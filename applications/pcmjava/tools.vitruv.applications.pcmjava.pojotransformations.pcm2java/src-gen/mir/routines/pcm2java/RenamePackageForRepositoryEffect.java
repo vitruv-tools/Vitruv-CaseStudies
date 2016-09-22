@@ -18,59 +18,37 @@ import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHe
 import tools.vitruv.extensions.dslsruntime.response.AbstractEffectRealization;
 import tools.vitruv.extensions.dslsruntime.response.ResponseExecutionState;
 import tools.vitruv.extensions.dslsruntime.response.structure.CallHierarchyHaving;
-import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
 
 @SuppressWarnings("all")
-public class RenamedRepositoryEffect extends AbstractEffectRealization {
-  public RenamedRepositoryEffect(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy, final ReplaceSingleValuedEAttribute<Repository, String> change) {
+public class RenamePackageForRepositoryEffect extends AbstractEffectRealization {
+  public RenamePackageForRepositoryEffect(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy, final Repository repository) {
     super(responseExecutionState, calledBy);
-    				this.change = change;
+    				this.repository = repository;
   }
   
-  private ReplaceSingleValuedEAttribute<Repository, String> change;
-  
-  protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine RenamedRepositoryEffect with input:");
-    getLogger().debug("   ReplaceSingleValuedEAttribute: " + this.change);
-    
-    org.emftext.language.java.containers.Package rootPackage = getCorrespondingElement(
-    	getCorrepondenceSourceRootPackage(change), // correspondence source supplier
-    	org.emftext.language.java.containers.Package.class,
-    	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	getRetrieveTag0(change));
-    if (rootPackage == null) {
-    	return;
-    }
-    initializeRetrieveElementState(rootPackage);
-    
-    preprocessElementStates();
-    new mir.routines.pcm2java.RenamedRepositoryEffect.EffectUserExecution(getExecutionState(), this).executeUserOperations(
-    	change, rootPackage);
-    postprocessElementStates();
-  }
-  
-  private String getRetrieveTag0(final ReplaceSingleValuedEAttribute<Repository, String> change) {
-    return "repository_root";
-  }
-  
-  private EObject getCorrepondenceSourceRootPackage(final ReplaceSingleValuedEAttribute<Repository, String> change) {
-    Repository _affectedEObject = change.getAffectedEObject();
-    return _affectedEObject;
-  }
+  private Repository repository;
   
   private static class EffectUserExecution extends AbstractEffectRealization.UserExecution {
-    @Extension
-    private RoutinesFacade effectFacade;
-    
     public EffectUserExecution(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy) {
+      super(responseExecutionState);
+    }
+    
+    private void executeUserOperations(final Repository repository, final org.emftext.language.java.containers.Package rootPackage) {
+      String _entityName = repository.getEntityName();
+      rootPackage.setName(_entityName);
+    }
+  }
+  
+  private static class CallRoutinesUserExecution extends AbstractEffectRealization.UserExecution {
+    public CallRoutinesUserExecution(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy) {
       super(responseExecutionState);
       this.effectFacade = new mir.routines.pcm2java.RoutinesFacade(responseExecutionState, calledBy);
     }
     
-    private void executeUserOperations(final ReplaceSingleValuedEAttribute<Repository, String> change, final org.emftext.language.java.containers.Package rootPackage) {
-      final Repository repository = change.getAffectedEObject();
-      String _newValue = change.getNewValue();
-      rootPackage.setName(_newValue);
+    @Extension
+    private RoutinesFacade effectFacade;
+    
+    private void executeUserOperations(final Repository repository, final org.emftext.language.java.containers.Package rootPackage) {
       this.effectFacade.callRenameJavaPackage(repository, rootPackage, "contracts", "contracts");
       this.effectFacade.callRenameJavaPackage(repository, rootPackage, "datatypes", "datatypes");
       EList<RepositoryComponent> _components__Repository = repository.getComponents__Repository();
@@ -93,9 +71,38 @@ public class RenamedRepositoryEffect extends AbstractEffectRealization {
       for (final CollectionDataType dataType_1 : _filter_3) {
         this.effectFacade.callRenameCollectionDataType(dataType_1);
       }
-      Repository _affectedEObject = change.getAffectedEObject();
       String _buildJavaFilePath = Pcm2JavaHelper.buildJavaFilePath(rootPackage);
-      this.persistProjectRelative(_affectedEObject, rootPackage, _buildJavaFilePath);
+      this.persistProjectRelative(repository, rootPackage, _buildJavaFilePath);
     }
+  }
+  
+  protected void executeRoutine() throws IOException {
+    getLogger().debug("Called routine RenamePackageForRepositoryEffect with input:");
+    getLogger().debug("   Repository: " + this.repository);
+    
+    org.emftext.language.java.containers.Package rootPackage = getCorrespondingElement(
+    	getCorrepondenceSourceRootPackage(repository), // correspondence source supplier
+    	org.emftext.language.java.containers.Package.class,
+    	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
+    	getRetrieveTag0(repository));
+    if (rootPackage == null) {
+    	return;
+    }
+    initializeRetrieveElementState(rootPackage);
+    
+    preprocessElementStates();
+    new mir.routines.pcm2java.RenamePackageForRepositoryEffect.EffectUserExecution(getExecutionState(), this).executeUserOperations(
+    	repository, rootPackage);
+    new mir.routines.pcm2java.RenamePackageForRepositoryEffect.CallRoutinesUserExecution(getExecutionState(), this).executeUserOperations(
+    	repository, rootPackage);
+    postprocessElementStates();
+  }
+  
+  private String getRetrieveTag0(final Repository repository) {
+    return "repository_root";
+  }
+  
+  private EObject getCorrepondenceSourceRootPackage(final Repository repository) {
+    return repository;
   }
 }

@@ -26,73 +26,33 @@ import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHe
 import tools.vitruv.extensions.dslsruntime.response.AbstractEffectRealization;
 import tools.vitruv.extensions.dslsruntime.response.ResponseExecutionState;
 import tools.vitruv.extensions.dslsruntime.response.structure.CallHierarchyHaving;
-import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
-public class CreatedCollectionDataTypeEffect extends AbstractEffectRealization {
-  public CreatedCollectionDataTypeEffect(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy, final InsertEReference<Repository, DataType> change) {
+public class CreateCollectionDataTypeImplementationEffect extends AbstractEffectRealization {
+  public CreateCollectionDataTypeImplementationEffect(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy, final CollectionDataType dataType) {
     super(responseExecutionState, calledBy);
-    				this.change = change;
+    				this.dataType = dataType;
   }
   
-  private InsertEReference<Repository, DataType> change;
-  
-  protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine CreatedCollectionDataTypeEffect with input:");
-    getLogger().debug("   InsertEReference: " + this.change);
-    
-    org.emftext.language.java.classifiers.Class innerTypeClass = getCorrespondingElement(
-    	getCorrepondenceSourceInnerTypeClass(change), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    initializeRetrieveElementState(innerTypeClass);
-    org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
-    	getCorrepondenceSourceDatatypesPackage(change), // correspondence source supplier
-    	org.emftext.language.java.containers.Package.class,
-    	(org.emftext.language.java.containers.Package _element) -> getCorrespondingModelElementsPreconditionDatatypesPackage(change, _element), // correspondence precondition checker
-    	null);
-    if (datatypesPackage == null) {
-    	return;
-    }
-    initializeRetrieveElementState(datatypesPackage);
-    
-    preprocessElementStates();
-    new mir.routines.pcm2java.CreatedCollectionDataTypeEffect.EffectUserExecution(getExecutionState(), this).executeUserOperations(
-    	change, innerTypeClass, datatypesPackage);
-    postprocessElementStates();
-  }
-  
-  private EObject getCorrepondenceSourceInnerTypeClass(final InsertEReference<Repository, DataType> change) {
-    DataType _newValue = change.getNewValue();
-    DataType _innerType_CollectionDataType = ((CollectionDataType) _newValue).getInnerType_CollectionDataType();
-    return _innerType_CollectionDataType;
-  }
-  
-  private boolean getCorrespondingModelElementsPreconditionDatatypesPackage(final InsertEReference<Repository, DataType> change, final org.emftext.language.java.containers.Package datatypesPackage) {
-    String _name = datatypesPackage.getName();
-    boolean _equals = Objects.equal(_name, "datatypes");
-    return _equals;
-  }
-  
-  private EObject getCorrepondenceSourceDatatypesPackage(final InsertEReference<Repository, DataType> change) {
-    Repository _affectedEObject = change.getAffectedEObject();
-    return _affectedEObject;
-  }
+  private CollectionDataType dataType;
   
   private static class EffectUserExecution extends AbstractEffectRealization.UserExecution {
-    @Extension
-    private RoutinesFacade effectFacade;
-    
     public EffectUserExecution(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy) {
+      super(responseExecutionState);
+    }
+  }
+  
+  private static class CallRoutinesUserExecution extends AbstractEffectRealization.UserExecution {
+    public CallRoutinesUserExecution(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy) {
       super(responseExecutionState);
       this.effectFacade = new mir.routines.pcm2java.RoutinesFacade(responseExecutionState, calledBy);
     }
     
-    private void executeUserOperations(final InsertEReference<Repository, DataType> change, final org.emftext.language.java.classifiers.Class innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage) {
-      DataType _newValue = change.getNewValue();
-      final CollectionDataType dataType = ((CollectionDataType) _newValue);
+    @Extension
+    private RoutinesFacade effectFacade;
+    
+    private void executeUserOperations(final CollectionDataType dataType, final org.emftext.language.java.classifiers.Class innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage) {
       DataType _innerType_CollectionDataType = dataType.getInnerType_CollectionDataType();
       final TypeReference innerTypeRef = Pcm2JavaHelper.createTypeReference(_innerType_CollectionDataType, innerTypeClass);
       TypeReference innerTypeClassOrWrapper = innerTypeRef;
@@ -117,5 +77,47 @@ public class CreatedCollectionDataTypeEffect extends AbstractEffectRealization {
       String _name_1 = selectedClass.getName();
       this.effectFacade.callAddSuperTypeToDataType(dataType, innerTypeClassOrWrapper, _name_1);
     }
+  }
+  
+  protected void executeRoutine() throws IOException {
+    getLogger().debug("Called routine CreateCollectionDataTypeImplementationEffect with input:");
+    getLogger().debug("   CollectionDataType: " + this.dataType);
+    
+    org.emftext.language.java.classifiers.Class innerTypeClass = getCorrespondingElement(
+    	getCorrepondenceSourceInnerTypeClass(dataType), // correspondence source supplier
+    	org.emftext.language.java.classifiers.Class.class,
+    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    	null);
+    initializeRetrieveElementState(innerTypeClass);
+    org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
+    	getCorrepondenceSourceDatatypesPackage(dataType), // correspondence source supplier
+    	org.emftext.language.java.containers.Package.class,
+    	(org.emftext.language.java.containers.Package _element) -> getCorrespondingModelElementsPreconditionDatatypesPackage(dataType, _element), // correspondence precondition checker
+    	null);
+    if (datatypesPackage == null) {
+    	return;
+    }
+    initializeRetrieveElementState(datatypesPackage);
+    
+    preprocessElementStates();
+    new mir.routines.pcm2java.CreateCollectionDataTypeImplementationEffect.CallRoutinesUserExecution(getExecutionState(), this).executeUserOperations(
+    	dataType, innerTypeClass, datatypesPackage);
+    postprocessElementStates();
+  }
+  
+  private EObject getCorrepondenceSourceInnerTypeClass(final CollectionDataType dataType) {
+    DataType _innerType_CollectionDataType = dataType.getInnerType_CollectionDataType();
+    return _innerType_CollectionDataType;
+  }
+  
+  private boolean getCorrespondingModelElementsPreconditionDatatypesPackage(final CollectionDataType dataType, final org.emftext.language.java.containers.Package datatypesPackage) {
+    String _name = datatypesPackage.getName();
+    boolean _equals = Objects.equal(_name, "datatypes");
+    return _equals;
+  }
+  
+  private EObject getCorrepondenceSourceDatatypesPackage(final CollectionDataType dataType) {
+    Repository _repository__DataType = dataType.getRepository__DataType();
+    return _repository__DataType;
   }
 }

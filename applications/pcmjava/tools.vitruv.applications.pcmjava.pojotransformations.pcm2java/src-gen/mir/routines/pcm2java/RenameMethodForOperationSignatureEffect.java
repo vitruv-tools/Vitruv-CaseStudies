@@ -25,56 +25,38 @@ import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 import tools.vitruv.extensions.dslsruntime.response.AbstractEffectRealization;
 import tools.vitruv.extensions.dslsruntime.response.ResponseExecutionState;
 import tools.vitruv.extensions.dslsruntime.response.structure.CallHierarchyHaving;
-import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
 
 @SuppressWarnings("all")
-public class RenameOperationSignatureEffect extends AbstractEffectRealization {
-  public RenameOperationSignatureEffect(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy, final ReplaceSingleValuedEAttribute<OperationSignature, String> change) {
+public class RenameMethodForOperationSignatureEffect extends AbstractEffectRealization {
+  public RenameMethodForOperationSignatureEffect(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy, final OperationSignature operationSignature) {
     super(responseExecutionState, calledBy);
-    				this.change = change;
+    				this.operationSignature = operationSignature;
   }
   
-  private ReplaceSingleValuedEAttribute<OperationSignature, String> change;
-  
-  private EObject getCorrepondenceSourceInterfaceMethod(final ReplaceSingleValuedEAttribute<OperationSignature, String> change) {
-    OperationSignature _affectedEObject = change.getAffectedEObject();
-    return _affectedEObject;
-  }
-  
-  protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine RenameOperationSignatureEffect with input:");
-    getLogger().debug("   ReplaceSingleValuedEAttribute: " + this.change);
-    
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
-    	getCorrepondenceSourceInterfaceMethod(change), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
-    	null);
-    if (interfaceMethod == null) {
-    	return;
-    }
-    initializeRetrieveElementState(interfaceMethod);
-    
-    preprocessElementStates();
-    new mir.routines.pcm2java.RenameOperationSignatureEffect.EffectUserExecution(getExecutionState(), this).executeUserOperations(
-    	change, interfaceMethod);
-    postprocessElementStates();
-  }
+  private OperationSignature operationSignature;
   
   private static class EffectUserExecution extends AbstractEffectRealization.UserExecution {
-    @Extension
-    private RoutinesFacade effectFacade;
-    
     public EffectUserExecution(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy) {
+      super(responseExecutionState);
+    }
+    
+    private void executeUserOperations(final OperationSignature operationSignature, final InterfaceMethod interfaceMethod) {
+      String _entityName = operationSignature.getEntityName();
+      interfaceMethod.setName(_entityName);
+    }
+  }
+  
+  private static class CallRoutinesUserExecution extends AbstractEffectRealization.UserExecution {
+    public CallRoutinesUserExecution(final ResponseExecutionState responseExecutionState, final CallHierarchyHaving calledBy) {
       super(responseExecutionState);
       this.effectFacade = new mir.routines.pcm2java.RoutinesFacade(responseExecutionState, calledBy);
     }
     
-    private void executeUserOperations(final ReplaceSingleValuedEAttribute<OperationSignature, String> change, final InterfaceMethod interfaceMethod) {
-      final OperationSignature operationSignature = change.getAffectedEObject();
+    @Extension
+    private RoutinesFacade effectFacade;
+    
+    private void executeUserOperations(final OperationSignature operationSignature, final InterfaceMethod interfaceMethod) {
       final OperationInterface operationInterface = operationSignature.getInterface__OperationSignature();
-      String _newValue = change.getNewValue();
-      interfaceMethod.setName(_newValue);
       final HashSet<InterfaceProvidingEntity> implementingComponents = Sets.<InterfaceProvidingEntity>newHashSet();
       Repository _repository__Interface = operationInterface.getRepository__Interface();
       EList<RepositoryComponent> _components__Repository = _repository__Interface.getComponents__Repository();
@@ -105,5 +87,31 @@ public class RenameOperationSignatureEffect extends AbstractEffectRealization {
       };
       basicComponents.forEach(_function_1);
     }
+  }
+  
+  private EObject getCorrepondenceSourceInterfaceMethod(final OperationSignature operationSignature) {
+    return operationSignature;
+  }
+  
+  protected void executeRoutine() throws IOException {
+    getLogger().debug("Called routine RenameMethodForOperationSignatureEffect with input:");
+    getLogger().debug("   OperationSignature: " + this.operationSignature);
+    
+    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    	getCorrepondenceSourceInterfaceMethod(operationSignature), // correspondence source supplier
+    	InterfaceMethod.class,
+    	(InterfaceMethod _element) -> true, // correspondence precondition checker
+    	null);
+    if (interfaceMethod == null) {
+    	return;
+    }
+    initializeRetrieveElementState(interfaceMethod);
+    
+    preprocessElementStates();
+    new mir.routines.pcm2java.RenameMethodForOperationSignatureEffect.EffectUserExecution(getExecutionState(), this).executeUserOperations(
+    	operationSignature, interfaceMethod);
+    new mir.routines.pcm2java.RenameMethodForOperationSignatureEffect.CallRoutinesUserExecution(getExecutionState(), this).executeUserOperations(
+    	operationSignature, interfaceMethod);
+    postprocessElementStates();
   }
 }
