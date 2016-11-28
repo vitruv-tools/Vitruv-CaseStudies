@@ -15,7 +15,7 @@
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="location" value="${workspace_loc}/../test-workspace_pcm-java"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/tools.vitruv.applications.pcmjava.gplimplementation.tests.pojotransformations/xtend-gen/tools/vitruv/applications/pcmjava/gplimplementation/tests/pojotransformations/PcmJavaGplTestSuite.java"/>
+<listEntry value="/tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.tests/xtend-gen/tools/vitruv/applications/pcmjava/gplimplementation/tests/pojotransformations/PcmJavaGplTestSuite.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -28,7 +28,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="tools.vitruv.applications.pcmjava.gplimplementation.tests.pojotransformations.PcmJavaGplTestSuite"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="tools.vitruv.applications.pcmjava.gplimplementation.tests.pojotransformations"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.tests"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="org.eclipse.platform.ide"/>
