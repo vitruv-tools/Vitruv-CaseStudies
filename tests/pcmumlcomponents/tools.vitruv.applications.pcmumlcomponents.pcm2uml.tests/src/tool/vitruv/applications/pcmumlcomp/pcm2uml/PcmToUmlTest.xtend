@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.eclipse.uml2.uml.Component
 
-class UmlToJavaClassTest extends AbstractPcmUmlTest {
+class PcmToUmlTest extends AbstractPcmUmlTest {
 	private static val COMPONENT_NAME = "TestComponent";
 
 	@Test
