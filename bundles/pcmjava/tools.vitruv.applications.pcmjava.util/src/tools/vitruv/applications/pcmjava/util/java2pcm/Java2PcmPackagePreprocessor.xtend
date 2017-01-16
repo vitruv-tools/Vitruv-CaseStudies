@@ -76,7 +76,7 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
 		if (doesHandleChange(change, correspondenceModel)) {
     		val eChange = change.getEChanges.get(0);
         	if (eChange instanceof InsertRootEObject<?>) {
-	            attachPackageToResource(eChange.getNewValue(), change.getURI());
+	            attachPackageToResource(eChange.newValue as EObject, change.getURI());
         	} else if (eChange instanceof JavaReplaceSingleValuedEAttribute<?,?>) {
 	            prepareRenamePackageInfos(eChange, change.getURI());
         	} // TODO: package deletion

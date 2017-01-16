@@ -73,7 +73,7 @@ public class TransformationExecutor {
 		return null
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(InsertRootEObject<?> createRootEObject) {
+	def private dispatch ChangePropagationResult executeTransformation(InsertRootEObject<? extends EObject> createRootEObject) {
 		val EObject[] createdObjects = mappingTransformations.
 			claimForMappedClassOrImplementingInterface(createRootEObject.newValue.class).createEObject(
 				createRootEObject.newValue)
@@ -81,7 +81,7 @@ public class TransformationExecutor {
 			createRootEObject(createRootEObject.newValue, createdObjects)
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(RemoveRootEObject<?> deleteRootEObject) {
+	def private dispatch ChangePropagationResult executeTransformation(RemoveRootEObject<? extends EObject> deleteRootEObject) {
 		val EObject[] removedEObjects = mappingTransformations.
 			claimForMappedClassOrImplementingInterface(deleteRootEObject.oldValue.class).removeEObject(
 				deleteRootEObject.oldValue)
@@ -100,9 +100,9 @@ public class TransformationExecutor {
 //			replaceRoot(replaceRootEObject.oldValue, replaceRootEObject.newValue, removedEObjects, createdObjects)
 //	}
 
-	def private dispatch ChangePropagationResult executeTransformation(InsertEReference<?,?> insertEReference) {
-		val oldAffectedEObject = if (insertEReference instanceof JavaInsertEReference<?,?>) {
-			insertEReference.oldAffectedEObject
+	def private dispatch ChangePropagationResult executeTransformation(InsertEReference<? extends EObject,? extends EObject> insertEReference) {
+		val EObject oldAffectedEObject = if (insertEReference instanceof JavaInsertEReference<?,?>) {
+			insertEReference.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
 			insertEReference.affectedEObject;
 		}
@@ -126,9 +126,9 @@ public class TransformationExecutor {
 		}
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(RemoveEReference<?,?> removeEReference) {
+	def private dispatch ChangePropagationResult executeTransformation(RemoveEReference<? extends EObject,? extends EObject> removeEReference) {
 		val oldAffectedEObject = if (removeEReference instanceof JavaRemoveEReference<?,?>) {
-			removeEReference.oldAffectedEObject
+			removeEReference.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
 			removeEReference.affectedEObject;
 		}
@@ -174,9 +174,9 @@ public class TransformationExecutor {
 //			replaceNonRootEObjectInList.index, eObjectsToDelete, createdEObjects)
 //	}
 
-	def private dispatch ChangePropagationResult executeTransformation(ReplaceSingleValuedEReference<?,?> replaceSingleValuedEReference) {
+	def private dispatch ChangePropagationResult executeTransformation(ReplaceSingleValuedEReference<? extends EObject,? extends EObject> replaceSingleValuedEReference) {
 		val oldAffectedEObject = if (replaceSingleValuedEReference instanceof JavaReplaceSingleValuedEReference<?,?>) {
-			replaceSingleValuedEReference.oldAffectedEObject
+			replaceSingleValuedEReference.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
 			replaceSingleValuedEReference.affectedEObject;
 		}
@@ -252,9 +252,9 @@ public class TransformationExecutor {
 //	}
 
 	def private dispatch ChangePropagationResult executeTransformation(
-		ReplaceSingleValuedEAttribute<?,?> replaceSingleValuedEAttribute) {
+		ReplaceSingleValuedEAttribute<? extends EObject,? extends Object> replaceSingleValuedEAttribute) {
 		val oldAffectedEObject = if (replaceSingleValuedEAttribute instanceof JavaReplaceSingleValuedEAttribute<?,?>) {
-			replaceSingleValuedEAttribute.oldAffectedEObject
+			replaceSingleValuedEAttribute.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
 			replaceSingleValuedEAttribute.affectedEObject;
 		}
@@ -264,9 +264,9 @@ public class TransformationExecutor {
 			replaceSingleValuedEAttribute.oldValue, replaceSingleValuedEAttribute.newValue)
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(InsertEAttributeValue<?,?> insertEAttributeValue) {
+	def private dispatch ChangePropagationResult executeTransformation(InsertEAttributeValue<? extends EObject,? extends Object> insertEAttributeValue) {
 		val oldAffectedEObject = if (insertEAttributeValue instanceof JavaInsertEAttributeValue<?,?>) {
-			insertEAttributeValue.oldAffectedEObject
+			insertEAttributeValue.oldAffectedEObject as EObject  // Cast is only necessary due to Xcore/Xtend problem
 		} else {
 			insertEAttributeValue.affectedEObject;
 		}
@@ -275,9 +275,9 @@ public class TransformationExecutor {
 				insertEAttributeValue.newValue, insertEAttributeValue.index)
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(RemoveEAttributeValue<?,?> removeEAttributeValue) {
+	def private dispatch ChangePropagationResult executeTransformation(RemoveEAttributeValue<? extends EObject,? extends Object> removeEAttributeValue) {
 		val oldAffectedEObject = if (removeEAttributeValue instanceof JavaRemoveEAttributeValue<?,?>) {
-			removeEAttributeValue.oldAffectedEObject
+			removeEAttributeValue.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
 			removeEAttributeValue.affectedEObject;
 		}
