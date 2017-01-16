@@ -30,7 +30,7 @@ class AbstractPcmUmlTest extends VitruviusChangePropagationTest {
 	override protected initializeTestModel() {
 		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository();
 		pcmRepository.entityName = MODEL_NAME;
-		createAndSychronizeModel(MODEL_NAME.projectModelPath, pcmRepository);
+		createAndSynchronizeModel(MODEL_NAME.projectModelPath, pcmRepository);
 	}
 
 }

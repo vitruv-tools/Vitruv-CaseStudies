@@ -30,7 +30,7 @@ class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
 	override protected initializeTestModel() {
 		val umlModel = UMLFactory.eINSTANCE.createModel();
 		umlModel.name = MODEL_NAME;
-		createAndSychronizeModel(MODEL_NAME.projectModelPath, umlModel);
+		createAndSynchronizeModel(MODEL_NAME.projectModelPath, umlModel);
 	}
 
 }
