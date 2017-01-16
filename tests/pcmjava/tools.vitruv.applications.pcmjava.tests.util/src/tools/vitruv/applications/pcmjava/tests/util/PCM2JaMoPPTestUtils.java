@@ -96,7 +96,7 @@ public class PCM2JaMoPPTestUtils {
             final EObject oldAffectedEObject, final String featureName) {
         final JavaInsertEReference<EObject, EObject> createChange = ReferenceFactory.eINSTANCE
                 .createJavaInsertEReference();
-        createChange.setIsCreate(true);
+        // createChange.setIsCreate(true);
         createChange.setNewValue(changedEObject);
         createChange.setAffectedEObject(newAffectedEObject);
         createChange.setOldAffectedEObject(oldAffectedEObject);

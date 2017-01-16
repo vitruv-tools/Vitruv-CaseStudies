@@ -892,7 +892,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 			final String annotationName) throws Throwable {
 		final JavaInsertEReference<EObject, EObject> createChange = ReferenceFactory.eINSTANCE
 				.createJavaInsertEReference();
-		createChange.setIsCreate(true);
+		//createChange.setIsCreate(true);
 		createChange.setOldAffectedEObject(annotableAndModifiable);
 		final AnnotationInstance newAnnotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance();
 		final Classifier classifier = this.createClassifierFromName(annotationName);
