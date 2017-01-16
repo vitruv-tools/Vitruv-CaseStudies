@@ -10,6 +10,7 @@ import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.framework.util.datatypes.MetamodelPair
 import org.emftext.language.java.JavaPackage
 import org.palladiosimulator.pcm.PcmPackage
+import org.eclipse.emf.ecore.EObject
 
 class TUIDUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 	private val MetamodelPair metamodelPair;
@@ -29,8 +30,8 @@ class TUIDUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 	
 	override propagateChange(EChange change, CorrespondenceModel correspondenceModel) {
 		if (change instanceof JavaFeatureEChange<?, ?>) {
-			val oldAffectedEObject = change.oldAffectedEObject
-			val newAffectedEObject = change.affectedEObject
+			val oldAffectedEObject = change.oldAffectedEObject as EObject // Cast necessary due to Xcore/Xtend problem
+			val newAffectedEObject = change.affectedEObject as EObject // Cast necessary due to Xcore/Xtend problem
 			if (null != oldAffectedEObject && null != newAffectedEObject) {
 				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject);
 			}
