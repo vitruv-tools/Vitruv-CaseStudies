@@ -6,7 +6,6 @@ import org.emftext.language.java.members.InterfaceMethod
 import static tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBJava2PcmHelper.*
 
 import static extension tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBAnnotationHelper.*
-import org.emftext.language.java.members.ClassMethod
 import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBJava2PcmHelper
 import org.palladiosimulator.pcm.repository.Repository
 import java.util.Collections
@@ -24,8 +23,8 @@ execute actions in pcm
 // ###################################################
 // ################ create Repository for first package################
 reaction CreatedFirstPackage {
-	after root created and inserted java::Package
-	call createRepositoryForFirstPackage(change.newValue)
+	after element java::Package created and inserted as root 
+	call createRepositoryForFirstPackage(change.insertChange.newValue)
 }
 
 routine createRepositoryForFirstPackage(java::Package javaPackage) {
@@ -45,20 +44,20 @@ routine createRepositoryForFirstPackage(java::Package javaPackage) {
 // ################ create Component from EJB class################
  
 reaction CreatedClass {
-	after list entry created and inserted in java::CompilationUnit[classifiers]
-		with change.newValue.isEJBClass 	
+	after element created and inserted in java::CompilationUnit[classifiers]
+		with change.insertChange.newValue.isEJBClass 	
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
-		createBasicComponent(repo, change.newValue);
+		createBasicComponent(repo, change.insertChange.newValue);
 	} 
 }
 
 reaction CreateClassAnnotation {
-	after list entry created and inserted in java::Class[annotationsAndModifiers]
-		with change.affectedEObject.isEJBClass 
+	after element created and inserted in java::Class[annotationsAndModifiers]
+		with change.insertChange.affectedEObject.isEJBClass 
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel) 
-		createBasicComponent(repo, change.affectedEObject as NamedElement)
+		createBasicComponent(repo, change.insertChange.affectedEObject as NamedElement)
 	} 
 }
 
@@ -78,20 +77,20 @@ routine createBasicComponent(pcm::Repository repo, java::NamedElement namedEleme
 // ################ create Interface from EJB interface################
 
 reaction CreatedInterface {
-	after list entry created and inserted in java::CompilationUnit[classifiers]
-		with change.newValue.isEJBBuisnessInterface 
+	after element created and inserted in java::CompilationUnit[classifiers]
+		with change.insertChange.newValue.isEJBBuisnessInterface 
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
-		createOperationInterface(repo, change.newValue)
+		createOperationInterface(repo, change.insertChange.newValue)
 	}
 }
 
 reaction CreateInterfaceAnnotation {
-	after list entry created and inserted in java::Interface[annotationsAndModifiers]
-		with change.affectedEObject.isEJBBuisnessInterface
+	after element created and inserted in java::Interface[annotationsAndModifiers]
+		with change.insertChange.affectedEObject.isEJBBuisnessInterface
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
-		createOperationInterface(repo, change.affectedEObject as NamedElement)
+		createOperationInterface(repo, change.insertChange.affectedEObject as NamedElement)
 	}
 }
 
@@ -110,9 +109,9 @@ routine createOperationInterface(pcm::Repository repo, java::NamedElement namedE
 // ###################################################
 // ################ create OperationRequiredRole from field################
 reaction CreateAnnotationForField {
-	after list entry created and inserted in java::Field[annotationsAndModifiers]
-		with change.affectedEObject.hasEJBAnnotation
-	call createdAnnotationForField(change.affectedEObject)
+	after element created and inserted in java::Field[annotationsAndModifiers]
+		with change.insertChange.affectedEObject.hasEJBAnnotation
+	call createdAnnotationForField(change.insertChange.affectedEObject)
 }
 		
 routine createdAnnotationForField(java::Field annotatedField) {
@@ -130,9 +129,9 @@ routine createdAnnotationForField(java::Field annotatedField) {
 }
 
 reaction CreateField {
-	after list entry created and inserted in java::Class[members]
-		with change.newValue.hasEJBAnnotation
-	call createdField(change.newValue as Field)
+	after element created and inserted in java::Class[members]
+		with change.insertChange.newValue.hasEJBAnnotation
+	call createdField(change.insertChange.newValue as Field)
 }
 
 routine createdField(java::Field field) {
@@ -164,8 +163,8 @@ routine createOperationRequiredRole(pcm::BasicComponent basicComponent, pcm::Ope
 // ###################################################
 // ################ create OperationProvidedRole from implements################
 reaction CreateImplements {
-	after list entry created and inserted in java::Class[implements]
-	call createdImplements(change.affectedEObject, change.newValue)
+	after element created and inserted in java::Class[implements]
+	call createdImplements(change.insertChange.affectedEObject, change.insertChange.newValue)
 }
 
 routine createdImplements(java::Class clazz, java::TypeReference implementz) {
@@ -193,9 +192,9 @@ routine createdImplements(java::Class clazz, java::TypeReference implementz) {
 // ################ create Signatures for interface methods################
 
 reaction CreateInterfaceMethod {
-	after list entry created and inserted in java::Interface[members]
-		with change.newValue instanceof InterfaceMethod && change.affectedEObject.isEJBBuisnessInterface
-	call createdInterfaceMethod(change.affectedEObject, change.newValue as InterfaceMethod)
+	after element created and inserted in java::Interface[members]
+		with change.insertChange.newValue instanceof InterfaceMethod && change.insertChange.affectedEObject.isEJBBuisnessInterface
+	call createdInterfaceMethod(change.insertChange.affectedEObject, change.insertChange.newValue as InterfaceMethod)
 }
 
 routine createdInterfaceMethod(java::Interface interf, java::InterfaceMethod method) {
@@ -223,8 +222,8 @@ routine createOperationSignature(java::InterfaceMethod interfaceMethod, pcm::Ope
 // #######################################################################
 // ################ create Parameter for  parameter################		
 reaction CreateParameterInInterfaceMethod {
-	after list entry created and inserted in java::InterfaceMethod[parameters]
-	call createdParameterInInterfaceMethod(change.affectedEObject, change.newValue)
+	after element created and inserted in java::InterfaceMethod[parameters]
+	call createdParameterInInterfaceMethod(change.insertChange.affectedEObject, change.insertChange.newValue)
 }
 
 routine createdParameterInInterfaceMethod(java::InterfaceMethod method, java::Parameter parameter) {
@@ -254,7 +253,7 @@ routine createPCMParameter(java::Parameter jaMoPPParam, pcm::OperationSignature 
 // #######################################################################
 // ################ create ReturnType for return type ################
 reaction ReturnTypeCreated {
-	after value replaced for java::InterfaceMethod[typeReference]
+	after element replaced at java::InterfaceMethod[typeReference]
 	call createdReturnType(change.affectedEObject, change.newValue)
 }
 
@@ -281,9 +280,9 @@ routine createPCMReturnType(java::TypeReference returnType, pcm::OperationSignat
 // #######################################################################
 // ################ create InnerDeclaration for field in datatype class################
 reaction CreateFieldInDatatypeClass {
-	after list entry created and inserted in java::Class[members]
-		with change.newValue instanceof Field
-	call createdFieldInDatatypeClass(change.affectedEObject, change.newValue as Field)
+	after element created and inserted in java::Class[members]
+		with change.insertChange.newValue instanceof Field
+	call createdFieldInDatatypeClass(change.insertChange.affectedEObject, change.insertChange.newValue as Field)
 }
 
 routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
@@ -308,10 +307,10 @@ routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
 // ################ create SEFF for class method that overrides interface method################
 
 reaction CreateClassMethodInEJBClass {
-	after list entry created and inserted in java::Class[members]
-		with change.newValue instanceof ClassMethod && change.affectedEObject.isEJBClass &&
-	   		EJBJava2PcmHelper.overridesInterfaceMethod(change.newValue as ClassMethod, change.affectedEObject)
-	call createdClassMethodInEJBClass(change.affectedEObject, change.newValue as ClassMethod)
+	after element java::ClassMethod created and inserted in java::Class[members]
+		with change.insertChange.affectedEObject.isEJBClass &&
+	   		EJBJava2PcmHelper.overridesInterfaceMethod(change.insertChange.newValue, change.insertChange.affectedEObject)
+	call createdClassMethodInEJBClass(change.insertChange.affectedEObject, change.insertChange.newValue)
 }
 
 routine createdClassMethodInEJBClass(java::Class clazz, java::ClassMethod classMethod) {

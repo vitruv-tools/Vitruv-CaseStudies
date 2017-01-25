@@ -1,7 +1,6 @@
 package mir.reactions.reactionsJavaTo5_1.ejbjava2pcm;
 
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.types.TypeReference;
@@ -31,16 +30,22 @@ class ReturnTypeCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof InterfaceMethod)) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof InterfaceMethod)) {
     	return false;
     }
-    
     // Check feature
     if (!change.getAffectedFeature().getName().equals("typeReference")) {
     	return false;
     }
+    if (change.isFromNonDefaultValue() && !(change.getOldValue() instanceof TypeReference)
+    ) {
+    	return false;
+    }
+    if (change.isToNonDefaultValue() && !(change.getNewValue() instanceof TypeReference)) {
+    	return false;
+    }
+    
     return true;
   }
   
@@ -48,7 +53,7 @@ class ReturnTypeCreatedReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEReference<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEReference typedChange = (ReplaceSingleValuedEReference)change;
+    ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> typedChange = (ReplaceSingleValuedEReference<InterfaceMethod, TypeReference>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }
