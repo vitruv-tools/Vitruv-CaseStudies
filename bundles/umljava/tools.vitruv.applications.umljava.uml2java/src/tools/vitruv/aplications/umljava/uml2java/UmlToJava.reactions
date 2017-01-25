@@ -8,9 +8,8 @@ in reaction to changes in uml
 execute actions in java
 
 reaction CreatedUmlClass {
-	after list entry created and inserted in uml::Model[packagedElement]
-	with change.newValue instanceof org.eclipse.uml2.uml.Class
-	call createJavaClass(change.newValue as org.eclipse.uml2.uml.Class)
+	after element uml::Class created and inserted in uml::Model[packagedElement]
+	call createJavaClass(change.insertChange.newValue)
 }
 
 routine createJavaClass(uml::Class umlClass) {
