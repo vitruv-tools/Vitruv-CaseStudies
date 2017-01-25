@@ -1,7 +1,6 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
@@ -10,6 +9,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
+import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
@@ -20,35 +20,40 @@ class CreatedSEFFReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> typedChange = (InsertEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>)change;
+    CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification> typedChange = (CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedSEFFReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedSEFFReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
+    return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final InsertEReference<BasicComponent, ServiceEffectSpecification> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof BasicComponent)) {
+  private boolean checkChangeProperties(final CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification> change) {
+    if (!(change.getCreateChange().getAffectedEObject() instanceof ServiceEffectSpecification)) {
+    	return false;
+    }
+    // Check affected object
+    if (!(change.getInsertChange().getAffectedEObject() instanceof BasicComponent)) {
+    	return false;
+    }
+    // Check feature
+    if (!change.getInsertChange().getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
+    	return false;
+    }
+    if (!(change.getInsertChange().getNewValue() instanceof ServiceEffectSpecification)) {
     	return false;
     }
     
-    // Check feature
-    if (!change.getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
-    	return false;
-    }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference<?, ?>)) {
+    if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    InsertEReference typedChange = (InsertEReference)change;
+    CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification> typedChange = (CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }
@@ -61,8 +66,9 @@ class CreatedSEFFReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final InsertEReference<BasicComponent, ServiceEffectSpecification> change, @Extension final RoutinesFacade _routinesFacade) {
-      ServiceEffectSpecification _newValue = change.getNewValue();
+    public void callRoutine1(final CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification> change, @Extension final RoutinesFacade _routinesFacade) {
+      InsertEReference<BasicComponent, ServiceEffectSpecification> _insertChange = change.getInsertChange();
+      ServiceEffectSpecification _newValue = _insertChange.getNewValue();
       _routinesFacade.createSEFF(_newValue);
     }
   }

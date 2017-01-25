@@ -1,7 +1,6 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -19,7 +18,7 @@ class RenameResourceDemandingInternalBehaviorReaction extends AbstractReactionRe
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour, java.lang.String>)change;
+    ReplaceSingleValuedEAttribute<ResourceDemandingInternalBehaviour, String> typedChange = (ReplaceSingleValuedEAttribute<ResourceDemandingInternalBehaviour, String>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.RenameResourceDemandingInternalBehaviorReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.RenameResourceDemandingInternalBehaviorReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
@@ -30,16 +29,16 @@ class RenameResourceDemandingInternalBehaviorReaction extends AbstractReactionRe
   }
   
   private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<ResourceDemandingInternalBehaviour, String> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof ResourceDemandingInternalBehaviour)) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof ResourceDemandingInternalBehaviour)) {
     	return false;
     }
-    
+    	
     // Check feature
     if (!change.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
+    
     return true;
   }
   
@@ -47,7 +46,7 @@ class RenameResourceDemandingInternalBehaviorReaction extends AbstractReactionRe
     if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute typedChange = (ReplaceSingleValuedEAttribute)change;
+    ReplaceSingleValuedEAttribute<ResourceDemandingInternalBehaviour, String> typedChange = (ReplaceSingleValuedEAttribute<ResourceDemandingInternalBehaviour, String>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }

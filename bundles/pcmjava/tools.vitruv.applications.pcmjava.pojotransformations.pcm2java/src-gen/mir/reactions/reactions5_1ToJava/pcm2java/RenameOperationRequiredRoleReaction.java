@@ -1,7 +1,6 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -19,7 +18,7 @@ class RenameOperationRequiredRoleReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.OperationRequiredRole, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.OperationRequiredRole, java.lang.String>)change;
+    ReplaceSingleValuedEAttribute<OperationRequiredRole, String> typedChange = (ReplaceSingleValuedEAttribute<OperationRequiredRole, String>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.RenameOperationRequiredRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.RenameOperationRequiredRoleReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
@@ -30,16 +29,16 @@ class RenameOperationRequiredRoleReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<OperationRequiredRole, String> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof OperationRequiredRole)) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof OperationRequiredRole)) {
     	return false;
     }
-    
+    	
     // Check feature
     if (!change.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
+    
     return true;
   }
   
@@ -47,7 +46,7 @@ class RenameOperationRequiredRoleReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute typedChange = (ReplaceSingleValuedEAttribute)change;
+    ReplaceSingleValuedEAttribute<OperationRequiredRole, String> typedChange = (ReplaceSingleValuedEAttribute<OperationRequiredRole, String>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }

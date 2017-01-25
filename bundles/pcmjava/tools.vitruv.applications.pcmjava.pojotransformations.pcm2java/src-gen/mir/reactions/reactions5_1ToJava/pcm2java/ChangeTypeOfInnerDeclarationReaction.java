@@ -1,7 +1,6 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
@@ -20,7 +19,7 @@ class ChangeTypeOfInnerDeclarationReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.InnerDeclaration, org.palladiosimulator.pcm.repository.DataType> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.InnerDeclaration, org.palladiosimulator.pcm.repository.DataType>)change;
+    ReplaceSingleValuedEReference<InnerDeclaration, DataType> typedChange = (ReplaceSingleValuedEReference<InnerDeclaration, DataType>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangeTypeOfInnerDeclarationReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangeTypeOfInnerDeclarationReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
@@ -31,16 +30,22 @@ class ChangeTypeOfInnerDeclarationReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final ReplaceSingleValuedEReference<InnerDeclaration, DataType> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof InnerDeclaration)) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof InnerDeclaration)) {
     	return false;
     }
-    
     // Check feature
     if (!change.getAffectedFeature().getName().equals("datatype_InnerDeclaration")) {
     	return false;
     }
+    if (change.isFromNonDefaultValue() && !(change.getOldValue() instanceof DataType)
+    ) {
+    	return false;
+    }
+    if (change.isToNonDefaultValue() && !(change.getNewValue() instanceof DataType)) {
+    	return false;
+    }
+    
     return true;
   }
   
@@ -48,7 +53,7 @@ class ChangeTypeOfInnerDeclarationReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEReference<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEReference typedChange = (ReplaceSingleValuedEReference)change;
+    ReplaceSingleValuedEReference<InnerDeclaration, DataType> typedChange = (ReplaceSingleValuedEReference<InnerDeclaration, DataType>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }

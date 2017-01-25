@@ -1,7 +1,6 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.ProvidedRole;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
@@ -10,6 +9,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
+import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
@@ -20,35 +20,41 @@ class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealizati
   }
   
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.palladiosimulator.pcm.repository.RepositoryComponent, org.palladiosimulator.pcm.repository.ProvidedRole> typedChange = (RemoveEReference<org.palladiosimulator.pcm.repository.RepositoryComponent, org.palladiosimulator.pcm.repository.ProvidedRole>)change;
+    RemoveAndDeleteNonRoot<RepositoryComponent, ProvidedRole> typedChange = (RemoveAndDeleteNonRoot<RepositoryComponent, ProvidedRole>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.DeletedProvidedRoleFromComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.DeletedProvidedRoleFromComponentReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return RemoveEReference.class;
+    return RemoveAndDeleteNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final RemoveEReference<RepositoryComponent, ProvidedRole> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof RepositoryComponent)) {
+  private boolean checkChangeProperties(final RemoveAndDeleteNonRoot<RepositoryComponent, ProvidedRole> change) {
+    if (!(change.getDeleteChange().getAffectedEObject() instanceof ProvidedRole)) {
+    	return false;
+    }
+    // Check affected object
+    if (!(change.getRemoveChange().getAffectedEObject() instanceof RepositoryComponent)) {
+    	return false;
+    }
+    // Check feature
+    if (!change.getRemoveChange().getAffectedFeature().getName().equals("providedRoles_InterfaceProvidingEntity")) {
+    	return false;
+    }
+    if (!(change.getRemoveChange().getOldValue() instanceof ProvidedRole)
+    ) {
     	return false;
     }
     
-    // Check feature
-    if (!change.getAffectedFeature().getName().equals("providedRoles_InterfaceProvidingEntity")) {
-    	return false;
-    }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof RemoveEReference<?, ?>)) {
+    if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
-    RemoveEReference typedChange = (RemoveEReference)change;
+    RemoveAndDeleteNonRoot<RepositoryComponent, ProvidedRole> typedChange = (RemoveAndDeleteNonRoot<RepositoryComponent, ProvidedRole>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }
@@ -61,8 +67,9 @@ class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealizati
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final RemoveEReference<RepositoryComponent, ProvidedRole> change, @Extension final RoutinesFacade _routinesFacade) {
-      ProvidedRole _oldValue = change.getOldValue();
+    public void callRoutine1(final RemoveAndDeleteNonRoot<RepositoryComponent, ProvidedRole> change, @Extension final RoutinesFacade _routinesFacade) {
+      RemoveEReference<RepositoryComponent, ProvidedRole> _removeChange = change.getRemoveChange();
+      ProvidedRole _oldValue = _removeChange.getOldValue();
       _routinesFacade.removeProvidedRole(_oldValue);
     }
   }

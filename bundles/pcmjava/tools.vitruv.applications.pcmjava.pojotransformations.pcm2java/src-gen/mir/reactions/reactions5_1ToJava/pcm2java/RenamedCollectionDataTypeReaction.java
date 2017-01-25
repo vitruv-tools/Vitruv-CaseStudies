@@ -1,7 +1,6 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -19,7 +18,7 @@ class RenamedCollectionDataTypeReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.CollectionDataType, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.CollectionDataType, java.lang.String>)change;
+    ReplaceSingleValuedEAttribute<CollectionDataType, String> typedChange = (ReplaceSingleValuedEAttribute<CollectionDataType, String>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.RenamedCollectionDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.RenamedCollectionDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
@@ -30,16 +29,16 @@ class RenamedCollectionDataTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<CollectionDataType, String> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof CollectionDataType)) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof CollectionDataType)) {
     	return false;
     }
-    
+    	
     // Check feature
     if (!change.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
+    
     return true;
   }
   
@@ -47,7 +46,7 @@ class RenamedCollectionDataTypeReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute typedChange = (ReplaceSingleValuedEAttribute)change;
+    ReplaceSingleValuedEAttribute<CollectionDataType, String> typedChange = (ReplaceSingleValuedEAttribute<CollectionDataType, String>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }

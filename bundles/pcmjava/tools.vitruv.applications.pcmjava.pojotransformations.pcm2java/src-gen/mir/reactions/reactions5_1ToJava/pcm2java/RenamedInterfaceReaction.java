@@ -1,9 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -20,7 +18,7 @@ class RenamedInterfaceReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Interface, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Interface, java.lang.String>)change;
+    ReplaceSingleValuedEAttribute<OperationInterface, String> typedChange = (ReplaceSingleValuedEAttribute<OperationInterface, String>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.RenamedInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.RenamedInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
@@ -30,17 +28,17 @@ class RenamedInterfaceReaction extends AbstractReactionRealization {
     return ReplaceSingleValuedEAttribute.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<Interface, String> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof Interface)) {
+  private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<OperationInterface, String> change) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof OperationInterface)) {
     	return false;
     }
-    
+    	
     // Check feature
     if (!change.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
+    
     return true;
   }
   
@@ -48,7 +46,7 @@ class RenamedInterfaceReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute typedChange = (ReplaceSingleValuedEAttribute)change;
+    ReplaceSingleValuedEAttribute<OperationInterface, String> typedChange = (ReplaceSingleValuedEAttribute<OperationInterface, String>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }
@@ -61,9 +59,9 @@ class RenamedInterfaceReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEAttribute<Interface, String> change, @Extension final RoutinesFacade _routinesFacade) {
-      Interface _affectedEObject = change.getAffectedEObject();
-      _routinesFacade.renameInterface(((OperationInterface) _affectedEObject));
+    public void callRoutine1(final ReplaceSingleValuedEAttribute<OperationInterface, String> change, @Extension final RoutinesFacade _routinesFacade) {
+      OperationInterface _affectedEObject = change.getAffectedEObject();
+      _routinesFacade.renameInterface(_affectedEObject);
     }
   }
 }

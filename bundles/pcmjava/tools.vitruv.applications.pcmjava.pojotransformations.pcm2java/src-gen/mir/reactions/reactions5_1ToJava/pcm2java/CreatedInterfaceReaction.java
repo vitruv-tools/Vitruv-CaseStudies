@@ -10,6 +10,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
+import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
@@ -20,35 +21,40 @@ class CreatedInterfaceReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.Interface> typedChange = (InsertEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.Interface>)change;
+    CreateAndInsertNonRoot<Repository, Interface> typedChange = (CreateAndInsertNonRoot<Repository, Interface>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
+    return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final InsertEReference<Repository, Interface> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof Repository)) {
+  private boolean checkChangeProperties(final CreateAndInsertNonRoot<Repository, Interface> change) {
+    if (!(change.getCreateChange().getAffectedEObject() instanceof EObject)) {
+    	return false;
+    }
+    // Check affected object
+    if (!(change.getInsertChange().getAffectedEObject() instanceof Repository)) {
+    	return false;
+    }
+    // Check feature
+    if (!change.getInsertChange().getAffectedFeature().getName().equals("interfaces__Repository")) {
+    	return false;
+    }
+    if (!(change.getInsertChange().getNewValue() instanceof Interface)) {
     	return false;
     }
     
-    // Check feature
-    if (!change.getAffectedFeature().getName().equals("interfaces__Repository")) {
-    	return false;
-    }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference<?, ?>)) {
+    if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    InsertEReference typedChange = (InsertEReference)change;
+    CreateAndInsertNonRoot<Repository, Interface> typedChange = (CreateAndInsertNonRoot<Repository, Interface>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }
@@ -61,8 +67,9 @@ class CreatedInterfaceReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final InsertEReference<Repository, Interface> change, @Extension final RoutinesFacade _routinesFacade) {
-      Interface _newValue = change.getNewValue();
+    public void callRoutine1(final CreateAndInsertNonRoot<Repository, Interface> change, @Extension final RoutinesFacade _routinesFacade) {
+      InsertEReference<Repository, Interface> _insertChange = change.getInsertChange();
+      Interface _newValue = _insertChange.getNewValue();
       _routinesFacade.createInterfaceImplementation(_newValue);
     }
   }

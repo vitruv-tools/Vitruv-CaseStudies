@@ -1,9 +1,8 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.palladiosimulator.pcm.repository.Signature;
+import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -20,7 +19,7 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.seff.ResourceDemandingSEFF, org.palladiosimulator.pcm.repository.Signature> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.seff.ResourceDemandingSEFF, org.palladiosimulator.pcm.repository.Signature>)change;
+    ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> typedChange = (ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangeOperationSignatureOfSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangeOperationSignatureOfSeffReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
@@ -30,17 +29,23 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
     return ReplaceSingleValuedEReference.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEReference<ResourceDemandingSEFF, Signature> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof ResourceDemandingSEFF)) {
+  private boolean checkChangeProperties(final ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> change) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof ResourceDemandingSEFF)) {
     	return false;
     }
-    
     // Check feature
     if (!change.getAffectedFeature().getName().equals("describedService__SEFF")) {
     	return false;
     }
+    if (change.isFromNonDefaultValue() && !(change.getOldValue() instanceof OperationSignature)
+    ) {
+    	return false;
+    }
+    if (change.isToNonDefaultValue() && !(change.getNewValue() instanceof OperationSignature)) {
+    	return false;
+    }
+    
     return true;
   }
   
@@ -48,7 +53,7 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
     if (!(change instanceof ReplaceSingleValuedEReference<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEReference typedChange = (ReplaceSingleValuedEReference)change;
+    ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> typedChange = (ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }
@@ -61,7 +66,7 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEReference<ResourceDemandingSEFF, Signature> change, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> change, @Extension final RoutinesFacade _routinesFacade) {
       ResourceDemandingSEFF _affectedEObject = change.getAffectedEObject();
       _routinesFacade.changeMethodForSeff(_affectedEObject);
     }

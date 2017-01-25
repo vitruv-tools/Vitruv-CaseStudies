@@ -1,7 +1,6 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -18,7 +17,7 @@ class ChangedSystemNameReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, java.lang.String>)change;
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangedSystemNameReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangedSystemNameReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
@@ -29,16 +28,16 @@ class ChangedSystemNameReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof org.palladiosimulator.pcm.system.System)) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof org.palladiosimulator.pcm.system.System)) {
     	return false;
     }
-    
+    	
     // Check feature
     if (!change.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
+    
     return true;
   }
   
@@ -46,7 +45,7 @@ class ChangedSystemNameReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute typedChange = (ReplaceSingleValuedEAttribute)change;
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }

@@ -1,16 +1,15 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
-import org.palladiosimulator.pcm.repository.RequiredRole;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
+import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
@@ -20,45 +19,42 @@ class CreatedRequiredRoleReaction extends AbstractReactionRealization {
     super(userInteracting);
   }
   
-  private boolean checkTriggerPrecondition(final InsertEReference<InterfaceRequiringEntity, RequiredRole> change) {
-    RequiredRole _newValue = change.getNewValue();
-    return (_newValue instanceof OperationRequiredRole);
-  }
-  
   public void executeReaction(final EChange change) {
-    InsertEReference<org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity, org.palladiosimulator.pcm.repository.RequiredRole> typedChange = (InsertEReference<org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity, org.palladiosimulator.pcm.repository.RequiredRole>)change;
+    CreateAndInsertNonRoot<InterfaceRequiringEntity, OperationRequiredRole> typedChange = (CreateAndInsertNonRoot<InterfaceRequiringEntity, OperationRequiredRole>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedRequiredRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedRequiredRoleReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
+    return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final InsertEReference<InterfaceRequiringEntity, RequiredRole> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof InterfaceRequiringEntity)) {
+  private boolean checkChangeProperties(final CreateAndInsertNonRoot<InterfaceRequiringEntity, OperationRequiredRole> change) {
+    if (!(change.getCreateChange().getAffectedEObject() instanceof OperationRequiredRole)) {
+    	return false;
+    }
+    // Check affected object
+    if (!(change.getInsertChange().getAffectedEObject() instanceof InterfaceRequiringEntity)) {
+    	return false;
+    }
+    // Check feature
+    if (!change.getInsertChange().getAffectedFeature().getName().equals("requiredRoles_InterfaceRequiringEntity")) {
+    	return false;
+    }
+    if (!(change.getInsertChange().getNewValue() instanceof OperationRequiredRole)) {
     	return false;
     }
     
-    // Check feature
-    if (!change.getAffectedFeature().getName().equals("requiredRoles_InterfaceRequiringEntity")) {
-    	return false;
-    }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference<?, ?>)) {
+    if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    InsertEReference typedChange = (InsertEReference)change;
+    CreateAndInsertNonRoot<InterfaceRequiringEntity, OperationRequiredRole> typedChange = (CreateAndInsertNonRoot<InterfaceRequiringEntity, OperationRequiredRole>)change;
     if (!checkChangeProperties(typedChange)) {
-    	return false;
-    }
-    if (!checkTriggerPrecondition(typedChange)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -70,9 +66,10 @@ class CreatedRequiredRoleReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final InsertEReference<InterfaceRequiringEntity, RequiredRole> change, @Extension final RoutinesFacade _routinesFacade) {
-      RequiredRole _newValue = change.getNewValue();
-      _routinesFacade.addRequiredRole(((OperationRequiredRole) _newValue));
+    public void callRoutine1(final CreateAndInsertNonRoot<InterfaceRequiringEntity, OperationRequiredRole> change, @Extension final RoutinesFacade _routinesFacade) {
+      InsertEReference<InterfaceRequiringEntity, OperationRequiredRole> _insertChange = change.getInsertChange();
+      OperationRequiredRole _newValue = _insertChange.getNewValue();
+      _routinesFacade.addRequiredRole(_newValue);
     }
   }
 }

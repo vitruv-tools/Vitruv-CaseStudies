@@ -1,7 +1,6 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -20,7 +19,7 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.DataType> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.DataType>)change;
+    ReplaceSingleValuedEReference<OperationSignature, DataType> typedChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(typedChange, routinesFacade);
@@ -31,16 +30,22 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
   }
   
   private boolean checkChangeProperties(final ReplaceSingleValuedEReference<OperationSignature, DataType> change) {
-    EObject changedElement = change.getAffectedEObject();
-    // Check model element type
-    if (!(changedElement instanceof OperationSignature)) {
+    // Check affected object
+    if (!(change.getAffectedEObject() instanceof OperationSignature)) {
     	return false;
     }
-    
     // Check feature
     if (!change.getAffectedFeature().getName().equals("returnType__OperationSignature")) {
     	return false;
     }
+    if (change.isFromNonDefaultValue() && !(change.getOldValue() instanceof DataType)
+    ) {
+    	return false;
+    }
+    if (change.isToNonDefaultValue() && !(change.getNewValue() instanceof DataType)) {
+    	return false;
+    }
+    
     return true;
   }
   
@@ -48,7 +53,7 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
     if (!(change instanceof ReplaceSingleValuedEReference<?, ?>)) {
     	return false;
     }
-    ReplaceSingleValuedEReference typedChange = (ReplaceSingleValuedEReference)change;
+    ReplaceSingleValuedEReference<OperationSignature, DataType> typedChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
     if (!checkChangeProperties(typedChange)) {
     	return false;
     }
