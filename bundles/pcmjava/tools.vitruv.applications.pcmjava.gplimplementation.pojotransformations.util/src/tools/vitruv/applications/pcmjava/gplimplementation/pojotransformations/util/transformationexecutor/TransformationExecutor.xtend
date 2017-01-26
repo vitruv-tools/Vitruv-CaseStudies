@@ -26,6 +26,7 @@ import tools.vitruv.framework.change.echange.feature.attribute.RemoveEAttributeV
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.tuid.TuidManager
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.framework.change.echange.compound.CompoundEChange
 
 public class TransformationExecutor {
 
@@ -52,8 +53,16 @@ public class TransformationExecutor {
 	}
 
 	def public ChangePropagationResult executeTransformationForChange(EChange change) {
-		val ChangePropagationResult transformationResult = executeTransformation(change)
-		updateTUIDOfAffectedEObjectInEChange(change)
+		val transformationResult = new ChangePropagationResult();
+		if (change instanceof CompoundEChange) {
+			for (atomicChange : change.atomicChanges) {
+				transformationResult.integrateResult(executeTransformation(atomicChange))
+				updateTUIDOfAffectedEObjectInEChange(atomicChange)
+			}
+		}
+		transformationResult.integrateResult(executeTransformation(change))
+		updateTUIDOfAffectedEObjectInEChange(change)	
+		
 		return transformationResult
 	}
 
