@@ -34,6 +34,7 @@ public class PCMParameterMappingTransformationTest extends PCM2JaMoPPTransformat
     public void testChangeParameterName() throws Throwable {
         final Parameter param = this.createAndSyncRepoOpSigAndParameter();
 
+        param.setEntityName(PCM2JaMoPPTestUtils.PARAMETER_NAME + PCM2JaMoPPTestUtils.RENAME);
         param.setParameterName(PCM2JaMoPPTestUtils.PARAMETER_NAME + PCM2JaMoPPTestUtils.RENAME);
         super.triggerSynchronization(VURI.getInstance(param.eResource()));
 
