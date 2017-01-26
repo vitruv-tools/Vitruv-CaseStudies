@@ -55,7 +55,7 @@ class BasicComponentMappingTransformation extends EmptyEObjectMappingTransformat
 
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject, EReference affectedReference, EObject oldValue,
 		int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		PCMJaMoPPUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel)
+		PCMJaMoPPUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
 	}
 
 	/**

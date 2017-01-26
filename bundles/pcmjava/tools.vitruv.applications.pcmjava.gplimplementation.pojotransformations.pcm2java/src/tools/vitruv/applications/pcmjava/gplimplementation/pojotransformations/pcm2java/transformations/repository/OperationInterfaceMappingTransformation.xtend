@@ -122,7 +122,7 @@ class OperationInterfaceMappingTransformation extends EmptyEObjectMappingTransfo
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
 		EReference affectedReference, EObject oldValue, int index, EObject[] oldMethods) {
-		PCMJaMoPPUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel)
+		PCMJaMoPPUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
 	}
 
 	override removeEObject(EObject eObject) {

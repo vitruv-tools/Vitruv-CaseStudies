@@ -84,7 +84,7 @@ class RepositoryMappingTransformation extends EmptyEObjectMappingTransformation 
 
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
 		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		return PCMJaMoPPUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel)
+		return PCMJaMoPPUtils.removeCorrespondenceAndAllObjects(oldValue, null, correspondenceModel)
 	}
 
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
