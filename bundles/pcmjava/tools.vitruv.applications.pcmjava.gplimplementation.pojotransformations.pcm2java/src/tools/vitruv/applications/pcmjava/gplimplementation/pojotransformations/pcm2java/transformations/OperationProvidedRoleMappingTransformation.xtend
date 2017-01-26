@@ -70,11 +70,8 @@ class OperationProvidedRoleMappingTransformation extends EmptyEObjectMappingTran
 			return new ChangePropagationResult
 		}
 		if (null != oldValue) {
-			val EObject[] oldEObjects = removeEObject(affectedEObject)
-			for (oldEObject : oldEObjects) {
-				correspondenceModel.removeCorrespondencesThatInvolveAtLeastAndDependend(oldEObject.toSet)
-				EcoreUtil.remove(oldEObject)
-			}
+			correspondenceModel.removeCorrespondencesThatInvolveAtLeastAndDependend(oldValue.toSet)
+			EcoreUtil.remove(oldValue)
  	 	}
  	 	// if the new value already has a correspondence we do not need to create newEObjects
 		if (!this.correspondenceModel.hasCorrespondences(newValue.toList)) {
