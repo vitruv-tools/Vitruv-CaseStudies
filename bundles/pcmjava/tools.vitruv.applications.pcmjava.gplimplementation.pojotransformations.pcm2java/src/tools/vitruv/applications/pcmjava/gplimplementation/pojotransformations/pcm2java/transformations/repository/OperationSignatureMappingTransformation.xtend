@@ -29,6 +29,7 @@ import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.EObjectUtil
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import org.emftext.language.java.members.Method
 
 class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -107,7 +108,12 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
 		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		return PCMJaMoPPUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel)
+		val correspondingObjects = correspondenceModel.getCorrespondingEObjects(newAffectedEObject).filter(Method);
+		val correspondingMethod = correspondingObjects.claimOne;
+		val oldTuid = correspondenceModel.calculateTUIDFromEObject(correspondingMethod);
+		val result = PCMJaMoPPUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
+		oldTuid.updateTuid(correspondingMethod); 
+		return result
 	}
 
 	/**

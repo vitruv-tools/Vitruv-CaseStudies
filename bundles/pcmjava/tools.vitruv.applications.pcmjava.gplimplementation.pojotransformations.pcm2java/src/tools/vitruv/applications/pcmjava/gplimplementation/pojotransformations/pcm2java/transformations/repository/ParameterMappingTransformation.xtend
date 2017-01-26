@@ -69,10 +69,13 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 		if (correspondingObjects.nullOrEmpty || correspondingObjects.filter(typeof(org.emftext.language.java.parameters.Parameter)).nullOrEmpty) {
 			return transformationResult
 		}
+		val correspondingParameter = correspondingObjects.filter(typeof(org.emftext.language.java.parameters.Parameter)).get(0)
 		if (affectedAttribute.name.equals(PcmNamespace.PCM_ATTRIBUTE_ENTITY_NAME)) {
 			val boolean saveFilesOfChangedEObjects = true
+			val oldTuid = correspondenceModel.calculateTUIDFromEObject(correspondingParameter)
 			PCM2JaMoPPUtils.updateNameAttribute(correspondingObjects, newValue, affectedAttribute,
 				featureCorrespondenceMap, correspondenceModel, saveFilesOfChangedEObjects)
+			oldTuid.updateTuid(correspondingParameter);
 		}
 		return transformationResult
 	}
@@ -97,9 +100,9 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 			try {
 				val TypeReference typeReference = DataTypeCorrespondenceHelper.
 					claimUniqueCorrespondingJaMoPPDataTypeReference(newValue as DataType, correspondenceModel)
+				val oldTuid = correspondenceModel.calculateTUIDFromEObject(correspondingParameter)
 				correspondingParameter.setTypeReference(typeReference)
-				val oldTUID = correspondenceModel.calculateTUIDFromEObject(correspondingParameter)
-				oldTUID.updateTuid(correspondingParameter)
+				oldTuid.updateTuid(correspondingParameter)
 			} catch (RuntimeException e) {
 				logger.warn("Could not find correspondence for PCM data type " + oldValue + " . " + e)
 			}
