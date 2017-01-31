@@ -1,7 +1,7 @@
 package mir.reactions.reactions5_1ToUML.pcmToUml;
 
 import mir.routines.pcmToUml.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
@@ -21,32 +21,32 @@ class CreatedPcmComponentReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<Repository, RepositoryComponent> typedChange = (CreateAndInsertNonRoot<Repository, RepositoryComponent>)change;
+    InsertEReference<Repository, RepositoryComponent> typedChange = ((CreateAndInsertNonRoot<Repository, RepositoryComponent>)change).getInsertChange();
+    Repository affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    RepositoryComponent newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<Repository, RepositoryComponent> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof EObject)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<Repository, RepositoryComponent> relevantChange = ((CreateAndInsertNonRoot<Repository, RepositoryComponent>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof Repository)) {
+    if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("components__Repository")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("components__Repository")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof RepositoryComponent)) {
+    if (!(relevantChange.getNewValue() instanceof RepositoryComponent)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -54,8 +54,7 @@ class CreatedPcmComponentReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<Repository, RepositoryComponent> typedChange = (CreateAndInsertNonRoot<Repository, RepositoryComponent>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -67,10 +66,8 @@ class CreatedPcmComponentReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<Repository, RepositoryComponent> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<Repository, RepositoryComponent> _insertChange = change.getInsertChange();
-      RepositoryComponent _newValue = _insertChange.getNewValue();
-      _routinesFacade.createUmlComponent(_newValue);
+    public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final RepositoryComponent newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createUmlComponent(newValue);
     }
   }
 }

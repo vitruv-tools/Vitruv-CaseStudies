@@ -7,7 +7,7 @@ execute actions in uml
 
 reaction CreatedPcmRepository {
 	after element pcm::Repository created and inserted as root
-	call createUmlModel(change.insertChange.newValue)
+	call createUmlModel(newValue)
 }
 
 routine createUmlModel(pcm::Repository pcmRepository) {
@@ -22,7 +22,7 @@ routine createUmlModel(pcm::Repository pcmRepository) {
 
 reaction CreatedPcmComponent {
 	after element created and inserted in pcm::Repository[components__Repository]
-	call createUmlComponent(change.insertChange.newValue)
+	call createUmlComponent(newValue)
 }
 
 routine createUmlComponent(pcm::RepositoryComponent pcmComponent) {
