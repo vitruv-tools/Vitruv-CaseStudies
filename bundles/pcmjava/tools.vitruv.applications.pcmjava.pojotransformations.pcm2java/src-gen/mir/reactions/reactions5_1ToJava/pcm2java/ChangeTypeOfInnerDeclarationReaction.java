@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
@@ -20,41 +21,44 @@ class ChangeTypeOfInnerDeclarationReaction extends AbstractReactionRealization {
   
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEReference<InnerDeclaration, DataType> typedChange = (ReplaceSingleValuedEReference<InnerDeclaration, DataType>)change;
+    InnerDeclaration affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    DataType oldValue = typedChange.getOldValue();
+    DataType newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangeTypeOfInnerDeclarationReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangeTypeOfInnerDeclarationReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return ReplaceSingleValuedEReference.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEReference<InnerDeclaration, DataType> change) {
+  private boolean checkChangeProperties(final EChange change) {
+    ReplaceSingleValuedEReference<InnerDeclaration, DataType> relevantChange = (ReplaceSingleValuedEReference<InnerDeclaration, DataType>)change;
     // Check affected object
-    if (!(change.getAffectedEObject() instanceof InnerDeclaration)) {
+    if (!(relevantChange.getAffectedEObject() instanceof InnerDeclaration)) {
     	return false;
     }
     // Check feature
-    if (!change.getAffectedFeature().getName().equals("datatype_InnerDeclaration")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("datatype_InnerDeclaration")) {
     	return false;
     }
-    if (change.isFromNonDefaultValue() && !(change.getOldValue() instanceof DataType)
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)
     ) {
     	return false;
     }
-    if (change.isToNonDefaultValue() && !(change.getNewValue() instanceof DataType)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
     	return false;
     }
-    
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEReference<?, ?>)) {
+    if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
-    ReplaceSingleValuedEReference<InnerDeclaration, DataType> typedChange = (ReplaceSingleValuedEReference<InnerDeclaration, DataType>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,9 +70,8 @@ class ChangeTypeOfInnerDeclarationReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEReference<InnerDeclaration, DataType> change, @Extension final RoutinesFacade _routinesFacade) {
-      InnerDeclaration _affectedEObject = change.getAffectedEObject();
-      _routinesFacade.changeTypeOfInnerDeclarationImplementation(_affectedEObject);
+    public void callRoutine1(final InnerDeclaration affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeTypeOfInnerDeclarationImplementation(affectedEObject);
     }
   }
 }

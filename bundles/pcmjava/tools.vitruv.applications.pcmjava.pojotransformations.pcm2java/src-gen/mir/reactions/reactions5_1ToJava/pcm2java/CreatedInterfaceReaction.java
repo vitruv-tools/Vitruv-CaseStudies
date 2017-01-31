@@ -1,7 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -21,32 +21,32 @@ class CreatedInterfaceReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<Repository, Interface> typedChange = (CreateAndInsertNonRoot<Repository, Interface>)change;
+    InsertEReference<Repository, Interface> typedChange = ((CreateAndInsertNonRoot<Repository, Interface>)change).getInsertChange();
+    Repository affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Interface newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedInterfaceReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<Repository, Interface> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof EObject)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<Repository, Interface> relevantChange = ((CreateAndInsertNonRoot<Repository, Interface>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof Repository)) {
+    if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("interfaces__Repository")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("interfaces__Repository")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof Interface)) {
+    if (!(relevantChange.getNewValue() instanceof Interface)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -54,8 +54,7 @@ class CreatedInterfaceReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<Repository, Interface> typedChange = (CreateAndInsertNonRoot<Repository, Interface>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -67,10 +66,8 @@ class CreatedInterfaceReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<Repository, Interface> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<Repository, Interface> _insertChange = change.getInsertChange();
-      Interface _newValue = _insertChange.getNewValue();
-      _routinesFacade.createInterfaceImplementation(_newValue);
+    public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createInterfaceImplementation(newValue);
     }
   }
 }

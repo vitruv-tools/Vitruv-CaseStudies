@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour;
@@ -20,32 +21,32 @@ class CreatedResourceDemandingInternalBehaviorReaction extends AbstractReactionR
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<BasicComponent, ResourceDemandingInternalBehaviour> typedChange = (CreateAndInsertNonRoot<BasicComponent, ResourceDemandingInternalBehaviour>)change;
+    InsertEReference<BasicComponent, ResourceDemandingInternalBehaviour> typedChange = ((CreateAndInsertNonRoot<BasicComponent, ResourceDemandingInternalBehaviour>)change).getInsertChange();
+    BasicComponent affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    ResourceDemandingInternalBehaviour newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedResourceDemandingInternalBehaviorReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedResourceDemandingInternalBehaviorReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<BasicComponent, ResourceDemandingInternalBehaviour> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof ResourceDemandingInternalBehaviour)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<BasicComponent, ResourceDemandingInternalBehaviour> relevantChange = ((CreateAndInsertNonRoot<BasicComponent, ResourceDemandingInternalBehaviour>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof BasicComponent)) {
+    if (!(relevantChange.getAffectedEObject() instanceof BasicComponent)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("resourceDemandingInternalBehaviours__BasicComponent")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("resourceDemandingInternalBehaviours__BasicComponent")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof ResourceDemandingInternalBehaviour)) {
+    if (!(relevantChange.getNewValue() instanceof ResourceDemandingInternalBehaviour)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -53,8 +54,7 @@ class CreatedResourceDemandingInternalBehaviorReaction extends AbstractReactionR
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<BasicComponent, ResourceDemandingInternalBehaviour> typedChange = (CreateAndInsertNonRoot<BasicComponent, ResourceDemandingInternalBehaviour>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,10 +66,8 @@ class CreatedResourceDemandingInternalBehaviorReaction extends AbstractReactionR
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<BasicComponent, ResourceDemandingInternalBehaviour> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<BasicComponent, ResourceDemandingInternalBehaviour> _insertChange = change.getInsertChange();
-      ResourceDemandingInternalBehaviour _newValue = _insertChange.getNewValue();
-      _routinesFacade.createMethodForResourceDemandingBehavior(_newValue);
+    public void callRoutine1(final BasicComponent affectedEObject, final EReference affectedFeature, final ResourceDemandingInternalBehaviour newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createMethodForResourceDemandingBehavior(newValue);
     }
   }
 }

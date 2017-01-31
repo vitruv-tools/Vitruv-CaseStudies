@@ -44,7 +44,7 @@ execute actions in java
 reaction CreatedRepository {
 	after element pcm::Repository created and inserted as root 
 	call {
-		val repository = change.insertChange.newValue
+		val repository = newValue
 		createJavaPackage(repository, null, repository.entityName, "repository_root");
 		createRepositorySubPackages(repository);
 	}
@@ -65,7 +65,7 @@ routine createRepositorySubPackages(pcm::Repository repository) {
 
 reaction RenamedRepository {
 	after attribute replaced at pcm::Repository[entityName]
-	call renamePackageForRepository(change.affectedEObject)
+	call renamePackageForRepository(affectedEObject)
 }
 
 routine renamePackageForRepository(pcm::Repository repository) {
@@ -104,7 +104,7 @@ routine renamePackageForRepository(pcm::Repository repository) {
 reaction CreatedSystem {
 	after element pcm::System created and inserted as root
 	call {
-		val system = change.insertChange.newValue;
+		val system = newValue;
 		createJavaPackage(system, null, system.entityName, "root_system");
 		createImplementationForSystem(system);
 	}
@@ -122,7 +122,7 @@ routine createImplementationForSystem(pcm::System system) {
 reaction DeletedSystem {
 	after element pcm::System deleted and removed as root 
 	call {
-		val system = change.removeChange.oldValue;
+		val system = oldValue;
 		deleteJavaPackage(system, system.entityName, "root_system");
 		deleteJavaClassifier(system);
 	}
@@ -130,7 +130,7 @@ reaction DeletedSystem {
 
 reaction ChangedSystemName {
 	after attribute replaced at pcm::System[entityName]
-	call changeSystemImplementationName(change.affectedEObject)
+	call changeSystemImplementationName(affectedEObject)
 }
 	
 routine changeSystemImplementationName(pcm::System system) {
@@ -147,7 +147,7 @@ routine changeSystemImplementationName(pcm::System system) {
 
 reaction AddedAssemblyContextToComposedStructure { 
 	after element pcm::AssemblyContext created and inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
-	call addAssemblyContextToComposedStructure(change.insertChange.affectedEObject, change.insertChange.newValue)
+	call addAssemblyContextToComposedStructure(affectedEObject, newValue)
 }
 
 // TODO HK This is ugly...
@@ -183,7 +183,7 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 
 reaction CreatedComponent { 
 	after element pcm::RepositoryComponent created and inserted in pcm::Repository[components__Repository]
-	call createComponentImplementation(change.insertChange.newValue)
+	call createComponentImplementation(newValue)
 }
 
 routine createComponentImplementation(pcm::RepositoryComponent component) {
@@ -211,7 +211,7 @@ routine createImplementationForComponent(pcm::RepositoryComponent component) {
 reaction RenameComponent {
 	after attribute replaced at pcm::RepositoryComponent[entityName]
 	call {
-		val component = change.affectedEObject;
+		val component = affectedEObject;
 		renameComponentPackageAndClass(component);
 	}
 }
@@ -241,8 +241,8 @@ routine renameComponentClass(pcm::RepositoryComponent component) {
 reaction DeletedComponent {
 	after element pcm::RepositoryComponent deleted and removed from pcm::Repository[components__Repository]
 	call {
-		deleteJavaPackage(change.removeChange.oldValue, change.removeChange.oldValue.entityName, "")
-		deleteJavaClassifier(change.removeChange.oldValue)
+		deleteJavaPackage(oldValue, oldValue.entityName, "")
+		deleteJavaClassifier(oldValue)
 	}
 }
 
@@ -251,7 +251,7 @@ reaction DeletedComponent {
 
 reaction CreatedInterface { 
 	after element created and inserted in pcm::Repository[interfaces__Repository]
-	call createInterfaceImplementation(change.insertChange.newValue)
+	call createInterfaceImplementation(newValue)
 }
 
 routine createInterfaceImplementation(pcm::Interface interf) { 
@@ -268,7 +268,7 @@ routine createInterfaceImplementation(pcm::Interface interf) {
 
 reaction RenamedInterface { 
 	after attribute replaced at pcm::OperationInterface[entityName]
-	call renameInterface(change.affectedEObject)
+	call renameInterface(affectedEObject)
 }
 
 routine renameInterface(pcm::OperationInterface interf) { 
@@ -286,7 +286,7 @@ routine renameInterface(pcm::OperationInterface interf) {
 
 reaction CreatedCompositeDataType { 
 	after element pcm::CompositeDataType created and inserted in pcm::Repository[dataTypes__Repository]
-	call createCompositeDataTypeImplementation(change.insertChange.newValue)
+	call createCompositeDataTypeImplementation(newValue)
 }
 
 routine createCompositeDataTypeImplementation(pcm::CompositeDataType dataType) { 
@@ -303,7 +303,7 @@ routine createCompositeDataTypeImplementation(pcm::CompositeDataType dataType) {
 
 reaction RenamedCompositeDataType { 
 	after attribute replaced at pcm::CompositeDataType[entityName]
-	call renameCompositeDataType(change.affectedEObject)
+	call renameCompositeDataType(affectedEObject)
 }
 
 routine renameCompositeDataType(pcm::CompositeDataType compositeDataType) { 
@@ -317,12 +317,12 @@ routine renameCompositeDataType(pcm::CompositeDataType compositeDataType) {
 
 reaction DeletedCompositeDataType {
 	after element pcm::CompositeDataType deleted and removed from pcm::Repository[dataTypes__Repository]
-	call deleteJavaClassifier(change.removeChange.oldValue)
+	call deleteJavaClassifier(oldValue)
 }
 
 reaction CreatedCollectionDataType { 
 	after element pcm::CollectionDataType created and inserted in pcm::Repository[dataTypes__Repository]
-	call createCollectionDataTypeImplementation(change.insertChange.newValue)
+	call createCollectionDataTypeImplementation(newValue)
 }
 
 routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType) { 
@@ -382,7 +382,7 @@ routine addSuperTypeToDataType(pcm::DataType dataType, java::TypeReference inner
 
 reaction RenamedCollectionDataType {
 	after attribute replaced at pcm::CollectionDataType[entityName]
-	call renameCollectionDataType(change.affectedEObject)
+	call renameCollectionDataType(affectedEObject)
 }
 
 routine renameCollectionDataType(pcm::CollectionDataType collectionDataType) { 
@@ -396,14 +396,14 @@ routine renameCollectionDataType(pcm::CollectionDataType collectionDataType) {
 
 reaction DeletedCollectionDataType { 
 	after element pcm::CollectionDataType deleted and removed from pcm::Repository[dataTypes__Repository]
-	call deleteJavaClassifier(change.removeChange.oldValue)
+	call deleteJavaClassifier(oldValue)
 }
 
 // ################ DATA TYPES - INNER DECLARATION REACTIONS ################
 
 reaction CreatedInnerDeclaration { 
 	after element pcm::InnerDeclaration created and inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
-	call createInnerDeclarationImplementation(change.insertChange.newValue)
+	call createInnerDeclarationImplementation(newValue)
 }
 
 routine createInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) { 
@@ -445,7 +445,7 @@ routine addInnerDeclarationToCompositeDataType(pcm::CompositeDataType dataType, 
 
 reaction RenameInnerDeclaration { 
 	after attribute replaced at pcm::InnerDeclaration[entityName]
-	call renameInnerDeclarationImplementation(change.affectedEObject)
+	call renameInnerDeclarationImplementation(affectedEObject)
 }
 
 routine renameInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) { 
@@ -472,7 +472,7 @@ routine renameInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclarat
 	
 reaction ChangeTypeOfInnerDeclaration { 
 	after element pcm::DataType replaced at pcm::InnerDeclaration[datatype_InnerDeclaration]
-	call changeTypeOfInnerDeclarationImplementation(change.affectedEObject)
+	call changeTypeOfInnerDeclarationImplementation(affectedEObject)
 }
 
 routine changeTypeOfInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) { 
@@ -633,7 +633,7 @@ routine deleteJavaClassifier(pcm::NamedElement sourceElement) {
 
 reaction CreatedProvidedRole { 
 	after element pcm::OperationProvidedRole created and inserted in pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
-	call addProvidedRole(change.insertChange.newValue)
+	call addProvidedRole(newValue)
 }
 
 routine addProvidedRole(pcm::OperationProvidedRole providedRole) { 
@@ -658,18 +658,18 @@ routine addProvidedRole(pcm::OperationProvidedRole providedRole) {
 }
 
 reaction ChangedProvidedInterfaceOfProvidedRole { 
-	after attribute replaced at pcm::OperationProvidedRole[providedInterface__OperationProvidedRole]
+	after element replaced at pcm::OperationProvidedRole[providedInterface__OperationProvidedRole]
 	call {
-		val operationProvidedRole = change.affectedEObject;
+		val operationProvidedRole = affectedEObject;
 		removeProvidedRole(operationProvidedRole);
 		addProvidedRole(operationProvidedRole);
 	}
 }
 
 reaction ChangedProvidingEntityOfProvidedRole { 
-	after attribute replaced at pcm::OperationProvidedRole[providingEntity_ProvidedRole]
+	after element replaced at pcm::OperationProvidedRole[providingEntity_ProvidedRole]
 	call {
-		val operationProvidedRole = change.affectedEObject;	
+		val operationProvidedRole = affectedEObject;	
 		removeProvidedRole(operationProvidedRole);
 		addProvidedRole(operationProvidedRole);
 	}
@@ -677,12 +677,12 @@ reaction ChangedProvidingEntityOfProvidedRole {
 
 reaction DeletedProvidedRoleFromSystem { 
 	after element pcm::ProvidedRole deleted and removed from pcm::System[providedRoles_InterfaceProvidingEntity]
-	call removeProvidedRole(change.removeChange.oldValue)
+	call removeProvidedRole(oldValue)
 }
 
 reaction DeletedProvidedRoleFromComponent { 
 	after element pcm::ProvidedRole deleted and removed from pcm::RepositoryComponent[providedRoles_InterfaceProvidingEntity]
-	call removeProvidedRole(change.removeChange.oldValue)
+	call removeProvidedRole(oldValue)
 }
 
 routine removeProvidedRole(pcm::ProvidedRole providedRole) { 
@@ -705,7 +705,7 @@ routine removeProvidedRole(pcm::ProvidedRole providedRole) {
 // TODO HK Implement rename correctly after having all four correspondences correctly 
 reaction CreatedRequiredRole { 
 	after element pcm::OperationRequiredRole created and inserted in pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
-	call addRequiredRole(change.insertChange.newValue)
+	call addRequiredRole(newValue)
 }
 
 // TODO HK This routine is hard to read, isn't it?
@@ -760,7 +760,7 @@ routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorres
 reaction DeletedRequiredRole { 
 	after element pcm::OperationRequiredRole deleted and removed from pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
 	call {
-		removeRequiredRole(change.removeChange.oldValue, change.removeChange.affectedEObject as RepositoryComponent);
+		removeRequiredRole(oldValue, affectedEObject as RepositoryComponent);
 	}
 }
 
@@ -831,21 +831,21 @@ routine reinitializeOperationRequiredRole(pcm::OperationRequiredRole requiredRol
 
 reaction RenameOperationRequiredRole { 
 	after attribute replaced at pcm::OperationRequiredRole[entityName]
-	call reinitializeOperationRequiredRole(change.affectedEObject)
+	call reinitializeOperationRequiredRole(affectedEObject)
 }
 
 reaction ChangeOperationRequiredRoleEntity { 
-	after attribute replaced at pcm::OperationRequiredRole[requiringEntity_RequiredRole]
+	after element replaced at pcm::OperationRequiredRole[requiringEntity_RequiredRole]
 	call {
-		val requiredRole = change.affectedEObject;
-		removeRequiredRole(requiredRole, change.oldValue);
+		val requiredRole = affectedEObject;
+		removeRequiredRole(requiredRole, oldValue);
 		addRequiredRole(requiredRole);
 	}
 }
 
 reaction ChangeOperationRequiredRoleInterface { 
-	after attribute replaced at pcm::OperationRequiredRole[requiredInterface__OperationRequiredRole]
-	call reinitializeOperationRequiredRole(change.affectedEObject)
+	after element replaced at pcm::OperationRequiredRole[requiredInterface__OperationRequiredRole]
+	call reinitializeOperationRequiredRole(affectedEObject)
 }
 
 
@@ -856,7 +856,7 @@ reaction ChangeOperationRequiredRoleInterface {
 // Use more reasonable correspondences than Michael
 reaction CreatedOperationSignature { 
 	after element pcm::OperationSignature created and inserted in pcm::OperationInterface[signatures__OperationInterface]
-	call createMethodForOperationSignature(change.insertChange.newValue)
+	call createMethodForOperationSignature(newValue)
 }
 
 routine createMethodForOperationSignature(pcm::OperationSignature operationSignature) { 
@@ -876,7 +876,7 @@ routine createMethodForOperationSignature(pcm::OperationSignature operationSigna
 
 reaction RenameOperationSignature { 
 	after attribute replaced at pcm::OperationSignature[entityName]
-	call renameMethodForOperationSignature(change.affectedEObject)
+	call renameMethodForOperationSignature(affectedEObject)
 }
 
 routine renameMethodForOperationSignature(pcm::OperationSignature operationSignature) { 
@@ -909,7 +909,7 @@ routine renameMethodForOperationSignature(pcm::OperationSignature operationSigna
 
 reaction ChangeOperationSignatureReturnType { 
 	after element pcm::DataType replaced at pcm::OperationSignature[returnType__OperationSignature]
-	call changeReturnTypeOfMethodForOperationSignature(change.affectedEObject)
+	call changeReturnTypeOfMethodForOperationSignature(affectedEObject)
 }
 
 routine changeReturnTypeOfMethodForOperationSignature(pcm::OperationSignature operationSignature) { 
@@ -935,7 +935,7 @@ routine changeInterfaceMethodReturnType(java::InterfaceMethod interfaceMethod, p
 
 reaction DeletedOperationSignature { 
 	after element pcm::OperationSignature deleted and removed from pcm::OperationInterface[signatures__OperationInterface]
-	call deleteMethodForOperationSignature(change.removeChange.oldValue)
+	call deleteMethodForOperationSignature(oldValue)
 }
 
 routine deleteMethodForOperationSignature(pcm::OperationSignature operationSignature) { 
@@ -953,7 +953,7 @@ routine deleteMethodForOperationSignature(pcm::OperationSignature operationSigna
 
 reaction CreatedParameter { 
 	after element pcm::Parameter created and inserted in pcm::OperationSignature[parameters__OperationSignature]
-	call createParameter(change.insertChange.newValue)
+	call createParameter(newValue)
 }
 
 // TODO HK Consolidate with ChangeParameterType!
@@ -977,7 +977,7 @@ routine createParameter(pcm::Parameter parameter) {
 
 reaction RenamedParameter { 
 	after attribute replaced at pcm::Parameter[parameterName]
-	call renameParameter(change.affectedEObject)
+	call renameParameter(affectedEObject)
 }
 
 routine renameParameter(pcm::Parameter parameter) { 
@@ -992,8 +992,8 @@ routine renameParameter(pcm::Parameter parameter) {
 }
 
 reaction ChangedParameterType { 
-	after attribute replaced at pcm::Parameter[dataType__Parameter]
-	call changeParameterType(change.affectedEObject)
+	after element replaced at pcm::Parameter[dataType__Parameter]
+	call changeParameterType(affectedEObject)
 }
 
 routine changeParameterType(pcm::Parameter parameter) { 
@@ -1013,7 +1013,7 @@ routine changeParameterType(pcm::Parameter parameter) {
 
 reaction DeletedParameter { 
 	after element pcm::Parameter deleted and removed from pcm::OperationSignature[parameters__OperationSignature]
-	call deleteParameter(change.removeChange.affectedEObject, change.removeChange.oldValue)
+	call deleteParameter(affectedEObject, oldValue)
 }
 
 routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parameter) { 
@@ -1032,7 +1032,7 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 
 reaction CreatedResourceDemandingInternalBehavior { 
 	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-	call createMethodForResourceDemandingBehavior(change.insertChange.newValue)
+	call createMethodForResourceDemandingBehavior(newValue)
 }
 
 routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
@@ -1053,7 +1053,7 @@ routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalB
 
 reaction RenameResourceDemandingInternalBehavior { 
 	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
-	call renameMethodForResourceDemandingBehavior(change.affectedEObject)
+	call renameMethodForResourceDemandingBehavior(affectedEObject)
 }
 
 routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
@@ -1069,7 +1069,7 @@ routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalB
 
 reaction DeletedDemandingInternalBehavior { 
 	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-	call deleteMethodForResourceDemandingBehavior(change.removeChange.oldValue)
+	call deleteMethodForResourceDemandingBehavior(oldValue)
 }
 
 routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
@@ -1085,7 +1085,7 @@ routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalB
 
 reaction CreatedSEFF { 
 	after element pcm::ServiceEffectSpecification created and inserted in pcm::BasicComponent[serviceEffectSpecifications__BasicComponent]
-	call createSEFF(change.insertChange.newValue)
+	call createSEFF(newValue)
 }
 
 routine createSEFF(pcm::ServiceEffectSpecification seff) { 
@@ -1114,7 +1114,7 @@ routine createSEFF(pcm::ServiceEffectSpecification seff) {
 
 reaction ChangeOperationSignatureOfSeff { 
 	after element pcm::OperationSignature replaced at pcm::ResourceDemandingSEFF[describedService__SEFF]
-	call changeMethodForSeff(change.affectedEObject)
+	call changeMethodForSeff(affectedEObject)
 }
 
 routine changeMethodForSeff(pcm::ResourceDemandingSEFF seff) { 
@@ -1140,7 +1140,7 @@ routine updateSEFFImplementingMethodName(pcm::ServiceEffectSpecification seff) {
 
 reaction DeletedSeff { 
 	after element pcm::ServiceEffectSpecification deleted and removed from pcm::BasicComponent[serviceEffectSpecifications__BasicComponent]
-	call deleteMethodForSeff(change.removeChange.oldValue)
+	call deleteMethodForSeff(oldValue)
 }
 
 routine deleteMethodForSeff(pcm::ServiceEffectSpecification seff) { 

@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
@@ -20,33 +21,33 @@ class DeletedSeffReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification> typedChange = (RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification>)change;
+    RemoveEReference<BasicComponent, ServiceEffectSpecification> typedChange = ((RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification>)change).getRemoveChange();
+    BasicComponent affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    ServiceEffectSpecification oldValue = typedChange.getOldValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.DeletedSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.DeletedSeffReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return RemoveAndDeleteNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification> change) {
-    if (!(change.getDeleteChange().getAffectedEObject() instanceof ServiceEffectSpecification)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    RemoveEReference<BasicComponent, ServiceEffectSpecification> relevantChange = ((RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification>)change).getRemoveChange();
     // Check affected object
-    if (!(change.getRemoveChange().getAffectedEObject() instanceof BasicComponent)) {
+    if (!(relevantChange.getAffectedEObject() instanceof BasicComponent)) {
     	return false;
     }
     // Check feature
-    if (!change.getRemoveChange().getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
     	return false;
     }
-    if (!(change.getRemoveChange().getOldValue() instanceof ServiceEffectSpecification)
+    if (!(relevantChange.getOldValue() instanceof ServiceEffectSpecification)
     ) {
     	return false;
     }
-    
     return true;
   }
   
@@ -54,8 +55,7 @@ class DeletedSeffReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
-    RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification> typedChange = (RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -67,10 +67,8 @@ class DeletedSeffReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification> change, @Extension final RoutinesFacade _routinesFacade) {
-      RemoveEReference<BasicComponent, ServiceEffectSpecification> _removeChange = change.getRemoveChange();
-      ServiceEffectSpecification _oldValue = _removeChange.getOldValue();
-      _routinesFacade.deleteMethodForSeff(_oldValue);
+    public void callRoutine1(final BasicComponent affectedEObject, final EReference affectedFeature, final ServiceEffectSpecification oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.deleteMethodForSeff(oldValue);
     }
   }
 }

@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
@@ -21,33 +22,33 @@ class DeletedRequiredRoleReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    RemoveAndDeleteNonRoot<InterfaceRequiringEntity, OperationRequiredRole> typedChange = (RemoveAndDeleteNonRoot<InterfaceRequiringEntity, OperationRequiredRole>)change;
+    RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole> typedChange = ((RemoveAndDeleteNonRoot<InterfaceRequiringEntity, OperationRequiredRole>)change).getRemoveChange();
+    InterfaceRequiringEntity affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    OperationRequiredRole oldValue = typedChange.getOldValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.DeletedRequiredRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.DeletedRequiredRoleReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return RemoveAndDeleteNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final RemoveAndDeleteNonRoot<InterfaceRequiringEntity, OperationRequiredRole> change) {
-    if (!(change.getDeleteChange().getAffectedEObject() instanceof OperationRequiredRole)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole> relevantChange = ((RemoveAndDeleteNonRoot<InterfaceRequiringEntity, OperationRequiredRole>)change).getRemoveChange();
     // Check affected object
-    if (!(change.getRemoveChange().getAffectedEObject() instanceof InterfaceRequiringEntity)) {
+    if (!(relevantChange.getAffectedEObject() instanceof InterfaceRequiringEntity)) {
     	return false;
     }
     // Check feature
-    if (!change.getRemoveChange().getAffectedFeature().getName().equals("requiredRoles_InterfaceRequiringEntity")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("requiredRoles_InterfaceRequiringEntity")) {
     	return false;
     }
-    if (!(change.getRemoveChange().getOldValue() instanceof OperationRequiredRole)
+    if (!(relevantChange.getOldValue() instanceof OperationRequiredRole)
     ) {
     	return false;
     }
-    
     return true;
   }
   
@@ -55,8 +56,7 @@ class DeletedRequiredRoleReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
-    RemoveAndDeleteNonRoot<InterfaceRequiringEntity, OperationRequiredRole> typedChange = (RemoveAndDeleteNonRoot<InterfaceRequiringEntity, OperationRequiredRole>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -68,12 +68,8 @@ class DeletedRequiredRoleReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final RemoveAndDeleteNonRoot<InterfaceRequiringEntity, OperationRequiredRole> change, @Extension final RoutinesFacade _routinesFacade) {
-      RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole> _removeChange = change.getRemoveChange();
-      OperationRequiredRole _oldValue = _removeChange.getOldValue();
-      RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole> _removeChange_1 = change.getRemoveChange();
-      InterfaceRequiringEntity _affectedEObject = _removeChange_1.getAffectedEObject();
-      _routinesFacade.removeRequiredRole(_oldValue, ((RepositoryComponent) _affectedEObject));
+    public void callRoutine1(final InterfaceRequiringEntity affectedEObject, final EReference affectedFeature, final OperationRequiredRole oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.removeRequiredRole(oldValue, ((RepositoryComponent) affectedEObject));
     }
   }
 }

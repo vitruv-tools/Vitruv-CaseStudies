@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -19,35 +20,37 @@ class RenameComponentReaction extends AbstractReactionRealization {
   
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEAttribute<RepositoryComponent, String> typedChange = (ReplaceSingleValuedEAttribute<RepositoryComponent, String>)change;
+    RepositoryComponent affectedEObject = typedChange.getAffectedEObject();
+    EAttribute affectedFeature = typedChange.getAffectedFeature();
+    String oldValue = typedChange.getOldValue();
+    String newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.RenameComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.RenameComponentReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return ReplaceSingleValuedEAttribute.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<RepositoryComponent, String> change) {
+  private boolean checkChangeProperties(final EChange change) {
+    ReplaceSingleValuedEAttribute<RepositoryComponent, String> relevantChange = (ReplaceSingleValuedEAttribute<RepositoryComponent, String>)change;
     // Check affected object
-    if (!(change.getAffectedEObject() instanceof RepositoryComponent)) {
+    if (!(relevantChange.getAffectedEObject() instanceof RepositoryComponent)) {
     	return false;
     }
-    	
     // Check feature
-    if (!change.getAffectedFeature().getName().equals("entityName")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
-    
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
+    if (!(change instanceof ReplaceSingleValuedEAttribute)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute<RepositoryComponent, String> typedChange = (ReplaceSingleValuedEAttribute<RepositoryComponent, String>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -59,8 +62,8 @@ class RenameComponentReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEAttribute<RepositoryComponent, String> change, @Extension final RoutinesFacade _routinesFacade) {
-      final RepositoryComponent component = change.getAffectedEObject();
+    public void callRoutine1(final RepositoryComponent affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+      final RepositoryComponent component = affectedEObject;
       _routinesFacade.renameComponentPackageAndClass(component);
     }
   }

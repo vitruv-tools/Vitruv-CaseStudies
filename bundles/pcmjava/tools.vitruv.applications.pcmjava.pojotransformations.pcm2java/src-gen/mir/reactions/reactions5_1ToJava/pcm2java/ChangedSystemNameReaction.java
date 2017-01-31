@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -18,35 +19,37 @@ class ChangedSystemNameReaction extends AbstractReactionRealization {
   
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String>)change;
+    org.palladiosimulator.pcm.system.System affectedEObject = typedChange.getAffectedEObject();
+    EAttribute affectedFeature = typedChange.getAffectedFeature();
+    String oldValue = typedChange.getOldValue();
+    String newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangedSystemNameReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangedSystemNameReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return ReplaceSingleValuedEAttribute.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> change) {
+  private boolean checkChangeProperties(final EChange change) {
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> relevantChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String>)change;
     // Check affected object
-    if (!(change.getAffectedEObject() instanceof org.palladiosimulator.pcm.system.System)) {
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.system.System)) {
     	return false;
     }
-    	
     // Check feature
-    if (!change.getAffectedFeature().getName().equals("entityName")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
-    
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
+    if (!(change instanceof ReplaceSingleValuedEAttribute)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -58,9 +61,8 @@ class ChangedSystemNameReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> change, @Extension final RoutinesFacade _routinesFacade) {
-      org.palladiosimulator.pcm.system.System _affectedEObject = change.getAffectedEObject();
-      _routinesFacade.changeSystemImplementationName(_affectedEObject);
+    public void callRoutine1(final org.palladiosimulator.pcm.system.System affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeSystemImplementationName(affectedEObject);
     }
   }
 }

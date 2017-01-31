@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
@@ -20,32 +21,32 @@ class CreatedProvidedRoleReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<InterfaceProvidingEntity, OperationProvidedRole> typedChange = (CreateAndInsertNonRoot<InterfaceProvidingEntity, OperationProvidedRole>)change;
+    InsertEReference<InterfaceProvidingEntity, OperationProvidedRole> typedChange = ((CreateAndInsertNonRoot<InterfaceProvidingEntity, OperationProvidedRole>)change).getInsertChange();
+    InterfaceProvidingEntity affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    OperationProvidedRole newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedProvidedRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedProvidedRoleReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<InterfaceProvidingEntity, OperationProvidedRole> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof OperationProvidedRole)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<InterfaceProvidingEntity, OperationProvidedRole> relevantChange = ((CreateAndInsertNonRoot<InterfaceProvidingEntity, OperationProvidedRole>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof InterfaceProvidingEntity)) {
+    if (!(relevantChange.getAffectedEObject() instanceof InterfaceProvidingEntity)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("providedRoles_InterfaceProvidingEntity")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("providedRoles_InterfaceProvidingEntity")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof OperationProvidedRole)) {
+    if (!(relevantChange.getNewValue() instanceof OperationProvidedRole)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -53,8 +54,7 @@ class CreatedProvidedRoleReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<InterfaceProvidingEntity, OperationProvidedRole> typedChange = (CreateAndInsertNonRoot<InterfaceProvidingEntity, OperationProvidedRole>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,10 +66,8 @@ class CreatedProvidedRoleReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<InterfaceProvidingEntity, OperationProvidedRole> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<InterfaceProvidingEntity, OperationProvidedRole> _insertChange = change.getInsertChange();
-      OperationProvidedRole _newValue = _insertChange.getNewValue();
-      _routinesFacade.addProvidedRole(_newValue);
+    public void callRoutine1(final InterfaceProvidingEntity affectedEObject, final EReference affectedFeature, final OperationProvidedRole newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.addProvidedRole(newValue);
     }
   }
 }

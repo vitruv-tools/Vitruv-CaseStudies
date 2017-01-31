@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Parameter;
@@ -9,7 +10,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
+import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
@@ -19,36 +20,45 @@ class ChangedParameterTypeReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Parameter, DataType> typedChange = (ReplaceSingleValuedEAttribute<Parameter, DataType>)change;
+    ReplaceSingleValuedEReference<Parameter, DataType> typedChange = (ReplaceSingleValuedEReference<Parameter, DataType>)change;
+    Parameter affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    DataType oldValue = typedChange.getOldValue();
+    DataType newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangedParameterTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangedParameterTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return ReplaceSingleValuedEAttribute.class;
+    return ReplaceSingleValuedEReference.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<Parameter, DataType> change) {
+  private boolean checkChangeProperties(final EChange change) {
+    ReplaceSingleValuedEReference<Parameter, DataType> relevantChange = (ReplaceSingleValuedEReference<Parameter, DataType>)change;
     // Check affected object
-    if (!(change.getAffectedEObject() instanceof Parameter)) {
+    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
     	return false;
     }
-    	
     // Check feature
-    if (!change.getAffectedFeature().getName().equals("dataType__Parameter")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("dataType__Parameter")) {
     	return false;
     }
-    
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)
+    ) {
+    	return false;
+    }
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
+    	return false;
+    }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
+    if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute<Parameter, DataType> typedChange = (ReplaceSingleValuedEAttribute<Parameter, DataType>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -60,9 +70,8 @@ class ChangedParameterTypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEAttribute<Parameter, DataType> change, @Extension final RoutinesFacade _routinesFacade) {
-      Parameter _affectedEObject = change.getAffectedEObject();
-      _routinesFacade.changeParameterType(_affectedEObject);
+    public void callRoutine1(final Parameter affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeParameterType(affectedEObject);
     }
   }
 }

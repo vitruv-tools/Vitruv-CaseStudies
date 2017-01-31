@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
@@ -20,32 +21,32 @@ class CreatedSEFFReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification> typedChange = (CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification>)change;
+    InsertEReference<BasicComponent, ServiceEffectSpecification> typedChange = ((CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification>)change).getInsertChange();
+    BasicComponent affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    ServiceEffectSpecification newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedSEFFReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedSEFFReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof ServiceEffectSpecification)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<BasicComponent, ServiceEffectSpecification> relevantChange = ((CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof BasicComponent)) {
+    if (!(relevantChange.getAffectedEObject() instanceof BasicComponent)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof ServiceEffectSpecification)) {
+    if (!(relevantChange.getNewValue() instanceof ServiceEffectSpecification)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -53,8 +54,7 @@ class CreatedSEFFReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification> typedChange = (CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,10 +66,8 @@ class CreatedSEFFReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<BasicComponent, ServiceEffectSpecification> _insertChange = change.getInsertChange();
-      ServiceEffectSpecification _newValue = _insertChange.getNewValue();
-      _routinesFacade.createSEFF(_newValue);
+    public void callRoutine1(final BasicComponent affectedEObject, final EReference affectedFeature, final ServiceEffectSpecification newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createSEFF(newValue);
     }
   }
 }

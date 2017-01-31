@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.ComposedStructure;
@@ -20,32 +21,32 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<ComposedStructure, AssemblyContext> typedChange = (CreateAndInsertNonRoot<ComposedStructure, AssemblyContext>)change;
+    InsertEReference<ComposedStructure, AssemblyContext> typedChange = ((CreateAndInsertNonRoot<ComposedStructure, AssemblyContext>)change).getInsertChange();
+    ComposedStructure affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    AssemblyContext newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<ComposedStructure, AssemblyContext> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof AssemblyContext)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<ComposedStructure, AssemblyContext> relevantChange = ((CreateAndInsertNonRoot<ComposedStructure, AssemblyContext>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof ComposedStructure)) {
+    if (!(relevantChange.getAffectedEObject() instanceof ComposedStructure)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("assemblyContexts__ComposedStructure")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("assemblyContexts__ComposedStructure")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof AssemblyContext)) {
+    if (!(relevantChange.getNewValue() instanceof AssemblyContext)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -53,8 +54,7 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<ComposedStructure, AssemblyContext> typedChange = (CreateAndInsertNonRoot<ComposedStructure, AssemblyContext>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,12 +66,8 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<ComposedStructure, AssemblyContext> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<ComposedStructure, AssemblyContext> _insertChange = change.getInsertChange();
-      ComposedStructure _affectedEObject = _insertChange.getAffectedEObject();
-      InsertEReference<ComposedStructure, AssemblyContext> _insertChange_1 = change.getInsertChange();
-      AssemblyContext _newValue = _insertChange_1.getNewValue();
-      _routinesFacade.addAssemblyContextToComposedStructure(_affectedEObject, _newValue);
+    public void callRoutine1(final ComposedStructure affectedEObject, final EReference affectedFeature, final AssemblyContext newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.addAssemblyContextToComposedStructure(affectedEObject, newValue);
     }
   }
 }

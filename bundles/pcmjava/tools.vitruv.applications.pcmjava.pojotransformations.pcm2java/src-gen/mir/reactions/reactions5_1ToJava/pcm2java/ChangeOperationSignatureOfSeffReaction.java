@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
@@ -20,41 +21,44 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
   
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> typedChange = (ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature>)change;
+    ResourceDemandingSEFF affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    OperationSignature oldValue = typedChange.getOldValue();
+    OperationSignature newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangeOperationSignatureOfSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangeOperationSignatureOfSeffReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return ReplaceSingleValuedEReference.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> change) {
+  private boolean checkChangeProperties(final EChange change) {
+    ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> relevantChange = (ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature>)change;
     // Check affected object
-    if (!(change.getAffectedEObject() instanceof ResourceDemandingSEFF)) {
+    if (!(relevantChange.getAffectedEObject() instanceof ResourceDemandingSEFF)) {
     	return false;
     }
     // Check feature
-    if (!change.getAffectedFeature().getName().equals("describedService__SEFF")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("describedService__SEFF")) {
     	return false;
     }
-    if (change.isFromNonDefaultValue() && !(change.getOldValue() instanceof OperationSignature)
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof OperationSignature)
     ) {
     	return false;
     }
-    if (change.isToNonDefaultValue() && !(change.getNewValue() instanceof OperationSignature)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof OperationSignature)) {
     	return false;
     }
-    
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEReference<?, ?>)) {
+    if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
-    ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> typedChange = (ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,9 +70,8 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> change, @Extension final RoutinesFacade _routinesFacade) {
-      ResourceDemandingSEFF _affectedEObject = change.getAffectedEObject();
-      _routinesFacade.changeMethodForSeff(_affectedEObject);
+    public void callRoutine1(final ResourceDemandingSEFF affectedEObject, final EReference affectedFeature, final OperationSignature oldValue, final OperationSignature newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeMethodForSeff(affectedEObject);
     }
   }
 }

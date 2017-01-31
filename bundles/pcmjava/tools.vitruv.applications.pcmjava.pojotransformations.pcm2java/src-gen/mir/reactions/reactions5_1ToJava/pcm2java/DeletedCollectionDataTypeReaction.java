@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -20,33 +21,33 @@ class DeletedCollectionDataTypeReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    RemoveAndDeleteNonRoot<Repository, CollectionDataType> typedChange = (RemoveAndDeleteNonRoot<Repository, CollectionDataType>)change;
+    RemoveEReference<Repository, CollectionDataType> typedChange = ((RemoveAndDeleteNonRoot<Repository, CollectionDataType>)change).getRemoveChange();
+    Repository affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    CollectionDataType oldValue = typedChange.getOldValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.DeletedCollectionDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.DeletedCollectionDataTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return RemoveAndDeleteNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final RemoveAndDeleteNonRoot<Repository, CollectionDataType> change) {
-    if (!(change.getDeleteChange().getAffectedEObject() instanceof CollectionDataType)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    RemoveEReference<Repository, CollectionDataType> relevantChange = ((RemoveAndDeleteNonRoot<Repository, CollectionDataType>)change).getRemoveChange();
     // Check affected object
-    if (!(change.getRemoveChange().getAffectedEObject() instanceof Repository)) {
+    if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
     // Check feature
-    if (!change.getRemoveChange().getAffectedFeature().getName().equals("dataTypes__Repository")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("dataTypes__Repository")) {
     	return false;
     }
-    if (!(change.getRemoveChange().getOldValue() instanceof CollectionDataType)
+    if (!(relevantChange.getOldValue() instanceof CollectionDataType)
     ) {
     	return false;
     }
-    
     return true;
   }
   
@@ -54,8 +55,7 @@ class DeletedCollectionDataTypeReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
-    RemoveAndDeleteNonRoot<Repository, CollectionDataType> typedChange = (RemoveAndDeleteNonRoot<Repository, CollectionDataType>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -67,10 +67,8 @@ class DeletedCollectionDataTypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final RemoveAndDeleteNonRoot<Repository, CollectionDataType> change, @Extension final RoutinesFacade _routinesFacade) {
-      RemoveEReference<Repository, CollectionDataType> _removeChange = change.getRemoveChange();
-      CollectionDataType _oldValue = _removeChange.getOldValue();
-      _routinesFacade.deleteJavaClassifier(_oldValue);
+    public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final CollectionDataType oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.deleteJavaClassifier(oldValue);
     }
   }
 }

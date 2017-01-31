@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -20,32 +21,32 @@ class CreatedOperationSignatureReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<OperationInterface, OperationSignature> typedChange = (CreateAndInsertNonRoot<OperationInterface, OperationSignature>)change;
+    InsertEReference<OperationInterface, OperationSignature> typedChange = ((CreateAndInsertNonRoot<OperationInterface, OperationSignature>)change).getInsertChange();
+    OperationInterface affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    OperationSignature newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedOperationSignatureReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedOperationSignatureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<OperationInterface, OperationSignature> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof OperationSignature)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<OperationInterface, OperationSignature> relevantChange = ((CreateAndInsertNonRoot<OperationInterface, OperationSignature>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof OperationInterface)) {
+    if (!(relevantChange.getAffectedEObject() instanceof OperationInterface)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("signatures__OperationInterface")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("signatures__OperationInterface")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof OperationSignature)) {
+    if (!(relevantChange.getNewValue() instanceof OperationSignature)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -53,8 +54,7 @@ class CreatedOperationSignatureReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<OperationInterface, OperationSignature> typedChange = (CreateAndInsertNonRoot<OperationInterface, OperationSignature>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,10 +66,8 @@ class CreatedOperationSignatureReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<OperationInterface, OperationSignature> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<OperationInterface, OperationSignature> _insertChange = change.getInsertChange();
-      OperationSignature _newValue = _insertChange.getNewValue();
-      _routinesFacade.createMethodForOperationSignature(_newValue);
+    public void callRoutine1(final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createMethodForOperationSignature(newValue);
     }
   }
 }

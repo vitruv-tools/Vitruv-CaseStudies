@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -20,32 +21,32 @@ class CreatedCollectionDataTypeReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<Repository, CollectionDataType> typedChange = (CreateAndInsertNonRoot<Repository, CollectionDataType>)change;
+    InsertEReference<Repository, CollectionDataType> typedChange = ((CreateAndInsertNonRoot<Repository, CollectionDataType>)change).getInsertChange();
+    Repository affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    CollectionDataType newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedCollectionDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedCollectionDataTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<Repository, CollectionDataType> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof CollectionDataType)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<Repository, CollectionDataType> relevantChange = ((CreateAndInsertNonRoot<Repository, CollectionDataType>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof Repository)) {
+    if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("dataTypes__Repository")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("dataTypes__Repository")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof CollectionDataType)) {
+    if (!(relevantChange.getNewValue() instanceof CollectionDataType)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -53,8 +54,7 @@ class CreatedCollectionDataTypeReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<Repository, CollectionDataType> typedChange = (CreateAndInsertNonRoot<Repository, CollectionDataType>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,10 +66,8 @@ class CreatedCollectionDataTypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<Repository, CollectionDataType> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<Repository, CollectionDataType> _insertChange = change.getInsertChange();
-      CollectionDataType _newValue = _insertChange.getNewValue();
-      _routinesFacade.createCollectionDataTypeImplementation(_newValue);
+    public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final CollectionDataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createCollectionDataTypeImplementation(newValue);
     }
   }
 }

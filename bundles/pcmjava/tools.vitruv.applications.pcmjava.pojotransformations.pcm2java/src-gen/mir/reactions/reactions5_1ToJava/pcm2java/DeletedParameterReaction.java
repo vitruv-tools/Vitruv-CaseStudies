@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
@@ -20,33 +21,33 @@ class DeletedParameterReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    RemoveAndDeleteNonRoot<OperationSignature, Parameter> typedChange = (RemoveAndDeleteNonRoot<OperationSignature, Parameter>)change;
+    RemoveEReference<OperationSignature, Parameter> typedChange = ((RemoveAndDeleteNonRoot<OperationSignature, Parameter>)change).getRemoveChange();
+    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Parameter oldValue = typedChange.getOldValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.DeletedParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.DeletedParameterReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return RemoveAndDeleteNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final RemoveAndDeleteNonRoot<OperationSignature, Parameter> change) {
-    if (!(change.getDeleteChange().getAffectedEObject() instanceof Parameter)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    RemoveEReference<OperationSignature, Parameter> relevantChange = ((RemoveAndDeleteNonRoot<OperationSignature, Parameter>)change).getRemoveChange();
     // Check affected object
-    if (!(change.getRemoveChange().getAffectedEObject() instanceof OperationSignature)) {
+    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
     	return false;
     }
     // Check feature
-    if (!change.getRemoveChange().getAffectedFeature().getName().equals("parameters__OperationSignature")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("parameters__OperationSignature")) {
     	return false;
     }
-    if (!(change.getRemoveChange().getOldValue() instanceof Parameter)
+    if (!(relevantChange.getOldValue() instanceof Parameter)
     ) {
     	return false;
     }
-    
     return true;
   }
   
@@ -54,8 +55,7 @@ class DeletedParameterReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
-    RemoveAndDeleteNonRoot<OperationSignature, Parameter> typedChange = (RemoveAndDeleteNonRoot<OperationSignature, Parameter>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -67,12 +67,8 @@ class DeletedParameterReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final RemoveAndDeleteNonRoot<OperationSignature, Parameter> change, @Extension final RoutinesFacade _routinesFacade) {
-      RemoveEReference<OperationSignature, Parameter> _removeChange = change.getRemoveChange();
-      OperationSignature _affectedEObject = _removeChange.getAffectedEObject();
-      RemoveEReference<OperationSignature, Parameter> _removeChange_1 = change.getRemoveChange();
-      Parameter _oldValue = _removeChange_1.getOldValue();
-      _routinesFacade.deleteParameter(_affectedEObject, _oldValue);
+    public void callRoutine1(final OperationSignature affectedEObject, final EReference affectedFeature, final Parameter oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.deleteParameter(affectedEObject, oldValue);
     }
   }
 }

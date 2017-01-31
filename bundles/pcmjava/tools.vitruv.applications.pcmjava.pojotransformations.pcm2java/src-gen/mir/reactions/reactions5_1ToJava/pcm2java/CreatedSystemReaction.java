@@ -18,24 +18,22 @@ class CreatedSystemReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertRoot<org.palladiosimulator.pcm.system.System> typedChange = (CreateAndInsertRoot<org.palladiosimulator.pcm.system.System>)change;
+    InsertRootEObject<org.palladiosimulator.pcm.system.System> typedChange = ((CreateAndInsertRoot<org.palladiosimulator.pcm.system.System>)change).getInsertChange();
+    org.palladiosimulator.pcm.system.System newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedSystemReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedSystemReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertRoot<org.palladiosimulator.pcm.system.System> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof org.palladiosimulator.pcm.system.System)) {
+  private boolean checkChangeProperties(final EChange change) {
+    InsertRootEObject<org.palladiosimulator.pcm.system.System> relevantChange = ((CreateAndInsertRoot<org.palladiosimulator.pcm.system.System>)change).getInsertChange();
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.system.System)) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof org.palladiosimulator.pcm.system.System)) {
-    	return false;
-    }
-    
     return true;
   }
   
@@ -43,8 +41,7 @@ class CreatedSystemReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertRoot)) {
     	return false;
     }
-    CreateAndInsertRoot<org.palladiosimulator.pcm.system.System> typedChange = (CreateAndInsertRoot<org.palladiosimulator.pcm.system.System>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -56,9 +53,8 @@ class CreatedSystemReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertRoot<org.palladiosimulator.pcm.system.System> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertRootEObject<org.palladiosimulator.pcm.system.System> _insertChange = change.getInsertChange();
-      final org.palladiosimulator.pcm.system.System system = _insertChange.getNewValue();
+    public void callRoutine1(final org.palladiosimulator.pcm.system.System newValue, @Extension final RoutinesFacade _routinesFacade) {
+      final org.palladiosimulator.pcm.system.System system = newValue;
       String _entityName = system.getEntityName();
       _routinesFacade.createJavaPackage(system, null, _entityName, "root_system");
       _routinesFacade.createImplementationForSystem(system);

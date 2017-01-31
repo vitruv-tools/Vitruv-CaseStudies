@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -19,35 +20,37 @@ class RenameOperationSignatureReaction extends AbstractReactionRealization {
   
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEAttribute<OperationSignature, String> typedChange = (ReplaceSingleValuedEAttribute<OperationSignature, String>)change;
+    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    EAttribute affectedFeature = typedChange.getAffectedFeature();
+    String oldValue = typedChange.getOldValue();
+    String newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.RenameOperationSignatureReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.RenameOperationSignatureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return ReplaceSingleValuedEAttribute.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEAttribute<OperationSignature, String> change) {
+  private boolean checkChangeProperties(final EChange change) {
+    ReplaceSingleValuedEAttribute<OperationSignature, String> relevantChange = (ReplaceSingleValuedEAttribute<OperationSignature, String>)change;
     // Check affected object
-    if (!(change.getAffectedEObject() instanceof OperationSignature)) {
+    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
     	return false;
     }
-    	
     // Check feature
-    if (!change.getAffectedFeature().getName().equals("entityName")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
-    
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEAttribute<?, ?>)) {
+    if (!(change instanceof ReplaceSingleValuedEAttribute)) {
     	return false;
     }
-    ReplaceSingleValuedEAttribute<OperationSignature, String> typedChange = (ReplaceSingleValuedEAttribute<OperationSignature, String>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -59,9 +62,8 @@ class RenameOperationSignatureReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEAttribute<OperationSignature, String> change, @Extension final RoutinesFacade _routinesFacade) {
-      OperationSignature _affectedEObject = change.getAffectedEObject();
-      _routinesFacade.renameMethodForOperationSignature(_affectedEObject);
+    public void callRoutine1(final OperationSignature affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.renameMethodForOperationSignature(affectedEObject);
     }
   }
 }

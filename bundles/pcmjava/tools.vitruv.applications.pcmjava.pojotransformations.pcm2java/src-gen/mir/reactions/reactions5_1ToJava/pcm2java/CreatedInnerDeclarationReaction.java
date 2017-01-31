@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
@@ -20,32 +21,32 @@ class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration> typedChange = (CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration>)change;
+    InsertEReference<CompositeDataType, InnerDeclaration> typedChange = ((CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration>)change).getInsertChange();
+    CompositeDataType affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    InnerDeclaration newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedInnerDeclarationReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedInnerDeclarationReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof InnerDeclaration)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<CompositeDataType, InnerDeclaration> relevantChange = ((CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof CompositeDataType)) {
+    if (!(relevantChange.getAffectedEObject() instanceof CompositeDataType)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("innerDeclaration_CompositeDataType")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("innerDeclaration_CompositeDataType")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof InnerDeclaration)) {
+    if (!(relevantChange.getNewValue() instanceof InnerDeclaration)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -53,8 +54,7 @@ class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration> typedChange = (CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,10 +66,8 @@ class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<CompositeDataType, InnerDeclaration> _insertChange = change.getInsertChange();
-      InnerDeclaration _newValue = _insertChange.getNewValue();
-      _routinesFacade.createInnerDeclarationImplementation(_newValue);
+    public void callRoutine1(final CompositeDataType affectedEObject, final EReference affectedFeature, final InnerDeclaration newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createInnerDeclarationImplementation(newValue);
     }
   }
 }

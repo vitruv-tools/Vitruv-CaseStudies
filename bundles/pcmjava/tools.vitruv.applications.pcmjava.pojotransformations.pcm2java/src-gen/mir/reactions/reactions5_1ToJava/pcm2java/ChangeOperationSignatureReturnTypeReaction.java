@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -20,41 +21,44 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
   
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEReference<OperationSignature, DataType> typedChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
+    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    DataType oldValue = typedChange.getOldValue();
+    DataType newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return ReplaceSingleValuedEReference.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEReference<OperationSignature, DataType> change) {
+  private boolean checkChangeProperties(final EChange change) {
+    ReplaceSingleValuedEReference<OperationSignature, DataType> relevantChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
     // Check affected object
-    if (!(change.getAffectedEObject() instanceof OperationSignature)) {
+    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
     	return false;
     }
     // Check feature
-    if (!change.getAffectedFeature().getName().equals("returnType__OperationSignature")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("returnType__OperationSignature")) {
     	return false;
     }
-    if (change.isFromNonDefaultValue() && !(change.getOldValue() instanceof DataType)
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)
     ) {
     	return false;
     }
-    if (change.isToNonDefaultValue() && !(change.getNewValue() instanceof DataType)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
     	return false;
     }
-    
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEReference<?, ?>)) {
+    if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
-    ReplaceSingleValuedEReference<OperationSignature, DataType> typedChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,9 +70,8 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEReference<OperationSignature, DataType> change, @Extension final RoutinesFacade _routinesFacade) {
-      OperationSignature _affectedEObject = change.getAffectedEObject();
-      _routinesFacade.changeReturnTypeOfMethodForOperationSignature(_affectedEObject);
+    public void callRoutine1(final OperationSignature affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeReturnTypeOfMethodForOperationSignature(affectedEObject);
     }
   }
 }

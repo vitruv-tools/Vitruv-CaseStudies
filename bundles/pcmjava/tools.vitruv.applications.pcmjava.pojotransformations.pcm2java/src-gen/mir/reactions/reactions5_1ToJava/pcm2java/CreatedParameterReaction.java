@@ -1,6 +1,7 @@
 package mir.reactions.reactions5_1ToJava.pcm2java;
 
 import mir.routines.pcm2java.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
@@ -20,32 +21,32 @@ class CreatedParameterReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<OperationSignature, Parameter> typedChange = (CreateAndInsertNonRoot<OperationSignature, Parameter>)change;
+    InsertEReference<OperationSignature, Parameter> typedChange = ((CreateAndInsertNonRoot<OperationSignature, Parameter>)change).getInsertChange();
+    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Parameter newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactions5_1ToJava.pcm2java.CreatedParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToJava.pcm2java.CreatedParameterReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<OperationSignature, Parameter> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof Parameter)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<OperationSignature, Parameter> relevantChange = ((CreateAndInsertNonRoot<OperationSignature, Parameter>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof OperationSignature)) {
+    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("parameters__OperationSignature")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("parameters__OperationSignature")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof Parameter)) {
+    if (!(relevantChange.getNewValue() instanceof Parameter)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -53,8 +54,7 @@ class CreatedParameterReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<OperationSignature, Parameter> typedChange = (CreateAndInsertNonRoot<OperationSignature, Parameter>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,10 +66,8 @@ class CreatedParameterReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<OperationSignature, Parameter> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<OperationSignature, Parameter> _insertChange = change.getInsertChange();
-      Parameter _newValue = _insertChange.getNewValue();
-      _routinesFacade.createParameter(_newValue);
+    public void callRoutine1(final OperationSignature affectedEObject, final EReference affectedFeature, final Parameter newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createParameter(newValue);
     }
   }
 }
