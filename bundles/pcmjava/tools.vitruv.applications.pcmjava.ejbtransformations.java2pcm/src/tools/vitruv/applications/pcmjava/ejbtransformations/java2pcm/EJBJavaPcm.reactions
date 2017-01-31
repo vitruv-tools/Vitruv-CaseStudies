@@ -24,7 +24,7 @@ execute actions in pcm
 // ################ create Repository for first package################
 reaction CreatedFirstPackage {
 	after element java::Package created and inserted as root 
-	call createRepositoryForFirstPackage(change.insertChange.newValue)
+	call createRepositoryForFirstPackage(newValue)
 }
 
 routine createRepositoryForFirstPackage(java::Package javaPackage) {
@@ -45,19 +45,19 @@ routine createRepositoryForFirstPackage(java::Package javaPackage) {
  
 reaction CreatedClass {
 	after element created and inserted in java::CompilationUnit[classifiers]
-		with change.insertChange.newValue.isEJBClass 	
+		with newValue.isEJBClass 	
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
-		createBasicComponent(repo, change.insertChange.newValue);
+		createBasicComponent(repo, newValue);
 	} 
 }
 
 reaction CreateClassAnnotation {
 	after element created and inserted in java::Class[annotationsAndModifiers]
-		with change.insertChange.affectedEObject.isEJBClass 
+		with affectedEObject.isEJBClass 
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel) 
-		createBasicComponent(repo, change.insertChange.affectedEObject as NamedElement)
+		createBasicComponent(repo, affectedEObject as NamedElement)
 	} 
 }
 
@@ -78,19 +78,19 @@ routine createBasicComponent(pcm::Repository repo, java::NamedElement namedEleme
 
 reaction CreatedInterface {
 	after element created and inserted in java::CompilationUnit[classifiers]
-		with change.insertChange.newValue.isEJBBuisnessInterface 
+		with newValue.isEJBBuisnessInterface 
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
-		createOperationInterface(repo, change.insertChange.newValue)
+		createOperationInterface(repo, newValue)
 	}
 }
 
 reaction CreateInterfaceAnnotation {
 	after element created and inserted in java::Interface[annotationsAndModifiers]
-		with change.insertChange.affectedEObject.isEJBBuisnessInterface
+		with affectedEObject.isEJBBuisnessInterface
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
-		createOperationInterface(repo, change.insertChange.affectedEObject as NamedElement)
+		createOperationInterface(repo, affectedEObject as NamedElement)
 	}
 }
 
@@ -110,14 +110,14 @@ routine createOperationInterface(pcm::Repository repo, java::NamedElement namedE
 // ################ create OperationRequiredRole from field################
 reaction CreateAnnotationForField {
 	after element created and inserted in java::Field[annotationsAndModifiers]
-		with change.insertChange.affectedEObject.hasEJBAnnotation
-	call createdAnnotationForField(change.insertChange.affectedEObject)
+		with affectedEObject.hasEJBAnnotation
+	call createdAnnotationForField(affectedEObject)
 }
 		
 routine createdAnnotationForField(java::Field annotatedField) {
 	match {
 		val basicComponent = retrieve pcm::BasicComponent corresponding to annotatedField.containingConcreteClassifier
-		//retrieve: pcm::OperationInterface as opInterface corresponding to change.affectedEObject 
+		//retrieve: pcm::OperationInterface as opInterface corresponding to affectedEObject 
 	}
 	action {
 		call {
@@ -130,14 +130,14 @@ routine createdAnnotationForField(java::Field annotatedField) {
 
 reaction CreateField {
 	after element created and inserted in java::Class[members]
-		with change.insertChange.newValue.hasEJBAnnotation
-	call createdField(change.insertChange.newValue as Field)
+		with newValue.hasEJBAnnotation
+	call createdField(newValue as Field)
 }
 
 routine createdField(java::Field field) {
 	match {
 		val basicComponent = retrieve pcm::BasicComponent corresponding to field
-		//retrieve: pcm::OperationInterface as opInterface corresponding to change.newValue
+		//retrieve: pcm::OperationInterface as opInterface corresponding to newValue
 	}
 	action {
 		call {
@@ -164,17 +164,17 @@ routine createOperationRequiredRole(pcm::BasicComponent basicComponent, pcm::Ope
 // ################ create OperationProvidedRole from implements################
 reaction CreateImplements {
 	after element created and inserted in java::Class[implements]
-	call createdImplements(change.insertChange.affectedEObject, change.insertChange.newValue)
+	call createdImplements(affectedEObject, newValue)
 }
 
 routine createdImplements(java::Class clazz, java::TypeReference implementz) {
 	match {
 		val basicComponent = retrieve pcm::BasicComponent corresponding to clazz
-		//retrieve: pcm::OperationInterface as opInterface corresponding to getClassifier(change.newValue) 
+		//retrieve: pcm::OperationInterface as opInterface corresponding to getClassifier(newValue) 
 	}
 	action {
 		val opr = create pcm::OperationProvidedRole
-		//add correspondence: opr, change.newValue
+		//add correspondence: opr, newValue
 		update opr {
 	    	val opInterface = basicComponent.repository__RepositoryComponent.interfaces__Repository.filter(typeof(OperationInterface)).
 	    			findFirst[it.entityName.equals(getClassifier(implementz).name)]
@@ -193,8 +193,8 @@ routine createdImplements(java::Class clazz, java::TypeReference implementz) {
 
 reaction CreateInterfaceMethod {
 	after element created and inserted in java::Interface[members]
-		with change.insertChange.newValue instanceof InterfaceMethod && change.insertChange.affectedEObject.isEJBBuisnessInterface
-	call createdInterfaceMethod(change.insertChange.affectedEObject, change.insertChange.newValue as InterfaceMethod)
+		with newValue instanceof InterfaceMethod && affectedEObject.isEJBBuisnessInterface
+	call createdInterfaceMethod(affectedEObject, newValue as InterfaceMethod)
 }
 
 routine createdInterfaceMethod(java::Interface interf, java::InterfaceMethod method) {
@@ -223,7 +223,7 @@ routine createOperationSignature(java::InterfaceMethod interfaceMethod, pcm::Ope
 // ################ create Parameter for  parameter################		
 reaction CreateParameterInInterfaceMethod {
 	after element created and inserted in java::InterfaceMethod[parameters]
-	call createdParameterInInterfaceMethod(change.insertChange.affectedEObject, change.insertChange.newValue)
+	call createdParameterInInterfaceMethod(affectedEObject, newValue)
 }
 
 routine createdParameterInInterfaceMethod(java::InterfaceMethod method, java::Parameter parameter) {
@@ -254,7 +254,7 @@ routine createPCMParameter(java::Parameter jaMoPPParam, pcm::OperationSignature 
 // ################ create ReturnType for return type ################
 reaction ReturnTypeCreated {
 	after element replaced at java::InterfaceMethod[typeReference]
-	call createdReturnType(change.affectedEObject, change.newValue)
+	call createdReturnType(affectedEObject, newValue)
 }
 
 routine createdReturnType(java::InterfaceMethod method, java::TypeReference type) {
@@ -281,8 +281,8 @@ routine createPCMReturnType(java::TypeReference returnType, pcm::OperationSignat
 // ################ create InnerDeclaration for field in datatype class################
 reaction CreateFieldInDatatypeClass {
 	after element created and inserted in java::Class[members]
-		with change.insertChange.newValue instanceof Field
-	call createdFieldInDatatypeClass(change.insertChange.affectedEObject, change.insertChange.newValue as Field)
+		with newValue instanceof Field
+	call createdFieldInDatatypeClass(affectedEObject, newValue as Field)
 }
 
 routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
@@ -308,9 +308,9 @@ routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
 
 reaction CreateClassMethodInEJBClass {
 	after element java::ClassMethod created and inserted in java::Class[members]
-		with change.insertChange.affectedEObject.isEJBClass &&
-	   		EJBJava2PcmHelper.overridesInterfaceMethod(change.insertChange.newValue, change.insertChange.affectedEObject)
-	call createdClassMethodInEJBClass(change.insertChange.affectedEObject, change.insertChange.newValue)
+		with affectedEObject.isEJBClass &&
+	   		EJBJava2PcmHelper.overridesInterfaceMethod(newValue, affectedEObject)
+	call createdClassMethodInEJBClass(affectedEObject, newValue)
 }
 
 routine createdClassMethodInEJBClass(java::Class clazz, java::ClassMethod classMethod) {

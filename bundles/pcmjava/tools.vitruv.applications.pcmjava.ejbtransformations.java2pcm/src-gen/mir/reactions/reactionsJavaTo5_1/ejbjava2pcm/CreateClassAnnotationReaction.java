@@ -1,7 +1,7 @@
 package mir.reactions.reactionsJavaTo5_1.ejbjava2pcm;
 
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.commons.NamedElement;
 import org.emftext.language.java.modifiers.AnnotationInstanceOrModifier;
@@ -23,40 +23,33 @@ class CreateClassAnnotationReaction extends AbstractReactionRealization {
     super(userInteracting);
   }
   
-  private boolean checkTriggerPrecondition(final CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> _insertChange = change.getInsertChange();
-    org.emftext.language.java.classifiers.Class _affectedEObject = _insertChange.getAffectedEObject();
-    boolean _isEJBClass = EJBAnnotationHelper.isEJBClass(_affectedEObject);
-    return _isEJBClass;
-  }
-  
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> typedChange = (CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.CreateClassAnnotationReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.CreateClassAnnotationReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof EObject)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("annotationsAndModifiers")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof AnnotationInstanceOrModifier)) {
+    if (!(relevantChange.getNewValue() instanceof AnnotationInstanceOrModifier)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -64,15 +57,23 @@ class CreateClassAnnotationReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> typedChange = (CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
-    if (!checkTriggerPrecondition(typedChange)) {
+    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final AnnotationInstanceOrModifier newValue) {
+    boolean _isEJBClass = EJBAnnotationHelper.isEJBClass(affectedEObject);
+    return _isEJBClass;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -80,11 +81,9 @@ class CreateClassAnnotationReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> change, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final AnnotationInstanceOrModifier newValue, @Extension final RoutinesFacade _routinesFacade) {
       final Repository repo = EJBJava2PcmHelper.findRepository(this.correspondenceModel);
-      InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> _insertChange = change.getInsertChange();
-      org.emftext.language.java.classifiers.Class _affectedEObject = _insertChange.getAffectedEObject();
-      _routinesFacade.createBasicComponent(repo, ((NamedElement) _affectedEObject));
+      _routinesFacade.createBasicComponent(repo, ((NamedElement) affectedEObject));
     }
   }
 }

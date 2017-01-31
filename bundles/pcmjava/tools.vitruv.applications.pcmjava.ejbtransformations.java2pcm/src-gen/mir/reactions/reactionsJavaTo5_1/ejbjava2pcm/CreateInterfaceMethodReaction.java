@@ -1,7 +1,7 @@
 package mir.reactions.reactionsJavaTo5_1.ejbjava2pcm;
 
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.InterfaceMethod;
@@ -22,37 +22,33 @@ class CreateInterfaceMethodReaction extends AbstractReactionRealization {
     super(userInteracting);
   }
   
-  private boolean checkTriggerPrecondition(final CreateAndInsertNonRoot<Interface, Member> change) {
-    return ((change.getInsertChange().getNewValue() instanceof InterfaceMethod) && EJBAnnotationHelper.isEJBBuisnessInterface(change.getInsertChange().getAffectedEObject()));
-  }
-  
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<Interface, Member> typedChange = (CreateAndInsertNonRoot<Interface, Member>)change;
+    InsertEReference<Interface, Member> typedChange = ((CreateAndInsertNonRoot<Interface, Member>)change).getInsertChange();
+    Interface affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Member newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.CreateInterfaceMethodReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.CreateInterfaceMethodReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<Interface, Member> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof EObject)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<Interface, Member> relevantChange = ((CreateAndInsertNonRoot<Interface, Member>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof Interface)) {
+    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("members")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof Member)) {
+    if (!(relevantChange.getNewValue() instanceof Member)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -60,15 +56,22 @@ class CreateInterfaceMethodReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<Interface, Member> typedChange = (CreateAndInsertNonRoot<Interface, Member>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
-    if (!checkTriggerPrecondition(typedChange)) {
+    InsertEReference<Interface, Member> typedChange = ((CreateAndInsertNonRoot<Interface, Member>)change).getInsertChange();
+    Interface affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Member newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final Interface affectedEObject, final EReference affectedFeature, final Member newValue) {
+    return ((newValue instanceof InterfaceMethod) && EJBAnnotationHelper.isEJBBuisnessInterface(affectedEObject));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -76,12 +79,8 @@ class CreateInterfaceMethodReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<Interface, Member> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<Interface, Member> _insertChange = change.getInsertChange();
-      Interface _affectedEObject = _insertChange.getAffectedEObject();
-      InsertEReference<Interface, Member> _insertChange_1 = change.getInsertChange();
-      Member _newValue = _insertChange_1.getNewValue();
-      _routinesFacade.createdInterfaceMethod(_affectedEObject, ((InterfaceMethod) _newValue));
+    public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final Member newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createdInterfaceMethod(affectedEObject, ((InterfaceMethod) newValue));
     }
   }
 }

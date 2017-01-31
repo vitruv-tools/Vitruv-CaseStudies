@@ -1,7 +1,7 @@
 package mir.reactions.reactionsJavaTo5_1.ejbjava2pcm;
 
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.Member;
@@ -21,40 +21,33 @@ class CreateFieldReaction extends AbstractReactionRealization {
     super(userInteracting);
   }
   
-  private boolean checkTriggerPrecondition(final CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member> change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Member> _insertChange = change.getInsertChange();
-    Member _newValue = _insertChange.getNewValue();
-    boolean _hasEJBAnnotation = EJBAnnotationHelper.hasEJBAnnotation(_newValue);
-    return _hasEJBAnnotation;
-  }
-  
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member> typedChange = (CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, Member> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Member newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.CreateFieldReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.CreateFieldReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof EObject)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<org.emftext.language.java.classifiers.Class, Member> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("members")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof Member)) {
+    if (!(relevantChange.getNewValue() instanceof Member)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -62,15 +55,23 @@ class CreateFieldReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member> typedChange = (CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
-    if (!checkTriggerPrecondition(typedChange)) {
+    InsertEReference<org.emftext.language.java.classifiers.Class, Member> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Member newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Member newValue) {
+    boolean _hasEJBAnnotation = EJBAnnotationHelper.hasEJBAnnotation(newValue);
+    return _hasEJBAnnotation;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -78,10 +79,8 @@ class CreateFieldReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member> change, @Extension final RoutinesFacade _routinesFacade) {
-      InsertEReference<org.emftext.language.java.classifiers.Class, Member> _insertChange = change.getInsertChange();
-      Member _newValue = _insertChange.getNewValue();
-      _routinesFacade.createdField(((Field) _newValue));
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Member newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createdField(((Field) newValue));
     }
   }
 }

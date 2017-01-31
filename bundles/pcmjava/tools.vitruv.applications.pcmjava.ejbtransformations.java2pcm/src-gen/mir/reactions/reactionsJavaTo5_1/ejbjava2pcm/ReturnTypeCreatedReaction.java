@@ -1,6 +1,7 @@
 package mir.reactions.reactionsJavaTo5_1.ejbjava2pcm;
 
 import mir.routines.ejbjava2pcm.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.types.TypeReference;
@@ -20,41 +21,44 @@ class ReturnTypeCreatedReaction extends AbstractReactionRealization {
   
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> typedChange = (ReplaceSingleValuedEReference<InterfaceMethod, TypeReference>)change;
+    InterfaceMethod affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    TypeReference oldValue = typedChange.getOldValue();
+    TypeReference newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.ReturnTypeCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.ReturnTypeCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return ReplaceSingleValuedEReference.class;
   }
   
-  private boolean checkChangeProperties(final ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> change) {
+  private boolean checkChangeProperties(final EChange change) {
+    ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> relevantChange = (ReplaceSingleValuedEReference<InterfaceMethod, TypeReference>)change;
     // Check affected object
-    if (!(change.getAffectedEObject() instanceof InterfaceMethod)) {
+    if (!(relevantChange.getAffectedEObject() instanceof InterfaceMethod)) {
     	return false;
     }
     // Check feature
-    if (!change.getAffectedFeature().getName().equals("typeReference")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("typeReference")) {
     	return false;
     }
-    if (change.isFromNonDefaultValue() && !(change.getOldValue() instanceof TypeReference)
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof TypeReference)
     ) {
     	return false;
     }
-    if (change.isToNonDefaultValue() && !(change.getNewValue() instanceof TypeReference)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof TypeReference)) {
     	return false;
     }
-    
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEReference<?, ?>)) {
+    if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
-    ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> typedChange = (ReplaceSingleValuedEReference<InterfaceMethod, TypeReference>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
@@ -66,10 +70,8 @@ class ReturnTypeCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> change, @Extension final RoutinesFacade _routinesFacade) {
-      InterfaceMethod _affectedEObject = change.getAffectedEObject();
-      TypeReference _newValue = change.getNewValue();
-      _routinesFacade.createdReturnType(_affectedEObject, _newValue);
+    public void callRoutine1(final InterfaceMethod affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createdReturnType(affectedEObject, newValue);
     }
   }
 }

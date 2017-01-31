@@ -1,7 +1,7 @@
 package mir.reactions.reactionsJavaTo5_1.ejbjava2pcm;
 
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.commons.NamedElement;
@@ -24,40 +24,33 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
     super(userInteracting);
   }
   
-  private boolean checkTriggerPrecondition(final CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier> change) {
-    InsertEReference<Interface, AnnotationInstanceOrModifier> _insertChange = change.getInsertChange();
-    Interface _affectedEObject = _insertChange.getAffectedEObject();
-    boolean _isEJBBuisnessInterface = EJBAnnotationHelper.isEJBBuisnessInterface(_affectedEObject);
-    return _isEJBBuisnessInterface;
-  }
-  
   public void executeReaction(final EChange change) {
-    CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier> typedChange = (CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier>)change;
+    InsertEReference<Interface, AnnotationInstanceOrModifier> typedChange = ((CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier>)change).getInsertChange();
+    Interface affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.CreateInterfaceAnnotationReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaTo5_1.ejbjava2pcm.CreateInterfaceAnnotationReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(typedChange, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
     return CreateAndInsertNonRoot.class;
   }
   
-  private boolean checkChangeProperties(final CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier> change) {
-    if (!(change.getCreateChange().getAffectedEObject() instanceof EObject)) {
-    	return false;
-    }
+  private boolean checkChangeProperties(final EChange change) {
+    InsertEReference<Interface, AnnotationInstanceOrModifier> relevantChange = ((CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier>)change).getInsertChange();
     // Check affected object
-    if (!(change.getInsertChange().getAffectedEObject() instanceof Interface)) {
+    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
     	return false;
     }
     // Check feature
-    if (!change.getInsertChange().getAffectedFeature().getName().equals("annotationsAndModifiers")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(change.getInsertChange().getNewValue() instanceof AnnotationInstanceOrModifier)) {
+    if (!(relevantChange.getNewValue() instanceof AnnotationInstanceOrModifier)) {
     	return false;
     }
-    
     return true;
   }
   
@@ -65,15 +58,23 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier> typedChange = (CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier>)change;
-    if (!checkChangeProperties(typedChange)) {
+    if (!checkChangeProperties(change)) {
     	return false;
     }
-    if (!checkTriggerPrecondition(typedChange)) {
+    InsertEReference<Interface, AnnotationInstanceOrModifier> typedChange = ((CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier>)change).getInsertChange();
+    Interface affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }
     getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final Interface affectedEObject, final EReference affectedFeature, final AnnotationInstanceOrModifier newValue) {
+    boolean _isEJBBuisnessInterface = EJBAnnotationHelper.isEJBBuisnessInterface(affectedEObject);
+    return _isEJBBuisnessInterface;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -81,11 +82,9 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier> change, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final AnnotationInstanceOrModifier newValue, @Extension final RoutinesFacade _routinesFacade) {
       final Repository repo = EJBJava2PcmHelper.findRepository(this.correspondenceModel);
-      InsertEReference<Interface, AnnotationInstanceOrModifier> _insertChange = change.getInsertChange();
-      Interface _affectedEObject = _insertChange.getAffectedEObject();
-      _routinesFacade.createOperationInterface(repo, ((NamedElement) _affectedEObject));
+      _routinesFacade.createOperationInterface(repo, ((NamedElement) affectedEObject));
     }
   }
 }
