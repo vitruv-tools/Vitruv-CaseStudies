@@ -13,7 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
@@ -24,7 +23,7 @@ class CreateClassAnnotationReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change).getInsertChange();
+    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
@@ -34,11 +33,11 @@ class CreateClassAnnotationReaction extends AbstractReactionRealization {
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return CreateAndInsertNonRoot.class;
+    return InsertEReference.class;
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change).getInsertChange();
+    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
@@ -52,7 +51,7 @@ class CreateClassAnnotationReaction extends AbstractReactionRealization {
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof CreateAndInsertNonRoot)) {
+    if (!(change instanceof InsertEReference)) {
     	return false;
     }
     getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
@@ -60,7 +59,7 @@ class CreateClassAnnotationReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change).getInsertChange();
+    InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, AnnotationInstanceOrModifier>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     AnnotationInstanceOrModifier newValue = typedChange.getNewValue();

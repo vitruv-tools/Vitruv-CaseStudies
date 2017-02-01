@@ -23,7 +23,7 @@ execute actions in pcm
 // ###################################################
 // ################ create Repository for first package################
 reaction CreatedFirstPackage {
-	after element java::Package created and inserted as root 
+	after element java::Package inserted as root 
 	call createRepositoryForFirstPackage(newValue)
 }
 
@@ -44,7 +44,7 @@ routine createRepositoryForFirstPackage(java::Package javaPackage) {
 // ################ create Component from EJB class################
  
 reaction CreatedClass {
-	after element created and inserted in java::CompilationUnit[classifiers]
+	after element inserted in java::CompilationUnit[classifiers]
 		with newValue.isEJBClass 	
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
@@ -53,7 +53,7 @@ reaction CreatedClass {
 }
 
 reaction CreateClassAnnotation {
-	after element created and inserted in java::Class[annotationsAndModifiers]
+	after element inserted in java::Class[annotationsAndModifiers]
 		with affectedEObject.isEJBClass 
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel) 
@@ -77,7 +77,7 @@ routine createBasicComponent(pcm::Repository repo, java::NamedElement namedEleme
 // ################ create Interface from EJB interface################
 
 reaction CreatedInterface {
-	after element created and inserted in java::CompilationUnit[classifiers]
+	after element inserted in java::CompilationUnit[classifiers]
 		with newValue.isEJBBuisnessInterface 
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
@@ -86,7 +86,7 @@ reaction CreatedInterface {
 }
 
 reaction CreateInterfaceAnnotation {
-	after element created and inserted in java::Interface[annotationsAndModifiers]
+	after element inserted in java::Interface[annotationsAndModifiers]
 		with affectedEObject.isEJBBuisnessInterface
 	call {
 		val Repository repo = EJBJava2PcmHelper.findRepository(correspondenceModel)
@@ -109,7 +109,7 @@ routine createOperationInterface(pcm::Repository repo, java::NamedElement namedE
 // ###################################################
 // ################ create OperationRequiredRole from field################
 reaction CreateAnnotationForField {
-	after element created and inserted in java::Field[annotationsAndModifiers]
+	after element inserted in java::Field[annotationsAndModifiers]
 		with affectedEObject.hasEJBAnnotation
 	call createdAnnotationForField(affectedEObject)
 }
@@ -129,7 +129,7 @@ routine createdAnnotationForField(java::Field annotatedField) {
 }
 
 reaction CreateField {
-	after element created and inserted in java::Class[members]
+	after element inserted in java::Class[members]
 		with newValue.hasEJBAnnotation
 	call createdField(newValue as Field)
 }
@@ -163,7 +163,7 @@ routine createOperationRequiredRole(pcm::BasicComponent basicComponent, pcm::Ope
 // ###################################################
 // ################ create OperationProvidedRole from implements################
 reaction CreateImplements {
-	after element created and inserted in java::Class[implements]
+	after element inserted in java::Class[implements]
 	call createdImplements(affectedEObject, newValue)
 }
 
@@ -192,7 +192,7 @@ routine createdImplements(java::Class clazz, java::TypeReference implementz) {
 // ################ create Signatures for interface methods################
 
 reaction CreateInterfaceMethod {
-	after element created and inserted in java::Interface[members]
+	after element inserted in java::Interface[members]
 		with newValue instanceof InterfaceMethod && affectedEObject.isEJBBuisnessInterface
 	call createdInterfaceMethod(affectedEObject, newValue as InterfaceMethod)
 }
@@ -222,7 +222,7 @@ routine createOperationSignature(java::InterfaceMethod interfaceMethod, pcm::Ope
 // #######################################################################
 // ################ create Parameter for  parameter################		
 reaction CreateParameterInInterfaceMethod {
-	after element created and inserted in java::InterfaceMethod[parameters]
+	after element inserted in java::InterfaceMethod[parameters]
 	call createdParameterInInterfaceMethod(affectedEObject, newValue)
 }
 
@@ -280,7 +280,7 @@ routine createPCMReturnType(java::TypeReference returnType, pcm::OperationSignat
 // #######################################################################
 // ################ create InnerDeclaration for field in datatype class################
 reaction CreateFieldInDatatypeClass {
-	after element created and inserted in java::Class[members]
+	after element inserted in java::Class[members]
 		with newValue instanceof Field
 	call createdFieldInDatatypeClass(affectedEObject, newValue as Field)
 }
@@ -307,7 +307,7 @@ routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
 // ################ create SEFF for class method that overrides interface method################
 
 reaction CreateClassMethodInEJBClass {
-	after element java::ClassMethod created and inserted in java::Class[members]
+	after element java::ClassMethod inserted in java::Class[members]
 		with affectedEObject.isEJBClass &&
 	   		EJBJava2PcmHelper.overridesInterfaceMethod(newValue, affectedEObject)
 	call createdClassMethodInEJBClass(affectedEObject, newValue)

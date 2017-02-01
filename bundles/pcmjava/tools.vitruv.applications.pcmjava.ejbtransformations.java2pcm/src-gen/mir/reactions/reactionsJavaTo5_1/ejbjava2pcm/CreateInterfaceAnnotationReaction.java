@@ -14,7 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
@@ -25,7 +24,7 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Interface, AnnotationInstanceOrModifier> typedChange = ((CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier>)change).getInsertChange();
+    InsertEReference<Interface, AnnotationInstanceOrModifier> typedChange = (InsertEReference<Interface, AnnotationInstanceOrModifier>)change;
     Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
@@ -35,11 +34,11 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return CreateAndInsertNonRoot.class;
+    return InsertEReference.class;
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Interface, AnnotationInstanceOrModifier> relevantChange = ((CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier>)change).getInsertChange();
+    InsertEReference<Interface, AnnotationInstanceOrModifier> relevantChange = (InsertEReference<Interface, AnnotationInstanceOrModifier>)change;
     if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
     	return false;
     }
@@ -53,7 +52,7 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof CreateAndInsertNonRoot)) {
+    if (!(change instanceof InsertEReference)) {
     	return false;
     }
     getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
@@ -61,7 +60,7 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<Interface, AnnotationInstanceOrModifier> typedChange = ((CreateAndInsertNonRoot<Interface, AnnotationInstanceOrModifier>)change).getInsertChange();
+    InsertEReference<Interface, AnnotationInstanceOrModifier> typedChange = (InsertEReference<Interface, AnnotationInstanceOrModifier>)change;
     Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
