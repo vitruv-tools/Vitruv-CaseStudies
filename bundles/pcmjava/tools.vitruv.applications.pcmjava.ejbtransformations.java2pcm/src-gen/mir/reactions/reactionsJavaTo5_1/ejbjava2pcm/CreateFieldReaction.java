@@ -37,11 +37,9 @@ class CreateFieldReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     InsertEReference<org.emftext.language.java.classifiers.Class, Member> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member>)change).getInsertChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
@@ -55,9 +53,11 @@ class CreateFieldReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
     InsertEReference<org.emftext.language.java.classifiers.Class, Member> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Member>)change).getInsertChange();
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
@@ -65,7 +65,7 @@ class CreateFieldReaction extends AbstractReactionRealization {
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

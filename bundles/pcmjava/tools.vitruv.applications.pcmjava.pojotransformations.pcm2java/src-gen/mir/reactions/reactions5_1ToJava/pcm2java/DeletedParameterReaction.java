@@ -36,16 +36,13 @@ class DeletedParameterReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     RemoveEReference<OperationSignature, Parameter> relevantChange = ((RemoveAndDeleteNonRoot<OperationSignature, Parameter>)change).getRemoveChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("parameters__OperationSignature")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Parameter)
-    ) {
+    if (!(relevantChange.getOldValue() instanceof Parameter)) {
     	return false;
     }
     return true;
@@ -55,10 +52,12 @@ class DeletedParameterReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

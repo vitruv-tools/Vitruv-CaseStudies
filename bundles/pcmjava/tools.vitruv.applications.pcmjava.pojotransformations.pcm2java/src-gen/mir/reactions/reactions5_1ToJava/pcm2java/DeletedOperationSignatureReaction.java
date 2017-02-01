@@ -36,16 +36,13 @@ class DeletedOperationSignatureReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     RemoveEReference<OperationInterface, OperationSignature> relevantChange = ((RemoveAndDeleteNonRoot<OperationInterface, OperationSignature>)change).getRemoveChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof OperationInterface)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("signatures__OperationInterface")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof OperationSignature)
-    ) {
+    if (!(relevantChange.getOldValue() instanceof OperationSignature)) {
     	return false;
     }
     return true;
@@ -55,10 +52,12 @@ class DeletedOperationSignatureReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

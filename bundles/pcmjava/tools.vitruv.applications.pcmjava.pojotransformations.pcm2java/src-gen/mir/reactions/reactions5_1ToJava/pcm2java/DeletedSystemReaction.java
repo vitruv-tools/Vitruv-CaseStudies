@@ -31,8 +31,7 @@ class DeletedSystemReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     RemoveRootEObject<org.palladiosimulator.pcm.system.System> relevantChange = ((RemoveAndDeleteRoot<org.palladiosimulator.pcm.system.System>)change).getRemoveChange();
-    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.system.System)
-    ) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.system.System)) {
     	return false;
     }
     return true;
@@ -42,10 +41,12 @@ class DeletedSystemReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

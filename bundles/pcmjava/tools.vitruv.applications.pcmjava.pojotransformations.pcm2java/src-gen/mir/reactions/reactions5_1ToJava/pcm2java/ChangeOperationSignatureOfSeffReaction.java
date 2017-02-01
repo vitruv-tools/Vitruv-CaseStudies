@@ -36,16 +36,13 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
   
   private boolean checkChangeProperties(final EChange change) {
     ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> relevantChange = (ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature>)change;
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof ResourceDemandingSEFF)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("describedService__SEFF")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof OperationSignature)
-    ) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof OperationSignature)) {
     	return false;
     }
     if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof OperationSignature)) {
@@ -58,10 +55,12 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
     if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

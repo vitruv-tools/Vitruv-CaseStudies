@@ -36,11 +36,9 @@ class CreatedCompositeDataTypeReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     InsertEReference<Repository, CompositeDataType> relevantChange = ((CreateAndInsertNonRoot<Repository, CompositeDataType>)change).getInsertChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("dataTypes__Repository")) {
     	return false;
     }
@@ -54,10 +52,12 @@ class CreatedCompositeDataTypeReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

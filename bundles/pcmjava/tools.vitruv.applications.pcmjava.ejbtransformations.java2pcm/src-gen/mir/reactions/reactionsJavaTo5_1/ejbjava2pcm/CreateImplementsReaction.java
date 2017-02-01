@@ -35,11 +35,9 @@ class CreateImplementsReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     InsertEReference<org.emftext.language.java.classifiers.Class, TypeReference> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, TypeReference>)change).getInsertChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("implements")) {
     	return false;
     }
@@ -53,10 +51,12 @@ class CreateImplementsReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

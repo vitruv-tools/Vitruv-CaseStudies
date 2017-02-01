@@ -36,16 +36,13 @@ class DeletedComponentReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     RemoveEReference<Repository, RepositoryComponent> relevantChange = ((RemoveAndDeleteNonRoot<Repository, RepositoryComponent>)change).getRemoveChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("components__Repository")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof RepositoryComponent)
-    ) {
+    if (!(relevantChange.getOldValue() instanceof RepositoryComponent)) {
     	return false;
     }
     return true;
@@ -55,10 +52,12 @@ class DeletedComponentReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

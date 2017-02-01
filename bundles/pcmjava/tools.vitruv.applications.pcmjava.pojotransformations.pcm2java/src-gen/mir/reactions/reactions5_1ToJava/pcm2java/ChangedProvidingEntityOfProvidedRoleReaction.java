@@ -36,16 +36,13 @@ class ChangedProvidingEntityOfProvidedRoleReaction extends AbstractReactionReali
   
   private boolean checkChangeProperties(final EChange change) {
     ReplaceSingleValuedEReference<OperationProvidedRole, InterfaceProvidingEntity> relevantChange = (ReplaceSingleValuedEReference<OperationProvidedRole, InterfaceProvidingEntity>)change;
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof OperationProvidedRole)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("providingEntity_ProvidedRole")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof InterfaceProvidingEntity)
-    ) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof InterfaceProvidingEntity)) {
     	return false;
     }
     if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof InterfaceProvidingEntity)) {
@@ -58,10 +55,12 @@ class ChangedProvidingEntityOfProvidedRoleReaction extends AbstractReactionReali
     if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

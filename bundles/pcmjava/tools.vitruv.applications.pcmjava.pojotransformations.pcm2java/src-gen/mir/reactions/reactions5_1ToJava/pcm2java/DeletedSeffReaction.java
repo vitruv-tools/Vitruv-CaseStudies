@@ -36,16 +36,13 @@ class DeletedSeffReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     RemoveEReference<BasicComponent, ServiceEffectSpecification> relevantChange = ((RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification>)change).getRemoveChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof BasicComponent)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof ServiceEffectSpecification)
-    ) {
+    if (!(relevantChange.getOldValue() instanceof ServiceEffectSpecification)) {
     	return false;
     }
     return true;
@@ -55,10 +52,12 @@ class DeletedSeffReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

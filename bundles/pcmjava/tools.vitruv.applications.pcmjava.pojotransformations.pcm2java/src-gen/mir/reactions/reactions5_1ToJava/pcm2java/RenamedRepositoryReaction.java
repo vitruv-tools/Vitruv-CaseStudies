@@ -35,12 +35,16 @@ class RenamedRepositoryReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     ReplaceSingleValuedEAttribute<Repository, String> relevantChange = (ReplaceSingleValuedEAttribute<Repository, String>)change;
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("entityName")) {
+    	return false;
+    }
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    	return false;
+    }
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
     	return false;
     }
     return true;
@@ -50,10 +54,12 @@ class RenamedRepositoryReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEAttribute)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

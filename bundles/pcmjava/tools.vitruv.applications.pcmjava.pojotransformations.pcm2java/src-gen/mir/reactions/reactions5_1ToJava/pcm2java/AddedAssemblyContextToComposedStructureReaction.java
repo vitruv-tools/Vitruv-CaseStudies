@@ -36,11 +36,9 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
   
   private boolean checkChangeProperties(final EChange change) {
     InsertEReference<ComposedStructure, AssemblyContext> relevantChange = ((CreateAndInsertNonRoot<ComposedStructure, AssemblyContext>)change).getInsertChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof ComposedStructure)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("assemblyContexts__ComposedStructure")) {
     	return false;
     }
@@ -54,10 +52,12 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

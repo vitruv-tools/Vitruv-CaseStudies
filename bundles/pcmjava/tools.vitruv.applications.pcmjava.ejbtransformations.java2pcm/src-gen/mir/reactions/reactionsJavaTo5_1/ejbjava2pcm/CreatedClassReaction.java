@@ -39,11 +39,9 @@ class CreatedClassReaction extends AbstractReactionRealization {
   
   private boolean checkChangeProperties(final EChange change) {
     InsertEReference<CompilationUnit, ConcreteClassifier> relevantChange = ((CreateAndInsertNonRoot<CompilationUnit, ConcreteClassifier>)change).getInsertChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof CompilationUnit)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("classifiers")) {
     	return false;
     }
@@ -57,9 +55,11 @@ class CreatedClassReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
     InsertEReference<CompilationUnit, ConcreteClassifier> typedChange = ((CreateAndInsertNonRoot<CompilationUnit, ConcreteClassifier>)change).getInsertChange();
     CompilationUnit affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
@@ -67,7 +67,7 @@ class CreatedClassReaction extends AbstractReactionRealization {
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

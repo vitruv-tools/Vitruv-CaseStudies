@@ -36,16 +36,13 @@ class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealizati
   
   private boolean checkChangeProperties(final EChange change) {
     RemoveEReference<RepositoryComponent, ProvidedRole> relevantChange = ((RemoveAndDeleteNonRoot<RepositoryComponent, ProvidedRole>)change).getRemoveChange();
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof RepositoryComponent)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("providedRoles_InterfaceProvidingEntity")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof ProvidedRole)
-    ) {
+    if (!(relevantChange.getOldValue() instanceof ProvidedRole)) {
     	return false;
     }
     return true;
@@ -55,10 +52,12 @@ class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealizati
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

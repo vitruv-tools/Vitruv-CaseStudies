@@ -36,16 +36,13 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
   
   private boolean checkChangeProperties(final EChange change) {
     ReplaceSingleValuedEReference<OperationSignature, DataType> relevantChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
-    // Check affected object
     if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
     	return false;
     }
-    // Check feature
     if (!relevantChange.getAffectedFeature().getName().equals("returnType__OperationSignature")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)
-    ) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)) {
     	return false;
     }
     if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
@@ -58,10 +55,12 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
     if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
+    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed precondition check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   
