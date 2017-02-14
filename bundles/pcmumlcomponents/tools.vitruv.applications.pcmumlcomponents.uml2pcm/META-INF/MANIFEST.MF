@@ -1,9 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius Applications PCM-UML Components
-Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents.pcm2uml
+Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents.uml2pcm
 Bundle-Version: 0.1.0.qualifier
-Export-Package: tools.vitruv.aplications.pcmumlcomp.pcm2uml
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
@@ -25,3 +24,4 @@ Require-Bundle: com.google.guava,
  org.palladiosimulator.pcm
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: vitruv.tools
+Export-Package: tools.vitruv.aplications.pcmumlcomp.uml2pcm
