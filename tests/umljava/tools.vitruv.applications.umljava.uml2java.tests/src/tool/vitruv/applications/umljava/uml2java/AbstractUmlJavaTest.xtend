@@ -1,6 +1,6 @@
 package tool.vitruv.applications.umljava.uml2java
 
-import tools.vitruv.aplications.umljava.uml2java.UmlToJavaChangePropagationSpecification
+import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
 import tools.vitruv.domains.java.JavaDomain
 import tools.vitruv.domains.uml.UmlDomain
 import org.eclipse.uml2.uml.UMLFactory

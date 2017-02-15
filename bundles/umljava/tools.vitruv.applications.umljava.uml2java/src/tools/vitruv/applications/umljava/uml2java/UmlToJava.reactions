@@ -1,4 +1,6 @@
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*;
+import static extension tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*;
+import org.eclipse.uml2.uml.VisibilityKind
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -8,22 +10,250 @@ in reaction to changes in uml
 execute actions in java
 
 reaction CreatedUmlClass {
-	after element uml::Class created and inserted in uml::Model[packagedElement]
-	call createJavaClass(newValue)
+    after element uml::Class created and inserted in uml::Model[packagedElement]
+    call createJavaClass(newValue)
 }
 
 routine createJavaClass(uml::Class umlClass) {
-	action {
-		val javaClass = create java::Class and initialize {
-			javaClass.name = umlClass.name;
-		}
-		add correspondence between umlClass and javaClass
-		val javaCompilationUnit = create java::CompilationUnit and initialize {
-			javaCompilationUnit.name = umlClass.name;
-			//javaCompilationUnit.namespaces += "testPackage" // FIXME Only for testing purposes
-			javaCompilationUnit.classifiers += javaClass;
-			persistProjectRelative(umlClass, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
-		}
-		add correspondence between umlClass and javaCompilationUnit
-	}
+    action {
+        val javaClass = create java::Class and initialize {
+            javaClass.name = umlClass.name;
+        }
+        add correspondence between umlClass and javaClass
+        val javaCompilationUnit = create java::CompilationUnit and initialize {
+            javaCompilationUnit.name = umlClass.name;
+            //javaCompilationUnit.namespaces += "testPackage" // FIXME Only for testing purposes
+            javaCompilationUnit.classifiers += javaClass;
+            persistProjectRelative(umlClass, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+        }
+        add correspondence between umlClass and javaCompilationUnit
+    }
+}
+
+reaction RenameUmlClass {
+    after attribute replaced at uml::Class[name]
+    call renameJavaClass(affectedEObject)
+}
+
+routine renameJavaClass(uml::Class umlClass) {
+    match {
+        val javaClass = retrieve java::Class corresponding to umlClass
+        val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClass
+    }
+    action {
+        update javaClass {
+            javaClass.name = umlClass.name;
+        }
+        update umlClass {
+            javaCompilationUnit.name = umlClass.name;
+            persistProjectRelative(umlClass, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+        }
+    }
+}
+
+reaction DeletedUmlClass {
+    after element uml::Class deleted and removed from uml::Model[packagedElement]
+    call deleteJavaClass(oldValue)
+}
+
+routine deleteJavaClass(uml::Class umlClass) {
+    match {
+        val javaClass = retrieve java::Class corresponding to umlClass
+        val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClass
+    }
+    action {
+        delete javaClass
+        delete javaCompilationUnit
+
+        //TODO: Schauen, ob Attribute Methoden automatisch mitgelöscht werden
+
+    }
+}
+
+reaction CreatedUmlAttribute {
+    after element uml::Property created and inserted in uml::Class[^attribute]
+    call createJavaAttribute(newValue)
+}
+
+routine createJavaAttribute(uml::Property umlAttribute) {
+    match {
+        val customTypeClass = retrieve optional java::Class corresponding to umlAttribute.type //TODO geht das?
+    }
+    action {
+        val javaAttribute = create java::Field and initialize {
+            javaAttribute.name = umlAttribute.name;
+            javaAttribute.typeReference = createTypeReference(umlAttribute.type);
+            //Sichtbarkeit auch schon gesetzt?
+                
+        }
+        add correspondence between umlAttribute and javaAttribute
+    }
+}
+
+
+
+
+reaction CreatedUmlMethod {
+    after element uml::Operation created and inserted in uml::Class[member]
+    call createJavaMethod(newValue)
+}
+
+routine createJavaMethod(uml::Operation umlOp) {
+    match {
+        val javaClass = retrieve java::Class corresponding to umlOp.class_
+    }
+    action {
+        val javaMethod = create java::InterfaceMethod and initialize {
+            javaMethod.name = umlOp.name;
+        }
+        add correspondence between umlOp and javaMethod
+        update javaClass {
+            javaClass.methods += javaMethod;
+        }
+    }
+}
+
+reaction CreatedUmlParameter {
+    after element uml::Parameter created and inserted in uml::Operation[ownedParameter]
+    call createJavaParameter(newValue)
+}
+
+routine createJavaParameter(uml::Parameter umlParam) {
+    match {
+        val javaMethod = retrieve java::Method corresponding to umlParam.operation
+    }
+    action {
+        val javaParam = create java::OrdinaryParameter and initialize {
+            javaParam.name = umlParam.name;
+            javaParam.typeReference = createTypeReference(umlParam.type)
+        }
+        add correspondence between javaParam and umlParam
+        update javaMethod {
+            javaMethod.parameters += javaParam;
+        }
+    }
+}
+
+reaction ChangedUmlMethodReturnType {
+    after element replaced at uml::Operation[type]
+    call changeJavaMethodReturnType(affectedEObject)
+}
+
+routine changeJavaMethodReturnType(uml::Operation umlOp) {
+    match {
+        val javaMethod = retrieve java::Method corresponding to umlOp
+        //val returnType = retrieve java::Class corresponding to umlOp.type
+    }
+    action {
+        update javaMethod {
+            javaMethod.typeReference = createTypeReference(umlOp.type)
+        }
+    }
+}
+ 
+reaction ChangedAbstractUmlClass {
+    after attribute replaced at uml::Class[isAbstract]
+    call changeAbstractJavaClass(affectedEObject)
+}
+
+routine changeAbstractJavaClass(uml::Class umlClass) {
+    match {
+        val javaClass = retrieve java::Class corresponding to umlClass
+    }
+    action {
+        val abstr = create java::Abstract
+        update javaClass {
+            if (umlClass.isAbstract) {
+                javaClass.addModifier(abstr)
+            } else {
+                javaClass.removeModifier(abstr.class)
+                
+            }
+            
+        }
+    }
+}
+
+reaction ChangedStaticUmlMethod {
+    after attribute replaced at uml::Operation[isStatic]
+    call changeStaticJavaMethod(affectedEObject)
+}
+
+routine changeStaticJavaMethod(uml::Operation umlOp) {
+    match {
+        val javaMethod = retrieve java::Method corresponding to umlOp
+    }
+    action {
+        update javaMethod{
+            if (umlOp.isStatic) {
+                //TODO Herausfinden, wie im Javamodell statische Methoden repräsentiert werden
+                
+            } else {
+                
+            }
+        }
+    }
+}
+
+reaction ChangedStaticUmlAttribute {
+    after attribute replaced at uml::Property[isStatic]
+    call changeStaticJavaAttribute(affectedEObject)
+}
+
+routine changeStaticJavaAttribute(uml::Property umlAttr) {
+    match {
+        val javaAttr = retrieve java::Field corresponding to umlAttr
+    }
+    action {
+        val staticFlag = create java::Static
+        update javaAttr {
+            if (umlAttr.isStatic) {
+                javaAttr.addModifier(staticFlag);
+            } else {
+                javaAttr.removeModifier(staticFlag.class)
+            }
+            
+        }
+    }
+}
+
+reaction ChangedVisibilityUmlAttribute {
+    after attribute replaced at uml::Property[visibility]
+    call changeVisibilityJavaAttribute(affectedEObject)
+}
+
+routine changeVisibilityJavaAttribute(uml::Property umlAttr) {
+    match {
+        val javaAttr = retrieve java::Field corresponding to umlAttr
+    }
+    action {
+        update javaAttr {
+            switch umlAttr.visibility.value {
+                case VisibilityKind.PRIVATE : javaAttr.makePrivate
+                case VisibilityKind.PROTECTED : javaAttr.makeProtected
+                case VisibilityKind.PUBLIC : javaAttr.makePublic
+                //TODO public als default? In Papyrus ist das so
+            }
+        }
+    }
+}
+
+reaction CreatedUmlInterface {
+    after element uml::Interface created and inserted in uml::Model[packagedElement]
+    call createJavaInterface(newValue)
+}
+
+routine createJavaInterface(uml::Interface umlInterface) {
+    action {
+        val javaInterface = create java::Interface and initialize {
+            javaInterface.name = umlInterface.name;
+        }
+        add correspondence between umlInterface and javaInterface
+        val javaCompilationUnit = create java::CompilationUnit and initialize {
+            javaCompilationUnit.name = umlInterface.name;
+            javaCompilationUnit.classifiers += javaInterface;
+            persistProjectRelative(umlInterface, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+        }
+        add correspondence between umlInterface and javaCompilationUnit
+    }
 }

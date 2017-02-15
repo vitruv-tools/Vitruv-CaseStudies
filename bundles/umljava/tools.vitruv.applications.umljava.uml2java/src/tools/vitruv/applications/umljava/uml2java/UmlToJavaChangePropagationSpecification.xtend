@@ -1,4 +1,4 @@
-package tools.vitruv.aplications.umljava.uml2java
+package tools.vitruv.applications.umljava.uml2java
 
 import mir.reactions.AbstractChangePropagationSpecificationUMLToJava
 
