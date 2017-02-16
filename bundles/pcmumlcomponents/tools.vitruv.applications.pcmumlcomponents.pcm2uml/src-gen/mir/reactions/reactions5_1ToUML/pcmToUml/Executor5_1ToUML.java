@@ -12,6 +12,7 @@ public class Executor5_1ToUML extends AbstractReactionsExecutor {
   protected void setup() {
     tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmRepositoryReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmRepositoryReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.RenamedPcmRepositoryReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.RenamedPcmRepositoryReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction(userInteracting));
   }
 }

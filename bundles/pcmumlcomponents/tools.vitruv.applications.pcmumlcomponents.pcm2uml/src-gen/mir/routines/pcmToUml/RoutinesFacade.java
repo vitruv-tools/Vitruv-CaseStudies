@@ -18,6 +18,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void renameModelForRepository(final Repository repository) {
+    mir.routines.pcmToUml.RenameModelForRepositoryRoutine effect = new mir.routines.pcmToUml.RenameModelForRepositoryRoutine(this.executionState, calledBy,
+    	repository);
+    effect.applyRoutine();
+  }
+  
   public void createUmlComponent(final RepositoryComponent pcmComponent) {
     mir.routines.pcmToUml.CreateUmlComponentRoutine effect = new mir.routines.pcmToUml.CreateUmlComponentRoutine(this.executionState, calledBy,
     	pcmComponent);

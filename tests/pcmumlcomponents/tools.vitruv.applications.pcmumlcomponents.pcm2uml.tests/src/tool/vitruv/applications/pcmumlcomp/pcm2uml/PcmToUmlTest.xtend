@@ -1,10 +1,11 @@
 package tool.vitruv.applications.pcmumlcomp.pcm2uml
 
-import org.junit.Test
-import static org.junit.Assert.*;
-import org.eclipse.uml2.uml.Model
-import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.eclipse.uml2.uml.Component
+import org.eclipse.uml2.uml.Model
+import org.junit.Test
+import org.palladiosimulator.pcm.repository.RepositoryFactory
+
+import static org.junit.Assert.*
 
 class PcmToUmlTest extends AbstractPcmUmlTest {
 	private static val COMPONENT_NAME = "TestComponent";
@@ -17,6 +18,15 @@ class PcmToUmlTest extends AbstractPcmUmlTest {
 		val umlModel = correspondingElements.get(0);
 		assertTrue(umlModel instanceof Model);
 		assertEquals(MODEL_NAME, (umlModel as Model).name);
+	}
+	
+	@Test
+	public def void testModelRename() {
+		val newName = 'foo';
+		rootElement.entityName = newName;
+		saveAndSynchronizeChanges(rootElement);
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
+		assertEquals(newName, (correspondingElements.get(0) as Model).name);
 	}
 
 	@Test

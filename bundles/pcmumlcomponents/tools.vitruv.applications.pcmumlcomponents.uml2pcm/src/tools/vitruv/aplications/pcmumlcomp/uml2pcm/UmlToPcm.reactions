@@ -5,6 +5,9 @@ reactions: UmlToPcm
 in reaction to changes in uml
 execute actions in pcm
 
+// ###################################################
+// ############### CONTAINER REACTIONS ###############
+
 reaction CreatedUmlModel {
 	after element uml::Model created and inserted as root
 	call createPcmRepository(newValue)
@@ -17,5 +20,21 @@ routine createPcmRepository(uml::Model umlModel) {
 			persistProjectRelative(umlModel, pcmRepository, "repository/" + umlModel.name + ".repository")
 		}
 		add correspondence between umlModel and pcmRepository
+	}
+}
+
+reaction RenamedUmlModel {
+	after attribute replaced at uml::Model[name]
+	call renamePcmRepository(affectedEObject)
+}
+
+routine renamePcmRepository(uml::Model model) {
+	match {
+		val repository = retrieve pcm::Repository corresponding to model
+	}
+	action {
+		update repository {
+			repository.entityName = model.name
+		}
 	}
 }
