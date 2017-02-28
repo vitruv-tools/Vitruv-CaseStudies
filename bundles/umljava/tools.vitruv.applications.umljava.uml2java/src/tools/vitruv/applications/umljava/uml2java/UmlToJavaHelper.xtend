@@ -18,9 +18,11 @@ import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
 import org.emftext.language.java.types.ClassifierReference
+import org.apache.log4j.Logger
+import org.apache.log4j.PropertyConfigurator
 
 class UmlToJavaHelper {
-	
+	private static val log = Logger.getLogger(UmlToJavaHelper);
 	private new() {
 	    
 	}
@@ -45,8 +47,11 @@ class UmlToJavaHelper {
      * @param cType java-Class
      */
 	def static TypeReference createTypeReference(Type dType, Class cType) {
+	    PropertyConfigurator.configure("log4j.properties")
 		var TypeReference typeRef;
-		if (dType == null) {
+		if (dType == null && cType == null) {
+		    log.info(cType == null)
+		    log.info("   VOOOOOOOIDDDD")
 		    return TypesFactory.eINSTANCE.createVoid();
 		} else if (dType instanceof PrimitiveType) {
 		    
