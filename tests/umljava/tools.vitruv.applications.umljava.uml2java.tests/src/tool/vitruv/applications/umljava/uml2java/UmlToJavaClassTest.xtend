@@ -33,6 +33,8 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	private static val DATATYPE_NAME2 = "DataTypeName2"
 	private static val OP_NAME = "operationName"
 	private static val OP_NAME2 = "operationName2"
+	private static val PARAM_NAME = "parameterName"
+    private static val PARAM_NAME2 = "parameterName2"
 	
 	private var org.eclipse.uml2.uml.Class uClass;
 	private var org.eclipse.uml2.uml.Property uAtt;
@@ -41,7 +43,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	private var org.eclipse.uml2.uml.Operation uIOperation;
 	private var org.eclipse.uml2.uml.Interface uI;
 	
-
+    private var Class jClass;
 	private var Interface jI;
 	
 	@BeforeClass
@@ -90,8 +92,6 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	    rootElement.packagedElements += uClass;
 	    saveAndSynchronizeChanges(uClass);
 	    
-	    //jClass = getJClassFromName(Class, CLASS_NAME)
-	    
 	    uIOperation = UMLFactory.eINSTANCE.createOperation;
         uIOperation.name = OP_NAME;
         
@@ -101,8 +101,6 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	    
 	    rootElement.packagedElements += uI;
 	    saveAndSynchronizeChanges(uI);
-	    
-	    
 	}
 	
 	//@After
@@ -128,6 +126,9 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         }
         if (jI != null) {
             jI = null;
+        }
+        if (jClass != null) {
+            jClass = null;
         }
         saveAndSynchronizeChanges(rootElement);
 	}
@@ -157,17 +158,35 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uClass.visibility = VisibilityKind.PRIVATE_LITERAL;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
+        jClass = getJClassFromName(Class, CLASS_NAME);
         assertTrue(jClass.private);
+        assertFalse(jClass.public);
+        assertFalse(jClass.protected);
+        
+        uClass.visibility = VisibilityKind.PROTECTED_LITERAL;
+        saveAndSynchronizeChanges(uClass);
+        
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        assertTrue(jClass.protected);
+        assertFalse(jClass.public);
+        assertFalse(jClass.private);
+        
     }
     @Test
     def testChangeAbstractClass() {
         uClass.isAbstract = true;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
+        jClass = getJClassFromName(Class, CLASS_NAME);
         assertNotNull(jClass);
         assertTrue(jClass.hasModifier(org.emftext.language.java.modifiers.Abstract))
+        
+        uClass.isAbstract = false;
+        saveAndSynchronizeChanges(uClass);
+        
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        assertNotNull(jClass);
+        assertTrue(!jClass.hasModifier(org.emftext.language.java.modifiers.Abstract))
     }
     
     @Test
@@ -175,20 +194,27 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uClass.name =  CLASS_NAME2;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME2)
-        assertNotNull(jClass)
+        jClass = getJClassFromName(Class, CLASS_NAME2);
+        assertNotNull(jClass);
+        assertModelNotExists(CLASS_NAME);
     }
     
     
     @Test
     def testChangeFinalClass() {
-        
         uClass.isFinalSpecialization = true;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME)
+        jClass = getJClassFromName(Class, CLASS_NAME)
         assertNotNull(jClass)
         assertTrue(jClass.hasModifier(org.emftext.language.java.modifiers.Final))
+        
+        uClass.isFinalSpecialization = false;
+        saveAndSynchronizeChanges(uClass);
+        
+        jClass = getJClassFromName(Class, CLASS_NAME)
+        assertNotNull(jClass)
+        assertTrue(!jClass.hasModifier(org.emftext.language.java.modifiers.Final))
     }
     
     
@@ -200,7 +226,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         rootElement.packagedElements += uI2;
         saveAndSynchronizeChanges(uI2)
         
-        var jI = getJClassFromName(org.emftext.language.java.classifiers.Interface, INTERFACE_NAME2);
+        jI = getJClassFromName(org.emftext.language.java.classifiers.Interface, INTERFACE_NAME2);
         assertNotNull(jI);
         uI2.destroy;
     }
@@ -212,7 +238,6 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         
         jI = getJClassFromName(org.emftext.language.java.classifiers.Interface, INTERFACE_NAME2);
         assertNotNull(jI);
-        assertEquals(INTERFACE_NAME2, jI.name)
         assertModelNotExists(buildJavaFilePath(INTERFACE_NAME))
     }
     
@@ -233,7 +258,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         
         saveAndSynchronizeChanges(uClass);       
         
-        val jClass = getJClassFromName(Class, CLASS_NAME)     
+        jClass = getJClassFromName(Class, CLASS_NAME)     
         val jAttribute = jClass.getMembersByName(ATTR_NAME2).head as Field
         assertNotNull(jAttribute);
 	}
@@ -248,7 +273,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	    uClass.createOwnedAttribute(ATTR_NAME2, customClass);
 	    saveAndSynchronizeChanges(uClass);
 	       
-	    val jClass = getJClassFromName(Class, CLASS_NAME);
+	    jClass = getJClassFromName(Class, CLASS_NAME);
         val jAttribute = jClass.getMembersByName(ATTR_NAME2).head as Field
         assertNotNull(jAttribute);
         assertEquals(CLASS_NAME3, jAttribute.typeReference.target.class.name)
@@ -260,7 +285,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	    uAtt.name = ATTR_NAME2;
 	    saveAndSynchronizeChanges(uClass);
 	    
-	    val jClass = getJClassFromName(Class, CLASS_NAME);
+	    jClass = getJClassFromName(Class, CLASS_NAME);
 	    val jAttr = jClass.getMembersByName(ATTR_NAME2).head as Field
 	    assertNotNull(jAttr);
 	    assertTrue(jClass.getMembersByName(ATTR_NAME).empty);
@@ -271,7 +296,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	    uAtt.destroy;
 	    saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
+        jClass = getJClassFromName(Class, CLASS_NAME);
         assertTrue(jClass.getMembersByName(ATTR_NAME).empty);
 	}
 
@@ -280,10 +305,18 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	    uAtt.isStatic = true;
         saveAndSynchronizeChanges(uClass);
          
-        val jClass = getJClassFromName(Class, CLASS_NAME);
-        val jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        var jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
         assertNotNull(jAttribute);
         assertTrue(jAttribute.hasModifier(org.emftext.language.java.modifiers.Static))
+        
+        uAtt.isStatic = false;
+        saveAndSynchronizeChanges(uClass);
+         
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
+        assertNotNull(jAttribute);
+        assertTrue(!jAttribute.hasModifier(org.emftext.language.java.modifiers.Static))
 	}
 	
     @Test
@@ -291,10 +324,18 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uAtt.isReadOnly = true;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
-        val jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        var jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
         assertNotNull(jAttribute);
         assertTrue(jAttribute.hasModifier(org.emftext.language.java.modifiers.Final))
+        
+        uAtt.isReadOnly = false;
+        saveAndSynchronizeChanges(uClass);
+        
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
+        assertNotNull(jAttribute);
+        assertTrue(!jAttribute.hasModifier(org.emftext.language.java.modifiers.Final))
     }
     
     @Test
@@ -302,10 +343,23 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uAtt.visibility = VisibilityKind.PRIVATE_LITERAL;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME); 
-        val jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
+        jClass = getJClassFromName(Class, CLASS_NAME); 
+        var jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
         assertNotNull(jAttribute);
-        assertTrue(jAttribute.hasModifier(org.emftext.language.java.modifiers.Private))
+        assertTrue(jAttribute.private)
+        assertFalse(jAttribute.protected)
+        assertFalse(jAttribute.public)
+        
+        uAtt.visibility = VisibilityKind.PROTECTED_LITERAL;
+        saveAndSynchronizeChanges(uClass);
+        
+        jClass = getJClassFromName(Class, CLASS_NAME); 
+        jAttribute = jClass.getMembersByName(ATTR_NAME).head as Field
+        assertNotNull(jAttribute);
+        assertTrue(jAttribute.protected)
+        assertFalse(jAttribute.private)
+        assertFalse(jAttribute.public)
+        
     }
     
     @Test
@@ -313,7 +367,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uClass.createOwnedOperation(OP_NAME, null, null, null);
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
+        jClass = getJClassFromName(Class, CLASS_NAME);
         val jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
         assertNotNull(jMeth)
         assertTrue(jMeth.typeReference instanceof org.emftext.language.java.types.Void)
@@ -324,7 +378,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uOperation.name = OP_NAME2;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
+        jClass = getJClassFromName(Class, CLASS_NAME);
         val jMeth = jClass.getMembersByName(OP_NAME2).head as ClassMethod
         assertNotNull(jMeth)
         assertTrue(jMeth.typeReference instanceof org.emftext.language.java.types.Void)
@@ -336,7 +390,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uOperation.destroy;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
+        jClass = getJClassFromName(Class, CLASS_NAME);
         assertTrue(jClass.getMembersByName(OP_NAME).empty)
     }
     
@@ -345,20 +399,36 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uOperation.isStatic = true;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
-        val jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        var jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
         assertNotNull(jMeth)
         assertTrue(jMeth.hasModifier(org.emftext.language.java.modifiers.Static))
+        
+        uOperation.isStatic = false;
+        saveAndSynchronizeChanges(uClass);
+        
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
+        assertNotNull(jMeth)
+        assertTrue(!jMeth.hasModifier(org.emftext.language.java.modifiers.Static))
     }
     
     @Test
     def testAbstractMethod() {
         uOperation.isAbstract = true;
         saveAndSynchronizeChanges(uClass);
-        val jClass = getJClassFromName(Class, CLASS_NAME);
-        val jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
+        
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        var jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
         assertNotNull(jMeth)
         assertTrue(jMeth.hasModifier(org.emftext.language.java.modifiers.Abstract))
+        
+        uOperation.isAbstract = false;
+        saveAndSynchronizeChanges(uClass);
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
+        assertNotNull(jMeth)
+        assertTrue(!jMeth.hasModifier(org.emftext.language.java.modifiers.Abstract))
     }
     
     @Test
@@ -366,10 +436,32 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uOperation.visibility = VisibilityKind.PRIVATE_LITERAL;
         saveAndSynchronizeChanges(uClass);
         
-        val jClass = getJClassFromName(Class, CLASS_NAME);
-        val jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        var jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
         assertNotNull(jMeth);
-        assertTrue(jMeth.hasModifier(org.emftext.language.java.modifiers.Private))
+        assertTrue(jMeth.private)
+        assertFalse(jMeth.protected)
+        assertFalse(jMeth.public)
+        
+        uOperation.visibility = VisibilityKind.PROTECTED_LITERAL;
+        saveAndSynchronizeChanges(uClass);
+        
+        jClass = getJClassFromName(Class, CLASS_NAME);
+        jMeth = jClass.getMembersByName(OP_NAME).head as ClassMethod
+        assertNotNull(jMeth);
+        assertTrue(jMeth.protected)
+        assertFalse(jMeth.private)
+        assertFalse(jMeth.public)
+    }
+    
+    @Test
+    def testCreateParameter() {
+        val uParam = UMLFactory.eINSTANCE.createParameter;
+        uParam.name = PARAM_NAME2;
+        val pt = UMLFactory.eINSTANCE.createPrimitiveType;
+        UMLFactory.eINSTANCE.createLiteralInteger
+        val u = org.eclipse.uml2.uml.resource.UMLResource.JAVA_PRIMITIVE_TYPES_LIBRARY_URI
+        
     }
     
     @Test
@@ -379,7 +471,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uI.ownedOperations += uOp;
         saveAndSynchronizeChanges(uI);
         
-        val jI = getJClassFromName(Interface, INTERFACE_NAME);
+        jI = getJClassFromName(Interface, INTERFACE_NAME);
         val jIM = jI.getMembersByName(OP_NAME2).head as InterfaceMethod;
         assertNotNull(jIM);
         uOp.destroy;
@@ -390,7 +482,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uIOperation.name = OP_NAME2;
         saveAndSynchronizeChanges(uI);
         
-        val jI = getJClassFromName(Interface, INTERFACE_NAME);
+        jI = getJClassFromName(Interface, INTERFACE_NAME);
         val jIM = jI.getMembersByName(OP_NAME2).head as InterfaceMethod
         assertNotNull(jIM)
         assertTrue(jI.getMembersByName(OP_NAME).empty)
@@ -401,14 +493,14 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uIOperation.destroy;
         saveAndSynchronizeChanges(uI);
         
-        val jI = getJClassFromName(Interface, INTERFACE_NAME);
-        assertNull(jI.getMembersByName(OP_NAME).head)
+        jI = getJClassFromName(Interface, INTERFACE_NAME);
+        assertTrue(jI.getMembersByName(OP_NAME).empty)
     }
     
 	
 	    
-	def private <T> T getJClassFromName(java.lang.Class<T> c, String name) {
-	    val iter = getModelResource(buildJavaFilePath(name)).allContents
+	def private <T extends org.emftext.language.java.classifiers.ConcreteClassifier> T getJClassFromName(java.lang.Class<T> c, String name) {
+	    val iter = getModelResource(buildJavaFilePath(name), true).allContents
         val i2 = iter.filter(c)
         return i2.next() as T
 	}

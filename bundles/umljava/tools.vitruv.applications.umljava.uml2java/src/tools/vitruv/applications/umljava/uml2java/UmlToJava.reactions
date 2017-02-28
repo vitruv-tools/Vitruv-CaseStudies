@@ -26,7 +26,6 @@ routine createJavaClass(uml::Class umlClass) {
         }
         add correspondence between umlClass and javaClass
         val javaCompilationUnit = create java::CompilationUnit and initialize {
-            logger.info("Create JClass Routine")
             javaCompilationUnit.name = umlClass.name;
             //javaCompilationUnit.namespaces += "testPackage" // FIXME Only for testing purposes
             javaCompilationUnit.classifiers += javaClass;
@@ -88,7 +87,9 @@ routine changeJavaClassFinal(uml::Class umlClass) {
         val finalMod = create java::Final
         update jClass {
             if (umlClass.isFinalSpecialization) {
-                jClass.addModifier(finalMod)
+                if (!jClass.hasModifier(finalMod.class)) {
+                    jClass.addModifier(finalMod)
+                }
             } else {
                 jClass.removeModifier(finalMod.class)
             }
@@ -109,7 +110,9 @@ routine changeAbstractJavaClass(uml::Class umlClass) {
         val abstr = create java::Abstract
         update javaClass {
             if (umlClass.isAbstract) {
-                javaClass.addModifier(abstr)
+                if (!javaClass.hasModifier(abstr.class)) {
+                    javaClass.addModifier(abstr)
+                }
             } else {
                 javaClass.removeModifier(abstr.class)
                 
@@ -194,17 +197,29 @@ routine deleteJavaInterface(uml::Interface umlInterface) {
         delete jCompUnit
     }
 }
-/* 
-reaction ChangedSuperInterface {
-    after attribute replaced at uml::Interface[]
+ 
+reaction ChangedUmlSuperInterface {
+    after element uml::Interface inserted in uml::Interface[generalization]
+    call changeJavaSuperInterface(newValue, affectedEObject)
 }
 
-*/
+routine changeJavaSuperInterface(uml::Interface superUMLInterface, uml::Interface uI) {
+    match {
+        val jI = retrieve java::Interface corresponding to uI
+        val superJavaInterface = retrieve java::Interface corresponding to superUMLInterface
+    }
+    action {
+        update jI {
+            jI.extends += createTypeReference(null, superJavaInterface)
+        }
+    }
+}
+
+
 
 reaction CreatedUmlAttribute {
     after element uml::Property created and inserted in uml::Class[ownedAttribute]
     call {
-        logger.info("------------ CreateAttr Reaction ---------------------")
         createJavaAttribute(affectedEObject, newValue)
     }
 }
@@ -219,7 +234,6 @@ routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
     }
     action {
         val javaAttribute = create java::Field and initialize {
-            logger.info("------------- CreateAttr Routine -------------")
             if (umlAttribute.name == null) {
                 javaAttribute.name = "DefaultAttributeName"
             } else {
@@ -227,8 +241,6 @@ routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
             }
             javaAttribute.typeReference = createTypeReference(umlAttribute.datatype, customTypeClass);    
         }
-        
-       
         update javaClass {
           javaClass.members += javaAttribute;
         }
@@ -263,7 +275,6 @@ routine deleteJavaAttribute(uml::Property umlAttr) {
         val jAttr = retrieve java::Field corresponding to umlAttr
     }
     action {
-        //TODO: Schauen, ob in javaClass.members das Attribut korrekt entfernt wurde
         delete jAttr
     }
 }
@@ -271,10 +282,8 @@ routine deleteJavaAttribute(uml::Property umlAttr) {
 reaction CreatedUmlMethod {
     after element uml::Operation created and inserted in uml::Class[ownedOperation]
     call {
-        logger.info("Create Java Method Reaction")
-        createJavaMethod(affectedEObject, newValue)
-        
-        }
+        createJavaMethod(affectedEObject, newValue)       
+    }
 }
 
 routine createJavaMethod(uml::Class uClass, uml::Operation umlOp) {
@@ -286,7 +295,6 @@ routine createJavaMethod(uml::Class uClass, uml::Operation umlOp) {
     action {
       
         val javaMethod = create java::ClassMethod and initialize {
-            logger.info("CreateJavaMethod Routine")
             if (umlOp.name == null) {
                 javaMethod.name = "DefaultMethodName"
             } else {
@@ -294,7 +302,6 @@ routine createJavaMethod(uml::Class uClass, uml::Operation umlOp) {
             }
             javaMethod.typeReference = createTypeReference(umlOp.type, customTypeClass)
         }
-        
         update javaClass {
             javaClass.members += javaMethod;
         }
@@ -307,7 +314,7 @@ reaction RenamedUmlMethod {
     after attribute replaced at uml::Operation[name]
     call renameJavaMethod(affectedEObject)
 }
-//Geht für ClassMethod und InterfaceMethod?
+//Geht für ClassMethod und InterfaceMethod
 routine renameJavaMethod(uml::Operation umlOp) {
     match {
         val jMeth = retrieve java::Method corresponding to umlOp
@@ -329,7 +336,7 @@ reaction DeletedUmlInterfaceMethod {
     call deleteJavaMethod(oldValue)
 }
 
-//Geht für ClassMethod und InterfaceMethod?
+//Geht für ClassMethod und InterfaceMethod
 routine deleteJavaMethod(uml::Operation umlOp) {
     match {
         val jMeth = retrieve java::Method corresponding to umlOp
@@ -344,7 +351,7 @@ reaction CreatedUmlParameter {
     after element uml::Parameter created and inserted in uml::Operation[ownedParameter]
     call createJavaParameter(newValue)
 }
-//Sollte für ClassMethod und InterfaceMethod gehen
+//Geht für ClassMethod und InterfaceMethod?
 routine createJavaParameter(uml::Parameter umlParam) {
     match {
         val javaMethod = retrieve java::Method corresponding to umlParam.operation
@@ -398,7 +405,9 @@ routine changeJavaAttributeFinal(uml::Property umlAttr) {
         val finalMod = create java::Final
         update jAttr {
             if (umlAttr.isReadOnly) {
-                jAttr.addModifier(finalMod)
+                if (!jAttr.hasModifier(finalMod.class)) {
+                    jAttr.addModifier(finalMod)
+                }
             } else {
                 jAttr.removeModifier(finalMod.class)
             }
@@ -422,57 +431,16 @@ routine changeStatic(uml::Feature uFeat) {
         val staticMod = create java::Static
         update jMod {
             if (uFeat.isStatic) {
-                jMod.addModifier(staticMod)
+                if (!jMod.hasModifier(staticMod.class)) {
+                    jMod.addModifier(staticMod)
+                }
             } else {
                 jMod.removeModifier(staticMod.class)
             }
         }
     }
 }
-/* 
-reaction ChangedStaticUmlMethod {
-    after attribute replaced at uml::Operation[isStatic]
-    call changeStaticJavaMethod(affectedEObject)
-}
 
-//TODO Statisch machen von Meth & Attr zusammenlegen?
-routine changeStaticJavaMethod(uml::Operation umlOp) {
-    match {
-        val javaMethod = retrieve java::ClassMethod corresponding to umlOp
-    }
-    action {
-        val staticMod = create java::Static
-        update javaMethod {
-            if (umlOp.isStatic) {
-                javaMethod.addModifier(staticMod)
-            } else {
-                javaMethod.removeModifier(staticMod.class)
-            }
-        }
-    }
-}
-
-reaction ChangedStaticUmlAttribute {
-    after attribute replaced at uml::Property[isStatic]
-    call changeStaticJavaAttribute(affectedEObject)
-}
-
-routine changeStaticJavaAttribute(uml::Property umlAttr) {
-    match {
-        val javaAttr = retrieve java::Field corresponding to umlAttr
-    }
-    action {
-        val staticMod = create java::Static
-        update javaAttr {
-            if (umlAttr.isStatic) {
-                javaAttr.addModifier(staticMod);
-            } else {
-                javaAttr.removeModifier(staticMod.class)
-            }
-        }
-    }
-}
-*/
 reaction ChangedAbstractUmlMethod {
     after attribute replaced at uml::Operation[isAbstract] 
     call changeAbstractJavaMethod(affectedEObject)
@@ -487,9 +455,10 @@ routine changeAbstractJavaMethod(uml::Operation umlOp) {
         val abstr = create java::Abstract
         update javaMethod {
             if (umlOp.isAbstract) {
-                javaMethod.addModifier(abstr)
-                umlOp.class_.isAbstract = true;
-                
+                if (!javaMethod.hasModifier(abstr.class)) {
+                    javaMethod.addModifier(abstr)
+                    //umlOp.class_.isAbstract = true;
+                }
             } else {
                 javaMethod.removeModifier(abstr.class)
             }
@@ -532,8 +501,6 @@ routine changeJavaMethodVisibility(uml::Operation umlOp) {
         }
     }
 }
-
-
 
 
 reaction CreatedUmlInterfaceMethod {

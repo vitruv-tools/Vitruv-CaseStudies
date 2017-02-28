@@ -28,6 +28,10 @@ class UmlToJavaHelper {
 	}
 
 
+    /**
+     * Liefert zu einem UML-VisibilityKind den entsprechenden Java-Sichtbarkeitsmodifier.
+     * Default-Rückgabe: Public.
+     */
     def static Modifier getJavaVisibility(VisibilityKind v) {
         switch v.value {
                 case VisibilityKind.PRIVATE : return ModifiersFactory.eINSTANCE.createPrivate
@@ -36,17 +40,29 @@ class UmlToJavaHelper {
             }
     }
     
+    /**
+     * Entfernt alle Sichtbarkeiten-Modifier eines AnnotableAndModifiables.
+     * (Klassen, Interfaces, Methoden, Attribute)
+     */
     def static removeJavaVisibilityModifiers(AnnotableAndModifiable a) {
         a.removeModifier(typeof(Private))
         a.removeModifier(typeof(Protected))
         a.removeModifier(typeof(Public))
+    }
+    
+    /**
+     * @param a         Objekt, dessen Modifer entfernt werden soll
+     * @param modifier  Klasse des Modifiers, das von Objekt a entfernt werden soll 
+     */
+    def static <T extends Modifier> removeJavaModifier(AnnotableAndModifiable a, java.lang.Class<T> modifier ) {
+        a.removeModifier(modifier)
     }
     /**
      * 
      * @param dType uml-DataType
      * @param cType java-Class
      */
-	def static TypeReference createTypeReference(Type dType, Class cType) {
+	def static TypeReference createTypeReference(Type dType, ConcreteClassifier cType) {
 	    PropertyConfigurator.configure("log4j.properties")
 		var TypeReference typeRef;
 		if (dType == null && cType == null) {
@@ -67,13 +83,13 @@ class UmlToJavaHelper {
 	 * NameSpaceClassifierReference hat eine Liste von ClassifierReferences
 	 * @param concreteClassifiers = Class, Interface, Enum or Annotation
 	 */
-	def static ClassifierReference createClassifierReference(ConcreteClassifier concreteClassifier) {
-        //val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
+	def static NamespaceClassifierReference createClassifierReference(ConcreteClassifier concreteClassifier) {
+        val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
         val classifierRef = TypesFactory.eINSTANCE.createClassifierReference
         classifierRef.target = EcoreUtil.copy(concreteClassifier)
-        //namespaceClassifierReference.classifierReferences.add(classifierRef)
+        namespaceClassifierReference.classifierReferences.add(classifierRef)
 
-        return classifierRef
+        return namespaceClassifierReference
     }
     
     
