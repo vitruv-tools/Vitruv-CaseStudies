@@ -3,6 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PCM 2 Java EJB
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 Bundle-Version: 1.0.0.qualifier
+Export-Package: mir.reactions.reactions5_1ToJava.pcm2javaEjb,
+ tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 Require-Bundle: org.eclipse.emf.ecore,
  com.google.guava,
  org.apache.log4j,
@@ -20,12 +22,12 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.framework.userinteraction,
  tools.vitruv.framework.correspondence,
  tools.vitruv.extensions.dslsruntime.mapping,
- tools.vitruv.extensions.dslsruntime.response,
  tools.vitruv.framework.change,
  tools.vitruv.framework.change.echange,
  tools.vitruv.framework.change.processing,
  tools.vitruv.domains.java.util.jamoppparser,
- tools.vitruv.applications.pcmjava.util  
+ tools.vitruv.applications.pcmjava.util,
+ tools.vitruv.extensions.dslsruntime.reactions,
+ tools.vitruv.applications.pcmjava.pojotransformations.pcm2java,
+ tools.vitruv.domains.java.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java,
- mir.responses.responses5_1ToJava.pcm2javaEjb
