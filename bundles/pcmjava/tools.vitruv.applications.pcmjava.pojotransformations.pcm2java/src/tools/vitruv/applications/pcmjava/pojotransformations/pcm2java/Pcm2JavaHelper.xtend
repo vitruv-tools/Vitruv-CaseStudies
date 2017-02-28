@@ -1,55 +1,83 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
 
-import org.eclipse.emf.ecore.EObject
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.TypesFactory
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.members.Constructor
-import org.emftext.language.java.classifiers.Class;
-import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.imports.ClassifierImport
-import org.emftext.language.java.instantiations.NewConstructorCall
-import org.emftext.language.java.parameters.Parameter
-import org.emftext.language.java.statements.StatementsFactory
-import org.emftext.language.java.expressions.ExpressionsFactory
-import org.emftext.language.java.references.ReferencesFactory
-import org.emftext.language.java.literals.LiteralsFactory
-import org.emftext.language.java.operators.OperatorsFactory
-import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.parameters.ParametersFactory
-import java.util.List
+import java.io.ByteArrayInputStream
+import java.util.ArrayList
 import java.util.Comparator
-import org.emftext.language.java.members.Method
-import tools.vitruv.framework.util.datatypes.ClaimableMap
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import tools.vitruv.framework.util.datatypes.ClaimableHashMap
+import java.util.List
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.annotations.AnnotationsFactory
+import org.emftext.language.java.classifiers.Class
+import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.emftext.language.java.types.Type
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.repository.DataType
-import org.emftext.language.java.modifiers.Modifier
-import org.emftext.language.java.modifiers.Public
+import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.containers.JavaRoot
+import org.emftext.language.java.expressions.ExpressionsFactory
+import org.emftext.language.java.imports.ClassifierImport
+import org.emftext.language.java.imports.Import
+import org.emftext.language.java.imports.ImportsFactory
+import org.emftext.language.java.instantiations.NewConstructorCall
+import org.emftext.language.java.literals.LiteralsFactory
+import org.emftext.language.java.members.ClassMethod
+import org.emftext.language.java.members.Constructor
+import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.MembersFactory
-import org.emftext.language.java.statements.Statement
-import org.emftext.language.java.types.Int
-import org.emftext.language.java.types.Char
-import org.emftext.language.java.types.ClassifierReference
+import org.emftext.language.java.members.Method
+import org.emftext.language.java.modifiers.AnnotableAndModifiable
+import org.emftext.language.java.modifiers.Modifier
+import org.emftext.language.java.modifiers.ModifiersFactory
+import org.emftext.language.java.modifiers.Public
+import org.emftext.language.java.operators.OperatorsFactory
+import org.emftext.language.java.parameters.Parameter
+import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.references.IdentifierReference
 import org.emftext.language.java.references.ReferenceableElement
-import java.util.ArrayList
-import org.emftext.language.java.containers.JavaRoot
-import java.io.ByteArrayInputStream
-import tools.vitruv.domains.java.util.jamoppparser.JaMoPPParser
-import org.emftext.language.java.imports.ImportsFactory
-import org.eclipse.emf.common.util.URI
+import org.emftext.language.java.references.ReferencesFactory
+import org.emftext.language.java.statements.Statement
+import org.emftext.language.java.statements.StatementsFactory
+import org.emftext.language.java.types.Char
+import org.emftext.language.java.types.ClassifierReference
+import org.emftext.language.java.types.Int
+import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.PrimitiveType
+import org.emftext.language.java.types.Type
+import org.emftext.language.java.types.TypeReference
+import org.emftext.language.java.types.TypesFactory
+import org.emftext.language.java.types.Void
+import org.palladiosimulator.pcm.repository.DataType
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
+import tools.vitruv.domains.java.util.jamoppparser.JaMoPPParser
+import tools.vitruv.framework.util.datatypes.ClaimableHashMap
+import tools.vitruv.framework.util.datatypes.ClaimableMap
 
-class Pcm2JavaHelper {
+class Pcm2JavaHelper{
+	
+	def static addAnnotationToAnnotableAndModifiable(AnnotableAndModifiable annotableAndModifiable, String annotationName){
+		val newAnnotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance()
+		val jaMoPPClass = ClassifiersFactory.eINSTANCE.createClass
+		jaMoPPClass.setName(annotationName);
+		newAnnotation.setAnnotation(jaMoPPClass)
+		annotableAndModifiable.getAnnotationsAndModifiers().add(newAnnotation)
+	}
+	
+	public def static addImportToClassFromString(ConcreteClassifier jaMoPPClass, List<String> namespaceArray,
+		String entityToImport) {
+		for (Import import : jaMoPPClass.containingCompilationUnit.imports) {
+			if ((import as ClassifierImport).classifier.name == entityToImport) {
+				return // Import has already been added (in the case of inject.Inject could be from javax.inject package)
+			}
+		}
+		val guiceImport = ImportsFactory.eINSTANCE.createClassifierImport
+		val ConcreteClassifier cl = ClassifiersFactory.eINSTANCE.createClass
+		cl.name = entityToImport
+		guiceImport.classifier = cl
+		guiceImport.namespaces.addAll(namespaceArray)
+		jaMoPPClass.containingCompilationUnit.imports.add(guiceImport)
+	}
+	 
 	public static def void initializeCompilationUnitAndJavaClassifier(CompilationUnit compilationUnit, ConcreteClassifier javaClassifier, String name) {
 		compilationUnit.name = name;
 		javaClassifier.name = name;
@@ -129,7 +157,7 @@ class Pcm2JavaHelper {
 		return "short"
 	}
 
-	def dispatch static getNameFromJaMoPPType(org.emftext.language.java.types.Void reference) {
+	def dispatch static getNameFromJaMoPPType(Void reference) {
 		return "void"
 	}
 	
@@ -519,7 +547,7 @@ class Pcm2JavaHelper {
 	}
 
 	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(
-		org.emftext.language.java.types.Void type) {
+		Void type) {
 		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Void")
 	}
 	
