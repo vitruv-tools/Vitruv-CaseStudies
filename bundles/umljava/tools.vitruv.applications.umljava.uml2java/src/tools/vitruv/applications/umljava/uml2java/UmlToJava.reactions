@@ -4,6 +4,7 @@ import org.apache.log4j.PropertyConfigurator
 import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.parameters.ParametersFactory
 import mir.routines.umlToJava.ChangeJavaMethodVisibilityRoutine
+import org.emftext.language.java.types.TypeReference
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -139,6 +140,82 @@ routine changeJavaClassVisibility(uml::Class uClass) {
     }
 }
 
+reaction ChangedUmlSuperClass {
+    after element uml::Class inserted in uml::Class[generalization]
+    call changeJavaSuperClass(newValue, affectedEObject)
+}
+
+routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
+    match {
+        val jClass = retrieve java::Class corresponding to uClass
+        val superJavaClass = retrieve java::Class corresponding to superUMLClass
+    }
+    action {
+        update jClass {
+            jClass.extends = createTypeReference(null, superJavaClass);
+        }
+    }
+}
+
+reaction CreatedUmlInterfaceImplement {
+    after element uml::Interface inserted in uml::Class[interfaceRealization]
+    call createJavaInterfaceImplement(newValue, affectedEObject)
+}
+
+routine createJavaInterfaceImplement(uml::Interface uI, uml::Class uClass) {
+    match {
+        val jClass = retrieve java::Class corresponding to uClass
+        val jI = retrieve java::Interface corresponding to uI
+    }
+    action {
+        update jClass {
+            jClass.implements += createTypeReference(null, jI);
+            //TODO InterfaceMethoden adden?
+        }
+    }
+}
+
+reaction DeletedUmlInterfaceImplement {
+    after element uml::Interface removed from uml::Class[interfaceRealization]
+    call deletedJavaInterfaceImplement(oldValue, affectedEObject)
+}
+
+routine deletedJavaInterfaceImplement(uml::Interface uI, uml::Class uClass) {
+    match {
+        val jClass = retrieve java::Class corresponding to uClass
+        val jI = retrieve java::Interface corresponding to uI
+    }
+    action {
+        update jClass {
+            var int i = 0;
+            for (TypeReference t : jClass.implements) {
+                var type = t.target as org.emftext.language.java.classifiers.Interface
+                if (jI.name.equals(type.name)) {
+                    jClass.implements.remove(i);
+                }
+                i++;
+            }
+            //TODO InterfaceMethoden entfernen?
+        }
+    }
+}
+
+reaction DeletedUmlSuperClass {
+    after element uml::Class removed from uml::Class[generalization]
+    call deleteJavaSuperClass(affectedEObject)
+}
+
+routine deleteJavaSuperClass(uml::Class uClass) {
+    match {
+        val jClass = retrieve java::Class corresponding to uClass
+    }
+    action {
+        update jClass {
+            jClass.extends = null;
+        }
+    }
+}
+
 reaction CreatedUmlInterface {
     after element uml::Interface created and inserted in uml::Model[packagedElement]
     call createJavaInterface(newValue)
@@ -211,6 +288,30 @@ routine changeJavaSuperInterface(uml::Interface superUMLInterface, uml::Interfac
     action {
         update jI {
             jI.extends += createTypeReference(null, superJavaInterface)
+        }
+    }
+}
+
+reaction DeletedUmlSuperInterface {
+    after element uml::Interface removed from uml::Interface[generalization]
+    call deleteJavaSuperInterface(oldValue, affectedEObject)
+}
+
+routine deleteJavaSuperInterface(uml::Interface superUMLInterface, uml::Interface uI) {
+    match {
+        val jI = retrieve java::Interface corresponding to uI
+        val superJavaInterface = retrieve java::Class corresponding to superUMLInterface
+    }
+    action {
+        update jI {
+            var int i = 0;
+            for (TypeReference t : jI.extends) {
+                var type = t.target as org.emftext.language.java.classifiers.Interface
+                if (superJavaInterface.name.equals(type.name)) {
+                    jI.extends.remove(i);
+                }
+                i++;
+            }
         }
     }
 }
