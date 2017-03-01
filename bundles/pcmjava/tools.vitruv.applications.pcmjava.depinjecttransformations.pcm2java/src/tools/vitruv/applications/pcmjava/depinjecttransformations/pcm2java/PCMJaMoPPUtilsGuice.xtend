@@ -2,7 +2,6 @@ package tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java
 
 import java.util.ArrayList
 import java.util.HashMap
-import java.util.List
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
@@ -14,9 +13,6 @@ import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.imports.ClassifierImport
-import org.emftext.language.java.imports.Import
-import org.emftext.language.java.imports.ImportsFactory
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.MembersFactory
@@ -46,17 +42,17 @@ import org.palladiosimulator.pcm.system.System
 import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
+import tools.vitruv.framework.tuid.TuidManager
 import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.userinteraction.UserInteractionType
 import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
-import static extension tools.vitruv.applications.pcmjava.util.transformations.pcm2java.helper.Pcm2JavaHelper.*
+import static tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper.*
+
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
-import com.google.common.collect.Lists
-import tools.vitruv.framework.tuid.TuidManager
 
 /**
  * 
@@ -171,7 +167,7 @@ public class PCMJaMoPPUtilsGuice {
 
 	}
 
-	def static ensureConstructorWithInjectAnnotation(Class jaMoPPClass) {
+	def static ensureConstructorWithInjectAnnotation(Class jaMoPPClass) { 
 		val constructor = getOrCreateConstructorToClass(jaMoPPClass)
 		if (!checkConstructorForInjectionTag(constructor)) {
 			addInjectToConstructor(constructor, jaMoPPClass)
@@ -272,7 +268,7 @@ public class PCMJaMoPPUtilsGuice {
 		var saveClassResource = false
 
 		// Save all mappings between assembly connectors and bindings, so we can easily add/remove a connector if needed
-		val system = ci.getCorrespondingEObjectsByType(affectedClass, org.palladiosimulator.pcm.system.System).claimOne
+		val system = ci.getCorrespondingEObjectsByType(affectedClass, System).claimOne
 		val interfaceToConnectorMappings = returnMappingsBetweenConnectorsAndInterfaceBindings(system, ci)
 
 		val oldStatements = oldMethod.statements
