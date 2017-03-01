@@ -23,5 +23,5 @@ Require-Bundle: com.google.guava,
  org.eclipse.uml2.uml,
  org.emftext.language.java
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: tools.vitruv.aplications.umljava.uml2java
+Export-Package: tools.vitruv.applications.umljava.uml2java
 

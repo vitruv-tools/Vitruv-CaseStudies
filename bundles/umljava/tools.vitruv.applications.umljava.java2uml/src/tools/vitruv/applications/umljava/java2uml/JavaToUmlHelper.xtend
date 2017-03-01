@@ -5,6 +5,9 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
+import org.eclipse.uml2.uml.Type
+import org.emftext.language.java.types.TypeReference
+import org.emftext.language.java.types.Void
 
 class JavaToUmlHelper {
     
@@ -17,6 +20,12 @@ class JavaToUmlHelper {
             case Protected: return VisibilityKind.PROTECTED_LITERAL
             case Public: return VisibilityKind.PUBLIC_LITERAL
             default: throw new IllegalArgumentException("Invalid VisibilityModifier: " + mod.class)
+        }
+    }
+    
+    def static Type getUmlType(TypeReference jType) {
+        if (jType.target instanceof Void) {
+            return null;
         }
     }
 }

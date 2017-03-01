@@ -1,8 +1,8 @@
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*;
 import org.apache.log4j.PropertyConfigurator
-import org.emftext.language.java.types.TypesFactory
-import org.emftext.language.java.parameters.ParametersFactory
 import static extension tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.Classifier
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -114,11 +114,116 @@ routine setUmlClassAbstract(java::Class jClass, Int isAbstract) {
             } else if (isAbstract == 0) {
                 uClass.isAbstract = false;
             } else {
-                //Fehler
+                throw new IllegalArgumentException("Invalid isAbstract Value: " + isAbstract);
             }
         }
     }
 }
+
+reaction JavaSuperClassChanged {
+    after element java::TypeReference replaced at java::Class[^extends]
+    call  {
+        clearUmlSuperClassifiers(affectedEObject)
+        addUmlSuperClassifier(affectedEObject, newValue)
+    }
+}
+
+reaction JavaSuperClassRemoved {
+    after element java::TypeReference removed from java::Class[^extends]
+    call clearUmlSuperClassifiers(affectedEObject)
+}
+
+routine addUmlSuperClassifier(java::ConcreteClassifier jClass, java::TypeReference jSuper) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+        val uSuper = retrieve uml::Class corresponding to jSuper.target
+    }
+    action {
+        update uClass {
+            uClass.generals += uSuper;
+        }
+    }
+}
+
+routine clearUmlSuperClassifiers(java::ConcreteClassifier jClass) {
+    match {
+         val uClass = retrieve uml::Class corresponding to jClass
+    }
+    action {
+        update uClass {
+            uClass.generals.clear;
+        }
+    }
+}
+
+reaction JavaSuperInterfaceAdded {
+    after element java::TypeReference inserted in java::Interface[^extends]
+    call addUmlSuperClassifier(affectedEObject, newValue)
+}
+
+reaction JavaSuperInterfaceRemoved {
+    after element java::TypeReference removed from java::Interface[^extends]
+    call removeUmlSuperInterface(affectedEObject, oldValue)
+}
+
+routine removeUmlSuperInterface(java::Interface jI, java::TypeReference jSuper) {
+    match {
+        val uI = retrieve uml::Interface corresponding to jI
+        val uSuper = retrieve uml::Interface corresponding to jSuper.target
+    }
+    action {
+        update uI {
+            var int i = 0;
+            for (Classifier inf : uI.generals) {
+                if (inf.name.equals(uI.name)) {
+                    uI.generals.remove(i);
+                }
+                i++;
+            }
+        }
+    }
+}
+
+reaction JavaClassImplementAdded {
+    after element java::Interface inserted in java::Class[implements]
+    call addUmlClassImplement(affectedEObject, newValue)
+}
+
+routine addUmlClassImplement(java::Class jClass, java::Interface jI) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+        val uI = retrieve uml::Interface corresponding to jI
+    }
+    action {
+        update uClass {
+            uClass.implementedInterfaces += uI;
+        }
+    }
+}
+
+reaction JavaClassImplementRemoved {
+    after element java::Interface removed from java::Class[implements]
+    call removeUmlClassImplement(affectedEObject, oldValue)
+}
+
+routine removeUmlClassImplement(java::Class jClass, java::Interface jI) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+        val uI = retrieve uml::Interface corresponding to jI
+    }
+    action {
+        update uClass {
+            var int i = 0;
+            for (Interface inf : uClass.implementedInterfaces) {
+                if (inf.name.equals(uI.name)) {
+                    uClass.implementedInterfaces.remove(i);
+                }
+                i++;
+            }
+        }
+    }
+}
+
 
 reaction JavaClassMadeFinal {
     after element java::Final created and inserted in java::Class[annotationsAndModifiers]
@@ -196,5 +301,310 @@ routine deleteUmlMethod(java::Method jMeth) {
     }
     action {
         delete uMeth
+    }
+}
+
+reaction JavaMethodMadePublic {
+    after element java::Public created and inserted in java::ClassMethod[annotationsAndModifiers]
+    call changeUmlMethodVisibility(newValue, affectedEObject)
+}
+
+reaction JavaMethodMadePrivate {
+    after element java::Private created and inserted in java::ClassMethod[annotationsAndModifiers]
+    call changeUmlMethodVisibility(newValue, affectedEObject)
+}
+
+reaction JavaMethodMadeProtected {
+    after element java::Protected created and inserted in java::ClassMethod[annotationsAndModifiers]
+    call changeUmlMethodVisibility(newValue, affectedEObject)
+}
+
+routine changeUmlMethodVisibility(java::Modifier mod, java::ClassMethod jMeth) {
+    match {
+        val uMeth = retrieve uml::Operation corresponding to jMeth
+    }
+    action {
+        update uMeth {
+            uMeth.visibility = getUmlVisibilityKind(mod);
+        }
+    }
+}
+
+//Java-Klasse ist automatisch abstrakt, sobald sie eine abstrakte Methode erhält
+reaction JavaMethodMadeAbstract {
+    after element java::Abstract created and inserted in java::ClassMethod[annotationsAndModifiers]
+    call  {
+        setUmlMethodAbstract(affectedEObject, 1)
+        setUmlClassAbstract(affectedEObject.eContainer as org.emftext.language.java.classifiers.Class, 1)
+    }
+}
+
+reaction JavaMethodMadeNonAbstract {
+    after element java::Abstract deleted and removed from java::ClassMethod[annotationsAndModifiers]
+    call setUmlMethodAbstract(affectedEObject, 0)
+}
+
+routine setUmlMethodAbstract(java::ClassMethod jMeth, Int isAbstract) {
+    match {
+        val uMeth = retrieve uml::Operation corresponding to jMeth
+    }
+    action {
+        update uMeth {
+            if (isAbstract == 1){
+                uMeth.isAbstract = true;
+            } else if (isAbstract == 0) {
+                uMeth.isAbstract = false;
+            } else {
+                throw new IllegalArgumentException("Invalid isAbstract Value: " + isAbstract);
+            }
+        }
+    }
+}
+
+reaction JavaMethodMadeStatic {
+    after element java::Static created and inserted in java::ClassMethod[annotationsAndModifiers]
+    call setUmlMethodStatic(affectedEObject, 1)
+}
+
+reaction JavaMethodMadeNonStatic {
+    after element java::Static deleted and removed from java::ClassMethod[annotationsAndModifiers]
+    call setUmlMethodStatic(affectedEObject, 0)
+}
+
+routine setUmlMethodStatic(java::ClassMethod jMeth, Int isStatic) {
+    match {
+        val uMeth = retrieve uml::Operation corresponding to jMeth
+    }
+    action {
+        update uMeth {
+            if (isStatic == 1) {
+                uMeth.isStatic = true;
+            } else if (isStatic == 0) {
+                uMeth.isStatic = false;
+            } else {
+                throw new IllegalArgumentException("Invalid isStatic Value: " + isStatic);
+            }
+        }
+    }
+}
+
+reaction JavaParameterCreated {
+    after element java::OrdinaryParameter created and inserted in java::Method[parameters]
+    call createUmlParameter(affectedEObject, newValue)
+}
+
+routine createUmlParameter(java::Method jMeth, java::OrdinaryParameter jParam) {
+    match {
+        val uMeth = retrieve uml::Operation corresponding to jMeth
+    }
+    action {
+        val uParam = create uml::Parameter and initialize {
+            if (jParam.name != null) {
+                uParam.name = jParam.name;
+            } else {
+                uParam.name = "DefaultUmlParameterName";
+            }
+            uParam.type = getUmlType(jParam.typeReference)
+        }
+        add correspondence between uParam and jParam
+    }
+}
+
+reaction JavaParameterRenamed {
+    after attribute replaced at java::OrdinaryParameter[name]
+    call renameJavaParameter(affectedEObject)
+}
+
+routine renameJavaParameter(java::OrdinaryParameter jParam) {
+    match {
+        val uParam = retrieve uml::Parameter corresponding to jParam
+    }
+    action {
+        update uParam {
+            uParam.name = jParam.name;
+        }
+    }
+}
+
+reaction JavaParameterDeleted {
+    after element java::OrdinaryParameter deleted and removed from java::Method[parameters]
+    call deleteJavaParameter(oldValue)
+}
+
+routine deleteJavaParameter(java::OrdinaryParameter jParam) {
+    match {
+        val uParam = retrieve uml::Parameter corresponding to jParam
+    }
+    action{
+        delete uParam         
+    }
+}
+
+reaction JavaParameterTypeChanged {
+    after element java::TypeReference replaced at java::OrdinaryParameter[typeReference]
+    call changeUmlParameterType(affectedEObject, newValue)
+}
+
+routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReference jType) {
+    match {
+        val uParam = retrieve uml::Parameter corresponding to jParam
+    }
+    action {
+        update uParam {
+            uParam.type = getUmlType(jType);
+        }
+    }
+}
+
+reaction JavaReturnTypeChanged {
+    after element java::TypeReference replaced at java::Method[typeReference]
+    call changeUmlReturnType(affectedEObject, newValue)
+}
+
+routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
+    match {
+        val uMeth = retrieve uml::Operation corresponding to jMeth
+    }
+     action {
+         update uMeth {
+             uMeth.type = getUmlType(jType);
+         }
+     }
+}
+
+reaction JavaAttributeCreated {
+    after element java::Field created and inserted in java::Class[members]
+    call createUmlAttribute(affectedEObject, newValue)
+}
+
+routine createUmlAttribute(java::Class jClass, java::Field jAttr) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+        val uType = retrieve optional uml::Classifier corresponding to jAttr.typeReference.target
+    }
+    action {
+        val uAttr = create uml::Property and initialize {
+            if (jAttr.name != null) {
+                uAttr.name = jAttr.name;
+            } else {
+                uAttr.name = "DefaultUmlAttributeName";
+            }
+            if (uType != null) {
+                uAttr.type = uType;
+            }
+        }
+        add correspondence between uAttr and jAttr
+    }
+}
+
+reaction JavaAttributeRenamed {
+    after attribute replaced at java::Field[name]
+    call renameUmlAttribute(affectedEObject)
+}
+
+routine renameUmlAttribute(java::Field jAttr) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr
+    }
+    action {
+        update uAttr {
+            uAttr.name = jAttr.name;
+        }
+    }
+}
+
+reaction JavaAttributeDeleted {
+    after element java::Field deleted and removed from java::Class[members]
+    call deleteUmlAttribute(oldValue)
+}
+
+routine deleteUmlAttribute(java::Field jAttr) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr
+    }
+    action {
+        delete uAttr
+    }
+}
+
+reaction JavaAttributeMadePublic {
+    after element java::Public created and inserted in java::Field[annotationsAndModifiers]
+    call changeUmlAttributeVisibility(affectedEObject, newValue)
+}
+
+reaction JavaAttributeMadePrivate {
+    after element java::Private created and inserted in java::Field[annotationsAndModifiers]
+    call changeUmlAttributeVisibility(affectedEObject, newValue)
+}
+
+reaction JavaAttributeMadeProtected {
+    after element java::Protected created and inserted in java::Field[annotationsAndModifiers]
+    call changeUmlAttributeVisibility(affectedEObject, newValue)
+}
+
+routine changeUmlAttributeVisibility(java::Field jAttr, java::Modifier mod) {
+    match {
+       val uAttr = retrieve uml::Property corresponding to jAttr 
+    }
+    action {
+        update uAttr {
+            uAttr.visibility = getUmlVisibilityKind(mod);
+        }
+    }
+}
+
+reaction JavaAttributeMadeStatic {
+    after element java::Static created and inserted in java::Field[annotationsAndModifiers]
+    call setUmlAttributeStatic(affectedEObject, 1)
+}
+
+reaction JavaAttributeMadeNonStatic {
+    after element java::Static deleted and removed from java::Field[annotationsAndModifiers]
+    call setUmlAttributeStatic(affectedEObject, 0)
+}
+
+routine setUmlAttributeStatic(java::Field jAttr, Int isStatic) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr
+    }
+    action {
+        update uAttr {
+            if (isStatic == 1) {
+                uAttr.isStatic = true;
+            } else if (isStatic == 0) {
+                uAttr.isStatic = false;
+            } else {
+                throw new IllegalArgumentException("Invalid isStatic value: " + isStatic);
+            }
+        }
+    }
+}
+
+reaction JavaAttributeMadeFinal {
+    after element java::Final created and inserted in java::Field[annotationsAndModifiers]
+    call setUmlAttributeFinal(affectedEObject, 1)
+}
+
+routine setUmlAttributeFinal(java::Field jAttr, Int isFinal) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr 
+    }
+    action {
+        update uAttr {
+            if (isFinal == 1) {
+                uAttr.isReadOnly = true;
+            } else if (isFinal == 0) {
+                uAttr.isReadOnly = false;
+            } else {
+                throw new IllegalArgumentException("Invalid isFinal value: " + isFinal);
+            }
+        }
+    }
+}
+
+reaction Logreaction {
+    after any change
+    call {
+        PropertyConfigurator.configure("log4j.properties")
     }
 }

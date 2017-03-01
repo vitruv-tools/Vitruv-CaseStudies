@@ -15,7 +15,7 @@ execute actions in java
 
 
 
-reaction CreatedUmlClass {
+reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Model[packagedElement]
     call createJavaClass(newValue)
 }
@@ -36,7 +36,7 @@ routine createJavaClass(uml::Class umlClass) {
     }
 }
 
-reaction RenameUmlClass {
+reaction UmlClassRenamed {
     after attribute replaced at uml::Class[name]
     call renameJavaClass(affectedEObject)
 }
@@ -57,7 +57,7 @@ routine renameJavaClass(uml::Class umlClass) {
     }
 }
 
-reaction DeletedUmlClass {
+reaction UmlClassDeleted {
     after element uml::Class deleted and removed from uml::Model[packagedElement]
     call deleteJavaClass(oldValue)
 }
@@ -76,11 +76,11 @@ routine deleteJavaClass(uml::Class umlClass) {
     }
 }
 
-reaction ChangedUmlClassFinal {
+reaction UmlClassMadeFinal {
     after attribute replaced at uml::Class[isFinalSpecialization] 
-    call changeJavaClassFinal(affectedEObject)
+    call setJavaClassFinal(affectedEObject)
 }
-routine changeJavaClassFinal(uml::Class umlClass) {
+routine setJavaClassFinal(uml::Class umlClass) {
     match {
         val jClass = retrieve java::Class corresponding to umlClass
     }
@@ -98,12 +98,12 @@ routine changeJavaClassFinal(uml::Class umlClass) {
     }
 }
 
-reaction ChangedAbstractUmlClass {
+reaction UmlClassMadeAbstract {
     after attribute replaced at uml::Class[isAbstract]
-    call changeAbstractJavaClass(affectedEObject)
+    call setJavaClassAbstract(affectedEObject)
 }
 
-routine changeAbstractJavaClass(uml::Class umlClass) {
+routine setJavaClassAbstract(uml::Class umlClass) {
     match {
         val javaClass = retrieve java::Class corresponding to umlClass
     }
@@ -123,7 +123,7 @@ routine changeAbstractJavaClass(uml::Class umlClass) {
     }
 }
 
-reaction ChangedUmlClassVisibility {
+reaction UmlClassVisibilityChanged {
     after attribute replaced at uml::Class[visibility]
     call changeJavaClassVisibility(affectedEObject)
 }
@@ -140,8 +140,8 @@ routine changeJavaClassVisibility(uml::Class uClass) {
     }
 }
 
-reaction ChangedUmlSuperClass {
-    after element uml::Class inserted in uml::Class[generalization]
+reaction UmlSuperClassChanged {
+    after element uml::Class inserted in uml::Class[general]
     call changeJavaSuperClass(newValue, affectedEObject)
 }
 
@@ -157,7 +157,7 @@ routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
     }
 }
 
-reaction CreatedUmlInterfaceImplement {
+reaction UmlInterfaceImplementCreated {
     after element uml::Interface inserted in uml::Class[interfaceRealization]
     call createJavaInterfaceImplement(newValue, affectedEObject)
 }
@@ -175,7 +175,7 @@ routine createJavaInterfaceImplement(uml::Interface uI, uml::Class uClass) {
     }
 }
 
-reaction DeletedUmlInterfaceImplement {
+reaction UmlInterfaceImplementDeleted {
     after element uml::Interface removed from uml::Class[interfaceRealization]
     call deletedJavaInterfaceImplement(oldValue, affectedEObject)
 }
@@ -200,8 +200,8 @@ routine deletedJavaInterfaceImplement(uml::Interface uI, uml::Class uClass) {
     }
 }
 
-reaction DeletedUmlSuperClass {
-    after element uml::Class removed from uml::Class[generalization]
+reaction UmlSuperClassDeleted {
+    after element uml::Class removed from uml::Class[general]
     call deleteJavaSuperClass(affectedEObject)
 }
 
@@ -216,7 +216,7 @@ routine deleteJavaSuperClass(uml::Class uClass) {
     }
 }
 
-reaction CreatedUmlInterface {
+reaction UmlInterfaceCreated {
     after element uml::Interface created and inserted in uml::Model[packagedElement]
     call createJavaInterface(newValue)
 }
@@ -236,7 +236,7 @@ routine createJavaInterface(uml::Interface umlInterface) {
     }
 }
 
-reaction RenamedUmlInterface {
+reaction UmlInterfaceRenamed {
     after attribute replaced at uml::Interface[name]
     call renameJavaInterface(affectedEObject)
 }
@@ -258,7 +258,7 @@ routine renameJavaInterface(uml::Interface umlInterface) {
     }
 }
 
-reaction DeletedUmlInterface {
+reaction UmlInterfaceDeleted {
     after element uml::Interface deleted and removed from uml::Model[packagedElement]
     call deleteJavaInterface(oldValue)
 }
@@ -275,8 +275,8 @@ routine deleteJavaInterface(uml::Interface umlInterface) {
     }
 }
  
-reaction ChangedUmlSuperInterface {
-    after element uml::Interface inserted in uml::Interface[generalization]
+reaction UmlSuperInterfaceChanged {
+    after element uml::Interface inserted in uml::Interface[general]
     call changeJavaSuperInterface(newValue, affectedEObject)
 }
 
@@ -292,8 +292,8 @@ routine changeJavaSuperInterface(uml::Interface superUMLInterface, uml::Interfac
     }
 }
 
-reaction DeletedUmlSuperInterface {
-    after element uml::Interface removed from uml::Interface[generalization]
+reaction UmlSuperInterfaceDeleted {
+    after element uml::Interface removed from uml::Interface[general]
     call deleteJavaSuperInterface(oldValue, affectedEObject)
 }
 
@@ -318,7 +318,7 @@ routine deleteJavaSuperInterface(uml::Interface superUMLInterface, uml::Interfac
 
 
 
-reaction CreatedUmlAttribute {
+reaction UmlAttributeCreated {
     after element uml::Property created and inserted in uml::Class[ownedAttribute]
     call {
         createJavaAttribute(affectedEObject, newValue)
@@ -350,11 +350,12 @@ routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
 }
 
 
-reaction RenamedUmlAttribute {
+reaction UmlAttributeRenamed {
     after attribute replaced at uml::Property[name]
     call renameJavaAttribute(affectedEObject)
 }
 
+//TypedElement kann Attribut oder Parameter sein
 routine renameJavaAttribute(uml::Property umlAttr) {
     match {
         val jAttr = retrieve java::Field corresponding to umlAttr
@@ -366,7 +367,7 @@ routine renameJavaAttribute(uml::Property umlAttr) {
     }
 }
 
-reaction DeletedUmlAttribute {
+reaction UmlAttributeDeleted {
     after element uml::Property deleted and removed from uml::Class[ownedAttribute]
     call deleteJavaAttribute(oldValue)
 }
@@ -380,7 +381,7 @@ routine deleteJavaAttribute(uml::Property umlAttr) {
     }
 }
 
-reaction CreatedUmlMethod {
+reaction UmlMethodCreated {
     after element uml::Operation created and inserted in uml::Class[ownedOperation]
     call {
         createJavaMethod(affectedEObject, newValue)       
@@ -411,7 +412,7 @@ routine createJavaMethod(uml::Class uClass, uml::Operation umlOp) {
 }
 
 
-reaction RenamedUmlMethod {
+reaction UmlMethodRenamed {
     after attribute replaced at uml::Operation[name]
     call renameJavaMethod(affectedEObject)
 }
@@ -427,7 +428,7 @@ routine renameJavaMethod(uml::Operation umlOp) {
     }
 }
 
-reaction DeletedUmlClassMethod {
+reaction UmlClassMethodDeleted {
     after element uml::Operation deleted and removed from uml::Class[ownedOperation]
     call deleteJavaMethod(oldValue)
 }
@@ -448,14 +449,14 @@ routine deleteJavaMethod(uml::Operation umlOp) {
 }
 
 
-reaction CreatedUmlParameter {
+reaction UmlParameterCreated {
     after element uml::Parameter created and inserted in uml::Operation[ownedParameter]
-    call createJavaParameter(newValue)
+    call createJavaParameter(affectedEObject, newValue)
 }
 //Geht für ClassMethod und InterfaceMethod?
-routine createJavaParameter(uml::Parameter umlParam) {
+routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
     match {
-        val javaMethod = retrieve java::Method corresponding to umlParam.operation
+        val javaMethod = retrieve java::Method corresponding to uMeth
         val customType = retrieve java::Class corresponding to umlParam.type
     }
     action {
@@ -470,8 +471,55 @@ routine createJavaParameter(uml::Parameter umlParam) {
     }
 }
 
-reaction ChangedUmlMethodReturnType {
-    after element replaced at uml::Operation[type]
+reaction UmlParameterRenamed {
+    after attribute replaced at uml::Parameter[name]
+    call renameJavaParameter(affectedEObject)
+}
+
+routine renameJavaParameter(uml::Parameter uParam) {
+    match {
+        val jParam = retrieve java::OrdinaryParameter corresponding to uParam
+    }
+    action {
+        update jParam {
+            jParam.name = uParam.name;
+        }
+    }
+}
+
+reaction UmlParameterDeleted {
+    after element uml::Parameter deleted and removed from uml::Operation[ownedParameter]
+    call deleteJavaParameter(oldValue)
+}
+
+routine deleteJavaParameter(uml::Parameter uParam) {
+    match {
+        val jParam = retrieve java::OrdinaryParameter corresponding to uParam
+    }
+    action {
+        delete jParam //TODO Ist Param wirklich aus JavaMethod.parameters gelöscht?
+    }
+}
+
+reaction UmlParameterTypeChanged {
+    after element uml::Type replaced at uml::Parameter[type]
+    call changeJavaParameterType(affectedEObject, newValue)
+}
+
+routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
+    match {
+        val jParam = retrieve java::OrdinaryParameter corresponding to uParam
+        val customClass = retrieve optional java::Class corresponding to uType
+    }
+    action {
+        update jParam {
+            jParam.typeReference = createTypeReference(uType, customClass);
+        }
+    }
+}
+
+reaction UmlMethodReturnTypeChanged {
+    after element uml::Type replaced at uml::Operation[type]
     call changeJavaMethodReturnType(affectedEObject)
 }
 
@@ -489,16 +537,28 @@ routine changeJavaMethodReturnType(uml::Operation umlOp) {
     }
 }
 
-//reaction ChangedUmlAttributeType {
-//    after attribute replaced at uml::Property[]
-    
-//}
-reaction ChangedUmlAttributeFinal {
-    after attribute replaced at uml::Property[isReadOnly]
-    call changeJavaAttributeFinal(affectedEObject) 
+reaction UmlAttributeTypeChanged {
+    after element uml::Type replaced at uml::Property[type]
+    call changeJavaAttributeType(affectedEObject, newValue)
 }
 
-routine changeJavaAttributeFinal(uml::Property umlAttr) {
+routine changeJavaAttributeType(uml::Property uAttr, uml::Type uType) {
+    match {
+        val jAttr = retrieve java::Field corresponding to uAttr
+        val customType = retrieve java::Class corresponding to uType
+    }
+    action {
+        update jAttr {
+            jAttr.typeReference = createTypeReference(uType, customType);
+        }
+    }
+}
+reaction UmlAttributeMadeFinal {
+    after attribute replaced at uml::Property[isReadOnly]
+    call setJavaAttributeFinal(affectedEObject) 
+}
+
+routine setJavaAttributeFinal(uml::Property umlAttr) {
     match {
         val jAttr = retrieve java::Field corresponding to umlAttr
     }
@@ -518,12 +578,12 @@ routine changeJavaAttributeFinal(uml::Property umlAttr) {
  
 
 //Feature definiert isStatic  -> kann u.a.Attribut oder Methode sein
-reaction ChangedStaticFeature {
+reaction UmlFeatureMadeStatic {
     after attribute replaced at uml::Feature[isStatic]
-    call changeStatic(affectedEObject)
+    call setStatic(affectedEObject)
 }
 
-routine changeStatic(uml::Feature uFeat) {
+routine setStatic(uml::Feature uFeat) {
     match {
         //AnnotableAndModifiable kann u.a. Methode oder Attribut sein
         val jMod = retrieve java::AnnotableAndModifiable corresponding to uFeat
@@ -542,12 +602,12 @@ routine changeStatic(uml::Feature uFeat) {
     }
 }
 
-reaction ChangedAbstractUmlMethod {
+reaction UmlMethodMadeAbstract {
     after attribute replaced at uml::Operation[isAbstract] 
-    call changeAbstractJavaMethod(affectedEObject)
+    call setJavaMethodAbstract(affectedEObject)
 }
 
-routine changeAbstractJavaMethod(uml::Operation umlOp) {
+routine setJavaMethodAbstract(uml::Operation umlOp) {
     match {
         val javaClass = retrieve java::Class corresponding to umlOp.class_
         val javaMethod = retrieve java::ClassMethod corresponding to umlOp
@@ -569,7 +629,7 @@ routine changeAbstractJavaMethod(uml::Operation umlOp) {
 }
 
 
-reaction ChangedUmlAttributeVisibility {
+reaction UmlAttributeVisibilityChanged {
     after attribute replaced at uml::Property[visibility]
     call changeJavaAttributeVisibility(affectedEObject)
 }
@@ -586,7 +646,7 @@ routine changeJavaAttributeVisibility(uml::Property umlAttr) {
     }
 }
 
-reaction ChangedUmlMethodVisibility {
+reaction UmlMethodVisibilityChanged {
     after attribute replaced at uml::Operation[visibility]
     call changeJavaMethodVisibility(affectedEObject)
 }
@@ -604,7 +664,7 @@ routine changeJavaMethodVisibility(uml::Operation umlOp) {
 }
 
 
-reaction CreatedUmlInterfaceMethod {
+reaction UmlInterfaceMethodCreated {
     after element uml::Operation created and inserted in uml::Interface[ownedOperation]
     call createJavaInterfaceMethod(newValue)
 }
@@ -621,7 +681,8 @@ routine createJavaInterfaceMethod(uml::Operation umlOp) {
             } else {
                 javaMethod.name = umlOp.name;
             }
-            javaMethod.typeReference = createTypeReference(umlOp.type, customClassType)
+            javaMethod.typeReference = createTypeReference(umlOp.type, customClassType);
+            javaMethod.makePublic;
             
         }
         add correspondence between umlOp and javaMethod
