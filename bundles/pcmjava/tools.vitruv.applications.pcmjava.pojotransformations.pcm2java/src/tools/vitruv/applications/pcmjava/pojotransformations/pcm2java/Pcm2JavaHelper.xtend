@@ -161,6 +161,15 @@ class Pcm2JavaHelper{
 		return "void"
 	}
 	
+	def static Constructor getOrCreateConstructorToClass(Class javaClass) { 
+		val constructors = javaClass.members.filter[it instanceof Constructor].map[it as Constructor]
+		if(constructors.nullOrEmpty){
+			val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
+			return addConstructorToClass(constructor, javaClass)
+		}
+		return constructors.iterator.next
+	}
+	
 	def static addConstructorToClass(Class javaClass) {
 		val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
 		addConstructorToClass(constructor, javaClass)
@@ -196,6 +205,7 @@ class Pcm2JavaHelper{
 		constructor.name = javaClass.name
 		constructor.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
 		javaClass.members.add(constructor)
+		return constructor
 	}
 	
 	def static Parameter createOrdinaryParameter(TypeReference typeReference, String name) {
