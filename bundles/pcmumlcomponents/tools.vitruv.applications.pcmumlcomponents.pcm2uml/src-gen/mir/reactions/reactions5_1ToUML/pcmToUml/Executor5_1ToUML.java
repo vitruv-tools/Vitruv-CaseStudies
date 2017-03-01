@@ -11,8 +11,14 @@ public class Executor5_1ToUML extends AbstractReactionsExecutor {
   
   protected void setup() {
     tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.RenamedElementReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.RenamedElementReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmRepositoryReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmRepositoryReaction(userInteracting));
-    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.RenamedPcmRepositoryReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.RenamedPcmRepositoryReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPrimitiveDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPrimitiveDataTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.DeletedDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.DeletedDataTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCompositeDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCompositeDataTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedInnerDeclarationReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedInnerDeclarationReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.DeletedInnerDeclarationReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.DeletedInnerDeclarationReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCollectionDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCollectionDataTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction(userInteracting));
   }
 }

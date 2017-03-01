@@ -1,11 +1,12 @@
 package tool.vitruv.applications.pcmumlcomp.pcm2uml
 
-import tools.vitruv.domains.uml.UmlDomain
-import tools.vitruv.framework.tests.VitruviusChangePropagationTest
+import org.palladiosimulator.pcm.repository.Repository
+import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlComponentsChangePropagationSpecification
 import tools.vitruv.domains.pcm.PcmDomain
-import org.palladiosimulator.pcm.repository.RepositoryFactory
-import org.palladiosimulator.pcm.repository.Repository
+import tools.vitruv.domains.uml.UmlDomain
+import tools.vitruv.framework.tests.VitruviusChangePropagationTest
+import org.eclipse.uml2.uml.Model
 
 class AbstractPcmUmlTest extends VitruviusChangePropagationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
@@ -31,6 +32,11 @@ class AbstractPcmUmlTest extends VitruviusChangePropagationTest {
 		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository();
 		pcmRepository.entityName = MODEL_NAME;
 		createAndSynchronizeModel(MODEL_NAME.projectModelPath, pcmRepository);
+	}
+	
+	protected def Model getUmlModel() {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
+		return (correspondingElements.get(0) as Model)
 	}
 
 }
