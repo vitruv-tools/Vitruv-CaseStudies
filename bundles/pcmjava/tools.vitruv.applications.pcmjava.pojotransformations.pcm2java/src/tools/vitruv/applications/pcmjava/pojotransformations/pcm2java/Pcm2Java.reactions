@@ -12,10 +12,10 @@ import java.util.ArrayList
 import java.util.LinkedList
 import java.util.Vector
 import java.util.Stack
-import java.util.List
+import java.util.List 
 import tools.vitruv.framework.userinteraction.UserInteractionType
 import org.emftext.language.java.generics.GenericsFactory
-import static extension tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper.*
+import static extension  tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CompositeDataType

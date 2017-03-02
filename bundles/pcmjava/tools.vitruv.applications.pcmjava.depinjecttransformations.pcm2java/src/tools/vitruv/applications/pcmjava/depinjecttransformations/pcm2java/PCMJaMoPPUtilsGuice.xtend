@@ -49,7 +49,7 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
-import static tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper.*
+import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*

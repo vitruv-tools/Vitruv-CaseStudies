@@ -34,7 +34,6 @@ Require-Bundle: com.google.guava,
  tools.vitruv.framework.tuid,
  org.palladiosimulator.pcm,
  tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.applications.pcmjava.pojotransformations.pcm2java,
  org.emftext.language.java,
  tools.vitruv.domains.java.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

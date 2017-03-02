@@ -11,7 +11,7 @@ import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;

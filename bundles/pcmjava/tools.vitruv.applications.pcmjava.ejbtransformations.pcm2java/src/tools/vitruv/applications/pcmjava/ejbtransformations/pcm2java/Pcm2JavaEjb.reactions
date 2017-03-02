@@ -21,9 +21,9 @@ import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
-import static extension tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper.*
-import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-  
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static extension tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
+
 import "http://www.emftext.org/java" as java 
 import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
 
@@ -35,7 +35,7 @@ execute actions in java
 // ################ PACKAGE RESPONSES ################
 
 
-reaction CreatedRepository{
+reaction CreatedRepository{  
 	after element pcm::Repository created and inserted as root
 	call {
 		val repository = newValue;

@@ -36,7 +36,7 @@ import static tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils.*
 import static tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
-import static extension tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper.*
+import static extension tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 
@@ -641,7 +641,7 @@ routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Pack
 			if(sourceElementMappedToClass instanceof BasicComponent){
 				//add constructor with inject to class
 				ensureConstructorWithInjectAnnotation(javaClass)
-			}else if (sourceElementMappedToClass instanceof System){
+			}else if (sourceElementMappedToClass instanceof System){ 
 				addGuiceModuleInterfaceToClass(javaClass)
 				val method = addConfigureMethodToModule(javaClass)
 				correspondenceModel.createAndAddCorrespondence(#[sourceElementMappedToClass], method.toList)
