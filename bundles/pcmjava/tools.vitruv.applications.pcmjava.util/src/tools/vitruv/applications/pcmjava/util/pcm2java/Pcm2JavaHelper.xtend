@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
+package tools.vitruv.applications.pcmjava.util.pcm2java
 
 import java.io.ByteArrayInputStream
 import java.util.ArrayList
