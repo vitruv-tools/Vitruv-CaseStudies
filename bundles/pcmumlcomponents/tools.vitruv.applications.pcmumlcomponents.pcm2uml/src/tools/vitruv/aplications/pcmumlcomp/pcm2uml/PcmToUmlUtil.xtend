@@ -23,7 +23,7 @@ class PcmToUmlUtil {
 		if (container.getOwnedAttributes.length === 0) {
 			container.createOwnedAttribute(CollectionTypeAttributeName, innerType)
 		} else {
-			if (container.getOwnedAttributes.get(0).name !== CollectionTypeAttributeName)
+			if (container.getOwnedAttributes.get(0).name != CollectionTypeAttributeName)
 				throw new IllegalArgumentException("Mapped type is not created from a pcm::CollectionDataType")
 			container.getOwnedAttributes.get(0).type = innerType
 		}
