@@ -158,6 +158,9 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		rootElement.dataTypes__Repository += innerType
 		pcmDataType.innerType_CollectionDataType = innerType
 		saveAndSynchronizeChanges(rootElement)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.DOUBLE), umlType.ownedAttributes.get(0).type.name)
+		
+		val changedCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
+		val changedUmlType = (changedCorrespondingElements.get(0) as DataType)
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.DOUBLE), changedUmlType.ownedAttributes.get(0).type.name)
 	}
 }
