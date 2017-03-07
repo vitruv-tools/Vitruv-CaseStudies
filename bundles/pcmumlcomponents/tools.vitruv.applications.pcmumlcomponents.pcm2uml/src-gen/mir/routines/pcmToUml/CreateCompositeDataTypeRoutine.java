@@ -6,7 +6,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.PackageableElement;
+import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -30,8 +30,8 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final CompositeDataType dataType, final Model umlModel, final DataType umlType) {
-      EList<PackageableElement> _packagedElements = umlModel.getPackagedElements();
-      _packagedElements.add(umlType);
+      EList<Type> _ownedTypes = umlModel.getOwnedTypes();
+      _ownedTypes.add(umlType);
     }
     
     public EObject getElement2(final CompositeDataType dataType, final Model umlModel, final DataType umlType) {

@@ -19,6 +19,11 @@ public class Executor5_1ToUML extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedInnerDeclarationReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedInnerDeclarationReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.DeletedInnerDeclarationReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.DeletedInnerDeclarationReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCollectionDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCollectionDataTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCollectionDataTypeTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCollectionDataTypeTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.ChangedCollectionDataTypeTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.ChangedCollectionDataTypeTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmInterfaceReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedOperationInterfaceSignatureReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedOperationInterfaceSignatureReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.ChangedOperationSignatureTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.ChangedOperationSignatureTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction(userInteracting));
   }
 }

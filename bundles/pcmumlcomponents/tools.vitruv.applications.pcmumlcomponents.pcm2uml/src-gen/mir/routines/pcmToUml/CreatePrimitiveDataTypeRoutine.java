@@ -5,8 +5,8 @@ import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.PrimitiveType;
+import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
@@ -32,8 +32,8 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final PrimitiveDataType dataType, final Model umlModel, final PrimitiveType umlType) {
-      EList<PackageableElement> _packagedElements = umlModel.getPackagedElements();
-      _packagedElements.add(umlType);
+      EList<Type> _ownedTypes = umlModel.getOwnedTypes();
+      _ownedTypes.add(umlType);
     }
     
     public EObject getElement2(final PrimitiveDataType dataType, final Model umlModel, final PrimitiveType umlType) {

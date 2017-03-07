@@ -64,7 +64,7 @@ routine createPrimitiveDataType(pcm::PrimitiveDataType dataType) {
 			umlType.name = PcmToUmlUtil.getUmlPrimitiveType(dataType.type)
 		}
 		update umlModel {
-			umlModel.packagedElements += umlType
+			umlModel.ownedTypes += umlType
 		}
 		add correspondence between dataType and umlType
 	}
@@ -99,7 +99,7 @@ routine createCompositeDataType(pcm::CompositeDataType dataType) {
 			umlType.name = dataType.entityName
 		}
 		update umlModel {
-			umlModel.packagedElements += umlType
+			umlModel.ownedTypes += umlType
 		}
 		add correspondence between dataType and umlType
 	}
@@ -157,22 +157,63 @@ reaction CreatedCollectionDataType {
 routine createCollectionDataType(pcm::CollectionDataType dataType) {
 	match {
 		val umlModel = retrieve uml::Model corresponding to dataType.repository__DataType
-		val umlInnerType = retrieve uml::DataType corresponding to dataType.innerType_CollectionDataType
+		//val umlInnerType = retrieve uml::DataType corresponding to dataType.innerType_CollectionDataType
 	}
 	action {
-		val umlProperty = create uml::Property and initialize {
-			umlProperty.type = umlInnerType
-			umlProperty.name = "innerType"
+		//val umlProperty = create uml::Property and initialize {
+			//umlProperty.type = umlInnerType
+			//umlProperty.name = "innerType"
 			// TODO: no correspondence for property = NPE?
-		}
+		//}
 		val umlType = create uml::DataType and initialize {
 			umlType.name = dataType.entityName
-			umlType.ownedAttributes += umlProperty
+			// umlType.ownedAttributes += umlProperty
 		}
 		update umlModel {
+			umlModel.ownedTypes += umlType
+			// TODO: packagesElements had to be used from the UML side?
 			umlModel.packagedElements += umlType
 		}
 		add correspondence between dataType and umlType
+	}
+}
+
+reaction CreatedCollectionDataTypeType {
+	after element inserted in pcm::CollectionDataType[innerType_CollectionDataType]
+	call {
+		System.out.println("[created collection datatype type]")
+		createCollectionDataTypeType(affectedEObject, newValue)
+		}
+}
+
+routine createCollectionDataTypeType(pcm::CollectionDataType pcmDataType, pcm::DataType pcmInnerType) {
+	match {
+		val umlType = retrieve uml::DataType corresponding to pcmDataType
+		val umlInnerType =  retrieve uml::DataType corresponding to pcmInnerType
+	}
+	action {
+		val umlProperty = create uml::Property and initialize {
+			umlProperty.name = PcmToUmlUtil.CollectionTypeAttributeName
+			umlProperty.type = umlInnerType
+		}
+		update umlType {
+			umlType.ownedAttributes += umlProperty
+		}
+	}
+}
+
+reaction ChangedCollectionDataTypeType {
+	after element replaced at pcm::CollectionDataType[innerType_CollectionDataType]
+	call changeCollectionDataTypeType(affectedEObject, newValue)
+}
+
+routine changeCollectionDataTypeType(pcm::CollectionDataType pcmDataType, pcm::DataType pcmInnerType) {
+	match {
+		val umlType = retrieve uml::DataType corresponding to pcmDataType
+		val umlInnerType =  retrieve uml::DataType corresponding to pcmInnerType
+	}
+	action {
+		call PcmToUmlUtil.changeCollectionDataTypeReturnType(umlType, umlInnerType)
 	}
 }
 
@@ -189,6 +230,67 @@ routine createUmlPropertyForDatatype(uml::DataType type, pcm::InnerDeclaration c
 	}
 }
 
+
+// ###################################################
+// ############## INTERFACE REACTIONS ################
+
+reaction CreatedPcmInterface {
+	after element created and inserted in pcm::Repository[interfaces__Repository]
+	call createUmlInterface(newValue)
+}
+
+routine createUmlInterface(pcm::Interface pcmInterface) {
+	match {
+		val umlModel = retrieve uml::Model corresponding to pcmInterface.repository__Interface 
+	}
+	action {
+		val umlInterface = create uml::Interface and initialize {
+			umlInterface.name = pcmInterface.entityName
+		}
+		update umlModel {
+			umlModel.packagedElements += umlInterface
+		}
+		add correspondence between umlInterface and pcmInterface
+	}
+}
+
+reaction CreatedOperationInterfaceSignature {
+	after element created and inserted in pcm::OperationInterface[signatures__OperationInterface]
+	call createOperationInterfaceSignature(newValue)
+}
+
+routine createOperationInterfaceSignature(pcm::OperationSignature pcmSignature) {
+	match {
+		val umlInterface = retrieve uml::Interface corresponding to pcmSignature.interface__OperationSignature
+	}
+	action {
+		val umlOperation = create uml::Operation and initialize {
+			umlOperation.name = pcmSignature.entityName
+		}
+		update umlInterface {
+			umlInterface.ownedOperations += umlOperation
+		}
+		add correspondence between umlOperation and pcmSignature
+	}
+}
+
+// TODO: why does this only have {id} and {entityName}? (Metamodel Explorer shows more)
+reaction ChangedOperationSignatureType {
+	after element replaced at pcm::OperationSignature[returnType__OperationSignature]
+	call changeUmlOperationType(affectedEObject)
+}
+
+routine changeUmlOperationType(pcm::OperationSignature pcmSignature) {
+	match {
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature
+		val umlReturnType = retrieve uml::DataType corresponding to pcmSignature.returnType__OperationSignature
+	}
+	action {
+		update umlOperation {
+			umlOperation.type = umlReturnType
+		}
+	}
+}
 
 
 

@@ -1,30 +1,31 @@
 package tools.vitruv.aplications.pcmumlcomp.pcm2uml
 
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
+import org.eclipse.uml2.uml.DataType
 
 class PcmToUmlUtil {
-	def static PrimitiveTypeEnum getPcmPrimitiveType(String typeName) {
-		PrimitiveTypeEnum.getByName(typeName);
-		/*switch typeName {
-			case "Bool": PrimitiveTypeEnum.BOOL
-			case "Byte": PrimitiveTypeEnum.BYTE
-			case "Char": PrimitiveTypeEnum.CHAR
-			case "Double": PrimitiveTypeEnum.DOUBLE
-			case "Int": PrimitiveTypeEnum.INT
-			case "Long": PrimitiveTypeEnum.LONG
-			case "String": PrimitiveTypeEnum.STRING
-		}*/
-	}
+	
+	public static val CollectionTypeAttributeName = "innerType"
 	
 	def static String getUmlPrimitiveType(PrimitiveTypeEnum dataType) {
 		switch dataType {
-			case BOOL: "bool"
-			case BYTE: "byte"
-			case CHAR: "char"
-			case DOUBLE: "double"
-			case INT: "int"
-			case LONG: "long"
-			case STRING: "string"
+			case BOOL: "Boolean"
+			case BYTE: "Byte"
+			case CHAR: "Char"
+			case DOUBLE: "Real"
+			case INT: "Integer"
+			case LONG: "Long"
+			case STRING: "String"
+		}
+	}
+	
+	def static void changeCollectionDataTypeReturnType(DataType container, DataType innerType) {
+		if (container.getOwnedAttributes.length === 0) {
+			container.createOwnedAttribute(CollectionTypeAttributeName, innerType)
+		} else {
+			if (container.getOwnedAttributes.get(0).name !== CollectionTypeAttributeName)
+				throw new IllegalArgumentException("Mapped type is not created from a pcm::CollectionDataType")
+			container.getOwnedAttributes.get(0).type = innerType
 		}
 	}
 }

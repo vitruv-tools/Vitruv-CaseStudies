@@ -1,9 +1,46 @@
+import org.eclipse.uml2.uml.PrimitiveType
+import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil
+import org.eclipse.uml2.uml.DataType
+
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
 
 reactions: UmlToPcm
 in reaction to changes in uml
 execute actions in pcm
+
+// ###################################################
+// ############### UNIVERSAL REACTIONS ###############
+
+reaction RenamedElement {
+	after attribute replaced at uml::NamedElement[name]
+	call renameElement(affectedEObject)
+}
+
+routine renameElement(uml::NamedElement umlElement) {
+	match {
+		val pcmElement = retrieve pcm::NamedElement corresponding to umlElement
+	}
+	action {
+		update pcmElement {
+			pcmElement.entityName = umlElement.name
+		}
+	}
+}
+
+reaction DeletedElement {
+	after element removed from uml::Model[packagedElement]
+	call deleteElement(oldValue)
+}
+
+routine deleteElement(uml::Element umlElement) {
+	match {
+		val pcmElement = retrieve pcm::Entity corresponding to umlElement
+	}
+	action {
+		delete pcmElement
+	}
+}
 
 // ###################################################
 // ############### CONTAINER REACTIONS ###############
@@ -23,18 +60,146 @@ routine createPcmRepository(uml::Model umlModel) {
 	}
 }
 
-reaction RenamedUmlModel {
-	after attribute replaced at uml::Model[name]
-	call renamePcmRepository(affectedEObject)
+// ###################################################
+// ############## DATA TYPES REACTIONS ###############
+
+reaction CreatedPrimitiveDataType {
+	after element uml::PrimitiveType created and inserted in uml::Model[packagedElement]
+	call createPrimitiveDataType(newValue)
 }
 
-routine renamePcmRepository(uml::Model model) {
+routine createPrimitiveDataType(uml::PrimitiveType umlType) {
 	match {
-		val repository = retrieve pcm::Repository corresponding to model
+		val pcmRepository = retrieve pcm::Repository corresponding to umlType.model 
 	}
 	action {
-		update repository {
-			repository.entityName = model.name
+		val pcmType = create pcm::PrimitiveDataType and initialize {
+			pcmType.type = UmlToPcmUtil.getPcmPrimitiveType(umlType.name)
+		}
+		update pcmRepository {
+			pcmRepository.dataTypes__Repository += pcmType
+		}
+		add correspondence between umlType and pcmType
+	}
+}
+
+reaction CreatedDataType {
+	after element uml::DataType created and inserted in uml::Model[packagedElement] with
+		!(newValue instanceof PrimitiveType)
+	call createDataType(newValue)
+}
+
+routine createDataType(uml::DataType umlType) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to umlType.model
+	}
+	action {
+		val pcmType = create pcm::CompositeDataType and initialize {
+			pcmType.entityName = umlType.name
+		}
+		update pcmRepository {
+			pcmRepository.dataTypes__Repository += pcmType
+		}
+		add correspondence between umlType and pcmType
+	}
+}
+
+reaction CreatedPropertyForDataType {
+	after element uml::Property created and inserted in uml::DataType[ownedAttribute]
+	call createInnerDeclarationOffProperty(newValue)
+}
+
+routine createInnerDeclarationOffProperty(uml::Property property) {
+	match {
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to property.owner
+	}
+	action {
+		val declaration = create pcm::InnerDeclaration and initialize {
+			declaration.entityName = property.name
+		}
+		update pcmCompositeType {
+			pcmCompositeType.innerDeclaration_CompositeDataType += declaration
+		}
+		add correspondence between property and declaration
+	}
+}
+
+reaction ChangedPropertyType {
+	after element replaced at uml::Property[type] with (newValue instanceof DataType)
+	call changePropertyType(affectedEObject, (newValue as DataType))
+}
+
+routine changePropertyType(uml::Property umlProperty, uml::DataType umlType) {
+	match {
+		val pcmDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty
+		val pcmType = retrieve pcm::DataType corresponding to umlType
+	}
+	action {
+		update pcmDeclaration {
+			pcmDeclaration.datatype_InnerDeclaration = pcmType
+		}
+	}
+}
+
+// ###################################################
+// ############### INTERFACE REACTIONS ###############
+
+reaction CreatedInterface {
+	after element uml::Interface created and inserted in uml::Model[packagedElement]
+	call createInterface(newValue)
+}
+
+routine createInterface(uml::Interface umlInterface) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to umlInterface.model
+	}
+	action {
+		val pcmInterface = create pcm::OperationInterface and initialize {
+			pcmInterface.entityName = umlInterface.name
+		}
+		update pcmRepository {
+			pcmRepository.interfaces__Repository += pcmInterface
+		}
+		add correspondence between umlInterface and pcmInterface
+	}
+}
+
+reaction CreatedInterfaceOperation {
+	after element uml::Operation created and inserted in uml::Interface[ownedOperation]
+	call {
+		createInterfaceOperation(newValue)
+		System.out.println("created interface operation")
+		}
+}
+
+routine createInterfaceOperation(uml::Operation umlOperation) {
+	match {
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlOperation.interface
+	}
+	action {
+		val pcmOperation = create pcm::OperationSignature and initialize {
+			pcmOperation.entityName = umlOperation.name
+		}
+		update pcmInterface {
+			pcmInterface.signatures__OperationInterface += pcmOperation
+		}
+		add correspondence between umlOperation and pcmOperation
+	}
+}
+
+reaction ChangedInterfaceOperationType {
+	after element replaced at uml::Operation[type] with (newValue instanceof DataType)
+	call changeInterfaceOperationType(affectedEObject, newValue)
+}
+
+routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Type umlType) {
+	match {
+		val pcmOperation = retrieve pcm::OperationSignature corresponding to umlOperation
+		val pcmType = retrieve pcm::DataType corresponding to umlType
+	}
+	action {
+		update pcmOperation {
+			pcmOperation.returnType__OperationSignature = pcmType
 		}
 	}
 }

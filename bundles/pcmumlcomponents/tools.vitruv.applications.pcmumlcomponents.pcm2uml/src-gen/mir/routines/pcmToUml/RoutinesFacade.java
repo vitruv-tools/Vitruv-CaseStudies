@@ -5,6 +5,8 @@ import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
+import org.palladiosimulator.pcm.repository.Interface;
+import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
@@ -66,9 +68,39 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void createCollectionDataTypeType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
+    mir.routines.pcmToUml.CreateCollectionDataTypeTypeRoutine effect = new mir.routines.pcmToUml.CreateCollectionDataTypeTypeRoutine(this.executionState, calledBy,
+    	pcmDataType, pcmInnerType);
+    effect.applyRoutine();
+  }
+  
+  public void changeCollectionDataTypeType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
+    mir.routines.pcmToUml.ChangeCollectionDataTypeTypeRoutine effect = new mir.routines.pcmToUml.ChangeCollectionDataTypeTypeRoutine(this.executionState, calledBy,
+    	pcmDataType, pcmInnerType);
+    effect.applyRoutine();
+  }
+  
   public void createUmlPropertyForDatatype(final org.eclipse.uml2.uml.DataType type, final InnerDeclaration counterpart, final org.eclipse.uml2.uml.DataType owner) {
     mir.routines.pcmToUml.CreateUmlPropertyForDatatypeRoutine effect = new mir.routines.pcmToUml.CreateUmlPropertyForDatatypeRoutine(this.executionState, calledBy,
     	type, counterpart, owner);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlInterface(final Interface pcmInterface) {
+    mir.routines.pcmToUml.CreateUmlInterfaceRoutine effect = new mir.routines.pcmToUml.CreateUmlInterfaceRoutine(this.executionState, calledBy,
+    	pcmInterface);
+    effect.applyRoutine();
+  }
+  
+  public void createOperationInterfaceSignature(final OperationSignature pcmSignature) {
+    mir.routines.pcmToUml.CreateOperationInterfaceSignatureRoutine effect = new mir.routines.pcmToUml.CreateOperationInterfaceSignatureRoutine(this.executionState, calledBy,
+    	pcmSignature);
+    effect.applyRoutine();
+  }
+  
+  public void changeUmlOperationType(final OperationSignature pcmSignature) {
+    mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine effect = new mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine(this.executionState, calledBy,
+    	pcmSignature);
     effect.applyRoutine();
   }
   

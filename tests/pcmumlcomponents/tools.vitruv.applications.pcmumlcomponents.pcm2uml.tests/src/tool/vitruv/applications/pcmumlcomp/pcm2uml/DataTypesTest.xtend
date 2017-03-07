@@ -2,6 +2,7 @@ package tool.vitruv.applications.pcmumlcomp.pcm2uml
 
 import org.eclipse.uml2.uml.DataType
 import org.junit.Test
+import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
@@ -9,7 +10,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 
 import static org.junit.Assert.*
-import org.palladiosimulator.pcm.repository.CollectionDataType
 
 class DataTypesTest extends AbstractPcmUmlTest {
 	
@@ -76,8 +76,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		val umlType = (correspondingElements.get(0) as DataType)
 		assertEquals(1, umlType.ownedAttributes.length)
 		assertEquals(attributeName, umlType.ownedAttributes.get(0).name)
-		// TODO: what happens so that this name gets changed to "BarType"?
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.BOOL), umlType.ownedAttributes.get(0).datatype.name)
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.BOOL), umlType.ownedAttributes.get(0).type.name)
 	}
 	
 	@Test
@@ -97,14 +96,15 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	@Test
 	public def void testCompositeDataTypeDeclarationDelete() {
 		val attributeName = "v4"
+		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
+		innerType.type = PrimitiveTypeEnum .INT
+		rootElement.dataTypes__Repository += innerType
 		val pcmDataType = initCompositeDataTypeDeclaration("BarType3", attributeName)
 		val declaration = RepositoryFactory.eINSTANCE.createInnerDeclaration()
 		declaration.entityName = "v5"
-		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
-		innerType.type = PrimitiveTypeEnum .INT
 		declaration.datatype_InnerDeclaration = innerType
 		pcmDataType.innerDeclaration_CompositeDataType += declaration
-		saveAndSynchronizeChanges(pcmDataType)
+		saveAndSynchronizeChanges(rootElement)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
 		val umlType = (correspondingElements.get(0) as DataType)
 		assertEquals("Type should be initialized with two properties", 2, umlType.ownedAttributes.length)
@@ -123,13 +123,14 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	protected def CollectionDataType initCollectionDataType(String name, PrimitiveTypeEnum innerTypeValue) {
-		val pcmDataType = RepositoryFactory.eINSTANCE.createCollectionDataType()
-		pcmDataType.entityName = name
 		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		innerType.type = innerTypeValue
-		saveAndSynchronizeChanges(innerType)
+		rootElement.dataTypes__Repository += innerType
+		val pcmDataType = RepositoryFactory.eINSTANCE.createCollectionDataType()
+		pcmDataType.entityName = name
+		rootElement.dataTypes__Repository += pcmDataType
 		pcmDataType.innerType_CollectionDataType = innerType
-		saveAndSynchronizeChanges(pcmDataType)
+		saveAndSynchronizeChanges(rootElement)
 		return pcmDataType
 	}
 	
@@ -138,10 +139,10 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		val pcmDataType = initCollectionDataType("c1", PrimitiveTypeEnum.INT)
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
+		assertEquals(1, correspondingElements.length)
 		val umlType = (correspondingElements.get(0) as DataType)
-		println("[testCollectionDataTypeCreate], " + (umlType == null));
 		assertEquals(1, umlType.ownedAttributes.length)
-		assertEquals("innerType", umlType.ownedAttributes.get(0))
+		assertEquals("innerType", umlType.ownedAttributes.get(0).name)
 	}
 	
 	@Test
@@ -154,8 +155,9 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		
 		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		innerType.type = PrimitiveTypeEnum.DOUBLE
+		rootElement.dataTypes__Repository += innerType
 		pcmDataType.innerType_CollectionDataType = innerType
-		saveAndSynchronizeChanges(pcmDataType)
+		saveAndSynchronizeChanges(rootElement)
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.DOUBLE), umlType.ownedAttributes.get(0).type.name)
 	}
 }

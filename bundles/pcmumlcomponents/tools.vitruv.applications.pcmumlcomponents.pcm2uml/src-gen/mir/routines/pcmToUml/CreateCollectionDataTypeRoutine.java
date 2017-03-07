@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -26,30 +26,22 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final CollectionDataType dataType, final Model umlModel, final DataType umlInnerType, final Property umlProperty, final DataType umlType) {
+    public EObject getElement1(final CollectionDataType dataType, final Model umlModel, final DataType umlType) {
       return umlModel;
     }
     
-    public EObject getCorrepondenceSourceUmlInnerType(final CollectionDataType dataType, final Model umlModel) {
-      org.palladiosimulator.pcm.repository.DataType _innerType_CollectionDataType = dataType.getInnerType_CollectionDataType();
-      return _innerType_CollectionDataType;
-    }
-    
-    public void updateUmlPropertyElement(final CollectionDataType dataType, final Model umlModel, final DataType umlInnerType, final Property umlProperty) {
-      umlProperty.setType(umlInnerType);
-      umlProperty.setName("innerType");
-    }
-    
-    public void update0Element(final CollectionDataType dataType, final Model umlModel, final DataType umlInnerType, final Property umlProperty, final DataType umlType) {
+    public void update0Element(final CollectionDataType dataType, final Model umlModel, final DataType umlType) {
+      EList<Type> _ownedTypes = umlModel.getOwnedTypes();
+      _ownedTypes.add(umlType);
       EList<PackageableElement> _packagedElements = umlModel.getPackagedElements();
       _packagedElements.add(umlType);
     }
     
-    public EObject getElement2(final CollectionDataType dataType, final Model umlModel, final DataType umlInnerType, final Property umlProperty, final DataType umlType) {
+    public EObject getElement2(final CollectionDataType dataType, final Model umlModel, final DataType umlType) {
       return dataType;
     }
     
-    public EObject getElement3(final CollectionDataType dataType, final Model umlModel, final DataType umlInnerType, final Property umlProperty, final DataType umlType) {
+    public EObject getElement3(final CollectionDataType dataType, final Model umlModel, final DataType umlType) {
       return umlType;
     }
     
@@ -58,11 +50,9 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
       return _repository__DataType;
     }
     
-    public void updateUmlTypeElement(final CollectionDataType dataType, final Model umlModel, final DataType umlInnerType, final Property umlProperty, final DataType umlType) {
+    public void updateUmlTypeElement(final CollectionDataType dataType, final Model umlModel, final DataType umlType) {
       String _entityName = dataType.getEntityName();
       umlType.setName(_entityName);
-      EList<Property> _ownedAttributes = umlType.getOwnedAttributes();
-      _ownedAttributes.add(umlProperty);
     }
   }
   
@@ -88,27 +78,14 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     	return;
     }
     initializeRetrieveElementState(umlModel);
-    DataType umlInnerType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlInnerType(dataType, umlModel), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
-    	null);
-    if (umlInnerType == null) {
-    	return;
-    }
-    initializeRetrieveElementState(umlInnerType);
-    Property umlProperty = UMLFactoryImpl.eINSTANCE.createProperty();
-    initializeCreateElementState(umlProperty);
-    userExecution.updateUmlPropertyElement(dataType, umlModel, umlInnerType, umlProperty);
-    
     DataType umlType = UMLFactoryImpl.eINSTANCE.createDataType();
     initializeCreateElementState(umlType);
-    userExecution.updateUmlTypeElement(dataType, umlModel, umlInnerType, umlProperty, umlType);
+    userExecution.updateUmlTypeElement(dataType, umlModel, umlType);
     
-    // val updatedElement userExecution.getElement1(dataType, umlModel, umlInnerType, umlProperty, umlType);
-    userExecution.update0Element(dataType, umlModel, umlInnerType, umlProperty, umlType);
+    // val updatedElement userExecution.getElement1(dataType, umlModel, umlType);
+    userExecution.update0Element(dataType, umlModel, umlType);
     
-    addCorrespondenceBetween(userExecution.getElement2(dataType, umlModel, umlInnerType, umlProperty, umlType), userExecution.getElement3(dataType, umlModel, umlInnerType, umlProperty, umlType), "");
+    addCorrespondenceBetween(userExecution.getElement2(dataType, umlModel, umlType), userExecution.getElement3(dataType, umlModel, umlType), "");
     
     postprocessElementStates();
   }
