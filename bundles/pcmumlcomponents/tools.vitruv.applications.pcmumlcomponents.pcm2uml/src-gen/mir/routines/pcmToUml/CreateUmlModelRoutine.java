@@ -53,11 +53,10 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   Repository: " + this.pcmRepository);
     
     Model umlModel = UMLFactoryImpl.eINSTANCE.createModel();
-    initializeCreateElementState(umlModel);
     userExecution.updateUmlModelElement(pcmRepository, umlModel);
     
     addCorrespondenceBetween(userExecution.getElement1(pcmRepository, umlModel), userExecution.getElement2(pcmRepository, umlModel), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
