@@ -69,17 +69,15 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   Class: " + this.umlClass);
     
     org.emftext.language.java.classifiers.Class javaClass = ClassifiersFactoryImpl.eINSTANCE.createClass();
-    initializeCreateElementState(javaClass);
     userExecution.updateJavaClassElement(umlClass, javaClass);
     
     addCorrespondenceBetween(userExecution.getElement1(umlClass, javaClass), userExecution.getElement2(umlClass, javaClass), "");
     
     CompilationUnit javaCompilationUnit = ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
-    initializeCreateElementState(javaCompilationUnit);
     userExecution.updateJavaCompilationUnitElement(umlClass, javaClass, javaCompilationUnit);
     
     addCorrespondenceBetween(userExecution.getElement3(umlClass, javaClass, javaCompilationUnit), userExecution.getElement4(umlClass, javaClass, javaCompilationUnit), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
