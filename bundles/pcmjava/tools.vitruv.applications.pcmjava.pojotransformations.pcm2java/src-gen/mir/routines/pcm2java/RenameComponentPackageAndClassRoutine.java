@@ -62,9 +62,9 @@ public class RenameComponentPackageAndClassRoutine extends AbstractRepairRoutine
     if (repositoryPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(repositoryPackage);
+    registerObjectUnderModification(repositoryPackage);
     userExecution.callRoutine1(component, repositoryPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

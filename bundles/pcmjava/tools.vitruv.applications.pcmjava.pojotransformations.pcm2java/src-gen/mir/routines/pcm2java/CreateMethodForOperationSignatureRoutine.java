@@ -71,14 +71,13 @@ public class CreateMethodForOperationSignatureRoutine extends AbstractRepairRout
     if (javaInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(javaInterface);
+    registerObjectUnderModification(javaInterface);
     InterfaceMethod interfaceMethod = MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
-    initializeCreateElementState(interfaceMethod);
     
     addCorrespondenceBetween(userExecution.getElement1(operationSignature, javaInterface, interfaceMethod), userExecution.getElement2(operationSignature, javaInterface, interfaceMethod), "");
     
     userExecution.callRoutine1(operationSignature, javaInterface, interfaceMethod, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

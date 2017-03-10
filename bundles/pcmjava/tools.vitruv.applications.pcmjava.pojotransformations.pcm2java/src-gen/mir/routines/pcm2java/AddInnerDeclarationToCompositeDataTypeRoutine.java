@@ -121,21 +121,18 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     if (dataTypeClass == null) {
     	return;
     }
-    initializeRetrieveElementState(dataTypeClass);
+    registerObjectUnderModification(dataTypeClass);
     Field innerDataTypeField = MembersFactoryImpl.eINSTANCE.createField();
-    initializeCreateElementState(innerDataTypeField);
     userExecution.updateInnerDataTypeFieldElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField);
     
     addCorrespondenceBetween(userExecution.getElement1(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField), userExecution.getElement2(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField), "");
     
     ClassMethod getterMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
-    initializeCreateElementState(getterMethod);
     userExecution.updateGetterMethodElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod);
     
     addCorrespondenceBetween(userExecution.getElement3(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod), userExecution.getElement4(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod), userExecution.getTag1(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod));
     
     ClassMethod setterMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
-    initializeCreateElementState(setterMethod);
     userExecution.updateSetterMethodElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     
     addCorrespondenceBetween(userExecution.getElement5(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod), userExecution.getElement6(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod), userExecution.getTag2(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod));
@@ -143,6 +140,6 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     // val updatedElement userExecution.getElement7(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     userExecution.update0Element(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

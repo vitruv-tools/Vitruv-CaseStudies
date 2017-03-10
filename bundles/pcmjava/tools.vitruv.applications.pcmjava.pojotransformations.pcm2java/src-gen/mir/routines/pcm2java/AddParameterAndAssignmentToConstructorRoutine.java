@@ -82,7 +82,6 @@ public class AddParameterAndAssignmentToConstructorRoutine extends AbstractRepai
     getLogger().debug("   String: " + this.parameterName);
     
     OrdinaryParameter newParameter = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
-    initializeCreateElementState(newParameter);
     userExecution.updateNewParameterElement(parameterCorrespondenceSource, constructor, typeReference, fieldToBeAssigned, parameterName, newParameter);
     
     addCorrespondenceBetween(userExecution.getElement1(parameterCorrespondenceSource, constructor, typeReference, fieldToBeAssigned, parameterName, newParameter), userExecution.getElement2(parameterCorrespondenceSource, constructor, typeReference, fieldToBeAssigned, parameterName, newParameter), "");
@@ -90,6 +89,6 @@ public class AddParameterAndAssignmentToConstructorRoutine extends AbstractRepai
     // val updatedElement userExecution.getElement3(parameterCorrespondenceSource, constructor, typeReference, fieldToBeAssigned, parameterName, newParameter);
     userExecution.update0Element(parameterCorrespondenceSource, constructor, typeReference, fieldToBeAssigned, parameterName, newParameter);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

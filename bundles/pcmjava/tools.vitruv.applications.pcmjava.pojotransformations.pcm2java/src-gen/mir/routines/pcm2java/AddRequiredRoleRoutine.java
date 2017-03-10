@@ -119,7 +119,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     if (requiredInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(requiredInterface);
+    registerObjectUnderModification(requiredInterface);
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClass(requiredRole, requiredInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
@@ -128,15 +128,13 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     if (javaClass == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClass);
+    registerObjectUnderModification(javaClass);
     ClassifierImport requiredInterfaceImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
-    initializeCreateElementState(requiredInterfaceImport);
     userExecution.updateRequiredInterfaceImportElement(requiredRole, requiredInterface, javaClass, requiredInterfaceImport);
     
     addCorrespondenceBetween(userExecution.getElement1(requiredRole, requiredInterface, javaClass, requiredInterfaceImport), userExecution.getElement2(requiredRole, requiredInterface, javaClass, requiredInterfaceImport), "");
     
     Field requiredInterfaceField = MembersFactoryImpl.eINSTANCE.createField();
-    initializeCreateElementState(requiredInterfaceField);
     userExecution.updateRequiredInterfaceFieldElement(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField);
     
     addCorrespondenceBetween(userExecution.getElement3(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField), userExecution.getElement4(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField), "");
@@ -146,6 +144,6 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     
     userExecution.callRoutine1(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

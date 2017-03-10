@@ -110,7 +110,7 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     if (dataTypeImplementation == null) {
     	return;
     }
-    initializeRetrieveElementState(dataTypeImplementation);
+    registerObjectUnderModification(dataTypeImplementation);
     CompilationUnit dataTypeImplementationCU = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDataTypeImplementationCU(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation), // correspondence source supplier
     	CompilationUnit.class,
@@ -119,12 +119,11 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     if (dataTypeImplementationCU == null) {
     	return;
     }
-    initializeRetrieveElementState(dataTypeImplementationCU);
+    registerObjectUnderModification(dataTypeImplementationCU);
     // val updatedElement userExecution.getElement1(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU);
     userExecution.update0Element(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU);
     
     NamespaceClassifierReference namespaceClassifier = TypesFactoryImpl.eINSTANCE.createNamespaceClassifierReference();
-    initializeCreateElementState(namespaceClassifier);
     userExecution.updateNamespaceClassifierElement(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU, namespaceClassifier);
     
     addCorrespondenceBetween(userExecution.getElement2(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU, namespaceClassifier), userExecution.getElement3(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU, namespaceClassifier), "");
@@ -132,6 +131,6 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     // val updatedElement userExecution.getElement4(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU, namespaceClassifier);
     userExecution.update1Element(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU, namespaceClassifier);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
