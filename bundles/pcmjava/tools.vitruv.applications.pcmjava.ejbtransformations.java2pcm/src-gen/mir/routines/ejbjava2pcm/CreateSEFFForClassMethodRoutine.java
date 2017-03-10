@@ -67,7 +67,6 @@ public class CreateSEFFForClassMethodRoutine extends AbstractRepairRoutineRealiz
     getLogger().debug("   ClassMethod: " + this.classMethod);
     
     ResourceDemandingSEFF seff = SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
-    initializeCreateElementState(seff);
     userExecution.updateSeffElement(basicComponent, opSignature, classMethod, seff);
     
     addCorrespondenceBetween(userExecution.getElement1(basicComponent, opSignature, classMethod, seff), userExecution.getElement2(basicComponent, opSignature, classMethod, seff), "");
@@ -75,6 +74,6 @@ public class CreateSEFFForClassMethodRoutine extends AbstractRepairRoutineRealiz
     // val updatedElement userExecution.getElement3(basicComponent, opSignature, classMethod, seff);
     userExecution.update0Element(basicComponent, opSignature, classMethod, seff);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

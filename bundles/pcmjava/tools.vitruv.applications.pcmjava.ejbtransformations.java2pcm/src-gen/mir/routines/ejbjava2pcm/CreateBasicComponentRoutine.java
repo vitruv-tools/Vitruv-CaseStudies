@@ -64,7 +64,6 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     getLogger().debug("   NamedElement: " + this.namedElement);
     
     BasicComponent basicComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
-    initializeCreateElementState(basicComponent);
     userExecution.updateBasicComponentElement(repo, namedElement, basicComponent);
     
     addCorrespondenceBetween(userExecution.getElement1(repo, namedElement, basicComponent), userExecution.getElement2(repo, namedElement, basicComponent), "");
@@ -72,6 +71,6 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     // val updatedElement userExecution.getElement3(repo, namedElement, basicComponent);
     userExecution.update0Element(repo, namedElement, basicComponent);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

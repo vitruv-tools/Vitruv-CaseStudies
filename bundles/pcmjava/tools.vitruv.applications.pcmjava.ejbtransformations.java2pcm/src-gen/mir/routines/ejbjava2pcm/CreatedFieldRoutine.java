@@ -72,9 +72,9 @@ public class CreatedFieldRoutine extends AbstractRepairRoutineRealization {
     if (basicComponent == null) {
     	return;
     }
-    initializeRetrieveElementState(basicComponent);
+    registerObjectUnderModification(basicComponent);
     userExecution.callRoutine1(field, basicComponent, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

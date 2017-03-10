@@ -93,13 +93,12 @@ public class CreatedImplementsRoutine extends AbstractRepairRoutineRealization {
     if (basicComponent == null) {
     	return;
     }
-    initializeRetrieveElementState(basicComponent);
+    registerObjectUnderModification(basicComponent);
     OperationProvidedRole opr = RepositoryFactoryImpl.eINSTANCE.createOperationProvidedRole();
-    initializeCreateElementState(opr);
     
     // val updatedElement userExecution.getElement1(clazz, implementz, basicComponent, opr);
     userExecution.update0Element(clazz, implementz, basicComponent, opr);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

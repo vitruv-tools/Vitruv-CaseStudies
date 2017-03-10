@@ -55,9 +55,9 @@ public class CreatedParameterInInterfaceMethodRoutine extends AbstractRepairRout
     if (opSignature == null) {
     	return;
     }
-    initializeRetrieveElementState(opSignature);
+    registerObjectUnderModification(opSignature);
     userExecution.callRoutine1(method, parameter, opSignature, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

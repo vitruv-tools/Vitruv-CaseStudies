@@ -74,9 +74,9 @@ public class CreatedAnnotationForFieldRoutine extends AbstractRepairRoutineReali
     if (basicComponent == null) {
     	return;
     }
-    initializeRetrieveElementState(basicComponent);
+    registerObjectUnderModification(basicComponent);
     userExecution.callRoutine1(annotatedField, basicComponent, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
