@@ -64,7 +64,6 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
     getLogger().debug("   NamedElement: " + this.namedElement);
     
     OperationInterface operationInterface = RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
-    initializeCreateElementState(operationInterface);
     userExecution.updateOperationInterfaceElement(repo, namedElement, operationInterface);
     
     addCorrespondenceBetween(userExecution.getElement1(repo, namedElement, operationInterface), userExecution.getElement2(repo, namedElement, operationInterface), "");
@@ -72,6 +71,6 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
     // val updatedElement userExecution.getElement3(repo, namedElement, operationInterface);
     userExecution.update0Element(repo, namedElement, operationInterface);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

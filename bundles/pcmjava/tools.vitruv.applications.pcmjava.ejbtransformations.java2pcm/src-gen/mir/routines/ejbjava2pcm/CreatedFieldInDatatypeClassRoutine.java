@@ -84,9 +84,8 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     if (compositeDataType == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeDataType);
+    registerObjectUnderModification(compositeDataType);
     InnerDeclaration innerDec = RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
-    initializeCreateElementState(innerDec);
     userExecution.updateInnerDecElement(clazz, field, compositeDataType, innerDec);
     
     addCorrespondenceBetween(userExecution.getElement1(clazz, field, compositeDataType, innerDec), userExecution.getElement2(clazz, field, compositeDataType, innerDec), "");
@@ -94,6 +93,6 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     // val updatedElement userExecution.getElement3(clazz, field, compositeDataType, innerDec);
     userExecution.update0Element(clazz, field, compositeDataType, innerDec);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

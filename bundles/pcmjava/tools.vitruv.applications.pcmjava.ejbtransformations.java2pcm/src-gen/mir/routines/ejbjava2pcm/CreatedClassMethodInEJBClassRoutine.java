@@ -71,9 +71,9 @@ public class CreatedClassMethodInEJBClassRoutine extends AbstractRepairRoutineRe
     if (basicComponent == null) {
     	return;
     }
-    initializeRetrieveElementState(basicComponent);
+    registerObjectUnderModification(basicComponent);
     userExecution.callRoutine1(clazz, classMethod, basicComponent, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
