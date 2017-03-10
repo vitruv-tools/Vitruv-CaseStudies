@@ -42,6 +42,6 @@ public class ReinitializeOperationRequiredRoleRoutine extends AbstractRepairRout
     
     userExecution.callRoutine1(requiredRole, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

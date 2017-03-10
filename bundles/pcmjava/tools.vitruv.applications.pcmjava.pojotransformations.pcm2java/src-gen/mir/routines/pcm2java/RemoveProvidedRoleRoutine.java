@@ -59,7 +59,7 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     if (requiredInterfaceImport == null) {
     	return;
     }
-    initializeRetrieveElementState(requiredInterfaceImport);
+    registerObjectUnderModification(requiredInterfaceImport);
     NamespaceClassifierReference namespaceClassifierReference = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceNamespaceClassifierReference(providedRole, requiredInterfaceImport), // correspondence source supplier
     	NamespaceClassifierReference.class,
@@ -68,11 +68,11 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     if (namespaceClassifierReference == null) {
     	return;
     }
-    initializeRetrieveElementState(namespaceClassifierReference);
+    registerObjectUnderModification(namespaceClassifierReference);
     deleteObject(userExecution.getElement1(providedRole, requiredInterfaceImport, namespaceClassifierReference));
     
     deleteObject(userExecution.getElement2(providedRole, requiredInterfaceImport, namespaceClassifierReference));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

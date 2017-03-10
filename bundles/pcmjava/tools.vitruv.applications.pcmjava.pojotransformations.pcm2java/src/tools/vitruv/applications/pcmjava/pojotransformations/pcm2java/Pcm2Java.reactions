@@ -163,10 +163,6 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 		val newConstructorCall = create java::NewConstructorCall
 		val contextClassImport = create java::ClassifierImport
 		val constructor = create java::Constructor
-		add correspondence between assemblyContextField and assemblyContext
-		add correspondence between newConstructorCall and assemblyContext
-		add correspondence between contextClassImport and assemblyContext
-		add correspondence between constructor and assemblyContext
 		update compositeComponentJavaClass {
 			compositeComponentJavaClass.members += assemblyContextField;
 			addConstructorToClass(constructor, compositeComponentJavaClass)
@@ -175,6 +171,10 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 		update constructor {
 			createNewForFieldInConstructor(newConstructorCall, constructor, assemblyContextField);
 		}
+		add correspondence between assemblyContextField and assemblyContext
+		add correspondence between newConstructorCall and assemblyContext
+		add correspondence between contextClassImport and assemblyContext
+		add correspondence between constructor and assemblyContext
 	}
 }
 
