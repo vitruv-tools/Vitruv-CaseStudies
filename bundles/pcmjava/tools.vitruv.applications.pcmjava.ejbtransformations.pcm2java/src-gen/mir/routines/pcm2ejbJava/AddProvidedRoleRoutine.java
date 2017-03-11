@@ -94,7 +94,7 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     if (operationProvidingInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(operationProvidingInterface);
+    registerObjectUnderModification(operationProvidingInterface);
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClass(providedRole, operationProvidingInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
@@ -103,15 +103,13 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     if (javaClass == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClass);
+    registerObjectUnderModification(javaClass);
     ClassifierImport interfaceImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
-    initializeCreateElementState(interfaceImport);
     userExecution.updateInterfaceImportElement(providedRole, operationProvidingInterface, javaClass, interfaceImport);
     
     addCorrespondenceBetween(userExecution.getElement1(providedRole, operationProvidingInterface, javaClass, interfaceImport), userExecution.getElement2(providedRole, operationProvidingInterface, javaClass, interfaceImport), "");
     
     NamespaceClassifierReference namespaceClassifierReference = TypesFactoryImpl.eINSTANCE.createNamespaceClassifierReference();
-    initializeCreateElementState(namespaceClassifierReference);
     userExecution.updateNamespaceClassifierReferenceElement(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference);
     
     addCorrespondenceBetween(userExecution.getElement3(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference), userExecution.getElement4(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference), "");
@@ -119,6 +117,6 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     // val updatedElement userExecution.getElement5(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference);
     userExecution.update0Element(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

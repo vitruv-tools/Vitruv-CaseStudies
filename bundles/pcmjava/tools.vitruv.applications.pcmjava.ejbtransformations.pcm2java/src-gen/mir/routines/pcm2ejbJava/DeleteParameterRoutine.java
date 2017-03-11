@@ -59,7 +59,7 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
     if (interfaceMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceMethod);
+    registerObjectUnderModification(interfaceMethod);
     OrdinaryParameter javaParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaParameter(signature, parameter, interfaceMethod), // correspondence source supplier
     	OrdinaryParameter.class,
@@ -68,9 +68,9 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
     if (javaParameter == null) {
     	return;
     }
-    initializeRetrieveElementState(javaParameter);
+    registerObjectUnderModification(javaParameter);
     deleteObject(userExecution.getElement1(signature, parameter, interfaceMethod, javaParameter));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

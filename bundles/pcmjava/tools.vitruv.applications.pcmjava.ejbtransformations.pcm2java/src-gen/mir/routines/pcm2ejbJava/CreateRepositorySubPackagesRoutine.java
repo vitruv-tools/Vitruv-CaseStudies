@@ -51,9 +51,9 @@ public class CreateRepositorySubPackagesRoutine extends AbstractRepairRoutineRea
     if (repositoryPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(repositoryPackage);
+    registerObjectUnderModification(repositoryPackage);
     userExecution.callRoutine1(repository, repositoryPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
