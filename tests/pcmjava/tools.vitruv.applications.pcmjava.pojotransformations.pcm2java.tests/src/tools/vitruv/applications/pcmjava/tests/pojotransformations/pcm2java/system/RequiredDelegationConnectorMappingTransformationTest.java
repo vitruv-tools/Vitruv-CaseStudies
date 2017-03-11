@@ -2,6 +2,7 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.sys
 
 import static org.junit.Assert.fail;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
@@ -18,6 +19,7 @@ import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
 
 public class RequiredDelegationConnectorMappingTransformationTest extends PCM2JaMoPPTransformationTest {
 
+	@Ignore
     @Test
     public void testAddRequireDelegationConnector() throws Throwable {
         final Repository repo = super.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
