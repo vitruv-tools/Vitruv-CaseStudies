@@ -85,11 +85,9 @@ import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils;
-import tools.vitruv.domains.emf.util.BuildProjects;
 import tools.vitruv.domains.java.JavaNamespace;
-import tools.vitruv.domains.java.builder.JavaAddBuilder;
-import tools.vitruv.domains.java.builder.JavaBuilder;
-import tools.vitruv.domains.java.builder.JavaRemoveBuilder;
+import tools.vitruv.domains.java.builder.VitruviusJavaBuilder;
+import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator;
 import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
 import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
 import tools.vitruv.framework.change.description.ConcreteChange;
@@ -98,6 +96,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.metamodel.Metamodel;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.modelsynchronization.ChangePropagationAbortCause;
+import tools.vitruv.framework.monitorededitor.ProjectBuildUtils;
 import tools.vitruv.framework.tests.TestUserInteractor;
 import tools.vitruv.framework.tests.VitruviusCasestudyTest;
 import tools.vitruv.framework.tests.util.TestUtil;
@@ -134,10 +133,10 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 		super.beforeTest(description);
 		this.testUserInteractor = new TestUserInteractor();
 		// add PCM Java Builder to Project under test
-		final JavaAddBuilder pcmJavaBuilder = new JavaAddBuilder();
-		pcmJavaBuilder.addBuilderToProject(this.currentTestProject, getVirtualModel().getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
+		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
+		pcmJavaBuilder.addToProject(this.currentTestProject, getVirtualModel().getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
-		BuildProjects.issueIncrementalBuild(currentTestProject, JavaBuilder.BUILDER_ID);
+		ProjectBuildUtils.issueIncrementalBuild(currentTestProject, VitruviusJavaBuilder.BUILDER_ID);
 
 		this.resourceSet = new ResourceSetImpl();
 		// set new user interactor
@@ -147,7 +146,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	@Override
 	protected void afterTest(final org.junit.runner.Description description) {
 		// Remove PCM Java Builder
-		final JavaRemoveBuilder pcmJavaRemoveBuilder = new JavaRemoveBuilder();
+		final VitruviusJavaBuilderApplicator pcmJavaRemoveBuilder = new VitruviusJavaBuilderApplicator();
 		pcmJavaRemoveBuilder.removeBuilderFromProject(this.currentTestProject);
 	}
 
