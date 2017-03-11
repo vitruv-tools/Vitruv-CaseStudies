@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>tools.vitruv</groupId>
+	<artifactId>parent</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>bundles</module>
+		<module>tests</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<xtext.version>2.10.0</xtext.version>
+		<tycho.version>0.26.0</tycho.version>
+		<surefire.version>2.19.1</surefire.version>
+		<maven.deploy-plugin.version>2.8.2</maven.deploy-plugin.version>
+		<bintray.deploy.plugin.version>0.1.1</bintray.deploy.plugin.version>
+		<bintray.deploy.repository>Vitruv</bintray.deploy.repository>
+	</properties>
+
+	<repositories>
+		<!-- If you adjust a repository here, please also adjust the repository in the b3 aggregator. -->
+		<repository>
+			<id>Eclipse Neon</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/neon</url>
+		</repository>
+		<repository>
+			<id>Eclipse Neon Updates</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/eclipse/updates/4.6</url>
+		</repository>
+		<repository>
+			<id>Xtext</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases</url>
+		</repository>
+		<repository>
+			<id>Vitruv Framework</id>
+			<layout>p2</layout>
+			<url>https://vitruv-tools.github.io/updatesite/nightly/framework/</url>
+		</repository>
+		<repository>
+			<id>Vitruv Domains</id>
+			<layout>p2</layout>
+			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/</url>
+		</repository>
+		<repository>
+			<id>EMFText</id>
+			<layout>p2</layout>
+			<url>http://update.emftext.org/release</url>
+		</repository>
+		<repository>
+			<id>JaMoPP (P2 Wrapper)</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/nightly/jamopp-p2/</url>
+		</repository>
+<!--		<repository>
+			<id>ASEM</id>
+			<layout>p2</layout>
+			<url>https://kit-sdq.github.io/updatesite/nightly/asem/</url>
+		</repository>
+		<repository>
+			<id>Palladiosimulator</id>
+			<layout>p2</layout>
+			<url>https://sdqweb.ipd.kit.edu/eclipse/palladiosimulator/nightly/</url>
+		</repository>
+		<repository>
+			<id>Papyrus</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/neon</url>
+		</repository>
+		<repository>
+			<id>Papyrus SysML</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/mdt/papyrus/components/sysml14/</url>
+		</repository>-->
+	</repositories>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<compilerId>eclipse</compilerId>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<optimize>true</optimize>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.plexus</groupId>
+						<artifactId>plexus-compiler-eclipse</artifactId>
+						<version>2.7</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.eclipse.xtend</groupId>
+				<artifactId>xtend-maven-plugin</artifactId>
+				<version>${xtext.version}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>xtend-gen</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>gen-clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>xtend-gen</directory>
+								</fileset>
+							</filesets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<pomDependencies>consider</pomDependencies>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${maven.deploy-plugin.version}</version>
+				<configuration>
+					<deployAtEnd>true</deployAtEnd>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
