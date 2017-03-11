@@ -101,7 +101,7 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(innerTypeClass);
+    registerObjectUnderModification(innerTypeClass);
     org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDatatypesPackage(dataType, innerTypeClass), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
@@ -110,9 +110,9 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     if (datatypesPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(datatypesPackage);
+    registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(dataType, innerTypeClass, datatypesPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

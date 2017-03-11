@@ -95,7 +95,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     if (componentClass == null) {
     	return;
     }
-    initializeRetrieveElementState(componentClass);
+    registerObjectUnderModification(componentClass);
     InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(seff, componentClass), // correspondence source supplier
     	InterfaceMethod.class,
@@ -104,12 +104,11 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     if (interfaceMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceMethod);
+    registerObjectUnderModification(interfaceMethod);
     if (!userExecution.checkMatcherPrecondition1(seff, componentClass, interfaceMethod)) {
     	return;
     }
     ClassMethod classMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
-    initializeCreateElementState(classMethod);
     userExecution.updateClassMethodElement(seff, componentClass, interfaceMethod, classMethod);
     
     addCorrespondenceBetween(userExecution.getElement1(seff, componentClass, interfaceMethod, classMethod), userExecution.getElement2(seff, componentClass, interfaceMethod, classMethod), "");
@@ -117,6 +116,6 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     // val updatedElement userExecution.getElement3(seff, componentClass, interfaceMethod, classMethod);
     userExecution.update0Element(seff, componentClass, interfaceMethod, classMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

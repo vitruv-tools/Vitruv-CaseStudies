@@ -60,9 +60,9 @@ public class RenameCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     if (datatypesPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(datatypesPackage);
+    registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(compositeDataType, datatypesPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

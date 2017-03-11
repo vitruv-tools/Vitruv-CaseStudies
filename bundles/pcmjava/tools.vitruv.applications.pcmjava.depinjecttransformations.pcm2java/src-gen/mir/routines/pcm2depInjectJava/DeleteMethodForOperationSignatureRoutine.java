@@ -50,9 +50,9 @@ public class DeleteMethodForOperationSignatureRoutine extends AbstractRepairRout
     if (interfaceMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceMethod);
+    registerObjectUnderModification(interfaceMethod);
     deleteObject(userExecution.getElement1(operationSignature, interfaceMethod));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

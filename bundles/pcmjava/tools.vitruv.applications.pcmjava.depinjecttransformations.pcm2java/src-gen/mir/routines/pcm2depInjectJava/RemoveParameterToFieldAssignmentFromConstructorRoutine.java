@@ -81,6 +81,6 @@ public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends Abst
     // val updatedElement userExecution.getElement1(ctor, fieldName);
     userExecution.update0Element(ctor, fieldName);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

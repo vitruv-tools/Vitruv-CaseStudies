@@ -60,9 +60,9 @@ public class RenameCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     if (datatypesPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(datatypesPackage);
+    registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(collectionDataType, datatypesPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

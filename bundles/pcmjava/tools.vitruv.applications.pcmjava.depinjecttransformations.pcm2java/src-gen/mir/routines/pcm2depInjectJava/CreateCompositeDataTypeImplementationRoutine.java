@@ -60,9 +60,9 @@ public class CreateCompositeDataTypeImplementationRoutine extends AbstractRepair
     if (datatypesPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(datatypesPackage);
+    registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(dataType, datatypesPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -92,9 +92,9 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
     if (configureMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(configureMethod);
+    registerObjectUnderModification(configureMethod);
     userExecution.callRoutine1(providedDelegationConnector, pcmSystem, configureMethod, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

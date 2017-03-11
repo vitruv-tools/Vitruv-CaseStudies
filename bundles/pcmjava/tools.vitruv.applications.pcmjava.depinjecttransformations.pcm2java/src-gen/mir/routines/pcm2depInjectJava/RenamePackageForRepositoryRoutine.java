@@ -96,12 +96,12 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
     if (rootPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(rootPackage);
+    registerObjectUnderModification(rootPackage);
     // val updatedElement userExecution.getElement1(repository, rootPackage);
     userExecution.update0Element(repository, rootPackage);
     
     userExecution.callRoutine1(repository, rootPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

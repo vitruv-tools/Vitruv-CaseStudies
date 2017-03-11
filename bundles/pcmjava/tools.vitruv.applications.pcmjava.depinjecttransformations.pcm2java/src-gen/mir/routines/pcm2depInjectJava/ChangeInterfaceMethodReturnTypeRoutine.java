@@ -57,10 +57,10 @@ public class ChangeInterfaceMethodReturnTypeRoutine extends AbstractRepairRoutin
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(returnTypeClass);
+    registerObjectUnderModification(returnTypeClass);
     // val updatedElement userExecution.getElement1(interfaceMethod, returnType, returnTypeClass);
     userExecution.update0Element(interfaceMethod, returnType, returnTypeClass);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

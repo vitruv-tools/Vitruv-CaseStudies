@@ -76,9 +76,8 @@ public class CreateMethodForResourceDemandingBehaviorRoutine extends AbstractRep
     if (componentClass == null) {
     	return;
     }
-    initializeRetrieveElementState(componentClass);
+    registerObjectUnderModification(componentClass);
     ClassMethod javaMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
-    initializeCreateElementState(javaMethod);
     userExecution.updateJavaMethodElement(behavior, componentClass, javaMethod);
     
     addCorrespondenceBetween(userExecution.getElement1(behavior, componentClass, javaMethod), userExecution.getElement2(behavior, componentClass, javaMethod), "");
@@ -86,6 +85,6 @@ public class CreateMethodForResourceDemandingBehaviorRoutine extends AbstractRep
     // val updatedElement userExecution.getElement3(behavior, componentClass, javaMethod);
     userExecution.update0Element(behavior, componentClass, javaMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

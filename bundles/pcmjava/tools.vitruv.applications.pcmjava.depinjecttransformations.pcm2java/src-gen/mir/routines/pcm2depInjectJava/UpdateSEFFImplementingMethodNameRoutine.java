@@ -57,10 +57,10 @@ public class UpdateSEFFImplementingMethodNameRoutine extends AbstractRepairRouti
     if (classMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(classMethod);
+    registerObjectUnderModification(classMethod);
     // val updatedElement userExecution.getElement1(seff, classMethod);
     userExecution.update0Element(seff, classMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
