@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="tools.vitruv.applications.pcmjava.pojotransformations.demo.JavaPcmProjectAndVsumGenerationHandler"
+            commandId="tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.demo.JavaPcmProjectAndVsumGeneration">
+      </handler>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Creates a project for PCM models and Java code and a Vitruv VSUM that keeps the models consistent"
+            id="tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.demo.JavaPcmProjectAndVsumGeneration"
+            name="Create PCM-Java Vitruv Demo">
+      </command>
+   </extension>
+
+	  <extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+			<command
+         commandId="tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.demo.JavaPcmProjectAndVsumGeneration"
+         label="Create PCM-Java Vitruv Demo"
+         style="push">
+				<visibleWhen
+				      checkEnabled="false">
+					<iterate>
+						<adapt type="org.eclipse.core.resources.IProject">
+         <test
+               property="org.eclipse.core.resources.open"
+               value="open">
+         </test>
+						</adapt>
+					</iterate>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+
+</plugin>
