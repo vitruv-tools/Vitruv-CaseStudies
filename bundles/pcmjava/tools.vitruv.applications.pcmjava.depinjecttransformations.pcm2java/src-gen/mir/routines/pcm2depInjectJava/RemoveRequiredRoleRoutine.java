@@ -84,7 +84,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     if (requiredInterfaceImport == null) {
     	return;
     }
-    initializeRetrieveElementState(requiredInterfaceImport);
+    registerObjectUnderModification(requiredInterfaceImport);
     Field requiredInterfaceField = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRequiredInterfaceField(requiredRole, requiringEntity, requiredInterfaceImport), // correspondence source supplier
     	Field.class,
@@ -93,7 +93,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     if (requiredInterfaceField == null) {
     	return;
     }
-    initializeRetrieveElementState(requiredInterfaceField);
+    registerObjectUnderModification(requiredInterfaceField);
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClass(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
@@ -102,13 +102,13 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     if (javaClass == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClass);
+    registerObjectUnderModification(javaClass);
     deleteObject(userExecution.getElement1(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass));
     
     deleteObject(userExecution.getElement2(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass));
     
     userExecution.callRoutine1(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

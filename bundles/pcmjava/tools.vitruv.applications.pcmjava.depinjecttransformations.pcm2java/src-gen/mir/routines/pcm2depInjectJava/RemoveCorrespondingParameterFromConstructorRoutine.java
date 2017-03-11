@@ -62,9 +62,9 @@ public class RemoveCorrespondingParameterFromConstructorRoutine extends Abstract
     if (param == null) {
     	return;
     }
-    initializeRetrieveElementState(param);
+    registerObjectUnderModification(param);
     deleteObject(userExecution.getElement1(ctor, correspondenceSource, param));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -71,7 +71,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     if (interfaceMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceMethod);
+    registerObjectUnderModification(interfaceMethod);
     OrdinaryParameter javaParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaParameter(parameter, interfaceMethod), // correspondence source supplier
     	OrdinaryParameter.class,
@@ -80,16 +80,16 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     if (javaParameter == null) {
     	return;
     }
-    initializeRetrieveElementState(javaParameter);
+    registerObjectUnderModification(javaParameter);
     org.emftext.language.java.classifiers.Class javaParameterTypeClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaParameterTypeClass(parameter, interfaceMethod, javaParameter), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(javaParameterTypeClass);
+    registerObjectUnderModification(javaParameterTypeClass);
     // val updatedElement userExecution.getElement1(parameter, interfaceMethod, javaParameter, javaParameterTypeClass);
     userExecution.update0Element(parameter, interfaceMethod, javaParameter, javaParameterTypeClass);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

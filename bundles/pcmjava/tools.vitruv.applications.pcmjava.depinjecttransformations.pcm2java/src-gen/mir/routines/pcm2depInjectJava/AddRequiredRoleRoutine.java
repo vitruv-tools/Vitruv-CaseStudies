@@ -100,7 +100,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     if (requiredInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(requiredInterface);
+    registerObjectUnderModification(requiredInterface);
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClass(requiredRole, requiredInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
@@ -109,12 +109,10 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     if (javaClass == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClass);
+    registerObjectUnderModification(javaClass);
     ClassifierImport requiredInterfaceImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
-    initializeCreateElementState(requiredInterfaceImport);
     
     Field requiredInterfaceField = MembersFactoryImpl.eINSTANCE.createField();
-    initializeCreateElementState(requiredInterfaceField);
     
     userExecution.callRoutine1(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField, actionsFacade);
     
@@ -122,6 +120,6 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     
     addCorrespondenceBetween(userExecution.getElement3(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField), userExecution.getElement4(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

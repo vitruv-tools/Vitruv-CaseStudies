@@ -83,10 +83,10 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     if (javaPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(javaPackage);
+    registerObjectUnderModification(javaPackage);
     // val updatedElement userExecution.getElement1(sourceElementMappedToPackage, parentPackage, packageName, expectedTag, javaPackage);
     userExecution.update0Element(sourceElementMappedToPackage, parentPackage, packageName, expectedTag, javaPackage);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

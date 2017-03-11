@@ -59,9 +59,9 @@ public class DeleteJavaPackageRoutine extends AbstractRepairRoutineRealization {
     if (javaPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(javaPackage);
+    registerObjectUnderModification(javaPackage);
     deleteObject(userExecution.getElement1(sourceElementMappedToPackage, packageName, expectedTag, javaPackage));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

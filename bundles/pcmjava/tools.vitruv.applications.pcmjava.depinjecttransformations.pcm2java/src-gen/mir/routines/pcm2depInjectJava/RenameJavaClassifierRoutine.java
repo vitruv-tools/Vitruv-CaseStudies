@@ -86,7 +86,7 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     if (compilationUnit == null) {
     	return;
     }
-    initializeRetrieveElementState(compilationUnit);
+    registerObjectUnderModification(compilationUnit);
     ConcreteClassifier javaClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClassifier(classSourceElement, containingPackage, className, compilationUnit), // correspondence source supplier
     	ConcreteClassifier.class,
@@ -95,13 +95,13 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     if (javaClassifier == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClassifier);
+    registerObjectUnderModification(javaClassifier);
     // val updatedElement userExecution.getElement1(classSourceElement, containingPackage, className, compilationUnit, javaClassifier);
     userExecution.update0Element(classSourceElement, containingPackage, className, compilationUnit, javaClassifier);
     
     // val updatedElement userExecution.getElement2(classSourceElement, containingPackage, className, compilationUnit, javaClassifier);
     userExecution.update1Element(classSourceElement, containingPackage, className, compilationUnit, javaClassifier);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

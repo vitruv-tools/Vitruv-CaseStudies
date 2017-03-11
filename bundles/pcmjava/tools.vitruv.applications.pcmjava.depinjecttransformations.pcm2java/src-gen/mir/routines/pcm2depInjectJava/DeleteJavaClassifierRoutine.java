@@ -59,7 +59,7 @@ public class DeleteJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     if (javaClassifier == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClassifier);
+    registerObjectUnderModification(javaClassifier);
     CompilationUnit compilationUnit = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompilationUnit(sourceElement, javaClassifier), // correspondence source supplier
     	CompilationUnit.class,
@@ -68,11 +68,11 @@ public class DeleteJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     if (compilationUnit == null) {
     	return;
     }
-    initializeRetrieveElementState(compilationUnit);
+    registerObjectUnderModification(compilationUnit);
     deleteObject(userExecution.getElement1(sourceElement, javaClassifier, compilationUnit));
     
     deleteObject(userExecution.getElement2(sourceElement, javaClassifier, compilationUnit));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

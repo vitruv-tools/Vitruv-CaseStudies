@@ -49,6 +49,6 @@ public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
     
     userExecution.callRoutine1(assemblyConnector, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

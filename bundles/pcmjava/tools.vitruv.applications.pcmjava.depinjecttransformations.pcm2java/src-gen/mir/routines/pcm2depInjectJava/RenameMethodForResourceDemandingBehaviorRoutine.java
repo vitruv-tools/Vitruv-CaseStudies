@@ -55,10 +55,10 @@ public class RenameMethodForResourceDemandingBehaviorRoutine extends AbstractRep
     if (javaMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(javaMethod);
+    registerObjectUnderModification(javaMethod);
     // val updatedElement userExecution.getElement1(behavior, javaMethod);
     userExecution.update0Element(behavior, javaMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

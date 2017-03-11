@@ -53,9 +53,9 @@ public class ChangeSystemImplementationNameRoutine extends AbstractRepairRoutine
     if (systemPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(systemPackage);
+    registerObjectUnderModification(systemPackage);
     userExecution.callRoutine1(system, systemPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
