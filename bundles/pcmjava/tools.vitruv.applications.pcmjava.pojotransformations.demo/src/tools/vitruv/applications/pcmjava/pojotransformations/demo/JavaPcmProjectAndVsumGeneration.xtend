@@ -16,7 +16,6 @@ import org.eclipse.jdt.launching.LibraryLocation
 import org.eclipse.jdt.launching.IVMInstall
 import tools.vitruv.framework.tests.util.TestUtil
 import tools.vitruv.framework.tuid.TuidManager
-import tools.vitruv.applications.pcmjava.tests.util.JaMoPPPCMTestUtil
 import tools.vitruv.framework.metamodel.Metamodel
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 import java.util.Collections
@@ -30,6 +29,7 @@ import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator
 import tools.vitruv.domains.emf.builder.VitruviusEmfBuilderApplicator
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilder
 import tools.vitruv.framework.monitorededitor.ProjectBuildUtils
+import tools.vitruv.applications.pcmjava.util.PCMJavaRepositoryCreationUtil
 
 class JavaPcmProjectAndVsumGeneration {
 	
@@ -55,7 +55,7 @@ class JavaPcmProjectAndVsumGeneration {
 	}
 	
 	protected def Iterable<Metamodel> createMetamodels() {
-		return JaMoPPPCMTestUtil.createPcmJamoppMetamodels();
+		return PCMJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
 	}
 	
 	protected def Iterable<ChangePropagationSpecification> createChangePropagationSpecifications() {
