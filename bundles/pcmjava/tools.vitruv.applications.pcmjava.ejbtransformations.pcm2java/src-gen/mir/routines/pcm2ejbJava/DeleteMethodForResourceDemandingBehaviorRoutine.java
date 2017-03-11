@@ -50,9 +50,9 @@ public class DeleteMethodForResourceDemandingBehaviorRoutine extends AbstractRep
     if (javaMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(javaMethod);
+    registerObjectUnderModification(javaMethod);
     deleteObject(userExecution.getElement1(behavior, javaMethod));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

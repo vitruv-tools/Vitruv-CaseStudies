@@ -105,7 +105,7 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     if (compositeTypeField == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeTypeField);
+    registerObjectUnderModification(compositeTypeField);
     ClassMethod compositeTypeGetterMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeTypeGetterMethod(innerDeclaration, compositeTypeField), // correspondence source supplier
     	ClassMethod.class,
@@ -114,7 +114,7 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     if (compositeTypeGetterMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeTypeGetterMethod);
+    registerObjectUnderModification(compositeTypeGetterMethod);
     ClassMethod compositeTypeSetterMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeTypeSetterMethod(innerDeclaration, compositeTypeField, compositeTypeGetterMethod), // correspondence source supplier
     	ClassMethod.class,
@@ -123,7 +123,7 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     if (compositeTypeSetterMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeTypeSetterMethod);
+    registerObjectUnderModification(compositeTypeSetterMethod);
     // val updatedElement userExecution.getElement1(innerDeclaration, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     userExecution.update0Element(innerDeclaration, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     
@@ -133,6 +133,6 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     // val updatedElement userExecution.getElement3(innerDeclaration, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     userExecution.update2Element(innerDeclaration, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

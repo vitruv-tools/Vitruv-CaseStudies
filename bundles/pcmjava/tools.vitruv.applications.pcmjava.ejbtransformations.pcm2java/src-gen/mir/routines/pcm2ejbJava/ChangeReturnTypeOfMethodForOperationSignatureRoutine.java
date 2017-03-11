@@ -53,9 +53,9 @@ public class ChangeReturnTypeOfMethodForOperationSignatureRoutine extends Abstra
     if (interfaceMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceMethod);
+    registerObjectUnderModification(interfaceMethod);
     userExecution.callRoutine1(operationSignature, interfaceMethod, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

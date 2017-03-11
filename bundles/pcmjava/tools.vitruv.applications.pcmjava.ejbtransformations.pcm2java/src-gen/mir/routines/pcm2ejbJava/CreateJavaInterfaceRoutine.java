@@ -68,13 +68,12 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     getLogger().debug("   String: " + this.className);
     
     Interface javaInterface = ClassifiersFactoryImpl.eINSTANCE.createInterface();
-    initializeCreateElementState(javaInterface);
     userExecution.updateJavaInterfaceElement(sourceElementMappedToClass, containingPackage, className, javaInterface);
     
     addCorrespondenceBetween(userExecution.getElement1(sourceElementMappedToClass, containingPackage, className, javaInterface), userExecution.getElement2(sourceElementMappedToClass, containingPackage, className, javaInterface), "");
     
     userExecution.callRoutine1(sourceElementMappedToClass, containingPackage, className, javaInterface, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

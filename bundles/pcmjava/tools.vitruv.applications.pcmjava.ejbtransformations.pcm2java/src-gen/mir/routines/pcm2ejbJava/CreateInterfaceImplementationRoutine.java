@@ -60,9 +60,9 @@ public class CreateInterfaceImplementationRoutine extends AbstractRepairRoutineR
     if (contractsPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(contractsPackage);
+    registerObjectUnderModification(contractsPackage);
     userExecution.callRoutine1(interf, contractsPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
