@@ -298,7 +298,7 @@ public class PCMJaMoPPUtilsGuice {
 		for (ExpressionStatement expr : newStatements.filter(ExpressionStatement)) {
 			val interfaceAndClassName = returnInterfaceAndClassNameForBindExpression(expr)
 			val interfaceName = interfaceAndClassName.key
-			val className = interfaceAndClassName.value
+			//val className = interfaceAndClassName.value
 			if (interfaceName != null) {
 				// logger.info("newstatement bind " + interfaceName + " to " + className)
 				newMappings.add(interfaceAndClassName)
