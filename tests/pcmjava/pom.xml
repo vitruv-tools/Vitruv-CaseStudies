@@ -22,5 +22,22 @@
 		<module>tools.vitruv.applications.pcmjava.tests.util</module>
 	</modules>
 
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+					<failIfNoTests>false</failIfNoTests>
+					<!-- Test suites explicitly defined as they are sumsuming each other and would lead to redundant test execution -->
+					<includes>
+						<include>**/PCM2JavaTestSuite.class</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
 </project>
