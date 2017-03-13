@@ -19,4 +19,4 @@ install: true
 script: mvn clean verify
 
 after_success:
-- . /tmp/BuildUtilities/travis-ci/deploy.sh applications/cbs releng/tools.vitruv.applications.cbs.updatesite.aggregated final vitruv-tools updatesite
+- . /tmp/BuildUtilities/travis-ci/deploy.sh applications/cbs releng/tools.vitruv.applications.cbs.updatesite repository vitruv-tools updatesite
