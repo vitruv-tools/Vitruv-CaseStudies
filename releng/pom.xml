@@ -15,7 +15,6 @@
 
 	<modules>
 		<module>tools.vitruv.applications.cbs.updatesite</module>
-		<module>tools.vitruv.applications.cbs.updatesite.aggregated</module>
 	</modules>
 
 </project>
