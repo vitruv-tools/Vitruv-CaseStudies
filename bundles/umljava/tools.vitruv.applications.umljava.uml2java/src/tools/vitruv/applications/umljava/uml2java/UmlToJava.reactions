@@ -5,6 +5,15 @@ import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.parameters.ParametersFactory
 import mir.routines.umlToJava.ChangeJavaMethodVisibilityRoutine
 import org.emftext.language.java.types.TypeReference
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.emftext.language.java.parameters.OrdinaryParameter
+import org.emftext.language.java.parameters.Parameter
+import org.emftext.language.java.types.NamespaceClassifierReference
+import org.emftext.language.java.modifiers.Final
+import java.util.Iterator
+import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.uml2.uml.UMLFactory
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -14,15 +23,16 @@ in reaction to changes in uml
 execute actions in java
 
 
-
 reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Model[packagedElement]
     call createJavaClass(newValue)
+
 }
 
 routine createJavaClass(uml::Class umlClass) {
     action {
         val javaClass = create java::Class and initialize {
+            //logger.info("NewJavaClass Corresp. : " + umlClass.name);
             javaClass.name = umlClass.name;
         }
         add correspondence between umlClass and javaClass
@@ -38,8 +48,10 @@ routine createJavaClass(uml::Class umlClass) {
 
 reaction UmlClassRenamed {
     after attribute replaced at uml::Class[name]
-    call renameJavaClass(affectedEObject)
-}
+    call {
+        //logger.info("UMlClassRename: " + affectedEObject + " | " + newValue);
+        renameJavaClass(affectedEObject)
+}}
 
 routine renameJavaClass(uml::Class umlClass) {
     match {
@@ -50,7 +62,7 @@ routine renameJavaClass(uml::Class umlClass) {
         update javaClass {
             javaClass.name = umlClass.name;
         }
-        update umlClass {
+        update javaCompilationUnit {
             javaCompilationUnit.name = umlClass.name;
             persistProjectRelative(umlClass, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
         }
@@ -87,13 +99,7 @@ routine setJavaClassFinal(uml::Class umlClass) {
     action {
         val finalMod = create java::Final
         update jClass {
-            if (umlClass.isFinalSpecialization) {
-                if (!jClass.hasModifier(finalMod.class)) {
-                    jClass.addModifier(finalMod)
-                }
-            } else {
-                jClass.removeModifier(finalMod.class)
-            }
+            setJavaModifier(jClass, finalMod, umlClass.isFinalSpecialization);
         }
     }
 }
@@ -105,19 +111,12 @@ reaction UmlClassMadeAbstract {
 
 routine setJavaClassAbstract(uml::Class umlClass) {
     match {
-        val javaClass = retrieve java::Class corresponding to umlClass
+        val jClass = retrieve java::Class corresponding to umlClass
     }
     action {
         val abstr = create java::Abstract
-        update javaClass {
-            if (umlClass.isAbstract) {
-                if (!javaClass.hasModifier(abstr.class)) {
-                    javaClass.addModifier(abstr)
-                }
-            } else {
-                javaClass.removeModifier(abstr.class)
-                
-            }
+        update jClass {
+            setJavaModifier(jClass, abstr, umlClass.abstract);
             
         }
     }
@@ -141,8 +140,9 @@ routine changeJavaClassVisibility(uml::Class uClass) {
 }
 
 reaction UmlSuperClassChanged {
-    after element uml::Class inserted in uml::Class[general]
-    call changeJavaSuperClass(newValue, affectedEObject)
+    after element uml::Generalization inserted in uml::Class[generalization]
+    call changeJavaSuperClass(newValue.general as org.eclipse.uml2.uml.Class, affectedEObject)
+
 }
 
 routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
@@ -153,55 +153,13 @@ routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
     action {
         update jClass {
             jClass.extends = createTypeReference(null, superJavaClass);
-        }
-    }
-}
-
-reaction UmlInterfaceImplementCreated {
-    after element uml::Interface inserted in uml::Class[interfaceRealization]
-    call createJavaInterfaceImplement(newValue, affectedEObject)
-}
-
-routine createJavaInterfaceImplement(uml::Interface uI, uml::Class uClass) {
-    match {
-        val jClass = retrieve java::Class corresponding to uClass
-        val jI = retrieve java::Interface corresponding to uI
-    }
-    action {
-        update jClass {
-            jClass.implements += createTypeReference(null, jI);
-            //TODO InterfaceMethoden adden?
-        }
-    }
-}
-
-reaction UmlInterfaceImplementDeleted {
-    after element uml::Interface removed from uml::Class[interfaceRealization]
-    call deletedJavaInterfaceImplement(oldValue, affectedEObject)
-}
-
-routine deletedJavaInterfaceImplement(uml::Interface uI, uml::Class uClass) {
-    match {
-        val jClass = retrieve java::Class corresponding to uClass
-        val jI = retrieve java::Interface corresponding to uI
-    }
-    action {
-        update jClass {
-            var int i = 0;
-            for (TypeReference t : jClass.implements) {
-                var type = t.target as org.emftext.language.java.classifiers.Interface
-                if (jI.name.equals(type.name)) {
-                    jClass.implements.remove(i);
-                }
-                i++;
-            }
-            //TODO InterfaceMethoden entfernen?
+            
         }
     }
 }
 
 reaction UmlSuperClassDeleted {
-    after element uml::Class removed from uml::Class[general]
+    after element uml::Generalization removed from uml::Class[generalization]
     call deleteJavaSuperClass(affectedEObject)
 }
 
@@ -215,6 +173,56 @@ routine deleteJavaSuperClass(uml::Class uClass) {
         }
     }
 }
+
+reaction UmlInterfaceImplementCreated {
+    after element uml::Interface inserted in uml::InterfaceRealization[supplier]
+    call createJavaInterfaceImplement(newValue, affectedEObject.eContainer as org.eclipse.uml2.uml.Class)
+}
+
+routine createJavaInterfaceImplement(uml::Interface uI, uml::Class uClass) {
+    match {
+        val jClass = retrieve java::Class corresponding to uClass
+        val jI = retrieve java::Interface corresponding to uI
+    }
+    action {
+        update jClass {
+            jClass.implements += createTypeReference(null, jI);
+        }
+        call {
+            val list = addInterfaceMethodsToUmlClass(uI, uClass)
+            for (org.eclipse.uml2.uml.Operation op : list) {
+                createJavaMethod(uClass, op)
+            }
+        }
+    }
+}
+
+reaction UmlInterfaceImplementDeleted {
+    after element uml::InterfaceRealization removed from uml::Class[interfaceRealization]
+    call deleteJavaInterfaceImplement(oldValue.suppliers.head as org.eclipse.uml2.uml.Interface , affectedEObject)
+}
+
+routine deleteJavaInterfaceImplement(uml::Interface uI, uml::Class uClass) {
+    match {
+        val jClass = retrieve java::Class corresponding to uClass
+        val jI = retrieve java::Interface corresponding to uI
+    }
+    action {
+        update jClass {
+            removeClassifierFromIterator(jClass.implements.iterator, jI) 
+        }
+        call {
+            val list = removeInterfaceMethodsFromUmlClass(uI, uClass)
+            uClass.createOwnedOperation("testMeth", null, null, null);
+            for (org.eclipse.uml2.uml.Operation op : list) {
+                deleteJavaMethod(op)
+                op.destroy;
+            }
+        }
+    }
+}
+
+
 
 reaction UmlInterfaceCreated {
     after element uml::Interface created and inserted in uml::Model[packagedElement]
@@ -276,8 +284,8 @@ routine deleteJavaInterface(uml::Interface umlInterface) {
 }
  
 reaction UmlSuperInterfaceChanged {
-    after element uml::Interface inserted in uml::Interface[general]
-    call changeJavaSuperInterface(newValue, affectedEObject)
+    after element uml::Generalization inserted in uml::Interface[generalization]
+    call changeJavaSuperInterface(newValue.general as org.eclipse.uml2.uml.Interface, affectedEObject)
 }
 
 routine changeJavaSuperInterface(uml::Interface superUMLInterface, uml::Interface uI) {
@@ -293,25 +301,18 @@ routine changeJavaSuperInterface(uml::Interface superUMLInterface, uml::Interfac
 }
 
 reaction UmlSuperInterfaceDeleted {
-    after element uml::Interface removed from uml::Interface[general]
-    call deleteJavaSuperInterface(oldValue, affectedEObject)
+    after element uml::Generalization removed from uml::Interface[generalization]
+    call deleteJavaSuperInterface(oldValue.general as org.eclipse.uml2.uml.Interface, affectedEObject)
 }
 
 routine deleteJavaSuperInterface(uml::Interface superUMLInterface, uml::Interface uI) {
     match {
         val jI = retrieve java::Interface corresponding to uI
-        val superJavaInterface = retrieve java::Class corresponding to superUMLInterface
+        val javaSuperInterface = retrieve java::Interface corresponding to superUMLInterface
     }
     action {
         update jI {
-            var int i = 0;
-            for (TypeReference t : jI.extends) {
-                var type = t.target as org.emftext.language.java.classifiers.Interface
-                if (superJavaInterface.name.equals(type.name)) {
-                    jI.extends.remove(i);
-                }
-                i++;
-            }
+            removeClassifierFromIterator(jI.extends.iterator, javaSuperInterface)
         }
     }
 }
@@ -406,6 +407,7 @@ routine createJavaMethod(uml::Class uClass, uml::Operation umlOp) {
         }
         update javaClass {
             javaClass.members += javaMethod;
+            logger.info("Correspondence Added: " + umlOp + ", " + javaMethod)
         }
         add correspondence between umlOp and javaMethod
     }
@@ -433,7 +435,7 @@ reaction UmlClassMethodDeleted {
     call deleteJavaMethod(oldValue)
 }
 
-reaction DeletedUmlInterfaceMethod {
+reaction UmlInterfaceMethodDeleted {
     after element uml::Operation deleted and removed from uml::Interface[ownedOperation]
     call deleteJavaMethod(oldValue)
 }
@@ -452,16 +454,21 @@ routine deleteJavaMethod(uml::Operation umlOp) {
 reaction UmlParameterCreated {
     after element uml::Parameter created and inserted in uml::Operation[ownedParameter]
     call createJavaParameter(affectedEObject, newValue)
+
 }
 //Geht für ClassMethod und InterfaceMethod?
 routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
     match {
         val javaMethod = retrieve java::Method corresponding to uMeth
-        val customType = retrieve java::Class corresponding to umlParam.type
+        val customType = retrieve optional java::Class corresponding to umlParam.type
     }
     action {
         val javaParam = create java::OrdinaryParameter and initialize {
-            javaParam.name = umlParam.name;
+            if (umlParam.name != null) {
+                javaParam.name = umlParam.name;
+            } else {
+                javaParam.name = "Defaultname";
+            }
             javaParam.typeReference = createTypeReference(umlParam.type, customType)
         }
         add correspondence between javaParam and umlParam
@@ -501,41 +508,68 @@ routine deleteJavaParameter(uml::Parameter uParam) {
     }
 }
 
+//Bei Änderung eines Parameters oder ReturnTypes
 reaction UmlParameterTypeChanged {
     after element uml::Type replaced at uml::Parameter[type]
-    call changeJavaParameterType(affectedEObject, newValue)
+    call {
+        changeJavaParameterType(affectedEObject, newValue)
+        
+        }
 }
 
 routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
     match {
-        val jParam = retrieve java::OrdinaryParameter corresponding to uParam
+        val jParam = retrieve optional java::OrdinaryParameter corresponding to uParam
+        val jMeth = retrieve java::Method corresponding to uParam.operation
         val customClass = retrieve optional java::Class corresponding to uType
     }
     action {
         update jParam {
-            jParam.typeReference = createTypeReference(uType, customClass);
+            val jType = createTypeReference(uType, customClass);
+            if (uParam.direction.equals(ParameterDirectionKind.RETURN_LITERAL)) {
+                jMeth.typeReference = jType;
+                if (jParam != null) {
+                    //call deleteJavaParameter(jParam)
+                }
+            } else {
+                jParam.typeReference = jType;
+            }
+            
         }
     }
 }
 
-reaction UmlMethodReturnTypeChanged {
-    after element uml::Type replaced at uml::Operation[type]
-    call changeJavaMethodReturnType(affectedEObject)
+reaction UmlMethodReturnTypeCreated {
+    after attribute replaced at uml::Parameter[direction]
+    call createJavaMethodReturnType(affectedEObject)
+
+        
 }
 
 //TODO Für ClassMethod & InterfaceMethod gleichzeitig anwendbar?
-routine changeJavaMethodReturnType(uml::Operation umlOp) {
+routine createJavaMethodReturnType(uml::Parameter uParam) {
     match {
-        val javaMethod = retrieve java::Method corresponding to umlOp
-        val returnType = retrieve java::Class corresponding to umlOp.type
+        val javaMethod = retrieve java::Method corresponding to uParam.operation
+        val jParam = retrieve java::OrdinaryParameter corresponding to uParam
+        val returnType = retrieve java::Class corresponding to uParam.type
         
     }
     action {
+
         update javaMethod {
-            javaMethod.typeReference = createTypeReference(umlOp.datatype, returnType)
+            if (uParam.direction.equals(ParameterDirectionKind.RETURN_LITERAL)) {
+                javaMethod.typeReference = createTypeReference(uParam.type, returnType);
+            } else {
+                javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid; //d. h. kein Return
+            }
+            
         }
+        
     }
+        //add correspondence between jType and uParam
 }
+
+
 
 reaction UmlAttributeTypeChanged {
     after element uml::Type replaced at uml::Property[type]
@@ -545,7 +579,7 @@ reaction UmlAttributeTypeChanged {
 routine changeJavaAttributeType(uml::Property uAttr, uml::Type uType) {
     match {
         val jAttr = retrieve java::Field corresponding to uAttr
-        val customType = retrieve java::Class corresponding to uType
+        val customType = retrieve optional java::Class corresponding to uType
     }
     action {
         update jAttr {
@@ -565,13 +599,7 @@ routine setJavaAttributeFinal(uml::Property umlAttr) {
     action {
         val finalMod = create java::Final
         update jAttr {
-            if (umlAttr.isReadOnly) {
-                if (!jAttr.hasModifier(finalMod.class)) {
-                    jAttr.addModifier(finalMod)
-                }
-            } else {
-                jAttr.removeModifier(finalMod.class)
-            }
+            setJavaModifier(jAttr, finalMod, umlAttr.isReadOnly);
         }
     }
 }
@@ -591,13 +619,7 @@ routine setStatic(uml::Feature uFeat) {
     action {
         val staticMod = create java::Static
         update jMod {
-            if (uFeat.isStatic) {
-                if (!jMod.hasModifier(staticMod.class)) {
-                    jMod.addModifier(staticMod)
-                }
-            } else {
-                jMod.removeModifier(staticMod.class)
-            }
+            setJavaModifier(jMod, staticMod, uFeat.isStatic);
         }
     }
 }
@@ -615,15 +637,17 @@ routine setJavaMethodAbstract(uml::Operation umlOp) {
     action {
         val abstr = create java::Abstract
         update javaMethod {
+            setJavaModifier(javaMethod, abstr, umlOp.abstract);
+        }
+        call {
             if (umlOp.isAbstract) {
-                if (!javaMethod.hasModifier(abstr.class)) {
-                    javaMethod.addModifier(abstr)
-                    //umlOp.class_.isAbstract = true;
-                }
-            } else {
-                javaMethod.removeModifier(abstr.class)
+                umlOp.class_.isAbstract = true;
+                 val uOperation = UMLFactory.eINSTANCE.createOperation;
+                 uOperation.name = "testMeth";
+                 umlOp.class_.ownedOperations += uOperation;
+                umlOp.class_.createOwnedOperation("testMeth2", null, null, null);
+                setJavaClassAbstract(umlOp.class_)
             }
-            
         }
     }    
 }
@@ -683,10 +707,12 @@ routine createJavaInterfaceMethod(uml::Operation umlOp) {
             }
             javaMethod.typeReference = createTypeReference(umlOp.type, customClassType);
             javaMethod.makePublic;
+            umlOp.visibility = VisibilityKind.PUBLIC_LITERAL;
             
         }
         add correspondence between umlOp and javaMethod
         update jInterface {
+            logger.info("Correspondence InterfaceMethod: " + umlOp + ", " + javaMethod)
             jInterface.members += javaMethod;
         }
     }
