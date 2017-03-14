@@ -1,6 +1,7 @@
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*;
-import org.apache.log4j.PropertyConfigurator
 import static extension tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import org.apache.log4j.PropertyConfigurator
+
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Classifier
 
@@ -21,7 +22,8 @@ routine createUmlClass(java::Class jClass) {
         val uClass = create uml::Class and initialize {
             uClass.name = jClass.name;
         }
-        val uModel = create uml::Model and initialize {
+        call {
+            val uModel = getUmlModel(correspondenceModel)
             uModel.packagedElements += uClass;
         }
         add correspondence between uClass and jClass

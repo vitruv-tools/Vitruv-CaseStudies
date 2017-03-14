@@ -8,6 +8,11 @@ import org.emftext.language.java.modifiers.Public
 import org.eclipse.uml2.uml.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.Void
+import org.eclipse.uml2.uml.Model
+import tools.vitruv.framework.correspondence.CorrespondenceModel
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import java.util.Set
+import org.eclipse.uml2.uml.UMLFactory
 
 class JavaToUmlHelper {
     
@@ -27,5 +32,16 @@ class JavaToUmlHelper {
         if (jType.target instanceof Void) {
             return null;
         }
+    }
+    
+    def static Model getUmlModel(CorrespondenceModel correspondenceModel) {
+        val Set<Model> models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
+        if (models.nullOrEmpty) {
+           return UMLFactory.eINSTANCE.createModel();
+        }
+        if (1 != models.size) {
+            //log.warn("found more than one repository. Returning the first")
+        }
+        return models.get(0)
     }
 }
