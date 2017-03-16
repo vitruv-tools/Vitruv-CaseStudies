@@ -1,0 +1,252 @@
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.DataType
+import tools.vitruv.applications.umlclassumlcomponents.class2comp.class2compUtil
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
+import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
+
+reactions: class2comp
+in reaction to changes in umlclass
+execute actions in umlcomp
+
+/*******
+*Class:*
+********/
+reaction CreatedUmlClass {
+	after element umlclass::Class created and inserted in umlclass::Model[packagedElement]
+	call createUmlComponent(newValue)
+}
+
+routine createUmlComponent(umlclass::Class umlClass) {
+	match {
+		val umlModel = retrieve umlcomp::Model corresponding to umlClass.package
+	}
+	action {
+		val umlComponent = create umlcomp::Component and initialize {
+			umlComponent.name = umlClass.name;
+		}
+		update umlModel {
+			umlModel.packagedElements += umlComponent;
+		}
+		add correspondence between umlClass and umlComponent
+	}
+}
+
+reaction RenameClass {
+	after attribute replaced at umlclass::Class[name]
+	call {
+		val umlClass = affectedEObject;
+		renameComponent(umlClass);
+	}
+}
+
+routine renameComponent(umlclass::Class umlClass) { 
+	match {
+		val component = retrieve umlcomp::Component corresponding to umlClass
+			with component.name.equals(umlClass.package.name)
+	}
+	action { 
+		update component {
+			component.name = umlClass.name;
+		}
+	}
+}
+
+reaction DeletedClass{
+	after element umlclass::Class deleted and removed from umlclass::Model[packagedElement]
+	call{
+		deleteComponent(oldValue, oldValue.name, "")
+	}
+}
+
+routine deleteComponent(umlclass::Class umlClass, String packageName, String expectedTag) { 
+	match {
+		val component = retrieve umlclass::Component corresponding to umlClass tagged with expectedTag
+	} 
+	action { 
+		delete component
+	}
+}
+
+reaction RenamedElement {
+	after attribute replaced at umlclass::NamedElement[name]
+	call renameElement(affectedEObject)
+}
+
+routine renameElement(umlcomp::NamedElement classElement) {
+	match {
+		val compElement = retrieve umlcomp::NamedElement corresponding to classElement
+	}
+	action {
+		update compElement {
+			compElement.name = classElement.name
+		}
+	}
+}
+
+
+/*******
+*Model:*
+********/
+reaction CreatedClassModel {
+	after element umlclass::Model created and inserted as root 
+	call createComponentModel(newValue)  
+}
+
+routine createComponentModel(umlclass::Model umlClassModel) {
+	action {
+		val umlComponentModel = create umlcomp::Model and initialize {
+			umlComponentModel.name = umlClassModel.name;
+			persistProjectRelative(umlClassModel, umlComponentModel, "model/" + umlClassModel.name + ".uml")	
+		}
+		add correspondence between umlClassModel and umlComponentModel
+	}
+}
+
+reaction RenamedClassModel {
+	after attribute replaced at umlclass::Model[name]
+	call renameComponentModelForClassModel(affectedEObject)
+}
+
+routine renameComponentModelForClassModel( umlclass::Model umlClassModel) {
+	match {
+		val umlComponentModel = retrieve umlcomp::Model corresponding to umlClassModel
+	}
+	action { 
+		update umlComponentModel {
+			umlComponentModel.name = umlClassModel.name;
+		}
+		call {
+			persistProjectRelative(umlClassModel, umlComponentModel, "model/" + umlClassModel.name + ".uml")
+		}	
+	}
+}
+
+
+/***********
+*Datatypes:*
+************/
+
+reaction CreatedPrimitiveDataType {
+	after element umlclass::PrimitiveType created and inserted in umlclass::Model[packagedElement]
+	call createPrimitiveDataType(newValue)
+}
+
+routine createPrimitiveDataType(umlclass::PrimitiveType classType) {match {
+		val umlModel = retrieve umlcomp::Model corresponding to classType.model
+	}
+	action {
+		val compType = create umlcomp::PrimitiveType and initialize {
+			compType.name = classType.name
+		}
+		update umlModel {
+			umlModel.ownedTypes += compType
+		}
+		add correspondence between compType and classType
+	}
+}
+
+reaction CreatedDataType {
+	after element umlclass::DataType created and inserted in umlclass::Model[packagedElement] with
+		!(newValue instanceof PrimitiveType)
+	call createDataType(newValue)
+}
+
+routine createDataType(umlclass::DataType classType) {
+	match {
+		val compModel = retrieve umlcomp::Model corresponding to classType.model
+	}
+	action {
+		val compType = create umlcomp::DataType and initialize {
+			compType.name = classType.name
+		}
+		update compModel {
+			compModel.ownedTypes += compType
+		}
+		add correspondence between classType and compType
+	}
+}
+
+reaction ChangedPropertyType {
+	after element replaced at umlclass::Property[type] with (newValue instanceof DataType)
+	call changePropertyType(affectedEObject, (newValue as DataType))
+}
+
+routine changePropertyType(umlclass::Property classProperty, umlclass::DataType classType) {
+	match {
+		val compProperty = retrieve umlclass::Property corresponding to classProperty
+		val compType = retrieve umlcomp::DataType corresponding to classType
+		val compModel = retrieve umlcomp::Model corresponding to classType.model
+	}
+	action {
+		update compProperty {
+			compProperty.type = compType;
+		}
+	}
+}
+
+
+/***********
+*Attributes:*
+************/
+
+reaction ClassAttributeCreated {
+    after element umlclass::Property created and inserted in umlclass::Class[ownedAttribute]
+    call {
+        createCompAttribute(affectedEObject, newValue)
+    }
+}
+
+
+routine createCompAttribute(umlclass::Class umlClass, umlclass::Property classAttribute) {
+    match {
+        val component = retrieve umlcomp::Component corresponding to umlClass
+    }
+    action {
+        val componentAttribute = create umlcomp::Property and initialize {
+            if (classAttribute.name == null) {
+                componentAttribute.name = "DefaultAttributeName"
+            } else {
+                componentAttribute.name = classAttribute.name;
+            }
+            componentAttribute.datatype = classAttribute.datatype;    
+        }
+        update component {
+          component.members += componentAttribute;
+        }
+        add correspondence between classAttribute and componentAttribute
+    }
+}
+
+
+reaction ClassAttributeRenamed {
+    after attribute replaced at umlclass::Property[name]
+    call renameComponentAttribute(affectedEObject)
+}
+
+routine renameComponentAttribute(umlclass::Property classAttribute) {
+    match {
+        val componentAttribute = retrieve umlcomp::Property corresponding to classAttribute
+    }
+    action {
+        update componentAttribute {
+            componentAttribute.name = classAttribute.name
+        }
+    }
+}
+
+reaction ClassAttributeDeleted {
+    after element umlclass::Property deleted and removed from umlclass::Class[ownedAttribute]
+    call deleteComponentAttribute(oldValue)
+}
+
+routine deleteComponentAttribute(umlclass::Property classAttribute) {
+    match {
+        val componentAttribute = retrieve umlcomp::Property corresponding to classAttribute
+    }
+    action {
+        delete componentAttribute
+        remove correspondence between classAttribute and componentAttribute
+    }
+}
+
