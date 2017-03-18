@@ -47,8 +47,7 @@ public class CreateInnerDeclarationOffPropertyRoutine extends AbstractRepairRout
     }
     
     public void updateDeclarationElement(final Property property, final CompositeDataType pcmCompositeType, final InnerDeclaration declaration) {
-      String _name = property.getName();
-      declaration.setEntityName(_name);
+      declaration.setEntityName(property.getName());
     }
   }
   

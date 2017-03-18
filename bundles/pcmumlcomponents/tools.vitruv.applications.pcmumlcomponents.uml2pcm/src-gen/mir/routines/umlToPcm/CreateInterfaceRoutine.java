@@ -47,8 +47,7 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updatePcmInterfaceElement(final Interface umlInterface, final Repository pcmRepository, final OperationInterface pcmInterface) {
-      String _name = umlInterface.getName();
-      pcmInterface.setEntityName(_name);
+      pcmInterface.setEntityName(umlInterface.getName());
     }
   }
   

@@ -6,9 +6,9 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -49,6 +49,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void changeInnerDeclarationOwner(final Property umlProperty) {
+    mir.routines.umlToPcm.ChangeInnerDeclarationOwnerRoutine effect = new mir.routines.umlToPcm.ChangeInnerDeclarationOwnerRoutine(this.executionState, calledBy,
+    	umlProperty);
+    effect.applyRoutine();
+  }
+  
   public void createInnerDeclarationOffProperty(final Property property) {
     mir.routines.umlToPcm.CreateInnerDeclarationOffPropertyRoutine effect = new mir.routines.umlToPcm.CreateInnerDeclarationOffPropertyRoutine(this.executionState, calledBy,
     	property);
@@ -73,9 +79,39 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeInterfaceOperationType(final Operation umlOperation, final Type umlType) {
+  public void addOperationParameter(final Operation umlOperation, final Parameter umlParameter) {
+    mir.routines.umlToPcm.AddOperationParameterRoutine effect = new mir.routines.umlToPcm.AddOperationParameterRoutine(this.executionState, calledBy,
+    	umlOperation, umlParameter);
+    effect.applyRoutine();
+  }
+  
+  public void addInterfaceOperationParameter(final Operation umlOperation, final Parameter umlParameter) {
+    mir.routines.umlToPcm.AddInterfaceOperationParameterRoutine effect = new mir.routines.umlToPcm.AddInterfaceOperationParameterRoutine(this.executionState, calledBy,
+    	umlOperation, umlParameter);
+    effect.applyRoutine();
+  }
+  
+  public void changeInterfaceOperationType(final Operation umlOperation, final Parameter umlParameter) {
     mir.routines.umlToPcm.ChangeInterfaceOperationTypeRoutine effect = new mir.routines.umlToPcm.ChangeInterfaceOperationTypeRoutine(this.executionState, calledBy,
-    	umlOperation, umlType);
+    	umlOperation, umlParameter);
+    effect.applyRoutine();
+  }
+  
+  public void changeParameterType(final Parameter umlParameter) {
+    mir.routines.umlToPcm.ChangeParameterTypeRoutine effect = new mir.routines.umlToPcm.ChangeParameterTypeRoutine(this.executionState, calledBy,
+    	umlParameter);
+    effect.applyRoutine();
+  }
+  
+  public void changeParameterName(final Parameter umlParameter) {
+    mir.routines.umlToPcm.ChangeParameterNameRoutine effect = new mir.routines.umlToPcm.ChangeParameterNameRoutine(this.executionState, calledBy,
+    	umlParameter);
+    effect.applyRoutine();
+  }
+  
+  public void changeParameterDirection(final Parameter umlParameter) {
+    mir.routines.umlToPcm.ChangeParameterDirectionRoutine effect = new mir.routines.umlToPcm.ChangeParameterDirectionRoutine(this.executionState, calledBy,
+    	umlParameter);
     effect.applyRoutine();
   }
 }

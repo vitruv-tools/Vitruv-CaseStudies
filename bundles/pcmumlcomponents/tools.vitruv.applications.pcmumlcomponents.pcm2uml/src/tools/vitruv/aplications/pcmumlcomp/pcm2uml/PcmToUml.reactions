@@ -1,3 +1,4 @@
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
@@ -12,8 +13,8 @@ execute actions in uml
 // ############### UNIVERSAL REACTIONS ###############
 
 reaction RenamedElement {
-	after attribute replaced at pcm::NamedElement[entityName] with
-		!(affectedEObject instanceof org.palladiosimulator.pcm.repository.PrimitiveDataType)
+	after attribute replaced at pcm::NamedElement[entityName] //with
+		//!(affectedEObject instanceof PrimitiveDataType)
 	call renameUmlElement(affectedEObject)
 }
 
@@ -25,6 +26,16 @@ routine renameUmlElement(pcm::NamedElement pcmElement) {
 		update umlElement {
 			umlElement.name = pcmElement.entityName
 		}
+	}
+}
+
+// most elements should be named. others might get special treatment
+routine deleteElement(pcm::NamedElement pcmElement) {
+	match {
+		val umlElement = retrieve uml::NamedElement corresponding to pcmElement
+	}
+	action {
+		delete umlElement
 	}
 }
 
@@ -122,16 +133,16 @@ routine createInnerDeclaration(pcm::InnerDeclaration innerDeclaration) {
 
 reaction DeletedInnerDeclaration {
 	after element pcm::InnerDeclaration removed from pcm::CompositeDataType[innerDeclaration_CompositeDataType]
-	call deleteInnerDeclaration(oldValue)
+	call deleteInnerDeclaration(affectedEObject, oldValue)
 }
 
-routine deleteInnerDeclaration(pcm::InnerDeclaration innerDeclaration) {
+routine deleteInnerDeclaration(pcm::CompositeDataType dataType, pcm::InnerDeclaration innerDeclaration) {
 	match {
-		val compositeType = retrieve uml::DataType corresponding to innerDeclaration.compositeDataType_InnerDeclaration
-		val umlType = retrieve uml::DataType corresponding to innerDeclaration.datatype_InnerDeclaration
+		val compositeType = retrieve uml::DataType corresponding to dataType
+		val umlProperty = retrieve uml::Property corresponding to innerDeclaration
 	}
 	action {
-		call compositeType.ownedAttributes.remove(umlType)
+		call compositeType.ownedAttributes.remove(umlProperty)
 	}
 }
 
@@ -254,6 +265,11 @@ routine createUmlInterface(pcm::Interface pcmInterface) {
 	}
 }
 
+reaction DeletedPcmInterface {
+	after element removed from pcm::Repository[interfaces__Repository]
+	call deleteElement(oldValue)
+}
+
 reaction CreatedOperationInterfaceSignature {
 	after element created and inserted in pcm::OperationInterface[signatures__OperationInterface]
 	call createOperationInterfaceSignature(newValue)
@@ -274,7 +290,6 @@ routine createOperationInterfaceSignature(pcm::OperationSignature pcmSignature) 
 	}
 }
 
-// TODO: why does this only have {id} and {entityName}? (Metamodel Explorer shows more)
 reaction ChangedOperationSignatureType {
 	after element replaced at pcm::OperationSignature[returnType__OperationSignature]
 	call changeUmlOperationType(affectedEObject)
@@ -288,6 +303,66 @@ routine changeUmlOperationType(pcm::OperationSignature pcmSignature) {
 	action {
 		update umlOperation {
 			umlOperation.type = umlReturnType
+		}
+	}
+}
+
+reaction DeletedOperationInterfaceSignature {
+	after element removed from pcm::OperationInterface[signatures__OperationInterface]
+	call deleteElement(oldValue) 
+}
+
+reaction CreatedOperationSignatureParameter {
+	after element inserted in pcm::OperationSignature[parameters__OperationSignature]
+	call createOperationSignatureParameter(affectedEObject, newValue)
+}
+routine createOperationSignatureParameter(pcm::OperationSignature pcmSignature, pcm::Parameter pcmParameter)
+{
+	match {
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature
+	}
+	action {
+		val umlParameter = create uml::Parameter and initialize {
+			umlParameter.name = pcmParameter.parameterName
+		}
+		update pcmParameter {
+			pcmParameter.entityName = pcmParameter.parameterName
+		}
+		update umlOperation {
+			umlOperation.ownedParameters += umlParameter
+		}
+		add correspondence between umlParameter and pcmParameter
+	}
+}
+reaction RenamedParameter {
+	after attribute replaced at pcm::Parameter[parameterName]
+	call renameParameter(affectedEObject)
+}
+routine renameParameter(pcm::Parameter pcmParameter) {
+	match {
+		val umlParameter = retrieve uml::Parameter corresponding to pcmParameter
+	}
+	action {
+		update umlParameter {
+			umlParameter.name = pcmParameter.parameterName
+		}
+		// TODO: pcm::Parameter doesn't inherit NamedElement in the nightly JavaDoc
+		update pcmParameter {
+			pcmParameter.entityName = pcmParameter.parameterName
+		}
+	}
+}
+reaction ChangedParameterDirection {
+	after attribute replaced at pcm::Parameter[modifier__Parameter]
+	call changeParameterDirection(affectedEObject)
+}
+routine changeParameterDirection(pcm::Parameter pcmParameter) {
+	match {
+		val umlParameter = retrieve uml::Parameter corresponding to pcmParameter
+	}
+	action {
+		update umlParameter {
+			umlParameter.direction = PcmToUmlUtil.getUmlParameterDirection(pcmParameter.modifier__Parameter)
 		}
 	}
 }

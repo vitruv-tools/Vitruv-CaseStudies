@@ -3,8 +3,6 @@ package mir.reactions.reactionsUMLTo5_1.umlToPcm;
 import com.google.common.base.Objects;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
@@ -18,8 +16,8 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class ChangedInterfaceOperationTypeReaction extends AbstractReactionRealization {
-  public ChangedInterfaceOperationTypeReaction(final UserInteracting userInteracting) {
+class ChangedParameterTypeReaction extends AbstractReactionRealization {
+  public ChangedParameterTypeReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -30,7 +28,7 @@ class ChangedInterfaceOperationTypeReaction extends AbstractReactionRealization 
     Type oldValue = typedChange.getOldValue();
     Type newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceOperationTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceOperationTypeReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -77,7 +75,9 @@ class ChangedInterfaceOperationTypeReaction extends AbstractReactionRealization 
   }
   
   private boolean checkUserDefinedPrecondition(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue) {
-    return (Objects.equal(affectedEObject.getDirection(), ParameterDirectionKind.RETURN_LITERAL) && (affectedEObject.getOwner() instanceof Operation));
+    ParameterDirectionKind _direction = affectedEObject.getDirection();
+    boolean _notEquals = (!Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL));
+    return _notEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -86,8 +86,7 @@ class ChangedInterfaceOperationTypeReaction extends AbstractReactionRealization 
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      Element _owner = affectedEObject.getOwner();
-      _routinesFacade.changeInterfaceOperationType(((Operation) _owner), affectedEObject);
+      _routinesFacade.changeParameterType(affectedEObject);
     }
   }
 }

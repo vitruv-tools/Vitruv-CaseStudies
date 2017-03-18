@@ -1,0 +1,99 @@
+package mir.routines.pcmToUml;
+
+import java.io.IOException;
+import mir.routines.pcmToUml.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
+import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.Parameter;
+import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
+import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+
+@SuppressWarnings("all")
+public class CreateOperationSignatureParameterRoutine extends AbstractRepairRoutineRealization {
+  private RoutinesFacade actionsFacade;
+  
+  private CreateOperationSignatureParameterRoutine.ActionUserExecution userExecution;
+  
+  private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
+    public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
+      super(reactionExecutionState);
+    }
+    
+    public EObject getElement1(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      return pcmParameter;
+    }
+    
+    public void update0Element(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      pcmParameter.setEntityName(pcmParameter.getParameterName());
+    }
+    
+    public EObject getElement4(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      return pcmParameter;
+    }
+    
+    public void updateUmlParameterElement(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      umlParameter.setName(pcmParameter.getParameterName());
+    }
+    
+    public EObject getElement2(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      return umlOperation;
+    }
+    
+    public EObject getElement3(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      return umlParameter;
+    }
+    
+    public EObject getCorrepondenceSourceUmlOperation(final OperationSignature pcmSignature, final Parameter pcmParameter) {
+      return pcmSignature;
+    }
+    
+    public void update1Element(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      EList<org.eclipse.uml2.uml.Parameter> _ownedParameters = umlOperation.getOwnedParameters();
+      _ownedParameters.add(umlParameter);
+    }
+  }
+  
+  public CreateOperationSignatureParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationSignature pcmSignature, final Parameter pcmParameter) {
+    super(reactionExecutionState, calledBy);
+    this.userExecution = new mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine.ActionUserExecution(getExecutionState(), this);
+    this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
+    this.pcmSignature = pcmSignature;this.pcmParameter = pcmParameter;
+  }
+  
+  private OperationSignature pcmSignature;
+  
+  private Parameter pcmParameter;
+  
+  protected void executeRoutine() throws IOException {
+    getLogger().debug("Called routine CreateOperationSignatureParameterRoutine with input:");
+    getLogger().debug("   OperationSignature: " + this.pcmSignature);
+    getLogger().debug("   Parameter: " + this.pcmParameter);
+    
+    Operation umlOperation = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature, pcmParameter), // correspondence source supplier
+    	Operation.class,
+    	(Operation _element) -> true, // correspondence precondition checker
+    	null);
+    if (umlOperation == null) {
+    	return;
+    }
+    initializeRetrieveElementState(umlOperation);
+    org.eclipse.uml2.uml.Parameter umlParameter = UMLFactoryImpl.eINSTANCE.createParameter();
+    initializeCreateElementState(umlParameter);
+    userExecution.updateUmlParameterElement(pcmSignature, pcmParameter, umlOperation, umlParameter);
+    
+    // val updatedElement userExecution.getElement1(pcmSignature, pcmParameter, umlOperation, umlParameter);
+    userExecution.update0Element(pcmSignature, pcmParameter, umlOperation, umlParameter);
+    
+    // val updatedElement userExecution.getElement2(pcmSignature, pcmParameter, umlOperation, umlParameter);
+    userExecution.update1Element(pcmSignature, pcmParameter, umlOperation, umlParameter);
+    
+    addCorrespondenceBetween(userExecution.getElement3(pcmSignature, pcmParameter, umlOperation, umlParameter), userExecution.getElement4(pcmSignature, pcmParameter, umlOperation, umlParameter), "");
+    
+    postprocessElementStates();
+  }
+}

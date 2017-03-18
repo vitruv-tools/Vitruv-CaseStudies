@@ -24,8 +24,7 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final NamedElement umlElement, final org.palladiosimulator.pcm.core.entity.NamedElement pcmElement) {
-      String _name = umlElement.getName();
-      pcmElement.setEntityName(_name);
+      pcmElement.setEntityName(umlElement.getName());
     }
     
     public EObject getCorrepondenceSourcePcmElement(final NamedElement umlElement) {

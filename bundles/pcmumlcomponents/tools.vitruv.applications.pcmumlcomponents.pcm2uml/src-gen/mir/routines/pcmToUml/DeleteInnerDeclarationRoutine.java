@@ -2,7 +2,6 @@ package mir.routines.pcmToUml;
 
 import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Property;
@@ -24,37 +23,37 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceUmlType(final InnerDeclaration innerDeclaration, final DataType compositeType) {
-      org.palladiosimulator.pcm.repository.DataType _datatype_InnerDeclaration = innerDeclaration.getDatatype_InnerDeclaration();
-      return _datatype_InnerDeclaration;
+    public EObject getCorrepondenceSourceUmlProperty(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final DataType compositeType) {
+      return innerDeclaration;
     }
     
-    public EObject getCorrepondenceSourceCompositeType(final InnerDeclaration innerDeclaration) {
-      CompositeDataType _compositeDataType_InnerDeclaration = innerDeclaration.getCompositeDataType_InnerDeclaration();
-      return _compositeDataType_InnerDeclaration;
+    public EObject getCorrepondenceSourceCompositeType(final CompositeDataType dataType, final InnerDeclaration innerDeclaration) {
+      return dataType;
     }
     
-    public void callRoutine1(final InnerDeclaration innerDeclaration, final DataType compositeType, final DataType umlType, @Extension final RoutinesFacade _routinesFacade) {
-      EList<Property> _ownedAttributes = compositeType.getOwnedAttributes();
-      _ownedAttributes.remove(umlType);
+    public void callRoutine1(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final DataType compositeType, final Property umlProperty, @Extension final RoutinesFacade _routinesFacade) {
+      compositeType.getOwnedAttributes().remove(umlProperty);
     }
   }
   
-  public DeleteInnerDeclarationRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InnerDeclaration innerDeclaration) {
+  public DeleteInnerDeclarationRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CompositeDataType dataType, final InnerDeclaration innerDeclaration) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcmToUml.DeleteInnerDeclarationRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
-    this.innerDeclaration = innerDeclaration;
+    this.dataType = dataType;this.innerDeclaration = innerDeclaration;
   }
+  
+  private CompositeDataType dataType;
   
   private InnerDeclaration innerDeclaration;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteInnerDeclarationRoutine with input:");
+    getLogger().debug("   CompositeDataType: " + this.dataType);
     getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
     
     DataType compositeType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompositeType(innerDeclaration), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceCompositeType(dataType, innerDeclaration), // correspondence source supplier
     	DataType.class,
     	(DataType _element) -> true, // correspondence precondition checker
     	null);
@@ -62,16 +61,16 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	return;
     }
     initializeRetrieveElementState(compositeType);
-    DataType umlType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlType(innerDeclaration, compositeType), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
+    Property umlProperty = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlProperty(dataType, innerDeclaration, compositeType), // correspondence source supplier
+    	Property.class,
+    	(Property _element) -> true, // correspondence precondition checker
     	null);
-    if (umlType == null) {
+    if (umlProperty == null) {
     	return;
     }
-    initializeRetrieveElementState(umlType);
-    userExecution.callRoutine1(innerDeclaration, compositeType, umlType, actionsFacade);
+    initializeRetrieveElementState(umlProperty);
+    userExecution.callRoutine1(dataType, innerDeclaration, compositeType, umlProperty, actionsFacade);
     
     postprocessElementStates();
   }

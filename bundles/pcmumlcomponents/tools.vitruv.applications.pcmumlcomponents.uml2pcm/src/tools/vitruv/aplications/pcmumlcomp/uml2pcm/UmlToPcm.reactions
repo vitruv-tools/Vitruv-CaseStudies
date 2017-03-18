@@ -1,6 +1,9 @@
 import org.eclipse.uml2.uml.PrimitiveType
 import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil
 import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.Operation
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
@@ -13,7 +16,8 @@ execute actions in pcm
 // ############### UNIVERSAL REACTIONS ###############
 
 reaction RenamedElement {
-	after attribute replaced at uml::NamedElement[name]
+	after attribute replaced at uml::NamedElement[name] with
+		(!(affectedEObject instanceof Parameter))
 	call renameElement(affectedEObject)
 }
 
@@ -109,6 +113,26 @@ reaction CreatedPropertyForDataType {
 	call createInnerDeclarationOffProperty(newValue)
 }
 
+reaction ChangedPropertyOwnerForDataType {
+	after element replaced at uml::Property[owner]
+	call changeInnerDeclarationOwner(affectedEObject)
+}
+
+routine changeInnerDeclarationOwner(uml::Property umlProperty) {
+	match {
+		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty
+		val pcmOwner = retrieve pcm::CompositeDataType corresponding to umlProperty.owner
+	}
+	action {
+		//update pcmInnerDeclaration.compositeDataType_InnerDeclaration {
+		//	pcmInnerDeclaration.compositeDataType_InnerDeclaration.innerDeclaration_CompositeDataType -= pcmInnerDeclaration
+		//}
+		update pcmOwner {
+			pcmOwner.innerDeclaration_CompositeDataType += pcmInnerDeclaration
+		}
+	}
+}
+
 routine createInnerDeclarationOffProperty(uml::Property property) {
 	match {
 		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to property.owner
@@ -187,19 +211,103 @@ routine createInterfaceOperation(uml::Operation umlOperation) {
 	}
 }
 
-reaction ChangedInterfaceOperationType {
-	after element replaced at uml::Operation[type] with (newValue instanceof DataType)
-	call changeInterfaceOperationType(affectedEObject, newValue)
+reaction ChangedInterfaceOperationTypeI {
+	after element inserted in uml::Operation[ownedParameter]
+	call addOperationParameter(affectedEObject, newValue)
 }
 
-routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Type umlType) {
+reaction ChangedInterfaceOperationType {
+	after element replaced at uml::Parameter[type] with
+		(affectedEObject.direction == ParameterDirectionKind.RETURN_LITERAL) &&
+		(affectedEObject.owner instanceof Operation)
+	call changeInterfaceOperationType((affectedEObject.owner as Operation), affectedEObject)
+}
+
+routine addOperationParameter(uml::Operation umlOperation, uml::Parameter umlParameter) {
 	match {
-		val pcmOperation = retrieve pcm::OperationSignature corresponding to umlOperation
-		val pcmType = retrieve pcm::DataType corresponding to umlType
+		val pcmSignature = retrieve pcm::Signature corresponding to umlOperation
 	}
 	action {
-		update pcmOperation {
-			pcmOperation.returnType__OperationSignature = pcmType
+		call {
+			if (umlParameter.direction == ParameterDirectionKind.RETURN_LITERAL) {
+				changeInterfaceOperationType(umlOperation, umlParameter)
+			}
+			else {
+				addInterfaceOperationParameter(umlOperation, umlParameter)
+			}
+		}
+	}
+}
+
+routine addInterfaceOperationParameter(uml::Operation umlOperation, uml::Parameter umlParameter) {	
+	match {
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation
+		val pcmType = retrieve pcm::DataType corresponding to umlParameter.type
+	}
+	action {
+		val pcmParameter = create pcm::Parameter and initialize {
+			pcmParameter.parameterName = umlParameter.name
+			pcmParameter.entityName = umlParameter.name
+		}
+		add correspondence between umlParameter and pcmParameter
+	}
+}
+
+routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Parameter umlParameter) {
+	match {
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation
+		val pcmType = retrieve pcm::DataType corresponding to umlParameter.type
+	}
+	action {
+		call println("changing Interface Operation Type")
+		update pcmSignature {
+			pcmSignature.returnType__OperationSignature = pcmType
+		}
+	}
+}
+
+reaction ChangedParameterType {
+	after element replaced at uml::Parameter[type] with affectedEObject.direction != ParameterDirectionKind.RETURN_LITERAL
+	call changeParameterType(affectedEObject)
+}
+routine changeParameterType(uml::Parameter umlParameter) {
+	match {
+		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter
+		val pcmType = retrieve pcm::DataType corresponding to umlParameter.type
+	}
+	action {
+		update pcmParameter {
+			pcmParameter.dataType__Parameter = pcmType
+		}
+	}
+}
+reaction ChangedParameterName {
+	after attribute replaced at uml::Parameter[name]
+	call changeParameterName(affectedEObject)
+}
+routine changeParameterName(uml::Parameter umlParameter) {
+	match {
+		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter
+	}
+	action {
+		update pcmParameter {
+			pcmParameter.parameterName = umlParameter.name
+			pcmParameter.entityName = umlParameter.name
+		}
+	}
+}
+reaction ChangedParameterDirection {
+	after attribute replaced at uml::Parameter[direction] with
+		(newValue != ParameterDirectionKind.RETURN_LITERAL)
+	call changeParameterDirection(affectedEObject)
+}
+routine changeParameterDirection(uml::Parameter umlParameter) {
+	match {
+		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter
+	}
+	action {
+		update pcmParameter {
+			pcmParameter.modifier__Parameter = UmlToPcmUtil.getPcmParameterModifier(umlParameter.direction)
 		}
 	}
 }

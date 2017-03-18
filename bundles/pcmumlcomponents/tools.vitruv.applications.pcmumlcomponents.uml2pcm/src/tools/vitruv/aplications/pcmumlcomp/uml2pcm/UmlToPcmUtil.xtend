@@ -5,6 +5,8 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.palladiosimulator.pcm.repository.CompositeDataType
+import org.palladiosimulator.pcm.repository.ParameterModifier
+import org.eclipse.uml2.uml.ParameterDirectionKind
 
 class UmlToPcmUtil {
 	
@@ -15,10 +17,21 @@ class UmlToPcmUtil {
 			return PrimitiveTypeEnum.INT
 		if (typeName == "Real")
 			return PrimitiveTypeEnum.DOUBLE
+		if (typeName == "Boolean")
+			return PrimitiveTypeEnum.BOOL
 		val pcmType = PrimitiveTypeEnum.getByName(typeName.toUpperCase())
-		if (pcmType == null)
+		if (pcmType === null)
 			return PrimitiveTypeEnum.STRING
 		return pcmType
+	}
+	
+	def static ParameterModifier getPcmParameterModifier(ParameterDirectionKind parameterDirection) {
+		switch (parameterDirection) {
+			case IN_LITERAL: return ParameterModifier.IN
+			case OUT_LITERAL: return ParameterModifier.OUT
+			case INOUT_LITERAL: return ParameterModifier.INOUT
+			default: return ParameterModifier.NONE
+		}
 	}
 	
 	// TODO: probably just don't create CollectionDataTypes

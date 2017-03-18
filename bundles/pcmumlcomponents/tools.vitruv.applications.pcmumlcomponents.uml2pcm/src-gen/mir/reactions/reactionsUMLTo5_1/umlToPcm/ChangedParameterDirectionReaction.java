@@ -1,9 +1,10 @@
 package mir.reactions.reactionsUMLTo5_1.umlToPcm;
 
+import com.google.common.base.Objects;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -14,19 +15,19 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class RenamedElementReaction extends AbstractReactionRealization {
-  public RenamedElementReaction(final UserInteracting userInteracting) {
+class ChangedParameterDirectionReaction extends AbstractReactionRealization {
+  public ChangedParameterDirectionReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<NamedElement, String> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    NamedElement affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind> typedChange = (ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind>)change;
+    Parameter affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    ParameterDirectionKind oldValue = typedChange.getOldValue();
+    ParameterDirectionKind newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLTo5_1.umlToPcm.RenamedElementReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.RenamedElementReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterDirectionReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterDirectionReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -35,17 +36,17 @@ class RenamedElementReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<NamedElement, String> relevantChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof NamedElement)) {
+    ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind> relevantChange = (ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("name")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("direction")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof ParameterDirectionKind)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof ParameterDirectionKind)) {
     	return false;
     }
     return true;
@@ -60,11 +61,11 @@ class RenamedElementReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEAttribute<NamedElement, String> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    NamedElement affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind> typedChange = (ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind>)change;
+    Parameter affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    ParameterDirectionKind oldValue = typedChange.getOldValue();
+    ParameterDirectionKind newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }
@@ -72,8 +73,9 @@ class RenamedElementReaction extends AbstractReactionRealization {
     return true;
   }
   
-  private boolean checkUserDefinedPrecondition(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
-    return (!(affectedEObject instanceof Parameter));
+  private boolean checkUserDefinedPrecondition(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue) {
+    boolean _notEquals = (!Objects.equal(newValue, ParameterDirectionKind.RETURN_LITERAL));
+    return _notEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -81,8 +83,8 @@ class RenamedElementReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.renameElement(affectedEObject);
+    public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeParameterDirection(affectedEObject);
     }
   }
 }

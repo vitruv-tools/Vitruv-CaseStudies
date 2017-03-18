@@ -9,10 +9,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class RenameUmlElementRoutine extends AbstractRepairRoutineRealization {
+public class DeleteElementRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private RenameUmlElementRoutine.ActionUserExecution userExecution;
+  private DeleteElementRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
@@ -23,18 +23,14 @@ public class RenameUmlElementRoutine extends AbstractRepairRoutineRealization {
       return umlElement;
     }
     
-    public void update0Element(final NamedElement pcmElement, final org.eclipse.uml2.uml.NamedElement umlElement) {
-      umlElement.setName(pcmElement.getEntityName());
-    }
-    
     public EObject getCorrepondenceSourceUmlElement(final NamedElement pcmElement) {
       return pcmElement;
     }
   }
   
-  public RenameUmlElementRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement pcmElement) {
+  public DeleteElementRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement pcmElement) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.pcmToUml.RenameUmlElementRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.pcmToUml.DeleteElementRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.pcmElement = pcmElement;
   }
@@ -42,7 +38,7 @@ public class RenameUmlElementRoutine extends AbstractRepairRoutineRealization {
   private NamedElement pcmElement;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine RenameUmlElementRoutine with input:");
+    getLogger().debug("Called routine DeleteElementRoutine with input:");
     getLogger().debug("   NamedElement: " + this.pcmElement);
     
     org.eclipse.uml2.uml.NamedElement umlElement = getCorrespondingElement(
@@ -54,8 +50,7 @@ public class RenameUmlElementRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     initializeRetrieveElementState(umlElement);
-    // val updatedElement userExecution.getElement1(pcmElement, umlElement);
-    userExecution.update0Element(pcmElement, umlElement);
+    deleteObject(userExecution.getElement1(pcmElement, umlElement));
     
     postprocessElementStates();
   }

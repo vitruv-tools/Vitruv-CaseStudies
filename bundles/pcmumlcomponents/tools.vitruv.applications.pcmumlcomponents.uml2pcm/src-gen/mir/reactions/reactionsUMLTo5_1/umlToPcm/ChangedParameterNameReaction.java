@@ -2,7 +2,6 @@ package mir.reactions.reactionsUMLTo5_1.umlToPcm;
 
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -14,19 +13,19 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class RenamedElementReaction extends AbstractReactionRealization {
-  public RenamedElementReaction(final UserInteracting userInteracting) {
+class ChangedParameterNameReaction extends AbstractReactionRealization {
+  public ChangedParameterNameReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<NamedElement, String> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    NamedElement affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<Parameter, String> typedChange = (ReplaceSingleValuedEAttribute<Parameter, String>)change;
+    Parameter affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
     String oldValue = typedChange.getOldValue();
     String newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLTo5_1.umlToPcm.RenamedElementReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.RenamedElementReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterNameReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterNameReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -35,8 +34,8 @@ class RenamedElementReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<NamedElement, String> relevantChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof NamedElement)) {
+    ReplaceSingleValuedEAttribute<Parameter, String> relevantChange = (ReplaceSingleValuedEAttribute<Parameter, String>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("name")) {
@@ -60,20 +59,8 @@ class RenamedElementReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEAttribute<NamedElement, String> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    NamedElement affectedEObject = typedChange.getAffectedEObject();
-    EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
-    	return false;
-    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
-  }
-  
-  private boolean checkUserDefinedPrecondition(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
-    return (!(affectedEObject instanceof Parameter));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -81,8 +68,8 @@ class RenamedElementReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.renameElement(affectedEObject);
+    public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeParameterName(affectedEObject);
     }
   }
 }

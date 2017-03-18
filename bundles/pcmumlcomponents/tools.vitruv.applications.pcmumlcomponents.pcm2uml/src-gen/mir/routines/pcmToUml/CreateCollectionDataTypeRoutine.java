@@ -51,8 +51,7 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updateUmlTypeElement(final CollectionDataType dataType, final Model umlModel, final DataType umlType) {
-      String _entityName = dataType.getEntityName();
-      umlType.setName(_entityName);
+      umlType.setName(dataType.getEntityName());
     }
   }
   

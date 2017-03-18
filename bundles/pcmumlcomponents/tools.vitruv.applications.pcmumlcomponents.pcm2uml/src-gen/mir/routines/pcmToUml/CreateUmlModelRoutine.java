@@ -30,10 +30,9 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUmlModelElement(final Repository pcmRepository, final Model umlModel) {
+      umlModel.setName(pcmRepository.getEntityName());
       String _entityName = pcmRepository.getEntityName();
-      umlModel.setName(_entityName);
-      String _entityName_1 = pcmRepository.getEntityName();
-      String _plus = ("model/" + _entityName_1);
+      String _plus = ("model/" + _entityName);
       String _plus_1 = (_plus + ".uml");
       this.persistProjectRelative(pcmRepository, umlModel, _plus_1);
     }

@@ -22,8 +22,13 @@ public class Executor5_1ToUML extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCollectionDataTypeTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCollectionDataTypeTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.ChangedCollectionDataTypeTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.ChangedCollectionDataTypeTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmInterfaceReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.DeletedPcmInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.DeletedPcmInterfaceReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedOperationInterfaceSignatureReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedOperationInterfaceSignatureReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.ChangedOperationSignatureTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.ChangedOperationSignatureTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.DeletedOperationInterfaceSignatureReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.DeletedOperationInterfaceSignatureReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedOperationSignatureParameterReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedOperationSignatureParameterReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.RenamedParameterReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.RenamedParameterReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.ChangedParameterDirectionReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.ChangedParameterDirectionReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction(userInteracting));
   }
 }

@@ -7,6 +7,8 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil
 
 import static org.junit.Assert.*
+import org.apache.log4j.Logger
+import org.apache.log4j.Level
 
 class DataTypesTest extends AbstractUmlPcmTest {
 	
@@ -16,13 +18,6 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		primitiveType.name = "Boolean"
 		rootElement.packagedElements += primitiveType
 		saveAndSynchronizeChanges(rootElement)
-		println("testPrimitiveTypeCreate")
-		println(primitiveType)
-		println(correspondenceModel)
-		println(correspondenceModel.getCorrespondingEObjects(#[primitiveType]))
-		println(correspondenceModel.getCorrespondingEObjects(#[primitiveType]) == null)
-		println(correspondenceModel.getCorrespondingEObjects(#[primitiveType]).size)
-		println(correspondenceModel.getCorrespondingEObjects(#[primitiveType]).flatten)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[primitiveType]).flatten
 		assertEquals(1, correspondingElements.length)
 		val pcmType = correspondingElements.get(0)
@@ -47,6 +42,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testDataTypeAddProperty() {
+		Logger.rootLogger.level = Level.ALL
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = "t2"
 		rootElement.packagedElements += dataType
@@ -54,11 +50,15 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val propertyType = UMLFactory.eINSTANCE.createPrimitiveType()
 		propertyType.name = "Integer"
 		rootElement.packagedElements += propertyType
-		dataType.createOwnedAttribute(propertyName, propertyType)
+		val property = dataType.createOwnedAttribute(propertyName, propertyType)
 		saveAndSynchronizeChanges(rootElement)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[dataType]).flatten
 		val pcmType = (correspondingElements.get(0) as CompositeDataType)
 		assertEquals(1, pcmType.innerDeclaration_CompositeDataType.length)
+		println("[testDataTypeAddProperty]")
+		println(pcmType.innerDeclaration_CompositeDataType.get(0))
+		println(pcmType.innerDeclaration_CompositeDataType.get(0).entityName)
+		println(property.name)
 		assertEquals(propertyName, pcmType.innerDeclaration_CompositeDataType.get(0).entityName)
 	}
 	

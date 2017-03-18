@@ -8,7 +8,6 @@ import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
@@ -46,9 +45,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void updatePcmTypeElement(final PrimitiveType umlType, final Repository pcmRepository, final PrimitiveDataType pcmType) {
-      String _name = umlType.getName();
-      PrimitiveTypeEnum _pcmPrimitiveType = UmlToPcmUtil.getPcmPrimitiveType(_name);
-      pcmType.setType(_pcmPrimitiveType);
+      pcmType.setType(UmlToPcmUtil.getPcmPrimitiveType(umlType.getName()));
     }
     
     public EObject getElement3(final PrimitiveType umlType, final Repository pcmRepository, final PrimitiveDataType pcmType) {

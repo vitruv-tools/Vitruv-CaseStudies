@@ -48,8 +48,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void updateUmlTypeElement(final CompositeDataType dataType, final Model umlModel, final DataType umlType) {
-      String _entityName = dataType.getEntityName();
-      umlType.setName(_entityName);
+      umlType.setName(dataType.getEntityName());
     }
   }
   

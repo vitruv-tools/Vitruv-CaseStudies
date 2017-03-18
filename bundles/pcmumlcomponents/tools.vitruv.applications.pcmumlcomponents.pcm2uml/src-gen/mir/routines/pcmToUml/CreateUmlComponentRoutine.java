@@ -43,8 +43,7 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUmlComponentElement(final RepositoryComponent pcmComponent, final Model umlModel, final Component umlComponent) {
-      String _entityName = pcmComponent.getEntityName();
-      umlComponent.setName(_entityName);
+      umlComponent.setName(pcmComponent.getEntityName());
     }
     
     public EObject getCorrepondenceSourceUmlModel(final RepositoryComponent pcmComponent) {

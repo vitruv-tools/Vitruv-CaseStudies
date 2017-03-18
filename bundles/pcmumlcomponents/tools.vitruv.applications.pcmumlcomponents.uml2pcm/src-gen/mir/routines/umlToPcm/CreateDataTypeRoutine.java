@@ -43,8 +43,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updatePcmTypeElement(final DataType umlType, final Repository pcmRepository, final CompositeDataType pcmType) {
-      String _name = umlType.getName();
-      pcmType.setEntityName(_name);
+      pcmType.setEntityName(umlType.getName());
     }
     
     public EObject getElement3(final DataType umlType, final Repository pcmRepository, final CompositeDataType pcmType) {

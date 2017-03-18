@@ -7,6 +7,7 @@ import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
@@ -22,6 +23,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   
   public void renameUmlElement(final NamedElement pcmElement) {
     mir.routines.pcmToUml.RenameUmlElementRoutine effect = new mir.routines.pcmToUml.RenameUmlElementRoutine(this.executionState, calledBy,
+    	pcmElement);
+    effect.applyRoutine();
+  }
+  
+  public void deleteElement(final NamedElement pcmElement) {
+    mir.routines.pcmToUml.DeleteElementRoutine effect = new mir.routines.pcmToUml.DeleteElementRoutine(this.executionState, calledBy,
     	pcmElement);
     effect.applyRoutine();
   }
@@ -56,9 +63,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void deleteInnerDeclaration(final InnerDeclaration innerDeclaration) {
+  public void deleteInnerDeclaration(final CompositeDataType dataType, final InnerDeclaration innerDeclaration) {
     mir.routines.pcmToUml.DeleteInnerDeclarationRoutine effect = new mir.routines.pcmToUml.DeleteInnerDeclarationRoutine(this.executionState, calledBy,
-    	innerDeclaration);
+    	dataType, innerDeclaration);
     effect.applyRoutine();
   }
   
@@ -101,6 +108,24 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void changeUmlOperationType(final OperationSignature pcmSignature) {
     mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine effect = new mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine(this.executionState, calledBy,
     	pcmSignature);
+    effect.applyRoutine();
+  }
+  
+  public void createOperationSignatureParameter(final OperationSignature pcmSignature, final Parameter pcmParameter) {
+    mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine effect = new mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine(this.executionState, calledBy,
+    	pcmSignature, pcmParameter);
+    effect.applyRoutine();
+  }
+  
+  public void renameParameter(final Parameter pcmParameter) {
+    mir.routines.pcmToUml.RenameParameterRoutine effect = new mir.routines.pcmToUml.RenameParameterRoutine(this.executionState, calledBy,
+    	pcmParameter);
+    effect.applyRoutine();
+  }
+  
+  public void changeParameterDirection(final Parameter pcmParameter) {
+    mir.routines.pcmToUml.ChangeParameterDirectionRoutine effect = new mir.routines.pcmToUml.ChangeParameterDirectionRoutine(this.executionState, calledBy,
+    	pcmParameter);
     effect.applyRoutine();
   }
   

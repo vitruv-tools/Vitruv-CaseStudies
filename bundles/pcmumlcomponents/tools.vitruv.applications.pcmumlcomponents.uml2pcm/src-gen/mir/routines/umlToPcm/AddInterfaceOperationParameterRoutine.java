@@ -6,31 +6,30 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
-import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRealization {
+public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private ChangeInterfaceOperationTypeRoutine.ActionUserExecution userExecution;
+  private AddInterfaceOperationParameterRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType) {
-      return pcmSignature;
+    public EObject getElement1(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
+      return umlParameter;
     }
     
-    public void update0Element(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType) {
-      pcmSignature.setReturnType__OperationSignature(pcmType);
+    public EObject getElement2(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
+      return pcmParameter;
     }
     
     public EObject getCorrepondenceSourcePcmType(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature) {
@@ -42,14 +41,15 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
       return umlOperation;
     }
     
-    public void callRoutine1(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType, @Extension final RoutinesFacade _routinesFacade) {
-      InputOutput.<String>println("changing Interface Operation Type");
+    public void updatePcmParameterElement(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
+      pcmParameter.setParameterName(umlParameter.getName());
+      pcmParameter.setEntityName(umlParameter.getName());
     }
   }
   
-  public ChangeInterfaceOperationTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation umlOperation, final Parameter umlParameter) {
+  public AddInterfaceOperationParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation umlOperation, final Parameter umlParameter) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.umlToPcm.ChangeInterfaceOperationTypeRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.umlToPcm.AddInterfaceOperationParameterRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.umlToPcm.RoutinesFacade(getExecutionState(), this);
     this.umlOperation = umlOperation;this.umlParameter = umlParameter;
   }
@@ -59,7 +59,7 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
   private Parameter umlParameter;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine ChangeInterfaceOperationTypeRoutine with input:");
+    getLogger().debug("Called routine AddInterfaceOperationParameterRoutine with input:");
     getLogger().debug("   Operation: " + this.umlOperation);
     getLogger().debug("   Parameter: " + this.umlParameter);
     
@@ -81,10 +81,11 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     	return;
     }
     initializeRetrieveElementState(pcmType);
-    userExecution.callRoutine1(umlOperation, umlParameter, pcmSignature, pcmType, actionsFacade);
+    org.palladiosimulator.pcm.repository.Parameter pcmParameter = RepositoryFactoryImpl.eINSTANCE.createParameter();
+    initializeCreateElementState(pcmParameter);
+    userExecution.updatePcmParameterElement(umlOperation, umlParameter, pcmSignature, pcmType, pcmParameter);
     
-    // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmType);
-    userExecution.update0Element(umlOperation, umlParameter, pcmSignature, pcmType);
+    addCorrespondenceBetween(userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmType, pcmParameter), userExecution.getElement2(umlOperation, umlParameter, pcmSignature, pcmType, pcmParameter), "");
     
     postprocessElementStates();
   }
