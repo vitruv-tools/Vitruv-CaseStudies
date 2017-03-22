@@ -1,10 +1,12 @@
 package mir.routines.javaToUml;
 
 import java.io.IOException;
+import java.util.Iterator;
 import mir.routines.javaToUml.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.classifiers.Interface;
+import tools.vitruv.applications.umljava.util.UmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -29,20 +31,9 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Interface uI) {
-      int i = 0;
       EList<org.eclipse.uml2.uml.Interface> _implementedInterfaces = uClass.getImplementedInterfaces();
-      for (final org.eclipse.uml2.uml.Interface inf : _implementedInterfaces) {
-        {
-          String _name = inf.getName();
-          String _name_1 = uI.getName();
-          boolean _equals = _name.equals(_name_1);
-          if (_equals) {
-            EList<org.eclipse.uml2.uml.Interface> _implementedInterfaces_1 = uClass.getImplementedInterfaces();
-            _implementedInterfaces_1.remove(i);
-          }
-          i++;
-        }
-      }
+      Iterator<org.eclipse.uml2.uml.Interface> _iterator = _implementedInterfaces.iterator();
+      UmlUtil.removeClassifierFromIterator(_iterator, uI);
     }
     
     public EObject getCorrepondenceSourceUI(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass) {

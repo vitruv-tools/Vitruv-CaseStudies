@@ -3,7 +3,11 @@ package mir.reactions.reactionsJavaToUML.javaToUml;
 import mir.routines.javaToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.modifiers.Final;
+import org.emftext.language.java.members.Field;
+import org.emftext.language.java.modifiers.Modifier;
+import org.emftext.language.java.modifiers.Private;
+import org.emftext.language.java.modifiers.Protected;
+import org.emftext.language.java.modifiers.Public;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -14,18 +18,18 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class JavaClassMadeNonFinalReaction extends AbstractReactionRealization {
-  public JavaClassMadeNonFinalReaction(final UserInteracting userInteracting) {
+class JavaAttributeMadePackagePrivateReaction extends AbstractReactionRealization {
+  public JavaAttributeMadePackagePrivateReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Final> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Final>)change).getRemoveChange();
-    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<Field, Modifier> typedChange = ((RemoveAndDeleteNonRoot<Field, Modifier>)change).getRemoveChange();
+    Field affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Final oldValue = typedChange.getOldValue();
+    Modifier oldValue = typedChange.getOldValue();
     mir.routines.javaToUml.RoutinesFacade routinesFacade = new mir.routines.javaToUml.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToUML.javaToUml.JavaClassMadeNonFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUML.javaToUml.JavaClassMadeNonFinalReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToUML.javaToUml.JavaAttributeMadePackagePrivateReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUML.javaToUml.JavaAttributeMadePackagePrivateReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
@@ -34,14 +38,14 @@ class JavaClassMadeNonFinalReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Final> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Final>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
+    RemoveEReference<Field, Modifier> relevantChange = ((RemoveAndDeleteNonRoot<Field, Modifier>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof Field)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Final)) {
+    if (!(relevantChange.getOldValue() instanceof Modifier)) {
     	return false;
     }
     return true;
@@ -56,8 +60,19 @@ class JavaClassMadeNonFinalReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    RemoveEReference<Field, Modifier> typedChange = ((RemoveAndDeleteNonRoot<Field, Modifier>)change).getRemoveChange();
+    Field affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Modifier oldValue = typedChange.getOldValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final Field affectedEObject, final EReference affectedFeature, final Modifier oldValue) {
+    return (((oldValue instanceof Private) || (oldValue instanceof Public)) || (oldValue instanceof Protected));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -65,8 +80,8 @@ class JavaClassMadeNonFinalReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Final oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setUmlClassFinal(affectedEObject, Integer.valueOf(0));
+    public void callRoutine1(final Field affectedEObject, final EReference affectedFeature, final Modifier oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeUmlAttributeVisibility(affectedEObject, null);
     }
   }
 }

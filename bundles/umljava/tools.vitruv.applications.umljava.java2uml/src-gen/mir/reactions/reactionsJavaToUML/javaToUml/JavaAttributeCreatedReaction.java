@@ -66,6 +66,7 @@ class JavaAttributeCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
+      System.out.println("JavaAttr Created Reaction");
       _routinesFacade.createUmlAttribute(affectedEObject, newValue);
     }
   }

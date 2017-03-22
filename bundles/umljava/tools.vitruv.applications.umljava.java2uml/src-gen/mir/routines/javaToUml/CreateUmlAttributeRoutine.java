@@ -3,6 +3,7 @@ package mir.routines.javaToUml;
 import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.javaToUml.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
@@ -33,6 +34,11 @@ public class CreateUmlAttributeRoutine extends AbstractRepairRoutineRealization 
       return jClass;
     }
     
+    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
+      EList<Property> _ownedAttributes = uClass.getOwnedAttributes();
+      _ownedAttributes.add(uAttr);
+    }
+    
     public EObject getCorrepondenceSourceUType(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass) {
       TypeReference _typeReference = jAttr.getTypeReference();
       Type _target = _typeReference.getTarget();
@@ -41,6 +47,10 @@ public class CreateUmlAttributeRoutine extends AbstractRepairRoutineRealization 
     
     public EObject getElement2(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
       return jAttr;
+    }
+    
+    public EObject getElement3(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
+      return uClass;
     }
     
     public void updateUAttrElement(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
@@ -95,6 +105,9 @@ public class CreateUmlAttributeRoutine extends AbstractRepairRoutineRealization 
     userExecution.updateUAttrElement(jClass, jAttr, uClass, uType, uAttr);
     
     addCorrespondenceBetween(userExecution.getElement1(jClass, jAttr, uClass, uType, uAttr), userExecution.getElement2(jClass, jAttr, uClass, uType, uAttr), "");
+    
+    // val updatedElement userExecution.getElement3(jClass, jAttr, uClass, uType, uAttr);
+    userExecution.update0Element(jClass, jAttr, uClass, uType, uAttr);
     
     postprocessElementStates();
   }

@@ -1,13 +1,14 @@
 package mir.routines.javaToUml;
 
 import java.io.IOException;
+import java.util.Iterator;
 import mir.routines.javaToUml.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
-import org.emftext.language.java.types.Type;
-import org.emftext.language.java.types.TypeReference;
+import tools.vitruv.applications.umljava.util.UmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -23,38 +24,26 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Interface jI, final TypeReference jSuper, final org.eclipse.uml2.uml.Interface uI, final org.eclipse.uml2.uml.Interface uSuper) {
+    public EObject getElement1(final Interface jI, final ConcreteClassifier jSuper, final org.eclipse.uml2.uml.Interface uI, final org.eclipse.uml2.uml.Interface uSuper) {
       return uI;
     }
     
-    public void update0Element(final Interface jI, final TypeReference jSuper, final org.eclipse.uml2.uml.Interface uI, final org.eclipse.uml2.uml.Interface uSuper) {
-      int i = 0;
+    public void update0Element(final Interface jI, final ConcreteClassifier jSuper, final org.eclipse.uml2.uml.Interface uI, final org.eclipse.uml2.uml.Interface uSuper) {
       EList<Classifier> _generals = uI.getGenerals();
-      for (final Classifier inf : _generals) {
-        {
-          String _name = inf.getName();
-          String _name_1 = uI.getName();
-          boolean _equals = _name.equals(_name_1);
-          if (_equals) {
-            EList<Classifier> _generals_1 = uI.getGenerals();
-            _generals_1.remove(i);
-          }
-          i++;
-        }
-      }
+      Iterator<Classifier> _iterator = _generals.iterator();
+      UmlUtil.removeClassifierFromIterator(_iterator, uSuper);
     }
     
-    public EObject getCorrepondenceSourceUI(final Interface jI, final TypeReference jSuper) {
+    public EObject getCorrepondenceSourceUI(final Interface jI, final ConcreteClassifier jSuper) {
       return jI;
     }
     
-    public EObject getCorrepondenceSourceUSuper(final Interface jI, final TypeReference jSuper, final org.eclipse.uml2.uml.Interface uI) {
-      Type _target = jSuper.getTarget();
-      return _target;
+    public EObject getCorrepondenceSourceUSuper(final Interface jI, final ConcreteClassifier jSuper, final org.eclipse.uml2.uml.Interface uI) {
+      return jSuper;
     }
   }
   
-  public RemoveUmlSuperInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface jI, final TypeReference jSuper) {
+  public RemoveUmlSuperInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface jI, final ConcreteClassifier jSuper) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUml.RemoveUmlSuperInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUml.RoutinesFacade(getExecutionState(), this);
@@ -63,12 +52,12 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
   
   private Interface jI;
   
-  private TypeReference jSuper;
+  private ConcreteClassifier jSuper;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveUmlSuperInterfaceRoutine with input:");
     getLogger().debug("   Interface: " + this.jI);
-    getLogger().debug("   TypeReference: " + this.jSuper);
+    getLogger().debug("   ConcreteClassifier: " + this.jSuper);
     
     org.eclipse.uml2.uml.Interface uI = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUI(jI, jSuper), // correspondence source supplier

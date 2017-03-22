@@ -3,7 +3,10 @@ package mir.reactions.reactionsJavaToUML.javaToUml;
 import mir.routines.javaToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
+import org.emftext.language.java.types.TypeReference;
+import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -19,10 +22,10 @@ class JavaClassImplementRemovedReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Interface> typedChange = (RemoveEReference<org.emftext.language.java.classifiers.Class, Interface>)change;
+    RemoveEReference<org.emftext.language.java.classifiers.Class, TypeReference> typedChange = (RemoveEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Interface oldValue = typedChange.getOldValue();
+    TypeReference oldValue = typedChange.getOldValue();
     mir.routines.javaToUml.RoutinesFacade routinesFacade = new mir.routines.javaToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUML.javaToUml.JavaClassImplementRemovedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUML.javaToUml.JavaClassImplementRemovedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -33,14 +36,14 @@ class JavaClassImplementRemovedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Interface> relevantChange = (RemoveEReference<org.emftext.language.java.classifiers.Class, Interface>)change;
+    RemoveEReference<org.emftext.language.java.classifiers.Class, TypeReference> relevantChange = (RemoveEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("implements")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Interface)) {
+    if (!(relevantChange.getOldValue() instanceof TypeReference)) {
     	return false;
     }
     return true;
@@ -64,8 +67,9 @@ class JavaClassImplementRemovedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Interface oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.removeUmlClassImplement(affectedEObject, oldValue);
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      ConcreteClassifier _classifierfromTypeRef = JavaUtil.getClassifierfromTypeRef(oldValue);
+      _routinesFacade.removeUmlClassImplement(affectedEObject, ((Interface) _classifierfromTypeRef));
     }
   }
 }

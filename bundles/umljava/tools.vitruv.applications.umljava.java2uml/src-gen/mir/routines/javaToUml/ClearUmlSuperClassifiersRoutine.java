@@ -4,7 +4,7 @@ import java.io.IOException;
 import mir.routines.javaToUml.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Generalization;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -30,8 +30,8 @@ public class ClearUmlSuperClassifiersRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final ConcreteClassifier jClass, final org.eclipse.uml2.uml.Class uClass) {
-      EList<Classifier> _generals = uClass.getGenerals();
-      _generals.clear();
+      EList<Generalization> _generalizations = uClass.getGeneralizations();
+      _generalizations.clear();
     }
   }
   

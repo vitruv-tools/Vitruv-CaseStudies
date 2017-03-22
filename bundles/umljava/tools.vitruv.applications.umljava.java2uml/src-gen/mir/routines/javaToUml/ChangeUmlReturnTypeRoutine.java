@@ -3,11 +3,14 @@ package mir.routines.javaToUml;
 import java.io.IOException;
 import mir.routines.javaToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
+import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -23,12 +26,18 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Method jMeth, final TypeReference jType, final Operation uMeth) {
+    public EObject getCorrepondenceSourceCustomType(final Method jMeth, final TypeReference jType, final Operation uMeth) {
+      ConcreteClassifier _classifierfromTypeRef = JavaUtil.getClassifierfromTypeRef(jType);
+      return _classifierfromTypeRef;
+    }
+    
+    public EObject getElement1(final Method jMeth, final TypeReference jType, final Operation uMeth, final org.eclipse.uml2.uml.Class customType) {
       return uMeth;
     }
     
-    public void update0Element(final Method jMeth, final TypeReference jType, final Operation uMeth) {
-      Type _umlType = JavaToUmlHelper.getUmlType(jType);
+    public void update0Element(final Method jMeth, final TypeReference jType, final Operation uMeth, final org.eclipse.uml2.uml.Class customType) {
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel);
+      Type _umlType = JavaToUmlHelper.getUmlType(jType, customType, _umlModel);
       uMeth.setType(_umlType);
     }
     
@@ -62,8 +71,14 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     	return;
     }
     initializeRetrieveElementState(uMeth);
-    // val updatedElement userExecution.getElement1(jMeth, jType, uMeth);
-    userExecution.update0Element(jMeth, jType, uMeth);
+    org.eclipse.uml2.uml.Class customType = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceCustomType(jMeth, jType, uMeth), // correspondence source supplier
+    	org.eclipse.uml2.uml.Class.class,
+    	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
+    	null);
+    initializeRetrieveElementState(customType);
+    // val updatedElement userExecution.getElement1(jMeth, jType, uMeth, customType);
+    userExecution.update0Element(jMeth, jType, uMeth, customType);
     
     postprocessElementStates();
   }

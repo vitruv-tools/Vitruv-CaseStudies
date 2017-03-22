@@ -67,7 +67,7 @@ class JavaMethodMadePublicReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final ClassMethod affectedEObject, final EReference affectedFeature, final Public newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeUmlMethodVisibility(newValue, affectedEObject);
+      _routinesFacade.changeUmlMethodVisibility(affectedEObject, newValue);
     }
   }
 }

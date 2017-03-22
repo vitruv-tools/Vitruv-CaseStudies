@@ -50,6 +50,7 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
       final Model uModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel);
       EList<PackageableElement> _packagedElements = uModel.getPackagedElements();
       _packagedElements.add(uClass);
+      this.persistProjectRelative(jClass, uModel, "model/model.uml");
     }
   }
   

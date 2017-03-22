@@ -1,9 +1,12 @@
-import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*;
-import static extension tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import org.eclipse.uml2.uml.VisibilityKind
+import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import org.emftext.language.java.modifiers.*;
+import org.emftext.language.java.classifiers.Interface;
 import org.apache.log4j.PropertyConfigurator
+import static tools.vitruv.applications.umljava.util.JavaUtil.*;
+import static tools.vitruv.applications.umljava.util.UmlUtil.*;
 
-import org.eclipse.uml2.uml.Interface
-import org.eclipse.uml2.uml.Classifier
+//import tools.vitruv.applications.umljava.util.JavaVisibility;
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -15,6 +18,7 @@ execute actions in uml
 reaction JavaClassCreated {
     after element java::Class created and inserted in java::CompilationUnit[classifiers]
     call createUmlClass(newValue)
+
 }
 
 routine createUmlClass(java::Class jClass) {
@@ -25,9 +29,31 @@ routine createUmlClass(java::Class jClass) {
         call {
             val uModel = getUmlModel(correspondenceModel)
             uModel.packagedElements += uClass;
+            persistProjectRelative(jClass, uModel, "model/model.uml")
         }
         add correspondence between uClass and jClass
         add correspondence between uClass and jClass.eContainer //TODO ist das die CompuUnit?
+    }
+}
+
+reaction JavaInterfaceCreated {
+    after element java::Interface created and inserted in java::CompilationUnit[classifiers]
+    call createUmlInterface(newValue)
+}
+
+routine createUmlInterface(java::Interface jI) {
+    action {
+        val uI = create uml::Interface and initialize {
+            uI.name = jI.name;
+            uI.visibility = VisibilityKind.PUBLIC_LITERAL
+        }
+        call {
+            val uModel = getUmlModel(correspondenceModel)
+            uModel.packagedElements += uI;
+            persistProjectRelative(jI, uModel, "model/model.uml")
+        }
+        add correspondence between uI and jI
+        add correspondence between uI and jI.eContainer
     }
 }
 
@@ -68,6 +94,7 @@ routine deleteUmlClassifier(java::ConcreteClassifier jClass, java::CompilationUn
     }
 }
 
+
 reaction JavaClassMadePublic {
     after element java::Public created and inserted in java::Class[annotationsAndModifiers]
     call changeUmlClassVisibility(affectedEObject, newValue)
@@ -79,6 +106,14 @@ reaction JavaClassMadePrivate {
 reaction JavaClassMadeProtected {
     after element java::Protected created and inserted in java::Class[annotationsAndModifiers]
     call changeUmlClassVisibility(affectedEObject, newValue)
+}
+
+reaction JavaClassMadePackagePrivate {
+    after element java::Modifier deleted and removed from java::Class[annotationsAndModifiers]
+    with oldValue instanceof Private
+    || oldValue instanceof Public
+    || oldValue instanceof Protected
+    call changeUmlClassVisibility(affectedEObject, null)
 }
 
 routine changeUmlClassVisibility(java::Class jClass, java::Modifier mod) {
@@ -126,7 +161,7 @@ reaction JavaSuperClassChanged {
     after element java::TypeReference replaced at java::Class[^extends]
     call  {
         clearUmlSuperClassifiers(affectedEObject)
-        addUmlSuperClassifier(affectedEObject, newValue)
+        addUmlSuperClassifier(affectedEObject, getClassifierfromTypeRef(newValue))
     }
 }
 
@@ -135,10 +170,10 @@ reaction JavaSuperClassRemoved {
     call clearUmlSuperClassifiers(affectedEObject)
 }
 
-routine addUmlSuperClassifier(java::ConcreteClassifier jClass, java::TypeReference jSuper) {
+routine addUmlSuperClassifier(java::ConcreteClassifier jClass, java::ConcreteClassifier jSuper) {
     match {
-        val uClass = retrieve uml::Class corresponding to jClass
-        val uSuper = retrieve uml::Class corresponding to jSuper.target
+        val uClass = retrieve uml::Classifier corresponding to jClass
+        val uSuper = retrieve uml::Classifier corresponding to jSuper
     }
     action {
         update uClass {
@@ -153,42 +188,36 @@ routine clearUmlSuperClassifiers(java::ConcreteClassifier jClass) {
     }
     action {
         update uClass {
-            uClass.generals.clear;
+            uClass.generalizations.clear;
         }
     }
 }
 
 reaction JavaSuperInterfaceAdded {
     after element java::TypeReference inserted in java::Interface[^extends]
-    call addUmlSuperClassifier(affectedEObject, newValue)
+    call addUmlSuperClassifier(affectedEObject, getClassifierfromTypeRef(newValue))
 }
 
 reaction JavaSuperInterfaceRemoved {
     after element java::TypeReference removed from java::Interface[^extends]
-    call removeUmlSuperInterface(affectedEObject, oldValue)
+    call removeUmlSuperInterface(affectedEObject, getClassifierfromTypeRef(oldValue))
 }
 
-routine removeUmlSuperInterface(java::Interface jI, java::TypeReference jSuper) {
+routine removeUmlSuperInterface(java::Interface jI, java::ConcreteClassifier jSuper) {
     match {
         val uI = retrieve uml::Interface corresponding to jI
-        val uSuper = retrieve uml::Interface corresponding to jSuper.target
+        val uSuper = retrieve uml::Interface corresponding to jSuper
     }
     action {
         update uI {
-            var int i = 0;
-            for (Classifier inf : uI.generals) {
-                if (inf.name.equals(uI.name)) {
-                    uI.generals.remove(i);
-                }
-                i++;
-            }
+            removeClassifierFromIterator(uI.generals.iterator, uSuper)
         }
     }
 }
 
 reaction JavaClassImplementAdded {
-    after element java::Interface inserted in java::Class[implements]
-    call addUmlClassImplement(affectedEObject, newValue)
+    after element java::TypeReference created and inserted in java::Class[implements]
+    call addUmlClassImplement(affectedEObject, getClassifierfromTypeRef(newValue) as Interface)
 }
 
 routine addUmlClassImplement(java::Class jClass, java::Interface jI) {
@@ -198,14 +227,14 @@ routine addUmlClassImplement(java::Class jClass, java::Interface jI) {
     }
     action {
         update uClass {
-            uClass.implementedInterfaces += uI;
+            uClass.createInterfaceRealization("IR-" + uI.name, uI)
         }
     }
 }
 
 reaction JavaClassImplementRemoved {
-    after element java::Interface removed from java::Class[implements]
-    call removeUmlClassImplement(affectedEObject, oldValue)
+    after element java::TypeReference removed from java::Class[implements]
+    call removeUmlClassImplement(affectedEObject, getClassifierfromTypeRef(oldValue) as Interface)
 }
 
 routine removeUmlClassImplement(java::Class jClass, java::Interface jI) {
@@ -215,13 +244,7 @@ routine removeUmlClassImplement(java::Class jClass, java::Interface jI) {
     }
     action {
         update uClass {
-            var int i = 0;
-            for (Interface inf : uClass.implementedInterfaces) {
-                if (inf.name.equals(uI.name)) {
-                    uClass.implementedInterfaces.remove(i);
-                }
-                i++;
-            }
+            removeClassifierFromIterator(uClass.implementedInterfaces.iterator, uI)
         }
     }
 }
@@ -229,12 +252,12 @@ routine removeUmlClassImplement(java::Class jClass, java::Interface jI) {
 
 reaction JavaClassMadeFinal {
     after element java::Final created and inserted in java::Class[annotationsAndModifiers]
-    call setUmlClassAbstract(affectedEObject, 1)
+    call setUmlClassFinal(affectedEObject, 1)
 }
 
 reaction JavaClassMadeNonFinal {
     after element java::Final deleted and removed from java::Class[annotationsAndModifiers]
-    call setUmlClassAbstract(affectedEObject, 0)
+    call setUmlClassFinal(affectedEObject, 0)
 }
 
 routine setUmlClassFinal(java::Class jClass, Int isFinal) {
@@ -254,24 +277,50 @@ routine setUmlClassFinal(java::Class jClass, Int isFinal) {
     }
 }
 
-//Für Interface & ClassMethods
-reaction JavaMethodCreated {
-    after element java::Method created and inserted in java::ConcreteClassifier[members]
-    call createUmlMethod(newValue, affectedEObject)
+reaction JavaClassMethodCreated {
+    after element java::ClassMethod created and inserted in java::Class[members]
+    call createUmlClassMethod(newValue, affectedEObject)
 }
 
-routine createUmlMethod(java::Method jMeth, java::ConcreteClassifier jClass) {
+routine createUmlClassMethod(java::ClassMethod jMeth, java::Class jClass) {
     match {
         val uClass = retrieve uml::Class corresponding to jClass
+        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jMeth.typeReference)
     }
     action {
         val uMeth = create uml::Operation and initialize {
             uMeth.name = jMeth.name;
-            //uMeth.type
+            if (jMeth.typeReference != null) {
+                uMeth.type = getUmlType(jMeth.typeReference, customType, getUmlModel(correspondenceModel))
+            }
         }
         add correspondence between uMeth and jMeth
         update uClass {
             uClass.ownedOperations += uMeth;
+        }
+    }
+}
+
+reaction JavaInterfaceMethodCreated {
+    after element java::InterfaceMethod created and inserted in java::Interface[members]
+    call createUmlInterfaceMethod(newValue, affectedEObject)
+}
+
+routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jI) {
+    match {
+        val uI = retrieve uml::Interface corresponding to jI
+        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jMeth.typeReference)
+    }
+    action {
+        val uMeth = create uml::Operation and initialize {
+            uMeth.name = jMeth.name;
+            if (jMeth.typeReference != null) {
+                uMeth.type = getUmlType(jMeth.typeReference, customType, getUmlModel(correspondenceModel))
+            }
+        }
+        add correspondence between uMeth and jMeth
+        update uI {
+            uI.ownedOperations += uMeth;
         }
     }
 }
@@ -308,20 +357,28 @@ routine deleteUmlMethod(java::Method jMeth) {
 
 reaction JavaMethodMadePublic {
     after element java::Public created and inserted in java::ClassMethod[annotationsAndModifiers]
-    call changeUmlMethodVisibility(newValue, affectedEObject)
+    call changeUmlMethodVisibility(affectedEObject, newValue)
 }
 
 reaction JavaMethodMadePrivate {
     after element java::Private created and inserted in java::ClassMethod[annotationsAndModifiers]
-    call changeUmlMethodVisibility(newValue, affectedEObject)
+    call changeUmlMethodVisibility(affectedEObject, newValue)
 }
 
 reaction JavaMethodMadeProtected {
     after element java::Protected created and inserted in java::ClassMethod[annotationsAndModifiers]
-    call changeUmlMethodVisibility(newValue, affectedEObject)
+    call changeUmlMethodVisibility(affectedEObject, newValue)
 }
 
-routine changeUmlMethodVisibility(java::Modifier mod, java::ClassMethod jMeth) {
+reaction JavaMethodMadePackagePrivate {
+    after element java::Modifier deleted and removed from java::ClassMethod[annotationsAndModifiers]
+    with oldValue instanceof Private
+    || oldValue instanceof Public
+    || oldValue instanceof Protected
+    call changeUmlMethodVisibility(affectedEObject, null)
+}
+
+routine changeUmlMethodVisibility( java::ClassMethod jMeth, java::Modifier mod) {
     match {
         val uMeth = retrieve uml::Operation corresponding to jMeth
     }
@@ -398,6 +455,7 @@ reaction JavaParameterCreated {
 routine createUmlParameter(java::Method jMeth, java::OrdinaryParameter jParam) {
     match {
         val uMeth = retrieve uml::Operation corresponding to jMeth
+        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jParam.typeReference)
     }
     action {
         val uParam = create uml::Parameter and initialize {
@@ -406,9 +464,14 @@ routine createUmlParameter(java::Method jMeth, java::OrdinaryParameter jParam) {
             } else {
                 uParam.name = "DefaultUmlParameterName";
             }
-            uParam.type = getUmlType(jParam.typeReference)
+            if (jParam.typeReference != null) {
+                uParam.type = getUmlType(jParam.typeReference, customType, getUmlModel(correspondenceModel))
+            }
         }
         add correspondence between uParam and jParam
+        update uMeth {
+            uMeth.ownedParameters += uParam
+        }
     }
 }
 
@@ -450,10 +513,11 @@ reaction JavaParameterTypeChanged {
 routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReference jType) {
     match {
         val uParam = retrieve uml::Parameter corresponding to jParam
+        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jType)
     }
     action {
         update uParam {
-            uParam.type = getUmlType(jType);
+            uParam.type = getUmlType(jType, customType, getUmlModel(correspondenceModel));
         }
     }
 }
@@ -466,17 +530,22 @@ reaction JavaReturnTypeChanged {
 routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
     match {
         val uMeth = retrieve uml::Operation corresponding to jMeth
+        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jType)
     }
      action {
          update uMeth {
-             uMeth.type = getUmlType(jType);
+             uMeth.type = getUmlType(jType, customType, getUmlModel(correspondenceModel))
          }
      }
 }
 
 reaction JavaAttributeCreated {
     after element java::Field created and inserted in java::Class[members]
-    call createUmlAttribute(affectedEObject, newValue)
+    call {
+        System.out.println("JavaAttr Created Reaction")
+        createUmlAttribute(affectedEObject, newValue)
+        
+        }
 }
 
 routine createUmlAttribute(java::Class jClass, java::Field jAttr) {
@@ -496,6 +565,9 @@ routine createUmlAttribute(java::Class jClass, java::Field jAttr) {
             }
         }
         add correspondence between uAttr and jAttr
+        update uClass {
+            uClass.ownedAttributes += uAttr;
+        }
     }
 }
 
@@ -529,6 +601,28 @@ routine deleteUmlAttribute(java::Field jAttr) {
     }
 }
 
+reaction JavaAttributeTypeChanged {
+    after element java::TypeReference replaced at java::Field[typeReference]
+    call {
+        System.out.println("Attribute Changed Reaction")
+        changeUmlAttributeType(affectedEObject, newValue)
+        
+        }
+}
+
+routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr
+        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jType)
+    }
+    action {
+        update uAttr {
+            uAttr.type = getUmlType(jType, customType, getUmlModel(correspondenceModel))
+        }
+        
+    }
+}
+
 reaction JavaAttributeMadePublic {
     after element java::Public created and inserted in java::Field[annotationsAndModifiers]
     call changeUmlAttributeVisibility(affectedEObject, newValue)
@@ -542,6 +636,14 @@ reaction JavaAttributeMadePrivate {
 reaction JavaAttributeMadeProtected {
     after element java::Protected created and inserted in java::Field[annotationsAndModifiers]
     call changeUmlAttributeVisibility(affectedEObject, newValue)
+}
+
+reaction JavaAttributeMadePackagePrivate {
+    after element java::Modifier deleted and removed from java::Field[annotationsAndModifiers]
+    with oldValue instanceof Private
+    || oldValue instanceof Public
+    || oldValue instanceof Protected
+    call changeUmlAttributeVisibility(affectedEObject, null)
 }
 
 routine changeUmlAttributeVisibility(java::Field jAttr, java::Modifier mod) {

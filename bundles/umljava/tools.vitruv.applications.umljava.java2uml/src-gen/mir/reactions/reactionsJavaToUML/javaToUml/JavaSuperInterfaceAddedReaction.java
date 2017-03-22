@@ -3,8 +3,10 @@ package mir.reactions.reactionsJavaToUML.javaToUml;
 import mir.routines.javaToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
+import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -66,7 +68,8 @@ class JavaSuperInterfaceAddedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addUmlSuperClassifier(affectedEObject, newValue);
+      ConcreteClassifier _classifierfromTypeRef = JavaUtil.getClassifierfromTypeRef(newValue);
+      _routinesFacade.addUmlSuperClassifier(affectedEObject, _classifierfromTypeRef);
     }
   }
 }

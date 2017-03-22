@@ -5,6 +5,7 @@ import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Field;
+import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.Modifier;
 import org.emftext.language.java.parameters.OrdinaryParameter;
@@ -22,6 +23,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void createUmlClass(final org.emftext.language.java.classifiers.Class jClass) {
     mir.routines.javaToUml.CreateUmlClassRoutine effect = new mir.routines.javaToUml.CreateUmlClassRoutine(this.executionState, calledBy,
     	jClass);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlInterface(final Interface jI) {
+    mir.routines.javaToUml.CreateUmlInterfaceRoutine effect = new mir.routines.javaToUml.CreateUmlInterfaceRoutine(this.executionState, calledBy,
+    	jI);
     effect.applyRoutine();
   }
   
@@ -49,7 +56,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void addUmlSuperClassifier(final ConcreteClassifier jClass, final TypeReference jSuper) {
+  public void addUmlSuperClassifier(final ConcreteClassifier jClass, final ConcreteClassifier jSuper) {
     mir.routines.javaToUml.AddUmlSuperClassifierRoutine effect = new mir.routines.javaToUml.AddUmlSuperClassifierRoutine(this.executionState, calledBy,
     	jClass, jSuper);
     effect.applyRoutine();
@@ -61,7 +68,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void removeUmlSuperInterface(final Interface jI, final TypeReference jSuper) {
+  public void removeUmlSuperInterface(final Interface jI, final ConcreteClassifier jSuper) {
     mir.routines.javaToUml.RemoveUmlSuperInterfaceRoutine effect = new mir.routines.javaToUml.RemoveUmlSuperInterfaceRoutine(this.executionState, calledBy,
     	jI, jSuper);
     effect.applyRoutine();
@@ -85,9 +92,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createUmlMethod(final Method jMeth, final ConcreteClassifier jClass) {
-    mir.routines.javaToUml.CreateUmlMethodRoutine effect = new mir.routines.javaToUml.CreateUmlMethodRoutine(this.executionState, calledBy,
+  public void createUmlClassMethod(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass) {
+    mir.routines.javaToUml.CreateUmlClassMethodRoutine effect = new mir.routines.javaToUml.CreateUmlClassMethodRoutine(this.executionState, calledBy,
     	jMeth, jClass);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlInterfaceMethod(final InterfaceMethod jMeth, final Interface jI) {
+    mir.routines.javaToUml.CreateUmlInterfaceMethodRoutine effect = new mir.routines.javaToUml.CreateUmlInterfaceMethodRoutine(this.executionState, calledBy,
+    	jMeth, jI);
     effect.applyRoutine();
   }
   
@@ -103,9 +116,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeUmlMethodVisibility(final Modifier mod, final ClassMethod jMeth) {
+  public void changeUmlMethodVisibility(final ClassMethod jMeth, final Modifier mod) {
     mir.routines.javaToUml.ChangeUmlMethodVisibilityRoutine effect = new mir.routines.javaToUml.ChangeUmlMethodVisibilityRoutine(this.executionState, calledBy,
-    	mod, jMeth);
+    	jMeth, mod);
     effect.applyRoutine();
   }
   
@@ -166,6 +179,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void deleteUmlAttribute(final Field jAttr) {
     mir.routines.javaToUml.DeleteUmlAttributeRoutine effect = new mir.routines.javaToUml.DeleteUmlAttributeRoutine(this.executionState, calledBy,
     	jAttr);
+    effect.applyRoutine();
+  }
+  
+  public void changeUmlAttributeType(final Field jAttr, final TypeReference jType) {
+    mir.routines.javaToUml.ChangeUmlAttributeTypeRoutine effect = new mir.routines.javaToUml.ChangeUmlAttributeTypeRoutine(this.executionState, calledBy,
+    	jAttr, jType);
     effect.applyRoutine();
   }
   

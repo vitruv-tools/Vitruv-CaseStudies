@@ -2,7 +2,6 @@ package mir.routines.javaToUml;
 
 import java.io.IOException;
 import mir.routines.javaToUml.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.classifiers.Interface;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -29,8 +28,9 @@ public class AddUmlClassImplementRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Interface uI) {
-      EList<org.eclipse.uml2.uml.Interface> _implementedInterfaces = uClass.getImplementedInterfaces();
-      _implementedInterfaces.add(uI);
+      String _name = uI.getName();
+      String _plus = ("IR-" + _name);
+      uClass.createInterfaceRealization(_plus, uI);
     }
     
     public EObject getCorrepondenceSourceUI(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass) {

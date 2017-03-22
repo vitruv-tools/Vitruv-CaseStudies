@@ -1,46 +1,86 @@
 package tools.vitruv.applications.umljava.java2uml
 
-import org.emftext.language.java.modifiers.Modifier
+import java.util.Iterator
+import java.util.Set
+import org.eclipse.uml2.uml.Classifier
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.Type
+import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.modifiers.Modifier
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
-import org.eclipse.uml2.uml.Type
+import org.emftext.language.java.types.Boolean
+import org.emftext.language.java.types.Byte
+import org.emftext.language.java.types.Char
+import org.emftext.language.java.types.Double
+import org.emftext.language.java.types.Float
+import org.emftext.language.java.types.Int
+import org.emftext.language.java.types.Long
+import org.emftext.language.java.types.NamespaceClassifierReference
+import org.emftext.language.java.types.Short
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.Void
-import org.eclipse.uml2.uml.Model
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.applications.umljava.util.JavaUtil;
+
+
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import java.util.Set
-import org.eclipse.uml2.uml.UMLFactory
+import org.emftext.language.java.classifiers.ConcreteClassifier
 
 class JavaToUmlHelper {
     
-    def static VisibilityKind getUmlVisibilityKind(Modifier mod) {
-        if (mod == null) {
-            throw new IllegalArgumentException("Invalid VisibilityModifier null")
+    /**
+     * @param vis Wenn null, return package-private
+     */
+    def static VisibilityKind getUmlVisibilityKind(Modifier vis) {
+        if (vis == null) {
+            return VisibilityKind.PACKAGE_LITERAL 
         }
-        switch mod.class {
-            case Private: return VisibilityKind.PRIVATE_LITERAL
-            case Protected: return VisibilityKind.PROTECTED_LITERAL
-            case Public: return VisibilityKind.PUBLIC_LITERAL
-            default: throw new IllegalArgumentException("Invalid VisibilityModifier: " + mod.class)
+        switch vis.eClass.name {
+            case Private.simpleName: return VisibilityKind.PRIVATE_LITERAL
+            case Protected.simpleName: return VisibilityKind.PROTECTED_LITERAL
+            case Public.simpleName: return VisibilityKind.PUBLIC_LITERAL
+            default: throw new IllegalArgumentException("Invalid VisibilityModifier: " + vis)
         }
     }
     
-    def static Type getUmlType(TypeReference jType) {
-        if (jType.target instanceof Void) {
-            return null;
+    def static Type getUmlType(TypeReference jType, org.eclipse.uml2.uml.Class customType, Model model) {
+        if (jType == null || jType instanceof Void) {
+            return null
         }
+        if (customType != null) {
+            return customType
+        }
+        val primType = UMLFactory.eINSTANCE.createPrimitiveType()
+        switch jType {
+            Void : return null
+            Int : primType.name = JavaUtil.INT
+            Boolean: primType.name = JavaUtil.BOOLEAN
+            Byte : primType.name = JavaUtil.BYTE
+            Long : primType.name = JavaUtil.LONG
+            Double : primType.name = JavaUtil.DOUBLE
+            Short : primType.name = JavaUtil.SHORT
+            Float : primType.name = JavaUtil.FLOAT
+            Char : primType.name = JavaUtil.CHAR
+            default: throw new IllegalArgumentException("no corresponding uml-primitiveType: for java TypeReference: " + jType.target)
+        }
+        model.packagedElements += primType;
+        println("primType: "+primType.name);
+        return primType;
     }
     
     def static Model getUmlModel(CorrespondenceModel correspondenceModel) {
         val Set<Model> models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
         if (models.nullOrEmpty) {
-           return UMLFactory.eINSTANCE.createModel();
+           val model = UMLFactory.eINSTANCE.createModel();
+           model.name = "model";
+           correspondenceModel.createAndAddCorrespondence(model, model)
+           return model;
         }
         if (1 != models.size) {
-            //log.warn("found more than one repository. Returning the first")
+            System.out.println("found more than one repository. Returning the first")
         }
         return models.get(0)
     }
