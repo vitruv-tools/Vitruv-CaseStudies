@@ -1,5 +1,6 @@
 package mir.routines.umlToPcm;
 
+import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Interface;
@@ -112,6 +113,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void changeParameterDirection(final Parameter umlParameter) {
     mir.routines.umlToPcm.ChangeParameterDirectionRoutine effect = new mir.routines.umlToPcm.ChangeParameterDirectionRoutine(this.executionState, calledBy,
     	umlParameter);
+    effect.applyRoutine();
+  }
+  
+  public void createPcmComponent(final Component umlComponent) {
+    mir.routines.umlToPcm.CreatePcmComponentRoutine effect = new mir.routines.umlToPcm.CreatePcmComponentRoutine(this.executionState, calledBy,
+    	umlComponent);
     effect.applyRoutine();
   }
 }

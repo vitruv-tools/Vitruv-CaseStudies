@@ -24,36 +24,28 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     }
     
     public EObject getElement1(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      return pcmParameter;
-    }
-    
-    public void update0Element(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      pcmParameter.setEntityName(pcmParameter.getParameterName());
-    }
-    
-    public EObject getElement4(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      return pcmParameter;
-    }
-    
-    public void updateUmlParameterElement(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      umlParameter.setName(pcmParameter.getParameterName());
-    }
-    
-    public EObject getElement2(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
       return umlOperation;
     }
     
-    public EObject getElement3(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+    public void update0Element(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      EList<org.eclipse.uml2.uml.Parameter> _ownedParameters = umlOperation.getOwnedParameters();
+      _ownedParameters.add(umlParameter);
+    }
+    
+    public void updateUmlParameterElement(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      umlParameter.setName(pcmParameter.getEntityName());
+    }
+    
+    public EObject getElement2(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
       return umlParameter;
+    }
+    
+    public EObject getElement3(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      return pcmParameter;
     }
     
     public EObject getCorrepondenceSourceUmlOperation(final OperationSignature pcmSignature, final Parameter pcmParameter) {
       return pcmSignature;
-    }
-    
-    public void update1Element(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      EList<org.eclipse.uml2.uml.Parameter> _ownedParameters = umlOperation.getOwnedParameters();
-      _ownedParameters.add(umlParameter);
     }
   }
   
@@ -89,10 +81,7 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     // val updatedElement userExecution.getElement1(pcmSignature, pcmParameter, umlOperation, umlParameter);
     userExecution.update0Element(pcmSignature, pcmParameter, umlOperation, umlParameter);
     
-    // val updatedElement userExecution.getElement2(pcmSignature, pcmParameter, umlOperation, umlParameter);
-    userExecution.update1Element(pcmSignature, pcmParameter, umlOperation, umlParameter);
-    
-    addCorrespondenceBetween(userExecution.getElement3(pcmSignature, pcmParameter, umlOperation, umlParameter), userExecution.getElement4(pcmSignature, pcmParameter, umlOperation, umlParameter), "");
+    addCorrespondenceBetween(userExecution.getElement2(pcmSignature, pcmParameter, umlOperation, umlParameter), userExecution.getElement3(pcmSignature, pcmParameter, umlOperation, umlParameter), "");
     
     postprocessElementStates();
   }

@@ -29,6 +29,14 @@ public class Executor5_1ToUML extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedOperationSignatureParameterReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedOperationSignatureParameterReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.RenamedParameterReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.RenamedParameterReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.ChangedParameterDirectionReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.ChangedParameterDirectionReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.ChangedParameterTypeReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.ChangedParameterTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.DeletedOperationSignatureParameterReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.DeletedOperationSignatureParameterReaction(userInteracting));
     this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedProvidedRoleReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedProvidedRoleReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.DeletedProvidedRoleReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.DeletedProvidedRoleReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.AddedOperationProvidedRoleInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.AddedOperationProvidedRoleInterfaceReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.CreatedRequiredRoleReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedRequiredRoleReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.DeletedRequiredRoleReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.DeletedRequiredRoleReaction(userInteracting));
+    this.addReaction(mir.reactions.reactions5_1ToUML.pcmToUml.AddedOperationRequiredRoleInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactions5_1ToUML.pcmToUml.AddedOperationRequiredRoleInterfaceReaction(userInteracting));
   }
 }

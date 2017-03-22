@@ -117,8 +117,6 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	
 	protected def Parameter createOperationParameter(OperationSignature pcmSignature, String name, DataType type) {
 		val pcmParameter = RepositoryFactory.eINSTANCE.createParameter()
-		// TODO
-		pcmParameter.parameterName = name
 		pcmParameter.entityName = name
 		pcmParameter.dataType__Parameter = type
 		pcmSignature.parameters__OperationSignature += pcmParameter
@@ -131,21 +129,19 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		val pcmInterface = createOperationInterface("i6")
 		val pcmOperation = createOperationInterfaceOperation(pcmInterface, "o1", PrimitiveTypeEnum.BOOL)
 		val parameterName = "p1"
-		val pcmParameter = createOperationParameter(pcmOperation, parameterName, pcmOperation.returnType__OperationSignature)
+		createOperationParameter(pcmOperation, parameterName, pcmOperation.returnType__OperationSignature)
 		val parameterType = pcmOperation.returnType__OperationSignature
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmOperation]).flatten
 		val umlOperation = (correspondingElements.get(0) as Operation)
 		assertEquals(2, umlOperation.ownedParameters.length)
-		val umlParameter = umlOperation.ownedParameters.get(0)
+		// first parameter should be the return value
+		val umlParameter = umlOperation.ownedParameters.get(1)
 		
 		println(umlParameter)
 		assertEquals(parameterName, umlParameter.name)
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveType((parameterType as PrimitiveDataType).type),
 			umlParameter.type.name)
-		println("testParameterAdd")
-		println(umlParameter.direction)
-		println(pcmParameter.modifier__Parameter)
 	}
 	
 	@Test
@@ -154,28 +150,56 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		val pcmOperation = createOperationInterfaceOperation(pcmInterface, "o1", PrimitiveTypeEnum.BOOL)
 		val pcmParameter = createOperationParameter(pcmOperation, "p1", pcmOperation.returnType__OperationSignature)
 		
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
-		val umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
-		
-		println("parameter mode")
-		println(pcmParameter.modifier__Parameter)
+		var correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
+		var umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
 		
 		val newType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		newType.type = PrimitiveTypeEnum.DOUBLE
 		rootElement.dataTypes__Repository += newType
 		pcmParameter.dataType__Parameter = newType
-		saveAndSynchronizeChanges(rootElement)
+		saveAndSynchronizeChanges(pcmParameter)
 		
+		// TODO: why is the correspondence broken for umlParameter?
+		// umlParameter access didn't result in an NPE
+		correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
+		umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
+				
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveType((newType as PrimitiveDataType).type),
 			umlParameter.type.name)
 
 		val newName = "p11"
-		pcmParameter.parameterName = newName
+		pcmParameter.entityName = newName
 		saveAndSynchronizeChanges(pcmParameter)
 		assertEquals(newName, umlParameter.name)
 		
 		pcmParameter.modifier__Parameter = ParameterModifier.OUT
 		saveAndSynchronizeChanges(pcmParameter)
+		
+		correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
+		umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
+		
 		assertEquals(PcmToUmlUtil.getUmlParameterDirection(pcmParameter.modifier__Parameter), umlParameter.direction)
+	}
+	
+	@Test
+	public def void testParameterDelete() {
+		val pcmInterface = createOperationInterface("i6")
+		val pcmOperation = createOperationInterfaceOperation(pcmInterface, "o1", PrimitiveTypeEnum.BOOL)
+		val pcmParameter1 = createOperationParameter(pcmOperation, "p1", pcmOperation.returnType__OperationSignature)
+		val remainingParameterName = "p2"
+		createOperationParameter(pcmOperation, remainingParameterName, pcmOperation.returnType__OperationSignature)
+		
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmOperation]).flatten
+		val umlOperation = (correspondingElements.get(0) as Operation)
+		assertEquals(3, umlOperation.ownedParameters.length)
+		
+		val parameterCount = umlOperation.ownedParameters.length
+		
+		pcmOperation.parameters__OperationSignature -= pcmParameter1
+		saveAndSynchronizeChanges(pcmOperation)
+		
+		assertEquals(parameterCount - 1, umlOperation.ownedParameters.length)
+		
+		assertEquals(remainingParameterName, umlOperation.ownedParameters.get(1).name)
 	}
 }

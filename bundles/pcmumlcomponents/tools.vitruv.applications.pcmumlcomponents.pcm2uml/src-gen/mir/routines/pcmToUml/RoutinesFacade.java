@@ -1,14 +1,20 @@
 package mir.routines.pcmToUml;
 
+import org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity;
+import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.Interface;
+import org.palladiosimulator.pcm.repository.OperationInterface;
+import org.palladiosimulator.pcm.repository.OperationProvidedRole;
+import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
+import org.palladiosimulator.pcm.repository.ProvidedRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
@@ -129,9 +135,57 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void changeParameterType(final Parameter pcmParameter) {
+    mir.routines.pcmToUml.ChangeParameterTypeRoutine effect = new mir.routines.pcmToUml.ChangeParameterTypeRoutine(this.executionState, calledBy,
+    	pcmParameter);
+    effect.applyRoutine();
+  }
+  
+  public void removeOperationSignatureParameter(final Parameter pcmParameter) {
+    mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine effect = new mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine(this.executionState, calledBy,
+    	pcmParameter);
+    effect.applyRoutine();
+  }
+  
   public void createUmlComponent(final RepositoryComponent pcmComponent) {
     mir.routines.pcmToUml.CreateUmlComponentRoutine effect = new mir.routines.pcmToUml.CreateUmlComponentRoutine(this.executionState, calledBy,
     	pcmComponent);
+    effect.applyRoutine();
+  }
+  
+  public void createProvidedRole(final InterfaceProvidingEntity pcmComponent, final ProvidedRole pcmProvidedRole) {
+    mir.routines.pcmToUml.CreateProvidedRoleRoutine effect = new mir.routines.pcmToUml.CreateProvidedRoleRoutine(this.executionState, calledBy,
+    	pcmComponent, pcmProvidedRole);
+    effect.applyRoutine();
+  }
+  
+  public void deleteProvidedRole(final ProvidedRole pcmProvidedRole) {
+    mir.routines.pcmToUml.DeleteProvidedRoleRoutine effect = new mir.routines.pcmToUml.DeleteProvidedRoleRoutine(this.executionState, calledBy,
+    	pcmProvidedRole);
+    effect.applyRoutine();
+  }
+  
+  public void addOperationProvidedRoleInterface(final OperationProvidedRole pcmRole, final OperationInterface pcmInterface) {
+    mir.routines.pcmToUml.AddOperationProvidedRoleInterfaceRoutine effect = new mir.routines.pcmToUml.AddOperationProvidedRoleInterfaceRoutine(this.executionState, calledBy,
+    	pcmRole, pcmInterface);
+    effect.applyRoutine();
+  }
+  
+  public void createRequiredRole(final InterfaceRequiringEntity pcmComponent, final OperationRequiredRole requiredRole) {
+    mir.routines.pcmToUml.CreateRequiredRoleRoutine effect = new mir.routines.pcmToUml.CreateRequiredRoleRoutine(this.executionState, calledBy,
+    	pcmComponent, requiredRole);
+    effect.applyRoutine();
+  }
+  
+  public void deleteRequiredRole(final OperationRequiredRole requiredRole) {
+    mir.routines.pcmToUml.DeleteRequiredRoleRoutine effect = new mir.routines.pcmToUml.DeleteRequiredRoleRoutine(this.executionState, calledBy,
+    	requiredRole);
+    effect.applyRoutine();
+  }
+  
+  public void addOperationRequiredRoleInterface(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface) {
+    mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine effect = new mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine(this.executionState, calledBy,
+    	pcmRole, pcmInterface);
     effect.applyRoutine();
   }
 }

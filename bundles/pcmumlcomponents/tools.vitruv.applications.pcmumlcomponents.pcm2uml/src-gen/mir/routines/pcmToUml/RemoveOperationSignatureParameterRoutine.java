@@ -9,10 +9,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
+public class RemoveOperationSignatureParameterRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private RenameParameterRoutine.ActionUserExecution userExecution;
+  private RemoveOperationSignatureParameterRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
@@ -23,18 +23,14 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
       return umlParameter;
     }
     
-    public void update0Element(final Parameter pcmParameter, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      umlParameter.setName(pcmParameter.getParameterName());
-    }
-    
     public EObject getCorrepondenceSourceUmlParameter(final Parameter pcmParameter) {
       return pcmParameter;
     }
   }
   
-  public RenameParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parameter pcmParameter) {
+  public RemoveOperationSignatureParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parameter pcmParameter) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.pcmToUml.RenameParameterRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.pcmParameter = pcmParameter;
   }
@@ -42,7 +38,7 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
   private Parameter pcmParameter;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine RenameParameterRoutine with input:");
+    getLogger().debug("Called routine RemoveOperationSignatureParameterRoutine with input:");
     getLogger().debug("   Parameter: " + this.pcmParameter);
     
     org.eclipse.uml2.uml.Parameter umlParameter = getCorrespondingElement(
@@ -54,8 +50,7 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     initializeRetrieveElementState(umlParameter);
-    // val updatedElement userExecution.getElement1(pcmParameter, umlParameter);
-    userExecution.update0Element(pcmParameter, umlParameter);
+    deleteObject(userExecution.getElement1(pcmParameter, umlParameter));
     
     postprocessElementStates();
   }

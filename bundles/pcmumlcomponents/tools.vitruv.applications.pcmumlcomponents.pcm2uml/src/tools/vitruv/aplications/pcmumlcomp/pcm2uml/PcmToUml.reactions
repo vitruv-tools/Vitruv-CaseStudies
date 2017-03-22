@@ -323,10 +323,7 @@ routine createOperationSignatureParameter(pcm::OperationSignature pcmSignature, 
 	}
 	action {
 		val umlParameter = create uml::Parameter and initialize {
-			umlParameter.name = pcmParameter.parameterName
-		}
-		update pcmParameter {
-			pcmParameter.entityName = pcmParameter.parameterName
+			umlParameter.name = pcmParameter.entityName
 		}
 		update umlOperation {
 			umlOperation.ownedParameters += umlParameter
@@ -346,10 +343,6 @@ routine renameParameter(pcm::Parameter pcmParameter) {
 		update umlParameter {
 			umlParameter.name = pcmParameter.parameterName
 		}
-		// TODO: pcm::Parameter doesn't inherit NamedElement in the nightly JavaDoc
-		update pcmParameter {
-			pcmParameter.entityName = pcmParameter.parameterName
-		}
 	}
 }
 reaction ChangedParameterDirection {
@@ -366,8 +359,36 @@ routine changeParameterDirection(pcm::Parameter pcmParameter) {
 		}
 	}
 }
+reaction ChangedParameterType {
+	after element pcm::DataType replaced at pcm::Parameter[dataType__Parameter]
+	call changeParameterType(affectedEObject)
+}
+routine changeParameterType(pcm::Parameter pcmParameter) {
+	match {
+		val umlParameter = retrieve uml::Parameter corresponding to pcmParameter
+		val umlType = retrieve uml::DataType corresponding to pcmParameter.dataType__Parameter
+	}
+	action {
+		update umlParameter {
+			umlParameter.type = umlType
+		}
+	}
+}
+reaction DeletedOperationSignatureParameter {
+	after element pcm::Parameter removed from pcm::OperationSignature[parameters__OperationSignature]
+	call removeOperationSignatureParameter(oldValue)
+}
+routine removeOperationSignatureParameter(pcm::Parameter pcmParameter) {
+	match {
+		val umlParameter = retrieve uml::Parameter corresponding to pcmParameter
+	}
+	action {
+		delete umlParameter
+	}
+}
 
-
+// ###################################################
+// ############### COMPONENT REACTIONS ###############
 
 reaction CreatedPcmComponent {
 	after element created and inserted in pcm::Repository[components__Repository]
@@ -386,5 +407,103 @@ routine createUmlComponent(pcm::RepositoryComponent pcmComponent) {
 			umlModel.packagedElements += umlComponent;
 		}
 		add correspondence between pcmComponent and umlComponent
+	}
+}
+
+reaction CreatedProvidedRole {
+	after element created and inserted in pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
+	call createProvidedRole(affectedEObject, newValue)
+}
+routine createProvidedRole(pcm::InterfaceProvidingEntity pcmComponent, pcm::ProvidedRole pcmProvidedRole) {
+	match {
+		val umlComponent = retrieve uml::Component corresponding to pcmComponent
+	}
+	action {
+		val interfaceRealization = create uml::InterfaceRealization and initialize {
+			interfaceRealization.name = pcmProvidedRole.entityName
+			interfaceRealization.clients += umlComponent
+		}
+		update umlComponent {
+			umlComponent.interfaceRealizations += interfaceRealization
+		}
+		add correspondence between interfaceRealization and pcmProvidedRole
+	}
+}
+reaction DeletedProvidedRole {
+	after element removed from pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
+	call deleteProvidedRole(oldValue)
+}
+routine deleteProvidedRole(pcm::ProvidedRole pcmProvidedRole) {
+	match {
+		val interfaceRealization = retrieve uml::InterfaceRealization corresponding to pcmProvidedRole
+	}
+	action {
+		delete interfaceRealization
+	}
+}
+reaction AddedOperationProvidedRoleInterface {
+	after element replaced at pcm::OperationProvidedRole[providedInterface__OperationProvidedRole]
+	call addOperationProvidedRoleInterface(affectedEObject, newValue)
+}
+routine addOperationProvidedRoleInterface(pcm::OperationProvidedRole pcmRole, pcm::OperationInterface pcmInterface) {
+	match {
+		val interfaceRealization = retrieve uml::InterfaceRealization corresponding to pcmRole
+		val umlInterface = retrieve uml::Interface corresponding to pcmInterface
+		val umlComponent = retrieve uml::Component corresponding to pcmRole.providingEntity_ProvidedRole
+	}
+	action {
+		update interfaceRealization {
+			interfaceRealization.suppliers.clear()
+			interfaceRealization.suppliers += umlInterface
+		}
+	}
+}
+
+reaction CreatedRequiredRole {
+	after element pcm::OperationRequiredRole inserted in pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
+	call createRequiredRole(affectedEObject, newValue)
+}
+routine createRequiredRole(pcm::InterfaceRequiringEntity pcmComponent, pcm::OperationRequiredRole requiredRole) {
+	match {
+		val umlComponent = retrieve uml::Component corresponding to pcmComponent
+		//val umlInterface = retrieve uml::Interface corresponding to requiredRole.requiredInterface__OperationRequiredRole
+	}
+	action {
+		val usage = create uml::Usage and initialize {
+			usage.name = requiredRole.entityName
+			usage.clients += umlComponent
+			// usage.targets += umlInterface
+		}
+		update umlComponent {
+			umlComponent.packagedElements += usage
+		}
+		add correspondence between usage and requiredRole
+	}
+}
+reaction DeletedRequiredRole {
+	after element pcm::OperationRequiredRole removed from pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
+	call deleteRequiredRole(oldValue)
+}
+routine deleteRequiredRole(pcm::OperationRequiredRole requiredRole) {
+	match {
+		val interfaceRealization = retrieve uml::InterfaceRealization corresponding to requiredRole
+	}
+	action {
+		delete interfaceRealization
+	}
+}
+reaction AddedOperationRequiredRoleInterface {
+	after element replaced at pcm::OperationRequiredRole[requiredInterface__OperationRequiredRole]
+	call addOperationRequiredRoleInterface(affectedEObject, newValue)
+}
+routine addOperationRequiredRoleInterface(pcm::OperationRequiredRole pcmRole, pcm::OperationInterface pcmInterface) {
+	match {
+		val umlUsage = retrieve uml::Usage corresponding to pcmRole
+		val umlInterface = retrieve uml::Interface corresponding to pcmInterface
+	}
+	action {
+		update umlUsage {
+			umlUsage.suppliers += umlInterface
+		}
 	}
 }

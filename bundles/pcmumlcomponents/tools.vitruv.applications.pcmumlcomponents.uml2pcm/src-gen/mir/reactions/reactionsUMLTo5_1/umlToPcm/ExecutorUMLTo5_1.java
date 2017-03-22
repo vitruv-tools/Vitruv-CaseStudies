@@ -26,5 +26,6 @@ public class ExecutorUMLTo5_1 extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterNameReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterNameReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterDirectionReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterDirectionReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedComponentReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedComponentReaction(userInteracting));
   }
 }

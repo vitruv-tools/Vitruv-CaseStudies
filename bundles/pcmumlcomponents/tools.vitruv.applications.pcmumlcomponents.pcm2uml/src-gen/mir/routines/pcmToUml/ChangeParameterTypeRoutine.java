@@ -3,28 +3,34 @@ package mir.routines.pcmToUml;
 import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Parameter;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
+public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private RenameParameterRoutine.ActionUserExecution userExecution;
+  private ChangeParameterTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Parameter pcmParameter, final org.eclipse.uml2.uml.Parameter umlParameter) {
+    public EObject getCorrepondenceSourceUmlType(final Parameter pcmParameter, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      DataType _dataType__Parameter = pcmParameter.getDataType__Parameter();
+      return _dataType__Parameter;
+    }
+    
+    public EObject getElement1(final Parameter pcmParameter, final org.eclipse.uml2.uml.Parameter umlParameter, final org.eclipse.uml2.uml.DataType umlType) {
       return umlParameter;
     }
     
-    public void update0Element(final Parameter pcmParameter, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      umlParameter.setName(pcmParameter.getParameterName());
+    public void update0Element(final Parameter pcmParameter, final org.eclipse.uml2.uml.Parameter umlParameter, final org.eclipse.uml2.uml.DataType umlType) {
+      umlParameter.setType(umlType);
     }
     
     public EObject getCorrepondenceSourceUmlParameter(final Parameter pcmParameter) {
@@ -32,9 +38,9 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public RenameParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parameter pcmParameter) {
+  public ChangeParameterTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parameter pcmParameter) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.pcmToUml.RenameParameterRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.pcmToUml.ChangeParameterTypeRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.pcmParameter = pcmParameter;
   }
@@ -42,7 +48,7 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
   private Parameter pcmParameter;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine RenameParameterRoutine with input:");
+    getLogger().debug("Called routine ChangeParameterTypeRoutine with input:");
     getLogger().debug("   Parameter: " + this.pcmParameter);
     
     org.eclipse.uml2.uml.Parameter umlParameter = getCorrespondingElement(
@@ -54,8 +60,17 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     initializeRetrieveElementState(umlParameter);
-    // val updatedElement userExecution.getElement1(pcmParameter, umlParameter);
-    userExecution.update0Element(pcmParameter, umlParameter);
+    org.eclipse.uml2.uml.DataType umlType = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlType(pcmParameter, umlParameter), // correspondence source supplier
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
+    	null);
+    if (umlType == null) {
+    	return;
+    }
+    initializeRetrieveElementState(umlType);
+    // val updatedElement userExecution.getElement1(pcmParameter, umlParameter, umlType);
+    userExecution.update0Element(pcmParameter, umlParameter, umlType);
     
     postprocessElementStates();
   }

@@ -1,9 +1,9 @@
+import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.PrimitiveType
 import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil
-import org.eclipse.uml2.uml.DataType
-import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.eclipse.uml2.uml.Parameter
-import org.eclipse.uml2.uml.Operation
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
@@ -311,3 +311,26 @@ routine changeParameterDirection(uml::Parameter umlParameter) {
 		}
 	}
 }
+
+// ###################################################
+// ############### COMPONENT REACTIONS ###############
+reaction CreatedComponent {
+	after element uml::Component inserted in uml::Model[packagedElement]
+	call createPcmComponent(newValue)
+}
+
+routine createPcmComponent(uml::Component umlComponent) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to umlComponent.model
+	}
+	action {
+		val pcmComponent = create pcm::CompositeComponent and initialize {
+			pcmComponent.entityName = umlComponent.name
+		}
+		update pcmRepository {
+			pcmRepository.components__Repository += pcmComponent
+		}
+		add correspondence between umlComponent and pcmComponent
+	}
+}
+
