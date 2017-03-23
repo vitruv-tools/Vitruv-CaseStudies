@@ -6,8 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
-import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -40,10 +38,6 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     
     public EObject getCorrepondenceSourcePcmSignature(final Operation umlOperation, final Parameter umlParameter) {
       return umlOperation;
-    }
-    
-    public void callRoutine1(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType, @Extension final RoutinesFacade _routinesFacade) {
-      InputOutput.<String>println("changing Interface Operation Type");
     }
   }
   
@@ -81,8 +75,6 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     	return;
     }
     initializeRetrieveElementState(pcmType);
-    userExecution.callRoutine1(umlOperation, umlParameter, pcmSignature, pcmType, actionsFacade);
-    
     // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmType);
     userExecution.update0Element(umlOperation, umlParameter, pcmSignature, pcmType);
     

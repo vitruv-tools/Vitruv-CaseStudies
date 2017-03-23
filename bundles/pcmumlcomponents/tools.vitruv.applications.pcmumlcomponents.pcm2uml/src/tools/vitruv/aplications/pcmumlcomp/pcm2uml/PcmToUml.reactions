@@ -292,9 +292,13 @@ routine createOperationInterfaceSignature(pcm::OperationSignature pcmSignature) 
 
 reaction ChangedOperationSignatureType {
 	after element replaced at pcm::OperationSignature[returnType__OperationSignature]
-	call changeUmlOperationType(affectedEObject)
+	call {
+		if (newValue === null)
+			unsetUmlOperationType(affectedEObject)
+		else
+			changeUmlOperationType(affectedEObject)
+	}
 }
-
 routine changeUmlOperationType(pcm::OperationSignature pcmSignature) {
 	match {
 		val umlOperation = retrieve uml::Operation corresponding to pcmSignature
@@ -303,6 +307,16 @@ routine changeUmlOperationType(pcm::OperationSignature pcmSignature) {
 	action {
 		update umlOperation {
 			umlOperation.type = umlReturnType
+		}
+	}
+}
+routine unsetUmlOperationType(pcm::OperationSignature pcmSignature) {
+	match {
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature
+	}
+	action {
+		update umlOperation {
+			umlOperation.type = null
 		}
 	}
 }

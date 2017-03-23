@@ -190,10 +190,7 @@ routine createInterface(uml::Interface umlInterface) {
 
 reaction CreatedInterfaceOperation {
 	after element uml::Operation created and inserted in uml::Interface[ownedOperation]
-	call {
-		createInterfaceOperation(newValue)
-		System.out.println("created interface operation")
-		}
+	call createInterfaceOperation(newValue)
 }
 
 routine createInterfaceOperation(uml::Operation umlOperation) {
@@ -211,18 +208,10 @@ routine createInterfaceOperation(uml::Operation umlOperation) {
 	}
 }
 
-reaction ChangedInterfaceOperationTypeI {
+reaction AddedInterfaceOperationParameter {
 	after element inserted in uml::Operation[ownedParameter]
 	call addOperationParameter(affectedEObject, newValue)
 }
-
-reaction ChangedInterfaceOperationType {
-	after element replaced at uml::Parameter[type] with
-		(affectedEObject.direction == ParameterDirectionKind.RETURN_LITERAL) &&
-		(affectedEObject.owner instanceof Operation)
-	call changeInterfaceOperationType((affectedEObject.owner as Operation), affectedEObject)
-}
-
 routine addOperationParameter(uml::Operation umlOperation, uml::Parameter umlParameter) {
 	match {
 		val pcmSignature = retrieve pcm::Signature corresponding to umlOperation
@@ -239,15 +228,28 @@ routine addOperationParameter(uml::Operation umlOperation, uml::Parameter umlPar
 	}
 }
 
+routine unsetInterfaceOperationType(uml::Operation umlOperation) {
+	match {
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation
+	}
+	action {
+		update pcmSignature {
+			pcmSignature.returnType__OperationSignature = null
+		}
+	}
+}
+
 routine addInterfaceOperationParameter(uml::Operation umlOperation, uml::Parameter umlParameter) {	
 	match {
 		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation
-		val pcmType = retrieve pcm::DataType corresponding to umlParameter.type
 	}
 	action {
 		val pcmParameter = create pcm::Parameter and initialize {
 			pcmParameter.parameterName = umlParameter.name
 			pcmParameter.entityName = umlParameter.name
+		}
+		update pcmSignature {
+			pcmSignature.parameters__OperationSignature += pcmParameter
 		}
 		add correspondence between umlParameter and pcmParameter
 	}
@@ -259,7 +261,6 @@ routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Parameter
 		val pcmType = retrieve pcm::DataType corresponding to umlParameter.type
 	}
 	action {
-		call println("changing Interface Operation Type")
 		update pcmSignature {
 			pcmSignature.returnType__OperationSignature = pcmType
 		}
@@ -267,8 +268,21 @@ routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Parameter
 }
 
 reaction ChangedParameterType {
-	after element replaced at uml::Parameter[type] with affectedEObject.direction != ParameterDirectionKind.RETURN_LITERAL
-	call changeParameterType(affectedEObject)
+	after element replaced at uml::Parameter[type]
+	call {
+		if (affectedEObject.direction == ParameterDirectionKind.RETURN_LITERAL) {
+			if (newValue !== null)
+				changeInterfaceOperationType((affectedEObject.owner as Operation), affectedEObject)
+			else
+				unsetInterfaceOperationType((affectedEObject.owner as Operation))
+		}
+		else {
+			if (newValue !== null)
+				changeParameterType(affectedEObject)
+			else
+				unsetParameterType(affectedEObject)
+		}
+	}
 }
 routine changeParameterType(uml::Parameter umlParameter) {
 	match {
@@ -278,6 +292,16 @@ routine changeParameterType(uml::Parameter umlParameter) {
 	action {
 		update pcmParameter {
 			pcmParameter.dataType__Parameter = pcmType
+		}
+	}
+}
+routine unsetParameterType(uml::Parameter umlParameter) {
+	match {
+		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter
+	}
+	action {
+		update pcmParameter {
+			pcmParameter.dataType__Parameter = null
 		}
 	}
 }
@@ -297,9 +321,20 @@ routine changeParameterName(uml::Parameter umlParameter) {
 	}
 }
 reaction ChangedParameterDirection {
-	after attribute replaced at uml::Parameter[direction] with
-		(newValue != ParameterDirectionKind.RETURN_LITERAL)
-	call changeParameterDirection(affectedEObject)
+	after attribute replaced at uml::Parameter[direction]
+	call {
+		// a PCM parameter has already been created; it has to be removed
+		if (newValue == ParameterDirectionKind.RETURN_LITERAL) {
+			changeInterfaceOperationType((affectedEObject.owner as Operation), affectedEObject)
+			deleteElement(affectedEObject)
+		}
+		// there is no parameter in the PCM (anymore)
+		else if (oldValue == ParameterDirectionKind.RETURN_LITERAL) {
+			addInterfaceOperationParameter((affectedEObject.owner as Operation), affectedEObject)
+		}
+		else
+			changeParameterDirection(affectedEObject)
+	}
 }
 routine changeParameterDirection(uml::Parameter umlParameter) {
 	match {
@@ -309,6 +344,26 @@ routine changeParameterDirection(uml::Parameter umlParameter) {
 		update pcmParameter {
 			pcmParameter.modifier__Parameter = UmlToPcmUtil.getPcmParameterModifier(umlParameter.direction)
 		}
+	}
+}
+
+reaction DeletedParameter {
+	after element uml::Parameter removed from uml::Operation[ownedParameter]
+	call {
+		if (oldValue.direction == ParameterDirectionKind.RETURN_LITERAL) {
+			unsetInterfaceOperationType(affectedEObject)
+		}
+		else {
+			deleteParameter(oldValue)
+		}
+	}
+}
+routine deleteParameter(uml::Parameter umlParameter) {
+	match {
+		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter
+	}
+	action {
+		delete pcmParameter
 	}
 }
 

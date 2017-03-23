@@ -86,6 +86,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void unsetInterfaceOperationType(final Operation umlOperation) {
+    mir.routines.umlToPcm.UnsetInterfaceOperationTypeRoutine effect = new mir.routines.umlToPcm.UnsetInterfaceOperationTypeRoutine(this.executionState, calledBy,
+    	umlOperation);
+    effect.applyRoutine();
+  }
+  
   public void addInterfaceOperationParameter(final Operation umlOperation, final Parameter umlParameter) {
     mir.routines.umlToPcm.AddInterfaceOperationParameterRoutine effect = new mir.routines.umlToPcm.AddInterfaceOperationParameterRoutine(this.executionState, calledBy,
     	umlOperation, umlParameter);
@@ -104,6 +110,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void unsetParameterType(final Parameter umlParameter) {
+    mir.routines.umlToPcm.UnsetParameterTypeRoutine effect = new mir.routines.umlToPcm.UnsetParameterTypeRoutine(this.executionState, calledBy,
+    	umlParameter);
+    effect.applyRoutine();
+  }
+  
   public void changeParameterName(final Parameter umlParameter) {
     mir.routines.umlToPcm.ChangeParameterNameRoutine effect = new mir.routines.umlToPcm.ChangeParameterNameRoutine(this.executionState, calledBy,
     	umlParameter);
@@ -112,6 +124,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   
   public void changeParameterDirection(final Parameter umlParameter) {
     mir.routines.umlToPcm.ChangeParameterDirectionRoutine effect = new mir.routines.umlToPcm.ChangeParameterDirectionRoutine(this.executionState, calledBy,
+    	umlParameter);
+    effect.applyRoutine();
+  }
+  
+  public void deleteParameter(final Parameter umlParameter) {
+    mir.routines.umlToPcm.DeleteParameterRoutine effect = new mir.routines.umlToPcm.DeleteParameterRoutine(this.executionState, calledBy,
     	umlParameter);
     effect.applyRoutine();
   }

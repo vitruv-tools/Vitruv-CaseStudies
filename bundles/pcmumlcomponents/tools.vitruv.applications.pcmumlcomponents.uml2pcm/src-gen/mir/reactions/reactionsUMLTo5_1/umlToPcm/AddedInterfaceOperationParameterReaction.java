@@ -14,8 +14,8 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class ChangedInterfaceOperationTypeIReaction extends AbstractReactionRealization {
-  public ChangedInterfaceOperationTypeIReaction(final UserInteracting userInteracting) {
+class AddedInterfaceOperationParameterReaction extends AbstractReactionRealization {
+  public AddedInterfaceOperationParameterReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -25,7 +25,7 @@ class ChangedInterfaceOperationTypeIReaction extends AbstractReactionRealization
     EReference affectedFeature = typedChange.getAffectedFeature();
     Parameter newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceOperationTypeIReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceOperationTypeIReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUMLTo5_1.umlToPcm.AddedInterfaceOperationParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.AddedInterfaceOperationParameterReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   

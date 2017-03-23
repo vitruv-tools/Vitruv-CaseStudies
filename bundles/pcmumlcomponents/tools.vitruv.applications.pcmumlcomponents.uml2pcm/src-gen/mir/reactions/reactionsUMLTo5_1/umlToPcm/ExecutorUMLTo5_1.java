@@ -21,11 +21,11 @@ public class ExecutorUMLTo5_1 extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedPropertyTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedPropertyTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedInterfaceReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedInterfaceOperationReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedInterfaceOperationReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceOperationTypeIReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceOperationTypeIReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceOperationTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceOperationTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.AddedInterfaceOperationParameterReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.AddedInterfaceOperationParameterReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterNameReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterNameReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterDirectionReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterDirectionReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.DeletedParameterReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.DeletedParameterReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedComponentReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedComponentReaction(userInteracting));
   }
 }

@@ -2,11 +2,10 @@ package mir.routines.umlToPcm;
 
 import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.Type;
-import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -24,24 +23,28 @@ public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutine
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
+    public EObject getElement1(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
+      return pcmSignature;
+    }
+    
+    public void update0Element(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
+      EList<org.palladiosimulator.pcm.repository.Parameter> _parameters__OperationSignature = pcmSignature.getParameters__OperationSignature();
+      _parameters__OperationSignature.add(pcmParameter);
+    }
+    
+    public EObject getElement2(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
       return umlParameter;
     }
     
-    public EObject getElement2(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
+    public EObject getElement3(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
       return pcmParameter;
-    }
-    
-    public EObject getCorrepondenceSourcePcmType(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature) {
-      Type _type = umlParameter.getType();
-      return _type;
     }
     
     public EObject getCorrepondenceSourcePcmSignature(final Operation umlOperation, final Parameter umlParameter) {
       return umlOperation;
     }
     
-    public void updatePcmParameterElement(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
+    public void updatePcmParameterElement(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
       pcmParameter.setParameterName(umlParameter.getName());
       pcmParameter.setEntityName(umlParameter.getName());
     }
@@ -72,20 +75,14 @@ public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutine
     	return;
     }
     initializeRetrieveElementState(pcmSignature);
-    DataType pcmType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmType(umlOperation, umlParameter, pcmSignature), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
-    	null);
-    if (pcmType == null) {
-    	return;
-    }
-    initializeRetrieveElementState(pcmType);
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = RepositoryFactoryImpl.eINSTANCE.createParameter();
     initializeCreateElementState(pcmParameter);
-    userExecution.updatePcmParameterElement(umlOperation, umlParameter, pcmSignature, pcmType, pcmParameter);
+    userExecution.updatePcmParameterElement(umlOperation, umlParameter, pcmSignature, pcmParameter);
     
-    addCorrespondenceBetween(userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmType, pcmParameter), userExecution.getElement2(umlOperation, umlParameter, pcmSignature, pcmType, pcmParameter), "");
+    // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmParameter);
+    userExecution.update0Element(umlOperation, umlParameter, pcmSignature, pcmParameter);
+    
+    addCorrespondenceBetween(userExecution.getElement2(umlOperation, umlParameter, pcmSignature, pcmParameter), userExecution.getElement3(umlOperation, umlParameter, pcmSignature, pcmParameter), "");
     
     postprocessElementStates();
   }

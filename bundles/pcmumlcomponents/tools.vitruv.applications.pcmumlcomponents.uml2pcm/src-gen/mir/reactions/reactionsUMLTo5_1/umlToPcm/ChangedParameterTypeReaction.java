@@ -3,6 +3,8 @@ package mir.reactions.reactionsUMLTo5_1.umlToPcm;
 import com.google.common.base.Objects;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
@@ -62,22 +64,8 @@ class ChangedParameterTypeReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEReference<Parameter, Type> typedChange = (ReplaceSingleValuedEReference<Parameter, Type>)change;
-    Parameter affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    Type oldValue = typedChange.getOldValue();
-    Type newValue = typedChange.getNewValue();
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
-    	return false;
-    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
-  }
-  
-  private boolean checkUserDefinedPrecondition(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue) {
-    ParameterDirectionKind _direction = affectedEObject.getDirection();
-    boolean _notEquals = (!Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL));
-    return _notEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -86,7 +74,23 @@ class ChangedParameterTypeReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeParameterType(affectedEObject);
+      ParameterDirectionKind _direction = affectedEObject.getDirection();
+      boolean _equals = Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL);
+      if (_equals) {
+        if ((newValue != null)) {
+          Element _owner = affectedEObject.getOwner();
+          _routinesFacade.changeInterfaceOperationType(((Operation) _owner), affectedEObject);
+        } else {
+          Element _owner_1 = affectedEObject.getOwner();
+          _routinesFacade.unsetInterfaceOperationType(((Operation) _owner_1));
+        }
+      } else {
+        if ((newValue != null)) {
+          _routinesFacade.changeParameterType(affectedEObject);
+        } else {
+          _routinesFacade.unsetParameterType(affectedEObject);
+        }
+      }
     }
   }
 }

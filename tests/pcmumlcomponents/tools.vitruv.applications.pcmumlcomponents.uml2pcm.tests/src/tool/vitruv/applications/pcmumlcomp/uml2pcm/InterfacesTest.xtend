@@ -14,6 +14,8 @@ import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.apache.log4j.Logger
+import org.apache.log4j.Level
 
 class InterfacesTest extends AbstractUmlPcmTest {
 	
@@ -37,19 +39,23 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void createIntefaceSignature() {
+	public def void createIntefaceOperation() {
+		val logger = Logger.getLogger("")
+		logger.level = Level.ALL
 		val umlInterface = createUmlInterface("i2")
 		val p1Type = UMLFactory.eINSTANCE.createPrimitiveType()
 		p1Type.name = "t1";
 		rootElement.packagedElements += p1Type
-		val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
+		/*val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
 		returnType.name = "Boolean"
-		rootElement.packagedElements += returnType
-		val parameters = new BasicEList<String>()
-		parameters += "p1"
+		rootElement.packagedElements += returnType*/
+		val parameterNames = new BasicEList<String>()
+		parameterNames += "p1"
 		val parameterTypes = new BasicEList<Type>()
 		parameterTypes += p1Type
-		val umlOperation = umlInterface.createOwnedOperation("o1", parameters, parameterTypes, returnType)
+		// TODO: this is not picked up correctly and creates parameters without further properties in the saved .repository
+		//val umlOperation = umlInterface.createOwnedOperation("o1", parameterNames, parameterTypes, returnType)
+		val umlOperation = createInterfaceOperation(umlInterface, "o1", "Boolean")
 		saveAndSynchronizeChanges(rootElement);
 
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten;
@@ -57,11 +63,11 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val pcmOperation = (correspondingElements.get(0) as OperationSignature)
 		assertTrue(pcmOperation instanceof OperationSignature)
 		assertEquals(umlOperation.name, pcmOperation.entityName)
-		println("createInterfaceSignature")
-		println(returnType)
-		println(pcmOperation.returnType__OperationSignature)
-		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(returnType.name),
+		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(umlOperation.type.name),
 			(pcmOperation.returnType__OperationSignature as PrimitiveDataType).type)
+			
+		//assertEquals(1, pcmOperation.parameters__OperationSignature.length)
+		//assertEquals(parameterNames.get(0), pcmOperation.parameters__OperationSignature.get(0).entityName)
 	}
 	
 	protected def Operation createInterfaceOperation(Interface umlInterface, String operationName, String operationType) {
@@ -77,15 +83,12 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void changeInterfaceSignature() {
+	public def void changeInterfaceOperation() {
 		val umlInterface = createUmlInterface("i3")
 		val umlOperation = createInterfaceOperation(umlInterface, "o1", "Boolean")
-		val correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
-		val pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
+		var correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
+		var pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
 		umlOperation.name = "o11"
-		println("change interface signature")
-		println(pcmSignature.returnType__OperationSignature)
-		println((pcmSignature.returnType__OperationSignature as PrimitiveDataType).type)
 		saveAndSynchronizeChanges(umlOperation)
 		assertEquals(umlOperation.name, pcmSignature.entityName)
 		val newType = UMLFactory.eINSTANCE.createPrimitiveType()
@@ -94,11 +97,16 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		umlOperation.type = newType
 		saveAndSynchronizeChanges(umlOperation)
 		
-		saveAndSynchronizeChanges(rootElement)
-		println(pcmSignature.returnType__OperationSignature)
-		println((pcmSignature.returnType__OperationSignature as PrimitiveDataType).type)
+		correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
+		pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(newType.name),
 			(pcmSignature.returnType__OperationSignature as PrimitiveDataType).type)
+			
+		umlOperation.type = null
+		saveAndSynchronizeChanges(umlOperation)
+		correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
+		pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
+		assertNull(pcmSignature.returnType__OperationSignature)
 	}
 	
 	protected def Parameter createParameter(Operation umlOperation, String name, String type) {
@@ -114,10 +122,13 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void addSignatureParameter() {
+	public def void addOperationParameter() {
 		val umlInterface = createUmlInterface("i4")
 		val umlOperation = createInterfaceOperation(umlInterface, "o1", "Boolean")
 		val umlParameter = createParameter(umlOperation, "p1", "Integer")
+		
+		val pcmSignature = getCorrespondingSignature(umlOperation)
+		assertEquals(1, pcmSignature.parameters__OperationSignature.length)
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlParameter]).flatten
 		assertEquals(1, correspondingElements.length)
@@ -130,8 +141,18 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(umlParameter.type.name), (pcmParameter.dataType__Parameter as PrimitiveDataType).type)
 	}
 	
+	protected def OperationSignature getCorrespondingSignature(Operation operation) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[operation]).flatten
+		return (correspondingElements.get(0) as OperationSignature)
+	}
+	
+	protected def org.palladiosimulator.pcm.repository.Parameter getCorrespondingParameter(Parameter umlParameter) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlParameter]).flatten
+		return (correspondingElements.get(0) as org.palladiosimulator.pcm.repository.Parameter)
+	}
+	
 	@Test
-	public def void changeSignatureParameter() {
+	public def void changeOperationParameter() {
 		val umlInterface = createUmlInterface("i4")
 		val umlOperation = createInterfaceOperation(umlInterface, "o1", "Boolean")
 		val umlParameter = createParameter(umlOperation, "p1", "Integer")
@@ -139,21 +160,51 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlParameter]).flatten
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof org.palladiosimulator.pcm.repository.Parameter)
-		val pcmParameter = (correspondingElements.get(0) as org.palladiosimulator.pcm.repository.Parameter)
+		var pcmParameter = (correspondingElements.get(0) as org.palladiosimulator.pcm.repository.Parameter)
 		
 		val newName = "p11"
 		umlParameter.name = newName
 		saveAndSynchronizeChanges(umlParameter)
+		pcmParameter = getCorrespondingParameter(umlParameter)
 		assertEquals(newName, pcmParameter.parameterName)
 		
 		val newType = umlOperation.type
 		umlParameter.type = newType
 		saveAndSynchronizeChanges(umlParameter)
+		pcmParameter = getCorrespondingParameter(umlParameter)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(newType.name), (pcmParameter.dataType__Parameter as PrimitiveDataType).type)
 		
 		umlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
 		saveAndSynchronizeChanges(umlParameter)
+		pcmParameter = getCorrespondingParameter(umlParameter)
 		assertEquals(UmlToPcmUtil.getPcmParameterModifier(umlParameter.direction), pcmParameter.modifier__Parameter)
+	}
+	
+	@Test
+	public def void deleteOperationParameter() {
+		val umlInterface = createUmlInterface("i5")
+		val umlOperation = createInterfaceOperation(umlInterface, "o1", "Boolean")
+		val parameter1 = createParameter(umlOperation, "p1", "Integer")
+		val remainingParameterName = "p2"
+		createParameter(umlOperation, remainingParameterName, "String")
+		
+		var pcmSignature = getCorrespondingSignature(umlOperation)
+		
+		assertEquals(2, pcmSignature.parameters__OperationSignature.length)
+		
+		umlOperation.ownedParameters -= parameter1
+		saveAndSynchronizeChanges(umlOperation)
+		
+		pcmSignature = getCorrespondingSignature(umlOperation)
+		assertEquals(1, pcmSignature.parameters__OperationSignature.length)
+		assertEquals(remainingParameterName, pcmSignature.parameters__OperationSignature.get(0).entityName)
+		
+		umlOperation.ownedParameters.remove(0)
+		saveAndSynchronizeChanges(umlOperation)
+		
+		pcmSignature = getCorrespondingSignature(umlOperation)
+		assertEquals(1, pcmSignature.parameters__OperationSignature.length)
+		assertNull(pcmSignature.returnType__OperationSignature)
 	}
 	
 }

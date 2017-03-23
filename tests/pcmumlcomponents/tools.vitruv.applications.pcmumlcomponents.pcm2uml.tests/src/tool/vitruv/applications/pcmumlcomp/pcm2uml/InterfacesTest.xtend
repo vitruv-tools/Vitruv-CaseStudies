@@ -79,14 +79,20 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		rootElement.dataTypes__Repository += newReturnType
 		pcmOperation.returnType__OperationSignature = newReturnType
 		saveAndSynchronizeChanges(rootElement)
-		val correspondingOperation = correspondenceModel.getCorrespondingEObjects(#[pcmOperation]).flatten
-		val umlOperation = (correspondingOperation.get(0) as Operation)
+		var correspondingOperation = correspondenceModel.getCorrespondingEObjects(#[pcmOperation]).flatten
+		var umlOperation = (correspondingOperation.get(0) as Operation)
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(newReturnType.type), umlOperation.type.name)
 		
 		val newOperationName = "o11"
 		pcmOperation.entityName = newOperationName
 		saveAndSynchronizeChanges(pcmOperation)
 		assertEquals(newOperationName, umlOperation.name)
+		
+		pcmOperation.returnType__OperationSignature = null
+		saveAndSynchronizeChanges(rootElement)
+		correspondingOperation = correspondenceModel.getCorrespondingEObjects(#[pcmOperation]).flatten
+		umlOperation = (correspondingOperation.get(0) as Operation)
+		assertEquals(null, umlOperation.type)
 	}
 	
 	@Test
