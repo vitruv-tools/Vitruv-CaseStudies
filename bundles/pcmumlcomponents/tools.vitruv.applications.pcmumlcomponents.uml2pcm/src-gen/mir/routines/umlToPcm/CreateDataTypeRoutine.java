@@ -1,17 +1,21 @@
 package mir.routines.umlToPcm;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import mir.routines.umlToPcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.cdo.CDOObject;
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Model;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Extension;
+import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
-import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
@@ -24,30 +28,20 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final DataType umlType, final Repository pcmRepository, final CompositeDataType pcmType) {
-      return pcmRepository;
-    }
-    
-    public EObject getCorrepondenceSourcePcmRepository(final DataType umlType) {
-      Model _model = umlType.getModel();
-      return _model;
-    }
-    
-    public void update0Element(final DataType umlType, final Repository pcmRepository, final CompositeDataType pcmType) {
-      EList<org.palladiosimulator.pcm.repository.DataType> _dataTypes__Repository = pcmRepository.getDataTypes__Repository();
-      _dataTypes__Repository.add(pcmType);
-    }
-    
-    public EObject getElement2(final DataType umlType, final Repository pcmRepository, final CompositeDataType pcmType) {
-      return umlType;
-    }
-    
-    public void updatePcmTypeElement(final DataType umlType, final Repository pcmRepository, final CompositeDataType pcmType) {
-      pcmType.setEntityName(umlType.getName());
-    }
-    
-    public EObject getElement3(final DataType umlType, final Repository pcmRepository, final CompositeDataType pcmType) {
-      return pcmType;
+    public void callRoutine1(final DataType umlType, @Extension final RoutinesFacade _routinesFacade) {
+      final String userPromptMsg = "Please select the PCM type to create";
+      final List<? extends Class<? extends CDOObject>> pcmDataTypes = Collections.<Class<? extends CDOObject>>unmodifiableList(CollectionLiterals.<Class<? extends CDOObject>>newArrayList(CollectionDataType.class, CompositeDataType.class));
+      int _size = pcmDataTypes.size();
+      final List<String> pcmDataTypeNames = new ArrayList<String>(_size);
+      for (final Class<? extends CDOObject> collectionDataType : pcmDataTypes) {
+        pcmDataTypeNames.add(collectionDataType.getName());
+      }
+      final int userInput = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, userPromptMsg, ((String[])Conversions.unwrapArray(pcmDataTypeNames, String.class)));
+      if ((userInput == 0)) {
+        _routinesFacade.createCollectionDataType(umlType);
+      } else {
+        _routinesFacade.createCompositeDataType(umlType);
+      }
     }
   }
   
@@ -64,23 +58,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreateDataTypeRoutine with input:");
     getLogger().debug("   DataType: " + this.umlType);
     
-    Repository pcmRepository = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmRepository(umlType), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
-    	null);
-    if (pcmRepository == null) {
-    	return;
-    }
-    initializeRetrieveElementState(pcmRepository);
-    CompositeDataType pcmType = RepositoryFactoryImpl.eINSTANCE.createCompositeDataType();
-    initializeCreateElementState(pcmType);
-    userExecution.updatePcmTypeElement(umlType, pcmRepository, pcmType);
-    
-    // val updatedElement userExecution.getElement1(umlType, pcmRepository, pcmType);
-    userExecution.update0Element(umlType, pcmRepository, pcmType);
-    
-    addCorrespondenceBetween(userExecution.getElement2(umlType, pcmRepository, pcmType), userExecution.getElement3(umlType, pcmRepository, pcmType), "");
+    userExecution.callRoutine1(umlType, actionsFacade);
     
     postprocessElementStates();
   }

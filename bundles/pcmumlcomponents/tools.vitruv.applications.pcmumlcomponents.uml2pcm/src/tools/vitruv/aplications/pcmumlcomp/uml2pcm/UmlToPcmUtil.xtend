@@ -10,7 +10,7 @@ import org.eclipse.uml2.uml.ParameterDirectionKind
 
 class UmlToPcmUtil {
 	
-	static val CollectionTypeAttributeName = "innerType" 
+	public static val CollectionTypeAttributeName = "innerType" 
 	
 	def static PrimitiveTypeEnum getPcmPrimitiveType(String typeName) {
 		if (typeName == "Integer")

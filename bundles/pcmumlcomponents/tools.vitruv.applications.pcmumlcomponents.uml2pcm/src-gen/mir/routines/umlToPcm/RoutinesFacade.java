@@ -50,9 +50,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeInnerDeclarationOwner(final Property umlProperty) {
-    mir.routines.umlToPcm.ChangeInnerDeclarationOwnerRoutine effect = new mir.routines.umlToPcm.ChangeInnerDeclarationOwnerRoutine(this.executionState, calledBy,
-    	umlProperty);
+  public void createCompositeDataType(final DataType umlType) {
+    mir.routines.umlToPcm.CreateCompositeDataTypeRoutine effect = new mir.routines.umlToPcm.CreateCompositeDataTypeRoutine(this.executionState, calledBy,
+    	umlType);
+    effect.applyRoutine();
+  }
+  
+  public void createCollectionDataType(final DataType umlType) {
+    mir.routines.umlToPcm.CreateCollectionDataTypeRoutine effect = new mir.routines.umlToPcm.CreateCollectionDataTypeRoutine(this.executionState, calledBy,
+    	umlType);
     effect.applyRoutine();
   }
   
@@ -62,9 +68,27 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void deleteInnerDeclarationOfProperty(final Property umlProperty) {
+    mir.routines.umlToPcm.DeleteInnerDeclarationOfPropertyRoutine effect = new mir.routines.umlToPcm.DeleteInnerDeclarationOfPropertyRoutine(this.executionState, calledBy,
+    	umlProperty);
+    effect.applyRoutine();
+  }
+  
+  public void unsetCollectionInnerType(final DataType umlType) {
+    mir.routines.umlToPcm.UnsetCollectionInnerTypeRoutine effect = new mir.routines.umlToPcm.UnsetCollectionInnerTypeRoutine(this.executionState, calledBy,
+    	umlType);
+    effect.applyRoutine();
+  }
+  
   public void changePropertyType(final Property umlProperty, final DataType umlType) {
     mir.routines.umlToPcm.ChangePropertyTypeRoutine effect = new mir.routines.umlToPcm.ChangePropertyTypeRoutine(this.executionState, calledBy,
     	umlProperty, umlType);
+    effect.applyRoutine();
+  }
+  
+  public void changeCollectionType(final DataType umlOwner, final DataType umlType) {
+    mir.routines.umlToPcm.ChangeCollectionTypeRoutine effect = new mir.routines.umlToPcm.ChangeCollectionTypeRoutine(this.executionState, calledBy,
+    	umlOwner, umlType);
     effect.applyRoutine();
   }
   

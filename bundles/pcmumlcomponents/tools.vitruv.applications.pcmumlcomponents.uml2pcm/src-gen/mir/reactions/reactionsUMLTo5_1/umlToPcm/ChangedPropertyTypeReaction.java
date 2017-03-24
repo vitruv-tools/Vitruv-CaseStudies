@@ -3,8 +3,8 @@ package mir.reactions.reactionsUMLTo5_1.umlToPcm;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -21,11 +21,11 @@ class ChangedPropertyTypeReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<Property, Type> typedChange = (ReplaceSingleValuedEReference<Property, Type>)change;
+    ReplaceSingleValuedEReference<Property, DataType> typedChange = (ReplaceSingleValuedEReference<Property, DataType>)change;
     Property affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Type oldValue = typedChange.getOldValue();
-    Type newValue = typedChange.getNewValue();
+    DataType oldValue = typedChange.getOldValue();
+    DataType newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedPropertyTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedPropertyTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -36,17 +36,17 @@ class ChangedPropertyTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<Property, Type> relevantChange = (ReplaceSingleValuedEReference<Property, Type>)change;
+    ReplaceSingleValuedEReference<Property, DataType> relevantChange = (ReplaceSingleValuedEReference<Property, DataType>)change;
     if (!(relevantChange.getAffectedEObject() instanceof Property)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("type")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof Type)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof Type)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
     	return false;
     }
     return true;
@@ -61,20 +61,8 @@ class ChangedPropertyTypeReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEReference<Property, Type> typedChange = (ReplaceSingleValuedEReference<Property, Type>)change;
-    Property affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    Type oldValue = typedChange.getOldValue();
-    Type newValue = typedChange.getNewValue();
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
-    	return false;
-    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
-  }
-  
-  private boolean checkUserDefinedPrecondition(final Property affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue) {
-    return (newValue instanceof DataType);
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -82,8 +70,10 @@ class ChangedPropertyTypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Property affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changePropertyType(affectedEObject, ((DataType) newValue));
+    public void callRoutine1(final Property affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changePropertyType(affectedEObject, newValue);
+      Element _owner = affectedEObject.getOwner();
+      _routinesFacade.changeCollectionType(((DataType) _owner), newValue);
     }
   }
 }
