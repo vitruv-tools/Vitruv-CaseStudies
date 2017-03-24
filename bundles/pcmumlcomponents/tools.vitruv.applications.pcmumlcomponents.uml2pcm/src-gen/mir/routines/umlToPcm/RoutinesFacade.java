@@ -4,12 +4,14 @@ import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Usage;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -161,6 +163,42 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void createPcmComponent(final Component umlComponent) {
     mir.routines.umlToPcm.CreatePcmComponentRoutine effect = new mir.routines.umlToPcm.CreatePcmComponentRoutine(this.executionState, calledBy,
     	umlComponent);
+    effect.applyRoutine();
+  }
+  
+  public void createCompositeComponent(final Component umlComponent) {
+    mir.routines.umlToPcm.CreateCompositeComponentRoutine effect = new mir.routines.umlToPcm.CreateCompositeComponentRoutine(this.executionState, calledBy,
+    	umlComponent);
+    effect.applyRoutine();
+  }
+  
+  public void createBasicComponent(final Component umlComponent) {
+    mir.routines.umlToPcm.CreateBasicComponentRoutine effect = new mir.routines.umlToPcm.CreateBasicComponentRoutine(this.executionState, calledBy,
+    	umlComponent);
+    effect.applyRoutine();
+  }
+  
+  public void createRequiredRole(final Component umlComponent, final Usage umlUsage) {
+    mir.routines.umlToPcm.CreateRequiredRoleRoutine effect = new mir.routines.umlToPcm.CreateRequiredRoleRoutine(this.executionState, calledBy,
+    	umlComponent, umlUsage);
+    effect.applyRoutine();
+  }
+  
+  public void changeRequiredInterface(final Usage umlUsage, final Interface umlInterface) {
+    mir.routines.umlToPcm.ChangeRequiredInterfaceRoutine effect = new mir.routines.umlToPcm.ChangeRequiredInterfaceRoutine(this.executionState, calledBy,
+    	umlUsage, umlInterface);
+    effect.applyRoutine();
+  }
+  
+  public void createProvidedRole(final Component umlComponent, final InterfaceRealization interfaceRealization) {
+    mir.routines.umlToPcm.CreateProvidedRoleRoutine effect = new mir.routines.umlToPcm.CreateProvidedRoleRoutine(this.executionState, calledBy,
+    	umlComponent, interfaceRealization);
+    effect.applyRoutine();
+  }
+  
+  public void changeProvidedInterface(final InterfaceRealization interfaceRealization, final Interface umlInterface) {
+    mir.routines.umlToPcm.ChangeProvidedInterfaceRoutine effect = new mir.routines.umlToPcm.ChangeProvidedInterfaceRoutine(this.executionState, calledBy,
+    	interfaceRealization, umlInterface);
     effect.applyRoutine();
   }
 }

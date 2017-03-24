@@ -27,5 +27,13 @@ public class ExecutorUMLTo5_1 extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterDirectionReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedParameterDirectionReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.DeletedParameterReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.DeletedParameterReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedComponentReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedComponentReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.AddedUsesRelationshipReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.AddedUsesRelationshipReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedUsesRelationshipInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedUsesRelationshipInterfaceReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.RemovedUsesRelationshipInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.RemovedUsesRelationshipInterfaceReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.RemovedUsesRelationshipReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.RemovedUsesRelationshipReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedInterfaceRealizationRelationshipReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.CreatedInterfaceRealizationRelationshipReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceRealizationInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.ChangedInterfaceRealizationInterfaceReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.RemovedInterfaceRealizationInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.RemovedInterfaceRealizationInterfaceReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUMLTo5_1.umlToPcm.RemovedInterfaceRealizationRelationshipReaction.getExpectedChangeType(), new mir.reactions.reactionsUMLTo5_1.umlToPcm.RemovedInterfaceRealizationRelationshipReaction(userInteracting));
   }
 }

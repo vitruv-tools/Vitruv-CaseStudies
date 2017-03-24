@@ -1,18 +1,17 @@
 package mir.routines.umlToPcm;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import mir.routines.umlToPcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
-import org.eclipse.uml2.uml.Model;
-import org.palladiosimulator.pcm.repository.CompositeComponent;
-import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization {
@@ -25,30 +24,15 @@ public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
-      return pcmRepository;
-    }
-    
-    public EObject getCorrepondenceSourcePcmRepository(final Component umlComponent) {
-      Model _model = umlComponent.getModel();
-      return _model;
-    }
-    
-    public void update0Element(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
-      EList<RepositoryComponent> _components__Repository = pcmRepository.getComponents__Repository();
-      _components__Repository.add(pcmComponent);
-    }
-    
-    public void updatePcmComponentElement(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
-      pcmComponent.setEntityName(umlComponent.getName());
-    }
-    
-    public EObject getElement2(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
-      return umlComponent;
-    }
-    
-    public EObject getElement3(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
-      return pcmComponent;
+    public void callRoutine1(final Component umlComponent, @Extension final RoutinesFacade _routinesFacade) {
+      final String userPromptMsg = "Please select whether this component can have subcomponents.";
+      final List<String> options = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("Yes", "No"));
+      final int choice = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, userPromptMsg, ((String[])Conversions.unwrapArray(options, String.class)));
+      if ((choice == 0)) {
+        _routinesFacade.createCompositeComponent(umlComponent);
+      } else {
+        _routinesFacade.createBasicComponent(umlComponent);
+      }
     }
   }
   
@@ -65,23 +49,7 @@ public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("Called routine CreatePcmComponentRoutine with input:");
     getLogger().debug("   Component: " + this.umlComponent);
     
-    Repository pcmRepository = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmRepository(umlComponent), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
-    	null);
-    if (pcmRepository == null) {
-    	return;
-    }
-    initializeRetrieveElementState(pcmRepository);
-    CompositeComponent pcmComponent = RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
-    initializeCreateElementState(pcmComponent);
-    userExecution.updatePcmComponentElement(umlComponent, pcmRepository, pcmComponent);
-    
-    // val updatedElement userExecution.getElement1(umlComponent, pcmRepository, pcmComponent);
-    userExecution.update0Element(umlComponent, pcmRepository, pcmComponent);
-    
-    addCorrespondenceBetween(userExecution.getElement2(umlComponent, pcmRepository, pcmComponent), userExecution.getElement3(umlComponent, pcmRepository, pcmComponent), "");
+    userExecution.callRoutine1(umlComponent, actionsFacade);
     
     postprocessElementStates();
   }
