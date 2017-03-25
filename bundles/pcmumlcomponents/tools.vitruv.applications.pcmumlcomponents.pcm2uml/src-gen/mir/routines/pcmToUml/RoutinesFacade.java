@@ -153,9 +153,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createUmlComponent(final RepositoryComponent pcmComponent) {
+  public void createUmlComponent(final RepositoryComponent pcmComponent, final String correspondenceTag) {
     mir.routines.pcmToUml.CreateUmlComponentRoutine effect = new mir.routines.pcmToUml.CreateUmlComponentRoutine(this.executionState, calledBy,
-    	pcmComponent);
+    	pcmComponent, correspondenceTag);
     effect.applyRoutine();
   }
   

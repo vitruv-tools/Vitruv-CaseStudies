@@ -29,6 +29,7 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
     }
     
     public void update0Element(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface, final Usage umlUsage, final Interface umlInterface) {
+      umlUsage.getSuppliers().clear();
       EList<NamedElement> _suppliers = umlUsage.getSuppliers();
       _suppliers.add(umlInterface);
     }

@@ -3,7 +3,7 @@ package mir.routines.pcmToUml;
 import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.InterfaceRealization;
+import org.eclipse.uml2.uml.Usage;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -20,11 +20,11 @@ public class DeleteRequiredRoleRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final OperationRequiredRole requiredRole, final InterfaceRealization interfaceRealization) {
-      return interfaceRealization;
+    public EObject getElement1(final OperationRequiredRole requiredRole, final Usage usage) {
+      return usage;
     }
     
-    public EObject getCorrepondenceSourceInterfaceRealization(final OperationRequiredRole requiredRole) {
+    public EObject getCorrepondenceSourceUsage(final OperationRequiredRole requiredRole) {
       return requiredRole;
     }
   }
@@ -42,16 +42,16 @@ public class DeleteRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("Called routine DeleteRequiredRoleRoutine with input:");
     getLogger().debug("   OperationRequiredRole: " + this.requiredRole);
     
-    InterfaceRealization interfaceRealization = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceInterfaceRealization(requiredRole), // correspondence source supplier
-    	InterfaceRealization.class,
-    	(InterfaceRealization _element) -> true, // correspondence precondition checker
+    Usage usage = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUsage(requiredRole), // correspondence source supplier
+    	Usage.class,
+    	(Usage _element) -> true, // correspondence precondition checker
     	null);
-    if (interfaceRealization == null) {
+    if (usage == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceRealization);
-    deleteObject(userExecution.getElement1(requiredRole, interfaceRealization));
+    initializeRetrieveElementState(usage);
+    deleteObject(userExecution.getElement1(requiredRole, usage));
     
     postprocessElementStates();
   }

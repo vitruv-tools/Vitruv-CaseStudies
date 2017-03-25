@@ -3,8 +3,8 @@ package mir.reactions.reactions5_1ToUML.pcmToUml;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.palladiosimulator.pcm.repository.CompositeComponent;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -15,18 +15,18 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class CreatedPcmComponentReaction extends AbstractReactionRealization {
-  public CreatedPcmComponentReaction(final UserInteracting userInteracting) {
+class CreatedCompositePcmComponentReaction extends AbstractReactionRealization {
+  public CreatedCompositePcmComponentReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Repository, RepositoryComponent> typedChange = ((CreateAndInsertNonRoot<Repository, RepositoryComponent>)change).getInsertChange();
+    InsertEReference<Repository, CompositeComponent> typedChange = ((CreateAndInsertNonRoot<Repository, CompositeComponent>)change).getInsertChange();
     Repository affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    RepositoryComponent newValue = typedChange.getNewValue();
+    CompositeComponent newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmComponentReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCompositePcmComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedCompositePcmComponentReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -35,14 +35,14 @@ class CreatedPcmComponentReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Repository, RepositoryComponent> relevantChange = ((CreateAndInsertNonRoot<Repository, RepositoryComponent>)change).getInsertChange();
+    InsertEReference<Repository, CompositeComponent> relevantChange = ((CreateAndInsertNonRoot<Repository, CompositeComponent>)change).getInsertChange();
     if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("components__Repository")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof RepositoryComponent)) {
+    if (!(relevantChange.getNewValue() instanceof CompositeComponent)) {
     	return false;
     }
     return true;
@@ -66,8 +66,8 @@ class CreatedPcmComponentReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final RepositoryComponent newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createUmlComponent(newValue);
+    public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final CompositeComponent newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createUmlComponent(newValue, "composite");
     }
   }
 }

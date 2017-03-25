@@ -25,48 +25,55 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final RepositoryComponent pcmComponent, final Model umlModel, final Component umlComponent) {
+    public EObject getElement1(final RepositoryComponent pcmComponent, final String correspondenceTag, final Model umlModel, final Component umlComponent) {
       return umlModel;
     }
     
-    public void update0Element(final RepositoryComponent pcmComponent, final Model umlModel, final Component umlComponent) {
+    public void update0Element(final RepositoryComponent pcmComponent, final String correspondenceTag, final Model umlModel, final Component umlComponent) {
       EList<PackageableElement> _packagedElements = umlModel.getPackagedElements();
       _packagedElements.add(umlComponent);
     }
     
-    public EObject getElement2(final RepositoryComponent pcmComponent, final Model umlModel, final Component umlComponent) {
+    public EObject getElement2(final RepositoryComponent pcmComponent, final String correspondenceTag, final Model umlModel, final Component umlComponent) {
       return pcmComponent;
     }
     
-    public EObject getElement3(final RepositoryComponent pcmComponent, final Model umlModel, final Component umlComponent) {
+    public EObject getElement3(final RepositoryComponent pcmComponent, final String correspondenceTag, final Model umlModel, final Component umlComponent) {
       return umlComponent;
     }
     
-    public void updateUmlComponentElement(final RepositoryComponent pcmComponent, final Model umlModel, final Component umlComponent) {
+    public void updateUmlComponentElement(final RepositoryComponent pcmComponent, final String correspondenceTag, final Model umlModel, final Component umlComponent) {
       umlComponent.setName(pcmComponent.getEntityName());
     }
     
-    public EObject getCorrepondenceSourceUmlModel(final RepositoryComponent pcmComponent) {
+    public String getTag1(final RepositoryComponent pcmComponent, final String correspondenceTag, final Model umlModel, final Component umlComponent) {
+      return correspondenceTag;
+    }
+    
+    public EObject getCorrepondenceSourceUmlModel(final RepositoryComponent pcmComponent, final String correspondenceTag) {
       Repository _repository__RepositoryComponent = pcmComponent.getRepository__RepositoryComponent();
       return _repository__RepositoryComponent;
     }
   }
   
-  public CreateUmlComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final RepositoryComponent pcmComponent) {
+  public CreateUmlComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final RepositoryComponent pcmComponent, final String correspondenceTag) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcmToUml.CreateUmlComponentRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
-    this.pcmComponent = pcmComponent;
+    this.pcmComponent = pcmComponent;this.correspondenceTag = correspondenceTag;
   }
   
   private RepositoryComponent pcmComponent;
   
+  private String correspondenceTag;
+  
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlComponentRoutine with input:");
     getLogger().debug("   RepositoryComponent: " + this.pcmComponent);
+    getLogger().debug("   String: " + this.correspondenceTag);
     
     Model umlModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlModel(pcmComponent), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUmlModel(pcmComponent, correspondenceTag), // correspondence source supplier
     	Model.class,
     	(Model _element) -> true, // correspondence precondition checker
     	null);
@@ -76,12 +83,12 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     initializeRetrieveElementState(umlModel);
     Component umlComponent = UMLFactoryImpl.eINSTANCE.createComponent();
     initializeCreateElementState(umlComponent);
-    userExecution.updateUmlComponentElement(pcmComponent, umlModel, umlComponent);
+    userExecution.updateUmlComponentElement(pcmComponent, correspondenceTag, umlModel, umlComponent);
     
-    // val updatedElement userExecution.getElement1(pcmComponent, umlModel, umlComponent);
-    userExecution.update0Element(pcmComponent, umlModel, umlComponent);
+    // val updatedElement userExecution.getElement1(pcmComponent, correspondenceTag, umlModel, umlComponent);
+    userExecution.update0Element(pcmComponent, correspondenceTag, umlModel, umlComponent);
     
-    addCorrespondenceBetween(userExecution.getElement2(pcmComponent, umlModel, umlComponent), userExecution.getElement3(pcmComponent, umlModel, umlComponent), "");
+    addCorrespondenceBetween(userExecution.getElement2(pcmComponent, correspondenceTag, umlModel, umlComponent), userExecution.getElement3(pcmComponent, correspondenceTag, umlModel, umlComponent), userExecution.getTag1(pcmComponent, correspondenceTag, umlModel, umlComponent));
     
     postprocessElementStates();
   }
