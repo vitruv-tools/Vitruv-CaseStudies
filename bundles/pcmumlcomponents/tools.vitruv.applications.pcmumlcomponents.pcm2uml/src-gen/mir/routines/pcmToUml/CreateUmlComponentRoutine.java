@@ -82,7 +82,8 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     }
     registerObjectUnderModification(umlModel);
     Component umlComponent = UMLFactoryImpl.eINSTANCE.createComponent();
-    userExecution.updateUmlComponentElement(pcmComponent, umlModel, umlComponent);
+    initializeCreateElementState(umlComponent);
+    userExecution.updateUmlComponentElement(pcmComponent, correspondenceTag, umlModel, umlComponent);
     
     // val updatedElement userExecution.getElement1(pcmComponent, correspondenceTag, umlModel, umlComponent);
     userExecution.update0Element(pcmComponent, correspondenceTag, umlModel, umlComponent);
