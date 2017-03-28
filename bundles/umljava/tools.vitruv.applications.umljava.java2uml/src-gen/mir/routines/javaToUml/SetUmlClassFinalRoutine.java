@@ -33,6 +33,7 @@ public class SetUmlClassFinalRoutine extends AbstractRepairRoutineRealization {
         if (((isFinal).intValue() == 0)) {
           uClass.setIsFinalSpecialization(false);
         } else {
+          throw new IllegalArgumentException(("Invalid isFinal value: " + isFinal));
         }
       }
     }

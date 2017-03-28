@@ -29,10 +29,10 @@ routine createUmlClass(java::Class jClass) {
         call {
             val uModel = getUmlModel(correspondenceModel)
             uModel.packagedElements += uClass;
-            persistProjectRelative(jClass, uModel, "model/model.uml")
+            persistProjectRelative(jClass, uModel, ROOTMODELFILE)
         }
         add correspondence between uClass and jClass
-        add correspondence between uClass and jClass.eContainer //TODO ist das die CompuUnit?
+        add correspondence between uClass and jClass.eContainer
     }
 }
 
@@ -50,7 +50,7 @@ routine createUmlInterface(java::Interface jI) {
         call {
             val uModel = getUmlModel(correspondenceModel)
             uModel.packagedElements += uI;
-            persistProjectRelative(jI, uModel, "model/model.uml")
+            persistProjectRelative(jI, uModel, ROOTMODELFILE)
         }
         add correspondence between uI and jI
         add correspondence between uI and jI.eContainer
@@ -63,7 +63,7 @@ reaction JavaClassifierRenamed {
     call renameUmlClassifier(affectedEObject)
 }
 
-//TODO uml::Classifer = {Class, Interface, Enumeration, und noch vieles mehr <-- Problem?}
+//uml::Classifer = {Class, Interface, Enumeration, ...}
 routine renameUmlClassifier(java::ConcreteClassifier jClass) {
     match {
         val uClass = retrieve uml::Classifier corresponding to jClass
@@ -79,6 +79,11 @@ routine renameUmlClassifier(java::ConcreteClassifier jClass) {
     }
 }
 
+reaction JavaCompUnitDeleted {
+    after element java::CompilationUnit removed as root
+    call deleteUmlClassifier(oldValue.classifiers.head, oldValue)
+}
+
 reaction JavaClassifierDeleted {
     after element java::ConcreteClassifier deleted and removed from java::CompilationUnit[classifiers]
     call deleteUmlClassifier(oldValue, affectedEObject)
@@ -90,15 +95,32 @@ routine deleteUmlClassifier(java::ConcreteClassifier jClass, java::CompilationUn
     }
     action {
         delete uClass
+        delete jClass
         delete jCompUnit
     }
 }
 
+reaction JavaElementMadePublic {
+    after element java::Public created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
+    call changeUmlNamedElementVisibility(affectedEObject, newValue)
+}
 
+routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem, java::Modifier mod) {
+    match {
+        val uElem = retrieve uml::NamedElement corresponding to jElem
+    }
+    action {
+        update uElem {
+            uElem.visibility = getUmlVisibilityKind(mod);
+        }
+    }
+}
+//TODO
+/* 
 reaction JavaClassMadePublic {
     after element java::Public created and inserted in java::Class[annotationsAndModifiers]
     call changeUmlClassVisibility(affectedEObject, newValue)
-}
+}*/
 reaction JavaClassMadePrivate {
     after element java::Private created and inserted in java::Class[annotationsAndModifiers]
     call changeUmlClassVisibility(affectedEObject, newValue)
@@ -137,7 +159,7 @@ reaction JavaClassMadeNonAbstract {
     call setUmlClassAbstract(affectedEObject, 0)
 }
 
-// isAbstract: Boolean geht nicht?
+// TODO isAbstract: Boolean geht nicht?
 // 1 = true
 // 0 = false
 routine setUmlClassAbstract(java::Class jClass, Int isAbstract) {
@@ -271,7 +293,7 @@ routine setUmlClassFinal(java::Class jClass, Int isFinal) {
             } else if (isFinal == 0) {
                 uClass.isFinalSpecialization = false;
             } else {
-                //Fehler
+                throw new IllegalArgumentException("Invalid isFinal value: " + isFinal)
             }
         }
     }
@@ -354,12 +376,12 @@ routine deleteUmlMethod(java::Method jMeth) {
         delete uMeth
     }
 }
-
+/* 
 reaction JavaMethodMadePublic {
     after element java::Public created and inserted in java::ClassMethod[annotationsAndModifiers]
     call changeUmlMethodVisibility(affectedEObject, newValue)
-}
-
+}*/
+//TODO
 reaction JavaMethodMadePrivate {
     after element java::Private created and inserted in java::ClassMethod[annotationsAndModifiers]
     call changeUmlMethodVisibility(affectedEObject, newValue)
@@ -622,12 +644,12 @@ routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
         
     }
 }
-
+/* 
 reaction JavaAttributeMadePublic {
     after element java::Public created and inserted in java::Field[annotationsAndModifiers]
     call changeUmlAttributeVisibility(affectedEObject, newValue)
-}
-
+}*/
+// TODO 
 reaction JavaAttributeMadePrivate {
     after element java::Private created and inserted in java::Field[annotationsAndModifiers]
     call changeUmlAttributeVisibility(affectedEObject, newValue)

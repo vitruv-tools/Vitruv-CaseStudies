@@ -1,5 +1,6 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
+import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import static org.junit.Assert.*;
 import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
 import org.junit.Test
@@ -24,10 +25,10 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlJavaTest {
     
     @Before
     def void before() {
-        uI = createSyncSimpleUmlInterface(INTERFACE_NAME);
+        uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME);
         op = createSimpleUmlOperation(IOPERATION_NAME);
         uI.ownedOperations += op;
-        typeClass = createSyncSimpleUmlClass(TYPE_NAME);
+        typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
         rootElement.packagedElements += uI;
         rootElement.packagedElements += typeClass;
         saveAndSynchronizeChanges(rootElement);

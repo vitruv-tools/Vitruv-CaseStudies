@@ -319,7 +319,7 @@ routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
             } else {
                 javaAttribute.name = umlAttribute.name;
             }
-            javaAttribute.typeReference = createTypeReference(umlAttribute.datatype, customTypeClass);    
+            javaAttribute.typeReference = createTypeReference(umlAttribute.type, customTypeClass);    
         }
         update javaClass {
           javaClass.members += javaAttribute;

@@ -53,11 +53,12 @@ class UmlToJavaHelper {
      * Default-Rückgabe: null -> Package-Private
      */
     def static Modifier getJavaVisibility(VisibilityKind v) {
-        switch v.value {
-                case VisibilityKind.PRIVATE : return ModifiersFactory.eINSTANCE.createPrivate
-                case VisibilityKind.PROTECTED : return ModifiersFactory.eINSTANCE.createProtected
-                case VisibilityKind.PUBLIC : return ModifiersFactory.eINSTANCE.createPublic
-                default : return null //Package-Private
+        switch v {
+                case VisibilityKind.PRIVATE_LITERAL : return ModifiersFactory.eINSTANCE.createPrivate
+                case VisibilityKind.PROTECTED_LITERAL : return ModifiersFactory.eINSTANCE.createProtected
+                case VisibilityKind.PUBLIC_LITERAL : return ModifiersFactory.eINSTANCE.createPublic
+                case VisibilityKind.PACKAGE_LITERAL : return null
+                default : throw new IllegalArgumentException("Invalid VisibilityKind: " + v)
             }
     }
     
@@ -68,8 +69,6 @@ class UmlToJavaHelper {
      * @param cType java-Class
      */
 	def static TypeReference createTypeReference(Type dType, ConcreteClassifier cType) {
-	    
-		
 		if (dType == null && cType == null) {
 		    return TypesFactory.eINSTANCE.createVoid();
 		} else if (cType != null) {
@@ -95,6 +94,5 @@ class UmlToJavaHelper {
 	        case SHORT : return TypesFactory.eINSTANCE.createShort
 	        default: throw new IllegalArgumentException("Invalid PrimitiveType: " + pType.name)
 	    }
-	       ;
 	}
 }

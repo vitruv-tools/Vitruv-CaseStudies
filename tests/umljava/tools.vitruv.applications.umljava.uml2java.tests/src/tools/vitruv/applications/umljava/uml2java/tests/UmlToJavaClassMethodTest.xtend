@@ -1,20 +1,16 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
+import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
 import org.junit.Test
 import static org.junit.Assert.*;
 import org.junit.Before
 import org.junit.After
-import org.emftext.language.java.members.InterfaceMethod
-import org.emftext.language.java.members.Method
 import org.emftext.language.java.members.ClassMethod
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.modifiers.Modifier
 import org.emftext.language.java.modifiers.Static
 import org.emftext.language.java.modifiers.Abstract
-import org.emftext.language.java.modifiers.Private
-import org.emftext.language.java.modifiers.Protected
 
 class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     private static val CLASS_NAME = "ClassName";
@@ -31,8 +27,8 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     
     @Before
     def void before() {
-        uClass = createSyncSimpleUmlClass(CLASS_NAME);
-        typeClass = createSyncSimpleUmlClass(TYPE_NAME);
+        uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
+        typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
         uOp = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, null)
         uClass.ownedOperations += uOp;
         rootElement.packagedElements += uClass;

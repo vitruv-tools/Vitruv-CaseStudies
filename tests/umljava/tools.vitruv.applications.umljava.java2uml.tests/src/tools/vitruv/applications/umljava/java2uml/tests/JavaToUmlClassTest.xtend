@@ -7,11 +7,12 @@ import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.AbstractJavaUmlTest
 
 import static org.junit.Assert.*
-import tools.vitruv.framework.tests.util.TestUtil
 import org.emftext.language.java.modifiers.ModifiersFactory
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import org.junit.Ignore
-import tools.vitruv.applications.umljava.util.JavaUtil
+import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import org.emftext.language.java.containers.CompilationUnit
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
 class JavaToUmlClassTest extends AbstractJavaUmlTest {
     private static val CLASS_NAME = "ClassName";
@@ -52,11 +53,21 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
         assertEquals(CLASS_RENAMED, uClass.name)
     }
     
-    @Ignore @Test
+    @Test
     def testDeleteClass() {
-        deleteAndSynchronizeModel(TestUtil.SOURCE_FOLDER + "/" + jClass.name + ".java")
-        val uClass = getCorrespondingObject(jClass, Class);
+        val comp = jClass.eContainer as CompilationUnit
+        jClass = null;
+        comp.classifiers.clear
+        saveAndSynchronizeChanges(comp)
+        val uClass = getUmlPackagedElementsbyName(JavaToUmlHelper.ROOTMODELFILE, org.eclipse.uml2.uml.Class, CLASS_NAME).head
         assertNull(uClass)
+    }
+    
+    @Test
+    def testDeleteCompilationUnit() {
+        var comp = jClass.eContainer as CompilationUnit
+        comp = null;
+        deleteAndSynchronizeModel("src/ClassName.java")
     }
     
     @Test
@@ -99,7 +110,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
    @Test
    def testSuperClassChanged() {
        val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME);
-       jClass.extends = JavaUtil::createNamespaceReferenceFromClassifier(superClass);
+       jClass.extends = createNamespaceReferenceFromClassifier(superClass);
        saveAndSynchronizeChanges(jClass);
        
        val uClass = getCorrespondingObject(jClass, Class);
@@ -110,8 +121,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
    @Test
    def testAddClassImplement() {
        val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME);
-       jClass.implements += JavaUtil::createNamespaceReferenceFromClassifier(implInterface);
-       //EcoreResourceBridge.saveResource(jClass.eResource())
+       jClass.implements += createNamespaceReferenceFromClassifier(implInterface);
        saveAndSynchronizeChanges(jClass);
        val uClass = getCorrespondingObject(jClass, Class);
        assertEquals(CLASS_NAME, uClass.name)

@@ -7,6 +7,8 @@ import org.junit.Before
 import org.junit.Ignore
 import static tools.vitruv.applications.umljava.util.JavaUtil.*;
 import static tools.vitruv.applications.umljava.util.UmlUtil.*;
+import org.emftext.language.java.containers.CompilationUnit
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 
 class JavaToUmlInterfaceTest extends AbstractJavaUmlTest {
     private static val INTERFACE_NAME = "InterfaceName"
@@ -36,9 +38,14 @@ class JavaToUmlInterfaceTest extends AbstractJavaUmlTest {
         
         assertAndReturnCorrespondingInterface(jInterface)
     }
-    @Ignore @Test
+    @Test
     def void testDeleteInterface() {
-        
+        val comp = jInterface.eContainer as CompilationUnit
+        jInterface = null;
+        comp.classifiers.clear
+        saveAndSynchronizeChanges(comp)
+        val uI = getUmlPackagedElementsbyName(JavaToUmlHelper.ROOTMODELFILE, org.eclipse.uml2.uml.Interface, INTERFACE_NAME).head
+        assertNull(uI)
     }
     
     @Test

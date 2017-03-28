@@ -53,7 +53,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
       final Model uModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel);
       EList<PackageableElement> _packagedElements = uModel.getPackagedElements();
       _packagedElements.add(uI);
-      this.persistProjectRelative(jI, uModel, "model/model.uml");
+      this.persistProjectRelative(jI, uModel, JavaToUmlHelper.ROOTMODELFILE);
     }
   }
   

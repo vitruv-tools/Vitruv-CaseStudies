@@ -8,6 +8,7 @@ import org.junit.Test
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import org.emftext.language.java.modifiers.ModifiersFactory
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
 class JavaToUmlAttributeTest extends AbstractJavaUmlTest {
     private static val ATTRIBUTE_NAME = "attributName"

@@ -30,6 +30,10 @@ public class DeleteUmlClassifierRoutine extends AbstractRepairRoutineRealization
     }
     
     public EObject getElement2(final ConcreteClassifier jClass, final CompilationUnit jCompUnit, final Classifier uClass) {
+      return jClass;
+    }
+    
+    public EObject getElement3(final ConcreteClassifier jClass, final CompilationUnit jCompUnit, final Classifier uClass) {
       return jCompUnit;
     }
   }
@@ -62,6 +66,8 @@ public class DeleteUmlClassifierRoutine extends AbstractRepairRoutineRealization
     deleteObject(userExecution.getElement1(jClass, jCompUnit, uClass));
     
     deleteObject(userExecution.getElement2(jClass, jCompUnit, uClass));
+    
+    deleteObject(userExecution.getElement3(jClass, jCompUnit, uClass));
     
     postprocessElementStates();
   }

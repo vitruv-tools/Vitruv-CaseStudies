@@ -30,6 +30,7 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import org.emftext.language.java.classifiers.ConcreteClassifier
 
 class JavaToUmlHelper {
+    public static val ROOTMODELFILE = "model/model.uml" 
     
     /**
      * @param vis Wenn null, return package-private

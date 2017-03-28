@@ -7,6 +7,7 @@ import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Method;
+import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.modifiers.Modifier;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.types.TypeReference;
@@ -41,6 +42,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void deleteUmlClassifier(final ConcreteClassifier jClass, final CompilationUnit jCompUnit) {
     mir.routines.javaToUml.DeleteUmlClassifierRoutine effect = new mir.routines.javaToUml.DeleteUmlClassifierRoutine(this.executionState, calledBy,
     	jClass, jCompUnit);
+    effect.applyRoutine();
+  }
+  
+  public void changeUmlNamedElementVisibility(final AnnotableAndModifiable jElem, final Modifier mod) {
+    mir.routines.javaToUml.ChangeUmlNamedElementVisibilityRoutine effect = new mir.routines.javaToUml.ChangeUmlNamedElementVisibilityRoutine(this.executionState, calledBy,
+    	jElem, mod);
     effect.applyRoutine();
   }
   

@@ -12,6 +12,7 @@ import tools.vitruv.framework.util.bridges.EcoreBridge
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
 class JavaToUmlClassMethodTest extends AbstractJavaUmlTest {
     private static val CLASS_NAME = "ClassName";

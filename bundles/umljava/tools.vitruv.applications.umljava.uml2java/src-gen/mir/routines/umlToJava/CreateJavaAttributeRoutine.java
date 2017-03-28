@@ -5,7 +5,6 @@ import java.io.IOException;
 import mir.routines.umlToJava.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Field;
@@ -37,8 +36,8 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
         String _name_1 = umlAttribute.getName();
         javaAttribute.setName(_name_1);
       }
-      DataType _datatype = umlAttribute.getDatatype();
-      TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(_datatype, customTypeClass);
+      Type _type = umlAttribute.getType();
+      TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(_type, customTypeClass);
       javaAttribute.setTypeReference(_createTypeReference);
     }
     

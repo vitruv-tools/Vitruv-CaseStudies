@@ -6,14 +6,10 @@ import static org.junit.Assert.*;
 import org.junit.Before
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.After
 import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.Member
-import org.eclipse.uml2.uml.DataType
 import org.emftext.language.java.modifiers.Static
 import org.emftext.language.java.modifiers.Final
-import org.emftext.language.java.modifiers.Private
-import org.emftext.language.java.modifiers.Protected
+import static tools.vitruv.applications.umljava.util.UmlUtil.*
 
 class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
     private static val ATTRIBUTE_NAME = "attributName";
@@ -29,8 +25,8 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
     
     @Before
     def void before() {
-        uClass = createSyncSimpleUmlClass(CLASS_NAME);
-        typeClass = createSyncSimpleUmlClass(TYPE_CLASS);
+        uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
+        typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS);
         uAttr = createUmlAttribute(ATTRIBUTE_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false);
         uClass.ownedAttributes += uAttr;
         saveAndSynchronizeChanges(rootElement);
@@ -51,7 +47,7 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
     }
     @Test
     def testCreatePrimitiveAttribute() {
-        val pType = createUmlPrimitiveType(PRIMITIVE_TYPE);
+        val pType = createUmlPrimitiveTypeAndAddToModel(rootElement, PRIMITIVE_TYPE);
         val attr = createUmlAttribute(STANDARD_ATTRIBUTE_NAME, pType, VisibilityKind.PUBLIC_LITERAL, false, false);
         uClass.ownedAttributes += attr;
         saveAndSynchronizeChanges(uClass);       
