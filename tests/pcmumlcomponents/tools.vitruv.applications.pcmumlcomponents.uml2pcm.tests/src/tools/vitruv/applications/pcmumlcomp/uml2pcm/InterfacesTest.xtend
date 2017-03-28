@@ -1,4 +1,4 @@
-package tool.vitruv.applications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomp.uml2pcm
 
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.uml2.uml.Interface

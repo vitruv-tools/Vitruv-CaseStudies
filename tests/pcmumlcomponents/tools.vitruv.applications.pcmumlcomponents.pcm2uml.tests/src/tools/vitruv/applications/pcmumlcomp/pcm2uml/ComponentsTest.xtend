@@ -1,4 +1,4 @@
-package tool.vitruv.applications.pcmumlcomp.pcm2uml
+package tools.vitruv.applications.pcmumlcomp.pcm2uml
 
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.RepositoryFactory

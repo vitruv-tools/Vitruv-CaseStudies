@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius Applications PCM-UML Components Tests
-Bundle-SymbolicName: tool.vitruv.applications.pcmumlcomp.pcm2uml.tests
+Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomp.pcm2uml.tests
 Bundle-Version: 0.1.0.qualifier
 Fragment-Host: tools.vitruv.applications.pcmumlcomponents.pcm2uml;bundle-version="0.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

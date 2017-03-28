@@ -1,4 +1,4 @@
-package tool.vitruv.applications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomp.uml2pcm
 
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory

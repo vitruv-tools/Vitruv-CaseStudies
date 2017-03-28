@@ -1,4 +1,4 @@
-package tool.vitruv.applications.pcmumlcomp.pcm2uml
+package tools.vitruv.applications.pcmumlcomp.pcm2uml
 
 import org.eclipse.uml2.uml.Model
 import org.junit.Test
