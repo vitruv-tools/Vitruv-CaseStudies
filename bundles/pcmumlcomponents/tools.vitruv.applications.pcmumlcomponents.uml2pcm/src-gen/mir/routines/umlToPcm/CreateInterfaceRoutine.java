@@ -72,9 +72,8 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     if (pcmRepository == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmRepository);
+    registerObjectUnderModification(pcmRepository);
     OperationInterface pcmInterface = RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
-    initializeCreateElementState(pcmInterface);
     userExecution.updatePcmInterfaceElement(umlInterface, pcmRepository, pcmInterface);
     
     // val updatedElement userExecution.getElement1(umlInterface, pcmRepository, pcmInterface);
@@ -82,6 +81,6 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     
     addCorrespondenceBetween(userExecution.getElement2(umlInterface, pcmRepository, pcmInterface), userExecution.getElement3(umlInterface, pcmRepository, pcmInterface), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

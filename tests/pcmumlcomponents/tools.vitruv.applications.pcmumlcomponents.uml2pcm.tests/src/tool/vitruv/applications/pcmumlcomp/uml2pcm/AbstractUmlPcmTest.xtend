@@ -2,7 +2,7 @@ package tool.vitruv.applications.pcmumlcomp.uml2pcm
 
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmComponentsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmComponentsChangePropagationSpecification
 import tools.vitruv.domains.pcm.PcmDomain
 import tools.vitruv.domains.uml.UmlDomain
 import tools.vitruv.framework.tests.VitruviusChangePropagationTest

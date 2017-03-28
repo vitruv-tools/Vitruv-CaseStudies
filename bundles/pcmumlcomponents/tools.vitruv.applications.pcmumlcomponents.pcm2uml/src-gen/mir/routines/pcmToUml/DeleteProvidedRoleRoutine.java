@@ -50,9 +50,9 @@ public class DeleteProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     if (interfaceRealization == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceRealization);
+    registerObjectUnderModification(interfaceRealization);
     deleteObject(userExecution.getElement1(pcmProvidedRole, interfaceRealization));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

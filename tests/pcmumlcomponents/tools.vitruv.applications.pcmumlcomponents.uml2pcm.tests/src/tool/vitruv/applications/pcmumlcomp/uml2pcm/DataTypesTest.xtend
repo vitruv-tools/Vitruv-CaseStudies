@@ -1,18 +1,16 @@
 package tool.vitruv.applications.pcmumlcomp.uml2pcm
 
+import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.UMLFactory
 import org.junit.Test
+import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil
 
 import static org.junit.Assert.*
-import org.apache.log4j.Logger
-import org.apache.log4j.Level
-import tools.vitruv.framework.userinteraction.impl.UserInteractorDialog
-import org.palladiosimulator.pcm.repository.CollectionDataType
-import org.eclipse.uml2.uml.DataType
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 class DataTypesTest extends AbstractUmlPcmTest {
 	
@@ -115,7 +113,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		return dataType
 	}
 	
-	protected def org.eclipse.uml2.uml.Property createProperty(DataType umlType, String name, String datatype) {
+	protected def Property createProperty(DataType umlType, String name, String datatype) {
 		val propertyType = UMLFactory.eINSTANCE.createPrimitiveType()
 		propertyType.name = datatype
 		rootElement.packagedElements += propertyType

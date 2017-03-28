@@ -66,7 +66,6 @@ public class CreateUmlPropertyForDatatypeRoutine extends AbstractRepairRoutineRe
     getLogger().debug("   DataType: " + this.owner);
     
     Property property = UMLFactoryImpl.eINSTANCE.createProperty();
-    initializeCreateElementState(property);
     userExecution.updatePropertyElement(type, counterpart, owner, property);
     
     // val updatedElement userExecution.getElement1(type, counterpart, owner, property);
@@ -74,6 +73,6 @@ public class CreateUmlPropertyForDatatypeRoutine extends AbstractRepairRoutineRe
     
     addCorrespondenceBetween(userExecution.getElement2(type, counterpart, owner, property), userExecution.getElement3(type, counterpart, owner, property), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

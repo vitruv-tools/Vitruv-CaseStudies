@@ -10,7 +10,7 @@ import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
-import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -74,9 +74,8 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     if (pcmRepository == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmRepository);
+    registerObjectUnderModification(pcmRepository);
     PrimitiveDataType pcmType = RepositoryFactoryImpl.eINSTANCE.createPrimitiveDataType();
-    initializeCreateElementState(pcmType);
     userExecution.updatePcmTypeElement(umlType, pcmRepository, pcmType);
     
     // val updatedElement userExecution.getElement1(umlType, pcmRepository, pcmType);
@@ -84,6 +83,6 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     
     addCorrespondenceBetween(userExecution.getElement2(umlType, pcmRepository, pcmType), userExecution.getElement3(umlType, pcmRepository, pcmType), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

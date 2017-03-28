@@ -60,7 +60,7 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     if (compositeType == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeType);
+    registerObjectUnderModification(compositeType);
     Property umlProperty = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlProperty(dataType, innerDeclaration, compositeType), // correspondence source supplier
     	Property.class,
@@ -69,9 +69,9 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     if (umlProperty == null) {
     	return;
     }
-    initializeRetrieveElementState(umlProperty);
+    registerObjectUnderModification(umlProperty);
     userExecution.callRoutine1(dataType, innerDeclaration, compositeType, umlProperty, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

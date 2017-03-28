@@ -78,9 +78,8 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     if (umlComponent == null) {
     	return;
     }
-    initializeRetrieveElementState(umlComponent);
+    registerObjectUnderModification(umlComponent);
     Usage usage = UMLFactoryImpl.eINSTANCE.createUsage();
-    initializeCreateElementState(usage);
     userExecution.updateUsageElement(pcmComponent, requiredRole, umlComponent, usage);
     
     // val updatedElement userExecution.getElement1(pcmComponent, requiredRole, umlComponent, usage);
@@ -88,6 +87,6 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     
     addCorrespondenceBetween(userExecution.getElement2(pcmComponent, requiredRole, umlComponent, usage), userExecution.getElement3(pcmComponent, requiredRole, umlComponent, usage), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

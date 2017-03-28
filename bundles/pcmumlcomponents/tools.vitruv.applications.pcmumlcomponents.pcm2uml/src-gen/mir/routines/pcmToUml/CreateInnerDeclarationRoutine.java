@@ -58,7 +58,7 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     if (compositeType == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeType);
+    registerObjectUnderModification(compositeType);
     DataType umlType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlType(innerDeclaration, compositeType), // correspondence source supplier
     	DataType.class,
@@ -67,9 +67,9 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     if (umlType == null) {
     	return;
     }
-    initializeRetrieveElementState(umlType);
+    registerObjectUnderModification(umlType);
     userExecution.callRoutine1(innerDeclaration, compositeType, umlType, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

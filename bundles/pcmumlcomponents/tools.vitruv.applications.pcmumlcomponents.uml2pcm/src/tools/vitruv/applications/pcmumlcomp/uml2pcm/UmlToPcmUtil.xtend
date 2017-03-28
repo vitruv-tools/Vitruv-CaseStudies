@@ -1,4 +1,4 @@
-package tools.vitruv.aplications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomp.uml2pcm
 
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.DataType

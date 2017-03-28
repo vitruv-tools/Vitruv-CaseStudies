@@ -51,6 +51,6 @@ public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization 
     
     userExecution.callRoutine1(umlComponent, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

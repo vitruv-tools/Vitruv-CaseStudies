@@ -59,7 +59,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     if (umlParameter == null) {
     	return;
     }
-    initializeRetrieveElementState(umlParameter);
+    registerObjectUnderModification(umlParameter);
     org.eclipse.uml2.uml.DataType umlType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlType(pcmParameter, umlParameter), // correspondence source supplier
     	org.eclipse.uml2.uml.DataType.class,
@@ -68,10 +68,10 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     if (umlType == null) {
     	return;
     }
-    initializeRetrieveElementState(umlType);
+    registerObjectUnderModification(umlType);
     // val updatedElement userExecution.getElement1(pcmParameter, umlParameter, umlType);
     userExecution.update0Element(pcmParameter, umlParameter, umlType);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

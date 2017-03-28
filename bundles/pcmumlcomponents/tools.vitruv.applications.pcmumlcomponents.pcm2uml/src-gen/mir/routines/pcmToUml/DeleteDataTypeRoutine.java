@@ -50,9 +50,9 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
     if (umlType == null) {
     	return;
     }
-    initializeRetrieveElementState(umlType);
+    registerObjectUnderModification(umlType);
     deleteObject(userExecution.getElement1(dataType, umlType));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

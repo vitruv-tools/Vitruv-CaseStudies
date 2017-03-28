@@ -7,7 +7,7 @@ import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlUtil
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 
 import static org.junit.Assert.*
 

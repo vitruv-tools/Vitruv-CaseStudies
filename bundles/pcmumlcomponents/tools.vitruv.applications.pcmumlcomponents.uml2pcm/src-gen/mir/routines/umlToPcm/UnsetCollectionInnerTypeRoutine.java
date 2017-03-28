@@ -72,9 +72,9 @@ public class UnsetCollectionInnerTypeRoutine extends AbstractRepairRoutineRealiz
     if (pcmType == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmType);
+    registerObjectUnderModification(pcmType);
     userExecution.callRoutine1(umlType, pcmType, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

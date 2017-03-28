@@ -77,9 +77,8 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     if (pcmRepository == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmRepository);
+    registerObjectUnderModification(pcmRepository);
     BasicComponent pcmComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
-    initializeCreateElementState(pcmComponent);
     userExecution.updatePcmComponentElement(umlComponent, pcmRepository, pcmComponent);
     
     // val updatedElement userExecution.getElement1(umlComponent, pcmRepository, pcmComponent);
@@ -87,6 +86,6 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     
     addCorrespondenceBetween(userExecution.getElement2(umlComponent, pcmRepository, pcmComponent), userExecution.getElement3(umlComponent, pcmRepository, pcmComponent), userExecution.getTag1(umlComponent, pcmRepository, pcmComponent));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

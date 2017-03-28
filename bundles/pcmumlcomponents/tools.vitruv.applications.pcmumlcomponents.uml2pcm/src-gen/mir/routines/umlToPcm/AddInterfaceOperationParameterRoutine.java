@@ -74,9 +74,8 @@ public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutine
     if (pcmSignature == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmSignature);
+    registerObjectUnderModification(pcmSignature);
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = RepositoryFactoryImpl.eINSTANCE.createParameter();
-    initializeCreateElementState(pcmParameter);
     userExecution.updatePcmParameterElement(umlOperation, umlParameter, pcmSignature, pcmParameter);
     
     // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmParameter);
@@ -84,6 +83,6 @@ public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutine
     
     addCorrespondenceBetween(userExecution.getElement2(umlOperation, umlParameter, pcmSignature, pcmParameter), userExecution.getElement3(umlOperation, umlParameter, pcmSignature, pcmParameter), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

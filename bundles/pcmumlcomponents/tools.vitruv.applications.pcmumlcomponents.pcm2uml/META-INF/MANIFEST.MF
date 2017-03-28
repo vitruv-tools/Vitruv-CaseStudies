@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius Applications PCM-UML Components
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents.pcm2uml
 Bundle-Version: 0.1.0.qualifier
-Export-Package: tools.vitruv.aplications.pcmumlcomp.pcm2uml
+Export-Package: tools.vitruv.applications.pcmumlcomp.pcm2uml
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,

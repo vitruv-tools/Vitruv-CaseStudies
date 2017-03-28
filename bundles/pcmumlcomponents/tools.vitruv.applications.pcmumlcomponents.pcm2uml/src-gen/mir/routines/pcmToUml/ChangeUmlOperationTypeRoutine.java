@@ -60,7 +60,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     if (umlOperation == null) {
     	return;
     }
-    initializeRetrieveElementState(umlOperation);
+    registerObjectUnderModification(umlOperation);
     DataType umlReturnType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlReturnType(pcmSignature, umlOperation), // correspondence source supplier
     	DataType.class,
@@ -69,10 +69,10 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     if (umlReturnType == null) {
     	return;
     }
-    initializeRetrieveElementState(umlReturnType);
+    registerObjectUnderModification(umlReturnType);
     // val updatedElement userExecution.getElement1(pcmSignature, umlOperation, umlReturnType);
     userExecution.update0Element(pcmSignature, umlOperation, umlReturnType);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

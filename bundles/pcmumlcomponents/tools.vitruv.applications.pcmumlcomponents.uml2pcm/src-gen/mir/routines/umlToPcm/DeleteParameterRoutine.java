@@ -49,9 +49,9 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
     if (pcmParameter == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmParameter);
+    registerObjectUnderModification(pcmParameter);
     deleteObject(userExecution.getElement1(umlParameter, pcmParameter));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

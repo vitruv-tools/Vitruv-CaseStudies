@@ -1,4 +1,4 @@
-package tools.vitruv.aplications.pcmumlcomp.pcm2uml
+package tools.vitruv.applications.pcmumlcomp.pcm2uml
 
 import org.eclipse.uml2.uml.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum

@@ -72,9 +72,8 @@ public class CreateOperationInterfaceSignatureRoutine extends AbstractRepairRout
     if (umlInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(umlInterface);
+    registerObjectUnderModification(umlInterface);
     Operation umlOperation = UMLFactoryImpl.eINSTANCE.createOperation();
-    initializeCreateElementState(umlOperation);
     userExecution.updateUmlOperationElement(pcmSignature, umlInterface, umlOperation);
     
     // val updatedElement userExecution.getElement1(pcmSignature, umlInterface, umlOperation);
@@ -82,6 +81,6 @@ public class CreateOperationInterfaceSignatureRoutine extends AbstractRepairRout
     
     addCorrespondenceBetween(userExecution.getElement2(pcmSignature, umlInterface, umlOperation), userExecution.getElement3(pcmSignature, umlInterface, umlOperation), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

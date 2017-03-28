@@ -1,6 +1,4 @@
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlUtil
-import org.palladiosimulator.pcm.repository.BasicComponent
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
@@ -14,8 +12,7 @@ execute actions in uml
 // ############### UNIVERSAL REACTIONS ###############
 
 reaction RenamedElement {
-	after attribute replaced at pcm::NamedElement[entityName] //with
-		//!(affectedEObject instanceof PrimitiveDataType)
+	after attribute replaced at pcm::NamedElement[entityName]
 	call renameUmlElement(affectedEObject)
 }
 
@@ -89,7 +86,6 @@ reaction DeletedDataType {
 
 routine deleteDataType(pcm::DataType dataType) {
 	match {
-		// val umlModel = retrieve uml::Model corresponding to dataType.repository__DataType
 		val umlType = retrieve uml::Type corresponding to dataType
 	}
 	action {
@@ -147,20 +143,6 @@ routine deleteInnerDeclaration(pcm::CompositeDataType dataType, pcm::InnerDeclar
 	}
 }
 
-/*reaction RenamedInnerDeclaration {
-	after attribute replaced at pcm::InnerDeclaration[entityName]
-	call renameInnerDeclaration(affectedEObject)
-}
-
-routine renameInnerDeclaration(pcm::InnerDeclaration innerDeclaration) {
-	match {
-		val umlType = retrieve uml::DataType corresponding to innerDeclaration.compositeDataType_InnerDeclaration
-	}
-	action {
-		call renameUmlProperty(innerDeclaration)
-	}
-}*/
-
 reaction CreatedCollectionDataType {
 	after element pcm::CollectionDataType created and inserted in  pcm::Repository[dataTypes__Repository]
 	call createCollectionDataType(newValue)
@@ -169,21 +151,13 @@ reaction CreatedCollectionDataType {
 routine createCollectionDataType(pcm::CollectionDataType dataType) {
 	match {
 		val umlModel = retrieve uml::Model corresponding to dataType.repository__DataType
-		//val umlInnerType = retrieve uml::DataType corresponding to dataType.innerType_CollectionDataType
 	}
 	action {
-		//val umlProperty = create uml::Property and initialize {
-			//umlProperty.type = umlInnerType
-			//umlProperty.name = "innerType"
-			// TODO: no correspondence for property = NPE?
-		//}
 		val umlType = create uml::DataType and initialize {
 			umlType.name = dataType.entityName
-			// umlType.ownedAttributes += umlProperty
 		}
 		update umlModel {
 			umlModel.ownedTypes += umlType
-			// TODO: packagesElements had to be used from the UML side?
 			umlModel.packagedElements += umlType
 		}
 		add correspondence between dataType and umlType
@@ -192,10 +166,7 @@ routine createCollectionDataType(pcm::CollectionDataType dataType) {
 
 reaction CreatedCollectionDataTypeType {
 	after element inserted in pcm::CollectionDataType[innerType_CollectionDataType]
-	call {
-		System.out.println("[created collection datatype type]")
-		createCollectionDataTypeType(affectedEObject, newValue)
-		}
+	call createCollectionDataTypeType(affectedEObject, newValue)
 }
 
 routine createCollectionDataTypeType(pcm::CollectionDataType pcmDataType, pcm::DataType pcmInnerType) {

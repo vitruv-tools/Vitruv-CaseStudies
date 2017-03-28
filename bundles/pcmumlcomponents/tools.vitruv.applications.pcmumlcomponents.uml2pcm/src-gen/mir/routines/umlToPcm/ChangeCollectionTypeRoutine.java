@@ -61,7 +61,7 @@ public class ChangeCollectionTypeRoutine extends AbstractRepairRoutineRealizatio
     if (pcmCollection == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmCollection);
+    registerObjectUnderModification(pcmCollection);
     org.palladiosimulator.pcm.repository.DataType pcmType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmType(umlOwner, umlType, pcmCollection), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.DataType.class,
@@ -70,10 +70,10 @@ public class ChangeCollectionTypeRoutine extends AbstractRepairRoutineRealizatio
     if (pcmType == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmType);
+    registerObjectUnderModification(pcmType);
     // val updatedElement userExecution.getElement1(umlOwner, umlType, pcmCollection, pcmType);
     userExecution.update0Element(umlOwner, umlType, pcmCollection, pcmType);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

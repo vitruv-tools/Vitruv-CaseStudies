@@ -60,6 +60,6 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     
     userExecution.callRoutine1(umlType, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

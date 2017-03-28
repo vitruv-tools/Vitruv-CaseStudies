@@ -63,9 +63,9 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
     if (pcmSignature == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmSignature);
+    registerObjectUnderModification(pcmSignature);
     userExecution.callRoutine1(umlOperation, umlParameter, pcmSignature, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

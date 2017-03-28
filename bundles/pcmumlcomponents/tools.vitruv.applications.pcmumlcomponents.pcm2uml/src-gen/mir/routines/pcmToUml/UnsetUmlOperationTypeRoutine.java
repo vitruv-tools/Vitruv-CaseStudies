@@ -54,10 +54,10 @@ public class UnsetUmlOperationTypeRoutine extends AbstractRepairRoutineRealizati
     if (umlOperation == null) {
     	return;
     }
-    initializeRetrieveElementState(umlOperation);
+    registerObjectUnderModification(umlOperation);
     // val updatedElement userExecution.getElement1(pcmSignature, umlOperation);
     userExecution.update0Element(pcmSignature, umlOperation);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

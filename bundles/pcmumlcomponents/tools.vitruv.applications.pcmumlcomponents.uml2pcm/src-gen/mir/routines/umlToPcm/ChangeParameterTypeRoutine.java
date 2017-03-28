@@ -60,7 +60,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     if (pcmParameter == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmParameter);
+    registerObjectUnderModification(pcmParameter);
     DataType pcmType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmType(umlParameter, pcmParameter), // correspondence source supplier
     	DataType.class,
@@ -69,10 +69,10 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     if (pcmType == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmType);
+    registerObjectUnderModification(pcmType);
     // val updatedElement userExecution.getElement1(umlParameter, pcmParameter, pcmType);
     userExecution.update0Element(umlParameter, pcmParameter, pcmType);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

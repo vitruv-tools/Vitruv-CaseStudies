@@ -67,7 +67,7 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
     if (umlUsage == null) {
     	return;
     }
-    initializeRetrieveElementState(umlUsage);
+    registerObjectUnderModification(umlUsage);
     Interface umlInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlInterface(pcmRole, pcmInterface, umlUsage), // correspondence source supplier
     	Interface.class,
@@ -76,10 +76,10 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
     if (umlInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(umlInterface);
+    registerObjectUnderModification(umlInterface);
     // val updatedElement userExecution.getElement1(pcmRole, pcmInterface, umlUsage, umlInterface);
     userExecution.update0Element(pcmRole, pcmInterface, umlUsage, umlInterface);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

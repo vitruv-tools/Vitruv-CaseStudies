@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.PrimitiveType
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
-import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml

@@ -72,9 +72,8 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     if (umlModel == null) {
     	return;
     }
-    initializeRetrieveElementState(umlModel);
+    registerObjectUnderModification(umlModel);
     org.eclipse.uml2.uml.Interface umlInterface = UMLFactoryImpl.eINSTANCE.createInterface();
-    initializeCreateElementState(umlInterface);
     userExecution.updateUmlInterfaceElement(pcmInterface, umlModel, umlInterface);
     
     // val updatedElement userExecution.getElement1(pcmInterface, umlModel, umlInterface);
@@ -82,6 +81,6 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     
     addCorrespondenceBetween(userExecution.getElement2(pcmInterface, umlModel, umlInterface), userExecution.getElement3(pcmInterface, umlModel, umlInterface), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

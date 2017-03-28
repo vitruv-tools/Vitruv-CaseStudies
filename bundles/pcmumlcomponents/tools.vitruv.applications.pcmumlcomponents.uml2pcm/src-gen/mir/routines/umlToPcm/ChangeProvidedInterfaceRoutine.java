@@ -77,7 +77,7 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
     if (pcmRole == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmRole);
+    registerObjectUnderModification(pcmRole);
     OperationInterface pcmInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmInterface(interfaceRealization, umlInterface, pcmRole), // correspondence source supplier
     	OperationInterface.class,
@@ -86,10 +86,10 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
     if (pcmInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmInterface);
+    registerObjectUnderModification(pcmInterface);
     // val updatedElement userExecution.getElement1(interfaceRealization, umlInterface, pcmRole, pcmInterface);
     userExecution.update0Element(interfaceRealization, umlInterface, pcmRole, pcmInterface);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

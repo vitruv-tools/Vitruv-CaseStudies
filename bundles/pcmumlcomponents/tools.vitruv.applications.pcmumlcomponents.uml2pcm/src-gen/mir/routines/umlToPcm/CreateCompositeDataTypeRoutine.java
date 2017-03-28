@@ -72,9 +72,8 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     if (pcmRepository == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmRepository);
+    registerObjectUnderModification(pcmRepository);
     CompositeDataType pcmType = RepositoryFactoryImpl.eINSTANCE.createCompositeDataType();
-    initializeCreateElementState(pcmType);
     userExecution.updatePcmTypeElement(umlType, pcmRepository, pcmType);
     
     // val updatedElement userExecution.getElement1(umlType, pcmRepository, pcmType);
@@ -82,6 +81,6 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     
     addCorrespondenceBetween(userExecution.getElement2(umlType, pcmRepository, pcmType), userExecution.getElement3(umlType, pcmRepository, pcmType), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -76,9 +76,8 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     if (umlModel == null) {
     	return;
     }
-    initializeRetrieveElementState(umlModel);
+    registerObjectUnderModification(umlModel);
     DataType umlType = UMLFactoryImpl.eINSTANCE.createDataType();
-    initializeCreateElementState(umlType);
     userExecution.updateUmlTypeElement(dataType, umlModel, umlType);
     
     // val updatedElement userExecution.getElement1(dataType, umlModel, umlType);
@@ -86,6 +85,6 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     
     addCorrespondenceBetween(userExecution.getElement2(dataType, umlModel, umlType), userExecution.getElement3(dataType, umlModel, umlType), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

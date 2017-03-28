@@ -4,7 +4,7 @@ import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
-import tools.vitruv.aplications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -54,10 +54,10 @@ public class ChangeParameterDirectionRoutine extends AbstractRepairRoutineRealiz
     if (pcmParameter == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmParameter);
+    registerObjectUnderModification(pcmParameter);
     // val updatedElement userExecution.getElement1(umlParameter, pcmParameter);
     userExecution.update0Element(umlParameter, pcmParameter);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -50,9 +50,9 @@ public class DeleteRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     if (usage == null) {
     	return;
     }
-    initializeRetrieveElementState(usage);
+    registerObjectUnderModification(usage);
     deleteObject(userExecution.getElement1(requiredRole, usage));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

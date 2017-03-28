@@ -73,9 +73,8 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     if (umlOperation == null) {
     	return;
     }
-    initializeRetrieveElementState(umlOperation);
+    registerObjectUnderModification(umlOperation);
     org.eclipse.uml2.uml.Parameter umlParameter = UMLFactoryImpl.eINSTANCE.createParameter();
-    initializeCreateElementState(umlParameter);
     userExecution.updateUmlParameterElement(pcmSignature, pcmParameter, umlOperation, umlParameter);
     
     // val updatedElement userExecution.getElement1(pcmSignature, pcmParameter, umlOperation, umlParameter);
@@ -83,6 +82,6 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     
     addCorrespondenceBetween(userExecution.getElement2(pcmSignature, pcmParameter, umlOperation, umlParameter), userExecution.getElement3(pcmSignature, pcmParameter, umlOperation, umlParameter), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

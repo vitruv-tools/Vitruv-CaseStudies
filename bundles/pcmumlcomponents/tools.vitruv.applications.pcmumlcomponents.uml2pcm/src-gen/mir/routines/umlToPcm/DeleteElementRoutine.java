@@ -50,9 +50,9 @@ public class DeleteElementRoutine extends AbstractRepairRoutineRealization {
     if (pcmElement == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmElement);
+    registerObjectUnderModification(pcmElement);
     deleteObject(userExecution.getElement1(umlElement, pcmElement));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

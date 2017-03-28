@@ -9,7 +9,7 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.eclipse.uml2.uml.Operation
-import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlUtil
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Parameter
@@ -144,7 +144,6 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		// first parameter should be the return value
 		val umlParameter = umlOperation.ownedParameters.get(1)
 		
-		println(umlParameter)
 		assertEquals(parameterName, umlParameter.name)
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveType((parameterType as PrimitiveDataType).type),
 			umlParameter.type.name)
@@ -165,8 +164,6 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		pcmParameter.dataType__Parameter = newType
 		saveAndSynchronizeChanges(pcmParameter)
 		
-		// TODO: why is the correspondence broken for umlParameter?
-		// umlParameter access didn't result in an NPE
 		correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
 		umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
 				

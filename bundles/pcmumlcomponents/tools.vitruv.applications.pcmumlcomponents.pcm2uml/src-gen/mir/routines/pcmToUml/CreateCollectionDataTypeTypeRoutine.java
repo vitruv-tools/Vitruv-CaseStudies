@@ -8,7 +8,7 @@ import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
-import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -71,7 +71,7 @@ public class CreateCollectionDataTypeTypeRoutine extends AbstractRepairRoutineRe
     if (umlType == null) {
     	return;
     }
-    initializeRetrieveElementState(umlType);
+    registerObjectUnderModification(umlType);
     org.eclipse.uml2.uml.DataType umlInnerType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlInnerType(pcmDataType, pcmInnerType, umlType), // correspondence source supplier
     	org.eclipse.uml2.uml.DataType.class,
@@ -80,14 +80,13 @@ public class CreateCollectionDataTypeTypeRoutine extends AbstractRepairRoutineRe
     if (umlInnerType == null) {
     	return;
     }
-    initializeRetrieveElementState(umlInnerType);
+    registerObjectUnderModification(umlInnerType);
     Property umlProperty = UMLFactoryImpl.eINSTANCE.createProperty();
-    initializeCreateElementState(umlProperty);
     userExecution.updateUmlPropertyElement(pcmDataType, pcmInnerType, umlType, umlInnerType, umlProperty);
     
     // val updatedElement userExecution.getElement1(pcmDataType, pcmInnerType, umlType, umlInnerType, umlProperty);
     userExecution.update0Element(pcmDataType, pcmInnerType, umlType, umlInnerType, umlProperty);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

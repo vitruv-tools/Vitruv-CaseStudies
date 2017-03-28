@@ -75,9 +75,8 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     if (pcmComponent == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmComponent);
+    registerObjectUnderModification(pcmComponent);
     OperationRequiredRole pcmRole = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
-    initializeCreateElementState(pcmRole);
     userExecution.updatePcmRoleElement(umlComponent, umlUsage, pcmComponent, pcmRole);
     
     // val updatedElement userExecution.getElement1(umlComponent, umlUsage, pcmComponent, pcmRole);
@@ -85,6 +84,6 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     
     addCorrespondenceBetween(userExecution.getElement2(umlComponent, umlUsage, pcmComponent, pcmRole), userExecution.getElement3(umlComponent, umlUsage, pcmComponent, pcmRole), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

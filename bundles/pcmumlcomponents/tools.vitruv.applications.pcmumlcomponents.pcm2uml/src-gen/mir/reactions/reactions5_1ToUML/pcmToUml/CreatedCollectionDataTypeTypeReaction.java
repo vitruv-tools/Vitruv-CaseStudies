@@ -66,7 +66,6 @@ class CreatedCollectionDataTypeTypeReaction extends AbstractReactionRealization 
     }
     
     public void callRoutine1(final CollectionDataType affectedEObject, final EReference affectedFeature, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
-      System.out.println("[created collection datatype type]");
       _routinesFacade.createCollectionDataTypeType(affectedEObject, newValue);
     }
   }

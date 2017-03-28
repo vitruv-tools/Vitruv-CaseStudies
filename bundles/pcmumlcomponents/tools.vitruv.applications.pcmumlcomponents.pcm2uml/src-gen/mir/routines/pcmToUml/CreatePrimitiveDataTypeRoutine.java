@@ -10,7 +10,7 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.Repository;
-import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -74,9 +74,8 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     if (umlModel == null) {
     	return;
     }
-    initializeRetrieveElementState(umlModel);
+    registerObjectUnderModification(umlModel);
     PrimitiveType umlType = UMLFactoryImpl.eINSTANCE.createPrimitiveType();
-    initializeCreateElementState(umlType);
     userExecution.updateUmlTypeElement(dataType, umlModel, umlType);
     
     // val updatedElement userExecution.getElement1(dataType, umlModel, umlType);
@@ -84,6 +83,6 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     
     addCorrespondenceBetween(userExecution.getElement2(dataType, umlModel, umlType), userExecution.getElement3(dataType, umlModel, umlType), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -49,9 +49,9 @@ public class RemoveOperationSignatureParameterRoutine extends AbstractRepairRout
     if (umlParameter == null) {
     	return;
     }
-    initializeRetrieveElementState(umlParameter);
+    registerObjectUnderModification(umlParameter);
     deleteObject(userExecution.getElement1(pcmParameter, umlParameter));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

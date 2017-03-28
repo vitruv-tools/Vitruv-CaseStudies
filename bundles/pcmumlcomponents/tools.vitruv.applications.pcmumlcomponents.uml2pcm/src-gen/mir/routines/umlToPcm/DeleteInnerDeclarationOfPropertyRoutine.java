@@ -50,9 +50,9 @@ public class DeleteInnerDeclarationOfPropertyRoutine extends AbstractRepairRouti
     if (innerDeclaration == null) {
     	return;
     }
-    initializeRetrieveElementState(innerDeclaration);
+    registerObjectUnderModification(innerDeclaration);
     deleteObject(userExecution.getElement1(umlProperty, innerDeclaration));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

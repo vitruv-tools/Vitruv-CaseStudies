@@ -2,7 +2,7 @@ package tool.vitruv.applications.pcmumlcomp.pcm2uml
 
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlComponentsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlComponentsChangePropagationSpecification
 import tools.vitruv.domains.pcm.PcmDomain
 import tools.vitruv.domains.uml.UmlDomain
 import tools.vitruv.framework.tests.VitruviusChangePropagationTest

@@ -76,9 +76,8 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     if (pcmRepository == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmRepository);
+    registerObjectUnderModification(pcmRepository);
     CollectionDataType pcmType = RepositoryFactoryImpl.eINSTANCE.createCollectionDataType();
-    initializeCreateElementState(pcmType);
     userExecution.updatePcmTypeElement(umlType, pcmRepository, pcmType);
     
     // val updatedElement userExecution.getElement1(umlType, pcmRepository, pcmType);
@@ -86,6 +85,6 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     
     addCorrespondenceBetween(userExecution.getElement2(umlType, pcmRepository, pcmType), userExecution.getElement3(umlType, pcmRepository, pcmType), userExecution.getTag1(umlType, pcmRepository, pcmType));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

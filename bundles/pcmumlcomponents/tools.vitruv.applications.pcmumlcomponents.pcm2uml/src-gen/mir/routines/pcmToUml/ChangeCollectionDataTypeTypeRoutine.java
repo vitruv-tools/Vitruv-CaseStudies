@@ -6,7 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
-import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -59,7 +59,7 @@ public class ChangeCollectionDataTypeTypeRoutine extends AbstractRepairRoutineRe
     if (umlType == null) {
     	return;
     }
-    initializeRetrieveElementState(umlType);
+    registerObjectUnderModification(umlType);
     org.eclipse.uml2.uml.DataType umlInnerType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlInnerType(pcmDataType, pcmInnerType, umlType), // correspondence source supplier
     	org.eclipse.uml2.uml.DataType.class,
@@ -68,9 +68,9 @@ public class ChangeCollectionDataTypeTypeRoutine extends AbstractRepairRoutineRe
     if (umlInnerType == null) {
     	return;
     }
-    initializeRetrieveElementState(umlInnerType);
+    registerObjectUnderModification(umlInnerType);
     userExecution.callRoutine1(pcmDataType, pcmInnerType, umlType, umlInnerType, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

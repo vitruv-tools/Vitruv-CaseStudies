@@ -1,4 +1,4 @@
-package tools.vitruv.aplications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomp.uml2pcm
 
 import mir.reactions.AbstractChangePropagationSpecificationUMLTo5_1
 

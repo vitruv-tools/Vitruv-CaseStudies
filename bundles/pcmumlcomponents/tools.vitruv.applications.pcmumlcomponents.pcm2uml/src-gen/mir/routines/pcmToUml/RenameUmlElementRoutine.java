@@ -53,10 +53,10 @@ public class RenameUmlElementRoutine extends AbstractRepairRoutineRealization {
     if (umlElement == null) {
     	return;
     }
-    initializeRetrieveElementState(umlElement);
+    registerObjectUnderModification(umlElement);
     // val updatedElement userExecution.getElement1(pcmElement, umlElement);
     userExecution.update0Element(pcmElement, umlElement);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

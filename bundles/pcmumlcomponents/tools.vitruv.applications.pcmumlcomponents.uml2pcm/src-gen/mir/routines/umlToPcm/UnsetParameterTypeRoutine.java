@@ -53,10 +53,10 @@ public class UnsetParameterTypeRoutine extends AbstractRepairRoutineRealization 
     if (pcmParameter == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmParameter);
+    registerObjectUnderModification(pcmParameter);
     // val updatedElement userExecution.getElement1(umlParameter, pcmParameter);
     userExecution.update0Element(umlParameter, pcmParameter);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -54,10 +54,10 @@ public class UnsetInterfaceOperationTypeRoutine extends AbstractRepairRoutineRea
     if (pcmSignature == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmSignature);
+    registerObjectUnderModification(pcmSignature);
     // val updatedElement userExecution.getElement1(umlOperation, pcmSignature);
     userExecution.update0Element(umlOperation, pcmSignature);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

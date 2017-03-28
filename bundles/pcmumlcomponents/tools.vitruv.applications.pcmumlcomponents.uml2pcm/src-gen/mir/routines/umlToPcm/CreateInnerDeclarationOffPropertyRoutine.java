@@ -72,9 +72,8 @@ public class CreateInnerDeclarationOffPropertyRoutine extends AbstractRepairRout
     if (pcmCompositeType == null) {
     	return;
     }
-    initializeRetrieveElementState(pcmCompositeType);
+    registerObjectUnderModification(pcmCompositeType);
     InnerDeclaration declaration = RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
-    initializeCreateElementState(declaration);
     userExecution.updateDeclarationElement(property, pcmCompositeType, declaration);
     
     // val updatedElement userExecution.getElement1(property, pcmCompositeType, declaration);
@@ -82,6 +81,6 @@ public class CreateInnerDeclarationOffPropertyRoutine extends AbstractRepairRout
     
     addCorrespondenceBetween(userExecution.getElement2(property, pcmCompositeType, declaration), userExecution.getElement3(property, pcmCompositeType, declaration), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
