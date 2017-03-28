@@ -25,6 +25,7 @@ class ConstructionSimulationTest extends VitruviusCasestudyTest {
         val li = iStrategy.createChangeModels(null, res)
         createAndSynchronizeModel("model/model.uml", res.allContents.head)
         triggerSynchronization(li)
+        //Noch keine assertions. Überprüfe manuell im JUnit-workspace.
     }
     
     override protected beforeTest(Description description) {
