@@ -1,7 +1,7 @@
 package tools.vitruv.applications.umljava.uml2java
 
-import mir.reactions.AbstractChangePropagationSpecificationUMLToJava
+import mir.reactions.AbstractChangePropagationSpecificationUmlToJava
 
-class UmlToJavaChangePropagationSpecification extends AbstractChangePropagationSpecificationUMLToJava {
+class UmlToJavaChangePropagationSpecification extends AbstractChangePropagationSpecificationUmlToJava {
 	
 }
