@@ -98,7 +98,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         assertJavaModifiableHasModifier(jClass, Final);
     }
     
-    @Test
+    @Ignore @Test
     def testSuperClassChanged() {
         val superClass = createSimpleUmlClass(rootElement, SUPER_CLASS_NAME);
         uClass.generals += superClass;
