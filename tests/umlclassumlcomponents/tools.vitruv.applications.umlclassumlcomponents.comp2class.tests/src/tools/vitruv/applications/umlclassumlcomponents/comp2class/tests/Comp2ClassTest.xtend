@@ -60,7 +60,7 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
     
 	@Test
     public def void testDeleteComponent() {
-    	val umlComp = createComponent(COMP_NAME)	
+    	val umlComp = createComponent(COMP_NAME)	 
 		saveAndSynchronizeChanges(umlComp)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
 		val umlClass = correspondingElements.get(0)		

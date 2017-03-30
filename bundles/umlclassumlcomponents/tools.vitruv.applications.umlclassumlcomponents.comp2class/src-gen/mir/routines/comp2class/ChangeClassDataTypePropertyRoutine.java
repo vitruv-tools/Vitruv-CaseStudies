@@ -28,7 +28,8 @@ public class ChangeClassDataTypePropertyRoutine extends AbstractRepairRoutineRea
     }
     
     public void update0Element(final Property compProperty, final Property classProperty) {
-      classProperty.setName(compProperty.getName());
+      String _name = compProperty.getName();
+      classProperty.setName(_name);
     }
     
     public String getRetrieveTag1(final Property compProperty) {

@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius Applications UMLClass-UMLComp Tests
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 Bundle-Version: 1.0.0.qualifier
-Fragment-Host: tools.vitruv.applications.umlclassumlcomponents.class2comp;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: tools.vitruv.framework.tests.util,
  tools.vitruv.framework.change.processing,
@@ -11,8 +10,12 @@ Require-Bundle: tools.vitruv.framework.tests.util,
  tools.vitruv.domains.uml,
  tools.vitruv.framework.vsum,
  tools.vitruv.framework.util,
- tools.vitruv.framework.tests.util,
  tools.vitruv.framework.change,
- tools.vitruv.framework.change.processing,
  tools.vitruv.framework.modelsynchronization,
- tools.vitruv.framework.tuid;bundle-version="0.2.0"
+ tools.vitruv.framework.tuid;bundle-version="0.2.0",
+ tools.vitruv.applications.umlclassumlcomponents.class2comp,
+ com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro
+

@@ -42,7 +42,8 @@ public class CreateDataTypeForClassRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void updateCompDataTypeElement(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final DataType compDataType) {
-      compDataType.setName(umlClass.getName());
+      String _name = umlClass.getName();
+      compDataType.setName(_name);
     }
     
     public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final DataType compDataType) {

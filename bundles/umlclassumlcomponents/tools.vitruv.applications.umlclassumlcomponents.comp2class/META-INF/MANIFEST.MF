@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Class2comp
-Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.class2comp
+Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.comp2class
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.uml2.uml,
  org.apache.log4j,
@@ -18,3 +18,4 @@ Require-Bundle: org.eclipse.uml2.uml,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.extensions.dslsruntime.mapping
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: tools.vitruv.applications.umlclassumlcomponents.comp2class

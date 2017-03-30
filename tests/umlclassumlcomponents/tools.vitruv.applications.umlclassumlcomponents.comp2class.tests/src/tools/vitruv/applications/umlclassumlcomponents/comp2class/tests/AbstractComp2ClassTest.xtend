@@ -1,15 +1,15 @@
 package tools.vitruv.applications.umlclassumlcomponents.comp2class.tests
 
-import tools.vitruv.applications.umlclassumlcomponents.comp2class.UmlComp2UmlClassChangePropagation
+import tools.vitruv.applications.umlclassumlcomponents.comp2class.UmlComp2UmlClassChangePropagation 
 import tools.vitruv.domains.uml.UmlDomain
 import org.eclipse.uml2.uml.UMLFactory
 import tools.vitruv.framework.tests.VitruviusChangePropagationTest
 import org.eclipse.uml2.uml.Model
-import tools.vitruv.framework.metamodel.Metamodel
+import tools.vitruv.framework.metamodel.Metamodel 
 
 class AbstractComp2ClassTest extends VitruviusChangePropagationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml"
-	protected static val MODEL_NAME = "model"
+	protected static val MODEL_NAME = "model" 
 	
 	private def String getProjectModelPath(String modelName) {
 		"model/" + modelName + "." + MODEL_FILE_EXTENSION

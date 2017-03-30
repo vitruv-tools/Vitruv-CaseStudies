@@ -66,7 +66,8 @@ class DeletedClassReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.deleteComponent(oldValue, oldValue.getName(), "");
+      String _name = oldValue.getName();
+      _routinesFacade.deleteComponent(oldValue, _name, "");
     }
   }
 }

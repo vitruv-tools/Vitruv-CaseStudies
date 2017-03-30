@@ -25,7 +25,8 @@ public class RenameClassModelForComponentModelRoutine extends AbstractRepairRout
     }
     
     public void update0Element(final Model umlCompModel, final Model umlClassModel) {
-      umlClassModel.setName(umlCompModel.getName());
+      String _name = umlCompModel.getName();
+      umlClassModel.setName(_name);
     }
     
     public EObject getCorrepondenceSourceUmlClassModel(final Model umlCompModel) {

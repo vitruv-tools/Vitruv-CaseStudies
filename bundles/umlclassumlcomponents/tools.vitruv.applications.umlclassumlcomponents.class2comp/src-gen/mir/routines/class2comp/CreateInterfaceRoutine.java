@@ -33,7 +33,8 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateCompInterfaceElement(final Interface classInterface, final Model compModel, final Interface compInterface) {
-      compInterface.setName(classInterface.getName());
+      String _name = classInterface.getName();
+      compInterface.setName(_name);
     }
     
     public EObject getElement2(final Interface classInterface, final Model compModel, final Interface compInterface) {

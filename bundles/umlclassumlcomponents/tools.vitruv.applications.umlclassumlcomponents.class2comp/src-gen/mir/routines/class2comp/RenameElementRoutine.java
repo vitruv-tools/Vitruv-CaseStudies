@@ -24,7 +24,8 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final NamedElement classElement, final NamedElement compElement) {
-      compElement.setName(classElement.getName());
+      String _name = classElement.getName();
+      compElement.setName(_name);
     }
     
     public EObject getCorrepondenceSourceCompElement(final NamedElement classElement) {

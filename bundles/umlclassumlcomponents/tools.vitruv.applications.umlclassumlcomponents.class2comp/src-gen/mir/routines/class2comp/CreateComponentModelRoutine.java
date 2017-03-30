@@ -29,9 +29,10 @@ public class CreateComponentModelRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updateUmlComponentModelElement(final Model umlClassModel, final Model umlComponentModel) {
-      umlComponentModel.setName(umlClassModel.getName());
       String _name = umlClassModel.getName();
-      String _plus = ("model/" + _name);
+      umlComponentModel.setName(_name);
+      String _name_1 = umlClassModel.getName();
+      String _plus = ("model/" + _name_1);
       String _plus_1 = (_plus + ".uml");
       this.persistProjectRelative(umlClassModel, umlComponentModel, _plus_1);
     }

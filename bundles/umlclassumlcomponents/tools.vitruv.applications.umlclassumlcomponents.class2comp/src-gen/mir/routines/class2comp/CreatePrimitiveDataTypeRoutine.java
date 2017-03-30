@@ -37,7 +37,8 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void updateCompTypeElement(final PrimitiveType classType, final Model umlModel, final PrimitiveType compType) {
-      compType.setName(classType.getName());
+      String _name = classType.getName();
+      compType.setName(_name);
     }
     
     public EObject getElement3(final PrimitiveType classType, final Model umlModel, final PrimitiveType compType) {

@@ -5,6 +5,7 @@ import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
+import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
@@ -50,9 +51,11 @@ public class CreateCompAttributeRoutine extends AbstractRepairRoutineRealization
       if (_tripleEquals) {
         componentAttribute.setName("DefaultAttributeName");
       } else {
-        componentAttribute.setName(classAttribute.getName());
+        String _name_1 = classAttribute.getName();
+        componentAttribute.setName(_name_1);
       }
-      componentAttribute.setDatatype(classAttribute.getDatatype());
+      DataType _datatype = classAttribute.getDatatype();
+      componentAttribute.setDatatype(_datatype);
     }
   }
   

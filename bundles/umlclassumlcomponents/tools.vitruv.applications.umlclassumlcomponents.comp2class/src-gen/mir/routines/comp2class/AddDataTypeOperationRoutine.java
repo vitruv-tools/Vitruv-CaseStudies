@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -58,8 +59,10 @@ public class AddDataTypeOperationRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updateClassOperationElement(final Operation compOperation, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
-      classOperation.setName(compOperation.getName());
-      classOperation.setType(compOperation.getType());
+      String _name = compOperation.getName();
+      classOperation.setName(_name);
+      Type _type = compOperation.getType();
+      classOperation.setType(_type);
     }
   }
   
