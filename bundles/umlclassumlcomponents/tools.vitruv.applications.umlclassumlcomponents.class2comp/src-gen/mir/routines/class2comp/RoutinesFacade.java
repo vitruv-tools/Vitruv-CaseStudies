@@ -1,6 +1,7 @@
 package mir.routines.class2comp;
 
 import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.PrimitiveType;
@@ -15,8 +16,32 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
+  public void createComponentModel(final Model umlClassModel) {
+    mir.routines.class2comp.CreateComponentModelRoutine effect = new mir.routines.class2comp.CreateComponentModelRoutine(this.executionState, calledBy,
+    	umlClassModel);
+    effect.applyRoutine();
+  }
+  
+  public void renameComponentModelForClassModel(final Model umlClassModel) {
+    mir.routines.class2comp.RenameComponentModelForClassModelRoutine effect = new mir.routines.class2comp.RenameComponentModelForClassModelRoutine(this.executionState, calledBy,
+    	umlClassModel);
+    effect.applyRoutine();
+  }
+  
+  public void routineCreatedUmlClass(final org.eclipse.uml2.uml.Class umlClass) {
+    mir.routines.class2comp.RoutineCreatedUmlClassRoutine effect = new mir.routines.class2comp.RoutineCreatedUmlClassRoutine(this.executionState, calledBy,
+    	umlClass);
+    effect.applyRoutine();
+  }
+  
   public void createUmlComponent(final org.eclipse.uml2.uml.Class umlClass) {
     mir.routines.class2comp.CreateUmlComponentRoutine effect = new mir.routines.class2comp.CreateUmlComponentRoutine(this.executionState, calledBy,
+    	umlClass);
+    effect.applyRoutine();
+  }
+  
+  public void createDataTypeForClass(final org.eclipse.uml2.uml.Class umlClass) {
+    mir.routines.class2comp.CreateDataTypeForClassRoutine effect = new mir.routines.class2comp.CreateDataTypeForClassRoutine(this.executionState, calledBy,
     	umlClass);
     effect.applyRoutine();
   }
@@ -39,18 +64,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createComponentModel(final Model umlClassModel) {
-    mir.routines.class2comp.CreateComponentModelRoutine effect = new mir.routines.class2comp.CreateComponentModelRoutine(this.executionState, calledBy,
-    	umlClassModel);
-    effect.applyRoutine();
-  }
-  
-  public void renameComponentModelForClassModel(final Model umlClassModel) {
-    mir.routines.class2comp.RenameComponentModelForClassModelRoutine effect = new mir.routines.class2comp.RenameComponentModelForClassModelRoutine(this.executionState, calledBy,
-    	umlClassModel);
-    effect.applyRoutine();
-  }
-  
   public void createPrimitiveDataType(final PrimitiveType classType) {
     mir.routines.class2comp.CreatePrimitiveDataTypeRoutine effect = new mir.routines.class2comp.CreatePrimitiveDataTypeRoutine(this.executionState, calledBy,
     	classType);
@@ -60,12 +73,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void createDataType(final DataType classType) {
     mir.routines.class2comp.CreateDataTypeRoutine effect = new mir.routines.class2comp.CreateDataTypeRoutine(this.executionState, calledBy,
     	classType);
-    effect.applyRoutine();
-  }
-  
-  public void changePropertyType(final Property classProperty, final DataType classType) {
-    mir.routines.class2comp.ChangePropertyTypeRoutine effect = new mir.routines.class2comp.ChangePropertyTypeRoutine(this.executionState, calledBy,
-    	classProperty, classType);
     effect.applyRoutine();
   }
   
@@ -84,6 +91,18 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void deleteComponentAttribute(final Property classAttribute) {
     mir.routines.class2comp.DeleteComponentAttributeRoutine effect = new mir.routines.class2comp.DeleteComponentAttributeRoutine(this.executionState, calledBy,
     	classAttribute);
+    effect.applyRoutine();
+  }
+  
+  public void changePropertyType(final Property classProperty, final DataType classType) {
+    mir.routines.class2comp.ChangePropertyTypeRoutine effect = new mir.routines.class2comp.ChangePropertyTypeRoutine(this.executionState, calledBy,
+    	classProperty, classType);
+    effect.applyRoutine();
+  }
+  
+  public void createInterface(final Interface classInterface) {
+    mir.routines.class2comp.CreateInterfaceRoutine effect = new mir.routines.class2comp.CreateInterfaceRoutine(this.executionState, calledBy,
+    	classInterface);
     effect.applyRoutine();
   }
 }

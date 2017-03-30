@@ -66,7 +66,7 @@ class CreatedUmlClassReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createUmlComponent(newValue);
+      _routinesFacade.routineCreatedUmlClass(newValue);
     }
   }
 }

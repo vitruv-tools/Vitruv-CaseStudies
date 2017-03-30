@@ -1,6 +1,5 @@
 package mir.routines.class2comp;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
@@ -47,8 +46,8 @@ public class CreateCompAttributeRoutine extends AbstractRepairRoutineRealization
     
     public void updateComponentAttributeElement(final org.eclipse.uml2.uml.Class umlClass, final Property classAttribute, final Component component, final Property componentAttribute) {
       String _name = classAttribute.getName();
-      boolean _equals = Objects.equal(_name, null);
-      if (_equals) {
+      boolean _tripleEquals = (_name == null);
+      if (_tripleEquals) {
         componentAttribute.setName("DefaultAttributeName");
       } else {
         componentAttribute.setName(classAttribute.getName());

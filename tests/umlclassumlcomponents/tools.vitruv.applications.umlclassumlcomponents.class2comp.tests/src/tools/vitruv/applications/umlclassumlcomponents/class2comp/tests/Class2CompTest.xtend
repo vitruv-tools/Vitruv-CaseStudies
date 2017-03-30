@@ -8,6 +8,8 @@ import org.eclipse.uml2.uml.Model
 
 class Class2CompTest extends AbstractClass2CompTest {
 	private static val CLASS_NAME = "TestUmlClass"
+	private static val CLASS_NAME2 = "TestUmlClass2"
+	private static val ATTR_NAME = "TestAttribute"
 
 	@Test
 		public def void testModelCreation() {
@@ -18,12 +20,13 @@ class Class2CompTest extends AbstractClass2CompTest {
 			assertTrue(umlModel instanceof Model)
 			assertEquals(MODEL_NAME, (umlModel as Model).name)
 	}
-
+	
+	/*******
+	*Class:*
+	********/
 	@Test
-	public def void testCreateClass() {
-		val umlClass = UMLFactory.eINSTANCE.createClass()
-		umlClass.name = CLASS_NAME
-		rootElement.packagedElements += umlClass
+	public def void testCreateComponentForClass() {
+		val umlClass = createClass(CLASS_NAME, 0, 1)
 		saveAndSynchronizeChanges(umlClass)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		assertEquals(1, correspondingElements.size)
@@ -32,28 +35,110 @@ class Class2CompTest extends AbstractClass2CompTest {
 		assertEquals(CLASS_NAME, (umlComponent as Component).name)
 	}
 	
-	@Test
-    public def void testRenameClass() {
-    	//create class:
-    	val umlClass = UMLFactory.eINSTANCE.createClass()
-		umlClass.name = "Before"
+	private def org.eclipse.uml2.uml.Class createClass(String name, int createNoComponent, int createNoDatatype) {
+		val umlClass = UMLFactory.eINSTANCE.createClass()
+		this.testUserInteractor.addNextSelections(createNoComponent, createNoDatatype); //Decide to create corresponding class or datatype
+		umlClass.name = name
 		rootElement.packagedElements += umlClass
+		return umlClass
+	}
+	
+	//REMOVE THIS
+	@Test
+	public def void testCreate2ComponentFor2Class() {
+		val umlClass = createClass(CLASS_NAME, 0, 1)
 		saveAndSynchronizeChanges(umlClass)
-		//check if class correctly added:
-		var correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten		
-		assertEquals(1, correspondingElements.size);
-		//change name:
-		rootElement.packagedElements.get(0).name = "After"
-		//check if rename successful:
-		assertEquals("After", rootElement.packagedElements.get(0).name)
-		//synchronize change
-		saveAndSynchronizeChanges(umlClass)
-		//check if rename happened in component:
-		correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		val umlClass2 = createClass(CLASS_NAME2, 0, 1)
+		saveAndSynchronizeChanges(umlClass2)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		assertEquals(1, correspondingElements.size)
 		val umlComponent = correspondingElements.get(0)
 		assertTrue(umlComponent instanceof Component)
-		assertEquals("After", (umlComponent as Component).name)
-    }
+		assertEquals(CLASS_NAME, (umlComponent as Component).name)
+	}
 	
+	@Test
+	public def void testCreateNoComponentForClass() {
+		val umlClass = createClass(CLASS_NAME, 1, 1)
+		saveAndSynchronizeChanges(umlClass)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		assertEquals(0, correspondingElements.size)
+		assertFalse(rootElement.packagedElements.contains(Component))
+	}
+	
+	@Test
+    public def void testRenameClass() {
+    	val umlClass = createClass("Old", 0, 1)
+		saveAndSynchronizeChanges(umlClass)
+		var correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		//change name:
+		rootElement.packagedElements.get(0).name = "New"
+		saveAndSynchronizeChanges(umlClass)
+		//check if rename happened in component:
+		val umlComponent = correspondingElements.get(0)
+		assertTrue(umlComponent instanceof Component)
+		assertEquals("New", (umlComponent as Component).name)
+    }
+    
+	@Test
+    public def void testDeleteClass() {
+    	val umlClass = createClass(CLASS_NAME, 0, 1)	
+		saveAndSynchronizeChanges(umlClass)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		val umlComponent = correspondingElements.get(0)		
+		//remove class		
+		assertTrue(rootElement.packagedElements.contains(umlClass))
+		umlClass.destroy()		
+		assertFalse(rootElement.packagedElements.contains(umlClass))
+		//rootElement.packagedElements.remove(umlClass)		
+		saveAndSynchronizeChanges(rootElement)
+		//check if component exists:		
+		assertFalse(rootElement.packagedElements.contains(umlComponent))
+    }
+    
+    @Test
+    public def void testCreateDataTypeForClass() {
+    	val umlClass = createClass(CLASS_NAME, 0, 0)
+		saveAndSynchronizeChanges(umlClass)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		assertEquals(1, correspondingElements.size)
+		val compDataType = correspondingElements.get(0)
+		assertTrue(compDataType instanceof org.eclipse.uml2.uml.DataType)
+		assertEquals(CLASS_NAME, (compDataType as org.eclipse.uml2.uml.DataType).name)
+	}
+	
+   	/***********
+	*Attributes:*
+	************/
+	@Test
+	public def void testCreateClassAttribute() {
+	    val umlClassAttribute = createClass(CLASS_NAME2, 1, 1)
+	    saveAndSynchronizeChanges(umlClassAttribute)
+	    val umlClass = createClass(CLASS_NAME, 0, 1)
+	    umlClass.createOwnedAttribute(ATTR_NAME, umlClassAttribute)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		saveAndSynchronizeChanges(umlClass)
+		//get corresponding component:
+		val umlComponent = (correspondingElements.get(0) as Component)		
+		assertEquals(1, umlComponent.attributes.size)
+		val umlComponentAttribute = umlComponent.attributes.get(0)
+		assertNotNull(umlComponentAttribute);
+		assertEquals(CLASS_NAME2, umlComponentAttribute.name)
+	}
+	
+	@Test
+    public def void testRenameClassAttribute() {
+    	assertTrue(false)
+		//change name:
+		
+    }
+    
+    @Test
+    public def void testDeleteClassAttribute() {
+    	assertTrue(false)
+		//change name:
+		
+    }
+    
 }
 

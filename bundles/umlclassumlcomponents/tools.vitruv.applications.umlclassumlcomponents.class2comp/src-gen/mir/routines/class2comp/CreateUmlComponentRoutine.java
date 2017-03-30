@@ -23,30 +23,30 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Model umlModel, final Component umlComponent) {
-      return umlModel;
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
+      return compModel;
     }
     
-    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Model umlModel, final Component umlComponent) {
-      EList<PackageableElement> _packagedElements = umlModel.getPackagedElements();
+    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
+      EList<PackageableElement> _packagedElements = compModel.getPackagedElements();
       _packagedElements.add(umlComponent);
     }
     
-    public EObject getElement2(final org.eclipse.uml2.uml.Class umlClass, final Model umlModel, final Component umlComponent) {
+    public EObject getElement2(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
       return umlClass;
     }
     
-    public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Model umlModel, final Component umlComponent) {
+    public EObject getCorrepondenceSourceCompModel(final org.eclipse.uml2.uml.Class umlClass) {
+      org.eclipse.uml2.uml.Package _package = umlClass.getPackage();
+      return _package;
+    }
+    
+    public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
       return umlComponent;
     }
     
-    public void updateUmlComponentElement(final org.eclipse.uml2.uml.Class umlClass, final Model umlModel, final Component umlComponent) {
+    public void updateUmlComponentElement(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
       umlComponent.setName(umlClass.getName());
-    }
-    
-    public EObject getCorrepondenceSourceUmlModel(final org.eclipse.uml2.uml.Class umlClass) {
-      org.eclipse.uml2.uml.Package _package = umlClass.getPackage();
-      return _package;
     }
   }
   
@@ -63,22 +63,22 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("Called routine CreateUmlComponentRoutine with input:");
     getLogger().debug("   Class: " + this.umlClass);
     
-    Model umlModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlModel(umlClass), // correspondence source supplier
+    Model compModel = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceCompModel(umlClass), // correspondence source supplier
     	Model.class,
     	(Model _element) -> true, // correspondence precondition checker
     	null);
-    if (umlModel == null) {
+    if (compModel == null) {
     	return;
     }
-    registerObjectUnderModification(umlModel);
+    registerObjectUnderModification(compModel);
     Component umlComponent = UMLFactoryImpl.eINSTANCE.createComponent();
-    userExecution.updateUmlComponentElement(umlClass, umlModel, umlComponent);
+    userExecution.updateUmlComponentElement(umlClass, compModel, umlComponent);
     
-    // val updatedElement userExecution.getElement1(umlClass, umlModel, umlComponent);
-    userExecution.update0Element(umlClass, umlModel, umlComponent);
+    // val updatedElement userExecution.getElement1(umlClass, compModel, umlComponent);
+    userExecution.update0Element(umlClass, compModel, umlComponent);
     
-    addCorrespondenceBetween(userExecution.getElement2(umlClass, umlModel, umlComponent), userExecution.getElement3(umlClass, umlModel, umlComponent), "");
+    addCorrespondenceBetween(userExecution.getElement2(umlClass, compModel, umlComponent), userExecution.getElement3(umlClass, compModel, umlComponent), "");
     
     postprocessElements();
   }
