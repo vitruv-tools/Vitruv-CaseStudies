@@ -66,7 +66,6 @@ import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.types.TypeReference;
-import org.junit.runner.Description;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -97,7 +96,6 @@ import tools.vitruv.framework.metamodel.Metamodel;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.monitorededitor.ProjectBuildUtils;
-import tools.vitruv.framework.tests.TestUserInteractor;
 import tools.vitruv.framework.tests.VitruviusCasestudyTest;
 import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
@@ -129,22 +127,17 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	}
 	
 	@Override
-	protected void beforeTest(final Description description) throws Throwable {
-		super.beforeTest(description);
-		this.testUserInteractor = new TestUserInteractor();
+	public void beforeTest() throws Throwable {
+		super.beforeTest();
 		// add PCM Java Builder to Project under test
 		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
 		pcmJavaBuilder.addToProject(this.currentTestProject, getVirtualModel().getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(currentTestProject, VitruviusJavaBuilder.BUILDER_ID);
-
-		this.resourceSet = new ResourceSetImpl();
-		// set new user interactor
-		this.setUserInteractor(this.testUserInteractor);
 	}
 
 	@Override
-	protected void afterTest(final org.junit.runner.Description description) {
+	public void afterTest() {
 		// Remove PCM Java Builder
 		final VitruviusJavaBuilderApplicator pcmJavaRemoveBuilder = new VitruviusJavaBuilderApplicator();
 		pcmJavaRemoveBuilder.removeBuilderFromProject(this.currentTestProject);
