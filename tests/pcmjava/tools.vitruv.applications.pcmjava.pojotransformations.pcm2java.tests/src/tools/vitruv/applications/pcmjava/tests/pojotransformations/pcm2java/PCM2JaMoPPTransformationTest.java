@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
+import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.commons.NamedElement;
@@ -81,6 +82,14 @@ import tools.vitruv.framework.util.datatypes.VURI;
  *
  */
 public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
+	
+	@Override
+	public void beforeTest() throws Throwable {
+		super.beforeTest();
+		// This is necessary because otherwise Maven tests will fail as resources from previous
+		// tests are still in the classpath and accidentially resolved
+		JavaClasspath.reset();
+	}
 	
 	@Override
 	protected List<ChangePropagationSpecification> createChangePropagationSpecifications() {
@@ -307,7 +316,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
         pdt.setType(PrimitiveTypeEnum.INT);
         pdt.setRepository__DataType(repo);
         innerDec.setDatatype_InnerDeclaration(pdt);
-        innerDec.setCompositeDataType_InnerDeclaration(cdt);
+        //innerDec.setCompositeDataType_InnerDeclaration(cdt);
         innerDec.setEntityName(PCM2JaMoPPTestUtils.INNER_DEC_NAME);
         cdt.getInnerDeclaration_CompositeDataType().add(innerDec);
         EcoreResourceBridge.saveResource(cdt.eResource());
@@ -505,7 +514,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     public Repository createMediaStore(final String mediaStoreName, final String webGUIName,
             final String downloadMethodName, final String uploadMethodName) throws Throwable {
 
-        this.beforeTest(null);
+        this.beforeTest();
 
         // create repo
         final Repository repo = this.createAndSyncRepository(this.resourceSet, "mediastorerepo");
