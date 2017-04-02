@@ -105,6 +105,24 @@ reaction JavaElementMadePublic {
     call changeUmlNamedElementVisibility(affectedEObject, newValue)
 }
 
+reaction JavaElementMadePrivate {
+    after element java::Private created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
+    call changeUmlNamedElementVisibility(affectedEObject, newValue)
+}
+
+reaction JavaElementMadeProtected {
+    after element java::Protected created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
+    call changeUmlNamedElementVisibility(affectedEObject, newValue)
+}
+
+reaction JavaElementMadePackagePrivatec {
+    after element java::Modifier deleted and removed from java::Class[annotationsAndModifiers]
+    with oldValue instanceof Private
+    || oldValue instanceof Public
+    || oldValue instanceof Protected
+    call changeUmlNamedElementVisibility(affectedEObject, null)
+}
+
 routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem, java::Modifier mod) {
     match {
         val uElem = retrieve uml::NamedElement corresponding to jElem
@@ -112,39 +130,6 @@ routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem, java
     action {
         update uElem {
             uElem.visibility = getUmlVisibilityKind(mod);
-        }
-    }
-}
-//TODO
-/* 
-reaction JavaClassMadePublic {
-    after element java::Public created and inserted in java::Class[annotationsAndModifiers]
-    call changeUmlClassVisibility(affectedEObject, newValue)
-}*/
-reaction JavaClassMadePrivate {
-    after element java::Private created and inserted in java::Class[annotationsAndModifiers]
-    call changeUmlClassVisibility(affectedEObject, newValue)
-}
-reaction JavaClassMadeProtected {
-    after element java::Protected created and inserted in java::Class[annotationsAndModifiers]
-    call changeUmlClassVisibility(affectedEObject, newValue)
-}
-
-reaction JavaClassMadePackagePrivate {
-    after element java::Modifier deleted and removed from java::Class[annotationsAndModifiers]
-    with oldValue instanceof Private
-    || oldValue instanceof Public
-    || oldValue instanceof Protected
-    call changeUmlClassVisibility(affectedEObject, null)
-}
-
-routine changeUmlClassVisibility(java::Class jClass, java::Modifier mod) {
-    match {
-        val uClass = retrieve uml::Class corresponding to jClass
-    }
-    action {
-        update uClass {
-            uClass.visibility = getUmlVisibilityKind(mod);
         }
     }
 }
@@ -347,67 +332,17 @@ routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jI
     }
 }
 
-reaction JavaMethodRenamed {
-    after attribute replaced at java::Method[name]
-    call renameUmlMethod(affectedEObject)
-}
-
-routine renameUmlMethod(java::Method jMeth) {
-    match {
-        val uMeth = retrieve uml::Operation corresponding to jMeth
-    }
-    action {
-        update uMeth {
-            uMeth.name = jMeth.name;
-        }
-    }
-}
-
-reaction JavaMethodDeleted {
-    after element java::Method deleted and removed from java::ConcreteClassifier[members]
+reaction JavaMemberDeleted {
+    after element java::Member deleted and removed from java::ConcreteClassifier[members]
     call deleteUmlMethod(oldValue)
 }
 
-routine deleteUmlMethod(java::Method jMeth) {
+routine deleteUmlMethod(java::Member jMem) {
     match {
-        val uMeth = retrieve uml::Operation corresponding to jMeth
+        val uMem = retrieve uml::NamedElement corresponding to jMem
     }
     action {
-        delete uMeth
-    }
-}
-/* 
-reaction JavaMethodMadePublic {
-    after element java::Public created and inserted in java::ClassMethod[annotationsAndModifiers]
-    call changeUmlMethodVisibility(affectedEObject, newValue)
-}*/
-//TODO
-reaction JavaMethodMadePrivate {
-    after element java::Private created and inserted in java::ClassMethod[annotationsAndModifiers]
-    call changeUmlMethodVisibility(affectedEObject, newValue)
-}
-
-reaction JavaMethodMadeProtected {
-    after element java::Protected created and inserted in java::ClassMethod[annotationsAndModifiers]
-    call changeUmlMethodVisibility(affectedEObject, newValue)
-}
-
-reaction JavaMethodMadePackagePrivate {
-    after element java::Modifier deleted and removed from java::ClassMethod[annotationsAndModifiers]
-    with oldValue instanceof Private
-    || oldValue instanceof Public
-    || oldValue instanceof Protected
-    call changeUmlMethodVisibility(affectedEObject, null)
-}
-
-routine changeUmlMethodVisibility( java::ClassMethod jMeth, java::Modifier mod) {
-    match {
-        val uMeth = retrieve uml::Operation corresponding to jMeth
-    }
-    action {
-        update uMeth {
-            uMeth.visibility = getUmlVisibilityKind(mod);
-        }
+        delete uMem
     }
 }
 
@@ -442,26 +377,26 @@ routine setUmlMethodAbstract(java::ClassMethod jMeth, Int isAbstract) {
     }
 }
 
-reaction JavaMethodMadeStatic {
-    after element java::Static created and inserted in java::ClassMethod[annotationsAndModifiers]
-    call setUmlMethodStatic(affectedEObject, 1)
+reaction JavaElementMadeStatic {
+    after element java::Static created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
+    call setUmlFeatureStatic(affectedEObject, 1)
 }
 
 reaction JavaMethodMadeNonStatic {
-    after element java::Static deleted and removed from java::ClassMethod[annotationsAndModifiers]
-    call setUmlMethodStatic(affectedEObject, 0)
+    after element java::Static deleted and removed from java::AnnotableAndModifiable[annotationsAndModifiers]
+    call setUmlFeatureStatic(affectedEObject, 0)
 }
 
-routine setUmlMethodStatic(java::ClassMethod jMeth, Int isStatic) {
+routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Int isStatic) {
     match {
-        val uMeth = retrieve uml::Operation corresponding to jMeth
+        val uFeature = retrieve uml::Feature corresponding to jElem
     }
     action {
-        update uMeth {
+        update uFeature {
             if (isStatic == 1) {
-                uMeth.isStatic = true;
+                uFeature.isStatic = true;
             } else if (isStatic == 0) {
-                uMeth.isStatic = false;
+                uFeature.isStatic = false;
             } else {
                 throw new IllegalArgumentException("Invalid isStatic Value: " + isStatic);
             }
@@ -593,33 +528,19 @@ routine createUmlAttribute(java::Class jClass, java::Field jAttr) {
     }
 }
 
-reaction JavaAttributeRenamed {
-    after attribute replaced at java::Field[name]
-    call renameUmlAttribute(affectedEObject)
+reaction JavaMemberRenamed {
+    after attribute replaced at java::Member[name]
+    call renameUmlMember(affectedEObject)
 }
 
-routine renameUmlAttribute(java::Field jAttr) {
+routine renameUmlMember(java::Member jMem) {
     match {
-        val uAttr = retrieve uml::Property corresponding to jAttr
+        val uMem = retrieve uml::NamedElement corresponding to jMem
     }
     action {
-        update uAttr {
-            uAttr.name = jAttr.name;
+        update uMem {
+            uMem.name = jMem.name;
         }
-    }
-}
-
-reaction JavaAttributeDeleted {
-    after element java::Field deleted and removed from java::Class[members]
-    call deleteUmlAttribute(oldValue)
-}
-
-routine deleteUmlAttribute(java::Field jAttr) {
-    match {
-        val uAttr = retrieve uml::Property corresponding to jAttr
-    }
-    action {
-        delete uAttr
     }
 }
 
@@ -642,67 +563,6 @@ routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
             uAttr.type = getUmlType(jType, customType, getUmlModel(correspondenceModel))
         }
         
-    }
-}
-/* 
-reaction JavaAttributeMadePublic {
-    after element java::Public created and inserted in java::Field[annotationsAndModifiers]
-    call changeUmlAttributeVisibility(affectedEObject, newValue)
-}*/
-// TODO 
-reaction JavaAttributeMadePrivate {
-    after element java::Private created and inserted in java::Field[annotationsAndModifiers]
-    call changeUmlAttributeVisibility(affectedEObject, newValue)
-}
-
-reaction JavaAttributeMadeProtected {
-    after element java::Protected created and inserted in java::Field[annotationsAndModifiers]
-    call changeUmlAttributeVisibility(affectedEObject, newValue)
-}
-
-reaction JavaAttributeMadePackagePrivate {
-    after element java::Modifier deleted and removed from java::Field[annotationsAndModifiers]
-    with oldValue instanceof Private
-    || oldValue instanceof Public
-    || oldValue instanceof Protected
-    call changeUmlAttributeVisibility(affectedEObject, null)
-}
-
-routine changeUmlAttributeVisibility(java::Field jAttr, java::Modifier mod) {
-    match {
-       val uAttr = retrieve uml::Property corresponding to jAttr 
-    }
-    action {
-        update uAttr {
-            uAttr.visibility = getUmlVisibilityKind(mod);
-        }
-    }
-}
-
-reaction JavaAttributeMadeStatic {
-    after element java::Static created and inserted in java::Field[annotationsAndModifiers]
-    call setUmlAttributeStatic(affectedEObject, 1)
-}
-
-reaction JavaAttributeMadeNonStatic {
-    after element java::Static deleted and removed from java::Field[annotationsAndModifiers]
-    call setUmlAttributeStatic(affectedEObject, 0)
-}
-
-routine setUmlAttributeStatic(java::Field jAttr, Int isStatic) {
-    match {
-        val uAttr = retrieve uml::Property corresponding to jAttr
-    }
-    action {
-        update uAttr {
-            if (isStatic == 1) {
-                uAttr.isStatic = true;
-            } else if (isStatic == 0) {
-                uAttr.isStatic = false;
-            } else {
-                throw new IllegalArgumentException("Invalid isStatic value: " + isStatic);
-            }
-        }
     }
 }
 

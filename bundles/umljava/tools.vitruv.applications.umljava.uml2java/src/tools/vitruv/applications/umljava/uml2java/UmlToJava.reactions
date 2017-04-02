@@ -38,36 +38,39 @@ routine createJavaClass(uml::Class umlClass) {
     }
 }
 
-reaction UmlClassRenamed {
-    after attribute replaced at uml::Class[name]
-    call renameJavaClass(affectedEObject)
+reaction UmlClassifierRenamed {
+    after attribute replaced at uml::Classifier[name]
+    call renameJavaClassifier(affectedEObject)
 }
 
-routine renameJavaClass(uml::Class umlClass) {
+routine renameJavaClassifier(uml::Classifier umlClass) {
     match {
-        val javaClass = retrieve java::Class corresponding to umlClass
-        val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClass
+        val javaClass = retrieve java::ConcreteClassifier corresponding to umlClass
+        val javaCompilationUnit = retrieve optional java::CompilationUnit corresponding to umlClass
     }
     action {
         update javaClass {
             javaClass.name = umlClass.name;
         }
         update javaCompilationUnit {
-            javaCompilationUnit.name = umlClass.name;
-            persistProjectRelative(umlClass, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+        	if (javaCompilationUnit != null) {
+        		javaCompilationUnit.name = umlClass.name;
+                persistProjectRelative(umlClass, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+        	}
+            
         }
     }
 }
 
-reaction UmlClassDeleted {
-    after element uml::Class deleted and removed from uml::Model[packagedElement]
+reaction UmlClassifierDeleted {
+    after element uml::Classifier deleted and removed from uml::Model[packagedElement]
     call deleteJavaClass(oldValue)
 }
 
-routine deleteJavaClass(uml::Class umlClass) {
+routine deleteJavaClass(uml::Classifier umlClass) {
     match {
-        val javaClass = retrieve java::Class corresponding to umlClass
-        val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClass
+        val javaClass = retrieve java::ConcreteClassifier corresponding to umlClass
+        val javaCompilationUnit = retrieve optional java::CompilationUnit corresponding to umlClass
     }
     action {
         delete javaClass
@@ -109,18 +112,18 @@ routine setJavaClassAbstract(uml::Class umlClass) {
     }
 }
 
-reaction UmlClassVisibilityChanged {
-    after attribute replaced at uml::Class[visibility]
-    call changeJavaClassVisibility(affectedEObject)
+reaction UmlElementVisibilityChanged {
+    after attribute replaced at uml::NamedElement[visibility]
+    call changeJavaElementVisibility(affectedEObject)
 }
 
-routine changeJavaClassVisibility(uml::Class uClass) {
+routine changeJavaElementVisibility(uml::NamedElement uElem) {
     match {
-        val jClass = retrieve java::Class corresponding to uClass
+        val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem
     }
     action {
-        update jClass {
-            setJavaVisibility(jClass, uClass.visibility);
+        update jElem {
+            setJavaVisibility(jElem, uElem.visibility);
         }
     }
 }
@@ -215,44 +218,6 @@ routine createJavaInterface(uml::Interface umlInterface) {
     }
 }
 
-reaction UmlInterfaceRenamed {
-    after attribute replaced at uml::Interface[name]
-    call renameJavaInterface(affectedEObject)
-}
-
-routine renameJavaInterface(uml::Interface umlInterface) {
-    match {
-        val jInterface = retrieve java::Interface corresponding to umlInterface
-        val jCompUnit = retrieve java::CompilationUnit corresponding to umlInterface
-    }
-    action {
-        update jInterface {
-            jInterface.name = umlInterface.name;
-        }
-        
-        update jCompUnit {
-            jCompUnit.name = umlInterface.name;
-            persistProjectRelative(umlInterface, jCompUnit, buildJavaFilePath(jCompUnit));
-        }
-    }
-}
-
-reaction UmlInterfaceDeleted {
-    after element uml::Interface deleted and removed from uml::Model[packagedElement]
-    call deleteJavaInterface(oldValue)
-}
-
-
-routine deleteJavaInterface(uml::Interface umlInterface) {
-    match {
-         val jInterface = retrieve java::Interface corresponding to umlInterface
-         val jCompUnit = retrieve java::CompilationUnit corresponding to umlInterface
-    }
-    action {
-        delete jInterface
-        delete jCompUnit
-    }
-}
  
 reaction UmlSuperInterfaceChanged {
     after element uml::Generalization inserted in uml::Interface[generalization]
@@ -309,7 +274,6 @@ reaction UmlAttributeCreated {
 routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
     match {
         val javaClass = retrieve java::Class corresponding to umlClass
-        
         val customTypeClass = retrieve optional java::Class corresponding to umlAttribute.type
     }
     action {
@@ -319,10 +283,11 @@ routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
             } else {
                 javaAttribute.name = umlAttribute.name;
             }
+            
             javaAttribute.typeReference = createTypeReference(umlAttribute.type, customTypeClass);    
         }
         update javaClass {
-          javaClass.members += javaAttribute;
+            handleMultiplicityAndAddToClass(umlAttribute, javaAttribute, javaClass);
         }
         add correspondence between umlAttribute and javaAttribute
     }
@@ -619,40 +584,6 @@ routine setJavaMethodAbstract(uml::Operation umlOp) {
         }
     }    
 }
-
-
-reaction UmlAttributeVisibilityChanged {
-    after attribute replaced at uml::Property[visibility]
-    call changeJavaAttributeVisibility(affectedEObject)
-}
-
-routine changeJavaAttributeVisibility(uml::Property umlAttr) {
-    match {
-        val javaAttr = retrieve java::Field corresponding to umlAttr
-    }
-    action {
-        update javaAttr {
-            setJavaVisibility(javaAttr, umlAttr.visibility);
-        }
-    }
-}
-
-reaction UmlMethodVisibilityChanged {
-    after attribute replaced at uml::Operation[visibility]
-    call changeJavaMethodVisibility(affectedEObject)
-}
-
-routine changeJavaMethodVisibility(uml::Operation umlOp) {
-    match {
-        val jMeth = retrieve java::ClassMethod corresponding to umlOp
-    }
-    action {
-        update jMeth {
-            setJavaVisibility(jMeth, umlOp.visibility);
-        }
-    }
-}
-
 
 reaction UmlInterfaceMethodCreated {
     after element uml::Operation created and inserted in uml::Interface[ownedOperation]
