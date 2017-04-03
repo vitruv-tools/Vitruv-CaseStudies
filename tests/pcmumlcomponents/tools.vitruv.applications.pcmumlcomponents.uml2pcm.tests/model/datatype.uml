@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_F00m0OlLEeaMSINJQfdhLg" name="RootElement">
+	<packagedElement xmi:id="AAAAAAFbNHiIsUFf//8=" name="Vec3" xmi:type="uml:DataType">
+		<ownedAttribute xmi:id="AAAAAAFbNHk0VEG0QUA=" name="X" type="AAAAAAFbNHjEUEGJMZY=" xmi:type="uml:Property" />
+		<ownedAttribute xmi:id="AAAAAAFbNHm/kEG9xR8=" name="Y" type="AAAAAAFbNHjEUEGJMZY=" xmi:type="uml:Property" />
+		<ownedAttribute xmi:id="AAAAAAFbNHolckHF638=" name="Z" type="AAAAAAFbNHjEUEGJMZY=" xmi:type="uml:Property" />
+	</packagedElement>
+	<packagedElement xmi:id="AAAAAAFbNHjEUEGJMZY=" name="Real" xmi:type="uml:PrimitiveType"/>
+</uml:Model>

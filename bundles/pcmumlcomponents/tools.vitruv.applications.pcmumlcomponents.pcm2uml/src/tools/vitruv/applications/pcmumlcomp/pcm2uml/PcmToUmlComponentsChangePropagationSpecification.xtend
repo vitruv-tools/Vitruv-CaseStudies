@@ -1,7 +1,7 @@
 package tools.vitruv.applications.pcmumlcomp.pcm2uml
 
-import mir.reactions.AbstractChangePropagationSpecification5_1ToUML
+import mir.reactions.AbstractChangePropagationSpecificationPcmToUml
 
-class PcmToUmlComponentsChangePropagationSpecification extends AbstractChangePropagationSpecification5_1ToUML {
+class PcmToUmlComponentsChangePropagationSpecification extends AbstractChangePropagationSpecificationPcmToUml {
 	
 }

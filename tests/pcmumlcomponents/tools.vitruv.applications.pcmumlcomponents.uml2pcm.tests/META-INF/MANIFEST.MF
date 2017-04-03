@@ -8,6 +8,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: tools.vitruv.framework.tests.util,
  tools.vitruv.framework.change.processing,
  org.junit,
- tools.vitruv.framework.vsum
+ tools.vitruv.framework.vsum,
+ tools.vitruv.applications.pcmumlcomponents.uml2pcm.constructionsimulation;bundle-version="0.1.0",
+ tools.vitruv.extensions.constructionsimulation;bundle-version="0.2.0",
+ tools.vitruv.extensions.constructionsimulation.util;bundle-version="0.2.0"
 Bundle-Vendor: vitruv.tools
 
