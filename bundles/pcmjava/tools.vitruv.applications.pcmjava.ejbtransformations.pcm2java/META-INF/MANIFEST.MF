@@ -3,7 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PCM 2 Java EJB
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 Bundle-Version: 0.1.0.qualifier
+<<<<<<< HEAD
 Export-Package: mir.reactions.reactions5_1ToJava.pcm2ejbJava,
+=======
+Export-Package: mir.reactions.reactionsPcmToJava.pcm2ejbJava,
+>>>>>>> master
  tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 Require-Bundle: org.eclipse.emf.ecore,
  com.google.guava,
