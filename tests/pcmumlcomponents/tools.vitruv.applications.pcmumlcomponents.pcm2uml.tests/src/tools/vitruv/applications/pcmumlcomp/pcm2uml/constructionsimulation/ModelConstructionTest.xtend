@@ -27,7 +27,7 @@ class ModelConstructionTest extends VitruviusEMFCasestudyTest {
 		val integrationStrategy = new PCMRepositoryIntegrationStrategy
 		val Resource resource = integrationStrategy.loadModel(REPOSITORY_PATH)
 		val changes = integrationStrategy.createChangeModels(null, resource)
-		createAndSynchronizeModel("model/model.repository", resource.contents.get(0))
+		createAndSynchronizeModel("model/small_example.repository", resource.contents.get(0))
 		triggerSynchronization(changes)
 	}
 	

@@ -22,6 +22,11 @@ import org.palladiosimulator.pcm.repository.CompleteComponentType
 import org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.Parameter
+import org.eclipse.emf.ecore.change.ChangeFactory
+import tools.vitruv.framework.change.echange.compound.CreateAndInsertRoot
+import tools.vitruv.framework.change.echange.compound.CompoundFactory
+import tools.vitruv.framework.change.echange.feature.FeatureFactory
+import tools.vitruv.framework.change.echange.eobject.EobjectFactory
 
 class PCMChangeBuildHelper extends ChangeBuildHelper {
 	
@@ -55,8 +60,13 @@ class PCMChangeBuildHelper extends ChangeBuildHelper {
      * @return the e change
      */
 	static def EChange createChangeFromRootEntity(Entity source) {
-		val InsertRootEObject<EObject> change = RootFactory.eINSTANCE.createInsertRootEObject()
-		change.setNewValue(source)
+		val createChange = EobjectFactory.eINSTANCE.createCreateEObject()
+		createChange.affectedEObject = source
+		val InsertRootEObject<EObject> insertChange = RootFactory.eINSTANCE.createInsertRootEObject()
+		insertChange.setNewValue(source)
+		val change = CompoundFactory.eINSTANCE.createCreateAndInsertRoot()
+		change.createChange = createChange
+		change.insertChange = insertChange
 		return change
 	}
 	
