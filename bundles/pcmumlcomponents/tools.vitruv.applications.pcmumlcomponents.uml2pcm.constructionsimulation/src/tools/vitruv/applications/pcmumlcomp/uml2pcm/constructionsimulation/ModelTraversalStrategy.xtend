@@ -20,6 +20,9 @@ import org.eclipse.uml2.uml.Property
 import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import org.eclipse.uml2.uml.Usage
 import org.eclipse.uml2.uml.InterfaceRealization
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.ecore.change.util.ChangeRecorder
+import tools.vitruv.framework.change.recording.AtomicEMFChangeRecorder
 
 class ModelTraversalStrategy extends EMFTraversalStrategy implements ITraversalStrategy<Model> {
 	
@@ -31,10 +34,17 @@ class ModelTraversalStrategy extends EMFTraversalStrategy implements ITraversalS
 	
 	override EList<VitruviusChange> traverse(Model entity, URI uri, EList<VitruviusChange> existingChanges) throws UnsupportedOperationException {
 		vuri = VURI.getInstance(uri)
+		val resourceSet = new ResourceSetImpl
+		val resource = resourceSet.createResource(uri)
+		val changeRecorder = new AtomicEMFChangeRecorder
+		changeRecorder.beginRecording(VURI.getInstance(uri), #{resource})
 		changeList = new BasicEList<VitruviusChange>()
 		traverseModel(entity)
 		traversePackagedElements(entity)
+		val changes = changeRecorder.endRecording
+		changes.forEach[changeList.add(it)]
 		return changeList
+		//return changeList
 	}
 	
 	def void setUserInteractor(UserInteractor userInteractor) {
