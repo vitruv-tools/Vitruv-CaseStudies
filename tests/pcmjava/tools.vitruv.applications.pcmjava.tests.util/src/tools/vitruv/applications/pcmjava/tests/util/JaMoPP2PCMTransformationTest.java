@@ -817,10 +817,12 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 		// adding the implements statement to the class will result in an unsuccessful proxy resolution
 		// for the implemented interface, which means that no correspondence gets created.
 		// Even forcing a reload of the interface and class models in the VSUM does not have any positive effect.
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-		}
+		// ADDITION: Using Maven, changes run properly without the sleep, so it is removed by now. 
+		// In Eclipse, it does not work without the sleep.
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//		}
 		final ICompilationUnit classCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(className, this.currentTestProject);
 		this.importCompilationUnitWithName(implementingInterfaceName, classCompilationUnit);
