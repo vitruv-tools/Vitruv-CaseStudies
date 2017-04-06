@@ -165,7 +165,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	
 	public synchronized void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
 		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
-		logger.debug("Starting to wait for finished synchronization");
+		logger.debug("Starting to wait for finished synchronization. Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: " + expectedNumberOfSyncs);
 		try {
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
@@ -191,12 +191,14 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	@Override
 	public synchronized void finishedChangePropagation() {
 		expectedNumberOfSyncs--;
+		logger.debug("Reducing number of expected syncs to: " + expectedNumberOfSyncs);
 		this.notifyAll();
 	}
 
 	@Override
 	public synchronized void abortedChangePropagation(ChangePropagationAbortCause cause) {
 		expectedNumberOfSyncs--;
+		logger.debug("Reducing number of expected syncs to: " + expectedNumberOfSyncs);
 		this.notifyAll();
 	}
 	
