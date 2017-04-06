@@ -14,10 +14,11 @@
 	<name>PCM-Java Application Tests</name>
 
 	<modules>
-		<!--<module>tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests</module>-->
-		<!--<module>tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.tests</module>-->
-		<!--<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests</module>-->
+		<module>tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests</module>
+		<module>tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.tests</module>
+		<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests</module>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests</module>
+		<!--The following plugin is only for running a complete test suite within Eclipse, but not necessary here -->
 		<!--<module>tools.vitruv.applications.pcmjava.tests</module>-->
 		<module>tools.vitruv.applications.pcmjava.tests.util</module>
 	</modules>
@@ -34,6 +35,8 @@
 					<!-- Test suites explicitly defined as they are sumsuming each other and would lead to redundant test execution -->
 					<includes>
 						<include>**/PCM2JavaTestSuite.class</include>
+						<include>**/Java2PCMTestSuite.class</include>
+						<include>**/Java2PcmEjbTransformationsTestSuite.class</include>
 					</includes>
 				</configuration>
 			</plugin>
