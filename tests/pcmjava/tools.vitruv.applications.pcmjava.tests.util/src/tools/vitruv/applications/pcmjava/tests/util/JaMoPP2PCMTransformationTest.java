@@ -141,6 +141,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(currentTestProject, VitruviusJavaBuilder.BUILDER_ID);
 		this.expectedNumberOfSyncs = 0;
+		java.lang.System.setErr(null);
 	}
 
 	@Override
