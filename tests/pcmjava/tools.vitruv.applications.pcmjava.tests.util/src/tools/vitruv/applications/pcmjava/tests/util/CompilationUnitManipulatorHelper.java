@@ -39,7 +39,7 @@ public class CompilationUnitManipulatorHelper {
         // Wait for synchronization before commiting the working copy, because
         // JaMoPP overwrites the compilation unit during reconcile
         synchronizationCallback.waitForSynchronization(1);
-        cu.commitWorkingCopy(true, new NullProgressMonitor());
+        cu.commitWorkingCopy(false, new NullProgressMonitor());
         cu.discardWorkingCopy();
     }
 
