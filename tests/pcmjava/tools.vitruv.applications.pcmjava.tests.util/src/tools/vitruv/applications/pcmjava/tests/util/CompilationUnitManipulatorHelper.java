@@ -36,11 +36,9 @@ public class CompilationUnitManipulatorHelper {
             cu.applyTextEdit(edit, null);
         }
         cu.reconcile(ICompilationUnit.NO_AST, false, null, null);
-        // Wait for synchronization before commiting the working copy, because
-        // JaMoPP overwrites the compilation unit during reconcile
-        synchronizationCallback.waitForSynchronization(1);
         cu.commitWorkingCopy(false, new NullProgressMonitor());
         cu.discardWorkingCopy();
+        synchronizationCallback.waitForSynchronization(1);
     }
 
     public static ICompilationUnit findICompilationUnitWithClassName(String entityName,
