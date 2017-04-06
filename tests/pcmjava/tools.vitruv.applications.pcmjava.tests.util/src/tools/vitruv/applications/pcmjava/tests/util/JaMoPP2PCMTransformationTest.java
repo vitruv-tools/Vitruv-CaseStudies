@@ -118,9 +118,11 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	private static final int SELECT_COMPOSITE_COMPONENT = 1;
 	private static final int SELECT_SYSTEM = 2;
 	protected static final int SELECT_NOTHING_DECIDE_LATER = 3;
-
+	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
+	
 	protected Package mainPackage;
 	protected Package secondPackage;
+	private int expectedNumberOfSyncs = 0;
 	
 	@Override
 	protected Iterable<Metamodel> createMetamodels() {
@@ -138,6 +140,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 		pcmJavaBuilder.addToProject(this.currentTestProject, getVirtualModel().getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(currentTestProject, VitruviusJavaBuilder.BUILDER_ID);
+		this.expectedNumberOfSyncs = 0;
 	}
 
 	@Override
@@ -159,9 +162,6 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
             throws JavaModelException {
 		CompilationUnitManipulatorHelper.editCompilationUnit(cu, this, edits);
     }
-	
-	private int expectedNumberOfSyncs = 0;
-	private static int MAXIMUM_SYNC_WAITING_TIME = 15000;
 	
 	public synchronized void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
 		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
