@@ -6,8 +6,8 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.palladiosimulator.pcm.repository.Repository;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBAnnotationHelper;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBJava2PcmHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -71,8 +71,8 @@ class CreatedClassReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final CompilationUnit affectedEObject, final EReference affectedFeature, final ConcreteClassifier newValue) {
-    boolean _isEJBClass = EJBAnnotationHelper.isEJBClass(newValue);
-    return _isEJBClass;
+    boolean _isEjbClass = EjbAnnotationHelper.isEjbClass(newValue);
+    return _isEjbClass;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -81,7 +81,7 @@ class CreatedClassReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final ConcreteClassifier newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final Repository repo = EJBJava2PcmHelper.findRepository(this.correspondenceModel);
+      final Repository repo = EjbJava2PcmHelper.findRepository(this.correspondenceModel);
       _routinesFacade.createBasicComponent(repo, newValue);
     }
   }

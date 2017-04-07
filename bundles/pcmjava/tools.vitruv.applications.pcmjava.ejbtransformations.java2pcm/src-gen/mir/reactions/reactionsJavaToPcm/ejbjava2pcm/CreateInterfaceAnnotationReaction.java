@@ -7,8 +7,8 @@ import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.commons.NamedElement;
 import org.emftext.language.java.modifiers.AnnotationInstanceOrModifier;
 import org.palladiosimulator.pcm.repository.Repository;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBAnnotationHelper;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBJava2PcmHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -72,8 +72,8 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final Interface affectedEObject, final EReference affectedFeature, final AnnotationInstanceOrModifier newValue) {
-    boolean _isEJBBuisnessInterface = EJBAnnotationHelper.isEJBBuisnessInterface(affectedEObject);
-    return _isEJBBuisnessInterface;
+    boolean _isEjbBuisnessInterface = EjbAnnotationHelper.isEjbBuisnessInterface(affectedEObject);
+    return _isEjbBuisnessInterface;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -82,7 +82,7 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final AnnotationInstanceOrModifier newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final Repository repo = EJBJava2PcmHelper.findRepository(this.correspondenceModel);
+      final Repository repo = EjbJava2PcmHelper.findRepository(this.correspondenceModel);
       _routinesFacade.createOperationInterface(repo, ((NamedElement) affectedEObject));
     }
   }

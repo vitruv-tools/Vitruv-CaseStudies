@@ -837,11 +837,13 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 		final org.emftext.language.java.classifiers.Class jaMoPPClass = (org.emftext.language.java.classifiers.Class) this
 				.getJaMoPPClassifierForVURI(VURI.getInstance(classCompilationUnit.getResource()));
 		final EList<TypeReference> classImplements = jaMoPPClass.getImplements();
-		
+		logger.debug("Found implements: " + classImplements);
 		for (final TypeReference implementsReference : classImplements) {
+			logger.debug("Implements data: " + implementsReference.getTarget());
 			final Set<OperationProvidedRole> correspondingEObjects = CorrespondenceModelUtil
 					.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), implementsReference,
 							OperationProvidedRole.class);
+			logger.debug("Corresponding provided roles: " + correspondingEObjects);
 			if (null != correspondingEObjects && 0 < correspondingEObjects.size()) {
 				return correspondingEObjects.iterator().next();
 			}

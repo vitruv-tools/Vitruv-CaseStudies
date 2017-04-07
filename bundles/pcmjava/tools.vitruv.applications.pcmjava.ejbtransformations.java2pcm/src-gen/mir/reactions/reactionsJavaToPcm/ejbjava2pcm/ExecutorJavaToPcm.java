@@ -23,6 +23,6 @@ public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateParameterInInterfaceMethodReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateParameterInInterfaceMethodReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.ReturnTypeCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.ReturnTypeCreatedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateFieldInDatatypeClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateFieldInDatatypeClassReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateClassMethodInEJBClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateClassMethodInEJBClassReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateClassMethodInEjbClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateClassMethodInEjbClassReaction(userInteracting));
   }
 }

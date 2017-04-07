@@ -36,21 +36,25 @@ class TypeReferenceMappingTransformation extends DefaultEObjectMappingTransforma
 
 			var interfaceClassifier = JaMoPP2PCMUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(
 				eObject as TypeReference)
+			logger.debug("Interface classifier: " + interfaceClassifier);
 			if(null == interfaceClassifier){
 				return null
 			}
 			val correspondingInterfaces = correspondenceModel.getCorrespondingEObjectsByType(if (interfaceClassifier.eIsProxy) EcoreUtil.resolve(interfaceClassifier, eObject) else interfaceClassifier,
 				OperationInterface)
+			logger.debug("Corresponding interface: " + correspondingInterfaces);
 			if (correspondingInterfaces.nullOrEmpty) {
 				return null
 			}
 			val operationInterface = correspondingInterfaces.get(0)
 			val correspondingBasicComponents = correspondenceModel.
 				getCorrespondingEObjectsByType(jaMoPPClass, BasicComponent)
+			logger.debug("Corresponding basic components: " + correspondingBasicComponents);
 			if (correspondingBasicComponents.nullOrEmpty) {
 				return null
 			}
 			val basicComponent = correspondingBasicComponents.get(0)
+			logger.debug("Propagated interface implementation change with target: " + interfaceClassifier);
 			return createOperationProvidedRole(basicComponent, operationInterface).toList
 		}
 		return null

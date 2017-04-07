@@ -24,7 +24,7 @@ public abstract class AbstractChangePropagationSpecificationPcmToJava extends Co
 	 * For adding further change processors overwrite this method and call the super method at the right place.
 	 */
 	protected void setup() {
-		this.addChangeMainprocessor(new mir.reactions.reactionsPcmToJava.pcm2ejbJava.ExecutorPcmToJava(getUserInteracting()));
+		this.addChangeMainprocessor(new mir.reactions.reactionsPcmToJava.pcm2EjbJava.ExecutorPcmToJava(getUserInteracting()));
 	}
 	
 }

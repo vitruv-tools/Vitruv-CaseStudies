@@ -1,10 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: PCM 2 Java EJB
+Bundle-Name: Vitruvius PCM-Java EJB Transformations PCM -> Java
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 Bundle-Version: 0.1.0.qualifier
-Export-Package: mir.reactions.reactionsPcmToJava.pcm2ejbJava,
- tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
+Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 Require-Bundle: org.eclipse.emf.ecore,
  com.google.guava,
  org.apache.log4j,
