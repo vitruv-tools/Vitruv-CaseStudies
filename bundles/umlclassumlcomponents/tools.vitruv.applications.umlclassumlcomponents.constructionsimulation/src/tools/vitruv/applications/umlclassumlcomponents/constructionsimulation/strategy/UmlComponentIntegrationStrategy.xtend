@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.strategy
+package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.Strategy
 
 import java.util.List;
 import org.eclipse.core.resources.IResource;
@@ -10,7 +10,7 @@ import org.eclipse.uml2.uml.Model;
 import static tools.vitruv.extensions.constructionsimulation.util.ResourceHelper.*;
 import tools.vitruv.extensions.constructionsimulation.strategies.IntegrationStategy;
 import tools.vitruv.framework.change.description.VitruviusChange;
-import tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.traversal.UmlComponentTraversalStrategy
+import tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.Traversal.UmlComponentTraversalStrategy
 
 public class UmlComponentIntegrationStrategy extends IntegrationStategy {
 

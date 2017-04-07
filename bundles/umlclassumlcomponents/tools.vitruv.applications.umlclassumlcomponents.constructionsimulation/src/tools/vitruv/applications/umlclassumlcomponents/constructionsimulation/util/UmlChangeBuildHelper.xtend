@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.util
+package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.Util
 
 import org.eclipse.uml2.uml.Model;
 

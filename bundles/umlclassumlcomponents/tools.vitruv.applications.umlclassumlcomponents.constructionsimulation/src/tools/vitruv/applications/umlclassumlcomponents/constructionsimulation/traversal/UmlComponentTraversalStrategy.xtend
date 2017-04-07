@@ -1,4 +1,4 @@
-package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.traversal
+package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.Traversal
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Model;
@@ -7,6 +7,8 @@ import tools.vitruv.framework.change.description.VitruviusChange;
 import tools.vitruv.framework.util.datatypes.VURI;
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.common.util.BasicEList
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import tools.vitruv.framework.change.recording.AtomicEMFChangeRecorder
 
 public class UmlComponentTraversalStrategy extends EMFTraversalStrategy {
 	
@@ -20,19 +22,21 @@ public class UmlComponentTraversalStrategy extends EMFTraversalStrategy {
 		}
 				
         vuri = VURI.getInstance(uri);
-        
-        //final EList<DataType> dataTypes = model.
-        //final EList<Component> components = model.
-		//final EList<Interface> interfaces = model. 
-        
-        //this.traverseModel(model);
-        //this.traverseDataTypes(dataTypes);
-        //this.traverseComponents(components);
-        //this.traverseInterfaces(interfaces);
 
-        changeList = new BasicEList<VitruviusChange>()//Test
-        return changeList        
-        //return this.changeList
+		val resourceSet = new ResourceSetImpl
+		val resource = resourceSet.createResource(uri)		
+		
+		val changeRecorder = new AtomicEMFChangeRecorder
+		changeRecorder.beginRecording(VURI.getInstance(uri), #{resource})
+		
+		//Simply add the existing model to the new resource:
+		resource.contents.addAll(model.allOwnedElements)
+		
+		changeList = new BasicEList<VitruviusChange>()
+		val changes = changeRecorder.endRecording
+		changes.forEach[changeList.add(it)]
+        return changeList     
+           
     }
     
 }
