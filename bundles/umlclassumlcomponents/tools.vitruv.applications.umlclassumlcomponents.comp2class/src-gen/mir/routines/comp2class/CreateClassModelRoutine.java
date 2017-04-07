@@ -25,10 +25,9 @@ public class CreateClassModelRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUmlClassModelElement(final Model umlCompModel, final Model umlClassModel) {
+      umlClassModel.setName(umlCompModel.getName());
       String _name = umlCompModel.getName();
-      umlClassModel.setName(_name);
-      String _name_1 = umlCompModel.getName();
-      String _plus = ("model/" + _name_1);
+      String _plus = ("model/" + _name);
       String _plus_1 = (_plus + ".uml");
       this.persistProjectRelative(umlCompModel, umlClassModel, _plus_1);
     }

@@ -37,13 +37,13 @@ public class CreateDataTypeForClassRoutine extends AbstractRepairRoutineRealizat
     }
     
     public EObject getCorrepondenceSourceCompModel(final org.eclipse.uml2.uml.Class umlClass) {
-      org.eclipse.uml2.uml.Package _package = umlClass.getPackage();
-      return _package;
+      Model _model = umlClass.getModel();
+      return _model;
     }
     
     public void updateCompDataTypeElement(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final DataType compDataType) {
-      String _name = umlClass.getName();
-      compDataType.setName(_name);
+      compDataType.setName(umlClass.getName());
+      compDataType.setPackage(umlClass.getPackage());
     }
     
     public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final DataType compDataType) {

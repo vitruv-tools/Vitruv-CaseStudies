@@ -45,8 +45,7 @@ public class CreateClassForDataTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void updateDataTypeClassElement(final DataType compType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
-      String _name = compType.getName();
-      dataTypeClass.setName(_name);
+      dataTypeClass.setName(compType.getName());
     }
     
     public EObject getCorrepondenceSourceUmlModel(final DataType compType) {

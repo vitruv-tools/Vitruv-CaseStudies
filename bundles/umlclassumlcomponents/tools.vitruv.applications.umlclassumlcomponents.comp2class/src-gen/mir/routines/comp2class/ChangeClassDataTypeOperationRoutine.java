@@ -24,8 +24,7 @@ public class ChangeClassDataTypeOperationRoutine extends AbstractRepairRoutineRe
     }
     
     public void update0Element(final Operation compOperation, final Operation classOperation) {
-      String _name = compOperation.getName();
-      classOperation.setName(_name);
+      classOperation.setName(compOperation.getName());
     }
     
     public String getRetrieveTag1(final Operation compOperation) {

@@ -1,4 +1,4 @@
-package mir.reactions.reactionsUMLToUML.comp2class;
+package mir.reactions.reactionsUmlToUml.comp2class;
 
 import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
@@ -26,7 +26,7 @@ class DeletedCompReaction extends AbstractReactionRealization {
     EReference affectedFeature = typedChange.getAffectedFeature();
     Component oldValue = typedChange.getOldValue();
     mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLToUML.comp2class.DeletedCompReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLToUML.comp2class.DeletedCompReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.comp2class.DeletedCompReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.DeletedCompReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
@@ -67,8 +67,7 @@ class DeletedCompReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final Component oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      String _name = oldValue.getName();
-      _routinesFacade.deleteClass(oldValue, _name, "");
+      _routinesFacade.deleteClass(oldValue, oldValue.getName(), "");
     }
   }
 }

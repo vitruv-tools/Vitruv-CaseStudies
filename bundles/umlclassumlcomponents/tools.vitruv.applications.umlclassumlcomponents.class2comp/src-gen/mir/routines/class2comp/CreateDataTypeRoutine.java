@@ -42,8 +42,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateCompTypeElement(final DataType classType, final Model compModel, final DataType compType) {
-      String _name = classType.getName();
-      compType.setName(_name);
+      compType.setName(classType.getName());
     }
     
     public EObject getElement3(final DataType classType, final Model compModel, final DataType compType) {

@@ -1,4 +1,4 @@
-package mir.reactions.reactionsUMLToUML.class2comp;
+package mir.reactions.reactionsUmlToUml.class2comp;
 
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
@@ -25,7 +25,7 @@ class RenamedElementReaction extends AbstractReactionRealization {
     String oldValue = typedChange.getOldValue();
     String newValue = typedChange.getNewValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLToUML.class2comp.RenamedElementReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLToUML.class2comp.RenamedElementReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.RenamedElementReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.RenamedElementReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   

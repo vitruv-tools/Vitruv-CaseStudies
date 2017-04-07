@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -38,10 +37,8 @@ public class AddClassDataTypePropertyRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updateClassPropertyElement(final Property compProperty, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Property classProperty) {
-      String _name = compProperty.getName();
-      classProperty.setName(_name);
-      Type _type = compProperty.getType();
-      classProperty.setType(_type);
+      classProperty.setName(compProperty.getName());
+      classProperty.setType(compProperty.getType());
     }
     
     public EObject getElement2(final Property compProperty, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Property classProperty) {

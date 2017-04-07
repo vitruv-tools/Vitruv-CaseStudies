@@ -1,4 +1,4 @@
-package mir.reactions.reactionsUMLToUML.comp2class;
+package mir.reactions.reactionsUmlToUml.comp2class;
 
 import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
@@ -25,7 +25,7 @@ class ChangedDataTypePropertyReaction extends AbstractReactionRealization {
     String oldValue = typedChange.getOldValue();
     String newValue = typedChange.getNewValue();
     mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLToUML.comp2class.ChangedDataTypePropertyReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLToUML.comp2class.ChangedDataTypePropertyReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.comp2class.ChangedDataTypePropertyReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.ChangedDataTypePropertyReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   

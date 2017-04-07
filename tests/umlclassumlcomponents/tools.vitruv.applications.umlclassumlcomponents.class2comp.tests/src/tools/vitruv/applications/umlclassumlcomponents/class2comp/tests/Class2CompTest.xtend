@@ -5,6 +5,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import static org.junit.Assert.*;
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Model
+import tools.vitruv.applications.umlclassumlcomponents.class2comp.tests.Class2CompTestUtil
 
 class Class2CompTest extends AbstractClass2CompTest {
 	private static val CLASS_NAME = "TestUmlClass"
@@ -27,7 +28,7 @@ class Class2CompTest extends AbstractClass2CompTest {
 	@Test
 	public def void testCreateComponentForClass() {
 		val umlClass = createClass(CLASS_NAME, 0, 1)
-		saveAndSynchronizeChanges(umlClass)
+		saveAndSynchronizeWithInteractions(umlClass)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		assertEquals(1, correspondingElements.size)
 		val umlComponent = correspondingElements.get(0)
@@ -37,19 +38,17 @@ class Class2CompTest extends AbstractClass2CompTest {
 	
 	private def org.eclipse.uml2.uml.Class createClass(String name, int createNoComponent, int createNoDatatype) {
 		val umlClass = UMLFactory.eINSTANCE.createClass()
-		this.testUserInteractor.addNextSelections(createNoComponent, createNoDatatype); //Decide to create corresponding class or datatype
+		Class2CompTestUtil.queueUserInteractionSelections(createNoComponent, createNoDatatype); //Decide to create corresponding class or datatype
 		umlClass.name = name
 		rootElement.packagedElements += umlClass
 		return umlClass
 	}
 	
-	//REMOVE THIS
 	@Test
 	public def void testCreate2ComponentFor2Class() {
 		val umlClass = createClass(CLASS_NAME, 0, 1)
-		saveAndSynchronizeChanges(umlClass)
 		val umlClass2 = createClass(CLASS_NAME2, 0, 1)
-		saveAndSynchronizeChanges(umlClass2)
+		saveAndSynchronizeWithInteractions(rootElement)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		assertEquals(1, correspondingElements.size)
 		val umlComponent = correspondingElements.get(0)
@@ -60,20 +59,33 @@ class Class2CompTest extends AbstractClass2CompTest {
 	@Test
 	public def void testCreateNoComponentForClass() {
 		val umlClass = createClass(CLASS_NAME, 1, 1)
-		saveAndSynchronizeChanges(umlClass)
+		saveAndSynchronizeWithInteractions(umlClass)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		assertEquals(0, correspondingElements.size)
 		assertFalse(rootElement.packagedElements.contains(Component))
 	}
 	
 	@Test
+	public def void testCreateComponentForClassPackageCheck() {
+		val umlClass = createClass(CLASS_NAME, 0, 1)
+		umlClass.package.name = "default"
+		saveAndSynchronizeWithInteractions(umlClass)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		assertEquals(1, correspondingElements.size)
+		val umlComponent = correspondingElements.get(0)
+		assertTrue(umlComponent instanceof Component)
+		assertEquals(CLASS_NAME, (umlComponent as Component).name)
+		assertEquals(CLASS_NAME + "-Package", umlClass.package.name)
+	}
+	
+	@Test
     public def void testRenameClass() {
     	val umlClass = createClass("Old", 0, 1)
-		saveAndSynchronizeChanges(umlClass)
+		saveAndSynchronizeWithInteractions(umlClass)
 		var correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		//change name:
-		rootElement.packagedElements.get(0).name = "New"
-		saveAndSynchronizeChanges(umlClass)
+		umlClass.name = "New" //rootElement.packagedElements.get(0).name = "New"
+		saveAndSynchronizeWithInteractions(umlClass)
 		//check if rename happened in component:
 		val umlComponent = correspondingElements.get(0)
 		assertTrue(umlComponent instanceof Component)
@@ -83,7 +95,7 @@ class Class2CompTest extends AbstractClass2CompTest {
 	@Test
     public def void testDeleteClass() {
     	val umlClass = createClass(CLASS_NAME, 0, 1)	
-		saveAndSynchronizeChanges(umlClass)
+		saveAndSynchronizeWithInteractions(umlClass)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		val umlComponent = correspondingElements.get(0)		
 		//remove class		
@@ -91,7 +103,7 @@ class Class2CompTest extends AbstractClass2CompTest {
 		umlClass.destroy()		
 		assertFalse(rootElement.packagedElements.contains(umlClass))
 		//rootElement.packagedElements.remove(umlClass)		
-		saveAndSynchronizeChanges(rootElement)
+		saveAndSynchronizeWithInteractions(rootElement)
 		//check if component exists:		
 		assertFalse(rootElement.packagedElements.contains(umlComponent))
     }
@@ -99,7 +111,7 @@ class Class2CompTest extends AbstractClass2CompTest {
     @Test
     public def void testCreateDataTypeForClass() {
     	val umlClass = createClass(CLASS_NAME, 0, 0)
-		saveAndSynchronizeChanges(umlClass)
+		saveAndSynchronizeWithInteractions(umlClass)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		assertEquals(1, correspondingElements.size)
 		val compDataType = correspondingElements.get(0)
@@ -113,11 +125,11 @@ class Class2CompTest extends AbstractClass2CompTest {
 	@Test
 	public def void testCreateClassAttribute() {
 	    val umlClassAttribute = createClass(CLASS_NAME2, 1, 1)
-	    saveAndSynchronizeChanges(umlClassAttribute)
+	    saveAndSynchronizeWithInteractions(umlClassAttribute)
 	    val umlClass = createClass(CLASS_NAME, 0, 1)
 	    umlClass.createOwnedAttribute(ATTR_NAME, umlClassAttribute)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
-		saveAndSynchronizeChanges(umlClass)
+		saveAndSynchronizeWithInteractions(umlClass)
 		//get corresponding component:
 		val umlComponent = (correspondingElements.get(0) as Component)		
 		assertEquals(1, umlComponent.attributes.size)

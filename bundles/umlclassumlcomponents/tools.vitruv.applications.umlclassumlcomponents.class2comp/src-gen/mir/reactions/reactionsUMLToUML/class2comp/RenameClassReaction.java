@@ -1,4 +1,4 @@
-package mir.reactions.reactionsUMLToUML.class2comp;
+package mir.reactions.reactionsUmlToUml.class2comp;
 
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
@@ -24,7 +24,7 @@ class RenameClassReaction extends AbstractReactionRealization {
     String oldValue = typedChange.getOldValue();
     String newValue = typedChange.getNewValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLToUML.class2comp.RenameClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLToUML.class2comp.RenameClassReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.RenameClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.RenameClassReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -68,8 +68,7 @@ class RenameClassReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final org.eclipse.uml2.uml.Class umlClass = affectedEObject;
-      _routinesFacade.renameComponent(umlClass);
+      _routinesFacade.renameComponent(affectedEObject);
     }
   }
 }

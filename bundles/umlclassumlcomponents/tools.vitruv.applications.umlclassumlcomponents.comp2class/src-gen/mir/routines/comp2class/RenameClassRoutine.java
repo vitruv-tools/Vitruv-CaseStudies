@@ -24,8 +24,7 @@ public class RenameClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
-      String _name = umlComp.getName();
-      umlClass.setName(_name);
+      umlClass.setName(umlComp.getName());
     }
     
     public EObject getCorrepondenceSourceUmlClass(final Component umlComp) {
@@ -33,10 +32,7 @@ public class RenameClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public boolean getCorrespondingModelElementsPreconditionUmlClass(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
-      String _name = umlClass.getName();
-      org.eclipse.uml2.uml.Package _package = umlComp.getPackage();
-      String _name_1 = _package.getName();
-      boolean _equals = _name.equals(_name_1);
+      boolean _equals = umlClass.getName().equals(umlComp.getPackage().getName());
       return _equals;
     }
   }

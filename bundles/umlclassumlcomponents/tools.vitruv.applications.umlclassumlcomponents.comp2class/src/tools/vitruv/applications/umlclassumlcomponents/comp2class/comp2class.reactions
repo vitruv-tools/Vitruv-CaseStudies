@@ -1,5 +1,4 @@
 import org.eclipse.uml2.uml.PrimitiveType
-import org.eclipse.uml2.uml.DataType
 import static extension tools.vitruv.applications.umlclassumlcomponents.comp2class.comp2classUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
@@ -23,7 +22,7 @@ reaction CreatedCompModel {
 routine createClassModel(umlcomp::Model umlCompModel) {
 	action {
 		val umlClassModel = create umlclass::Model and initialize {
-			umlClassModel.name = umlCompModel.name;
+			umlClassModel.name = umlCompModel.name
 			persistProjectRelative(umlCompModel, umlClassModel, "model/" + umlCompModel.name + ".uml")	
 		}
 		add correspondence between umlCompModel and umlClassModel
@@ -42,7 +41,7 @@ routine renameClassModelForComponentModel(umlcomp::Model umlCompModel) {
 	}
 	action { 
 		update umlClassModel {
-			umlClassModel.name = umlCompModel.name;
+			umlClassModel.name = umlCompModel.name
 		}
 		call {
 			persistProjectRelative(umlCompModel, umlClassModel, "model/" + umlCompModel.name + ".uml")
@@ -68,10 +67,10 @@ routine createUmlClass(umlcomp::Component umlComponent) {
 	}
 	action {
 		val umlClass = create umlclass::Class and initialize {
-			umlClass.name = umlComponent.name;
+			umlClass.name = umlComponent.name
 		}
 		update umlModel {
-			umlModel.packagedElements += umlClass;
+			umlModel.packagedElements += umlClass
 		}
 		add correspondence between umlComponent and umlClass
 	}
@@ -81,8 +80,7 @@ routine createUmlClass(umlcomp::Component umlComponent) {
 reaction RenameComponent {
 	after attribute replaced at umlcomp::Component[name]
 	call {
-		val umlComp = affectedEObject;
-		renameClass(umlComp);
+		renameClass(affectedEObject)
 	}
 }
 
@@ -93,7 +91,7 @@ routine renameClass(umlcomp::Component umlComp) {
 	}
 	action { 
 		update umlClass {
-			umlClass.name = umlComp.name;
+			umlClass.name = umlComp.name
 		}
 	}
 }
@@ -170,10 +168,10 @@ routine createClassForDataType(umlcomp::DataType compType){
 	}
 	action {
 		val dataTypeClass = create umlclass::Class and initialize {
-			dataTypeClass.name = compType.name;
+			dataTypeClass.name = compType.name
 		}
 		update umlModel {
-			umlModel.packagedElements += dataTypeClass;
+			umlModel.packagedElements += dataTypeClass
 		}
 		add correspondence between compType and dataTypeClass tag with "DataTypeRepresentation"
 	}	

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Class2comp
+Bundle-Name: Comp2Class
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.comp2class
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.uml2.uml,

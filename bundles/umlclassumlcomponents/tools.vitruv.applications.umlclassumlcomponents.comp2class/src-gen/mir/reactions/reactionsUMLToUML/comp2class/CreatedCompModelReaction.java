@@ -1,4 +1,4 @@
-package mir.reactions.reactionsUMLToUML.comp2class;
+package mir.reactions.reactionsUmlToUml.comp2class;
 
 import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.uml2.uml.Model;
@@ -22,7 +22,7 @@ class CreatedCompModelReaction extends AbstractReactionRealization {
     InsertRootEObject<Model> typedChange = ((CreateAndInsertRoot<Model>)change).getInsertChange();
     Model newValue = typedChange.getNewValue();
     mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLToUML.comp2class.CreatedCompModelReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLToUML.comp2class.CreatedCompModelReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.comp2class.CreatedCompModelReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.CreatedCompModelReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
   }
   

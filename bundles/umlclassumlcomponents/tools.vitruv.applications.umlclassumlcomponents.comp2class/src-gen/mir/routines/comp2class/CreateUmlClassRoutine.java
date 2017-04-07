@@ -24,8 +24,7 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUmlClassElement(final Component umlComponent, final Model umlModel, final org.eclipse.uml2.uml.Class umlClass) {
-      String _name = umlComponent.getName();
-      umlClass.setName(_name);
+      umlClass.setName(umlComponent.getName());
     }
     
     public EObject getElement1(final Component umlComponent, final Model umlModel, final org.eclipse.uml2.uml.Class umlClass) {

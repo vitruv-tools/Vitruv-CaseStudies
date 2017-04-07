@@ -1,4 +1,4 @@
-package mir.reactions.reactionsUMLToUML.class2comp;
+package mir.reactions.reactionsUmlToUml.class2comp;
 
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
@@ -25,7 +25,7 @@ class ClassAttributeDeletedReaction extends AbstractReactionRealization {
     EReference affectedFeature = typedChange.getAffectedFeature();
     Property oldValue = typedChange.getOldValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLToUML.class2comp.ClassAttributeDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLToUML.class2comp.ClassAttributeDeletedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.ClassAttributeDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.ClassAttributeDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   

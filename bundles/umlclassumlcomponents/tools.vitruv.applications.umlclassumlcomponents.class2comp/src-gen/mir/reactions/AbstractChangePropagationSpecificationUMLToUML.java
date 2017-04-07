@@ -6,10 +6,10 @@ import tools.vitruv.framework.change.processing.impl.CompositeChangePropagationS
  * The {@link class tools.vitruv.framework.change.processing.impl.CompositeChangePropagationSpecification} for transformations between the metamodels http://www.eclipse.org/uml2/5.0.0/UML and http://www.eclipse.org/uml2/5.0.0/UML.
  * To add further change processors overwrite the setup method.
  */
-public abstract class AbstractChangePropagationSpecificationUMLToUML extends CompositeChangePropagationSpecification {
+public abstract class AbstractChangePropagationSpecificationUmlToUml extends CompositeChangePropagationSpecification {
 	private final tools.vitruv.framework.util.datatypes.MetamodelPair metamodelPair;
 	
-	public AbstractChangePropagationSpecificationUMLToUML() {
+	public AbstractChangePropagationSpecificationUmlToUml() {
 		super(new tools.vitruv.framework.userinteraction.impl.UserInteractor());
 		this.metamodelPair = new tools.vitruv.framework.util.datatypes.MetamodelPair("http://www.eclipse.org/uml2/5.0.0/UML", "http://www.eclipse.org/uml2/5.0.0/UML");
 		setup();
@@ -20,11 +20,11 @@ public abstract class AbstractChangePropagationSpecificationUMLToUML extends Com
 	}	
 	
 	/**
-	 * Adds the reactions change processors to this {@link AbstractChangePropagationSpecificationUMLToUML}.
+	 * Adds the reactions change processors to this {@link AbstractChangePropagationSpecificationUmlToUml}.
 	 * For adding further change processors overwrite this method and call the super method at the right place.
 	 */
 	protected void setup() {
-		this.addChangeMainprocessor(new mir.reactions.reactionsUMLToUML.class2comp.ExecutorUMLToUML(getUserInteracting()));
+		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToUml.class2comp.ExecutorUmlToUml(getUserInteracting()));
 	}
 	
 }

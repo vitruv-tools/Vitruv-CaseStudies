@@ -6,8 +6,11 @@ import org.eclipse.uml2.uml.UMLFactory
 import tools.vitruv.framework.tests.VitruviusChangePropagationTest
 import org.eclipse.uml2.uml.Model
 import tools.vitruv.framework.metamodel.Metamodel
+import org.eclipse.emf.ecore.EObject
+import tools.vitruv.applications.umlclassumlcomponents.class2comp.tests.Class2CompTestUtil
+import org.eclipse.uml2.uml.Type
 
-class AbstractClass2CompTest extends VitruviusChangePropagationTest {
+abstract class AbstractClass2CompTest extends VitruviusChangePropagationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml"
 	protected static val MODEL_NAME = "model"
 	
@@ -18,6 +21,10 @@ class AbstractClass2CompTest extends VitruviusChangePropagationTest {
 	protected def Model getRootElement() {
 		return MODEL_NAME.projectModelPath.root as Model
 	}
+	
+	/*protected def Model getRootElement(Type umlPackage) {
+		return umlPackage.package.name.projectModelPath.root as Model
+	}*/
 
 	override protected createMetamodels() {
 		//return #[new UmlDomain().metamodel, new UmlDomain().metamodel]
@@ -34,12 +41,17 @@ class AbstractClass2CompTest extends VitruviusChangePropagationTest {
 		createAndSynchronizeModel(MODEL_NAME.projectModelPath, umlModel)
 	}
 	
-	override protected getCorrespondenceModel(){
-		//hack for UML
+	//hack for handling of one singular UML model instead of two
+	override protected getCorrespondenceModel() {
 		val Metamodel umlMM = metamodels.iterator().next;
 		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()); 
 	}
-
 	
+	//saveAndSynchronize & commit all pending userInteractions
+	protected def saveAndSynchronizeWithInteractions(EObject object) {
+		Class2CompTestUtil.sendCollectedUserInteractionSelections(this.testUserInteractor)
+		saveAndSynchronizeChanges(object)
+	}
+
 }
 

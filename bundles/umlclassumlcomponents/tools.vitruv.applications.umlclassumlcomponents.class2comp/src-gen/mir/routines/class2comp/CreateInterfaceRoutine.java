@@ -33,8 +33,7 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateCompInterfaceElement(final Interface classInterface, final Model compModel, final Interface compInterface) {
-      String _name = classInterface.getName();
-      compInterface.setName(_name);
+      compInterface.setName(classInterface.getName());
     }
     
     public EObject getElement2(final Interface classInterface, final Model compModel, final Interface compInterface) {
@@ -42,8 +41,8 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
     
     public EObject getCorrepondenceSourceCompModel(final Interface classInterface) {
-      org.eclipse.uml2.uml.Package _package = classInterface.getPackage();
-      return _package;
+      Model _model = classInterface.getModel();
+      return _model;
     }
     
     public EObject getElement3(final Interface classInterface, final Model compModel, final Interface compInterface) {

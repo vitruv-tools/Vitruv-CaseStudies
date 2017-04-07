@@ -24,8 +24,7 @@ public class RenameComponentAttributeRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final Property classAttribute, final Property componentAttribute) {
-      String _name = classAttribute.getName();
-      componentAttribute.setName(_name);
+      componentAttribute.setName(classAttribute.getName());
     }
     
     public EObject getCorrepondenceSourceComponentAttribute(final Property classAttribute) {

@@ -37,8 +37,8 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     }
     
     public EObject getCorrepondenceSourceCompModel(final org.eclipse.uml2.uml.Class umlClass) {
-      org.eclipse.uml2.uml.Package _package = umlClass.getPackage();
-      return _package;
+      Model _model = umlClass.getModel();
+      return _model;
     }
     
     public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
@@ -46,8 +46,8 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUmlComponentElement(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
-      String _name = umlClass.getName();
-      umlComponent.setName(_name);
+      umlComponent.setName(umlClass.getName());
+      umlComponent.setPackage(umlClass.getPackage());
     }
   }
   
