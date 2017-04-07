@@ -59,12 +59,12 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.seff.SeffFactory;
 import org.palladiosimulator.pcm.system.System;
 
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.PcmToJavaChangePropagationSpecification;
-import tools.vitruv.applications.pcmjava.tests.util.JaMoPPPCMTestUtil;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils;
+import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory.FileChangeKind;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
@@ -81,7 +81,7 @@ import tools.vitruv.framework.util.datatypes.VURI;
  * @author Langhamm
  *
  */
-public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
+public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
 	
 	@Override
 	public void beforeTest() throws Throwable {
@@ -93,7 +93,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
 	
 	@Override
 	protected List<ChangePropagationSpecification> createChangePropagationSpecifications() {
-		return Collections.singletonList(new PcmToJavaChangePropagationSpecification());
+		return Collections.singletonList(new Pcm2JavaChangePropagationSpecification());
 	}
 	
     @SuppressWarnings("unchecked")
@@ -177,7 +177,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
 
     protected OperationSignature createAndSyncOperationSignature(final Repository repo,
             final OperationInterface opInterface) throws IOException {
-        final String operationSignatureName = PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME;
+        final String operationSignatureName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME;
         return this.createAndSyncOperationSignature(repo, opInterface, operationSignatureName);
     }
 
@@ -201,7 +201,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected OperationInterface renameInterfaceAndSync(final OperationInterface opInterface) throws Throwable {
-        final String newValue = opInterface.getEntityName() + PCM2JaMoPPTestUtils.RENAME;
+        final String newValue = opInterface.getEntityName() + Pcm2JavaTestUtils.RENAME;
         opInterface.setEntityName(newValue);
         EcoreResourceBridge.saveResource(opInterface.eResource());
         this.triggerSynchronization(VURI.getInstance(opInterface.eResource()));
@@ -209,14 +209,14 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected BasicComponent addBasicComponentAndSync(final Repository repo, final String name) throws Throwable {
-        final BasicComponent basicComponent = PCM2JaMoPPTestUtils.createBasicComponent(repo, name);
+        final BasicComponent basicComponent = Pcm2JavaTestUtils.createBasicComponent(repo, name);
         EcoreResourceBridge.saveResource(repo.eResource());
         this.triggerSynchronization(VURI.getInstance(repo.eResource()));
         return basicComponent;
     }
 
     protected BasicComponent addBasicComponentAndSync(final Repository repo) throws Throwable {
-        return this.addBasicComponentAndSync(repo, PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME);
+        return this.addBasicComponentAndSync(repo, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
     }
 
     protected OperationInterface addInterfaceToReposiotryAndSync(final Repository repo, final String interfaceName)
@@ -231,7 +231,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
 
     protected Repository createAndSyncRepository(final ResourceSet resourceSet, final String repositoryName)
             throws IOException {
-        final Repository repo = PCM2JaMoPPTestUtils.createRepository(resourceSet, repositoryName,
+        final Repository repo = Pcm2JavaTestUtils.createRepository(resourceSet, repositoryName,
                 this.currentTestProjectName);
         this.changeRecorder.beginRecording(VURI.getInstance(repo.eResource()), Collections.singletonList(repo));
         this.synchronizeFileChange(FileChangeKind.Create, VURI.getInstance(repo.eResource()));
@@ -239,9 +239,9 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected OperationSignature createAndSyncRepoInterfaceAndOperationSignature() throws IOException, Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
         final OperationSignature opSig = this.createAndSyncOperationSignature(repo, opInterface);
         return opSig;
     }
@@ -249,7 +249,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     protected Parameter addAndSyncParameterWithPrimitiveTypeToSignature(final OperationSignature opSig) {
         final PrimitiveDataType dataType = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
         dataType.setType(PrimitiveTypeEnum.INT);
-        return this.addAndSyncParameterToSignature(opSig, dataType, PCM2JaMoPPTestUtils.PARAMETER_NAME);
+        return this.addAndSyncParameterToSignature(opSig, dataType, Pcm2JavaTestUtils.PARAMETER_NAME);
     }
 
     protected Parameter addAndSyncParameterToSignature(final OperationSignature opSig, final DataType dataType,
@@ -282,7 +282,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected CompositeDataType createAndSyncCompositeDataType(final Repository repo) throws Throwable {
-        return this.createAndSyncCompositeDataType(repo, PCM2JaMoPPTestUtils.COMPOSITE_DATA_TYPE_NAME);
+        return this.createAndSyncCompositeDataType(repo, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME);
     }
 
     protected Parameter createAndSyncRepoOpSigAndParameter() throws IOException, Throwable {
@@ -302,7 +302,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected InnerDeclaration createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
         final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
         this.triggerSynchronization(VURI.getInstance(repo.eResource()));
@@ -317,7 +317,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
         pdt.setRepository__DataType(repo);
         innerDec.setDatatype_InnerDeclaration(pdt);
         //innerDec.setCompositeDataType_InnerDeclaration(cdt);
-        innerDec.setEntityName(PCM2JaMoPPTestUtils.INNER_DEC_NAME);
+        innerDec.setEntityName(Pcm2JavaTestUtils.INNER_DEC_NAME);
         cdt.getInnerDeclaration_CompositeDataType().add(innerDec);
         EcoreResourceBridge.saveResource(cdt.eResource());
         return innerDec;
@@ -368,7 +368,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected System createAndSyncSystem(final String name) throws Throwable {
-        final System system = PCM2JaMoPPTestUtils.createSystem(this.resourceSet, name, this.currentTestProjectName);
+        final System system = Pcm2JavaTestUtils.createSystem(this.resourceSet, name, this.currentTestProjectName);
         this.changeRecorder.beginRecording(VURI.getInstance(system.eResource()), Collections.singletonList(system));
         this.synchronizeFileChange(FileChangeKind.Create, VURI.getInstance(system.eResource()));
         return system;
@@ -378,7 +378,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
             final ComposedProvidingRequiringEntity composedProvidingRequiringEntity,
             final BasicComponent basicComponent) throws IOException {
         final AssemblyContext assemblyContext = CompositionFactory.eINSTANCE.createAssemblyContext();
-        assemblyContext.setEntityName(PCM2JaMoPPTestUtils.ASSEMBLY_CONTEXT_NAME);
+        assemblyContext.setEntityName(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME);
         assemblyContext.setEncapsulatedComponent__AssemblyContext(basicComponent);
         assemblyContext.setParentStructure__AssemblyContext(composedProvidingRequiringEntity);
         EcoreResourceBridge.saveResource(composedProvidingRequiringEntity.eResource());
@@ -388,7 +388,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
 
     protected CompositeComponent createAndSyncCompositeComponent(final Repository repo, final String name)
             throws Throwable {
-        final CompositeComponent compositeComponent = PCM2JaMoPPTestUtils.createCompositeComponent(repo, name);
+        final CompositeComponent compositeComponent = Pcm2JavaTestUtils.createCompositeComponent(repo, name);
         EcoreResourceBridge.saveResource(repo.eResource());
         this.triggerSynchronization(VURI.getInstance(repo.eResource()));
         return compositeComponent;
@@ -571,7 +571,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
     @Override
     protected List<Metamodel> createMetamodels() {
     	List<Metamodel> result = new ArrayList<Metamodel>();
-    	for (Metamodel metamodel : JaMoPPPCMTestUtil.createPcmJamoppMetamodels()) {
+    	for (Metamodel metamodel : PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels()) {
     		result.add(metamodel);
     	}
         return result;
@@ -595,7 +595,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
                 fieldsFound++;
                 final Field field = (Field) eObject;
                 fieldName = field.getName();
-                fieldTypeName = PCM2JaMoPPUtils.getNameFromJaMoPPType(field.getTypeReference());
+                fieldTypeName = Pcm2JavaUtils.getNameFromJaMoPPType(field.getTypeReference());
                 assertTrue("field name unexpected",
                         field.getName().toLowerCase().contains(innerDec.getEntityName().toLowerCase()));
             } else if (eObject instanceof Method) {
@@ -608,7 +608,7 @@ public class PCM2JaMoPPTransformationTest extends VitruviusEMFCasestudyTest {
         assertEquals("unexpected number of corresponding methods found", 2, methodsFound);
         final String expectedName = innerDec.getEntityName();
         assertEquals("name of field does not mathc name of inner declaration", expectedName, fieldName);
-        final String expectedTypeName = PCMJaMoPPUtils.getNameFromPCMDataType(innerDec.getDatatype_InnerDeclaration());
+        final String expectedTypeName = PcmJavaUtils.getNameFromPCMDataType(innerDec.getDatatype_InnerDeclaration());
         assertEquals("name of JaMoPP type is not expected name of PCM datatype", expectedTypeName.toLowerCase(),
                 fieldTypeName.toLowerCase());
 

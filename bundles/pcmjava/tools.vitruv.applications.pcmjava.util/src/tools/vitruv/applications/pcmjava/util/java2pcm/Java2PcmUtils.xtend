@@ -4,7 +4,7 @@ import com.google.common.collect.Sets
 import tools.vitruv.framework.userinteraction.UserInteractionType
 import tools.vitruv.framework.util.datatypes.VURI
 import tools.vitruv.framework.userinteraction.UserInteracting
-import tools.vitruv.framework.tuid.TUID
+import tools.vitruv.framework.tuid.Tuid
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 import java.util.ArrayList
 import java.util.HashSet
@@ -35,17 +35,17 @@ import org.palladiosimulator.pcm.system.System
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import org.eclipse.emf.ecore.util.EcoreUtil
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 
-abstract class JaMoPP2PCMUtils extends PCMJaMoPPUtils {
+abstract class Java2PcmUtils extends PcmJavaUtils {
 	private new() {
 	}
 
-	private static Logger logger = Logger.getLogger(JaMoPP2PCMUtils.simpleName)
+	private static Logger logger = Logger.getLogger(Java2PcmUtils.simpleName)
 
 	def public static Repository getRepository(CorrespondenceModel correspondenceModel) {
 		val Set<Repository> repos = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)
@@ -96,13 +96,13 @@ abstract class JaMoPP2PCMUtils extends PCMJaMoPPUtils {
 						"will not be renamed")
 
 			} else {
-				val TUID oldTUID = correspondenceModel.calculateTUIDFromEObject(pcmRoot)
+				val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(pcmRoot)
 	
 				// change name		
 				pcmRoot.entityName = newValue.toString;
 	
 				val VURI oldVURI = VURI.getInstance(pcmRoot.eResource.getURI)
-				PCMJaMoPPUtils.handleRootChanges(pcmRoot, correspondenceModel, oldVURI, transformationResult, oldVURI, oldTUID)
+				PcmJavaUtils.handleRootChanges(pcmRoot, correspondenceModel, oldVURI, transformationResult, oldVURI, oldTuid)
 				transformationResult.addVuriToDeleteIfNotNull(oldVURI)
 			}
 		}
@@ -112,7 +112,7 @@ abstract class JaMoPP2PCMUtils extends PCMJaMoPPUtils {
 		Object oldValue, Object newValue,
 		ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap, CorrespondenceModel correspondenceModel, 
 		ChangePropagationResult transformationResult) {
-		val correspondingEObjects = PCMJaMoPPUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
+		val correspondingEObjects = PcmJavaUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel)
 		if (correspondingEObjects.nullOrEmpty) {
 			return
@@ -124,10 +124,10 @@ abstract class JaMoPP2PCMUtils extends PCMJaMoPPUtils {
 		if (!rootPCMEObjects.nullOrEmpty) {
 			saveFilesOfChangedEObjects = false
 		}
-		JaMoPP2PCMUtils.updateNameAttribute(correspondingEObjects, newValue, affectedAttribute,
+		Java2PcmUtils.updateNameAttribute(correspondingEObjects, newValue, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel, saveFilesOfChangedEObjects)
 		if (!rootPCMEObjects.nullOrEmpty) {
-			JaMoPP2PCMUtils.updateNameAttributeForPCMRootObjects(rootPCMEObjects, affectedAttribute, newValue,
+			Java2PcmUtils.updateNameAttributeForPCMRootObjects(rootPCMEObjects, affectedAttribute, newValue,
 				correspondenceModel, transformationResult)
 		}
 		return
@@ -140,8 +140,8 @@ abstract class JaMoPP2PCMUtils extends PCMJaMoPPUtils {
 		}
 		for (pcmElement : newCorrespondingEObjects) {
 			if (pcmElement instanceof Repository || pcmElement instanceof System) {
-				PCMJaMoPPUtils.addRootChangeToTransformationResult(pcmElement, correspondenceModel,
-					PCMJaMoPPUtils.getSourceModelVURI(newEObject), transformationResult)
+				PcmJavaUtils.addRootChangeToTransformationResult(pcmElement, correspondenceModel,
+					PcmJavaUtils.getSourceModelVURI(newEObject), transformationResult)
 			} else {
 				// do nothing. save will be done later
 			}
@@ -228,7 +228,7 @@ abstract class JaMoPP2PCMUtils extends PCMJaMoPPUtils {
 			for (correspondingInterface : correspondingInterfaces) {
 	
 				// ii)a)
-				repoComponent = JaMoPP2PCMUtils.getComponentOfConcreteClassifier(
+				repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
 					typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
 				if (null == repoComponent) {
 					return null
@@ -250,7 +250,7 @@ abstract class JaMoPP2PCMUtils extends PCMJaMoPPUtils {
 				val correspondingComponents = fieldTypeCorrespondences.filter(typeof(RepositoryComponent))
 				if (!correspondingComponents.nullOrEmpty) {
 					if (null == repoComponent) {
-						repoComponent = JaMoPP2PCMUtils.getComponentOfConcreteClassifier(
+						repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
 							typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
 					}
 					if (null == repoComponent) {
@@ -281,7 +281,7 @@ abstract class JaMoPP2PCMUtils extends PCMJaMoPPUtils {
 	
 	def public static Classifier getTargetClassifierFromImplementsReferenceAndNormalizeURI(
 		TypeReference reference) {
-		var interfaceClassifier = JaMoPP2PCMUtils.getTargetClassifierFromTypeReference(reference)
+		var interfaceClassifier = Java2PcmUtils.getTargetClassifierFromTypeReference(reference)
 		if (null == interfaceClassifier) {
 			return null
 		}

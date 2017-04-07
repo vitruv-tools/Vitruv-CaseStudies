@@ -28,12 +28,11 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.system.System
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
-import static tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PCMJaMoPPUtilsGuice.*
-import static tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils.*
-import static tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils.*
+import static tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice.*
+import static tools.vitruv.applications.pcmjava.util.PcmJavaUtils.*
+import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import static extension tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
@@ -231,14 +230,14 @@ routine addedProvidedDelegationConnector(pcm::ProvidedDelegationConnector provid
 			val opInterface = providedDelegationConnector.innerProvidedRole_ProvidedDelegationConnector.providedInterface__OperationProvidedRole
 			val systemClass = configureMethod.containingConcreteClassifier as org.emftext.language.java.classifiers.Class
 			val jaMoPPInterface = correspondenceModel.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
-			val namespaceClassifierRef = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPInterface)
+			val namespaceClassifierRef = createNamespaceClassifierReference(jaMoPPInterface)
 			for (impl : systemClass.implements) {
 				if (hasSameTargetReference(namespaceClassifierRef, impl)) {
 					return
 				}
 			}
 			systemClass.implements.add(namespaceClassifierRef)
-			val classifierImport = PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface)
+			val classifierImport = addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface)
 			correspondenceModel.createAndAddCorrespondence(pcmSystem.toList, #[namespaceClassifierRef, classifierImport])
 		}
 	}
@@ -1064,7 +1063,7 @@ reaction ChangedParameterType {
 
 routine changeParameterType(pcm::Parameter parameter) { 
 	match {
-		// retrieve the interface method to update the TUID according to the new parameter type
+		// retrieve the interface method to update the Tuid according to the new parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to parameter.operationSignature__Parameter
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 		val javaParameterTypeClass = retrieve optional java::Class corresponding to parameter.dataType__Parameter
@@ -1084,7 +1083,7 @@ reaction DeletedParameter {
 
 routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parameter) { 
 	match {
-		// retrieve the interface method to update the TUID according to the removed parameter type
+		// retrieve the interface method to update the Tuid according to the removed parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to signature
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 	} 

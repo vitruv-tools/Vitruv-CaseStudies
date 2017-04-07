@@ -7,9 +7,9 @@ import org.emftext.language.java.parameters.Parameter
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -18,13 +18,13 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 	}
 
 	override setCorrespondenceForFeatures() {
-		JaMoPP2PCMUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap)
+		Java2PcmUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap)
 	}
 
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
 		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
+		Java2PcmUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
 			featureCorrespondenceMap, correspondenceModel, transformationResult)
 		return transformationResult
 	}

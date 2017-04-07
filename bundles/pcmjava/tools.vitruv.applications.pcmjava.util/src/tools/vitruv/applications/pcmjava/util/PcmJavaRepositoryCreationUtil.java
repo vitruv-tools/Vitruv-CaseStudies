@@ -13,12 +13,12 @@ import tools.vitruv.framework.metamodel.Metamodel;
  * @author Langhamm
  *
  */
-public class PCMJavaRepositoryCreationUtil {
+public class PcmJavaRepositoryCreationUtil {
 
     /**
      * Util classes should not have public constructor
      */
-    private PCMJavaRepositoryCreationUtil() {
+    private PcmJavaRepositoryCreationUtil() {
 
     }
 

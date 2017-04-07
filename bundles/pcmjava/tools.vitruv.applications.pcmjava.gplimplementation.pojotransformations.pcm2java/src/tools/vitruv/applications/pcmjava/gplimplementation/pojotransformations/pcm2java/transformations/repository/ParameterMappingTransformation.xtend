@@ -18,9 +18,9 @@ import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.EObjectUtil
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -63,7 +63,7 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
 		val transformationResult = new ChangePropagationResult
-		val Set<EObject> correspondingObjects = PCM2JaMoPPUtils.
+		val Set<EObject> correspondingObjects = Pcm2JavaUtils.
 			checkKeyAndCorrespondingObjects(affectedEObject, affectedAttribute, featureCorrespondenceMap,
 				correspondenceModel)
 		if (correspondingObjects.nullOrEmpty || correspondingObjects.filter(typeof(org.emftext.language.java.parameters.Parameter)).nullOrEmpty) {
@@ -72,8 +72,8 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 		val correspondingParameter = correspondingObjects.filter(typeof(org.emftext.language.java.parameters.Parameter)).get(0)
 		if (affectedAttribute.name.equals(PcmNamespace.PCM_ATTRIBUTE_ENTITY_NAME)) {
 			val boolean saveFilesOfChangedEObjects = true
-			val oldTuid = correspondenceModel.calculateTUIDFromEObject(correspondingParameter)
-			PCM2JaMoPPUtils.updateNameAttribute(correspondingObjects, newValue, affectedAttribute,
+			val oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingParameter)
+			Pcm2JavaUtils.updateNameAttribute(correspondingObjects, newValue, affectedAttribute,
 				featureCorrespondenceMap, correspondenceModel, saveFilesOfChangedEObjects)
 			oldTuid.updateTuid(correspondingParameter);
 		}
@@ -86,7 +86,7 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 	override updateSingleValuedNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
 		EObject oldValue, EObject newValue) {
 		val transformationResult = new ChangePropagationResult
-		val Set<EObject> correspondingEObjects = PCM2JaMoPPUtils.
+		val Set<EObject> correspondingEObjects = Pcm2JavaUtils.
 			checkKeyAndCorrespondingObjects(affectedEObject, affectedReference, featureCorrespondenceMap,
 				correspondenceModel)
 		if (correspondingEObjects.nullOrEmpty ||
@@ -100,7 +100,7 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 			try {
 				val TypeReference typeReference = DataTypeCorrespondenceHelper.
 					claimUniqueCorrespondingJaMoPPDataTypeReference(newValue as DataType, correspondenceModel)
-				val oldTuid = correspondenceModel.calculateTUIDFromEObject(correspondingParameter)
+				val oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingParameter)
 				correspondingParameter.setTypeReference(typeReference)
 				oldTuid.updateTuid(correspondingParameter)
 			} catch (RuntimeException e) {

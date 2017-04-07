@@ -1,7 +1,7 @@
 package tools.vitruv.applications.pcmjava.util
 
 import com.google.common.collect.Sets
-import tools.vitruv.framework.tuid.TUID
+import tools.vitruv.framework.tuid.Tuid
 import tools.vitruv.framework.util.datatypes.VURI
 import tools.vitruv.framework.util.bridges.EMFBridge
 import tools.vitruv.framework.util.datatypes.ClaimableMap
@@ -26,16 +26,16 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.system.System
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.framework.correspondence.Correspondence
 import tools.vitruv.framework.util.VitruviusConstants
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
-class PCMJaMoPPUtils {
-	private static val Logger logger = Logger.getLogger(PCMJaMoPPUtils.simpleName)
+class PcmJavaUtils {
+	private static val Logger logger = Logger.getLogger(PcmJavaUtils.simpleName)
 
 	static Set<Class<?>> pcmJavaRootObjects = Sets.newHashSet(Repository, System, Package, CompilationUnit)
 
@@ -99,8 +99,8 @@ class PCMJaMoPPUtils {
 		if (reference1 == reference2 || reference1.equals(reference2)) {
 			return true
 		}
-		val target1 = JaMoPP2PCMUtils.getTargetClassifierFromTypeReference(reference1)
-		val target2 = JaMoPP2PCMUtils.getTargetClassifierFromTypeReference(reference2)
+		val target1 = Java2PcmUtils.getTargetClassifierFromTypeReference(reference1)
+		val target2 = Java2PcmUtils.getTargetClassifierFromTypeReference(reference2)
 		return target1 == target2 || target1.equals(target2)
 	}
 
@@ -150,33 +150,33 @@ class PCMJaMoPPUtils {
 	}
 
 	def dispatch static handleRootChanges(Iterable<EObject> eObjects, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, TUID oldTUID) {
+		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, Tuid oldTuid) {
 		eObjects.forEach [ eObject |
 			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, transformationResult, vuriToDelete,
-				oldTUID)
+				oldTuid)
 		]
 	}
 
 	def dispatch static handleRootChanges(EObject[] eObjects, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, TUID oldTUID) {
+		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, Tuid oldTuid) {
 		eObjects.forEach [ eObject |
 			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, transformationResult, vuriToDelete,
-				oldTUID)
+				oldTuid)
 		]
 	}
 
 	def dispatch static handleRootChanges(EObject eObject, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, TUID oldTUID) {
+		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, Tuid oldTuid) {
 		handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, transformationResult, vuriToDelete,
-			oldTUID)
+			oldTuid)
 	}
 
 	def static handleSingleRootChange(EObject eObject, CorrespondenceModel correspondenceModel, VURI sourceModelVURI,
-		ChangePropagationResult transformationResult, VURI vuriToDelete, TUID oldTUID) {
+		ChangePropagationResult transformationResult, VURI vuriToDelete, Tuid oldTuid) {
 		EcoreUtil.remove(eObject)
-		PCMJaMoPPUtils.addRootChangeToTransformationResult(eObject, correspondenceModel, sourceModelVURI,
+		PcmJavaUtils.addRootChangeToTransformationResult(eObject, correspondenceModel, sourceModelVURI,
 			transformationResult)
-		oldTUID.updateTuid(eObject)
+		oldTuid.updateTuid(eObject)
 		transformationResult.addVuriToDeleteIfNotNull(vuriToDelete)
 	}
 
@@ -218,33 +218,33 @@ class PCMJaMoPPUtils {
 		CorrespondenceModel correspondenceModel, Set<Class<?>> rootObjects) {
 		var Set<Correspondence> correspondences = null
 		if (null != exRootObject) {
-			val rootTUID = correspondenceModel.calculateTUIDFromEObject(exRootObject)
-			val String prefix = rootTUID.toString
+			val rootTuid = correspondenceModel.calculateTuidFromEObject(exRootObject)
+			val String prefix = rootTuid.toString
 			EcoreUtil.remove(object)
-			val tuid = correspondenceModel.calculateTUIDFromEObject(object, exRootObject, prefix)
+			val tuid = correspondenceModel.calculateTuidFromEObject(object, exRootObject, prefix)
 			correspondences = correspondenceModel.
-				removeCorrespondencesThatInvolveAtLeastAndDependendForTUIDs(tuid.toSet)
+				removeCorrespondencesThatInvolveAtLeastAndDependendForTuids(tuid.toSet)
 		} else {
 			correspondences = correspondenceModel.removeCorrespondencesThatInvolveAtLeastAndDependend(object.toSet)
 		}
 		val transformationResult = new ChangePropagationResult
 		for (correspondence : correspondences) {
-			resolveAndRemoveEObject(correspondence.getATUIDs, correspondenceModel, transformationResult, rootObjects)
-			resolveAndRemoveEObject(correspondence.getBTUIDs, correspondenceModel, transformationResult, rootObjects)
+			resolveAndRemoveEObject(correspondence.getATuids, correspondenceModel, transformationResult, rootObjects)
+			resolveAndRemoveEObject(correspondence.getBTuids, correspondenceModel, transformationResult, rootObjects)
 		}
 		return transformationResult
 	}
 
-	def private static resolveAndRemoveEObject(Iterable<TUID> tuids, CorrespondenceModel correspondenceModel,
+	def private static resolveAndRemoveEObject(Iterable<Tuid> tuids, CorrespondenceModel correspondenceModel,
 		ChangePropagationResult transformationResult, Set<Class<?>> rootObjectClasses) {
 		for (tuid : tuids) {
 			try {
-				val eObject = correspondenceModel.resolveEObjectFromTUID(tuid)
+				val eObject = correspondenceModel.resolveEObjectFromTuid(tuid)
 				if (null != eObject) {
 					EcoreUtil.delete(eObject)
 				}
 				if (eObject.isInstanceOfARootClass(rootObjectClasses)) {
-					val vuri = tuid.getVURIFromTUID()
+					val vuri = tuid.getVURIFromTuid()
 					transformationResult.addVuriToDeleteIfNotNull(vuri)
 				}
 			} catch (RuntimeException e) {
@@ -263,10 +263,10 @@ class PCMJaMoPPUtils {
 	}
 
 	/**
-	 * returns the VURI of the second part of the TUID (which should be the VURI String) 
+	 * returns the VURI of the second part of the Tuid (which should be the VURI String) 
 	 */
-	def private static VURI getVURIFromTUID(TUID tuid) {
-		val segments = tuid.toString.split(VitruviusConstants.getTUIDSegmentSeperator)
+	def private static VURI getVURIFromTuid(Tuid tuid) {
+		val segments = tuid.toString.split(VitruviusConstants.getTuidSegmentSeperator)
 		if (2 <= segments.length) {
 			val key = segments.get(1)
 			return VURI.getInstance(key)
@@ -292,9 +292,9 @@ class PCMJaMoPPUtils {
 				if (null == correspondingObject) {
 					logger.error("corresponding object is null")
 				} else {
-					val TUID oldTUID = correspondenceModel.calculateTUIDFromEObject(correspondingObject)
+					val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingObject)
 					correspondingObject.eSet(eStructuralFeature, newValue)
-					oldTUID.updateTuid(correspondingObject)
+					oldTuid.updateTuid(correspondingObject)
 					if (saveFilesOfChangedEObjects) {
 						// nothing to do here?
 					}

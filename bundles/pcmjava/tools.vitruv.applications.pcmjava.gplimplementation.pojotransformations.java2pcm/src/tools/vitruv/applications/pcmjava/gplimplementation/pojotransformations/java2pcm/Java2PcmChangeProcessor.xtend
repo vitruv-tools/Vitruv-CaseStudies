@@ -17,7 +17,7 @@ import tools.vitruv.framework.util.datatypes.MetamodelPair
 import org.emftext.language.java.JavaPackage
 import org.palladiosimulator.pcm.PcmPackage
 
-class Java2PCMChangeProcessor extends TransformationExecutorChangeProcessor {
+class Java2PcmChangeProcessor extends TransformationExecutorChangeProcessor {
 	private val MetamodelPair metamodelPair;
 	
 	new(UserInteracting userInteracting) {

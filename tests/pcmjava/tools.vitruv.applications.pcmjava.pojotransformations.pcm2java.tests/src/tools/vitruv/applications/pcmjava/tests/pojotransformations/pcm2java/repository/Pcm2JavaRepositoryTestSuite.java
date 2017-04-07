@@ -10,9 +10,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	CompositeComponentMappingTransformationTest.class, CompositeDataTypeMappingTransformationTest.class,
 	InnerDeclarationMappingTransformationTest.class, OperationInterfaceMappingTransformationTest.class,
 	OperationProvidedRoleMappingTransformationTest.class, OperationRequiredRoleMappingTransformationTest.class,
-	OperationSignatureMappingTransformationTest.class, PCMParameterMappingTransformationTest.class,
+	OperationSignatureMappingTransformationTest.class, PcmParameterMappingTransformationTest.class,
 	RepositoryMappingTransformaitonTest.class, ResourceDemandingInternalBehaviorMappingTransformationTest.class,
 	SEFFMappingTransformationTest.class} )
-public class PCM2JavaRepositoryTestSuite {
+public class Pcm2JavaRepositoryTestSuite {
 
 }

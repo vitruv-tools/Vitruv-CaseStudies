@@ -19,17 +19,17 @@ import tools.vitruv.framework.tuid.TuidManager
 import tools.vitruv.framework.metamodel.Metamodel
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 import java.util.Collections
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.JavaToPcmChangePropagationSpecification
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.framework.vsum.InternalVirtualModel
 import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import tools.vitruv.domains.emf.builder.VitruviusEmfBuilder
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.PcmToJavaChangePropagationSpecification
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator
 import tools.vitruv.domains.emf.builder.VitruviusEmfBuilderApplicator
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilder
 import tools.vitruv.framework.monitorededitor.ProjectBuildUtils
-import tools.vitruv.applications.pcmjava.util.PCMJavaRepositoryCreationUtil
+import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
+import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification
 
 class JavaPcmProjectAndVsumGeneration {
 	
@@ -50,16 +50,16 @@ class JavaPcmProjectAndVsumGeneration {
 	
 	private def InternalVirtualModel createVirtualModel() {
 		val metamodels = this.createMetamodels();
-		val virtualModel = TestUtil.createVSUM("testProjectVsum", metamodels, createChangePropagationSpecifications());
+		val virtualModel = TestUtil.createVirtualModel("testProjectVsum", metamodels, createChangePropagationSpecifications());
 		return virtualModel;
 	}
 	
 	protected def Iterable<Metamodel> createMetamodels() {
-		return PCMJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
+		return PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
 	}
 	
 	protected def Iterable<ChangePropagationSpecification> createChangePropagationSpecifications() {
-		return #[new JavaToPcmChangePropagationSpecification(), new PcmToJavaChangePropagationSpecification()];
+		return #[new Java2PcmChangePropagationSpecification(), new Pcm2JavaChangePropagationSpecification()];
 	}
 	
 	    // ensure that MockupProject is existing

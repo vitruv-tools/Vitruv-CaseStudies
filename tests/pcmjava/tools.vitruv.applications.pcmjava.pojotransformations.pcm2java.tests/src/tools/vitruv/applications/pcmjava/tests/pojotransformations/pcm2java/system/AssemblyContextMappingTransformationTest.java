@@ -7,15 +7,15 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class AssemblyContextMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class AssemblyContextMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testCreateAssemblyContext() throws Throwable {
-        final System system = super.createAndSyncSystem(PCM2JaMoPPTestUtils.SYSTEM_NAME);
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
+        final Repository repo = super.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent basicComponent = super.addBasicComponentAndSync(repo);
 
         final AssemblyContext assemblyContext = this.createAndSyncAssemblyContext(system, basicComponent);

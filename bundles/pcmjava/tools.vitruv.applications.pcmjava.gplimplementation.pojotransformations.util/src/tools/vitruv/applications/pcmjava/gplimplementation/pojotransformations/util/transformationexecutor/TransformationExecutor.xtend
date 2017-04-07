@@ -57,16 +57,16 @@ public class TransformationExecutor {
 		if (change instanceof CompoundEChange) {
 			for (atomicChange : change.atomicChanges) {
 				transformationResult.integrateResult(executeTransformation(atomicChange))
-				updateTUIDOfAffectedEObjectInEChange(atomicChange)
+				updateTuidOfAffectedEObjectInEChange(atomicChange)
 			}
 		}
 		transformationResult.integrateResult(executeTransformation(change))
-		updateTUIDOfAffectedEObjectInEChange(change)	
+		updateTuidOfAffectedEObjectInEChange(change)	
 		
 		return transformationResult
 	}
 
-	def protected updateTUIDOfAffectedEObjectInEChange(EChange change) {
+	def protected updateTuidOfAffectedEObjectInEChange(EChange change) {
 		if (change instanceof JavaFeatureEChange<?,?>) {
 			val JavaFeatureEChange<?,?> eFeatureChange = change as JavaFeatureEChange<?,?>
 			val EObject oldAffectedEObject = eFeatureChange.oldAffectedEObject

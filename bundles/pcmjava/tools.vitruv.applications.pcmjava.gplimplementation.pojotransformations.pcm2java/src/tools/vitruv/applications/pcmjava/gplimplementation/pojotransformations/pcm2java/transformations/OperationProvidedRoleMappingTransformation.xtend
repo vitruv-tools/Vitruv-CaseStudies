@@ -13,8 +13,8 @@ import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class OperationProvidedRoleMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -48,9 +48,9 @@ class OperationProvidedRoleMappingTransformation extends EmptyEObjectMappingTran
 			getCorrespondingEObjectsByType(providingEntity, Class).claimOne
 		val jaMoPPInterface = correspondenceModel.
 			getCorrespondingEObjectsByType(opInterface, Interface).claimOne
-		val namespaceClassifierRef = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPInterface)
+		val namespaceClassifierRef = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPInterface)
 		jaMoPPClass.implements.add(namespaceClassifierRef)
-		val classifierImport = PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(jaMoPPClass, jaMoPPInterface)
+		val classifierImport = Pcm2JavaUtils.addImportToCompilationUnitOfClassifier(jaMoPPClass, jaMoPPInterface)
 		return #[namespaceClassifierRef, classifierImport]
 	}
 

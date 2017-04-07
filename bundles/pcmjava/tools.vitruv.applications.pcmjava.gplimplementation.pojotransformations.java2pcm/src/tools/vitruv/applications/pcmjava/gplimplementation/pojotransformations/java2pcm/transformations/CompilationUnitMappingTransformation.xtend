@@ -10,9 +10,9 @@ import org.emftext.language.java.containers.CompilationUnit
 import org.palladiosimulator.pcm.system.System
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -55,7 +55,7 @@ class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransforma
 				if (!systems.nullOrEmpty) {
 					for (system : systems) {
 						if (null == system.eResource) {
-							PCMJaMoPPUtils.addRootChangeToTransformationResult(system, correspondenceModel, PCMJaMoPPUtils.getSourceModelVURI(newAffectedEObject), transformationResult)
+							PcmJavaUtils.addRootChangeToTransformationResult(system, correspondenceModel, PcmJavaUtils.getSourceModelVURI(newAffectedEObject), transformationResult)
 						} else {
 							//do nothing, cause save is done later
 						}
@@ -63,7 +63,7 @@ class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransforma
 					}
 				}
 			}
-			JaMoPP2PCMUtils.
+			Java2PcmUtils.
 				createNewCorrespondingEObjects(newValue, newCorrespondingEObjects,
 					correspondenceModel, transformationResult)
 		}
@@ -75,7 +75,7 @@ class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransforma
 	
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
 		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		PCMJaMoPPUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel)
+		PcmJavaUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel)
 		return new ChangePropagationResult 
 	}
 

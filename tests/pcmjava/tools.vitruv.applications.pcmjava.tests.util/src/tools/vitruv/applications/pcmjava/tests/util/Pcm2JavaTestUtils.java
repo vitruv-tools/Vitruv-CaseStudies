@@ -24,7 +24,7 @@ import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.ModelInstance;
 import tools.vitruv.framework.util.datatypes.VURI;
 
-public class PCM2JaMoPPTestUtils {
+public class Pcm2JavaTestUtils {
 
     public static final String REPOSITORY_NAME = "testRepository";
     public static final String BASIC_COMPONENT_NAME = "TestBasicComponent";
@@ -41,7 +41,7 @@ public class PCM2JaMoPPTestUtils {
     public static final String COLLECTION_DATA_TYPE_NAME = "TestCollectionDatatype";
 
     // private ctor for util class
-    private PCM2JaMoPPTestUtils() {
+    private Pcm2JavaTestUtils() {
     }
 
     public static Repository createRepository(final ResourceSet resourceSet, final String repositoryName,

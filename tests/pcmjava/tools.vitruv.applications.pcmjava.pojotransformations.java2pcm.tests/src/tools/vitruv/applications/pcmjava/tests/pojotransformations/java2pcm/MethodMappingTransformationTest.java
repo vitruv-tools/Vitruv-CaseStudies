@@ -14,11 +14,11 @@ import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 
 import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHelper;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 
-public class MethodMappingTransformationTest extends Java2PCMPackageMappingTransformationTest {
+public class MethodMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
     @Test
     public void testAddMethod() throws Throwable {
@@ -27,7 +27,7 @@ public class MethodMappingTransformationTest extends Java2PCMPackageMappingTrans
 
         final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
 
-        this.assertOperationSignature(opSig, opInterface, PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME);
+        this.assertOperationSignature(opSig, opInterface, Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class MethodMappingTransformationTest extends Java2PCMPackageMappingTrans
                 opSig.getEntityName());
 
         this.assertOperationSignature(newOpSig, opInterface,
-                PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME + PCM2JaMoPPTestUtils.RENAME);
+                Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class MethodMappingTransformationTest extends Java2PCMPackageMappingTrans
 
         final OperationSignature newOpSig = this.changeReturnType(opSig);
 
-        this.assertOperationSignature(newOpSig, opInterface, PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME);
+        this.assertOperationSignature(newOpSig, opInterface, Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
     }
 
     private OperationSignature changeReturnType(final OperationSignature opSig) throws Throwable {

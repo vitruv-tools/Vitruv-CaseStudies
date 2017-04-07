@@ -5,12 +5,12 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm.EjbJava2PcmTransformationsTestSuite;
-import tools.vitruv.applications.pcmjava.tests.transformations.PCMJavaTransformationsTestSuite;
+import tools.vitruv.applications.pcmjava.tests.transformations.PcmJavaTransformationUtilsTestSuite;
 
 @RunWith(Suite.class)
 
-@SuiteClasses({ //JaMoPPTUIDCalculatorAndResolverTestSuite.class, 
-	PCMJavaTransformationsTestSuite.class,
+@SuiteClasses({ //JaMoPPTuidCalculatorAndResolverTestSuite.class, 
+	PcmJavaTransformationUtilsTestSuite.class,
 	PcmJavaPojoTransformationsTestSuite.class,
 	EjbJava2PcmTransformationsTestSuite.class
 	})

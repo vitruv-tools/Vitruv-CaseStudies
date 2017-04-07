@@ -58,7 +58,7 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
         if (eObject instanceof Package) {
             val Package newPackage = eObject as Package;
             // attach the package to a resource in order to enable the calculation of
-            // a TUID in the transformations
+            // a Tuid in the transformations
             val ResourceSet resourceSet = new ResourceSetImpl();
             val Resource resource = resourceSet.createResource(vuri.getEMFUri());
             resource.getContents().add(newPackage);

@@ -14,18 +14,18 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 
-public class SEFFMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testCreateSEFF() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent bc1 = this.addBasicComponentAndSync(repo);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
         final OperationSignature opSignature = this.createAndSyncOperationSignature(repo, opInterface);
         this.createAndSyncOperationProvidedRole(opInterface, bc1);
 
@@ -36,15 +36,15 @@ public class SEFFMappingTransformationTest extends PCM2JaMoPPTransformationTest 
 
     @Test
     public void testRenameSEFF() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent bc1 = this.addBasicComponentAndSync(repo);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
         final OperationSignature opSignature = this.createAndSyncOperationSignature(repo, opInterface);
         this.createAndSyncOperationProvidedRole(opInterface, bc1);
         final ResourceDemandingSEFF rdSEFF = this.createAndSyncSeff(bc1, opSignature);
 
-        opSignature.setEntityName(PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME + PCM2JaMoPPTestUtils.RENAME);
+        opSignature.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
         super.triggerSynchronization(opInterface);
 
         this.assertSEFFCorrespondenceToMethod(rdSEFF, opSignature.getEntityName());

@@ -12,10 +12,10 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.domains.java.JavaNamespace
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class BasicComponentMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -28,12 +28,12 @@ class BasicComponentMappingTransformation extends EmptyEObjectMappingTransformat
 	override createEObject(EObject eObject) {
 		val BasicComponent basicComponent = eObject as BasicComponent
 
-		var Package rootPackage = PCM2JaMoPPUtils.findCorrespondingPackageByName(
+		var Package rootPackage = Pcm2JavaUtils.findCorrespondingPackageByName(
 			basicComponent.repository__RepositoryComponent.entityName, correspondenceModel,
 			basicComponent.repository__RepositoryComponent)
 
 		//create all necessary elements
-		val retEObjects = PCM2JaMoPPUtils.createPackageCompilationUnitAndJaMoPPClass(basicComponent, rootPackage)
+		val retEObjects = Pcm2JavaUtils.createPackageCompilationUnitAndJaMoPPClass(basicComponent, rootPackage)
 		return retEObjects
 	}
 	
@@ -55,7 +55,7 @@ class BasicComponentMappingTransformation extends EmptyEObjectMappingTransformat
 
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject, EReference affectedReference, EObject oldValue,
 		int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		PCMJaMoPPUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
+		PcmJavaUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
 	}
 
 	/**
@@ -67,7 +67,7 @@ class BasicComponentMappingTransformation extends EmptyEObjectMappingTransformat
 	 */
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
-		return PCM2JaMoPPUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
+		return Pcm2JavaUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
 			featureCorrespondenceMap, correspondenceModel)
 	}
 

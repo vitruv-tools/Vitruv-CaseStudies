@@ -11,11 +11,9 @@ import java.util.Collection;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.ClassMethod;
-import org.junit.Before;
 import org.junit.Test;
 
-import tools.vitruv.applications.pcmjava.tests.util.JaMoPPPCMTestUtil;
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 
 /**
  * Test for the JaMoPPPCMUtil class - not a utility class. Tests the textual creation of a
@@ -24,12 +22,7 @@ import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils;
  * @author Langhamm
  *
  */
-public class JaMoPPPCMUtilsTest {
-
-    @Before
-    public void setUp() throws Exception {
-        JaMoPPPCMTestUtil.registerMetamodels();
-    }
+public class JavaUtilsTest {
 
     @Test
     public void testCreateCompilationUnit() throws IOException {
@@ -39,7 +32,7 @@ public class JaMoPPPCMUtilsTest {
         final String content = "package " + "datatypes;" + "\n\n" + "import " + selectedClass.getPackage().getName()
                 + "." + selectedClass.getSimpleName() + ";\n\n" + "public class " + className + " extends "
                 + selectedClass.getSimpleName() + "<" + "String" + ">" + " {\n" + "\n\n" + "}";
-        final CompilationUnit cu = PCM2JaMoPPUtils.createCompilationUnit(className, content);
+        final CompilationUnit cu = Pcm2JavaUtils.createCompilationUnit(className, content);
 
         assertEquals("CompilationUnit name is wrong", cu.getName(), className + ".java");
         assertTrue("No classifier in compliation unit", cu.getClassifiers().size() == 1);
@@ -49,7 +42,7 @@ public class JaMoPPPCMUtilsTest {
     @Test
     public void testCreateMethod() throws Throwable {
         final String content = "public void test() {\n" + "System.out.println(\"Hello world\");" + "\n}";
-        final EObject eObject = PCM2JaMoPPUtils.createJaMoPPMethod(content);
+        final EObject eObject = Pcm2JavaUtils.createJaMoPPMethod(content);
 
         assertNotNull("eObject is null", eObject);
         assertTrue("eObject is not instance of method", eObject instanceof ClassMethod);

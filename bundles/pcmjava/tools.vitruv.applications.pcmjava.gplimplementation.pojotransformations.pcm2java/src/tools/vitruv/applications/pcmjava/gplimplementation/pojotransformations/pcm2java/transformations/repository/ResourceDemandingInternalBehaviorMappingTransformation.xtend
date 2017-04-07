@@ -8,7 +8,7 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.util.transformationexecutor.DefaultEObjectMappingTransformation
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class ResourceDemandingInternalBehaviorMappingTransformation extends DefaultEObjectMappingTransformation {
 
@@ -32,7 +32,7 @@ class ResourceDemandingInternalBehaviorMappingTransformation extends DefaultEObj
 			val classForMethod = classesForMethod.get(0)
 			//val methodName = getMethodNameFromUser(classForMethod.name)
 			val methodName = resourceDemandingInternalBehaviour.entityName
-			val classMethod = PCM2JaMoPPUtils.createClassMethod(methodName, TypesFactory.eINSTANCE.createVoid, null,
+			val classMethod = Pcm2JavaUtils.createClassMethod(methodName, TypesFactory.eINSTANCE.createVoid, null,
 				null, false)
 			classForMethod.members.add(classMethod)
 			correspondenceModel.createAndAddCorrespondence(resourceDemandingInternalBehaviour, classMethod)

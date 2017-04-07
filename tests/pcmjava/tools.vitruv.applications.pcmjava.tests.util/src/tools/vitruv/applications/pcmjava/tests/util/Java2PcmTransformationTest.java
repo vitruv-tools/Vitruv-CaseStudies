@@ -84,7 +84,8 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.domains.pcm.PcmNamespace;
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils;
+import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilder;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator;
@@ -110,9 +111,9 @@ import tools.vitruv.framework.util.datatypes.VURI;
  *
  */
 @SuppressWarnings("restriction")
-public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTest implements SynchronizationAwaitCallback {
+public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest implements SynchronizationAwaitCallback {
 
-	private static final Logger logger = Logger.getLogger(JaMoPP2PCMTransformationTest.class.getSimpleName());
+	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 
 	protected static final int SELECT_BASIC_COMPONENT = 0;
 	private static final int SELECT_COMPOSITE_COMPONENT = 1;
@@ -126,7 +127,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	
 	@Override
 	protected Iterable<Metamodel> createMetamodels() {
-		return JaMoPPPCMTestUtil.createPcmJamoppMetamodels();
+		return PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
 	}
 	
 	@Override
@@ -204,9 +205,9 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	}
 	
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
-		this.mainPackage = this.createPackageWithPackageInfo(new String[] { PCM2JaMoPPTestUtils.REPOSITORY_NAME });
-		this.createPackageWithPackageInfo(new String[] { PCM2JaMoPPTestUtils.REPOSITORY_NAME, "contracts" });
-		this.createPackageWithPackageInfo(new String[] { PCM2JaMoPPTestUtils.REPOSITORY_NAME, "datatypes" });
+		this.mainPackage = this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
+		this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts" });
+		this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes" });
 		final CorrespondenceModel ci = this.getCorrespondenceModel();
 		if (null == ci) {
 			throw new RuntimeException("Could not get correspondence instance.");
@@ -218,8 +219,8 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 
 	protected BasicComponent addSecondPackageCorrespondsToBasicComponent() throws Throwable {
 		this.testUserInteractor.addNextSelections(SELECT_BASIC_COMPONENT);
-		return this.createSecondPackage(BasicComponent.class, PCM2JaMoPPTestUtils.REPOSITORY_NAME,
-				PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME);
+		return this.createSecondPackage(BasicComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
 
 	protected <T> T createSecondPackage(final Class<T> correspondingType, final String... namespace) throws Throwable {
@@ -371,7 +372,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 
 	protected <T> T addClassInPackage(final Package packageForClass, final Class<T> classOfCorrespondingObject)
 			throws Throwable {
-		final String implementingClassName = PCM2JaMoPPTestUtils.IMPLEMENTING_CLASS_NAME;
+		final String implementingClassName = Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME;
 		return this.addClassInPackage(packageForClass, classOfCorrespondingObject, implementingClassName);
 	}
 
@@ -448,19 +449,19 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 
 	protected CompositeComponent addSecondPackageCorrespondsToCompositeComponent() throws Throwable {
 		this.testUserInteractor.addNextSelections(SELECT_COMPOSITE_COMPONENT);
-		return this.createSecondPackage(CompositeComponent.class, PCM2JaMoPPTestUtils.REPOSITORY_NAME,
-				PCM2JaMoPPTestUtils.COMPOSITE_COMPONENT_NAME);
+		return this.createSecondPackage(CompositeComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
+				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
 	}
 
 	protected org.palladiosimulator.pcm.system.System addSecondPackageCorrespondsToSystem() throws Throwable {
 		this.testUserInteractor.addNextSelections(SELECT_SYSTEM);
-		return this.createSecondPackage(System.class, PCM2JaMoPPTestUtils.SYSTEM_NAME);
+		return this.createSecondPackage(System.class, Pcm2JavaTestUtils.SYSTEM_NAME);
 	}
 
 	protected void addSecondPackageCorrespondsWithoutCorrespondences() throws Throwable {
 		this.testUserInteractor.addNextSelections(SELECT_NOTHING_DECIDE_LATER);
-		this.createSecondPackageWithoutCorrespondence(PCM2JaMoPPTestUtils.REPOSITORY_NAME,
-				PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME);
+		this.createSecondPackageWithoutCorrespondence(Pcm2JavaTestUtils.REPOSITORY_NAME,
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
 
 	protected void assertRepositoryAndPCMName(final Repository repo, final RepositoryComponent repoComponent,
@@ -529,7 +530,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 
 	private OperationInterface createInterfaceInPackage(final String packageName)
 			throws Throwable, CoreException, InterruptedException {
-		final String interfaceName = PCM2JaMoPPTestUtils.INTERFACE_NAME;
+		final String interfaceName = Pcm2JavaTestUtils.INTERFACE_NAME;
 		return this.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence(packageName, interfaceName);
 	}
 
@@ -609,7 +610,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	}
 
 	protected OperationSignature addMethodToInterfaceWithCorrespondence(final String interfaceName) throws Throwable {
-		final String methodName = PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME;
+		final String methodName = Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME;
 		return this.addMethodToInterfaceWithCorrespondence(interfaceName, methodName);
 	}
 
@@ -654,14 +655,14 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 		final IMethod iMethod = cu.getType(className).getMethod(methodName, null);
 		final int offset = iMethod.getNameRange().getOffset();
 		final int length = iMethod.getNameRange().getLength();
-		final String newMethodName = methodName + PCM2JaMoPPTestUtils.RENAME;
+		final String newMethodName = methodName + Pcm2JavaTestUtils.RENAME;
 		final ReplaceEdit replaceEdit = new ReplaceEdit(offset, length, newMethodName);
 		editCompilationUnit(cu, replaceEdit);
 		return this.findOperationSignatureForJaMoPPMethodInCompilationUnit(newMethodName, className, cu);
 	}
 
 	protected void assertDataTypeName(final TypeReference typeReference, final DataType pcmDataType) {
-		final String jaMoPPTypeName = PCM2JaMoPPUtils.getNameFromJaMoPPType(typeReference);
+		final String jaMoPPTypeName = Pcm2JavaUtils.getNameFromJaMoPPType(typeReference);
 		final String pcmTypeName = this.getNameFromPCMDataType(pcmDataType);
 		assertEquals("The name of the PCM datatype does not equal the JaMoPP type name", jaMoPPTypeName, pcmTypeName);
 	}
@@ -801,7 +802,7 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	protected String addPackageAndImplementingClass(final String componentName)
 			throws CoreException, IOException, InterruptedException {
 		this.testUserInteractor.addNextSelections(SELECT_BASIC_COMPONENT);
-		final Package mediaStorePackage = this.createPackageWithPackageInfo(PCM2JaMoPPTestUtils.REPOSITORY_NAME,
+		final Package mediaStorePackage = this.createPackageWithPackageInfo(Pcm2JavaTestUtils.REPOSITORY_NAME,
 				componentName);
 		this.testUserInteractor.addNextSelections(0);
 

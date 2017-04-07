@@ -3,13 +3,13 @@ package tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.OperationInterface
-import tools.vitruv.applications.pcmjava.tests.util.JaMoPP2PCMTransformationTest
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming.EjbJavaToPcmChangePropagationSpecification
+import tools.vitruv.applications.pcmjava.tests.util.Java2PcmTransformationTest
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming.EjbJava2PcmChangePropagationSpecification
 
 /**
  * class that contains special methods for EJB testing
  */
-abstract class EjbJava2PcmTransformationTest extends JaMoPP2PCMTransformationTest {
+abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest {
 	
 	public static val String STATELESS_ANNOTATION_NAME = "Stateless"
 	public static val String REMOTE_ANNOTATION_NAME = "Remote"
@@ -20,7 +20,7 @@ abstract class EjbJava2PcmTransformationTest extends JaMoPP2PCMTransformationTes
 	protected static val String TEST_FIELD_NAME = "testEJBfield"
 	
 	override protected createChangePropagationSpecifications() {
-		return #[new EjbJavaToPcmChangePropagationSpecification()];
+		return #[new EjbJava2PcmChangePropagationSpecification()];
 	}
 	
 	def protected createEjbClass(String className) {

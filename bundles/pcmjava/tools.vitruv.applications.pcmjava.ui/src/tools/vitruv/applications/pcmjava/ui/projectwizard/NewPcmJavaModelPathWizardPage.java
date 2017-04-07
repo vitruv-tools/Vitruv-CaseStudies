@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Composite;
  * 
  */
 @SuppressWarnings("restriction")
-class NewPCMJavaModelPathWizardPage extends WizardPage {
+class NewPcmJavaModelPathWizardPage extends WizardPage {
 
     private static final String DEFAULT_MODEL_PATH = "model";
     private String modelPath;
@@ -33,7 +33,7 @@ class NewPCMJavaModelPathWizardPage extends WizardPage {
     private SelectionButtonDialogField createSystemFileSelectionButtonDialogField;
     private StringDialogField chooseSystemFileStringDialogField;
 
-    protected NewPCMJavaModelPathWizardPage(String pageName, IWizardPage previousPage) {
+    protected NewPcmJavaModelPathWizardPage(String pageName, IWizardPage previousPage) {
         super(pageName);
         modelPath = DEFAULT_MODEL_PATH;
         setTitle("PCM model path selection");

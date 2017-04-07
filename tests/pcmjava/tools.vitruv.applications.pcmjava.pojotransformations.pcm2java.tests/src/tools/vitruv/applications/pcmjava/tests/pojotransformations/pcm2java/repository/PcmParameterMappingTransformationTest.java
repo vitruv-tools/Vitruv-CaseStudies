@@ -16,12 +16,12 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.datatypes.VURI;
 
-public class PCMParameterMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testAddParameter() throws Throwable {
@@ -34,8 +34,8 @@ public class PCMParameterMappingTransformationTest extends PCM2JaMoPPTransformat
     public void testChangeParameterName() throws Throwable {
         final Parameter param = this.createAndSyncRepoOpSigAndParameter();
 
-        param.setEntityName(PCM2JaMoPPTestUtils.PARAMETER_NAME + PCM2JaMoPPTestUtils.RENAME);
-        param.setParameterName(PCM2JaMoPPTestUtils.PARAMETER_NAME + PCM2JaMoPPTestUtils.RENAME);
+        param.setEntityName(Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
+        param.setParameterName(Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
         super.triggerSynchronization(VURI.getInstance(param.eResource()));
 
         this.assertParameterCorrespondences(param);
@@ -56,7 +56,7 @@ public class PCMParameterMappingTransformationTest extends PCM2JaMoPPTransformat
     @Test
     public void testAddParameterWithCompositeDataType() throws Throwable {
         final Parameter param = super.createAndSyncRepoOpSigAndParameterWithDataTypeName(
-                PCM2JaMoPPTestUtils.COMPOSITE_DATA_TYPE_NAME, PCM2JaMoPPTestUtils.PARAMETER_NAME);
+                Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME, Pcm2JavaTestUtils.PARAMETER_NAME);
 
         this.assertParameterCorrespondences(param);
     }
@@ -76,10 +76,10 @@ public class PCMParameterMappingTransformationTest extends PCM2JaMoPPTransformat
     @Test
     public void testAddMultipleParameters() throws Throwable {
         final Parameter param = super.createAndSyncRepoOpSigAndParameterWithDataTypeName(
-                PCM2JaMoPPTestUtils.COMPOSITE_DATA_TYPE_NAME + "_1", "compositeParam1");
+                Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + "_1", "compositeParam1");
         final OperationSignature opSig = param.getOperationSignature__Parameter();
         final CompositeDataType cdt = super.createAndSyncCompositeDataType(opSig.getInterface__OperationSignature()
-                .getRepository__Interface(), PCM2JaMoPPTestUtils.COMPOSITE_DATA_TYPE_NAME + "_2");
+                .getRepository__Interface(), Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + "_2");
 
         final Parameter param2 = super.addAndSyncParameterWithPrimitiveTypeToSignature(opSig);
         final Parameter param3 = super.addAndSyncParameterToSignature(opSig, cdt, "compositeParam2");
@@ -92,10 +92,10 @@ public class PCMParameterMappingTransformationTest extends PCM2JaMoPPTransformat
     @Test
     public void testAddMultipleParametersAndRemoveOne() throws Throwable {
         final Parameter param = super.createAndSyncRepoOpSigAndParameterWithDataTypeName(
-                PCM2JaMoPPTestUtils.COMPOSITE_DATA_TYPE_NAME + "_1", "compositeParam1");
+                Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + "_1", "compositeParam1");
         final OperationSignature opSig = param.getOperationSignature__Parameter();
         final CompositeDataType cdt = super.createAndSyncCompositeDataType(opSig.getInterface__OperationSignature()
-                .getRepository__Interface(), PCM2JaMoPPTestUtils.COMPOSITE_DATA_TYPE_NAME + "_2");
+                .getRepository__Interface(), Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + "_2");
 
         final Parameter param2 = super.addAndSyncParameterWithPrimitiveTypeToSignature(opSig);
         final Parameter param3 = super.addAndSyncParameterToSignature(opSig, cdt, "compositeParam2");

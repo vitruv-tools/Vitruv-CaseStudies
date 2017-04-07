@@ -6,8 +6,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 
-@SuiteClasses({ JaMoPPPCMUtilsTest.class //, JaMoPPTest.class 
+@SuiteClasses({ JavaUtilsTest.class //, JaMoPPTest.class 
 	})
-public class PCMJavaTransformationsTestSuite {
+public class PcmJavaTransformationUtilsTestSuite {
 
 }

@@ -1,13 +1,13 @@
 package tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm
 
-import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmPackagePreprocessor
 import tools.vitruv.framework.util.datatypes.MetamodelPair
 import org.emftext.language.java.JavaPackage
 import org.palladiosimulator.pcm.PcmPackage
 import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import tools.vitruv.framework.change.processing.impl.CompositeChangePropagationSpecification
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmPackagePreprocessor
 
-class JavaToPcmGplImplementationChangePropagationSpecification extends CompositeChangePropagationSpecification {
+class Java2PcmGplImplementationChangePropagationSpecification extends CompositeChangePropagationSpecification {
 	private MetamodelPair metamodelPair;
 	
 	new() {
@@ -18,7 +18,7 @@ class JavaToPcmGplImplementationChangePropagationSpecification extends Composite
 
 	def protected setup() {
 		addChangePreprocessor(new Java2PcmPackagePreprocessor(userInteracting));
-		addChangeMainprocessor(new Java2PCMChangeProcessor(userInteracting));
+		addChangeMainprocessor(new Java2PcmChangeProcessor(userInteracting));
 	}
 	
 	override getMetamodelPair() {

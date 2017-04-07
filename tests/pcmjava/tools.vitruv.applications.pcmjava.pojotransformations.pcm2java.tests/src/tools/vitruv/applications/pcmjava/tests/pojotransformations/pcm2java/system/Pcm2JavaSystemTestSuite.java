@@ -8,6 +8,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @SuiteClasses({ AssemblyContextMappingTransformationTest.class,
 	SystemMappingTransformationTest.class })
-public class PCM2JavaSystemTestSuite {
+public class Pcm2JavaSystemTestSuite {
 
 }

@@ -9,9 +9,9 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class InterfaceMappingTransformationTest extends Java2PCMPackageMappingTransformationTest {
+public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
     /**
      * interface in contracts package --> should automatically be mapped to operation interface
@@ -24,7 +24,7 @@ public class InterfaceMappingTransformationTest extends Java2PCMPackageMappingTr
 
         final OperationInterface opIf = super.addInterfaceInContractsPackage();
 
-        this.assertOperationInterface(repo, opIf, PCM2JaMoPPTestUtils.INTERFACE_NAME);
+        this.assertOperationInterface(repo, opIf, Pcm2JavaTestUtils.INTERFACE_NAME);
     }
 
     /**
@@ -39,7 +39,7 @@ public class InterfaceMappingTransformationTest extends Java2PCMPackageMappingTr
 
         final OperationInterface opInterface = super.addInterfaceInSecondPackageWithCorrespondence(bc.getEntityName());
 
-        this.assertOperationInterface(repo, opInterface, PCM2JaMoPPTestUtils.INTERFACE_NAME);
+        this.assertOperationInterface(repo, opInterface, Pcm2JavaTestUtils.INTERFACE_NAME);
     }
 
     /**
@@ -65,9 +65,9 @@ public class InterfaceMappingTransformationTest extends Java2PCMPackageMappingTr
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
 
         final OperationInterface newOpInterface = this.renameClassifierWithName(opInterface.getEntityName(),
-                PCM2JaMoPPTestUtils.INTERFACE_NAME + PCM2JaMoPPTestUtils.RENAME, OperationInterface.class);
+                Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME, OperationInterface.class);
 
-        this.assertOperationInterface(repo, newOpInterface, PCM2JaMoPPTestUtils.INTERFACE_NAME
-                + PCM2JaMoPPTestUtils.RENAME);
+        this.assertOperationInterface(repo, newOpInterface, Pcm2JavaTestUtils.INTERFACE_NAME
+                + Pcm2JavaTestUtils.RENAME);
     }
 }

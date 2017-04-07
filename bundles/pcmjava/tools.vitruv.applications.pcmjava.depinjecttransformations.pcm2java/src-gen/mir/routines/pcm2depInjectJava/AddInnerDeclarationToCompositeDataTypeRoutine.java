@@ -12,7 +12,6 @@ import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -37,7 +36,7 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
       EList<Member> _members_2 = dataTypeClass.getMembers();
       _members_2.add(setterMethod);
       EList<Member> _members_3 = dataTypeClass.getMembers();
-      PCM2JaMoPPUtils.sortMembers(_members_3);
+      Pcm2JavaHelper.sortMembers(_members_3);
     }
     
     public EObject getCorrepondenceSourceDataTypeClass(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final TypeReference dataTypeReference) {

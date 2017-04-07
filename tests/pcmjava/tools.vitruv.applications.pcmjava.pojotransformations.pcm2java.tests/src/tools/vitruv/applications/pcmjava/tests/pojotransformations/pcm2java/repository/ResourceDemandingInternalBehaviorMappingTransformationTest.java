@@ -9,18 +9,18 @@ import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour;
 import org.palladiosimulator.pcm.seff.SeffFactory;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 
-public class ResourceDemandingInternalBehaviorMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class ResourceDemandingInternalBehaviorMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     private static final String RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD = "resourceDemandingInternalBehaviourClassMethod";
 
     @Test
     public void testCreateResourceDemandingInternalBehavior() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent bc1 = this.addBasicComponentAndSync(repo);
 
         this.testUserInteractor.addNextSelections(RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD);

@@ -39,8 +39,6 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.system.System
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import tools.vitruv.framework.tuid.TuidManager
@@ -49,18 +47,20 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
-import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
+import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 /**
  * 
  * @author Alexander Monev
  */
-public class PCMJaMoPPUtilsGuice {
+public class PcmJamoppUtilsGuice {
 
-	private static val Logger logger = Logger.getLogger(PCMJaMoPPUtilsGuice.simpleName)
+	private static val Logger logger = Logger.getLogger(PcmJamoppUtilsGuice.simpleName)
 
 	public static final int SELECT_KEEP_OLD_BINDING = 0;
 	public static final int SELECT_REPLACE_WITH_NEW_BINDING = 1;
@@ -81,8 +81,8 @@ public class PCMJaMoPPUtilsGuice {
 			throw e
 		}
 
-		PCMJaMoPPUtilsGuice.addGuiceModuleInterfaceToClass(jaMoPPCompositeClass)
-		val classMethod = PCMJaMoPPUtilsGuice.addConfigureMethodToModule(jaMoPPCompositeClass)
+		PcmJamoppUtilsGuice.addGuiceModuleInterfaceToClass(jaMoPPCompositeClass)
+		val classMethod = PcmJamoppUtilsGuice.addConfigureMethodToModule(jaMoPPCompositeClass)
 		return classMethod
 	}
 
@@ -111,7 +111,7 @@ public class PCMJaMoPPUtilsGuice {
 			val expressionStatements = configureMethod.statements.filter(ExpressionStatement)
 			for (ExpressionStatement expr : expressionStatements) {
 
-				val interfaceAndClassName = PCMJaMoPPUtilsGuice.returnInterfaceAndClassNameForBindExpression(expr)
+				val interfaceAndClassName = PcmJamoppUtilsGuice.returnInterfaceAndClassNameForBindExpression(expr)
 
 				if (interfaceAndClassName != null) {
 					val interfaceName = interfaceAndClassName.key
@@ -121,13 +121,13 @@ public class PCMJaMoPPUtilsGuice {
 						if (className != implClass.name) { // this condition is to avoid adding the same statement twice
 						// A binding for opInterface already exists and the new binding binds it to a different implementation
 						// The user must decide whether to only keep the old binding, or replace it with the new one	
-							if (PCMJaMoPPUtilsGuice.
+							if (PcmJamoppUtilsGuice.
 								checkIfUserWantsToReplaceInterfaceBinding(interfaceClass.name, implClass.name,
 									userInteracting)) {
 								// Remove old binding from statements
 								configureMethod.statements.remove(expr)
 								// Remove old assembly connector
-								acToRemove = PCMJaMoPPUtilsGuice.
+								acToRemove = PcmJamoppUtilsGuice.
 									findAssemblyConnectorForOperationInterface(opInterface, system)
 							} else {
 								keepOldBinding = true
@@ -140,10 +140,10 @@ public class PCMJaMoPPUtilsGuice {
 
 			if (!keepOldBinding) {
 				// add bind call
-				PCMJaMoPPUtilsGuice.addBindCallToConfigureMethod(configureMethod, interfaceClass.name, implClass.name)
+				PcmJamoppUtilsGuice.addBindCallToConfigureMethod(configureMethod, interfaceClass.name, implClass.name)
 
 				// create assembly connector
-				if (PCMJaMoPPUtilsGuice.createAssemblyConnector(opInterface, component, assemblyContext, providedRole,
+				if (PcmJamoppUtilsGuice.createAssemblyConnector(opInterface, component, assemblyContext, providedRole,
 					system, userInteracting) != null) {
 					updateSystem = true
 				}
@@ -152,7 +152,7 @@ public class PCMJaMoPPUtilsGuice {
 		}
 
 		val affectedClass = configureMethod.containingConcreteClassifier as ConcreteClassifier
-		PCMJaMoPPUtilsGuice.saveResourceForClass(affectedClass)
+		PcmJamoppUtilsGuice.saveResourceForClass(affectedClass)
 
 		if (acToRemove != null) {
 			EcoreUtil.remove(acToRemove)
@@ -160,7 +160,7 @@ public class PCMJaMoPPUtilsGuice {
 		}
 
 		if (updateSystem) {
-			PCMJaMoPPUtilsGuice.saveResourceForSystem(system)
+			PcmJamoppUtilsGuice.saveResourceForSystem(system)
 		}
 
 		return null
@@ -218,7 +218,7 @@ public class PCMJaMoPPUtilsGuice {
 	}
 
 	def static addConfigureMethodToModule(Class jaMoPPClass) {
-		val classifierReference = PCM2JaMoPPUtils.createAndReturnNamespaceClassifierReferenceForName("", "Binder")
+		val classifierReference = Pcm2JavaUtils.createAndReturnNamespaceClassifierReferenceForName("", "Binder")
 		val classifier = classifierReference.classifierReferences.get(0)
 
 		// Check if configure method has already been added before
@@ -235,13 +235,13 @@ public class PCMJaMoPPUtilsGuice {
 		method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
 		method.typeReference = TypesFactory.eINSTANCE.createVoid
 
-		val Parameter parameter = PCM2JaMoPPUtils.createOrdinaryParameter(classifier, "binder")
+		val Parameter parameter = Pcm2JavaUtils.createOrdinaryParameter(classifier, "binder")
 		method.parameters.add(parameter)
 		jaMoPPClass.members.add(method)
 
 		val Interface jaMoPPInterface = ClassifiersFactory.eINSTANCE.createInterface
 		jaMoPPInterface.name = "Module"
-		val namespaceClassifierRef = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPInterface)
+		val namespaceClassifierRef = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPInterface)
 
 		// Check if "implements Module" has already been added before
 		if (checkIfClassImplementsInterface(jaMoPPClass, jaMoPPInterface)) {
@@ -508,8 +508,8 @@ public class PCMJaMoPPUtilsGuice {
 		// create "bind(Comp.class)."
 		val ClassMethod bindMethod = MembersFactory.eINSTANCE.createClassMethod
 		bindMethod.name = "bind"
-		val classTypeReference = PCM2JaMoPPUtils.createAndReturnNamespaceClassifierReferenceForName("", "Class")
-		bindMethod.parameters.add(PCM2JaMoPPUtils.createOrdinaryParameter(classTypeReference, interfaceName + ".class"))
+		val classTypeReference = Pcm2JavaUtils.createAndReturnNamespaceClassifierReferenceForName("", "Class")
+		bindMethod.parameters.add(Pcm2JavaUtils.createOrdinaryParameter(classTypeReference, interfaceName + ".class"))
 		val MethodCall bindCall = ReferencesFactory.eINSTANCE.createMethodCall
 		bindCall.target = bindMethod
 
@@ -522,7 +522,7 @@ public class PCMJaMoPPUtilsGuice {
 		// create "to(CompImpl.class)"
 		val ClassMethod toMethod = MembersFactory.eINSTANCE.createClassMethod
 		toMethod.name = "to"
-		toMethod.parameters.add(PCM2JaMoPPUtils.createOrdinaryParameter(classTypeReference, implClassName + ".class"))
+		toMethod.parameters.add(Pcm2JavaUtils.createOrdinaryParameter(classTypeReference, implClassName + ".class"))
 		val MethodCall toCall = ReferencesFactory.eINSTANCE.createMethodCall
 		toCall.target = toMethod
 
@@ -702,7 +702,7 @@ public class PCMJaMoPPUtilsGuice {
 
 		// TODO: check if a similar method exists in POJO utils
 		private def static findBasicComponentByName(String entityName, CorrespondenceModel ci) {
-			val repo = JaMoPP2PCMUtils.getRepository(ci)
+			val repo = Java2PcmUtils.getRepository(ci)
 			for (BasicComponent comp : repo.components__Repository.filter(BasicComponent)) {
 				try {
 					val implClass = ci.getCorrespondingEObjectsByType(comp, Class).claimOne
@@ -720,7 +720,7 @@ public class PCMJaMoPPUtilsGuice {
 
 		// TODO: check if a similar method exists in POJO utils
 		private def static findOperationInterfaceByName(String entityName, CorrespondenceModel ci) {
-			val repo = JaMoPP2PCMUtils.getRepository(ci)
+			val repo = Java2PcmUtils.getRepository(ci)
 			for (OperationInterface opInterface : repo.interfaces__Repository.filter(OperationInterface)) {
 				if (opInterface.entityName == entityName) {
 					return opInterface
@@ -769,7 +769,7 @@ public class PCMJaMoPPUtilsGuice {
 							!ac.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext.
 								equals(assemblyConnector.providingAssemblyContext_AssemblyConnector.
 									encapsulatedComponent__AssemblyContext)) {
-							if (PCMJaMoPPUtilsGuice.
+							if (PcmJamoppUtilsGuice.
 								checkIfUserWantsToReplaceInterfaceBinding(interfaceClass.name, implClass.name,
 									userInteracting)) {
 								// Old binding won't be readded to the list of statements
@@ -789,7 +789,7 @@ public class PCMJaMoPPUtilsGuice {
 						}
 
 						if (!removeOldBinding && !(removeNewBinding && ac.equals(assemblyConnector))) {
-							val expressionStatement = PCMJaMoPPUtilsGuice.addBindCallToConfigureMethod(configureMethod,
+							val expressionStatement = PcmJamoppUtilsGuice.addBindCallToConfigureMethod(configureMethod,
 								interfaceClass.name, implClass.name)
 
 							if (expressionStatement != null && ac.equals(assemblyConnector)) {
@@ -806,11 +806,11 @@ public class PCMJaMoPPUtilsGuice {
 				}
 
 				val affectedClass = configureMethod.containingConcreteClassifier as ConcreteClassifier
-				PCMJaMoPPUtilsGuice.saveResourceForClass(affectedClass)
+				PcmJamoppUtilsGuice.saveResourceForClass(affectedClass)
 
 				if (connectorToRemove != null) {
 					EcoreUtil.remove(connectorToRemove)
-					PCMJaMoPPUtilsGuice.saveResourceForSystem(system)
+					PcmJamoppUtilsGuice.saveResourceForSystem(system)
 				}
 
 				return null

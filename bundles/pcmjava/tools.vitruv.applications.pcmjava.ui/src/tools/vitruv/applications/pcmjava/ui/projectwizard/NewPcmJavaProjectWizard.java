@@ -9,11 +9,11 @@ import org.eclipse.ui.IWorkbench;
  * @author Langhamm A wizard to create a new PCM Java project according to a chosen template.
  */
 @SuppressWarnings("restriction")
-public class NewPCMJavaProjectWizard extends JavaProjectWizard {
+public class NewPcmJavaProjectWizard extends JavaProjectWizard {
 
-    private NewPCMJavaModelPathWizardPage pcmJavaModelPathWizardPage;
+    private NewPcmJavaModelPathWizardPage pcmJavaModelPathWizardPage;
 
-    public NewPCMJavaProjectWizard() {
+    public NewPcmJavaProjectWizard() {
         super();
         setNeedsProgressMonitor(true);
     }
@@ -37,7 +37,7 @@ public class NewPCMJavaProjectWizard extends JavaProjectWizard {
         super.addPages();
         if(null == pcmJavaModelPathWizardPage){
             IWizardPage lastWizardPage = this.getPages()[this.getPages().length - 1];
-            pcmJavaModelPathWizardPage = new NewPCMJavaModelPathWizardPage("Select pcm model path", lastWizardPage);
+            pcmJavaModelPathWizardPage = new NewPcmJavaModelPathWizardPage("Select pcm model path", lastWizardPage);
         }
         super.addPage(pcmJavaModelPathWizardPage);
     }

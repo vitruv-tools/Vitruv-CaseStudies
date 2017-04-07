@@ -12,7 +12,7 @@ import org.emftext.language.java.JavaPackage
 import org.palladiosimulator.pcm.PcmPackage
 import org.eclipse.emf.ecore.EObject
 
-class TUIDUpdatePreprocessor extends AbstractEChangePropagationSpecification {
+class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 	private val MetamodelPair metamodelPair;
 	
 	new(UserInteracting userInteracting) {

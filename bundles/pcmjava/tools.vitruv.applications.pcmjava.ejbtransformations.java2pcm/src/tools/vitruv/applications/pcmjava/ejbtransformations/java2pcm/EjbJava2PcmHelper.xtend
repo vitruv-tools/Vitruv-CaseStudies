@@ -6,14 +6,14 @@ import org.emftext.language.java.classifiers.Interface
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.types.TypeReference
 import org.palladiosimulator.pcm.repository.Repository
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 class EjbJava2PcmHelper {
 	private new(){}
 	
 	public static def Classifier getClassifier(TypeReference typeReference){
-		var classifier = JaMoPP2PCMUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference)
+		var classifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference)
 		return classifier
 	}
 	
@@ -24,7 +24,7 @@ class EjbJava2PcmHelper {
 	public static def getOoverridenInterfaceMethod(ClassMethod classMethod, Class jaMoPPClass){
 		val implementedEjbInterfaces = jaMoPPClass.implements.map[it.classifier].filter(typeof(Interface)).filter[EjbAnnotationHelper.isEjbBuisnessInterface(it)]
 		for(ejbInterface : implementedEjbInterfaces){
-			val method = ejbInterface.methods.findFirst[JaMoPP2PCMUtils.hasSameSignature(it, classMethod)]
+			val method = ejbInterface.methods.findFirst[Java2PcmUtils.hasSameSignature(it, classMethod)]
 			if(null != method){
 				return method
 			}
@@ -33,7 +33,7 @@ class EjbJava2PcmHelper {
 	} 
 	
 	public static def Repository findRepository(CorrespondenceModel correspondenceModel){ 
-		return JaMoPP2PCMUtils.getRepository(correspondenceModel)
+		return Java2PcmUtils.getRepository(correspondenceModel)
 	}
 	
 }

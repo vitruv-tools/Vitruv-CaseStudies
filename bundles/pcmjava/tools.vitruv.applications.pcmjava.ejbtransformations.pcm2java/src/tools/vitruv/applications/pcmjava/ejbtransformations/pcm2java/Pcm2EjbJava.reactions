@@ -838,7 +838,7 @@ reaction ChangedParameterType {
 
 routine changeParameterType(pcm::Parameter parameter) { 
 	match {
-		// retrieve the interface method to update the TUID according to the new parameter type
+		// retrieve the interface method to update the Tuid according to the new parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to parameter.operationSignature__Parameter
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 		val javaParameterTypeClass = retrieve optional java::Class corresponding to parameter.dataType__Parameter
@@ -858,7 +858,7 @@ reaction DeletedParameter {
 
 routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parameter) { 
 	match {
-		// retrieve the interface method to update the TUID according to the removed parameter type
+		// retrieve the interface method to update the Tuid according to the removed parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to signature
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 	} 

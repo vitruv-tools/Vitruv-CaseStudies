@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm
 
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.Parameter
@@ -27,7 +27,7 @@ class EjbInterfaceMappingTest extends EjbJava2PcmTransformationTest{
 		val correspondingOpSignature = createPackageEjbInterrfaceAndInterfaceMethod()
 		
 		assertEquals("OperationSiganture has not the expected name ", correspondingOpSignature.entityName, 
-				PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME)
+				Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME)
 	}
 	
 	@Test
