@@ -34,9 +34,9 @@
 					<failIfNoTests>false</failIfNoTests>
 					<!-- Test suites explicitly defined as they are sumsuming each other and would lead to redundant test execution -->
 					<includes>
-						<include>**/PCM2JavaTestSuite.class</include>
-						<include>**/Java2PCMTestSuite.class</include>
-						<include>**/Java2PcmEjbTransformationsTestSuite.class</include>
+						<include>**/Pcm2JavaTestSuite.class</include>
+						<include>**/Java2PcmTestSuite.class</include>
+						<include>**/EjbJava2PcmTransformationsTestSuite.class</include>
 					</includes>
 				</configuration>
 			</plugin>
