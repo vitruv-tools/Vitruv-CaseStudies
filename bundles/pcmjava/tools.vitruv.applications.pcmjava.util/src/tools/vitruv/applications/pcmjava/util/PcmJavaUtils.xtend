@@ -29,7 +29,6 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.framework.correspondence.Correspondence
-import tools.vitruv.framework.util.VitruviusConstants
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
@@ -126,7 +125,7 @@ class PcmJavaUtils {
 			javaRootPath = javaRootPath + "/package-info.java";
 		}
 		val VURI cuVURI = VURI.getInstance(srcFolderPath + javaRootPath);
-		transformationResult.addRootEObjectToSave(newJavaRoot, cuVURI)
+		transformationResult.registerForEstablishPersistence(newJavaRoot, cuVURI)
 	}
 
 	def static VURI getSourceModelVURI(EObject eObject) {
@@ -146,7 +145,7 @@ class PcmJavaUtils {
 			folderName = folderName + "/";
 		}
 		val VURI vuri = VURI.getInstance(folderName + fileName);
-		transformationResult.addRootEObjectToSave(namedElement, vuri)
+		transformationResult.registerForEstablishPersistence(namedElement, vuri)
 	}
 
 	def dispatch static handleRootChanges(Iterable<EObject> eObjects, CorrespondenceModel correspondenceModel,
@@ -177,7 +176,8 @@ class PcmJavaUtils {
 		PcmJavaUtils.addRootChangeToTransformationResult(eObject, correspondenceModel, sourceModelVURI,
 			transformationResult)
 		oldTuid.updateTuid(eObject)
-		transformationResult.addVuriToDeleteIfNotNull(vuriToDelete)
+		// Not necessary any more because VSUM does this
+		//transformationResult.addVuriToDeleteIfNotNull(vuriToDelete)
 	}
 
 	private static def String getFolderPathInProjectOfResource(VURI sourceModelVURI, String folderName) {
@@ -244,8 +244,8 @@ class PcmJavaUtils {
 					EcoreUtil.delete(eObject)
 				}
 				if (eObject.isInstanceOfARootClass(rootObjectClasses)) {
-					val vuri = tuid.getVURIFromTuid()
-					transformationResult.addVuriToDeleteIfNotNull(vuri)
+					//val vuri = tuid.getVURIFromTuid()
+					transformationResult.revokeRegistrationForPersistence(eObject)
 				}
 			} catch (RuntimeException e) {
 				// ignore runtime exception during object deletion
@@ -265,14 +265,14 @@ class PcmJavaUtils {
 	/**
 	 * returns the VURI of the second part of the Tuid (which should be the VURI String) 
 	 */
-	def private static VURI getVURIFromTuid(Tuid tuid) {
-		val segments = tuid.toString.split(VitruviusConstants.getTuidSegmentSeperator)
-		if (2 <= segments.length) {
-			val key = segments.get(1)
-			return VURI.getInstance(key)
-		}
-		return null
-	}
+//	def private static VURI getVURIFromTuid(Tuid tuid) {
+//		val segments = tuid.toString.split(VitruviusConstants.getTuidSegmentSeperator)
+//		if (2 <= segments.length) {
+//			val key = segments.get(1)
+//			return VURI.getInstance(key)
+//		}
+//		return null
+//	}
 	
 	def static updateNameAttribute(Set<EObject> correspondingEObjects, Object newValue,
 		EStructuralFeature affectedFeature,

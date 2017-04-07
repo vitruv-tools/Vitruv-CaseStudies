@@ -103,7 +103,8 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	
 				val VURI oldVURI = VURI.getInstance(pcmRoot.eResource.getURI)
 				PcmJavaUtils.handleRootChanges(pcmRoot, correspondenceModel, oldVURI, transformationResult, oldVURI, oldTuid)
-				transformationResult.addVuriToDeleteIfNotNull(oldVURI)
+				// Not necessary any more because VSUM does this
+				//transformationResult.addVuriToDeleteIfNotNull(oldVURI)
 			}
 		}
 	}
