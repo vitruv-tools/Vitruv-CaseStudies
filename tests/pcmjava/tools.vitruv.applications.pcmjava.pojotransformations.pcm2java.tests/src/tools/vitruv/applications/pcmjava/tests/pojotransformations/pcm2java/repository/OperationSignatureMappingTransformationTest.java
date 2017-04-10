@@ -13,7 +13,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory;
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -29,7 +28,7 @@ public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransfo
         final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
 
         opSig.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
-        super.triggerSynchronization(VURI.getInstance(opSig.eResource()));
+        super.saveAndSynchronizeChanges(opSig);
 
         this.assertOperationSignatureCorrespondence(opSig);
     }
@@ -38,10 +37,10 @@ public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransfo
     public void testChangeOperationSignatureReturnType() throws Throwable {
         final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
 
-        final PrimitiveDataType pdt = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
-        pdt.setType(PrimitiveTypeEnum.STRING);
+        final Repository repo = opSig.getInterface__OperationSignature().getRepository__Interface();
+        final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
         opSig.setReturnType__OperationSignature(pdt);
-        super.triggerSynchronization(VURI.getInstance(opSig.eResource()));
+        super.saveAndSynchronizeChanges(opSig);
 
         this.assertOperationSignatureCorrespondence(opSig);
     }
@@ -56,12 +55,11 @@ public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransfo
         // prepare OperationSignature with return type at creation
         final OperationSignature opSig = RepositoryFactory.eINSTANCE.createOperationSignature();
         opSig.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
-        final PrimitiveDataType pdt = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
-        pdt.setType(PrimitiveTypeEnum.STRING);
+        final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
         opSig.setReturnType__OperationSignature(pdt);
         opSig.setInterface__OperationSignature(opInterface);
         // trigger synchronization execution
-        super.triggerSynchronization(opInterface);
+        super.saveAndSynchronizeChanges(opInterface);
 
         // assert the signature
         this.assertOperationSignatureCorrespondence(opSig);

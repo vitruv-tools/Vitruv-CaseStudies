@@ -15,7 +15,6 @@ import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -37,7 +36,7 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
                 Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
 
         operationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertOperationProvidedRole(operationProvidedRole);
     }
@@ -51,7 +50,7 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
         final BasicComponent newBasicComponent = this.addBasicComponentAndSync(repo, "NewProvidingComponent");
 
         operationProvidedRole.setProvidingEntity_ProvidedRole(newBasicComponent);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertOperationProvidedRole(operationProvidedRole);
     }
@@ -72,8 +71,7 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
         newOperationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
         newOperationProvidedRole.setProvidingEntity_ProvidedRole(basicComponent);
         basicComponent.getProvidedRoles_InterfaceProvidingEntity().add(newOperationProvidedRole);
-        final VURI vuri = VURI.getInstance(repo.eResource());
-        super.triggerSynchronization(vuri);
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertOperationProvidedRole(operationProvidedRole);
         this.assertOperationProvidedRole(newOperationProvidedRole);
@@ -94,11 +92,10 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
         newOperationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
         newOperationProvidedRole.setProvidingEntity_ProvidedRole(basicComponent);
         basicComponent.getProvidedRoles_InterfaceProvidingEntity().add(newOperationProvidedRole);
-        final VURI vuri = VURI.getInstance(repo.eResource());
-        super.triggerSynchronization(vuri);
+        super.saveAndSynchronizeChanges(repo);
 
         basicComponent.getProvidedRoles_InterfaceProvidingEntity().remove(newOperationProvidedRole);
-        super.triggerSynchronization(vuri);
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertOperationProvidedRole(operationProvidedRole);
         final CompilationUnit jaMoPPCu = CollectionBridge

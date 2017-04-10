@@ -245,10 +245,17 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         final OperationSignature opSig = this.createAndSyncOperationSignature(repo, opInterface);
         return opSig;
     }
+    
+    protected PrimitiveDataType createPrimitiveDataType(PrimitiveTypeEnum type, Repository repository) {
+    	final PrimitiveDataType dataType = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
+    	dataType.setType(PrimitiveTypeEnum.INT);
+    	repository.getDataTypes__Repository().add(dataType);
+    	return dataType;
+    }
 
     protected Parameter addAndSyncParameterWithPrimitiveTypeToSignature(final OperationSignature opSig) {
-        final PrimitiveDataType dataType = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
-        dataType.setType(PrimitiveTypeEnum.INT);
+    	final Repository repo = opSig.getInterface__OperationSignature().getRepository__Interface();
+        final PrimitiveDataType dataType = createPrimitiveDataType(PrimitiveTypeEnum.INT, repo);
         return this.addAndSyncParameterToSignature(opSig, dataType, Pcm2JavaTestUtils.PARAMETER_NAME);
     }
 
@@ -312,9 +319,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
     protected InnerDeclaration addInnerDeclaration(final CompositeDataType cdt, final Repository repo)
             throws Throwable {
         final InnerDeclaration innerDec = RepositoryFactory.eINSTANCE.createInnerDeclaration();
-        final PrimitiveDataType pdt = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
-        pdt.setType(PrimitiveTypeEnum.INT);
-        pdt.setRepository__DataType(repo);
+        final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.INT, repo);
         innerDec.setDatatype_InnerDeclaration(pdt);
         //innerDec.setCompositeDataType_InnerDeclaration(cdt);
         innerDec.setEntityName(Pcm2JavaTestUtils.INNER_DEC_NAME);

@@ -13,7 +13,6 @@ import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -65,7 +64,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
                 Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME);
         opr.setRequiredInterface__OperationRequiredRole(newInterface);
         opr.setRequiringEntity_RequiredRole(newBasicComponent);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         this.getVirtualModel().executeCommand(new Callable<Void>() {
             @Override
@@ -85,7 +84,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
         final OperationRequiredRole opr = this.createAndSyncRepoBasicCompInterfaceAndOperationReqiredRole();
 
         opr.setEntityName("operationReqRoleNameChange");
-        super.triggerSynchronization(VURI.getInstance(opr.eResource()));
+        super.saveAndSynchronizeChanges(opr);
 
         this.assertOperationRequiredRole(opr);
     }
@@ -98,7 +97,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
         final OperationInterface newInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
         opr.setRequiredInterface__OperationRequiredRole(newInterface);
-        super.triggerSynchronization(VURI.getInstance(opr.eResource()));
+        super.saveAndSynchronizeChanges(opr);
 
         this.assertOperationRequiredRole(opr);
     }

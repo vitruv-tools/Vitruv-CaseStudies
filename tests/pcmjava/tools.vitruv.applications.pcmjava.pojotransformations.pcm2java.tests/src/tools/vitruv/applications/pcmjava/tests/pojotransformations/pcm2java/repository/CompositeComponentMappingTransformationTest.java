@@ -80,11 +80,11 @@ public class CompositeComponentMappingTransformationTest extends Pcm2JavaTransfo
         return compositeComponent;
     }
 
-    private CompositeComponent addCompositeComponentAndSync(final Repository repo) {
+    private CompositeComponent addCompositeComponentAndSync(final Repository repo) throws IOException {
         final CompositeComponent cc = RepositoryFactory.eINSTANCE.createCompositeComponent();
         cc.setEntityName(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
         cc.setRepository__RepositoryComponent(repo);
-        super.triggerSynchronization(repo);
+        super.saveAndSynchronizeChanges(repo);
         return cc;
     }
 

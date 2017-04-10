@@ -16,7 +16,6 @@ import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationTest {
 
@@ -35,7 +34,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
         // Test
         repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
         EcoreResourceBridge.saveResource(repo.eResource());
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         // check
         this.assertRepositoryCorrespondences(repo);
@@ -50,7 +49,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
         // Test
         repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
         EcoreResourceBridge.saveResource(repo.eResource());
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         // check
         this.assertRepositoryCorrespondences(repo);

@@ -6,7 +6,6 @@ import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
@@ -49,10 +48,8 @@ public class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransfo
 
     protected void testAddCollectionDataTypeWithPrimitiveInnerType(final PrimitiveTypeEnum pte) throws Throwable {
         final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
-        final PrimitiveDataType primitiveType = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
-        primitiveType.setType(pte);
-        primitiveType.setRepository__DataType(repo);
-
+        final PrimitiveDataType primitiveType = createPrimitiveDataType(pte, repo);
+        
         this.testUserInteractor.addNextSelections(0);
         final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
                 Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, primitiveType);

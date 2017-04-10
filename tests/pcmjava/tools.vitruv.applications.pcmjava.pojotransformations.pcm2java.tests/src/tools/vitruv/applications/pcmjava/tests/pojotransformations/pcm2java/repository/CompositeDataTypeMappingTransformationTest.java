@@ -10,7 +10,6 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -29,7 +28,7 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
 
         cdt.setEntityName(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME);
-        super.triggerSynchronization(VURI.getInstance(cdt.eResource()));
+        super.saveAndSynchronizeChanges(cdt);
 
         this.assertDataTypeCorrespondence(cdt);
     }
@@ -38,10 +37,10 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
     public void testAddCompositeDataTypeWithInnerTypes() throws Throwable {
         final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createCompositeDataType(repo, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         this.getVirtualModel().executeCommand(new Callable<Void>() {
 
@@ -75,7 +74,7 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
         innerDec.setDatatype_InnerDeclaration(cdt2);
         innerDec.setCompositeDataType_InnerDeclaration(cdt);
         cdt.getInnerDeclaration_CompositeDataType().add(innerDec);
-        super.triggerSynchronization(VURI.getInstance(cdt.eResource()));
+        super.saveAndSynchronizeChanges(cdt);
 
         this.assertDataTypeCorrespondence(cdt);
     }

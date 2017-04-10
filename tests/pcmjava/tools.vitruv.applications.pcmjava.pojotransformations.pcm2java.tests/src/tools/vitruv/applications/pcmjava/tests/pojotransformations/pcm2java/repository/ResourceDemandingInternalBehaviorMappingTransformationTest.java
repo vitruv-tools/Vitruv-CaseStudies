@@ -2,6 +2,8 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.rep
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.emftext.language.java.members.ClassMethod;
 import org.junit.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -43,12 +45,12 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
     }
 
     private ResourceDemandingInternalBehaviour createAndSyncResourceDemandingInternalBehavior(
-            final BasicComponent basicComponent, final String resourceDemandingInternalBehaviourName) {
+            final BasicComponent basicComponent, final String resourceDemandingInternalBehaviourName) throws IOException {
         final ResourceDemandingInternalBehaviour resourceDemandingInternalBehaviour = SeffFactory.eINSTANCE
                 .createResourceDemandingInternalBehaviour();
         resourceDemandingInternalBehaviour.setEntityName(resourceDemandingInternalBehaviourName);
         basicComponent.getResourceDemandingInternalBehaviours__BasicComponent().add(resourceDemandingInternalBehaviour);
-        this.triggerSynchronization(basicComponent);
+        this.saveAndSynchronizeChanges(basicComponent);
         return resourceDemandingInternalBehaviour;
     }
 }

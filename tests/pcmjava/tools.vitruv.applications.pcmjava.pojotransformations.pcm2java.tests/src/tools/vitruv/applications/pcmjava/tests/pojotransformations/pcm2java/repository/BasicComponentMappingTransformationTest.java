@@ -10,7 +10,6 @@ import org.palladiosimulator.pcm.repository.Repository;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -29,7 +28,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
 
         basicComponent.setEntityName(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME);
-        this.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        this.saveAndSynchronizeChanges(repo);
 
         this.assertBasicComponentCorrespondences(basicComponent);
     }
@@ -40,7 +39,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
 
         EcoreUtil.delete(basicComponent);
-        super.triggerSynchronization(repo);
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertEmptyCorrespondence(basicComponent);
         this.assertCompilationUnitForBasicComponentDeleted(basicComponent);
@@ -53,7 +52,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
         final BasicComponent basicComponent2 = this.addBasicComponentAndSync(repo, "SecondBasicComponent");
 
         EcoreUtil.delete(basicComponent);
-        super.triggerSynchronization(repo);
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertEmptyCorrespondence(basicComponent);
         this.assertBasicComponentCorrespondences(basicComponent2);
