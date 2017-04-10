@@ -1,56 +1,52 @@
 package tools.vitruv.applications.pcmumlcomp.pcm2uml.constructionsimulation
 
-import java.io.File
-import java.util.List
-import org.apache.log4j.Level
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
-import org.junit.Test
+import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlComponentsChangePropagationSpecification
 import tools.vitruv.domains.pcm.PcmDomain
+import tools.vitruv.domains.pcm.util.RepositoryModelLoader
 import tools.vitruv.domains.uml.UmlDomain
-import tools.vitruv.framework.change.description.VitruviusChange
 import tools.vitruv.framework.tests.VitruviusEMFCasestudyTest
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
+import tools.vitruv.framework.util.datatypes.VURI
 
-class ModelConstructionTest extends VitruviusEMFCasestudyTest {
-	
-	val REPOSITORY_PATH = "model/small_example.repository"
-	
-	private static val Logger logger = Logger.getLogger(ModelConstructionTest)
+abstract class ModelConstructionTest extends VitruviusEMFCasestudyTest {
 		
-	@Test
-	def void smallExampleTest() {
-		logger.level = Level.ALL
-		val integrationStrategy = new PCMRepositoryIntegrationStrategy
-		val Resource resource = integrationStrategy.loadModel(REPOSITORY_PATH)
-		val changes = integrationStrategy.createChangeModels(null, resource)
-		createAndSynchronizeModel("model/small_example.repository", resource.contents.get(0))
-		triggerSynchronization(changes)
+	protected static val Logger logger = Logger.getLogger(ModelConstructionTest)
+	
+	protected var Resource targetResource;
+	
+	protected val TARGET_MODEL = "model"
+	protected val MODEL_FILE_EXTENSION = "repository"
+	
+	override void beforeTest() {
+		super.beforeTest()
+		targetResource = resourceSet.createResource(URI.createPlatformResourceURI(TARGET_MODEL.projectModelPath, true))
 	}
 	
-	def protected void triggerSynchronization(List<VitruviusChange> changes) {
-		for (change : changes) {
-			triggerSynchronization(change)
-		}
+	protected def Resource loadModel(String path) {
+		return RepositoryModelLoader.loadPCMResource(path)
 	}
 	
-	def protected void triggerSynchronization(VitruviusChange change) {
-		virtualModel.propagateChange(change)
+	private def String getProjectModelPath(String modelName) {
+		this.currentTestProjectName + "/model/" + modelName + "." + MODEL_FILE_EXTENSION;
 	}
 	
-	def protected void createAndSynchronizeModel(String path, EObject rootElement) {
-		if (path.isNullOrEmpty || rootElement === null) {
-			throw new IllegalArgumentException()
-		}
-		val modelPath = currentTestProjectName + File.separator + path
-		val resource = resourceSet.createResource(
-			URI.createPlatformResourceURI(modelPath, true)
-		)
+	protected def Repository getRootElement(Resource resource) {
+		return resource.allContents.head as Repository
+	}
+	
+	protected def void saveAndSynchronizeChanges(Resource resource) {
 		EcoreResourceBridge.saveResource(resource)
-		resource.contents.add(rootElement)
+		triggerSynchronization(VURI.getInstance(resource))
+	}
+	
+	protected def saveModel(Repository model) {
+		changeRecorder.beginRecording(VURI.getInstance(targetResource), #[targetResource])
+		targetResource.contents += model
+		saveAndSynchronizeChanges(targetResource)
 	}
 		
 	override protected createChangePropagationSpecifications() {
