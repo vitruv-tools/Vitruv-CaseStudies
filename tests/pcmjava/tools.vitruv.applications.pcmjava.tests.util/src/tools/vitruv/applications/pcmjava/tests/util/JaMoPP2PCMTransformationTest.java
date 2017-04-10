@@ -50,6 +50,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
+import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.annotations.AnnotationInstance;
 import org.emftext.language.java.annotations.AnnotationsFactory;
 import org.emftext.language.java.classifiers.Classifier;
@@ -66,7 +67,6 @@ import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.types.TypeReference;
-import org.junit.runner.Description;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -97,7 +97,6 @@ import tools.vitruv.framework.metamodel.Metamodel;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.monitorededitor.ProjectBuildUtils;
-import tools.vitruv.framework.tests.TestUserInteractor;
 import tools.vitruv.framework.tests.VitruviusCasestudyTest;
 import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
@@ -119,9 +118,11 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	private static final int SELECT_COMPOSITE_COMPONENT = 1;
 	private static final int SELECT_SYSTEM = 2;
 	protected static final int SELECT_NOTHING_DECIDE_LATER = 3;
-
+	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
+	
 	protected Package mainPackage;
 	protected Package secondPackage;
+	private int expectedNumberOfSyncs = 0;
 	
 	@Override
 	protected Iterable<Metamodel> createMetamodels() {
@@ -129,22 +130,22 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	}
 	
 	@Override
-	protected void beforeTest(final Description description) throws Throwable {
-		super.beforeTest(description);
-		this.testUserInteractor = new TestUserInteractor();
+	public void beforeTest() throws Throwable {
+		super.beforeTest();
+		// This is necessary because otherwise Maven tests will fail as resources from previous
+		// tests are still in the classpath and accidentially resolved
+		JavaClasspath.reset();
 		// add PCM Java Builder to Project under test
 		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
 		pcmJavaBuilder.addToProject(this.currentTestProject, getVirtualModel().getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(currentTestProject, VitruviusJavaBuilder.BUILDER_ID);
-
-		this.resourceSet = new ResourceSetImpl();
-		// set new user interactor
-		this.setUserInteractor(this.testUserInteractor);
+		this.expectedNumberOfSyncs = 0;
+		java.lang.System.setErr(null);
 	}
 
 	@Override
-	protected void afterTest(final org.junit.runner.Description description) {
+	public void afterTest() {
 		// Remove PCM Java Builder
 		final VitruviusJavaBuilderApplicator pcmJavaRemoveBuilder = new VitruviusJavaBuilderApplicator();
 		pcmJavaRemoveBuilder.removeBuilderFromProject(this.currentTestProject);
@@ -163,12 +164,9 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 		CompilationUnitManipulatorHelper.editCompilationUnit(cu, this, edits);
     }
 	
-	private int expectedNumberOfSyncs = 0;
-	private static int MAXIMUM_SYNC_WAITING_TIME = 15000;
-	
 	public synchronized void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
 		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
-		logger.debug("Starting to wait for finished synchronization");
+		logger.debug("Starting to wait for finished synchronization. Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: " + expectedNumberOfSyncs);
 		try {
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
@@ -194,12 +192,14 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 	@Override
 	public synchronized void finishedChangePropagation() {
 		expectedNumberOfSyncs--;
+		logger.debug("Reducing number of expected syncs to: " + expectedNumberOfSyncs);
 		this.notifyAll();
 	}
 
 	@Override
 	public synchronized void abortedChangePropagation(ChangePropagationAbortCause cause) {
 		expectedNumberOfSyncs--;
+		logger.debug("Reducing number of expected syncs to: " + expectedNumberOfSyncs);
 		this.notifyAll();
 	}
 	
@@ -817,10 +817,12 @@ public abstract class JaMoPP2PCMTransformationTest extends VitruviusCasestudyTes
 		// adding the implements statement to the class will result in an unsuccessful proxy resolution
 		// for the implemented interface, which means that no correspondence gets created.
 		// Even forcing a reload of the interface and class models in the VSUM does not have any positive effect.
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-		}
+		// ADDITION: Using Maven, changes run properly without the sleep, so it is removed by now. 
+		// In Eclipse, it does not work without the sleep.
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//		}
 		final ICompilationUnit classCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(className, this.currentTestProject);
 		this.importCompilationUnitWithName(implementingInterfaceName, classCompilationUnit);

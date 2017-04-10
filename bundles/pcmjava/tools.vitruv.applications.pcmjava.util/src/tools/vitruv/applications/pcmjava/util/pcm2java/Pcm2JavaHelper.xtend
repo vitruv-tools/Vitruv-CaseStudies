@@ -52,6 +52,8 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.domains.java.util.jamoppparser.JaMoPPParser
 import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
+import org.eclipse.emf.common.util.ECollections
+import org.eclipse.emf.common.util.EList
 
 class Pcm2JavaHelper{
 	
@@ -369,8 +371,8 @@ class Pcm2JavaHelper{
 	/**
 	 * sorts the member list to ensure that fields are printed before constructors and constructors before methods
 	 */
-	def static sortMembers(List<? extends EObject> members) {
-		members.sort(new Comparator<EObject> {
+	def static sortMembers(EList<? extends EObject> members) {
+		ECollections.sort(members, new Comparator<EObject> {
 
 			override compare(EObject o1, EObject o2) {
 

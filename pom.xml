@@ -53,36 +53,6 @@
 			<layout>p2</layout>
 			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/</url>
 		</repository>
-		<repository>
-			<id>EMFText</id>
-			<layout>p2</layout>
-			<url>http://update.emftext.org/release</url>
-		</repository>
-		<repository>
-			<id>JaMoPP (P2 Wrapper)</id>
-			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/nightly/jamopp-p2/</url>
-		</repository>
-<!--		<repository>
-			<id>ASEM</id>
-			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/nightly/asem/</url>
-		</repository>
-		<repository>
-			<id>Palladiosimulator</id>
-			<layout>p2</layout>
-			<url>https://sdqweb.ipd.kit.edu/eclipse/palladiosimulator/nightly/</url>
-		</repository>
-		<repository>
-			<id>Papyrus</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/neon</url>
-		</repository>
-		<repository>
-			<id>Papyrus SysML</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/modeling/mdt/papyrus/components/sysml14/</url>
-		</repository>-->
 	</repositories>
 
 	<build>
