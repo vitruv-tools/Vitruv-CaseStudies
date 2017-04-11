@@ -3,6 +3,8 @@ package mir.routines.umlToJava;
 import java.io.IOException;
 import mir.routines.umlToJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Classifier;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -19,58 +21,58 @@ public class DeleteJavaClassRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit javaCompilationUnit) {
-      return javaClass;
+    public EObject getElement1(final Classifier umlClassifer, final ConcreteClassifier javaClassifier, final CompilationUnit javaCompilationUnit) {
+      return javaClassifier;
     }
     
-    public EObject getCorrepondenceSourceJavaClass(final org.eclipse.uml2.uml.Class umlClass) {
-      return umlClass;
-    }
-    
-    public EObject getElement2(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit javaCompilationUnit) {
+    public EObject getElement2(final Classifier umlClassifer, final ConcreteClassifier javaClassifier, final CompilationUnit javaCompilationUnit) {
       return javaCompilationUnit;
     }
     
-    public EObject getCorrepondenceSourceJavaCompilationUnit(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass) {
-      return umlClass;
+    public EObject getCorrepondenceSourceJavaCompilationUnit(final Classifier umlClassifer, final ConcreteClassifier javaClassifier) {
+      return umlClassifer;
+    }
+    
+    public EObject getCorrepondenceSourceJavaClassifier(final Classifier umlClassifer) {
+      return umlClassifer;
     }
   }
   
-  public DeleteJavaClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass) {
+  public DeleteJavaClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier umlClassifer) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJava.DeleteJavaClassRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.umlToJava.RoutinesFacade(getExecutionState(), this);
-    this.umlClass = umlClass;
+    this.umlClassifer = umlClassifer;
   }
   
-  private org.eclipse.uml2.uml.Class umlClass;
+  private Classifier umlClassifer;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaClassRoutine with input:");
-    getLogger().debug("   Class: " + this.umlClass);
+    getLogger().debug("   Classifier: " + this.umlClassifer);
     
-    org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJavaClass(umlClass), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    ConcreteClassifier javaClassifier = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceJavaClassifier(umlClassifer), // correspondence source supplier
+    	ConcreteClassifier.class,
+    	(ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
-    if (javaClass == null) {
+    if (javaClassifier == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClass);
+    registerObjectUnderModification(javaClassifier);
     CompilationUnit javaCompilationUnit = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJavaCompilationUnit(umlClass, javaClass), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceJavaCompilationUnit(umlClassifer, javaClassifier), // correspondence source supplier
     	CompilationUnit.class,
     	(CompilationUnit _element) -> true, // correspondence precondition checker
     	null);
     if (javaCompilationUnit == null) {
     	return;
     }
-    initializeRetrieveElementState(javaCompilationUnit);
-    deleteObject(userExecution.getElement1(umlClass, javaClass, javaCompilationUnit));
+    registerObjectUnderModification(javaCompilationUnit);
+    deleteObject(userExecution.getElement1(umlClassifer, javaClassifier, javaCompilationUnit));
     
-    deleteObject(userExecution.getElement2(umlClass, javaClass, javaCompilationUnit));
+    deleteObject(userExecution.getElement2(umlClassifer, javaClassifier, javaCompilationUnit));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

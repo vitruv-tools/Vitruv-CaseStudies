@@ -50,9 +50,9 @@ public class DeleteJavaMethodRoutine extends AbstractRepairRoutineRealization {
     if (jMeth == null) {
     	return;
     }
-    initializeRetrieveElementState(jMeth);
+    registerObjectUnderModification(jMeth);
     deleteObject(userExecution.getElement1(umlOp, jMeth));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

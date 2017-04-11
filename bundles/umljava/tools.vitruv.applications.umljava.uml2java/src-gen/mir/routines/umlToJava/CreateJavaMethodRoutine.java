@@ -3,15 +3,15 @@ package mir.routines.umlToJava;
 import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToJava.RoutinesFacade;
-import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.uml2.uml.VisibilityKind;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import org.emftext.language.java.types.TypeReference;
+import org.emftext.language.java.modifiers.ModifiersFactory;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -34,12 +34,20 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
       if (_equals) {
         javaMethod.setName("DefaultMethodName");
       } else {
-        String _name_1 = umlOp.getName();
-        javaMethod.setName(_name_1);
+        javaMethod.setName(umlOp.getName());
       }
-      Type _type = umlOp.getType();
-      TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(_type, customTypeClass);
-      javaMethod.setTypeReference(_createTypeReference);
+      if (((!Objects.equal(umlOp.getVisibility(), null)) && (!Objects.equal(umlOp.getVisibility(), VisibilityKind.PACKAGE_LITERAL)))) {
+        UmlToJavaHelper.setJavaVisibility(javaMethod, umlOp.getVisibility());
+      }
+      boolean _isStatic = umlOp.isStatic();
+      if (_isStatic) {
+        javaMethod.addModifier(ModifiersFactory.eINSTANCE.createStatic());
+      }
+      boolean _isAbstract = umlOp.isAbstract();
+      if (_isAbstract) {
+        javaMethod.addModifier(ModifiersFactory.eINSTANCE.createAbstract());
+      }
+      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReference(umlOp.getType(), customTypeClass));
     }
     
     public EObject getElement1(final org.eclipse.uml2.uml.Class uClass, final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
@@ -49,8 +57,7 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
     public void update0Element(final org.eclipse.uml2.uml.Class uClass, final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
       EList<Member> _members = javaClass.getMembers();
       _members.add(javaMethod);
-      Logger _logger = this.getLogger();
-      _logger.info(((("Correspondence Added: " + umlOp) + ", ") + javaMethod));
+      this.getLogger().info(((("Correspondence Added: " + umlOp) + ", ") + javaMethod));
     }
     
     public EObject getCorrepondenceSourceJavaClass(final org.eclipse.uml2.uml.Class uClass, final Operation umlOp) {
@@ -95,15 +102,14 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
     if (javaClass == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClass);
+    registerObjectUnderModification(javaClass);
     org.emftext.language.java.classifiers.Class customTypeClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCustomTypeClass(uClass, umlOp, javaClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(customTypeClass);
+    registerObjectUnderModification(customTypeClass);
     ClassMethod javaMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
-    initializeCreateElementState(javaMethod);
     userExecution.updateJavaMethodElement(uClass, umlOp, javaClass, customTypeClass, javaMethod);
     
     // val updatedElement userExecution.getElement1(uClass, umlOp, javaClass, customTypeClass, javaMethod);
@@ -111,6 +117,6 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
     
     addCorrespondenceBetween(userExecution.getElement2(uClass, umlOp, javaClass, customTypeClass, javaMethod), userExecution.getElement3(uClass, umlOp, javaClass, customTypeClass, javaMethod), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -28,8 +28,7 @@ public class SetJavaAttributeFinalRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Property umlAttr, final Field jAttr, final Final finalMod) {
-      boolean _isReadOnly = umlAttr.isReadOnly();
-      JavaUtil.setJavaModifier(jAttr, finalMod, _isReadOnly);
+      JavaUtil.setJavaModifier(jAttr, finalMod, umlAttr.isReadOnly());
     }
     
     public EObject getCorrepondenceSourceJAttr(final Property umlAttr) {
@@ -58,13 +57,12 @@ public class SetJavaAttributeFinalRoutine extends AbstractRepairRoutineRealizati
     if (jAttr == null) {
     	return;
     }
-    initializeRetrieveElementState(jAttr);
+    registerObjectUnderModification(jAttr);
     Final finalMod = ModifiersFactoryImpl.eINSTANCE.createFinal();
-    initializeCreateElementState(finalMod);
     
     // val updatedElement userExecution.getElement1(umlAttr, jAttr, finalMod);
     userExecution.update0Element(umlAttr, jAttr, finalMod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

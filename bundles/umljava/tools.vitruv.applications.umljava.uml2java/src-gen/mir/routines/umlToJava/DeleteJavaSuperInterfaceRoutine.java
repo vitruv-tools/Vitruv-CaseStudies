@@ -3,7 +3,6 @@ package mir.routines.umlToJava;
 import java.io.IOException;
 import java.util.ListIterator;
 import mir.routines.umlToJava.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -31,17 +30,12 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final Interface superUMLInterface, final Interface uI, final org.emftext.language.java.classifiers.Interface jI, final org.emftext.language.java.classifiers.Interface javaSuperInterface) {
-      EList<TypeReference> _extends = jI.getExtends();
-      final ListIterator<TypeReference> iter = _extends.listIterator();
+      final ListIterator<TypeReference> iter = jI.getExtends().listIterator();
       while (iter.hasNext()) {
         {
           TypeReference _next = iter.next();
-          EList<ClassifierReference> _classifierReferences = ((NamespaceClassifierReference) _next).getClassifierReferences();
-          ClassifierReference _head = IterableExtensions.<ClassifierReference>head(_classifierReferences);
-          final Classifier type = _head.getTarget();
-          String _name = javaSuperInterface.getName();
-          String _name_1 = type.getName();
-          boolean _equals = _name.equals(_name_1);
+          final Classifier type = IterableExtensions.<ClassifierReference>head(((NamespaceClassifierReference) _next).getClassifierReferences()).getTarget();
+          boolean _equals = javaSuperInterface.getName().equals(type.getName());
           if (_equals) {
             iter.remove();
           }
@@ -82,7 +76,7 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     if (jI == null) {
     	return;
     }
-    initializeRetrieveElementState(jI);
+    registerObjectUnderModification(jI);
     org.emftext.language.java.classifiers.Interface javaSuperInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaSuperInterface(superUMLInterface, uI, jI), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
@@ -91,10 +85,10 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     if (javaSuperInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(javaSuperInterface);
+    registerObjectUnderModification(javaSuperInterface);
     // val updatedElement userExecution.getElement1(superUMLInterface, uI, jI, javaSuperInterface);
     userExecution.update0Element(superUMLInterface, uI, jI, javaSuperInterface);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

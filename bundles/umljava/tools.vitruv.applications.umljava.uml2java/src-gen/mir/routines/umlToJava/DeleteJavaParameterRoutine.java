@@ -50,9 +50,9 @@ public class DeleteJavaParameterRoutine extends AbstractRepairRoutineRealization
     if (jParam == null) {
     	return;
     }
-    initializeRetrieveElementState(jParam);
+    registerObjectUnderModification(jParam);
     deleteObject(userExecution.getElement1(uParam, jParam));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -25,8 +25,7 @@ public class RenameJavaMethodRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Operation umlOp, final Method jMeth) {
-      String _name = umlOp.getName();
-      jMeth.setName(_name);
+      jMeth.setName(umlOp.getName());
     }
     
     public EObject getCorrepondenceSourceJMeth(final Operation umlOp) {
@@ -55,10 +54,10 @@ public class RenameJavaMethodRoutine extends AbstractRepairRoutineRealization {
     if (jMeth == null) {
     	return;
     }
-    initializeRetrieveElementState(jMeth);
+    registerObjectUnderModification(jMeth);
     // val updatedElement userExecution.getElement1(umlOp, jMeth);
     userExecution.update0Element(umlOp, jMeth);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

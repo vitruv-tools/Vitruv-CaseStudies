@@ -8,7 +8,6 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.types.TypeReference;
 import org.emftext.language.java.types.TypesFactory;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -36,12 +35,9 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     
     public void update0Element(final Parameter uParam, final Integer changedToVoid, final Method javaMethod, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class returnType) {
       if (((changedToVoid).intValue() == 1)) {
-        org.emftext.language.java.types.Void _createVoid = TypesFactory.eINSTANCE.createVoid();
-        javaMethod.setTypeReference(_createVoid);
+        javaMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
       } else {
-        Type _type = uParam.getType();
-        TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(_type, returnType);
-        javaMethod.setTypeReference(_createTypeReference);
+        javaMethod.setTypeReference(UmlToJavaHelper.createTypeReference(uParam.getType(), returnType));
       }
     }
     
@@ -80,7 +76,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     if (javaMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(javaMethod);
+    registerObjectUnderModification(javaMethod);
     OrdinaryParameter jParam = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJParam(uParam, changedToVoid, javaMethod), // correspondence source supplier
     	OrdinaryParameter.class,
@@ -89,7 +85,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     if (jParam == null) {
     	return;
     }
-    initializeRetrieveElementState(jParam);
+    registerObjectUnderModification(jParam);
     org.emftext.language.java.classifiers.Class returnType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceReturnType(uParam, changedToVoid, javaMethod, jParam), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
@@ -98,10 +94,10 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     if (returnType == null) {
     	return;
     }
-    initializeRetrieveElementState(returnType);
+    registerObjectUnderModification(returnType);
     // val updatedElement userExecution.getElement1(uParam, changedToVoid, javaMethod, jParam, returnType);
     userExecution.update0Element(uParam, changedToVoid, javaMethod, jParam, returnType);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

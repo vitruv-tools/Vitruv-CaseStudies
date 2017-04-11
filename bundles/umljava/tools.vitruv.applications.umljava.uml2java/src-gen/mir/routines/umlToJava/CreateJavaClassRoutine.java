@@ -2,13 +2,10 @@ package mir.routines.umlToJava;
 
 import java.io.IOException;
 import mir.routines.umlToJava.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
-import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
-import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -24,62 +21,43 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass) {
-      return umlClass;
+    public EObject getElement1(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier) {
+      return umlClassifier;
     }
     
-    public void updateJavaClassElement(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass) {
-      String _name = umlClass.getName();
-      javaClass.setName(_name);
+    public EObject getElement2(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier) {
+      return javaClassifier;
     }
     
-    public EObject getElement4(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit javaCompilationUnit) {
-      return javaCompilationUnit;
+    public void updateJavaClassifierElement(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier) {
+      javaClassifier.setName(umlClassifier.getName());
     }
     
-    public EObject getElement2(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass) {
-      return javaClass;
-    }
-    
-    public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit javaCompilationUnit) {
-      return umlClass;
-    }
-    
-    public void updateJavaCompilationUnitElement(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit javaCompilationUnit) {
-      String _name = umlClass.getName();
-      javaCompilationUnit.setName(_name);
-      EList<ConcreteClassifier> _classifiers = javaCompilationUnit.getClassifiers();
-      _classifiers.add(javaClass);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit);
-      this.persistProjectRelative(umlClass, javaCompilationUnit, _buildJavaFilePath);
+    public void callRoutine1(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createJavaCompilationUnit(umlClassifier, javaClassifier, umlClassifier.getNamespace());
     }
   }
   
-  public CreateJavaClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass) {
+  public CreateJavaClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier umlClassifier) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJava.CreateJavaClassRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.umlToJava.RoutinesFacade(getExecutionState(), this);
-    this.umlClass = umlClass;
+    this.umlClassifier = umlClassifier;
   }
   
-  private org.eclipse.uml2.uml.Class umlClass;
+  private Classifier umlClassifier;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaClassRoutine with input:");
-    getLogger().debug("   Class: " + this.umlClass);
+    getLogger().debug("   Classifier: " + this.umlClassifier);
     
-    org.emftext.language.java.classifiers.Class javaClass = ClassifiersFactoryImpl.eINSTANCE.createClass();
-    initializeCreateElementState(javaClass);
-    userExecution.updateJavaClassElement(umlClass, javaClass);
+    org.emftext.language.java.classifiers.Class javaClassifier = ClassifiersFactoryImpl.eINSTANCE.createClass();
+    userExecution.updateJavaClassifierElement(umlClassifier, javaClassifier);
     
-    addCorrespondenceBetween(userExecution.getElement1(umlClass, javaClass), userExecution.getElement2(umlClass, javaClass), "");
+    addCorrespondenceBetween(userExecution.getElement1(umlClassifier, javaClassifier), userExecution.getElement2(umlClassifier, javaClassifier), "");
     
-    CompilationUnit javaCompilationUnit = ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
-    initializeCreateElementState(javaCompilationUnit);
-    userExecution.updateJavaCompilationUnitElement(umlClass, javaClass, javaCompilationUnit);
+    userExecution.callRoutine1(umlClassifier, javaClassifier, actionsFacade);
     
-    addCorrespondenceBetween(userExecution.getElement3(umlClass, javaClass, javaCompilationUnit), userExecution.getElement4(umlClass, javaClass, javaCompilationUnit), "");
-    
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -28,8 +28,7 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod javaMethod, final Abstract abstr) {
-      boolean _isAbstract = umlOp.isAbstract();
-      JavaUtil.setJavaModifier(javaMethod, abstr, _isAbstract);
+      JavaUtil.setJavaModifier(javaMethod, abstr, umlOp.isAbstract());
     }
     
     public EObject getCorrepondenceSourceJavaClass(final Operation umlOp) {
@@ -63,7 +62,7 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     if (javaClass == null) {
     	return;
     }
-    initializeRetrieveElementState(javaClass);
+    registerObjectUnderModification(javaClass);
     ClassMethod javaMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaMethod(umlOp, javaClass), // correspondence source supplier
     	ClassMethod.class,
@@ -72,13 +71,12 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     if (javaMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(javaMethod);
+    registerObjectUnderModification(javaMethod);
     Abstract abstr = ModifiersFactoryImpl.eINSTANCE.createAbstract();
-    initializeCreateElementState(abstr);
     
     // val updatedElement userExecution.getElement1(umlOp, javaClass, javaMethod, abstr);
     userExecution.update0Element(umlOp, javaClass, javaMethod, abstr);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

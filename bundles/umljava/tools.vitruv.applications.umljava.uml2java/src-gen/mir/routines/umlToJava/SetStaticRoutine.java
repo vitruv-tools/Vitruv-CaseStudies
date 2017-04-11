@@ -32,8 +32,7 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Feature uFeat, final AnnotableAndModifiable jMod, final Static staticMod) {
-      boolean _isStatic = uFeat.isStatic();
-      JavaUtil.setJavaModifier(jMod, staticMod, _isStatic);
+      JavaUtil.setJavaModifier(jMod, staticMod, uFeat.isStatic());
     }
   }
   
@@ -58,13 +57,12 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     if (jMod == null) {
     	return;
     }
-    initializeRetrieveElementState(jMod);
+    registerObjectUnderModification(jMod);
     Static staticMod = ModifiersFactoryImpl.eINSTANCE.createStatic();
-    initializeCreateElementState(staticMod);
     
     // val updatedElement userExecution.getElement1(uFeat, jMod, staticMod);
     userExecution.update0Element(uFeat, jMod, staticMod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

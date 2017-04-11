@@ -37,8 +37,7 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     
     public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Method jMeth, final org.emftext.language.java.classifiers.Class customClass) {
       final TypeReference jType = UmlToJavaHelper.createTypeReference(uType, customClass);
-      ParameterDirectionKind _direction = uParam.getDirection();
-      boolean _equals = _direction.equals(ParameterDirectionKind.RETURN_LITERAL);
+      boolean _equals = uParam.getDirection().equals(ParameterDirectionKind.RETURN_LITERAL);
       if (_equals) {
         jMeth.setTypeReference(jType);
         boolean _notEquals = (!Objects.equal(jParam, null));
@@ -80,7 +79,7 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     	OrdinaryParameter.class,
     	(OrdinaryParameter _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(jParam);
+    registerObjectUnderModification(jParam);
     Method jMeth = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJMeth(uParam, uType, jParam), // correspondence source supplier
     	Method.class,
@@ -89,16 +88,16 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     if (jMeth == null) {
     	return;
     }
-    initializeRetrieveElementState(jMeth);
+    registerObjectUnderModification(jMeth);
     org.emftext.language.java.classifiers.Class customClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCustomClass(uParam, uType, jParam, jMeth), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(customClass);
+    registerObjectUnderModification(customClass);
     // val updatedElement userExecution.getElement1(uParam, uType, jParam, jMeth, customClass);
     userExecution.update0Element(uParam, uType, jParam, jMeth, customClass);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

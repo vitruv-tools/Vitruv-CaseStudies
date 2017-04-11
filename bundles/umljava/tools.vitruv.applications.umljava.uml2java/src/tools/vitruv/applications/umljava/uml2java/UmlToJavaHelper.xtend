@@ -1,44 +1,29 @@
 package tools.vitruv.applications.umljava.uml2java
 
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.classifiers.Class;
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.eclipse.uml2.uml.Type
-import org.emftext.language.java.types.TypesFactory
-import org.eclipse.uml2.uml.PrimitiveType
-import org.eclipse.uml2.uml.DataType
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import tools.vitruv.framework.util.datatypes.ClaimableMap
-import org.emftext.language.java.modifiers.Modifier
-import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.modifiers.Private
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.emftext.language.java.modifiers.AnnotableAndModifiable
-import org.emftext.language.java.modifiers.Protected
-import org.emftext.language.java.modifiers.Public
-import org.emftext.language.java.types.ClassifierReference
 import org.apache.log4j.Logger
-import org.apache.log4j.PropertyConfigurator
-import org.emftext.language.java.classifiers.Classifier
+import org.eclipse.uml2.uml.EnumerationLiteral
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.Property
+import org.eclipse.uml2.uml.Type
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.emftext.language.java.members.Member
-import java.util.Iterator
-import org.eclipse.uml2.uml.Operation
-import java.util.List
-import java.util.ArrayList
-import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.emf.common.util.EList
-import org.eclipse.emf.common.util.BasicEList
+import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.members.Field
+import org.emftext.language.java.modifiers.AnnotableAndModifiable
+import org.emftext.language.java.modifiers.Modifier
+import org.emftext.language.java.modifiers.ModifiersFactory
+import org.emftext.language.java.types.TypeReference
+import org.emftext.language.java.types.TypesFactory
+
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import org.emftext.language.java.members.MembersFactory
 
 class UmlToJavaHelper {
     
 	private static val log = Logger.getLogger(UmlToJavaHelper);
 	private new() {}
-
-
 
     def static void setJavaVisibility(AnnotableAndModifiable jModifiable, VisibilityKind vis) {
         removeJavaVisibilityModifiers(jModifiable);
@@ -48,6 +33,7 @@ class UmlToJavaHelper {
         }
         
     }
+    
     /**
      * Liefert zu einem UML-VisibilityKind den entsprechenden Java-Sichtbarkeitsmodifier.
      * Default-Rückgabe: null -> Package-Private
@@ -61,9 +47,11 @@ class UmlToJavaHelper {
                 default : throw new IllegalArgumentException("Invalid VisibilityKind: " + v)
             }
     }
-    
 
     /**
+ 	 * Creates a Java-NamespaceReference if cType != null
+     * Creates a PrimitiveType if dType != null && cType == null
+     * Creates Void if both Types are null
      * 
      * @param dType uml-DataType
      * @param cType java-Class
@@ -75,7 +63,7 @@ class UmlToJavaHelper {
 	        return createNamespaceReferenceFromClassifier(cType);
 	    } else if (dType instanceof PrimitiveType) {
 	        return mapToJavaPrimitiveType(dType);
-	    } else {
+	    } else {//TODO dType ist DataType
 	        val dClass = ClassifiersFactory.eINSTANCE.createClass;
 	        dClass.name = dType.name;
 	        return createNamespaceReferenceFromClassifier(dClass)
@@ -94,5 +82,26 @@ class UmlToJavaHelper {
 	        case SHORT : return TypesFactory.eINSTANCE.createShort
 	        default: throw new IllegalArgumentException("Invalid PrimitiveType: " + pType.name)
 	    }
+	}
+	
+	def static void handleMultiplicityAndAddToClass(Property umlAttribute, Field javaAttribute, Class jClass) {
+		if (umlAttribute.lowerBound == 1 && umlAttribute.upperBound == 1) {
+			//javaAttribute final setzen oder im Konstruktor initialisieren + getter und setter
+		} else if (umlAttribute.lowerBound == 0) {
+			if (umlAttribute.upperBound == 1) {
+				jClass.members += javaAttribute
+			} else if (umlAttribute.upperBound == LiteralUnlimitedNatural.UNLIMITED) {
+                //Collection
+			} else if (umlAttribute.upperBound > 1) {
+				//Auch Collection
+			}
+		}
+		jClass.members += javaAttribute
+	}
+	
+	def static createJavaEnumConstant(EnumerationLiteral enumLiteral) {
+		val enumConstant = MembersFactory.eINSTANCE.createEnumConstant
+		enumConstant.name = enumLiteral.name
+		return enumConstant
 	}
 }

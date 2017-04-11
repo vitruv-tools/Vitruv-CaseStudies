@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -32,8 +31,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Property uAttr, final Type uType, final Field jAttr, final org.emftext.language.java.classifiers.Class customType) {
-      TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(uType, customType);
-      jAttr.setTypeReference(_createTypeReference);
+      jAttr.setTypeReference(UmlToJavaHelper.createTypeReference(uType, customType));
     }
     
     public EObject getCorrepondenceSourceJAttr(final Property uAttr, final Type uType) {
@@ -65,16 +63,16 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     if (jAttr == null) {
     	return;
     }
-    initializeRetrieveElementState(jAttr);
+    registerObjectUnderModification(jAttr);
     org.emftext.language.java.classifiers.Class customType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCustomType(uAttr, uType, jAttr), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(customType);
+    registerObjectUnderModification(customType);
     // val updatedElement userExecution.getElement1(uAttr, uType, jAttr, customType);
     userExecution.update0Element(uAttr, uType, jAttr, customType);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

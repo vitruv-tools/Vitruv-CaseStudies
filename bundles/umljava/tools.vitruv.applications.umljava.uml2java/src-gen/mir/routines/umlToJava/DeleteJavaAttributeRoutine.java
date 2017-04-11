@@ -50,9 +50,9 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
     if (jAttr == null) {
     	return;
     }
-    initializeRetrieveElementState(jAttr);
+    registerObjectUnderModification(jAttr);
     deleteObject(userExecution.getElement1(umlAttr, jAttr));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

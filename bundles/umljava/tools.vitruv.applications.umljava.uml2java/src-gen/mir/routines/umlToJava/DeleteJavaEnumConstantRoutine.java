@@ -1,0 +1,58 @@
+package mir.routines.umlToJava;
+
+import java.io.IOException;
+import mir.routines.umlToJava.RoutinesFacade;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.EnumerationLiteral;
+import org.emftext.language.java.members.EnumConstant;
+import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
+import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+
+@SuppressWarnings("all")
+public class DeleteJavaEnumConstantRoutine extends AbstractRepairRoutineRealization {
+  private RoutinesFacade actionsFacade;
+  
+  private DeleteJavaEnumConstantRoutine.ActionUserExecution userExecution;
+  
+  private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
+    public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
+      super(reactionExecutionState);
+    }
+    
+    public EObject getElement1(final EnumerationLiteral uLiteral, final EnumConstant jConst) {
+      return jConst;
+    }
+    
+    public EObject getCorrepondenceSourceJConst(final EnumerationLiteral uLiteral) {
+      return uLiteral;
+    }
+  }
+  
+  public DeleteJavaEnumConstantRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final EnumerationLiteral uLiteral) {
+    super(reactionExecutionState, calledBy);
+    this.userExecution = new mir.routines.umlToJava.DeleteJavaEnumConstantRoutine.ActionUserExecution(getExecutionState(), this);
+    this.actionsFacade = new mir.routines.umlToJava.RoutinesFacade(getExecutionState(), this);
+    this.uLiteral = uLiteral;
+  }
+  
+  private EnumerationLiteral uLiteral;
+  
+  protected void executeRoutine() throws IOException {
+    getLogger().debug("Called routine DeleteJavaEnumConstantRoutine with input:");
+    getLogger().debug("   EnumerationLiteral: " + this.uLiteral);
+    
+    EnumConstant jConst = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceJConst(uLiteral), // correspondence source supplier
+    	EnumConstant.class,
+    	(EnumConstant _element) -> true, // correspondence precondition checker
+    	null);
+    if (jConst == null) {
+    	return;
+    }
+    registerObjectUnderModification(jConst);
+    deleteObject(userExecution.getElement1(uLiteral, jConst));
+    
+    postprocessElements();
+  }
+}

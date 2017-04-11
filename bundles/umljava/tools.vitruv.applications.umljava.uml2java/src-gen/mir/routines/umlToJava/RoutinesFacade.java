@@ -1,11 +1,18 @@
 package mir.routines.umlToJava;
 
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Feature;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -16,21 +23,57 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createJavaClass(final org.eclipse.uml2.uml.Class umlClass) {
+  public void createJavaClass(final Classifier umlClassifier) {
     mir.routines.umlToJava.CreateJavaClassRoutine effect = new mir.routines.umlToJava.CreateJavaClassRoutine(this.executionState, calledBy,
-    	umlClass);
+    	umlClassifier);
     effect.applyRoutine();
   }
   
-  public void renameJavaClass(final org.eclipse.uml2.uml.Class umlClass) {
-    mir.routines.umlToJava.RenameJavaClassRoutine effect = new mir.routines.umlToJava.RenameJavaClassRoutine(this.executionState, calledBy,
-    	umlClass);
+  public void createJavaCompilationUnit(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace) {
+    mir.routines.umlToJava.CreateJavaCompilationUnitRoutine effect = new mir.routines.umlToJava.CreateJavaCompilationUnitRoutine(this.executionState, calledBy,
+    	umlClassifier, jClassifier, uNamespace);
     effect.applyRoutine();
   }
   
-  public void deleteJavaClass(final org.eclipse.uml2.uml.Class umlClass) {
+  public void createJavaPackage(final org.eclipse.uml2.uml.Package uPackage) {
+    mir.routines.umlToJava.CreateJavaPackageRoutine effect = new mir.routines.umlToJava.CreateJavaPackageRoutine(this.executionState, calledBy,
+    	uPackage);
+    effect.applyRoutine();
+  }
+  
+  public void renameJavaPackageAndClassifier(final org.eclipse.uml2.uml.Package uPackage) {
+    mir.routines.umlToJava.RenameJavaPackageAndClassifierRoutine effect = new mir.routines.umlToJava.RenameJavaPackageAndClassifierRoutine(this.executionState, calledBy,
+    	uPackage);
+    effect.applyRoutine();
+  }
+  
+  public void renameJavaPackage(final org.eclipse.uml2.uml.Package uPackage) {
+    mir.routines.umlToJava.RenameJavaPackageRoutine effect = new mir.routines.umlToJava.RenameJavaPackageRoutine(this.executionState, calledBy,
+    	uPackage);
+    effect.applyRoutine();
+  }
+  
+  public void changePackageOfJavaCompilationUnit(final org.eclipse.uml2.uml.Package uPackage, final Classifier uClassifier) {
+    mir.routines.umlToJava.ChangePackageOfJavaCompilationUnitRoutine effect = new mir.routines.umlToJava.ChangePackageOfJavaCompilationUnitRoutine(this.executionState, calledBy,
+    	uPackage, uClassifier);
+    effect.applyRoutine();
+  }
+  
+  public void deleteJavaPackage(final org.eclipse.uml2.uml.Package uPackage) {
+    mir.routines.umlToJava.DeleteJavaPackageRoutine effect = new mir.routines.umlToJava.DeleteJavaPackageRoutine(this.executionState, calledBy,
+    	uPackage);
+    effect.applyRoutine();
+  }
+  
+  public void renameJavaClassifier(final Classifier umlClassifier) {
+    mir.routines.umlToJava.RenameJavaClassifierRoutine effect = new mir.routines.umlToJava.RenameJavaClassifierRoutine(this.executionState, calledBy,
+    	umlClassifier);
+    effect.applyRoutine();
+  }
+  
+  public void deleteJavaClass(final Classifier umlClassifer) {
     mir.routines.umlToJava.DeleteJavaClassRoutine effect = new mir.routines.umlToJava.DeleteJavaClassRoutine(this.executionState, calledBy,
-    	umlClass);
+    	umlClassifer);
     effect.applyRoutine();
   }
   
@@ -46,9 +89,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeJavaClassVisibility(final org.eclipse.uml2.uml.Class uClass) {
-    mir.routines.umlToJava.ChangeJavaClassVisibilityRoutine effect = new mir.routines.umlToJava.ChangeJavaClassVisibilityRoutine(this.executionState, calledBy,
-    	uClass);
+  public void changeJavaElementVisibility(final NamedElement uElem) {
+    mir.routines.umlToJava.ChangeJavaElementVisibilityRoutine effect = new mir.routines.umlToJava.ChangeJavaElementVisibilityRoutine(this.executionState, calledBy,
+    	uElem);
     effect.applyRoutine();
   }
   
@@ -64,32 +107,50 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createJavaInterfaceImplement(final Interface uI, final org.eclipse.uml2.uml.Class uClass) {
-    mir.routines.umlToJava.CreateJavaInterfaceImplementRoutine effect = new mir.routines.umlToJava.CreateJavaInterfaceImplementRoutine(this.executionState, calledBy,
-    	uI, uClass);
+  public void createJavaEnum(final Enumeration uEnum) {
+    mir.routines.umlToJava.CreateJavaEnumRoutine effect = new mir.routines.umlToJava.CreateJavaEnumRoutine(this.executionState, calledBy,
+    	uEnum);
     effect.applyRoutine();
   }
   
-  public void deleteJavaInterfaceImplement(final Interface uI, final org.eclipse.uml2.uml.Class uClass) {
-    mir.routines.umlToJava.DeleteJavaInterfaceImplementRoutine effect = new mir.routines.umlToJava.DeleteJavaInterfaceImplementRoutine(this.executionState, calledBy,
+  public void createJavaEnumConstant(final EnumerationLiteral uLiteral, final Enumeration uEnum) {
+    mir.routines.umlToJava.CreateJavaEnumConstantRoutine effect = new mir.routines.umlToJava.CreateJavaEnumConstantRoutine(this.executionState, calledBy,
+    	uLiteral, uEnum);
+    effect.applyRoutine();
+  }
+  
+  public void deleteJavaEnumConstant(final EnumerationLiteral uLiteral) {
+    mir.routines.umlToJava.DeleteJavaEnumConstantRoutine effect = new mir.routines.umlToJava.DeleteJavaEnumConstantRoutine(this.executionState, calledBy,
+    	uLiteral);
+    effect.applyRoutine();
+  }
+  
+  public void renameJavaNamedElement(final NamedElement uElem, final String name) {
+    mir.routines.umlToJava.RenameJavaNamedElementRoutine effect = new mir.routines.umlToJava.RenameJavaNamedElementRoutine(this.executionState, calledBy,
+    	uElem, name);
+    effect.applyRoutine();
+  }
+  
+  public void createJavaCollectionClass(final DataType dType, final Property innerType) {
+    mir.routines.umlToJava.CreateJavaCollectionClassRoutine effect = new mir.routines.umlToJava.CreateJavaCollectionClassRoutine(this.executionState, calledBy,
+    	dType, innerType);
+    effect.applyRoutine();
+  }
+  
+  public void changeJavaImplementedInterface(final Interface uI, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
+    mir.routines.umlToJava.ChangeJavaImplementedInterfaceRoutine effect = new mir.routines.umlToJava.ChangeJavaImplementedInterfaceRoutine(this.executionState, calledBy,
+    	uI, oldInterface, uClass);
+    effect.applyRoutine();
+  }
+  
+  public void deleteJavaImplementedInterface(final Interface uI, final org.eclipse.uml2.uml.Class uClass) {
+    mir.routines.umlToJava.DeleteJavaImplementedInterfaceRoutine effect = new mir.routines.umlToJava.DeleteJavaImplementedInterfaceRoutine(this.executionState, calledBy,
     	uI, uClass);
     effect.applyRoutine();
   }
   
   public void createJavaInterface(final Interface umlInterface) {
     mir.routines.umlToJava.CreateJavaInterfaceRoutine effect = new mir.routines.umlToJava.CreateJavaInterfaceRoutine(this.executionState, calledBy,
-    	umlInterface);
-    effect.applyRoutine();
-  }
-  
-  public void renameJavaInterface(final Interface umlInterface) {
-    mir.routines.umlToJava.RenameJavaInterfaceRoutine effect = new mir.routines.umlToJava.RenameJavaInterfaceRoutine(this.executionState, calledBy,
-    	umlInterface);
-    effect.applyRoutine();
-  }
-  
-  public void deleteJavaInterface(final Interface umlInterface) {
-    mir.routines.umlToJava.DeleteJavaInterfaceRoutine effect = new mir.routines.umlToJava.DeleteJavaInterfaceRoutine(this.executionState, calledBy,
     	umlInterface);
     effect.applyRoutine();
   }
@@ -192,18 +253,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   
   public void setJavaMethodAbstract(final Operation umlOp) {
     mir.routines.umlToJava.SetJavaMethodAbstractRoutine effect = new mir.routines.umlToJava.SetJavaMethodAbstractRoutine(this.executionState, calledBy,
-    	umlOp);
-    effect.applyRoutine();
-  }
-  
-  public void changeJavaAttributeVisibility(final Property umlAttr) {
-    mir.routines.umlToJava.ChangeJavaAttributeVisibilityRoutine effect = new mir.routines.umlToJava.ChangeJavaAttributeVisibilityRoutine(this.executionState, calledBy,
-    	umlAttr);
-    effect.applyRoutine();
-  }
-  
-  public void changeJavaMethodVisibility(final Operation umlOp) {
-    mir.routines.umlToJava.ChangeJavaMethodVisibilityRoutine effect = new mir.routines.umlToJava.ChangeJavaMethodVisibilityRoutine(this.executionState, calledBy,
     	umlOp);
     effect.applyRoutine();
   }

@@ -30,8 +30,7 @@ public class SetJavaClassAbstractRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass, final Abstract abstr) {
-      boolean _isAbstract = umlClass.isAbstract();
-      JavaUtil.setJavaModifier(jClass, abstr, _isAbstract);
+      JavaUtil.setJavaModifier(jClass, abstr, umlClass.isAbstract());
     }
   }
   
@@ -56,13 +55,12 @@ public class SetJavaClassAbstractRoutine extends AbstractRepairRoutineRealizatio
     if (jClass == null) {
     	return;
     }
-    initializeRetrieveElementState(jClass);
+    registerObjectUnderModification(jClass);
     Abstract abstr = ModifiersFactoryImpl.eINSTANCE.createAbstract();
-    initializeCreateElementState(abstr);
     
     // val updatedElement userExecution.getElement1(umlClass, jClass, abstr);
     userExecution.update0Element(umlClass, jClass, abstr);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

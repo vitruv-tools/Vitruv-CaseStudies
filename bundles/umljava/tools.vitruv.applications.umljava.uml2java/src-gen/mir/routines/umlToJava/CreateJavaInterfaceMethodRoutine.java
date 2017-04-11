@@ -11,7 +11,6 @@ import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -34,12 +33,9 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
       if (_equals) {
         javaMethod.setName("DefaultInterfaceMethodName");
       } else {
-        String _name_1 = umlOp.getName();
-        javaMethod.setName(_name_1);
+        javaMethod.setName(umlOp.getName());
       }
-      Type _type = umlOp.getType();
-      TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(_type, customClassType);
-      javaMethod.setTypeReference(_createTypeReference);
+      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReference(umlOp.getType(), customClassType));
     }
     
     public EObject getElement1(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customClassType, final InterfaceMethod javaMethod) {
@@ -91,15 +87,14 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     if (jInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(jInterface);
+    registerObjectUnderModification(jInterface);
     org.emftext.language.java.classifiers.Class customClassType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCustomClassType(umlOp, jInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(customClassType);
+    registerObjectUnderModification(customClassType);
     InterfaceMethod javaMethod = MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
-    initializeCreateElementState(javaMethod);
     userExecution.updateJavaMethodElement(umlOp, jInterface, customClassType, javaMethod);
     
     addCorrespondenceBetween(userExecution.getElement1(umlOp, jInterface, customClassType, javaMethod), userExecution.getElement2(umlOp, jInterface, customClassType, javaMethod), "");
@@ -107,6 +102,6 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     // val updatedElement userExecution.getElement3(umlOp, jInterface, customClassType, javaMethod);
     userExecution.update0Element(umlOp, jInterface, customClassType, javaMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

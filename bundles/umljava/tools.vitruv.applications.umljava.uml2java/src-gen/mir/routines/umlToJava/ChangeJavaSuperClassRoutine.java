@@ -3,7 +3,6 @@ package mir.routines.umlToJava;
 import java.io.IOException;
 import mir.routines.umlToJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -29,8 +28,7 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class superJavaClass) {
-      TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(null, superJavaClass);
-      jClass.setExtends(_createTypeReference);
+      jClass.setExtends(UmlToJavaHelper.createTypeReference(null, superJavaClass));
     }
     
     public EObject getCorrepondenceSourceSuperJavaClass(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass) {
@@ -62,7 +60,7 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     if (jClass == null) {
     	return;
     }
-    initializeRetrieveElementState(jClass);
+    registerObjectUnderModification(jClass);
     org.emftext.language.java.classifiers.Class superJavaClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceSuperJavaClass(superUMLClass, uClass, jClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
@@ -71,10 +69,10 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     if (superJavaClass == null) {
     	return;
     }
-    initializeRetrieveElementState(superJavaClass);
+    registerObjectUnderModification(superJavaClass);
     // val updatedElement userExecution.getElement1(superUMLClass, uClass, jClass, superJavaClass);
     userExecution.update0Element(superUMLClass, uClass, jClass, superJavaClass);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

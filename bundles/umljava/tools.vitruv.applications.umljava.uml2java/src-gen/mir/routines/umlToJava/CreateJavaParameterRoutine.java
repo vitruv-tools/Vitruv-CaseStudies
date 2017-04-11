@@ -11,7 +11,6 @@ import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.impl.ParametersFactoryImpl;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -58,14 +57,11 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
       String _name = umlParam.getName();
       boolean _notEquals = (!Objects.equal(_name, null));
       if (_notEquals) {
-        String _name_1 = umlParam.getName();
-        javaParam.setName(_name_1);
+        javaParam.setName(umlParam.getName());
       } else {
         javaParam.setName("Defaultname");
       }
-      Type _type = umlParam.getType();
-      TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(_type, customType);
-      javaParam.setTypeReference(_createTypeReference);
+      javaParam.setTypeReference(UmlToJavaHelper.createTypeReference(umlParam.getType(), customType));
     }
   }
   
@@ -93,15 +89,14 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     if (javaMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(javaMethod);
+    registerObjectUnderModification(javaMethod);
     org.emftext.language.java.classifiers.Class customType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCustomType(uMeth, umlParam, javaMethod), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(customType);
+    registerObjectUnderModification(customType);
     OrdinaryParameter javaParam = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
-    initializeCreateElementState(javaParam);
     userExecution.updateJavaParamElement(uMeth, umlParam, javaMethod, customType, javaParam);
     
     addCorrespondenceBetween(userExecution.getElement1(uMeth, umlParam, javaMethod, customType, javaParam), userExecution.getElement2(uMeth, umlParam, javaMethod, customType, javaParam), "");
@@ -109,6 +104,6 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     // val updatedElement userExecution.getElement3(uMeth, umlParam, javaMethod, customType, javaParam);
     userExecution.update0Element(uMeth, umlParam, javaMethod, customType, javaParam);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

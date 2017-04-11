@@ -65,7 +65,7 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     if (jI == null) {
     	return;
     }
-    initializeRetrieveElementState(jI);
+    registerObjectUnderModification(jI);
     org.emftext.language.java.classifiers.Interface superJavaInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceSuperJavaInterface(superUMLInterface, uI, jI), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
@@ -74,10 +74,10 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     if (superJavaInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(superJavaInterface);
+    registerObjectUnderModification(superJavaInterface);
     // val updatedElement userExecution.getElement1(superUMLInterface, uI, jI, superJavaInterface);
     userExecution.update0Element(superUMLInterface, uI, jI, superJavaInterface);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

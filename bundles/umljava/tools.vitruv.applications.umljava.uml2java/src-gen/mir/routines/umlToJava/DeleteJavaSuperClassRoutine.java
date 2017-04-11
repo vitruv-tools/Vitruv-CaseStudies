@@ -52,10 +52,10 @@ public class DeleteJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     if (jClass == null) {
     	return;
     }
-    initializeRetrieveElementState(jClass);
+    registerObjectUnderModification(jClass);
     // val updatedElement userExecution.getElement1(uClass, jClass);
     userExecution.update0Element(uClass, jClass);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -29,8 +29,7 @@ public class RenameJavaParameterRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Parameter uParam, final OrdinaryParameter jParam) {
-      String _name = uParam.getName();
-      jParam.setName(_name);
+      jParam.setName(uParam.getName());
     }
   }
   
@@ -55,10 +54,10 @@ public class RenameJavaParameterRoutine extends AbstractRepairRoutineRealization
     if (jParam == null) {
     	return;
     }
-    initializeRetrieveElementState(jParam);
+    registerObjectUnderModification(jParam);
     // val updatedElement userExecution.getElement1(uParam, jParam);
     userExecution.update0Element(uParam, jParam);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

@@ -30,8 +30,7 @@ public class SetJavaClassFinalRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass, final Final finalMod) {
-      boolean _isFinalSpecialization = umlClass.isFinalSpecialization();
-      JavaUtil.setJavaModifier(jClass, finalMod, _isFinalSpecialization);
+      JavaUtil.setJavaModifier(jClass, finalMod, umlClass.isFinalSpecialization());
     }
   }
   
@@ -56,13 +55,12 @@ public class SetJavaClassFinalRoutine extends AbstractRepairRoutineRealization {
     if (jClass == null) {
     	return;
     }
-    initializeRetrieveElementState(jClass);
+    registerObjectUnderModification(jClass);
     Final finalMod = ModifiersFactoryImpl.eINSTANCE.createFinal();
-    initializeCreateElementState(finalMod);
     
     // val updatedElement userExecution.getElement1(umlClass, jClass, finalMod);
     userExecution.update0Element(umlClass, jClass, finalMod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

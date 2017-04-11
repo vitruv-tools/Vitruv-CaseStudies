@@ -25,8 +25,7 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Property umlAttr, final Field jAttr) {
-      String _name = umlAttr.getName();
-      jAttr.setName(_name);
+      jAttr.setName(umlAttr.getName());
     }
     
     public EObject getCorrepondenceSourceJAttr(final Property umlAttr) {
@@ -55,10 +54,10 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
     if (jAttr == null) {
     	return;
     }
-    initializeRetrieveElementState(jAttr);
+    registerObjectUnderModification(jAttr);
     // val updatedElement userExecution.getElement1(umlAttr, jAttr);
     userExecution.update0Element(umlAttr, jAttr);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }
