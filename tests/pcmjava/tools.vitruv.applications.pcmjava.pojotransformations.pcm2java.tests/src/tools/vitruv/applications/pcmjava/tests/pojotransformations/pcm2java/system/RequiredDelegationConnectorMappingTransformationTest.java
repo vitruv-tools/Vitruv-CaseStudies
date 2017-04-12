@@ -38,7 +38,7 @@ public class RequiredDelegationConnectorMappingTransformationTest extends Pcm2Ja
         requiredDelegationConnector.setInnerRequiredRole_RequiredDelegationConnector(basicComponentRequiredRole);
         requiredDelegationConnector.setOuterRequiredRole_RequiredDelegationConnector(systemRequiredRole);
         requiredDelegationConnector.setParentStructure__Connector(system);
-        super.triggerSynchronization(system);
+        super.saveAndSynchronizeChanges(system);
 
         this.assertRequiredDelegationConnector(requiredDelegationConnector);
     }

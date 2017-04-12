@@ -249,14 +249,14 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
     	return dataType;
     }
 
-    protected Parameter addAndSyncParameterWithPrimitiveTypeToSignature(final OperationSignature opSig) {
+    protected Parameter addAndSyncParameterWithPrimitiveTypeToSignature(final OperationSignature opSig) throws IOException {
     	final Repository repo = opSig.getInterface__OperationSignature().getRepository__Interface();
         final PrimitiveDataType dataType = createPrimitiveDataType(PrimitiveTypeEnum.INT, repo);
         return this.addAndSyncParameterToSignature(opSig, dataType, Pcm2JavaTestUtils.PARAMETER_NAME);
     }
 
     protected Parameter addAndSyncParameterToSignature(final OperationSignature opSig, final DataType dataType,
-            final String parameterName) {
+            final String parameterName) throws IOException {
         final Parameter param = RepositoryFactory.eINSTANCE.createParameter();
         param.setEntityName(parameterName);
         param.setParameterName(parameterName);
@@ -264,7 +264,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         param.setModifier__Parameter(ParameterModifier.IN);
         param.setOperationSignature__Parameter(opSig);
         opSig.getParameters__OperationSignature().add(param);
-        this.triggerSynchronization(opSig);
+        this.saveAndSynchronizeChanges(opSig);
         return param;
     }
 
@@ -306,7 +306,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
         final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
-        this.triggerSynchronization(repo);
+        this.saveAndSynchronizeChanges(repo);
         return innerDec;
     }
 
@@ -332,13 +332,13 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected OperationProvidedRole createAndSyncOperationProvidedRole(final OperationInterface opInterface,
-            final InterfaceProvidingEntity interfaceProvidingEntity) {
+            final InterfaceProvidingEntity interfaceProvidingEntity) throws IOException {
         final OperationProvidedRole operationProvidedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole();
         operationProvidedRole
                 .setEntityName(interfaceProvidingEntity.getEntityName() + "_provides_" + opInterface.getEntityName());
         operationProvidedRole.setProvidedInterface__OperationProvidedRole(opInterface);
         operationProvidedRole.setProvidingEntity_ProvidedRole(interfaceProvidingEntity);
-        this.triggerSynchronization(opInterface);
+        this.saveAndSynchronizeChanges(opInterface);
         return operationProvidedRole;
     }
 
