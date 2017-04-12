@@ -1,0 +1,102 @@
+import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
+import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import org.emftext.language.java.modifiers.ModifiersFactory
+import org.eclipse.uml2.uml.VisibilityKind
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
+
+reactions: UmlToJavaAttribute
+in reaction to changes in uml
+execute actions in java
+
+
+
+reaction UmlAttributeCreated {
+    after element uml::Property created and inserted in uml::Class[ownedAttribute]
+    call {
+        createJavaAttribute(affectedEObject, newValue)
+    }
+}
+
+routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
+    match {
+        val javaClass = retrieve java::Class corresponding to umlClass
+        val customTypeClass = retrieve optional java::Class corresponding to umlAttribute.type
+    }
+    action {
+        val javaAttribute = create java::Field and initialize {
+            if (umlAttribute.name == null) {
+                javaAttribute.name = "DefaultAttributeName"
+            } else {
+                javaAttribute.name = umlAttribute.name;
+            }
+            if (umlAttribute.visibility != null && umlAttribute.visibility != VisibilityKind.PACKAGE_LITERAL) {
+            	setJavaVisibility(javaAttribute, umlAttribute.visibility)
+            }
+            if (umlAttribute.static) {
+            	javaAttribute.addModifier(ModifiersFactory.eINSTANCE.createStatic)
+            }
+            if (umlAttribute.isReadOnly) {
+            	javaAttribute.addModifier(ModifiersFactory.eINSTANCE.createFinal)
+            }
+            if (umlAttribute.type != null) {
+            	javaAttribute.typeReference = createTypeReference(umlAttribute.type, customTypeClass);
+            }
+        }
+        update javaClass {
+            handleMultiplicityAndAddToClass(umlAttribute, javaAttribute, javaClass);
+        }
+        add correspondence between umlAttribute and javaAttribute
+    }
+}
+
+reaction UmlAttributeDeleted {
+    after element uml::Property deleted and removed from uml::Class[ownedAttribute]
+    call deleteJavaAttribute(oldValue)
+}
+
+routine deleteJavaAttribute(uml::Property umlAttr) {
+    match {
+        val jAttr = retrieve java::Field corresponding to umlAttr
+    }
+    action {
+        delete jAttr
+    }
+}
+
+reaction UmlAttributeMadeFinal {
+    after attribute replaced at uml::Property[isReadOnly]
+    call setJavaAttributeFinal(affectedEObject) 
+}
+
+routine setJavaAttributeFinal(uml::Property umlAttr) {
+    match {
+        val jAttr = retrieve java::Field corresponding to umlAttr
+    }
+    action {
+        val finalMod = create java::Final
+        update jAttr {
+            setJavaModifier(jAttr, finalMod, umlAttr.isReadOnly);
+        }
+    }
+}
+
+reaction UmlAttributeTypeChanged {
+    after element uml::Type replaced at uml::Property[type]
+    call changeJavaAttributeType(affectedEObject, newValue)
+}
+
+routine changeJavaAttributeType(uml::Property uAttr, uml::Type uType) {
+    match {
+        val jAttr = retrieve java::Field corresponding to uAttr
+        val customType = retrieve optional java::Class corresponding to uType
+    }
+    action {
+        update jAttr {
+            jAttr.typeReference = createTypeReference(uType, customType);
+        }
+    }
+}
