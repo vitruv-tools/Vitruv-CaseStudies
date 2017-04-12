@@ -2,6 +2,7 @@ package tools.vitruv.applications.umljava.util
 
 import java.util.Iterator
 import org.eclipse.emf.common.util.EList
+import org.eclipse.uml2.uml.AggregationKind
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Interface
@@ -12,13 +13,18 @@ import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction
+import org.eclipse.uml2.uml.PrimitiveType
+import java.util.List
+import java.util.ArrayList
 
 /**
  * Uml-Util-Class
  */
 class UmlUtil {
+	
     /**
-     * Prevents instatiation
+     * Prevents instantiation
      */
     private new () {
         
@@ -47,7 +53,7 @@ class UmlUtil {
     /**
      * Creates and returns a Uml Interface. It is added the model.
      */
-    def static Interface createUmlInterfaceAndAddToModel(Model model, String name, EList<Interface> superInterfaces) {
+    def static Interface createUmlInterfaceAndAddToModel(Model model, String name, List<Interface> superInterfaces) {
         val uI = createUmlInterface(name, superInterfaces)
         model.packagedElements += uI
         return uI
@@ -82,7 +88,7 @@ class UmlUtil {
      * 
      * @throws IllegalArgumentException if name is null.
      */
-    def static Interface createUmlInterface(String name, EList<Interface> superInterfaces) {
+    def static Interface createUmlInterface(String name, List<Interface> superInterfaces) {
         val uI = UMLFactory.eINSTANCE.createInterface;
         if (name == null) {
             throw new IllegalArgumentException("Cannot create UmlInterface - name is null");
@@ -105,7 +111,7 @@ class UmlUtil {
     /**
      * Creates an uml operation that acts as InterfaceMethod. (public, not static, not abstract)
      */
-    def protected Operation createUmlInterfaceOperation(String name, Type returnType, EList<Parameter> params) {
+    def protected Operation createUmlInterfaceOperation(String name, Type returnType, List<Parameter> params) {
         return createUmlOperation(name, returnType, VisibilityKind.PUBLIC_LITERAL, false, false, params);
     }
     
@@ -114,7 +120,7 @@ class UmlUtil {
      * return and params can be null
      * @throws IllegalArgumentException if name or vis is null
      */
-    def static Operation createUmlOperation(String name, Type returnType, VisibilityKind vis, boolean abstr, boolean stat, EList<Parameter> params) {
+    def static Operation createUmlOperation(String name, Type returnType, VisibilityKind vis, boolean abstr, boolean stat, List<Parameter> params) {
         val op = UMLFactory.eINSTANCE.createOperation;
         if (name == null) {
             throw new IllegalArgumentException("Cannot create UmlOperation - name is null");
@@ -174,7 +180,7 @@ class UmlUtil {
     /**
      * Creates and returns a PrimitiveType. It is added to the model.
      */
-    def static createUmlPrimitiveTypeAndAddToModel(Model model, String pTypeName) {
+    def static PrimitiveType createUmlPrimitiveTypeAndAddToModel(Model model, String pTypeName) {
         val pType = createUmlPrimitiveType(pTypeName);
         model.packagedElements += pType
         return pType
@@ -215,5 +221,52 @@ class UmlUtil {
                 iter.remove;
             }
         }
+    }
+    
+    /**
+     * Converts the parent namespace/package into a list of Strings
+     * 
+     * org.example.test.test2 --> [org, example, test]
+     * 
+     */
+    def static List<String> getUmlParentNamespaceAsStringList(org.eclipse.uml2.uml.Namespace uNamespace) {
+    	if (!(uNamespace.namespace instanceof Model)) {
+    		return buildNamespaceStringList(uNamespace.namespace, new ArrayList<String>)
+    	} else {
+    		return new ArrayList<String>
+    	}
+    	
+    }
+    
+    /**
+     * Converts the namespace/package into a list of Strings
+     * 
+     * org.example.test.test2 --> [org, example, test, test2]
+     * 
+     */
+    def static List<String> getUmlNamespaceAsStringList(org.eclipse.uml2.uml.Namespace uNamespace) {
+    	return buildNamespaceStringList(uNamespace, new ArrayList<String>)
+    }
+    
+    def private static List<String> buildNamespaceStringList(org.eclipse.uml2.uml.Namespace uNamespace, List<String> namespace) {
+    	namespace += uNamespace?.name
+    	if (uNamespace?.namespace !== null && !(uNamespace?.namespace instanceof Model)) {
+    		return buildNamespaceStringList(uNamespace.namespace, namespace)
+    	} else {
+    		return namespace.reverse
+    	}
+    }
+    
+    def static createDirectedAssociation(Class fromClass, Class toClass, int lowerLimit, int upperLimit) {
+    	val unlim = UMLFactory.eINSTANCE.createLiteralUnlimitedNatural
+    	unlim.value = Integer.MAX_VALUE
+    	
+    	fromClass.createAssociation(false, AggregationKind.NONE_LITERAL, "End1", 1, unlim.unlimitedValue, fromClass, true, AggregationKind.NONE_LITERAL, firstLettertoLowercase(toClass.name), lowerLimit, upperLimit)
+    }
+    
+    
+    
+    def static private String firstLettertoLowercase(String s) {
+    	return Character.toLowerCase(s.charAt(0)) + s.substring(1)
     }
 }

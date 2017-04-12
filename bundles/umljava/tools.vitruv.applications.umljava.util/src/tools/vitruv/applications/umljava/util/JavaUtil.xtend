@@ -19,6 +19,11 @@ import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
+import org.emftext.language.java.types.PrimitiveType
+import org.emftext.language.java.types.Type
+import org.emftext.language.java.generics.GenericsFactory
+import org.emftext.language.java.containers.JavaRoot
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class JavaUtil {
     public static val BOOLEAN = "boolean";
@@ -209,14 +214,26 @@ class JavaUtil {
     /**
      * @param add true -> hinzufügen, sonst entfernen
      */
-    def static setJavaModifier(AnnotableAndModifiable jMem, Modifier mod, boolean add) {
+    def static setJavaModifier(AnnotableAndModifiable jModifiable, Modifier mod, boolean add) {
         if (add) {
-            if (!jMem.hasModifier(mod.class)) {
-                jMem.addModifier(mod)
+            if (!jModifiable.hasModifier(mod.class)) {//TODO Logeintrag + Schauen, ob es einen Fehler gibt
+                jModifiable.addModifier(mod)  
             } else {
-                jMem.removeModifier(mod.class)
+            	System.out.println("The Java AnnotableAndModifiable " + jModifiable.class + " already has the modifier " + mod.class)
+            	//TODO Durch Log ersetzen
             }
+        } else {
+            jModifiable.removeModifier(mod.class)
         }
+    }
+    
+    /**
+     * Adds mod to jModifiable if mod is not null.
+     */
+    def static addModifierIfNotNull(AnnotableAndModifiable jModifiable, Modifier mod) {
+    	if (mod !== null) {
+    		setJavaModifier(jModifiable, mod, true)
+    	}
     }
      
      /**
@@ -262,4 +279,15 @@ class JavaUtil {
         }
         return typeReferences
     }
+    
+    def static TypeReference createCollectiontypeReference(String collectionName, org.emftext.language.java.classifiers.Class innerTypeClass) {
+    	val collectionClass = createJavaClass(collectionName, JavaVisibility.PUBLIC, false, false)
+    	val innerTypeReference = createNamespaceReferenceFromClassifier(innerTypeClass)
+    	val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
+		qualifiedTypeArgument.typeReference = innerTypeReference;
+		val collectionClassNamespaceReference = createNamespaceReferenceFromClassifier(collectionClass)
+		collectionClassNamespaceReference.classifierReferences.get(0).typeArguments += qualifiedTypeArgument;
+		return collectionClassNamespaceReference
+    }
+    
 }
