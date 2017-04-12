@@ -132,7 +132,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	}
 	
 	@Override
-	public void beforeTest() throws Throwable {
+	public void beforeTest() {
 		super.beforeTest();
 		this.getVirtualModel().addChangePropagationListener(this);
 		// This is necessary because otherwise Maven tests will fail as resources from previous

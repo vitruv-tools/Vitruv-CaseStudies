@@ -82,11 +82,16 @@ import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
 	
 	@Override
-	public void beforeTest() throws Throwable {
-		super.beforeTest();
+	protected void setup() {
 		// This is necessary because otherwise Maven tests will fail as resources from previous
 		// tests are still in the classpath and accidentally resolved
 		JavaClasspath.reset();
+	}
+	
+	@Override
+	protected void cleanup() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	@Override
