@@ -1,0 +1,74 @@
+import static tools.vitruv.applications.umljava.util.JavaUtil.*;
+import static tools.vitruv.applications.umljava.util.UmlUtil.*;
+import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
+
+reactions: JavaToUmlAttribute
+in reaction to changes in java
+execute actions in uml
+
+reaction JavaAttributeCreated {
+    after element java::Field created and inserted in java::Class[members]
+    call {
+        createUmlAttribute(affectedEObject, newValue)
+        
+        }
+}
+
+routine createUmlAttribute(java::Class jClass, java::Field jAttr) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+        val uType = retrieve optional uml::Classifier corresponding to jAttr.typeReference.target
+    }
+    action {
+        val uAttr = create uml::Property and initialize {
+            uAttr.name = jAttr.name;
+        }
+        add correspondence between uAttr and jAttr
+        update uClass {
+            uClass.ownedAttributes += uAttr;
+        }
+    }
+}
+
+reaction JavaAttributeTypeChanged {
+    after element java::TypeReference replaced at java::Field[typeReference]
+    call {
+        changeUmlAttributeType(affectedEObject, newValue)
+        }
+}
+
+routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr
+        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jType)
+    }
+    action {
+        update uAttr {
+            uAttr.type = getUmlType(jType, customType, getUmlModel(correspondenceModel, userInteracting))
+        }
+    }
+}
+
+reaction JavaAttributeMadeFinal {
+    after element java::Final created and inserted in java::Field[annotationsAndModifiers]
+    call setUmlAttributeFinal(affectedEObject, 1)
+}
+
+routine setUmlAttributeFinal(java::Field jAttr, Integer isFinal) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr 
+    }
+    action {
+        update uAttr {
+            if (isFinal == 1) {
+                uAttr.isReadOnly = true;
+            } else if (isFinal == 0) {
+                uAttr.isReadOnly = false;
+            } else {
+                throw new IllegalArgumentException("Invalid isFinal value: " + isFinal);
+            }
+        }
+    }
+}

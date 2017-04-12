@@ -1,0 +1,32 @@
+package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
+
+import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
+import tools.vitruv.framework.userinteraction.UserInteracting;
+
+@SuppressWarnings("all")
+public class ExecutorJavaToUml extends AbstractReactionsExecutor {
+  public ExecutorJavaToUml(final UserInteracting userInteracting) {
+    super(userInteracting, new tools.vitruv.framework.util.datatypes.MetamodelPair(org.emftext.language.java.impl.JavaPackageImpl.eNS_URI, org.eclipse.uml2.uml.internal.impl.UMLPackageImpl.eNS_URI));
+  }
+  
+  protected void setup() {
+    tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassCreatedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaInterfaceCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaInterfaceCreatedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompUnitDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompUnitDeletedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassifierDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassifierDeletedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaElementVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaElementVisibilityChangedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaElementMadePackagePrivateReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaElementMadePackagePrivateReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeAbstractReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeAbstractReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeNonAbstractReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeNonAbstractReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperClassChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperClassChangedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperClassRemovedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperClassRemovedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperInterfaceAddedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperInterfaceAddedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperInterfaceRemovedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperInterfaceRemovedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassImplementAddedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassImplementAddedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassImplementRemovedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassImplementRemovedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeFinalReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeFinalReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeNonFinalReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeNonFinalReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaNamedElementRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaNamedElementRenamedReaction(userInteracting));
+  }
+}

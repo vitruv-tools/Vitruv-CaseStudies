@@ -1,0 +1,269 @@
+import org.eclipse.uml2.uml.VisibilityKind
+
+import org.emftext.language.java.modifiers.*;
+import org.emftext.language.java.classifiers.Interface;
+import org.apache.log4j.PropertyConfigurator
+import static tools.vitruv.applications.umljava.util.JavaUtil.*;
+import static tools.vitruv.applications.umljava.util.UmlUtil.*;
+import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
+
+reactions: JavaToUmlClassifier
+in reaction to changes in java
+execute actions in uml
+
+reaction JavaClassCreated {
+    after element java::Class created and inserted in java::CompilationUnit[classifiers]
+    call createUmlClass(newValue)
+
+}
+
+routine createUmlClass(java::Class jClass) {
+    action {
+        val uClass = create uml::Class and initialize {
+            uClass.name = jClass.name;
+        }
+        call {
+        	addUmlElementToRootModel(uClass, jClass)
+        }
+        add correspondence between uClass and jClass
+        add correspondence between uClass and jClass.eContainer
+    }
+}
+
+routine addUmlElementToRootModel(uml::PackageableElement uPackageable, EObject persistedObject) {
+	action {
+		call {
+			val uModel = getUmlModel(correspondenceModel, userInteracting)
+            uModel.packagedElements += uPackageable;
+            persistProjectRelative(persistedObject, uModel, rootModelFile)
+		}
+	}
+}
+
+reaction JavaInterfaceCreated {
+    after element java::Interface created and inserted in java::CompilationUnit[classifiers]
+    call createUmlInterface(newValue)
+}
+
+routine createUmlInterface(java::Interface jInterface) {
+    action {
+        val uInterface = create uml::Interface and initialize {
+            uInterface.name = jInterface.name;
+            uInterface.visibility = VisibilityKind.PUBLIC_LITERAL
+        }
+        call {
+           addUmlElementToRootModel(uInterface, jInterface)
+        }
+        add correspondence between uInterface and jInterface
+        add correspondence between uInterface and jInterface.eContainer
+    }
+}
+
+reaction JavaCompUnitDeleted {
+    after element java::CompilationUnit removed as root
+    call deleteUmlClassifier(oldValue.classifiers.head, oldValue)
+}
+
+reaction JavaClassifierDeleted {
+    after element java::ConcreteClassifier deleted and removed from java::CompilationUnit[classifiers]
+    call deleteUmlClassifier(oldValue, affectedEObject)
+}
+
+routine deleteUmlClassifier(java::ConcreteClassifier jClass, java::CompilationUnit jCompUnit) {
+    match {
+        val uClass = retrieve uml::Classifier corresponding to jClass
+    }
+    action {
+        delete uClass
+        delete jCompUnit
+    }
+}
+
+reaction JavaElementVisibilityChanged {
+    after element java::Modifier created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
+    with newValue instanceof Public || newValue instanceof Private || newValue instanceof Protected
+    call changeUmlNamedElementVisibility(affectedEObject, newValue)
+}
+
+reaction JavaElementMadePackagePrivate {
+    after element java::Modifier deleted and removed from java::Class[annotationsAndModifiers]
+    with oldValue instanceof Private
+    || oldValue instanceof Public
+    || oldValue instanceof Protected
+    call changeUmlNamedElementVisibility(affectedEObject, null)
+}
+
+routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem, java::Modifier mod) {
+    match {
+        val uElem = retrieve uml::NamedElement corresponding to jElem
+    }
+    action {
+        update uElem {
+            uElem.visibility = getUmlVisibilityKind(mod);
+        }
+    }
+}
+
+reaction JavaClassMadeAbstract {
+    after element java::Abstract created and inserted in java::Class[annotationsAndModifiers]
+    call setUmlClassAbstract(affectedEObject, 1)
+}
+
+reaction JavaClassMadeNonAbstract {
+    after element java::Abstract deleted and removed from java::Class[annotationsAndModifiers]
+    call setUmlClassAbstract(affectedEObject, 0)
+}
+
+routine setUmlClassAbstract(java::Class jClass, Boolean isAbstract) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+    }
+    action {
+        update uClass {
+            if (isAbstract == 1) {
+                uClass.isAbstract = true;
+            } else if (isAbstract == 0) {
+                uClass.isAbstract = false;
+            } else {
+                throw new IllegalArgumentException("Invalid isAbstract Value: " + isAbstract);
+            }
+        }
+    }
+}
+
+reaction JavaSuperClassChanged {
+    after element java::TypeReference replaced at java::Class[^extends] //TODO Funktioniert das, wenn vorher nichts drin stand?
+    call  {
+        addUmlSuperClassifier(affectedEObject, getClassifierfromTypeRef(newValue))
+    }
+}
+
+reaction JavaSuperClassRemoved {
+    after element java::TypeReference removed from java::Class[^extends]
+    call clearUmlSuperClassifiers(affectedEObject)
+}
+
+routine addUmlSuperClassifier(java::ConcreteClassifier jClass, java::ConcreteClassifier jSuper) {
+    match {
+        val uClass = retrieve uml::Classifier corresponding to jClass
+        val uSuper = retrieve uml::Classifier corresponding to jSuper
+    }
+    action {
+        update uClass {
+            uClass.generals += uSuper;
+        }
+    }
+}
+
+routine clearUmlSuperClassifiers(java::ConcreteClassifier jClass) {
+    match {
+         val uClass = retrieve uml::Class corresponding to jClass
+    }
+    action {
+        update uClass {
+            uClass.generalizations.clear;
+        }
+    }
+}
+
+reaction JavaSuperInterfaceAdded {
+    after element java::TypeReference inserted in java::Interface[^extends]
+    call addUmlSuperClassifier(affectedEObject, getClassifierfromTypeRef(newValue))
+}
+
+reaction JavaSuperInterfaceRemoved {
+    after element java::TypeReference removed from java::Interface[^extends]
+    call removeUmlSuperInterface(affectedEObject, getClassifierfromTypeRef(oldValue))
+}
+
+routine removeUmlSuperInterface(java::Interface jI, java::ConcreteClassifier jSuper) {
+    match {
+        val uI = retrieve uml::Interface corresponding to jI
+        val uSuper = retrieve uml::Interface corresponding to jSuper
+    }
+    action {
+        update uI {
+            removeClassifierFromIterator(uI.generals.iterator, uSuper)
+        }
+    }
+}
+
+reaction JavaClassImplementAdded {
+    after element java::TypeReference created and inserted in java::Class[implements]
+    call addUmlClassImplement(affectedEObject, getClassifierfromTypeRef(newValue) as Interface)
+}
+
+routine addUmlClassImplement(java::Class jClass, java::Interface jI) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+        val uI = retrieve uml::Interface corresponding to jI
+    }
+    action {
+        update uClass {
+            uClass.createInterfaceRealization(DEFAULT_INTERFACEREALIZATION_NAME + uI.name, uI)
+        }
+    }
+}
+
+reaction JavaClassImplementRemoved {
+    after element java::TypeReference removed from java::Class[implements]
+    call removeUmlClassImplement(affectedEObject, getClassifierfromTypeRef(oldValue) as Interface)
+}
+
+routine removeUmlClassImplement(java::Class jClass, java::Interface jI) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+        val uI = retrieve uml::Interface corresponding to jI
+    }
+    action {
+        update uClass {
+            removeClassifierFromIterator(uClass.implementedInterfaces.iterator, uI)
+        }
+    }
+}
+
+reaction JavaClassMadeFinal {
+    after element java::Final created and inserted in java::Class[annotationsAndModifiers]
+    call setUmlClassFinal(affectedEObject, 1)
+}
+
+reaction JavaClassMadeNonFinal {
+    after element java::Final deleted and removed from java::Class[annotationsAndModifiers]
+    call setUmlClassFinal(affectedEObject, 0)
+}
+
+routine setUmlClassFinal(java::Class jClass, Integer isFinal) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+    }
+    action {
+        update uClass {
+            if (isFinal == 1) {
+                uClass.isFinalSpecialization = true;
+            } else if (isFinal == 0) {
+                uClass.isFinalSpecialization = false;
+            } else {
+                throw new IllegalArgumentException("Invalid isFinal value: " + isFinal)
+            }
+        }
+    }
+}
+
+reaction JavaNamedElementRenamed {
+    after attribute replaced at java::NamedElement[name]
+    call renameUmlNamedElement(affectedEObject)
+}
+
+routine renameUmlNamedElement(java::NamedElement jElement) {
+    match {
+        val uElement = retrieve uml::NamedElement corresponding to jElement
+    }
+    action {
+        update uElement {
+            uElement.name = jElement.name;
+        }
+    }
+}
+
