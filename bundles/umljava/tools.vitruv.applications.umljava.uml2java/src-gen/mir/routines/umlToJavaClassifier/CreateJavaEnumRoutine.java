@@ -2,14 +2,10 @@ package mir.routines.umlToJavaClassifier;
 
 import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Enumeration;
-import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
-import org.emftext.language.java.members.EnumConstant;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -27,12 +23,6 @@ public class CreateJavaEnumRoutine extends AbstractRepairRoutineRealization {
     
     public void updateJEnumElement(final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum) {
       jEnum.setName(uEnum.getName());
-      EList<EnumerationLiteral> _ownedLiterals = uEnum.getOwnedLiterals();
-      for (final EnumerationLiteral enumLit : _ownedLiterals) {
-        EList<EnumConstant> _constants = jEnum.getConstants();
-        EnumConstant _createJavaEnumConstant = UmlToJavaHelper.createJavaEnumConstant(enumLit);
-        _constants.add(_createJavaEnumConstant);
-      }
     }
     
     public EObject getElement1(final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum) {

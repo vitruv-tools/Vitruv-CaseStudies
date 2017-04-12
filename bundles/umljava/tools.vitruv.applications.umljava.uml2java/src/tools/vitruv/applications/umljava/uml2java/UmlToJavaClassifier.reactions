@@ -9,6 +9,12 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.EnumerationLiteral
 import org.emftext.language.java.types.NamespaceClassifierReference
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.emftext.language.java.classifiers.ClassifiersFactory
+import org.emftext.language.java.containers.ContainersFactory
+import org.emftext.language.java.generics.GenericsFactory
+import org.emftext.language.java.types.TypesFactory
+import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -28,10 +34,11 @@ routine createJavaClass(uml::Classifier umlClassifier) {
     action {
         val javaClassifier = create java::Class and initialize {
         	javaClassifier.name = umlClassifier.name;
+        	javaClassifier.makePublic
         }
         add correspondence between umlClassifier and javaClassifier
         call { 
-        	createJavaCompilationUnit ( umlClassifier , javaClassifier , umlClassifier . namespace )
+        	createJavaCompilationUnit (umlClassifier, javaClassifier, umlClassifier.namespace)
         }
     }
 }
@@ -358,7 +365,6 @@ routine createJavaInterface(uml::Interface umlInterface) {
 		}
     }
 }
-
  
 reaction UmlSuperInterfaceChanged {
     after element uml::Generalization inserted in uml::Interface[generalization]
@@ -389,14 +395,7 @@ routine deleteJavaSuperInterface(uml::Interface superUMLInterface, uml::Interfac
     }
     action {
         update jI {
-            val iter = jI.extends.listIterator
-            while (iter.hasNext) {
-                val type = (iter.next as NamespaceClassifierReference).classifierReferences.head.target
-                if (javaSuperInterface.name.equals(type.name)) {
-                    iter.remove;
-                }
-            }
-            //TODO Ersetzen durch removeClassifierFromIterator(jI.extends.iterator, javaSuperInterface)
+            removeClassifierFromIterator(jI.extends.iterator, javaSuperInterface)
         }
     }
 }
@@ -410,9 +409,6 @@ routine createJavaEnum(uml::Enumeration uEnum) {
 	action {
 		val jEnum = create java::Enumeration and initialize {
 			jEnum.name = uEnum.name
-			for (EnumerationLiteral enumLit : uEnum.ownedLiterals) {//TODO Hoffentlich sparen
-				jEnum.constants += createJavaEnumConstant(enumLit)
-			}
 		}
 		add correspondence between uEnum and jEnum
 		call {
@@ -432,11 +428,7 @@ routine createJavaEnumConstant(uml::EnumerationLiteral uLiteral, uml::Enumeratio
 	}
 	action {
 		val jConstant = create java::EnumConstant and initialize {
-			if (uLiteral.name == null) {
-				jConstant.name = "DefaultEnumConstantName"
-			} else {
-				jConstant.name = uLiteral.name
-			}
+			jConstant.name = uLiteral.name
 		}
 		add correspondence between jConstant and uLiteral
 		update jEnum {
@@ -475,8 +467,6 @@ routine changeJavaElementVisibility(uml::NamedElement uElem) {
     }
 }
 
-
-
 reaction UmlNamedElementRenamed{
 	after attribute replaced at uml::NamedElement[name] 
 	with !(affectedEObject instanceof org.eclipse.uml2.uml.Classifier)
@@ -491,6 +481,30 @@ routine renameJavaNamedElement(uml::NamedElement uElem, String name) {
 	action {
 		update jElem {
 			jElem.name = name
+		}
+	}
+}
+
+
+reaction UmlMuliplicityChanged {
+	after element replaced at uml::Property[upperValue]
+	call handleMultiplicityForJavaAttribute(affectedEObject)
+}
+
+routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
+	match {
+		val jAttribute = retrieve java::Field corresponding to uAttribute
+		val jType = retrieve java::Class corresponding to uAttribute.type
+	}
+	action {
+		update jAttribute {
+			if (uAttribute.lower == 0) {
+				if (uAttribute.upperValue instanceof LiteralUnlimitedNaturalImpl) {
+			        jAttribute.typeReference = createCollectiontypeReference("List", jType)
+			    }
+			} else if (uAttribute.upper > 1) {
+				jAttribute.typeReference = createCollectiontypeReference("List", jType)
+			}
 		}
 	}
 }

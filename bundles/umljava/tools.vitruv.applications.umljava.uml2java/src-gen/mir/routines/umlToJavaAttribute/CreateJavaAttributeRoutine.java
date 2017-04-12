@@ -1,16 +1,14 @@
 package mir.routines.umlToJavaAttribute;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToJavaAttribute.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.VisibilityKind;
 import org.emftext.language.java.members.Field;
+import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import org.emftext.language.java.modifiers.ModifiersFactory;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -27,29 +25,7 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updateJavaAttributeElement(final org.eclipse.uml2.uml.Class umlClass, final Property umlAttribute, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final Field javaAttribute) {
-      String _name = umlAttribute.getName();
-      boolean _equals = Objects.equal(_name, null);
-      if (_equals) {
-        javaAttribute.setName("DefaultAttributeName");
-      } else {
-        javaAttribute.setName(umlAttribute.getName());
-      }
-      if (((!Objects.equal(umlAttribute.getVisibility(), null)) && (!Objects.equal(umlAttribute.getVisibility(), VisibilityKind.PACKAGE_LITERAL)))) {
-        UmlToJavaHelper.setJavaVisibility(javaAttribute, umlAttribute.getVisibility());
-      }
-      boolean _isStatic = umlAttribute.isStatic();
-      if (_isStatic) {
-        javaAttribute.addModifier(ModifiersFactory.eINSTANCE.createStatic());
-      }
-      boolean _isReadOnly = umlAttribute.isReadOnly();
-      if (_isReadOnly) {
-        javaAttribute.addModifier(ModifiersFactory.eINSTANCE.createFinal());
-      }
-      Type _type = umlAttribute.getType();
-      boolean _notEquals = (!Objects.equal(_type, null));
-      if (_notEquals) {
-        javaAttribute.setTypeReference(UmlToJavaHelper.createTypeReference(umlAttribute.getType(), customTypeClass));
-      }
+      javaAttribute.setName(umlAttribute.getName());
     }
     
     public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Property umlAttribute, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final Field javaAttribute) {
@@ -57,7 +33,8 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Property umlAttribute, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final Field javaAttribute) {
-      UmlToJavaHelper.handleMultiplicityAndAddToClass(umlAttribute, javaAttribute, javaClass);
+      EList<Member> _members = javaClass.getMembers();
+      _members.add(javaAttribute);
     }
     
     public EObject getCorrepondenceSourceJavaClass(final org.eclipse.uml2.uml.Class umlClass, final Property umlAttribute) {

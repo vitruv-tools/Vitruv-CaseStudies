@@ -1,6 +1,5 @@
 package mir.routines.umlToJavaClassifier;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
@@ -42,13 +41,7 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void updateJConstantElement(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
-      String _name = uLiteral.getName();
-      boolean _equals = Objects.equal(_name, null);
-      if (_equals) {
-        jConstant.setName("DefaultEnumConstantName");
-      } else {
-        jConstant.setName(uLiteral.getName());
-      }
+      jConstant.setName(uLiteral.getName());
     }
     
     public EObject getCorrepondenceSourceJEnum(final EnumerationLiteral uLiteral, final Enumeration uEnum) {

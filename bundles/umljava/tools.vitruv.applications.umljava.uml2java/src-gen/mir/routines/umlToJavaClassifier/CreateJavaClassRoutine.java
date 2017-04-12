@@ -31,6 +31,7 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     
     public void updateJavaClassifierElement(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier) {
       javaClassifier.setName(umlClassifier.getName());
+      javaClassifier.makePublic();
     }
     
     public void callRoutine1(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier, @Extension final RoutinesFacade _routinesFacade) {

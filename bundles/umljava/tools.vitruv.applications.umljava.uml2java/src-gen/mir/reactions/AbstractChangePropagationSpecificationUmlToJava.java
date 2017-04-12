@@ -24,8 +24,8 @@ public abstract class AbstractChangePropagationSpecificationUmlToJava extends Co
 	 * For adding further change processors overwrite this method and call the super method at the right place.
 	 */
 	protected void setup() {
-		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToJava.umlToJavaMethod.ExecutorUmlToJava(getUserInteracting()));
 		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.ExecutorUmlToJava(getUserInteracting()));
+		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToJava.umlToJavaMethod.ExecutorUmlToJava(getUserInteracting()));
 		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.ExecutorUmlToJava(getUserInteracting()));
 	}
 	

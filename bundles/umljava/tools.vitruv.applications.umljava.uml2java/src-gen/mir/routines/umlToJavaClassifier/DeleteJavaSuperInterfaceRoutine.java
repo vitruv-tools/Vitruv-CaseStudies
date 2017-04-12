@@ -1,15 +1,10 @@
 package mir.routines.umlToJavaClassifier;
 
 import java.io.IOException;
-import java.util.ListIterator;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.emftext.language.java.classifiers.Classifier;
-import org.emftext.language.java.types.ClassifierReference;
-import org.emftext.language.java.types.NamespaceClassifierReference;
-import org.emftext.language.java.types.TypeReference;
+import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -30,17 +25,7 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final Interface superUMLInterface, final Interface uI, final org.emftext.language.java.classifiers.Interface jI, final org.emftext.language.java.classifiers.Interface javaSuperInterface) {
-      final ListIterator<TypeReference> iter = jI.getExtends().listIterator();
-      while (iter.hasNext()) {
-        {
-          TypeReference _next = iter.next();
-          final Classifier type = IterableExtensions.<ClassifierReference>head(((NamespaceClassifierReference) _next).getClassifierReferences()).getTarget();
-          boolean _equals = javaSuperInterface.getName().equals(type.getName());
-          if (_equals) {
-            iter.remove();
-          }
-        }
-      }
+      JavaUtil.removeClassifierFromIterator(jI.getExtends().iterator(), javaSuperInterface);
     }
     
     public EObject getCorrepondenceSourceJI(final Interface superUMLInterface, final Interface uI) {
