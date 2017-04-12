@@ -2,9 +2,10 @@ package tools.vitruv.applications.umlclassumlcomponents.comp2class.tests
 
 import org.junit.Test
 import org.eclipse.uml2.uml.UMLFactory
-import static org.junit.Assert.*;
+import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.PackageableElement
 
 class Comp2ClassTest extends AbstractComp2ClassTest {
 	private static val COMP_NAME = "TestUmlComp"
@@ -26,17 +27,6 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 	/***********
 	*Component:*
 	***********/
-	@Test
-	public def void testCreateClassForComponent() {
-		val umlComp = createComponent(COMP_NAME)
-		saveAndSynchronizeChanges(umlComp)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
-		assertEquals(1, correspondingElements.size)
-		val umlClass = correspondingElements.get(0)
-		assertTrue(umlClass instanceof org.eclipse.uml2.uml.Class)
-		assertEquals(COMP_NAME, (umlClass as org.eclipse.uml2.uml.Class).name)
-	}
-	
 	private def org.eclipse.uml2.uml.Component createComponent(String name) {
 		val umlComponent = UMLFactory.eINSTANCE.createComponent()
 		umlComponent.name = name
@@ -44,18 +34,30 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		return umlComponent
 	}
 	
-	@Test
-    public def void testRenameComponent() {
-    	val umlComponent = createComponent("Old")
-		saveAndSynchronizeChanges(umlComponent)
-		var correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		//change name:
-		rootElement.packagedElements.get(0).name = "New"
-		saveAndSynchronizeChanges(umlComponent)
-		//check if rename happened in class:
+	private def void checkClass(PackageableElement umlComp, String name) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
+		assertEquals(1, correspondingElements.size)
 		val umlClass = correspondingElements.get(0)
 		assertTrue(umlClass instanceof org.eclipse.uml2.uml.Class)
-		assertEquals("New", (umlClass as org.eclipse.uml2.uml.Class).name)
+		assertEquals(name, (umlClass as org.eclipse.uml2.uml.Class).name)
+	}
+	
+	@Test
+	public def void testCreateClassForComponent() {
+		val umlComp = createComponent(COMP_NAME)
+		saveAndSynchronizeChanges(umlComp)
+		checkClass(umlComp, COMP_NAME)
+	}
+	
+	@Test
+    public def void testRenameComponent() {
+    	val umlComp = createComponent("Old")
+		saveAndSynchronizeChanges(umlComp)
+		//change name:
+		umlComp.name = "New"
+		saveAndSynchronizeChanges(umlComp)
+		//check if rename happened in class:
+		checkClass(umlComp, "New")
     }
     
 	@Test
@@ -73,19 +75,24 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		//check if class exists:		
 		assertFalse(rootElement.packagedElements.contains(umlClass))
     }
-
+	
+	@Test
+	public def void testCreate2ClassFor2Component() {
+		val umlComp1 = createComponent(COMP_NAME)
+		val umlComp2 = createComponent(COMP_NAME2)
+		saveAndSynchronizeChanges(rootElement)
+		checkClass(umlComp1, COMP_NAME)
+		checkClass(umlComp2, COMP_NAME2)
+	}
+	
     /**********
-	*Datatpye:*
+	*Datatype:*
 	**********/
 	@Test
 	public def void testCreateClassForDataType() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compDataType]).flatten
-		assertEquals(1, correspondingElements.size)
-		val umlClass = correspondingElements.get(0)
-		assertTrue(umlClass instanceof org.eclipse.uml2.uml.Class)
-		assertEquals(DATATYPE_NAME, (umlClass as org.eclipse.uml2.uml.Class).name)		
+		checkClass(compDataType, DATATYPE_NAME)		
 	}
 	
     private def org.eclipse.uml2.uml.DataType createDataType(String name, int createClass) {

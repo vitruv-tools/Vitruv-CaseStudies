@@ -74,10 +74,7 @@ routine routineCreatedUmlClass(umlclass::Class umlClass){
 			if (userInteracting.modalTextYesNoUserInteracting(msg))
         		createDataTypeForClass(umlClass)
         	else {
-        		if ((umlClass.package === null) || (umlClass.package.name == "default")) //(umlClass.package.name == "model")) //TODO proper fix for package in tests
-        			createUmlComponentAndPackage(umlClass)
-        		else
-        			createUmlComponent(umlClass)			
+        		createUmlComponent(umlClass)			
         	}
 		}
 	}
@@ -99,6 +96,7 @@ routine createUmlComponent(umlclass::Class umlClass) {
 	}
 }
 
+//TODO: Currently unused, remove?
 routine createUmlComponentAndPackage(umlclass::Class umlClass) {
 	match {
 		val compModel = retrieve umlcomp::Model corresponding to umlClass.model

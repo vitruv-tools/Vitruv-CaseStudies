@@ -1,6 +1,5 @@
 package mir.routines.class2comp;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -35,11 +34,7 @@ public class RoutineCreatedUmlClassRoutine extends AbstractRepairRoutineRealizat
       if (_modalTextYesNoUserInteracting) {
         _routinesFacade.createDataTypeForClass(umlClass);
       } else {
-        if (((umlClass.getPackage() == null) || Objects.equal(umlClass.getPackage().getName(), "default"))) {
-          _routinesFacade.createUmlComponentAndPackage(umlClass);
-        } else {
-          _routinesFacade.createUmlComponent(umlClass);
-        }
+        _routinesFacade.createUmlComponent(umlClass);
       }
     }
   }

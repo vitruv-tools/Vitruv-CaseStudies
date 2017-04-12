@@ -7,7 +7,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Model;
-import static tools.vitruv.extensions.constructionsimulation.util.ResourceHelper.*;
+import static tools.vitruv.extensions.constructionsimulation.util.ResourceHelper.*
 import tools.vitruv.extensions.constructionsimulation.strategies.IntegrationStategy;
 import tools.vitruv.framework.change.description.VitruviusChange;
 import tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.Traversal.UmlComponentTraversalStrategy

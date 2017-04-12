@@ -30,7 +30,7 @@ public class UmlComponentTraversalStrategy extends EMFTraversalStrategy {
 		changeRecorder.beginRecording(VURI.getInstance(uri), #{resource})
 		
 		//Simply add the existing model to the new resource:
-		resource.contents.addAll(model.allOwnedElements)
+		resource.contents.add(model)
 		
 		changeList = new BasicEList<VitruviusChange>()
 		val changes = changeRecorder.endRecording

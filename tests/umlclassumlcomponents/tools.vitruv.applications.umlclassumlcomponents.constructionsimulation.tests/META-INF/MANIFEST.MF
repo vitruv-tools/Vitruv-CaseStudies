@@ -19,12 +19,13 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.framework.change.processing,
  tools.vitruv.framework.modelsynchronization,
  tools.vitruv.extensions.constructionsimulation,
- tools.vitruv.extensions.constructionsimulation.util
- tools.vitruv.applications.umlclassumlcomponents.class2comp
+ tools.vitruv.extensions.constructionsimulation.util,
+ tools.vitruv.applications.umlclassumlcomponents.class2comp,
  tools.vitruv.framework.tests.util,
  tools.vitruv.framework.change.processing,
  org.junit,
  tools.vitruv.framework.tuid;bundle-version="0.2.0",
  tools.vitruv.applications.umlclassumlcomponents.class2comp,
- com.google.guava
- 
+ com.google.guava, 
+ tools.vitruv.applications.umlclassumlcomponents.constructionsimulation
+
