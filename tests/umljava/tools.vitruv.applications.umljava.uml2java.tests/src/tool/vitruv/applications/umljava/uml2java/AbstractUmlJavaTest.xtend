@@ -4,10 +4,10 @@ import tools.vitruv.aplications.umljava.uml2java.UmlToJavaChangePropagationSpeci
 import tools.vitruv.domains.java.JavaDomain
 import tools.vitruv.domains.uml.UmlDomain
 import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.framework.tests.VitruviusChangePropagationTest
 import org.eclipse.uml2.uml.Model
+import tools.vitruv.framework.tests.VitruviusEmfApplicationTest
 
-class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
+class AbstractUmlJavaTest extends VitruviusEmfApplicationTest {
 	private static val MODEL_FILE_EXTENSION = "uml";
 	private static val MODEL_NAME = "model";
 	
@@ -16,7 +16,7 @@ class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
 	}
 	
 	protected def Model getRootElement() {
-		return MODEL_NAME.projectModelPath.root as Model;
+		return MODEL_NAME.projectModelPath.firstRootElement as Model;
 	}
 	
 	override protected createChangePropagationSpecifications() {
@@ -27,10 +27,14 @@ class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
 		return #[new UmlDomain().metamodel, new JavaDomain().metamodel];
 	}
 	
-	override protected initializeTestModel() {
+	override protected setup() {
 		val umlModel = UMLFactory.eINSTANCE.createModel();
 		umlModel.name = MODEL_NAME;
 		createAndSynchronizeModel(MODEL_NAME.projectModelPath, umlModel);
+	}
+	
+	override protected cleanup() {
+		// Do nothing
 	}
 
 }

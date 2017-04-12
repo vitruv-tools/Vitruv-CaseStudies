@@ -1,13 +1,13 @@
 package tool.vitruv.applications.pcmumlcomp.pcm2uml
 
 import tools.vitruv.domains.uml.UmlDomain
-import tools.vitruv.framework.tests.VitruviusChangePropagationTest
 import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlComponentsChangePropagationSpecification
 import tools.vitruv.domains.pcm.PcmDomain
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.palladiosimulator.pcm.repository.Repository
+import tools.vitruv.framework.tests.VitruviusEmfApplicationTest
 
-class AbstractPcmUmlTest extends VitruviusChangePropagationTest {
+class AbstractPcmUmlTest extends VitruviusEmfApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
 	protected static val MODEL_NAME = "model";
 	

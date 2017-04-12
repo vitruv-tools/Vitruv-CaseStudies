@@ -99,7 +99,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.modelsynchronization.ChangePropagationListener;
 import tools.vitruv.framework.monitorededitor.ProjectBuildUtils;
-import tools.vitruv.framework.tests.VitruviusCasestudyTest;
+import tools.vitruv.framework.tests.VitruviusApplicationTest;
 import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 import tools.vitruv.framework.util.bridges.EMFBridge;
@@ -112,7 +112,7 @@ import tools.vitruv.framework.util.datatypes.VURI;
  *
  */
 @SuppressWarnings("restriction")
-public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest implements ChangePropagationListener, SynchronizationAwaitCallback {
+public abstract class Java2PcmTransformationTest extends VitruviusApplicationTest implements ChangePropagationListener, SynchronizationAwaitCallback {
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 

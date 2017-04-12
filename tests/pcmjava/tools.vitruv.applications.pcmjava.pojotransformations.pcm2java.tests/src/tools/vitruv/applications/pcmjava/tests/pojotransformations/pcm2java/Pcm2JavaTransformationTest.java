@@ -68,7 +68,7 @@ import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.metamodel.Metamodel;
-import tools.vitruv.framework.tests.VitruviusEMFCasestudyTest;
+import tools.vitruv.framework.tests.VitruviusEmfApplicationTest;
 import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
@@ -79,7 +79,7 @@ import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
  * @author Langhamm
  *
  */
-public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
+public class Pcm2JavaTransformationTest extends VitruviusEmfApplicationTest {
 	
 	@Override
 	protected void setup() {
