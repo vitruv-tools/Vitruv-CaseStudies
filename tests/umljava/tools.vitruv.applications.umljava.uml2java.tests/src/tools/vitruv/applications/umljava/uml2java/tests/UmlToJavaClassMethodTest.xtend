@@ -11,6 +11,7 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.modifiers.Static
 import org.emftext.language.java.modifiers.Abstract
+import org.eclipse.uml2.uml.UMLFactory
 
 class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     private static val CLASS_NAME = "ClassName";
@@ -18,25 +19,32 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     private static val OPERATION_NAME = "classMethod";
     private static val STANDARD_OPERATION_NAME = "standardMethod";
     private static val OPERATION_RENAME = "classMethodRenamed";
+    private static val PRIMITIVE_TYPE = "int"
     private static val PARAMETER_NAME = "parameterName";
+    private static val STANDARD_PARAMETER_NAME = "standardParameterName"
     private static val PARAMETER_RENAME = "parameterRenamed";
     
-    private static var org.eclipse.uml2.uml.Class uClass;
-    private static var org.eclipse.uml2.uml.Class typeClass;
-    private static var Operation uOp;
+    private static var org.eclipse.uml2.uml.Class uClass
+    private static var org.eclipse.uml2.uml.Class typeClass
+    private static var org.eclipse.uml2.uml.Parameter uParam
+    private static var org.eclipse.uml2.uml.PrimitiveType pType
+    private static var Operation uOp
     
     @Before
     def void before() {
         uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
         typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
-        uOp = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, null)
+        pType = createUmlPrimitiveTypeAndAddToModel(rootElement, PRIMITIVE_TYPE)
+        uParam = createUmlParameter(PARAMETER_NAME, pType)
+        uOp = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
         uClass.ownedOperations += uOp;
         rootElement.packagedElements += uClass;
         rootElement.packagedElements += typeClass;
+        rootElement.packagedElements += pType;
         saveAndSynchronizeChanges(rootElement);
     }
     
-    @After
+    //@After
     def void after() {
         if (uOp != null) {
             uOp.destroy;
@@ -46,6 +54,12 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         }
         if (typeClass != null) {
             typeClass.destroy;
+        }
+        if (uParam != null) {
+        	uParam.destroy
+        }
+        if (pType != null) {
+        	pType.destroy
         }
         saveAndSynchronizeChanges(rootElement);
     }
@@ -119,7 +133,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     
     @Test
     def testCreateParameter() {
-        val uParam = createUmlParameter(PARAMETER_NAME, typeClass)
+        val uParam = createUmlParameter(STANDARD_PARAMETER_NAME, typeClass)
         uOp.ownedParameters += uParam;
         saveAndSynchronizeChanges(uOp);
 
@@ -127,4 +141,24 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         assertJavaMethodHasUniqueParameter(jMeth, uParam);
         
     }
+    
+    @Test
+    def testRenameParameter() {
+    	uParam.name = PARAMETER_RENAME
+    	saveAndSynchronizeChanges(uParam)
+    	
+    	val jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
+        assertJavaMethodHasUniqueParameter(jMeth, uParam);
+        assertJavaMethodDontHaveParameter(jMeth, PARAMETER_NAME)
+    }
+    
+    @Test
+    def testDeleteParameter() {
+    	uParam.destroy
+    	saveAndSynchronizeChanges(rootElement)
+    	
+    	val jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
+    	assertJavaMethodDontHaveParameter(jMeth, PARAMETER_NAME)
+    }
+    
 }

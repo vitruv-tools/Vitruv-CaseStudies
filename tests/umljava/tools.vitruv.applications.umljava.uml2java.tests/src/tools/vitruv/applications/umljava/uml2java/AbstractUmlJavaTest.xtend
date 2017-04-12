@@ -1,39 +1,45 @@
 package tools.vitruv.applications.umljava.uml2java
 
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
+import org.apache.log4j.Logger
+import org.apache.log4j.PropertyConfigurator
+import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.uml2.uml.Classifier
+import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.classifiers.Interface
+import org.emftext.language.java.members.Member
+import org.emftext.language.java.members.Method
+import org.emftext.language.java.modifiers.AnnotableAndModifiable
+import org.emftext.language.java.modifiers.Modifier
+import org.emftext.language.java.modifiers.Private
+import org.emftext.language.java.modifiers.Protected
+import org.emftext.language.java.modifiers.Public
+import org.emftext.language.java.types.TypedElement
 import tools.vitruv.domains.java.JavaDomain
 import tools.vitruv.domains.uml.UmlDomain
-import org.eclipse.uml2.uml.UMLFactory
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*;
 import tools.vitruv.framework.tests.VitruviusChangePropagationTest
-import org.eclipse.uml2.uml.Model
-import org.eclipse.uml2.uml.VisibilityKind
-import org.eclipse.emf.common.util.EList
-import org.apache.log4j.Logger
+
 import static org.junit.Assert.*
-import org.apache.log4j.PropertyConfigurator
-import org.emftext.language.java.members.Method
-import org.emftext.language.java.members.Member
-import org.eclipse.uml2.uml.DataType
-import org.emftext.language.java.modifiers.Modifier
-import org.emftext.language.java.modifiers.AnnotableAndModifiable
-import org.emftext.language.java.modifiers.Public
-import org.emftext.language.java.modifiers.Protected
-import org.emftext.language.java.modifiers.Private
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
     protected static val final Logger logger = Logger.getLogger(typeof(AbstractUmlJavaTest).simpleName);
 	private static val MODEL_FILE_EXTENSION = "uml";
 	private static val MODEL_NAME = "model";
 
-	
 	private def String getProjectModelPath(String modelName) {
 		"model/" + modelName + "." + MODEL_FILE_EXTENSION;
 	}
 	
 	protected def Model getRootElement() {
-		return MODEL_NAME.projectModelPath.root as Model;
+		return getFirstRootElement(MODEL_NAME.projectModelPath) as Model;
 	}
 	
 	override protected createChangePropagationSpecifications() {
@@ -82,8 +88,8 @@ class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
      * @param jMem Java-TypedElement (Attribute, Method, Parameter)
      * @param uType Uml-Typ
      */
-    def protected void assertJavaMemberHasType(org.emftext.language.java.types.TypedElement jMem, org.eclipse.uml2.uml.Classifier uType) {
-        if (uType instanceof org.eclipse.uml2.uml.PrimitiveType) {
+    def protected void assertJavaMemberHasType(TypedElement jMem, Classifier uType) {
+        if (uType instanceof PrimitiveType) {
             assertEquals(uType.name, jMem.typeReference.eClass.name.toLowerCase)
         } else if (uType instanceof org.eclipse.uml2.uml.Class) {
             assertEquals(uType.name, getClassifierfromTypeRef(jMem.typeReference).name)
@@ -131,17 +137,38 @@ class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
 	def protected org.emftext.language.java.classifiers.Class getJClassFromName(String name) {
 	    return getJClassifFromName(org.emftext.language.java.classifiers.Class, name);
 	}
-    def protected org.emftext.language.java.classifiers.Interface getJInterfaceFromName(String name) {
-        return getJClassifFromName(org.emftext.language.java.classifiers.Interface, name);
+	
+    def protected Interface getJInterfaceFromName(String name) {
+        return getJClassifFromName(Interface, name);
     }
 	
-	def private <T extends org.emftext.language.java.classifiers.ConcreteClassifier> T getJClassifFromName(java.lang.Class<T> c, String name) {
-        val iter = getModelResource(buildJavaFilePath(name), true).allContents.filter(c);
+	def private <T extends ConcreteClassifier> T getJClassifFromName(Class<T> c, String name) {
+        val iter = getModelResource(buildJavaFilePath(name)).allContents.filter(c);
         val returnClassif = iter.next() as T
         if (iter.hasNext()) {
             logger.info("Es gibt zum Namen " + name +  " des Typs " + c +  "mehr als eine Java-Datei")
         }
         return returnClassif
+    }
+    def protected getCorrespondingObject(EObject obj) {
+        val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]);
+        
+        if (corrList.nullOrEmpty) {
+            return null
+        } else if (corrList.head.nullOrEmpty) {
+            return null;
+        }
+        return corrList.head.head
+    }
+    def protected <T> getCorrespondingObject(EObject obj, Class<T> c) {
+    	val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]);
+        if (corrList.nullOrEmpty) {
+            return null
+        } else if (corrList.head.nullOrEmpty) {
+            return null;
+        }
+        return corrList.head.filter(c).head as T
+
     }
     
     
@@ -149,7 +176,7 @@ class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
      * Gibt Liste an Java-Member mit den Namen memName in Java-Classifier classifName zurück, Liste kann leer sein.
      */
     def protected EList<Member> getJavaMembersFromClassiferByName(String classifName, String memName) {
-        return getJClassifFromName(org.emftext.language.java.classifiers.ConcreteClassifier, classifName).getMembersByName(memName);
+        return getJClassifFromName(ConcreteClassifier, classifName).getMembersByName(memName);
     }
     
     /**
@@ -160,16 +187,29 @@ class AbstractUmlJavaTest extends VitruviusChangePropagationTest {
         assertNotNull(jMems);
         return jMems;
     }
+    
     /**
      * @param jMethod Java-Methode
      * @param param Uml-Parameter
      */
-    protected def assertJavaMethodHasUniqueParameter(Method jMethod, org.eclipse.uml2.uml.Parameter param) {
+    protected def void assertJavaMethodHasUniqueParameter(Method jMethod, Parameter param) {
         assertFalse(jMethod.parameters.nullOrEmpty);
-        assertTrue(jMethod.parameters.size == 1);
-        val jparam = jMethod.parameters.head;
-        assertEquals(param.type.name, (getClassifierfromTypeRef(jparam.typeReference).name));
+        val params = jMethod.parameters.filter[it.name == param.name]
+        assertTrue(params.size == 1);
+        val jparam = params.head;
+        if (jparam.typeReference instanceof org.emftext.language.java.types.PrimitiveType) {
+        	assertEquals(param.type.name, (jparam.typeReference.eClass.name.toLowerCase));
+        } else {
+        	assertEquals(param.type.name, (getClassifierfromTypeRef(jparam.typeReference).name));
+        }
+        
         assertEquals(param.name, jparam.name);
     }
-
+    
+    protected def void assertJavaMethodDontHaveParameter(Method jMethod, String paramName) {
+    	if (!jMethod.parameters.nullOrEmpty) {
+    		val params = jMethod.parameters.filter[it.name == paramName]
+    		assertTrue(params.nullOrEmpty)
+    	}
+    }
 }

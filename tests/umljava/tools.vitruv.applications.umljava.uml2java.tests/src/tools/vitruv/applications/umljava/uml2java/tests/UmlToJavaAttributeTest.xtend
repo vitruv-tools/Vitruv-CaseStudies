@@ -2,7 +2,7 @@ package tools.vitruv.applications.umljava.uml2java.tests
 
 import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
 import org.junit.Test
-import static org.junit.Assert.*;
+import static org.junit.Assert.*
 import org.junit.Before
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.VisibilityKind
@@ -10,6 +10,7 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.modifiers.Static
 import org.emftext.language.java.modifiers.Final
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
 class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
     private static val ATTRIBUTE_NAME = "attributName";

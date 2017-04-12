@@ -26,9 +26,10 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
     def void before() {
         uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
         saveAndSynchronizeChanges(rootElement)
+        
     }
     
-    @After
+    //@After
     def void after() {
         if (uI != null) {
             uI.destroy
@@ -62,9 +63,10 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
     
     @Test
     def testAddSuperInterface() {
-        createInterfaceWithTwoSuperInterfaces(INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
+    	println("sss: "+getCorrespondingObject(uI, org.emftext.language.java.classifiers.Interface))
+        val interface = createInterfaceWithTwoSuperInterfaces(INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
         saveAndSynchronizeChanges(rootElement)
-        val jI = getJInterfaceFromName(INTERFACE_NAME);
+        val jI = getCorrespondingObject(interface, org.emftext.language.java.classifiers.Interface);
         assertEquals(SUPERINTERFACENAME_1, getClassifierfromTypeRef(jI.extends.get(0)).name)
         assertEquals(SUPERINTERFACENAME_2, getClassifierfromTypeRef(jI.extends.get(1)).name)
     }
@@ -80,6 +82,7 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
         assertEquals(SUPERINTERFACENAME_2, getClassifierfromTypeRef(jI.extends.get(0)).name)
         assertJavaFileExists(SUPERINTERFACENAME_1);
     }
+    
 
     
     /**

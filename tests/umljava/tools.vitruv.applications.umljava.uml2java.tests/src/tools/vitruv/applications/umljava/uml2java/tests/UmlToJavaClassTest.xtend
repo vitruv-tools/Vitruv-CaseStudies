@@ -12,6 +12,7 @@ import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import org.eclipse.uml2.uml.UMLFactory
 
 class UmlToJavaClassTest extends AbstractUmlJavaTest {
 	private static val CLASS_NAME = "ClassName";
@@ -39,6 +40,27 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         saveAndSynchronizeChanges(rootElement);
 	}
 	
+	@Test
+	def void t() {
+		val c = UMLFactory.eINSTANCE.createClass;
+		c.name = "Cname"
+		val uPack2 = UMLFactory.eINSTANCE.createPackage
+		uPack2.name = "second"
+		val uPack = UMLFactory.eINSTANCE.createPackage
+		uPack.name = "first"
+		uPack2.packagedElements += c
+		rootElement.packagedElements += uPack
+		uPack.packagedElements += uPack2
+		saveAndSynchronizeChanges(rootElement)
+		
+		uPack.name = "neww"
+		saveAndSynchronizeChanges(rootElement)
+		
+		/* 
+		val jCl = getJClassFromName("Cname")
+		println(jCl.modifiers)
+		println(jCl)*/
+	}
 
 	@Test
 	def testCreateClass() {
@@ -60,13 +82,18 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uClass.visibility = VisibilityKind.PRIVATE_LITERAL;
         saveAndSynchronizeChanges(uClass);
         
-        var jClass = getJClassFromName(CLASS_NAME);
+        val jClass = getJClassFromName(CLASS_NAME);
         assertJavaModifiableHasVisibility(jClass, VisibilityKind.PRIVATE_LITERAL);
         
+
+    }
+    
+    @Test
+    def testChangeClassVisibility2() {
         uClass.visibility = VisibilityKind.PACKAGE_LITERAL;
         saveAndSynchronizeChanges(uClass);
         
-        jClass = getJClassFromName(CLASS_NAME);
+        val jClass = getJClassFromName(CLASS_NAME);
         assertJavaModifiableHasVisibility(jClass, VisibilityKind.PACKAGE_LITERAL);
     }
     
@@ -98,7 +125,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         assertJavaModifiableHasModifier(jClass, Final);
     }
     
-    @Ignore @Test
+    @Test
     def testSuperClassChanged() {
         val superClass = createSimpleUmlClass(rootElement, SUPER_CLASS_NAME);
         uClass.generals += superClass;
@@ -127,13 +154,22 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
     
     @Test
     def testAddClassImplement() {
+    	val class2 = createSimpleUmlClass(rootElement, "Class2")
         val uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME);
-        uClass.createInterfaceRealization("InterfacRealization", uI);
+        val realization = uClass.createInterfaceRealization("InterfacRealization", uI);
+        println(realization.contract)
         saveAndSynchronizeChanges(uClass);
-        
         val jClass = getJClassFromName(CLASS_NAME)
         assertEquals(INTERFACE_NAME, getClassifierfromTypeRef(jClass.implements.head).name);
+        realization.implementingClassifier = class2
+        saveAndSynchronizeChanges(class2);
+        
        
+    }
+    
+    
+    def testChangeInterfaceImplementer() {
+    	
     }
  
     /**
