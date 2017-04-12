@@ -27,7 +27,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
-        this.testUserInteractor.addNextSelections(0);
+        this.getUserInteractor().addNextSelections(0);
         final BasicComponent bcForClass = super.addClassInSecondPackage(BasicComponent.class);
 
         super.assertRepositoryAndPCMName(repo, bcForClass, bc.getEntityName());
@@ -38,7 +38,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
         final CompositeComponent cc = super.addSecondPackageCorrespondsToCompositeComponent();
 
-        this.testUserInteractor.addNextSelections(0);
+        this.getUserInteractor().addNextSelections(0);
         final CompositeComponent ccForClass = this.addClassInSecondPackage(CompositeComponent.class);
 
         super.assertRepositoryAndPCMName(repo, ccForClass, cc.getEntityName());
@@ -49,7 +49,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         super.addRepoContractsAndDatatypesPackage();
         final System pcmSystem = super.addSecondPackageCorrespondsToSystem();
 
-        this.testUserInteractor.addNextSelections(0);
+        this.getUserInteractor().addNextSelections(0);
         final System systemForClass = super.addClassInSecondPackage(System.class);
 
         super.assertPCMNamedElement(systemForClass, pcmSystem.getEntityName());
@@ -65,7 +65,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         super.addRepoContractsAndDatatypesPackage();
         super.addSecondPackageCorrespondsWithoutCorrespondences();
 
-        this.testUserInteractor.addNextSelections(ClassMappingTransformation.SELECT_NO_CORRESPONDENCE);
+        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_NO_CORRESPONDENCE);
         try {
             final EObject eObject = super.addClassInPackage(this.secondPackage, EObject.class);
             fail("The class should not have any correspondences, but it has a correspondence to eObject: " + eObject);
@@ -79,7 +79,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
         super.addSecondPackageCorrespondsWithoutCorrespondences();
 
-        this.testUserInteractor.addNextSelections(ClassMappingTransformation.SELECT_CREATE_BASIC_COMPONENT);
+        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_BASIC_COMPONENT);
         final BasicComponent newBc = super.addClassInSecondPackage(BasicComponent.class);
 
         super.assertRepositoryAndPCMName(repo, newBc, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
@@ -90,7 +90,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
         super.addSecondPackageCorrespondsWithoutCorrespondences();
 
-        this.testUserInteractor.addNextSelections(ClassMappingTransformation.SELECT_CREATE_COMPOSITE_COMPONENT);
+        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_COMPOSITE_COMPONENT);
         final CompositeComponent cc = super.addClassInSecondPackage(CompositeComponent.class);
 
         super.assertRepositoryAndPCMName(repo, cc, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
@@ -101,7 +101,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         this.addRepoContractsAndDatatypesPackage();
         super.addSecondPackageCorrespondsWithoutCorrespondences();
 
-        this.testUserInteractor.addNextSelections(ClassMappingTransformation.SELECT_CREATE_SYSTEM);
+        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_SYSTEM);
         final System pcmSystem = super.addClassInSecondPackage(System.class);
 
         this.assertPCMNamedElement(pcmSystem, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
@@ -120,7 +120,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     public void testAddCollectionDatatypeClassInDatatypePackage() throws Throwable {
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
 
-        this.testUserInteractor.addNextSelections(ClassMappingTransformation.SELECT_CREATE_COLLECTION_DATA_TYPE);
+        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_COLLECTION_DATA_TYPE);
         final CollectionDataType collection = super.addClassInPackage(this.getDatatypesPackage(),
                 CollectionDataType.class);
 
@@ -131,7 +131,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     public void testAddClassInDatatypePackage() throws Throwable {
         this.addRepoContractsAndDatatypesPackage();
         try {
-            this.testUserInteractor.addNextSelections(ClassMappingTransformation.SELECT_DO_NOT_CREATE_DATA_TYPE);
+            this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_DO_NOT_CREATE_DATA_TYPE);
             final EObject eObject = super.addClassInPackage(this.getDatatypesPackage(), EObject.class);
             fail("The class should not have any datatype correspondences, but it has a correspondence to eObject: "
                     + eObject);
@@ -144,7 +144,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     public void testRenameBasicComponentClass() throws Throwable {
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
         this.addSecondPackageCorrespondsWithoutCorrespondences();
-        this.testUserInteractor.addNextSelections(ClassMappingTransformation.SELECT_CREATE_BASIC_COMPONENT);
+        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_BASIC_COMPONENT);
         final BasicComponent basicComponent = this.addClassInSecondPackage(BasicComponent.class);
 
         final BasicComponent newBasicComponent = super.renameClassifierWithName(basicComponent.getEntityName(),

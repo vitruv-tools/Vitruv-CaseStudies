@@ -55,7 +55,7 @@ public class DataTypeCorrespondenceHelperTest extends Pcm2JavaTransformationTest
     	final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
     	// Create and sync CollectionDataType
-    	this.testUserInteractor.addNextSelections(0);
+    	this.getUserInteractor().addNextSelections(0);
     	final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
                 Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null);
     	

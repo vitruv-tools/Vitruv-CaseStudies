@@ -16,7 +16,7 @@ public class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransfo
     public void testAddCollectionDataTypeWithoutInnerType() throws Throwable {
         final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
-        this.testUserInteractor.addNextSelections(0);
+        this.getUserInteractor().addNextSelections(0);
         final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
                 Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null);
 
@@ -39,7 +39,7 @@ public class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransfo
         final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType compositeDataType = this.createAndSyncCompositeDataType(repo);
 
-        this.testUserInteractor.addNextSelections(0);
+        this.getUserInteractor().addNextSelections(0);
         final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
                 Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, compositeDataType);
 
@@ -50,7 +50,7 @@ public class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransfo
         final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final PrimitiveDataType primitiveType = createPrimitiveDataType(pte, repo);
         
-        this.testUserInteractor.addNextSelections(0);
+        this.getUserInteractor().addNextSelections(0);
         final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
                 Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, primitiveType);
 

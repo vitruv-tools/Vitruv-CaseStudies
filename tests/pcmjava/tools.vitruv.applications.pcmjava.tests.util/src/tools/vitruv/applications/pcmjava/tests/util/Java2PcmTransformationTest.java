@@ -221,7 +221,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	}
 
 	protected BasicComponent addSecondPackageCorrespondsToBasicComponent() throws Throwable {
-		this.testUserInteractor.addNextSelections(SELECT_BASIC_COMPONENT);
+		this.getUserInteractor().addNextSelections(SELECT_BASIC_COMPONENT);
 		return this.createSecondPackage(BasicComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
@@ -449,18 +449,18 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 //	}
 
 	protected CompositeComponent addSecondPackageCorrespondsToCompositeComponent() throws Throwable {
-		this.testUserInteractor.addNextSelections(SELECT_COMPOSITE_COMPONENT);
+		this.getUserInteractor().addNextSelections(SELECT_COMPOSITE_COMPONENT);
 		return this.createSecondPackage(CompositeComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
 	}
 
 	protected org.palladiosimulator.pcm.system.System addSecondPackageCorrespondsToSystem() throws Throwable {
-		this.testUserInteractor.addNextSelections(SELECT_SYSTEM);
+		this.getUserInteractor().addNextSelections(SELECT_SYSTEM);
 		return this.createSecondPackage(System.class, Pcm2JavaTestUtils.SYSTEM_NAME);
 	}
 
 	protected void addSecondPackageCorrespondsWithoutCorrespondences() throws Throwable {
-		this.testUserInteractor.addNextSelections(SELECT_NOTHING_DECIDE_LATER);
+		this.getUserInteractor().addNextSelections(SELECT_NOTHING_DECIDE_LATER);
 		this.createSecondPackageWithoutCorrespondence(Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
@@ -589,12 +589,12 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 
 	protected OperationInterface addInterfaceInSecondPackageWithCorrespondence(final String packageName)
 			throws Throwable {
-		this.testUserInteractor.addNextSelections(0);
+		this.getUserInteractor().addNextSelections(0);
 		return this.createInterfaceInPackage(packageName);
 	}
 
 	protected EObject addInterfaceInPackageWithoutCorrespondence(final String packageName) throws Throwable {
-		this.testUserInteractor.addNextSelections(1);
+		this.getUserInteractor().addNextSelections(1);
 		Package jaMoPPPackage = this.getPackageWithNameFromCorrespondenceModel(packageName);
 		return this.createInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(), "I" + packageName, false);
 	}
@@ -802,10 +802,10 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 
 	protected String addPackageAndImplementingClass(final String componentName)
 			throws CoreException, IOException, InterruptedException {
-		this.testUserInteractor.addNextSelections(SELECT_BASIC_COMPONENT);
+		this.getUserInteractor().addNextSelections(SELECT_BASIC_COMPONENT);
 		final Package mediaStorePackage = this.createPackageWithPackageInfo(Pcm2JavaTestUtils.REPOSITORY_NAME,
 				componentName);
-		this.testUserInteractor.addNextSelections(0);
+		this.getUserInteractor().addNextSelections(0);
 
 		final String implementingClassName = componentName + "Impl";
 		this.addClassInPackage(mediaStorePackage, BasicComponent.class, implementingClassName);

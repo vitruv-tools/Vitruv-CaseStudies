@@ -72,7 +72,6 @@ import tools.vitruv.framework.tests.VitruviusEMFCasestudyTest;
 import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 /**
  * super class for all repository and system tests. Contains helper methods
@@ -185,8 +184,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         final OperationSignature opSig = RepositoryFactory.eINSTANCE.createOperationSignature();
         opSig.setEntityName(operationSignatureName);
         opSig.setInterface__OperationSignature(opInterface);
-        EcoreResourceBridge.saveResource(repo.eResource());
-        this.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        this.saveAndSynchronizeChanges(repo);
         return opSig;
     }
 
@@ -202,15 +200,13 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
     protected OperationInterface renameInterfaceAndSync(final OperationInterface opInterface) throws Throwable {
         final String newValue = opInterface.getEntityName() + Pcm2JavaTestUtils.RENAME;
         opInterface.setEntityName(newValue);
-        EcoreResourceBridge.saveResource(opInterface.eResource());
-        this.triggerSynchronization(VURI.getInstance(opInterface.eResource()));
+        this.saveAndSynchronizeChanges(opInterface);
         return opInterface;
     }
 
     protected BasicComponent addBasicComponentAndSync(final Repository repo, final String name) throws Throwable {
         final BasicComponent basicComponent = Pcm2JavaTestUtils.createBasicComponent(repo, name);
-        EcoreResourceBridge.saveResource(repo.eResource());
-        this.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        this.saveAndSynchronizeChanges(repo);
         return basicComponent;
     }
 
@@ -223,8 +219,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         final OperationInterface opInterface = RepositoryFactory.eINSTANCE.createOperationInterface();
         opInterface.setRepository__Interface(repo);
         opInterface.setEntityName(interfaceName);
-        EcoreResourceBridge.saveResource(repo.eResource());
-        this.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        this.saveAndSynchronizeChanges(repo);
         return opInterface;
     }
 
@@ -269,16 +264,14 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         param.setModifier__Parameter(ParameterModifier.IN);
         param.setOperationSignature__Parameter(opSig);
         opSig.getParameters__OperationSignature().add(param);
-        final VURI vuri = VURI.getInstance(opSig.eResource());
-        this.triggerSynchronization(vuri);
+        this.triggerSynchronization(opSig);
         return param;
     }
 
     protected CompositeDataType createAndSyncCompositeDataType(final Repository repo, final String name)
             throws Throwable {
         final CompositeDataType cdt = this.createCompositeDataType(repo, name);
-        EcoreResourceBridge.saveResource(repo.eResource());
-        this.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        this.saveAndSynchronizeChanges(repo);
         return cdt;
     }
 
@@ -313,7 +306,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
         final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
-        this.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        this.triggerSynchronization(repo);
         return innerDec;
     }
 
@@ -345,8 +338,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
                 .setEntityName(interfaceProvidingEntity.getEntityName() + "_provides_" + opInterface.getEntityName());
         operationProvidedRole.setProvidedInterface__OperationProvidedRole(opInterface);
         operationProvidedRole.setProvidingEntity_ProvidedRole(interfaceProvidingEntity);
-        final VURI vuri = VURI.getInstance(opInterface.eResource());
-        this.triggerSynchronization(vuri);
+        this.triggerSynchronization(opInterface);
         return operationProvidedRole;
     }
 
@@ -367,9 +359,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         operationRequiredRole.setEntityName(opInterface.getEntityName().toLowerCase());
         operationRequiredRole.setRequiredInterface__OperationRequiredRole(opInterface);
         operationRequiredRole.setRequiringEntity_RequiredRole(iprovidingRequiringEntity);
-        EcoreResourceBridge.saveResource(iprovidingRequiringEntity.eResource());
-        final VURI vuri = VURI.getInstance(iprovidingRequiringEntity.eResource());
-        this.triggerSynchronization(vuri);
+        this.saveAndSynchronizeChanges(iprovidingRequiringEntity);
         return operationRequiredRole;
     }
 
@@ -390,16 +380,14 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         assemblyContext.setEntityName(Pcm2JavaTestUtils.ASSEMBLY_CONTEXT_NAME);
         assemblyContext.setEncapsulatedComponent__AssemblyContext(basicComponent);
         assemblyContext.setParentStructure__AssemblyContext(composedProvidingRequiringEntity);
-        EcoreResourceBridge.saveResource(composedProvidingRequiringEntity.eResource());
-        this.triggerSynchronization(composedProvidingRequiringEntity);
+        this.saveAndSynchronizeChanges(composedProvidingRequiringEntity);
         return assemblyContext;
     }
 
     protected CompositeComponent createAndSyncCompositeComponent(final Repository repo, final String name)
             throws Throwable {
         final CompositeComponent compositeComponent = Pcm2JavaTestUtils.createCompositeComponent(repo, name);
-        EcoreResourceBridge.saveResource(repo.eResource());
-        this.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        this.saveAndSynchronizeChanges(repo);
         return compositeComponent;
     }
 
@@ -571,8 +559,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         final ResourceDemandingSEFF rdSEFF = SeffFactory.eINSTANCE.createResourceDemandingSEFF();
         rdSEFF.setBasicComponent_ServiceEffectSpecification(basicComponent);
         rdSEFF.setDescribedService__SEFF(describedSignature);
-        EcoreResourceBridge.saveResource(basicComponent.eResource());
-        this.triggerSynchronization(VURI.getInstance(basicComponent.eResource()));
+        this.saveAndSynchronizeChanges(basicComponent);
         return rdSEFF;
 
     }
@@ -659,8 +646,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
 	    if (null != innerType) {
 	        cdt.setInnerType_CollectionDataType(innerType);
 	    }
-	    EcoreResourceBridge.saveResource(repo.eResource());
-	    super.triggerSynchronization(repo);
+	    super.saveAndSynchronizeChanges(repo);
 	    return cdt;
 	}
 	

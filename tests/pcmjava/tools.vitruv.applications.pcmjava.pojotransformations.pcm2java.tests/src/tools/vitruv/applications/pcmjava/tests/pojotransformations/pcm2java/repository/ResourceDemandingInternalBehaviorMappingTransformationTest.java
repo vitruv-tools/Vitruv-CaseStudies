@@ -25,7 +25,7 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
         final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent bc1 = this.addBasicComponentAndSync(repo);
 
-        this.testUserInteractor.addNextSelections(RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD);
+        this.getUserInteractor().addNextSelections(RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD);
         final ResourceDemandingInternalBehaviour resourceDemandingInternalBehaviour = this
                 .createAndSyncResourceDemandingInternalBehavior(bc1,
                         RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD);

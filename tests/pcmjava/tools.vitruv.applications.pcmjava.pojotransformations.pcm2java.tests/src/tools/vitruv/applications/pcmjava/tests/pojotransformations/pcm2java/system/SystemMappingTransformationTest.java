@@ -7,7 +7,6 @@ import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 
 public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -23,8 +22,7 @@ public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest 
         final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
 
         system.setEntityName(Pcm2JavaTestUtils.SYSTEM_NAME + Pcm2JavaTestUtils.RENAME);
-        EcoreResourceBridge.saveResource(system.eResource());
-        super.triggerSynchronization(system);
+        super.saveAndSynchronizeChanges(system);
 
         this.assertSystem(system);
     }
