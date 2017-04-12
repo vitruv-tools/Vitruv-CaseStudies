@@ -1,6 +1,6 @@
 package tools.vitruv.applications.umljava.java2uml
 
-import java.util.Iterator
+import tools.vitruv.framework.userinteraction.UserInteractionType
 import java.util.Set
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Model
@@ -28,9 +28,14 @@ import tools.vitruv.applications.umljava.util.JavaUtil;
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import tools.vitruv.framework.userinteraction.UserInteracting
 
 class JavaToUmlHelper {
-    public static val ROOTMODELFILE = "model/model.uml" 
+    private static val ROOTMODELDIRECTORY = "model"
+    private static val DEFAULTMODELNAME = "model"
+    private static var MODELNAME = DEFAULTMODELNAME
+    private static val MODELNAME_INPUTMESSAGE = "Please enter a name for the uml root model"
+    public static val DEFAULT_INTERFACEREALIZATION_NAME = "DefaultInterfaceRealizationName"
     
     /**
      * @param vis Wenn null, return package-private
@@ -46,7 +51,9 @@ class JavaToUmlHelper {
             default: throw new IllegalArgumentException("Invalid VisibilityModifier: " + vis)
         }
     }
-    
+    def static getRootModelFile() {
+    	return ROOTMODELDIRECTORY + "/" + MODELNAME + ".uml"
+    }
     def static Type getUmlType(TypeReference jType, org.eclipse.uml2.uml.Class customType, Model model) {
         if (jType == null || jType instanceof Void) {
             return null
@@ -72,13 +79,22 @@ class JavaToUmlHelper {
         return primType;
     }
     
-    def static Model getUmlModel(CorrespondenceModel correspondenceModel) {
+    def static Model getUmlModel(CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
         val Set<Model> models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
         if (models.nullOrEmpty) {
-           val model = UMLFactory.eINSTANCE.createModel();
-           model.name = "model";
-           correspondenceModel.createAndAddCorrespondence(model, model)
-           return model;
+			val model = UMLFactory.eINSTANCE.createModel();
+			model.name = DEFAULTMODELNAME;
+			/* 
+			val userModelName = userInteracting.getTextInput(MODELNAME_INPUTMESSAGE)
+			if (userModelName.nullOrEmpty) {
+				model.name = DEFAULTMODELNAME;
+			} else {
+				MODELNAME = userModelName
+				model.name = userModelName
+			}*/
+            //We add a correspondence of the model with itself to save it in the correspondence model
+			correspondenceModel.createAndAddCorrespondence(model, model)
+			return model;
         }
         if (1 != models.size) {
             System.out.println("found more than one repository. Returning the first")

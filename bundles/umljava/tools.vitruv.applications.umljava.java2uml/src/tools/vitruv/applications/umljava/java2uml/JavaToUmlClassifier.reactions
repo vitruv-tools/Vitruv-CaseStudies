@@ -267,3 +267,19 @@ routine renameUmlNamedElement(java::NamedElement jElement) {
     }
 }
 
+reaction JavaPackageCreated {
+	after element java::Package inserted as root
+	call createUmlPackage(newValue)
+}
+
+routine createUmlPackage(java::Package jPackage) {
+	action {
+		val uPackage = create uml::Package and initialize {
+			uPackage.name = jPackage.name
+		}
+		add correspondence between uPackage and jPackage
+		call {
+			addUmlElementToRootModel(uPackage, jPackage)
+		}
+	}
+}

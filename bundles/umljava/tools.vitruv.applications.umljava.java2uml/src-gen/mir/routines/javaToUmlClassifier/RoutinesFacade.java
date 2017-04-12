@@ -95,4 +95,10 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     	jElement);
     effect.applyRoutine();
   }
+  
+  public void createUmlPackage(final org.emftext.language.java.containers.Package jPackage) {
+    mir.routines.javaToUmlClassifier.CreateUmlPackageRoutine effect = new mir.routines.javaToUmlClassifier.CreateUmlPackageRoutine(this.executionState, calledBy,
+    	jPackage);
+    effect.applyRoutine();
+  }
 }
