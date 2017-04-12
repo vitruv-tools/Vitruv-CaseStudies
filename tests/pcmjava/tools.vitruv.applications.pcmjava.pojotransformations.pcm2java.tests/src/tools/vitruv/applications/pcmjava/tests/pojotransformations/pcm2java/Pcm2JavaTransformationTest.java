@@ -65,6 +65,7 @@ import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
+import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory.FileChangeKind;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
@@ -231,10 +232,8 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
 
     protected Repository createAndSyncRepository(final ResourceSet resourceSet, final String repositoryName)
             throws IOException {
-        final Repository repo = Pcm2JavaTestUtils.createRepository(resourceSet, repositoryName,
-                this.currentTestProjectName);
-        this.changeRecorder.beginRecording(VURI.getInstance(repo.eResource()), Collections.singletonList(repo));
-        this.synchronizeFileChange(FileChangeKind.Create, VURI.getInstance(repo.eResource()));
+    	final Repository repo = Pcm2JavaTestUtils.createRepository(repositoryName);
+        createAndSynchronizeModel("model/" + repositoryName + "." + PcmNamespace.REPOSITORY_FILE_EXTENSION, repo);
         return repo;
     }
 

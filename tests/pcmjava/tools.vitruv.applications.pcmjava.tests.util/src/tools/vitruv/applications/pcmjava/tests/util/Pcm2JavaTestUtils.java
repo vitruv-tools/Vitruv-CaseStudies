@@ -44,15 +44,9 @@ public class Pcm2JavaTestUtils {
     private Pcm2JavaTestUtils() {
     }
 
-    public static Repository createRepository(final ResourceSet resourceSet, final String repositoryName,
-            final String projectName) throws IOException {
-        final VURI repoVURI = VURI.getInstance(
-                projectName + "/model/" + repositoryName + "." + PcmNamespace.REPOSITORY_FILE_EXTENSION);
-        final Resource resource = resourceSet.createResource(repoVURI.getEMFUri());
+    public static Repository createRepository( final String repositoryName) throws IOException {
         final Repository repo = RepositoryFactory.eINSTANCE.createRepository();
         repo.setEntityName(repositoryName);
-        resource.getContents().add(repo);
-        EcoreResourceBridge.saveResource(resource);
         return repo;
     }
 
