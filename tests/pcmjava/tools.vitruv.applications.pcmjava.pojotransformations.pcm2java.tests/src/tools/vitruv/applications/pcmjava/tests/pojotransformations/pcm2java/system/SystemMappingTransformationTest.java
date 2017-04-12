@@ -7,9 +7,7 @@ import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
-import tools.vitruv.framework.change.description.VitruviusChangeFactory.FileChangeKind;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -36,9 +34,7 @@ public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest 
         final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
         this.assertSystem(system);
         
-        VURI systemVuri = VURI.getInstance(system.eResource()); 
-        system.eResource().delete(null);
-        super.synchronizeFileChange(FileChangeKind.Delete, systemVuri);
+        deleteAndSynchronizeModel(createSystemPathInProject(system.getEntityName()));
         
         assertEmptyCorrespondence(system);
         assertCompilationUnitForSystemDeleted(system);

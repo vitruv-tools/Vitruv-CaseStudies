@@ -66,7 +66,6 @@ import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.domains.pcm.PcmNamespace;
-import tools.vitruv.framework.change.description.VitruviusChangeFactory.FileChangeKind;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.metamodel.Metamodel;
@@ -230,10 +229,14 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         return opInterface;
     }
 
+    protected String createRepositoryPathInProject(final String repositoryName) {
+    	return "model/" + repositoryName + "." + PcmNamespace.REPOSITORY_FILE_EXTENSION;
+    }
+    
     protected Repository createAndSyncRepository(final ResourceSet resourceSet, final String repositoryName)
             throws IOException {
     	final Repository repo = Pcm2JavaTestUtils.createRepository(repositoryName);
-        createAndSynchronizeModel("model/" + repositoryName + "." + PcmNamespace.REPOSITORY_FILE_EXTENSION, repo);
+        createAndSynchronizeModel(createRepositoryPathInProject(repositoryName), repo);
         return repo;
     }
 
@@ -371,10 +374,13 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         return operationRequiredRole;
     }
 
-    protected System createAndSyncSystem(final String name) throws Throwable {
-        final System system = Pcm2JavaTestUtils.createSystem(this.resourceSet, name, this.currentTestProjectName);
-        this.changeRecorder.beginRecording(VURI.getInstance(system.eResource()), Collections.singletonList(system));
-        this.synchronizeFileChange(FileChangeKind.Create, VURI.getInstance(system.eResource()));
+    protected String createSystemPathInProject(final String systemName) {
+    	return "model/" + systemName + "." + PcmNamespace.SYSTEM_FILE_EXTENSION;
+    }
+    
+    protected System createAndSyncSystem(final String systemName) throws Throwable {
+        final System system = Pcm2JavaTestUtils.createSystem(systemName);
+        createAndSynchronizeModel(createSystemPathInProject(systemName), system);
         return system;
     }
 

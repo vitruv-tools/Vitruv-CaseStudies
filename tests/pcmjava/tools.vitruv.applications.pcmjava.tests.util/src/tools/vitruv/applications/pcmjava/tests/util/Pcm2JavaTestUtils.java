@@ -2,18 +2,12 @@ package tools.vitruv.applications.pcmjava.tests.util;
 
 import java.io.IOException;
 
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CompositeComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 import org.palladiosimulator.pcm.system.System;
 import org.palladiosimulator.pcm.system.SystemFactory;
-
-import tools.vitruv.domains.pcm.PcmNamespace;
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 
 public class Pcm2JavaTestUtils {
 
@@ -55,15 +49,10 @@ public class Pcm2JavaTestUtils {
         return compositeComponent;
     }
 
-    public static System createSystem(final ResourceSet resourceSet, final String systemName, final String projectName)
+    public static System createSystem(final String systemName)
             throws Throwable {
-        final VURI repoVURI = VURI
-                .getInstance(projectName + "/model/" + systemName + "." + PcmNamespace.SYSTEM_FILE_EXTENSION);
-        final Resource resource = resourceSet.createResource(repoVURI.getEMFUri());
         final System system = SystemFactory.eINSTANCE.createSystem();
         system.setEntityName(systemName);
-        resource.getContents().add(system);
-        EcoreResourceBridge.saveResource(resource);
         return system;
     }
 }
