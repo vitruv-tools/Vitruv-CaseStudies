@@ -15,7 +15,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
 
     @Test
     public void testAddBasicComponent() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
 
@@ -24,7 +24,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
 
     @Test
     public void testRenameBasicComponent() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
 
         basicComponent.setEntityName(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME);
@@ -35,7 +35,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
 
     @Test
     public void testDeleteBasicComponent() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
 
         EcoreUtil.delete(basicComponent);
@@ -47,7 +47,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
 
     @Test
     public void testAddTwoBasicComponentAndDeleteOne() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
         final BasicComponent basicComponent2 = this.addBasicComponentAndSync(repo, "SecondBasicComponent");
 

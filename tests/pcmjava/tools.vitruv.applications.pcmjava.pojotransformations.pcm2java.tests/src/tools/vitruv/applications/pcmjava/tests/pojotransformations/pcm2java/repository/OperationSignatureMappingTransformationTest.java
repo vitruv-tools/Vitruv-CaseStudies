@@ -48,7 +48,7 @@ public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransfo
     @Test
     public void testCreateOperationSignatureWithReturnType() throws Throwable {
         // create
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);
 

@@ -75,7 +75,7 @@ public class CompositeComponentMappingTransformationTest extends Pcm2JavaTransfo
     }
 
     private CompositeComponent createAndSyncRepoAndCompositeComponent() throws IOException {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeComponent compositeComponent = this.addCompositeComponentAndSync(repo);
         return compositeComponent;
     }

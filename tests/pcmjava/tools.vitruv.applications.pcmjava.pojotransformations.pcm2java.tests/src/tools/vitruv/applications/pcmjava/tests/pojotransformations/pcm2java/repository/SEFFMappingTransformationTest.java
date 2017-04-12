@@ -22,7 +22,7 @@ public class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testCreateSEFF() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent bc1 = this.addBasicComponentAndSync(repo);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);
@@ -36,7 +36,7 @@ public class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testRenameSEFF() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent bc1 = this.addBasicComponentAndSync(repo);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);

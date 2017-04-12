@@ -27,7 +27,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
     @Test
     public void testAddOperationRequiredToSystem() throws Throwable {
         final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);
 
@@ -39,7 +39,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
 
     @Test
     public void testAddOperationRequiredRoleToCompositeComponent() throws Throwable {
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);
         final CompositeComponent compositeComponent = super.createAndSyncCompositeComponent(repo,
@@ -104,7 +104,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
 
     @Test
     public void testAddOperationRequiredRoleToSystem() throws Throwable {
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
         final OperationInterface opInterface = super.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);

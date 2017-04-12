@@ -22,7 +22,7 @@ public class RequiredDelegationConnectorMappingTransformationTest extends Pcm2Ja
 	@Ignore
     @Test
     public void testAddRequireDelegationConnector() throws Throwable {
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent basicComp = super.addBasicComponentAndSync(repo, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
         final OperationInterface opInterface = super.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);

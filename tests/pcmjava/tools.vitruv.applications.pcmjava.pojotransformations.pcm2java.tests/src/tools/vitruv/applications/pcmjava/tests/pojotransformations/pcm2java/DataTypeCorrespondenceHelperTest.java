@@ -22,7 +22,7 @@ public class DataTypeCorrespondenceHelperTest extends Pcm2JavaTransformationTest
 
 	@Test
 	public void testCorrespondenceForCompositeDataType() throws Throwable {
-		final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
 		// Create and sync CompositeDataType
 		final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
@@ -52,7 +52,7 @@ public class DataTypeCorrespondenceHelperTest extends Pcm2JavaTransformationTest
 
 	@Test
     public void testCorrespondenceForCollectionDataType() throws Throwable {
-    	final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+    	final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
     	// Create and sync CollectionDataType
     	this.testUserInteractor.addNextSelections(0);

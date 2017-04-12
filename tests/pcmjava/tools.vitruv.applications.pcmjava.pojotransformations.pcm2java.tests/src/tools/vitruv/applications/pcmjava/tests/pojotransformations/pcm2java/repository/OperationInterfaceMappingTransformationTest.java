@@ -14,7 +14,7 @@ public class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransfo
 
     @Test
     public void testAddInterface() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);
@@ -24,7 +24,7 @@ public class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransfo
 
     @Test
     public void testRenameInterface() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo, Pcm2JavaTestUtils.INTERFACE_NAME);
 
         opInterface = this.renameInterfaceAndSync(opInterface);

@@ -15,7 +15,7 @@ public class AssemblyContextMappingTransformationTest extends Pcm2JavaTransforma
     @Test
     public void testCreateAssemblyContext() throws Throwable {
         final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent basicComponent = super.addBasicComponentAndSync(repo);
 
         final AssemblyContext assemblyContext = this.createAndSyncAssemblyContext(system, basicComponent);

@@ -22,7 +22,7 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
 
     @Test
     public void testCreateResourceDemandingInternalBehavior() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent bc1 = this.addBasicComponentAndSync(repo);
 
         this.testUserInteractor.addNextSelections(RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD);

@@ -15,7 +15,7 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
 
     @Test
     public void testAddCompositeDataType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
 
@@ -24,7 +24,7 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
 
     @Test
     public void testRenameCompositeDataType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
 
         cdt.setEntityName(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME);
@@ -35,7 +35,7 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
 
     @Test
     public void testAddCompositeDataTypeWithInnerTypes() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createCompositeDataType(repo, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME);
         super.saveAndSynchronizeChanges(repo);
 
@@ -66,7 +66,7 @@ public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransfor
 
     @Test
     public void testAddCompositeDataTypeToCompositeDataType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
         final CompositeDataType cdt2 = this.createAndSyncCompositeDataType(repo, "InnerCompositeDataTypeTest");
 

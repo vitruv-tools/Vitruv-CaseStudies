@@ -13,7 +13,6 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -233,7 +232,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
     	return "model/" + repositoryName + "." + PcmNamespace.REPOSITORY_FILE_EXTENSION;
     }
     
-    protected Repository createAndSyncRepository(final ResourceSet resourceSet, final String repositoryName)
+    protected Repository createAndSyncRepository(final String repositoryName)
             throws IOException {
     	final Repository repo = Pcm2JavaTestUtils.createRepository(repositoryName);
         createAndSynchronizeModel(createRepositoryPathInProject(repositoryName), repo);
@@ -241,7 +240,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected OperationSignature createAndSyncRepoInterfaceAndOperationSignature() throws IOException, Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME);
         final OperationSignature opSig = this.createAndSyncOperationSignature(repo, opInterface);
@@ -311,7 +310,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
     }
 
     protected InnerDeclaration createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
         final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
         this.triggerSynchronization(VURI.getInstance(repo.eResource()));
@@ -527,7 +526,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
         this.beforeTest();
 
         // create repo
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, "mediastorerepo");
+        final Repository repo = this.createAndSyncRepository("mediastorerepo");
 
         // create component
         final BasicComponent mediaStoreBC = this.addBasicComponentAndSync(repo, mediaStoreName);

@@ -21,7 +21,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
 
     @Test
     public void testAddRepository() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         this.assertRepositoryCorrespondences(repo);
     }
@@ -29,7 +29,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
     @Test
     public void testRepositoryNameChange() throws Throwable {
         // setup
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         // Test
         repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
@@ -43,7 +43,7 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
     @Test
     public void testRepositoryNameChangeWithComponents() throws Throwable {
         // setup
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
         
         // Test
