@@ -2,9 +2,6 @@ package tools.vitruv.applications.pcmjava.tests.util;
 
 import java.io.IOException;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -14,14 +11,8 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory;
 import org.palladiosimulator.pcm.system.System;
 import org.palladiosimulator.pcm.system.SystemFactory;
 
-import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
-import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
 import tools.vitruv.domains.pcm.PcmNamespace;
-import tools.vitruv.framework.change.description.ConcreteChange;
-import tools.vitruv.framework.change.description.VitruviusChangeFactory;
-import tools.vitruv.framework.util.bridges.EMFBridge;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
-import tools.vitruv.framework.util.datatypes.ModelInstance;
 import tools.vitruv.framework.util.datatypes.VURI;
 
 public class Pcm2JavaTestUtils {
@@ -50,10 +41,6 @@ public class Pcm2JavaTestUtils {
         return repo;
     }
 
-    public static BasicComponent createBasicComponent(final Repository repo) {
-        return createBasicComponent(repo, BASIC_COMPONENT_NAME);
-    }
-
     public static BasicComponent createBasicComponent(final Repository repo, final String name) {
         final BasicComponent basicComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
         basicComponent.setRepository__RepositoryComponent(repo);
@@ -66,49 +53,6 @@ public class Pcm2JavaTestUtils {
         compositeComponent.setRepository__RepositoryComponent(repo);
         compositeComponent.setEntityName(name);
         return compositeComponent;
-    }
-
-    public static VURI createDummyVURI(final String name) {
-        return VURI.getInstance(EMFBridge.createPlatformResourceURI("test/" + name));
-    }
-
-    public static Resource createResource(final String resourceName, final ResourceSet resourceSet) {
-        final URI uri = EMFBridge.createPlatformResourceURI(resourceName);
-        // final URI uri = URI.createPlatformResourceURI("test/" + resourceName, true);
-        final Resource resource = resourceSet.createResource(uri);
-        return resource;
-    }
-
-    public static ModelInstance createModelInstance(final String name, final ResourceSet resourceSet) {
-        final Resource resource = createResource(name, resourceSet);
-        final VURI vuri = VURI.getInstance(name);
-        final ModelInstance modelInstance = new ModelInstance(vuri, resource);
-        return modelInstance;
-    }
-
-    public static ConcreteChange createCreateChange(final EObject changedEObject, final EObject newAffectedEObject,
-            final EObject oldAffectedEObject, final String featureName) {
-        final JavaInsertEReference<EObject, EObject> createChange = ReferenceFactory.eINSTANCE
-                .createJavaInsertEReference();
-        // createChange.setIsCreate(true);
-        createChange.setNewValue(changedEObject);
-        createChange.setAffectedEObject(newAffectedEObject);
-        createChange.setOldAffectedEObject(oldAffectedEObject);
-        createChange.setAffectedFeature(getEReferenceByName(newAffectedEObject, featureName));
-        createChange.setNewValue(changedEObject);
-        final ConcreteChange emfModelChange = VitruviusChangeFactory.getInstance().createConcreteChange(createChange,
-                VURI.getInstance(oldAffectedEObject.eResource()));
-        return emfModelChange;
-    }
-
-    public static EReference getEReferenceByName(final EObject eObject, final String featureName) {
-        return (EReference) eObject.eClass().getEStructuralFeature(featureName);
-    }
-
-    public static Resource saveVURI(final VURI vuri, final ResourceSet resourceSet) throws IOException {
-        final Resource resource = resourceSet.createResource(vuri.getEMFUri());
-        EcoreResourceBridge.saveResource(resource);
-        return resource;
     }
 
     public static System createSystem(final ResourceSet resourceSet, final String systemName, final String projectName)
