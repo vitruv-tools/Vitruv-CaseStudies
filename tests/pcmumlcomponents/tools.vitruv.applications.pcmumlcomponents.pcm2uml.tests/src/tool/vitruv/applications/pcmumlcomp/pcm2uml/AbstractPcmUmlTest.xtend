@@ -16,7 +16,7 @@ class AbstractPcmUmlTest extends VitruviusChangePropagationTest {
 	}
 	
 	protected def Repository getRootElement() {
-		return MODEL_NAME.projectModelPath.root as Repository;
+		return MODEL_NAME.projectModelPath.firstRootElement as Repository;
 	}
 	
 	override protected createChangePropagationSpecifications() {

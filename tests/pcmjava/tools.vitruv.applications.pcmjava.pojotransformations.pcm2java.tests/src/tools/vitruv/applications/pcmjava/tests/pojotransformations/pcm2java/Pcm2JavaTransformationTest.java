@@ -87,7 +87,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
 	public void beforeTest() throws Throwable {
 		super.beforeTest();
 		// This is necessary because otherwise Maven tests will fail as resources from previous
-		// tests are still in the classpath and accidentially resolved
+		// tests are still in the classpath and accidentally resolved
 		JavaClasspath.reset();
 	}
 	

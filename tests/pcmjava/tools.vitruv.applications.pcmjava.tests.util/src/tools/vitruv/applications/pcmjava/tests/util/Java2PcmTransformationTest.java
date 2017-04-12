@@ -97,6 +97,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.metamodel.Metamodel;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.modelsynchronization.ChangePropagationAbortCause;
+import tools.vitruv.framework.modelsynchronization.ChangePropagationListener;
 import tools.vitruv.framework.monitorededitor.ProjectBuildUtils;
 import tools.vitruv.framework.tests.VitruviusCasestudyTest;
 import tools.vitruv.framework.tests.util.TestUtil;
@@ -111,7 +112,7 @@ import tools.vitruv.framework.util.datatypes.VURI;
  *
  */
 @SuppressWarnings("restriction")
-public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest implements SynchronizationAwaitCallback {
+public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest implements ChangePropagationListener, SynchronizationAwaitCallback {
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 
@@ -133,8 +134,9 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	@Override
 	public void beforeTest() throws Throwable {
 		super.beforeTest();
+		this.getVirtualModel().addChangePropagationListener(this);
 		// This is necessary because otherwise Maven tests will fail as resources from previous
-		// tests are still in the classpath and accidentially resolved
+		// tests are still in the classpath and accidentally resolved
 		JavaClasspath.reset();
 		// add PCM Java Builder to Project under test
 		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
@@ -142,6 +144,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(currentTestProject, VitruviusJavaBuilder.BUILDER_ID);
 		this.expectedNumberOfSyncs = 0;
+		// Pipe JaMoPP error output to null
 		java.lang.System.setErr(null);
 	}
 
@@ -240,7 +243,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 		packageRoot.createPackageFragment(namespaceDotted, force, new NullProgressMonitor());
 		waitForSynchronization(1);
 	}
-
+	
 	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException  {
 		String packageFile = StringUtils.join(namespace, "/");
 		packageFile = packageFile + "/package-info.java";
@@ -248,8 +251,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 		final List<String> namespaceList = Arrays.asList(namespace);
 		jaMoPPPackage.setName(namespaceList.get(namespaceList.size() - 1));
 		jaMoPPPackage.getNamespaces().addAll(namespaceList.subList(0, namespaceList.size() - 1));
-		final VURI packageVURI = this.createVURIForSrcFile(packageFile);
-		final Resource resource = this.resourceSet.createResource(packageVURI.getEMFUri());
+		final Resource resource = this.createModelResource(getPathInProjectForSrcFile(packageFile));
 		EcoreResourceBridge.saveEObjectAsOnlyContent(jaMoPPPackage, resource);
 		waitForSynchronization(1);
 		return jaMoPPPackage;
@@ -360,9 +362,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 		return packageFragment;
 	}
 
-	private VURI createVURIForSrcFile(final String srcFilePath) {
-		final String vuriKey = this.getProjectPath() + TestUtil.SOURCE_FOLDER + "/" + srcFilePath;
-		return VURI.getInstance(vuriKey);
+	private String getPathInProjectForSrcFile(final String srcFilePath) {
+		return TestUtil.SOURCE_FOLDER + "/" + srcFilePath;
 	}
 
 	protected <T> T addClassInSecondPackage(final Class<T> classOfCorrespondingObject) throws Throwable {
