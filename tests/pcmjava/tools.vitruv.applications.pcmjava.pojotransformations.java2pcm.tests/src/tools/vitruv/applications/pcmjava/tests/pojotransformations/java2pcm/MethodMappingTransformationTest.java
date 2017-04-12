@@ -59,7 +59,7 @@ public class MethodMappingTransformationTest extends Java2PcmPackageMappingTrans
         final String className = opSig.getInterface__OperationSignature().getEntityName();
         final String methodName = opSig.getEntityName();
         final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IMethod iMethod = cu.getType(className).getMethod(methodName, null);
         final int returnTypeOffset = iMethod.getSourceRange().getOffset();
         final String retTypeName = iMethod.getSource().split(" ")[0];

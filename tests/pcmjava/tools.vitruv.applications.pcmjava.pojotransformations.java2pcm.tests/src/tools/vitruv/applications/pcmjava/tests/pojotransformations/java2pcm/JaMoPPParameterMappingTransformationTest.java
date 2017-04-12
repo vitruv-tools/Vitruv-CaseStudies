@@ -74,7 +74,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
     private Parameter renameParameterInSignature(final String interfaceName, final String methodName,
             final String oldParameterName, final String newParameterName) throws Throwable {
         final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(interfaceName,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IMethod iMethod = this.findIMethodByName(interfaceName, methodName, icu);
         final ILocalVariable localVariable = this.findParameterInIMethod(iMethod, oldParameterName);
         final String typeName = localVariable.getSource().split(" ")[0];
@@ -92,7 +92,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
     private Parameter changeParameterType(final String interfaceName, final String methodName, final String paramName,
             final String newTypeName) throws Throwable {
         final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(interfaceName,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IMethod iMethod = this.findIMethodByName(interfaceName, methodName, icu);
         final ILocalVariable parameter = this.findParameterInIMethod(iMethod, paramName);
         final int offset = parameter.getSourceRange().getOffset();

@@ -640,7 +640,7 @@ public class Pcm2JavaTransformationTest extends VitruviusEMFCasestudyTest {
     }
     
     protected boolean existsClass(final String expectedClassName) throws Throwable {
-        final IProject testProject = TestUtil.getProjectByName(this.currentTestProject.getName());
+        final IProject testProject = TestUtil.getProjectByName(this.getCurrentTestProject().getName());
         final IJavaProject javaProject = JavaCore.create(testProject);
         for (final IPackageFragment pkg : javaProject.getPackageFragments()) {
             for (final ICompilationUnit unit : pkg.getCompilationUnits()) {

@@ -166,7 +166,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
     private InnerDeclaration renameFieldInClass(final String className, final String fieldName,
             final String newFieldName) throws Throwable {
         final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IType type = icu.getType(className);
         final IField fieldToRename = type.getField(fieldName);
         final String fieldToRenameStr = fieldToRename.getSource();
@@ -186,7 +186,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
     private InnerDeclaration changeFieldTypeInClass(final String className, final String fieldName,
             final String newFieldTypeName) throws Throwable {
         final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IType type = icu.getType(className);
         final IField fieldToRename = type.getField(fieldName);
         final String fieldSrc = fieldToRename.getSource();

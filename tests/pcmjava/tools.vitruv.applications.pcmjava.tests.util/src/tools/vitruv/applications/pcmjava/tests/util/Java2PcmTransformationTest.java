@@ -140,9 +140,9 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 		JavaClasspath.reset();
 		// add PCM Java Builder to Project under test
 		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
-		pcmJavaBuilder.addToProject(this.currentTestProject, getVirtualModel().getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
+		pcmJavaBuilder.addToProject(this.getCurrentTestProject(), getVirtualModel().getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
-		ProjectBuildUtils.issueIncrementalBuild(currentTestProject, VitruviusJavaBuilder.BUILDER_ID);
+		ProjectBuildUtils.issueIncrementalBuild(getCurrentTestProject(), VitruviusJavaBuilder.BUILDER_ID);
 		this.expectedNumberOfSyncs = 0;
 		// Pipe JaMoPP error output to null
 		java.lang.System.setErr(null);
@@ -152,7 +152,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	public void afterTest() {
 		// Remove PCM Java Builder
 		final VitruviusJavaBuilderApplicator pcmJavaRemoveBuilder = new VitruviusJavaBuilderApplicator();
-		pcmJavaRemoveBuilder.removeBuilderFromProject(this.currentTestProject);
+		pcmJavaRemoveBuilder.removeBuilderFromProject(this.getCurrentTestProject());
 	}
 
 	@Override
@@ -295,7 +295,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 			throws Throwable {
 		try {
 			final ICompilationUnit cu = CompilationUnitManipulatorHelper
-					.findICompilationUnitWithClassName(entityName + ".java", this.currentTestProject);
+					.findICompilationUnitWithClassName(entityName + ".java", this.getCurrentTestProject());
 			final int offset = cu.getBuffer().getContents().indexOf(entityName);
 			if (cu.getBuffer() instanceof IBuffer.ITextEditCapability) {
 				logger.info(cu.getBuffer());
@@ -314,7 +314,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	}
 
 	private Package findJaMoPPPackageWithName(final String newName) throws JavaModelException  {
-		final IJavaProject javaProject = JavaCore.create(this.currentTestProject);
+		final IJavaProject javaProject = JavaCore.create(this.getCurrentTestProject());
 		for (final IPackageFragmentRoot packageFragmentRoot : javaProject.getPackageFragmentRoots()) {
 			final IJavaElement[] children = packageFragmentRoot.getChildren();
 			for (final IJavaElement iJavaElement : children) {
@@ -350,7 +350,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	}
 
 	private IPackageFragmentRoot getIJavaProject() throws CoreException  {
-		final IProject project = this.currentTestProject;
+		final IProject project = this.getCurrentTestProject();
 		final IJavaProject javaProject = JavaCore.create(project);
 		final IFolder sourceFolder = project.getFolder(TestUtil.SOURCE_FOLDER);
 		if (!sourceFolder.exists()) {
@@ -489,7 +489,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 			final IFile iFile = EMFBridge.getIFileForEMFUri(eObject.eResource().getURI());
 			fullFilePaths.add(iFile.getFullPath().toString());
 		}
-		final IFolder folder = this.currentTestProject.getFolder("model");
+		final IFolder folder = this.getCurrentTestProject().getFolder("model");
 		final List<String> foundAdditionalFiles = new ArrayList<>();
 		for (final IResource iResource : folder.members()) {
 			final String iResourcePath = iResource.getFullPath().toString();
@@ -619,7 +619,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 			final String methodName) throws Throwable, JavaModelException {
 		final String methodString = "\nvoid " + methodName + "();\n";
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.addMethodToCompilationUnit(interfaceName,
-				methodString, this.currentTestProject, this);
+				methodString, this.getCurrentTestProject(), this);
 		return this.findOperationSignatureForJaMoPPMethodInCompilationUnit(methodName, interfaceName, cu);
 	}
 
@@ -627,7 +627,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 			final String methodName) throws Throwable {
 		final String methodString = "\n\tpublic void " + methodName + " () {\n\t}\n";
 		final ICompilationUnit icu = CompilationUnitManipulatorHelper.addMethodToCompilationUnit(className,
-				methodString, this.currentTestProject, this);
+				methodString, this.getCurrentTestProject(), this);
 		final Method jaMoPPMethod = this.findJaMoPPMethodInICU(icu, methodName);
 		final ClassMethod classMethod = (ClassMethod) jaMoPPMethod;
 		return CollectionBridge.claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
@@ -652,7 +652,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	protected OperationSignature renameMethodInClassWithName(final String className, final String methodName)
 			throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-				this.currentTestProject);
+				this.getCurrentTestProject());
 		final IMethod iMethod = cu.getType(className).getMethod(methodName, null);
 		final int offset = iMethod.getNameRange().getOffset();
 		final int length = iMethod.getNameRange().getLength();
@@ -705,7 +705,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 			final String typeName, final String parameterName, final String[] parameterTypeSignatures)
 					throws Throwable {
 		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(interfaceName,
-				this.currentTestProject);
+				this.getCurrentTestProject());
 		final IMethod iMethod = icu.getType(interfaceName).getMethod(methodName, parameterTypeSignatures);
 		final String parameterStr = typeName + " " + parameterName;
 		return this.insertParameterIntoSignature(methodName, parameterName, icu, iMethod, parameterStr);
@@ -732,7 +732,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 			oldTypeName = "void";
 		}
 		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(interfaceName,
-				this.currentTestProject);
+				this.getCurrentTestProject());
 		final IMethod iMethod = icu.getType(interfaceName).getMethod(methodName, null);
 		final String retTypeStr = typeName;
 		final int offset = iMethod.getSourceRange().getOffset()
@@ -826,7 +826,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 //		} catch (InterruptedException e) {
 //		}
 		final ICompilationUnit classCompilationUnit = CompilationUnitManipulatorHelper
-				.findICompilationUnitWithClassName(className, this.currentTestProject);
+				.findICompilationUnitWithClassName(className, this.getCurrentTestProject());
 		this.importCompilationUnitWithName(implementingInterfaceName, classCompilationUnit);
 		
 		final IType classType = classCompilationUnit.getType(className);
@@ -856,7 +856,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	protected void importCompilationUnitWithName(final String implementingInterfaceName,
 			final ICompilationUnit classCompilationUnit) throws JavaModelException {
 		final ICompilationUnit interfaceCompilationUnit = CompilationUnitManipulatorHelper
-				.findICompilationUnitWithClassName(implementingInterfaceName, this.currentTestProject);
+				.findICompilationUnitWithClassName(implementingInterfaceName, this.getCurrentTestProject());
 		final String namespace = interfaceCompilationUnit.getType(implementingInterfaceName).getFullyQualifiedName();
 		classCompilationUnit.createImport(namespace, null, null);
 	}
@@ -864,7 +864,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	protected <T> T addFieldToClassWithName(final String className, final String fieldType, final String fieldName,
 			final Class<T> correspondingType) throws Throwable {
 		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-				this.currentTestProject);
+				this.getCurrentTestProject());
 		if (!fieldType.equals("String")) {
 			this.importCompilationUnitWithName(fieldType, icu);
 		}
@@ -921,7 +921,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	protected <T> T addAnnotationToClassifier(final AnnotableAndModifiable annotable, final String annotationName,
 			final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-				this.currentTestProject);
+				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
 		final int offset = CompilationUnitManipulatorHelper.getOffsetForAddingAnntationToClass(type);
 		final InsertEdit insertEdit = new InsertEdit(offset, "@" + annotationName);
@@ -935,7 +935,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusCasestudyTest 
 	protected <T> T addAnnotationToField(final String fieldName, final String annotationName,
 			final Class<T> classOfCorrespondingObject, final String className) throws Throwable {
 		final ICompilationUnit cu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-				this.currentTestProject);
+				this.getCurrentTestProject());
 		final IType type = cu.getType(className);
 		final int offset = CompilationUnitManipulatorHelper.getOffsetForAddingAnntationToField(type, fieldName);
 		final InsertEdit insertEdit = new InsertEdit(offset, "@" + annotationName + " ");
