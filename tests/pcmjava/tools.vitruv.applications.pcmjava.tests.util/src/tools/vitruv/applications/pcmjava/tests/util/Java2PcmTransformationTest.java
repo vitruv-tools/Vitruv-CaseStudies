@@ -155,14 +155,6 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		pcmJavaRemoveBuilder.removeBuilderFromProject(this.getCurrentTestProject());
 	}
 
-	@Override
-	protected CorrespondenceModel getCorrespondenceModel()  {
-		final VURI jaMoPPVURI = VURI.getInstance(JavaNamespace.METAMODEL_NAMESPACE);
-		final VURI pcmVURI = VURI.getInstance(PcmNamespace.METAMODEL_NAMESPACE);
-		final CorrespondenceModel corresponcenceInstance = getVirtualModel().getCorrespondenceModel(pcmVURI, jaMoPPVURI);
-		return corresponcenceInstance;
-	}
-
 	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits)
             throws JavaModelException {
 		CompilationUnitManipulatorHelper.editCompilationUnit(cu, this, edits);
