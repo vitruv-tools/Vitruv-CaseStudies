@@ -5,9 +5,9 @@ import tools.vitruv.domains.java.JavaDomain
 import tools.vitruv.domains.uml.UmlDomain
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Model
-import tools.vitruv.framework.tests.VitruviusEmfApplicationTest
+import tools.vitruv.framework.tests.VitruviusApplicationTest
 
-class AbstractUmlJavaTest extends VitruviusEmfApplicationTest {
+class AbstractUmlJavaTest extends VitruviusApplicationTest {
 	private static val MODEL_FILE_EXTENSION = "uml";
 	private static val MODEL_NAME = "model";
 	
