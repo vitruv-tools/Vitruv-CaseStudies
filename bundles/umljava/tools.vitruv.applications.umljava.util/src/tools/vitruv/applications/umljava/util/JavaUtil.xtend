@@ -24,8 +24,22 @@ import org.emftext.language.java.types.Type
 import org.emftext.language.java.generics.GenericsFactory
 import org.emftext.language.java.containers.JavaRoot
 import org.eclipse.emf.ecore.util.EcoreUtil
+import java.util.ArrayList
+import java.util.HashSet
+import java.util.LinkedList
+import java.util.Set
+import java.util.List
+import org.emftext.language.java.imports.ClassifierImport
+import tools.vitruv.domains.java.util.jamoppparser.JamoppParser
+import java.io.ByteArrayInputStream
+import org.emftext.language.java.containers.CompilationUnit
+import org.eclipse.emf.common.util.URI
+import org.emftext.language.java.members.Constructor
+import org.apache.log4j.Logger
+import org.emftext.language.java.parameters.Parametrizable
 
 class JavaUtil {
+	private static val logger = Logger.getLogger(JavaUtil)
     public static val BOOLEAN = "boolean";
     public static val BYTE = "byte";
     public static val CHAR = "char";
@@ -41,59 +55,57 @@ class JavaUtil {
     
     private new() {}
     
+    def static void addJavaVisibilityModifier(AnnotableAndModifiable modifiable, JavaVisibility visibility) {
+    	val visibilityModifier = getJavaVisibilityModifierFromEnum(visibility)
+    	addModifierIfNotNull(modifiable, visibilityModifier)
+    }
+        
     
     /**
-     * return null bei package-private
+     * Returns the Java Modifier corresponding to the JavaVisibility-Enum Constant.
+     * Returns null if visibility is JavaVisibility.PACKAGE.
      */
-    def static getJavaVisibilityModifierFromEnum(JavaVisibility vis) {
-        switch vis {
+    def static getJavaVisibilityModifierFromEnum(JavaVisibility visibility) {
+        switch visibility {
             case JavaVisibility.PUBLIC: return ModifiersFactory.eINSTANCE.createPublic
             case JavaVisibility.PRIVATE: return ModifiersFactory.eINSTANCE.createPrivate
             case JavaVisibility.PROTECTED: return ModifiersFactory.eINSTANCE.createProtected
             case JavaVisibility.PACKAGE: return null
-            default: throw new IllegalArgumentException("Invalid Visibility: " + vis)
+            default: throw new IllegalArgumentException("Invalid Visibility: " + visibility)
         }
     }
     
     /**
      * The created Class is not contained in a compilationunit.
      */
-    def static createJavaClass(String cName, JavaVisibility vis, boolean abstr, boolean fin) {
-        val cls = ClassifiersFactory.eINSTANCE.createClass;
-        if (cName == null) {
-            throw new IllegalArgumentException("Classname is null");
-        }
-        cls.name = cName;
-        if (vis != null && vis != JavaVisibility.PACKAGE) {
-            cls.addModifier(getJavaVisibilityModifierFromEnum(vis))
-        }
+    def static createJavaClass(String name, JavaVisibility visibility, boolean abstr, boolean fin) {
+        val jClass = ClassifiersFactory.eINSTANCE.createClass;
+        setName(jClass, name)
+        addJavaVisibilityModifier(jClass, visibility)
         if (abstr) {
-            cls.addModifier(ModifiersFactory.eINSTANCE.createAbstract)
+            makeAbstract(jClass)
         }
         if (fin) {
-            cls.addModifier(ModifiersFactory.eINSTANCE.createFinal)
+            makeFinal(jClass)
         }
-        return cls;
+        return jClass;
     }
     
     /**
      * The created Interface is not contained in a compilationunit.
      */
     def static createJavaInterface(String name, EList<Interface> superInterfaces) {
-        val jI = ClassifiersFactory.eINSTANCE.createInterface;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create JavalInterface - name is null");
-        }
-        jI.name = name;
-        jI.makePublic;
+        val jInterface = ClassifiersFactory.eINSTANCE.createInterface;
+        setName(jInterface, name)
+        jInterface.makePublic;
         if (!superInterfaces.nullOrEmpty) {
-            jI.extends.addAll(createNamespaceReferenceFromList(superInterfaces));
+            jInterface.extends.addAll(createNamespaceReferenceFromList(superInterfaces));
         }
-        return jI;
+        return jInterface;
     }
     
     /**
-     * .java Endung wird in der Methode eingefügt
+     * The Method automatically sets the .java FileExtension
      */
     def static createEmptyCompilationUnit(String name) {
         val cu = ContainersFactory.eINSTANCE.createCompilationUnit
@@ -102,37 +114,28 @@ class JavaUtil {
     }
     
     /**
-     * @return public Operation mit Namen; kein Return, Params oder Modifier
+     * @return public Operation with name; no return, params or modifier
      */
     def static createSimpleJavaOperation(String name) {
         return createJavaClassMethod(name, null, JavaVisibility.PUBLIC, false, false, null)
     }
     
     /**
-     * return und params kann null sein.
+     * return and params can be null
      */
-    def static createJavaClassMethod(String name, TypeReference returnType, JavaVisibility vis, boolean abstr, boolean stat, EList<Parameter> params) {
-        val jMeth = MembersFactory.eINSTANCE.createClassMethod;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create Java Method - name is null");
-        }
-        jMeth.name = name;
-        if (returnType != null) {
-            jMeth.typeReference = returnType;
-        }
-        if (vis != null && vis != JavaVisibility.PACKAGE) {
-            jMeth.addModifier(getJavaVisibilityModifierFromEnum(vis));
-        }
+    def static createJavaClassMethod(String name, TypeReference returnType, JavaVisibility visibility, boolean abstr, boolean stat, EList<Parameter> params) {
+        val jMethod = MembersFactory.eINSTANCE.createClassMethod;
+        setName(jMethod, name)
+        setTypeReferenceIfNotNull(jMethod, returnType)
+        addJavaVisibilityModifier(jMethod, visibility)
         if (abstr) {
-            jMeth.addModifier(ModifiersFactory.eINSTANCE.createAbstract)
+            makeAbstract(jMethod)
         }
         if (stat) {
-            jMeth.addModifier(ModifiersFactory.eINSTANCE.createStatic)
+            makeStatic(jMethod)
         }
-        if (!params.nullOrEmpty) {
-            jMeth.parameters.addAll(params);
-        }
-        return jMeth;
+        addParametersIfNotNull(jMethod, params)
+        return jMethod;
     }
     
     
@@ -141,51 +144,32 @@ class JavaUtil {
      * Return an InterfaceMethod (public, not static, not abstract)
      */
     def static createJavaInterfaceMethod(String name, TypeReference returnType, EList<Parameter> params) {
-        val jMeth = MembersFactory.eINSTANCE.createInterfaceMethod;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create Java Method - name is null");
-        }
-        jMeth.name = name;
-        if (returnType != null) {
-            jMeth.typeReference = returnType;
-        }
-        jMeth.makePublic;
-        if (!params.nullOrEmpty) {
-            jMeth.parameters.addAll(params);
-        }
-        return jMeth;
+        val jMethod = MembersFactory.eINSTANCE.createInterfaceMethod;
+        setName(jMethod, name)
+        setTypeReferenceIfNotNull(jMethod, returnType)
+        jMethod.makePublic;
+        addParametersIfNotNull(jMethod, params)
+        return jMethod;
     }
     
-    def static  createJavaAttribute(String name, TypeReference type, JavaVisibility vis, boolean fin, boolean stat) {
-        val attr = MembersFactory.eINSTANCE.createField;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create Java Field - name is null");
-        }
-        attr.name = name;
-        if (vis != null && vis != JavaVisibility.PACKAGE) {
-            attr.addModifier(getJavaVisibilityModifierFromEnum(vis))
-        }
+    def static  createJavaAttribute(String name, TypeReference type, JavaVisibility visibility, boolean fin, boolean stat) {
+        val jAttribute = MembersFactory.eINSTANCE.createField;
+        setName(jAttribute, name)
+        addJavaVisibilityModifier(jAttribute, visibility)
         if (fin) {
-            attr.addModifier(ModifiersFactory.eINSTANCE.createFinal)
+            makeFinal(jAttribute)
         }
         if (stat) {
-            attr.addModifier(ModifiersFactory.eINSTANCE.createStatic)
+            makeStatic(jAttribute)
         }
-        if (type != null) {
-            attr.typeReference = type;
-        }
-        return attr;
+        setTypeReferenceIfNotNull(jAttribute, type)
+        return jAttribute;
     }
     
     def static createJavaParameter(String name, TypeReference type) {
         val param = ParametersFactory.eINSTANCE.createOrdinaryParameter;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create JavaParameter - name is null");
-        }
-        param.name = name
-        if (type != null) {
-            param.typeReference = type;
-        }
+        setName(param, name)
+        setTypeReferenceIfNotNull(param, type)
         return param;
     }
     
@@ -205,7 +189,7 @@ class JavaUtil {
      */
     def static NamespaceClassifierReference createNamespaceReferenceFromClassifier(ConcreteClassifier concreteClassifier) {
         val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
-        val classifierRef = TypesFactory.eINSTANCE.createClassifierReference
+        var classifierRef = TypesFactory.eINSTANCE.createClassifierReference
         classifierRef.target = concreteClassifier
         namespaceClassifierReference.classifierReferences.add(classifierRef)
         return namespaceClassifierReference
@@ -216,11 +200,10 @@ class JavaUtil {
      */
     def static setJavaModifier(AnnotableAndModifiable jModifiable, Modifier mod, boolean add) {
         if (add) {
-            if (!jModifiable.hasModifier(mod.class)) {//TODO Logeintrag + Schauen, ob es einen Fehler gibt
+            if (!jModifiable.hasModifier(mod.class)) {//TODO Schauen, ob es einen Fehler gibt
                 jModifiable.addModifier(mod)  
             } else {
-            	System.out.println("The Java AnnotableAndModifiable " + jModifiable.class + " already has the modifier " + mod.class)
-            	//TODO Durch Log ersetzen
+            	logger.warn("The Java AnnotableAndModifiable " + jModifiable.class + " already has the modifier " + mod.class)
             }
         } else {
             jModifiable.removeModifier(mod.class)
@@ -233,6 +216,37 @@ class JavaUtil {
     def static addModifierIfNotNull(AnnotableAndModifiable jModifiable, Modifier mod) {
     	if (mod !== null) {
     		setJavaModifier(jModifiable, mod, true)
+    	}
+    }
+    
+    def static void setName(org.emftext.language.java.commons.NamedElement namedElement, String name) {
+    	if (name == null) {
+    		throw new IllegalArgumentException("Cannot set name of " + namedElement + " to null")
+    	}
+    	namedElement.name = name
+    }
+    
+    def static void makeFinal(AnnotableAndModifiable modifiable) {
+    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createFinal, true)
+    }
+    
+    def static void makeAbstract(AnnotableAndModifiable modifiable) {
+    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createAbstract, true)
+    }
+    
+    def static void makeStatic(AnnotableAndModifiable modifiable) {
+    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createStatic, true)
+    }
+    
+    def static void setTypeReferenceIfNotNull(org.emftext.language.java.types.TypedElement typedElement, TypeReference typeRef) {
+    	if (typeRef !== null) {
+    		typedElement.typeReference = typeRef
+    	}
+    }
+    
+    def static void addParametersIfNotNull(Parametrizable parametrizable, List<Parameter> params) {
+    	if (!params.nullOrEmpty) {
+    		parametrizable.parameters.addAll(params)
     	}
     }
      
@@ -280,14 +294,43 @@ class JavaUtil {
         return typeReferences
     }
     
-    def static TypeReference createCollectiontypeReference(String collectionName, org.emftext.language.java.classifiers.Class innerTypeClass) {
-    	val collectionClass = createJavaClass(collectionName, JavaVisibility.PUBLIC, false, false)
+    def static TypeReference createCollectiontypeReference(String collectionQualifiedName, org.emftext.language.java.classifiers.Class innerTypeClass) {
     	val innerTypeReference = createNamespaceReferenceFromClassifier(innerTypeClass)
     	val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
 		qualifiedTypeArgument.typeReference = innerTypeReference;
-		val collectionClassNamespaceReference = createNamespaceReferenceFromClassifier(collectionClass)
+		val collectionClassNamespaceReference = createNamespaceReferenceFromClassifier(getJavaClassImport(collectionQualifiedName).classifier)
 		collectionClassNamespaceReference.classifierReferences.get(0).typeArguments += qualifiedTypeArgument;
 		return collectionClassNamespaceReference
     }
     
+    def static ClassifierImport getJavaClassImport(String name) {
+		val content = "package dummyPackage;\n " +
+				"import " + name + ";\n" +
+				"public class DummyClass {}";
+		val dummyCU = createJavaRoot("DummyClass", content) as CompilationUnit;
+		val classifierImport = (dummyCU.getImports().get(0) as ClassifierImport)
+		EcoreUtil.copy(classifierImport);
+		return classifierImport;
+		
+	}
+	
+	def static JavaRoot createJavaRoot(String name, String content) {
+		val JamoppParser jaMoPPParser = new JamoppParser
+		val inStream = new ByteArrayInputStream(content.bytes)
+		val javaRoot = jaMoPPParser.parseCompilationUnitFromInputStream(URI.createFileURI(name + ".java"),
+			inStream)
+		javaRoot.name = name + ".java"
+		EcoreUtil.remove(javaRoot)
+		return javaRoot
+	}
+   
+   def static Constructor addJavaConstructorToClass(org.emftext.language.java.classifiers.Class jClass, JavaVisibility visibility, List<Parameter> params) {
+   	   val constructor = MembersFactory.eINSTANCE.createConstructor
+   	   setName(constructor, jClass.name)
+   	   addParametersIfNotNull(constructor, params)
+   	   addJavaVisibilityModifier(constructor, visibility)
+   	   jClass.members += constructor
+   	   
+   	   return constructor
+   }
 }

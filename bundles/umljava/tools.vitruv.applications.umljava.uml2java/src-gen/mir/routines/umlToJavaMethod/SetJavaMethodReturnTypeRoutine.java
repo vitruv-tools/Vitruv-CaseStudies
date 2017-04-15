@@ -25,51 +25,51 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceJParam(final Parameter uParam, final Integer changedToVoid, final Method javaMethod) {
+    public EObject getCorrepondenceSourceJParam(final Parameter uParam, final Integer value, final Method javaMethod) {
       return uParam;
     }
     
-    public EObject getElement1(final Parameter uParam, final Integer changedToVoid, final Method javaMethod, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class returnType) {
+    public EObject getElement1(final Parameter uParam, final Integer value, final Method javaMethod, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class returnType) {
       return javaMethod;
     }
     
-    public void update0Element(final Parameter uParam, final Integer changedToVoid, final Method javaMethod, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class returnType) {
-      if (((changedToVoid).intValue() == 1)) {
+    public void update0Element(final Parameter uParam, final Integer value, final Method javaMethod, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class returnType) {
+      if (((value).intValue() == 1)) {
         javaMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
       } else {
         javaMethod.setTypeReference(UmlToJavaHelper.createTypeReference(uParam.getType(), returnType));
       }
     }
     
-    public EObject getCorrepondenceSourceJavaMethod(final Parameter uParam, final Integer changedToVoid) {
+    public EObject getCorrepondenceSourceJavaMethod(final Parameter uParam, final Integer value) {
       Operation _operation = uParam.getOperation();
       return _operation;
     }
     
-    public EObject getCorrepondenceSourceReturnType(final Parameter uParam, final Integer changedToVoid, final Method javaMethod, final OrdinaryParameter jParam) {
+    public EObject getCorrepondenceSourceReturnType(final Parameter uParam, final Integer value, final Method javaMethod, final OrdinaryParameter jParam) {
       Type _type = uParam.getType();
       return _type;
     }
   }
   
-  public SetJavaMethodReturnTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parameter uParam, final Integer changedToVoid) {
+  public SetJavaMethodReturnTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parameter uParam, final Integer value) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(getExecutionState(), this);
-    this.uParam = uParam;this.changedToVoid = changedToVoid;
+    this.uParam = uParam;this.value = value;
   }
   
   private Parameter uParam;
   
-  private Integer changedToVoid;
+  private Integer value;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetJavaMethodReturnTypeRoutine with input:");
     getLogger().debug("   Parameter: " + this.uParam);
-    getLogger().debug("   Integer: " + this.changedToVoid);
+    getLogger().debug("   Integer: " + this.value);
     
     Method javaMethod = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJavaMethod(uParam, changedToVoid), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceJavaMethod(uParam, value), // correspondence source supplier
     	Method.class,
     	(Method _element) -> true, // correspondence precondition checker
     	null);
@@ -78,7 +78,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     }
     registerObjectUnderModification(javaMethod);
     OrdinaryParameter jParam = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJParam(uParam, changedToVoid, javaMethod), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceJParam(uParam, value, javaMethod), // correspondence source supplier
     	OrdinaryParameter.class,
     	(OrdinaryParameter _element) -> true, // correspondence precondition checker
     	null);
@@ -87,7 +87,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     }
     registerObjectUnderModification(jParam);
     org.emftext.language.java.classifiers.Class returnType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceReturnType(uParam, changedToVoid, javaMethod, jParam), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceReturnType(uParam, value, javaMethod, jParam), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
@@ -95,8 +95,8 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     	return;
     }
     registerObjectUnderModification(returnType);
-    // val updatedElement userExecution.getElement1(uParam, changedToVoid, javaMethod, jParam, returnType);
-    userExecution.update0Element(uParam, changedToVoid, javaMethod, jParam, returnType);
+    // val updatedElement userExecution.getElement1(uParam, value, javaMethod, jParam, returnType);
+    userExecution.update0Element(uParam, value, javaMethod, jParam, returnType);
     
     postprocessElements();
   }

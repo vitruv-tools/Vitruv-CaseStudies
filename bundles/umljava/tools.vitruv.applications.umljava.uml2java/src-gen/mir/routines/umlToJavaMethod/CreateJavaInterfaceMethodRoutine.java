@@ -1,6 +1,5 @@
 package mir.routines.umlToJavaMethod;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
@@ -11,7 +10,6 @@ import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -28,14 +26,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     }
     
     public void updateJavaMethodElement(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customClassType, final InterfaceMethod javaMethod) {
-      String _name = umlOp.getName();
-      boolean _equals = Objects.equal(_name, null);
-      if (_equals) {
-        javaMethod.setName("DefaultInterfaceMethodName");
-      } else {
-        javaMethod.setName(umlOp.getName());
-      }
-      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReference(umlOp.getType(), customClassType));
+      javaMethod.setName("DefaultInterfaceMethodName");
     }
     
     public EObject getElement1(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customClassType, final InterfaceMethod javaMethod) {

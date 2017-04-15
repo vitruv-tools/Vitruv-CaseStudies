@@ -11,24 +11,15 @@ class UmlToJavaAssociationTest extends AbstractUmlJavaTest {
 	
 	@Test
 	def void testCreateAssociation() {
+		this.userInteractor.addNextSelections(0,2)
 		val c1 = createSimpleUmlClass(rootElement, "Klasse1") 
 		val c2 = createSimpleUmlClass(rootElement, "Klasse2")
-		val attr = c2.createOwnedAttribute("atttrrr", c1)
-		attr.lower = 1
-		attr.upper = LiteralUnlimitedNatural.UNLIMITED
+		//val attr = c2.createOwnedAttribute("atttrrr", c1)
 		
-		println(attr.lower)
-		println(attr.lowerBound)
-		println(attr.lowerValue.integerValue)
-		println(attr.lowerValue.class)
-		println(attr.lowerValue.eClass)
-		println(attr.upper)
-		println(attr.upperBound)
-		//println(attr.upperValue.integerValue)
-		println(attr.upperValue.unlimitedValue)
-		println(attr.upperValue.class)
-		println(attr.upperValue.eClass)
-		//EcoreResourceBridge.saveResource(rootElement.eResource());
+		createDirectedAssociation(c1, c2, 0, LiteralUnlimitedNatural.UNLIMITED)
 		saveAndSynchronizeChanges(rootElement)
+		createDirectedAssociation(c2, c1, 0, 1)
+		saveAndSynchronizeChanges(rootElement)
+		
 	}
 }

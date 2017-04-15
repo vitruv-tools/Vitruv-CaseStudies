@@ -3,6 +3,7 @@ package mir.routines.umlToJavaMethod;
 import org.eclipse.uml2.uml.Feature;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -44,9 +45,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void setJavaMethodReturnType(final Parameter uParam, final Integer changedToVoid) {
+  public void setJavaMethodReturnType(final Parameter uParam, final Integer value) {
     mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine(this.executionState, calledBy,
-    	uParam, changedToVoid);
+    	uParam, value);
     effect.applyRoutine();
   }
   
@@ -65,6 +66,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void createJavaInterfaceMethod(final Operation umlOp) {
     mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine(this.executionState, calledBy,
     	umlOp);
+    effect.applyRoutine();
+  }
+  
+  public void handleMultiplicityForJavaAttribute(final Property uAttribute) {
+    mir.routines.umlToJavaMethod.HandleMultiplicityForJavaAttributeRoutine effect = new mir.routines.umlToJavaMethod.HandleMultiplicityForJavaAttributeRoutine(this.executionState, calledBy,
+    	uAttribute);
     effect.applyRoutine();
   }
 }

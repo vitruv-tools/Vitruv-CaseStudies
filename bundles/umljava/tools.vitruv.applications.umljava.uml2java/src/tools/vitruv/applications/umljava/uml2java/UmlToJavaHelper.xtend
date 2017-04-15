@@ -19,12 +19,20 @@ import org.emftext.language.java.types.TypesFactory
 
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import org.emftext.language.java.members.MembersFactory
+import java.util.Set
+import java.util.HashSet
+import java.util.ArrayList
+import java.util.LinkedList
+import java.util.List
+import tools.vitruv.framework.userinteraction.UserInteracting
+import tools.vitruv.framework.userinteraction.UserInteractionType
 
 class UmlToJavaHelper {
     
 	private static val log = Logger.getLogger(UmlToJavaHelper);
-	private new() {}
-
+	private new() {
+	}
+    
     def static void setJavaVisibility(AnnotableAndModifiable jModifiable, VisibilityKind vis) {
         removeJavaVisibilityModifiers(jModifiable);
         val v = getJavaVisibility(vis);
@@ -33,6 +41,8 @@ class UmlToJavaHelper {
         }
         
     }
+    
+    
     
     /**
      * Liefert zu einem UML-VisibilityKind den entsprechenden Java-Sichtbarkeitsmodifier.
@@ -84,20 +94,19 @@ class UmlToJavaHelper {
 	    }
 	}
 	
-	def static void handleMultiplicityAndAddToClass(Property umlAttribute, Field javaAttribute, Class jClass) {
-		if (umlAttribute.lowerBound == 1 && umlAttribute.upperBound == 1) {
-			//javaAttribute final setzen oder im Konstruktor initialisieren + getter und setter
-		} else if (umlAttribute.lowerBound == 0) {
-			if (umlAttribute.upperBound == 1) {
-				jClass.members += javaAttribute
-			} else if (umlAttribute.upperBound == LiteralUnlimitedNatural.UNLIMITED) {
-                //Collection
-			} else if (umlAttribute.upperBound > 1) {
-				//Auch Collection
-			}
+    def static letUserSelectCollectionTypeName(UserInteracting userInteracting) {
+    	var List<java.lang.Class<?>> collectionDataTypes = new ArrayList
+		collectionDataTypes += #[ArrayList, LinkedList, HashSet]
+		val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size)
+		for (collectionDataType : collectionDataTypes) {
+			collectionDataTypeNames.add(collectionDataType.name)
 		}
-		jClass.members += javaAttribute
-	}
+		val String selectTypeMsg = "Select a Collectiontype for the association end"
+		val int selectedType = userInteracting.selectFromMessage(UserInteractionType.MODAL, selectTypeMsg,
+			collectionDataTypeNames)
+		val java.lang.Class<?> selectedClass = collectionDataTypes.get(selectedType)
+	    return selectedClass.name
+    }
 	
 	def static createJavaEnumConstant(EnumerationLiteral enumLiteral) {
 		val enumConstant = MembersFactory.eINSTANCE.createEnumConstant

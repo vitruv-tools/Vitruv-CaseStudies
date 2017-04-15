@@ -258,10 +258,7 @@ class UmlUtil {
     }
     
     def static createDirectedAssociation(Class fromClass, Class toClass, int lowerLimit, int upperLimit) {
-    	val unlim = UMLFactory.eINSTANCE.createLiteralUnlimitedNatural
-    	unlim.value = Integer.MAX_VALUE
-    	
-    	fromClass.createAssociation(false, AggregationKind.NONE_LITERAL, "End1", 1, unlim.unlimitedValue, fromClass, true, AggregationKind.NONE_LITERAL, firstLettertoLowercase(toClass.name), lowerLimit, upperLimit)
+    	fromClass.createAssociation(true, AggregationKind.NONE_LITERAL, firstLettertoLowercase(toClass.name), lowerLimit, upperLimit, toClass, false, AggregationKind.NONE_LITERAL, firstLettertoLowercase(fromClass.name), 0, 1)
     }
     
     

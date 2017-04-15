@@ -15,6 +15,12 @@ import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.generics.GenericsFactory
 import org.emftext.language.java.types.TypesFactory
 import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
+import java.util.Set
+import java.util.LinkedList
+import java.util.ArrayList
+import java.util.HashSet
+import java.util.List
+import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -481,30 +487,6 @@ routine renameJavaNamedElement(uml::NamedElement uElem, String name) {
 	action {
 		update jElem {
 			jElem.name = name
-		}
-	}
-}
-
-
-reaction UmlMuliplicityChanged {
-	after element replaced at uml::Property[upperValue]
-	call handleMultiplicityForJavaAttribute(affectedEObject)
-}
-
-routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
-	match {
-		val jAttribute = retrieve java::Field corresponding to uAttribute
-		val jType = retrieve java::Class corresponding to uAttribute.type
-	}
-	action {
-		update jAttribute {
-			if (uAttribute.lower == 0) {
-				if (uAttribute.upperValue instanceof LiteralUnlimitedNaturalImpl) {
-			        jAttribute.typeReference = createCollectiontypeReference("List", jType)
-			    }
-			} else if (uAttribute.upper > 1) {
-				jAttribute.typeReference = createCollectiontypeReference("List", jType)
-			}
 		}
 	}
 }

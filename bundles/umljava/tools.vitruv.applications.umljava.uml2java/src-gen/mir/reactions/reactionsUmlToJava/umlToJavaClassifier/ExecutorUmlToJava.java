@@ -35,6 +35,5 @@ public class ExecutorUmlToJava extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumLiteralDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumLiteralDeletedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlElementVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlElementVisibilityChangedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlNamedElementRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlNamedElementRenamedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlMuliplicityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlMuliplicityChangedReaction(userInteracting));
   }
 }
