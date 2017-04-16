@@ -44,8 +44,8 @@ class UmlUtil {
     /**
      * Creates and returns a Uml Class. It is added the model.
      */
-    def static Class createUmlClassAndAddToModel(Model model, String name, VisibilityKind vis, boolean abstr, boolean fin) {
-        val uClass = createUmlClass(name, vis, abstr, fin)
+    def static Class createUmlClassAndAddToModel(Model model, String name, VisibilityKind visibility, boolean abstr, boolean fin) {
+        val uClass = createUmlClass(name, visibility, abstr, fin)
         model.packagedElements += uClass
         return uClass
     }
@@ -54,30 +54,24 @@ class UmlUtil {
      * Creates and returns a Uml Interface. It is added the model.
      */
     def static Interface createUmlInterfaceAndAddToModel(Model model, String name, List<Interface> superInterfaces) {
-        val uI = createUmlInterface(name, superInterfaces)
-        model.packagedElements += uI
-        return uI
+        val uInterface = createUmlInterface(name, superInterfaces)
+        model.packagedElements += uInterface
+        return uInterface
     }
     
     /**
      * Creates and returns a Uml-Class.
      * The class is not contained in a rootmodel.
      * 
-     * @throws IllegalArgumentException if name or vis is null
+     * @throws IllegalArgumentException if name or visibility is null
      */
-    def static Class createUmlClass(String name, VisibilityKind vis, boolean abstr, boolean fin) {
-        val uC = UMLFactory.eINSTANCE.createClass;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create UmlClass - name is null");
-        }
-        uC.name = name;
-        if (vis == null) {
-            throw new IllegalArgumentException("Cannot create UmlClass - visibility is null");
-        }
-        uC.visibility = vis;
-        uC.isAbstract = abstr;
-        uC.isFinalSpecialization = fin;
-        return uC;
+    def static Class createUmlClass(String name, VisibilityKind visibility, boolean abstr, boolean fin) {
+        val uClass = UMLFactory.eINSTANCE.createClass;
+        setName(uClass, name)
+        uClass.visibility = visibility;
+        uClass.isAbstract = abstr;
+        uClass.isFinalSpecialization = fin;
+        return uClass;
     }
     
     /**
@@ -89,16 +83,13 @@ class UmlUtil {
      * @throws IllegalArgumentException if name is null.
      */
     def static Interface createUmlInterface(String name, List<Interface> superInterfaces) {
-        val uI = UMLFactory.eINSTANCE.createInterface;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create UmlInterface - name is null");
-        }
-        uI.name = name;
-        uI.visibility = VisibilityKind.PUBLIC_LITERAL;
+        val uInterface = UMLFactory.eINSTANCE.createInterface;
+        setName(uInterface, name)
+        uInterface.visibility = VisibilityKind.PUBLIC_LITERAL;
         if (!superInterfaces.nullOrEmpty) {
-            uI.generals.addAll(superInterfaces);
+            uInterface.generals.addAll(superInterfaces);
         }        
-        return uI;
+        return uInterface;
     }
     
     /**
@@ -118,48 +109,33 @@ class UmlUtil {
     /**
      * 
      * return and params can be null
-     * @throws IllegalArgumentException if name or vis is null
+     * @throws IllegalArgumentException if name or visibility is null
      */
-    def static Operation createUmlOperation(String name, Type returnType, VisibilityKind vis, boolean abstr, boolean stat, List<Parameter> params) {
-        val op = UMLFactory.eINSTANCE.createOperation;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create UmlOperation - name is null");
-        }
-        op.name = name;
-        if (returnType != null) {
-            op.type = returnType;
-        }
-        if (vis == null) {
-            throw new IllegalArgumentException("Cannot create UmlOperation - visibility is null");
-        }
-        op.visibility = vis;
-        op.isAbstract = abstr;
-        op.isStatic = stat;
+    def static Operation createUmlOperation(String name, Type returnType, VisibilityKind visibility, boolean abstr, boolean stat, List<Parameter> params) {
+        val uOperation = UMLFactory.eINSTANCE.createOperation;
+        setName(uOperation, name)
+        uOperation.type = returnType;
+        uOperation.visibility = visibility;
+        uOperation.isAbstract = abstr;
+        uOperation.isStatic = stat;
         if (!params.nullOrEmpty) {
-            op.ownedParameters.addAll(params);
+            uOperation.ownedParameters.addAll(params);
         }
-        return op;
+        return uOperation;
     }
     
     /**
-     * @throws IllegalArgumentException if name or vis is null
+     * @throws IllegalArgumentException if name or visibility is null
      */
-    def static createUmlAttribute(String name, Type type, VisibilityKind vis, boolean fin, boolean stat) {
-        val attr = UMLFactory.eINSTANCE.createProperty;
-        if (name == null) {
-            throw new IllegalArgumentException("Cannot create UmlProperty - name is null");
-        }
-        attr.name = name;
-        if (vis == null) {
-            throw new IllegalArgumentException("Cannot create UmlProperty - visibility is null");
-        }
-        attr.visibility = vis;
-        attr.isReadOnly = fin;
-        attr.isStatic = stat;
-        if (type != null) {
-            attr.type = type;
-        }
-        return attr;
+    def static createUmlAttribute(String name, Type type, VisibilityKind visibility, boolean fin, boolean stat) {
+        val uAttribute = UMLFactory.eINSTANCE.createProperty;
+        setName(uAttribute, name)
+        uAttribute.visibility = visibility;
+        uAttribute.isReadOnly = fin;
+        uAttribute.isStatic = stat;
+        uAttribute.type = type;
+
+        return uAttribute;
     }
     
     /**
@@ -192,10 +168,7 @@ class UmlUtil {
      */
     def static createUmlPrimitiveType (String name) {
         val pType = UMLFactory.eINSTANCE.createPrimitiveType;
-        if (name == null) {
-            throw new IllegalArgumentException("Invalid Primitive Type name: " + name);
-        }
-        pType.name = name;
+        setName(pType, name)
         return pType;
     }
     
@@ -211,6 +184,14 @@ class UmlUtil {
         }
         return supers
     }
+    
+    def static void setName(org.eclipse.uml2.uml.NamedElement namedElement, String name) {
+    	if (name === null) {
+            throw new IllegalArgumentException("Invalid name: " + name + " for " + namedElement);
+        }
+        namedElement.name = name;
+    }
+    
     
     /**
      * Removes the elements in the Iterator iter with the same name as classif.
