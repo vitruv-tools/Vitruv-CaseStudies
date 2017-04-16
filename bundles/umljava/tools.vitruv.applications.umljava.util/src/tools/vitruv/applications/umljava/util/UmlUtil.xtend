@@ -7,16 +7,18 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction
 import org.eclipse.uml2.uml.PrimitiveType
 import java.util.List
 import java.util.ArrayList
+import org.eclipse.uml2.uml.Enumeration
+import org.eclipse.uml2.uml.EnumerationLiteral
 
 /**
  * Uml-Util-Class
@@ -33,30 +35,56 @@ class UmlUtil {
     /**
      * Creates a simple Uml CLass (public, not static, not abstract, no fields, no operations)
      */
-    def static createSimpleUmlClass(Model model, String name) {
-        return createUmlClassAndAddToModel(model, name, VisibilityKind.PUBLIC_LITERAL, false, false);
+    def static createSimpleUmlClass(Package uPackage, String name) {
+        return createUmlClassAndAddToPackage(uPackage, name, VisibilityKind.PUBLIC_LITERAL, false, false);
     }
     
-    def static createSimpleUmlInterface(Model model, String name) {
-        return createUmlInterfaceAndAddToModel(model, name, null);
+    def static createSimpleUmlInterface(Package uPackage, String name) {
+        return createUmlInterfaceAndAddToPackage(uPackage, name, null);
     }
     
     /**
-     * Creates and returns a Uml Class. It is added the model.
+     * Creates and returns a Uml Class. It is added the package.
      */
-    def static Class createUmlClassAndAddToModel(Model model, String name, VisibilityKind visibility, boolean abstr, boolean fin) {
+    def static Class createUmlClassAndAddToPackage(Package uPackage, String name, VisibilityKind visibility, boolean abstr, boolean fin) {
         val uClass = createUmlClass(name, visibility, abstr, fin)
-        model.packagedElements += uClass
+        uPackage.packagedElements += uClass
         return uClass
     }
     
     /**
-     * Creates and returns a Uml Interface. It is added the model.
+     * Creates and returns a Uml Interface. It is added the package.
      */
-    def static Interface createUmlInterfaceAndAddToModel(Model model, String name, List<Interface> superInterfaces) {
+    def static Interface createUmlInterfaceAndAddToPackage(Package uPackage, String name, List<Interface> superInterfaces) {
         val uInterface = createUmlInterface(name, superInterfaces)
-        model.packagedElements += uInterface
+        uPackage.packagedElements += uInterface
         return uInterface
+    }
+    
+    def static Enumeration createUmlEnumAndAddToPackage(Package uPackage, String name, VisibilityKind visibility, List<EnumerationLiteral> enumLiterals) {
+    	val uEnum = createUmlEnum(name, visibility, enumLiterals)
+    	uPackage.packagedElements += uEnum
+    	return uEnum
+    }
+    
+    def static Enumeration createUmlEnum(String name, VisibilityKind visibility, List<EnumerationLiteral> enumLiterals) {
+    	val uEnum = UMLFactory.eINSTANCE.createEnumeration
+    	setName(uEnum, name)
+    	uEnum.visibility = visibility
+    	if (!enumLiterals.nullOrEmpty) {
+    		uEnum.ownedLiterals.addAll(enumLiterals)
+    	}
+    	return uEnum
+    }
+    
+    def static List<EnumerationLiteral> createUmlEnumLiteralsFromList(List<String> enumLiteralNames) {
+    	val enumLiterals = new ArrayList<EnumerationLiteral>
+    	for (name : enumLiteralNames) {
+    		val literal = UMLFactory.eINSTANCE.createEnumerationLiteral
+    		literal.name = name
+    		enumLiterals += literal
+    	}
+    	return enumLiterals
     }
     
     /**
@@ -144,7 +172,7 @@ class UmlUtil {
     def static Parameter createUmlParameter(String name, Type type) {
         val param = UMLFactory.eINSTANCE.createParameter;
         param.type = type;
-        if (name == null) {
+        if (name === null) {
             param.direction = ParameterDirectionKind.RETURN_LITERAL;
         } else {
             param.name = name;
@@ -156,9 +184,9 @@ class UmlUtil {
     /**
      * Creates and returns a PrimitiveType. It is added to the model.
      */
-    def static PrimitiveType createUmlPrimitiveTypeAndAddToModel(Model model, String pTypeName) {
+    def static PrimitiveType createUmlPrimitiveTypeAndAddToModel(Package uPackage, String pTypeName) {
         val pType = createUmlPrimitiveType(pTypeName);
-        model.packagedElements += pType
+        uPackage.packagedElements += pType
         return pType
     }
     

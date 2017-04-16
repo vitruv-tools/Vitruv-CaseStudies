@@ -10,7 +10,12 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.modifiers.Static
 import org.emftext.language.java.modifiers.Final
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.emftext.language.java.types.TypesFactory
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
 class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
     private static val ATTRIBUTE_NAME = "attributName";
@@ -28,20 +33,20 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
     def void before() {
         uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
         typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS);
-        uAttr = createUmlAttribute(ATTRIBUTE_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false);
+        uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false);
         uClass.ownedAttributes += uAttr;
         saveAndSynchronizeChanges(rootElement);
     }
     
     //@After
     def void after() {
-        if (uClass != null) {
+        if (uClass !== null) {
             uClass.destroy;
         }
-        if (typeClass != null) {
+        if (typeClass !== null) {
             typeClass.destroy;
         }
-        if (uAttr != null) {
+        if (uAttr !== null) {
             uAttr.destroy;
         }
         saveAndSynchronizeChanges(rootElement);
@@ -53,27 +58,36 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
         uClass.ownedAttributes += attr;
         saveAndSynchronizeChanges(uClass);       
         
-        val jAttr = assertUniqueJavaMemberExistsInClass(CLASS_NAME, STANDARD_ATTRIBUTE_NAME, Field);
-        assertJavaMemberHasType(jAttr, pType);
+        val jClass = getCorrespondingClass(uClass)
+        val jAttr = getCorrespondingAttribute(attr);
+        assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC, TypesFactory.eINSTANCE.createInt, false, false, jClass)
+        assertAttributeEquals(uAttr, jAttr)
     }
     
     @Test
     def testCreateAttribute() {
-        uClass.createOwnedAttribute(STANDARD_ATTRIBUTE_NAME, typeClass);
+        val attr = uClass.createOwnedAttribute(STANDARD_ATTRIBUTE_NAME, typeClass);
         saveAndSynchronizeChanges(uClass);
            
-        val jAttr = assertUniqueJavaMemberExistsInClass(CLASS_NAME, STANDARD_ATTRIBUTE_NAME, Field);
-        assertJavaMemberHasType(jAttr, typeClass);
+        val jClass = getCorrespondingClass(uClass)
+        val jtypeClass = getCorrespondingClass(typeClass)
+        val jAttr = getCorrespondingAttribute(attr)
+        assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC, 
+        	createNamespaceReferenceFromClassifier(jtypeClass), false, false, jClass)
+        assertAttributeEquals(uAttr, jAttr)
         
     }
     
     @Test
     def testRenameAttribute() {
         uAttr.name = ATTRIBUTE_RENAME;
-        saveAndSynchronizeChanges(uClass);
+        saveAndSynchronizeChanges(uClass)
         
-        assertUniqueJavaMemberExistsInClass(CLASS_NAME, ATTRIBUTE_RENAME, Field);
-        assertJavaMemberNotExistsInClass(CLASS_NAME, ATTRIBUTE_NAME);
+        val jClass = getCorrespondingClass(uClass)
+        val jAttr = getCorrespondingAttribute(uAttr)
+        assertEquals(ATTRIBUTE_RENAME, uAttr.name)
+        assertAttributeEquals(uAttr, jAttr)
+        assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
     }
     
     @Test
@@ -81,7 +95,10 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
         uAttr.destroy;
         saveAndSynchronizeChanges(uClass);
         
-        assertJavaMemberNotExistsInClass(CLASS_NAME, ATTRIBUTE_NAME);
+        val jClass = getCorrespondingClass(uClass)
+        val jAttr = getCorrespondingAttribute(uAttr)
+        assertNull(jAttr)
+        assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
     }
 
     @Test
@@ -89,8 +106,9 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
         uAttr.isStatic = true;
         saveAndSynchronizeChanges(uClass);
          
-        val jAttr = assertUniqueJavaMemberExistsInClass(CLASS_NAME, ATTRIBUTE_NAME, Field);
-        assertJavaModifiableHasModifier(jAttr, Static);
+        val jAttr = getCorrespondingAttribute(uAttr)
+        assertJavaModifiableStatic(jAttr, true)
+        assertAttributeEquals(uAttr, jAttr)
     }
     
     @Test
@@ -98,8 +116,9 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
         uAttr.isReadOnly = true;
         saveAndSynchronizeChanges(uClass);
         
-        val jAttr = assertUniqueJavaMemberExistsInClass(CLASS_NAME, ATTRIBUTE_NAME, Field);
-        assertJavaModifiableHasModifier(jAttr, Final);
+        val jAttr = getCorrespondingAttribute(uAttr)
+        assertJavaModifiableFinal(jAttr, true)
+        assertAttributeEquals(uAttr, jAttr)
     }
     
     @Test
@@ -107,14 +126,16 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
         uAttr.visibility = VisibilityKind.PRIVATE_LITERAL;
         saveAndSynchronizeChanges(uClass);
         
-        var jAttr = assertUniqueJavaMemberExistsInClass(CLASS_NAME, ATTRIBUTE_NAME, Field);
-        assertJavaModifiableHasVisibility(jAttr, VisibilityKind.PRIVATE_LITERAL);
+        var jAttr = getCorrespondingAttribute(uAttr)
+        assertJavaModifiableHasVisibility(jAttr, JavaVisibility.PRIVATE)
+        assertAttributeEquals(uAttr, jAttr)
         
         uAttr.visibility = VisibilityKind.PACKAGE_LITERAL;
         saveAndSynchronizeChanges(uClass);
         
-        jAttr = assertUniqueJavaMemberExistsInClass(CLASS_NAME, ATTRIBUTE_NAME, Field);
-        assertJavaModifiableHasVisibility(jAttr, VisibilityKind.PACKAGE_LITERAL);
+        jAttr = getCorrespondingAttribute(uAttr)
+        assertJavaModifiableHasVisibility(jAttr, JavaVisibility.PACKAGE)
+        assertAttributeEquals(uAttr, jAttr)
     }
     
 

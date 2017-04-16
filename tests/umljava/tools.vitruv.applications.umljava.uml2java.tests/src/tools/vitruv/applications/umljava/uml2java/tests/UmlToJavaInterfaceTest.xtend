@@ -12,13 +12,14 @@ import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import org.emftext.language.java.types.NamespaceClassifierReference
 
 class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
     private static val INTERFACE_NAME = "InterfaceName"
     private static val INTERFACE_RENAME = "InterfaceRename"
     private static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
     private static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
-    private static val STANDARD_INTERACE_NAME = "StandardInterfaceName"
+    private static val STANDARD_INTERFACE_NAME = "StandardInterfaceName"
     private static var Interface uI
     
     
@@ -39,9 +40,12 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
     
     @Test
     def testCreateInterface() {
-        createSimpleUmlInterface(rootElement, STANDARD_INTERACE_NAME);
+        val interface = createSimpleUmlInterface(rootElement, STANDARD_INTERFACE_NAME);
         saveAndSynchronizeChanges(rootElement)
-        assertJavaFileExists(STANDARD_INTERACE_NAME);
+        
+        assertJavaFileExists(STANDARD_INTERFACE_NAME, #[]);
+        val jInterface = getCorrespondingInterface(interface)
+        assertEquals(STANDARD_INTERFACE_NAME, jInterface.name)
     }
     
     @Test
@@ -49,8 +53,10 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
         uI.name = INTERFACE_RENAME;
         saveAndSynchronizeChanges(uI);
         
-        assertJavaFileExists(INTERFACE_RENAME);
-        assertJavaFileNotExists(INTERFACE_NAME);
+        assertJavaFileExists(INTERFACE_RENAME, #[]);
+        val jInterface = getCorrespondingInterface(uI)
+        assertEquals(INTERFACE_RENAME, jInterface.name)
+        assertJavaFileNotExists(INTERFACE_NAME, #[]);
     }
     
     @Test
@@ -58,29 +64,28 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
         uI.destroy;
         saveAndSynchronizeChanges(rootElement);
         
-        assertJavaFileNotExists(INTERFACE_NAME);
+        assertJavaFileNotExists(INTERFACE_NAME, #[]);
     }
     
     @Test
     def testAddSuperInterface() {
-    	println("sss: "+getCorrespondingObject(uI, org.emftext.language.java.classifiers.Interface))
         val interface = createInterfaceWithTwoSuperInterfaces(INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
         saveAndSynchronizeChanges(rootElement)
-        val jI = getCorrespondingObject(interface, org.emftext.language.java.classifiers.Interface);
-        assertEquals(SUPERINTERFACENAME_1, getClassifierfromTypeRef(jI.extends.get(0)).name)
-        assertEquals(SUPERINTERFACENAME_2, getClassifierfromTypeRef(jI.extends.get(1)).name)
+        val jI = getCorrespondingInterface(interface)
+        assertEquals(SUPERINTERFACENAME_1, getClassifierFromNameSpaceReference(jI.extends.get(0) as NamespaceClassifierReference).name)
+        assertEquals(SUPERINTERFACENAME_2, getClassifierFromNameSpaceReference(jI.extends.get(1) as NamespaceClassifierReference).name)
     }
     
-    @Ignore @Test
+    @Test
     def testRemoveSuperInterface() {
         val uI = createInterfaceWithTwoSuperInterfaces(INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
         saveAndSynchronizeChanges(rootElement)
         uI.generalizations.remove(0);
         saveAndSynchronizeChanges(rootElement);
-        val jI = getJInterfaceFromName(INTERFACE_NAME);
+        val jI = getCorrespondingInterface(uI)
         assertTrue(jI.extends.size.toString, jI.extends.size == 1); //TODO Ist 0 statt 1. Im Model ist es aber richtig.
-        assertEquals(SUPERINTERFACENAME_2, getClassifierfromTypeRef(jI.extends.get(0)).name)
-        assertJavaFileExists(SUPERINTERFACENAME_1);
+        assertEquals(SUPERINTERFACENAME_2, getClassifierFromNameSpaceReference(jI.extends.get(0) as NamespaceClassifierReference).name)
+        assertJavaFileExists(SUPERINTERFACENAME_1, #[]);
     }
     
 
@@ -94,7 +99,7 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
         val EList<Interface> supers = new BasicEList<Interface>;
         supers += super1;
         supers += super2;
-        return createUmlInterfaceAndAddToModel(rootElement, iName, supers);
+        return createUmlInterfaceAndAddToPackage(rootElement, iName, supers);
     }
     
 }

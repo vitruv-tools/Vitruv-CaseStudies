@@ -3,4 +3,4 @@
  * @author Fei
  *
  */
-package tools.vitruv.application.umljava.testutil;
+package tools.vitruv.applications.umljava.testutil;

@@ -1,6 +1,9 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static org.junit.Assert.*;
 import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
 import org.junit.Test
@@ -10,6 +13,8 @@ import org.emftext.language.java.members.InterfaceMethod
 import org.eclipse.uml2.uml.Operation
 import org.junit.Before
 import org.junit.After
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import org.emftext.language.java.types.TypesFactory
 
 class UmlToJavaInterfaceMethodTest extends AbstractUmlJavaTest {
     private static val INTERFACE_NAME = "InterfaceName";
@@ -49,24 +54,35 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlJavaTest {
     
     @Test
     def void testCreateInterfaceMethod() {
-        uI.createOwnedOperation(STANDARD_IOPERATION_NAME, null, null, null)
+        val interfaceMethod = uI.createOwnedOperation(STANDARD_IOPERATION_NAME, null, null, null)
         saveAndSynchronizeChanges(uI);
-        assertUniqueJavaMemberExistsInClass(INTERFACE_NAME, STANDARD_IOPERATION_NAME, InterfaceMethod);
+        
+        val jMethod = getCorrespondingInterfaceMethod(interfaceMethod)
+        val jInterface = getCorrespondingInterface(uI)
+        assertJavaMethodTraits(jMethod, STANDARD_IOPERATION_NAME, JavaVisibility.PUBLIC,
+        	TypesFactory.eINSTANCE.createVoid, false, false, null, jInterface)
+        assertMethodEquals(interfaceMethod, jMethod)
     }
      
     @Test
     def testRenameInterfaceMethod() {
         op.name = IOPERATION_RENAME;
         saveAndSynchronizeChanges(op);
-        assertUniqueJavaMemberExistsInClass(INTERFACE_NAME, IOPERATION_RENAME, InterfaceMethod);
-        assertJavaMemberNotExistsInClass(INTERFACE_NAME, IOPERATION_NAME);
+        
+        val jMethod = getCorrespondingInterfaceMethod(op)
+        val jInterface = getCorrespondingInterface(uI)
+        assertEquals(IOPERATION_RENAME, jMethod.name)
+        assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
+        assertMethodEquals(op, jMethod)
     }
     
     @Test
     def testDeleteInterfaceMethod() {
         op.destroy;
         saveAndSynchronizeChanges(rootElement);
-        assertJavaMemberNotExistsInClass(INTERFACE_NAME, IOPERATION_NAME);
+        
+        val jInterface = getCorrespondingInterface(uI)
+        assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
     }
     
     @Test
@@ -74,8 +90,10 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlJavaTest {
         op.type = typeClass;
         saveAndSynchronizeChanges(op);
         
-        val jIMeth = assertUniqueJavaMemberExistsInClass(INTERFACE_NAME, IOPERATION_NAME, InterfaceMethod);
-        assertJavaMemberHasType(jIMeth, typeClass);
+        val jMethod = getCorrespondingInterfaceMethod(op)
+        val jTypeClass = getCorrespondingClass(typeClass)
+        assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
+        assertMethodEquals(op, jMethod)
     }
     
     @Test
@@ -83,8 +101,13 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlJavaTest {
         val param = createUmlParameter(PARAMETER_NAME, typeClass);
         op.ownedParameters += param;
         saveAndSynchronizeChanges(op);
-        val jIMeth = assertUniqueJavaMemberExistsInClass(INTERFACE_NAME, IOPERATION_NAME, InterfaceMethod);
-        assertJavaMethodHasUniqueParameter(jIMeth, param);
-    }
+        
+        val jMethod = getCorrespondingInterfaceMethod(op)
+        val jParam = getCorrespondingParameter(param)
+        val jTypeClass = getCorrespondingClass(typeClass)
+        assertJavaMethodHasUniqueParameter(jMethod, PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
+        assertMethodEquals(op, jMethod)
+        }
+        
     
 }

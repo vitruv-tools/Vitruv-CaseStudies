@@ -37,6 +37,10 @@ import org.eclipse.emf.common.util.URI
 import org.emftext.language.java.members.Constructor
 import org.apache.log4j.Logger
 import org.emftext.language.java.parameters.Parametrizable
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.classifiers.Classifier
+import org.emftext.language.java.members.Method
+import org.emftext.language.java.members.EnumConstant
 
 class JavaUtil {
 	private static val logger = Logger.getLogger(JavaUtil)
@@ -75,6 +79,10 @@ class JavaUtil {
         }
     }
     
+    def static JavaVisibility getEnumConstantFromJavaVisibility(Class<? extends Modifier> modifier) {
+    	
+    }
+    
     /**
      * The created Class is not contained in a compilationunit.
      */
@@ -107,9 +115,9 @@ class JavaUtil {
     /**
      * The Method automatically sets the .java FileExtension
      */
-    def static createEmptyCompilationUnit(String name) {
+    def static createEmptyCompilationUnit(String nameWithoutFileExtension) {
         val cu = ContainersFactory.eINSTANCE.createCompilationUnit
-        cu.name = name + ".java";
+        cu.name = nameWithoutFileExtension + ".java";
         return cu
     }
     
@@ -173,16 +181,22 @@ class JavaUtil {
         return param;
     }
     
+    def static createJavaEnumConstant(String name) {
+    	val constant = MembersFactory.eINSTANCE.createEnumConstant
+    	constant.name = name
+    	return constant
+    }
+    
     /**
      * Gibt den ersten Java-Classifier zurück, der zur Java-TypeReference type gehört.
      * Ist type kein NameSpaceClassifierreference, kommt null zurück.
-     */
+     
     def static ConcreteClassifier getClassifierfromTypeRef(TypeReference type) {
         if (type instanceof NamespaceClassifierReference) {
             return (type as NamespaceClassifierReference).classifierReferences.head.target as ConcreteClassifier;
         }
         return null;
-    }
+    }*/
     
     /**
      * Verpackt ein Java-ConcreteClassifier in ein NamespaceClassifierReference
@@ -193,6 +207,10 @@ class JavaUtil {
         classifierRef.target = concreteClassifier
         namespaceClassifierReference.classifierReferences.add(classifierRef)
         return namespaceClassifierReference
+    }
+    
+    def static Classifier getClassifierFromNameSpaceReference(NamespaceClassifierReference namespaceRef) {
+    	return namespaceRef.classifierReferences.head.target
     }
     
     /**
@@ -266,27 +284,25 @@ class JavaUtil {
     }
     
     /**
-     * Entfernt alle Sichtbarkeiten-Modifier eines AnnotableAndModifiables.
-     * (Klassen, Interfaces, Methoden, Attribute)
+     * Removes all Private, Public and Protected modifiers from a modifiable.
      */
-    def static removeJavaVisibilityModifiers(AnnotableAndModifiable a) {
-        a.removeModifier(typeof(Private))
-        a.removeModifier(typeof(Protected))
-        a.removeModifier(typeof(Public))
+    def static removeJavaVisibilityModifiers(AnnotableAndModifiable modifiable) {
+        modifiable.removeModifier(typeof(Private))
+        modifiable.removeModifier(typeof(Protected))
+        modifiable.removeModifier(typeof(Public))
     }
     
     /**
-     * @param a         Objekt, dessen Modifer entfernt werden soll
-     * @param modifier  Klasse des Modifiers, das von Objekt a entfernt werden soll 
+     * Removes a modifier from a modifiable
      */
-    def static <T extends Modifier> removeJavaModifier(AnnotableAndModifiable a, Class<T> modifier ) {
-        a.removeModifier(modifier)
+    def static <T extends Modifier> removeJavaModifier(AnnotableAndModifiable modifiable, Class<T> modifier ) {
+        modifiable.removeModifier(modifier)
     }
     
     /**
      * Converts a list with ConcreteClassifiers to a list with corresponding NamespaceClassifierRefrences.
      */
-    def static EList<NamespaceClassifierReference> createNamespaceReferenceFromList(EList<? extends ConcreteClassifier> list) {
+    def static EList<NamespaceClassifierReference> createNamespaceReferenceFromList(List<? extends ConcreteClassifier> list) {
         val typeReferences = new BasicEList<NamespaceClassifierReference>
         for (ConcreteClassifier i : list) {
             typeReferences += createNamespaceReferenceFromClassifier(i)
@@ -303,9 +319,12 @@ class JavaUtil {
 		return collectionClassNamespaceReference
     }
     
-    def static ClassifierImport getJavaClassImport(String name) {
+    /**
+     * Creates a Java-ClassifierImport from a qualified name
+     */
+    def static ClassifierImport getJavaClassImport(String qualifiedName) {
 		val content = "package dummyPackage;\n " +
-				"import " + name + ";\n" +
+				"import " + qualifiedName + ";\n" +
 				"public class DummyClass {}";
 		val dummyCU = createJavaRoot("DummyClass", content) as CompilationUnit;
 		val classifierImport = (dummyCU.getImports().get(0) as ClassifierImport)
@@ -314,6 +333,10 @@ class JavaUtil {
 		
 	}
 	
+	/**
+	 * Creates a JavaRoot Object with the given content
+	 * 
+	 */
 	def static JavaRoot createJavaRoot(String name, String content) {
 		val JamoppParser jaMoPPParser = new JamoppParser
 		val inStream = new ByteArrayInputStream(content.bytes)
@@ -324,6 +347,9 @@ class JavaUtil {
 		return javaRoot
 	}
    
+   /**
+    * Adds a constructor to the class
+    */
    def static Constructor addJavaConstructorToClass(org.emftext.language.java.classifiers.Class jClass, JavaVisibility visibility, List<Parameter> params) {
    	   val constructor = MembersFactory.eINSTANCE.createConstructor
    	   setName(constructor, jClass.name)
@@ -332,5 +358,23 @@ class JavaUtil {
    	   jClass.members += constructor
    	   
    	   return constructor
+   }
+   
+   def static getJavaVisibilityConstantFromUmlVisibilityKind(VisibilityKind uVisibility) {
+   	   switch(uVisibility) {
+   	   	case VisibilityKind.PUBLIC_LITERAL: return JavaVisibility.PUBLIC
+   	   	case VisibilityKind.PROTECTED_LITERAL: return JavaVisibility.PROTECTED
+   	   	case VisibilityKind.PACKAGE_LITERAL : return JavaVisibility.PACKAGE
+   	   	case VisibilityKind.PRIVATE_LITERAL: return JavaVisibility.PRIVATE
+   	   	default: throw new IllegalArgumentException("Unknown VisibilityKind: " + uVisibility)
+   	   }
+   }
+   
+   def static createEnumConstantsFromList(List<String> enumConstantNames) {
+   	   val  enumConstants = new ArrayList<EnumConstant>
+   	   for (name : enumConstantNames) {
+   	   	   enumConstants += createJavaEnumConstant(name)
+   	   }
+   	   return enumConstants
    }
 }

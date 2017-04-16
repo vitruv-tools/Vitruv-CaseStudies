@@ -1,6 +1,9 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
 import org.junit.Test
 import static org.junit.Assert.*;
@@ -12,6 +15,8 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.modifiers.Static
 import org.emftext.language.java.modifiers.Abstract
 import org.eclipse.uml2.uml.UMLFactory
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import org.emftext.language.java.types.TypesFactory
 
 class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     private static val CLASS_NAME = "ClassName";
@@ -66,9 +71,14 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     
     @Test
     def void testCreateSimpleMethod() {
-        uClass.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
+        val operation = uClass.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
         saveAndSynchronizeChanges(uClass);
-        assertUniqueJavaMemberExistsInClass(CLASS_NAME, STANDARD_OPERATION_NAME, ClassMethod);
+        
+        val jMethod = getCorrespondingClassMethod(operation)
+        val jClass = getCorrespondingClass(uClass)
+        assertJavaMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PACKAGE,
+        	TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
+        assertMethodEquals(operation, jMethod)
     }
     
     @Test
@@ -76,8 +86,10 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         uOp.type = typeClass;
         saveAndSynchronizeChanges(uOp);
         
-        val jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod);
-        assertJavaMemberHasType(jMeth, typeClass);
+        val jMethod = getCorrespondingClassMethod(uOp)
+        val jTypeClass = getCorrespondingClass(typeClass)
+        assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
+        assertMethodEquals(uOp, jMethod)
     }
     
     @Test
@@ -85,8 +97,11 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         uOp.name = OPERATION_RENAME;
         saveAndSynchronizeChanges(uOp);
         
-        assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_RENAME, ClassMethod);
-        assertJavaMemberNotExistsInClass(CLASS_NAME, OPERATION_NAME);
+        val jMethod = getCorrespondingClassMethod(uOp)
+        val jClass = getCorrespondingClass(uClass)
+        assertEquals(OPERATION_RENAME, jMethod.name)
+        assertMethodEquals(uOp, jMethod)
+        assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
     }
     
     @Test
@@ -94,7 +109,10 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         uOp.destroy;
         saveAndSynchronizeChanges(uClass);
         
-        assertJavaMemberNotExistsInClass(CLASS_NAME, OPERATION_NAME);
+        val jMethod = getCorrespondingClassMethod(uOp)
+        val jClass = getCorrespondingClass(uClass)
+        assertNull(jMethod)
+        assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
     }
     
     @Test
@@ -102,8 +120,9 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         uOp.isStatic = true;
         saveAndSynchronizeChanges(uOp);
         
-        val jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
-        assertJavaModifiableHasModifier(jMeth, Static)
+        val jMethod = getCorrespondingClassMethod(uOp)
+        assertJavaModifiableStatic(jMethod, true)
+        assertMethodEquals(uOp, jMethod)
     }
     
     @Test
@@ -111,8 +130,9 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         uOp.isAbstract = true;
         saveAndSynchronizeChanges(uOp);
         
-        val jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
-        assertJavaModifiableHasModifier(jMeth, Abstract)
+        val jMethod = getCorrespondingClassMethod(uOp)
+        assertJavaModifiableAbstract(jMethod, true)
+        assertMethodEquals(uOp, jMethod)
     }
     
     @Test
@@ -120,14 +140,16 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         uOp.visibility = VisibilityKind.PRIVATE_LITERAL;
         saveAndSynchronizeChanges(uOp);
         
-        var jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
-        assertJavaModifiableHasVisibility(jMeth, VisibilityKind.PRIVATE_LITERAL)
+        var jMethod = getCorrespondingClassMethod(uOp)
+        assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PRIVATE)
+        assertMethodEquals(uOp, jMethod)
         
         uOp.visibility = VisibilityKind.PROTECTED_LITERAL;
         saveAndSynchronizeChanges(uOp);
         
-        jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
-        assertJavaModifiableHasVisibility(jMeth, VisibilityKind.PROTECTED_LITERAL)
+        jMethod = getCorrespondingClassMethod(uOp)
+        assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
+        assertMethodEquals(uOp, jMethod)
     }
 
     
@@ -137,9 +159,10 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         uOp.ownedParameters += uParam;
         saveAndSynchronizeChanges(uOp);
 
-        val jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
-        assertJavaMethodHasUniqueParameter(jMeth, uParam);
-        
+        val jParam = getCorrespondingParameter(uParam)
+        val jTypeClass = getCorrespondingClass(typeClass)
+        assertJavaParameterTraits(jParam, STANDARD_PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
+        assertParameterEquals(uParam, jParam)
     }
     
     @Test
@@ -147,9 +170,11 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     	uParam.name = PARAMETER_RENAME
     	saveAndSynchronizeChanges(uParam)
     	
-    	val jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
-        assertJavaMethodHasUniqueParameter(jMeth, uParam);
-        assertJavaMethodDontHaveParameter(jMeth, PARAMETER_NAME)
+    	val jParam = getCorrespondingParameter(uParam)
+    	val jMethod = getCorrespondingClassMethod(uOp)
+    	assertEquals(PARAMETER_RENAME, jParam.name)
+    	assertJavaMethodHasUniqueParameter(jMethod, PARAMETER_RENAME, TypesFactory.eINSTANCE.createInt)
+    	assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
     }
     
     @Test
@@ -157,8 +182,8 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
     	uParam.destroy
     	saveAndSynchronizeChanges(rootElement)
     	
-    	val jMeth = assertUniqueJavaMemberExistsInClass(CLASS_NAME, OPERATION_NAME, ClassMethod)
-    	assertJavaMethodDontHaveParameter(jMeth, PARAMETER_NAME)
+    	val jMethod = getCorrespondingClassMethod(uOp)
+    	assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
     }
     
 }

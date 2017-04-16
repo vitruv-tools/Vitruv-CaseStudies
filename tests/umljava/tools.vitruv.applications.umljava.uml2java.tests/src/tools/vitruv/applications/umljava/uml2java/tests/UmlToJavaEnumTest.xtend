@@ -1,11 +1,15 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
+import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
 import org.eclipse.uml2.uml.VisibilityKind
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
 class UmlToJavaEnumTest extends AbstractUmlJavaTest {
 	private static val ENUM_NAME = "EnumName"
@@ -16,11 +20,12 @@ class UmlToJavaEnumTest extends AbstractUmlJavaTest {
 	private static val LITERAL_NAME = "LITERALNAME"
 	
 	private static var org.eclipse.uml2.uml.Enumeration uEnum
+	private static val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
+	private static val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
 	
 	@Before
 	def void before() {
-		uEnum = createUmlEnumAndAddToPackage(rootElement, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL,
-			createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1))
+		uEnum = createUmlEnumAndAddToPackage(rootElement, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, enumLiterals1)
 		saveAndSynchronizeChanges(uEnum)
 	}
 	
@@ -33,11 +38,14 @@ class UmlToJavaEnumTest extends AbstractUmlJavaTest {
 	@Test
 	def void testCreateEnum() {
 		val enumeration = createUmlEnumAndAddToPackage(rootElement, STANDARD_ENUM_NAME, VisibilityKind.PRIVATE_LITERAL,
-			createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2))
+			enumLiterals2)
 	    saveAndSynchronizeChanges(enumeration)
-	    assertJavaFileExists(STANDARD_ENUM_NAME)
-	    val jEnum = getCorrespondingObject(enumeration, org.emftext.language.java.classifiers.Enumeration)
+	    
+	    assertJavaFileExists(STANDARD_ENUM_NAME, #[])
+	    val jEnum = getCorrespondingEnum(enumeration)
+	    assertJavaEnumTraits(jEnum, STANDARD_ENUM_NAME, JavaVisibility.PRIVATE, createEnumConstantsFromList(ENUM_LITERAL_NAMES_2))
 	    assertEnumEquals(enumeration, jEnum)
+	    
 	    
 	}
 	
@@ -45,9 +53,11 @@ class UmlToJavaEnumTest extends AbstractUmlJavaTest {
 	def void testRenameEnum() {
 		uEnum.name = ENUM_RENAME
 		saveAndSynchronizeChanges(uEnum)
-		assertJavaFileExists(ENUM_RENAME)
-		assertJavaFileNotExists(ENUM_NAME)
-		val jEnum = getCorrespondingObject(uEnum, org.emftext.language.java.classifiers.Enumeration)
+		
+		assertJavaFileExists(ENUM_RENAME, #[])
+		assertJavaFileNotExists(ENUM_NAME, #[])
+		val jEnum = getCorrespondingEnum(uEnum)
+		assertEquals(ENUM_RENAME, uEnum.name)
 	    assertEnumEquals(uEnum, jEnum)
 	}
 	
@@ -55,14 +65,17 @@ class UmlToJavaEnumTest extends AbstractUmlJavaTest {
 	def void testDeleteEnum() {
 		uEnum.destroy
 		saveAndSynchronizeChanges(rootElement)
-		assertJavaFileNotExists(ENUM_NAME)
+		
+		assertJavaFileNotExists(ENUM_NAME, #[])
 	}
 	
 	@Test
 	def void testAddEnumLiteral() {
 		uEnum.createOwnedLiteral(LITERAL_NAME)
 		saveAndSynchronizeChanges(uEnum)
-		val jEnum = getCorrespondingObject(uEnum, org.emftext.language.java.classifiers.Enumeration)
+		
+		val jEnum = getCorrespondingEnum(uEnum)
+		assertJavaEnumHasConstant(jEnum, LITERAL_NAME)
 	    assertEnumEquals(uEnum, jEnum)
 	}
 	
@@ -70,7 +83,9 @@ class UmlToJavaEnumTest extends AbstractUmlJavaTest {
 	def void testDeleteEnumLiteral() {
 		uEnum.ownedLiterals.remove(0)
 		saveAndSynchronizeChanges(uEnum)
-		val jEnum = getCorrespondingObject(uEnum, org.emftext.language.java.classifiers.Enumeration)
+		
+		val jEnum = getCorrespondingEnum(uEnum)
+		assertJavaEnumDontHaveConstant(jEnum, ENUM_LITERAL_NAMES_1.head)
 	    assertEnumEquals(uEnum, jEnum)
 	}
 	
