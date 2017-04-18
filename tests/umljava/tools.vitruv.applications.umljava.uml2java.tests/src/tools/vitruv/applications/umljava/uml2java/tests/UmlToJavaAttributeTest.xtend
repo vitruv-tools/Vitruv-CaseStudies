@@ -1,6 +1,6 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
-import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.junit.Test
 import static org.junit.Assert.*
 import org.junit.Before
@@ -17,7 +17,7 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
-class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
+class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName";
     private static val ATTRIBUTE_RENAME = "attributeRenamed";
     private static val STANDARD_ATTRIBUTE_NAME = "standardAttributName";

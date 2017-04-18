@@ -8,7 +8,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import tools.vitruv.applications.umljava.java2uml.AbstractJavaUmlTest
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
@@ -16,7 +16,7 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import tools.vitruv.framework.tests.util.TestUtil
 
-class JavaToUmlClassTest extends AbstractJavaUmlTest {
+class JavaToUmlClassTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
     private static val STANDARD_CLASS_NAME = "StandardClassName";
     private static val CLASS_RENAMED = "ClassRenamed"
@@ -61,7 +61,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
     def void testCreateClass() {
         val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);
         
-        val uClass = getCorrespondingObject(cls, Class);
+        val uClass = getCorrespondingObjectWithClass(cls, Class);
         assertEquals(STANDARD_CLASS_NAME, uClass.name)
     }
     
@@ -70,7 +70,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
         jClass.name = CLASS_RENAMED;
         saveAndSynchronizeChanges(jClass);
         
-        val uClass = getCorrespondingObject(jClass, Class);
+        val uClass = getCorrespondingObjectWithClass(jClass, Class);
         assertEquals(CLASS_RENAMED, uClass.name)
     }
     
@@ -96,14 +96,14 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
         jClass.makeProtected;
         saveAndSynchronizeChanges(jClass);
         
-        var uClass = getCorrespondingObject(jClass, Class);
+        var uClass = getCorrespondingObjectWithClass(jClass, Class);
         assertEquals(CLASS_NAME, uClass.name)
         assertHasVisibility(uClass, JavaVisibility.PROTECTED)
         
         jClass.makePrivate;
         saveAndSynchronizeChanges(jClass);
         
-        uClass = getCorrespondingObject(jClass, Class);
+        uClass = getCorrespondingObjectWithClass(jClass, Class);
         assertEquals(CLASS_NAME, uClass.name)
         assertHasVisibility(uClass, JavaVisibility.PRIVATE)
     }
@@ -113,7 +113,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
        jClass.addModifier(ModifiersFactory.eINSTANCE.createAbstract)
        saveAndSynchronizeChanges(jClass);
        
-       val uClass = getCorrespondingObject(jClass, Class);
+       val uClass = getCorrespondingObjectWithClass(jClass, Class);
        assertEquals(CLASS_NAME, uClass.name)
        assertTrue(uClass.isAbstract);
    }
@@ -123,7 +123,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
        jClass.addModifier(ModifiersFactory.eINSTANCE.createFinal)
        saveAndSynchronizeChanges(jClass);
        
-       val uClass = getCorrespondingObject(jClass, Class);
+       val uClass = getCorrespondingObjectWithClass(jClass, Class);
        assertEquals(CLASS_NAME, uClass.name)
        assertTrue(uClass.isFinalSpecialization);
    }
@@ -134,7 +134,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
        jClass.extends = createNamespaceReferenceFromClassifier(superClass);
        saveAndSynchronizeChanges(jClass);
        
-       val uClass = getCorrespondingObject(jClass, Class);
+       val uClass = getCorrespondingObjectWithClass(jClass, Class);
        assertEquals(CLASS_NAME, uClass.name)
        assertEquals(SUPER_CLASS_NAME, uClass.generals.head.name);
    }
@@ -144,7 +144,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
        val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME);
        jClass.implements += createNamespaceReferenceFromClassifier(implInterface);
        saveAndSynchronizeChanges(jClass);
-       val uClass = getCorrespondingObject(jClass, Class);
+       val uClass = getCorrespondingObjectWithClass(jClass, Class);
        assertEquals(CLASS_NAME, uClass.name)
        assertEquals(INTERFACE_NAME, uClass.interfaceRealizations.head.contract.name);
    }

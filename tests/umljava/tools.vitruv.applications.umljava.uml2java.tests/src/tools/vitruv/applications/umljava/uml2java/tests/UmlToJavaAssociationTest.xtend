@@ -1,13 +1,13 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
 import org.junit.Test
-import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
-class UmlToJavaAssociationTest extends AbstractUmlJavaTest {
+class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
 	
 	@Test
 	def void testCreateAssociation() {

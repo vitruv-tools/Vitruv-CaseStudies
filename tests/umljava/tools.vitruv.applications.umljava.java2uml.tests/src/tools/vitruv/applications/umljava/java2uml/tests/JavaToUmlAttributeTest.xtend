@@ -1,6 +1,6 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
-import tools.vitruv.applications.umljava.java2uml.AbstractJavaUmlTest
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Before
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.types.TypesFactory
@@ -10,7 +10,7 @@ import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import org.emftext.language.java.modifiers.ModifiersFactory
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
-class JavaToUmlAttributeTest extends AbstractJavaUmlTest {
+class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName"
     private static val ATTRIBUTE_RENAME = "attributeRenamed"
     private static val STANDARD_ATTRIBUTE_NAME = "standardAttributName"
@@ -80,7 +80,7 @@ class JavaToUmlAttributeTest extends AbstractJavaUmlTest {
         jAttr = null;
         
         saveAndSynchronizeChanges(jClass);
-        val uClass = getCorrespondingObject(jClass, org.eclipse.uml2.uml.Class)
+        val uClass = getCorrespondingObjectWithClass(jClass, org.eclipse.uml2.uml.Class)
         assertTrue(uClass.ownedAttributes.nullOrEmpty)
     }
 

@@ -7,7 +7,7 @@ import org.emftext.language.java.modifiers.Final
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
@@ -19,7 +19,7 @@ import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 import org.emftext.language.java.types.NamespaceClassifierReference
 import javax.naming.event.NamespaceChangeListener
 
-class UmlToJavaClassTest extends AbstractUmlJavaTest {
+class UmlToJavaClassTest extends Uml2JavaTransformationTest {
 	private static val CLASS_NAME = "ClassName";
 	private static val STANDARD_CLASS_NAME = "StandardClassName"
 	private static val CLASS_RENAME = "ClassRenamed"

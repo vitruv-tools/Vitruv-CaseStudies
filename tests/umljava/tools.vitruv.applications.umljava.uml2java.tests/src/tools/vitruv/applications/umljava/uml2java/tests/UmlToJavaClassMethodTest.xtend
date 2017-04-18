@@ -4,7 +4,7 @@ import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
-import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.junit.Test
 import static org.junit.Assert.*;
 import org.junit.Before
@@ -18,7 +18,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 import org.emftext.language.java.types.TypesFactory
 
-class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
+class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     private static val CLASS_NAME = "ClassName";
     private static val TYPE_NAME = "TypeName";
     private static val OPERATION_NAME = "classMethod";

@@ -14,9 +14,11 @@ import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.emftext.language.java.members.ClassMethod
 import org.eclipse.uml2.uml.Operation
 import tools.vitruv.framework.tests.VitruviusApplicationTest
+import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 
-class AbstractUmlJavaTest extends VitruviusApplicationTest {
-    protected static val final Logger logger = Logger.getLogger(typeof(AbstractUmlJavaTest).simpleName);
+class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
+    protected static val final Logger logger = Logger.getLogger(typeof(Uml2JavaTransformationTest).simpleName);
+    
 	private static val MODEL_FILE_EXTENSION = "uml";
 	private static val MODEL_NAME = "model";
 
@@ -31,10 +33,7 @@ class AbstractUmlJavaTest extends VitruviusApplicationTest {
 	override protected createChangePropagationSpecifications() {
 		return #[new UmlToJavaChangePropagationSpecification()]; 
 	}
-	
-	override protected createMetamodels() {
-		return #[new UmlDomain().metamodel, new JavaDomain().metamodel];
-	}
+
 	override protected cleanup() {
         
     }
@@ -61,46 +60,33 @@ class AbstractUmlJavaTest extends VitruviusApplicationTest {
         }
         return returnClassif
     }
-    def protected getCorrespondingObjects(EObject obj) {
-        if (obj === null) {
-            throw new IllegalArgumentException("Cannot retrieve correspondence for null")
-        }
-        val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten;
-        if (corrList.nullOrEmpty) {
-            return null
-        }
-        return corrList
-    }
-    def protected <T> getCorrespondingObject(EObject obj, Class<T> c) {
-        return getCorrespondingObjects(obj).filter(c).head as T
 
-    }
     
     def protected getCorrespondingAttribute(Property uAttribute) {
-    	return getCorrespondingObject(uAttribute, org.emftext.language.java.members.Field)
+    	return getCorrespondingObjectWithClass(uAttribute, org.emftext.language.java.members.Field)
     }
     
     def protected getCorrespondingClassMethod(Operation uOperation) {
-    	return getCorrespondingObject(uOperation, org.emftext.language.java.members.ClassMethod)
+    	return getCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.ClassMethod)
     }
     
     def protected getCorrespondingInterfaceMethod(Operation uOperation) {
-    	return getCorrespondingObject(uOperation, org.emftext.language.java.members.InterfaceMethod)
+    	return getCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.InterfaceMethod)
     }
     
     def protected getCorrespondingClass(org.eclipse.uml2.uml.Class uClass) {
-    	return getCorrespondingObject(uClass, org.emftext.language.java.classifiers.Class)
+    	return getCorrespondingObjectWithClass(uClass, org.emftext.language.java.classifiers.Class)
     }
     
     def protected getCorrespondingInterface(org.eclipse.uml2.uml.Interface uInterface) {
-    	return getCorrespondingObject(uInterface, org.emftext.language.java.classifiers.Interface)
+    	return getCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
     }
     
     def protected getCorrespondingEnum(org.eclipse.uml2.uml.Enumeration uEnumeration) {
-    	return getCorrespondingObject(uEnumeration, org.emftext.language.java.classifiers.Enumeration)
+    	return getCorrespondingObjectWithClass(uEnumeration, org.emftext.language.java.classifiers.Enumeration)
     }
     def protected getCorrespondingParameter(org.eclipse.uml2.uml.Parameter uParam) {
-    	return getCorrespondingObject(uParam, org.emftext.language.java.parameters.OrdinaryParameter)
+    	return getCorrespondingObjectWithClass(uParam, org.emftext.language.java.parameters.OrdinaryParameter)
     }
     
     

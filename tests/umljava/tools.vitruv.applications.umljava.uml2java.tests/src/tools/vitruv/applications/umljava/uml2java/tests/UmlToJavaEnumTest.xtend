@@ -7,11 +7,11 @@ import static org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
-class UmlToJavaEnumTest extends AbstractUmlJavaTest {
+class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	private static val ENUM_NAME = "EnumName"
 	private static val ENUM_RENAME = "EnumRenamed"
 	private static val STANDARD_ENUM_NAME = "StandardEnumName"

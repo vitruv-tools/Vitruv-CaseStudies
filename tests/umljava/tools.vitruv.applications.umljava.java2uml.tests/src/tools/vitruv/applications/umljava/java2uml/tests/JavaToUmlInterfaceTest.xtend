@@ -1,7 +1,7 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
 import static org.junit.Assert.*;
-import tools.vitruv.applications.umljava.java2uml.AbstractJavaUmlTest
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Test
 import org.junit.Before
 import org.junit.Ignore
@@ -10,7 +10,7 @@ import static tools.vitruv.applications.umljava.util.UmlUtil.*;
 import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 
-class JavaToUmlInterfaceTest extends AbstractJavaUmlTest {
+class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName"
     private static val INTERFACE_RENAME = "InterfaceRename"
     private static val STANDARD_INTERFACE_NAME = "StandardInterfaceName"
@@ -82,7 +82,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaUmlTest {
      * @return Das Uml-Interface dessen namen zum javaInterface passt und korrespondiert.
      */
     private def org.eclipse.uml2.uml.Interface assertAndReturnCorrespondingInterface(org.emftext.language.java.classifiers.Interface javaInterface) {
-        val uI = getCorrespondingObject(javaInterface, org.eclipse.uml2.uml.Interface)
+        val uI = getCorrespondingObjectWithClass(javaInterface, org.eclipse.uml2.uml.Interface)
         assertEquals(javaInterface.name, uI?.name)
         return uI;
     }

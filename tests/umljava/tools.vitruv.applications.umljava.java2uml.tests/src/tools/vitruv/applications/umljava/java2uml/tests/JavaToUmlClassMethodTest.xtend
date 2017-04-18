@@ -6,7 +6,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import tools.vitruv.applications.umljava.java2uml.AbstractJavaUmlTest
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import tools.vitruv.framework.util.bridges.EcoreBridge
 
 import static org.junit.Assert.*
@@ -17,7 +17,7 @@ import org.eclipse.uml2.types.TypesFactory
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.members.MembersFactory
 
-class JavaToUmlClassMethodTest extends AbstractJavaUmlTest {
+class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
     private static val TYPE_NAME = "TypeName";
     private static val OPERATION_NAME = "classMethod";
@@ -85,7 +85,7 @@ class JavaToUmlClassMethodTest extends AbstractJavaUmlTest {
         jMeth = null
         saveAndSynchronizeChanges(jClass)
         
-        val uClass = getCorrespondingObject(jClass, org.eclipse.uml2.uml.Class)
+        val uClass = getCorrespondingObjectWithClass(jClass, org.eclipse.uml2.uml.Class)
         assertTrue(uClass.ownedOperations.nullOrEmpty)
     }
     

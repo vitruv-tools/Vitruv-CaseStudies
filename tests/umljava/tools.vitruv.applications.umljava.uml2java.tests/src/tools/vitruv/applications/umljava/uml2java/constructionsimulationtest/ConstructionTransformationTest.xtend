@@ -5,9 +5,9 @@ import tools.vitruv.applications.umljava.constructionsimulation.strategy.UmlInte
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
 import tools.vitruv.domains.uml.UmlDomain
 import tools.vitruv.domains.java.JavaDomain
-import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 
-class ConstructionTransformationTest extends AbstractUmlJavaTest {
+class ConstructionTransformationTest extends Uml2JavaTransformationTest {
 	
 	@Test
     def void testModel1() {

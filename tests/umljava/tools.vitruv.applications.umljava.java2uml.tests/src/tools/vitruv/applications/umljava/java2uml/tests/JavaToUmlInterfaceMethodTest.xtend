@@ -1,13 +1,13 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
-import tools.vitruv.applications.umljava.java2uml.AbstractJavaUmlTest
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Before
 import org.junit.After
 import static org.junit.Assert.*;
 import static tools.vitruv.applications.umljava.util.JavaUtil.*;
 import org.junit.Test
 
-class JavaToUmlInterfaceMethodTest extends AbstractJavaUmlTest {
+class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName";
     private static val TYPE_NAME = "TypeName";
     private static val IOPERATION_NAME = "interfaceMethod";
@@ -64,7 +64,7 @@ class JavaToUmlInterfaceMethodTest extends AbstractJavaUmlTest {
         jMeth = null
         saveAndSynchronizeChanges(jI)
         
-        val uInterface = getCorrespondingObject(jI, org.eclipse.uml2.uml.Interface)
+        val uInterface = getCorrespondingObjectWithClass(jI, org.eclipse.uml2.uml.Interface)
         assertTrue(uInterface.ownedOperations.nullOrEmpty)
     }
     

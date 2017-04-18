@@ -5,7 +5,7 @@ import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static org.junit.Assert.*;
-import tools.vitruv.applications.umljava.uml2java.AbstractUmlJavaTest
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.junit.Test
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Interface
@@ -16,7 +16,7 @@ import org.junit.After
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 import org.emftext.language.java.types.TypesFactory
 
-class UmlToJavaInterfaceMethodTest extends AbstractUmlJavaTest {
+class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName";
     private static val TYPE_NAME = "TypeName";
     private static val IOPERATION_NAME = "interfaceMethod";

@@ -17,8 +17,9 @@ import org.emftext.language.java.members.Method
 import org.emftext.language.java.members.Field
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 import tools.vitruv.framework.tests.VitruviusApplicationTest
+import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 
-class AbstractJavaUmlTest extends VitruviusApplicationTest {
+class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     
     private static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
 	
@@ -34,10 +35,6 @@ class AbstractJavaUmlTest extends VitruviusApplicationTest {
 	
 	override protected createChangePropagationSpecifications() {
 		return #[new JavaToUmlChangePropagationSpecification()]; 
-	}
-	
-	override protected createMetamodels() {
-		return #[new UmlDomain().metamodel, new JavaDomain().metamodel];
 	}
 	
     def protected createJavaClassWithCompilationUnit(String cName, JavaVisibility vis, boolean abstr, boolean fin) {
@@ -78,26 +75,6 @@ class AbstractJavaUmlTest extends VitruviusApplicationTest {
         return cu
     }
     
-    /**
-     * @return das erste correspondierende Objekt. Null, wenn keins vorhanden.
-     */
-    def protected getCorrespondingObject(EObject obj) {
-        val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]);
-        if (corrList.nullOrEmpty) {
-            return null
-        } else if (corrList.head.nullOrEmpty) {
-            return null;
-        }
-        return corrList.head.head
-    }
-    
-    def protected <T> getCorrespondingObject(EObject obj, Class<T> c) {
-        val corr = getCorrespondingObject(obj)
-        if (corr == null) {
-            return null;
-        }
-        return corr as T
-    }
     
     /**
      * @param uElem Uml-Klasse, Interface, Methode, Attribute, ...
@@ -119,13 +96,13 @@ class AbstractJavaUmlTest extends VitruviusApplicationTest {
         assertEquals(getClassifierFromTypeReference(jParam.typeReference).name, uParam.type.name);
     }
    def protected assertNameAndReturnUniqueUmlMethod(Method meth) {
-       val umlOperation = getCorrespondingObject(meth, org.eclipse.uml2.uml.Operation)
+       val umlOperation = getCorrespondingObjectWithClass(meth, org.eclipse.uml2.uml.Operation)
        assertEquals(meth.name, umlOperation.name)
        return umlOperation
    }
    
    def protected assertNameAndReturnUniqueUmlAttribute(Field jAttr) {
-       val uAttr = getCorrespondingObject(jAttr, org.eclipse.uml2.uml.Property)
+       val uAttr = getCorrespondingObjectWithClass(jAttr, org.eclipse.uml2.uml.Property)
        assertEquals(jAttr.name, uAttr.name)
        return uAttr
    }
@@ -133,6 +110,11 @@ class AbstractJavaUmlTest extends VitruviusApplicationTest {
     def protected getUmlPackagedElementsbyName(String modelPath, Class<? extends org.eclipse.uml2.uml.Classifier> type, String className) {
         val m = getModelResource(modelPath).allContents.head as Model
         return m.packagedElements.filter(type).filter[it.name == className].toList;
+    }
+    
+    
+    def protected getCorrespondingClass(org.emftext.language.java.classifiers.Class jClass) {
+        
     }
     
     
