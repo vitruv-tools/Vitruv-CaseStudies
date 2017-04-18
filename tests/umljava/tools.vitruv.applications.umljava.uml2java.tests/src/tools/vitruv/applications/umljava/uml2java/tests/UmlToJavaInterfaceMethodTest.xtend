@@ -50,6 +50,7 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlJavaTest {
         if (typeClass != null) {
             typeClass.destroy;
         }
+        saveAndSynchronizeChanges(rootElement)
     }
     
     @Test
@@ -92,6 +93,9 @@ class UmlToJavaInterfaceMethodTest extends AbstractUmlJavaTest {
         
         val jMethod = getCorrespondingInterfaceMethod(op)
         val jTypeClass = getCorrespondingClass(typeClass)
+        if (jTypeClass == null) {
+            println("customTypeClass is null")
+        }
         assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
         assertMethodEquals(op, jMethod)
     }

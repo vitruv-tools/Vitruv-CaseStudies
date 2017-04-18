@@ -61,7 +61,7 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
         val jClass = getCorrespondingClass(uClass)
         val jAttr = getCorrespondingAttribute(attr);
         assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC, TypesFactory.eINSTANCE.createInt, false, false, jClass)
-        assertAttributeEquals(uAttr, jAttr)
+        assertAttributeEquals(attr, jAttr)
     }
     
     @Test
@@ -74,7 +74,7 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
         val jAttr = getCorrespondingAttribute(attr)
         assertJavaAttributeTraits(jAttr, STANDARD_ATTRIBUTE_NAME, JavaVisibility.PUBLIC, 
         	createNamespaceReferenceFromClassifier(jtypeClass), false, false, jClass)
-        assertAttributeEquals(uAttr, jAttr)
+        assertAttributeEquals(attr, jAttr)
         
     }
     
@@ -96,8 +96,6 @@ class UmlToJavaAttributeTest extends AbstractUmlJavaTest {
         saveAndSynchronizeChanges(uClass);
         
         val jClass = getCorrespondingClass(uClass)
-        val jAttr = getCorrespondingAttribute(uAttr)
-        assertNull(jAttr)
         assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
     }
 

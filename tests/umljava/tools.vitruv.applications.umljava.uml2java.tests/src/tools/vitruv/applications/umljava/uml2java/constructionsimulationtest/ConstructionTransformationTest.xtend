@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.uml2java.constructionsimulationtest
 
-import tools.vitruv.framework.tests.VitruviusEMFCasestudyTest
 import org.junit.Test
 import tools.vitruv.applications.umljava.constructionsimulation.strategy.UmlIntegrationStrategy
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
@@ -28,9 +27,6 @@ class ConstructionTransformationTest extends AbstractUmlJavaTest {
         //val li = iStrategy.createChangeModels(null, res)
         createAndSynchronizeModel("model/model.uml", res.allContents.head)
         //triggerSynchronization(li)
-    }
-    override protected initializeTestModel() {
-    	
     }
 
 	

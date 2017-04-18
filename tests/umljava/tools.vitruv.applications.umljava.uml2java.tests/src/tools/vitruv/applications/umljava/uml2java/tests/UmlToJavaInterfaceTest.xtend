@@ -69,7 +69,7 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
     
     @Test
     def testAddSuperInterface() {
-        val interface = createInterfaceWithTwoSuperInterfaces(INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
+        val interface = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
         saveAndSynchronizeChanges(rootElement)
         val jI = getCorrespondingInterface(interface)
         assertEquals(SUPERINTERFACENAME_1, getClassifierFromNameSpaceReference(jI.extends.get(0) as NamespaceClassifierReference).name)
@@ -78,7 +78,7 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
     
     @Test
     def testRemoveSuperInterface() {
-        val uI = createInterfaceWithTwoSuperInterfaces(INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
+        val uI = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
         saveAndSynchronizeChanges(rootElement)
         uI.generalizations.remove(0);
         saveAndSynchronizeChanges(rootElement);

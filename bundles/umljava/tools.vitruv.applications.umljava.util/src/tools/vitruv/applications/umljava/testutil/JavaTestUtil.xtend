@@ -43,13 +43,18 @@ class JavaTestUtil {
 	}
 	
 	def static void assertJavaEnumConstantListEquals(List<EnumConstant> constantsList1, List<EnumConstant> constantsList2) {
-		assertEquals(constantsList1.size, constantsList2.size)
-		for (const : constantsList1) {
-			val correspondingConstants = constantsList2.filter[name == const.name]
-			if (correspondingConstants.size != 1) {
-				fail("There are 0 or more than 1 constant with the name " + const.name)
-			}
+		if (constantsList1.nullOrEmpty) {
+		    assertTrue(constantsList2.nullOrEmpty)
+		} else {
+            assertEquals(constantsList1.size, constantsList2.size)
+            for (const : constantsList1) {
+                val correspondingConstants = constantsList2.filter[name == const.name]
+                if (correspondingConstants.size != 1) {
+                    fail("There are 0 or more than 1 constant with the name " + const.name)
+                }
+            }
 		}
+		
 	}
 	
 	def static void assertJavaInterfaceTraits(Interface jInterface, String name, JavaVisibility visibility) {
@@ -64,7 +69,7 @@ class JavaTestUtil {
 		assertJavaModifiableHasVisibility(jMethod, visibility)
 		assertJavaModifiableStatic(jMethod, isStatic)
 		assertJavaModifiableAbstract(jMethod, isAbstract)
-		assertEquals(containedClassifier.name, (jMethod.eContainer as ConcreteClassifier).name)
+		assertEquals(containedClassifier.name + " not equal as " + (jMethod.eContainer as ConcreteClassifier).name, containedClassifier.name, (jMethod.eContainer as ConcreteClassifier).name)
 		assertJavaParameterListEquals(jMethod.parameters, parameterList)
 	}
 	
@@ -75,14 +80,18 @@ class JavaTestUtil {
 	
 
 	def static void assertJavaParameterListEquals(List<Parameter> paramList1, List<Parameter> paramList2) {
-		assertEquals(paramList1.size, paramList2.size)
-		for(param : paramList1) {
-			val correspondingParams = paramList2.filter[name == param.name]
-			if (correspondingParams.size != 1) {
-				fail("There are 0 or more than 1 Parameter with the name " + param.name)
-			}
-			assertJavaParameterTraits(correspondingParams.head, param.name, param.typeReference)
-		}
+	    if (paramList1.nullOrEmpty) {
+	        assertTrue(paramList2.nullOrEmpty)
+	    } else {
+            assertEquals(paramList1.size, paramList2.size)
+            for (param : paramList1) {
+                val correspondingParams = paramList2.filter[name == param.name]
+                if (correspondingParams.size != 1) {
+                    fail("There are 0 or more than 1 Parameter with the name " + param.name)
+                }
+                assertJavaParameterTraits(correspondingParams.head, param.name, param.typeReference)
+            }
+	    }
 	}
 	
 	
@@ -166,7 +175,7 @@ class JavaTestUtil {
     }
     
     def static void assertJavaMemberContainerDontHaveMember(MemberContainer memContainer, String name) {
-    	assertTrue(memContainer.members.filter[it.name == name].nullOrEmpty)
+    	assertTrue(memContainer.getMembersByName(name).nullOrEmpty)
     }
     
     def static void assertJavaEnumHasConstant(Enumeration jEnum, String constantName) {

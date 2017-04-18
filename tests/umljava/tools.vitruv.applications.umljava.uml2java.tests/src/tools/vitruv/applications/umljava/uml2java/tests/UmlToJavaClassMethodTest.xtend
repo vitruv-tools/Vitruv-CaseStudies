@@ -76,7 +76,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         
         val jMethod = getCorrespondingClassMethod(operation)
         val jClass = getCorrespondingClass(uClass)
-        assertJavaMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PACKAGE,
+        assertJavaMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
         	TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
         assertMethodEquals(operation, jMethod)
     }
@@ -109,9 +109,7 @@ class UmlToJavaClassMethodTest extends AbstractUmlJavaTest {
         uOp.destroy;
         saveAndSynchronizeChanges(uClass);
         
-        val jMethod = getCorrespondingClassMethod(uOp)
         val jClass = getCorrespondingClass(uClass)
-        assertNull(jMethod)
         assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
     }
     

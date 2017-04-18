@@ -142,7 +142,10 @@ class UmlUtil {
     def static Operation createUmlOperation(String name, Type returnType, VisibilityKind visibility, boolean abstr, boolean stat, List<Parameter> params) {
         val uOperation = UMLFactory.eINSTANCE.createOperation;
         setName(uOperation, name)
-        uOperation.type = returnType;
+        if (returnType !== null) {
+            uOperation.type = returnType;
+        }
+        
         uOperation.visibility = visibility;
         uOperation.isAbstract = abstr;
         uOperation.isStatic = stat;

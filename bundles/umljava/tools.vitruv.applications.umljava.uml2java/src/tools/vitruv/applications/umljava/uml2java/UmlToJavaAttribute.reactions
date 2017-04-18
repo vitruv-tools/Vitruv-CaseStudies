@@ -30,6 +30,7 @@ routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
     action {
         val javaAttribute = create java::Field and initialize {
             javaAttribute.name = umlAttribute.name;
+            javaAttribute.makePublic
         }
         update javaClass {
             javaClass.members += javaAttribute

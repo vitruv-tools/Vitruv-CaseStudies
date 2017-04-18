@@ -1,16 +1,11 @@
 package mir.routines.umlToJavaMethod;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
-import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -31,30 +26,16 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
       return uParam;
     }
     
-    public EObject getElement1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Method jMeth, final org.emftext.language.java.classifiers.Class customClass) {
+    public EObject getElement1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customClass) {
       return jParam;
     }
     
-    public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Method jMeth, final org.emftext.language.java.classifiers.Class customClass) {
-      final TypeReference jType = UmlToJavaHelper.createTypeReference(uType, customClass);
-      boolean _equals = uParam.getDirection().equals(ParameterDirectionKind.RETURN_LITERAL);
-      if (_equals) {
-        jMeth.setTypeReference(jType);
-        boolean _notEquals = (!Objects.equal(jParam, null));
-        if (_notEquals) {
-        }
-      } else {
-        jParam.setTypeReference(jType);
-      }
+    public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customClass) {
+      jParam.setTypeReference(UmlToJavaHelper.createTypeReference(uType, customClass));
     }
     
-    public EObject getCorrepondenceSourceCustomClass(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Method jMeth) {
+    public EObject getCorrepondenceSourceCustomClass(final Parameter uParam, final Type uType, final OrdinaryParameter jParam) {
       return uType;
-    }
-    
-    public EObject getCorrepondenceSourceJMeth(final Parameter uParam, final Type uType, final OrdinaryParameter jParam) {
-      Operation _operation = uParam.getOperation();
-      return _operation;
     }
   }
   
@@ -79,24 +60,18 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     	OrdinaryParameter.class,
     	(OrdinaryParameter _element) -> true, // correspondence precondition checker
     	null);
-    registerObjectUnderModification(jParam);
-    Method jMeth = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJMeth(uParam, uType, jParam), // correspondence source supplier
-    	Method.class,
-    	(Method _element) -> true, // correspondence precondition checker
-    	null);
-    if (jMeth == null) {
+    if (jParam == null) {
     	return;
     }
-    registerObjectUnderModification(jMeth);
+    registerObjectUnderModification(jParam);
     org.emftext.language.java.classifiers.Class customClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomClass(uParam, uType, jParam, jMeth), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceCustomClass(uParam, uType, jParam), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(customClass);
-    // val updatedElement userExecution.getElement1(uParam, uType, jParam, jMeth, customClass);
-    userExecution.update0Element(uParam, uType, jParam, jMeth, customClass);
+    // val updatedElement userExecution.getElement1(uParam, uType, jParam, customClass);
+    userExecution.update0Element(uParam, uType, jParam, customClass);
     
     postprocessElements();
   }

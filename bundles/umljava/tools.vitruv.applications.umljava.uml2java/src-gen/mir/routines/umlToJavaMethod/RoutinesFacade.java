@@ -3,6 +3,7 @@ package mir.routines.umlToJavaMethod;
 import org.eclipse.uml2.uml.Feature;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
@@ -45,9 +46,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void setJavaMethodReturnType(final Parameter uParam, final Integer value) {
+  public void adaptJavaParametertoDirectionChange(final Operation uOperation, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
+    mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine effect = new mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine(this.executionState, calledBy,
+    	uOperation, oldDirection, newDirection);
+    effect.applyRoutine();
+  }
+  
+  public void setJavaMethodReturnType(final Operation uOperation) {
     mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine(this.executionState, calledBy,
-    	uParam, value);
+    	uOperation);
     effect.applyRoutine();
   }
   

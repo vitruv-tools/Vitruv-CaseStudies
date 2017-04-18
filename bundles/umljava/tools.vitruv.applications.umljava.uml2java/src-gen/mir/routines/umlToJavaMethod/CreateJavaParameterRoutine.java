@@ -27,25 +27,25 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceCustomType(final Operation uMeth, final Parameter umlParam, final Method javaMethod) {
-      Type _type = umlParam.getType();
-      return _type;
-    }
-    
-    public EObject getElement1(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customType, final OrdinaryParameter javaParam) {
+    public EObject getElement1(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       return javaParam;
     }
     
-    public void update0Element(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customType, final OrdinaryParameter javaParam) {
+    public void update0Element(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       EList<org.emftext.language.java.parameters.Parameter> _parameters = javaMethod.getParameters();
       _parameters.add(javaParam);
     }
     
-    public EObject getElement2(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customType, final OrdinaryParameter javaParam) {
+    public EObject getCorrepondenceSourceCustomTypeClass(final Operation uMeth, final Parameter umlParam, final Method javaMethod) {
+      Type _type = umlParam.getType();
+      return _type;
+    }
+    
+    public EObject getElement2(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       return umlParam;
     }
     
-    public EObject getElement3(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customType, final OrdinaryParameter javaParam) {
+    public EObject getElement3(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       return javaMethod;
     }
     
@@ -53,15 +53,14 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
       return uMeth;
     }
     
-    public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customType, final OrdinaryParameter javaParam) {
-      String _name = umlParam.getName();
-      boolean _notEquals = (!Objects.equal(_name, null));
-      if (_notEquals) {
-        javaParam.setName(umlParam.getName());
+    public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
+      boolean _equals = Objects.equal(umlParam, null);
+      if (_equals) {
+        javaParam.setName("DefaultParameterName");
       } else {
-        javaParam.setName("Defaultname");
+        javaParam.setName(umlParam.getName());
       }
-      javaParam.setTypeReference(UmlToJavaHelper.createTypeReference(umlParam.getType(), customType));
+      javaParam.setTypeReference(UmlToJavaHelper.createTypeReference(umlParam.getType(), customTypeClass));
     }
   }
   
@@ -90,19 +89,19 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     	return;
     }
     registerObjectUnderModification(javaMethod);
-    org.emftext.language.java.classifiers.Class customType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomType(uMeth, umlParam, javaMethod), // correspondence source supplier
+    org.emftext.language.java.classifiers.Class customTypeClass = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceCustomTypeClass(uMeth, umlParam, javaMethod), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    registerObjectUnderModification(customType);
+    registerObjectUnderModification(customTypeClass);
     OrdinaryParameter javaParam = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
-    userExecution.updateJavaParamElement(uMeth, umlParam, javaMethod, customType, javaParam);
+    userExecution.updateJavaParamElement(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     
-    addCorrespondenceBetween(userExecution.getElement1(uMeth, umlParam, javaMethod, customType, javaParam), userExecution.getElement2(uMeth, umlParam, javaMethod, customType, javaParam), "");
+    addCorrespondenceBetween(userExecution.getElement1(uMeth, umlParam, javaMethod, customTypeClass, javaParam), userExecution.getElement2(uMeth, umlParam, javaMethod, customTypeClass, javaParam), "");
     
-    // val updatedElement userExecution.getElement3(uMeth, umlParam, javaMethod, customType, javaParam);
-    userExecution.update0Element(uMeth, umlParam, javaMethod, customType, javaParam);
+    // val updatedElement userExecution.getElement3(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
+    userExecution.update0Element(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     
     postprocessElements();
   }

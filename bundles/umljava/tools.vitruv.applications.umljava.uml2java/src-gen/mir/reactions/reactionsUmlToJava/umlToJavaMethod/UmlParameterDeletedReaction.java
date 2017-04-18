@@ -1,9 +1,11 @@
 package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 
+import com.google.common.base.Objects;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -57,8 +59,21 @@ class UmlParameterDeletedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    RemoveEReference<Operation, Parameter> typedChange = ((RemoveAndDeleteNonRoot<Operation, Parameter>)change).getRemoveChange();
+    Operation affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Parameter oldValue = typedChange.getOldValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final Operation affectedEObject, final EReference affectedFeature, final Parameter oldValue) {
+    ParameterDirectionKind _direction = oldValue.getDirection();
+    boolean _notEquals = (!Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL));
+    return _notEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

@@ -1,17 +1,14 @@
 package mir.routines.umlToJavaMethod;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.VisibilityKind;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import org.emftext.language.java.modifiers.ModifiersFactory;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -29,24 +26,8 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateJavaMethodElement(final org.eclipse.uml2.uml.Class uClass, final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
-      String _name = umlOp.getName();
-      boolean _equals = Objects.equal(_name, null);
-      if (_equals) {
-        javaMethod.setName("DefaultMethodName");
-      } else {
-        javaMethod.setName(umlOp.getName());
-      }
-      if (((!Objects.equal(umlOp.getVisibility(), null)) && (!Objects.equal(umlOp.getVisibility(), VisibilityKind.PACKAGE_LITERAL)))) {
-        UmlToJavaHelper.setJavaVisibility(javaMethod, umlOp.getVisibility());
-      }
-      boolean _isStatic = umlOp.isStatic();
-      if (_isStatic) {
-        javaMethod.addModifier(ModifiersFactory.eINSTANCE.createStatic());
-      }
-      boolean _isAbstract = umlOp.isAbstract();
-      if (_isAbstract) {
-        javaMethod.addModifier(ModifiersFactory.eINSTANCE.createAbstract());
-      }
+      javaMethod.setName(umlOp.getName());
+      UmlToJavaHelper.setJavaVisibility(javaMethod, umlOp.getVisibility());
       javaMethod.setTypeReference(UmlToJavaHelper.createTypeReference(umlOp.getType(), customTypeClass));
     }
     
@@ -57,7 +38,6 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
     public void update0Element(final org.eclipse.uml2.uml.Class uClass, final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
       EList<Member> _members = javaClass.getMembers();
       _members.add(javaMethod);
-      this.getLogger().info(((("Correspondence Added: " + umlOp) + ", ") + javaMethod));
     }
     
     public EObject getCorrepondenceSourceJavaClass(final org.eclipse.uml2.uml.Class uClass, final Operation umlOp) {

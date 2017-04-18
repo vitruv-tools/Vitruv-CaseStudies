@@ -16,8 +16,8 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class UmlParameterTypeChangedReaction extends AbstractReactionRealization {
-  public UmlParameterTypeChangedReaction(final UserInteracting userInteracting) {
+class UmlMethodReturnTypeChangedReaction extends AbstractReactionRealization {
+  public UmlMethodReturnTypeChangedReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -28,7 +28,7 @@ class UmlParameterTypeChangedReaction extends AbstractReactionRealization {
     Type oldValue = typedChange.getOldValue();
     Type newValue = typedChange.getNewValue();
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterTypeChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterTypeChangedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodReturnTypeChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodReturnTypeChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -76,8 +76,8 @@ class UmlParameterTypeChangedReaction extends AbstractReactionRealization {
   
   private boolean checkUserDefinedPrecondition(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue) {
     ParameterDirectionKind _direction = affectedEObject.getDirection();
-    boolean _notEquals = (!Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL));
-    return _notEquals;
+    boolean _equals = Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL);
+    return _equals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -86,7 +86,7 @@ class UmlParameterTypeChangedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeJavaParameterType(affectedEObject, newValue);
+      _routinesFacade.setJavaMethodReturnType(affectedEObject.getOperation());
     }
   }
 }

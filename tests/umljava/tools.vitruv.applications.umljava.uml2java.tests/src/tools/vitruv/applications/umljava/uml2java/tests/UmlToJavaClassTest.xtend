@@ -60,7 +60,6 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         uClass.destroy;
         saveAndSynchronizeChanges(rootElement);
         
-        assertNull(getCorrespondingClass(uClass))
         assertJavaFileNotExists(CLASS_NAME, #[]);
 	}
 	

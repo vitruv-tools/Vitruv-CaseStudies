@@ -10,6 +10,7 @@ import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
+import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -25,29 +26,31 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
       super(reactionExecutionState);
     }
     
-    public void updateJavaMethodElement(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customClassType, final InterfaceMethod javaMethod) {
-      javaMethod.setName("DefaultInterfaceMethodName");
+    public void updateJavaMethodElement(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customTypeClass, final InterfaceMethod javaMethod) {
+      javaMethod.setName(umlOp.getName());
+      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReference(umlOp.getType(), customTypeClass));
+      javaMethod.makePublic();
     }
     
-    public EObject getElement1(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customClassType, final InterfaceMethod javaMethod) {
+    public EObject getElement1(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customTypeClass, final InterfaceMethod javaMethod) {
       return umlOp;
     }
     
-    public EObject getCorrepondenceSourceCustomClassType(final Operation umlOp, final Interface jInterface) {
-      Type _type = umlOp.getType();
-      return _type;
-    }
-    
-    public void update0Element(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customClassType, final InterfaceMethod javaMethod) {
+    public void update0Element(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customTypeClass, final InterfaceMethod javaMethod) {
       EList<Member> _members = jInterface.getMembers();
       _members.add(javaMethod);
     }
     
-    public EObject getElement2(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customClassType, final InterfaceMethod javaMethod) {
+    public EObject getCorrepondenceSourceCustomTypeClass(final Operation umlOp, final Interface jInterface) {
+      Type _type = umlOp.getType();
+      return _type;
+    }
+    
+    public EObject getElement2(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customTypeClass, final InterfaceMethod javaMethod) {
       return javaMethod;
     }
     
-    public EObject getElement3(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customClassType, final InterfaceMethod javaMethod) {
+    public EObject getElement3(final Operation umlOp, final Interface jInterface, final org.emftext.language.java.classifiers.Class customTypeClass, final InterfaceMethod javaMethod) {
       return jInterface;
     }
     
@@ -79,19 +82,19 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     	return;
     }
     registerObjectUnderModification(jInterface);
-    org.emftext.language.java.classifiers.Class customClassType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomClassType(umlOp, jInterface), // correspondence source supplier
+    org.emftext.language.java.classifiers.Class customTypeClass = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceCustomTypeClass(umlOp, jInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    registerObjectUnderModification(customClassType);
+    registerObjectUnderModification(customTypeClass);
     InterfaceMethod javaMethod = MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
-    userExecution.updateJavaMethodElement(umlOp, jInterface, customClassType, javaMethod);
+    userExecution.updateJavaMethodElement(umlOp, jInterface, customTypeClass, javaMethod);
     
-    addCorrespondenceBetween(userExecution.getElement1(umlOp, jInterface, customClassType, javaMethod), userExecution.getElement2(umlOp, jInterface, customClassType, javaMethod), "");
+    addCorrespondenceBetween(userExecution.getElement1(umlOp, jInterface, customTypeClass, javaMethod), userExecution.getElement2(umlOp, jInterface, customTypeClass, javaMethod), "");
     
-    // val updatedElement userExecution.getElement3(umlOp, jInterface, customClassType, javaMethod);
-    userExecution.update0Element(umlOp, jInterface, customClassType, javaMethod);
+    // val updatedElement userExecution.getElement3(umlOp, jInterface, customTypeClass, javaMethod);
+    userExecution.update0Element(umlOp, jInterface, customTypeClass, javaMethod);
     
     postprocessElements();
   }

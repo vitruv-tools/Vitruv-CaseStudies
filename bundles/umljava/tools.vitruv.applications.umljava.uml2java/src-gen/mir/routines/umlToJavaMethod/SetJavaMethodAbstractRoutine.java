@@ -5,8 +5,6 @@ import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.emftext.language.java.members.ClassMethod;
-import org.emftext.language.java.modifiers.Abstract;
-import org.emftext.language.java.modifiers.impl.ModifiersFactoryImpl;
 import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -23,12 +21,12 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod javaMethod, final Abstract abstr) {
+    public EObject getElement1(final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod javaMethod) {
       return javaMethod;
     }
     
-    public void update0Element(final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod javaMethod, final Abstract abstr) {
-      JavaUtil.setJavaModifier(javaMethod, abstr, umlOp.isAbstract());
+    public void update0Element(final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod javaMethod) {
+      JavaUtil.setAbstract(javaMethod, umlOp.isAbstract());
     }
     
     public EObject getCorrepondenceSourceJavaClass(final Operation umlOp) {
@@ -72,10 +70,8 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     	return;
     }
     registerObjectUnderModification(javaMethod);
-    Abstract abstr = ModifiersFactoryImpl.eINSTANCE.createAbstract();
-    
-    // val updatedElement userExecution.getElement1(umlOp, javaClass, javaMethod, abstr);
-    userExecution.update0Element(umlOp, javaClass, javaMethod, abstr);
+    // val updatedElement userExecution.getElement1(umlOp, javaClass, javaMethod);
+    userExecution.update0Element(umlOp, javaClass, javaMethod);
     
     postprocessElements();
   }

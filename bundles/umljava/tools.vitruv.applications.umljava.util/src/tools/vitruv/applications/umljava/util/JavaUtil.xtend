@@ -90,12 +90,9 @@ class JavaUtil {
         val jClass = ClassifiersFactory.eINSTANCE.createClass;
         setName(jClass, name)
         addJavaVisibilityModifier(jClass, visibility)
-        if (abstr) {
-            makeAbstract(jClass)
-        }
-        if (fin) {
-            makeFinal(jClass)
-        }
+        setAbstract(jClass, abstr)
+        setFinal(jClass, fin)
+
         return jClass;
     }
     
@@ -136,12 +133,8 @@ class JavaUtil {
         setName(jMethod, name)
         setTypeReferenceIfNotNull(jMethod, returnType)
         addJavaVisibilityModifier(jMethod, visibility)
-        if (abstr) {
-            makeAbstract(jMethod)
-        }
-        if (stat) {
-            makeStatic(jMethod)
-        }
+		setAbstract(jMethod, abstr)
+		setStatic(jMethod, stat)
         addParametersIfNotNull(jMethod, params)
         return jMethod;
     }
@@ -164,12 +157,8 @@ class JavaUtil {
         val jAttribute = MembersFactory.eINSTANCE.createField;
         setName(jAttribute, name)
         addJavaVisibilityModifier(jAttribute, visibility)
-        if (fin) {
-            makeFinal(jAttribute)
-        }
-        if (stat) {
-            makeStatic(jAttribute)
-        }
+        setFinal(jAttribute, fin)
+        setStatic(jAttribute, stat)
         setTypeReferenceIfNotNull(jAttribute, type)
         return jAttribute;
     }
@@ -202,6 +191,9 @@ class JavaUtil {
      * Verpackt ein Java-ConcreteClassifier in ein NamespaceClassifierReference
      */
     def static NamespaceClassifierReference createNamespaceReferenceFromClassifier(ConcreteClassifier concreteClassifier) {
+        if (concreteClassifier === null) {
+        	throw new IllegalArgumentException("Cannot create a NamespaceClassifierReference for null")
+        }
         val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
         var classifierRef = TypesFactory.eINSTANCE.createClassifierReference
         classifierRef.target = concreteClassifier
@@ -238,22 +230,22 @@ class JavaUtil {
     }
     
     def static void setName(org.emftext.language.java.commons.NamedElement namedElement, String name) {
-    	if (name == null) {
+    	if (name === null) {
     		throw new IllegalArgumentException("Cannot set name of " + namedElement + " to null")
     	}
     	namedElement.name = name
     }
     
-    def static void makeFinal(AnnotableAndModifiable modifiable) {
-    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createFinal, true)
+    def static void setFinal(AnnotableAndModifiable modifiable, boolean toAdd) {
+    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createFinal, toAdd)
     }
     
-    def static void makeAbstract(AnnotableAndModifiable modifiable) {
-    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createAbstract, true)
+    def static void setAbstract(AnnotableAndModifiable modifiable, boolean toAdd) {
+    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createAbstract, toAdd)
     }
     
-    def static void makeStatic(AnnotableAndModifiable modifiable) {
-    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createStatic, true)
+    def static void setStatic(AnnotableAndModifiable modifiable, boolean toAdd) {
+    	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createStatic, toAdd)
     }
     
     def static void setTypeReferenceIfNotNull(org.emftext.language.java.types.TypedElement typedElement, TypeReference typeRef) {

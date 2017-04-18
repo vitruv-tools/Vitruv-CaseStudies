@@ -26,6 +26,7 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     
     public void updateJavaAttributeElement(final org.eclipse.uml2.uml.Class umlClass, final Property umlAttribute, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final Field javaAttribute) {
       javaAttribute.setName(umlAttribute.getName());
+      javaAttribute.makePublic();
     }
     
     public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Property umlAttribute, final org.emftext.language.java.classifiers.Class javaClass, final org.emftext.language.java.classifiers.Class customTypeClass, final Field javaAttribute) {
