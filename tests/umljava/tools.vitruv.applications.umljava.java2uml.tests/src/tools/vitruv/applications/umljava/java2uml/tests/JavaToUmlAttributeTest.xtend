@@ -6,9 +6,14 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.types.TypesFactory
 import org.junit.Test
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.emftext.language.java.modifiers.ModifiersFactory
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.uml2.uml.UMLFactory
 
 class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName"
@@ -50,9 +55,11 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         jClass.members += attr
         saveAndSynchronizeChanges(jClass)
         
-        val uAttr = assertNameAndReturnUniqueUmlAttribute(attr)
-        assertTrue(uAttr.type instanceof org.eclipse.uml2.uml.PrimitiveType)
-        assertEquals(INT, uAttr.type.name)
+        val uAttr = getCorrespondingAttribute(attr)
+        val uClass = getCorrespondingClass(jClass)
+        assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, createUmlPrimitiveType(PRIMITIVE_TYPE),
+            false, false, uClass, null, null)
+        assertAttributeEquals(uAttr, attr)
     }
     
     @Test
@@ -61,9 +68,12 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         jClass.members += attr
         saveAndSynchronizeChanges(jClass)
         
-        val uAttr = assertNameAndReturnUniqueUmlAttribute(attr)
-        assertTrue(uAttr.type instanceof org.eclipse.uml2.uml.Class)
-        assertEquals(typeClass.name, uAttr.type.name)
+        val uAttr = getCorrespondingAttribute(attr)
+        val uClass = getCorrespondingClass(jClass)
+        val uTypeClass = getCorrespondingClass(typeClass)
+        assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, uTypeClass,
+            false, false, uClass, null, null)
+        assertAttributeEquals(uAttr, attr)
     }
     
     @Test
@@ -71,35 +81,41 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         jAttr.name = ATTRIBUTE_RENAME
         saveAndSynchronizeChanges(jAttr)
         
-        assertNameAndReturnUniqueUmlAttribute(jAttr)
+        val uAttr = getCorrespondingAttribute(jAttr)
+        val uClass = getCorrespondingClass(jClass)
+        assertEquals(ATTRIBUTE_RENAME, uAttr.name)
+        assertUmlClassDontHaveOperation(uClass, ATTRIBUTE_NAME)
+        assertAttributeEquals(uAttr, jAttr)
     }
     
     @Test
     def testDeleteAttribute() {
         jClass.members.clear
         jAttr = null;
-        
         saveAndSynchronizeChanges(jClass);
-        val uClass = getCorrespondingObjectWithClass(jClass, org.eclipse.uml2.uml.Class)
-        assertTrue(uClass.ownedAttributes.nullOrEmpty)
+
+        val uClass = getCorrespondingClass(jClass)
+        assertUmlClassDontHaveOperation(uClass, ATTRIBUTE_NAME)
     }
 
     @Test
     def testStaticAttribute() {
-        jAttr.addModifier(ModifiersFactory.eINSTANCE.createStatic)
+        jAttr.static = true
         saveAndSynchronizeChanges(jAttr);
          
-        val uAttr = assertNameAndReturnUniqueUmlAttribute(jAttr)
-        assertTrue(uAttr.isStatic);
+        val uAttr = getCorrespondingAttribute(jAttr)
+        assertTrue(uAttr.static)
+        assertAttributeEquals(uAttr, jAttr)
     }
     
     @Test
     def testFinalAttribute() {
-        jAttr.addModifier(ModifiersFactory.eINSTANCE.createFinal)
+        jAttr.final = true
         saveAndSynchronizeChanges(jAttr);
          
-        val uAttr = assertNameAndReturnUniqueUmlAttribute(jAttr)
-        assertTrue(uAttr.isReadOnly);
+        val uAttr = getCorrespondingAttribute(jAttr)
+        assertTrue(uAttr.readOnly)
+        assertAttributeEquals(uAttr, jAttr)
     }
     
     @Test
@@ -107,13 +123,15 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         jAttr.makePublic
         saveAndSynchronizeChanges(jAttr);
          
-        var uAttr = assertNameAndReturnUniqueUmlAttribute(jAttr)
-        assertHasVisibility(uAttr, JavaVisibility.PUBLIC)
+        var uAttr = getCorrespondingAttribute(jAttr)
+        assertUmlNamedElementHasVisibility(uAttr, VisibilityKind.PUBLIC_LITERAL)
+        assertAttributeEquals(uAttr, jAttr)
         
         jAttr.makeProtected
         saveAndSynchronizeChanges(jAttr);
          
-        uAttr = assertNameAndReturnUniqueUmlAttribute(jAttr)
-        assertHasVisibility(uAttr, JavaVisibility.PROTECTED)
+        uAttr = getCorrespondingAttribute(jAttr)
+        assertUmlNamedElementHasVisibility(uAttr, VisibilityKind.PROTECTED_LITERAL)
+        assertAttributeEquals(uAttr, jAttr)
     }
 }

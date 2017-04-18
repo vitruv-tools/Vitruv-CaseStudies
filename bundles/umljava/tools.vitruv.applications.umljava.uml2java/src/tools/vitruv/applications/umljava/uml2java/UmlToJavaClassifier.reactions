@@ -1,5 +1,5 @@
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import org.emftext.language.java.classifiers.ConcreteClassifier
@@ -180,7 +180,6 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
         update javaCompilationUnit {
             javaCompilationUnit.name = umlClassifier.name;
             persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
-
         }
     }
 }
@@ -211,9 +210,8 @@ routine setJavaClassFinal(uml::Class umlClass) {
         val jClass = retrieve java::Class corresponding to umlClass
     }
     action {
-        val finalMod = create java::Final
         update jClass {
-            setJavaModifier(jClass, finalMod, umlClass.isFinalSpecialization);
+            jClass.final = umlClass.finalSpecialization
         }
     }
 }
@@ -228,9 +226,8 @@ routine setJavaClassAbstract(uml::Class umlClass) {
         val jClass = retrieve java::Class corresponding to umlClass
     }
     action {
-        val abstr = create java::Abstract
         update jClass {
-            setJavaModifier(jClass, abstr, umlClass.abstract);
+            jClass.abstract = umlClass.abstract
         }
     }
 }

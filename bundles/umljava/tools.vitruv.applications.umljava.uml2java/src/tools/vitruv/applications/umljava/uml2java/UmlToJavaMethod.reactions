@@ -9,7 +9,7 @@ import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypesFactory
 
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import org.emftext.language.java.classifiers.ConcreteClassifier
@@ -188,7 +188,7 @@ routine setStatic(uml::Feature uFeat) {
     action {
         val staticMod = create java::Static
         update jMod {
-            setJavaModifier(jMod, staticMod, uFeat.isStatic);
+            jMod.static = uFeat.isStatic
         }
     }
 }
@@ -205,7 +205,7 @@ routine setJavaMethodAbstract(uml::Operation umlOp) {
     }
     action {
         update javaMethod {
-            setAbstract(javaMethod, umlOp.abstract)
+            javaMethod.abstract =  umlOp.abstract
         }
     }    
 }

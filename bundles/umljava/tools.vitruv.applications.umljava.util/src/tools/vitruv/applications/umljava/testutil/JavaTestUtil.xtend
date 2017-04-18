@@ -25,8 +25,11 @@ import org.emftext.language.java.modifiers.Static
 import org.emftext.language.java.classifiers.Interface
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import java.util.List
+import org.emftext.language.java.modifiers.Abstract
 
 class JavaTestUtil {
+	
+	private new() {}
 	
 	def static void assertJavaClassTraits(Class jClass, String name, JavaVisibility visibility, 
 		boolean isAbstract, boolean isFinal) {
@@ -42,13 +45,13 @@ class JavaTestUtil {
 		assertJavaEnumConstantListEquals(constantsList, jEnum.constants)
 	}
 	
-	def static void assertJavaEnumConstantListEquals(List<EnumConstant> constantsList1, List<EnumConstant> constantsList2) {
-		if (constantsList1.nullOrEmpty) {
-		    assertTrue(constantsList2.nullOrEmpty)
+	def static void assertJavaEnumConstantListEquals(List<EnumConstant> expectedList, List<EnumConstant> actualList) {
+		if (expectedList.nullOrEmpty) {
+		    assertTrue(actualList.nullOrEmpty)
 		} else {
-            assertEquals(constantsList1.size, constantsList2.size)
-            for (const : constantsList1) {
-                val correspondingConstants = constantsList2.filter[name == const.name]
+            assertEquals(expectedList.size, actualList.size)
+            for (const : expectedList) {
+                val correspondingConstants = actualList.filter[name == const.name]
                 if (correspondingConstants.size != 1) {
                     fail("There are 0 or more than 1 constant with the name " + const.name)
                 }
@@ -69,7 +72,7 @@ class JavaTestUtil {
 		assertJavaModifiableHasVisibility(jMethod, visibility)
 		assertJavaModifiableStatic(jMethod, isStatic)
 		assertJavaModifiableAbstract(jMethod, isAbstract)
-		assertEquals(containedClassifier.name + " not equal as " + (jMethod.eContainer as ConcreteClassifier).name, containedClassifier.name, (jMethod.eContainer as ConcreteClassifier).name)
+		assertEquals(containedClassifier.name, (jMethod.eContainer as ConcreteClassifier).name)
 		assertJavaParameterListEquals(jMethod.parameters, parameterList)
 	}
 	
@@ -79,13 +82,13 @@ class JavaTestUtil {
 	}
 	
 
-	def static void assertJavaParameterListEquals(List<Parameter> paramList1, List<Parameter> paramList2) {
-	    if (paramList1.nullOrEmpty) {
-	        assertTrue(paramList2.nullOrEmpty)
+	def static void assertJavaParameterListEquals(List<Parameter> expectedList, List<Parameter> actualList) {
+	    if (expectedList.nullOrEmpty) {
+	        assertTrue(actualList.nullOrEmpty)
 	    } else {
-            assertEquals(paramList1.size, paramList2.size)
-            for (param : paramList1) {
-                val correspondingParams = paramList2.filter[name == param.name]
+            assertEquals(expectedList.size, expectedList.size)
+            for (param : expectedList) {
+                val correspondingParams = actualList.filter[name == param.name]
                 if (correspondingParams.size != 1) {
                     fail("There are 0 or more than 1 Parameter with the name " + param.name)
                 }
@@ -102,32 +105,26 @@ class JavaTestUtil {
         assertJavaElementHasTypeRef(jAttribute, typeRef)
         assertJavaModifiableFinal(jAttribute, isFinal)
         assertJavaModifiableStatic(jAttribute, isStatic)
-        //assertEquals(containedClass.name , (jAttribute.eContainer as Class).name)
+        assertEquals(containedClass.name , (jAttribute.eContainer as Class).name)
 	}
 	
-	
-	
 	def static void assertJavaModifiableFinal(AnnotableAndModifiable modifiable, boolean isFinal) {
-		if (isFinal) {
-        	assertJavaModifiableHasModifier(modifiable, org.emftext.language.java.modifiers.Final)
-        } else {
-        	assertJavaModifiableDontHaveModifier(modifiable, org.emftext.language.java.modifiers.Final)
-        }
+		assertModifierExisistenceAsExpected(modifiable, Final, isFinal)
 	}
 	
 	def static void assertJavaModifiableStatic(AnnotableAndModifiable modifiable, boolean isStatic) {
-		if (isStatic) {
-        	assertJavaModifiableHasModifier(modifiable, org.emftext.language.java.modifiers.Static)
-        } else {
-        	assertJavaModifiableDontHaveModifier(modifiable, org.emftext.language.java.modifiers.Static)
-        }
+		assertModifierExisistenceAsExpected(modifiable, Static, isStatic)
 	}
 	
 	def static void assertJavaModifiableAbstract(AnnotableAndModifiable modifiable, boolean isAbstract) {
-		if (isAbstract) {
-        	assertJavaModifiableHasModifier(modifiable, org.emftext.language.java.modifiers.Abstract)
+		assertModifierExisistenceAsExpected(modifiable, Abstract, isAbstract)
+	}
+	
+	def static void assertModifierExisistenceAsExpected(AnnotableAndModifiable modifiable, java.lang.Class<? extends Modifier> modifierClass, boolean exists) {
+	    if (exists) {
+            assertJavaModifiableHasModifier(modifiable, modifierClass)
         } else {
-        	assertJavaModifiableDontHaveModifier(modifiable, org.emftext.language.java.modifiers.Abstract)
+            assertJavaModifiableDontHaveModifier(modifiable, modifierClass)
         }
 	}
 	
@@ -223,21 +220,24 @@ class JavaTestUtil {
      * @param uType Uml-Typ
      */
     def static void assertJavaElementHasTypeRef(TypedElement jTypedElement, TypeReference typeRef) {
-    	val typeToVerify = jTypedElement.typeReference
-        if (typeRef instanceof PrimitiveType && typeToVerify instanceof PrimitiveType) {
-            assertEquals(typeRef.class, typeToVerify.class)
-        } else if (typeRef instanceof NamespaceClassifierReference && typeToVerify instanceof NamespaceClassifierReference) {
-            assertNamespaceClassifierReferenceEquals(typeRef as NamespaceClassifierReference,
-            	typeToVerify as NamespaceClassifierReference)
-        } else {
-            fail("The typeReference <" + typeToVerify + "> of " + jTypedElement + " doesn't match the typeReference <" + typeRef + ">")
-        }
+        assertTypeEquals(typeRef, jTypedElement.typeReference)
     }
     
-    def static void assertNamespaceClassifierReferenceEquals(NamespaceClassifierReference namespaceRef1,
-    	NamespaceClassifierReference namespaceRef2) {
-    	assertEquals(getClassifierFromTypeReference(namespaceRef1).name, getClassifierFromTypeReference(namespaceRef2).name)
+    def static dispatch void assertTypeEquals(TypeReference typeRef1, TypeReference typeRef2) {
+        fail("The typeReference <" + typeRef1 + "> and <" + typeRef2 
+            + "> are incomparable or are neither PrimitiveTypes nor NamespaceClassifierReferences")
     }
+    
+    def static dispatch void assertTypeEquals(NamespaceClassifierReference namespaceRef1,
+        NamespaceClassifierReference namespaceRef2) {
+        assertEquals(getClassifierFromTypeReference(namespaceRef1).name, 
+            getClassifierFromTypeReference(namespaceRef2).name)
+    }
+    
+    def static dispatch void assertTypeEquals(PrimitiveType primType1, PrimitiveType primtype2) {
+        assertEquals(primType1.class, primtype2.class)
+    }
+
     
     /**
      * @param childClass Java-Kindklasse

@@ -39,8 +39,9 @@ import org.apache.log4j.Logger
 import org.emftext.language.java.parameters.Parametrizable
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.members.Method
+import org.emftext.language.java.containers.Package
 import org.emftext.language.java.members.EnumConstant
+import java.util.Collections
 
 class JavaUtil {
 	private static val logger = Logger.getLogger(JavaUtil)
@@ -118,6 +119,13 @@ class JavaUtil {
         return cu
     }
     
+    def static createJavaCompilationUnitWithClassifierInPackage(ConcreteClassifier jClassifier, Package jPackage) {
+        val compUnit = createEmptyCompilationUnit(jClassifier.name)
+        compUnit.classifiers += jClassifier
+        compUnit.namespaces.addAll(getJavaPackageAsStringList(jPackage))
+        return compUnit
+    }
+    
     /**
      * @return public Operation with name; no return, params or modifier
      */
@@ -131,7 +139,7 @@ class JavaUtil {
     def static createJavaClassMethod(String name, TypeReference returnType, JavaVisibility visibility, boolean abstr, boolean stat, EList<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createClassMethod;
         setName(jMethod, name)
-        setTypeReferenceIfNotNull(jMethod, returnType)
+        setTypeReference(jMethod, returnType)
         addJavaVisibilityModifier(jMethod, visibility)
 		setAbstract(jMethod, abstr)
 		setStatic(jMethod, stat)
@@ -147,7 +155,7 @@ class JavaUtil {
     def static createJavaInterfaceMethod(String name, TypeReference returnType, EList<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createInterfaceMethod;
         setName(jMethod, name)
-        setTypeReferenceIfNotNull(jMethod, returnType)
+        setTypeReference(jMethod, returnType)
         jMethod.makePublic;
         addParametersIfNotNull(jMethod, params)
         return jMethod;
@@ -159,14 +167,14 @@ class JavaUtil {
         addJavaVisibilityModifier(jAttribute, visibility)
         setFinal(jAttribute, fin)
         setStatic(jAttribute, stat)
-        setTypeReferenceIfNotNull(jAttribute, type)
+        setTypeReference(jAttribute, type)
         return jAttribute;
     }
     
     def static createJavaParameter(String name, TypeReference type) {
         val param = ParametersFactory.eINSTANCE.createOrdinaryParameter;
         setName(param, name)
-        setTypeReferenceIfNotNull(param, type)
+        setTypeReference(param, type)
         return param;
     }
     
@@ -277,9 +285,11 @@ class JavaUtil {
     	setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createStatic, toAdd)
     }
     
-    def static void setTypeReferenceIfNotNull(org.emftext.language.java.types.TypedElement typedElement, TypeReference typeRef) {
+    def static void setTypeReference(org.emftext.language.java.types.TypedElement typedElement, TypeReference typeRef) {
     	if (typeRef !== null) {
     		typedElement.typeReference = typeRef
+    	} else {
+    	    typedElement.typeReference = TypesFactory.eINSTANCE.createVoid
     	}
     }
     
@@ -397,5 +407,14 @@ class JavaUtil {
    	   	   enumConstants += createJavaEnumConstant(name)
    	   }
    	   return enumConstants
+   }
+   
+   def static getJavaPackageAsStringList(Package jPackage) {
+       if (jPackage === null) { //Defaultpackage
+           return Collections.<String>emptyList()
+       }
+       val packageStringList = EcoreUtil.copyAll(jPackage.namespaces) //TODO Was ist, wenn namespaces null
+       packageStringList += jPackage.name
+       return packageStringList
    }
 }

@@ -10,12 +10,15 @@ import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import tools.vitruv.framework.util.bridges.EcoreBridge
 
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 import org.eclipse.uml2.types.TypesFactory
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.members.MembersFactory
+import org.eclipse.uml2.uml.VisibilityKind
 
 class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
@@ -59,7 +62,11 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jClass.members += meth
         saveAndSynchronizeChanges(jClass)
         
-        assertNameAndReturnUniqueUmlMethod(meth)
+        val uOperation = getCorrespondingMethod(meth)
+        val uClass = getCorrespondingClass(jClass)
+        assertUmlOperationTraits(uOperation, STANDARD_OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, 
+            false, false, uClass, null)
+        assertMethodEquals(uOperation, meth)
     }
     
     @Test
@@ -67,8 +74,10 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jMeth.typeReference = createNamespaceReferenceFromClassifier(typeClass)
         saveAndSynchronizeChanges(jMeth)
         
-        val uOp = assertNameAndReturnUniqueUmlMethod(jMeth)
-        assertEquals(typeClass.name, uOp.type.name)
+        val uOperation = getCorrespondingMethod(jMeth)
+        val uTypeClass = getCorrespondingClass(typeClass)
+        assertUmlOperationHasReturntype(uOperation, uTypeClass)
+        assertMethodEquals(uOperation, jMeth)
     }
     
     @Test
@@ -76,7 +85,11 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jMeth.name = OPERATION_RENAME
         saveAndSynchronizeChanges(jMeth)
         
-        assertNameAndReturnUniqueUmlMethod(jMeth)
+        val uOperation = getCorrespondingMethod(jMeth)
+        val uClass = getCorrespondingClass(jClass)
+        assertEquals(OPERATION_RENAME, uOperation.name)
+        assertUmlClassHasUniqueOperation(uClass, OPERATION_RENAME)
+        assertMethodEquals(uOperation, jMeth)
     }
     
     @Test
@@ -85,27 +98,29 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jMeth = null
         saveAndSynchronizeChanges(jClass)
         
-        val uClass = getCorrespondingObjectWithClass(jClass, org.eclipse.uml2.uml.Class)
-        assertTrue(uClass.ownedOperations.nullOrEmpty)
+        val uClass = getCorrespondingClass(jClass)
+        assertUmlClassDontHaveOperation(uClass, OPERATION_RENAME)
     }
     
     @Test
     def testStaticMethod() {
-        jMeth.addModifier(ModifiersFactory.eINSTANCE.createStatic)
+        jMeth.static = true
         saveAndSynchronizeChanges(jMeth)
         
-        val uOp = assertNameAndReturnUniqueUmlMethod(jMeth)
-        assertTrue(uOp.static)
+        val uOperation = getCorrespondingMethod(jMeth)
+        assertUmlFeatureHasStaticValue(uOperation, true)
+        assertMethodEquals(uOperation, jMeth)
         
     }
     
     @Test
     def testAbstractMethod() {
-        jMeth.addModifier(ModifiersFactory.eINSTANCE.createAbstract)
+        jMeth.abstract = true
         saveAndSynchronizeChanges(jMeth)
         
-        val uOp = assertNameAndReturnUniqueUmlMethod(jMeth)
-        assertTrue(uOp.abstract)
+        val uOperation = getCorrespondingMethod(jMeth)
+        assertUmlOperationHasAbstractValue(uOperation, true)
+        assertMethodEquals(uOperation, jMeth)
     }
     
     @Test
@@ -113,14 +128,16 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jMeth.makeProtected
         saveAndSynchronizeChanges(jMeth)
         
-        var uOp = assertNameAndReturnUniqueUmlMethod(jMeth)
-        assertHasVisibility(uOp, JavaVisibility.PROTECTED)
+        var uOperation = getCorrespondingMethod(jMeth)
+        assertUmlNamedElementHasVisibility(uOperation, VisibilityKind.PROTECTED_LITERAL)
+        assertMethodEquals(uOperation, jMeth)
         
         jMeth.makePrivate
         saveAndSynchronizeChanges(jMeth)
         
-        uOp = assertNameAndReturnUniqueUmlMethod(jMeth)
-        assertHasVisibility(uOp, JavaVisibility.PRIVATE)
+        uOperation = getCorrespondingMethod(jMeth)
+        assertUmlNamedElementHasVisibility(uOperation, VisibilityKind.PRIVATE_LITERAL)
+        assertMethodEquals(uOperation, jMeth)
     }
 
     
@@ -130,8 +147,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jMeth.parameters += jParam
         saveAndSynchronizeChanges(jMeth)
 
-        val uOp = assertNameAndReturnUniqueUmlMethod(jMeth)
-        assertUmlOperationHasUniqueParameter(uOp, jParam)
+        val uOperation = getCorrespondingMethod(jMeth)
+        assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME)
+        assertMethodEquals(uOperation, jMeth)
     }
     
 

@@ -3,8 +3,6 @@ package tools.vitruv.applications.umljava.java2uml
 import static org.junit.Assert.fail;
 import static org.junit.Assert.*;
 import org.eclipse.uml2.uml.Model
-import tools.vitruv.domains.java.JavaDomain
-import tools.vitruv.domains.uml.UmlDomain
 import tools.vitruv.framework.tests.util.TestUtil
 import tools.vitruv.framework.util.datatypes.VURI
 import org.apache.log4j.PropertyConfigurator
@@ -18,14 +16,17 @@ import org.emftext.language.java.members.Field
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.Property
 
 class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     
+    //TODO: Userinteraction bestimmt pfad gleich mit
     private static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
 	
 	
 	override protected cleanup() {
-        userInteractor.addNextSelections(UMLMODELNAME)
+
     }
     
     override protected setup() {
@@ -62,7 +63,6 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
         val jI = createJavaInterface(name, superInterfaces)
         cu.classifiers += jI;
         saveAndSynchronizeChanges(cu);
-        //this.changeRecorder.beginRecording(VURI.getInstance(jI.eResource), #[jI.eResource])
         return jI;
     }
 
@@ -74,49 +74,35 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
         createAndSynchronizeModel(TestUtil.SOURCE_FOLDER + "/" + cu.name, cu)
         return cu
     }
-    
-    
-    /**
-     * @param uElem Uml-Klasse, Interface, Methode, Attribute, ...
-     */
-    def protected void assertHasVisibility(org.eclipse.uml2.uml.NamedElement uElem, JavaVisibility vis) {
-        switch vis {
-            case PUBLIC: assertEquals(VisibilityKind.PUBLIC_LITERAL, uElem.visibility)
-            case PRIVATE: assertEquals(VisibilityKind.PRIVATE_LITERAL, uElem.visibility)
-            case PROTECTED: assertEquals(VisibilityKind.PROTECTED_LITERAL, uElem.visibility)
-            case PACKAGE: assertEquals(VisibilityKind.PACKAGE_LITERAL, uElem.visibility)
-            default: fail("Unknown visibility: " + vis)
-        }
-        
-    }
-    def protected void assertUmlOperationHasUniqueParameter(org.eclipse.uml2.uml.Operation uOp, org.emftext.language.java.parameters.Parameter jParam) {
-        val paramList = uOp.ownedParameters.filter[name == jParam.name]
-        assertTrue(paramList.size == 1)
-        val uParam = paramList.head
-        assertEquals(getClassifierFromTypeReference(jParam.typeReference).name, uParam.type.name);
-    }
-   def protected assertNameAndReturnUniqueUmlMethod(Method meth) {
-       val umlOperation = getCorrespondingObjectWithClass(meth, org.eclipse.uml2.uml.Operation)
-       assertEquals(meth.name, umlOperation.name)
-       return umlOperation
-   }
-   
-   def protected assertNameAndReturnUniqueUmlAttribute(Field jAttr) {
-       val uAttr = getCorrespondingObjectWithClass(jAttr, org.eclipse.uml2.uml.Property)
-       assertEquals(jAttr.name, uAttr.name)
-       return uAttr
-   }
+
 
     def protected getUmlPackagedElementsbyName(String modelPath, Class<? extends org.eclipse.uml2.uml.Classifier> type, String className) {
         val m = getModelResource(modelPath).allContents.head as Model
         return m.packagedElements.filter(type).filter[it.name == className].toList;
     }
     
-    
     def protected getCorrespondingClass(org.emftext.language.java.classifiers.Class jClass) {
-        
+        return getFirstCorrespondingObjectWithClass(jClass, org.eclipse.uml2.uml.Class)
     }
     
+    def protected getCorrespondingInterface(org.emftext.language.java.classifiers.Interface jInterface) {
+        return getFirstCorrespondingObjectWithClass(jInterface, org.eclipse.uml2.uml.Interface)
+    }
+    def protected getCorrespondingEnum(org.emftext.language.java.classifiers.Enumeration jEnum) {
+        return getFirstCorrespondingObjectWithClass(jEnum, org.eclipse.uml2.uml.Enumeration)
+    }
+    def protected getCorrespondingMethod(Method jMethod) {
+        return getFirstCorrespondingObjectWithClass(jMethod, Operation)
+    }
+    def protected getCorrespondingAttribute(Field jAttribute) {
+        return getFirstCorrespondingObjectWithClass(jAttribute, Property)
+    }
+    def protected getCorrespondingParameter(org.emftext.language.java.parameters.OrdinaryParameter jParam) {
+        return getFirstCorrespondingObjectWithClass(jParam, org.eclipse.uml2.uml.Parameter)
+    }
+    def protected getCorrespondingPackage(org.emftext.language.java.containers.Package jPackage) {
+        return getFirstCorrespondingObjectWithClass(jPackage, org.eclipse.uml2.uml.Package)
+    }
     
 
 }

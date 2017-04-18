@@ -4,8 +4,11 @@ import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Before
 import org.junit.After
 import static org.junit.Assert.*;
-import static tools.vitruv.applications.umljava.util.JavaUtil.*;
+import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.junit.Test
+import org.eclipse.uml2.uml.VisibilityKind
 
 class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName";
@@ -15,22 +18,22 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     private static val IOPERATION_RENAME = "interfaceMethodRenamed";
     private static val PARAMETER_NAME = "parameterName";
     
-    private static var org.emftext.language.java.classifiers.Interface jI;
+    private static var org.emftext.language.java.classifiers.Interface jInterface;
     private static var org.emftext.language.java.classifiers.Class typeClass;
     private static var org.emftext.language.java.members.InterfaceMethod jMeth;
     
     @Before
     def void before() {
-        jI = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
+        jInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_NAME)
         jMeth = createJavaInterfaceMethod(IOPERATION_NAME, null, null)
-        jI.members += jMeth
-        saveAndSynchronizeChanges(jI)
+        jInterface.members += jMeth
+        saveAndSynchronizeChanges(jInterface)
     }
     
     //@After
     def void after() {
-        if (jI != null) {
+        if (jInterface != null) {
             
         }
         if (jMeth != null) {
@@ -44,10 +47,14 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     @Test
     def void testCreateInterfaceMethod() {
         val interfaceMethod = createJavaInterfaceMethod(STANDARD_IOPERATION_NAME, null, null)
-        jI.members += interfaceMethod
-        saveAndSynchronizeChanges(jI)
+        jInterface.members += interfaceMethod
+        saveAndSynchronizeChanges(jInterface)
         
-        assertNameAndReturnUniqueUmlMethod(interfaceMethod)
+        val uOperation = getCorrespondingMethod(interfaceMethod)
+        val uInterface = getCorrespondingInterface(jInterface)
+        assertUmlOperationTraits(uOperation, STANDARD_IOPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, false,
+            uInterface, null)
+        assertMethodEquals(uOperation, interfaceMethod)
     }
      
     @Test
@@ -55,17 +62,22 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
         jMeth.name = IOPERATION_RENAME
         saveAndSynchronizeChanges(jMeth)
 
-        assertNameAndReturnUniqueUmlMethod(jMeth)
+        val uOperation = getCorrespondingMethod(jMeth)
+        val uInterface = getCorrespondingInterface(jInterface)
+        assertEquals(IOPERATION_RENAME, uOperation.name)
+        assertUmlInterfaceDontHaveOperation(uInterface, IOPERATION_NAME)
+        assertMethodEquals(uOperation, jMeth)
+        
     }
     
     @Test
     def testDeleteInterfaceMethod() {
-        jI.members.clear
+        jInterface.members.clear
         jMeth = null
-        saveAndSynchronizeChanges(jI)
+        saveAndSynchronizeChanges(jInterface)
         
-        val uInterface = getCorrespondingObjectWithClass(jI, org.eclipse.uml2.uml.Interface)
-        assertTrue(uInterface.ownedOperations.nullOrEmpty)
+        val uInterface = getCorrespondingInterface(jInterface)
+        assertUmlInterfaceDontHaveOperation(uInterface, IOPERATION_NAME)
     }
     
     @Test
@@ -73,8 +85,10 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
         jMeth.typeReference = createNamespaceReferenceFromClassifier(typeClass)
         saveAndSynchronizeChanges(jMeth)
         
-        val uMeth = assertNameAndReturnUniqueUmlMethod(jMeth)
-        assertEquals(typeClass.name, uMeth.type.name)
+        val uOperation = getCorrespondingMethod(jMeth)
+        val utypeClass = getCorrespondingClass(typeClass)
+        assertUmlOperationHasReturntype(uOperation, utypeClass)
+        assertMethodEquals(uOperation, jMeth)
     }
     
     @Test
@@ -83,7 +97,8 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
         jMeth.parameters += jParam
         saveAndSynchronizeChanges(jMeth)
 
-        val uOp = assertNameAndReturnUniqueUmlMethod(jMeth)
-        assertUmlOperationHasUniqueParameter(uOp, jParam)
+        val uOperation = getCorrespondingMethod(jMeth)
+        assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME)
+        assertMethodEquals(uOperation, jMeth)
     }
 }

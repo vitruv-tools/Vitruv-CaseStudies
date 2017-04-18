@@ -5,10 +5,13 @@ import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Test
 import org.junit.Before
 import org.junit.Ignore
-import static tools.vitruv.applications.umljava.util.JavaUtil.*;
 import static tools.vitruv.applications.umljava.util.UmlUtil.*;
+import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
+import org.eclipse.uml2.uml.VisibilityKind
 
 class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName"
@@ -26,9 +29,11 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
     
     @Test
     def void testCreateInterface() {
-        val jI = createSimpleJavaInterfaceWithCompilationUnit(STANDARD_INTERFACE_NAME)
+        val jInterface = createSimpleJavaInterfaceWithCompilationUnit(STANDARD_INTERFACE_NAME)
         
-        assertAndReturnCorrespondingInterface(jI)
+        val uInterface = getCorrespondingInterface(jInterface)
+        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, null)
+        assertInterfaceEquals(uInterface, jInterface)
     }
     
     @Test
@@ -36,10 +41,12 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         jInterface.name = INTERFACE_RENAME
         saveAndSynchronizeChanges(jInterface)
         
-        assertAndReturnCorrespondingInterface(jInterface)
+        val uInterface = getCorrespondingInterface(jInterface)
+        assertEquals(INTERFACE_RENAME, uInterface.name)
+        assertInterfaceEquals(uInterface, jInterface)
     }
     @Test
-    def void testDeleteInterface() {
+    def void testDeleteInterface() {//TODO überarbeiten
         val comp = jInterface.eContainer as CompilationUnit
         jInterface = null;
         comp.classifiers.clear
@@ -54,10 +61,10 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         jInterface.extends += createNamespaceReferenceFromClassifier(superInterface)
         saveAndSynchronizeChanges(jInterface)
         
-        val uI = assertAndReturnCorrespondingInterface(jInterface)
-        val umlSuperInterfaces = extractSuperInterfaces(uI)
-        assertTrue(umlSuperInterfaces.size == 1)
-        assertEquals(SUPERINTERFACENAME_1, umlSuperInterfaces.head.name)
+        val uInterface = getCorrespondingInterface(jInterface)
+        val uSuperInterface = getCorrespondingInterface(superInterface)
+        assertUmlClassifierHasSuperClassifier(uInterface, uSuperInterface)
+        assertInterfaceEquals(uInterface, jInterface)
     }
     
     @Test
@@ -71,19 +78,13 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         jInterface.extends.remove(0)
         saveAndSynchronizeChanges(jInterface)
         
-        val uI = assertAndReturnCorrespondingInterface(jInterface)
-        val umlSuperInterfaces = extractSuperInterfaces(uI)
-        assertTrue(umlSuperInterfaces.size == 1)
-        assertEquals(SUPERINTERFACENAME_2, umlSuperInterfaces.head.name)
+        val uInterface = getCorrespondingInterface(jInterface)
+        val uSuperInterface = getCorrespondingInterface(superInterface)
+        val uSuperInterface2 = getCorrespondingInterface(superInterface2)
+        assertUmlClassifierHasSuperClassifier(uInterface, uSuperInterface2)
+        assertUmlClassifierDontHaveSuperClassifier(uInterface, uSuperInterface)
+        assertInterfaceEquals(uInterface, jInterface)
     }
 
-    
-    /**
-     * @return Das Uml-Interface dessen namen zum javaInterface passt und korrespondiert.
-     */
-    private def org.eclipse.uml2.uml.Interface assertAndReturnCorrespondingInterface(org.emftext.language.java.classifiers.Interface javaInterface) {
-        val uI = getCorrespondingObjectWithClass(javaInterface, org.eclipse.uml2.uml.Interface)
-        assertEquals(javaInterface.name, uI?.name)
-        return uI;
-    }
+ 
 }

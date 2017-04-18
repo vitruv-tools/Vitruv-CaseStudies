@@ -19,6 +19,8 @@ import java.util.List
 import java.util.ArrayList
 import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.EnumerationLiteral
+import org.eclipse.uml2.uml.Association
+import org.eclipse.uml2.uml.ValueSpecification
 
 /**
  * Uml-Util-Class
@@ -269,7 +271,7 @@ class UmlUtil {
     	}
     }
     
-    def static createDirectedAssociation(Class fromClass, Class toClass, int lowerLimit, int upperLimit) {
+    def static Association createDirectedAssociation(Class fromClass, Class toClass, int lowerLimit, int upperLimit) {
     	fromClass.createAssociation(true, AggregationKind.NONE_LITERAL, firstLettertoLowercase(toClass.name), lowerLimit, upperLimit, toClass, false, AggregationKind.NONE_LITERAL, firstLettertoLowercase(fromClass.name), 0, 1)
     }
     
@@ -277,5 +279,11 @@ class UmlUtil {
     
     def static private String firstLettertoLowercase(String s) {
     	return Character.toLowerCase(s.charAt(0)) + s.substring(1)
+    }
+    
+    def static ValueSpecification createValueSpecificationWithIntValue(int value) {
+        val valueSpecification = UMLFactory.eINSTANCE.createLiteralInteger
+        valueSpecification.value = value
+        return valueSpecification
     }
 }

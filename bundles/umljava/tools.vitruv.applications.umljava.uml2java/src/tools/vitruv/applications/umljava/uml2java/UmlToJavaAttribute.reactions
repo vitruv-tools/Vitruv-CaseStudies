@@ -1,5 +1,5 @@
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import org.emftext.language.java.modifiers.ModifiersFactory
@@ -63,9 +63,8 @@ routine setJavaAttributeFinal(uml::Property umlAttr) {
         val jAttr = retrieve java::Field corresponding to umlAttr
     }
     action {
-        val finalMod = create java::Final
         update jAttr {
-            setJavaModifier(jAttr, finalMod, umlAttr.isReadOnly);
+            jAttr.final = umlAttr.readOnly
         }
     }
 }

@@ -63,30 +63,30 @@ class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
 
     
     def protected getCorrespondingAttribute(Property uAttribute) {
-    	return getCorrespondingObjectWithClass(uAttribute, org.emftext.language.java.members.Field)
+    	return getFirstCorrespondingObjectWithClass(uAttribute, org.emftext.language.java.members.Field)
     }
     
     def protected getCorrespondingClassMethod(Operation uOperation) {
-    	return getCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.ClassMethod)
+    	return getFirstCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.ClassMethod)
     }
     
     def protected getCorrespondingInterfaceMethod(Operation uOperation) {
-    	return getCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.InterfaceMethod)
+    	return getFirstCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.InterfaceMethod)
     }
     
     def protected getCorrespondingClass(org.eclipse.uml2.uml.Class uClass) {
-    	return getCorrespondingObjectWithClass(uClass, org.emftext.language.java.classifiers.Class)
+    	return getFirstCorrespondingObjectWithClass(uClass, org.emftext.language.java.classifiers.Class)
     }
     
     def protected getCorrespondingInterface(org.eclipse.uml2.uml.Interface uInterface) {
-    	return getCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
+    	return getFirstCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
     }
     
     def protected getCorrespondingEnum(org.eclipse.uml2.uml.Enumeration uEnumeration) {
-    	return getCorrespondingObjectWithClass(uEnumeration, org.emftext.language.java.classifiers.Enumeration)
+    	return getFirstCorrespondingObjectWithClass(uEnumeration, org.emftext.language.java.classifiers.Enumeration)
     }
     def protected getCorrespondingParameter(org.eclipse.uml2.uml.Parameter uParam) {
-    	return getCorrespondingObjectWithClass(uParam, org.emftext.language.java.parameters.OrdinaryParameter)
+    	return getFirstCorrespondingObjectWithClass(uParam, org.emftext.language.java.parameters.OrdinaryParameter)
     }
     
     

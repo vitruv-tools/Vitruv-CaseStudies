@@ -142,25 +142,21 @@ class TestUtil {
 		assertJavaModifiableHasVisibility(jElement, jVisibility)
 	}
 	
-	def static void assertTypeEquals(org.eclipse.uml2.uml.Type uType, TypeReference jTypeReference) {
-		if (uType === null) {
-			assertTrue(jTypeReference instanceof Void)
-		} else if (jTypeReference instanceof org.emftext.language.java.types.PrimitiveType) {
-			assertPrimitiveTypeEquals(uType, jTypeReference)
-		} else if (jTypeReference instanceof NamespaceClassifierReference) {
-			assertNamespaceClassifierReferenceTypeEquals(uType, jTypeReference)
-		} else {
-			throw new IllegalArgumentException("The java TypeReference is neither a PrimitiveType nor a NamespaceClassifierReference")
-		}
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Type uType, TypeReference jTypeReference) {
+		throw new IllegalArgumentException("The java TypeReference is neither a PrimitiveType nor a NamespaceClassifierReference")
 	}
 	
-	def static void assertPrimitiveTypeEquals(org.eclipse.uml2.uml.Type uPrimitiveType, org.emftext.language.java.types.PrimitiveType jPrimitiveType) {
-		assertEquals(uPrimitiveType.name, jPrimitiveType.eClass.name.toLowerCase)
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Class uClass, NamespaceClassifierReference namespaceRef) {
+	    assertEquals(uClass.name, getClassifierFromTypeReference(namespaceRef).name)
 	}
 	
-	def static void assertNamespaceClassifierReferenceTypeEquals(org.eclipse.uml2.uml.Type uType, NamespaceClassifierReference jNamespaceClassifierReference) {
-		 assertEquals(uType.name, getClassifierFromTypeReference(jNamespaceClassifierReference).name)
-	}
+	def static dispatch void assertTypeEquals(java.lang.Void nullReference, Void voidType) {
+        //umlType is null, javaType is void -> Do nothing, assertion passed.
+    }
+	
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType, org.emftext.language.java.types.PrimitiveType jPrimType) {
+        assertEquals(uPrimType.name, jPrimType.eClass.name.toLowerCase)
+    }
 	
 	def static void assertParameterListEquals(List<org.eclipse.uml2.uml.Parameter> uParamList, List<org.emftext.language.java.parameters.Parameter> jParamList) {
 		val uParamListWithoutReturn = uParamList.filter[direction != ParameterDirectionKind.RETURN_LITERAL]

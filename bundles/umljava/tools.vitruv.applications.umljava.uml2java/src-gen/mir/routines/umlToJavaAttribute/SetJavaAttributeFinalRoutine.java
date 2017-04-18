@@ -5,8 +5,6 @@ import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.modifiers.Final;
-import org.emftext.language.java.modifiers.impl.ModifiersFactoryImpl;
 import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -23,12 +21,12 @@ public class SetJavaAttributeFinalRoutine extends AbstractRepairRoutineRealizati
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Property umlAttr, final Field jAttr, final Final finalMod) {
+    public EObject getElement1(final Property umlAttr, final Field jAttr) {
       return jAttr;
     }
     
-    public void update0Element(final Property umlAttr, final Field jAttr, final Final finalMod) {
-      JavaUtil.setJavaModifier(jAttr, finalMod, umlAttr.isReadOnly());
+    public void update0Element(final Property umlAttr, final Field jAttr) {
+      JavaUtil.setFinal(jAttr, umlAttr.isReadOnly());
     }
     
     public EObject getCorrepondenceSourceJAttr(final Property umlAttr) {
@@ -58,10 +56,8 @@ public class SetJavaAttributeFinalRoutine extends AbstractRepairRoutineRealizati
     	return;
     }
     registerObjectUnderModification(jAttr);
-    Final finalMod = ModifiersFactoryImpl.eINSTANCE.createFinal();
-    
-    // val updatedElement userExecution.getElement1(umlAttr, jAttr, finalMod);
-    userExecution.update0Element(umlAttr, jAttr, finalMod);
+    // val updatedElement userExecution.getElement1(umlAttr, jAttr);
+    userExecution.update0Element(umlAttr, jAttr);
     
     postprocessElements();
   }

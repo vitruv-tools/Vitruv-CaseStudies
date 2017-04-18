@@ -13,8 +13,11 @@ import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.framework.tests.util.TestUtil
+import org.eclipse.uml2.uml.VisibilityKind
 
 class JavaToUmlClassTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
@@ -39,30 +42,12 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
     }
 
     @Test
-    def void tt() {
-    	val cls = ClassifiersFactory.eINSTANCE.createClass;
-    	val cu = ContainersFactory.eINSTANCE.createCompilationUnit
-    	val pack = ContainersFactory.eINSTANCE.createPackage
-    	pack.name = "packname"
-    	pack.compilationUnits += cu
-    	println(pack.compilationUnits)
-    	cu.namespaces += pack.namespaces
-    	cu.namespaces += pack.name
-    	cu.name = "Aa.java"
-    	cls.name = "Aa"
-    	cu.classifiers += cls
-    	createAndSynchronizeModel(TestUtil.SOURCE_FOLDER + "/" + cu.namespaces.head + "/" + cu.name, cu)
-    	saveAndSynchronizeChanges(cu);
-    	println(pack)
-    	println(cu)
-    	println(cls)
-    }
-    @Test
     def void testCreateClass() {
         val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);
         
-        val uClass = getCorrespondingObjectWithClass(cls, Class);
-        assertEquals(STANDARD_CLASS_NAME, uClass.name)
+        val uClass = getCorrespondingClass(cls);
+        assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, null)
+        assertClassEquals(uClass, cls)
     }
     
     @Test
@@ -70,25 +55,28 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         jClass.name = CLASS_RENAMED;
         saveAndSynchronizeChanges(jClass);
         
-        val uClass = getCorrespondingObjectWithClass(jClass, Class);
+        val uClass = getCorrespondingClass(jClass);
         assertEquals(CLASS_RENAMED, uClass.name)
+        assertClassEquals(uClass, jClass)
     }
     
     @Test
-    def testDeleteClass() {
+    def testDeleteClass() {//TODO Überarbeiten
         val comp = jClass.eContainer as CompilationUnit
         jClass = null;
         comp.classifiers.clear
         saveAndSynchronizeChanges(comp)
+        
         val uClass = getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).head
         assertNull(uClass)
     }
     
     @Test
-    def testDeleteCompilationUnit() {
+    def testDeleteCompilationUnit() { //TODO Überarbeiten
         var comp = jClass.eContainer as CompilationUnit
         comp = null;
         deleteAndSynchronizeModel("src/ClassName.java")
+        fail("Not implemented")
     }
     
     @Test
@@ -96,36 +84,36 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         jClass.makeProtected;
         saveAndSynchronizeChanges(jClass);
         
-        var uClass = getCorrespondingObjectWithClass(jClass, Class);
-        assertEquals(CLASS_NAME, uClass.name)
-        assertHasVisibility(uClass, JavaVisibility.PROTECTED)
+        var uClass = getCorrespondingClass(jClass);
+        assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PROTECTED_LITERAL)
+        assertClassEquals(uClass, jClass)
         
         jClass.makePrivate;
         saveAndSynchronizeChanges(jClass);
         
-        uClass = getCorrespondingObjectWithClass(jClass, Class);
-        assertEquals(CLASS_NAME, uClass.name)
-        assertHasVisibility(uClass, JavaVisibility.PRIVATE)
+        uClass = getCorrespondingClass(jClass);
+        assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PRIVATE_LITERAL)
+        assertClassEquals(uClass, jClass)
     }
     
    @Test
    def testChangeAbstractClass() {
-       jClass.addModifier(ModifiersFactory.eINSTANCE.createAbstract)
+       jClass.abstract = true
        saveAndSynchronizeChanges(jClass);
        
-       val uClass = getCorrespondingObjectWithClass(jClass, Class);
-       assertEquals(CLASS_NAME, uClass.name)
-       assertTrue(uClass.isAbstract);
+       val uClass = getCorrespondingClass(jClass)
+       assertTrue(uClass.abstract)
+       assertClassEquals(uClass, jClass)
    }
    
    @Test
    def testChangeFinalClass() {
-       jClass.addModifier(ModifiersFactory.eINSTANCE.createFinal)
+       jClass.final = true
        saveAndSynchronizeChanges(jClass);
        
-       val uClass = getCorrespondingObjectWithClass(jClass, Class);
-       assertEquals(CLASS_NAME, uClass.name)
-       assertTrue(uClass.isFinalSpecialization);
+       val uClass = getCorrespondingClass(jClass)
+       assertTrue(uClass.finalSpecialization)
+       assertClassEquals(uClass, jClass)
    }
    
    @Test
@@ -134,9 +122,10 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
        jClass.extends = createNamespaceReferenceFromClassifier(superClass);
        saveAndSynchronizeChanges(jClass);
        
-       val uClass = getCorrespondingObjectWithClass(jClass, Class);
-       assertEquals(CLASS_NAME, uClass.name)
-       assertEquals(SUPER_CLASS_NAME, uClass.generals.head.name);
+       val uClass = getCorrespondingClass(jClass)
+       val uSuperClass = getCorrespondingClass(superClass)
+       assertUmlClassifierHasSuperClassifier(uClass, uSuperClass)
+       assertClassEquals(uClass, jClass)
    }
    
    @Test
@@ -144,9 +133,11 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
        val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME);
        jClass.implements += createNamespaceReferenceFromClassifier(implInterface);
        saveAndSynchronizeChanges(jClass);
-       val uClass = getCorrespondingObjectWithClass(jClass, Class);
-       assertEquals(CLASS_NAME, uClass.name)
-       assertEquals(INTERFACE_NAME, uClass.interfaceRealizations.head.contract.name);
+       
+       val uClass = getCorrespondingClass(jClass)
+       val uInterface = getCorrespondingInterface(implInterface)
+       assertUmlClassHasImplement(uClass, uInterface)
+       assertClassEquals(uClass, jClass)
    }
     
 

@@ -3,8 +3,6 @@ package mir.routines.umlToJavaClassifier;
 import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.emftext.language.java.modifiers.Final;
-import org.emftext.language.java.modifiers.impl.ModifiersFactoryImpl;
 import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -21,7 +19,7 @@ public class SetJavaClassFinalRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass, final Final finalMod) {
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass) {
       return jClass;
     }
     
@@ -29,8 +27,8 @@ public class SetJavaClassFinalRoutine extends AbstractRepairRoutineRealization {
       return umlClass;
     }
     
-    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass, final Final finalMod) {
-      JavaUtil.setJavaModifier(jClass, finalMod, umlClass.isFinalSpecialization());
+    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass) {
+      JavaUtil.setFinal(jClass, umlClass.isFinalSpecialization());
     }
   }
   
@@ -56,10 +54,8 @@ public class SetJavaClassFinalRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     registerObjectUnderModification(jClass);
-    Final finalMod = ModifiersFactoryImpl.eINSTANCE.createFinal();
-    
-    // val updatedElement userExecution.getElement1(umlClass, jClass, finalMod);
-    userExecution.update0Element(umlClass, jClass, finalMod);
+    // val updatedElement userExecution.getElement1(umlClass, jClass);
+    userExecution.update0Element(umlClass, jClass);
     
     postprocessElements();
   }
