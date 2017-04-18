@@ -67,7 +67,7 @@ class JavaSuperInterfaceAddedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addUmlSuperClassifier(affectedEObject, JavaUtil.getClassifierfromTypeRef(newValue));
+      _routinesFacade.addUmlSuperClassifier(affectedEObject, JavaUtil.getClassifierFromTypeReference(newValue));
     }
   }
 }

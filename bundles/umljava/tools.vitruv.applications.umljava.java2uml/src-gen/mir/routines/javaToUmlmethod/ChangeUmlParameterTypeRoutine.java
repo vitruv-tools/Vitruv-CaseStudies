@@ -4,7 +4,7 @@ import java.io.IOException;
 import mir.routines.javaToUmlmethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -29,8 +29,8 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public EObject getCorrepondenceSourceCustomType(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
-      ConcreteClassifier _classifierfromTypeRef = JavaUtil.getClassifierfromTypeRef(jType);
-      return _classifierfromTypeRef;
+      Classifier _classifierFromTypeReference = JavaUtil.getClassifierFromTypeReference(jType);
+      return _classifierFromTypeReference;
     }
     
     public EObject getElement1(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam, final org.eclipse.uml2.uml.Class customType) {

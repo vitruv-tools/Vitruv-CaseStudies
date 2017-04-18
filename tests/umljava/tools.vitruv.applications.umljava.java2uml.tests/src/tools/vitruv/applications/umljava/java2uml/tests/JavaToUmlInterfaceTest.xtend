@@ -44,7 +44,7 @@ class JavaToUmlInterfaceTest extends AbstractJavaUmlTest {
         jInterface = null;
         comp.classifiers.clear
         saveAndSynchronizeChanges(comp)
-        val uI = getUmlPackagedElementsbyName(JavaToUmlHelper.ROOTMODELFILE, org.eclipse.uml2.uml.Interface, INTERFACE_NAME).head
+        val uI = getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, org.eclipse.uml2.uml.Interface, INTERFACE_NAME).head
         assertNull(uI)
     }
     

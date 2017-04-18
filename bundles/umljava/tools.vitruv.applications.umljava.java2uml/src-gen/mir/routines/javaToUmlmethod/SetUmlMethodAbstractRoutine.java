@@ -20,28 +20,20 @@ public class SetUmlMethodAbstractRoutine extends AbstractRepairRoutineRealizatio
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final ClassMethod jMeth, final Integer isAbstract, final Operation uMeth) {
-      return uMeth;
+    public EObject getElement1(final ClassMethod jMeth, final Boolean isAbstract, final Operation uOperation) {
+      return uOperation;
     }
     
-    public void update0Element(final ClassMethod jMeth, final Integer isAbstract, final Operation uMeth) {
-      if (((isAbstract).intValue() == 1)) {
-        uMeth.setIsAbstract(true);
-      } else {
-        if (((isAbstract).intValue() == 0)) {
-          uMeth.setIsAbstract(false);
-        } else {
-          throw new IllegalArgumentException(("Invalid isAbstract Value: " + isAbstract));
-        }
-      }
+    public void update0Element(final ClassMethod jMeth, final Boolean isAbstract, final Operation uOperation) {
+      uOperation.setIsAbstract((isAbstract).booleanValue());
     }
     
-    public EObject getCorrepondenceSourceUMeth(final ClassMethod jMeth, final Integer isAbstract) {
+    public EObject getCorrepondenceSourceUOperation(final ClassMethod jMeth, final Boolean isAbstract) {
       return jMeth;
     }
   }
   
-  public SetUmlMethodAbstractRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod jMeth, final Integer isAbstract) {
+  public SetUmlMethodAbstractRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod jMeth, final Boolean isAbstract) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlmethod.SetUmlMethodAbstractRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlmethod.RoutinesFacade(getExecutionState(), this);
@@ -50,24 +42,24 @@ public class SetUmlMethodAbstractRoutine extends AbstractRepairRoutineRealizatio
   
   private ClassMethod jMeth;
   
-  private Integer isAbstract;
+  private Boolean isAbstract;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlMethodAbstractRoutine with input:");
     getLogger().debug("   ClassMethod: " + this.jMeth);
-    getLogger().debug("   Integer: " + this.isAbstract);
+    getLogger().debug("   Boolean: " + this.isAbstract);
     
-    Operation uMeth = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUMeth(jMeth, isAbstract), // correspondence source supplier
+    Operation uOperation = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUOperation(jMeth, isAbstract), // correspondence source supplier
     	Operation.class,
     	(Operation _element) -> true, // correspondence precondition checker
     	null);
-    if (uMeth == null) {
+    if (uOperation == null) {
     	return;
     }
-    registerObjectUnderModification(uMeth);
-    // val updatedElement userExecution.getElement1(jMeth, isAbstract, uMeth);
-    userExecution.update0Element(jMeth, isAbstract, uMeth);
+    registerObjectUnderModification(uOperation);
+    // val updatedElement userExecution.getElement1(jMeth, isAbstract, uOperation);
+    userExecution.update0Element(jMeth, isAbstract, uOperation);
     
     postprocessElements();
   }

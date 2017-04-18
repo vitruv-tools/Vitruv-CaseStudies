@@ -67,7 +67,7 @@ class JavaAttributeMadeFinalReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Field affectedEObject, final EReference affectedFeature, final Final newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setUmlAttributeFinal(affectedEObject, Integer.valueOf(1));
+      _routinesFacade.setUmlAttributeFinal(affectedEObject, Boolean.valueOf(true));
     }
   }
 }

@@ -67,7 +67,7 @@ class JavaElementMadeStaticReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final AnnotableAndModifiable affectedEObject, final EReference affectedFeature, final Static newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setUmlFeatureStatic(affectedEObject, Integer.valueOf(1));
+      _routinesFacade.setUmlFeatureStatic(affectedEObject, Boolean.valueOf(true));
     }
   }
 }

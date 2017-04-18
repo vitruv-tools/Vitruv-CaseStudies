@@ -159,7 +159,7 @@ class TestUtil {
 	}
 	
 	def static void assertNamespaceClassifierReferenceTypeEquals(org.eclipse.uml2.uml.Type uType, NamespaceClassifierReference jNamespaceClassifierReference) {
-		 assertEquals(uType.name, getClassifierFromNameSpaceReference(jNamespaceClassifierReference).name)
+		 assertEquals(uType.name, getClassifierFromTypeReference(jNamespaceClassifierReference).name)
 	}
 	
 	def static void assertParameterListEquals(List<org.eclipse.uml2.uml.Parameter> uParamList, List<org.emftext.language.java.parameters.Parameter> jParamList) {

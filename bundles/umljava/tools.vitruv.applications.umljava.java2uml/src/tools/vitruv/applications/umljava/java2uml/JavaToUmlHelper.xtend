@@ -84,14 +84,14 @@ class JavaToUmlHelper {
         if (models.nullOrEmpty) {
 			val model = UMLFactory.eINSTANCE.createModel();
 			model.name = DEFAULTMODELNAME;
-			/* 
+			 
 			val userModelName = userInteracting.getTextInput(MODELNAME_INPUTMESSAGE)
 			if (userModelName.nullOrEmpty) {
 				model.name = DEFAULTMODELNAME;
 			} else {
 				MODELNAME = userModelName
 				model.name = userModelName
-			}*/
+			}
             //We add a correspondence of the model with itself to save it in the correspondence model
 			correspondenceModel.createAndAddCorrespondence(model, model)
 			return model;

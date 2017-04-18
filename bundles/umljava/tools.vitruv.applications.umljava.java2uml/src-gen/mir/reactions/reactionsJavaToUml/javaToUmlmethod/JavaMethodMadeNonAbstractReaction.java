@@ -67,7 +67,7 @@ class JavaMethodMadeNonAbstractReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final ClassMethod affectedEObject, final EReference affectedFeature, final Abstract oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setUmlMethodAbstract(affectedEObject, Integer.valueOf(0));
+      _routinesFacade.setUmlMethodAbstract(affectedEObject, Boolean.valueOf(false));
     }
   }
 }

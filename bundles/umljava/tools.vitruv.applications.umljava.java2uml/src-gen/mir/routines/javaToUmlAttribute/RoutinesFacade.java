@@ -24,7 +24,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void setUmlAttributeFinal(final Field jAttr, final Integer isFinal) {
+  public void setUmlAttributeFinal(final Field jAttr, final Boolean isFinal) {
     mir.routines.javaToUmlAttribute.SetUmlAttributeFinalRoutine effect = new mir.routines.javaToUmlAttribute.SetUmlAttributeFinalRoutine(this.executionState, calledBy,
     	jAttr, isFinal);
     effect.applyRoutine();

@@ -67,7 +67,7 @@ class JavaSuperInterfaceRemovedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final TypeReference oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.removeUmlSuperInterface(affectedEObject, JavaUtil.getClassifierfromTypeRef(oldValue));
+      _routinesFacade.removeUmlSuperInterface(affectedEObject, JavaUtil.getClassifierFromTypeReference(oldValue));
     }
   }
 }

@@ -20,28 +20,20 @@ public class SetUmlFeatureStaticRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final AnnotableAndModifiable jElem, final Integer isStatic, final Feature uFeature) {
+    public EObject getElement1(final AnnotableAndModifiable jElem, final Boolean isStatic, final Feature uFeature) {
       return uFeature;
     }
     
-    public void update0Element(final AnnotableAndModifiable jElem, final Integer isStatic, final Feature uFeature) {
-      if (((isStatic).intValue() == 1)) {
-        uFeature.setIsStatic(true);
-      } else {
-        if (((isStatic).intValue() == 0)) {
-          uFeature.setIsStatic(false);
-        } else {
-          throw new IllegalArgumentException(("Invalid isStatic Value: " + isStatic));
-        }
-      }
+    public void update0Element(final AnnotableAndModifiable jElem, final Boolean isStatic, final Feature uFeature) {
+      uFeature.setIsStatic((isStatic).booleanValue());
     }
     
-    public EObject getCorrepondenceSourceUFeature(final AnnotableAndModifiable jElem, final Integer isStatic) {
+    public EObject getCorrepondenceSourceUFeature(final AnnotableAndModifiable jElem, final Boolean isStatic) {
       return jElem;
     }
   }
   
-  public SetUmlFeatureStaticRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final AnnotableAndModifiable jElem, final Integer isStatic) {
+  public SetUmlFeatureStaticRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final AnnotableAndModifiable jElem, final Boolean isStatic) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlmethod.SetUmlFeatureStaticRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlmethod.RoutinesFacade(getExecutionState(), this);
@@ -50,12 +42,12 @@ public class SetUmlFeatureStaticRoutine extends AbstractRepairRoutineRealization
   
   private AnnotableAndModifiable jElem;
   
-  private Integer isStatic;
+  private Boolean isStatic;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlFeatureStaticRoutine with input:");
     getLogger().debug("   AnnotableAndModifiable: " + this.jElem);
-    getLogger().debug("   Integer: " + this.isStatic);
+    getLogger().debug("   Boolean: " + this.isStatic);
     
     Feature uFeature = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUFeature(jElem, isStatic), // correspondence source supplier

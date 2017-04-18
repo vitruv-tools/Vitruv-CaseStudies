@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.eclipse.uml2.uml.Model
 import tools.vitruv.domains.java.JavaDomain
 import tools.vitruv.domains.uml.UmlDomain
-import tools.vitruv.framework.tests.VitruviusChangePropagationTest
 import tools.vitruv.framework.tests.util.TestUtil
 import tools.vitruv.framework.util.datatypes.VURI
 import org.apache.log4j.PropertyConfigurator
@@ -17,18 +16,21 @@ import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.members.Field
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.framework.tests.VitruviusApplicationTest
 
-class AbstractJavaUmlTest extends VitruviusChangePropagationTest {
-    //private static val MODEL_FILE_EXTENSION = "uml";
-    //private static val MODEL_NAME = "model";
+class AbstractJavaUmlTest extends VitruviusApplicationTest {
+    
+    private static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
 	
-    private def String getProjectModelPath(String modelName) {
-        //"model/" + modelName + "." + MODEL_FILE_EXTENSION;
+	
+	override protected cleanup() {
+        userInteractor.addNextSelections(UMLMODELNAME)
     }
-	
-	protected def Model getRootElement() {
-	    //return MODEL_NAME.projectModelPath.root as Model;
-	}
+    
+    override protected setup() {
+        PropertyConfigurator.configure("log4j.properties")
+        userInteractor.addNextSelections(UMLMODELNAME)
+    }
 	
 	override protected createChangePropagationSpecifications() {
 		return #[new JavaToUmlChangePropagationSpecification()]; 
@@ -38,21 +40,17 @@ class AbstractJavaUmlTest extends VitruviusChangePropagationTest {
 		return #[new UmlDomain().metamodel, new JavaDomain().metamodel];
 	}
 	
-	override protected initializeTestModel() {
-        PropertyConfigurator.configure("log4j.properties")
-	}
-
     def protected createJavaClassWithCompilationUnit(String cName, JavaVisibility vis, boolean abstr, boolean fin) {
         val cu = createCompilationUnitAsModel(cName);
         val cls = createJavaClass(cName, vis, abstr, fin)
         cu.classifiers += cls;
         saveAndSynchronizeChanges(cu);
-        this.changeRecorder.beginRecording(VURI.getInstance(cls.eResource), #[cls.eResource])
+        //this.changeRecorder.beginRecording(VURI.getInstance(cls.eResource), #[cls.eResource])
         return cls;
     }
     
     def protected createSimpleJavaClassWithCompilationUnit(String name) {
-        return createJavaClassWithCompilationUnit(name, null, false, false);
+        return createJavaClassWithCompilationUnit(name, JavaVisibility.PUBLIC, false, false);
     }
     
     def protected createSimpleJavaInterfaceWithCompilationUnit(String name) {
@@ -67,7 +65,7 @@ class AbstractJavaUmlTest extends VitruviusChangePropagationTest {
         val jI = createJavaInterface(name, superInterfaces)
         cu.classifiers += jI;
         saveAndSynchronizeChanges(cu);
-        this.changeRecorder.beginRecording(VURI.getInstance(jI.eResource), #[jI.eResource])
+        //this.changeRecorder.beginRecording(VURI.getInstance(jI.eResource), #[jI.eResource])
         return jI;
     }
 
@@ -118,7 +116,7 @@ class AbstractJavaUmlTest extends VitruviusChangePropagationTest {
         val paramList = uOp.ownedParameters.filter[name == jParam.name]
         assertTrue(paramList.size == 1)
         val uParam = paramList.head
-        assertEquals(getClassifierfromTypeRef(jParam.typeReference).name, uParam.type.name);
+        assertEquals(getClassifierFromTypeReference(jParam.typeReference).name, uParam.type.name);
     }
    def protected assertNameAndReturnUniqueUmlMethod(Method meth) {
        val umlOperation = getCorrespondingObject(meth, org.eclipse.uml2.uml.Operation)
@@ -136,5 +134,7 @@ class AbstractJavaUmlTest extends VitruviusChangePropagationTest {
         val m = getModelResource(modelPath).allContents.head as Model
         return m.packagedElements.filter(type).filter[it.name == className].toList;
     }
+    
+    
 
 }

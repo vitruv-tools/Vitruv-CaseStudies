@@ -66,7 +66,7 @@ class JavaClassMadeNonFinalReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Final oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setUmlClassFinal(affectedEObject, Integer.valueOf(0));
+      _routinesFacade.setUmlClassFinal(affectedEObject, Boolean.valueOf(false));
     }
   }
 }

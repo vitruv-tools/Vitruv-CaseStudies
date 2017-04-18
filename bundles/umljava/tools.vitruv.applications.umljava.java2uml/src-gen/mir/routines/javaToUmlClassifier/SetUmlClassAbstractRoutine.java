@@ -18,28 +18,20 @@ public class SetUmlClassAbstractRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Integer isAbstract, final org.eclipse.uml2.uml.Class uClass) {
+    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Boolean isAbstract, final org.eclipse.uml2.uml.Class uClass) {
       return uClass;
     }
     
-    public EObject getCorrepondenceSourceUClass(final org.emftext.language.java.classifiers.Class jClass, final Integer isAbstract) {
+    public EObject getCorrepondenceSourceUClass(final org.emftext.language.java.classifiers.Class jClass, final Boolean isAbstract) {
       return jClass;
     }
     
-    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Integer isAbstract, final org.eclipse.uml2.uml.Class uClass) {
-      if (((isAbstract).intValue() == 1)) {
-        uClass.setIsAbstract(true);
-      } else {
-        if (((isAbstract).intValue() == 0)) {
-          uClass.setIsAbstract(false);
-        } else {
-          throw new IllegalArgumentException(("Invalid isAbstract Value: " + isAbstract));
-        }
-      }
+    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Boolean isAbstract, final org.eclipse.uml2.uml.Class uClass) {
+      uClass.setIsAbstract((isAbstract).booleanValue());
     }
   }
   
-  public SetUmlClassAbstractRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass, final Integer isAbstract) {
+  public SetUmlClassAbstractRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass, final Boolean isAbstract) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.SetUmlClassAbstractRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
@@ -48,12 +40,12 @@ public class SetUmlClassAbstractRoutine extends AbstractRepairRoutineRealization
   
   private org.emftext.language.java.classifiers.Class jClass;
   
-  private Integer isAbstract;
+  private Boolean isAbstract;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlClassAbstractRoutine with input:");
     getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Integer: " + this.isAbstract);
+    getLogger().debug("   Boolean: " + this.isAbstract);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, isAbstract), // correspondence source supplier

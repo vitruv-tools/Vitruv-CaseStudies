@@ -141,8 +141,8 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         saveAndSynchronizeChanges(uClass);
         
         val jClass = getCorrespondingClass(uClass)
-        assertTrue(jClass.implements.size.toString, jClass.implements.size == 1); //TODO Ist 0 statt 1. Im Model ist es richtig.
-        assertEquals(INTERFACE_NAME2, getClassifierFromNameSpaceReference(jClass.implements.get(0) as NamespaceClassifierReference).name)
+        assertTrue(jClass.implements.size.toString, jClass.implements.size == 1);
+        assertEquals(INTERFACE_NAME2, getClassifierFromTypeReference(jClass.implements.get(0)).name)
         assertJavaFileExists(INTERFACE_NAME, #[]);
         assertClassEquals(uClass, jClass)
     }
@@ -155,7 +155,7 @@ class UmlToJavaClassTest extends AbstractUmlJavaTest {
         println(realization.contract)
         saveAndSynchronizeChanges(uClass);
         val jClass = getCorrespondingClass(uClass)
-        assertEquals(INTERFACE_NAME, getClassifierFromNameSpaceReference(jClass.implements.head as NamespaceClassifierReference).name);
+        assertEquals(INTERFACE_NAME, getClassifierFromTypeReference(jClass.implements.head).name);
         realization.implementingClassifier = class2
         saveAndSynchronizeChanges(class2);
         assertClassEquals(uClass, jClass)

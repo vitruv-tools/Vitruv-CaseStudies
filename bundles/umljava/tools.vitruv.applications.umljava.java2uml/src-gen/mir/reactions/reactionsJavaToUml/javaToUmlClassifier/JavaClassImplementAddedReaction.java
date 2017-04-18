@@ -3,7 +3,7 @@ package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.util.JavaUtil;
@@ -69,8 +69,8 @@ class JavaClassImplementAddedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      ConcreteClassifier _classifierfromTypeRef = JavaUtil.getClassifierfromTypeRef(newValue);
-      _routinesFacade.addUmlClassImplement(affectedEObject, ((Interface) _classifierfromTypeRef));
+      Classifier _classifierFromTypeReference = JavaUtil.getClassifierFromTypeReference(newValue);
+      _routinesFacade.addUmlClassImplement(affectedEObject, ((Interface) _classifierFromTypeReference));
     }
   }
 }

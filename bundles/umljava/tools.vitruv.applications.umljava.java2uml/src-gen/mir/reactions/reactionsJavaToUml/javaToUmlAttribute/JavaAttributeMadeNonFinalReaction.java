@@ -1,9 +1,10 @@
-package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
+package mir.reactions.reactionsJavaToUml.javaToUmlAttribute;
 
-import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import mir.routines.javaToUmlAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.modifiers.Abstract;
+import org.emftext.language.java.members.Field;
+import org.emftext.language.java.modifiers.Final;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -14,18 +15,18 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class JavaClassMadeNonAbstractReaction extends AbstractReactionRealization {
-  public JavaClassMadeNonAbstractReaction(final UserInteracting userInteracting) {
+class JavaAttributeMadeNonFinalReaction extends AbstractReactionRealization {
+  public JavaAttributeMadeNonFinalReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Abstract> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Abstract>)change).getRemoveChange();
-    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<Field, Final> typedChange = ((RemoveAndDeleteNonRoot<Field, Final>)change).getRemoveChange();
+    Field affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Abstract oldValue = typedChange.getOldValue();
-    mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeNonAbstractReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeNonAbstractReaction.ActionUserExecution(this.executionState, this);
+    Final oldValue = typedChange.getOldValue();
+    mir.routines.javaToUmlAttribute.RoutinesFacade routinesFacade = new mir.routines.javaToUmlAttribute.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
@@ -34,14 +35,14 @@ class JavaClassMadeNonAbstractReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Abstract> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Abstract>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
+    RemoveEReference<Field, Final> relevantChange = ((RemoveAndDeleteNonRoot<Field, Final>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof Field)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Abstract)) {
+    if (!(relevantChange.getOldValue() instanceof Final)) {
     	return false;
     }
     return true;
@@ -65,8 +66,8 @@ class JavaClassMadeNonAbstractReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Abstract oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setUmlClassAbstract(affectedEObject, Boolean.valueOf(false));
+    public void callRoutine1(final Field affectedEObject, final EReference affectedFeature, final Final oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.setUmlAttributeFinal(affectedEObject, Boolean.valueOf(false));
     }
   }
 }

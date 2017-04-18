@@ -20,28 +20,20 @@ public class SetUmlAttributeFinalRoutine extends AbstractRepairRoutineRealizatio
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceUAttr(final Field jAttr, final Integer isFinal) {
+    public EObject getCorrepondenceSourceUAttr(final Field jAttr, final Boolean isFinal) {
       return jAttr;
     }
     
-    public EObject getElement1(final Field jAttr, final Integer isFinal, final Property uAttr) {
+    public EObject getElement1(final Field jAttr, final Boolean isFinal, final Property uAttr) {
       return uAttr;
     }
     
-    public void update0Element(final Field jAttr, final Integer isFinal, final Property uAttr) {
-      if (((isFinal).intValue() == 1)) {
-        uAttr.setIsReadOnly(true);
-      } else {
-        if (((isFinal).intValue() == 0)) {
-          uAttr.setIsReadOnly(false);
-        } else {
-          throw new IllegalArgumentException(("Invalid isFinal value: " + isFinal));
-        }
-      }
+    public void update0Element(final Field jAttr, final Boolean isFinal, final Property uAttr) {
+      uAttr.setIsReadOnly((isFinal).booleanValue());
     }
   }
   
-  public SetUmlAttributeFinalRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Field jAttr, final Integer isFinal) {
+  public SetUmlAttributeFinalRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Field jAttr, final Boolean isFinal) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlAttribute.SetUmlAttributeFinalRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlAttribute.RoutinesFacade(getExecutionState(), this);
@@ -50,12 +42,12 @@ public class SetUmlAttributeFinalRoutine extends AbstractRepairRoutineRealizatio
   
   private Field jAttr;
   
-  private Integer isFinal;
+  private Boolean isFinal;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlAttributeFinalRoutine with input:");
     getLogger().debug("   Field: " + this.jAttr);
-    getLogger().debug("   Integer: " + this.isFinal);
+    getLogger().debug("   Boolean: " + this.isFinal);
     
     Property uAttr = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUAttr(jAttr, isFinal), // correspondence source supplier

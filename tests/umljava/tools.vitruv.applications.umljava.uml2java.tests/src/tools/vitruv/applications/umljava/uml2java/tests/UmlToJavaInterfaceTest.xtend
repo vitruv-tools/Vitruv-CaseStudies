@@ -72,8 +72,8 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
         val interface = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
         saveAndSynchronizeChanges(rootElement)
         val jI = getCorrespondingInterface(interface)
-        assertEquals(SUPERINTERFACENAME_1, getClassifierFromNameSpaceReference(jI.extends.get(0) as NamespaceClassifierReference).name)
-        assertEquals(SUPERINTERFACENAME_2, getClassifierFromNameSpaceReference(jI.extends.get(1) as NamespaceClassifierReference).name)
+        assertEquals(SUPERINTERFACENAME_1, getClassifierFromTypeReference(jI.extends.get(0)).name)
+        assertEquals(SUPERINTERFACENAME_2, getClassifierFromTypeReference(jI.extends.get(1)).name)
     }
     
     @Test
@@ -83,8 +83,8 @@ class UmlToJavaInterfaceTest extends AbstractUmlJavaTest {
         uI.generalizations.remove(0);
         saveAndSynchronizeChanges(rootElement);
         val jI = getCorrespondingInterface(uI)
-        assertTrue(jI.extends.size.toString, jI.extends.size == 1); //TODO Ist 0 statt 1. Im Model ist es aber richtig.
-        assertEquals(SUPERINTERFACENAME_2, getClassifierFromNameSpaceReference(jI.extends.get(0) as NamespaceClassifierReference).name)
+        assertTrue(jI.extends.size.toString, jI.extends.size == 1);
+        assertEquals(SUPERINTERFACENAME_2, getClassifierFromTypeReference(jI.extends.get(0)).name)
         assertJavaFileExists(SUPERINTERFACENAME_1, #[]);
     }
     

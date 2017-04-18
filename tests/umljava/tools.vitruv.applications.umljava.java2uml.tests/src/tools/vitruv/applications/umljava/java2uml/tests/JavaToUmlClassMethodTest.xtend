@@ -13,6 +13,9 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import org.eclipse.uml2.types.TypesFactory
+import org.emftext.language.java.classifiers.ClassifiersFactory
+import org.emftext.language.java.members.MembersFactory
 
 class JavaToUmlClassMethodTest extends AbstractJavaUmlTest {
     private static val CLASS_NAME = "ClassName";

@@ -67,7 +67,7 @@ class JavaMethodMadeNonStaticReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final AnnotableAndModifiable affectedEObject, final EReference affectedFeature, final Static oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setUmlFeatureStatic(affectedEObject, Integer.valueOf(0));
+      _routinesFacade.setUmlFeatureStatic(affectedEObject, Boolean.valueOf(false));
     }
   }
 }

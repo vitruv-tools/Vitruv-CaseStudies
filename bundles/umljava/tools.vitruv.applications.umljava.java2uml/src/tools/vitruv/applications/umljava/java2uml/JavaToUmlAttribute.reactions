@@ -19,7 +19,6 @@ reaction JavaAttributeCreated {
 routine createUmlAttribute(java::Class jClass, java::Field jAttr) {
     match {
         val uClass = retrieve uml::Class corresponding to jClass
-        val uType = retrieve optional uml::Classifier corresponding to jAttr.typeReference.target
     }
     action {
         val uAttr = create uml::Property and initialize {
@@ -42,7 +41,7 @@ reaction JavaAttributeTypeChanged {
 routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
     match {
         val uAttr = retrieve uml::Property corresponding to jAttr
-        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jType)
+        val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jType)
     }
     action {
         update uAttr {
@@ -53,22 +52,21 @@ routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
 
 reaction JavaAttributeMadeFinal {
     after element java::Final created and inserted in java::Field[annotationsAndModifiers]
-    call setUmlAttributeFinal(affectedEObject, 1)
+    call setUmlAttributeFinal(affectedEObject, true)
 }
 
-routine setUmlAttributeFinal(java::Field jAttr, Integer isFinal) {
+reaction JavaAttributeMadeNonFinal {
+    after element java::Final deleted and removed from java::Field[annotationsAndModifiers]
+    call setUmlAttributeFinal(affectedEObject, false)
+}
+
+routine setUmlAttributeFinal(java::Field jAttr, Boolean isFinal) {
     match {
         val uAttr = retrieve uml::Property corresponding to jAttr 
     }
     action {
         update uAttr {
-            if (isFinal == 1) {
-                uAttr.isReadOnly = true;
-            } else if (isFinal == 0) {
-                uAttr.isReadOnly = false;
-            } else {
-                throw new IllegalArgumentException("Invalid isFinal value: " + isFinal);
-            }
+            uAttr.isReadOnly = isFinal
         }
     }
 }

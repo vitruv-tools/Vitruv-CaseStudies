@@ -20,7 +20,7 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Interface uI) {
+    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Interface uInterface) {
       return uClass;
     }
     
@@ -28,11 +28,11 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
       return jClass;
     }
     
-    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Interface uI) {
-      UmlUtil.removeClassifierFromIterator(uClass.getImplementedInterfaces().iterator(), uI);
+    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Interface uInterface) {
+      UmlUtil.removeClassifierFromIterator(uClass.getImplementedInterfaces().iterator(), uInterface);
     }
     
-    public EObject getCorrepondenceSourceUI(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass) {
+    public EObject getCorrepondenceSourceUInterface(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass) {
       return jI;
     }
   }
@@ -62,17 +62,17 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
     	return;
     }
     registerObjectUnderModification(uClass);
-    org.eclipse.uml2.uml.Interface uI = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUI(jClass, jI, uClass), // correspondence source supplier
+    org.eclipse.uml2.uml.Interface uInterface = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUInterface(jClass, jI, uClass), // correspondence source supplier
     	org.eclipse.uml2.uml.Interface.class,
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
-    if (uI == null) {
+    if (uInterface == null) {
     	return;
     }
-    registerObjectUnderModification(uI);
-    // val updatedElement userExecution.getElement1(jClass, jI, uClass, uI);
-    userExecution.update0Element(jClass, jI, uClass, uI);
+    registerObjectUnderModification(uInterface);
+    // val updatedElement userExecution.getElement1(jClass, jI, uClass, uInterface);
+    userExecution.update0Element(jClass, jI, uClass, uInterface);
     
     postprocessElements();
   }

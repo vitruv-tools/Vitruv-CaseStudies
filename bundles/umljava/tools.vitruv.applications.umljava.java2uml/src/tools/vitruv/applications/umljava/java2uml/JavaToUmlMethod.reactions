@@ -16,15 +16,14 @@ reaction JavaClassMethodCreated {
 routine createUmlClassMethod(java::ClassMethod jMeth, java::Class jClass) {
     match {
         val uClass = retrieve uml::Class corresponding to jClass
-        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jMeth.typeReference)
     }
     action {
-        val uMeth = create uml::Operation and initialize {
-            uMeth.name = jMeth.name;
+        val uOperation = create uml::Operation and initialize {
+            uOperation.name = jMeth.name;
         }
-        add correspondence between uMeth and jMeth
+        add correspondence between uOperation and jMeth
         update uClass {
-            uClass.ownedOperations += uMeth;
+            uClass.ownedOperations += uOperation;
         }
     }
 }
@@ -36,16 +35,15 @@ reaction JavaInterfaceMethodCreated {
 
 routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jI) {
     match {
-        val uI = retrieve uml::Interface corresponding to jI
-        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jMeth.typeReference)
+        val uInterface = retrieve uml::Interface corresponding to jI
     }
     action {
-        val uMeth = create uml::Operation and initialize {
-            uMeth.name = jMeth.name;
+        val uOperation = create uml::Operation and initialize {
+            uOperation.name = jMeth.name;
         }
-        add correspondence between uMeth and jMeth
-        update uI {
-            uI.ownedOperations += uMeth;
+        add correspondence between uOperation and jMeth
+        update uInterface {
+            uInterface.ownedOperations += uOperation;
         }
     }
 }
@@ -67,55 +65,43 @@ routine deleteUmlMethod(java::Member jMem) {
 reaction JavaMethodMadeAbstract {
     after element java::Abstract created and inserted in java::ClassMethod[annotationsAndModifiers]
     call  {
-        setUmlMethodAbstract(affectedEObject, 1)
+        setUmlMethodAbstract(affectedEObject, true)
     }
 }
 
 reaction JavaMethodMadeNonAbstract {
     after element java::Abstract deleted and removed from java::ClassMethod[annotationsAndModifiers]
-    call setUmlMethodAbstract(affectedEObject, 0)
+    call setUmlMethodAbstract(affectedEObject, false)
 }
 
 routine setUmlMethodAbstract(java::ClassMethod jMeth, Boolean isAbstract) {
     match {
-        val uMeth = retrieve uml::Operation corresponding to jMeth
+        val uOperation = retrieve uml::Operation corresponding to jMeth
     }
     action {
-        update uMeth {
-            if (isAbstract == 1){
-                uMeth.isAbstract = true;
-            } else if (isAbstract == 0) {
-                uMeth.isAbstract = false;
-            } else {
-                throw new IllegalArgumentException("Invalid isAbstract Value: " + isAbstract);
-            }
+        update uOperation {
+            uOperation.isAbstract = isAbstract
         }
     }
 }
 
 reaction JavaElementMadeStatic {
     after element java::Static created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
-    call setUmlFeatureStatic(affectedEObject, 1)
+    call setUmlFeatureStatic(affectedEObject, true)
 }
 
 reaction JavaMethodMadeNonStatic {
     after element java::Static deleted and removed from java::AnnotableAndModifiable[annotationsAndModifiers]
-    call setUmlFeatureStatic(affectedEObject, 0)
+    call setUmlFeatureStatic(affectedEObject, false)
 }
 
-routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Integer isStatic) {
+routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Boolean isStatic) {
     match {
         val uFeature = retrieve uml::Feature corresponding to jElem
     }
     action {
         update uFeature {
-            if (isStatic == 1) {
-                uFeature.isStatic = true;
-            } else if (isStatic == 0) {
-                uFeature.isStatic = false;
-            } else {
-                throw new IllegalArgumentException("Invalid isStatic Value: " + isStatic);
-            }
+            uFeature.isStatic = isStatic
         }
     }
 }
@@ -127,16 +113,16 @@ reaction JavaParameterCreated {
 
 routine createUmlParameter(java::Method jMeth, java::OrdinaryParameter jParam) {
     match {
-        val uMeth = retrieve uml::Operation corresponding to jMeth
-        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jParam.typeReference)
+        val uOperation = retrieve uml::Operation corresponding to jMeth
+        val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jParam.typeReference)
     }
     action {
         val uParam = create uml::Parameter and initialize {
             uParam.name = jParam.name;
         }
         add correspondence between uParam and jParam
-        update uMeth {
-            uMeth.ownedParameters += uParam
+        update uOperation {
+            uOperation.ownedParameters += uParam
         }
     }
 }
@@ -163,7 +149,7 @@ reaction JavaParameterTypeChanged {
 routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReference jType) {
     match {
         val uParam = retrieve uml::Parameter corresponding to jParam
-        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jType)
+        val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jType)
     }
     action {
         update uParam {
@@ -179,12 +165,12 @@ reaction JavaReturnTypeChanged {
 
 routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
     match {
-        val uMeth = retrieve uml::Operation corresponding to jMeth
-        val customType = retrieve optional uml::Class corresponding to getClassifierfromTypeRef(jType)
+        val uOperation = retrieve uml::Operation corresponding to jMeth
+        val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jType)
     }
      action {
-         update uMeth {
-             uMeth.type = getUmlType(jType, customType, getUmlModel(correspondenceModel, userInteracting))
+         update uOperation {
+             uOperation.type = getUmlType(jType, customType, getUmlModel(correspondenceModel, userInteracting))
          }
      }
 }

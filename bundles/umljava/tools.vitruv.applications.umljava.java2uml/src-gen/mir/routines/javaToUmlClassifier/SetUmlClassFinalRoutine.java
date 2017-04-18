@@ -18,28 +18,20 @@ public class SetUmlClassFinalRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Integer isFinal, final org.eclipse.uml2.uml.Class uClass) {
+    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Boolean isFinal, final org.eclipse.uml2.uml.Class uClass) {
       return uClass;
     }
     
-    public EObject getCorrepondenceSourceUClass(final org.emftext.language.java.classifiers.Class jClass, final Integer isFinal) {
+    public EObject getCorrepondenceSourceUClass(final org.emftext.language.java.classifiers.Class jClass, final Boolean isFinal) {
       return jClass;
     }
     
-    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Integer isFinal, final org.eclipse.uml2.uml.Class uClass) {
-      if (((isFinal).intValue() == 1)) {
-        uClass.setIsFinalSpecialization(true);
-      } else {
-        if (((isFinal).intValue() == 0)) {
-          uClass.setIsFinalSpecialization(false);
-        } else {
-          throw new IllegalArgumentException(("Invalid isFinal value: " + isFinal));
-        }
-      }
+    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Boolean isFinal, final org.eclipse.uml2.uml.Class uClass) {
+      uClass.setIsFinalSpecialization((isFinal).booleanValue());
     }
   }
   
-  public SetUmlClassFinalRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass, final Integer isFinal) {
+  public SetUmlClassFinalRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass, final Boolean isFinal) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.SetUmlClassFinalRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
@@ -48,12 +40,12 @@ public class SetUmlClassFinalRoutine extends AbstractRepairRoutineRealization {
   
   private org.emftext.language.java.classifiers.Class jClass;
   
-  private Integer isFinal;
+  private Boolean isFinal;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlClassFinalRoutine with input:");
     getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Integer: " + this.isFinal);
+    getLogger().debug("   Boolean: " + this.isFinal);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, isFinal), // correspondence source supplier

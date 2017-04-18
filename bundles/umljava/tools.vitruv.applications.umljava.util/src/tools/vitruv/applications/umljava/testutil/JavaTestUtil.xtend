@@ -236,7 +236,7 @@ class JavaTestUtil {
     
     def static void assertNamespaceClassifierReferenceEquals(NamespaceClassifierReference namespaceRef1,
     	NamespaceClassifierReference namespaceRef2) {
-    	assertEquals(getClassifierFromNameSpaceReference(namespaceRef1).name, getClassifierFromNameSpaceReference(namespaceRef2).name)
+    	assertEquals(getClassifierFromTypeReference(namespaceRef1).name, getClassifierFromTypeReference(namespaceRef2).name)
     }
     
     /**
@@ -244,6 +244,6 @@ class JavaTestUtil {
      * @param superClass Java-Superclass
      */
 	def static void assertHasSuperClass(Class childClass, Class superClass) {
-	    assertEquals(superClass.name, getClassifierFromNameSpaceReference(childClass.extends as NamespaceClassifierReference).name);
+	    assertEquals(superClass.name, getClassifierFromTypeReference(childClass.extends).name);
 	}
 }

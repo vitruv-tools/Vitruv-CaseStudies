@@ -70,7 +70,7 @@ class JavaSuperClassChangedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addUmlSuperClassifier(affectedEObject, JavaUtil.getClassifierfromTypeRef(newValue));
+      _routinesFacade.addUmlSuperClassifier(affectedEObject, JavaUtil.getClassifierFromTypeReference(newValue));
     }
   }
 }

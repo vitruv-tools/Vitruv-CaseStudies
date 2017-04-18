@@ -1,18 +1,20 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
 import org.eclipse.uml2.uml.Class
+import org.emftext.language.java.classifiers.ClassifiersFactory
+import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.containers.ContainersFactory
+import org.emftext.language.java.modifiers.ModifiersFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.AbstractJavaUmlTest
-
-import static org.junit.Assert.*
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.junit.Ignore
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
-import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import tools.vitruv.framework.tests.util.TestUtil
 
 class JavaToUmlClassTest extends AbstractJavaUmlTest {
     private static val CLASS_NAME = "ClassName";
@@ -37,6 +39,25 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
     }
 
     @Test
+    def void tt() {
+    	val cls = ClassifiersFactory.eINSTANCE.createClass;
+    	val cu = ContainersFactory.eINSTANCE.createCompilationUnit
+    	val pack = ContainersFactory.eINSTANCE.createPackage
+    	pack.name = "packname"
+    	pack.compilationUnits += cu
+    	println(pack.compilationUnits)
+    	cu.namespaces += pack.namespaces
+    	cu.namespaces += pack.name
+    	cu.name = "Aa.java"
+    	cls.name = "Aa"
+    	cu.classifiers += cls
+    	createAndSynchronizeModel(TestUtil.SOURCE_FOLDER + "/" + cu.namespaces.head + "/" + cu.name, cu)
+    	saveAndSynchronizeChanges(cu);
+    	println(pack)
+    	println(cu)
+    	println(cls)
+    }
+    @Test
     def void testCreateClass() {
         val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);
         
@@ -59,7 +80,7 @@ class JavaToUmlClassTest extends AbstractJavaUmlTest {
         jClass = null;
         comp.classifiers.clear
         saveAndSynchronizeChanges(comp)
-        val uClass = getUmlPackagedElementsbyName(JavaToUmlHelper.ROOTMODELFILE, org.eclipse.uml2.uml.Class, CLASS_NAME).head
+        val uClass = getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).head
         assertNull(uClass)
     }
     

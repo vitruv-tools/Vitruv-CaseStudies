@@ -6,9 +6,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.ClassMethod;
-import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -24,34 +22,29 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceCustomType(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass) {
-      ConcreteClassifier _classifierfromTypeRef = JavaUtil.getClassifierfromTypeRef(jMeth.getTypeReference());
-      return _classifierfromTypeRef;
-    }
-    
-    public EObject getElement1(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Class customType, final Operation uMeth) {
-      return uMeth;
+    public EObject getElement1(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final Operation uOperation) {
+      return uOperation;
     }
     
     public EObject getCorrepondenceSourceUClass(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass) {
       return jClass;
     }
     
-    public void update0Element(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Class customType, final Operation uMeth) {
+    public void update0Element(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final Operation uOperation) {
       EList<Operation> _ownedOperations = uClass.getOwnedOperations();
-      _ownedOperations.add(uMeth);
+      _ownedOperations.add(uOperation);
     }
     
-    public EObject getElement2(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Class customType, final Operation uMeth) {
+    public EObject getElement2(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final Operation uOperation) {
       return jMeth;
     }
     
-    public void updateUMethElement(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Class customType, final Operation uMeth) {
-      uMeth.setName(jMeth.getName());
+    public EObject getElement3(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final Operation uOperation) {
+      return uClass;
     }
     
-    public EObject getElement3(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Class customType, final Operation uMeth) {
-      return uClass;
+    public void updateUOperationElement(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass, final Operation uOperation) {
+      uOperation.setName(jMeth.getName());
     }
   }
   
@@ -80,19 +73,13 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     	return;
     }
     registerObjectUnderModification(uClass);
-    org.eclipse.uml2.uml.Class customType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomType(jMeth, jClass, uClass), // correspondence source supplier
-    	org.eclipse.uml2.uml.Class.class,
-    	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(customType);
-    Operation uMeth = UMLFactoryImpl.eINSTANCE.createOperation();
-    userExecution.updateUMethElement(jMeth, jClass, uClass, customType, uMeth);
+    Operation uOperation = UMLFactoryImpl.eINSTANCE.createOperation();
+    userExecution.updateUOperationElement(jMeth, jClass, uClass, uOperation);
     
-    addCorrespondenceBetween(userExecution.getElement1(jMeth, jClass, uClass, customType, uMeth), userExecution.getElement2(jMeth, jClass, uClass, customType, uMeth), "");
+    addCorrespondenceBetween(userExecution.getElement1(jMeth, jClass, uClass, uOperation), userExecution.getElement2(jMeth, jClass, uClass, uOperation), "");
     
-    // val updatedElement userExecution.getElement3(jMeth, jClass, uClass, customType, uMeth);
-    userExecution.update0Element(jMeth, jClass, uClass, customType, uMeth);
+    // val updatedElement userExecution.getElement3(jMeth, jClass, uClass, uOperation);
+    userExecution.update0Element(jMeth, jClass, uClass, uOperation);
     
     postprocessElements();
   }

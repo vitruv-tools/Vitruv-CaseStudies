@@ -4,7 +4,7 @@ import java.io.IOException;
 import mir.routines.javaToUmlmethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -24,20 +24,20 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceCustomType(final Method jMeth, final TypeReference jType, final Operation uMeth) {
-      ConcreteClassifier _classifierfromTypeRef = JavaUtil.getClassifierfromTypeRef(jType);
-      return _classifierfromTypeRef;
+    public EObject getCorrepondenceSourceCustomType(final Method jMeth, final TypeReference jType, final Operation uOperation) {
+      Classifier _classifierFromTypeReference = JavaUtil.getClassifierFromTypeReference(jType);
+      return _classifierFromTypeReference;
     }
     
-    public EObject getElement1(final Method jMeth, final TypeReference jType, final Operation uMeth, final org.eclipse.uml2.uml.Class customType) {
-      return uMeth;
+    public EObject getElement1(final Method jMeth, final TypeReference jType, final Operation uOperation, final org.eclipse.uml2.uml.Class customType) {
+      return uOperation;
     }
     
-    public void update0Element(final Method jMeth, final TypeReference jType, final Operation uMeth, final org.eclipse.uml2.uml.Class customType) {
-      uMeth.setType(JavaToUmlHelper.getUmlType(jType, customType, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting)));
+    public void update0Element(final Method jMeth, final TypeReference jType, final Operation uOperation, final org.eclipse.uml2.uml.Class customType) {
+      uOperation.setType(JavaToUmlHelper.getUmlType(jType, customType, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting)));
     }
     
-    public EObject getCorrepondenceSourceUMeth(final Method jMeth, final TypeReference jType) {
+    public EObject getCorrepondenceSourceUOperation(final Method jMeth, final TypeReference jType) {
       return jMeth;
     }
   }
@@ -58,23 +58,23 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     getLogger().debug("   Method: " + this.jMeth);
     getLogger().debug("   TypeReference: " + this.jType);
     
-    Operation uMeth = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUMeth(jMeth, jType), // correspondence source supplier
+    Operation uOperation = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUOperation(jMeth, jType), // correspondence source supplier
     	Operation.class,
     	(Operation _element) -> true, // correspondence precondition checker
     	null);
-    if (uMeth == null) {
+    if (uOperation == null) {
     	return;
     }
-    registerObjectUnderModification(uMeth);
+    registerObjectUnderModification(uOperation);
     org.eclipse.uml2.uml.Class customType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomType(jMeth, jType, uMeth), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceCustomType(jMeth, jType, uOperation), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(customType);
-    // val updatedElement userExecution.getElement1(jMeth, jType, uMeth, customType);
-    userExecution.update0Element(jMeth, jType, uMeth, customType);
+    // val updatedElement userExecution.getElement1(jMeth, jType, uOperation, customType);
+    userExecution.update0Element(jMeth, jType, uOperation, customType);
     
     postprocessElements();
   }

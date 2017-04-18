@@ -4,11 +4,9 @@ import java.io.IOException;
 import mir.routines.javaToUmlAttribute.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.types.Type;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -24,7 +22,7 @@ public class CreateUmlAttributeRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
+    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Property uAttr) {
       return uAttr;
     }
     
@@ -32,25 +30,20 @@ public class CreateUmlAttributeRoutine extends AbstractRepairRoutineRealization 
       return jClass;
     }
     
-    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
+    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Property uAttr) {
       EList<Property> _ownedAttributes = uClass.getOwnedAttributes();
       _ownedAttributes.add(uAttr);
     }
     
-    public EObject getCorrepondenceSourceUType(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass) {
-      Type _target = jAttr.getTypeReference().getTarget();
-      return _target;
-    }
-    
-    public EObject getElement2(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
+    public EObject getElement2(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Property uAttr) {
       return jAttr;
     }
     
-    public EObject getElement3(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
+    public EObject getElement3(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Property uAttr) {
       return uClass;
     }
     
-    public void updateUAttrElement(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Classifier uType, final Property uAttr) {
+    public void updateUAttrElement(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Property uAttr) {
       uAttr.setName(jAttr.getName());
     }
   }
@@ -80,19 +73,13 @@ public class CreateUmlAttributeRoutine extends AbstractRepairRoutineRealization 
     	return;
     }
     registerObjectUnderModification(uClass);
-    Classifier uType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUType(jClass, jAttr, uClass), // correspondence source supplier
-    	Classifier.class,
-    	(Classifier _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(uType);
     Property uAttr = UMLFactoryImpl.eINSTANCE.createProperty();
-    userExecution.updateUAttrElement(jClass, jAttr, uClass, uType, uAttr);
+    userExecution.updateUAttrElement(jClass, jAttr, uClass, uAttr);
     
-    addCorrespondenceBetween(userExecution.getElement1(jClass, jAttr, uClass, uType, uAttr), userExecution.getElement2(jClass, jAttr, uClass, uType, uAttr), "");
+    addCorrespondenceBetween(userExecution.getElement1(jClass, jAttr, uClass, uAttr), userExecution.getElement2(jClass, jAttr, uClass, uAttr), "");
     
-    // val updatedElement userExecution.getElement3(jClass, jAttr, uClass, uType, uAttr);
-    userExecution.update0Element(jClass, jAttr, uClass, uType, uAttr);
+    // val updatedElement userExecution.getElement3(jClass, jAttr, uClass, uAttr);
+    userExecution.update0Element(jClass, jAttr, uClass, uAttr);
     
     postprocessElements();
   }

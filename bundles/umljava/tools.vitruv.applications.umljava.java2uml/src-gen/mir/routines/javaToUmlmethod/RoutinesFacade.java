@@ -36,13 +36,13 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void setUmlMethodAbstract(final ClassMethod jMeth, final Integer isAbstract) {
+  public void setUmlMethodAbstract(final ClassMethod jMeth, final Boolean isAbstract) {
     mir.routines.javaToUmlmethod.SetUmlMethodAbstractRoutine effect = new mir.routines.javaToUmlmethod.SetUmlMethodAbstractRoutine(this.executionState, calledBy,
     	jMeth, isAbstract);
     effect.applyRoutine();
   }
   
-  public void setUmlFeatureStatic(final AnnotableAndModifiable jElem, final Integer isStatic) {
+  public void setUmlFeatureStatic(final AnnotableAndModifiable jElem, final Boolean isStatic) {
     mir.routines.javaToUmlmethod.SetUmlFeatureStaticRoutine effect = new mir.routines.javaToUmlmethod.SetUmlFeatureStaticRoutine(this.executionState, calledBy,
     	jElem, isStatic);
     effect.applyRoutine();

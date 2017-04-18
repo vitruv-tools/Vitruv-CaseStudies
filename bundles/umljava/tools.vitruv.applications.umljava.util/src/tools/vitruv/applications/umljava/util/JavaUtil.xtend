@@ -201,8 +201,37 @@ class JavaUtil {
         return namespaceClassifierReference
     }
     
-    def static Classifier getClassifierFromNameSpaceReference(NamespaceClassifierReference namespaceRef) {
-    	return namespaceRef.classifierReferences.head.target
+    def static Classifier getClassifierFromTypeReference(TypeReference typeRef) {
+        val type = getJavaTypeFromTypeReference(typeRef)
+        if (type instanceof Classifier) {
+            return type as Classifier
+        } else {
+            logger.warn("The TypeReference " + typeRef + " does not contain a Classifier. Returning null.")
+            return null
+        }
+    }
+    
+    def static dispatch Type getJavaTypeFromTypeReference(TypeReference typeRef) {
+        logger.warn(typeRef + " is neither a NamespaceClassifierReference nor a PrimitiveType. Returning null.")
+        return null
+    }
+    
+    def static dispatch Type getJavaTypeFromTypeReference(NamespaceClassifierReference namespaceRef) {
+        if (namespaceRef.classifierReferences.nullOrEmpty) {
+            throw new IllegalArgumentException(namespaceRef + " has no classifierReferences")
+        } else if (namespaceRef.classifierReferences.head.target === null) {
+            logger.warn("The first target of the classifierReference of " + namespaceRef + " is null")
+            return null
+        } else {
+            return namespaceRef.classifierReferences.head.target
+        }
+    }
+    def static dispatch Type getJavaTypeFromTypeReference(PrimitiveType primType) {
+        return primType
+    }
+    def static dispatch Type getJavaTypeFromTypeReference(java.lang.Void nullReference) {
+        logger.warn("Cannot get Type of a null-TypeReference. Returning null.")
+        return null
     }
     
     /**
@@ -306,7 +335,7 @@ class JavaUtil {
     	val innerTypeReference = createNamespaceReferenceFromClassifier(innerTypeClass)
     	val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
 		qualifiedTypeArgument.typeReference = innerTypeReference;
-		val collectionClassNamespaceReference = createNamespaceReferenceFromClassifier(getJavaClassImport(collectionQualifiedName).classifier)
+		val collectionClassNamespaceReference = createNamespaceReferenceFromClassifier(tools.vitruv.applications.umljava.util.JavaUtil.createJavaClassImport(collectionQualifiedName).classifier)
 		collectionClassNamespaceReference.classifierReferences.get(0).typeArguments += qualifiedTypeArgument;
 		return collectionClassNamespaceReference
     }
@@ -314,13 +343,13 @@ class JavaUtil {
     /**
      * Creates a Java-ClassifierImport from a qualified name
      */
-    def static ClassifierImport getJavaClassImport(String qualifiedName) {
+    def static ClassifierImport createJavaClassImport(String qualifiedName) {
 		val content = "package dummyPackage;\n " +
 				"import " + qualifiedName + ";\n" +
 				"public class DummyClass {}";
 		val dummyCU = createJavaRoot("DummyClass", content) as CompilationUnit;
 		val classifierImport = (dummyCU.getImports().get(0) as ClassifierImport)
-		EcoreUtil.copy(classifierImport);
+		//EcoreUtil.copy(classifierImport);
 		return classifierImport;
 		
 	}
