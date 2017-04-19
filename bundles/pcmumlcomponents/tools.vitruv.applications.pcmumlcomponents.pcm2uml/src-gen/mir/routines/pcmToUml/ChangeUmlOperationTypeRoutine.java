@@ -66,9 +66,6 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     	DataType.class,
     	(DataType _element) -> true, // correspondence precondition checker
     	null);
-    if (umlReturnType == null) {
-    	return;
-    }
     registerObjectUnderModification(umlReturnType);
     // val updatedElement userExecution.getElement1(pcmSignature, umlOperation, umlReturnType);
     userExecution.update0Element(pcmSignature, umlOperation, umlReturnType);

@@ -22,6 +22,7 @@ Require-Bundle: com.google.guava,
  tools.vitruv.extensions.dslsruntime.mapping,
  tools.vitruv.domains.pcm.util,
  org.eclipse.uml2.uml,
- org.palladiosimulator.pcm
+ org.palladiosimulator.pcm,
+ org.palladiosimulator.pcm.resources;bundle-version="4.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: vitruv.tools

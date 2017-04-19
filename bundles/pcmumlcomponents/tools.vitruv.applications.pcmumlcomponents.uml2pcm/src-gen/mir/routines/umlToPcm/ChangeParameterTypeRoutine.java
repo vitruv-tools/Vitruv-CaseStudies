@@ -4,8 +4,10 @@ import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.palladiosimulator.pcm.repository.DataType;
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,7 +28,14 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Parameter umlParameter, final org.palladiosimulator.pcm.repository.Parameter pcmParameter, final DataType pcmType) {
-      pcmParameter.setDataType__Parameter(pcmType);
+      if ((pcmType == null)) {
+        Type _type = umlParameter.getType();
+        if ((_type instanceof PrimitiveType)) {
+          pcmParameter.setDataType__Parameter(UmlToPcmUtil.getPcmPrimitiveType(umlParameter.getType().getName(), this.userInteracting));
+        }
+      } else {
+        pcmParameter.setDataType__Parameter(pcmType);
+      }
     }
     
     public EObject getCorrepondenceSourcePcmType(final Parameter umlParameter, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
@@ -66,9 +75,6 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	DataType.class,
     	(DataType _element) -> true, // correspondence precondition checker
     	null);
-    if (pcmType == null) {
-    	return;
-    }
     registerObjectUnderModification(pcmType);
     // val updatedElement userExecution.getElement1(umlParameter, pcmParameter, pcmType);
     userExecution.update0Element(umlParameter, pcmParameter, pcmType);

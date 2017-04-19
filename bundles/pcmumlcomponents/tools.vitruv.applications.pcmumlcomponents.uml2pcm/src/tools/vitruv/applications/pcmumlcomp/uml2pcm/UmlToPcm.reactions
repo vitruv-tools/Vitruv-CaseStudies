@@ -206,7 +206,6 @@ routine unsetCollectionInnerType(uml::DataType umlType) {
 reaction ChangedPropertyType {
 	after element uml::DataType replaced at uml::Property[type]
 	call {
-		// TODO: the respective match-clauses should handle correct application?
 		changePropertyType(affectedEObject, newValue)
 		changeCollectionType((affectedEObject.owner as DataType), newValue)
 	}
@@ -327,11 +326,17 @@ routine addInterfaceOperationParameter(uml::Operation umlOperation, uml::Paramet
 routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Parameter umlParameter) {
 	match {
 		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation
-		val pcmType = retrieve pcm::DataType corresponding to umlParameter.type
+		val pcmType = retrieve optional pcm::DataType corresponding to umlParameter.type
 	}
 	action {
 		update pcmSignature {
-			pcmSignature.returnType__OperationSignature = pcmType
+			if (pcmType === null) {
+				if (umlParameter.type instanceof PrimitiveType) {
+					pcmSignature.returnType__OperationSignature = UmlToPcmUtil.getPcmPrimitiveType(umlParameter.type.name, userInteracting)
+				}
+			} else {
+				pcmSignature.returnType__OperationSignature = pcmType
+			}
 		}
 	}
 }
@@ -356,11 +361,17 @@ reaction ChangedParameterType {
 routine changeParameterType(uml::Parameter umlParameter) {
 	match {
 		val pcmParameter = retrieve pcm::Parameter corresponding to umlParameter
-		val pcmType = retrieve pcm::DataType corresponding to umlParameter.type
+		val pcmType = retrieve optional pcm::DataType corresponding to umlParameter.type
 	}
 	action {
 		update pcmParameter {
-			pcmParameter.dataType__Parameter = pcmType
+			if (pcmType === null) {
+				if (umlParameter.type instanceof PrimitiveType) {
+					pcmParameter.dataType__Parameter = UmlToPcmUtil.getPcmPrimitiveType(umlParameter.type.name, userInteracting)
+				}
+			} else {
+				pcmParameter.dataType__Parameter = pcmType
+			}
 		}
 	}
 }

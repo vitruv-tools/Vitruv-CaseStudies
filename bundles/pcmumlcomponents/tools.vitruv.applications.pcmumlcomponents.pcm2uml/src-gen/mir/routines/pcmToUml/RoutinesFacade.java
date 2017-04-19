@@ -117,12 +117,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void unsetUmlOperationType(final OperationSignature pcmSignature) {
-    mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine effect = new mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine(this.executionState, calledBy,
-    	pcmSignature);
-    effect.applyRoutine();
-  }
-  
   public void createOperationSignatureParameter(final OperationSignature pcmSignature, final Parameter pcmParameter) {
     mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine effect = new mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine(this.executionState, calledBy,
     	pcmSignature, pcmParameter);

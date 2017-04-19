@@ -10,8 +10,8 @@ class DatatypeConstructionTest extends ModelConstructionTest {
 	def void dataTypeTest() {
 		logger.level = Level.ALL
 		val Resource resource = loadModel("model/datatype.uml")
-		testUserInteractor.addNextSelections(1)
-		saveModel(resource.rootElement)
+		userInteractor.addNextSelections(1)
+		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
 	}
 	
 }

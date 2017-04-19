@@ -8,7 +8,7 @@ class DatatypeConstructionTest extends ModelConstructionTest {
 	@Test
 	def void dataTypeTest() {
 		val Resource resource = loadModel("model/datatype.repository")
-		saveModel(resource.rootElement)
+		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
 	}
 	
 }

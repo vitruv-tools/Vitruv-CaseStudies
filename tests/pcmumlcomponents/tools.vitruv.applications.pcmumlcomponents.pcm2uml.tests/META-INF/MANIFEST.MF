@@ -9,6 +9,7 @@ Require-Bundle: tools.vitruv.framework.tests.util,
  tools.vitruv.framework.change.processing,
  org.junit,
  tools.vitruv.framework.vsum,
- tools.vitruv.extensions.constructionsimulation;bundle-version="0.2.0"
+ tools.vitruv.extensions.constructionsimulation;bundle-version="0.2.0",
+ org.palladiosimulator.pcm.resources;bundle-version="4.0.0"
 Bundle-Vendor: vitruv.tools
 

@@ -33,7 +33,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		innerType.name = "Integer"
 		rootElement.packagedElements += innerType
 		
-		testUserInteractor.addNextSelections(0)
+		userInteractor.addNextSelections(0)
 		val umlType = UMLFactory.eINSTANCE.createDataType()
 		umlType.name = "IntList"
 		rootElement.packagedElements += umlType
@@ -61,7 +61,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		dataType.name = typeName
 		val nrOwnedTypesBefore = rootElement.ownedTypes.length
 		rootElement.packagedElements += dataType
-		testUserInteractor.addNextSelections(1)
+		userInteractor.addNextSelections(1)
 		saveAndSynchronizeChanges(rootElement)
 		assertEquals(nrOwnedTypesBefore + 1, rootElement.ownedTypes.length)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[dataType]).flatten
@@ -76,7 +76,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = "t2"
 		rootElement.packagedElements += dataType
-		testUserInteractor.addNextSelections(1)
+		userInteractor.addNextSelections(1)
 		val propertyName = "p1"
 		val propertyType = UMLFactory.eINSTANCE.createPrimitiveType()
 		propertyType.name = "Integer"
@@ -99,7 +99,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = "t2"
 		rootElement.packagedElements += dataType
-		testUserInteractor.addNextSelections(0)
+		userInteractor.addNextSelections(0)
 		saveAndSynchronizeChanges(rootElement)
 		return dataType
 	}
@@ -108,7 +108,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = "t2"
 		rootElement.packagedElements += dataType
-		testUserInteractor.addNextSelections(1)
+		userInteractor.addNextSelections(1)
 		saveAndSynchronizeChanges(rootElement)
 		return dataType
 	}

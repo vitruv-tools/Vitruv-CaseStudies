@@ -4,6 +4,15 @@ import org.eclipse.uml2.uml.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.palladiosimulator.pcm.repository.ParameterModifier
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import java.util.HashMap
+import java.util.Map
+import org.palladiosimulator.pcm.repository.Repository
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 
 class PcmToUmlUtil {
 	
@@ -26,7 +35,8 @@ class PcmToUmlUtil {
 			case IN: return ParameterDirectionKind.IN_LITERAL
 			case INOUT: return ParameterDirectionKind.INOUT_LITERAL
 			case OUT: return ParameterDirectionKind.OUT_LITERAL
-			default: return ParameterDirectionKind.IN_LITERAL
+			case NONE: return ParameterDirectionKind.IN_LITERAL
+			default: throw new IllegalArgumentException("Invalid parameter modifier")
 		}
 	}
 	

@@ -5,9 +5,11 @@ import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -28,7 +30,14 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     }
     
     public void update0Element(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType) {
-      pcmSignature.setReturnType__OperationSignature(pcmType);
+      if ((pcmType == null)) {
+        Type _type = umlParameter.getType();
+        if ((_type instanceof PrimitiveType)) {
+          pcmSignature.setReturnType__OperationSignature(UmlToPcmUtil.getPcmPrimitiveType(umlParameter.getType().getName(), this.userInteracting));
+        }
+      } else {
+        pcmSignature.setReturnType__OperationSignature(pcmType);
+      }
     }
     
     public EObject getCorrepondenceSourcePcmType(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature) {
@@ -71,9 +80,6 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     	DataType.class,
     	(DataType _element) -> true, // correspondence precondition checker
     	null);
-    if (pcmType == null) {
-    	return;
-    }
     registerObjectUnderModification(pcmType);
     // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmType);
     userExecution.update0Element(umlOperation, umlParameter, pcmSignature, pcmType);

@@ -19,7 +19,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		umlComponent.name = name
 		rootElement.packagedElements += umlComponent
 		val componentMode = if (isComposable) 0 else 1
-		testUserInteractor.addNextSelections(componentMode)
+		userInteractor.addNextSelections(componentMode)
 		saveAndSynchronizeChanges(rootElement)
 		return umlComponent
 	}
@@ -77,14 +77,6 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		assertEquals(interfaceRealization.name, pcmRole.entityName)
 		val pcmInterface = getCorrespondingInterface(umlInterface)
 		assertEquals(pcmInterface, pcmRole.providedInterface__OperationProvidedRole)
-		
-		// TODO: check for message
-		/*
-		val interfaceRealization2 = UMLFactory.eINSTANCE.createInterfaceRealization()
-		interfaceRealization2.name = "ir2"
-		umlComponent.interfaceRealizations += interfaceRealization2
-		saveAndSynchronizeChanges(interfaceRealization2)
-		*/
 	}
 	
 	@Test

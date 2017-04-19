@@ -70,11 +70,7 @@ class ChangedOperationSignatureTypeReaction extends AbstractReactionRealization 
     }
     
     public void callRoutine1(final OperationSignature affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
-      if ((newValue == null)) {
-        _routinesFacade.unsetUmlOperationType(affectedEObject);
-      } else {
-        _routinesFacade.changeUmlOperationType(affectedEObject);
-      }
+      _routinesFacade.changeUmlOperationType(affectedEObject);
     }
   }
 }
