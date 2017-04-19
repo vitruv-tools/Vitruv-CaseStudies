@@ -67,7 +67,7 @@ import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.metamodel.Metamodel;
+import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.tests.VitruviusApplicationTest;
 import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
@@ -570,9 +570,9 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
     }
 
     @Override
-    protected List<Metamodel> createMetamodels() {
-    	List<Metamodel> result = new ArrayList<Metamodel>();
-    	for (Metamodel metamodel : PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels()) {
+    protected List<VitruvDomain> getVitruvDomains() {
+    	List<VitruvDomain> result = new ArrayList<VitruvDomain>();
+    	for (VitruvDomain metamodel : PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels()) {
     		result.add(metamodel);
     	}
         return result;

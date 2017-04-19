@@ -13,16 +13,13 @@ import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.j
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm.transformations.ClassMethodMappingTransformation
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm.transformations.TypeReferenceMappingTransformation
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.util.transformationexecutor.DefaultEObjectMappingTransformation
-import tools.vitruv.framework.util.datatypes.MetamodelPair
-import org.emftext.language.java.JavaPackage
-import org.palladiosimulator.pcm.PcmPackage
+import tools.vitruv.domains.java.JavaDomainProvider
+import tools.vitruv.domains.pcm.PcmDomainProvider
 
 class Java2PcmChangeProcessor extends TransformationExecutorChangeProcessor {
-	private val MetamodelPair metamodelPair;
 	
 	new(UserInteracting userInteracting) {
-		super(userInteracting);
-		this.metamodelPair = new MetamodelPair(JavaPackage.eNS_URI, PcmPackage.eNS_URI);
+		super(userInteracting, new JavaDomainProvider().domain, new PcmDomainProvider().domain)
 
 		addMapping(new PackageMappingTransformation())
 		addMapping(new CompilationUnitMappingTransformation())
@@ -36,10 +33,6 @@ class Java2PcmChangeProcessor extends TransformationExecutorChangeProcessor {
 		addMapping(new TypeReferenceMappingTransformation())
 		// Mapping for EObjects in order to avoid runtime exceptions
 		addMapping(new DefaultEObjectMappingTransformation());
-	}
-	
-	override getMetamodelPair() {
-		return metamodelPair;
 	}
 	
 }

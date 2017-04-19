@@ -1,4 +1,4 @@
-package mir.reactions.reactions5_1ToUML.pcmToUml;
+package mir.reactions.reactionsPcmToUml.pcmToUml;
 
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -22,7 +22,7 @@ class CreatedPcmRepositoryReaction extends AbstractReactionRealization {
     InsertRootEObject<Repository> typedChange = ((CreateAndInsertRoot<Repository>)change).getInsertChange();
     Repository newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmRepositoryReaction.ActionUserExecution userExecution = new mir.reactions.reactions5_1ToUML.pcmToUml.CreatedPcmRepositoryReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmRepositoryReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmRepositoryReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
   }
   

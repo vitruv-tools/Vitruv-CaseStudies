@@ -1,9 +1,10 @@
-package mir.reactions.reactionsUMLToJava.umlToJava;
+package mir.reactions.reactionsPcmToUml.pcmToUml;
 
-import mir.routines.umlToJava.RoutinesFacade;
+import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -14,18 +15,18 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class CreatedUmlClassReaction extends AbstractReactionRealization {
-  public CreatedUmlClassReaction(final UserInteracting userInteracting) {
+class CreatedPcmComponentReaction extends AbstractReactionRealization {
+  public CreatedPcmComponentReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Model, org.eclipse.uml2.uml.Class> typedChange = ((CreateAndInsertNonRoot<Model, org.eclipse.uml2.uml.Class>)change).getInsertChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<Repository, RepositoryComponent> typedChange = ((CreateAndInsertNonRoot<Repository, RepositoryComponent>)change).getInsertChange();
+    Repository affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    org.eclipse.uml2.uml.Class newValue = typedChange.getNewValue();
-    mir.routines.umlToJava.RoutinesFacade routinesFacade = new mir.routines.umlToJava.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUMLToJava.umlToJava.CreatedUmlClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUMLToJava.umlToJava.CreatedUmlClassReaction.ActionUserExecution(this.executionState, this);
+    RepositoryComponent newValue = typedChange.getNewValue();
+    mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmComponentReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -34,14 +35,14 @@ class CreatedUmlClassReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Model, org.eclipse.uml2.uml.Class> relevantChange = ((CreateAndInsertNonRoot<Model, org.eclipse.uml2.uml.Class>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    InsertEReference<Repository, RepositoryComponent> relevantChange = ((CreateAndInsertNonRoot<Repository, RepositoryComponent>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("components__Repository")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Class)) {
+    if (!(relevantChange.getNewValue() instanceof RepositoryComponent)) {
     	return false;
     }
     return true;
@@ -65,8 +66,8 @@ class CreatedUmlClassReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createJavaClass(newValue);
+    public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final RepositoryComponent newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createUmlComponent(newValue);
     }
   }
 }

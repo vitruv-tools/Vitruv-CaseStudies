@@ -19,6 +19,7 @@ Require-Bundle: com.google.guava,
  tools.vitruv.framework.userinteraction,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.extensions.dslsruntime.mapping,
+ tools.vitruv.domains.uml,
  tools.vitruv.domains.java.util,
  org.eclipse.uml2.uml,
  org.emftext.language.java

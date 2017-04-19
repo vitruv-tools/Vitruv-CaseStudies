@@ -3,9 +3,9 @@ package tools.vitruv.applications.pcmjava.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import tools.vitruv.domains.pcm.PcmDomain;
-import tools.vitruv.domains.java.JavaDomain;
-import tools.vitruv.framework.metamodel.Metamodel;
+import tools.vitruv.domains.pcm.PcmDomainProvider;
+import tools.vitruv.framework.domains.VitruvDomain;
+import tools.vitruv.domains.java.JavaDomainProvider;
 
 /**
  * Util class for the PCM Java case study
@@ -27,10 +27,10 @@ public class PcmJavaRepositoryCreationUtil {
      *
      * @return the PCMJava MetaRepository
      */
-    public static List<Metamodel> createPcmJamoppMetamodels() {
-    	List<Metamodel> result = new ArrayList<Metamodel>();
-        result.add(new PcmDomain().getMetamodel());
-        result.add(new JavaDomain().getMetamodel());
+    public static List<VitruvDomain> createPcmJamoppMetamodels() {
+    	List<VitruvDomain> result = new ArrayList<VitruvDomain>();
+        result.add(new PcmDomainProvider().getDomain());
+        result.add(new JavaDomainProvider().getDomain());
         return result;
     }
 

@@ -1,12 +1,16 @@
 package mir.reactions.reactionsJavaToPcm.ejbjava2pcm;
 
+import tools.vitruv.domains.java.JavaDomainProvider;
+import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
   public ExecutorJavaToPcm(final UserInteracting userInteracting) {
-    super(userInteracting, new tools.vitruv.framework.util.datatypes.MetamodelPair(org.emftext.language.java.impl.JavaPackageImpl.eNS_URI, org.palladiosimulator.pcm.impl.PcmPackageImpl.eNS_URI));
+    super(userInteracting,
+    	new JavaDomainProvider().getDomain(), 
+    	new PcmDomainProvider().getDomain());
   }
   
   protected void setup() {

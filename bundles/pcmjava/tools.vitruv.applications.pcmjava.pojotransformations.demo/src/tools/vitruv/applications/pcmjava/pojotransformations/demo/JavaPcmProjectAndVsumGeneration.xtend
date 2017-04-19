@@ -16,7 +16,6 @@ import org.eclipse.jdt.launching.LibraryLocation
 import org.eclipse.jdt.launching.IVMInstall
 import tools.vitruv.framework.tests.util.TestUtil
 import tools.vitruv.framework.tuid.TuidManager
-import tools.vitruv.framework.metamodel.Metamodel
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 import java.util.Collections
 import tools.vitruv.domains.pcm.PcmNamespace
@@ -30,6 +29,7 @@ import tools.vitruv.framework.monitorededitor.ProjectBuildUtils
 import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification
+import tools.vitruv.framework.domains.VitruvDomain
 
 class JavaPcmProjectAndVsumGeneration {
 	
@@ -49,12 +49,12 @@ class JavaPcmProjectAndVsumGeneration {
 	}
 	
 	private def InternalVirtualModel createVirtualModel() {
-		val metamodels = this.createMetamodels();
-		val virtualModel = TestUtil.createVirtualModel("testProjectVsum", metamodels, createChangePropagationSpecifications());
+		val metamodels = this.createVitruvDomains();
+		val virtualModel = TestUtil.createVirtualModel("testProjectVsum", false, metamodels, createChangePropagationSpecifications());
 		return virtualModel;
 	}
 	
-	protected def Iterable<Metamodel> createMetamodels() {
+	protected def Iterable<VitruvDomain> createVitruvDomains() {
 		return PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
 	}
 	

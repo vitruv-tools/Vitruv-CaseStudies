@@ -1,11 +1,11 @@
 package tool.vitruv.applications.umljava.uml2java
 
 import tools.vitruv.aplications.umljava.uml2java.UmlToJavaChangePropagationSpecification
-import tools.vitruv.domains.java.JavaDomain
-import tools.vitruv.domains.uml.UmlDomain
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Model
 import tools.vitruv.framework.tests.VitruviusApplicationTest
+import tools.vitruv.domains.uml.UmlDomainProvider
+import tools.vitruv.domains.java.JavaDomainProvider
 
 class AbstractUmlJavaTest extends VitruviusApplicationTest {
 	private static val MODEL_FILE_EXTENSION = "uml";
@@ -23,8 +23,8 @@ class AbstractUmlJavaTest extends VitruviusApplicationTest {
 		return #[new UmlToJavaChangePropagationSpecification()]; 
 	}
 	
-	override protected createMetamodels() {
-		return #[new UmlDomain().metamodel, new JavaDomain().metamodel];
+	override protected getVitruvDomains() {
+		return #[new UmlDomainProvider().domain, new JavaDomainProvider().domain];
 	}
 	
 	override protected setup() {
@@ -36,5 +36,5 @@ class AbstractUmlJavaTest extends VitruviusApplicationTest {
 	override protected cleanup() {
 		// Do nothing
 	}
-
+	
 }

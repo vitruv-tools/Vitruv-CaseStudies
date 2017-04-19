@@ -94,7 +94,7 @@ import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
 import tools.vitruv.framework.change.description.ConcreteChange;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.metamodel.Metamodel;
+import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.modelsynchronization.ChangePropagationListener;
@@ -127,7 +127,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	private int expectedNumberOfSyncs = 0;
 	
 	@Override
-	protected Iterable<Metamodel> createMetamodels() {
+	protected Iterable<VitruvDomain> getVitruvDomains() {
 		return PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
 	}
 	

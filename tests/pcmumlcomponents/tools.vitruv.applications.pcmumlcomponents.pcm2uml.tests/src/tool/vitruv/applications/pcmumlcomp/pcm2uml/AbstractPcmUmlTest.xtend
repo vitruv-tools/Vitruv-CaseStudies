@@ -1,11 +1,11 @@
 package tool.vitruv.applications.pcmumlcomp.pcm2uml
 
-import tools.vitruv.domains.uml.UmlDomain
 import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlComponentsChangePropagationSpecification
-import tools.vitruv.domains.pcm.PcmDomain
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.framework.tests.VitruviusApplicationTest
+import tools.vitruv.domains.uml.UmlDomainProvider
+import tools.vitruv.domains.pcm.PcmDomainProvider
 
 class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
@@ -23,8 +23,8 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 		return #[new PcmToUmlComponentsChangePropagationSpecification()]; 
 	}
 	
-	override protected createMetamodels() {
-		return #[new UmlDomain().metamodel, new PcmDomain().metamodel];
+	override protected getVitruvDomains() {
+		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain];
 	}
 	
 	override protected setup() {
