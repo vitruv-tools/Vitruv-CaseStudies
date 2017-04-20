@@ -10,8 +10,9 @@ import tools.vitruv.domains.uml.UmlDomain
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import org.eclipse.emf.common.util.URI
 import tools.vitruv.framework.metamodel.Metamodel
+import org.eclipse.emf.ecore.resource.Resource
 
-class ModelConstructionTest extends VitruviusEMFCasestudyTest {
+abstract class AbstractConstructionTest extends VitruviusEMFCasestudyTest {
 	
 	def protected void triggerSynchronization(List<VitruviusChange> changes) {
 		for (change : changes) {
@@ -23,16 +24,15 @@ class ModelConstructionTest extends VitruviusEMFCasestudyTest {
 		virtualModel.propagateChange(change)
 	}
 	
-	def protected void createAndSynchronizeModel(String path, EObject rootElement) {
+	def protected Resource createAndSynchronizeModel(String path, EObject rootElement) {
 		if (path.isNullOrEmpty || rootElement === null) {
 			throw new IllegalArgumentException()
 		}
 		val modelPath = currentTestProjectName + File.separator + path
-		val resource = resourceSet.createResource(
-			URI.createPlatformResourceURI(modelPath, true)
-		)
+		val resource = resourceSet.createResource(URI.createPlatformResourceURI(modelPath, true))
 		EcoreResourceBridge.saveResource(resource)
 		resource.contents.add(rootElement)
+		return resource
 	}
 		
 	override protected createChangePropagationSpecifications() {
@@ -46,8 +46,8 @@ class ModelConstructionTest extends VitruviusEMFCasestudyTest {
 	
 	//hack for handling of one singular UML model instead of two
 	override protected getCorrespondenceModel() {
-		val Metamodel umlMM = metamodels.iterator().next;
-		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()); 
+		val Metamodel umlMM = metamodels.iterator().next
+		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()) 
 	}
 	
 }

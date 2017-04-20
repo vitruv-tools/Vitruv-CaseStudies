@@ -32,7 +32,7 @@ abstract class AbstractClass2CompTest extends VitruviusChangePropagationTest {
 	}
 		
 	override protected createChangePropagationSpecifications() {
-		return #[new UmlClass2UmlCompChangePropagation()];
+		return #[new UmlClass2UmlCompChangePropagation()]
 	}
 	
 	override protected initializeTestModel() {
@@ -43,8 +43,8 @@ abstract class AbstractClass2CompTest extends VitruviusChangePropagationTest {
 	
 	//hack for handling of one singular UML model instead of two
 	override protected getCorrespondenceModel() {
-		val Metamodel umlMM = metamodels.iterator().next;
-		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()); 
+		val Metamodel umlMM = metamodels.iterator().next
+		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()) 
 	}
 	
 	//saveAndSynchronize & commit all pending userInteractions

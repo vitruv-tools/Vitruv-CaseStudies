@@ -19,12 +19,16 @@ public class RenameClassRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
+    public EObject getElement1(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage) {
       return umlClass;
     }
     
-    public void update0Element(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
+    public void update0Element(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage) {
       umlClass.setName(umlComp.getName());
+    }
+    
+    public EObject getCorrepondenceSourceClassPackage(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
+      return umlComp;
     }
     
     public EObject getCorrepondenceSourceUmlClass(final Component umlComp) {
@@ -32,7 +36,7 @@ public class RenameClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public boolean getCorrespondingModelElementsPreconditionUmlClass(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
-      boolean _equals = umlClass.getName().equals(umlComp.getPackage().getName());
+      boolean _equals = umlClass.getName().equals(umlComp.getName());
       return _equals;
     }
   }
@@ -59,8 +63,14 @@ public class RenameClassRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     registerObjectUnderModification(umlClass);
-    // val updatedElement userExecution.getElement1(umlComp, umlClass);
-    userExecution.update0Element(umlComp, umlClass);
+    org.eclipse.uml2.uml.Package classPackage = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceClassPackage(umlComp, umlClass), // correspondence source supplier
+    	org.eclipse.uml2.uml.Package.class,
+    	(org.eclipse.uml2.uml.Package _element) -> true, // correspondence precondition checker
+    	null);
+    registerObjectUnderModification(classPackage);
+    // val updatedElement userExecution.getElement1(umlComp, umlClass, classPackage);
+    userExecution.update0Element(umlComp, umlClass, classPackage);
     
     postprocessElements();
   }

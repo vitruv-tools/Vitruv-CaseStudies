@@ -50,8 +50,7 @@ public class CreateInterfaceRealizationRoutine extends AbstractRepairRoutineReal
     }
     
     public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface) {
-      org.eclipse.uml2.uml.Package _package = umlClass.getPackage();
-      return _package;
+      return umlClass;
     }
   }
   

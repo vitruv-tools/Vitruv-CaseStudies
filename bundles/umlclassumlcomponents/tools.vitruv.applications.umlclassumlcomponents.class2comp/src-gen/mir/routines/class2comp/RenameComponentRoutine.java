@@ -19,21 +19,21 @@ public class RenameComponentRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Component component) {
-      return component;
-    }
-    
-    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Component component) {
-      component.setName(umlClass.getName());
-    }
-    
-    public EObject getCorrepondenceSourceComponent(final org.eclipse.uml2.uml.Class umlClass) {
-      return umlClass;
-    }
-    
-    public boolean getCorrespondingModelElementsPreconditionComponent(final org.eclipse.uml2.uml.Class umlClass, final Component component) {
-      boolean _equals = component.getName().equals(umlClass.getName());
+    public boolean getCorrespondingModelElementsPreconditionUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final Component umlComponent) {
+      boolean _equals = umlComponent.getName().equals(umlClass.getName());
       return _equals;
+    }
+    
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Component umlComponent) {
+      return umlComponent;
+    }
+    
+    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Component umlComponent) {
+      umlComponent.setName(umlClass.getName());
+    }
+    
+    public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass) {
+      return umlClass;
     }
   }
   
@@ -50,17 +50,17 @@ public class RenameComponentRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine RenameComponentRoutine with input:");
     getLogger().debug("   Class: " + this.umlClass);
     
-    Component component = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceComponent(umlClass), // correspondence source supplier
+    Component umlComponent = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlComponent(umlClass), // correspondence source supplier
     	Component.class,
-    	(Component _element) -> userExecution.getCorrespondingModelElementsPreconditionComponent(umlClass, _element), // correspondence precondition checker
+    	(Component _element) -> userExecution.getCorrespondingModelElementsPreconditionUmlComponent(umlClass, _element), // correspondence precondition checker
     	null);
-    if (component == null) {
+    if (umlComponent == null) {
     	return;
     }
-    registerObjectUnderModification(component);
-    // val updatedElement userExecution.getElement1(umlClass, component);
-    userExecution.update0Element(umlClass, component);
+    registerObjectUnderModification(umlComponent);
+    // val updatedElement userExecution.getElement1(umlClass, umlComponent);
+    userExecution.update0Element(umlClass, umlComponent);
     
     postprocessElements();
   }

@@ -20,4 +20,4 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.framework.modelsynchronization,
  tools.vitruv.extensions.constructionsimulation,
  tools.vitruv.extensions.constructionsimulation.util
-Export-Package: tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.Strategy
+Export-Package: tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.strategy

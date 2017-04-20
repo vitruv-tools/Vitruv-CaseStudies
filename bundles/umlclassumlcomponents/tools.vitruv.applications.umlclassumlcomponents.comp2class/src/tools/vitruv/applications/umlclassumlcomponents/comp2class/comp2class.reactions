@@ -66,13 +66,21 @@ routine createUmlClass(umlcomp::Component umlComponent) {
 		val umlModel = retrieve umlclass::Model corresponding to umlComponent.package
 	}
 	action {
+		//TODO fix package creation, still exceptions
+		//val classPackage = create umlclass::Package and initialize {
+		//	classPackage.name = umlComponent.name 
+		//}
 		val umlClass = create umlclass::Class and initialize {
 			umlClass.name = umlComponent.name
+			//umlClass.package = classPackage
 		}
 		update umlModel {
 			umlModel.packagedElements += umlClass
+			//umlModel.allOwningPackages += classPackage //TODO check this, right container?
 		}
+		//add correspondence between umlComponent and classPackage
 		add correspondence between umlComponent and umlClass
+		
 	}
 }
 
@@ -87,12 +95,17 @@ reaction RenameComponent {
 routine renameClass(umlcomp::Component umlComp) { 
 	match {
 		val umlClass = retrieve umlclass::Class corresponding to umlComp
-			with umlClass.name.equals(umlComp.package.name)
+			with umlClass.name.equals(umlComp.name)
+		val classPackage = retrieve optional umlclass::Package corresponding to umlComp
 	}
 	action { 
 		update umlClass {
 			umlClass.name = umlComp.name
 		}
+		//TODO: Nullpoiter Exception when not available, optional doesn't fix?
+		//update classPackage {
+		//	classPackage.name = umlComp.name
+		//}
 	}
 }
 
@@ -121,7 +134,8 @@ reaction RenamedElement {
 
 routine renameElement(umlclass::NamedElement compElement) {
 	match {
-		val classElement = retrieve umlclass::NamedElement corresponding to compElement
+		val classElement = retrieve umlclass::NamedElement corresponding to compElement tagged with ""
+		//only rename generically for untagged elements
 	}
 	action {
 		update classElement {

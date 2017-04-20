@@ -25,7 +25,7 @@ class AbstractComp2ClassTest extends VitruviusChangePropagationTest {
 	}
 		
 	override protected createChangePropagationSpecifications() {
-		return #[new UmlComp2UmlClassChangePropagation()];
+		return #[new UmlComp2UmlClassChangePropagation()]
 	}
 	
 	override protected initializeTestModel() {
@@ -36,8 +36,8 @@ class AbstractComp2ClassTest extends VitruviusChangePropagationTest {
 	
 	override protected getCorrespondenceModel(){
 		//hack for UML
-		val Metamodel umlMM = metamodels.iterator().next;
-		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()); 
+		val Metamodel umlMM = metamodels.iterator().next
+		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()) 
 	}
 
 	

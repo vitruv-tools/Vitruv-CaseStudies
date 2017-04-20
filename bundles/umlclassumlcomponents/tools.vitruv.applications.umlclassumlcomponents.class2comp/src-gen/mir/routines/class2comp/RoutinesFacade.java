@@ -1,5 +1,6 @@
 package mir.routines.class2comp;
 
+import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
@@ -104,6 +105,18 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void changePropertyType(final Property classProperty, final DataType classType) {
     mir.routines.class2comp.ChangePropertyTypeRoutine effect = new mir.routines.class2comp.ChangePropertyTypeRoutine(this.executionState, calledBy,
     	classProperty, classType);
+    effect.applyRoutine();
+  }
+  
+  public void createdPackage(final org.eclipse.uml2.uml.Package classPackage) {
+    mir.routines.class2comp.CreatedPackageRoutine effect = new mir.routines.class2comp.CreatedPackageRoutine(this.executionState, calledBy,
+    	classPackage);
+    effect.applyRoutine();
+  }
+  
+  public void assignNewPackage(final org.eclipse.uml2.uml.Package classPackage, final Component umlComponent) {
+    mir.routines.class2comp.AssignNewPackageRoutine effect = new mir.routines.class2comp.AssignNewPackageRoutine(this.executionState, calledBy,
+    	classPackage, umlComponent);
     effect.applyRoutine();
   }
   

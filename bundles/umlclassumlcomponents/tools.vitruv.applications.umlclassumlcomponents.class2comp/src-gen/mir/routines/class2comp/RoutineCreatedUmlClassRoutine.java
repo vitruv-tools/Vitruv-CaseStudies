@@ -21,7 +21,7 @@ public class RoutineCreatedUmlClassRoutine extends AbstractRepairRoutineRealizat
     
     public boolean checkMatcherPrecondition1(final org.eclipse.uml2.uml.Class umlClass) {
       String _name = umlClass.getName();
-      String _plus = ("Create corresponding component for created class \'" + _name);
+      String _plus = ("Create corresponding Component or DataType for created class \'" + _name);
       final String msg = (_plus + "\'?");
       return class2compUtil.modalTextYesNoUserInteracting(this.userInteracting, msg);
     }

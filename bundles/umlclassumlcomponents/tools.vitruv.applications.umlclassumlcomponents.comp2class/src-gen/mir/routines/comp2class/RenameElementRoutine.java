@@ -27,6 +27,10 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
       classElement.setName(compElement.getName());
     }
     
+    public String getRetrieveTag1(final NamedElement compElement) {
+      return "";
+    }
+    
     public EObject getCorrepondenceSourceClassElement(final NamedElement compElement) {
       return compElement;
     }
@@ -49,7 +53,7 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceClassElement(compElement), // correspondence source supplier
     	NamedElement.class,
     	(NamedElement _element) -> true, // correspondence precondition checker
-    	null);
+    	userExecution.getRetrieveTag1(compElement));
     if (classElement == null) {
     	return;
     }

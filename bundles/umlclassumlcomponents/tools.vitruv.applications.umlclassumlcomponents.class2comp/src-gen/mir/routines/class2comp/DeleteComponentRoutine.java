@@ -19,16 +19,16 @@ public class DeleteComponentRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag, final Component component) {
-      return component;
-    }
-    
-    public EObject getCorrepondenceSourceComponent(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag) {
-      return umlClass;
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag, final Component umlComponent) {
+      return umlComponent;
     }
     
     public String getRetrieveTag1(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag) {
       return expectedTag;
+    }
+    
+    public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag) {
+      return umlClass;
     }
   }
   
@@ -51,16 +51,16 @@ public class DeleteComponentRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   String: " + this.packageName);
     getLogger().debug("   String: " + this.expectedTag);
     
-    Component component = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceComponent(umlClass, packageName, expectedTag), // correspondence source supplier
+    Component umlComponent = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlComponent(umlClass, packageName, expectedTag), // correspondence source supplier
     	Component.class,
     	(Component _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(umlClass, packageName, expectedTag));
-    if (component == null) {
+    if (umlComponent == null) {
     	return;
     }
-    registerObjectUnderModification(component);
-    deleteObject(userExecution.getElement1(umlClass, packageName, expectedTag, component));
+    registerObjectUnderModification(umlComponent);
+    deleteObject(userExecution.getElement1(umlClass, packageName, expectedTag, umlComponent));
     
     postprocessElements();
   }

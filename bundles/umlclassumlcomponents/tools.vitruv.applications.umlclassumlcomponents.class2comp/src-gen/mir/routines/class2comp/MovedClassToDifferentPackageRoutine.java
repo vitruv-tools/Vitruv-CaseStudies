@@ -48,6 +48,10 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
     public EObject getCorrepondenceSourceUmlCompNew(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Model compModel, final Component umlCompOld) {
       return newPackage;
     }
+    
+    public EObject getCorrepondenceSourcenull(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Model compModel, final Component umlCompOld, final Component umlCompNew) {
+      return umlClass;
+    }
   }
   
   public MovedClassToDifferentPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage) {
@@ -96,6 +100,13 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
     	return;
     }
     registerObjectUnderModification(umlCompNew);
+    if (getCorrespondingElement(
+    	userExecution.getCorrepondenceSourcenull(umlClass, oldPackage, newPackage, compModel, umlCompOld, umlCompNew), // correspondence source supplier
+    	Component.class,
+    	(Component _element) -> true, // correspondence precondition checker
+    	null) != null) {
+    	return;
+    }
     removeCorrespondenceBetween(userExecution.getElement1(umlClass, oldPackage, newPackage, compModel, umlCompOld, umlCompNew), userExecution.getElement2(umlClass, oldPackage, newPackage, compModel, umlCompOld, umlCompNew));
     
     addCorrespondenceBetween(userExecution.getElement3(umlClass, oldPackage, newPackage, compModel, umlCompOld, umlCompNew), userExecution.getElement4(umlClass, oldPackage, newPackage, compModel, umlCompOld, umlCompNew), "");

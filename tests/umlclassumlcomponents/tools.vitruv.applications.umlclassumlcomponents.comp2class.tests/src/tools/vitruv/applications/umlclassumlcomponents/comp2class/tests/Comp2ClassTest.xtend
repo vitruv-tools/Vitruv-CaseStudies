@@ -58,6 +58,7 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		saveAndSynchronizeChanges(umlComp)
 		//check if rename happened in class:
 		checkClass(umlComp, "New")
+		//TODO check if rename happened in package:
     }
     
 	@Test
@@ -97,7 +98,7 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 	
     private def org.eclipse.uml2.uml.DataType createDataType(String name, int createClass) {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
-		this.testUserInteractor.addNextSelections(createClass); //Decide to create corresponding class
+		this.testUserInteractor.addNextSelections(createClass) //Decide to create corresponding class
 		dataType.name = name
 		rootElement.packagedElements += dataType
 		return dataType
