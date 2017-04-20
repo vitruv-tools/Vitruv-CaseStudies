@@ -1,12 +1,16 @@
 package mir.reactions.reactionsUmlToPcm.umlToPcm;
 
+import tools.vitruv.domains.pcm.PcmDomainProvider;
+import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorUmlToPcm extends AbstractReactionsExecutor {
   public ExecutorUmlToPcm(final UserInteracting userInteracting) {
-    super(userInteracting, new tools.vitruv.framework.util.datatypes.MetamodelPair(org.eclipse.uml2.uml.internal.impl.UMLPackageImpl.eNS_URI, org.palladiosimulator.pcm.impl.PcmPackageImpl.eNS_URI));
+    super(userInteracting,
+    	new UmlDomainProvider().getDomain(), 
+    	new PcmDomainProvider().getDomain());
   }
   
   protected void setup() {

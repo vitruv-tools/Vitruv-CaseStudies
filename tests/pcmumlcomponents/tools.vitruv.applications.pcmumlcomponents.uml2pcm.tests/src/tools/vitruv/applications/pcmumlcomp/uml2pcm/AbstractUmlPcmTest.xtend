@@ -1,12 +1,13 @@
 package tools.vitruv.applications.pcmumlcomp.uml2pcm
 
-import org.eclipse.uml2.uml.Model
-import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.domains.pcm.PcmDomain
-import tools.vitruv.domains.uml.UmlDomain
-import tools.vitruv.framework.tests.VitruviusApplicationTest
 import org.eclipse.emf.common.util.URI
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.resource.UMLResource
+import tools.vitruv.domains.pcm.PcmDomainProvider
+import tools.vitruv.domains.uml.UmlDomainProvider
+import tools.vitruv.framework.tests.VitruviusApplicationTest
 
 class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml";
@@ -24,8 +25,8 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 		return #[new UmlToPcmComponentsChangePropagationSpecification()]; 
 	}
 	
-	override protected createMetamodels() {
-		return #[new UmlDomain().metamodel, new PcmDomain().metamodel];
+	override protected getVitruvDomains() {
+		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain];
 	}
 	
 	protected def initializeTestModel() {
@@ -46,7 +47,7 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 		resourceSet.createResource(URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI))
 		val primitiveTypesUri = URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI).appendFragment("_0")
 		val primitiveTypes = resourceSet.getEObject(primitiveTypesUri, true)
-		val package = primitiveTypes as org.eclipse.uml2.uml.Package
+		val package = primitiveTypes as Package
 		//rootElement.createPackageImport(package)
 		//saveAndSynchronizeChanges(rootElement)
 		return package

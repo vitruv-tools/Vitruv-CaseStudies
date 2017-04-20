@@ -7,8 +7,8 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
 
 reactions: PcmToUml
-in reaction to changes in pcm
-execute actions in uml
+in reaction to changes in PCM
+execute actions in UML
 
 
 // ###################################################

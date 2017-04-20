@@ -3,8 +3,8 @@ package tools.vitruv.applications.pcmumlcomp.pcm2uml
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.domains.pcm.PcmDomain
-import tools.vitruv.domains.uml.UmlDomain
+import tools.vitruv.domains.pcm.PcmDomainProvider
+import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
 class AbstractPcmUmlTest extends VitruviusApplicationTest {
@@ -23,8 +23,8 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 		return #[new PcmToUmlComponentsChangePropagationSpecification()]; 
 	}
 	
-	override protected createMetamodels() {
-		return #[new UmlDomain().metamodel, new PcmDomain().metamodel];
+	override protected getVitruvDomains() {
+		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain];
 	}
 	
 	protected def initializeTestModel() {

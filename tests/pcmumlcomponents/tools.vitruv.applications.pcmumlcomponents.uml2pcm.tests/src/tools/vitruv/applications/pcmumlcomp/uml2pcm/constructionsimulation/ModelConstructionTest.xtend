@@ -6,8 +6,8 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.uml2.uml.Model
 import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmComponentsChangePropagationSpecification
-import tools.vitruv.domains.pcm.PcmDomain
-import tools.vitruv.domains.uml.UmlDomain
+import tools.vitruv.domains.pcm.PcmDomainProvider
+import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
 class ModelConstructionTest extends VitruviusApplicationTest {
@@ -20,8 +20,8 @@ class ModelConstructionTest extends VitruviusApplicationTest {
 		return #[new UmlToPcmComponentsChangePropagationSpecification()]
 	}
 	
-	override protected createMetamodels() {
-		return #[new UmlDomain().metamodel, new PcmDomain().metamodel]
+	override protected getVitruvDomains() {
+		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain];
 	}
 	
 	protected def Model getRootElement(Resource resource) {
