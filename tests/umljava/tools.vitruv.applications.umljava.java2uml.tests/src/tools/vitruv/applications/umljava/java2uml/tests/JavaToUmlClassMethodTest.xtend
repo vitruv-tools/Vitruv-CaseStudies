@@ -60,6 +60,21 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     def void testCreateSimpleMethod() {
         val meth = createSimpleJavaOperation(STANDARD_OPERATION_NAME)
         jClass.members += meth
+        val jAttr = createJavaAttribute("atta", createNamespaceReferenceFromClassifier(typeClass), JavaVisibility.PUBLIC, false, false)
+        jClass.members += jAttr
+        
+        val constr2 = jClass.createJavaConstructorAndAddToClass
+        val param2 = createJavaParameter("jojojo", org.emftext.language.java.types.TypesFactory.eINSTANCE.createBoolean)
+        constr2.parameters += param2
+        
+        
+        val typeAttr = createJavaAttribute("tuitui", createNamespaceReferenceFromClassifier(typeClass), JavaVisibility.PUBLIC, false, false)
+        typeClass.members += typeAttr
+        val constr = typeClass.createJavaConstructorAndAddToClass
+        val param = createJavaParameter("paramname", org.emftext.language.java.types.TypesFactory.eINSTANCE.createBoolean)
+        constr.parameters += param
+        createNewForFieldInConstructor(jAttr)
+        saveAndSynchronizeChanges(typeClass)
         saveAndSynchronizeChanges(jClass)
         
         val uOperation = getCorrespondingMethod(meth)

@@ -5,13 +5,15 @@ import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import org.emftext.language.java.modifiers.ModifiersFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
 
 reactions: UmlToJavaAttribute
-in reaction to changes in uml
-execute actions in java
+in reaction to changes in UML
+execute actions in Java
 
 
 
@@ -86,3 +88,42 @@ routine changeJavaAttributeType(uml::Property uAttr, uml::Type uType) {
     }
 }
 
+reaction l2 {
+    after attribute replaced at uml::LiteralInteger[value]
+    call {
+        handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
+    }
+}
+
+reaction u2 {
+    after attribute replaced at uml::LiteralUnlimitedNatural[value]
+    call handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
+}
+
+routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
+    match {
+        val jAttribute = retrieve java::Field corresponding to uAttribute
+        val jType = retrieve java::Class corresponding to uAttribute.type
+    }
+    action {
+        update jAttribute {
+            if (uAttribute.lower == 0) {
+                if (uAttribute.upper == 1) {
+                    jAttribute.typeReference = createTypeReference(uAttribute.type, jType)
+                } else if (uAttribute.upper == LiteralUnlimitedNatural.UNLIMITED) {
+                    jAttribute.typeReference = createCollectiontypeReference(letUserSelectCollectionTypeName(userInteracting), jType)
+                } else if (uAttribute.upper > 1) {
+                    jAttribute.typeReference = createCollectiontypeReference(letUserSelectCollectionTypeName(userInteracting), jType)
+                }
+            } else if (uAttribute.lower == 1) {
+                if (uAttribute.upper == 1) {
+                    jAttribute.typeReference = createTypeReference(uAttribute.type, jType)
+                    createNewForFieldInConstructor(jAttribute)
+                    (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += createJavaGetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
+                    val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), jAttribute.typeReference)
+                    (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += createJavaSetterForAttribute(jAttribute, JavaVisibility.PUBLIC, param)
+                }
+            }
+        }
+    }
+}

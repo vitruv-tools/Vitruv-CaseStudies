@@ -1,12 +1,16 @@
 package mir.reactions.reactionsJavaToUml.javaToUmlAttribute;
 
+import tools.vitruv.domains.java.JavaDomainProvider;
+import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorJavaToUml extends AbstractReactionsExecutor {
   public ExecutorJavaToUml(final UserInteracting userInteracting) {
-    super(userInteracting, new tools.vitruv.framework.util.datatypes.MetamodelPair(org.emftext.language.java.impl.JavaPackageImpl.eNS_URI, org.eclipse.uml2.uml.internal.impl.UMLPackageImpl.eNS_URI));
+    super(userInteracting,
+    	new JavaDomainProvider().getDomain(), 
+    	new UmlDomainProvider().getDomain());
   }
   
   protected void setup() {

@@ -1,12 +1,16 @@
 package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 
+import tools.vitruv.domains.java.JavaDomainProvider;
+import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorUmlToJava extends AbstractReactionsExecutor {
   public ExecutorUmlToJava(final UserInteracting userInteracting) {
-    super(userInteracting, new tools.vitruv.framework.util.datatypes.MetamodelPair(org.eclipse.uml2.uml.internal.impl.UMLPackageImpl.eNS_URI, org.emftext.language.java.impl.JavaPackageImpl.eNS_URI));
+    super(userInteracting,
+    	new UmlDomainProvider().getDomain(), 
+    	new JavaDomainProvider().getDomain());
   }
   
   protected void setup() {
@@ -22,7 +26,5 @@ public class ExecutorUmlToJava extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlFeatureMadeStaticReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlFeatureMadeStaticReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeAbstractReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeAbstractReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodCreatedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlUpperMuliplicityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlUpperMuliplicityChangedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlLowerMuliplicityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlLowerMuliplicityChangedReaction(userInteracting));
   }
 }

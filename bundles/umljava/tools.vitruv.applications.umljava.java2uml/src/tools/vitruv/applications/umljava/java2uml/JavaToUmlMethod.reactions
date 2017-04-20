@@ -4,9 +4,9 @@ import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
 
-reactions: JavaToUmlmethod
-in reaction to changes in java
-execute actions in uml
+reactions: JavaToUmlMethod
+in reaction to changes in Java
+execute actions in UML
 
 reaction JavaClassMethodCreated {
     after element java::ClassMethod created and inserted in java::Class[members]

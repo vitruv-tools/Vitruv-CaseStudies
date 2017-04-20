@@ -105,8 +105,10 @@ class UmlTestUtil {
     }
         
     def static void assertUmlParameterListEquals(List<Parameter> expectedList, List<Parameter> actualList) {
-        if (expectedList.filter[direction != ParameterDirectionKind.RETURN_LITERAL].nullOrEmpty) {
-            assertTrue(actualList.filter[direction != ParameterDirectionKind.RETURN_LITERAL].nullOrEmpty)
+        if (expectedList.nullOrEmpty) {
+            if (!actualList.nullOrEmpty) {
+                assertTrue(actualList.filter[direction != ParameterDirectionKind.RETURN_LITERAL].nullOrEmpty)
+            }
         } else {
             assertEquals(expectedList.size, expectedList.size)
             for (param : expectedList) {

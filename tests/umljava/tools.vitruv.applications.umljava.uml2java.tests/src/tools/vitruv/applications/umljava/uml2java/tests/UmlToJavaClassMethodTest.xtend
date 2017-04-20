@@ -33,7 +33,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     private static var org.eclipse.uml2.uml.Class typeClass
     private static var org.eclipse.uml2.uml.Parameter uParam
     private static var org.eclipse.uml2.uml.PrimitiveType pType
-    private static var Operation uOp
+    private static var Operation uOperation
     
     @Before
     def void before() {
@@ -41,8 +41,8 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
         pType = createUmlPrimitiveTypeAndAddToModel(rootElement, PRIMITIVE_TYPE)
         uParam = createUmlParameter(PARAMETER_NAME, pType)
-        uOp = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
-        uClass.ownedOperations += uOp;
+        uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
+        uClass.ownedOperations += uOperation;
         rootElement.packagedElements += uClass;
         rootElement.packagedElements += typeClass;
         rootElement.packagedElements += pType;
@@ -51,8 +51,8 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     
     //@After
     def void after() {
-        if (uOp != null) {
-            uOp.destroy;
+        if (uOperation != null) {
+            uOperation.destroy;
         }
         if (uClass != null) {
             uClass.destroy;
@@ -83,30 +83,30 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     
     @Test
     def void testChangeReturnType() {
-        uOp.type = typeClass;
-        saveAndSynchronizeChanges(uOp);
+        uOperation.type = typeClass;
+        saveAndSynchronizeChanges(uOperation);
         
-        val jMethod = getCorrespondingClassMethod(uOp)
+        val jMethod = getCorrespondingClassMethod(uOperation)
         val jTypeClass = getCorrespondingClass(typeClass)
         assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertMethodEquals(uOp, jMethod)
+        assertMethodEquals(uOperation, jMethod)
     }
     
     @Test
     def testRenameMethod() {
-        uOp.name = OPERATION_RENAME;
-        saveAndSynchronizeChanges(uOp);
+        uOperation.name = OPERATION_RENAME;
+        saveAndSynchronizeChanges(uOperation);
         
-        val jMethod = getCorrespondingClassMethod(uOp)
+        val jMethod = getCorrespondingClassMethod(uOperation)
         val jClass = getCorrespondingClass(uClass)
         assertEquals(OPERATION_RENAME, jMethod.name)
-        assertMethodEquals(uOp, jMethod)
+        assertMethodEquals(uOperation, jMethod)
         assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
     }
     
     @Test
     def testDeleteMethod() {
-        uOp.destroy;
+        uOperation.destroy;
         saveAndSynchronizeChanges(uClass);
         
         val jClass = getCorrespondingClass(uClass)
@@ -115,47 +115,47 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     
     @Test
     def testStaticMethod() {
-        uOp.isStatic = true;
-        saveAndSynchronizeChanges(uOp);
+        uOperation.isStatic = true;
+        saveAndSynchronizeChanges(uOperation);
         
-        val jMethod = getCorrespondingClassMethod(uOp)
+        val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableStatic(jMethod, true)
-        assertMethodEquals(uOp, jMethod)
+        assertMethodEquals(uOperation, jMethod)
     }
     
     @Test
     def testAbstractMethod() {
-        uOp.isAbstract = true;
-        saveAndSynchronizeChanges(uOp);
+        uOperation.isAbstract = true;
+        saveAndSynchronizeChanges(uOperation);
         
-        val jMethod = getCorrespondingClassMethod(uOp)
+        val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableAbstract(jMethod, true)
-        assertMethodEquals(uOp, jMethod)
+        assertMethodEquals(uOperation, jMethod)
     }
     
     @Test
     def testMethodVisibility() {
-        uOp.visibility = VisibilityKind.PRIVATE_LITERAL;
-        saveAndSynchronizeChanges(uOp);
+        uOperation.visibility = VisibilityKind.PRIVATE_LITERAL;
+        saveAndSynchronizeChanges(uOperation);
         
-        var jMethod = getCorrespondingClassMethod(uOp)
+        var jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PRIVATE)
-        assertMethodEquals(uOp, jMethod)
+        assertMethodEquals(uOperation, jMethod)
         
-        uOp.visibility = VisibilityKind.PROTECTED_LITERAL;
-        saveAndSynchronizeChanges(uOp);
+        uOperation.visibility = VisibilityKind.PROTECTED_LITERAL;
+        saveAndSynchronizeChanges(uOperation);
         
-        jMethod = getCorrespondingClassMethod(uOp)
+        jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
-        assertMethodEquals(uOp, jMethod)
+        assertMethodEquals(uOperation, jMethod)
     }
 
     
     @Test
     def testCreateParameter() {
         val uParam = createUmlParameter(STANDARD_PARAMETER_NAME, typeClass)
-        uOp.ownedParameters += uParam;
-        saveAndSynchronizeChanges(uOp);
+        uOperation.ownedParameters += uParam;
+        saveAndSynchronizeChanges(uOperation);
 
         val jParam = getCorrespondingParameter(uParam)
         val jTypeClass = getCorrespondingClass(typeClass)
@@ -169,7 +169,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     	saveAndSynchronizeChanges(uParam)
     	
     	val jParam = getCorrespondingParameter(uParam)
-    	val jMethod = getCorrespondingClassMethod(uOp)
+    	val jMethod = getCorrespondingClassMethod(uOperation)
     	assertEquals(PARAMETER_RENAME, jParam.name)
     	assertJavaMethodHasUniqueParameter(jMethod, PARAMETER_RENAME, TypesFactory.eINSTANCE.createInt)
     	assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
@@ -180,7 +180,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     	uParam.destroy
     	saveAndSynchronizeChanges(rootElement)
     	
-    	val jMethod = getCorrespondingClassMethod(uOp)
+    	val jMethod = getCorrespondingClassMethod(uOperation)
     	assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
     }
     

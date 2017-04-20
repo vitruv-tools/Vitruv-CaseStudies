@@ -42,6 +42,26 @@ import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.containers.Package
 import org.emftext.language.java.members.EnumConstant
 import java.util.Collections
+import org.emftext.language.java.members.Field
+import org.emftext.language.java.statements.StatementsFactory
+import org.emftext.language.java.expressions.ExpressionsFactory
+import org.emftext.language.java.references.ReferencesFactory
+import org.emftext.language.java.literals.LiteralsFactory
+import org.emftext.language.java.operators.OperatorsFactory
+import org.emftext.language.java.instantiations.InstantiationsFactory
+import org.emftext.language.java.references.SelfReference
+import org.emftext.language.java.instantiations.NewConstructorCall
+import org.emftext.language.java.expressions.AssignmentExpressionChild
+import org.emftext.language.java.expressions.AssignmentExpression
+import org.emftext.language.java.operators.AssignmentOperator
+import org.emftext.language.java.references.ReferenceableElement
+import org.emftext.language.java.statements.ExpressionStatement
+import org.emftext.language.java.references.IdentifierReference
+import org.hamcrest.Condition.Step
+import org.emftext.language.java.generics.QualifiedTypeArgument
+import org.emftext.language.java.expressions.Expression
+import org.emftext.language.java.statements.Return
+import org.emftext.language.java.members.ClassMethod
 
 class JavaUtil {
 	private static val logger = Logger.getLogger(JavaUtil)
@@ -136,7 +156,7 @@ class JavaUtil {
     /**
      * return and params can be null
      */
-    def static createJavaClassMethod(String name, TypeReference returnType, JavaVisibility visibility, boolean abstr, boolean stat, EList<Parameter> params) {
+    def static createJavaClassMethod(String name, TypeReference returnType, JavaVisibility visibility, boolean abstr, boolean stat, List<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createClassMethod;
         setName(jMethod, name)
         setTypeReference(jMethod, returnType)
@@ -417,4 +437,210 @@ class JavaUtil {
        packageStringList += jPackage.name
        return packageStringList
    }
+   
+   def static createJavaConstructorAndAddToClass(org.emftext.language.java.classifiers.Class jClass) {
+        val constructor = MembersFactory.eINSTANCE.createConstructor
+        constructor.name = jClass.name
+        constructor.makePublic
+        jClass.members += constructor
+        return constructor
+   }
+   
+   def static createNewForFieldInConstructor(Field jAttribute) {
+        val classifier = jAttribute.containingConcreteClassifier
+        if (classifier === null) {
+            return null
+        }
+        val jClass = classifier as org.emftext.language.java.classifiers.Class
+
+        // create constructor if none exists
+        if (jClass.members.filter(Constructor).nullOrEmpty) {
+            createJavaConstructorAndAddToClass(jClass)
+        }
+        
+        for (constructor : jClass.members.filter(Constructor)) {
+            if (!constructorContainsAttributeSelfReferenceStatement(constructor, jAttribute)) {
+                addNewStatementToConstructor(constructor, jAttribute, jClass.fields, constructor.parameters)
+            }
+        }
+    }
+   
+   def static addNewStatementToConstructor(Constructor constructor, Field jAttribute,
+        Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
+        val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
+        val selfReference = createSelfReferenceToAttribute(jAttribute)
+        val newConstructorCall = createNewConstructorCall(jAttribute, fieldsToUseAsArgument, parametersToUseAsArgument)
+        val assignment = createAssignmentExpression(selfReference, 
+            OperatorsFactory.eINSTANCE.createAssignment, newConstructorCall)
+        expressionStatement.expression = assignment
+        constructor.statements += expressionStatement
+        return newConstructorCall
+    }
+    
+    /**
+     * Creates a this.jAttributename expression
+     */
+    def static SelfReference createSelfReferenceToAttribute(Field jAttribute) {
+        val selfReference = ReferencesFactory.eINSTANCE.createSelfReference
+        selfReference.self = LiteralsFactory.eINSTANCE.createThis
+
+        val fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference
+        fieldReference.target = EcoreUtil.copy(jAttribute)
+        selfReference.next = EcoreUtil.copy(fieldReference)
+        return selfReference
+    }
+    
+    def static NewConstructorCall createNewConstructorCall(Field jAttribute, 
+        Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
+        val newConstructorCall = InstantiationsFactory.eINSTANCE.createNewConstructorCall
+        newConstructorCall.typeReference = EcoreUtil.copy(jAttribute.typeReference)
+        updateArgumentsOfConstructorCall(jAttribute, fieldsToUseAsArgument, parametersToUseAsArgument, newConstructorCall)
+        
+        return newConstructorCall
+    }
+    
+    def static void updateArgumentsOfConstructorCall(Field jAttribute, Field[] fieldsToUseAsArgument,
+        Parameter[] parametersToUseAsArgument, NewConstructorCall newConstructorCall) {
+        val List<TypeReference> typeListForConstructor = new ArrayList<TypeReference>
+        val classifierOfAttributeType = getClassifierFromTypeReference(jAttribute.typeReference)
+        if (classifierOfAttributeType !== null) {
+            val constructorListOfClass = (classifierOfAttributeType as org.emftext.language.java.classifiers.Class).members.filter(Constructor)
+            if (!constructorListOfClass.nullOrEmpty) {
+                val firstConstructor = constructorListOfClass.head
+                for (constructorParam : firstConstructor.parameters) {
+                    typeListForConstructor += constructorParam.typeReference
+                }
+            }
+        }
+        for (typeRef : typeListForConstructor) {
+            val refElement = typeRef.findMatchingTypeInParametersOrFields(fieldsToUseAsArgument,
+                parametersToUseAsArgument)
+            if (refElement !== null) {
+                val identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference
+                identifierReference.target = refElement
+                newConstructorCall.arguments += identifierReference
+            } else {
+                newConstructorCall.arguments += LiteralsFactory.eINSTANCE.createNullLiteral
+            }
+        }
+    }
+    
+    def static ReferenceableElement findMatchingTypeInParametersOrFields(TypeReference typeReferenceToFind,
+        Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
+        for (parameter : parametersToUseAsArgument) {
+            if (typeReferenceEquals(typeReferenceToFind, parameter.typeReference)) {
+                return parameter
+            }
+        }
+        for (field : fieldsToUseAsArgument) {
+            if (typeReferenceEquals(typeReferenceToFind, field.typeReference)) {
+                return field
+            }
+        }
+        return null
+    }
+    
+    /**
+     * Creates leftSide <operator> rightSide
+     */
+    def static AssignmentExpression createAssignmentExpression(AssignmentExpressionChild leftSide, 
+        AssignmentOperator operator, org.emftext.language.java.expressions.Expression rightSide) {
+        val assignmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
+        assignmentExpression.child = leftSide
+        assignmentExpression.assignmentOperator = operator
+        assignmentExpression.value = rightSide
+        return assignmentExpression
+    }
+    
+    def static dispatch typeReferenceEquals(TypeReference typeRef1, TypeReference typeRef2) {
+        logger.warn("No dispatch Method found for the typeReferences " + typeRef1 + " and " + typeRef2 + ". Returning false.")
+        return false
+    }
+    
+    def static dispatch typeReferenceEquals(NamespaceClassifierReference typeRef1, NamespaceClassifierReference typeRef2) {
+        return getClassifierFromTypeReference(typeRef1).name.equals(getClassifierFromTypeReference(typeRef2).name)
+    }
+    
+    def static dispatch typeReferenceEquals(PrimitiveType primType1, PrimitiveType primtype2) {
+        return primType1.class.equals(primtype2.class)
+    }
+    def static dispatch typeReferenceEquals(Void type1, Void typ22) {
+        logger.warn("Both TypeReferences to compare are null. Returning true.")
+        return true
+    }
+    
+    def static boolean constructorContainsAttributeSelfReferenceStatement(Constructor cons, Field jAttribute) {
+        if (cons.statements.nullOrEmpty || cons.statements.filter(ExpressionStatement).nullOrEmpty) {
+            return false
+        }
+        if (!cons.statements.filter(ExpressionStatement).filter[ExpressionHasAttributeSelfReference(it, jAttribute)].nullOrEmpty) {
+            return true
+        }
+    }
+    
+    def static boolean ExpressionHasAttributeSelfReference(ExpressionStatement expressionStatement, Field jAttribute) {
+        if (expressionStatement.expression !== null && expressionStatement.expression instanceof AssignmentExpression) {
+            val assignmentExpression = expressionStatement.expression as AssignmentExpression
+            if ((assignmentExpression.child as SelfReference).self instanceof org.emftext.language.java.literals.This
+                && ((assignmentExpression.child as SelfReference).next as IdentifierReference).target.name == jAttribute.name) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    
+   def static Field getJavaAttributeByName(org.emftext.language.java.classifiers.Class jClass, String attributeName) {
+       val candidates = jClass.members.filter(Field)
+       for (member : candidates) {
+           if (member.name == attributeName) {
+               return member as Field
+           }
+       }
+       return null
+   }
+   
+   def static Constructor getFirstJavaConstructor(org.emftext.language.java.classifiers.Class jClass) {
+       val candidates = jClass.members.filter(Constructor)
+       if (!candidates.nullOrEmpty) {
+           return candidates.head
+       } else {
+           return null
+       }
+   }
+   
+   def static getInnerTypeReferenceOfCollectionTypeReference(TypeReference typeRef) {
+       if (typeRef instanceof NamespaceClassifierReference) {
+           return (typeRef.classifierReferences.head.typeArguments.head as QualifiedTypeArgument).typeReference
+       }
+       logger.warn("Cannot get inner TypeReference of a non-NamespaceClassifierReference. Returning null.")
+       return null
+   }
+   
+   def static ClassMethod createJavaGetterForAttribute(Field jAttribute, JavaVisibility visibility) {
+       val getterMethod = createJavaClassMethod("get" + firstLettertoUppercase(jAttribute.name), jAttribute.typeReference, visibility, false, false, null)
+       getterMethod.statements += createReturnStatement(createSelfReferenceToAttribute(jAttribute))
+       return getterMethod
+   }
+   
+   def static createJavaSetterForAttribute(Field jAttribute, JavaVisibility visibility, Parameter param) {
+       val setterMethod = createJavaClassMethod("get" + firstLettertoUppercase(jAttribute.name), null, visibility, false, false, #[param])
+       val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
+       val paramReference = ReferencesFactory.eINSTANCE.createIdentifierReference
+       paramReference.target = param
+       expressionStatement.expression = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment,paramReference)
+       setterMethod.statements += expressionStatement
+       return setterMethod
+   }
+   
+   def static Return createReturnStatement(Expression returnValue) {
+       val returnStatement = StatementsFactory.eINSTANCE.createReturn
+       returnStatement.returnValue = returnValue
+       return returnStatement
+   }
+   
+   def static private String firstLettertoUppercase(String s) {
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1)
+    }
+   
 }

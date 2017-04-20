@@ -277,7 +277,7 @@ class UmlUtil {
     
     
     
-    def static private String firstLettertoLowercase(String s) {
+    def static String firstLettertoLowercase(String s) {
     	return Character.toLowerCase(s.charAt(0)) + s.substring(1)
     }
     

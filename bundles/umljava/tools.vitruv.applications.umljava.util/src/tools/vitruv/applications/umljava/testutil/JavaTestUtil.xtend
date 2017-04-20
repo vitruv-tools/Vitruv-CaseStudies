@@ -223,21 +223,9 @@ class JavaTestUtil {
         assertTypeEquals(typeRef, jTypedElement.typeReference)
     }
     
-    def static dispatch void assertTypeEquals(TypeReference typeRef1, TypeReference typeRef2) {
-        fail("The typeReference <" + typeRef1 + "> and <" + typeRef2 
-            + "> are incomparable or are neither PrimitiveTypes nor NamespaceClassifierReferences")
+    def static void assertTypeEquals(TypeReference typeRef1, TypeReference typeRef2) {
+        assertTrue(typeReferenceEquals(typeRef1, typeRef2))
     }
-    
-    def static dispatch void assertTypeEquals(NamespaceClassifierReference namespaceRef1,
-        NamespaceClassifierReference namespaceRef2) {
-        assertEquals(getClassifierFromTypeReference(namespaceRef1).name, 
-            getClassifierFromTypeReference(namespaceRef2).name)
-    }
-    
-    def static dispatch void assertTypeEquals(PrimitiveType primType1, PrimitiveType primtype2) {
-        assertEquals(primType1.class, primtype2.class)
-    }
-
     
     /**
      * @param childClass Java-Kindklasse

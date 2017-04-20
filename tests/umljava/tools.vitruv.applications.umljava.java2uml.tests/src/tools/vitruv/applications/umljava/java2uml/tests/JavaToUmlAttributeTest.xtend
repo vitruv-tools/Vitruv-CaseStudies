@@ -53,6 +53,8 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     def testCreatePrimitiveAttribute() {
         val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, TypesFactory.eINSTANCE.createInt, JavaVisibility.PRIVATE, false, false)
         jClass.members += attr
+        val getter = createJavaGetterForAttribute(attr, JavaVisibility.PRIVATE)
+        jClass.members += getter
         saveAndSynchronizeChanges(jClass)
         
         val uAttr = getCorrespondingAttribute(attr)

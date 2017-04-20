@@ -35,4 +35,10 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     	uAttr, uType);
     effect.applyRoutine();
   }
+  
+  public void handleMultiplicityForJavaAttribute(final Property uAttribute) {
+    mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine(this.executionState, calledBy,
+    	uAttribute);
+    effect.applyRoutine();
+  }
 }
