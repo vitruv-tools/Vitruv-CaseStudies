@@ -1,12 +1,15 @@
 package mir.reactions.reactionsUmlToUml.comp2class;
 
+import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorUmlToUml extends AbstractReactionsExecutor {
   public ExecutorUmlToUml(final UserInteracting userInteracting) {
-    super(userInteracting, new tools.vitruv.framework.util.datatypes.MetamodelPair(org.eclipse.uml2.uml.internal.impl.UMLPackageImpl.eNS_URI, org.eclipse.uml2.uml.internal.impl.UMLPackageImpl.eNS_URI));
+    super(userInteracting,
+    	new UmlDomainProvider().getDomain(), 
+    	new UmlDomainProvider().getDomain());
   }
   
   protected void setup() {

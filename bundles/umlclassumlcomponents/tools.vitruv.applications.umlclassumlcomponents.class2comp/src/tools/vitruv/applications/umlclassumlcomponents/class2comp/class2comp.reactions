@@ -1,14 +1,16 @@
-import org.eclipse.uml2.uml.PrimitiveType
-import org.eclipse.uml2.uml.DataType
 import static extension tools.vitruv.applications.umlclassumlcomponents.class2comp.class2compUtil.*
 import org.eclipse.uml2.uml.Component
+import org.eclipse.uml2.uml.Classifier
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.DataType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
 
 reactions: class2comp
-in reaction to changes in umlclass
-execute actions in umlcomp
+in reaction to changes in UML
+execute actions in UML
+
 
 /*******
 *Model:*
@@ -92,29 +94,6 @@ routine createUmlComponent(umlclass::Class umlClass) {
 		}
 		update compModel 
 			compModel.packagedElements += umlComponent
-		
-		add correspondence between umlClass and umlComponent
-	}
-}
-
-//TODO: Currently unused, remove?
-routine createUmlComponentAndPackage(umlclass::Class umlClass) {
-	match {
-		val compModel = retrieve umlcomp::Model corresponding to umlClass.model
-	}
-	action {
-		val classPackage = create umlclass::Package and initialize 
-			classPackage.name = umlClass.name + "-Package"
-			
-		val umlComponent = create umlcomp::Component and initialize {
-			umlComponent.name = umlClass.name
-			umlComponent.package = classPackage	
-		}		
-		update compModel 
-			compModel.packagedElements += umlComponent
-		
-		//update umlClass 
-		//	umlClass.package = classPackage
 		
 		add correspondence between umlClass and umlComponent
 	}
@@ -374,19 +353,31 @@ reaction MoveClassToDifferentPackage {
 routine movedClassToDifferentPackage(umlclass::Class umlClass, umlclass::Package oldPackage, umlclass::Package newPackage) {
 	match {
 		val compModel = retrieve umlcomp::Model corresponding to umlClass.model
-		val umlCompOld = retrieve umlcomp::Component corresponding to oldPackage
-		val umlCompNew = retrieve umlcomp::Component corresponding to newPackage
+		val packageOldComp = retrieve optional umlcomp::Component corresponding to oldPackage
+		val packageNewComp = retrieve optional umlcomp::Component corresponding to newPackage
+		val compLinked = retrieve optional umlcomp::Component corresponding to umlClass
+		
 		//TODO check if class has no corresponding component
-		require absence of umlcomp::Component corresponding to umlClass
+		//require absence of umlcomp::Component corresponding to umlClass
 	}
 	action {
-		//shouldn't happen, TODO check this
-		//remove correspondence between umlClass and umlCompOld
-		//add correspondence between umlClass and umlCompNew
+		call {
+			if (packageOldComp !== null)
+				removeCorrespondence(umlClass as Classifier, packageOldComp as Classifier) //shouldn't happen, TODO check this
+		}		
 		
-		//TODO rethink everything here, why correspondence to package?		
-		remove correspondence between umlClass and oldPackage
-		add correspondence between umlClass and newPackage 
+		
+		
+		//add correspondence between umlClass and packageNewComp
+		
+		//TODO Think of ways to handle this
+		
+	}
+}
+
+routine removeCorrespondence(umlclass::Classifier classObject, umlcomp::Classifier compObject) {
+	action {
+		remove correspondence between classObject and compObject
 	}
 }
 
@@ -484,3 +475,5 @@ routine addRequiredRole(umlclass::Class umlClass, umlclass::Interface classInter
 		add correspondence between usage and classInterface
 	}
 }
+
+

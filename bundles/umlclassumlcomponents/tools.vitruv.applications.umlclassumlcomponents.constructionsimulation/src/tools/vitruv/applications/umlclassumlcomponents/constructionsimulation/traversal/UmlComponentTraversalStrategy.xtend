@@ -8,7 +8,7 @@ import tools.vitruv.framework.util.datatypes.VURI
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import tools.vitruv.framework.change.recording.AtomicEMFChangeRecorder
+import tools.vitruv.framework.change.recording.AtomicEmfChangeRecorder
 
 public class UmlComponentTraversalStrategy extends EMFTraversalStrategy {
 	
@@ -26,7 +26,7 @@ public class UmlComponentTraversalStrategy extends EMFTraversalStrategy {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(uri)		
 		
-		val changeRecorder = new AtomicEMFChangeRecorder
+		val changeRecorder = new AtomicEmfChangeRecorder
 		//changeRecorder.beginRecording(vuri, #{resource})
 		changeRecorder.beginRecording(VURI.getInstance(resource), #{resource})
 		

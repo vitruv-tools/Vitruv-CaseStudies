@@ -49,7 +49,7 @@ class TestConstructionTest extends AbstractConstructionTest {
    		
 		//val changes = integrationStrategy.createChangeModels(null, resource) //TODO fix this
 		
-		val inputResource = createAndSynchronizeModel("model/model.uml", fileResource.allContents.head)
+		val inputResource = createAndSynchronizeModel2("model/model.uml", fileResource.allContents.head)
 		
 		//TODO User Interaction might be needed in the future		
 		//testUserInteractor.addNextSelections(0,0,0,0)

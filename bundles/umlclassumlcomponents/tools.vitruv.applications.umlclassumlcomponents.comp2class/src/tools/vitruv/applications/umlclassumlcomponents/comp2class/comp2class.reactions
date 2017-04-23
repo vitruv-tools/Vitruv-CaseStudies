@@ -5,8 +5,8 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
 
 reactions: comp2class
-in reaction to changes in umlcomp
-execute actions in umlclass
+in reaction to changes in UML
+execute actions in UML
 
 /*******
 *Model:*
@@ -161,6 +161,7 @@ reaction CreatedDatatype {
 
 //!!!
 //This routine is currently not needed, as we are using one singular meta model
+//It does no harm however, in that case nothing will happen in this routine
 routine createDataTypeForDataType(umlcomp::DataType compType){
 	match {
 		val classModel = retrieve umlclass::Model corresponding to compType.model

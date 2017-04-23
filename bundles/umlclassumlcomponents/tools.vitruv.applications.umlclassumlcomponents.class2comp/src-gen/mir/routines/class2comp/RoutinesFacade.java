@@ -1,5 +1,6 @@
 package mir.routines.class2comp;
 
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Interface;
@@ -38,12 +39,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   
   public void createUmlComponent(final org.eclipse.uml2.uml.Class umlClass) {
     mir.routines.class2comp.CreateUmlComponentRoutine effect = new mir.routines.class2comp.CreateUmlComponentRoutine(this.executionState, calledBy,
-    	umlClass);
-    effect.applyRoutine();
-  }
-  
-  public void createUmlComponentAndPackage(final org.eclipse.uml2.uml.Class umlClass) {
-    mir.routines.class2comp.CreateUmlComponentAndPackageRoutine effect = new mir.routines.class2comp.CreateUmlComponentAndPackageRoutine(this.executionState, calledBy,
     	umlClass);
     effect.applyRoutine();
   }
@@ -123,6 +118,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void movedClassToDifferentPackage(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage) {
     mir.routines.class2comp.MovedClassToDifferentPackageRoutine effect = new mir.routines.class2comp.MovedClassToDifferentPackageRoutine(this.executionState, calledBy,
     	umlClass, oldPackage, newPackage);
+    effect.applyRoutine();
+  }
+  
+  public void removeCorrespondence(final Classifier classObject, final Classifier compObject) {
+    mir.routines.class2comp.RemoveCorrespondenceRoutine effect = new mir.routines.class2comp.RemoveCorrespondenceRoutine(this.executionState, calledBy,
+    	classObject, compObject);
     effect.applyRoutine();
   }
   
