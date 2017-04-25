@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
@@ -23,30 +22,26 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final PrimitiveType classType, final Model umlModel, final PrimitiveType compType) {
-      return umlModel;
+    public EObject getElement1(final PrimitiveType classType, final PrimitiveType compType) {
+      org.eclipse.uml2.uml.Package _package = compType.getPackage();
+      return _package;
     }
     
-    public void update0Element(final PrimitiveType classType, final Model umlModel, final PrimitiveType compType) {
-      EList<Type> _ownedTypes = umlModel.getOwnedTypes();
+    public void update0Element(final PrimitiveType classType, final PrimitiveType compType) {
+      EList<Type> _ownedTypes = compType.getPackage().getOwnedTypes();
       _ownedTypes.add(compType);
     }
     
-    public EObject getElement2(final PrimitiveType classType, final Model umlModel, final PrimitiveType compType) {
+    public EObject getElement2(final PrimitiveType classType, final PrimitiveType compType) {
       return compType;
     }
     
-    public void updateCompTypeElement(final PrimitiveType classType, final Model umlModel, final PrimitiveType compType) {
+    public void updateCompTypeElement(final PrimitiveType classType, final PrimitiveType compType) {
       compType.setName(classType.getName());
     }
     
-    public EObject getElement3(final PrimitiveType classType, final Model umlModel, final PrimitiveType compType) {
+    public EObject getElement3(final PrimitiveType classType, final PrimitiveType compType) {
       return classType;
-    }
-    
-    public EObject getCorrepondenceSourceUmlModel(final PrimitiveType classType) {
-      Model _model = classType.getModel();
-      return _model;
     }
   }
   
@@ -63,22 +58,13 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     getLogger().debug("Called routine CreatePrimitiveDataTypeRoutine with input:");
     getLogger().debug("   PrimitiveType: " + this.classType);
     
-    Model umlModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlModel(classType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
-    if (umlModel == null) {
-    	return;
-    }
-    registerObjectUnderModification(umlModel);
     PrimitiveType compType = UMLFactoryImpl.eINSTANCE.createPrimitiveType();
-    userExecution.updateCompTypeElement(classType, umlModel, compType);
+    userExecution.updateCompTypeElement(classType, compType);
     
-    // val updatedElement userExecution.getElement1(classType, umlModel, compType);
-    userExecution.update0Element(classType, umlModel, compType);
+    // val updatedElement userExecution.getElement1(classType, compType);
+    userExecution.update0Element(classType, compType);
     
-    addCorrespondenceBetween(userExecution.getElement2(classType, umlModel, compType), userExecution.getElement3(classType, umlModel, compType), "");
+    addCorrespondenceBetween(userExecution.getElement2(classType, compType), userExecution.getElement3(classType, compType), "");
     
     postprocessElements();
   }

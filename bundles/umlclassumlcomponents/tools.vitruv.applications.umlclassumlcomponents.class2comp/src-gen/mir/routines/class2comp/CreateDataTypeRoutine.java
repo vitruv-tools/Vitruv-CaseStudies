@@ -5,7 +5,6 @@ import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -23,29 +22,25 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final DataType classType, final Model compModel, final DataType compType) {
-      return compModel;
+    public EObject getElement1(final DataType classType, final DataType compType) {
+      org.eclipse.uml2.uml.Package _package = compType.getPackage();
+      return _package;
     }
     
-    public void update0Element(final DataType classType, final Model compModel, final DataType compType) {
-      EList<Type> _ownedTypes = compModel.getOwnedTypes();
+    public void update0Element(final DataType classType, final DataType compType) {
+      EList<Type> _ownedTypes = compType.getPackage().getOwnedTypes();
       _ownedTypes.add(compType);
     }
     
-    public EObject getElement2(final DataType classType, final Model compModel, final DataType compType) {
+    public EObject getElement2(final DataType classType, final DataType compType) {
       return classType;
     }
     
-    public EObject getCorrepondenceSourceCompModel(final DataType classType) {
-      Model _model = classType.getModel();
-      return _model;
-    }
-    
-    public void updateCompTypeElement(final DataType classType, final Model compModel, final DataType compType) {
+    public void updateCompTypeElement(final DataType classType, final DataType compType) {
       compType.setName(classType.getName());
     }
     
-    public EObject getElement3(final DataType classType, final Model compModel, final DataType compType) {
+    public EObject getElement3(final DataType classType, final DataType compType) {
       return compType;
     }
   }
@@ -63,22 +58,13 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreateDataTypeRoutine with input:");
     getLogger().debug("   DataType: " + this.classType);
     
-    Model compModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompModel(classType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
-    if (compModel == null) {
-    	return;
-    }
-    registerObjectUnderModification(compModel);
     DataType compType = UMLFactoryImpl.eINSTANCE.createDataType();
-    userExecution.updateCompTypeElement(classType, compModel, compType);
+    userExecution.updateCompTypeElement(classType, compType);
     
-    // val updatedElement userExecution.getElement1(classType, compModel, compType);
-    userExecution.update0Element(classType, compModel, compType);
+    // val updatedElement userExecution.getElement1(classType, compType);
+    userExecution.update0Element(classType, compType);
     
-    addCorrespondenceBetween(userExecution.getElement2(classType, compModel, compType), userExecution.getElement3(classType, compModel, compType), "");
+    addCorrespondenceBetween(userExecution.getElement2(classType, compType), userExecution.getElement3(classType, compType), "");
     
     postprocessElements();
   }

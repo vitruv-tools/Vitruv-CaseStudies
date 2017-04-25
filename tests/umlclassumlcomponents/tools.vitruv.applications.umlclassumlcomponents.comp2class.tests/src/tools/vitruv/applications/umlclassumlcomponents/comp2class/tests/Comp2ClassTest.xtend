@@ -39,31 +39,41 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		return umlComponent
 	}
 	
-	private def void checkClass(PackageableElement umlComp, String name) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
+	private def void checkClass(PackageableElement compElement, String name) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compElement]).flatten
 		assertEquals(1, correspondingElements.size)
 		val umlClass = correspondingElements.get(0)
 		assertTrue(umlClass instanceof Class)
 		assertEquals(name, (umlClass as Class).name)
 	}
 	
+	private def void checkClassAndPackage(Component umlComp, String name) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
+		assertEquals(1, correspondingElements.size)
+		val umlClass = correspondingElements.get(0)
+		assertTrue(umlClass instanceof Class)
+		assertEquals(name, (umlClass as Class).name)
+		val classPackage = (umlClass as Class).package
+		assertEquals(name + " Package", classPackage.name)
+	}
+	
+	
 	@Test
 	public def void testCreateClassForComponent() {
 		val umlComp = createComponent(COMP_NAME)
 		saveAndSynchronizeChanges(umlComp)
-		checkClass(umlComp, COMP_NAME)
+		checkClassAndPackage(umlComp, COMP_NAME)
 	}
 	
 	@Test
     public def void testRenameComponent() {
     	val umlComp = createComponent("Old")
-		saveAndSynchronizeChanges(umlComp)
+		saveAndSynchronizeChanges(rootElement)
 		//change name:
 		umlComp.name = "New"
-		saveAndSynchronizeChanges(umlComp)
-		//check if rename happened in class:
-		checkClass(umlComp, "New")
-		//TODO check if rename happened in package:
+		saveAndSynchronizeChanges(rootElement)
+		//check if rename happened in class & package:
+		checkClassAndPackage(umlComp, "New")
     }
     
 	@Test
@@ -80,6 +90,7 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		saveAndSynchronizeChanges(rootElement)
 		//check if class exists:		
 		assertFalse(rootElement.packagedElements.contains(umlClass))
+		//TODO Check for package as well
     }
 	
 	@Test
@@ -87,8 +98,8 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		val umlComp1 = createComponent(COMP_NAME)
 		val umlComp2 = createComponent(COMP_NAME2)
 		saveAndSynchronizeChanges(rootElement)
-		checkClass(umlComp1, COMP_NAME)
-		checkClass(umlComp2, COMP_NAME2)
+		checkClassAndPackage(umlComp1, COMP_NAME)
+		checkClassAndPackage(umlComp2, COMP_NAME2)
 	}
 	
     /**********

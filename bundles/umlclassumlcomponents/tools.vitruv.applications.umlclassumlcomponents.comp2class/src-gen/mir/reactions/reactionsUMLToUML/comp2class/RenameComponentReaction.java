@@ -69,7 +69,7 @@ class RenameComponentReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Component affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.renameClass(affectedEObject);
+      _routinesFacade.renameClassAndPackage(affectedEObject, newValue);
     }
   }
 }

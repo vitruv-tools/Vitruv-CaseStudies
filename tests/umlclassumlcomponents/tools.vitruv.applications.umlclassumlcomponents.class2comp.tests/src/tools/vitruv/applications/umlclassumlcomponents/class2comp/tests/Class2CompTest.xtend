@@ -1,11 +1,14 @@
 package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 
-import org.junit.Test
-import org.eclipse.uml2.uml.UMLFactory
-import static org.junit.Assert.*
+import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Component
+import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.Model
-import tools.vitruv.applications.umlclassumlcomponents.class2comp.tests.Class2CompTestUtil
+import org.eclipse.uml2.uml.UMLFactory
+import org.junit.Test
+import org.eclipse.uml2.uml.Package
+
+import static org.junit.Assert.*
 
 class Class2CompTest extends AbstractClass2CompTest {
 	private static val CLASS_NAME = "TestUmlClass"
@@ -26,15 +29,28 @@ class Class2CompTest extends AbstractClass2CompTest {
 	*Class:*
 	********/	
 	
-	private def org.eclipse.uml2.uml.Class createClass(String name, int createNoComponent, int createNoDatatype) {
+	private def Class createClass(String name, int createNoComponent, int createNoDatatype) {
+		return createClass(name, rootElement, createNoComponent, createNoDatatype)
+	}
+	
+	private def Class createClass(String name, Package classPackage, int createNoComponent, int createNoDatatype) {
 		val umlClass = UMLFactory.eINSTANCE.createClass()
 		Class2CompTestUtil.queueUserInteractionSelections(createNoComponent, createNoDatatype) //Decide to create corresponding class or datatype
 		umlClass.name = name
-		rootElement.packagedElements += umlClass
+		classPackage.packagedElements += umlClass
 		return umlClass
 	}
 	
-	private def void checkComponent(org.eclipse.uml2.uml.Class umlClass, String name) {
+	private def Package createPackage(String name) {
+		val classPackage = UMLFactory.eINSTANCE.createPackage()
+		//TODO add userInteractions when added back in
+		classPackage.name = name + " Package"
+		rootElement.packagedElements += classPackage
+		return classPackage
+	}
+	
+	
+	private def void checkComponent(Class umlClass, String name) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		assertEquals(1, correspondingElements.size)
 		val umlComponent = correspondingElements.get(0)
@@ -84,7 +100,7 @@ class Class2CompTest extends AbstractClass2CompTest {
     	val umlClass = createClass("Old", 0, 1)
 		saveAndSynchronizeWithInteractions(umlClass)
 		//change name:
-		umlClass.name = "New" //rootElement.packagedElements.get(0).name = "New"
+		umlClass.name = "New"
 		saveAndSynchronizeWithInteractions(umlClass)
 		//check if rename happened in component:
 		checkComponent(umlClass, "New")
@@ -105,6 +121,16 @@ class Class2CompTest extends AbstractClass2CompTest {
 		//check if component exists:		
 		assertFalse(rootElement.packagedElements.contains(umlComponent))
     }    
+    
+    @Test
+	public def void testCreateComponentForClassInPackage() {
+		val classPackage = createPackage(CLASS_NAME)
+		val umlClass = createClass(CLASS_NAME, classPackage, 0, 1)
+		umlClass.package = classPackage
+		saveAndSynchronizeWithInteractions(umlClass)
+		checkComponent(umlClass, CLASS_NAME)
+	}
+	
     	
    	/***********
 	*DataTypes:*
@@ -116,8 +142,8 @@ class Class2CompTest extends AbstractClass2CompTest {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
 		assertEquals(1, correspondingElements.size)
 		val compDataType = correspondingElements.get(0)
-		assertTrue(compDataType instanceof org.eclipse.uml2.uml.DataType)
-		assertEquals(CLASS_NAME, (compDataType as org.eclipse.uml2.uml.DataType).name)
+		assertTrue(compDataType instanceof DataType)
+		assertEquals(CLASS_NAME, (compDataType as DataType).name)
 	}
 	
 		

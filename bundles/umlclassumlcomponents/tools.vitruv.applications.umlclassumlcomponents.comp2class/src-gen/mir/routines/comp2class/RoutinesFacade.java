@@ -28,15 +28,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createUmlClass(final Component umlComponent) {
-    mir.routines.comp2class.CreateUmlClassRoutine effect = new mir.routines.comp2class.CreateUmlClassRoutine(this.executionState, calledBy,
+  public void createUmlClassWithPackage(final Component umlComponent) {
+    mir.routines.comp2class.CreateUmlClassWithPackageRoutine effect = new mir.routines.comp2class.CreateUmlClassWithPackageRoutine(this.executionState, calledBy,
     	umlComponent);
     effect.applyRoutine();
   }
   
-  public void renameClass(final Component umlComp) {
-    mir.routines.comp2class.RenameClassRoutine effect = new mir.routines.comp2class.RenameClassRoutine(this.executionState, calledBy,
-    	umlComp);
+  public void renameClassAndPackage(final Component umlComp, final String newName) {
+    mir.routines.comp2class.RenameClassAndPackageRoutine effect = new mir.routines.comp2class.RenameClassAndPackageRoutine(this.executionState, calledBy,
+    	umlComp, newName);
     effect.applyRoutine();
   }
   

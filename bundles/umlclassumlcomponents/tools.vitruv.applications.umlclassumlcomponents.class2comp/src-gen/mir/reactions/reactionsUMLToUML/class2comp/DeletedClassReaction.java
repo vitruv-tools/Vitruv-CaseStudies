@@ -2,7 +2,6 @@ package mir.reactions.reactionsUmlToUml.class2comp;
 
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -20,8 +19,8 @@ class DeletedClassReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    RemoveEReference<Model, org.eclipse.uml2.uml.Class> typedChange = ((RemoveAndDeleteNonRoot<Model, org.eclipse.uml2.uml.Class>)change).getRemoveChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Class> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Class>)change).getRemoveChange();
+    org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     org.eclipse.uml2.uml.Class oldValue = typedChange.getOldValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
@@ -34,8 +33,8 @@ class DeletedClassReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Model, org.eclipse.uml2.uml.Class> relevantChange = ((RemoveAndDeleteNonRoot<Model, org.eclipse.uml2.uml.Class>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    RemoveEReference<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Class> relevantChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Class>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Package)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
@@ -65,7 +64,7 @@ class DeletedClassReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteComponent(oldValue, oldValue.getName(), "");
     }
   }

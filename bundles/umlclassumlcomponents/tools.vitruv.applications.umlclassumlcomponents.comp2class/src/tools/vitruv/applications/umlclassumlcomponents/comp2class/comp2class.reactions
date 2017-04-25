@@ -1,5 +1,6 @@
 import org.eclipse.uml2.uml.PrimitiveType
 import static extension tools.vitruv.applications.umlclassumlcomponents.comp2class.comp2classUtil.*
+import org.eclipse.uml2.uml.Component
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
@@ -56,31 +57,35 @@ routine renameClassModelForComponentModel(umlcomp::Model umlCompModel) {
 reaction CreatedUmlComponent {
 	after element umlcomp::Component created and inserted in umlcomp::Model[packagedElement]
 	call {
-		createUmlClass(newValue)
+		createUmlClassWithPackage(newValue)
 		}
 	
 }
 
-routine createUmlClass(umlcomp::Component umlComponent) {
+routine createUmlClassWithPackage(umlcomp::Component umlComponent) {
 	match {
 		val umlModel = retrieve umlclass::Model corresponding to umlComponent.package
 	}
 	action {
 		//TODO fix package creation, still exceptions
-		//val classPackage = create umlclass::Package and initialize {
-		//	classPackage.name = umlComponent.name 
-		//}
+		val classPackage = create umlclass::Package and initialize {
+			classPackage.name = umlComponent.name + " Package"
+		}
 		val umlClass = create umlclass::Class and initialize {
 			umlClass.name = umlComponent.name
-			//umlClass.package = classPackage
+			umlClass.package = classPackage
 		}
 		update umlModel {
-			umlModel.packagedElements += umlClass
-			//umlModel.allOwningPackages += classPackage //TODO check this, right container?
+			//umlModel.packagedElements += umlClass //Now in package //TODO check if sufficient
+			umlModel.packagedElements += classPackage
+			//umlModel.allOwningPackages += classPackage //TODO check this, special container needed?
 		}
-		//add correspondence between umlComponent and classPackage
+		update classPackage {			
+			classPackage.packagedElements += umlClass
+		}
+		//add correspondence between umlComponent and classPackage //TODO add in again
 		add correspondence between umlComponent and umlClass
-		
+		//TODO rearrange for clarity
 	}
 }
 
@@ -88,24 +93,31 @@ routine createUmlClass(umlcomp::Component umlComponent) {
 reaction RenameComponent {
 	after attribute replaced at umlcomp::Component[name]
 	call {
-		renameClass(affectedEObject)
+		renameClassAndPackage(affectedEObject, newValue)
 	}
 }
 
-routine renameClass(umlcomp::Component umlComp) { 
+routine renameClassAndPackage(umlcomp::Component umlComp, String newName) { 
 	match {
-		val umlClass = retrieve umlclass::Class corresponding to umlComp
-			with umlClass.name.equals(umlComp.name)
-		val classPackage = retrieve optional umlclass::Package corresponding to umlComp
+		val umlClass = retrieve umlclass::Class corresponding to umlComp tagged with ""
+		val classPackage = retrieve optional umlclass::Package corresponding to umlComp //TODO no correspondence yet
 	}
 	action { 
 		update umlClass {
-			umlClass.name = umlComp.name
+			umlClass.name = newName
 		}
 		//TODO: Nullpoiter Exception when not available, optional doesn't fix?
 		//update classPackage {
-		//	classPackage.name = umlComp.name
+		//	classPackage.name = newName
 		//}
+		call {
+			if (umlClass.package !== null) {//TODO temporary solution, no correspondence yet
+				umlClass.package.name = newName + " Package" 
+			}
+			if (classPackage !== null) {//TODO no correspondence yet
+				classPackage.name = newName + " Package" 
+			}
+		}
 	}
 }
 
@@ -129,6 +141,7 @@ routine deleteClass(umlcomp::Component umlComp, String packageName, String expec
 
 reaction RenamedElement {
 	after attribute replaced at umlcomp::NamedElement[name]
+		with !(affectedEObject instanceof Component) 
 	call renameElement(affectedEObject)
 }
 

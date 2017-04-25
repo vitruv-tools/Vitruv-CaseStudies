@@ -47,7 +47,6 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     
     public void updateUmlComponentElement(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
       umlComponent.setName(umlClass.getName());
-      umlComponent.setPackage(umlClass.getPackage());
     }
   }
   

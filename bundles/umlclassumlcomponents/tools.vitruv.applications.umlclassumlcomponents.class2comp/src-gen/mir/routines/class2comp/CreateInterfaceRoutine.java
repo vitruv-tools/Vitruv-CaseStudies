@@ -5,7 +5,6 @@ import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -23,29 +22,25 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Interface classInterface, final Model compModel, final Interface compInterface) {
-      return compModel;
+    public EObject getElement1(final Interface classInterface, final Interface compInterface) {
+      org.eclipse.uml2.uml.Package _package = classInterface.getPackage();
+      return _package;
     }
     
-    public void update0Element(final Interface classInterface, final Model compModel, final Interface compInterface) {
-      EList<PackageableElement> _packagedElements = compModel.getPackagedElements();
+    public void update0Element(final Interface classInterface, final Interface compInterface) {
+      EList<PackageableElement> _packagedElements = classInterface.getPackage().getPackagedElements();
       _packagedElements.add(compInterface);
     }
     
-    public void updateCompInterfaceElement(final Interface classInterface, final Model compModel, final Interface compInterface) {
+    public void updateCompInterfaceElement(final Interface classInterface, final Interface compInterface) {
       compInterface.setName(classInterface.getName());
     }
     
-    public EObject getElement2(final Interface classInterface, final Model compModel, final Interface compInterface) {
+    public EObject getElement2(final Interface classInterface, final Interface compInterface) {
       return classInterface;
     }
     
-    public EObject getCorrepondenceSourceCompModel(final Interface classInterface) {
-      Model _model = classInterface.getModel();
-      return _model;
-    }
-    
-    public EObject getElement3(final Interface classInterface, final Model compModel, final Interface compInterface) {
+    public EObject getElement3(final Interface classInterface, final Interface compInterface) {
       return compInterface;
     }
   }
@@ -63,22 +58,13 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreateInterfaceRoutine with input:");
     getLogger().debug("   Interface: " + this.classInterface);
     
-    Model compModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompModel(classInterface), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
-    if (compModel == null) {
-    	return;
-    }
-    registerObjectUnderModification(compModel);
     Interface compInterface = UMLFactoryImpl.eINSTANCE.createInterface();
-    userExecution.updateCompInterfaceElement(classInterface, compModel, compInterface);
+    userExecution.updateCompInterfaceElement(classInterface, compInterface);
     
-    // val updatedElement userExecution.getElement1(classInterface, compModel, compInterface);
-    userExecution.update0Element(classInterface, compModel, compInterface);
+    // val updatedElement userExecution.getElement1(classInterface, compInterface);
+    userExecution.update0Element(classInterface, compInterface);
     
-    addCorrespondenceBetween(userExecution.getElement2(classInterface, compModel, compInterface), userExecution.getElement3(classInterface, compModel, compInterface), "");
+    addCorrespondenceBetween(userExecution.getElement2(classInterface, compInterface), userExecution.getElement3(classInterface, compInterface), "");
     
     postprocessElements();
   }

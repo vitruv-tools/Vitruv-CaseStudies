@@ -5,7 +5,6 @@ import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Component;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -22,24 +21,19 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourcePackageNewComp(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Model compModel, final Component packageOldComp) {
+    public EObject getCorrepondenceSourcePackageNewComp(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Component packageOldComp) {
       return newPackage;
     }
     
-    public EObject getCorrepondenceSourceCompModel(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage) {
-      Model _model = umlClass.getModel();
-      return _model;
-    }
-    
-    public EObject getCorrepondenceSourceCompLinked(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Model compModel, final Component packageOldComp, final Component packageNewComp) {
+    public EObject getCorrepondenceSourceCompLinked(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Component packageOldComp, final Component packageNewComp) {
       return umlClass;
     }
     
-    public EObject getCorrepondenceSourcePackageOldComp(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Model compModel) {
+    public EObject getCorrepondenceSourcePackageOldComp(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage) {
       return oldPackage;
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Model compModel, final Component packageOldComp, final Component packageNewComp, final Component compLinked, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Component packageOldComp, final Component packageNewComp, final Component compLinked, @Extension final RoutinesFacade _routinesFacade) {
       if ((packageOldComp != null)) {
         _routinesFacade.removeCorrespondence(((Classifier) umlClass), ((Classifier) packageOldComp));
       }
@@ -65,34 +59,25 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
     getLogger().debug("   Package: " + this.oldPackage);
     getLogger().debug("   Package: " + this.newPackage);
     
-    Model compModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompModel(umlClass, oldPackage, newPackage), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
-    if (compModel == null) {
-    	return;
-    }
-    registerObjectUnderModification(compModel);
     Component packageOldComp = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePackageOldComp(umlClass, oldPackage, newPackage, compModel), // correspondence source supplier
+    	userExecution.getCorrepondenceSourcePackageOldComp(umlClass, oldPackage, newPackage), // correspondence source supplier
     	Component.class,
     	(Component _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(packageOldComp);
     Component packageNewComp = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePackageNewComp(umlClass, oldPackage, newPackage, compModel, packageOldComp), // correspondence source supplier
+    	userExecution.getCorrepondenceSourcePackageNewComp(umlClass, oldPackage, newPackage, packageOldComp), // correspondence source supplier
     	Component.class,
     	(Component _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(packageNewComp);
     Component compLinked = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompLinked(umlClass, oldPackage, newPackage, compModel, packageOldComp, packageNewComp), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceCompLinked(umlClass, oldPackage, newPackage, packageOldComp, packageNewComp), // correspondence source supplier
     	Component.class,
     	(Component _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(compLinked);
-    userExecution.callRoutine1(umlClass, oldPackage, newPackage, compModel, packageOldComp, packageNewComp, compLinked, actionsFacade);
+    userExecution.callRoutine1(umlClass, oldPackage, newPackage, packageOldComp, packageNewComp, compLinked, actionsFacade);
     
     postprocessElements();
   }

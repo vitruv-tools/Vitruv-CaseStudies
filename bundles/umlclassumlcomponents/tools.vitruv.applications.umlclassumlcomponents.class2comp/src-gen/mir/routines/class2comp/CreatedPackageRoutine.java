@@ -1,16 +1,17 @@
 package mir.routines.class2comp;
 
+import com.google.common.collect.Iterables;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import tools.vitruv.applications.umlclassumlcomponents.class2comp.class2compUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -42,10 +43,14 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
       String _name = classPackage.getName();
       String _plus = ("Choose an existing Component to link Package \'" + _name);
       final String msg2 = (_plus + "\' to:");
-      final List<String> options = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("Test"));
+      final List<Component> componentsList = IterableExtensions.<Component>toList(Iterables.<Component>filter(umlModel.getPackagedElements(), Component.class));
+      final Function1<Component, String> _function = (Component e) -> {
+        return e.getName();
+      };
+      final List<String> options = ListExtensions.<Component, String>map(componentsList, _function);
       final int selection = class2compUtil.modalTextUserinteracting(this.userInteracting, msg2, ((String[])Conversions.unwrapArray(options, String.class)));
-      final PackageableElement umlComponent = umlModel.getPackagedElements().get(selection);
-      _routinesFacade.assignNewPackage(classPackage, ((Component) umlComponent));
+      final Component umlComponent = componentsList.get(selection);
+      _routinesFacade.assignNewPackage(classPackage, umlComponent);
     }
   }
   

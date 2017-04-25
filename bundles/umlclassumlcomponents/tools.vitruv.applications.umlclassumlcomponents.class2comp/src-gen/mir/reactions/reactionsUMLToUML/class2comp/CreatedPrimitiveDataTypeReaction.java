@@ -2,7 +2,6 @@ package mir.reactions.reactionsUmlToUml.class2comp;
 
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -21,8 +20,8 @@ class CreatedPrimitiveDataTypeReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Model, PrimitiveType> typedChange = ((CreateAndInsertNonRoot<Model, PrimitiveType>)change).getInsertChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Package, PrimitiveType> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, PrimitiveType>)change).getInsertChange();
+    org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     PrimitiveType newValue = typedChange.getNewValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
@@ -35,8 +34,8 @@ class CreatedPrimitiveDataTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Model, PrimitiveType> relevantChange = ((CreateAndInsertNonRoot<Model, PrimitiveType>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    InsertEReference<org.eclipse.uml2.uml.Package, PrimitiveType> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, PrimitiveType>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Package)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
@@ -66,7 +65,7 @@ class CreatedPrimitiveDataTypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final PrimitiveType newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final PrimitiveType newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createPrimitiveDataType(newValue);
     }
   }

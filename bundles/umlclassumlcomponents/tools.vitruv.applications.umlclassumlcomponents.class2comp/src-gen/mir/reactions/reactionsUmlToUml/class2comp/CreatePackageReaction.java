@@ -3,6 +3,7 @@ package mir.reactions.reactionsUmlToUml.class2comp;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -20,10 +21,10 @@ class CreatePackageReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Model, org.eclipse.uml2.uml.Package> typedChange = ((CreateAndInsertNonRoot<Model, org.eclipse.uml2.uml.Package>)change).getInsertChange();
+    InsertEReference<Model, PackageableElement> typedChange = ((CreateAndInsertNonRoot<Model, PackageableElement>)change).getInsertChange();
     Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    org.eclipse.uml2.uml.Package newValue = typedChange.getNewValue();
+    PackageableElement newValue = typedChange.getNewValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.CreatePackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.CreatePackageReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -34,14 +35,14 @@ class CreatePackageReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Model, org.eclipse.uml2.uml.Package> relevantChange = ((CreateAndInsertNonRoot<Model, org.eclipse.uml2.uml.Package>)change).getInsertChange();
+    InsertEReference<Model, PackageableElement> relevantChange = ((CreateAndInsertNonRoot<Model, PackageableElement>)change).getInsertChange();
     if (!(relevantChange.getAffectedEObject() instanceof Model)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("nestedPackage")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Package)) {
+    if (!(relevantChange.getNewValue() instanceof PackageableElement)) {
     	return false;
     }
     return true;
@@ -56,10 +57,10 @@ class CreatePackageReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<Model, org.eclipse.uml2.uml.Package> typedChange = ((CreateAndInsertNonRoot<Model, org.eclipse.uml2.uml.Package>)change).getInsertChange();
+    InsertEReference<Model, PackageableElement> typedChange = ((CreateAndInsertNonRoot<Model, PackageableElement>)change).getInsertChange();
     Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    org.eclipse.uml2.uml.Package newValue = typedChange.getNewValue();
+    PackageableElement newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }
@@ -67,8 +68,8 @@ class CreatePackageReaction extends AbstractReactionRealization {
     return true;
   }
   
-  private boolean checkUserDefinedPrecondition(final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package newValue) {
-    return (newValue instanceof Package);
+  private boolean checkUserDefinedPrecondition(final Model affectedEObject, final EReference affectedFeature, final PackageableElement newValue) {
+    return (newValue instanceof org.eclipse.uml2.uml.Package);
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -76,8 +77,10 @@ class CreatePackageReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createdPackage(newValue);
+    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final PackageableElement newValue, @Extension final RoutinesFacade _routinesFacade) {
+      if (false) {
+        _routinesFacade.createdPackage(((org.eclipse.uml2.uml.Package) newValue));
+      }
     }
   }
 }

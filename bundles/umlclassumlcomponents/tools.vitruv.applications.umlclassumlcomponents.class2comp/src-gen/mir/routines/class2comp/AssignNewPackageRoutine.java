@@ -23,15 +23,7 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
       return umlComponent;
     }
     
-    public void update0Element(final org.eclipse.uml2.uml.Package classPackage, final Component umlComponent) {
-      umlComponent.setPackage(classPackage);
-    }
-    
     public EObject getElement2(final org.eclipse.uml2.uml.Package classPackage, final Component umlComponent) {
-      return umlComponent;
-    }
-    
-    public EObject getElement3(final org.eclipse.uml2.uml.Package classPackage, final Component umlComponent) {
       return classPackage;
     }
   }
@@ -52,10 +44,7 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   Package: " + this.classPackage);
     getLogger().debug("   Component: " + this.umlComponent);
     
-    // val updatedElement userExecution.getElement1(classPackage, umlComponent);
-    userExecution.update0Element(classPackage, umlComponent);
-    
-    addCorrespondenceBetween(userExecution.getElement2(classPackage, umlComponent), userExecution.getElement3(classPackage, umlComponent), "");
+    addCorrespondenceBetween(userExecution.getElement1(classPackage, umlComponent), userExecution.getElement2(classPackage, umlComponent), "");
     
     postprocessElements();
   }

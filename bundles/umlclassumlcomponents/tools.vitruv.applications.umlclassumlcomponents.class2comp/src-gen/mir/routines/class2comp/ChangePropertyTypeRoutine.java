@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -21,17 +20,12 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Property classProperty, final DataType classType, final Property compProperty, final DataType compType, final Model compModel) {
+    public EObject getElement1(final Property classProperty, final DataType classType, final Property compProperty, final DataType compType) {
       return compProperty;
     }
     
-    public void update0Element(final Property classProperty, final DataType classType, final Property compProperty, final DataType compType, final Model compModel) {
+    public void update0Element(final Property classProperty, final DataType classType, final Property compProperty, final DataType compType) {
       compProperty.setType(compType);
-    }
-    
-    public EObject getCorrepondenceSourceCompModel(final Property classProperty, final DataType classType, final Property compProperty, final DataType compType) {
-      Model _model = classType.getModel();
-      return _model;
     }
     
     public EObject getCorrepondenceSourceCompType(final Property classProperty, final DataType classType, final Property compProperty) {
@@ -77,17 +71,8 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
     	return;
     }
     registerObjectUnderModification(compType);
-    Model compModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompModel(classProperty, classType, compProperty, compType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
-    if (compModel == null) {
-    	return;
-    }
-    registerObjectUnderModification(compModel);
-    // val updatedElement userExecution.getElement1(classProperty, classType, compProperty, compType, compModel);
-    userExecution.update0Element(classProperty, classType, compProperty, compType, compModel);
+    // val updatedElement userExecution.getElement1(classProperty, classType, compProperty, compType);
+    userExecution.update0Element(classProperty, classType, compProperty, compType);
     
     postprocessElements();
   }
