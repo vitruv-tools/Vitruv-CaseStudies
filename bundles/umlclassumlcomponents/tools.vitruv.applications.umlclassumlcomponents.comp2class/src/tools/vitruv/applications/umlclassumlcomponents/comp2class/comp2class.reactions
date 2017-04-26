@@ -64,10 +64,9 @@ reaction CreatedUmlComponent {
 
 routine createUmlClassWithPackage(umlcomp::Component umlComponent) {
 	match {
-		val umlModel = retrieve umlclass::Model corresponding to umlComponent.package
+		val classModel = retrieve umlclass::Model corresponding to umlComponent.model
 	}
 	action {
-		//TODO fix package creation, still exceptions
 		val classPackage = create umlclass::Package and initialize {
 			classPackage.name = umlComponent.name + " Package"
 		}
@@ -75,17 +74,14 @@ routine createUmlClassWithPackage(umlcomp::Component umlComponent) {
 			umlClass.name = umlComponent.name
 			umlClass.package = classPackage
 		}
-		update umlModel {
-			//umlModel.packagedElements += umlClass //Now in package //TODO check if sufficient
-			umlModel.packagedElements += classPackage
-			//umlModel.allOwningPackages += classPackage //TODO check this, special container needed?
-		}
 		update classPackage {			
 			classPackage.packagedElements += umlClass
 		}
-		//add correspondence between umlComponent and classPackage //TODO add in again
+		update classModel {
+			classModel.packagedElements += classPackage
+		}
 		add correspondence between umlComponent and umlClass
-		//TODO rearrange for clarity
+		add correspondence between umlComponent and classPackage
 	}
 }
 
@@ -100,21 +96,14 @@ reaction RenameComponent {
 routine renameClassAndPackage(umlcomp::Component umlComp, String newName) { 
 	match {
 		val umlClass = retrieve umlclass::Class corresponding to umlComp tagged with ""
-		val classPackage = retrieve optional umlclass::Package corresponding to umlComp //TODO no correspondence yet
+		val classPackage = retrieve optional umlclass::Package corresponding to umlComp
 	}
 	action { 
 		update umlClass {
 			umlClass.name = newName
 		}
-		//TODO: Nullpoiter Exception when not available, optional doesn't fix?
-		//update classPackage {
-		//	classPackage.name = newName
-		//}
 		call {
-			if (umlClass.package !== null) {//TODO temporary solution, no correspondence yet
-				umlClass.package.name = newName + " Package" 
-			}
-			if (classPackage !== null) {//TODO no correspondence yet
+			if (classPackage !== null) {
 				classPackage.name = newName + " Package" 
 			}
 		}
@@ -192,14 +181,14 @@ routine createDataTypeForDataType(umlcomp::DataType compType){
 
 routine createClassForDataType(umlcomp::DataType compType){
 	match {
-		val umlModel = retrieve umlclass::Model corresponding to compType.model
+		val classModel = retrieve umlclass::Model corresponding to compType.model
 	}
 	action {
 		val dataTypeClass = create umlclass::Class and initialize {
 			dataTypeClass.name = compType.name
 		}
-		update umlModel {
-			umlModel.packagedElements += dataTypeClass
+		update classModel {
+			classModel.packagedElements += dataTypeClass
 		}
 		add correspondence between compType and dataTypeClass tag with "DataTypeRepresentation"
 	}	
@@ -213,7 +202,6 @@ reaction AddedDataTypeProperty{
 
 routine addClassDataTypeProperty(umlcomp::Property compProperty, umlcomp::DataType compDataType) {
 	match{
-		val umlModel = retrieve umlclass::Model corresponding to compProperty.model
 		val dataTypeClass = retrieve umlclass::Class corresponding to compDataType tagged with "DataTypeRepresentation"
 	}
 	action {
@@ -254,7 +242,6 @@ reaction AddedDataTypeOperation{
 
 routine addDataTypeOperation(umlcomp::Operation compOperation, umlcomp::DataType compDataType) {
 	match{
-		val umlModel = retrieve umlclass::Model corresponding to compOperation.model
 		val dataTypeClass = retrieve umlclass::Class corresponding to compDataType tagged with "DataTypeRepresentation"
 	}
 	action {

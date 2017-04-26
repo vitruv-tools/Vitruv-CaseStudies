@@ -314,7 +314,7 @@ reaction CreatePackage {
 
 routine createdPackage(umlclass::Package classPackage) {
 	match {
-		val umlModel = retrieve umlcomp::Model corresponding to classPackage
+		val compModel = retrieve umlcomp::Model corresponding to classPackage.model
 		check {
 			val msg = "Do you want to link this Package '" + classPackage.name + "' to an existing Component?"
 			return userInteracting.modalTextYesNoUserInteracting(msg)
@@ -324,7 +324,7 @@ routine createdPackage(umlclass::Package classPackage) {
 		call { 
 			val msg2 = "Choose an existing Component to link Package '" + classPackage.name + "' to:"
 			//Get list of existing components as options for dialog
-			val componentsList = umlModel.packagedElements.filter(Component).toList
+			val componentsList = compModel.packagedElements.filter(Component).toList
 			val options = componentsList.map[e | e.name] 			
 			val selection = userInteracting.modalTextUserinteracting(msg2, options)		
 			//Use selection to assign new package

@@ -5,7 +5,6 @@ import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -23,41 +22,36 @@ public class AddDataTypeOperationRoutine extends AbstractRepairRoutineRealizatio
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Operation compOperation, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
+    public EObject getElement1(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
       return dataTypeClass;
     }
     
-    public void update0Element(final Operation compOperation, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
+    public void update0Element(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
       EList<Operation> _ownedOperations = dataTypeClass.getOwnedOperations();
       _ownedOperations.add(classOperation);
     }
     
-    public String getRetrieveTag1(final Operation compOperation, final DataType compDataType, final Model umlModel) {
+    public String getRetrieveTag1(final Operation compOperation, final DataType compDataType) {
       return "DataTypeRepresentation";
     }
     
-    public EObject getElement2(final Operation compOperation, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
+    public EObject getElement2(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
       return classOperation;
     }
     
-    public EObject getCorrepondenceSourceDataTypeClass(final Operation compOperation, final DataType compDataType, final Model umlModel) {
+    public EObject getCorrepondenceSourceDataTypeClass(final Operation compOperation, final DataType compDataType) {
       return compDataType;
     }
     
-    public EObject getElement3(final Operation compOperation, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
+    public EObject getElement3(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
       return compOperation;
     }
     
-    public String getTag1(final Operation compOperation, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
+    public String getTag1(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
       return "DataTypeOperation";
     }
     
-    public EObject getCorrepondenceSourceUmlModel(final Operation compOperation, final DataType compDataType) {
-      Model _model = compOperation.getModel();
-      return _model;
-    }
-    
-    public void updateClassOperationElement(final Operation compOperation, final DataType compDataType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
+    public void updateClassOperationElement(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
       classOperation.setName(compOperation.getName());
       classOperation.setType(compOperation.getType());
     }
@@ -79,31 +73,22 @@ public class AddDataTypeOperationRoutine extends AbstractRepairRoutineRealizatio
     getLogger().debug("   Operation: " + this.compOperation);
     getLogger().debug("   DataType: " + this.compDataType);
     
-    Model umlModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlModel(compOperation, compDataType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
-    if (umlModel == null) {
-    	return;
-    }
-    registerObjectUnderModification(umlModel);
     org.eclipse.uml2.uml.Class dataTypeClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceDataTypeClass(compOperation, compDataType, umlModel), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceDataTypeClass(compOperation, compDataType), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(compOperation, compDataType, umlModel));
+    	userExecution.getRetrieveTag1(compOperation, compDataType));
     if (dataTypeClass == null) {
     	return;
     }
     registerObjectUnderModification(dataTypeClass);
     Operation classOperation = UMLFactoryImpl.eINSTANCE.createOperation();
-    userExecution.updateClassOperationElement(compOperation, compDataType, umlModel, dataTypeClass, classOperation);
+    userExecution.updateClassOperationElement(compOperation, compDataType, dataTypeClass, classOperation);
     
-    // val updatedElement userExecution.getElement1(compOperation, compDataType, umlModel, dataTypeClass, classOperation);
-    userExecution.update0Element(compOperation, compDataType, umlModel, dataTypeClass, classOperation);
+    // val updatedElement userExecution.getElement1(compOperation, compDataType, dataTypeClass, classOperation);
+    userExecution.update0Element(compOperation, compDataType, dataTypeClass, classOperation);
     
-    addCorrespondenceBetween(userExecution.getElement2(compOperation, compDataType, umlModel, dataTypeClass, classOperation), userExecution.getElement3(compOperation, compDataType, umlModel, dataTypeClass, classOperation), userExecution.getTag1(compOperation, compDataType, umlModel, dataTypeClass, classOperation));
+    addCorrespondenceBetween(userExecution.getElement2(compOperation, compDataType, dataTypeClass, classOperation), userExecution.getElement3(compOperation, compDataType, dataTypeClass, classOperation), userExecution.getTag1(compOperation, compDataType, dataTypeClass, classOperation));
     
     postprocessElements();
   }

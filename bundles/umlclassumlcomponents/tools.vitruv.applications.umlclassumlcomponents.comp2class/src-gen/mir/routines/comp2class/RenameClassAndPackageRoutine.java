@@ -41,12 +41,6 @@ public class RenameClassAndPackageRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void callRoutine1(final Component umlComp, final String newName, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage, @Extension final RoutinesFacade _routinesFacade) {
-      org.eclipse.uml2.uml.Package _package = umlClass.getPackage();
-      boolean _tripleNotEquals = (_package != null);
-      if (_tripleNotEquals) {
-        org.eclipse.uml2.uml.Package _package_1 = umlClass.getPackage();
-        _package_1.setName((newName + " Package"));
-      }
       if ((classPackage != null)) {
         classPackage.setName((newName + " Package"));
       }

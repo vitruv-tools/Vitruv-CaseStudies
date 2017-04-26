@@ -23,32 +23,32 @@ public class CreateClassForDataTypeRoutine extends AbstractRepairRoutineRealizat
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final DataType compType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
-      return umlModel;
+    public EObject getElement1(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
+      return classModel;
     }
     
-    public void update0Element(final DataType compType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
-      EList<PackageableElement> _packagedElements = umlModel.getPackagedElements();
+    public void update0Element(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
+      EList<PackageableElement> _packagedElements = classModel.getPackagedElements();
       _packagedElements.add(dataTypeClass);
     }
     
-    public EObject getElement2(final DataType compType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
+    public EObject getElement2(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
       return compType;
     }
     
-    public EObject getElement3(final DataType compType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
+    public EObject getElement3(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
       return dataTypeClass;
     }
     
-    public String getTag1(final DataType compType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
+    public String getTag1(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
       return "DataTypeRepresentation";
     }
     
-    public void updateDataTypeClassElement(final DataType compType, final Model umlModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
+    public void updateDataTypeClassElement(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
       dataTypeClass.setName(compType.getName());
     }
     
-    public EObject getCorrepondenceSourceUmlModel(final DataType compType) {
+    public EObject getCorrepondenceSourceClassModel(final DataType compType) {
       Model _model = compType.getModel();
       return _model;
     }
@@ -67,22 +67,22 @@ public class CreateClassForDataTypeRoutine extends AbstractRepairRoutineRealizat
     getLogger().debug("Called routine CreateClassForDataTypeRoutine with input:");
     getLogger().debug("   DataType: " + this.compType);
     
-    Model umlModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlModel(compType), // correspondence source supplier
+    Model classModel = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceClassModel(compType), // correspondence source supplier
     	Model.class,
     	(Model _element) -> true, // correspondence precondition checker
     	null);
-    if (umlModel == null) {
+    if (classModel == null) {
     	return;
     }
-    registerObjectUnderModification(umlModel);
+    registerObjectUnderModification(classModel);
     org.eclipse.uml2.uml.Class dataTypeClass = UMLFactoryImpl.eINSTANCE.createClass();
-    userExecution.updateDataTypeClassElement(compType, umlModel, dataTypeClass);
+    userExecution.updateDataTypeClassElement(compType, classModel, dataTypeClass);
     
-    // val updatedElement userExecution.getElement1(compType, umlModel, dataTypeClass);
-    userExecution.update0Element(compType, umlModel, dataTypeClass);
+    // val updatedElement userExecution.getElement1(compType, classModel, dataTypeClass);
+    userExecution.update0Element(compType, classModel, dataTypeClass);
     
-    addCorrespondenceBetween(userExecution.getElement2(compType, umlModel, dataTypeClass), userExecution.getElement3(compType, umlModel, dataTypeClass), userExecution.getTag1(compType, umlModel, dataTypeClass));
+    addCorrespondenceBetween(userExecution.getElement2(compType, classModel, dataTypeClass), userExecution.getElement3(compType, classModel, dataTypeClass), userExecution.getTag1(compType, classModel, dataTypeClass));
     
     postprocessElements();
   }

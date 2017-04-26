@@ -28,22 +28,23 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public boolean checkMatcherPrecondition1(final org.eclipse.uml2.uml.Package classPackage, final Model umlModel) {
+    public EObject getCorrepondenceSourceCompModel(final org.eclipse.uml2.uml.Package classPackage) {
+      Model _model = classPackage.getModel();
+      return _model;
+    }
+    
+    public boolean checkMatcherPrecondition1(final org.eclipse.uml2.uml.Package classPackage, final Model compModel) {
       String _name = classPackage.getName();
       String _plus = ("Do you want to link this Package \'" + _name);
       final String msg = (_plus + "\' to an existing Component?");
       return class2compUtil.modalTextYesNoUserInteracting(this.userInteracting, msg);
     }
     
-    public EObject getCorrepondenceSourceUmlModel(final org.eclipse.uml2.uml.Package classPackage) {
-      return classPackage;
-    }
-    
-    public void callRoutine1(final org.eclipse.uml2.uml.Package classPackage, final Model umlModel, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.eclipse.uml2.uml.Package classPackage, final Model compModel, @Extension final RoutinesFacade _routinesFacade) {
       String _name = classPackage.getName();
       String _plus = ("Choose an existing Component to link Package \'" + _name);
       final String msg2 = (_plus + "\' to:");
-      final List<Component> componentsList = IterableExtensions.<Component>toList(Iterables.<Component>filter(umlModel.getPackagedElements(), Component.class));
+      final List<Component> componentsList = IterableExtensions.<Component>toList(Iterables.<Component>filter(compModel.getPackagedElements(), Component.class));
       final Function1<Component, String> _function = (Component e) -> {
         return e.getName();
       };
@@ -67,19 +68,19 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreatedPackageRoutine with input:");
     getLogger().debug("   Package: " + this.classPackage);
     
-    Model umlModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlModel(classPackage), // correspondence source supplier
+    Model compModel = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceCompModel(classPackage), // correspondence source supplier
     	Model.class,
     	(Model _element) -> true, // correspondence precondition checker
     	null);
-    if (umlModel == null) {
+    if (compModel == null) {
     	return;
     }
-    registerObjectUnderModification(umlModel);
-    if (!userExecution.checkMatcherPrecondition1(classPackage, umlModel)) {
+    registerObjectUnderModification(compModel);
+    if (!userExecution.checkMatcherPrecondition1(classPackage, compModel)) {
     	return;
     }
-    userExecution.callRoutine1(classPackage, umlModel, actionsFacade);
+    userExecution.callRoutine1(classPackage, compModel, actionsFacade);
     
     postprocessElements();
   }

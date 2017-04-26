@@ -159,7 +159,7 @@ class Class2CompTest extends AbstractClass2CompTest {
 	//TODO all broken, even needed?
 	/*@Test
 	public def void testCreateClassAttribute() {
-	    val umlClassAttribute = createClass(CLASS_NAME2, 1, 1)
+	    val umlClassAttribute = createClass(CLASS_NAME2, 1, 1) //TODO change class to attribute
 	    saveAndSynchronizeWithInteractions(umlClassAttribute)
 	    val umlClass = createClass(CLASS_NAME, 0, 1)
 	    umlClass.createOwnedAttribute(ATTR_NAME, umlClassAttribute)
