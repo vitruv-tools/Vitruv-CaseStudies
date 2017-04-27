@@ -28,6 +28,7 @@ public class ExecutorUmlToUml extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.ChangedPropertyTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.ChangedPropertyTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.CreatePackageReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.CreatePackageReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.MoveClassToDifferentPackageReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.MoveClassToDifferentPackageReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.ElementVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.ElementVisibilityChangedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.CreatedInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.CreatedInterfaceReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.InterfaceRealizedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.InterfaceRealizedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.InterfaceDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.InterfaceDeletedReaction(userInteracting));

@@ -16,6 +16,7 @@ import tools.vitruv.applications.umlclassumlcomponents.class2comp.class2compUtil
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
@@ -45,13 +46,19 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
       String _plus = ("Choose an existing Component to link Package \'" + _name);
       final String msg2 = (_plus + "\' to:");
       final List<Component> componentsList = IterableExtensions.<Component>toList(Iterables.<Component>filter(compModel.getPackagedElements(), Component.class));
-      final Function1<Component, String> _function = (Component e) -> {
-        return e.getName();
-      };
-      final List<String> options = ListExtensions.<Component, String>map(componentsList, _function);
-      final int selection = class2compUtil.modalTextUserinteracting(this.userInteracting, msg2, ((String[])Conversions.unwrapArray(options, String.class)));
-      final Component umlComponent = componentsList.get(selection);
-      _routinesFacade.assignNewPackage(classPackage, umlComponent);
+      int _size = componentsList.size();
+      boolean _notEquals = (_size != 0);
+      if (_notEquals) {
+        final Function1<Component, String> _function = (Component e) -> {
+          return e.getName();
+        };
+        final List<String> options = ListExtensions.<Component, String>map(componentsList, _function);
+        final int selection = class2compUtil.modalTextUserinteracting(this.userInteracting, msg2, ((String[])Conversions.unwrapArray(options, String.class)));
+        final Component umlComponent = componentsList.get(selection);
+        _routinesFacade.assignNewPackage(classPackage, umlComponent);
+      } else {
+        this.userInteracting.showMessage(UserInteractionType.MODELESS, "No available Component found");
+      }
     }
   }
   

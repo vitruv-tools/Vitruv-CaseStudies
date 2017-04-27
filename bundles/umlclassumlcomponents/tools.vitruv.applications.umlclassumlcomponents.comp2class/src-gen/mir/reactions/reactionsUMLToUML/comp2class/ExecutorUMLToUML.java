@@ -25,5 +25,6 @@ public class ExecutorUmlToUml extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.ChangedDataTypePropertyReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.ChangedDataTypePropertyReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.AddedDataTypeOperationReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.AddedDataTypeOperationReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.ChangedDataTypeOperationReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.ChangedDataTypeOperationReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.ElementVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.ElementVisibilityChangedReaction(userInteracting));
   }
 }

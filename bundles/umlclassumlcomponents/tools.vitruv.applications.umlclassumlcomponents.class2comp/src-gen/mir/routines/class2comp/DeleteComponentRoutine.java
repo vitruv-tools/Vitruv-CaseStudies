@@ -19,48 +19,45 @@ public class DeleteComponentRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag, final Component umlComponent) {
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final String expectedTag, final Component umlComponent) {
       return umlComponent;
     }
     
-    public String getRetrieveTag1(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag) {
+    public String getRetrieveTag1(final org.eclipse.uml2.uml.Class umlClass, final String expectedTag) {
       return expectedTag;
     }
     
-    public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag) {
+    public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final String expectedTag) {
       return umlClass;
     }
   }
   
-  public DeleteComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag) {
+  public DeleteComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass, final String expectedTag) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.DeleteComponentRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
-    this.umlClass = umlClass;this.packageName = packageName;this.expectedTag = expectedTag;
+    this.umlClass = umlClass;this.expectedTag = expectedTag;
   }
   
   private org.eclipse.uml2.uml.Class umlClass;
-  
-  private String packageName;
   
   private String expectedTag;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteComponentRoutine with input:");
     getLogger().debug("   Class: " + this.umlClass);
-    getLogger().debug("   String: " + this.packageName);
     getLogger().debug("   String: " + this.expectedTag);
     
     Component umlComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlComponent(umlClass, packageName, expectedTag), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUmlComponent(umlClass, expectedTag), // correspondence source supplier
     	Component.class,
     	(Component _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(umlClass, packageName, expectedTag));
+    	userExecution.getRetrieveTag1(umlClass, expectedTag));
     if (umlComponent == null) {
     	return;
     }
     registerObjectUnderModification(umlComponent);
-    deleteObject(userExecution.getElement1(umlClass, packageName, expectedTag, umlComponent));
+    deleteObject(userExecution.getElement1(umlClass, expectedTag, umlComponent));
     
     postprocessElements();
   }

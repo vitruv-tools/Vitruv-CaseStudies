@@ -1,12 +1,19 @@
 package mir.routines.class2comp;
 
+import com.google.common.collect.Iterables;
 import java.io.IOException;
+import java.util.Collections;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
@@ -19,32 +26,42 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Package classPackage, final Component umlComponent) {
-      return umlComponent;
-    }
-    
-    public EObject getElement2(final org.eclipse.uml2.uml.Package classPackage, final Component umlComponent) {
-      return classPackage;
+    public void callRoutine1(final org.eclipse.uml2.uml.Package newPackage, final Component umlComponent, @Extension final RoutinesFacade _routinesFacade) {
+      final Iterable<org.eclipse.uml2.uml.Package> packages = Iterables.<org.eclipse.uml2.uml.Package>filter(Iterables.<EObject>concat(this.correspondenceModel.getCorrespondingEObjects(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(umlComponent)))), org.eclipse.uml2.uml.Package.class);
+      org.eclipse.uml2.uml.Package oldPackage = null;
+      int _size = IterableExtensions.size(packages);
+      boolean _notEquals = (_size != 0);
+      if (_notEquals) {
+        oldPackage = ((org.eclipse.uml2.uml.Package[])Conversions.unwrapArray(packages, org.eclipse.uml2.uml.Package.class))[0];
+      }
+      if ((oldPackage == null)) {
+        this.correspondenceModel.createAndAddCorrespondence(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(umlComponent)), Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(newPackage)));
+      } else {
+        String _name = oldPackage.getName();
+        String _plus = ("Chosen Component is already linked to existing Package \'" + _name);
+        final String msg = (_plus + "\'.");
+        this.userInteracting.showMessage(UserInteractionType.MODELESS, msg);
+      }
     }
   }
   
-  public AssignNewPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package classPackage, final Component umlComponent) {
+  public AssignNewPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package newPackage, final Component umlComponent) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.AssignNewPackageRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
-    this.classPackage = classPackage;this.umlComponent = umlComponent;
+    this.newPackage = newPackage;this.umlComponent = umlComponent;
   }
   
-  private org.eclipse.uml2.uml.Package classPackage;
+  private org.eclipse.uml2.uml.Package newPackage;
   
   private Component umlComponent;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AssignNewPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.classPackage);
+    getLogger().debug("   Package: " + this.newPackage);
     getLogger().debug("   Component: " + this.umlComponent);
     
-    addCorrespondenceBetween(userExecution.getElement1(classPackage, umlComponent), userExecution.getElement2(classPackage, umlComponent), "");
+    userExecution.callRoutine1(newPackage, umlComponent, actionsFacade);
     
     postprocessElements();
   }

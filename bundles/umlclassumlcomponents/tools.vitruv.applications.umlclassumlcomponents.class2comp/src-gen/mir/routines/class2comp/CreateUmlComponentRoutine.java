@@ -1,6 +1,7 @@
 package mir.routines.class2comp;
 
 import java.io.IOException;
+import java.util.Collections;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -8,6 +9,8 @@ import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -48,6 +51,11 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     public void updateUmlComponentElement(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent) {
       umlComponent.setName(umlClass.getName());
     }
+    
+    public void callRoutine1(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final Component umlComponent, @Extension final RoutinesFacade _routinesFacade) {
+      final org.eclipse.uml2.uml.Package classPackage = umlClass.getPackage();
+      this.correspondenceModel.createAndAddCorrespondence(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(umlComponent)), Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(classPackage)));
+    }
   }
   
   public CreateUmlComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass) {
@@ -79,6 +87,8 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     userExecution.update0Element(umlClass, compModel, umlComponent);
     
     addCorrespondenceBetween(userExecution.getElement2(umlClass, compModel, umlComponent), userExecution.getElement3(umlClass, compModel, umlComponent), "");
+    
+    userExecution.callRoutine1(umlClass, compModel, umlComponent, actionsFacade);
     
     postprocessElements();
   }

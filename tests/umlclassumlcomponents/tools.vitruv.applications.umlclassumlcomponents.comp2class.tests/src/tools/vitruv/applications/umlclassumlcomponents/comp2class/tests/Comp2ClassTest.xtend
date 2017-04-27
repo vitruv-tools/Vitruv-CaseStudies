@@ -14,6 +14,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import org.junit.Test
 
 import static org.junit.Assert.*
+import org.eclipse.uml2.uml.VisibilityKind
 
 class Comp2ClassTest extends AbstractComp2ClassTest {
 	private static val COMP_NAME = "TestUmlComp"
@@ -21,7 +22,12 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 	private static val DATATYPE_NAME = "TestDataType"
 	private static val PROPERTY_NAME = "TestProperty"
 	private static val OPERATION_NAME = "TestOperation"
-
+	
+	/*******
+	*Model:*
+	********/	
+	//Model creation currently unused due to usage of one singular model
+	
 	@Test
 		public def void testModelCreation() {
 			assertModelExists("model/" + MODEL_NAME + ".uml")
@@ -32,19 +38,15 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 			assertEquals(MODEL_NAME, (umlModel as Model).name)
 	}
 	
-	/***********
-	*Component:*
-	***********/
-	private def Component createComponent(String name) {
-		val umlComponent = UMLFactory.eINSTANCE.createComponent()
-		umlComponent.name = name
-		rootElement.packagedElements += umlComponent
-		return umlComponent
-	}
 	
+	/***************
+	*Assert Helper:*
+	****************/	
+		
 	private def void assertTypeAndName(EObject umlObject, java.lang.Class<? extends NamedElement> umlType, String name) {	
 		assertTrue(umlObject.class.isInstance(umlType) || umlObject.class.genericInterfaces.contains(umlType))
-		//second condition encloses 'impl'-classes		
+		//Second condition encloses 'impl'-classes	
+			
 		assertEquals(name, (umlObject as NamedElement).name)
 	}
 	
@@ -75,13 +77,26 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		//Check package correspondence 
 		val classPackageFromCorrespondence = correspondingElements.filter(Package).get(0)		
 		assertTypeAndName(classPackageFromCorrespondence, Package, name + " Package")
-	}
+	}	
 	
+	
+	/***********
+	*Component:*
+	************/
+	
+	private def Component createComponent(String name) {
+		val umlComponent = UMLFactory.eINSTANCE.createComponent()
+		umlComponent.name = name
+		rootElement.packagedElements += umlComponent
+		return umlComponent
+	}
+
 	
 	@Test
 	public def void testCreateClassForComponent() {
 		val umlComp = createComponent(COMP_NAME)
 		saveAndSynchronizeChanges(umlComp)
+		
 		assertClassAndPackage(umlComp, COMP_NAME)
 	}
 	
@@ -89,10 +104,12 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
     public def void testRenameComponent() {
     	val umlComp = createComponent("Old")
 		saveAndSynchronizeChanges(rootElement)
-		//change name:
+		
+		//Change name:
 		umlComp.name = "New"
 		saveAndSynchronizeChanges(rootElement)
-		//check if rename happened in class & package:
+		
+		//Check if rename happened in class & package:
 		assertClassAndPackage(umlComp, "New")
     }
     
@@ -107,13 +124,13 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		val classPackage = (umlClass as Class).package
 		val classModel = (umlClass as Class).model
 		
-		//remove component		
+		//Remove component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
 		umlComp.destroy()		
 		assertFalse(rootElement.packagedElements.contains(umlComp))
 		saveAndSynchronizeChanges(rootElement)
 		
-		//check if class exists:		
+		//Check if class exists:		
 		assertFalse(classPackage.packagedElements.contains(umlClass))
 		assertFalse(classModel.packagedElements.contains(umlClass))
     }
@@ -127,13 +144,16 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		assertClassAndPackage(umlComp2, COMP_NAME2)
 	}
 	
+	
     /**********
 	*Datatype:*
-	**********/
+	***********/
+	
 	@Test
 	public def void testCreateClassForDataType() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
+		
 		assertClass(compDataType, DATATYPE_NAME)		
 	}
 	
@@ -156,8 +176,8 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		compProperty.name = PROPERTY_NAME
 		compDataType.ownedAttributes += compProperty
 		saveAndSynchronizeChanges(compDataType)
-		assertEquals(1, umlClass.ownedAttributes.size)
 		
+		assertEquals(1, umlClass.ownedAttributes.size)		
 		val classProperty = umlClass.ownedAttributes.get(0)
 		assertTypeAndName(classProperty, Property, PROPERTY_NAME)				
 	}
@@ -194,8 +214,8 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		compOperation.name = OPERATION_NAME
 		compDataType.ownedOperations += compOperation
 		saveAndSynchronizeChanges(compDataType)		
-		assertEquals(1, umlClass.ownedOperations.size)
 		
+		assertEquals(1, umlClass.ownedOperations.size)		
 		val classOperation = umlClass.ownedOperations.get(0)
 		assertTypeAndName(classOperation, Operation, OPERATION_NAME)			
 	}
@@ -220,6 +240,30 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		val classOperation = umlClass.ownedOperations.get(0)
 		assertEquals("New", (classOperation as Operation).name)
     }
+		   
+		    	
+   	/***********
+	*Visibility:*
+	************/
 	
+	private def void assertVisibility(NamedElement element) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[element]).flatten
+		for (EObject corrElement : correspondingElements) {
+			assertTrue((corrElement as NamedElement).visibility == element.visibility)
+		} 
+		
+	}
+	
+	@Test
+	public def void testVisibilityChange() {
+		val umlComp = createComponent(COMP_NAME)
+		umlComp.visibility = VisibilityKind.PRIVATE_LITERAL
+		saveAndSynchronizeChanges(umlComp)		
+		assertVisibility(umlComp)
+		
+		umlComp.visibility = VisibilityKind.PUBLIC_LITERAL
+		saveAndSynchronizeChanges(umlComp)		
+		assertVisibility(umlComp)
+	}			
 }
 

@@ -1,6 +1,8 @@
 import org.eclipse.uml2.uml.PrimitiveType
 import static extension tools.vitruv.applications.umlclassumlcomponents.comp2class.comp2classUtil.*
 import org.eclipse.uml2.uml.Component
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.uml2.uml.NamedElement
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
@@ -8,6 +10,7 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
 reactions: comp2class
 in reaction to changes in UML
 execute actions in UML
+
 
 /*******
 *Model:*
@@ -50,9 +53,10 @@ routine renameClassModelForComponentModel(umlcomp::Model umlCompModel) {
 	}
 }
 
-/*******
+
+/***********
 *Component:*
-********/
+************/
 
 reaction CreatedUmlComponent {
 	after element umlcomp::Component created and inserted in umlcomp::Model[packagedElement]
@@ -146,9 +150,10 @@ routine renameElement(umlclass::NamedElement compElement) {
 	}
 }
 
+
 /**********
 *Datatpye:*
-**********/
+***********/
 
 reaction CreatedDatatype {
 	after element umlcomp::DataType created and inserted in umlcomp::Model[packagedElement]
@@ -269,6 +274,26 @@ routine changeClassDataTypeOperation(umlcomp::Operation compOperation) {
 	action {
 		update classOperation { 
 			classOperation.name = compOperation.name	
+		}
+	}
+}	
+	
+/************
+*Visibility:*
+************/
+
+reaction ElementVisibilityChanged {
+	after attribute replaced at umlcomp::NamedElement[visibility]
+	call changeCorrespondingVisibility(affectedEObject)
+}
+
+routine changeCorrespondingVisibility(umlcomp::NamedElement compElement) {
+	action {
+		call {
+			val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compElement]).flatten
+			for (EObject classElement : correspondingElements) {
+				(classElement as NamedElement).visibility = compElement.visibility
+			}
 		}
 	}
 	

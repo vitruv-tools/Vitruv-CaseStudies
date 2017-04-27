@@ -31,9 +31,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void routineCreatedUmlClass(final org.eclipse.uml2.uml.Class umlClass) {
+  public void routineCreatedUmlClass(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage) {
     mir.routines.class2comp.RoutineCreatedUmlClassRoutine effect = new mir.routines.class2comp.RoutineCreatedUmlClassRoutine(this.executionState, calledBy,
-    	umlClass);
+    	umlClass, classPackage);
     effect.applyRoutine();
   }
   
@@ -55,9 +55,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void deleteComponent(final org.eclipse.uml2.uml.Class umlClass, final String packageName, final String expectedTag) {
+  public void deleteComponent(final org.eclipse.uml2.uml.Class umlClass, final String expectedTag) {
     mir.routines.class2comp.DeleteComponentRoutine effect = new mir.routines.class2comp.DeleteComponentRoutine(this.executionState, calledBy,
-    	umlClass, packageName, expectedTag);
+    	umlClass, expectedTag);
     effect.applyRoutine();
   }
   
@@ -109,9 +109,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void assignNewPackage(final org.eclipse.uml2.uml.Package classPackage, final Component umlComponent) {
+  public void assignNewPackage(final org.eclipse.uml2.uml.Package newPackage, final Component umlComponent) {
     mir.routines.class2comp.AssignNewPackageRoutine effect = new mir.routines.class2comp.AssignNewPackageRoutine(this.executionState, calledBy,
-    	classPackage, umlComponent);
+    	newPackage, umlComponent);
     effect.applyRoutine();
   }
   
@@ -124,6 +124,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void removeCorrespondence(final Classifier classObject, final Classifier compObject) {
     mir.routines.class2comp.RemoveCorrespondenceRoutine effect = new mir.routines.class2comp.RemoveCorrespondenceRoutine(this.executionState, calledBy,
     	classObject, compObject);
+    effect.applyRoutine();
+  }
+  
+  public void changeCorrespondingVisibility(final NamedElement classElement) {
+    mir.routines.class2comp.ChangeCorrespondingVisibilityRoutine effect = new mir.routines.class2comp.ChangeCorrespondingVisibilityRoutine(this.executionState, calledBy,
+    	classElement);
     effect.applyRoutine();
   }
   

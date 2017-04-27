@@ -1,8 +1,11 @@
-import org.eclipse.uml2.uml.DataType
-import org.eclipse.uml2.uml.PrimitiveType
-import org.eclipse.uml2.uml.Package
-import org.eclipse.uml2.uml.Component
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Classifier
+import org.eclipse.uml2.uml.Component
+import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.NamedElement
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.PrimitiveType
+import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import static extension tools.vitruv.applications.umlclassumlcomponents.class2comp.class2compUtil.*
 
@@ -58,16 +61,17 @@ routine renameComponentModelForClassModel( umlclass::Model umlClassModel) {
 /*******
 *Class:*
 ********/
+
 reaction CreatedUmlClass {
 	after element umlclass::Class created and inserted in umlclass::Package[packagedElement]
 	call {
-		routineCreatedUmlClass(newValue)
+		routineCreatedUmlClass(newValue, affectedEObject)
 	}
 	
 }
 
-routine routineCreatedUmlClass(umlclass::Class umlClass){
-	match{
+routine routineCreatedUmlClass(umlclass::Class umlClass, umlclass::Package classPackage){
+	match {
 		check {
 			val msg = "Create corresponding Component or DataType for created class '" + umlClass.name + "'?"
 			return userInteracting.modalTextYesNoUserInteracting(msg)
@@ -75,12 +79,34 @@ routine routineCreatedUmlClass(umlclass::Class umlClass){
 	}
 	action{
 		call {
-			val msg = "Should '" + umlClass.name + "' be represented by a DataType?"
+			val msg = "Should '" + umlClass.name + "' be represented by a DataType? If not, it will be a Component."
 			if (userInteracting.modalTextYesNoUserInteracting(msg))
         		createDataTypeForClass(umlClass)
         	else {
-        		createUmlComponent(umlClass)			
-        	}
+        		//Create Component:
+        		
+        		//Component creation for class in Model forbidden:
+        		if ( !(classPackage.class.isInstance(Package) || classPackage.class.genericInterfaces.contains(Package)) ) {
+        			val String msg2 = "Can't create Component '"  + umlClass.name + "' in Model '"+ classPackage.name
+						+"'. No new Component created. Please create '" + umlClass.name + "' in a Package."
+					userInteracting.showMessage(UserInteractionType.MODELESS, msg2)
+        		} else {
+	        		//Get Component matching to Package
+					val comps = correspondenceModel.getCorrespondingEObjects(#[classPackage]).flatten.filter(Component)
+					var Component matchedPackageComponent = null
+					if (comps.size != 0) 
+						matchedPackageComponent = comps.get(0)
+	        		
+	        		if (matchedPackageComponent === null) { //Check if this Package already has a Component
+	        			createUmlComponent(umlClass)
+		        	} else {
+		        		val String msg3 = "Package '" + classPackage.name + "' already has a corresponding Component '"
+		        			+ matchedPackageComponent.name + "'. No new Component created. Create '" + umlClass.name + "' in a different Package."
+						userInteracting.showMessage(UserInteractionType.MODELESS, msg3)
+		        	}
+		        	
+	        	}
+	        }
 		}
 	}
 }
@@ -97,6 +123,14 @@ routine createUmlComponent(umlclass::Class umlClass) {
 			compModel.packagedElements += umlComponent
 		
 		add correspondence between umlClass and umlComponent
+		
+		call {
+			val classPackage = umlClass.package
+			//Only add correspondence if classPackage is not a Model (or ModelImpl)
+			//if (classPackage.class.isInstance(Package) || classPackage.class.genericInterfaces.contains(Package)) //TODO out for now, back in later? 
+				correspondenceModel.createAndAddCorrespondence(#[umlComponent], #[classPackage])				
+				//add correspondence between umlComponent and umlClass.package
+		}
 	}
 }
 
@@ -140,11 +174,11 @@ routine renameComponent(umlclass::Class umlClass) {
 reaction DeletedClass{
 	after element umlclass::Class deleted and removed from umlclass::Package[packagedElement]
 	call{
-		deleteComponent(oldValue, oldValue.name, "")
+		deleteComponent(oldValue, "")
 	}
 }
 
-routine deleteComponent(umlclass::Class umlClass, String packageName, String expectedTag) { 
+routine deleteComponent(umlclass::Class umlClass, String expectedTag) { 
 	match {
 		val umlComponent = retrieve umlcomp::Component corresponding to umlClass tagged with expectedTag
 	} 
@@ -214,9 +248,9 @@ routine createDataType(umlclass::DataType classType) {
 	}
 }
 
-/***********
+/************
 *Attributes:*
-************/
+*************/
 
 reaction ClassAttributeCreated {
     after element umlclass::Property created and inserted in umlclass::Class[ownedAttribute]
@@ -307,8 +341,7 @@ reaction CreatePackage {
 	after element created and inserted in umlclass::Model[packagedElement]
 		with (newValue instanceof Package)
 	call {
-		if (false) //TODO: add back in once correspondeces are added 
-			createdPackage(newValue as Package)
+		createdPackage(newValue as Package)		
 	}
 }
 
@@ -325,21 +358,38 @@ routine createdPackage(umlclass::Package classPackage) {
 			val msg2 = "Choose an existing Component to link Package '" + classPackage.name + "' to:"
 			//Get list of existing components as options for dialog
 			val componentsList = compModel.packagedElements.filter(Component).toList
-			val options = componentsList.map[e | e.name] 			
-			val selection = userInteracting.modalTextUserinteracting(msg2, options)		
-			//Use selection to assign new package
-			val umlComponent = componentsList.get(selection)
-			assignNewPackage(classPackage, umlComponent)
+			if (componentsList.size != 0) { 
+				val options = componentsList.map[e | e.name] 			
+				val selection = userInteracting.modalTextUserinteracting(msg2, options)		
+				//Use selection to assign new package
+				val umlComponent = componentsList.get(selection)
+				assignNewPackage(classPackage, umlComponent)
+			} else {
+				userInteracting.showMessage(UserInteractionType.MODELESS, "No available Component found")
+			}
 		}
 					
 	}
 }
 
-routine assignNewPackage(umlclass::Package classPackage, umlclass::Component umlComponent) {
+routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlComponent) {
 	action {
-		add correspondence between umlComponent and classPackage	
+		call {
+			val packages = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten.filter(Package)
+			var Package oldPackage = null
+			if (packages.size != 0) 
+				oldPackage = packages.get(0)
+			
+			
+			if (oldPackage === null) {
+				correspondenceModel.createAndAddCorrespondence(#[umlComponent], #[newPackage])
+				//add correspondence between umlComponent and newPackage
+			} else {
+				val String msg = "Chosen Component is already linked to existing Package '" + oldPackage.name + "'."
+				userInteracting.showMessage(UserInteractionType.MODELESS, msg)
+			}
+		}
 	} 
-
 }
 
 
@@ -382,10 +432,30 @@ routine removeCorrespondence(umlclass::Classifier classObject, umlcomp::Classifi
 //TODO reaction RenamePackage, needed? rename component not possible as rename class would be required too
 
 
+/***********
+*Visibility:*
+************/
+
+reaction ElementVisibilityChanged {
+	after attribute replaced at umlclass::NamedElement[visibility]
+	call changeCorrespondingVisibility(affectedEObject)
+}
+
+routine changeCorrespondingVisibility(umlclass::NamedElement classElement) {
+	action {
+		call {
+			val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[classElement]).flatten
+			for (EObject compElement : correspondingElements) {
+				(compElement as NamedElement).visibility = classElement.visibility
+			}
+		}
+	}
+}
+
 
 /************
 *Interfaces:*
-************/
+*************/
 
 //TODO: implement correctly
 reaction CreatedInterface {

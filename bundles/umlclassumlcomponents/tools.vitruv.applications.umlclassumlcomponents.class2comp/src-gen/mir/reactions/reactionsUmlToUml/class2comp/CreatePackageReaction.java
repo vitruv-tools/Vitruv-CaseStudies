@@ -78,9 +78,7 @@ class CreatePackageReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final PackageableElement newValue, @Extension final RoutinesFacade _routinesFacade) {
-      if (false) {
-        _routinesFacade.createdPackage(((org.eclipse.uml2.uml.Package) newValue));
-      }
+      _routinesFacade.createdPackage(((org.eclipse.uml2.uml.Package) newValue));
     }
   }
 }

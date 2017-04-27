@@ -87,4 +87,10 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     	compOperation);
     effect.applyRoutine();
   }
+  
+  public void changeCorrespondingVisibility(final NamedElement compElement) {
+    mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine effect = new mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine(this.executionState, calledBy,
+    	compElement);
+    effect.applyRoutine();
+  }
 }
