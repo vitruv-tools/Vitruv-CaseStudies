@@ -58,12 +58,15 @@ public class RoutineCreatedUmlClassRoutine extends AbstractRepairRoutineRealizat
           this.userInteracting.showMessage(UserInteractionType.MODELESS, msg2);
         } else {
           final Iterable<Component> comps = Iterables.<Component>filter(Iterables.<EObject>concat(this.correspondenceModel.getCorrespondingEObjects(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(classPackage)))), Component.class);
-          Component matchedPackageComponent = null;
+          Component _xifexpression = null;
           int _size = IterableExtensions.size(comps);
           boolean _notEquals = (_size != 0);
           if (_notEquals) {
-            matchedPackageComponent = ((Component[])Conversions.unwrapArray(comps, Component.class))[0];
+            _xifexpression = ((Component[])Conversions.unwrapArray(comps, Component.class))[0];
+          } else {
+            _xifexpression = null;
           }
+          Component matchedPackageComponent = _xifexpression;
           if ((matchedPackageComponent == null)) {
             _routinesFacade.createUmlComponent(umlClass);
           } else {

@@ -93,10 +93,8 @@ routine routineCreatedUmlClass(umlclass::Class umlClass, umlclass::Package class
         		} else {
 	        		//Get Component matching to Package
 					val comps = correspondenceModel.getCorrespondingEObjects(#[classPackage]).flatten.filter(Component)
-					var Component matchedPackageComponent = null
-					if (comps.size != 0) 
-						matchedPackageComponent = comps.get(0)
-	        		
+					var Component matchedPackageComponent = if(comps.size != 0) comps.get(0) else null
+						        		
 	        		if (matchedPackageComponent === null) { //Check if this Package already has a Component
 	        			createUmlComponent(umlClass)
 		        	} else {
@@ -126,8 +124,8 @@ routine createUmlComponent(umlclass::Class umlClass) {
 		
 		call {
 			val classPackage = umlClass.package
-			//Only add correspondence if classPackage is not a Model (or ModelImpl)
-			//if (classPackage.class.isInstance(Package) || classPackage.class.genericInterfaces.contains(Package)) //TODO out for now, back in later? 
+			//Only add correspondence if classPackage is not a Model (or ModelImpl) //TODO out for now, back in later? 
+			//if (classPackage.class.isInstance(Package) || classPackage.class.genericInterfaces.contains(Package)) 
 				correspondenceModel.createAndAddCorrespondence(#[umlComponent], #[classPackage])				
 				//add correspondence between umlComponent and umlClass.package
 		}
@@ -372,14 +370,11 @@ routine createdPackage(umlclass::Package classPackage) {
 	}
 }
 
-routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlComponent) {
+routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlComponent) { //TODO rewrite this to fit new package linking
 	action {
 		call {
 			val packages = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten.filter(Package)
-			var Package oldPackage = null
-			if (packages.size != 0) 
-				oldPackage = packages.get(0)
-			
+			var Package oldPackage = if(packages.size != 0) packages.get(0) else null			
 			
 			if (oldPackage === null) {
 				correspondenceModel.createAndAddCorrespondence(#[umlComponent], #[newPackage])
@@ -404,17 +399,14 @@ routine movedClassToDifferentPackage(umlclass::Class umlClass, umlclass::Package
 		val packageNewComp = retrieve optional umlcomp::Component corresponding to newPackage
 		val compLinked = retrieve optional umlcomp::Component corresponding to umlClass
 		
-		//TODO check if class has no corresponding component
+		//TODO check if class has no corresponding component?
 		//require absence of umlcomp::Component corresponding to umlClass
 	}
 	action {
 		call {
 			if (packageOldComp !== null)
 				removeCorrespondence(umlClass as Classifier, packageOldComp as Classifier) //shouldn't happen, TODO check this
-		}		
-		
-		
-		
+		}			
 		//add correspondence between umlClass and packageNewComp
 		
 		//TODO Implement rename handling concept

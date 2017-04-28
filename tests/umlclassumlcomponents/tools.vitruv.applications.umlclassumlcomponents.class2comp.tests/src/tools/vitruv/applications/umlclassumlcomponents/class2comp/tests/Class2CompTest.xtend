@@ -223,7 +223,7 @@ class Class2CompTest extends AbstractClass2CompTest {
 	}	
 	
 	@Test
-	public def void testCreatePackageWithLinkSuccess() {
+	public def void testCreatePackageWithLinkSuccess() { //TODO Fix later with new package linking
 		//Create Component without Package:
 		val umlClass = createClass(CLASS_NAME, 0, 1)
 		saveAndSynchronizeWithInteractions(umlClass)
@@ -253,7 +253,7 @@ class Class2CompTest extends AbstractClass2CompTest {
 	}
 	
 	@Test
-	public def void testCreatePackageWithLinkButComponentHasLink() {
+	public def void testCreatePackageWithLinkButComponentHasLink() { //TODO Fix later with new package linking
 		//Create a Class with a corresponding Component:
 		val classPackageOld = createPackage(CLASS_NAME)
 		val umlClass = createClass(CLASS_NAME, classPackageOld, 0, 1)

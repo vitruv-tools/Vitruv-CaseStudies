@@ -28,12 +28,15 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package newPackage, final Component umlComponent, @Extension final RoutinesFacade _routinesFacade) {
       final Iterable<org.eclipse.uml2.uml.Package> packages = Iterables.<org.eclipse.uml2.uml.Package>filter(Iterables.<EObject>concat(this.correspondenceModel.getCorrespondingEObjects(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(umlComponent)))), org.eclipse.uml2.uml.Package.class);
-      org.eclipse.uml2.uml.Package oldPackage = null;
+      org.eclipse.uml2.uml.Package _xifexpression = null;
       int _size = IterableExtensions.size(packages);
       boolean _notEquals = (_size != 0);
       if (_notEquals) {
-        oldPackage = ((org.eclipse.uml2.uml.Package[])Conversions.unwrapArray(packages, org.eclipse.uml2.uml.Package.class))[0];
+        _xifexpression = ((org.eclipse.uml2.uml.Package[])Conversions.unwrapArray(packages, org.eclipse.uml2.uml.Package.class))[0];
+      } else {
+        _xifexpression = null;
       }
+      org.eclipse.uml2.uml.Package oldPackage = _xifexpression;
       if ((oldPackage == null)) {
         this.correspondenceModel.createAndAddCorrespondence(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(umlComponent)), Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(newPackage)));
       } else {
