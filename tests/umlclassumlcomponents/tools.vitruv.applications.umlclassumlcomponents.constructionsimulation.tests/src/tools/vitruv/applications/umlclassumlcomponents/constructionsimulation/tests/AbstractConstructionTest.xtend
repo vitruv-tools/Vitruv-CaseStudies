@@ -40,17 +40,11 @@ abstract class AbstractConstructionTest extends VitruviusApplicationTest  {
 		return #[new UmlClass2UmlCompChangePropagation()]
 	}	
 
+	//hack for handling of one singular UML model instead of two
 	override protected getVitruvDomains() {
-		//return #[new UmlDomain().metamodel, new UmlDomain().metamodel]
-		//return #[new UmlDomain().metamodel]
 		return #[new UmlDomainProvider().domain]
 	}	
 	
-	//hack for handling of one singular UML model instead of two
-	/*override protected getCorrespondenceModel(){
-		val Metamodel umlMM = metamodels.iterator().next
-		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()) 
-	}*/
 	//hack for handling of one singular UML model instead of two
 	override protected getCorrespondenceModel() {
 		val VitruvDomain umlDomain = this.getVitruvDomains().iterator().next

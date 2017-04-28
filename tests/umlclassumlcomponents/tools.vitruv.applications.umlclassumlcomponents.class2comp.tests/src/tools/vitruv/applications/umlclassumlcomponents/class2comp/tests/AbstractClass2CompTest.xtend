@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EObject
 import tools.vitruv.applications.umlclassumlcomponents.class2comp.tests.Class2CompTestUtil
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.domains.VitruvDomain
+import org.eclipse.uml2.uml.Type
 
 abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml"
@@ -22,12 +23,11 @@ abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
 	}
 	
 	/*protected def Model getRootElement(Type umlPackage) {
-		return umlPackage.package.name.projectModelPath.root as Model
+		return umlPackage.package.name.projectModelPath.firstRootElement as Model
 	}*/
 
+	//hack for handling of one singular UML model instead of two
 	override protected getVitruvDomains() {
-		//return #[new UmlDomain().metamodel, new UmlDomain().metamodel]
-		//return #[new UmlDomain().metamodel]
 		return #[new UmlDomainProvider().domain]
 	}
 		
@@ -41,11 +41,6 @@ abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
 		createAndSynchronizeModel(MODEL_NAME.projectModelPath, umlModel)
 	}
 	
-	/*//hack for handling of one singular UML model instead of two
-	override protected getCorrespondenceModel() {
-		val Metamodel umlMM = metamodels.iterator().next
-		return this.getVirtualModel().getCorrespondenceModel(umlMM.getURI(), umlMM.getURI()) 
-	}*/		
 	//hack for handling of one singular UML model instead of two
 	override protected getCorrespondenceModel() {
 		val VitruvDomain umlDomain = this.getVitruvDomains().iterator().next
