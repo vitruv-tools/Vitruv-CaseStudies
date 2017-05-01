@@ -80,9 +80,14 @@ class JavaUtil {
     
     private new() {}
     
-    def static void addJavaVisibilityModifier(AnnotableAndModifiable modifiable, JavaVisibility visibility) {
+    def static void setJavaVisibilityModifier(AnnotableAndModifiable modifiable, JavaVisibility visibility) {
     	val visibilityModifier = getJavaVisibilityModifierFromEnum(visibility)
-    	addModifierIfNotNull(modifiable, visibilityModifier)
+    	if (visibilityModifier !== null) {
+    	    removeJavaVisibilityModifiers(modifiable)
+    	    setJavaModifier(modifiable, visibilityModifier, true)
+    	} else {
+    	    logger.warn("No corresponding Java-Visibility-Modifier found for " + visibility)
+    	}
     }
         
     
@@ -110,7 +115,7 @@ class JavaUtil {
     def static createJavaClass(String name, JavaVisibility visibility, boolean abstr, boolean fin) {
         val jClass = ClassifiersFactory.eINSTANCE.createClass;
         setName(jClass, name)
-        addJavaVisibilityModifier(jClass, visibility)
+        tools.vitruv.applications.umljava.util.JavaUtil.setJavaVisibilityModifier(jClass, visibility)
         setAbstract(jClass, abstr)
         setFinal(jClass, fin)
 
@@ -160,7 +165,7 @@ class JavaUtil {
         val jMethod = MembersFactory.eINSTANCE.createClassMethod;
         setName(jMethod, name)
         setTypeReference(jMethod, returnType)
-        addJavaVisibilityModifier(jMethod, visibility)
+        tools.vitruv.applications.umljava.util.JavaUtil.setJavaVisibilityModifier(jMethod, visibility)
 		setAbstract(jMethod, abstr)
 		setStatic(jMethod, stat)
         addParametersIfNotNull(jMethod, params)
@@ -184,7 +189,7 @@ class JavaUtil {
     def static  createJavaAttribute(String name, TypeReference type, JavaVisibility visibility, boolean fin, boolean stat) {
         val jAttribute = MembersFactory.eINSTANCE.createField;
         setName(jAttribute, name)
-        addJavaVisibilityModifier(jAttribute, visibility)
+        tools.vitruv.applications.umljava.util.JavaUtil.setJavaVisibilityModifier(jAttribute, visibility)
         setFinal(jAttribute, fin)
         setStatic(jAttribute, stat)
         setTypeReference(jAttribute, type)
@@ -405,7 +410,7 @@ class JavaUtil {
    	   val constructor = MembersFactory.eINSTANCE.createConstructor
    	   setName(constructor, jClass.name)
    	   addParametersIfNotNull(constructor, params)
-   	   addJavaVisibilityModifier(constructor, visibility)
+   	   tools.vitruv.applications.umljava.util.JavaUtil.setJavaVisibilityModifier(constructor, visibility)
    	   jClass.members += constructor
    	   
    	   return constructor

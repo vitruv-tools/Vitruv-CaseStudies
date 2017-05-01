@@ -10,7 +10,6 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.members.Field
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.Modifier
 import org.emftext.language.java.modifiers.ModifiersFactory
@@ -33,31 +32,10 @@ class UmlToJavaHelper {
 	private new() {
 	}
     
-    def static void setJavaVisibility(AnnotableAndModifiable jModifiable, VisibilityKind vis) {
-        removeJavaVisibilityModifiers(jModifiable);
-        val v = getJavaVisibility(vis);
-        if (v != null) {
-            jModifiable.addModifier(v);
-        }
-        
+    def static void setJavaVisibility(AnnotableAndModifiable jModifiable, VisibilityKind uVisibility) {
+        setJavaVisibilityModifier(jModifiable, getJavaVisibilityConstantFromUmlVisibilityKind(uVisibility))
     }
     
-    
-    
-    /**
-     * Liefert zu einem UML-VisibilityKind den entsprechenden Java-Sichtbarkeitsmodifier.
-     * Default-Rückgabe: null -> Package-Private
-     */
-    def static Modifier getJavaVisibility(VisibilityKind v) {
-        switch v {
-                case VisibilityKind.PRIVATE_LITERAL : return ModifiersFactory.eINSTANCE.createPrivate
-                case VisibilityKind.PROTECTED_LITERAL : return ModifiersFactory.eINSTANCE.createProtected
-                case VisibilityKind.PUBLIC_LITERAL : return ModifiersFactory.eINSTANCE.createPublic
-                case VisibilityKind.PACKAGE_LITERAL : return null
-                default : throw new IllegalArgumentException("Invalid VisibilityKind: " + v)
-            }
-    }
-
     /**
  	 * Creates a Java-NamespaceReference if cType != null
      * Creates a PrimitiveType if dType != null && cType == null
@@ -116,9 +94,4 @@ class UmlToJavaHelper {
 	    return selectedClass.name
     }
 	
-	def static createJavaEnumConstant(EnumerationLiteral enumLiteral) {
-		val enumConstant = MembersFactory.eINSTANCE.createEnumConstant
-		enumConstant.name = enumLiteral.name
-		return enumConstant
-	}
 }
