@@ -11,6 +11,7 @@ import tools.vitruv.applications.umljava.uml2java.tests.*
     UmlToJavaInterfaceMethodTest,
     UmlToJavaInterfaceTest,
     UmlToJavaClassMethodTest,
+    UmlToJavaAssociationTest,
     UmlToJavaAttributeTest)
 class UmlToJavaTestSuite {
     
