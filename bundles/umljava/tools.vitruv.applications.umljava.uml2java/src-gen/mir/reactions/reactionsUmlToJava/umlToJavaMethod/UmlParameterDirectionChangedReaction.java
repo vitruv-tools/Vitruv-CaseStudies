@@ -70,7 +70,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setJavaMethodReturnType(affectedEObject.getOperation());
+      _routinesFacade.adaptJavaParametertoDirectionChange(affectedEObject.getOperation(), affectedEObject, oldValue, newValue);
     }
   }
 }

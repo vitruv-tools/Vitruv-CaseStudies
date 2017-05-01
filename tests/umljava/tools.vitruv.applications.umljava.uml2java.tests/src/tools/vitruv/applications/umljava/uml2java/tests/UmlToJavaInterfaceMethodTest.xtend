@@ -22,7 +22,6 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
     private static val IOPERATION_NAME = "interfaceMethod";
     private static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod";
     private static val IOPERATION_RENAME = "interfaceMethodRenamed";
-    private static val PARAMETER_NAME = "parameterName";
     
     private static var org.eclipse.uml2.uml.Interface uI;
     private static var org.eclipse.uml2.uml.Class typeClass;
@@ -99,19 +98,6 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
         assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
         assertMethodEquals(op, jMethod)
     }
-    
-    @Test
-    def testCreateInterfaceParameter() {
-        val param = createUmlParameter(PARAMETER_NAME, typeClass);
-        op.ownedParameters += param;
-        saveAndSynchronizeChanges(op);
-        
-        val jMethod = getCorrespondingInterfaceMethod(op)
-        val jParam = getCorrespondingParameter(param)
-        val jTypeClass = getCorrespondingClass(typeClass)
-        assertJavaMethodHasUniqueParameter(jMethod, PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertMethodEquals(op, jMethod)
-        }
         
     
 }

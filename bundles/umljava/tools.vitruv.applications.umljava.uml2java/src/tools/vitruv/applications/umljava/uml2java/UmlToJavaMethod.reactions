@@ -18,6 +18,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
+import org.emftext.language.java.parameters.OrdinaryParameter
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -87,7 +88,7 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
     action {
         val javaParam = create java::OrdinaryParameter and initialize {
         	if (umlParam == null) {
-        		javaParam.name = "DefaultParameterName"
+        		javaParam.name = "DefaultParameterName" //TODO notwendig?
         	} else {
         		javaParam.name = umlParam.name;
         	}
@@ -143,21 +144,30 @@ reaction UmlMethodReturnTypeChanged {
 
 reaction UmlParameterDirectionChanged {
     after attribute replaced at uml::Parameter[direction]
-    call setJavaMethodReturnType(affectedEObject.operation)
+    call adaptJavaParametertoDirectionChange(affectedEObject.operation, affectedEObject, oldValue, newValue)
 }
 
-routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, plain ParameterDirectionKind as oldDirection,
+routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Parameter uParam, plain ParameterDirectionKind as oldDirection,
 	plain ParameterDirectionKind as newDirection) {
 	match {
 		val jMethod = retrieve java::Method corresponding to uOperation
-		val customTypeClass = retrieve optional java::Class corresponding to uOperation.type
+		val jParam = retrieve optional java::OrdinaryParameter corresponding to uParam
+		val customTypeClass = retrieve optional java::Class corresponding to uParam.type
 	}
 	action {
 		update jMethod {
 			if (newDirection == ParameterDirectionKind.RETURN_LITERAL) {
-				jMethod.typeReference = createTypeReference(uOperation.type, customTypeClass)
+				jMethod.typeReference = createTypeReference(uParam.type, customTypeClass)
 			} else if (oldDirection == ParameterDirectionKind.RETURN_LITERAL) {
 				jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
+			}
+		}
+		
+		call {
+		    if (newDirection == ParameterDirectionKind.RETURN_LITERAL && jParam !== null) {
+			    deleteJavaParameter(uParam)
+			} else if (newDirection == ParameterDirectionKind.IN_LITERAL && jParam === null) {
+			    createJavaParameter(uOperation, uParam)
 			}
 		}
 	}

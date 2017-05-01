@@ -45,9 +45,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void adaptJavaParametertoDirectionChange(final Operation uOperation, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
+  public void adaptJavaParametertoDirectionChange(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
     mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine effect = new mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine(this.executionState, calledBy,
-    	uOperation, oldDirection, newDirection);
+    	uOperation, uParam, oldDirection, newDirection);
     effect.applyRoutine();
   }
   

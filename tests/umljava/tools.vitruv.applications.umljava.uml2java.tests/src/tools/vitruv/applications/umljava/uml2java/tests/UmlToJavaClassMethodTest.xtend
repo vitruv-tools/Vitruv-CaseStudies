@@ -26,8 +26,6 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     private static val OPERATION_RENAME = "classMethodRenamed";
     private static val PRIMITIVE_TYPE = "int"
     private static val PARAMETER_NAME = "parameterName";
-    private static val STANDARD_PARAMETER_NAME = "standardParameterName"
-    private static val PARAMETER_RENAME = "parameterRenamed";
     
     private static var org.eclipse.uml2.uml.Class uClass
     private static var org.eclipse.uml2.uml.Class typeClass
@@ -149,39 +147,4 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
         assertMethodEquals(uOperation, jMethod)
     }
-
-    
-    @Test
-    def testCreateParameter() {
-        val uParam = createUmlParameter(STANDARD_PARAMETER_NAME, typeClass)
-        uOperation.ownedParameters += uParam;
-        saveAndSynchronizeChanges(uOperation);
-
-        val jParam = getCorrespondingParameter(uParam)
-        val jTypeClass = getCorrespondingClass(typeClass)
-        assertJavaParameterTraits(jParam, STANDARD_PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertParameterEquals(uParam, jParam)
-    }
-    
-    @Test
-    def testRenameParameter() {
-    	uParam.name = PARAMETER_RENAME
-    	saveAndSynchronizeChanges(uParam)
-    	
-    	val jParam = getCorrespondingParameter(uParam)
-    	val jMethod = getCorrespondingClassMethod(uOperation)
-    	assertEquals(PARAMETER_RENAME, jParam.name)
-    	assertJavaMethodHasUniqueParameter(jMethod, PARAMETER_RENAME, TypesFactory.eINSTANCE.createInt)
-    	assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
-    }
-    
-    @Test
-    def testDeleteParameter() {
-    	uParam.destroy
-    	saveAndSynchronizeChanges(rootElement)
-    	
-    	val jMethod = getCorrespondingClassMethod(uOperation)
-    	assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
-    }
-    
 }
