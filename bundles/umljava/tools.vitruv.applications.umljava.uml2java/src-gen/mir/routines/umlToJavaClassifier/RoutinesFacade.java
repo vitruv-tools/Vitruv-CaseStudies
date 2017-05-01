@@ -7,6 +7,7 @@ import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
+import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
@@ -160,6 +161,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void renameJavaNamedElement(final NamedElement uElem, final String name) {
     mir.routines.umlToJavaClassifier.RenameJavaNamedElementRoutine effect = new mir.routines.umlToJavaClassifier.RenameJavaNamedElementRoutine(this.executionState, calledBy,
     	uElem, name);
+    effect.applyRoutine();
+  }
+  
+  public void checkIfCorrespondingJavaPrimitiveTypeExists(final PrimitiveType uPrimType) {
+    mir.routines.umlToJavaClassifier.CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine effect = new mir.routines.umlToJavaClassifier.CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine(this.executionState, calledBy,
+    	uPrimType);
     effect.applyRoutine();
   }
 }

@@ -487,3 +487,18 @@ routine renameJavaNamedElement(uml::NamedElement uElem, String name) {
 		}
 	}
 }
+
+reaction UmlPrimitiveTypeCreated {
+    after element uml::PrimitiveType created and inserted in uml::Model[packagedElement]
+    call checkIfCorrespondingJavaPrimitiveTypeExists(newValue)
+}
+
+routine checkIfCorrespondingJavaPrimitiveTypeExists(uml::PrimitiveType uPrimType) {
+    action {
+        call {
+            if (mapToJavaPrimitiveType(uPrimType) === null) {
+                userInteracting.showMessage(UserInteractionType.MODAL, "There is no corresponding Java-PrimitiveType for " + uPrimType)
+            }
+        }
+    }
+}

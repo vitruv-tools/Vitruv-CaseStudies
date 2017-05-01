@@ -29,7 +29,7 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 
 class UmlToJavaHelper {
     
-	private static val log = Logger.getLogger(UmlToJavaHelper);
+	private static val logger = Logger.getLogger(UmlToJavaHelper);
 	private new() {
 	}
     
@@ -67,7 +67,7 @@ class UmlToJavaHelper {
      * @param cType java-Class
      */
 	def static TypeReference createTypeReference(Type dType, ConcreteClassifier cType) {
-		if (dType == null && cType == null) {
+		if (dType == null && cType == null) {//TODO dispatch Method
 		    return TypesFactory.eINSTANCE.createVoid();
 		} else if (cType != null) {
 	        return createNamespaceReferenceFromClassifier(cType);
@@ -80,6 +80,11 @@ class UmlToJavaHelper {
 		}
 	} 
 	
+	/**
+	 * Returns the corresponding Java-PrimitiveType by checking the given Uml-PrimitiveType's name.
+	 * (Case-sensitive)
+	 * Returns null if no corresponding Java-PrimitiveType could be found.
+	 */
 	def static org.emftext.language.java.types.PrimitiveType mapToJavaPrimitiveType(PrimitiveType pType) {
 	    switch pType.name {
 	        case BOOLEAN : return TypesFactory.eINSTANCE.createBoolean
@@ -90,7 +95,10 @@ class UmlToJavaHelper {
 	        case INT : return TypesFactory.eINSTANCE.createInt
 	        case LONG : return TypesFactory.eINSTANCE.createLong
 	        case SHORT : return TypesFactory.eINSTANCE.createShort
-	        default: throw new IllegalArgumentException("Invalid PrimitiveType: " + pType.name)
+	        default: {
+	            logger.warn("No corresponding Java-PrimitiveType for " + pType + ". Returning null.")
+	            return null
+	        }
 	    }
 	}
 	
