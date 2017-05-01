@@ -16,6 +16,8 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	private static val COMPONENT_NAME = "TestComponent";
 	private static val INTERFACE_NAME = "TestInterface1"
 	private static val INTERFACE_NAME2 = "TestInterface2"
+	protected static val PROVIDED_ROLE_NAME = "TestProvided" 
+	protected static val REQUIRED_ROLE_NAME = "TestRequired" 
 	
 	protected def OperationInterface createInterface(String name) {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
@@ -62,7 +64,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmInterface = createInterface(INTERFACE_NAME)
 		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface
-		requiredRole.entityName = "ri1"
+		requiredRole.entityName = REQUIRED_ROLE_NAME
 		requiredRole.requiringEntity_RequiredRole = pcmComponent
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
 		saveAndSynchronizeChanges(pcmComponent)
@@ -89,11 +91,11 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmInterface1 = createInterface(INTERFACE_NAME)
 		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface1
-		requiredRole.entityName = "ri1"
+		requiredRole.entityName = REQUIRED_ROLE_NAME
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
 		saveAndSynchronizeChanges(pcmComponent)
 		
-		val pcmInterface2 = createInterface("i2")
+		val pcmInterface2 = createInterface(INTERFACE_NAME + "2")
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface2
 		saveAndSynchronizeChanges(requiredRole)
 		
@@ -109,7 +111,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmInterface = createInterface(INTERFACE_NAME)
 		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface
-		requiredRole.entityName = "ri1"
+		requiredRole.entityName = REQUIRED_ROLE_NAME
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
 		saveAndSynchronizeChanges(pcmComponent)
 		
@@ -126,7 +128,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmInterface = createInterface(INTERFACE_NAME)
 		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()
 		providedRole.providedInterface__OperationProvidedRole = pcmInterface
-		providedRole.entityName = "pr1"
+		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent
 		pcmComponent.providedRoles_InterfaceProvidingEntity += providedRole
 		saveAndSynchronizeChanges(pcmComponent)
@@ -153,7 +155,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmInterface1 = createInterface(INTERFACE_NAME)
 		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()
 		providedRole.providedInterface__OperationProvidedRole = pcmInterface1
-		providedRole.entityName = "pr1"
+		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent
 		pcmComponent.providedRoles_InterfaceProvidingEntity += providedRole
 		saveAndSynchronizeChanges(pcmComponent)
@@ -173,7 +175,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmInterface = createInterface(INTERFACE_NAME)
 		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()
 		providedRole.providedInterface__OperationProvidedRole = pcmInterface
-		providedRole.entityName = "pr1"
+		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent
 		pcmComponent.providedRoles_InterfaceProvidingEntity += providedRole
 		saveAndSynchronizeChanges(pcmComponent)

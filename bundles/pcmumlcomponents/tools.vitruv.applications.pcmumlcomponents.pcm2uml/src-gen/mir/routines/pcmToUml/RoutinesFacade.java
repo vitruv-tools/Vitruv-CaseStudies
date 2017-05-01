@@ -69,27 +69,51 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void changeInnerDeclarationType(final InnerDeclaration innerDeclaration, final DataType pcmDataType) {
+    mir.routines.pcmToUml.ChangeInnerDeclarationTypeRoutine effect = new mir.routines.pcmToUml.ChangeInnerDeclarationTypeRoutine(this.executionState, calledBy,
+    	innerDeclaration, pcmDataType);
+    effect.applyRoutine();
+  }
+  
   public void deleteInnerDeclaration(final CompositeDataType dataType, final InnerDeclaration innerDeclaration) {
     mir.routines.pcmToUml.DeleteInnerDeclarationRoutine effect = new mir.routines.pcmToUml.DeleteInnerDeclarationRoutine(this.executionState, calledBy,
     	dataType, innerDeclaration);
     effect.applyRoutine();
   }
   
-  public void createCollectionDataType(final CollectionDataType dataType) {
-    mir.routines.pcmToUml.CreateCollectionDataTypeRoutine effect = new mir.routines.pcmToUml.CreateCollectionDataTypeRoutine(this.executionState, calledBy,
-    	dataType);
+  public void addCompositeDataTypeParent(final CompositeDataType dataType, final CompositeDataType parent) {
+    mir.routines.pcmToUml.AddCompositeDataTypeParentRoutine effect = new mir.routines.pcmToUml.AddCompositeDataTypeParentRoutine(this.executionState, calledBy,
+    	dataType, parent);
     effect.applyRoutine();
   }
   
-  public void createCollectionDataTypeType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
-    mir.routines.pcmToUml.CreateCollectionDataTypeTypeRoutine effect = new mir.routines.pcmToUml.CreateCollectionDataTypeTypeRoutine(this.executionState, calledBy,
+  public void removeCompositeDataTypeParent(final CompositeDataType dataType, final CompositeDataType parent) {
+    mir.routines.pcmToUml.RemoveCompositeDataTypeParentRoutine effect = new mir.routines.pcmToUml.RemoveCompositeDataTypeParentRoutine(this.executionState, calledBy,
+    	dataType, parent);
+    effect.applyRoutine();
+  }
+  
+  public void createCollectionDataTypeInnerType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
+    mir.routines.pcmToUml.CreateCollectionDataTypeInnerTypeRoutine effect = new mir.routines.pcmToUml.CreateCollectionDataTypeInnerTypeRoutine(this.executionState, calledBy,
     	pcmDataType, pcmInnerType);
     effect.applyRoutine();
   }
   
-  public void changeCollectionDataTypeType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
-    mir.routines.pcmToUml.ChangeCollectionDataTypeTypeRoutine effect = new mir.routines.pcmToUml.ChangeCollectionDataTypeTypeRoutine(this.executionState, calledBy,
+  public void removeCollectionDataTypeInnerType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
+    mir.routines.pcmToUml.RemoveCollectionDataTypeInnerTypeRoutine effect = new mir.routines.pcmToUml.RemoveCollectionDataTypeInnerTypeRoutine(this.executionState, calledBy,
     	pcmDataType, pcmInnerType);
+    effect.applyRoutine();
+  }
+  
+  public void clearCorrespondenceForCollectionTypes(final CollectionDataType pcmType) {
+    mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine effect = new mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine(this.executionState, calledBy,
+    	pcmType);
+    effect.applyRoutine();
+  }
+  
+  public void addCorrespondenceForCollectionTypes(final CollectionDataType pcmType, final org.eclipse.uml2.uml.DataType innerType) {
+    mir.routines.pcmToUml.AddCorrespondenceForCollectionTypesRoutine effect = new mir.routines.pcmToUml.AddCorrespondenceForCollectionTypesRoutine(this.executionState, calledBy,
+    	pcmType, innerType);
     effect.applyRoutine();
   }
   
@@ -117,6 +141,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void unsetUmlOperationType(final OperationSignature pcmSignature) {
+    mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine effect = new mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine(this.executionState, calledBy,
+    	pcmSignature);
+    effect.applyRoutine();
+  }
+  
   public void createOperationSignatureParameter(final OperationSignature pcmSignature, final Parameter pcmParameter) {
     mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine effect = new mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine(this.executionState, calledBy,
     	pcmSignature, pcmParameter);
@@ -135,9 +165,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeParameterType(final Parameter pcmParameter) {
+  public void changeParameterType(final Parameter pcmParameter, final DataType pcmDataType) {
     mir.routines.pcmToUml.ChangeParameterTypeRoutine effect = new mir.routines.pcmToUml.ChangeParameterTypeRoutine(this.executionState, calledBy,
-    	pcmParameter);
+    	pcmParameter, pcmDataType);
     effect.applyRoutine();
   }
   

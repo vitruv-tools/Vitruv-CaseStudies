@@ -13,6 +13,9 @@ import static org.junit.Assert.*
 
 class DataTypesTest extends AbstractPcmUmlTest {
 	
+	protected val ATTRIBUTE_NAME = "attr"
+	protected val DATATYPE_NAME = "TestType"
+	
 	protected def PrimitiveDataType createPrimitiveDataType() {
 		val pcmDataType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		pcmDataType.type = PrimitiveTypeEnum.BOOL
@@ -27,7 +30,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
 		assertEquals(1, correspondingElements.length)
 		val umlModel = getUmlModel()
-		val umlType = umlModel.getOwnedType(PcmToUmlUtil.getUmlPrimitiveType(pcmDataType.type))
+		val umlType = umlModel.getOwnedType(PcmToUmlUtil.getUmlPrimitiveTypeName(pcmDataType.type))
 		assertNotNull(umlType)
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.BOOL), umlType.name)
 	}
@@ -60,7 +63,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	
 	@Test
 	public def void testCompositeDataTypeCreate() {
-		val pcmDataType = createCompositeDataType("FooType")
+		val pcmDataType = createCompositeDataType(DATATYPE_NAME)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
 		assertEquals(1, correspondingElements.length)
 		val umlModel = getUmlModel()
@@ -70,8 +73,8 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	
 	@Test
 	public def void testCompositeDataTypeDeclarationAdd() {
-		val attributeName = "v1"
-		val pcmDataType = initCompositeDataTypeDeclaration("BarType", attributeName)
+		val attributeName = ATTRIBUTE_NAME
+		val pcmDataType = initCompositeDataTypeDeclaration(DATATYPE_NAME, attributeName)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
 		val umlType = (correspondingElements.get(0) as DataType)
 		assertEquals(1, umlType.ownedAttributes.length)
@@ -81,8 +84,8 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	
 	@Test
 	public def void testCompositeDataTypeDeclarationEdit() {
-		val attributeName = "v3"
-		val pcmDataType = initCompositeDataTypeDeclaration("BarType2", "v2")
+		val attributeName = ATTRIBUTE_NAME
+		val pcmDataType = initCompositeDataTypeDeclaration(DATATYPE_NAME, ATTRIBUTE_NAME + "2")
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
 		val declaration = pcmDataType.innerDeclaration_CompositeDataType.get(0)
 		declaration.entityName = attributeName
@@ -95,13 +98,13 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	
 	@Test
 	public def void testCompositeDataTypeDeclarationDelete() {
-		val attributeName = "v4"
+		val attributeName = ATTRIBUTE_NAME
 		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		innerType.type = PrimitiveTypeEnum .INT
 		rootElement.dataTypes__Repository += innerType
-		val pcmDataType = initCompositeDataTypeDeclaration("BarType3", attributeName)
+		val pcmDataType = initCompositeDataTypeDeclaration(DATATYPE_NAME, attributeName)
 		val declaration = RepositoryFactory.eINSTANCE.createInnerDeclaration()
-		declaration.entityName = "v5"
+		declaration.entityName = ATTRIBUTE_NAME + "2"
 		declaration.datatype_InnerDeclaration = innerType
 		pcmDataType.innerDeclaration_CompositeDataType += declaration
 		saveAndSynchronizeChanges(rootElement)
@@ -117,7 +120,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	@Test
 	public def void testCompositeDataTypeDelete() {
 		val dataTypesBefore = rootElement.dataTypes__Repository.length
-		val pcmDataType = createCompositeDataType("BazType")
+		val pcmDataType = createCompositeDataType(DATATYPE_NAME)
 		rootElement.dataTypes__Repository.remove(pcmDataType)
 		assertEquals(dataTypesBefore, rootElement.dataTypes__Repository.length)
 	}
@@ -134,7 +137,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		return pcmDataType
 	}
 	
-	@Test
+	@Deprecated
 	public def void testCollectionDataTypeCreate() {
 		val pcmDataType = initCollectionDataType("c1", PrimitiveTypeEnum.INT)
 		
@@ -145,7 +148,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		assertEquals("innerType", umlType.ownedAttributes.get(0).name)
 	}
 	
-	@Test
+	@Deprecated
 	public def void testCollectionDataTypeChangeType() {
 		val pcmDataType = initCollectionDataType("c2", PrimitiveTypeEnum.INT)
 		

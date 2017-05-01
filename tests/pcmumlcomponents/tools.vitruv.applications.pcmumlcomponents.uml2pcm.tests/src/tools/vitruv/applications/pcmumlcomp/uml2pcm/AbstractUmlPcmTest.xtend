@@ -12,6 +12,11 @@ import tools.vitruv.framework.tests.VitruviusApplicationTest
 class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml";
 	protected static val MODEL_NAME = "model";
+	protected static val COMPONENT_NAME = "TestComponent"
+	protected static val INTERFACE_NAME = "TestInterface"
+	protected static val OPERATION_NAME = "fooOperation"
+	protected static val PARAMETER_NAME = "fooParameter"
+	protected static val PARAMETER_NAME_2 = "barParameter"
 	
 	private def String getProjectModelPath(String modelName) {
 		"repository/" + modelName + "." + MODEL_FILE_EXTENSION;

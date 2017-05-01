@@ -10,45 +10,45 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
+import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class CreatedCollectionDataTypeTypeReaction extends AbstractReactionRealization {
-  public CreatedCollectionDataTypeTypeReaction(final UserInteracting userInteracting) {
+class RemovedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealization {
+  public RemovedCollectionDataTypeInnerTypeReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<CollectionDataType, DataType> typedChange = (InsertEReference<CollectionDataType, DataType>)change;
+    RemoveEReference<CollectionDataType, DataType> typedChange = (RemoveEReference<CollectionDataType, DataType>)change;
     CollectionDataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType newValue = typedChange.getNewValue();
+    DataType oldValue = typedChange.getOldValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsPcmToUml.pcmToUml.CreatedCollectionDataTypeTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedCollectionDataTypeTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCollectionDataTypeInnerTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCollectionDataTypeInnerTypeReaction.ActionUserExecution(this.executionState, this);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
+    return RemoveEReference.class;
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<CollectionDataType, DataType> relevantChange = (InsertEReference<CollectionDataType, DataType>)change;
+    RemoveEReference<CollectionDataType, DataType> relevantChange = (RemoveEReference<CollectionDataType, DataType>)change;
     if (!(relevantChange.getAffectedEObject() instanceof CollectionDataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("innerType_CollectionDataType")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof DataType)) {
+    if (!(relevantChange.getOldValue() instanceof DataType)) {
     	return false;
     }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference)) {
+    if (!(change instanceof RemoveEReference)) {
     	return false;
     }
     getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
@@ -65,8 +65,8 @@ class CreatedCollectionDataTypeTypeReaction extends AbstractReactionRealization 
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CollectionDataType affectedEObject, final EReference affectedFeature, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createCollectionDataTypeType(affectedEObject, newValue);
+    public void callRoutine1(final CollectionDataType affectedEObject, final EReference affectedFeature, final DataType oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.removeCollectionDataTypeInnerType(affectedEObject, oldValue);
     }
   }
 }

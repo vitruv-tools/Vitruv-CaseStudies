@@ -3,56 +3,51 @@ package mir.reactions.reactionsPcmToUml.pcmToUml;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.palladiosimulator.pcm.repository.DataType;
-import org.palladiosimulator.pcm.repository.Parameter;
+import org.palladiosimulator.pcm.repository.CompositeDataType;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
+import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class ChangedParameterTypeReaction extends AbstractReactionRealization {
-  public ChangedParameterTypeReaction(final UserInteracting userInteracting) {
+class AddedCompositeDataTypeParentReaction extends AbstractReactionRealization {
+  public AddedCompositeDataTypeParentReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<Parameter, DataType> typedChange = (ReplaceSingleValuedEReference<Parameter, DataType>)change;
-    Parameter affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<CompositeDataType, CompositeDataType> typedChange = (InsertEReference<CompositeDataType, CompositeDataType>)change;
+    CompositeDataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType oldValue = typedChange.getOldValue();
-    DataType newValue = typedChange.getNewValue();
+    CompositeDataType newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsPcmToUml.pcmToUml.ChangedParameterTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.ChangedParameterTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    mir.reactions.reactionsPcmToUml.pcmToUml.AddedCompositeDataTypeParentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.AddedCompositeDataTypeParentReaction.ActionUserExecution(this.executionState, this);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return ReplaceSingleValuedEReference.class;
+    return InsertEReference.class;
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<Parameter, DataType> relevantChange = (ReplaceSingleValuedEReference<Parameter, DataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
+    InsertEReference<CompositeDataType, CompositeDataType> relevantChange = (InsertEReference<CompositeDataType, CompositeDataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof CompositeDataType)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("dataType__Parameter")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("parentType_CompositeDataType")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)) {
-    	return false;
-    }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
+    if (!(relevantChange.getNewValue() instanceof CompositeDataType)) {
     	return false;
     }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEReference)) {
+    if (!(change instanceof InsertEReference)) {
     	return false;
     }
     getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
@@ -69,8 +64,8 @@ class ChangedParameterTypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parameter affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeParameterType(affectedEObject, newValue);
+    public void callRoutine1(final CompositeDataType affectedEObject, final EReference affectedFeature, final CompositeDataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.addCompositeDataTypeParent(affectedEObject, newValue);
     }
   }
 }

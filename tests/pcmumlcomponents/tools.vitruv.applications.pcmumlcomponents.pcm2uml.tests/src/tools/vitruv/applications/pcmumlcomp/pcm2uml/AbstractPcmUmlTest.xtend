@@ -1,15 +1,27 @@
 package tools.vitruv.applications.pcmumlcomp.pcm2uml
 
+import java.util.Map
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
 	protected static val MODEL_NAME = "model";
+	// private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
+	private static val PRIMITIVETYPES_URI = "pathmap://PCM_MODELS/PrimitiveTypes.repository"
+	
+	protected static var Repository primitiveTypesRepository = null
 	
 	private def String getProjectModelPath(String modelName) {
 		"model/" + modelName + "." + MODEL_FILE_EXTENSION;
@@ -43,6 +55,28 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	
 	override protected setup() {
 		initializeTestModel()
+	}
+	
+	protected def Repository loadPrimitiveTypes() {
+		if (primitiveTypesRepository !== null) {
+			return primitiveTypesRepository
+		}
+			
+		val Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE
+		val Map<String, Object> m = reg.extensionToFactoryMap
+		m.put("repository", new XMIResourceFactoryImpl())
+		
+		val URI uri = URI.createURI(PRIMITIVETYPES_URI)
+		
+		val ResourceSet resSet = new ResourceSetImpl()
+		val Resource resource = resSet.getResource(uri, true)
+		
+		primitiveTypesRepository = resource.contents.head as Repository
+		return primitiveTypesRepository
+	}
+	
+	protected def PrimitiveDataType getPrimitiveType(PrimitiveTypeEnum type) {
+		return loadPrimitiveTypes().dataTypes__Repository.get(type.value) as PrimitiveDataType
 	}
 
 }

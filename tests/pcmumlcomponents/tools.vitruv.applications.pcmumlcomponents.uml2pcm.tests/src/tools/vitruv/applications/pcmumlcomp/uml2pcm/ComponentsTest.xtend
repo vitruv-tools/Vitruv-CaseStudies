@@ -13,6 +13,9 @@ import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
 
 class ComponentsTest extends AbstractUmlPcmTest {
+	
+	protected static val USAGE_NAME = "testUsage"
+	protected static val INTERFACE_REALIZATION_NAME = "testInterfaceRealization"
 		
 	protected def Component createUmlComponent(String name, Boolean isComposable) {
 		val umlComponent = UMLFactory.eINSTANCE.createComponent()
@@ -53,7 +56,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testCreateBasicComponent() {
-		val umlComponent = createUmlComponent("c1")
+		val umlComponent = createUmlComponent(COMPONENT_NAME)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof BasicComponent)
@@ -63,10 +66,10 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testAddProvidedInterface() {
-		val umlComponent = createUmlComponent("c3")
-		val umlInterface = createUmlInterface("i3")
+		val umlComponent = createUmlComponent(COMPONENT_NAME)
+		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val interfaceRealization = UMLFactory.eINSTANCE.createInterfaceRealization()
-		interfaceRealization.name = "ir1"
+		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface
 		umlComponent.interfaceRealizations += interfaceRealization
 		saveAndSynchronizeChanges(umlComponent)
@@ -81,15 +84,15 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testChangeProvidedInterface() {
-		val umlComponent = createUmlComponent("c3")
-		val umlInterface1 = createUmlInterface("i1")
+		val umlComponent = createUmlComponent(COMPONENT_NAME)
+		val umlInterface1 = createUmlInterface(INTERFACE_NAME)
 		val interfaceRealization = UMLFactory.eINSTANCE.createInterfaceRealization()
-		interfaceRealization.name = "ir1"
+		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface1
 		umlComponent.interfaceRealizations += interfaceRealization
 		saveAndSynchronizeChanges(umlComponent)
 		
-		val umlInterface2 = createUmlInterface("i2")
+		val umlInterface2 = createUmlInterface(INTERFACE_NAME + "2")
 		interfaceRealization.suppliers.clear()
 		interfaceRealization.suppliers += umlInterface2
 		saveAndSynchronizeChanges(interfaceRealization)
@@ -104,10 +107,10 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testRemoveProvidedInterface() {
-		val umlComponent = createUmlComponent("c3")
-		val umlInterface = createUmlInterface("i3")
+		val umlComponent = createUmlComponent(COMPONENT_NAME)
+		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val interfaceRealization = UMLFactory.eINSTANCE.createInterfaceRealization()
-		interfaceRealization.name = "ir1"
+		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface
 		umlComponent.interfaceRealizations += interfaceRealization
 		saveAndSynchronizeChanges(umlComponent)
@@ -121,10 +124,10 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testAddRequiredInterface() {
-		val umlComponent = createUmlComponent("c4")
-		val umlInterface = createUmlInterface("i4")
+		val umlComponent = createUmlComponent(COMPONENT_NAME)
+		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val usage = UMLFactory.eINSTANCE.createUsage()
-		usage.name = "u1"
+		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface
 		umlComponent.packagedElements += usage
 		saveAndSynchronizeChanges(umlComponent)
@@ -139,15 +142,15 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testChangeRequiredInterface() {
-		val umlComponent = createUmlComponent("c1")
-		val umlInterface1 = createUmlInterface("i1")
+		val umlComponent = createUmlComponent(COMPONENT_NAME)
+		val umlInterface1 = createUmlInterface(INTERFACE_NAME)
 		val usage = UMLFactory.eINSTANCE.createUsage()
-		usage.name = "u1"
+		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface1
 		umlComponent.packagedElements += usage
 		saveAndSynchronizeChanges(umlComponent)
 		
-		val umlInterface2 = createUmlInterface("i2")
+		val umlInterface2 = createUmlInterface(INTERFACE_NAME + "2")
 		// usage.suppliers.clear()
 		// usage.suppliers += #[umlInterface2]
 		usage.suppliers.set(0, umlInterface2)
@@ -163,10 +166,10 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testRemoveRequiredInterface() {
-		val umlComponent = createUmlComponent("c1")
-		val umlInterface = createUmlInterface("i1")
+		val umlComponent = createUmlComponent(COMPONENT_NAME)
+		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val usage = UMLFactory.eINSTANCE.createUsage()
-		usage.name = "u1"
+		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface
 		umlComponent.packagedElements += usage
 		saveAndSynchronizeChanges(umlComponent)
@@ -180,7 +183,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void testCreateCompositeComponent() {
-		val umlComponent = createUmlComponent("c2", true)
+		val umlComponent = createUmlComponent(COMPONENT_NAME, true)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
 		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof CompositeComponent)

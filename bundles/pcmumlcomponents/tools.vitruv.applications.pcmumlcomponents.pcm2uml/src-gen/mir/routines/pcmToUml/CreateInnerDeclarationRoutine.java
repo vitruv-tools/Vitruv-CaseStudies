@@ -64,9 +64,6 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	DataType.class,
     	(DataType _element) -> true, // correspondence precondition checker
     	null);
-    if (umlType == null) {
-    	return;
-    }
     registerObjectUnderModification(umlType);
     userExecution.callRoutine1(innerDeclaration, compositeType, umlType, actionsFacade);
     

@@ -49,7 +49,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void updateUmlTypeElement(final PrimitiveDataType dataType, final Model umlModel, final PrimitiveType umlType) {
-      umlType.setName(PcmToUmlUtil.getUmlPrimitiveType(dataType.getType()));
+      umlType.setName(PcmToUmlUtil.getUmlPrimitiveTypeName(dataType.getType()));
     }
   }
   

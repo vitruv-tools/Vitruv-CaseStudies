@@ -5,7 +5,6 @@ import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageImport;
@@ -30,7 +29,7 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
     public void updatePackageImportElement(final Repository pcmRepository, final PackageImport packageImport) {
       final ResourceSetImpl resourceSet = new ResourceSetImpl();
       final URI primitiveTypesUri = URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI).appendFragment("_0");
-      final Resource primitiveTypes = resourceSet.createResource(primitiveTypesUri);
+      final EObject primitiveTypes = resourceSet.getEObject(primitiveTypesUri, true);
       packageImport.setImportedPackage(((org.eclipse.uml2.uml.Package) primitiveTypes));
     }
     

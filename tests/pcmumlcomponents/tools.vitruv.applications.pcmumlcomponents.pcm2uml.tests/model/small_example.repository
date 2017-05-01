@@ -36,13 +36,13 @@
   <interfaces__Repository xsi:type="repository:OperationInterface" id="_lnWLsFxcEeSTz_OnR9Pwug" entityName="ISell">
     <signatures__OperationInterface id="_nljk0FxcEeSTz_OnR9Pwug" entityName="sell"/>
     <signatures__OperationInterface id="_otO-kFxcEeSTz_OnR9Pwug" entityName="moreSell">
-      <parameters__OperationSignature parameterName="item" entityName="item" modifier__Parameter="in">
+      <parameters__OperationSignature entityName="item" parameterName="item" modifier__Parameter="in">
         <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
       </parameters__OperationSignature>
-      <parameters__OperationSignature parameterName="price" entityName="price" modifier__Parameter="in">
+      <parameters__OperationSignature entityName="price" parameterName="price" modifier__Parameter="in">
         <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.0"/>
       </parameters__OperationSignature>
-      <parameters__OperationSignature dataType__Parameter="_PJA07GOYEeSFHehhKcqnTg" parameterName="sellerList" entityName="sellerList" modifier__Parameter="out"/>
+      <parameters__OperationSignature entityName="sellerList" dataType__Parameter="_PJA07GOYEeSFHehhKcqnTg" parameterName="sellerList" modifier__Parameter="out"/>
     </signatures__OperationInterface>
   </interfaces__Repository>
   <interfaces__Repository xsi:type="repository:OperationInterface" id="_qvd8EFxcEeSTz_OnR9Pwug" entityName="IBuy">
