@@ -3,7 +3,7 @@ package mir.routines.umlToJavaClassifier;
 import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -28,7 +28,7 @@ public class SetJavaClassAbstractRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass) {
-      JavaUtil.setAbstract(jClass, umlClass.isAbstract());
+      JavaModifierUtil.setAbstract(jClass, umlClass.isAbstract());
     }
   }
   

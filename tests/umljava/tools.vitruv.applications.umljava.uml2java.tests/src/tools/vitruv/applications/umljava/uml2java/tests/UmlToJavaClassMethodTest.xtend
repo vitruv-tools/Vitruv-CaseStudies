@@ -1,21 +1,19 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
+
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.junit.Test
 import static org.junit.Assert.*;
 import org.junit.Before
 import org.junit.After
-import org.emftext.language.java.members.ClassMethod
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.modifiers.Static
-import org.emftext.language.java.modifiers.Abstract
-import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.emftext.language.java.types.TypesFactory
 
 class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {

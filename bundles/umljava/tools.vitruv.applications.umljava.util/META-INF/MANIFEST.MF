@@ -27,4 +27,6 @@ Require-Bundle: com.google.guava,
  tools.vitruv.framework.tests.util;bundle-version="0.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: tools.vitruv.applications.umljava.testutil,
- tools.vitruv.applications.umljava.util
+ tools.vitruv.applications.umljava.util,
+  tools.vitruv.applications.umljava.util.java,
+   tools.vitruv.applications.umljava.util.uml

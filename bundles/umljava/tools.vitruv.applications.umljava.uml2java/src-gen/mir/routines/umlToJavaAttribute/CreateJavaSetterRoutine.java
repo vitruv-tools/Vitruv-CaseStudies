@@ -5,7 +5,7 @@ import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -22,7 +22,7 @@ public class CreateJavaSetterRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void callRoutine1(final Field jAttribute, @Extension final RoutinesFacade _routinesFacade) {
-      boolean _javaSetterForAttributeExists = JavaUtil.javaSetterForAttributeExists(jAttribute);
+      boolean _javaSetterForAttributeExists = JavaMemberAndParameterUtil.javaSetterForAttributeExists(jAttribute);
       boolean _not = (!_javaSetterForAttributeExists);
       if (_not) {
         UmlToJavaHelper.createSetterForAttribute(jAttribute);

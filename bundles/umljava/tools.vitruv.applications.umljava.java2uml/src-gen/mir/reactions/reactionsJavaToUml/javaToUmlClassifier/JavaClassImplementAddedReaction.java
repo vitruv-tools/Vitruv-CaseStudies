@@ -6,7 +6,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -69,7 +69,7 @@ class JavaClassImplementAddedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      Classifier _classifierFromTypeReference = JavaUtil.getClassifierFromTypeReference(newValue);
+      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(newValue);
       _routinesFacade.addUmlClassImplement(affectedEObject, ((Interface) _classifierFromTypeReference));
     }
   }

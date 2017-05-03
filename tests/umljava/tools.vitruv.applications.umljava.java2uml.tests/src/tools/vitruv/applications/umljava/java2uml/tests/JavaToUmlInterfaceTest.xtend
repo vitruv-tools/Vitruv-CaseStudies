@@ -5,8 +5,7 @@ import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Test
 import org.junit.Before
 import org.junit.Ignore
-import static tools.vitruv.applications.umljava.util.UmlUtil.*;
-import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.emftext.language.java.containers.CompilationUnit

@@ -12,8 +12,9 @@ import org.emftext.language.java.modifiers.Static
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import org.emftext.language.java.modifiers.Abstract
 import org.eclipse.uml2.uml.VisibilityKind

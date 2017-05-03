@@ -3,8 +3,8 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.modifiers.*;
 import org.emftext.language.java.classifiers.Interface;
 import org.apache.log4j.PropertyConfigurator
-import static tools.vitruv.applications.umljava.util.JavaUtil.*;
-import static tools.vitruv.applications.umljava.util.UmlUtil.*;
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*;
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*;
 import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
 import org.emftext.language.java.classifiers.ConcreteClassifier
 

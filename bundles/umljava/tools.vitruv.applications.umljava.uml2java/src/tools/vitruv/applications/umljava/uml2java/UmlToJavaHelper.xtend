@@ -16,7 +16,9 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import org.emftext.language.java.members.MembersFactory
 import java.util.Set
 import java.util.HashSet
@@ -28,7 +30,7 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 import org.emftext.language.java.members.Field
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 class UmlToJavaHelper {

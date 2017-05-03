@@ -1,7 +1,7 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.junit.Before
 import org.junit.Test

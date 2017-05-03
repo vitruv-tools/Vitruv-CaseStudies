@@ -10,9 +10,8 @@ import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import org.emftext.language.java.types.NamespaceClassifierReference
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName"

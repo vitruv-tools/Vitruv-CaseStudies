@@ -5,7 +5,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -67,7 +67,7 @@ class JavaSuperInterfaceAddedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addUmlSuperClassifier(affectedEObject, JavaUtil.getClassifierFromTypeReference(newValue));
+      _routinesFacade.addUmlSuperClassifier(affectedEObject, JavaTypeUtil.getClassifierFromTypeReference(newValue));
     }
   }
 }

@@ -5,7 +5,7 @@ import static org.junit.Assert.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*

@@ -9,13 +9,14 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.modifiers.Static
 import org.emftext.language.java.modifiers.Final
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlPropertyAndAssociationUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.emftext.language.java.types.TypesFactory
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 
 class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName";

@@ -5,7 +5,7 @@ import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.emftext.language.java.members.ClassMethod;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,7 +26,7 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Operation umlOp, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod javaMethod) {
-      JavaUtil.setAbstract(javaMethod, umlOp.isAbstract());
+      JavaModifierUtil.setAbstract(javaMethod, umlOp.isAbstract());
     }
     
     public EObject getCorrepondenceSourceJavaClass(final Operation umlOp) {

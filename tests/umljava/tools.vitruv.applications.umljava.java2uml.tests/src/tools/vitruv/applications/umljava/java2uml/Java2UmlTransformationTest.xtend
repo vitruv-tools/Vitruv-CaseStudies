@@ -11,10 +11,10 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.EList
 import org.emftext.language.java.classifiers.Interface
 import org.eclipse.uml2.uml.VisibilityKind
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.members.Field
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 import org.eclipse.uml2.uml.Operation

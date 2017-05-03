@@ -8,7 +8,7 @@ import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -25,7 +25,7 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public EObject getCorrepondenceSourceCustomType(final Field jAttr, final TypeReference jType, final Property uAttr) {
-      Classifier _classifierFromTypeReference = JavaUtil.getClassifierFromTypeReference(jType);
+      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(jType);
       return _classifierFromTypeReference;
     }
     

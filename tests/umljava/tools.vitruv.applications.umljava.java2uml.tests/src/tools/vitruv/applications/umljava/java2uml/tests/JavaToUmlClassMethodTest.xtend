@@ -10,11 +10,13 @@ import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import tools.vitruv.framework.util.bridges.EcoreBridge
 
 import static org.junit.Assert.*
-import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.eclipse.uml2.types.TypesFactory
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.members.MembersFactory
@@ -60,22 +62,6 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     def void testCreateSimpleMethod() {
         val meth = createSimpleJavaOperation(STANDARD_OPERATION_NAME)
         jClass.members += meth
-        val jAttr = createJavaAttribute("atta", createNamespaceReferenceFromClassifier(typeClass), JavaVisibility.PUBLIC, false, false)
-        jClass.members += jAttr
-        
-        val constr2 = jClass.createJavaConstructorAndAddToClass
-        val param2 = createJavaParameter("jojojo", org.emftext.language.java.types.TypesFactory.eINSTANCE.createBoolean)
-        constr2.parameters += param2
-        
-        
-        val typeAttr = createJavaAttribute("tuitui", createNamespaceReferenceFromClassifier(typeClass), JavaVisibility.PUBLIC, false, false)
-        typeClass.members += typeAttr
-        val constr = typeClass.createJavaConstructorAndAddToClass
-        val param = createJavaParameter("paramname", org.emftext.language.java.types.TypesFactory.eINSTANCE.createBoolean)
-        constr.parameters += param
-        createNewForFieldInConstructor(jAttr)
-        saveAndSynchronizeChanges(typeClass)
-        saveAndSynchronizeChanges(jClass)
         
         val uOperation = getCorrespondingMethod(meth)
         val uClass = getCorrespondingClass(jClass)

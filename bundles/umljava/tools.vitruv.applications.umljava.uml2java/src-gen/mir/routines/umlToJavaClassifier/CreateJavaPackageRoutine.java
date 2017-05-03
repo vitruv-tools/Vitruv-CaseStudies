@@ -8,7 +8,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Namespace;
 import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
-import tools.vitruv.applications.umljava.util.UmlUtil;
+import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -42,7 +42,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
       boolean _tripleNotEquals = (_namespace != null);
       if (_tripleNotEquals) {
         EList<String> _namespaces = jPackage.getNamespaces();
-        List<String> _umlParentNamespaceAsStringList = UmlUtil.getUmlParentNamespaceAsStringList(uPackage);
+        List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
         Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
       }
       jPackage.setName(uPackage.getName());

@@ -9,7 +9,7 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -50,12 +50,12 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
           int _upper_1 = uAttribute.getUpper();
           boolean _equals_2 = (_upper_1 == LiteralUnlimitedNatural.UNLIMITED);
           if (_equals_2) {
-            jAttribute.setTypeReference(JavaUtil.createCollectiontypeReference(UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting), jType));
+            jAttribute.setTypeReference(JavaTypeUtil.createCollectiontypeReference(UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting), jType));
           } else {
             int _upper_2 = uAttribute.getUpper();
             boolean _greaterThan = (_upper_2 > 1);
             if (_greaterThan) {
-              jAttribute.setTypeReference(JavaUtil.createCollectiontypeReference(UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting), jType));
+              jAttribute.setTypeReference(JavaTypeUtil.createCollectiontypeReference(UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting), jType));
             }
           }
         }

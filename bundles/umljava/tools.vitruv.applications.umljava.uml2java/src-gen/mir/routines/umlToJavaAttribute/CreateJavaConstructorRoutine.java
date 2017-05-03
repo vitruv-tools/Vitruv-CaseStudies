@@ -4,7 +4,7 @@ import java.io.IOException;
 import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaStatementUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -21,7 +21,7 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void callRoutine1(final Field jAttribute, @Extension final RoutinesFacade _routinesFacade) {
-      JavaUtil.createNewForFieldInConstructor(jAttribute);
+      JavaStatementUtil.createNewForFieldInConstructor(jAttribute);
     }
   }
   

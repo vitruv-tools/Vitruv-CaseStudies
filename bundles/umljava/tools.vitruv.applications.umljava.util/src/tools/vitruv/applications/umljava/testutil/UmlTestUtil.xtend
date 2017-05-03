@@ -25,7 +25,7 @@ import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
 import org.eclipse.uml2.uml.internal.impl.LiteralIntegerImpl
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
 

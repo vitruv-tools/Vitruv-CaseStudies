@@ -4,7 +4,7 @@ import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.classifiers.Interface;
-import tools.vitruv.applications.umljava.util.UmlUtil;
+import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -29,7 +29,7 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Interface uInterface) {
-      UmlUtil.removeClassifierFromIterator(uClass.getImplementedInterfaces().iterator(), uInterface);
+      UmlClassifierAndPackageUtil.removeClassifierFromIterator(uClass.getImplementedInterfaces().iterator(), uInterface);
     }
     
     public EObject getCorrepondenceSourceUInterface(final org.emftext.language.java.classifiers.Class jClass, final Interface jI, final org.eclipse.uml2.uml.Class uClass) {

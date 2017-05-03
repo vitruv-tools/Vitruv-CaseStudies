@@ -2,17 +2,16 @@ package tools.vitruv.applications.umljava.uml2java.tests
 
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlPropertyAndAssociationUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Before
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.eclipse.uml2.uml.UMLFactory
 
 class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
     

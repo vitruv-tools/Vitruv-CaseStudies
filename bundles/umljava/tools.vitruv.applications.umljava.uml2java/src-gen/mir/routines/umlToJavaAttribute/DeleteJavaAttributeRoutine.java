@@ -6,7 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -31,8 +31,8 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void callRoutine1(final Property umlAttr, final Field jAttr, @Extension final RoutinesFacade _routinesFacade) {
-      JavaUtil.removeJavaGettersOfAttribute(jAttr);
-      JavaUtil.removeJavaSettersOfAttribute(jAttr);
+      JavaMemberAndParameterUtil.removeJavaGettersOfAttribute(jAttr);
+      JavaMemberAndParameterUtil.removeJavaSettersOfAttribute(jAttr);
     }
   }
   

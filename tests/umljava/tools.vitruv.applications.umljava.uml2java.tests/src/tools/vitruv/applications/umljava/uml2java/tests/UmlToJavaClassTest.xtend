@@ -2,22 +2,17 @@ package tools.vitruv.applications.umljava.uml2java.tests
 
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.modifiers.Abstract
-import org.emftext.language.java.modifiers.Final
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
-import org.emftext.language.java.types.NamespaceClassifierReference
-import javax.naming.event.NamespaceChangeListener
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 
 class UmlToJavaClassTest extends Uml2JavaTransformationTest {
 	private static val CLASS_NAME = "ClassName";

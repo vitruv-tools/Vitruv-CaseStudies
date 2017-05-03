@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.Feature;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.modifiers.Static;
 import org.emftext.language.java.modifiers.impl.ModifiersFactoryImpl;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -32,7 +32,7 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Feature uFeat, final AnnotableAndModifiable jMod, final Static staticMod) {
-      JavaUtil.setStatic(jMod, uFeat.isStatic());
+      JavaModifierUtil.setStatic(jMod, uFeat.isStatic());
     }
   }
   

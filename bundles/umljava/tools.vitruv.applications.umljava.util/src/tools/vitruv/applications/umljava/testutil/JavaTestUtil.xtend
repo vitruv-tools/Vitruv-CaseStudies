@@ -2,8 +2,8 @@ package tools.vitruv.applications.umljava.testutil
 
 import static org.junit.Assert.*
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import org.emftext.language.java.modifiers.Public
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected

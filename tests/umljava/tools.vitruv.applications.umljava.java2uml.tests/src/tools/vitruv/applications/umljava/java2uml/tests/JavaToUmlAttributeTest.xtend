@@ -6,12 +6,14 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.types.TypesFactory
 import org.junit.Test
 import static org.junit.Assert.*
-import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.emftext.language.java.modifiers.ModifiersFactory
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.UMLFactory
 

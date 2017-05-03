@@ -8,7 +8,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Namespace;
 import org.emftext.language.java.containers.CompilationUnit;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -32,7 +32,7 @@ public class ChangePackageOfJavaCompilationUnitRoutine extends AbstractRepairRou
     public void update0Element(final org.emftext.language.java.containers.Package jPackage, final CompilationUnit jCompUnit, final Namespace uNamespace) {
       jCompUnit.getNamespaces().clear();
       EList<String> _namespaces = jCompUnit.getNamespaces();
-      Collection<String> _javaPackageAsStringList = JavaUtil.getJavaPackageAsStringList(jPackage);
+      Collection<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage);
       Iterables.<String>addAll(_namespaces, _javaPackageAsStringList);
       this.persistProjectRelative(uNamespace, jCompUnit, JavaPersistenceHelper.buildJavaFilePath(jCompUnit));
     }

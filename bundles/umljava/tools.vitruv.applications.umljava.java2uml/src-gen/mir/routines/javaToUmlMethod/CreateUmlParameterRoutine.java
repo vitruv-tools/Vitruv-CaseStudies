@@ -10,7 +10,7 @@ import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -27,7 +27,7 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
     }
     
     public EObject getCorrepondenceSourceCustomType(final Method jMeth, final OrdinaryParameter jParam, final Operation uOperation) {
-      Classifier _classifierFromTypeReference = JavaUtil.getClassifierFromTypeReference(jParam.getTypeReference());
+      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(jParam.getTypeReference());
       return _classifierFromTypeReference;
     }
     

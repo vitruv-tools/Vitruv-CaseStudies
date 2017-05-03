@@ -12,7 +12,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -44,7 +44,7 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     public void updateJavaCompilationUnitElement(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit) {
       if ((jPackage != null)) {
         EList<String> _namespaces = javaCompilationUnit.getNamespaces();
-        Collection<String> _javaPackageAsStringList = JavaUtil.getJavaPackageAsStringList(jPackage);
+        Collection<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage);
         Iterables.<String>addAll(_namespaces, _javaPackageAsStringList);
       }
       javaCompilationUnit.setName(jClassifier.getName());

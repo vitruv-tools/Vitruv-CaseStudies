@@ -1,22 +1,17 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
 import org.eclipse.uml2.uml.Class
-import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.ContainersFactory
-import org.emftext.language.java.modifiers.ModifiersFactory
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
-
+import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import static org.junit.Assert.*
-import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import tools.vitruv.framework.tests.util.TestUtil
 import org.eclipse.uml2.uml.VisibilityKind
 
 class JavaToUmlClassTest extends Java2UmlTransformationTest {
@@ -65,7 +60,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
     
     @Test
     def testDeleteClass() {//TODO Überarbeiten
-        val comp = jClass.eContainer as CompilationUnit
+        val comp = jClass.containingCompilationUnit
         jClass = null;
         comp.classifiers.clear
         saveAndSynchronizeChanges(comp)
@@ -76,7 +71,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
     
     @Test
     def testDeleteCompilationUnit() { //TODO Überarbeiten
-        var comp = jClass.eContainer as CompilationUnit
+        var comp = jClass.containingCompilationUnit
         comp = null;
         deleteAndSynchronizeModel("src/ClassName.java")
         fail("Not implemented")

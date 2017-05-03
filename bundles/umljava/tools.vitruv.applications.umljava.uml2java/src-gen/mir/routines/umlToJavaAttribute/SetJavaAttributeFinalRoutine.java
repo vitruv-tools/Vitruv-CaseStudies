@@ -5,7 +5,7 @@ import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.emftext.language.java.members.Field;
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,7 +26,7 @@ public class SetJavaAttributeFinalRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Property umlAttr, final Field jAttr) {
-      JavaUtil.setFinal(jAttr, umlAttr.isReadOnly());
+      JavaModifierUtil.setFinal(jAttr, umlAttr.isReadOnly());
     }
     
     public EObject getCorrepondenceSourceJAttr(final Property umlAttr) {

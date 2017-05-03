@@ -9,7 +9,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.containers.CompilationUnit;
-import tools.vitruv.applications.umljava.util.UmlUtil;
+import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -37,7 +37,7 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     public void update0Element(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage) {
       jPackage.getNamespaces().clear();
       EList<String> _namespaces = jPackage.getNamespaces();
-      List<String> _umlParentNamespaceAsStringList = UmlUtil.getUmlParentNamespaceAsStringList(uPackage);
+      List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
       Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
       jPackage.setName(uPackage.getName());
       this.persistProjectRelative(uPackage, jPackage, JavaPersistenceHelper.buildJavaFilePath(jPackage));

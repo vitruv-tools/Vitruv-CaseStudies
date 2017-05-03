@@ -1,27 +1,9 @@
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import java.lang.reflect.Modifier
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.eclipse.uml2.uml.VisibilityKind
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.uml2.uml.EnumerationLiteral
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.emftext.language.java.containers.ContainersFactory
-import org.emftext.language.java.generics.GenericsFactory
-import org.emftext.language.java.types.TypesFactory
-import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
-import java.util.Set
-import java.util.LinkedList
-import java.util.ArrayList
-import java.util.HashSet
-import java.util.List
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractionType
-import org.emftext.language.java.JavaPackage
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java

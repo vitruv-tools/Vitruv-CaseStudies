@@ -1,7 +1,8 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static org.junit.Assert.*;
@@ -13,7 +14,7 @@ import org.emftext.language.java.members.InterfaceMethod
 import org.eclipse.uml2.uml.Operation
 import org.junit.Before
 import org.junit.After
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.emftext.language.java.types.TypesFactory
 
 class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {

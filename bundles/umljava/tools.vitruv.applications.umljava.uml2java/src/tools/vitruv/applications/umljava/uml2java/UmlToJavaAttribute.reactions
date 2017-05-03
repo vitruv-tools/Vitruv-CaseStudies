@@ -1,12 +1,9 @@
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-import static extension tools.vitruv.applications.umljava.util.JavaUtil.*
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import static tools.vitruv.applications.umljava.util.UmlUtil.*
-import org.emftext.language.java.modifiers.ModifiersFactory
-import org.eclipse.uml2.uml.VisibilityKind
+import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
-import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java

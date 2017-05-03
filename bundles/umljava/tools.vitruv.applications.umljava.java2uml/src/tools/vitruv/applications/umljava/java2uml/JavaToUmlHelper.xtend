@@ -23,7 +23,7 @@ import org.emftext.language.java.types.Short
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.Void
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.applications.umljava.util.JavaUtil;
+import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
@@ -64,14 +64,14 @@ class JavaToUmlHelper {
         val primType = UMLFactory.eINSTANCE.createPrimitiveType()
         switch jType {
             Void : return null
-            Int : primType.name = JavaUtil.INT
-            Boolean: primType.name = JavaUtil.BOOLEAN
-            Byte : primType.name = JavaUtil.BYTE
-            Long : primType.name = JavaUtil.LONG
-            Double : primType.name = JavaUtil.DOUBLE
-            Short : primType.name = JavaUtil.SHORT
-            Float : primType.name = JavaUtil.FLOAT
-            Char : primType.name = JavaUtil.CHAR
+            Int : primType.name = JavaTypeUtil.INT
+            Boolean: primType.name = JavaTypeUtil.BOOLEAN
+            Byte : primType.name = JavaTypeUtil.BYTE
+            Long : primType.name = JavaTypeUtil.LONG
+            Double : primType.name = JavaTypeUtil.DOUBLE
+            Short : primType.name = JavaTypeUtil.SHORT
+            Float : primType.name = JavaTypeUtil.FLOAT
+            Char : primType.name = JavaTypeUtil.CHAR
             default: throw new IllegalArgumentException("no corresponding uml-primitiveType: for java TypeReference: " + jType.target)
         }
         model.packagedElements += primType;
