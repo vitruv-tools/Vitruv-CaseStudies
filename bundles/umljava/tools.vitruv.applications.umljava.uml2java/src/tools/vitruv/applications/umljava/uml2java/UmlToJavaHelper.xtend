@@ -25,6 +25,11 @@ import java.util.LinkedList
 import java.util.List
 import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.userinteraction.UserInteractionType
+import org.emftext.language.java.members.Field
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.applications.umljava.util.JavaUtil.JavaVisibility
+import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 class UmlToJavaHelper {
     
@@ -92,6 +97,17 @@ class UmlToJavaHelper {
 			collectionDataTypeNames)
 		val java.lang.Class<?> selectedClass = collectionDataTypes.get(selectedType)
 	    return selectedClass.name
+    }
+    
+    def static createGetterForAttribute(Field jAttribute) {
+        val jGetter = createJavaGetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
+        (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += jGetter
+    }
+    
+    def static createSetterForAttribute(Field jAttribute) {
+        
+        val jSetter = createJavaSetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
+        (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += jSetter
     }
 	
 }

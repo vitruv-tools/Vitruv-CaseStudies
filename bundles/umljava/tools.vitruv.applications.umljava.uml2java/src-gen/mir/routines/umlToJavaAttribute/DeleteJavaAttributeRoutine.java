@@ -4,7 +4,9 @@ import java.io.IOException;
 import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
+import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,6 +28,11 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
     
     public EObject getCorrepondenceSourceJAttr(final Property umlAttr) {
       return umlAttr;
+    }
+    
+    public void callRoutine1(final Property umlAttr, final Field jAttr, @Extension final RoutinesFacade _routinesFacade) {
+      JavaUtil.removeJavaGettersOfAttribute(jAttr);
+      JavaUtil.removeJavaSettersOfAttribute(jAttr);
     }
   }
   
@@ -51,6 +58,8 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
     	return;
     }
     registerObjectUnderModification(jAttr);
+    userExecution.callRoutine1(umlAttr, jAttr, actionsFacade);
+    
     deleteObject(userExecution.getElement1(umlAttr, jAttr));
     
     postprocessElements();

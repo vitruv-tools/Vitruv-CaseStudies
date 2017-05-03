@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import java.util.ArrayList
 import java.util.HashSet
 import java.util.LinkedList
-import java.util.Set
+import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import java.util.List
 import org.emftext.language.java.imports.ClassifierImport
 import tools.vitruv.domains.java.util.jamoppparser.JamoppParser
@@ -623,13 +623,14 @@ class JavaUtil {
    }
    
    def static ClassMethod createJavaGetterForAttribute(Field jAttribute, JavaVisibility visibility) {
-       val getterMethod = createJavaClassMethod("get" + firstLettertoUppercase(jAttribute.name), jAttribute.typeReference, visibility, false, false, null)
+       val getterMethod = createJavaClassMethod("get" + firstLettertoUppercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference), visibility, false, false, null)
        getterMethod.statements += createReturnStatement(createSelfReferenceToAttribute(jAttribute))
        return getterMethod
    }
    
-   def static createJavaSetterForAttribute(Field jAttribute, JavaVisibility visibility, Parameter param) {
-       val setterMethod = createJavaClassMethod("get" + firstLettertoUppercase(jAttribute.name), null, visibility, false, false, #[param])
+   def static createJavaSetterForAttribute(Field jAttribute, JavaVisibility visibility) {
+       val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference))
+       val setterMethod = createJavaClassMethod("set" + firstLettertoUppercase(jAttribute.name), null, visibility, false, false, #[param])
        val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
        val paramReference = ReferencesFactory.eINSTANCE.createIdentifierReference
        paramReference.target = param
@@ -642,6 +643,70 @@ class JavaUtil {
        val returnStatement = StatementsFactory.eINSTANCE.createReturn
        returnStatement.returnValue = returnValue
        return returnStatement
+   }
+   
+   /**
+    * Checks if a Java-Method is Getter for a given Java-Attribute by name.
+    * Returns true if the name is "getAttributeName"
+    */
+   def static boolean javaGetterForAttributeExists(Field jAttribute) {
+       val possibleGetters = getJavaGettersOfAttribute(jAttribute)
+       if (!possibleGetters.nullOrEmpty) {
+           return true
+       }
+       return false
+   }
+   
+   /**
+    * Checks if a Java-Method is Setter for a given Java-Attribute by name.
+    * Returns true if the name is "setAttributeName"
+    */
+   def static boolean javaSetterForAttributeExists(Field jAttribute) {
+       val possibleSetters = getJavaSettersOfAttribute(jAttribute)
+       if (!possibleSetters.nullOrEmpty) {
+           return true
+       }
+       return false
+   }
+   def static List<ClassMethod> getJavaGettersOfAttribute(Field jAttribute) {
+       if (jAttribute === null) {
+           logger.warn("Cannot retrieve Getters for Java-Attribute null. Returning empty List.")
+           return Collections.<ClassMethod>emptyList
+       }
+       val expectedSetterName = "get" + firstLettertoUppercase(jAttribute.name)
+       val jClass = jAttribute.eContainer as org.emftext.language.java.classifiers.Class
+       if (jClass === null) {
+           return Collections.<ClassMethod>emptyList 
+       }
+       return jClass.members.filter(ClassMethod)?.filter[expectedSetterName.equals(name)]?.toList
+   }
+   
+   def static List<ClassMethod> getJavaSettersOfAttribute(Field jAttribute) {
+       if (jAttribute === null) {
+           logger.warn("Cannot retrieve Setters for Java-Attribute null. Returning empty List.")
+           return Collections.<ClassMethod>emptyList
+       }
+       val expectedSetterName = "set" + firstLettertoUppercase(jAttribute.name)
+       val jClass = jAttribute.eContainer as org.emftext.language.java.classifiers.Class
+       return jClass.members.filter(ClassMethod)?.filter[expectedSetterName.equals(name)]?.toList
+   }
+   
+   def static void removeJavaGettersOfAttribute(Field jAttribute) {
+       val getters = getJavaGettersOfAttribute(jAttribute)
+       if (!getters.nullOrEmpty) {
+           for (getter : getters) {
+               EcoreUtil.remove(getter)
+           }
+       }
+   }
+   
+   def static void removeJavaSettersOfAttribute(Field jAttribute) {
+       val setters = getJavaSettersOfAttribute(jAttribute)
+       if (!setters.nullOrEmpty) {
+           for (setter : setters) {
+               EcoreUtil.remove(setter)
+           }
+       }
    }
    
    def static private String firstLettertoUppercase(String s) {

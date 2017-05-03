@@ -2,6 +2,7 @@ package mir.routines.umlToJavaAttribute;
 
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.emftext.language.java.members.Field;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -39,6 +40,24 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void handleMultiplicityForJavaAttribute(final Property uAttribute) {
     mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine(this.executionState, calledBy,
     	uAttribute);
+    effect.applyRoutine();
+  }
+  
+  public void createJavaConstructor(final Field jAttribute) {
+    mir.routines.umlToJavaAttribute.CreateJavaConstructorRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaConstructorRoutine(this.executionState, calledBy,
+    	jAttribute);
+    effect.applyRoutine();
+  }
+  
+  public void createJavaGetter(final Field jAttribute) {
+    mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine(this.executionState, calledBy,
+    	jAttribute);
+    effect.applyRoutine();
+  }
+  
+  public void createJavaSetter(final Field jAttribute) {
+    mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine(this.executionState, calledBy,
+    	jAttribute);
     effect.applyRoutine();
   }
 }

@@ -51,7 +51,12 @@ routine deleteJavaAttribute(uml::Property umlAttr) {
         val jAttr = retrieve java::Field corresponding to umlAttr
     }
     action {
+        call {
+            removeJavaGettersOfAttribute(jAttr)
+            removeJavaSettersOfAttribute(jAttr)
+        }
         delete jAttr
+        
     }
 }
 
@@ -88,14 +93,14 @@ routine changeJavaAttributeType(uml::Property uAttr, uml::Type uType) {
     }
 }
 
-reaction l2 {
+reaction UmlLowerMultiplicityChanged {
     after attribute replaced at uml::LiteralInteger[value]
     call {
         handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
     }
 }
 
-reaction u2 {
+reaction UmlUpperMultiplicityChanged {
     after attribute replaced at uml::LiteralUnlimitedNatural[value]
     call handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
 }
@@ -118,11 +123,42 @@ routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
             } else if (uAttribute.lower == 1) {
                 if (uAttribute.upper == 1) {
                     jAttribute.typeReference = createTypeReference(uAttribute.type, jType)
-                    createNewForFieldInConstructor(jAttribute)
-                    (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += createJavaGetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
-                    val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), jAttribute.typeReference)
-                    (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += createJavaSetterForAttribute(jAttribute, JavaVisibility.PUBLIC, param)
                 }
+            }
+        }
+        call {
+            if (uAttribute.lower == 1 && uAttribute.upper == 1) {
+                createJavaConstructor(jAttribute)
+                createJavaGetter(jAttribute)
+                createJavaSetter(jAttribute)
+            }
+        }
+    }
+}
+
+routine createJavaConstructor(java::Field jAttribute) {
+    action {
+        call {
+            createNewForFieldInConstructor(jAttribute)
+        }
+    }
+}
+
+routine createJavaGetter(java::Field jAttribute) {
+    action {
+        call {
+            if (!javaGetterForAttributeExists(jAttribute)) {
+                createGetterForAttribute(jAttribute)
+            }
+        }
+    }
+}
+
+routine createJavaSetter(java::Field jAttribute) {
+    action {
+        call {
+            if (!javaSetterForAttributeExists(jAttribute)) {
+                createSetterForAttribute(jAttribute)
             }
         }
     }

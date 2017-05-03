@@ -2,18 +2,14 @@ package mir.routines.umlToJavaAttribute;
 
 import java.io.IOException;
 import mir.routines.umlToJavaAttribute.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
-import org.emftext.language.java.members.ClassMethod;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.members.Member;
-import org.emftext.language.java.parameters.OrdinaryParameter;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.applications.umljava.util.JavaUtil;
-import tools.vitruv.applications.umljava.util.UmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -71,18 +67,16 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
           boolean _equals_4 = (_upper_3 == 1);
           if (_equals_4) {
             jAttribute.setTypeReference(UmlToJavaHelper.createTypeReference(uAttribute.getType(), jType));
-            JavaUtil.createNewForFieldInConstructor(jAttribute);
-            EObject _eContainer = jAttribute.eContainer();
-            EList<Member> _members = ((org.emftext.language.java.classifiers.Class) _eContainer).getMembers();
-            ClassMethod _createJavaGetterForAttribute = JavaUtil.createJavaGetterForAttribute(jAttribute, JavaUtil.JavaVisibility.PUBLIC);
-            _members.add(_createJavaGetterForAttribute);
-            final OrdinaryParameter param = JavaUtil.createJavaParameter(UmlUtil.firstLettertoLowercase(jAttribute.getName()), jAttribute.getTypeReference());
-            EObject _eContainer_1 = jAttribute.eContainer();
-            EList<Member> _members_1 = ((org.emftext.language.java.classifiers.Class) _eContainer_1).getMembers();
-            ClassMethod _createJavaSetterForAttribute = JavaUtil.createJavaSetterForAttribute(jAttribute, JavaUtil.JavaVisibility.PUBLIC, param);
-            _members_1.add(_createJavaSetterForAttribute);
           }
         }
+      }
+    }
+    
+    public void callRoutine1(final Property uAttribute, final Field jAttribute, final org.emftext.language.java.classifiers.Class jType, @Extension final RoutinesFacade _routinesFacade) {
+      if (((uAttribute.getLower() == 1) && (uAttribute.getUpper() == 1))) {
+        _routinesFacade.createJavaConstructor(jAttribute);
+        _routinesFacade.createJavaGetter(jAttribute);
+        _routinesFacade.createJavaSetter(jAttribute);
       }
     }
   }
@@ -120,6 +114,8 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     registerObjectUnderModification(jType);
     // val updatedElement userExecution.getElement1(uAttribute, jAttribute, jType);
     userExecution.update0Element(uAttribute, jAttribute, jType);
+    
+    userExecution.callRoutine1(uAttribute, jAttribute, jType, actionsFacade);
     
     postprocessElements();
   }
