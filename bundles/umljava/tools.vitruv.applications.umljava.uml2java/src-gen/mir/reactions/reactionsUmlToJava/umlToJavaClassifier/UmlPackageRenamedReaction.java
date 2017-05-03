@@ -81,7 +81,7 @@ class UmlPackageRenamedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.renameJavaPackageAndClassifier(affectedEObject);
+      _routinesFacade.renameJavaPackage(affectedEObject, affectedEObject.getNamespace());
     }
   }
 }

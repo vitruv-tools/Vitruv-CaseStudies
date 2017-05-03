@@ -25,6 +25,9 @@ import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
 import org.eclipse.uml2.uml.internal.impl.LiteralIntegerImpl
 import org.eclipse.uml2.uml.ParameterDirectionKind
+import static tools.vitruv.applications.umljava.util.UmlUtil.*
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
 
 class UmlTestUtil {
     private static val logger = Logger.getLogger(typeof(UmlTestUtil).simpleName)
@@ -139,7 +142,7 @@ class UmlTestUtil {
     }
     
     def static void assertUmlPackageableElementIsInPackage(PackageableElement packageable, Package uPackage) {
-        //TODO implement
+        assertThat(getUmlNamespaceAsStringList(uPackage), is(getUmlNamespaceAsStringList(packageable.namespace)))
     }
     
     def static void assertUmlNamedElementHasVisibility(NamedElement uElement, VisibilityKind visibility) {

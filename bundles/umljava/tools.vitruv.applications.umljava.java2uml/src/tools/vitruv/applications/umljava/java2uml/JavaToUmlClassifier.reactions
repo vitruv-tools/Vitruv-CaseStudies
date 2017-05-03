@@ -243,7 +243,6 @@ routine setUmlClassFinal(java::Class jClass, Boolean isFinal) {
 
 reaction JavaNamedElementRenamed {
     after attribute replaced at java::NamedElement[name]
-    with !(affectedEObject instanceof org.emftext.language.java.containers.Package)
     call renameUmlNamedElement(affectedEObject)
 }
 
@@ -273,4 +272,38 @@ routine createUmlPackage(java::Package jPackage) {
 			addUmlElementToRootModel(uPackage, jPackage)
 		}
 	}
+}
+
+reaction JavaCompilationUnitInsertedInPackage {
+    after element java::CompilationUnit inserted in java::Package[compilationUnits]
+    call addUmlPackageOfClass(affectedEObject, newValue.classifiers.head)
+}
+
+reaction JavaCompilationUnitRemovedFromPackage {
+    after element java::CompilationUnit removed from java::Package[compilationUnits]
+    call removeUmlPackageOfClass(affectedEObject, oldValue.classifiers.head)
+}
+
+routine addUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier jClassifier) {
+    match {
+        val uClassifier = retrieve uml::Classifier corresponding to jClassifier
+        val uPackage = retrieve uml::Package corresponding to jPackage
+    }
+    action {
+        update uPackage {
+            uPackage.packagedElements += uClassifier
+        }
+    }
+}
+
+routine removeUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier jClassifier) {
+    match {
+        val uClassifier = retrieve uml::Classifier corresponding to jClassifier
+        val uPackage = retrieve uml::Package corresponding to jPackage
+    }
+    action {
+        update uPackage {
+            removePackagedElementFromPackage(uPackage, uClassifier)
+        }
+    }
 }

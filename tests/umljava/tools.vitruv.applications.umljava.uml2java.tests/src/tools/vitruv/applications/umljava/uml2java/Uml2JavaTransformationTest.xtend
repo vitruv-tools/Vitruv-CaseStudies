@@ -78,6 +78,10 @@ class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
     	return getFirstCorrespondingObjectWithClass(uClass, org.emftext.language.java.classifiers.Class)
     }
     
+    def protected getCorrespondingCompilationUnit(org.eclipse.uml2.uml.Class uClass) {
+        return getFirstCorrespondingObjectWithClass(uClass, org.emftext.language.java.containers.CompilationUnit)
+    }
+    
     def protected getCorrespondingInterface(org.eclipse.uml2.uml.Interface uInterface) {
     	return getFirstCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
     }
@@ -87,6 +91,10 @@ class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
     }
     def protected getCorrespondingParameter(org.eclipse.uml2.uml.Parameter uParam) {
     	return getFirstCorrespondingObjectWithClass(uParam, org.emftext.language.java.parameters.OrdinaryParameter)
+    }
+    
+    def protected getCorrespondingPackage(org.eclipse.uml2.uml.Package uPackage) {
+        return getFirstCorrespondingObjectWithClass(uPackage, org.emftext.language.java.containers.Package)
     }
     
     

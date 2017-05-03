@@ -1,5 +1,6 @@
 package tools.vitruv.applications.umljava.java2uml
 
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static org.junit.Assert.fail;
 import static org.junit.Assert.*;
 import org.eclipse.uml2.uml.Model
@@ -71,8 +72,14 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
      */
     def private createCompilationUnitAsModel(String name) {
         val cu = createEmptyCompilationUnit(name)
-        createAndSynchronizeModel(TestUtil.SOURCE_FOLDER + "/" + cu.name, cu)
+        createAndSynchronizeModel(buildJavaFilePath(cu), cu)
         return cu
+    }
+    
+    def protected createJavaPackageAsModel(String name, org.emftext.language.java.containers.Package superPackage) {
+        val jPackage = createJavaPackage(name, superPackage)
+        createAndSynchronizeModel(buildJavaFilePath(jPackage), jPackage)
+        return jPackage
     }
 
 

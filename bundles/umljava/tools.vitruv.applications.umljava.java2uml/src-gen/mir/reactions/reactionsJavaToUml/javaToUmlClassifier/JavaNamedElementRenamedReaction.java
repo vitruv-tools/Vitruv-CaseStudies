@@ -59,20 +59,8 @@ class JavaNamedElementRenamedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEAttribute<NamedElement, String> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    NamedElement affectedEObject = typedChange.getAffectedEObject();
-    EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
-    	return false;
-    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
-  }
-  
-  private boolean checkUserDefinedPrecondition(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
-    return (!(affectedEObject instanceof org.emftext.language.java.containers.Package));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

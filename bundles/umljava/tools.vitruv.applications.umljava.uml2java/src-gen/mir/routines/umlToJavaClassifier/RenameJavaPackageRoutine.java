@@ -6,6 +6,9 @@ import java.util.List;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Namespace;
+import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.containers.CompilationUnit;
 import tools.vitruv.applications.umljava.util.UmlUtil;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -23,15 +26,15 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceJPackage(final org.eclipse.uml2.uml.Package uPackage) {
+    public EObject getCorrepondenceSourceJPackage(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace) {
       return uPackage;
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Package uPackage, final org.emftext.language.java.containers.Package jPackage) {
+    public EObject getElement1(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage) {
       return jPackage;
     }
     
-    public void update0Element(final org.eclipse.uml2.uml.Package uPackage, final org.emftext.language.java.containers.Package jPackage) {
+    public void update0Element(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage) {
       jPackage.getNamespaces().clear();
       EList<String> _namespaces = jPackage.getNamespaces();
       List<String> _umlParentNamespaceAsStringList = UmlUtil.getUmlParentNamespaceAsStringList(uPackage);
@@ -39,23 +42,33 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
       jPackage.setName(uPackage.getName());
       this.persistProjectRelative(uPackage, jPackage, JavaPersistenceHelper.buildJavaFilePath(jPackage));
     }
+    
+    public void callRoutine1(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, @Extension final RoutinesFacade _routinesFacade) {
+      EList<CompilationUnit> _compilationUnits = jPackage.getCompilationUnits();
+      for (final CompilationUnit compUnit : _compilationUnits) {
+        _routinesFacade.changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace);
+      }
+    }
   }
   
-  public RenameJavaPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package uPackage) {
+  public RenameJavaPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
-    this.uPackage = uPackage;
+    this.uPackage = uPackage;this.uNamespace = uNamespace;
   }
   
   private org.eclipse.uml2.uml.Package uPackage;
   
+  private Namespace uNamespace;
+  
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaPackageRoutine with input:");
     getLogger().debug("   Package: " + this.uPackage);
+    getLogger().debug("   Namespace: " + this.uNamespace);
     
     org.emftext.language.java.containers.Package jPackage = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJPackage(uPackage), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceJPackage(uPackage, uNamespace), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	null);
@@ -63,8 +76,10 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     registerObjectUnderModification(jPackage);
-    // val updatedElement userExecution.getElement1(uPackage, jPackage);
-    userExecution.update0Element(uPackage, jPackage);
+    // val updatedElement userExecution.getElement1(uPackage, uNamespace, jPackage);
+    userExecution.update0Element(uPackage, uNamespace, jPackage);
+    
+    userExecution.callRoutine1(uPackage, uNamespace, jPackage, actionsFacade);
     
     postprocessElements();
   }

@@ -9,8 +9,11 @@ import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.Final
 import org.emftext.language.java.modifiers.Static
 
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.JavaUtil.*
+import static tools.vitruv.applications.umljava.util.UmlUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import org.emftext.language.java.modifiers.Abstract
 import org.eclipse.uml2.uml.VisibilityKind
@@ -26,6 +29,7 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.uml2.uml.EnumerationLiteral
 import org.emftext.language.java.members.EnumConstant
 import org.apache.log4j.Logger
+import org.emftext.language.java.containers.CompilationUnit
 
 class TestUtil {
 	
@@ -43,13 +47,13 @@ class TestUtil {
 		assertAbstractClassEquals(uClass, jClass)
 		assertFinalClassEquals(uClass, jClass)
 		assertVisibilityEquals(uClass, jClass)
-		assertPackageEquals(uClass, jClass)
+		assertPackageEquals(uClass.namespace as org.eclipse.uml2.uml.Package, (jClass.eContainer as CompilationUnit).namespaces)
 	}
 	
 	def static void assertInterfaceEquals(org.eclipse.uml2.uml.Interface uInterface, org.emftext.language.java.classifiers.Interface jInterface) {
 		assertEquals(uInterface.name, jInterface.name)
 		assertVisibilityEquals(uInterface, jInterface)
-		assertPackageEquals(uInterface, jInterface)
+		assertPackageEquals(uInterface.namespace as org.eclipse.uml2.uml.Package, (jInterface.eContainer as CompilationUnit).namespaces)
 	}
 	
 	def static void assertAttributeEquals(Property uAttribute, Field jAttribute) {
@@ -60,8 +64,13 @@ class TestUtil {
 		assertTypeEquals(uAttribute.type, jAttribute.typeReference)
 	}
 	
-	def static assertPackageEquals(org.eclipse.uml2.uml.Classifier uClassifier, org.emftext.language.java.classifiers.Classifier jClassifier) {
-		//TODO
+	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage, org.emftext.language.java.containers.Package jPackage) {
+		assertEquals(uPackage.name, jPackage.name)
+		assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces)
+	}
+	
+	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage, List<String> packageStringList) {
+	    assertThat(getUmlNamespaceAsStringList(uPackage), is(packageStringList));
 	}
 	
 	def static void assertEnumEquals(org.eclipse.uml2.uml.Enumeration uEnum, org.emftext.language.java.classifiers.Enumeration jEnum) {

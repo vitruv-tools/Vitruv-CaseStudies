@@ -21,6 +21,7 @@ import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.EnumerationLiteral
 import org.eclipse.uml2.uml.Association
 import org.eclipse.uml2.uml.ValueSpecification
+import org.eclipse.uml2.uml.PackageableElement
 
 /**
  * Uml-Util-Class
@@ -32,6 +33,13 @@ class UmlUtil {
      */
     private new () {
         
+    }
+    
+    def static Package createUmlPackageAndAddToSuperPackage(String name, Package superPackage) {
+        val uPackage = UMLFactory.eINSTANCE.createPackage
+        uPackage.name = name
+        superPackage.packagedElements += uPackage
+        return uPackage
     }
     
     /**
@@ -285,5 +293,14 @@ class UmlUtil {
         val valueSpecification = UMLFactory.eINSTANCE.createLiteralInteger
         valueSpecification.value = value
         return valueSpecification
+    }
+    
+    def static removePackagedElementFromPackage(Package uPackage, PackageableElement packageable) {
+        val iter = uPackage.packagedElements.iterator
+        while (iter.hasNext) {
+            if (iter.next.name.equals(packageable.name)) {
+                iter.remove;
+            }
+        }
     }
 }

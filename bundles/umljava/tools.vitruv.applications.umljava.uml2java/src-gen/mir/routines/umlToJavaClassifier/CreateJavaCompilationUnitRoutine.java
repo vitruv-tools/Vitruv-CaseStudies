@@ -2,17 +2,17 @@ package mir.routines.umlToJavaClassifier;
 
 import com.google.common.collect.Iterables;
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Namespace;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
-import tools.vitruv.applications.umljava.util.UmlUtil;
+import tools.vitruv.applications.umljava.util.JavaUtil;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -29,24 +29,35 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final CompilationUnit javaCompilationUnit) {
+    public EObject getCorrepondenceSourceJPackage(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace) {
+      return uNamespace;
+    }
+    
+    public EObject getElement1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit) {
       return umlClassifier;
     }
     
-    public EObject getElement2(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final CompilationUnit javaCompilationUnit) {
+    public EObject getElement2(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit) {
       return javaCompilationUnit;
     }
     
-    public void updateJavaCompilationUnitElement(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final CompilationUnit javaCompilationUnit) {
-      if ((!(uNamespace instanceof Model))) {
+    public void updateJavaCompilationUnitElement(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit) {
+      if ((jPackage != null)) {
         EList<String> _namespaces = javaCompilationUnit.getNamespaces();
-        List<String> _umlNamespaceAsStringList = UmlUtil.getUmlNamespaceAsStringList(uNamespace);
-        Iterables.<String>addAll(_namespaces, _umlNamespaceAsStringList);
+        Collection<String> _javaPackageAsStringList = JavaUtil.getJavaPackageAsStringList(jPackage);
+        Iterables.<String>addAll(_namespaces, _javaPackageAsStringList);
       }
       javaCompilationUnit.setName(jClassifier.getName());
       EList<ConcreteClassifier> _classifiers = javaCompilationUnit.getClassifiers();
       _classifiers.add(jClassifier);
       this.persistProjectRelative(umlClassifier, javaCompilationUnit, JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit));
+    }
+    
+    public void callRoutine1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit, @Extension final RoutinesFacade _routinesFacade) {
+      if ((jPackage != null)) {
+        EList<CompilationUnit> _compilationUnits = jPackage.getCompilationUnits();
+        _compilationUnits.add(javaCompilationUnit);
+      }
     }
   }
   
@@ -69,10 +80,18 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
     getLogger().debug("   Namespace: " + this.uNamespace);
     
+    org.emftext.language.java.containers.Package jPackage = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceJPackage(umlClassifier, jClassifier, uNamespace), // correspondence source supplier
+    	org.emftext.language.java.containers.Package.class,
+    	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
+    	null);
+    registerObjectUnderModification(jPackage);
     CompilationUnit javaCompilationUnit = ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
-    userExecution.updateJavaCompilationUnitElement(umlClassifier, jClassifier, uNamespace, javaCompilationUnit);
+    userExecution.updateJavaCompilationUnitElement(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit);
     
-    addCorrespondenceBetween(userExecution.getElement1(umlClassifier, jClassifier, uNamespace, javaCompilationUnit), userExecution.getElement2(umlClassifier, jClassifier, uNamespace, javaCompilationUnit), "");
+    addCorrespondenceBetween(userExecution.getElement1(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit), userExecution.getElement2(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit), "");
+    
+    userExecution.callRoutine1(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit, actionsFacade);
     
     postprocessElements();
   }

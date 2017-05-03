@@ -102,4 +102,16 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     	jPackage);
     effect.applyRoutine();
   }
+  
+  public void addUmlPackageOfClass(final org.emftext.language.java.containers.Package jPackage, final ConcreteClassifier jClassifier) {
+    mir.routines.javaToUmlClassifier.AddUmlPackageOfClassRoutine effect = new mir.routines.javaToUmlClassifier.AddUmlPackageOfClassRoutine(this.executionState, calledBy,
+    	jPackage, jClassifier);
+    effect.applyRoutine();
+  }
+  
+  public void removeUmlPackageOfClass(final org.emftext.language.java.containers.Package jPackage, final ConcreteClassifier jClassifier) {
+    mir.routines.javaToUmlClassifier.RemoveUmlPackageOfClassRoutine effect = new mir.routines.javaToUmlClassifier.RemoveUmlPackageOfClassRoutine(this.executionState, calledBy,
+    	jPackage, jClassifier);
+    effect.applyRoutine();
+  }
 }

@@ -34,13 +34,16 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME);
     }
     
-    @After
+    //@After
     def void after() {
         if (jClass != null) {
             jClass = null
         }
     }
 
+
+
+    
     @Test
     def void testCreateClass() {
         val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);

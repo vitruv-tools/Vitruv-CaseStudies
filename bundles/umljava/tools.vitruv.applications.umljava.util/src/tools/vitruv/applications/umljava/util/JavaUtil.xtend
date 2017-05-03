@@ -122,6 +122,17 @@ class JavaUtil {
         return jClass;
     }
     
+    def static createJavaPackage(String name, Package containingPackage) {
+        val jPackage = ContainersFactory.eINSTANCE.createPackage
+        setName(jPackage, name)
+        jPackage.namespaces += getJavaPackageAsStringList(containingPackage)
+        return jPackage
+    }
+    
+    def static CompilationUnit getContainingCompilationUnit(ConcreteClassifier jClassifier) {
+        return jClassifier.eContainer as CompilationUnit
+    }
+    
     /**
      * The created Interface is not contained in a compilationunit.
      */
@@ -707,10 +718,20 @@ class JavaUtil {
                EcoreUtil.remove(setter)
            }
        }
-   }
+    }
    
-   def static private String firstLettertoUppercase(String s) {
+    def static private String firstLettertoUppercase(String s) {
         return Character.toUpperCase(s.charAt(0)) + s.substring(1)
+    }
+    
+    def static removeJavaClassifierFromPackage(Package jPackage,ConcreteClassifier jClassifier) {
+        val iter = jPackage.compilationUnits.iterator
+        while (iter.hasNext) {
+            if (iter.next.name.equals(jClassifier.name)) {
+                iter.remove;
+            }
+        }
+        
     }
    
 }

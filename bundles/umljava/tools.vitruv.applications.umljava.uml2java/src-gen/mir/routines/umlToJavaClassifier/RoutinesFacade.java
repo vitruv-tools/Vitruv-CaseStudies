@@ -10,6 +10,7 @@ import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.containers.CompilationUnit;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -32,27 +33,21 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createJavaPackage(final org.eclipse.uml2.uml.Package uPackage) {
+  public void createJavaPackage(final org.eclipse.uml2.uml.Package uPackage, final org.eclipse.uml2.uml.Package uSuperPackage) {
     mir.routines.umlToJavaClassifier.CreateJavaPackageRoutine effect = new mir.routines.umlToJavaClassifier.CreateJavaPackageRoutine(this.executionState, calledBy,
-    	uPackage);
+    	uPackage, uSuperPackage);
     effect.applyRoutine();
   }
   
-  public void renameJavaPackageAndClassifier(final org.eclipse.uml2.uml.Package uPackage) {
-    mir.routines.umlToJavaClassifier.RenameJavaPackageAndClassifierRoutine effect = new mir.routines.umlToJavaClassifier.RenameJavaPackageAndClassifierRoutine(this.executionState, calledBy,
-    	uPackage);
-    effect.applyRoutine();
-  }
-  
-  public void renameJavaPackage(final org.eclipse.uml2.uml.Package uPackage) {
+  public void renameJavaPackage(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace) {
     mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine effect = new mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine(this.executionState, calledBy,
-    	uPackage);
+    	uPackage, uNamespace);
     effect.applyRoutine();
   }
   
-  public void changePackageOfJavaCompilationUnit(final org.eclipse.uml2.uml.Package uPackage, final Classifier uClassifier) {
+  public void changePackageOfJavaCompilationUnit(final org.emftext.language.java.containers.Package jPackage, final CompilationUnit jCompUnit, final Namespace uNamespace) {
     mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine effect = new mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine(this.executionState, calledBy,
-    	uPackage, uClassifier);
+    	jPackage, jCompUnit, uNamespace);
     effect.applyRoutine();
   }
   

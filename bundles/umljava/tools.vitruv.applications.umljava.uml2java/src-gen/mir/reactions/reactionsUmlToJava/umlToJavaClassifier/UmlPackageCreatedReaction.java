@@ -65,7 +65,7 @@ class UmlPackageCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createJavaPackage(newValue);
+      _routinesFacade.createJavaPackage(newValue, affectedEObject);
     }
   }
 }
