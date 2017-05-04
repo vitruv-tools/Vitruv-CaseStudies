@@ -21,6 +21,7 @@ import org.eclipse.uml2.types.TypesFactory
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.members.MembersFactory
 import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
@@ -62,7 +63,7 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     def void testCreateSimpleMethod() {
         val meth = createSimpleJavaOperation(STANDARD_OPERATION_NAME)
         jClass.members += meth
-        
+        saveAndSynchronizeChanges(jClass)
         val uOperation = getCorrespondingMethod(meth)
         val uClass = getCorrespondingClass(jClass)
         assertUmlOperationTraits(uOperation, STANDARD_OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, 
@@ -95,8 +96,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     
     @Test
     def void testDeleteMethod() {
-        jClass.members.clear
-        jMeth = null
+        assertNotNull(getCorrespondingMethod(jMeth))
+        
+        EcoreUtil.delete(jMeth)
         saveAndSynchronizeChanges(jClass)
         
         val uClass = getCorrespondingClass(jClass)

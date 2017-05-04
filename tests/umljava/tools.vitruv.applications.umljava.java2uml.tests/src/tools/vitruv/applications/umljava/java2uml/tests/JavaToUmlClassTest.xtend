@@ -6,13 +6,14 @@ import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
-import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class JavaToUmlClassTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
@@ -36,15 +37,12 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         }
     }
 
-
-
-    
     @Test
     def void testCreateClass() {
         val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);
         
         val uClass = getCorrespondingClass(cls);
-        assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, getUmlRootModel())
+        assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, getUmlRootModel(JavaToUmlHelper.rootModelFile))
         assertClassEquals(uClass, cls)
     }
     
@@ -59,10 +57,11 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
     }
     
     @Test
-    def testDeleteClass() {//TODO Überarbeiten
+    def testDeleteClass() {
+        assertNotNull(getCorrespondingClass(jClass))
         val comp = jClass.containingCompilationUnit
-        jClass = null;
-        comp.classifiers.clear
+
+        EcoreUtil.delete(jClass)
         saveAndSynchronizeChanges(comp)
         
         val uClass = getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).head
@@ -70,11 +69,12 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
     }
     
     @Test
-    def testDeleteCompilationUnit() { //TODO Überarbeiten
-        var comp = jClass.containingCompilationUnit
-        comp = null;
-        deleteAndSynchronizeModel("src/ClassName.java")
-        fail("Not implemented")
+    def testDeleteCompilationUnit() {
+        val compUnitFilePath = buildJavaFilePath(jClass.containingCompilationUnit)
+        assertNotNull(getCorrespondingClass(jClass))
+        deleteAndSynchronizeModel(compUnitFilePath)
+        
+        assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).nullOrEmpty)
     }
     
     @Test

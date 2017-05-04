@@ -1,22 +1,17 @@
 package tools.vitruv.applications.umljava.java2uml
 
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import static org.junit.Assert.fail;
 import static org.junit.Assert.*;
 import org.eclipse.uml2.uml.Model
 import tools.vitruv.framework.tests.util.TestUtil
-import tools.vitruv.framework.util.datatypes.VURI
 import org.apache.log4j.PropertyConfigurator
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.common.util.EList
 import org.emftext.language.java.classifiers.Interface
-import org.eclipse.uml2.uml.VisibilityKind
 import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.members.Field
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import tools.vitruv.framework.tests.VitruviusApplicationTest
 import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
@@ -24,7 +19,7 @@ import org.apache.log4j.Logger
 
 class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     private static val logger = Logger.getLogger(Java2UmlTransformationTest.simpleName)
-    //TODO: Userinteraction bestimmt pfad gleich mit
+    private static val UMLMODELPATH = "rootModelDirectory" //Directory of the Uml Model Path used in the java2uml tests
     private static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
 	
 	
@@ -34,7 +29,7 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     
     override protected setup() {
         PropertyConfigurator.configure("log4j.properties")
-        userInteractor.addNextSelections(UMLMODELNAME)
+        userInteractor.addNextSelections(UMLMODELNAME, UMLMODELPATH)
     }
 	
 	override protected createChangePropagationSpecifications() {
@@ -85,9 +80,9 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     }
 
 
-    def protected getUmlPackagedElementsbyName(String modelPath, Class<? extends org.eclipse.uml2.uml.Classifier> type, String className) {
-        val m = getModelResource(modelPath).allContents.head as Model
-        return m.packagedElements.filter(type).filter[it.name == className].toList;
+    def protected getUmlPackagedElementsbyName(String modelPath, Class<? extends org.eclipse.uml2.uml.PackageableElement> type, String elementName) {
+        val model = getUmlRootModel(modelPath)
+        return model.packagedElements.filter(type).filter[it.name == elementName].toList;
     }
     
     def protected getCorrespondingClass(org.emftext.language.java.classifiers.Class jClass) {
@@ -113,15 +108,13 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
         return getFirstCorrespondingObjectWithClass(jPackage, org.eclipse.uml2.uml.Package)
     }
     
-    def protected getUmlRootModel() {
-        val models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
-        if (models.nullOrEmpty) {
+    def protected getUmlRootModel(String modelPath) {
+        val model = getModelResource(modelPath).allContents.head
+        if (!(model instanceof Model)) {
             logger.warn("No Uml Rootmodel found.")
             return null
-        } else if (models.size != 1) {
-            logger.warn("Found more than one Uml Rootmodel. Returning the first.")
         }
-        return models.head as Model
+        return model as Model
     }
     
 

@@ -10,6 +10,8 @@ import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.eclipse.emf.ecore.util.EcoreUtil
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
+import org.eclipse.uml2.uml.Package
 
 class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     
@@ -53,8 +55,10 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     }
     
     @Test
-    def void deletePackage() {
+    def void testDeletePackage() {
         deleteAndSynchronizeModel(buildJavaFilePath(jPackageLevel1))
+        
+        assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Package, PACKAGE_LEVEL_1).nullOrEmpty)
         
     }
     

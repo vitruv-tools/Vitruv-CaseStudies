@@ -29,10 +29,11 @@ import org.apache.log4j.Logger
 
 class JavaToUmlHelper {
     private static val logger = Logger.getLogger(JavaToUmlHelper.simpleName)
-    private static val ROOTMODELDIRECTORY = "model"
+    private static var ROOTMODELDIRECTORY = "model"
     private static val DEFAULTMODELNAME = "model"
     private static var MODELNAME = DEFAULTMODELNAME
     private static val MODELNAME_INPUTMESSAGE = "Please enter a name for the uml root model"
+    private static val MODELPATH_INPUTMESSAGE = "Please enter a path for the uml root model"
     public static val DEFAULT_INTERFACEREALIZATION_NAME = "DefaultInterfaceRealizationName"
     
     /**
@@ -82,14 +83,18 @@ class JavaToUmlHelper {
         if (models.nullOrEmpty) {
 			val model = UMLFactory.eINSTANCE.createModel();
 			model.name = DEFAULTMODELNAME;
-			 
+			
 			val userModelName = userInteracting.getTextInput(MODELNAME_INPUTMESSAGE)
+			val userModelPath = userInteracting.getTextInput(MODELPATH_INPUTMESSAGE)
 			if (userModelName.nullOrEmpty) {
 				model.name = DEFAULTMODELNAME;
 			} else {
 				MODELNAME = userModelName
 				model.name = userModelName
 			}
+			if (!userModelPath.nullOrEmpty) {
+                ROOTMODELDIRECTORY = userModelPath;
+            }
             //We add a correspondence of the model with itself to save it in the correspondence model
 			correspondenceModel.createAndAddCorrespondence(model, model)
 			return model;

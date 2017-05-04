@@ -16,6 +16,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName"
@@ -94,8 +95,9 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     
     @Test
     def testDeleteAttribute() {
-        jClass.members.clear
-        jAttr = null;
+        assertNotNull(getCorrespondingAttribute(jAttr))
+        
+        EcoreUtil.delete(jAttr)
         saveAndSynchronizeChanges(jClass);
 
         val uClass = getCorrespondingClass(jClass)

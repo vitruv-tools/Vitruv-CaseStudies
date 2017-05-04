@@ -10,6 +10,7 @@ import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.junit.Test
 import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName";
@@ -73,8 +74,8 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     
     @Test
     def testDeleteInterfaceMethod() {
-        jInterface.members.clear
-        jMeth = null
+        assertNotNull(getCorrespondingMethod(jMeth))
+        EcoreUtil.delete(jMeth)
         saveAndSynchronizeChanges(jInterface)
         
         val uInterface = getCorrespondingInterface(jInterface)

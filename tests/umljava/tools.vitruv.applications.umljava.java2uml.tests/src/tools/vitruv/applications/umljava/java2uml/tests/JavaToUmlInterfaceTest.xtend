@@ -11,6 +11,7 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName"
@@ -31,7 +32,7 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         val jInterface = createSimpleJavaInterfaceWithCompilationUnit(STANDARD_INTERFACE_NAME)
         
         val uInterface = getCorrespondingInterface(jInterface)
-        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, getUmlRootModel())
+        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, getUmlRootModel(JavaToUmlHelper.rootModelFile))
         assertInterfaceEquals(uInterface, jInterface)
     }
     
@@ -45,13 +46,11 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         assertInterfaceEquals(uInterface, jInterface)
     }
     @Test
-    def void testDeleteInterface() {//TODO überarbeiten
-        val comp = jInterface.eContainer as CompilationUnit
-        jInterface = null;
-        comp.classifiers.clear
+    def void testDeleteInterface() {
+        val comp = jInterface.containingCompilationUnit
+        EcoreUtil.delete(jInterface)
         saveAndSynchronizeChanges(comp)
-        val uI = getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, org.eclipse.uml2.uml.Interface, INTERFACE_NAME).head
-        assertNull(uI)
+        assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, org.eclipse.uml2.uml.Interface, INTERFACE_NAME).nullOrEmpty)
     }
     
     @Test
