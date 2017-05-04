@@ -24,32 +24,32 @@ public class CreateInterfaceRealizationRoutine extends AbstractRepairRoutineReal
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final InterfaceRealization interfaceRealization) {
-      return umlComponent;
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final InterfaceRealization interfaceRealization) {
+      return umlComp;
     }
     
-    public void updateInterfaceRealizationElement(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final InterfaceRealization interfaceRealization) {
+    public void updateInterfaceRealizationElement(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final InterfaceRealization interfaceRealization) {
       interfaceRealization.setName(classInterface.getName());
       EList<NamedElement> _clients = interfaceRealization.getClients();
-      _clients.add(umlComponent);
+      _clients.add(umlComp);
       EList<NamedElement> _suppliers = interfaceRealization.getSuppliers();
       _suppliers.add(classInterface);
     }
     
-    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final InterfaceRealization interfaceRealization) {
-      EList<InterfaceRealization> _interfaceRealizations = umlComponent.getInterfaceRealizations();
+    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final InterfaceRealization interfaceRealization) {
+      EList<InterfaceRealization> _interfaceRealizations = umlComp.getInterfaceRealizations();
       _interfaceRealizations.add(interfaceRealization);
     }
     
-    public EObject getElement2(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final InterfaceRealization interfaceRealization) {
+    public EObject getElement2(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final InterfaceRealization interfaceRealization) {
       return interfaceRealization;
     }
     
-    public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final InterfaceRealization interfaceRealization) {
+    public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final InterfaceRealization interfaceRealization) {
       return classInterface;
     }
     
-    public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface) {
+    public EObject getCorrepondenceSourceUmlComp(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface) {
       return umlClass;
     }
   }
@@ -70,22 +70,22 @@ public class CreateInterfaceRealizationRoutine extends AbstractRepairRoutineReal
     getLogger().debug("   Class: " + this.umlClass);
     getLogger().debug("   Interface: " + this.classInterface);
     
-    Component umlComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlComponent(umlClass, classInterface), // correspondence source supplier
+    Component umlComp = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlComp(umlClass, classInterface), // correspondence source supplier
     	Component.class,
     	(Component _element) -> true, // correspondence precondition checker
     	null);
-    if (umlComponent == null) {
+    if (umlComp == null) {
     	return;
     }
-    registerObjectUnderModification(umlComponent);
+    registerObjectUnderModification(umlComp);
     InterfaceRealization interfaceRealization = UMLFactoryImpl.eINSTANCE.createInterfaceRealization();
-    userExecution.updateInterfaceRealizationElement(umlClass, classInterface, umlComponent, interfaceRealization);
+    userExecution.updateInterfaceRealizationElement(umlClass, classInterface, umlComp, interfaceRealization);
     
-    // val updatedElement userExecution.getElement1(umlClass, classInterface, umlComponent, interfaceRealization);
-    userExecution.update0Element(umlClass, classInterface, umlComponent, interfaceRealization);
+    // val updatedElement userExecution.getElement1(umlClass, classInterface, umlComp, interfaceRealization);
+    userExecution.update0Element(umlClass, classInterface, umlComp, interfaceRealization);
     
-    addCorrespondenceBetween(userExecution.getElement2(umlClass, classInterface, umlComponent, interfaceRealization), userExecution.getElement3(umlClass, classInterface, umlComponent, interfaceRealization), "");
+    addCorrespondenceBetween(userExecution.getElement2(umlClass, classInterface, umlComp, interfaceRealization), userExecution.getElement3(umlClass, classInterface, umlComp, interfaceRealization), "");
     
     postprocessElements();
   }

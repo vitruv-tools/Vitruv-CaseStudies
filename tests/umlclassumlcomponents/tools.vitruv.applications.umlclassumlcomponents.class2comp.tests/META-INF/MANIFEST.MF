@@ -17,5 +17,5 @@ Require-Bundle: tools.vitruv.framework.tests.util,
  com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro
-
+ org.eclipse.xtend.lib.macro, 
+ tools.vitruv.applications.umlclassumlcomponents.sharedutil

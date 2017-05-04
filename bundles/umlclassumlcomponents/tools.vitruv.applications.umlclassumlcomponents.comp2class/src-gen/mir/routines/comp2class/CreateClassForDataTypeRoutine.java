@@ -1,13 +1,17 @@
 package mir.routines.comp2class;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import java.io.IOException;
 import mir.routines.comp2class.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -24,28 +28,24 @@ public class CreateClassForDataTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public EObject getElement1(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
-      return classModel;
-    }
-    
-    public void update0Element(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
-      EList<PackageableElement> _packagedElements = classModel.getPackagedElements();
-      _packagedElements.add(dataTypeClass);
-    }
-    
-    public EObject getElement2(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
       return compType;
     }
     
-    public EObject getElement3(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
+    public EObject getElement2(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
       return dataTypeClass;
     }
     
     public String getTag1(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
-      return "DataTypeRepresentation";
+      return SharedUtil.DATA_TYPE_REPRESENTATION_TAG;
     }
     
     public void updateDataTypeClassElement(final DataType compType, final Model classModel, final org.eclipse.uml2.uml.Class dataTypeClass) {
       dataTypeClass.setName(compType.getName());
+      final Function1<org.eclipse.uml2.uml.Package, Boolean> _function = (org.eclipse.uml2.uml.Package it) -> {
+        String _name = it.getName();
+        return Boolean.valueOf(Objects.equal(_name, SharedUtil.CLASS_DATATYPES_PACKAGE_NAME));
+      };
+      dataTypeClass.setPackage(((org.eclipse.uml2.uml.Package[])Conversions.unwrapArray(IterableExtensions.<org.eclipse.uml2.uml.Package>filter(Iterables.<org.eclipse.uml2.uml.Package>filter(classModel.getPackagedElements(), org.eclipse.uml2.uml.Package.class), _function), org.eclipse.uml2.uml.Package.class))[0]);
     }
     
     public EObject getCorrepondenceSourceClassModel(final DataType compType) {
@@ -79,10 +79,7 @@ public class CreateClassForDataTypeRoutine extends AbstractRepairRoutineRealizat
     org.eclipse.uml2.uml.Class dataTypeClass = UMLFactoryImpl.eINSTANCE.createClass();
     userExecution.updateDataTypeClassElement(compType, classModel, dataTypeClass);
     
-    // val updatedElement userExecution.getElement1(compType, classModel, dataTypeClass);
-    userExecution.update0Element(compType, classModel, dataTypeClass);
-    
-    addCorrespondenceBetween(userExecution.getElement2(compType, classModel, dataTypeClass), userExecution.getElement3(compType, classModel, dataTypeClass), userExecution.getTag1(compType, classModel, dataTypeClass));
+    addCorrespondenceBetween(userExecution.getElement1(compType, classModel, dataTypeClass), userExecution.getElement2(compType, classModel, dataTypeClass), userExecution.getTag1(compType, classModel, dataTypeClass));
     
     postprocessElements();
   }

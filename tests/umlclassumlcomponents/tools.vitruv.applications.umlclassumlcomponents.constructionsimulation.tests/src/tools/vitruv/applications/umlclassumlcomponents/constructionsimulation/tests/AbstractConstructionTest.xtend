@@ -1,17 +1,19 @@
 package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.tests
 
-import tools.vitruv.applications.umlclassumlcomponents.class2comp.UmlClass2UmlCompChangePropagation
-import tools.vitruv.framework.tests.VitruviusApplicationTest 
-import java.util.List
-import tools.vitruv.framework.change.description.VitruviusChange
-import org.eclipse.emf.ecore.EObject
 import java.io.File
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge
+import java.util.List
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
+import tools.vitruv.applications.umlclassumlcomponents.class2comp.UmlClass2UmlCompChangePropagation
 import tools.vitruv.domains.uml.UmlDomainProvider
+import tools.vitruv.framework.change.description.VitruviusChange
 import tools.vitruv.framework.domains.VitruvDomain
+import tools.vitruv.framework.tests.VitruviusApplicationTest
+import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
 abstract class AbstractConstructionTest extends VitruviusApplicationTest  {
+	
+	protected static val OUTPUT_NAME = "model/model.uml"
 	
 	def protected void triggerSynchronization(List<VitruviusChange> changes) {
 		for (change : changes) {
@@ -23,7 +25,7 @@ abstract class AbstractConstructionTest extends VitruviusApplicationTest  {
 		virtualModel.propagateChange(change)
 	}
 	
-	def protected Resource createAndSynchronizeModel2(String path, EObject rootElement) {
+	def protected Resource createAndSynchronizeModelWithReturnedResource(String path, EObject rootElement) { //TODO Temp, remove
 		if (path.isNullOrEmpty || rootElement === null) {
 			throw new IllegalArgumentException()
 		}
@@ -35,17 +37,28 @@ abstract class AbstractConstructionTest extends VitruviusApplicationTest  {
 		resource.contents.add(rootElement)
 		return resource
 	}
-		
+	
+	def protected createModel(String path, EObject rootElement) { //TODO Temp, remove
+		if (path.isNullOrEmpty || rootElement === null) {
+			throw new IllegalArgumentException()
+		}
+		//val resourceSet = new ResourceSetImpl()
+		//val resource = resourceSet.createResource(URI.createPlatformResourceURI(path, true))
+		val resource = createModelResource(path)
+		//EcoreResourceBridge.saveResource(resource)
+		resource.contents.add(rootElement)
+	}
+
 	override protected createChangePropagationSpecifications() {
 		return #[new UmlClass2UmlCompChangePropagation()]
 	}	
 
-	//hack for handling of one singular UML model instead of two
+	//Hack for handling of one singular UML model instead of two
 	override protected getVitruvDomains() {
 		return #[new UmlDomainProvider().domain]
 	}	
 	
-	//hack for handling of one singular UML model instead of two
+	//Hack for handling of one singular UML model instead of two
 	override protected getCorrespondenceModel() {
 		val VitruvDomain umlDomain = this.getVitruvDomains().iterator().next
 		return this.getVirtualModel().getCorrespondenceModel(umlDomain.getURI(), umlDomain.getURI()) 
@@ -57,6 +70,4 @@ abstract class AbstractConstructionTest extends VitruviusApplicationTest  {
 	override protected setup() {
 		
 	}
-	
-	
 }

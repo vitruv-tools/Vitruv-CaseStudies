@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -32,7 +33,7 @@ public class ChangeClassDataTypePropertyRoutine extends AbstractRepairRoutineRea
     }
     
     public String getRetrieveTag1(final Property compProperty) {
-      return "DataTypeProperty";
+      return SharedUtil.DATA_TYPE_PROPERTY;
     }
   }
   

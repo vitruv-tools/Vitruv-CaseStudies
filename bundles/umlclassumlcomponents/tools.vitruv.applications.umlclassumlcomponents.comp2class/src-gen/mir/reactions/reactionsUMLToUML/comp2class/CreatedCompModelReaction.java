@@ -57,7 +57,8 @@ class CreatedCompModelReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Model newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createClassModel(newValue);
+      _routinesFacade.createModelSelfCorrespondence(newValue);
+      _routinesFacade.createDataTypePackage(newValue);
     }
   }
 }

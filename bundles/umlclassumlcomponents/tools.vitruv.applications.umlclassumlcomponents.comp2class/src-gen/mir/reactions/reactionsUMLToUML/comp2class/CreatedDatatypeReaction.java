@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.xtext.xbase.lib.Extension;
-import tools.vitruv.applications.umlclassumlcomponents.comp2class.comp2classUtil;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -71,8 +71,8 @@ class CreatedDatatypeReaction extends AbstractReactionRealization {
     public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
       String _name = newValue.getName();
       String _plus = ("Is \'" + _name);
-      final String msg = (_plus + "\' a generic/library DataType? If not a class representation will be created.");
-      if (((newValue instanceof PrimitiveType) || comp2classUtil.modalTextYesNoUserInteracting(this.userInteracting, msg))) {
+      final String question = (_plus + "\' a generic/library DataType? If not a class representation will be created.");
+      if (((newValue instanceof PrimitiveType) || SharedUtil.modalTextYesNoUserInteracting(this.userInteracting, question))) {
         _routinesFacade.createDataTypeForDataType(newValue);
       } else {
         _routinesFacade.createClassForDataType(newValue);

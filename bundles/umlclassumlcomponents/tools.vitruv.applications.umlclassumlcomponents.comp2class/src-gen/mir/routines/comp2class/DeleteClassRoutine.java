@@ -2,8 +2,12 @@ package mir.routines.comp2class;
 
 import java.io.IOException;
 import mir.routines.comp2class.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
+import org.eclipse.uml2.uml.PackageableElement;
+import org.eclipse.xtext.xbase.lib.Extension;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -19,48 +23,72 @@ public class DeleteClassRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Component umlComp, final String packageName, final String expectedTag, final org.eclipse.uml2.uml.Class umlClass) {
+    public EObject getElement1(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage) {
       return umlClass;
     }
     
-    public String getRetrieveTag1(final Component umlComp, final String packageName, final String expectedTag) {
-      return expectedTag;
+    public EObject getCorrepondenceSourceClassPackage(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
+      return umlComp;
     }
     
-    public EObject getCorrepondenceSourceUmlClass(final Component umlComp, final String packageName, final String expectedTag) {
+    public EObject getCorrepondenceSourceUmlClass(final Component umlComp) {
       return umlComp;
+    }
+    
+    public void callRoutine1(final Component umlComp, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage, @Extension final RoutinesFacade _routinesFacade) {
+      boolean _isEmpty = classPackage.getPackagedElements().isEmpty();
+      if (_isEmpty) {
+        classPackage.destroy();
+      } else {
+        String _name = classPackage.getName();
+        String _plus = ("Delete the corresponding Package \'" + _name);
+        final String question = (_plus + "\' and all its contained elements?");
+        boolean _modalTextYesNoUserInteracting = SharedUtil.modalTextYesNoUserInteracting(this.userInteracting, question);
+        if (_modalTextYesNoUserInteracting) {
+          EList<PackageableElement> _packagedElements = classPackage.getPackagedElements();
+          for (final PackageableElement classElement : _packagedElements) {
+            classElement.destroy();
+          }
+          classPackage.destroy();
+        }
+      }
     }
   }
   
-  public DeleteClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Component umlComp, final String packageName, final String expectedTag) {
+  public DeleteClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Component umlComp) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.comp2class.DeleteClassRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.comp2class.RoutinesFacade(getExecutionState(), this);
-    this.umlComp = umlComp;this.packageName = packageName;this.expectedTag = expectedTag;
+    this.umlComp = umlComp;
   }
   
   private Component umlComp;
   
-  private String packageName;
-  
-  private String expectedTag;
-  
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteClassRoutine with input:");
     getLogger().debug("   Component: " + this.umlComp);
-    getLogger().debug("   String: " + this.packageName);
-    getLogger().debug("   String: " + this.expectedTag);
     
     org.eclipse.uml2.uml.Class umlClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlClass(umlComp, packageName, expectedTag), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUmlClass(umlComp), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(umlComp, packageName, expectedTag));
+    	null);
     if (umlClass == null) {
     	return;
     }
     registerObjectUnderModification(umlClass);
-    deleteObject(userExecution.getElement1(umlComp, packageName, expectedTag, umlClass));
+    org.eclipse.uml2.uml.Package classPackage = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceClassPackage(umlComp, umlClass), // correspondence source supplier
+    	org.eclipse.uml2.uml.Package.class,
+    	(org.eclipse.uml2.uml.Package _element) -> true, // correspondence precondition checker
+    	null);
+    if (classPackage == null) {
+    	return;
+    }
+    registerObjectUnderModification(classPackage);
+    deleteObject(userExecution.getElement1(umlComp, umlClass, classPackage));
+    
+    userExecution.callRoutine1(umlComp, umlClass, classPackage, actionsFacade);
     
     postprocessElements();
   }

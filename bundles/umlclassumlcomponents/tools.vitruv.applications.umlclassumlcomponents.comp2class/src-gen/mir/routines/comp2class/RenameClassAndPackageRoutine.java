@@ -5,6 +5,7 @@ import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.xtext.xbase.lib.Extension;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -42,7 +43,7 @@ public class RenameClassAndPackageRoutine extends AbstractRepairRoutineRealizati
     
     public void callRoutine1(final Component umlComp, final String newName, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage, @Extension final RoutinesFacade _routinesFacade) {
       if ((classPackage != null)) {
-        classPackage.setName((newName + " Package"));
+        classPackage.setName((newName + SharedUtil.PACKAGE_SUFFIX));
       }
     }
   }

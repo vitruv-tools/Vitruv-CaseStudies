@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -28,7 +29,7 @@ public class ChangeClassDataTypeOperationRoutine extends AbstractRepairRoutineRe
     }
     
     public String getRetrieveTag1(final Operation compOperation) {
-      return "DataTypeOperation";
+      return SharedUtil.DATA_TYPE_OPERATION_TAG;
     }
     
     public EObject getCorrepondenceSourceClassOperation(final Operation compOperation) {

@@ -1,14 +1,16 @@
 package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.tests
 
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Component
+import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.PackageableElement
 import org.junit.Test
 import tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.strategy.UmlComponentIntegrationStrategy
-import org.eclipse.uml2.uml.PackageableElement
+
 import static org.junit.Assert.*
-import org.eclipse.uml2.uml.Model
-import org.eclipse.uml2.uml.Component
-import org.eclipse.uml2.uml.Interface
-import org.eclipse.uml2.uml.DataType
 
 class TestConstructionTest extends AbstractConstructionTest {
 			
@@ -20,8 +22,8 @@ class TestConstructionTest extends AbstractConstructionTest {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
 		assertEquals(1, correspondingElements.size)
 		val umlClass = correspondingElements.get(0)
-		assertTrue(umlClass instanceof org.eclipse.uml2.uml.Class)
-		assertEquals(name, (umlClass as org.eclipse.uml2.uml.Class).name)
+		assertTrue(umlClass instanceof Class)
+		assertEquals(name, (umlClass as Class).name)
 	}
 	
 	private def void checkComponent(PackageableElement umlComponent, String name) {
@@ -44,17 +46,19 @@ class TestConstructionTest extends AbstractConstructionTest {
 		return integrationStrategy.loadModel("TestModels/" + fileName)
 	} 
 	
-	private def Resource constructionTest(String fileName) {
+	private def Resource constructionTest(String fileName) { //TODO remove fully?
+		
 		val fileResource = getTestModelResource(fileName)
    		
-		//val changes = integrationStrategy.createChangeModels(null, resource) //TODO fix this
+   		val integrationStrategy = new UmlComponentIntegrationStrategy()
+		val changes = integrationStrategy.createChangeModels(null, fileResource) //TODO fix this
 		
-		val inputResource = createAndSynchronizeModel2("model/model.uml", fileResource.allContents.head)
+		val inputResource = createAndSynchronizeModelWithReturnedResource(OUTPUT_NAME, fileResource.allContents.head) 
 		
 		//TODO User Interaction might be needed in the future		
 		//testUserInteractor.addNextSelections(0,0,0,0)
 		
-		//triggerSynchronization(changes) //TODO fix this
+		triggerSynchronization(changes) //TODO fix this
 		
 		return inputResource
 	}
@@ -63,8 +67,34 @@ class TestConstructionTest extends AbstractConstructionTest {
 	*Tests:*
 	********/
 	
+	@Test //TODO Temp, remove
+	def void naiiveConstructionTest2Components() {
+		val Resource inputResource = getTestModelResource("TestModel2Components.uml")
+		createAndSynchronizeModel(OUTPUT_NAME, inputResource.allContents.head)
+		
+		val allCorr = correspondenceModel.allCorrespondences.get(0)
+		val model1 = allCorr.getAs().get(0)
+		val model2 = correspondenceModel.getCorrespondingEObjects(#[model1]).flatten.get(0)
+		val test = "No Results here"
+	}
+		
+	@Test //TODO Temp, remove
+	def void integrationConstructionTest2Components() {		
+		val integrationStrategy = new UmlComponentIntegrationStrategy()		
+		val Resource inputResource = integrationStrategy.loadModel("TestModels/TestModel2Components.uml")
+		val changes = integrationStrategy.createChangeModels(null, inputResource)
+		createAndSynchronizeModel(OUTPUT_NAME, inputResource.allContents.head)
+		triggerSynchronization(changes) 
+		
+		val allCorr = correspondenceModel.allCorrespondences.get(0)
+		val model1 = allCorr.getAs().get(0)
+		val model2 = correspondenceModel.getCorrespondingEObjects(#[model1]).flatten.get(0)
+		val test = "No Results here"
+	}
+	
 	@Test
-	def void constructionTest2Components(){
+	def void constructionTest2Components() {		
+		
 		val inputResource = constructionTest("TestModel2Components.uml")
 		
 		//Check inputResource (Component Diagram)

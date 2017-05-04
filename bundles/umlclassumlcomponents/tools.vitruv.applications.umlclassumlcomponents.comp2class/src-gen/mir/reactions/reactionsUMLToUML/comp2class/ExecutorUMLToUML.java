@@ -16,10 +16,10 @@ public class ExecutorUmlToUml extends AbstractReactionsExecutor {
     tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.CreatedCompModelReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.CreatedCompModelReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.RenamedComponentModelReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.RenamedComponentModelReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.RenamedElementReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.RenamedElementReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.CreatedUmlComponentReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.CreatedUmlComponentReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.RenameComponentReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.RenameComponentReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.DeletedCompReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.DeletedCompReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.RenamedElementReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.RenamedElementReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.CreatedDatatypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.CreatedDatatypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.AddedDataTypePropertyReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.AddedDataTypePropertyReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.comp2class.ChangedDataTypePropertyReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.comp2class.ChangedDataTypePropertyReaction(userInteracting));

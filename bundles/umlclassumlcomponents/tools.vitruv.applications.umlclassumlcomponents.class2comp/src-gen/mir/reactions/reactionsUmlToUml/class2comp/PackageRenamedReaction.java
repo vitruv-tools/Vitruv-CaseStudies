@@ -2,7 +2,6 @@ package mir.reactions.reactionsUmlToUml.class2comp;
 
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -13,19 +12,19 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class ClassAttributeRenamedReaction extends AbstractReactionRealization {
-  public ClassAttributeRenamedReaction(final UserInteracting userInteracting) {
+class PackageRenamedReaction extends AbstractReactionRealization {
+  public PackageRenamedReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Property, String> typedChange = (ReplaceSingleValuedEAttribute<Property, String>)change;
-    Property affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String>)change;
+    org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
     String oldValue = typedChange.getOldValue();
     String newValue = typedChange.getNewValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToUml.class2comp.ClassAttributeRenamedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.ClassAttributeRenamedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.PackageRenamedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.PackageRenamedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -34,8 +33,8 @@ class ClassAttributeRenamedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<Property, String> relevantChange = (ReplaceSingleValuedEAttribute<Property, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Property)) {
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Package)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("name")) {
@@ -68,8 +67,8 @@ class ClassAttributeRenamedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Property affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.renameComponentAttribute(affectedEObject);
+    public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.routinePackageRenamed(affectedEObject, newValue, oldValue);
     }
   }
 }

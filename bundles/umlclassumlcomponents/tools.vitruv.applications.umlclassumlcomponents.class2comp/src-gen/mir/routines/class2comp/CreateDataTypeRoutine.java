@@ -5,7 +5,7 @@ import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Type;
+import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -28,8 +28,8 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final DataType classType, final DataType compType) {
-      EList<Type> _ownedTypes = compType.getPackage().getOwnedTypes();
-      _ownedTypes.add(compType);
+      EList<PackageableElement> _packagedElements = compType.getPackage().getPackagedElements();
+      _packagedElements.add(compType);
     }
     
     public EObject getElement2(final DataType classType, final DataType compType) {

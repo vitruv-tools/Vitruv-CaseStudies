@@ -57,7 +57,7 @@ class CreatedClassModelReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Model newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createComponentModel(newValue);
+      _routinesFacade.createModelSelfCorrespondence(newValue);
     }
   }
 }

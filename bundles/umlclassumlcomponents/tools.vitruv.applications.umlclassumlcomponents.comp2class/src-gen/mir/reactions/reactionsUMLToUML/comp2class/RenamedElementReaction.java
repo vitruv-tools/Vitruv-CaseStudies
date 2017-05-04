@@ -73,7 +73,7 @@ class RenamedElementReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
-    return (!(affectedEObject instanceof Component));
+    return ((!(affectedEObject instanceof Component)) && (!(affectedEObject instanceof org.eclipse.uml2.uml.Package)));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

@@ -25,32 +25,32 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final Usage usage) {
-      return umlComponent;
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final Usage usage) {
+      return umlComp;
     }
     
-    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final Usage usage) {
-      EList<PackageableElement> _packagedElements = umlComponent.getPackagedElements();
+    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final Usage usage) {
+      EList<PackageableElement> _packagedElements = umlComp.getPackagedElements();
       _packagedElements.add(usage);
     }
     
-    public EObject getElement2(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final Usage usage) {
+    public EObject getElement2(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final Usage usage) {
       return usage;
     }
     
-    public void updateUsageElement(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final Usage usage) {
+    public void updateUsageElement(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final Usage usage) {
       usage.setName(classInterface.getName());
       EList<NamedElement> _clients = usage.getClients();
-      _clients.add(umlComponent);
+      _clients.add(umlComp);
       EList<NamedElement> _suppliers = usage.getSuppliers();
       _suppliers.add(classInterface);
     }
     
-    public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComponent, final Usage usage) {
+    public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface, final Component umlComp, final Usage usage) {
       return classInterface;
     }
     
-    public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface) {
+    public EObject getCorrepondenceSourceUmlComp(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface) {
       return umlClass;
     }
   }
@@ -71,22 +71,22 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   Class: " + this.umlClass);
     getLogger().debug("   Interface: " + this.classInterface);
     
-    Component umlComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlComponent(umlClass, classInterface), // correspondence source supplier
+    Component umlComp = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlComp(umlClass, classInterface), // correspondence source supplier
     	Component.class,
     	(Component _element) -> true, // correspondence precondition checker
     	null);
-    if (umlComponent == null) {
+    if (umlComp == null) {
     	return;
     }
-    registerObjectUnderModification(umlComponent);
+    registerObjectUnderModification(umlComp);
     Usage usage = UMLFactoryImpl.eINSTANCE.createUsage();
-    userExecution.updateUsageElement(umlClass, classInterface, umlComponent, usage);
+    userExecution.updateUsageElement(umlClass, classInterface, umlComp, usage);
     
-    // val updatedElement userExecution.getElement1(umlClass, classInterface, umlComponent, usage);
-    userExecution.update0Element(umlClass, classInterface, umlComponent, usage);
+    // val updatedElement userExecution.getElement1(umlClass, classInterface, umlComp, usage);
+    userExecution.update0Element(umlClass, classInterface, umlComp, usage);
     
-    addCorrespondenceBetween(userExecution.getElement2(umlClass, classInterface, umlComponent, usage), userExecution.getElement3(umlClass, classInterface, umlComponent, usage), "");
+    addCorrespondenceBetween(userExecution.getElement2(umlClass, classInterface, umlComp, usage), userExecution.getElement3(umlClass, classInterface, umlComp, usage), "");
     
     postprocessElements();
   }

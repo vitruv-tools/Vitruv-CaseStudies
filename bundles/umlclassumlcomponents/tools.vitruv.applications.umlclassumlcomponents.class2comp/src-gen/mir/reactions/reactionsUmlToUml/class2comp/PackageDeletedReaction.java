@@ -2,7 +2,7 @@ package mir.reactions.reactionsUmlToUml.class2comp;
 
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -14,18 +14,18 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class ClassAttributeDeletedReaction extends AbstractReactionRealization {
-  public ClassAttributeDeletedReaction(final UserInteracting userInteracting) {
+class PackageDeletedReaction extends AbstractReactionRealization {
+  public PackageDeletedReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.eclipse.uml2.uml.Class, Property> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Class, Property>)change).getRemoveChange();
-    org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<Model, org.eclipse.uml2.uml.Package> typedChange = ((RemoveAndDeleteNonRoot<Model, org.eclipse.uml2.uml.Package>)change).getRemoveChange();
+    Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Property oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.Package oldValue = typedChange.getOldValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToUml.class2comp.ClassAttributeDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.ClassAttributeDeletedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.PackageDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.PackageDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
@@ -34,14 +34,14 @@ class ClassAttributeDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.eclipse.uml2.uml.Class, Property> relevantChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Class, Property>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
+    RemoveEReference<Model, org.eclipse.uml2.uml.Package> relevantChange = ((RemoveAndDeleteNonRoot<Model, org.eclipse.uml2.uml.Package>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("ownedAttribute")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Property)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.Package)) {
     	return false;
     }
     return true;
@@ -65,8 +65,8 @@ class ClassAttributeDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Property oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.deleteComponentAttribute(oldValue);
+    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.routinePackageDeleted(oldValue, affectedEObject);
     }
   }
 }

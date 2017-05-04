@@ -1,20 +1,21 @@
-package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests;
+package tools.vitruv.applications.umlclassumlcomponents.sharedutil;
 
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import tools.vitruv.framework.tests.*;
 
-class Class2CompTestUtil {
+import tools.vitruv.framework.tests.TestUserInteractor;
+
+public class UserInteractionTestUtil {
 	
 	private static ConcurrentLinkedQueue<Integer> concurrentIntLinkedQueue = new ConcurrentLinkedQueue<Integer>();
 	
 	//Store given UserInteractions for later by appending them
-	protected static void queueUserInteractionSelections(final Integer... nextSelections) {
+	public static void queueUserInteractionSelections(final Integer... nextSelections) {
 		concurrentIntLinkedQueue.addAll(Arrays.asList(nextSelections));
 	}
 	
 	//Commit currently pending UserInteractions
-	protected static void sendCollectedUserInteractionSelections(TestUserInteractor userInteractor) {
+	public static void sendCollectedUserInteractionSelections(TestUserInteractor userInteractor) {
 	        userInteractor.addNextSelections(concurrentIntLinkedQueue.toArray(new Integer[0]));
 	        concurrentIntLinkedQueue.clear();
 	}

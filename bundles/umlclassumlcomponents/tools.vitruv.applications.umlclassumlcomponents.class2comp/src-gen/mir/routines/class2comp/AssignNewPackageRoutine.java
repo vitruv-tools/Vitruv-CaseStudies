@@ -29,9 +29,9 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
     public void callRoutine1(final org.eclipse.uml2.uml.Package newPackage, final Component umlComponent, @Extension final RoutinesFacade _routinesFacade) {
       final Iterable<org.eclipse.uml2.uml.Package> packages = Iterables.<org.eclipse.uml2.uml.Package>filter(Iterables.<EObject>concat(this.correspondenceModel.getCorrespondingEObjects(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(umlComponent)))), org.eclipse.uml2.uml.Package.class);
       org.eclipse.uml2.uml.Package _xifexpression = null;
-      int _size = IterableExtensions.size(packages);
-      boolean _notEquals = (_size != 0);
-      if (_notEquals) {
+      boolean _isEmpty = IterableExtensions.isEmpty(packages);
+      boolean _not = (!_isEmpty);
+      if (_not) {
         _xifexpression = ((org.eclipse.uml2.uml.Package[])Conversions.unwrapArray(packages, org.eclipse.uml2.uml.Package.class))[0];
       } else {
         _xifexpression = null;
@@ -42,8 +42,8 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
       } else {
         String _name = oldPackage.getName();
         String _plus = ("Chosen Component is already linked to existing Package \'" + _name);
-        final String msg = (_plus + "\'.");
-        this.userInteracting.showMessage(UserInteractionType.MODELESS, msg);
+        final String errorMsg = (_plus + "\'.");
+        this.userInteracting.showMessage(UserInteractionType.MODELESS, errorMsg);
       }
     }
   }

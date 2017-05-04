@@ -11,10 +11,13 @@ import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Test
 
 import static org.junit.Assert.*
-import org.eclipse.uml2.uml.VisibilityKind
+import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
+import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
 
 class Comp2ClassTest extends AbstractComp2ClassTest {
 	private static val COMP_NAME = "TestUmlComp"
@@ -22,34 +25,12 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 	private static val DATATYPE_NAME = "TestDataType"
 	private static val PROPERTY_NAME = "TestProperty"
 	private static val OPERATION_NAME = "TestOperation"
-	
-	/*******
-	*Model:*
-	********/	
-	//Model creation currently unused due to usage of one singular model
-	
-	@Test
-		public def void testModelCreation() {
-			assertModelExists("model/" + MODEL_NAME + ".uml")
-			val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
-			assertEquals(1, correspondingElements.size)
-			val umlModel = correspondingElements.get(0)
-			assertTrue(umlModel instanceof Model)
-			assertEquals(MODEL_NAME, (umlModel as Model).name)
-	}
-	
+
 	
 	/***************
 	*Assert Helper:*
 	****************/	
-		
-	private def void assertTypeAndName(EObject umlObject, java.lang.Class<? extends NamedElement> umlType, String name) {	
-		assertTrue(umlObject.class.isInstance(umlType) || umlObject.class.genericInterfaces.contains(umlType))
-		//Second condition encloses 'impl'-classes	
-			
-		assertEquals(name, (umlObject as NamedElement).name)
-	}
-	
+
 	private def void assertClass(PackageableElement compElement, String name) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compElement]).flatten
 		assertEquals(1, correspondingElements.size)
@@ -58,28 +39,55 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 	}
 	
 	private def void assertClassAndPackage(Component umlComp, String name) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
-		assertEquals(2, correspondingElements.size) //Class & Package
+		assertClassAndPackage(umlComp, name, name + PACKAGE_SUFFIX, true)
+	}
+	
+	private def void assertClassAndPackage(PackageableElement compElement, String name, String packageName, Boolean packageCorrCheck) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[compElement]).flatten
 		
-		//Check class
+		//Check Class
 		val umlClass = correspondingElements.filter(Class).get(0)
 		
 		assertTypeAndName(umlClass, Class, name)
 		
 		//Check Package
 		val classPackage = (umlClass as Class).package
-		assertEquals(name + " Package", classPackage.name)
+		assertEquals(packageName, classPackage.name)
 		val packageOwnedTypes = classPackage.ownedTypes
 		assertEquals(1, packageOwnedTypes.size)
 		val classFromPackage = packageOwnedTypes.get(0)
 		assertTypeAndName(classFromPackage, Class, name)
 		
-		//Check package correspondence 
-		val classPackageFromCorrespondence = correspondingElements.filter(Package).get(0)		
-		assertTypeAndName(classPackageFromCorrespondence, Package, name + " Package")
+		if (packageCorrCheck) {
+			//Check Package correspondence 
+			val classPackageFromCorrespondence = correspondingElements.filter(Package).get(0)		
+			assertTypeAndName(classPackageFromCorrespondence, Package, name + PACKAGE_SUFFIX)		
+		}
 	}	
 	
+	/*******
+	*Model:*
+	********/	
 	
+	@Test
+	//This test covers usage of one as well as two Models
+	public def void testModelCreation() {
+		//Check Model:
+		assertModelExists(FOLDER_NAME + MODEL_NAME + "." + MODEL_FILE_EXTENSION)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
+		val classModel = correspondingElements.filter(Model).get(0)
+		assertTypeAndName(classModel, Model, MODEL_NAME)
+		
+		//Check DataType Package
+		val packagedElements = (classModel as Model).packagedElements
+		assertEquals(1, packagedElements.size)
+		val dataTypePackage = packagedElements.get(0)
+		assertTypeAndName(dataTypePackage, Package, CLASS_DATATYPES_PACKAGE_NAME)
+//		val dataTypePackageFromCorr = correspondingElements.filter(Package).get(0)
+//		assertTypeAndName(dataTypePackageFromCorr, Package, CLASS_DATATYPES_PACKAGE_NAME)
+	}
+	
+		
 	/***********
 	*Component:*
 	************/
@@ -109,12 +117,12 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		umlComp.name = "New"
 		saveAndSynchronizeChanges(rootElement)
 		
-		//Check if rename happened in class & package:
+		//Check if rename happened in Class & Package:
 		assertClassAndPackage(umlComp, "New")
     }
     
 	@Test
-    public def void testDeleteComponent() {
+    public def void testDeleteComponentWithPackage() {
     	val umlComp = createComponent(COMP_NAME)	 
 		saveAndSynchronizeChanges(umlComp)
 		
@@ -124,17 +132,82 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		val classPackage = (umlClass as Class).package
 		val classModel = (umlClass as Class).model
 		
-		//Remove component		
+		//Remove Component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
-		umlComp.destroy()		
+		umlComp.destroy()
 		assertFalse(rootElement.packagedElements.contains(umlComp))
 		saveAndSynchronizeChanges(rootElement)
 		
-		//Check if class exists:		
+		//Check if Class or Package exists:		
 		assertFalse(classPackage.packagedElements.contains(umlClass))
 		assertFalse(classModel.packagedElements.contains(umlClass))
+		assertFalse(classModel.packagedElements.contains(classPackage))
     }
 	
+	@Test
+    public def void testDeleteComponentWithoutPackage() {
+    	val umlComp = createComponent(COMP_NAME)    	
+		saveAndSynchronizeChanges(umlComp)
+		
+		assertClassAndPackage(umlComp, COMP_NAME)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
+		val umlClass = correspondingElements.filter(Class).get(0)
+		val classPackage = (umlClass as Class).package
+		val classModel = (umlClass as Class).model
+		
+		//Package gets more members:
+    	val umlClass2 = UMLFactory.eINSTANCE.createClass()
+		umlClass2.name = CLASS_NAME2
+		classPackage.packagedElements += umlClass2 //TODO fix, illegal write. transaction?
+		
+		//Remove Component		
+		assertTrue(rootElement.packagedElements.contains(umlComp))
+		umlComp.destroy()
+		queueUserInteractionSelections(1) //Decide to not delete Package
+		assertFalse(rootElement.packagedElements.contains(umlComp))
+		saveAndSynchronizeChanges(rootElement)
+		
+		//Check if Class or Package exists:		
+		assertFalse(classPackage.packagedElements.contains(umlClass))
+		assertFalse(classModel.packagedElements.contains(umlClass))
+		assertTrue(classModel.packagedElements.contains(classPackage))
+		assertTrue(classPackage.packagedElements.contains(umlClass2))		
+    }
+    
+	@Test
+    public def void testDeleteComponentWithPackageAndContents() {
+    	val umlComp = createComponent(COMP_NAME)    	
+		saveAndSynchronizeChanges(umlComp)
+		
+		assertClassAndPackage(umlComp, COMP_NAME)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComp]).flatten
+		val umlClass = correspondingElements.filter(Class).get(0)
+		val classPackage = (umlClass as Class).package
+		val classModel = (umlClass as Class).model
+		
+		//Package gets more members:
+    	val umlClass2 = UMLFactory.eINSTANCE.createClass()
+		umlClass2.name = CLASS_NAME2
+		//Add new Class to Package in transaction:
+//		EMFCommandBridge.createAndExecuteVitruviusRecordingCommand(() -> {
+//    		classPackage.packagedElements += umlClass2 //TODO More here? What else?
+//		}, TransactionalEditingDomain.Factory.INSTANCE.getEditingDomain(this.resource.getResourceSet()); //TODO How?
+		classPackage.packagedElements += umlClass2 //TODO fix, illegal write. use transaction
+		
+		//Remove Component		
+		assertTrue(rootElement.packagedElements.contains(umlComp))
+		umlComp.destroy()
+		queueUserInteractionSelections(0) //Decide to delete Package and Contents
+		assertFalse(rootElement.packagedElements.contains(umlComp))
+		saveAndSynchronizeChanges(rootElement)
+		
+		//Check if Class or Package exists:		
+		assertFalse(classPackage.packagedElements.contains(umlClass))
+		assertFalse(classModel.packagedElements.contains(umlClass))
+		assertFalse(classModel.packagedElements.contains(classPackage))
+		assertFalse(classModel.packagedElements.contains(umlClass2))		
+    }
+    
 	@Test
 	public def void testCreate2ClassFor2Component() {
 		val umlComp1 = createComponent(COMP_NAME)
@@ -154,7 +227,7 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
 		
-		assertClass(compDataType, DATATYPE_NAME)		
+		assertClassAndPackage(compDataType, DATATYPE_NAME, CLASS_DATATYPES_PACKAGE_NAME, false)			
 	}
 	
     private def DataType createDataType(String name, int createClass) {
@@ -194,11 +267,11 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		compDataType.ownedAttributes += compProperty
 		saveAndSynchronizeChanges(compDataType)
 		
-		//change name:
+		//Change name:
 		compProperty.name = "New"
 		saveAndSynchronizeChanges(compProperty)
 		
-		//check if rename happened in class property:
+		//Check if rename happened in Class Property:
 		val classProperty = umlClass.ownedAttributes.get(0)
 		assertEquals("New", (classProperty as Property).name)
     }
@@ -232,11 +305,11 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		compDataType.ownedOperations += compOperation
 		saveAndSynchronizeChanges(compDataType)
 		
-		//change name:
+		//Change name:
 		compOperation.name = "New"
 		saveAndSynchronizeChanges(compOperation)
 		
-		//check if rename happened in class operation:
+		//Check if rename happened in Class Operation:
 		val classOperation = umlClass.ownedOperations.get(0)
 		assertEquals("New", (classOperation as Operation).name)
     }

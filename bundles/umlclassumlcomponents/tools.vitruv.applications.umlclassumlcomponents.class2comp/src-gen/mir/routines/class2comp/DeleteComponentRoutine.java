@@ -19,45 +19,38 @@ public class DeleteComponentRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final String expectedTag, final Component umlComponent) {
-      return umlComponent;
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Component umlComp) {
+      return umlComp;
     }
     
-    public String getRetrieveTag1(final org.eclipse.uml2.uml.Class umlClass, final String expectedTag) {
-      return expectedTag;
-    }
-    
-    public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final String expectedTag) {
+    public EObject getCorrepondenceSourceUmlComp(final org.eclipse.uml2.uml.Class umlClass) {
       return umlClass;
     }
   }
   
-  public DeleteComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass, final String expectedTag) {
+  public DeleteComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.DeleteComponentRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
-    this.umlClass = umlClass;this.expectedTag = expectedTag;
+    this.umlClass = umlClass;
   }
   
   private org.eclipse.uml2.uml.Class umlClass;
   
-  private String expectedTag;
-  
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteComponentRoutine with input:");
     getLogger().debug("   Class: " + this.umlClass);
-    getLogger().debug("   String: " + this.expectedTag);
     
-    Component umlComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlComponent(umlClass, expectedTag), // correspondence source supplier
+    Component umlComp = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlComp(umlClass), // correspondence source supplier
     	Component.class,
     	(Component _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(umlClass, expectedTag));
-    if (umlComponent == null) {
+    	null);
+    if (umlComp == null) {
     	return;
     }
-    registerObjectUnderModification(umlComponent);
-    deleteObject(userExecution.getElement1(umlClass, expectedTag, umlComponent));
+    registerObjectUnderModification(umlComp);
+    deleteObject(userExecution.getElement1(umlClass, umlComp));
     
     postprocessElements();
   }

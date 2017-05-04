@@ -1,14 +1,15 @@
 package tools.vitruv.applications.umlclassumlcomponents.constructionsimulation.traversal
 
+import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.uml2.uml.Model
 import tools.vitruv.extensions.constructionsimulation.traversal.EMFTraversalStrategy
 import tools.vitruv.framework.change.description.VitruviusChange
-import tools.vitruv.framework.util.datatypes.VURI
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.common.util.BasicEList
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import tools.vitruv.framework.change.recording.AtomicEmfChangeRecorder
+import tools.vitruv.framework.util.datatypes.VURI
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 public class UmlComponentTraversalStrategy extends EMFTraversalStrategy {
 	
@@ -31,7 +32,8 @@ public class UmlComponentTraversalStrategy extends EMFTraversalStrategy {
 		changeRecorder.beginRecording(VURI.getInstance(resource), #{resource})
 		
 		//Simply add the existing model to the new resource:
-		resource.contents.add(model)
+		val modelCopy = EcoreUtil.copy(model)
+		resource.contents.add(modelCopy)
 		
 		changeList = new BasicEList<VitruviusChange>()
 		val changes = changeRecorder.endRecording

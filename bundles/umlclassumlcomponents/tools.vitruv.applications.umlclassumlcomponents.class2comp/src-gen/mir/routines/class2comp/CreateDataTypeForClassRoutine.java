@@ -8,6 +8,7 @@ import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -43,7 +44,6 @@ public class CreateDataTypeForClassRoutine extends AbstractRepairRoutineRealizat
     
     public void updateCompDataTypeElement(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final DataType compDataType) {
       compDataType.setName(umlClass.getName());
-      compDataType.setPackage(umlClass.getPackage());
     }
     
     public EObject getElement3(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final DataType compDataType) {
@@ -51,7 +51,7 @@ public class CreateDataTypeForClassRoutine extends AbstractRepairRoutineRealizat
     }
     
     public String getTag1(final org.eclipse.uml2.uml.Class umlClass, final Model compModel, final DataType compDataType) {
-      return "DataTypeRepresentation";
+      return SharedUtil.DATA_TYPE_REPRESENTATION_TAG;
     }
   }
   

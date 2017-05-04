@@ -16,21 +16,39 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createClassModel(final Model umlCompModel) {
+  public void createModelSelfCorrespondence(final Model compModel) {
+    mir.routines.comp2class.CreateModelSelfCorrespondenceRoutine effect = new mir.routines.comp2class.CreateModelSelfCorrespondenceRoutine(this.executionState, calledBy,
+    	compModel);
+    effect.applyRoutine();
+  }
+  
+  public void createClassModel(final Model compModel) {
     mir.routines.comp2class.CreateClassModelRoutine effect = new mir.routines.comp2class.CreateClassModelRoutine(this.executionState, calledBy,
-    	umlCompModel);
+    	compModel);
     effect.applyRoutine();
   }
   
-  public void renameClassModelForComponentModel(final Model umlCompModel) {
+  public void createDataTypePackage(final Model compModel) {
+    mir.routines.comp2class.CreateDataTypePackageRoutine effect = new mir.routines.comp2class.CreateDataTypePackageRoutine(this.executionState, calledBy,
+    	compModel);
+    effect.applyRoutine();
+  }
+  
+  public void renameClassModelForComponentModel(final Model compModel) {
     mir.routines.comp2class.RenameClassModelForComponentModelRoutine effect = new mir.routines.comp2class.RenameClassModelForComponentModelRoutine(this.executionState, calledBy,
-    	umlCompModel);
+    	compModel);
     effect.applyRoutine();
   }
   
-  public void createUmlClassWithPackage(final Component umlComponent) {
-    mir.routines.comp2class.CreateUmlClassWithPackageRoutine effect = new mir.routines.comp2class.CreateUmlClassWithPackageRoutine(this.executionState, calledBy,
-    	umlComponent);
+  public void renameElement(final NamedElement compElement) {
+    mir.routines.comp2class.RenameElementRoutine effect = new mir.routines.comp2class.RenameElementRoutine(this.executionState, calledBy,
+    	compElement);
+    effect.applyRoutine();
+  }
+  
+  public void createClassWithPackage(final Component umlComp) {
+    mir.routines.comp2class.CreateClassWithPackageRoutine effect = new mir.routines.comp2class.CreateClassWithPackageRoutine(this.executionState, calledBy,
+    	umlComp);
     effect.applyRoutine();
   }
   
@@ -40,15 +58,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void deleteClass(final Component umlComp, final String packageName, final String expectedTag) {
+  public void deleteClass(final Component umlComp) {
     mir.routines.comp2class.DeleteClassRoutine effect = new mir.routines.comp2class.DeleteClassRoutine(this.executionState, calledBy,
-    	umlComp, packageName, expectedTag);
-    effect.applyRoutine();
-  }
-  
-  public void renameElement(final NamedElement compElement) {
-    mir.routines.comp2class.RenameElementRoutine effect = new mir.routines.comp2class.RenameElementRoutine(this.executionState, calledBy,
-    	compElement);
+    	umlComp);
     effect.applyRoutine();
   }
   

@@ -1,9 +1,13 @@
 package mir.routines.class2comp;
 
+import com.google.common.collect.Iterables;
 import java.io.IOException;
+import java.util.Collections;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -19,20 +23,11 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final NamedElement classElement, final NamedElement compElement) {
-      return compElement;
-    }
-    
-    public void update0Element(final NamedElement classElement, final NamedElement compElement) {
-      compElement.setName(classElement.getName());
-    }
-    
-    public String getRetrieveTag1(final NamedElement classElement) {
-      return "";
-    }
-    
-    public EObject getCorrepondenceSourceCompElement(final NamedElement classElement) {
-      return classElement;
+    public void callRoutine1(final NamedElement classElement, @Extension final RoutinesFacade _routinesFacade) {
+      final Iterable<EObject> correspondingElements = Iterables.<EObject>concat(this.correspondenceModel.getCorrespondingEObjects(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(classElement))));
+      for (final EObject compElement : correspondingElements) {
+        ((NamedElement) compElement).setName(classElement.getName());
+      }
     }
   }
   
@@ -49,17 +44,7 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine RenameElementRoutine with input:");
     getLogger().debug("   NamedElement: " + this.classElement);
     
-    NamedElement compElement = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompElement(classElement), // correspondence source supplier
-    	NamedElement.class,
-    	(NamedElement _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(classElement));
-    if (compElement == null) {
-    	return;
-    }
-    registerObjectUnderModification(compElement);
-    // val updatedElement userExecution.getElement1(classElement, compElement);
-    userExecution.update0Element(classElement, compElement);
+    userExecution.callRoutine1(classElement, actionsFacade);
     
     postprocessElements();
   }

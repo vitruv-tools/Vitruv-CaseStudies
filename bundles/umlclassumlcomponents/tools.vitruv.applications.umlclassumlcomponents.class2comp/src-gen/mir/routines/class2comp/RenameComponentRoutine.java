@@ -19,20 +19,15 @@ public class RenameComponentRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public boolean getCorrespondingModelElementsPreconditionUmlComponent(final org.eclipse.uml2.uml.Class umlClass, final Component umlComponent) {
-      boolean _equals = umlComponent.getName().equals(umlClass.getName());
-      return _equals;
+    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Component umlComp) {
+      return umlComp;
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class umlClass, final Component umlComponent) {
-      return umlComponent;
+    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Component umlComp) {
+      umlComp.setName(umlClass.getName());
     }
     
-    public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final Component umlComponent) {
-      umlComponent.setName(umlClass.getName());
-    }
-    
-    public EObject getCorrepondenceSourceUmlComponent(final org.eclipse.uml2.uml.Class umlClass) {
+    public EObject getCorrepondenceSourceUmlComp(final org.eclipse.uml2.uml.Class umlClass) {
       return umlClass;
     }
   }
@@ -50,17 +45,17 @@ public class RenameComponentRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine RenameComponentRoutine with input:");
     getLogger().debug("   Class: " + this.umlClass);
     
-    Component umlComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlComponent(umlClass), // correspondence source supplier
+    Component umlComp = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlComp(umlClass), // correspondence source supplier
     	Component.class,
-    	(Component _element) -> userExecution.getCorrespondingModelElementsPreconditionUmlComponent(umlClass, _element), // correspondence precondition checker
+    	(Component _element) -> true, // correspondence precondition checker
     	null);
-    if (umlComponent == null) {
+    if (umlComp == null) {
     	return;
     }
-    registerObjectUnderModification(umlComponent);
-    // val updatedElement userExecution.getElement1(umlClass, umlComponent);
-    userExecution.update0Element(umlClass, umlComponent);
+    registerObjectUnderModification(umlComp);
+    // val updatedElement userExecution.getElement1(umlClass, umlComp);
+    userExecution.update0Element(umlClass, umlComp);
     
     postprocessElements();
   }

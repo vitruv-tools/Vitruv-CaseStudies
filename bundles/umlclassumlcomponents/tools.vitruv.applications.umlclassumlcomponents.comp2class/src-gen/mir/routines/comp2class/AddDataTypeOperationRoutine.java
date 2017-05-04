@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -32,7 +33,7 @@ public class AddDataTypeOperationRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public String getRetrieveTag1(final Operation compOperation, final DataType compDataType) {
-      return "DataTypeRepresentation";
+      return SharedUtil.DATA_TYPE_REPRESENTATION_TAG;
     }
     
     public EObject getElement2(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
@@ -48,7 +49,7 @@ public class AddDataTypeOperationRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public String getTag1(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
-      return "DataTypeOperation";
+      return SharedUtil.DATA_TYPE_OPERATION_TAG;
     }
     
     public void updateClassOperationElement(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {

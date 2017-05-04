@@ -12,7 +12,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
-import tools.vitruv.applications.umlclassumlcomponents.class2comp.class2compUtil;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -37,25 +37,25 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
     public boolean checkMatcherPrecondition1(final org.eclipse.uml2.uml.Package classPackage, final Model compModel) {
       String _name = classPackage.getName();
       String _plus = ("Do you want to link this Package \'" + _name);
-      final String msg = (_plus + "\' to an existing Component?");
-      return class2compUtil.modalTextYesNoUserInteracting(this.userInteracting, msg);
+      final String question = (_plus + "\' to an existing Component?");
+      return SharedUtil.modalTextYesNoUserInteracting(this.userInteracting, question);
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package classPackage, final Model compModel, @Extension final RoutinesFacade _routinesFacade) {
       String _name = classPackage.getName();
       String _plus = ("Choose an existing Component to link Package \'" + _name);
-      final String msg2 = (_plus + "\' to:");
+      final String question = (_plus + "\' to:");
       final List<Component> componentsList = IterableExtensions.<Component>toList(Iterables.<Component>filter(compModel.getPackagedElements(), Component.class));
-      int _size = componentsList.size();
-      boolean _notEquals = (_size != 0);
-      if (_notEquals) {
+      boolean _isEmpty = componentsList.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
         final Function1<Component, String> _function = (Component e) -> {
           return e.getName();
         };
         final List<String> options = ListExtensions.<Component, String>map(componentsList, _function);
-        final int selection = class2compUtil.modalTextUserinteracting(this.userInteracting, msg2, ((String[])Conversions.unwrapArray(options, String.class)));
-        final Component umlComponent = componentsList.get(selection);
-        _routinesFacade.assignNewPackage(classPackage, umlComponent);
+        final int selection = SharedUtil.modalTextUserinteracting(this.userInteracting, question, ((String[])Conversions.unwrapArray(options, String.class)));
+        final Component umlComp = componentsList.get(selection);
+        _routinesFacade.assignNewPackage(classPackage, umlComp);
       } else {
         this.userInteracting.showMessage(UserInteractionType.MODELESS, "No available Component found");
       }

@@ -67,7 +67,7 @@ class DeletedCompReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final Component oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.deleteClass(oldValue, oldValue.getName(), "");
+      _routinesFacade.deleteClass(oldValue);
     }
   }
 }

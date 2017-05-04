@@ -2,10 +2,8 @@ package mir.routines.class2comp;
 
 import java.io.IOException;
 import mir.routines.class2comp.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -23,13 +21,7 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
     
     public EObject getElement1(final Interface classInterface, final Interface compInterface) {
-      org.eclipse.uml2.uml.Package _package = classInterface.getPackage();
-      return _package;
-    }
-    
-    public void update0Element(final Interface classInterface, final Interface compInterface) {
-      EList<PackageableElement> _packagedElements = classInterface.getPackage().getPackagedElements();
-      _packagedElements.add(compInterface);
+      return classInterface;
     }
     
     public void updateCompInterfaceElement(final Interface classInterface, final Interface compInterface) {
@@ -37,10 +29,6 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
     
     public EObject getElement2(final Interface classInterface, final Interface compInterface) {
-      return classInterface;
-    }
-    
-    public EObject getElement3(final Interface classInterface, final Interface compInterface) {
       return compInterface;
     }
   }
@@ -61,10 +49,7 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     Interface compInterface = UMLFactoryImpl.eINSTANCE.createInterface();
     userExecution.updateCompInterfaceElement(classInterface, compInterface);
     
-    // val updatedElement userExecution.getElement1(classInterface, compInterface);
-    userExecution.update0Element(classInterface, compInterface);
-    
-    addCorrespondenceBetween(userExecution.getElement2(classInterface, compInterface), userExecution.getElement3(classInterface, compInterface), "");
+    addCorrespondenceBetween(userExecution.getElement1(classInterface, compInterface), userExecution.getElement2(classInterface, compInterface), "");
     
     postprocessElements();
   }
