@@ -31,6 +31,7 @@ import org.eclipse.uml2.uml.EnumerationLiteral
 import org.emftext.language.java.members.EnumConstant
 import org.apache.log4j.Logger
 import org.emftext.language.java.containers.CompilationUnit
+import org.eclipse.uml2.uml.Model
 
 class TestUtil {
 	
@@ -67,12 +68,20 @@ class TestUtil {
 	
 	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage, org.emftext.language.java.containers.Package jPackage) {
 		assertEquals(uPackage.name, jPackage.name)
-		assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces)
+	    assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces)
 	}
 	
 	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage, List<String> packageStringList) {
 	    assertThat(getUmlNamespaceAsStringList(uPackage), is(packageStringList));
 	}
+	
+	def static dispatch void assertPackageEquals(Model uModel, java.lang.Void empty) {
+	    //Do Nothing, assertion passed
+	}
+	
+	def static dispatch void assertPackageEquals(Model uModel, List<String> list) {
+        assertTrue(list.nullOrEmpty)
+    }
 	
 	def static void assertEnumEquals(org.eclipse.uml2.uml.Enumeration uEnum, org.emftext.language.java.classifiers.Enumeration jEnum) {
 		assertEquals(uEnum.name, jEnum.name)

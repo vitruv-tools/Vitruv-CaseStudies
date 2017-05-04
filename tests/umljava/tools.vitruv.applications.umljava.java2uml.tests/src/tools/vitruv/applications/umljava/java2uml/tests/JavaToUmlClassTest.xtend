@@ -44,7 +44,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);
         
         val uClass = getCorrespondingClass(cls);
-        assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, null)
+        assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false, getUmlRootModel())
         assertClassEquals(uClass, cls)
     }
     

@@ -31,7 +31,7 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         val jInterface = createSimpleJavaInterfaceWithCompilationUnit(STANDARD_INTERFACE_NAME)
         
         val uInterface = getCorrespondingInterface(jInterface)
-        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, null)
+        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, getUmlRootModel())
         assertInterfaceEquals(uInterface, jInterface)
     }
     

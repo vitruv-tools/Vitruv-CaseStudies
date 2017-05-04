@@ -1,5 +1,6 @@
 package tools.vitruv.applications.umljava.java2uml
 
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static org.junit.Assert.fail;
 import static org.junit.Assert.*;
@@ -19,9 +20,10 @@ import tools.vitruv.framework.tests.VitruviusApplicationTest
 import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
+import org.apache.log4j.Logger
 
 class Java2UmlTransformationTest extends AbstractUmlJavaTest {
-    
+    private static val logger = Logger.getLogger(Java2UmlTransformationTest.simpleName)
     //TODO: Userinteraction bestimmt pfad gleich mit
     private static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
 	
@@ -109,6 +111,17 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     }
     def protected getCorrespondingPackage(org.emftext.language.java.containers.Package jPackage) {
         return getFirstCorrespondingObjectWithClass(jPackage, org.eclipse.uml2.uml.Package)
+    }
+    
+    def protected getUmlRootModel() {
+        val models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
+        if (models.nullOrEmpty) {
+            logger.warn("No Uml Rootmodel found.")
+            return null
+        } else if (models.size != 1) {
+            logger.warn("Found more than one Uml Rootmodel. Returning the first.")
+        }
+        return models.head as Model
     }
     
 

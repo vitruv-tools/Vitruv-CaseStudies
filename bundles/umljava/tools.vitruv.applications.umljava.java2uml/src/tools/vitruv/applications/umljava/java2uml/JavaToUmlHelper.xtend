@@ -1,8 +1,6 @@
 package tools.vitruv.applications.umljava.java2uml
 
-import tools.vitruv.framework.userinteraction.UserInteractionType
 import java.util.Set
-import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
@@ -18,7 +16,6 @@ import org.emftext.language.java.types.Double
 import org.emftext.language.java.types.Float
 import org.emftext.language.java.types.Int
 import org.emftext.language.java.types.Long
-import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.Short
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.Void
@@ -27,10 +24,11 @@ import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import org.emftext.language.java.classifiers.ConcreteClassifier
 import tools.vitruv.framework.userinteraction.UserInteracting
+import org.apache.log4j.Logger
 
 class JavaToUmlHelper {
+    private static val logger = Logger.getLogger(JavaToUmlHelper.simpleName)
     private static val ROOTMODELDIRECTORY = "model"
     private static val DEFAULTMODELNAME = "model"
     private static var MODELNAME = DEFAULTMODELNAME
@@ -97,7 +95,7 @@ class JavaToUmlHelper {
 			return model;
         }
         if (1 != models.size) {
-            System.out.println("found more than one repository. Returning the first")
+            logger.warn("found more than one repository. Returning the first")
         }
         return models.get(0)
     }
