@@ -41,8 +41,6 @@ class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
         assertJavaElementHasTypeRef(jAttribute, createNamespaceReferenceFromClassifier(jClass2))
         assertClassEquals(uClass1, jClass1)
         assertAttributeEquals(uAttribute, jAttribute)
-        assertTrue(javaGetterForAttributeExists(jAttribute))
-        assertTrue(javaSetterForAttributeExists(jAttribute))
     }
 	
 	@Test
@@ -60,7 +58,8 @@ class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
 		assertClassEquals(uClass1, jClass1)
 		assertNotNull(jConstructor)
 		assertTrue(constructorContainsAttributeSelfReferenceStatement(jConstructor, jAttribute))
-		
+		assertTrue(javaGetterForAttributeExists(jAttribute))
+        assertTrue(javaSetterForAttributeExists(jAttribute))
 	}
 	
 	@Test

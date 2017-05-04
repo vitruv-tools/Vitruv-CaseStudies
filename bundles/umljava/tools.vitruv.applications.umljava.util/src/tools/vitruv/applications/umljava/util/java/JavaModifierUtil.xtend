@@ -15,12 +15,16 @@ class JavaModifierUtil {
     private new() {}
     
     def static void setJavaVisibilityModifier(AnnotableAndModifiable modifiable, JavaVisibility visibility) {
-        val visibilityModifier = getJavaVisibilityModifierFromEnum(visibility)
-        if (visibilityModifier !== null) {
+        if (visibility == JavaVisibility.PACKAGE) {
             removeJavaVisibilityModifiers(modifiable)
-            setJavaModifier(modifiable, visibilityModifier, true)
         } else {
-            logger.warn("No corresponding Java-Visibility-Modifier found for " + visibility)
+            val visibilityModifier = getJavaVisibilityModifierFromEnum(visibility)
+            if (visibilityModifier !== null) {
+                removeJavaVisibilityModifiers(modifiable)
+                setJavaModifier(modifiable, visibilityModifier, true)
+            } else {
+                logger.warn("No corresponding Java-Visibility-Modifier found for " + visibility)
+            }
         }
     }
     
