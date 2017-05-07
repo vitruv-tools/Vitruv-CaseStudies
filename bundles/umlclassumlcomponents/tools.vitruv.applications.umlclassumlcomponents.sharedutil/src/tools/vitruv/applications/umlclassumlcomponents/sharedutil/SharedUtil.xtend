@@ -5,11 +5,11 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 
 class SharedUtil {
 		
-	def static int modalTextUserinteracting(UserInteracting userInteracting, String msg, String... selections) {
+	public static def int modalTextUserinteracting(UserInteracting userInteracting, String msg, String... selections) {
 		return userInteracting.selectFromMessage(UserInteractionType.MODAL, msg, selections)
 	}
 
-	def static boolean modalTextYesNoUserInteracting(UserInteracting userInteracting, String msg) {
+	public static def boolean modalTextYesNoUserInteracting(UserInteracting userInteracting, String msg) {
 		return 0 == userInteracting.modalTextUserinteracting(msg, "Yes", "No")
 	}
 

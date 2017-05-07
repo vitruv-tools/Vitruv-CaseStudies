@@ -18,6 +18,8 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
+import tools.vitruv.framework.util.command.EMFCommandBridge
+import java.util.concurrent.Callable
 
 class Comp2ClassTest extends AbstractComp2ClassTest {
 	private static val COMP_NAME = "TestUmlComp"
@@ -48,8 +50,7 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		//Check Class
 		val umlClass = correspondingElements.filter(Class).get(0)
 		
-		assertTypeAndName(umlClass, Class, name)
-		
+		assertTypeAndName(umlClass, Class, name)		
 		//Check Package
 		val classPackage = (umlClass as Class).package
 		assertEquals(packageName, classPackage.name)
@@ -158,12 +159,16 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 		//Package gets more members:
     	val umlClass2 = UMLFactory.eINSTANCE.createClass()
 		umlClass2.name = CLASS_NAME2
-		classPackage.packagedElements += umlClass2 //TODO fix, illegal write. transaction?
+		//Add new Class to Package in transaction:
+		virtualModel.executeCommand([
+			classPackage.packagedElements += umlClass2
+			return null
+		])
 		
 		//Remove Component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
-		umlComp.destroy()
 		queueUserInteractionSelections(1) //Decide to not delete Package
+		umlComp.destroy()
 		assertFalse(rootElement.packagedElements.contains(umlComp))
 		saveAndSynchronizeChanges(rootElement)
 		
@@ -189,15 +194,15 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
     	val umlClass2 = UMLFactory.eINSTANCE.createClass()
 		umlClass2.name = CLASS_NAME2
 		//Add new Class to Package in transaction:
-//		EMFCommandBridge.createAndExecuteVitruviusRecordingCommand(() -> {
-//    		classPackage.packagedElements += umlClass2 //TODO More here? What else?
-//		}, TransactionalEditingDomain.Factory.INSTANCE.getEditingDomain(this.resource.getResourceSet()); //TODO How?
-		classPackage.packagedElements += umlClass2 //TODO fix, illegal write. use transaction
+		virtualModel.executeCommand([
+			classPackage.packagedElements += umlClass2 
+			return null
+		])
 		
 		//Remove Component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
-		umlComp.destroy()
 		queueUserInteractionSelections(0) //Decide to delete Package and Contents
+		umlComp.destroy()
 		assertFalse(rootElement.packagedElements.contains(umlComp))
 		saveAndSynchronizeChanges(rootElement)
 		
@@ -222,20 +227,20 @@ class Comp2ClassTest extends AbstractComp2ClassTest {
 	*Datatype:*
 	***********/
 	
+    private def DataType createDataType(String name, int createClass) {
+		val dataType = UMLFactory.eINSTANCE.createDataType()
+		this.userInteractor.addNextSelections(createClass) //Decide to create corresponding Class
+		dataType.name = name
+		rootElement.packagedElements += dataType
+		return dataType
+	}
+	
 	@Test
 	public def void testCreateClassForDataType() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
 		
 		assertClassAndPackage(compDataType, DATATYPE_NAME, CLASS_DATATYPES_PACKAGE_NAME, false)			
-	}
-	
-    private def DataType createDataType(String name, int createClass) {
-		val dataType = UMLFactory.eINSTANCE.createDataType()
-		this.userInteractor.addNextSelections(createClass) //Decide to create corresponding class
-		dataType.name = name
-		rootElement.packagedElements += dataType
-		return dataType
 	}
 	
 	@Test

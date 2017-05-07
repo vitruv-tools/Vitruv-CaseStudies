@@ -41,7 +41,6 @@ routine createComponentModel(umlclass::Model umlClassModel) {
 	action {
 		val compModel = create umlcomp::Model and initialize {
 			compModel.name = umlClassModel.name
-			persistProjectRelative(umlClassModel, compModel, FOLDER_NAME + umlClassModel.name + "." + MODEL_FILE_EXTENSION)	
 		}
 		add correspondence between umlClassModel and compModel
 	}
@@ -62,9 +61,6 @@ routine renameComponentModelForClassModel( umlclass::Model umlClassModel) {
 		update compModel {
 			compModel.name = umlClassModel.name
 		}
-		call {
-			persistProjectRelative(umlClassModel, compModel, FOLDER_NAME + umlClassModel.name + "." + MODEL_FILE_EXTENSION)
-		}	
 	}
 }
 

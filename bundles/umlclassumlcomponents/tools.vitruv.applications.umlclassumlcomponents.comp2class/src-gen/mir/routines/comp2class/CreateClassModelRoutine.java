@@ -5,7 +5,6 @@ import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
-import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -27,11 +26,6 @@ public class CreateClassModelRoutine extends AbstractRepairRoutineRealization {
     
     public void updateUmlClassModelElement(final Model compModel, final Model umlClassModel) {
       umlClassModel.setName(compModel.getName());
-      String _name = compModel.getName();
-      String _plus = (SharedUtil.FOLDER_NAME + _name);
-      String _plus_1 = (_plus + ".");
-      String _plus_2 = (_plus_1 + SharedUtil.MODEL_FILE_EXTENSION);
-      this.persistProjectRelative(compModel, umlClassModel, _plus_2);
     }
     
     public EObject getElement2(final Model compModel, final Model umlClassModel) {

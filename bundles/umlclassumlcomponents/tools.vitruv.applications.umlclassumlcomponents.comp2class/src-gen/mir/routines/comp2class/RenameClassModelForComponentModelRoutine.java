@@ -4,8 +4,6 @@ import java.io.IOException;
 import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.xtext.xbase.lib.Extension;
-import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -31,14 +29,6 @@ public class RenameClassModelForComponentModelRoutine extends AbstractRepairRout
     
     public EObject getCorrepondenceSourceClassModel(final Model compModel) {
       return compModel;
-    }
-    
-    public void callRoutine1(final Model compModel, final Model classModel, @Extension final RoutinesFacade _routinesFacade) {
-      String _name = compModel.getName();
-      String _plus = (SharedUtil.FOLDER_NAME + _name);
-      String _plus_1 = (_plus + ".");
-      String _plus_2 = (_plus_1 + SharedUtil.MODEL_FILE_EXTENSION);
-      this.persistProjectRelative(compModel, classModel, _plus_2);
     }
   }
   
@@ -66,8 +56,6 @@ public class RenameClassModelForComponentModelRoutine extends AbstractRepairRout
     registerObjectUnderModification(classModel);
     // val updatedElement userExecution.getElement1(compModel, classModel);
     userExecution.update0Element(compModel, classModel);
-    
-    userExecution.callRoutine1(compModel, classModel, actionsFacade);
     
     postprocessElements();
   }
