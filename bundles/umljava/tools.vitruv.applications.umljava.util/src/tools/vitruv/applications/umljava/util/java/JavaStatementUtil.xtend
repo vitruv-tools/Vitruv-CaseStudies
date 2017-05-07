@@ -28,7 +28,11 @@ import org.emftext.language.java.statements.StatementsFactory
 import org.emftext.language.java.types.TypeReference
 import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-
+import org.emftext.language.java.statements.Statement
+import org.emftext.language.java.statements.Condition
+import org.emftext.language.java.expressions.EqualityExpressionChild
+import org.emftext.language.java.operators.EqualityOperator
+import org.emftext.language.java.expressions.EqualityExpression
 
 class JavaStatementUtil {
     private static val logger = Logger.getLogger(JavaStatementUtil.simpleName)
@@ -61,13 +65,11 @@ class JavaStatementUtil {
    
    def static addNewStatementToConstructor(Constructor constructor, Field jAttribute,
         Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
-        val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
         val selfReference = createSelfReferenceToAttribute(jAttribute)
         val newConstructorCall = createNewConstructorCall(jAttribute, fieldsToUseAsArgument, parametersToUseAsArgument)
         val assignment = createAssignmentExpression(selfReference, 
             OperatorsFactory.eINSTANCE.createAssignment, newConstructorCall)
-        expressionStatement.expression = assignment
-        constructor.statements += expressionStatement
+        constructor.statements += wrapExpressionInExpressionStatement(assignment)
         return newConstructorCall
     }
     
@@ -135,7 +137,7 @@ class JavaStatementUtil {
     }
     
     /**
-     * Creates leftSide <operator> rightSide
+     * Creates leftSide <AssignmentOperator> rightSide
      */
     def static AssignmentExpression createAssignmentExpression(AssignmentExpressionChild leftSide, 
         AssignmentOperator operator, Expression rightSide) {
@@ -155,5 +157,48 @@ class JavaStatementUtil {
             }
         }
         return false
+    }
+    
+    def static IdentifierReference createIdentifierReference(ReferenceableElement elem) {
+        val reference = ReferencesFactory.eINSTANCE.createIdentifierReference
+        reference.target = EcoreUtil.copy(elem)
+        return reference
+    }
+    
+    /**
+     * thenStatement and elseStatement can be null
+     */
+    def static Condition createCondition(Expression ifCondition, Statement thenStatement, Statement elseStatement) {
+        if (ifCondition === null) {
+            throw new IllegalArgumentException("Cannot create If block with 'null' as condition")
+        }
+        val condition = StatementsFactory.eINSTANCE.createCondition
+        condition.condition = ifCondition
+        if (condition !== null) {
+            condition.statement = thenStatement
+        }
+        if (elseStatement !== null) {
+            condition.elseStatement = elseStatement
+        }
+        return condition
+    }
+    
+    /**
+     * Creates leftSide <EqualityOperator> rightSide
+     * EqualityOperator can be equal or notEqual
+     */
+    def static EqualityExpression createBinaryEqualityExpression(EqualityExpressionChild leftSide, EqualityOperator eqOperator, 
+        EqualityExpressionChild rightSide) {
+        val eqExpression = ExpressionsFactory.eINSTANCE.createEqualityExpression
+        eqExpression.children += leftSide
+        eqExpression.children += rightSide
+        eqExpression.equalityOperators += eqOperator
+        return eqExpression
+    }
+    
+    def static ExpressionStatement wrapExpressionInExpressionStatement(Expression expressionToWrap) {
+        val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
+        expressionStatement.expression = expressionToWrap
+        return expressionStatement
     }
 }

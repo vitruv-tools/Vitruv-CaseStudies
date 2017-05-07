@@ -107,8 +107,12 @@ class UmlToJavaHelper {
     }
     
     def static createSetterForAttribute(Field jAttribute) {
-        
         val jSetter = createJavaSetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
+        (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += jSetter
+    }
+    
+    def static createSetterForAttributeWithNullCheck(Field jAttribute) {
+        val jSetter = createJavaSetterForAttributeWithNullCheck(jAttribute, JavaVisibility.PUBLIC)
         (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += jSetter
     }
 	

@@ -76,7 +76,7 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
       if (((uAttribute.getLower() == 1) && (uAttribute.getUpper() == 1))) {
         _routinesFacade.createJavaConstructor(jAttribute);
         _routinesFacade.createJavaGetter(jAttribute);
-        _routinesFacade.createJavaSetter(jAttribute);
+        _routinesFacade.createJavaSetterWithNullCheck(jAttribute);
       }
     }
   }

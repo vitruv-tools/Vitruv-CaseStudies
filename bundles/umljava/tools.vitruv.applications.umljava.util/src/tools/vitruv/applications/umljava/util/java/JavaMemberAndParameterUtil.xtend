@@ -24,7 +24,8 @@ import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
-
+import org.emftext.language.java.expressions.ExpressionsFactory
+import org.emftext.language.java.literals.LiteralsFactory
 
 class JavaMemberAndParameterUtil {
     private static val logger = Logger.getLogger(JavaMemberAndParameterUtil.simpleName)
@@ -116,23 +117,43 @@ class JavaMemberAndParameterUtil {
         jClass.members += constructor
         return constructor
    }
-    
+   
+   /**
+    * @param visibility Visibility of the Getter
+    */
    def static ClassMethod createJavaGetterForAttribute(Field jAttribute, JavaVisibility visibility) {
        val getterMethod = createJavaClassMethod("get" + firstLettertoUppercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference), visibility, false, false, null)
        getterMethod.statements += createReturnStatement(createSelfReferenceToAttribute(jAttribute))
        return getterMethod
    }
    
+   /**
+    * @param visibility Visibility of the Setter
+    */
+   def static createJavaSetterForAttributeWithNullCheck(Field jAttribute, JavaVisibility visibility) {
+       val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference))
+       val setterMethod = createJavaClassMethod("set" + firstLettertoUppercase(jAttribute.name), null, visibility, false, false, #[param])
+       val paramReference = createIdentifierReference(param)
+       val attributeAssignment = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment, EcoreUtil.copy(paramReference))
+       val assignmentStatement = wrapExpressionInExpressionStatement(attributeAssignment)
+       val ifCondition = createBinaryEqualityExpression(paramReference, OperatorsFactory.eINSTANCE.createNotEqual, LiteralsFactory.eINSTANCE.createNullLiteral)
+       val condition = createCondition(ifCondition, assignmentStatement, null)
+       setterMethod.statements += condition
+       return setterMethod
+   }
+   
+   /**
+    * @param visibility Visibility of the Setter
+    */
    def static createJavaSetterForAttribute(Field jAttribute, JavaVisibility visibility) {
        val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference))
        val setterMethod = createJavaClassMethod("set" + firstLettertoUppercase(jAttribute.name), null, visibility, false, false, #[param])
-       val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
-       val paramReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-       paramReference.target = param
-       expressionStatement.expression = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment,paramReference)
-       setterMethod.statements += expressionStatement
+       val paramReference = createIdentifierReference(param)
+       val attributeAssignment = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment, EcoreUtil.copy(paramReference))
+       setterMethod.statements += wrapExpressionInExpressionStatement(attributeAssignment)
        return setterMethod
    }
+   
    def static void addParametersIfNotNull(Parametrizable parametrizable, List<Parameter> params) {
         if (!params.nullOrEmpty) {
             parametrizable.parameters.addAll(params)
@@ -172,6 +193,9 @@ class JavaMemberAndParameterUtil {
        return false
    }
    
+   /**
+    * Returns the the methods with the name getAttributeName
+    */
    def static List<ClassMethod> getJavaGettersOfAttribute(Field jAttribute) {
        if (jAttribute === null) {
            logger.warn("Cannot retrieve Getters for Java-Attribute null. Returning empty List.")
@@ -185,6 +209,9 @@ class JavaMemberAndParameterUtil {
        return jClass.members.filter(ClassMethod)?.filter[expectedSetterName.equals(name)]?.toList
    }
    
+   /**
+    * Returns the the methods with the name setAttributeName
+    */
    def static List<ClassMethod> getJavaSettersOfAttribute(Field jAttribute) {
        if (jAttribute === null) {
            logger.warn("Cannot retrieve Setters for Java-Attribute null. Returning empty List.")

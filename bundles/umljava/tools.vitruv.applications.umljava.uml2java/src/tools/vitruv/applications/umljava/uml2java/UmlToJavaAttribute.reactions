@@ -127,7 +127,7 @@ routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
             if (uAttribute.lower == 1 && uAttribute.upper == 1) {
                 createJavaConstructor(jAttribute)
                 createJavaGetter(jAttribute)
-                createJavaSetter(jAttribute)
+                createJavaSetterWithNullCheck(jAttribute)
             }
         }
     }
@@ -151,11 +151,11 @@ routine createJavaGetter(java::Field jAttribute) {
     }
 }
 
-routine createJavaSetter(java::Field jAttribute) {
+routine createJavaSetterWithNullCheck(java::Field jAttribute) {
     action {
         call {
             if (!javaSetterForAttributeExists(jAttribute)) {
-                createSetterForAttribute(jAttribute)
+                createSetterForAttributeWithNullCheck(jAttribute)
             }
         }
     }

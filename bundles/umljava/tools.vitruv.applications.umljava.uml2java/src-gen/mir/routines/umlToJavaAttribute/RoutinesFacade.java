@@ -55,8 +55,8 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createJavaSetter(final Field jAttribute) {
-    mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine(this.executionState, calledBy,
+  public void createJavaSetterWithNullCheck(final Field jAttribute) {
+    mir.routines.umlToJavaAttribute.CreateJavaSetterWithNullCheckRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaSetterWithNullCheckRoutine(this.executionState, calledBy,
     	jAttribute);
     effect.applyRoutine();
   }

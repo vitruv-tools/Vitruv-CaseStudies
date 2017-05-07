@@ -69,7 +69,7 @@ class JavaContainerAndClassifierUtil {
      */
     def static createEmptyCompilationUnit(String nameWithoutFileExtension) {
         val cu = ContainersFactory.eINSTANCE.createCompilationUnit
-        cu.name = nameWithoutFileExtension + ".java";
+        cu.name = nameWithoutFileExtension
         return cu
     }
     
