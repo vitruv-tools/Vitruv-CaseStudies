@@ -10,15 +10,21 @@ reactions: UmlToJavaMethod
 in reaction to changes in UML
 execute actions inJava
 
+
 reaction UmlMethodCreated {
     after element uml::Operation created and inserted in uml::Class[ownedOperation]
-    with (affectedEObject instanceof org.eclipse.uml2.uml.Class)
-    || (affectedEObject instanceof org.eclipse.uml2.uml.Enumeration)
     call {
         createJavaMethod(affectedEObject, newValue)       
     }
 }
-
+//We need separate Reactions for Class and Enums, because they don't have a common
+//superClass for "having ownedOperation"
+reaction UmlMethodCreatedInEnum {
+    after element uml::Operation created and inserted in uml::Enumeration[ownedOperation]
+    call {
+        createJavaMethod(affectedEObject, newValue)       
+    }
+}
 routine createJavaMethod(uml::Classifier uClassifier, uml::Operation umlOp) {
     match {
         
@@ -37,6 +43,8 @@ routine createJavaMethod(uml::Classifier uClassifier, uml::Operation umlOp) {
         add correspondence between umlOp and javaMethod
     }
 }
+
+
 
 reaction UmlClassMethodDeleted {
     after element uml::Operation deleted and removed from uml::Class[ownedOperation]

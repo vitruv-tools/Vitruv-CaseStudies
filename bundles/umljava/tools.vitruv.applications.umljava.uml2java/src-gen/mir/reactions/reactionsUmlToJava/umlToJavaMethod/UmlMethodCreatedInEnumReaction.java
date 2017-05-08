@@ -2,6 +2,7 @@ package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -14,18 +15,18 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class UmlMethodCreatedReaction extends AbstractReactionRealization {
-  public UmlMethodCreatedReaction(final UserInteracting userInteracting) {
+class UmlMethodCreatedInEnumReaction extends AbstractReactionRealization {
+  public UmlMethodCreatedInEnumReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Class, Operation> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Operation>)change).getInsertChange();
-    org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<Enumeration, Operation> typedChange = ((CreateAndInsertNonRoot<Enumeration, Operation>)change).getInsertChange();
+    Enumeration affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     Operation newValue = typedChange.getNewValue();
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedInEnumReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedInEnumReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -34,8 +35,8 @@ class UmlMethodCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Class, Operation> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Operation>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
+    InsertEReference<Enumeration, Operation> relevantChange = ((CreateAndInsertNonRoot<Enumeration, Operation>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof Enumeration)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedOperation")) {
@@ -65,7 +66,7 @@ class UmlMethodCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Operation newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final Enumeration affectedEObject, final EReference affectedFeature, final Operation newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createJavaMethod(affectedEObject, newValue);
     }
   }
