@@ -1,9 +1,9 @@
-package mir.reactions.reactionsUmlToUml.class2comp;
+package mir.reactions.reactionsUmlToUml.comp2class;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import mir.routines.class2comp.RoutinesFacade;
+import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -18,8 +18,8 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class InterfaceRealizedReaction extends AbstractReactionRealization {
-  public InterfaceRealizedReaction(final UserInteracting userInteracting) {
+class AddedProvidedRoleReaction extends AbstractReactionRealization {
+  public AddedProvidedRoleReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -28,8 +28,8 @@ class InterfaceRealizedReaction extends AbstractReactionRealization {
     InterfaceRealization affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     Interface newValue = typedChange.getNewValue();
-    mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToUml.class2comp.InterfaceRealizedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.InterfaceRealizedReaction.ActionUserExecution(this.executionState, this);
+    mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.comp2class.AddedProvidedRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.AddedProvidedRoleReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -70,21 +70,16 @@ class InterfaceRealizedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final InterfaceRealization affectedEObject, final EReference affectedFeature, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final InterfaceRealization classIFRealization = affectedEObject;
-      final Iterable<org.eclipse.uml2.uml.Class> interfaceClients = Iterables.<org.eclipse.uml2.uml.Class>filter(classIFRealization.getClients(), org.eclipse.uml2.uml.Class.class);
-      boolean _isEmpty = IterableExtensions.isEmpty(interfaceClients);
+      final InterfaceRealization compIFRealizaion = affectedEObject;
+      final Iterable<Component> clients = Iterables.<Component>filter(compIFRealizaion.getClients(), Component.class);
+      boolean _isEmpty = IterableExtensions.isEmpty(clients);
       boolean _not = (!_isEmpty);
       if (_not) {
-        final org.eclipse.uml2.uml.Class affectedClass = ((org.eclipse.uml2.uml.Class[])Conversions.unwrapArray(interfaceClients, org.eclipse.uml2.uml.Class.class))[0];
-        final Interface classInterface = newValue;
-        final org.eclipse.uml2.uml.Package classPackage = affectedClass.getPackage();
-        final org.eclipse.uml2.uml.Package interfacePackage = classInterface.getPackage();
-        boolean _notEquals = (!Objects.equal(classPackage, interfacePackage));
-        if (_notEquals) {
-          _routinesFacade.createCompInterface(classInterface);
-          _routinesFacade.createRequiredRole(classIFRealization, classInterface, classPackage);
-          _routinesFacade.createProvidedRole(classIFRealization, classInterface, interfacePackage);
-        }
+        final Component umlComp = ((Component[])Conversions.unwrapArray(clients, Component.class))[0];
+        final Interface compInterface = newValue;
+        _routinesFacade.createClassInterface(compInterface, umlComp);
+        _routinesFacade.createClassInterfaceRealization(compIFRealizaion, umlComp);
+        _routinesFacade.addClassInterfaceRealizationToClass(compIFRealizaion, compInterface, umlComp);
       }
     }
   }

@@ -6,6 +6,7 @@ import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.PrimitiveType
 
 import static extension tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.eclipse.uml2.uml.Interface
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
@@ -338,19 +339,103 @@ routine changeCorrespondingVisibility(umlcomp::NamedElement compElement) {
 }
 
 	
-///************
-//*Interfaces:*
-//************/
-////TODO implement interface reactions
-//
-//reaction UsesRelationshipCreated {
-//	after element umlcomp::Interface created and inserted in umlcomp::Component[useCase] //TODO fix this, different element/set
-//	call createRequiresRelationship(newValue, affectedEObject)
-//}
-//
-//routine createRequiresRelationship(umlcomp::Interface newValue, umlcomp::Component affectedEObject) { 
-//	action {
-//		
-//	}
-//}
+/************
+*Interfaces:*
+************/
+
+//***Provided***
+reaction AddedProvidedRole {
+	after element umlcomp::Interface inserted in umlcomp::InterfaceRealization[supplier]
+	call {
+		val compIFRealizaion = affectedEObject
+		val clients = compIFRealizaion.clients.filter(Component)
+		//Assume client is set:
+		if (!clients.isEmpty) {
+			val umlComp = clients.get(0)
+			val compInterface = newValue
+			
+			//Create a corresponding Interface:		
+			createClassInterface(compInterface, umlComp)
+			//Create a corresponding InterfaceRealization:
+			createClassInterfaceRealization(compIFRealizaion, umlComp)
+			//Set the final parameters of the new InterfaceRealization:
+			addClassInterfaceRealizationToClass(compIFRealizaion, compInterface, umlComp)		
+			}		
+		}
+}
+
+routine createClassInterface(umlcomp::Interface compInterface, umlcomp::Component umlComp) {
+	match {
+		val umlClass = retrieve umlclass::Class corresponding to umlComp
+	} 
+	action {
+		val classInterface = create umlclass::Interface and initialize {
+			classInterface.name = compInterface.name + CLASS_INTERFACE_SUFFIX
+		}
+		update umlClass.package {
+			umlClass.package.packagedElements += classInterface 
+		}
+		add correspondence between compInterface and classInterface
+	}
+}
+
+routine createClassInterfaceRealization(umlcomp::NamedElement iFRealizationOrUsage, umlcomp::Component umlComp) {
+	match {
+		val umlClass = retrieve umlclass::Class corresponding to umlComp
+	} 
+	action {
+		val classIFRealization = create umlclass::InterfaceRealization and initialize {
+			classIFRealization.name = iFRealizationOrUsage.name + CLASS_IF_REALIZATION_SUFFIX
+			classIFRealization.clients += umlClass
+		}
+		update umlClass {
+			umlClass.interfaceRealizations += classIFRealization
+		}
+		update umlClass.package {
+			umlClass.interfaceRealizations += classIFRealization 
+			
+		}
+		add correspondence between iFRealizationOrUsage and classIFRealization
+	}
+}
+
+routine addClassInterfaceRealizationToClass(umlcomp::NamedElement iFRealizationOrUsage, umlcomp::Interface compInterface, umlcomp::Component umlComp) {
+	match {
+		val classIFRealization = retrieve umlclass::InterfaceRealization corresponding to iFRealizationOrUsage
+		val classInterface = retrieve umlclass::Interface corresponding to compInterface
+	} 
+	action {
+		update classIFRealization  {
+			classIFRealization.suppliers += classInterface
+			classIFRealization.contract = classInterface
+		}
+	}
+}
+
+//***Required***
+reaction AddedRequiredRole {
+	after element umlcomp::Interface inserted in umlcomp::Usage[supplier]
+	call {
+		val compUsage = affectedEObject
+		val clients = compUsage.clients.filter(Component)
+		//Assume client is set:
+		if (!clients.isEmpty) {
+			val umlComp = clients.get(0)
+			val compInterface = newValue
+			
+			//Require corresponding Interface:
+			//Get Class Interface matching to Component Interface:
+			val iFs = correspondenceModel.getCorrespondingEObjects(#[compInterface]).flatten.filter(Interface)
+			var Interface matchedInterface = if(!iFs.isEmpty) iFs.get(0) else null				        		
+			if (matchedInterface !== null) {
+				//Create a corresponding InterfaceRealization:
+				createClassInterfaceRealization(compUsage, umlComp)
+				//Set the final parameters of the new InterfaceRealization:
+				addClassInterfaceRealizationToClass(compUsage, compInterface, umlComp)	
+			}	
+		}		
+	}
+}
+
+//TODO Interface removed reaction
 

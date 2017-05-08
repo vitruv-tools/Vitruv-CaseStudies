@@ -30,4 +30,9 @@ class SharedUtil {
 	public static val DATA_TYPE_REPRESENTATION_TAG = "DataTypeRepresentation"
 	public static val DATA_TYPE_OPERATION_TAG = "DataTypeOperation"
 	public static val DATA_TYPE_PROPERTY = "DataTypeProperty"
+	
+	public static val COMP_INTERFACE_SUFFIX = " (Component)"
+	public static val COMP_IF_REALIZATION_SUFFIX = " (Component)"
+	public static val CLASS_INTERFACE_SUFFIX = " (Class)"
+	public static val CLASS_IF_REALIZATION_SUFFIX = " (Class)"
 }

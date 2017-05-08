@@ -16,6 +16,9 @@ class SharedTestUtil {
 	public static val ATTR_NAME = "TestAttribute"
 	public static val PACKAGE_NAME = "TestPackage"
 	public static val PACKAGE_NAME2 = "TestPackage2"
+	public static val INTERFACE_NAME = "TestInterface"
+	public static val INTERFACE_REALIZATION_NAME = "TestInterfaceRealization"
+	public static val USAGE_NAME = "TestUsage"
 	
 	//Component
 	

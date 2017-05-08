@@ -9,13 +9,20 @@ import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.domains.VitruvDomain
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
+import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
+import org.eclipse.uml2.uml.Class
 import org.eclipse.emf.ecore.resource.Resource
 import java.io.IOException
 import tools.vitruv.framework.util.datatypes.VURI
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import java.util.Collections
+import org.eclipse.uml2.uml.Component
+import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.InterfaceRealization
+import org.eclipse.uml2.uml.Usage
 
 abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
 
@@ -90,5 +97,73 @@ abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
 //		saveAndSynchronizeChanges(rootElement)
 //	}
 
+	/***************
+	*Assert Helper:*
+	****************/		
+
+	package def Component assertComponentForClass(Class umlClass, String name) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlClass]).flatten
+		assertEquals(1, correspondingElements.size)
+		val umlComponent = correspondingElements.get(0)
+		assertTypeAndName(umlComponent, Component, name)
+		return umlComponent as Component
+	}	
+	
+	package def Component assertPackageLinkedToComponent(Package classPackage, String componentName) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[classPackage]).flatten.filter(Component)
+		assertEquals(1, correspondingElements.size)
+		val umlComponent = correspondingElements.get(0)
+		assertTypeAndName(umlComponent, Component, componentName)
+		return umlComponent
+	}
+		
+	/*****************
+	*Creation Helper:*
+	******************/		
+
+	package def Class createClassWithoutInteraction(String name) {
+		val classPackage = createPackage(name + PACKAGE_SUFFIX)
+		return createClassWithoutInteraction(name, classPackage)
+	}
+	
+	package def Class createClassWithoutInteraction(String name, Package classPackage) {
+		val umlClass = UMLFactory.eINSTANCE.createClass()
+		umlClass.name = name
+		classPackage.packagedElements += umlClass
+	
+		return umlClass
+	}
+			
+	package def Class createClass(String name, int createNoComponent) {
+		val classPackage = createPackage(name + PACKAGE_SUFFIX)
+		return createClass(name, classPackage, createNoComponent)
+	}
+	
+	package def Class createClass(String name, Package classPackage, int createNoComponent) {
+		val umlClass = createClassWithoutInteraction(name, classPackage)		
+				
+		//Decide whether to create corresponding Component or not:
+		queueUserInteractionSelections(createNoComponent) 
+		
+		return umlClass
+	} 
+	
+	package def Package createPackage(String name) {
+		createPackage(name, 1, 0)
+	}
+	
+	package def Package createPackage(String name, int linkToNoComponent, int componentSelection) {
+		val classPackage = UMLFactory.eINSTANCE.createPackage()
+		classPackage.name = name + PACKAGE_SUFFIX
+		rootElement.packagedElements += classPackage
+		
+		//Decide whether to link this Package to an existing Component
+		if (linkToNoComponent == 1)
+			queueUserInteractionSelections(linkToNoComponent)
+		else
+			queueUserInteractionSelections(linkToNoComponent, componentSelection)
+		
+		return classPackage
+	}	
 }
 

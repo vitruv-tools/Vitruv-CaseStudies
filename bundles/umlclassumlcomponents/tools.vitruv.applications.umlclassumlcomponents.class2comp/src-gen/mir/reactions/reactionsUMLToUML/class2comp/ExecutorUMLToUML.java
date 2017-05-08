@@ -31,9 +31,7 @@ public class ExecutorUmlToUml extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.PackageRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.PackageRenamedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.PackageDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.PackageDeletedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.ElementVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.ElementVisibilityChangedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.CreatedInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.CreatedInterfaceReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.InterfaceRealizedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.InterfaceRealizedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.InterfaceDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.InterfaceDeletedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToUml.class2comp.AddedUsesRelationshipReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToUml.class2comp.AddedUsesRelationshipReaction(userInteracting));
   }
 }

@@ -151,27 +151,39 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createInterface(final Interface classInterface) {
-    mir.routines.class2comp.CreateInterfaceRoutine effect = new mir.routines.class2comp.CreateInterfaceRoutine(this.executionState, calledBy,
+  public void createCompInterface(final Interface classInterface) {
+    mir.routines.class2comp.CreateCompInterfaceRoutine effect = new mir.routines.class2comp.CreateCompInterfaceRoutine(this.executionState, calledBy,
     	classInterface);
     effect.applyRoutine();
   }
   
-  public void createInterfaceRealization(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface) {
+  public void createProvidedRole(final InterfaceRealization classIFRealization, final Interface classInterface, final org.eclipse.uml2.uml.Package affectedPackage) {
+    mir.routines.class2comp.CreateProvidedRoleRoutine effect = new mir.routines.class2comp.CreateProvidedRoleRoutine(this.executionState, calledBy,
+    	classIFRealization, classInterface, affectedPackage);
+    effect.applyRoutine();
+  }
+  
+  public void createInterfaceRealization(final InterfaceRealization classIFRealization, final Component umlComp, final Interface compInterface) {
     mir.routines.class2comp.CreateInterfaceRealizationRoutine effect = new mir.routines.class2comp.CreateInterfaceRealizationRoutine(this.executionState, calledBy,
-    	umlClass, classInterface);
+    	classIFRealization, umlComp, compInterface);
+    effect.applyRoutine();
+  }
+  
+  public void createRequiredRole(final InterfaceRealization classIFRealization, final Interface classInterface, final org.eclipse.uml2.uml.Package affectedPackage) {
+    mir.routines.class2comp.CreateRequiredRoleRoutine effect = new mir.routines.class2comp.CreateRequiredRoleRoutine(this.executionState, calledBy,
+    	classIFRealization, classInterface, affectedPackage);
+    effect.applyRoutine();
+  }
+  
+  public void createUsage(final InterfaceRealization classIFRealization, final Component umlComp, final Interface compInterface) {
+    mir.routines.class2comp.CreateUsageRoutine effect = new mir.routines.class2comp.CreateUsageRoutine(this.executionState, calledBy,
+    	classIFRealization, umlComp, compInterface);
     effect.applyRoutine();
   }
   
   public void deleteInterfaceRealization(final InterfaceRealization classInterface) {
     mir.routines.class2comp.DeleteInterfaceRealizationRoutine effect = new mir.routines.class2comp.DeleteInterfaceRealizationRoutine(this.executionState, calledBy,
     	classInterface);
-    effect.applyRoutine();
-  }
-  
-  public void addRequiredRole(final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface) {
-    mir.routines.class2comp.AddRequiredRoleRoutine effect = new mir.routines.class2comp.AddRequiredRoleRoutine(this.executionState, calledBy,
-    	umlClass, classInterface);
     effect.applyRoutine();
   }
 }

@@ -3,6 +3,7 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Package
@@ -238,7 +239,6 @@ routine createDataType(umlclass::DataType classType) {
 	}
 }
 
-//TODO change all of the following to apply only for datatypes
 reaction DataTypeClassAttributeCreated {
     after element umlclass::Property created and inserted in umlclass::Class[ownedAttribute]
     call {
@@ -385,9 +385,6 @@ routine movedClassToDifferentPackage(umlclass::Class umlClass, umlclass::Package
 		val packageOldComp = retrieve optional umlcomp::Component corresponding to oldPackage
 		val packageNewComp = retrieve optional umlcomp::Component corresponding to newPackage
 		val compLinked = retrieve optional umlcomp::Component corresponding to umlClass
-		
-		//TODO check if class has no corresponding component?
-		//require absence of umlcomp::Component corresponding to umlClass
 	}
 	action {
 		call {
@@ -421,9 +418,10 @@ routine routinePackageRenamed(umlclass::Package classPackage, String newName, St
 			val comps = correspondenceModel.getCorrespondingEObjects(#[classPackage]).flatten.filter(Component)
 			var Component comp = if(!comps.isEmpty) comps.get(0) else null		
 			if ((oldName == CLASS_DATATYPES_PACKAGE_NAME) || (comp !== null) || (newName == CLASS_DATATYPES_PACKAGE_NAME)) {
-				//TODO revert rename currently not possible
+				//Revert rename currently not possible
+				//Add a rollback once Vitruvius can handle it
 			}
-			//TODO Therefore use temporary hack:
+			//Therefore use temporary hack:
 			if (oldName == CLASS_DATATYPES_PACKAGE_NAME)
 				classPackage.name = CLASS_DATATYPES_PACKAGE_NAME
 			else if ((newName == CLASS_DATATYPES_PACKAGE_NAME) && (oldName !== null)) {
@@ -450,7 +448,8 @@ routine routinePackageDeleted(umlclass::Package classPackage, umlclass::Model cl
 			val comps = correspondenceModel.getCorrespondingEObjects(#[classPackage]).flatten.filter(Component)
 			var Component comp = if(!comps.isEmpty) comps.get(0) else null		
 			if ((classPackage.name == CLASS_DATATYPES_PACKAGE_NAME) || (comp !== null)) {
-				//TODO revert remove currently not possible
+				//Revert remove currently not possible
+				//Add a rollback once Vitruvius can handle it
 			}			
 		}
 	}
@@ -481,49 +480,114 @@ routine changeCorrespondingVisibility(umlclass::NamedElement classElement) {
 *Interfaces:*
 *************/
 
-//TODO: implement correctly
-reaction CreatedInterface {
-	after element umlclass::Interface created and inserted in umlclass::Package[packagedElement]
-	call createInterface(newValue)
+reaction InterfaceRealized {
+	after element umlclass::Interface inserted in umlclass::InterfaceRealization[supplier]
+	call {
+		val classIFRealization = affectedEObject
+		val interfaceClients = classIFRealization.clients.filter(Class)
+		if (!interfaceClients.isEmpty) {
+			val affectedClass = interfaceClients.get(0)			
+			val classInterface = newValue
+			
+			//Decide action according to Package situation:
+			val Package classPackage = affectedClass.package
+			val Package interfacePackage = classInterface.package
+			
+			//Act only when the realization is cross packages:
+			if (classPackage != interfacePackage) {
+				//Create a corresponding Interface:
+				createCompInterface(classInterface)
+				
+				//Create a Usage realtion between the Component of the class and the Interface:
+				createRequiredRole(classIFRealization, classInterface, classPackage)
+				
+				//Provide the affected Interface in the Component of its own Package:
+				createProvidedRole(classIFRealization, classInterface, interfacePackage)				
+			} 			
+		}
+	}
 }
 
-routine createInterface(umlclass::Interface classInterface) {
+routine createCompInterface(umlclass::Interface classInterface) {
+	match {
+		val compModel = retrieve umlcomp::Model corresponding to classInterface.package.model
+	}
 	action {
 		val compInterface = create umlcomp::Interface and initialize {
-			compInterface.name = classInterface.name
+			compInterface.name = classInterface.name + COMP_INTERFACE_SUFFIX
+		}
+		update compModel{
+			compModel.packagedElements += compInterface
 		}
 		add correspondence between classInterface and compInterface
 	}
 }
 
-
 //***Provided***
-
-reaction InterfaceRealized{
-	after element umlclass::Interface created and inserted in umlclass::Class[interfaceRealization] //TODO fix this, different element/set
-	call createInterfaceRealization(affectedEObject, newValue)
-}
-
-routine createInterfaceRealization(umlclass::Class umlClass, umlclass::Interface classInterface) {
+routine createProvidedRole(umlclass::InterfaceRealization classIFRealization, umlclass::Interface classInterface, umlclass::Package affectedPackage) {
 	match {
-		val umlComp = retrieve umlcomp::Component corresponding to umlClass
+		val compInterface = retrieve umlcomp::Interface corresponding to classInterface
 	}
 	action {
-		val interfaceRealization = create umlcomp::InterfaceRealization and initialize {
-			interfaceRealization.name = classInterface.name
-			interfaceRealization.clients += umlComp
-			interfaceRealization.suppliers += classInterface
+		call {
+			//Get Component matching to Package
+			val comps = correspondenceModel.getCorrespondingEObjects(#[affectedPackage]).flatten.filter(Component)
+			var Component matchedComponent = if(!comps.isEmpty) comps.get(0) else null				        		
+			if (matchedComponent !== null) {
+				createInterfaceRealization(classIFRealization, matchedComponent, compInterface)
+			}
+		}		
+	}	
+}
+
+routine createInterfaceRealization(umlclass::InterfaceRealization classIFRealization, umlcomp::Component umlComp, umlcomp::Interface compInterface) {
+	action {
+		val compIFRealization = create umlcomp::InterfaceRealization and initialize {
+			compIFRealization.name = classIFRealization.name + COMP_IF_REALIZATION_SUFFIX
+			compIFRealization.clients += umlComp
+			compIFRealization.contract = compInterface
+			compIFRealization.suppliers += compInterface
 		}
 		update umlComp {
-			umlComp.interfaceRealizations += interfaceRealization
+			umlComp.interfaceRealizations += compIFRealization
 		}
-		add correspondence between interfaceRealization and classInterface
+		add correspondence between compIFRealization and classIFRealization
 	}
-	
+}
+
+//***Required***
+routine createRequiredRole(umlclass::InterfaceRealization classIFRealization, umlclass::Interface classInterface, umlclass::Package affectedPackage) {
+	match {
+		val compInterface = retrieve umlcomp::Interface corresponding to classInterface
+	}
+	action {
+		call {
+			//Get Component matching to Package
+			val comps = correspondenceModel.getCorrespondingEObjects(#[affectedPackage]).flatten.filter(Component)
+			var Component matchedComponent = if(!comps.isEmpty) comps.get(0) else null				        		
+			if (matchedComponent !== null) {
+				createUsage(classIFRealization, matchedComponent, compInterface)
+			}
+		}		
+	}	
+}
+
+routine createUsage(umlclass::InterfaceRealization classIFRealization, umlcomp::Component umlComp, umlcomp::Interface compInterface) {
+	action {
+		val usage = create umlcomp::Usage and initialize {
+			usage.name = classIFRealization.name
+			usage.clients += umlComp
+			usage.suppliers += compInterface
+		}
+		update umlComp {
+			umlComp.packagedElements += usage
+		}
+		add correspondence between usage and classIFRealization
+	}
 }
 
 
-//TODO ?? merge with required?
+//TODO Implement various delete reactions
 reaction InterfaceDeleted {
 	after element removed from umlclass::Class[interfaceRealization]
 	call deleteInterfaceRealization(oldValue)
@@ -534,30 +598,6 @@ routine deleteInterfaceRealization(umlclass::InterfaceRealization classInterface
 	}
 	action {
 		delete interfaceRealization
-	}
-}
-
-//***Required***
-
-reaction AddedUsesRelationship {
-	after element umlclass::Interface created and inserted in umlclass::Class[useCase] //TODO useCase correct??
-	call addRequiredRole(affectedEObject, newValue)
-}
-
-routine addRequiredRole(umlclass::Class umlClass, umlclass::Interface classInterface) {
-	match {
-		val umlComp = retrieve umlcomp::Component corresponding to umlClass
-	}
-	action {
-		val usage = create umlcomp::Usage and initialize {
-			usage.name = classInterface.name
-			usage.clients += umlComp
-			usage.suppliers += classInterface
-		}
-		update umlComp {
-			umlComp.packagedElements += usage
-		}
-		add correspondence between usage and classInterface
 	}
 }
 

@@ -2,6 +2,8 @@ package mir.routines.comp2class;
 
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Operation;
@@ -103,6 +105,24 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void changeCorrespondingVisibility(final NamedElement compElement) {
     mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine effect = new mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine(this.executionState, calledBy,
     	compElement);
+    effect.applyRoutine();
+  }
+  
+  public void createClassInterface(final Interface compInterface, final Component umlComp) {
+    mir.routines.comp2class.CreateClassInterfaceRoutine effect = new mir.routines.comp2class.CreateClassInterfaceRoutine(this.executionState, calledBy,
+    	compInterface, umlComp);
+    effect.applyRoutine();
+  }
+  
+  public void createClassInterfaceRealization(final NamedElement compIFRealization, final Component umlComp) {
+    mir.routines.comp2class.CreateClassInterfaceRealizationRoutine effect = new mir.routines.comp2class.CreateClassInterfaceRealizationRoutine(this.executionState, calledBy,
+    	compIFRealization, umlComp);
+    effect.applyRoutine();
+  }
+  
+  public void addClassInterfaceRealizationToClass(final InterfaceRealization compIFRealization, final Interface compInterface, final Component umlComp) {
+    mir.routines.comp2class.AddClassInterfaceRealizationToClassRoutine effect = new mir.routines.comp2class.AddClassInterfaceRealizationToClassRoutine(this.executionState, calledBy,
+    	compIFRealization, compInterface, umlComp);
     effect.applyRoutine();
   }
 }
