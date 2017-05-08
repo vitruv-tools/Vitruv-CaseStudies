@@ -26,6 +26,7 @@ import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
 import org.emftext.language.java.expressions.ExpressionsFactory
 import org.emftext.language.java.literals.LiteralsFactory
+import org.emftext.language.java.classifiers.ConcreteClassifier
 
 class JavaMemberAndParameterUtil {
     private static val logger = Logger.getLogger(JavaMemberAndParameterUtil.simpleName)
@@ -89,6 +90,14 @@ class JavaMemberAndParameterUtil {
         return constant
     }
     
+    def static List<EnumConstant> createJavaEnumConstantsFromList(List<String> enumConstantNames) {
+        val enumConstantList = new ArrayList<EnumConstant>
+        for (name : enumConstantNames) {
+            enumConstantList += createJavaEnumConstant(name)
+        }
+        return enumConstantList
+    }
+    
     /**
     * Adds a constructor to the class
     */
@@ -100,14 +109,6 @@ class JavaMemberAndParameterUtil {
        jClass.members += constructor
        
        return constructor
-   }
-   
-   def static createEnumConstantsFromList(List<String> enumConstantNames) {
-       val  enumConstants = new ArrayList<EnumConstant>
-       for (name : enumConstantNames) {
-           enumConstants += createJavaEnumConstant(name)
-       }
-       return enumConstants
    }
    
    def static createJavaConstructorAndAddToClass(Class jClass) {
@@ -202,7 +203,7 @@ class JavaMemberAndParameterUtil {
            return Collections.<ClassMethod>emptyList
        }
        val expectedSetterName = "get" + firstLettertoUppercase(jAttribute.name)
-       val jClass = jAttribute.eContainer as Class
+       val jClass = jAttribute.eContainer as ConcreteClassifier
        if (jClass === null) {
            return Collections.<ClassMethod>emptyList 
        }
@@ -218,7 +219,7 @@ class JavaMemberAndParameterUtil {
            return Collections.<ClassMethod>emptyList
        }
        val expectedSetterName = "set" + firstLettertoUppercase(jAttribute.name)
-       val jClass = jAttribute.eContainer as Class
+       val jClass = jAttribute.eContainer as ConcreteClassifier
        return jClass.members.filter(ClassMethod)?.filter[expectedSetterName.equals(name)]?.toList
    }
    

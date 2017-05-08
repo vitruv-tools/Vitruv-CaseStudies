@@ -307,3 +307,55 @@ routine removeUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier
         }
     }
 }
+
+reaction JavaEnumCreated {
+    after element java::Enumeration created and inserted in java::CompilationUnit[classifiers]
+    call createUmlEnum(newValue)
+}
+
+routine createUmlEnum(java::Enumeration jEnum) {
+    action {
+        val uEnum = create uml::Enumeration and initialize {
+            uEnum.name = jEnum.name;
+        }
+        call {
+            addUmlElementToRootModel(uEnum, jEnum)
+        }
+        add correspondence between uEnum and jEnum
+        add correspondence between uEnum and jEnum.eContainer
+    }
+}
+
+reaction JavaEnumConstantCreated {
+    after element java::EnumConstant created and inserted in java::Enumeration[constants]
+    call createUmlEnumLiteral(affectedEObject, newValue)
+}
+
+routine createUmlEnumLiteral(java::Enumeration jEnum, java::EnumConstant jConstant) {
+    match {
+        val uEnum = retrieve uml::Enumeration corresponding to jEnum
+    }
+    action {
+        val uLiteral = create uml::EnumerationLiteral and initialize {
+            uLiteral.name = jConstant.name
+        }
+        add correspondence between uLiteral and jConstant
+        update uEnum {
+            uEnum.ownedLiterals += uLiteral
+        }
+    }
+}
+
+reaction JavaEnumConstantDeleted {
+    after element java::EnumConstant deleted and removed from java::Enumeration[constants]
+    call deleteUmlEnumLiteral(oldValue)
+}
+
+routine deleteUmlEnumLiteral(java::EnumConstant jConstant) {
+    match {
+        val uLiteral = retrieve uml::EnumerationLiteral corresponding to jConstant
+    }
+    action {
+        delete uLiteral
+    }
+}

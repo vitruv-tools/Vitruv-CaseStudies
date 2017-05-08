@@ -8,21 +8,23 @@ in reaction to changes in Java
 execute actions in UML
 
 reaction JavaClassMethodCreated {
-    after element java::ClassMethod created and inserted in java::Class[members]
+    after element java::ClassMethod created and inserted in java::ConcreteClassifier[members]
+    with (affectedEObject instanceof org.emftext.language.java.classifiers.Class)
+    || (affectedEObject instanceof org.emftext.language.java.classifiers.Enumeration)
     call createUmlClassMethod(newValue, affectedEObject)
 }
 
-routine createUmlClassMethod(java::ClassMethod jMeth, java::Class jClass) {
+routine createUmlClassMethod(java::ClassMethod jMeth, java::ConcreteClassifier jClassifier) {
     match {
-        val uClass = retrieve uml::Class corresponding to jClass
+        val uClassifier = retrieve uml::Class corresponding to jClassifier
     }
     action {
         val uOperation = create uml::Operation and initialize {
             uOperation.name = jMeth.name;
         }
         add correspondence between uOperation and jMeth
-        update uClass {
-            uClass.ownedOperations += uOperation;
+        update uClassifier {
+            uClassifier.ownedOperations += uOperation;
         }
     }
 }

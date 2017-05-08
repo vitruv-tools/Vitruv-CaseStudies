@@ -23,7 +23,8 @@ import org.emftext.language.java.types.TypeReference
 import tools.vitruv.domains.java.util.jamoppparser.JamoppParser
 import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-
+import org.emftext.language.java.members.EnumConstant
+import org.emftext.language.java.classifiers.Enumeration
 
 class JavaContainerAndClassifierUtil {
     private static val logger = Logger.getLogger(JavaContainerAndClassifierUtil.simpleName)
@@ -62,6 +63,23 @@ class JavaContainerAndClassifierUtil {
             jInterface.extends.addAll(createNamespaceReferenceFromList(superInterfaces));
         }
         return jInterface;
+    }
+    
+    /**
+     * The created Enum is not contained in a compilationunit.
+     */
+    def static createJavaEnum(String name, JavaVisibility visibility, List<EnumConstant> constantsList) {
+        val jEnum = ClassifiersFactory.eINSTANCE.createEnumeration;
+        setName(jEnum, name)
+        setJavaVisibilityModifier(jEnum, visibility)
+        addEnumConstantIfNotNull(jEnum, constantsList)
+        return jEnum;
+    }
+    
+    def static addEnumConstantIfNotNull(Enumeration jEnum, List<EnumConstant> constantsList) {
+        if (!constantsList.nullOrEmpty) {
+            jEnum.constants.addAll(constantsList)
+        }
     }
     
     /**

@@ -8,14 +8,19 @@ in reaction to changes in Java
 execute actions in UML
 
 reaction JavaAttributeCreated {
-    after element java::Field created and inserted in java::Class[members]
+    after element java::Field created and inserted in java::ConcreteClassifier[members]
     call {
-        createUmlAttribute(affectedEObject, newValue)
-        
+        if (affectedEObject instanceof org.emftext.language.java.classifiers.Class) {
+            createUmlAttributeInClass(affectedEObject, newValue)
+        } else if (affectedEObject instanceof org.emftext.language.java.classifiers.Enumeration) {
+            createUmlAttributeInEnum(affectedEObject, newValue)
+        } else {
+            logger.warn(affectedEObject + " is neither a Class nor a Enum. JavaAttributeCreated-Reaction not executed.")
         }
+    }
 }
 
-routine createUmlAttribute(java::Class jClass, java::Field jAttr) {
+routine createUmlAttributeInClass(java::Class jClass, java::Field jAttr) {
     match {
         val uClass = retrieve uml::Class corresponding to jClass
     }
@@ -26,6 +31,22 @@ routine createUmlAttribute(java::Class jClass, java::Field jAttr) {
         add correspondence between uAttr and jAttr
         update uClass {
             uClass.ownedAttributes += uAttr;
+        }
+    }
+}
+//UML-Enumeration and UMl-Class don't have a common superclass for "having ownedAttributes".
+//Therefore we implemented two separate routines
+routine createUmlAttributeInEnum(java::Enumeration jEnum, java::Field jAttr) {
+    match {
+        val uEnum = retrieve uml::Enumeration corresponding to jEnum
+    }
+    action {
+        val uAttr = create uml::Property and initialize {
+            uAttr.name = jAttr.name;
+        }
+        add correspondence between uAttr and jAttr
+        update uEnum {
+            uEnum.ownedAttributes += uAttr;
         }
     }
 }

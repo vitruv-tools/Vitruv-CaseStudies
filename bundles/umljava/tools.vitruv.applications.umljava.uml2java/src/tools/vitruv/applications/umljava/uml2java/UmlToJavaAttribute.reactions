@@ -14,14 +14,14 @@ execute actions in Java
 
 
 
-reaction UmlAttributeCreated {
+reaction UmlAttributeCreatedInClass {
     after element uml::Property created and inserted in uml::Class[ownedAttribute]
     call {
-        createJavaAttribute(affectedEObject, newValue)
+        createJavaAttributeInClass(affectedEObject, newValue)
     }
 }
 
-routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
+routine createJavaAttributeInClass(uml::Class umlClass, uml::Property umlAttribute) {
     match {
         val javaClass = retrieve java::Class corresponding to umlClass
         val customTypeClass = retrieve optional java::Class corresponding to umlAttribute.type
@@ -37,9 +37,39 @@ routine createJavaAttribute(uml::Class umlClass, uml::Property umlAttribute) {
         add correspondence between umlAttribute and javaAttribute
     }
 }
+//We can not define one single reaction for attribute creation in enums and classes because
+//They don't have a common superclass for "having ownedAttributes"
+reaction UmlAttributeCreatedInEnum {
+    after element uml::Property created and inserted in uml::Enumeration[ownedAttribute]
+    call {
+        createJavaAttributeInEnum(affectedEObject, newValue)
+    }
+}
 
-reaction UmlAttributeDeleted {
+routine createJavaAttributeInEnum(uml::Enumeration uEnum, uml::Property umlAttribute) {
+    match {
+        val jEnum = retrieve java::Enumeration corresponding to uEnum
+        val customTypeClass = retrieve optional java::Class corresponding to umlAttribute.type
+    }
+    action {
+        val javaAttribute = create java::Field and initialize {
+            javaAttribute.name = umlAttribute.name;
+            javaAttribute.makePublic
+        }
+        update jEnum {
+            jEnum.members += javaAttribute
+        }
+        add correspondence between umlAttribute and javaAttribute
+    }
+}
+
+reaction UmlAttributeDeletedFromClass {
     after element uml::Property deleted and removed from uml::Class[ownedAttribute]
+    call deleteJavaAttribute(oldValue)
+}
+
+reaction UmlAttributeDeletedFromEnum {
+    after element uml::Property deleted and removed from uml::Enumeration[ownedAttribute]
     call deleteJavaAttribute(oldValue)
 }
 

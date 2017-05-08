@@ -260,4 +260,12 @@ class UmlTestUtil {
     def static void assertUmlClassDontHaveImplement(Class uClass, Interface implementedInterface) {
         assertTrue(uClass.implementedInterfaces.filter[name == implementedInterface.name].nullOrEmpty)
     }
+    
+    def static void assertUmlEnumHasLiteral(Enumeration uEnum, EnumerationLiteral uLiteral) {
+        assertFalse(uEnum.ownedLiterals.filter[name == uLiteral.name].nullOrEmpty)
+    }
+    
+    def static void assertUmlEnumDontHaveLiteral(Enumeration uEnum, EnumerationLiteral uLiteral) {
+        assertTrue(uEnum.ownedLiterals.filter[name == uLiteral.name].nullOrEmpty)
+    }
 }

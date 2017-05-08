@@ -3,6 +3,8 @@ package mir.reactions.reactionsJavaToUml.javaToUmlMethod;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.members.ClassMethod;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -20,8 +22,8 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, ClassMethod>)change).getInsertChange();
-    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<ConcreteClassifier, ClassMethod> typedChange = ((CreateAndInsertNonRoot<ConcreteClassifier, ClassMethod>)change).getInsertChange();
+    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     ClassMethod newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
@@ -34,8 +36,8 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, ClassMethod>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
+    InsertEReference<ConcreteClassifier, ClassMethod> relevantChange = ((CreateAndInsertNonRoot<ConcreteClassifier, ClassMethod>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof ConcreteClassifier)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
@@ -56,8 +58,19 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    InsertEReference<ConcreteClassifier, ClassMethod> typedChange = ((CreateAndInsertNonRoot<ConcreteClassifier, ClassMethod>)change).getInsertChange();
+    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    ClassMethod newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final ConcreteClassifier affectedEObject, final EReference affectedFeature, final ClassMethod newValue) {
+    return ((affectedEObject instanceof org.emftext.language.java.classifiers.Class) || (affectedEObject instanceof Enumeration));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -65,7 +78,7 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final ClassMethod newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ConcreteClassifier affectedEObject, final EReference affectedFeature, final ClassMethod newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createUmlClassMethod(newValue, affectedEObject);
     }
   }

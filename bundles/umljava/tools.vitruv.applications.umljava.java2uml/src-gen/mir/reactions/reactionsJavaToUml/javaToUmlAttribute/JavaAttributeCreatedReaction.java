@@ -1,8 +1,11 @@
 package mir.reactions.reactionsJavaToUml.javaToUmlAttribute;
 
 import mir.routines.javaToUmlAttribute.RoutinesFacade;
+import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.members.Field;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -20,8 +23,8 @@ class JavaAttributeCreatedReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Field> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Field>)change).getInsertChange();
-    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<ConcreteClassifier, Field> typedChange = ((CreateAndInsertNonRoot<ConcreteClassifier, Field>)change).getInsertChange();
+    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     Field newValue = typedChange.getNewValue();
     mir.routines.javaToUmlAttribute.RoutinesFacade routinesFacade = new mir.routines.javaToUmlAttribute.RoutinesFacade(this.executionState, this);
@@ -34,8 +37,8 @@ class JavaAttributeCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Field> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Field>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
+    InsertEReference<ConcreteClassifier, Field> relevantChange = ((CreateAndInsertNonRoot<ConcreteClassifier, Field>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof ConcreteClassifier)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
@@ -65,8 +68,18 @@ class JavaAttributeCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createUmlAttribute(affectedEObject, newValue);
+    public void callRoutine1(final ConcreteClassifier affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
+      if ((affectedEObject instanceof org.emftext.language.java.classifiers.Class)) {
+        _routinesFacade.createUmlAttributeInClass(((org.emftext.language.java.classifiers.Class)affectedEObject), newValue);
+      } else {
+        if ((affectedEObject instanceof Enumeration)) {
+          _routinesFacade.createUmlAttributeInEnum(((Enumeration)affectedEObject), newValue);
+        } else {
+          Logger _logger = this.getLogger();
+          String _plus = (affectedEObject + " is neither a Class nor a Enum. JavaAttributeCreated-Reaction not executed.");
+          _logger.warn(_plus);
+        }
+      }
     }
   }
 }

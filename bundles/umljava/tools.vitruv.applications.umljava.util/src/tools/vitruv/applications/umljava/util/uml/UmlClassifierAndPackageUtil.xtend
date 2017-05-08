@@ -80,12 +80,16 @@ class UmlClassifierAndPackageUtil {
         return uEnum
     }
     
+    def static EnumerationLiteral createUmlEnumerationLiteral(String name) {
+        val literal = UMLFactory.eINSTANCE.createEnumerationLiteral
+        literal.name = name
+        return literal
+    }
+    
     def static List<EnumerationLiteral> createUmlEnumLiteralsFromList(List<String> enumLiteralNames) {
         val enumLiterals = new ArrayList<EnumerationLiteral>
         for (name : enumLiteralNames) {
-            val literal = UMLFactory.eINSTANCE.createEnumerationLiteral
-            literal.name = name
-            enumLiterals += literal
+            enumLiterals += createUmlEnumerationLiteral(name)
         }
         return enumLiterals
     }

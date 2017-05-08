@@ -130,7 +130,7 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
             for (compUnit : jPackage.compilationUnits) {
                 changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
             }
-            //for (subPackage : jPackage.)
+            //for (subPackage : jPackage.subPackages)
         }
 	}
 }

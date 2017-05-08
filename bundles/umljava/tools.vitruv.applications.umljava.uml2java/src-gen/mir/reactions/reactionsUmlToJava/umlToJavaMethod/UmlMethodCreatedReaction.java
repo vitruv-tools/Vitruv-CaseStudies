@@ -2,6 +2,7 @@ package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -56,8 +57,19 @@ class UmlMethodCreatedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    InsertEReference<org.eclipse.uml2.uml.Class, Operation> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Operation>)change).getInsertChange();
+    org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    Operation newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Operation newValue) {
+    return ((affectedEObject instanceof org.eclipse.uml2.uml.Class) || (affectedEObject instanceof Enumeration));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

@@ -1,5 +1,6 @@
 package mir.routines.javaToUmlMethod;
 
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.InterfaceMethod;
@@ -18,9 +19,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createUmlClassMethod(final ClassMethod jMeth, final org.emftext.language.java.classifiers.Class jClass) {
+  public void createUmlClassMethod(final ClassMethod jMeth, final ConcreteClassifier jClassifier) {
     mir.routines.javaToUmlMethod.CreateUmlClassMethodRoutine effect = new mir.routines.javaToUmlMethod.CreateUmlClassMethodRoutine(this.executionState, calledBy,
-    	jMeth, jClass);
+    	jMeth, jClassifier);
     effect.applyRoutine();
   }
   

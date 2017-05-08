@@ -1,5 +1,6 @@
 package mir.routines.javaToUmlAttribute;
 
+import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
@@ -12,9 +13,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createUmlAttribute(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr) {
-    mir.routines.javaToUmlAttribute.CreateUmlAttributeRoutine effect = new mir.routines.javaToUmlAttribute.CreateUmlAttributeRoutine(this.executionState, calledBy,
+  public void createUmlAttributeInClass(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr) {
+    mir.routines.javaToUmlAttribute.CreateUmlAttributeInClassRoutine effect = new mir.routines.javaToUmlAttribute.CreateUmlAttributeInClassRoutine(this.executionState, calledBy,
     	jClass, jAttr);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlAttributeInEnum(final Enumeration jEnum, final Field jAttr) {
+    mir.routines.javaToUmlAttribute.CreateUmlAttributeInEnumRoutine effect = new mir.routines.javaToUmlAttribute.CreateUmlAttributeInEnumRoutine(this.executionState, calledBy,
+    	jEnum, jAttr);
     effect.applyRoutine();
   }
   

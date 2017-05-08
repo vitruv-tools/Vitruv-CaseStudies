@@ -4,9 +4,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.commons.NamedElement;
 import org.emftext.language.java.containers.CompilationUnit;
+import org.emftext.language.java.members.EnumConstant;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.modifiers.Modifier;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
@@ -112,6 +114,24 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void removeUmlPackageOfClass(final org.emftext.language.java.containers.Package jPackage, final ConcreteClassifier jClassifier) {
     mir.routines.javaToUmlClassifier.RemoveUmlPackageOfClassRoutine effect = new mir.routines.javaToUmlClassifier.RemoveUmlPackageOfClassRoutine(this.executionState, calledBy,
     	jPackage, jClassifier);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlEnum(final Enumeration jEnum) {
+    mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine effect = new mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine(this.executionState, calledBy,
+    	jEnum);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlEnumLiteral(final Enumeration jEnum, final EnumConstant jConstant) {
+    mir.routines.javaToUmlClassifier.CreateUmlEnumLiteralRoutine effect = new mir.routines.javaToUmlClassifier.CreateUmlEnumLiteralRoutine(this.executionState, calledBy,
+    	jEnum, jConstant);
+    effect.applyRoutine();
+  }
+  
+  public void deleteUmlEnumLiteral(final EnumConstant jConstant) {
+    mir.routines.javaToUmlClassifier.DeleteUmlEnumLiteralRoutine effect = new mir.routines.javaToUmlClassifier.DeleteUmlEnumLiteralRoutine(this.executionState, calledBy,
+    	jConstant);
     effect.applyRoutine();
   }
 }

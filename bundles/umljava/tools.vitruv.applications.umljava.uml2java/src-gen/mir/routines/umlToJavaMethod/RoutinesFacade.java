@@ -1,5 +1,6 @@
 package mir.routines.umlToJavaMethod;
 
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Feature;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
@@ -15,9 +16,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createJavaMethod(final org.eclipse.uml2.uml.Class uClass, final Operation umlOp) {
+  public void createJavaMethod(final Classifier uClassifier, final Operation umlOp) {
     mir.routines.umlToJavaMethod.CreateJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaMethodRoutine(this.executionState, calledBy,
-    	uClass, umlOp);
+    	uClassifier, umlOp);
     effect.applyRoutine();
   }
   

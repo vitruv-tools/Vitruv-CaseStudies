@@ -1,6 +1,8 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlPropertyAndAssociationUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
@@ -10,6 +12,7 @@ import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
+import org.emftext.language.java.types.TypesFactory
 
 class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	private static val ENUM_NAME = "EnumName"
@@ -18,10 +21,13 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	private static val ENUM_LITERAL_NAMES_1 = #["RED", "BLUE", "GREEN", "YELLOW", "PURPLE"]
 	private static val ENUM_LITERAL_NAMES_2 = #["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
 	private static val LITERAL_NAME = "LITERALNAME"
-	
+	private static val OPERATION_NAME = "operationName"
+	private static val TYPE_CLASS = "TypeClass"
 	private static var org.eclipse.uml2.uml.Enumeration uEnum
 	private static val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
 	private static val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
+    
+    
 	
 	@Before
 	def void before() {
@@ -33,6 +39,7 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 		if (uEnum !== null) {
 			uEnum.destroy
 		}
+		saveAndSynchronizeChanges(rootElement)
 	}
 	
 	@Test
@@ -43,7 +50,7 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	    
 	    assertJavaFileExists(STANDARD_ENUM_NAME, #[])
 	    val jEnum = getCorrespondingEnum(enumeration)
-	    assertJavaEnumTraits(jEnum, STANDARD_ENUM_NAME, JavaVisibility.PRIVATE, createEnumConstantsFromList(ENUM_LITERAL_NAMES_2))
+	    assertJavaEnumTraits(jEnum, STANDARD_ENUM_NAME, JavaVisibility.PRIVATE, createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2))
 	    assertEnumEquals(enumeration, jEnum)
 	    
 	    
@@ -89,4 +96,17 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	    assertEnumEquals(uEnum, jEnum)
 	}
 	
+	@Test
+	def void testAddEnumMethod() {
+	    val uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, null)
+	    uEnum.ownedOperations += uOperation
+	    saveAndSynchronizeChanges(rootElement)
+	    
+	    val jMethod = getCorrespondingClassMethod(uOperation)
+	    val jEnum = getCorrespondingEnum(uEnum)
+        assertJavaMethodTraits(jMethod, OPERATION_NAME, JavaVisibility.PUBLIC,
+            TypesFactory.eINSTANCE.createVoid, false, false, null, jEnum)
+        assertMethodEquals(uOperation, jMethod)
+	}
+
 }

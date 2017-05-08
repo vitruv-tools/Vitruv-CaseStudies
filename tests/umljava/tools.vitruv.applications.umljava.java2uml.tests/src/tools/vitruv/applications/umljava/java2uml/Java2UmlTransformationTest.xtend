@@ -16,6 +16,8 @@ import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
 import org.apache.log4j.Logger
+import java.util.List
+import org.emftext.language.java.members.EnumConstant
 
 class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     private static val logger = Logger.getLogger(Java2UmlTransformationTest.simpleName)
@@ -36,6 +38,9 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
 		return #[new JavaToUmlChangePropagationSpecification()]; 
 	}
 	
+	/**
+	 * @return the new Java-Class
+	 */
     def protected createJavaClassWithCompilationUnit(String cName, JavaVisibility vis, boolean abstr, boolean fin) {
         val cu = createCompilationUnitAsModel(cName);
         val cls = createJavaClass(cName, vis, abstr, fin)
@@ -45,23 +50,41 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
         return cls;
     }
     
+    /**
+     * @return the new Java-Class
+     */
     def protected createSimpleJavaClassWithCompilationUnit(String name) {
         return createJavaClassWithCompilationUnit(name, JavaVisibility.PUBLIC, false, false);
     }
     
+    /**
+     * @return the new Java-Interface
+     */
     def protected createSimpleJavaInterfaceWithCompilationUnit(String name) {
         return createJavaInterfaceWithCompilationUnit (name, null);
     }
     
     /**
      * Sichtbarkeit wird automatisch auf Public gesetzt
+     * @return the new Java-interface
      */
-    def protected createJavaInterfaceWithCompilationUnit (String name, EList<Interface> superInterfaces) {
+    def protected createJavaInterfaceWithCompilationUnit (String name, List<Interface> superInterfaces) {
         val cu = createCompilationUnitAsModel(name);
         val jI = createJavaInterface(name, superInterfaces)
         cu.classifiers += jI;
         saveAndSynchronizeChanges(cu);
         return jI;
+    }
+    
+    /**
+     * @return the new Java-Enumeration
+     */
+    def protected createJavaEnumWithCompilationUnit(String name, JavaVisibility visibility, List<EnumConstant> constants) {
+        val jEnum = createJavaEnum(name, visibility, constants)
+        val cu = createCompilationUnitAsModel(name)
+        cu.classifiers += jEnum
+        saveAndSynchronizeChanges(cu)
+        return jEnum
     }
 
     /**

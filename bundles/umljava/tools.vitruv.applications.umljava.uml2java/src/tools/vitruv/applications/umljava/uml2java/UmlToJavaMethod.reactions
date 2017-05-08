@@ -12,15 +12,17 @@ execute actions inJava
 
 reaction UmlMethodCreated {
     after element uml::Operation created and inserted in uml::Class[ownedOperation]
+    with (affectedEObject instanceof org.eclipse.uml2.uml.Class)
+    || (affectedEObject instanceof org.eclipse.uml2.uml.Enumeration)
     call {
         createJavaMethod(affectedEObject, newValue)       
     }
 }
 
-routine createJavaMethod(uml::Class uClass, uml::Operation umlOp) {
+routine createJavaMethod(uml::Classifier uClassifier, uml::Operation umlOp) {
     match {
         
-        val javaClass = retrieve java::Class corresponding to uClass
+        val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
         val customTypeClass = retrieve optional java::Class corresponding to umlOp.type
     }
     action {
@@ -29,8 +31,8 @@ routine createJavaMethod(uml::Class uClass, uml::Operation umlOp) {
             setJavaVisibility(javaMethod, umlOp.visibility)
             javaMethod.typeReference = createTypeReference(umlOp.type, customTypeClass)
         }
-        update javaClass {
-            javaClass.members += javaMethod;
+        update jClassifier {
+            jClassifier.members += javaMethod;
         }
         add correspondence between umlOp and javaMethod
     }
@@ -40,10 +42,15 @@ reaction UmlClassMethodDeleted {
     after element uml::Operation deleted and removed from uml::Class[ownedOperation]
     call deleteJavaMethod(oldValue)
 }
-//uml::Interface and uml::Class dont have a common superClass for "having ownedOperation",
-//so we need two separate reactions
+//uml::Interface and uml::Class and uml::Enumeration dont have a common superClass for "having ownedOperation",
+//so we need separate reactions
 reaction UmlInterfaceMethodDeleted {
     after element uml::Operation deleted and removed from uml::Interface[ownedOperation]
+    call deleteJavaMethod(oldValue)
+}
+
+reaction UmlEnumMethodDeleted {
+    after element uml::Operation deleted and removed from uml::Enumeration[ownedOperation]
     call deleteJavaMethod(oldValue)
 }
 
