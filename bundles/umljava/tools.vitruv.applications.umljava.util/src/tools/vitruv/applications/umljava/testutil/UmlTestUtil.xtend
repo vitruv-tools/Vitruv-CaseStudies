@@ -170,6 +170,10 @@ class UmlTestUtil {
         assertEquals(isAbstract, uOperation.abstract) 
     }
     
+    def static void assertUmlOperationHasFinalValue(Operation uOperation, boolean isFinal) {
+        assertEquals(isFinal, uOperation.isLeaf) 
+    }
+    
     
     /**
      * Uml-TypedElement includes Property and Parameter, but NOT Operation 

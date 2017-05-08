@@ -241,3 +241,18 @@ routine createJavaInterfaceMethod(uml::Operation umlOp) {
     }
 }
 
+reaction UmlMethodMadeFinal {
+    after attribute replaced at uml::Operation[isLeaf]
+    call setJavaMethodFinal(affectedEObject, newValue)
+}
+
+routine setJavaMethodFinal(uml::Operation uOperation, Boolean isFinal) {
+    match {
+        val jMethod = retrieve java::ClassMethod corresponding to uOperation
+    }
+    action {
+        update jMethod {
+            jMethod.final = isFinal
+        }
+    }
+}

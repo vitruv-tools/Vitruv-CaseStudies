@@ -175,3 +175,24 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
          }
      }
 }
+
+reaction JavaMethodMadeFinal {
+    after element java::Final created and inserted in java::ClassMethod[annotationsAndModifiers]
+    call setUmlMethodFinal(affectedEObject, true)
+}
+
+reaction JavaMethodMadeNonFinal {
+    after element java::Final deleted and removed from java::ClassMethod[annotationsAndModifiers]
+    call setUmlMethodFinal(affectedEObject, false)
+}
+
+routine setUmlMethodFinal(java::Method jMethod, Boolean isFinal) {
+    match {
+        val uOperation = retrieve uml::Operation corresponding to jMethod
+    }
+    action {
+        update uOperation {
+            uOperation.isLeaf = isFinal
+        }
+    }
+}

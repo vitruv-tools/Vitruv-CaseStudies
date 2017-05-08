@@ -18,10 +18,11 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.eclipse.uml2.types.TypesFactory
-import org.emftext.language.java.classifiers.ClassifiersFactory
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.emftext.language.java.members.MembersFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.containers.CompilationUnit
 
 class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
@@ -47,16 +48,12 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     
     //@After
     def void after() {
-        if (jMeth != null) {
-            
+        if (jClass !== null) {
+            deleteAndSynchronizeModel(buildJavaFilePath(jClass.eContainer as CompilationUnit))
         }
-        if (jClass != null) {
-            
+        if (typeClass !== null) {
+            deleteAndSynchronizeModel(buildJavaFilePath(typeClass.eContainer as CompilationUnit))
         }
-        if (typeClass != null) {
-
-        }
-        //saveAndSynchronizeChanges(rootElement);
     }
     
     @Test
@@ -123,6 +120,16 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         
         val uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasAbstractValue(uOperation, true)
+        assertMethodEquals(uOperation, jMeth)
+    }
+    
+    @Test
+    def testFinalMethod() {
+        jMeth.final = true
+        saveAndSynchronizeChanges(jMeth)
+        
+        val uOperation = getCorrespondingMethod(jMeth)
+        assertUmlOperationHasFinalValue(uOperation, true)
         assertMethodEquals(uOperation, jMeth)
     }
     

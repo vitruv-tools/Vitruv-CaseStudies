@@ -26,5 +26,7 @@ public class ExecutorJavaToUml extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterDeletedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterTypeChangedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaReturnTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaReturnTypeChangedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeFinalReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeFinalReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonFinalReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonFinalReaction(userInteracting));
   }
 }

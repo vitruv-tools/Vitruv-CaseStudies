@@ -75,4 +75,10 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     	umlOp);
     effect.applyRoutine();
   }
+  
+  public void setJavaMethodFinal(final Operation uOperation, final Boolean isFinal) {
+    mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine(this.executionState, calledBy,
+    	uOperation, isFinal);
+    effect.applyRoutine();
+  }
 }

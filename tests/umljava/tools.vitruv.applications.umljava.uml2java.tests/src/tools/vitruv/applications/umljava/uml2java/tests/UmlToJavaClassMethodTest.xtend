@@ -120,6 +120,16 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     }
     
     @Test
+    def testFinalMethod() {
+        uOperation.isLeaf = true;
+        saveAndSynchronizeChanges(uOperation);
+        
+        val jMethod = getCorrespondingClassMethod(uOperation)
+        assertJavaModifiableFinal(jMethod, true)
+        assertMethodEquals(uOperation, jMethod)
+    }
+    
+    @Test
     def testAbstractMethod() {
         uOperation.isAbstract = true;
         saveAndSynchronizeChanges(uOperation);

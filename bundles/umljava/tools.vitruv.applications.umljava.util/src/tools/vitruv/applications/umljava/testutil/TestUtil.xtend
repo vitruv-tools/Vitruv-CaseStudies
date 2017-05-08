@@ -110,6 +110,7 @@ class TestUtil {
 	def static void assertMethodEquals(Operation uMethod, Method jMethod) {
 		assertEquals(uMethod.name, jMethod.name)
 		assertStaticEquals(uMethod, jMethod)
+		assertFinalMethodEquals(uMethod, jMethod)
 		assertAbstractMethodEquals(uMethod, jMethod)
 		assertVisibilityEquals(uMethod, jMethod)
 		assertTypeEquals(uMethod.type, jMethod.typeReference)
@@ -147,6 +148,14 @@ class TestUtil {
 			assertFalse(jClass.hasModifier(Abstract))
 		}
 	}
+	
+	def static void assertFinalMethodEquals(Operation uMethod, Method jMethod) {
+        if (uMethod.isLeaf) {
+            assertTrue(jMethod.hasModifier(Final))
+        } else {
+            assertFalse(jMethod.hasModifier(Final))
+        }
+    }
 	
 	def static void assertAbstractMethodEquals(Operation uMethod, Method jMethod) {
 		if (uMethod.abstract) {
