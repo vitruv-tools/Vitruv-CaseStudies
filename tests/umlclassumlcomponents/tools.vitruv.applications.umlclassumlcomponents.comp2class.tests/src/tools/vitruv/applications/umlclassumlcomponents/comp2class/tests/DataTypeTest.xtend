@@ -112,6 +112,5 @@ class DataTypeTest extends AbstractComp2ClassTest{
 		dataType.name = name
 		rootElement.packagedElements += dataType
 		return dataType
-	}
-		
+	}		
 }

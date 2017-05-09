@@ -2,7 +2,7 @@ package mir.reactions.reactionsUmlToUml.class2comp;
 
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.PrimitiveType;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -14,18 +14,18 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class CreatedPrimitiveDataTypeReaction extends AbstractReactionRealization {
-  public CreatedPrimitiveDataTypeReaction(final UserInteracting userInteracting) {
+class AddedDataClassTypeOperationReaction extends AbstractReactionRealization {
+  public AddedDataClassTypeOperationReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Package, PrimitiveType> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, PrimitiveType>)change).getInsertChange();
-    org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Class, Operation> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Operation>)change).getInsertChange();
+    org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    PrimitiveType newValue = typedChange.getNewValue();
+    Operation newValue = typedChange.getNewValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToUml.class2comp.CreatedPrimitiveDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.CreatedPrimitiveDataTypeReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.AddedDataClassTypeOperationReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.AddedDataClassTypeOperationReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -34,14 +34,14 @@ class CreatedPrimitiveDataTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Package, PrimitiveType> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, PrimitiveType>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Package)) {
+    InsertEReference<org.eclipse.uml2.uml.Class, Operation> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Operation>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("ownedOperation")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof PrimitiveType)) {
+    if (!(relevantChange.getNewValue() instanceof Operation)) {
     	return false;
     }
     return true;
@@ -65,8 +65,8 @@ class CreatedPrimitiveDataTypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final PrimitiveType newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createPrimitiveDataTypeSelfCorrespondence(newValue);
+    public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Operation newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.addDataTypeOperation(affectedEObject, newValue);
     }
   }
 }

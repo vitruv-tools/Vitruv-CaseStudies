@@ -14,8 +14,8 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class DataTypeClassAttributeDeletedReaction extends AbstractReactionRealization {
-  public DataTypeClassAttributeDeletedReaction(final UserInteracting userInteracting) {
+class DeletedDataTypeClassPropertyReaction extends AbstractReactionRealization {
+  public DeletedDataTypeClassPropertyReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -25,7 +25,7 @@ class DataTypeClassAttributeDeletedReaction extends AbstractReactionRealization 
     EReference affectedFeature = typedChange.getAffectedFeature();
     Property oldValue = typedChange.getOldValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToUml.class2comp.DataTypeClassAttributeDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.DataTypeClassAttributeDeletedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.DeletedDataTypeClassPropertyReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.DeletedDataTypeClassPropertyReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
@@ -66,7 +66,7 @@ class DataTypeClassAttributeDeletedReaction extends AbstractReactionRealization 
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Property oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.deleteCompDataTypeAttribute(oldValue);
+      _routinesFacade.deleteCompDataTypeProperty(oldValue);
     }
   }
 }

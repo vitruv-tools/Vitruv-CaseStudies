@@ -78,7 +78,7 @@ class CreatedDataTypeReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createDataType(newValue);
+      _routinesFacade.createDataTypeSelfCorrespondence(newValue);
     }
   }
 }

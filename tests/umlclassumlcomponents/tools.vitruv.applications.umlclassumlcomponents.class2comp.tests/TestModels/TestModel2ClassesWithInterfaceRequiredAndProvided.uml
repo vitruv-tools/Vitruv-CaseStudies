@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_aOxssBKDEeeRM-mACfMeBg" name="RootElement">
+  <packagedElement xmi:type="uml:Package" xmi:id="_3SusADKsEeeX2foC8oNHBg" name="Test Class Package 1">
+    <packagedElement xmi:type="uml:Class" xmi:id="_3SusATKsEeeX2foC8oNHBg" name="Test Class 1">
+      <interfaceRealization xmi:id="_HM178DT1EeekEqyZPUjRdQ" name="Interface Realization 1" client="_3SusATKsEeeX2foC8oNHBg" supplier="_GWh_ADT1EeekEqyZPUjRdQ" contract="_GWh_ADT1EeekEqyZPUjRdQ"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_GWh_ADT1EeekEqyZPUjRdQ" name="Test Interface"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_3SwhMDKsEeeX2foC8oNHBg" name="Test Class 2 Package">
+    <packagedElement xmi:type="uml:Class" xmi:id="_3SwhMTKsEeeX2foC8oNHBg" name="Test Class 2">
+      <interfaceRealization xmi:id="_WtXtwDT5EeekEqyZPUjRdQ" name="Interface Realization 2" client="_3SwhMTKsEeeX2foC8oNHBg" supplier="_GWh_ADT1EeekEqyZPUjRdQ" contract="_GWh_ADT1EeekEqyZPUjRdQ"/>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>

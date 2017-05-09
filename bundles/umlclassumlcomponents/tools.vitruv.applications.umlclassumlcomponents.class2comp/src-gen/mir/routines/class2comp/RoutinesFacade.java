@@ -7,6 +7,7 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
@@ -73,8 +74,20 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void createPrimitiveDataTypeSelfCorrespondence(final PrimitiveType classType) {
+    mir.routines.class2comp.CreatePrimitiveDataTypeSelfCorrespondenceRoutine effect = new mir.routines.class2comp.CreatePrimitiveDataTypeSelfCorrespondenceRoutine(this.executionState, calledBy,
+    	classType);
+    effect.applyRoutine();
+  }
+  
   public void createPrimitiveDataType(final PrimitiveType classType) {
     mir.routines.class2comp.CreatePrimitiveDataTypeRoutine effect = new mir.routines.class2comp.CreatePrimitiveDataTypeRoutine(this.executionState, calledBy,
+    	classType);
+    effect.applyRoutine();
+  }
+  
+  public void createDataTypeSelfCorrespondence(final DataType classType) {
+    mir.routines.class2comp.CreateDataTypeSelfCorrespondenceRoutine effect = new mir.routines.class2comp.CreateDataTypeSelfCorrespondenceRoutine(this.executionState, calledBy,
     	classType);
     effect.applyRoutine();
   }
@@ -85,27 +98,45 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createCompDataTypeAttribute(final org.eclipse.uml2.uml.Class umlClass, final Property classAttribute) {
-    mir.routines.class2comp.CreateCompDataTypeAttributeRoutine effect = new mir.routines.class2comp.CreateCompDataTypeAttributeRoutine(this.executionState, calledBy,
-    	umlClass, classAttribute);
+  public void addDataTypeProperty(final org.eclipse.uml2.uml.Class dataTypeClass, final Property classProperty) {
+    mir.routines.class2comp.AddDataTypePropertyRoutine effect = new mir.routines.class2comp.AddDataTypePropertyRoutine(this.executionState, calledBy,
+    	dataTypeClass, classProperty);
     effect.applyRoutine();
   }
   
-  public void renameCompDataTypeAttribute(final Property classAttribute) {
-    mir.routines.class2comp.RenameCompDataTypeAttributeRoutine effect = new mir.routines.class2comp.RenameCompDataTypeAttributeRoutine(this.executionState, calledBy,
-    	classAttribute);
+  public void changeDataTypeProperty(final Property classProperty) {
+    mir.routines.class2comp.ChangeDataTypePropertyRoutine effect = new mir.routines.class2comp.ChangeDataTypePropertyRoutine(this.executionState, calledBy,
+    	classProperty);
     effect.applyRoutine();
   }
   
-  public void deleteCompDataTypeAttribute(final Property classAttribute) {
-    mir.routines.class2comp.DeleteCompDataTypeAttributeRoutine effect = new mir.routines.class2comp.DeleteCompDataTypeAttributeRoutine(this.executionState, calledBy,
-    	classAttribute);
+  public void deleteCompDataTypeProperty(final Property classProperty) {
+    mir.routines.class2comp.DeleteCompDataTypePropertyRoutine effect = new mir.routines.class2comp.DeleteCompDataTypePropertyRoutine(this.executionState, calledBy,
+    	classProperty);
     effect.applyRoutine();
   }
   
-  public void changeAttributeType(final Property classProperty, final DataType classType) {
-    mir.routines.class2comp.ChangeAttributeTypeRoutine effect = new mir.routines.class2comp.ChangeAttributeTypeRoutine(this.executionState, calledBy,
+  public void changeDataTypeAttributeType(final Property classProperty, final DataType classType) {
+    mir.routines.class2comp.ChangeDataTypeAttributeTypeRoutine effect = new mir.routines.class2comp.ChangeDataTypeAttributeTypeRoutine(this.executionState, calledBy,
     	classProperty, classType);
+    effect.applyRoutine();
+  }
+  
+  public void addDataTypeOperation(final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
+    mir.routines.class2comp.AddDataTypeOperationRoutine effect = new mir.routines.class2comp.AddDataTypeOperationRoutine(this.executionState, calledBy,
+    	dataTypeClass, classOperation);
+    effect.applyRoutine();
+  }
+  
+  public void changeDataTypeOperation(final Operation classOperation) {
+    mir.routines.class2comp.ChangeDataTypeOperationRoutine effect = new mir.routines.class2comp.ChangeDataTypeOperationRoutine(this.executionState, calledBy,
+    	classOperation);
+    effect.applyRoutine();
+  }
+  
+  public void deleteCompDataTypeOperation(final Operation classOperation) {
+    mir.routines.class2comp.DeleteCompDataTypeOperationRoutine effect = new mir.routines.class2comp.DeleteCompDataTypeOperationRoutine(this.executionState, calledBy,
+    	classOperation);
     effect.applyRoutine();
   }
   

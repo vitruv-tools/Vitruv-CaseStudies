@@ -11,10 +11,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class ChangeAttributeTypeRoutine extends AbstractRepairRoutineRealization {
+public class ChangeDataTypeAttributeTypeRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private ChangeAttributeTypeRoutine.ActionUserExecution userExecution;
+  private ChangeDataTypeAttributeTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
@@ -42,9 +42,9 @@ public class ChangeAttributeTypeRoutine extends AbstractRepairRoutineRealization
     }
   }
   
-  public ChangeAttributeTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property classProperty, final DataType classType) {
+  public ChangeDataTypeAttributeTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property classProperty, final DataType classType) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.class2comp.ChangeAttributeTypeRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.class2comp.ChangeDataTypeAttributeTypeRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.classProperty = classProperty;this.classType = classType;
   }
@@ -54,7 +54,7 @@ public class ChangeAttributeTypeRoutine extends AbstractRepairRoutineRealization
   private DataType classType;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine ChangeAttributeTypeRoutine with input:");
+    getLogger().debug("Called routine ChangeDataTypeAttributeTypeRoutine with input:");
     getLogger().debug("   Property: " + this.classProperty);
     getLogger().debug("   DataType: " + this.classType);
     

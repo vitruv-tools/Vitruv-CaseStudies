@@ -15,8 +15,8 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class ChangedAttributeTypeReaction extends AbstractReactionRealization {
-  public ChangedAttributeTypeReaction(final UserInteracting userInteracting) {
+class ChangedDataTypeClassAttributeTypeReaction extends AbstractReactionRealization {
+  public ChangedDataTypeClassAttributeTypeReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -27,7 +27,7 @@ class ChangedAttributeTypeReaction extends AbstractReactionRealization {
     Type oldValue = typedChange.getOldValue();
     Type newValue = typedChange.getNewValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToUml.class2comp.ChangedAttributeTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.ChangedAttributeTypeReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.ChangedDataTypeClassAttributeTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.ChangedDataTypeClassAttributeTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -83,7 +83,7 @@ class ChangedAttributeTypeReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Property affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeAttributeType(affectedEObject, ((DataType) newValue));
+      _routinesFacade.changeDataTypeAttributeType(affectedEObject, ((DataType) newValue));
     }
   }
 }

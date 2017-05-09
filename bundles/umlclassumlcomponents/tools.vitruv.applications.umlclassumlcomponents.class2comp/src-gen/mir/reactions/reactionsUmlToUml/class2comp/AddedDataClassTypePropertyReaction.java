@@ -14,8 +14,8 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class DataTypeClassAttributeCreatedReaction extends AbstractReactionRealization {
-  public DataTypeClassAttributeCreatedReaction(final UserInteracting userInteracting) {
+class AddedDataClassTypePropertyReaction extends AbstractReactionRealization {
+  public AddedDataClassTypePropertyReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -25,7 +25,7 @@ class DataTypeClassAttributeCreatedReaction extends AbstractReactionRealization 
     EReference affectedFeature = typedChange.getAffectedFeature();
     Property newValue = typedChange.getNewValue();
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToUml.class2comp.DataTypeClassAttributeCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.DataTypeClassAttributeCreatedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToUml.class2comp.AddedDataClassTypePropertyReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.AddedDataClassTypePropertyReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -66,7 +66,7 @@ class DataTypeClassAttributeCreatedReaction extends AbstractReactionRealization 
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Property newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createCompDataTypeAttribute(affectedEObject, newValue);
+      _routinesFacade.addDataTypeProperty(affectedEObject, newValue);
     }
   }
 }

@@ -60,34 +60,6 @@ abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
 		FOLDER_NAME + modelName + "." + MODEL_FILE_EXTENSION
 	}	
 	
-	//TODO: The following is a test to traverse containing packages in createAndSynchronizeModel() and add them too:  
-//	
-//	private def String getPlatformModelPath(String modelPathWithinProject) {
-//		return this.getCurrentTestProject().getName() + "/" + modelPathWithinProject
-//	}
-//	
-//	private def VURI getModelVuri(String modelPathWithinProject) {
-//		return VURI.getInstance(getPlatformModelPath(modelPathWithinProject));
-//	}
-//	
-//	private def void startRecordingChanges(Resource resource) {
-//		val VURI vuri = VURI.getInstance(resource)
-//		this.changeRecorder.beginRecording(vuri, Collections.singleton(resource))
-//	}
-//	
-//	override protected void createAndSynchronizeModel(String modelPathInProject, EObject rootElement) throws IOException {
-//		if (modelPathInProject.isEmpty || rootElement === null) {
-//			throw new IllegalArgumentException();
-//		}
-//		val resourceSet = new ResourceSetImpl();
-//		val resource = resourceSet.createResource(getModelVuri(modelPathInProject).getEMFUri())
-//		this.startRecordingChanges(resource)
-//		resource.contents.add(rootElement)
-//		for (Package p : (rootElement as Package).packagedElements.filter(Package)) {
-//			resource.contents.add(p)
-//		}		
-//		saveAndSynchronizeChanges(rootElement)
-//	}
 
 	/***************
 	*Assert Helper:*

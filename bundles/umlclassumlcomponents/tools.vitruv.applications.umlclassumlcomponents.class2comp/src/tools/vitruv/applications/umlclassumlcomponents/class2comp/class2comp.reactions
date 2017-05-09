@@ -202,12 +202,18 @@ routine deleteComponent(umlclass::Class umlClass) {
 *Datatypes:*
 ************/
 
-//TODO This is currently only used for self references, as we are using one singular meta model
 reaction CreatedPrimitiveDataType {
 	after element umlclass::PrimitiveType created and inserted in umlclass::Package[packagedElement]
-	call createPrimitiveDataType(newValue)
+	//call createPrimitiveDataType(newValue) //TODO This is currently not needed, as we are using one singular meta model
+	call createPrimitiveDataTypeSelfCorrespondence(newValue)
+}
+routine createPrimitiveDataTypeSelfCorrespondence(umlclass::PrimitiveType classType) {
+	action {
+		add correspondence between classType and classType		
+	}
 }
 
+//TODO This is currently only used for self references, as we are using one singular meta model
 routine createPrimitiveDataType(umlclass::PrimitiveType classType) {
 	action {
 		val compType = create umlcomp::PrimitiveType and initialize {
@@ -220,13 +226,20 @@ routine createPrimitiveDataType(umlclass::PrimitiveType classType) {
 	}
 }
 
-//TODO This is currently only used for self references, as we are using one singular meta model
 reaction CreatedDataType {
 	after element umlclass::DataType created and inserted in umlclass::Package[packagedElement] 
 		with !(newValue instanceof PrimitiveType)
-	call createDataType(newValue)
+	//call createDataType(newValue) //TODO This is currently not needed, as we are using one singular meta model
+	call createDataTypeSelfCorrespondence(newValue)
 }
 
+routine createDataTypeSelfCorrespondence(umlclass::DataType classType) {
+	action {
+		add correspondence between classType and classType
+	}
+}
+
+//TODO This is currently only used for self references, as we are using one singular meta model
 routine createDataType(umlclass::DataType classType) {
 	action {
 		val compType = create umlcomp::DataType and initialize {
@@ -239,74 +252,71 @@ routine createDataType(umlclass::DataType classType) {
 	}
 }
 
-reaction DataTypeClassAttributeCreated {
+reaction AddedDataClassTypeProperty {
     after element umlclass::Property created and inserted in umlclass::Class[ownedAttribute]
     call {
-        createCompDataTypeAttribute(affectedEObject, newValue)
+        addDataTypeProperty(affectedEObject, newValue)
     }
 }
 
-routine createCompDataTypeAttribute(umlclass::Class umlClass, umlclass::Property classAttribute) {
+routine addDataTypeProperty(umlclass::Class dataTypeClass, umlclass::Property classProperty) {
     match {
-        val compDataType = retrieve umlcomp::DataType corresponding to umlClass tagged with DATA_TYPE_REPRESENTATION_TAG
+        val compDataType = retrieve umlcomp::DataType corresponding to dataTypeClass tagged with DATA_TYPE_REPRESENTATION_TAG
     }
     action {
-        val compAttribute = create umlcomp::Property and initialize {
-            if (classAttribute.name === null) {
-                compAttribute.name = "DefaultAttributeName"
-            } else {
-                compAttribute.name = classAttribute.name
-            }
-            compAttribute.datatype = classAttribute.datatype
+        val compProperty = create umlcomp::Property and initialize {
+            compProperty.name = classProperty.name
+            compProperty.datatype = classProperty.datatype
+            compProperty.visibility = classProperty.visibility
         }
         update compDataType {
-          compDataType.members += compAttribute
+          compDataType.ownedAttributes += compProperty
         }
-        add correspondence between classAttribute and compAttribute
+        add correspondence between classProperty and compProperty
     }
 }
 
 
-reaction DataTypeClassAttributeRenamed {
+reaction ChangedDataTypeClassProperty {
     after attribute replaced at umlclass::Property[name]
-    call renameCompDataTypeAttribute(affectedEObject)
+    call changeDataTypeProperty(affectedEObject)
 }
 
-routine renameCompDataTypeAttribute(umlclass::Property classAttribute) {
+routine changeDataTypeProperty(umlclass::Property classProperty) {
     match {
-        val compAttribute = retrieve umlcomp::Property corresponding to classAttribute tagged with DATA_TYPE_PROPERTY
+        val compProperty = retrieve umlcomp::Property corresponding to classProperty tagged with DATA_TYPE_PROPERTY
     }
     action {
-        update compAttribute {
-            compAttribute.name = classAttribute.name
+        update compProperty {
+            compProperty.name = classProperty.name
         }
     }
 }
 
 
-reaction DataTypeClassAttributeDeleted {
+reaction DeletedDataTypeClassProperty {
     after element umlclass::Property deleted and removed from umlclass::Class[ownedAttribute]
-    call deleteCompDataTypeAttribute(oldValue)
+    call deleteCompDataTypeProperty(oldValue)
 }
 
-routine deleteCompDataTypeAttribute(umlclass::Property classAttribute) {
+routine deleteCompDataTypeProperty(umlclass::Property classProperty) {
     match {
-        val compAttribute = retrieve umlcomp::Property corresponding to classAttribute tagged with DATA_TYPE_PROPERTY
+        val compProperty = retrieve umlcomp::Property corresponding to classProperty tagged with DATA_TYPE_PROPERTY
     }
     action {
-        delete compAttribute
-        remove correspondence between classAttribute and compAttribute
+        delete compProperty
+        remove correspondence between classProperty and compProperty
     }
 }
 
 
-reaction ChangedAttributeType {
+reaction ChangedDataTypeClassAttributeType {
 	after element replaced at umlclass::Property[type] 
 		with (newValue instanceof DataType)
-	call changeAttributeType(affectedEObject, (newValue as DataType))
+	call changeDataTypeAttributeType(affectedEObject, (newValue as DataType))
 }
 
-routine changeAttributeType(umlclass::Property classProperty, umlclass::DataType classType) {
+routine changeDataTypeAttributeType(umlclass::Property classProperty, umlclass::DataType classType) {
 	match {
 		val compAttribute = retrieve umlclass::Property corresponding to classProperty tagged with DATA_TYPE_PROPERTY
 		val compType = retrieve umlcomp::DataType corresponding to classType
@@ -318,6 +328,63 @@ routine changeAttributeType(umlclass::Property classProperty, umlclass::DataType
 	}
 }
 
+
+reaction AddedDataClassTypeOperation {
+    after element umlclass::Operation created and inserted in umlclass::Class[ownedOperation]
+    call {
+        addDataTypeOperation(affectedEObject, newValue)
+    }
+}
+
+routine addDataTypeOperation(umlclass::Class dataTypeClass, umlclass::Operation classOperation) {
+    match {
+        val compDataType = retrieve umlcomp::DataType corresponding to dataTypeClass tagged with DATA_TYPE_REPRESENTATION_TAG
+    }
+    action {
+        val compOperation = create umlcomp::Operation and initialize {
+            compOperation.name = classOperation.name
+            compOperation.datatype = classOperation.datatype
+            compOperation.visibility = classOperation.visibility
+        }
+        update compDataType {
+          compDataType.ownedOperations += compOperation
+        }
+        add correspondence between classOperation and compOperation
+    }
+}
+
+
+reaction ChangedDataTypeClassOperation {
+    after attribute replaced at umlclass::Operation[name]
+    call changeDataTypeOperation(affectedEObject)
+}
+
+routine changeDataTypeOperation(umlclass::Operation classOperation) {
+    match {
+        val compOperation = retrieve umlcomp::Operation corresponding to classOperation tagged with DATA_TYPE_PROPERTY
+    }
+    action {
+        update compOperation {
+            compOperation.name = classOperation.name
+        }
+    }
+}
+
+
+reaction DeletedDataTypeClassOperation {
+    after element umlclass::Property deleted and removed from umlclass::Class[ownedAttribute]
+    call deleteCompDataTypeProperty(oldValue)
+}
+
+routine deleteCompDataTypeOperation(umlclass::Operation classOperation) {
+    match {
+        val compOperation = retrieve umlcomp::Operation corresponding to classOperation tagged with DATA_TYPE_PROPERTY
+    }
+    action {
+        delete compOperation
+        remove correspondence between classOperation and compOperation
+    }
+}
 
 /**********
 *Packages:*
