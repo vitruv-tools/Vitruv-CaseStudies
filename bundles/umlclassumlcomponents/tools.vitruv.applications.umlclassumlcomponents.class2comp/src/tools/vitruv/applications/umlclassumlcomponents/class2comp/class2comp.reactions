@@ -3,7 +3,6 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.DataType
-import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Package
@@ -11,6 +10,7 @@ import org.eclipse.uml2.uml.PrimitiveType
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import static extension tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.eclipse.uml2.uml.Usage
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlcomp
@@ -419,7 +419,7 @@ routine routinePackageRenamed(umlclass::Package classPackage, String newName, St
 			var Component comp = if(!comps.isEmpty) comps.get(0) else null		
 			if ((oldName == CLASS_DATATYPES_PACKAGE_NAME) || (comp !== null) || (newName == CLASS_DATATYPES_PACKAGE_NAME)) {
 				//Revert rename currently not possible
-				//Add a rollback once Vitruvius can handle it
+				//TODO: Add a rollback once Vitruvius can handle it
 			}
 			//Therefore use temporary hack:
 			if (oldName == CLASS_DATATYPES_PACKAGE_NAME)
@@ -449,7 +449,7 @@ routine routinePackageDeleted(umlclass::Package classPackage, umlclass::Model cl
 			var Component comp = if(!comps.isEmpty) comps.get(0) else null		
 			if ((classPackage.name == CLASS_DATATYPES_PACKAGE_NAME) || (comp !== null)) {
 				//Revert remove currently not possible
-				//Add a rollback once Vitruvius can handle it
+				//TODO: Add a rollback once Vitruvius can handle it
 			}			
 		}
 	}
@@ -495,17 +495,38 @@ reaction InterfaceRealized {
 			
 			//Act only when the realization is cross packages:
 			if (classPackage != interfacePackage) {
-				//Create a corresponding Interface:
-				createCompInterface(classInterface)
-				
-				//Create a Usage realtion between the Component of the class and the Interface:
-				createRequiredRole(classIFRealization, classInterface, classPackage)
-				
-				//Provide the affected Interface in the Component of its own Package:
-				createProvidedRole(classIFRealization, classInterface, interfacePackage)				
+				createRequiredAndProvidedRole(classInterface, classIFRealization, interfacePackage, classPackage)
 			} 			
 		}
 	}
+}
+
+routine createRequiredAndProvidedRole(umlclass::Interface classInterface, umlclass::InterfaceRealization classIFRealizationReq, 
+		umlclass::Package interfacePackage, umlclass::Package classPackage) {
+	action {
+		call {
+			//Act only if a Class of classPackage realized the Interface
+			//Retrieve the InterfaceRealization
+
+			val classesWithIFRealization = interfacePackage.packagedElements.filter(Class).filter[e | !e.interfaceRealizations.isEmpty]
+			val iFRealizations = classesWithIFRealization.map[e | e.interfaceRealizations].flatten()
+			val matchedIFRealizations = iFRealizations.filter[e | e.suppliers.contains(classInterface)]
+
+
+			val classIFRealizationProviding = if(!matchedIFRealizations.isEmpty) matchedIFRealizations.get(0) else null  		
+			if (classIFRealizationProviding !== null) {
+				//Create a corresponding Interface:
+				createCompInterface(classInterface)
+				
+				//Create a Usage relation between the Component of the class and the Interface:
+				createRequiredRole(classIFRealizationReq, classInterface, classPackage)
+				
+				//Provide the affected Interface in the Component of its own Package:
+				createProvidedRole(classIFRealizationProviding, classInterface, interfacePackage)					
+			}	
+		}
+	}
+	
 }
 
 routine createCompInterface(umlclass::Interface classInterface) {
@@ -543,7 +564,7 @@ routine createProvidedRole(umlclass::InterfaceRealization classIFRealization, um
 routine createInterfaceRealization(umlclass::InterfaceRealization classIFRealization, umlcomp::Component umlComp, umlcomp::Interface compInterface) {
 	action {
 		val compIFRealization = create umlcomp::InterfaceRealization and initialize {
-			compIFRealization.name = classIFRealization.name + COMP_IF_REALIZATION_SUFFIX
+			compIFRealization.name = classIFRealization.name + COMP_IFR_AND_USAGE_SUFFIX
 			compIFRealization.clients += umlComp
 			compIFRealization.contract = compInterface
 			compIFRealization.suppliers += compInterface
@@ -575,7 +596,7 @@ routine createRequiredRole(umlclass::InterfaceRealization classIFRealization, um
 routine createUsage(umlclass::InterfaceRealization classIFRealization, umlcomp::Component umlComp, umlcomp::Interface compInterface) {
 	action {
 		val usage = create umlcomp::Usage and initialize {
-			usage.name = classIFRealization.name
+			usage.name = classIFRealization.name + COMP_IFR_AND_USAGE_SUFFIX
 			usage.clients += umlComp
 			usage.suppliers += compInterface
 		}
@@ -587,18 +608,56 @@ routine createUsage(umlclass::InterfaceRealization classIFRealization, umlcomp::
 }
 
 
-//TODO Implement various delete reactions
-reaction InterfaceDeleted {
-	after element removed from umlclass::Class[interfaceRealization]
-	call deleteInterfaceRealization(oldValue)
+reaction RemovedInterface {
+	after element umlclass::Interface deleted and removed from umlclass::Package[packagedElement]
+	call removeInterface(oldValue)
 }
-routine deleteInterfaceRealization(umlclass::InterfaceRealization classInterface) {
+
+routine removeInterface(umlclass::Interface classInterface) {
 	match {
-		val interfaceRealization = retrieve umlcomp::InterfaceRealization corresponding to classInterface
+		val compInterface = retrieve umlcomp::Interface corresponding to classInterface
 	}
-	action {
-		delete interfaceRealization
+	action {		
+		call {
+			//Retrieve all Components that use this Interface
+			val compModel = compInterface.model
+			val compsWithUsage = compModel.packagedElements.filter(Component).filter[e | !e.packagedElements.filter(Usage).isEmpty]
+			val compsWithMatchingUsage = compsWithUsage.filter[ e | e.packagedElements.filter(Usage).get(0).suppliers.contains(compInterface)]
+			
+			//Retrieve all matched Usages and delete them
+			val matchingUsages = compsWithMatchingUsage.map[e | e.packagedElements.filter(Usage).get(0)]
+			for (Usage compUsage : matchingUsages) {
+				compUsage.destroy
+			}
+		}
+		delete compInterface
 	}
 }
 
+
+reaction RemovedInterfaceRealization {
+	after element umlclass::InterfaceRealization deleted and removed from umlclass::Class[interfaceRealization]
+	call {
+		removeInterfaceRealization(oldValue)
+		removeUsage(oldValue)
+	}
+}
+
+routine removeInterfaceRealization(umlclass::InterfaceRealization classIFRealization) {
+	match {
+		val compIFRealization = retrieve umlcomp::InterfaceRealization corresponding to classIFRealization
+	}
+	action {
+		delete compIFRealization
+	}
+}
+
+routine removeUsage(umlclass::InterfaceRealization classIFRealization) {
+	match {
+		val compUsage = retrieve umlcomp::Usage corresponding to classIFRealization
+	}
+	action {
+		delete compUsage
+	}
+}
 

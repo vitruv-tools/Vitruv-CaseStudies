@@ -11,6 +11,7 @@ import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.Usage;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
+import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -40,7 +41,9 @@ public class CreateUsageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUsageElement(final InterfaceRealization classIFRealization, final Component umlComp, final Interface compInterface, final Usage usage) {
-      usage.setName(classIFRealization.getName());
+      String _name = classIFRealization.getName();
+      String _plus = (_name + SharedUtil.COMP_IFR_AND_USAGE_SUFFIX);
+      usage.setName(_plus);
       EList<NamedElement> _clients = usage.getClients();
       _clients.add(umlComp);
       EList<NamedElement> _suppliers = usage.getSuppliers();

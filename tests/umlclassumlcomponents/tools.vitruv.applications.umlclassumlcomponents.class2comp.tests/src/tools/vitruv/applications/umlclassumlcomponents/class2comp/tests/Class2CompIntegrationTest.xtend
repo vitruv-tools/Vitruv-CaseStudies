@@ -3,6 +3,7 @@ package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 import java.util.Collections
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.internal.impl.ClassImpl
 import org.eclipse.uml2.uml.internal.impl.ComponentImpl
 import org.eclipse.uml2.uml.internal.impl.DataTypeImpl
@@ -48,7 +49,7 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 		val umlModel = integrationTest("TestModel2Classes.uml")
 		
 		//Validate expected contents:
-		val modelElements = umlModel.packagedElements
+		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
 		assertCountOfTypeInList(modelElements, PackageImpl, 2) //There should be 2 original Packages
 		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 1) //Class Package 1 should have 1 original Class
 		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 2 should have 1 original Class
@@ -57,23 +58,14 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 	
 	@Test
 	def void integrationTestWith2ClasssesWithoutPackage() {
-		//Decide to create an empty Package:
-		queueUserInteractionSelections(0, 0)
-		//Decide to create a Component for the Class:
-		queueUserInteractionSelections(0)
-		//Decide to create an empty Package:
-		queueUserInteractionSelections(0, 0)
-		//Decide to create a Component for the Class:
-		queueUserInteractionSelections(0)
-		
+		//Temporary test to check created changes while debugging
 		val umlModel = integrationTest("TestModel2ClassesWithoutPackage.uml")
 		
 		//Validate expected contents:
-		val modelElements = umlModel.packagedElements
-		assertCountOfTypeInList(modelElements, PackageImpl, 2) //There should be 2 original Packages
-		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 1) //Class Package 1 should have 1 original Class
-		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 2 should have 1 original Class
-		assertCountOfTypeInList(modelElements, ComponentImpl, 2) //There should be 2 new Components
+		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
+		assertCountOfTypeInList(modelElements, PackageImpl, 0) //There should be no original Packages
+		assertCountOfTypeInList(modelElements, ClassImpl, 2) //There should be 2 original Classes
+		assertCountOfTypeInList(modelElements, ComponentImpl, 0) //There should be no new Components
 	}
 	
 
@@ -90,7 +82,7 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 		val umlModel = integrationTest("TestModel1Class1Datatype.uml")
 		
 		//Validate expected contents:
-		val modelElements = umlModel.packagedElements
+		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
 		assertCountOfTypeInList(modelElements, PackageImpl, 2) //There should be 2 original Packages
 		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 1) //Class DataTypes Package should have 1 Class
 		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 1 should have 1 Class

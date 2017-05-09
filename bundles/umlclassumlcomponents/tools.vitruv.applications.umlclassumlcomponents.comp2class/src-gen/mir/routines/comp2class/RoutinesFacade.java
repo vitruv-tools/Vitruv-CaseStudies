@@ -8,6 +8,7 @@ import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Usage;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -48,6 +49,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void changeCorrespondingVisibility(final NamedElement compElement) {
+    mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine effect = new mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine(this.executionState, calledBy,
+    	compElement);
+    effect.applyRoutine();
+  }
+  
   public void createClassWithPackage(final Component umlComp) {
     mir.routines.comp2class.CreateClassWithPackageRoutine effect = new mir.routines.comp2class.CreateClassWithPackageRoutine(this.executionState, calledBy,
     	umlComp);
@@ -68,6 +75,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   
   public void createDataTypeForDataType(final DataType compType) {
     mir.routines.comp2class.CreateDataTypeForDataTypeRoutine effect = new mir.routines.comp2class.CreateDataTypeForDataTypeRoutine(this.executionState, calledBy,
+    	compType);
+    effect.applyRoutine();
+  }
+  
+  public void createDataTypeSelfCorrespondence(final DataType compType) {
+    mir.routines.comp2class.CreateDataTypeSelfCorrespondenceRoutine effect = new mir.routines.comp2class.CreateDataTypeSelfCorrespondenceRoutine(this.executionState, calledBy,
     	compType);
     effect.applyRoutine();
   }
@@ -102,27 +115,33 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeCorrespondingVisibility(final NamedElement compElement) {
-    mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine effect = new mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine(this.executionState, calledBy,
-    	compElement);
-    effect.applyRoutine();
-  }
-  
   public void createClassInterface(final Interface compInterface, final Component umlComp) {
     mir.routines.comp2class.CreateClassInterfaceRoutine effect = new mir.routines.comp2class.CreateClassInterfaceRoutine(this.executionState, calledBy,
     	compInterface, umlComp);
     effect.applyRoutine();
   }
   
-  public void createClassInterfaceRealization(final NamedElement compIFRealization, final Component umlComp) {
+  public void createClassInterfaceRealization(final NamedElement iFRealizationOrUsage, final Component umlComp) {
     mir.routines.comp2class.CreateClassInterfaceRealizationRoutine effect = new mir.routines.comp2class.CreateClassInterfaceRealizationRoutine(this.executionState, calledBy,
-    	compIFRealization, umlComp);
+    	iFRealizationOrUsage, umlComp);
     effect.applyRoutine();
   }
   
-  public void addClassInterfaceRealizationToClass(final InterfaceRealization compIFRealization, final Interface compInterface, final Component umlComp) {
+  public void addClassInterfaceRealizationToClass(final NamedElement iFRealizationOrUsage, final Interface compInterface, final Component umlComp) {
     mir.routines.comp2class.AddClassInterfaceRealizationToClassRoutine effect = new mir.routines.comp2class.AddClassInterfaceRealizationToClassRoutine(this.executionState, calledBy,
-    	compIFRealization, compInterface, umlComp);
+    	iFRealizationOrUsage, compInterface, umlComp);
+    effect.applyRoutine();
+  }
+  
+  public void removeInterfaceRealizationForInterfaceRealization(final InterfaceRealization compIFRealization) {
+    mir.routines.comp2class.RemoveInterfaceRealizationForInterfaceRealizationRoutine effect = new mir.routines.comp2class.RemoveInterfaceRealizationForInterfaceRealizationRoutine(this.executionState, calledBy,
+    	compIFRealization);
+    effect.applyRoutine();
+  }
+  
+  public void removeInterfaceRealizationForUsage(final Usage compUsage) {
+    mir.routines.comp2class.RemoveInterfaceRealizationForUsageRoutine effect = new mir.routines.comp2class.RemoveInterfaceRealizationForUsageRoutine(this.executionState, calledBy,
+    	compUsage);
     effect.applyRoutine();
   }
 }

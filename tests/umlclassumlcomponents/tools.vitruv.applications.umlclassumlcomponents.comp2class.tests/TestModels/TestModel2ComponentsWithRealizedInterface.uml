@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_aOxssBKDEeeRM-mACfMeBg" name="RootElement">
+  <packagedElement xmi:type="uml:Component" xmi:id="_jDGGoB43Eeezno0W-Wdtew" name="Test Component">
+    <interfaceRealization xmi:id="_vpLkwDQtEeeb67niq0DAdw" name="Test InterfaceRealization" client="_jDGGoB43Eeezno0W-Wdtew" supplier="_-AK4cDQtEeeb67niq0DAdw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_KPp60B46EeepMOns3Tlm-Q" name="Test Component 2"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_-AK4cDQtEeeb67niq0DAdw" name="Test Interface"/>
+</uml:Model>

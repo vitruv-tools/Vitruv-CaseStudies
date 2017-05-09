@@ -36,7 +36,7 @@ public class CreateInterfaceRealizationRoutine extends AbstractRepairRoutineReal
     
     public void updateCompIFRealizationElement(final InterfaceRealization classIFRealization, final Component umlComp, final Interface compInterface, final InterfaceRealization compIFRealization) {
       String _name = classIFRealization.getName();
-      String _plus = (_name + SharedUtil.COMP_IF_REALIZATION_SUFFIX);
+      String _plus = (_name + SharedUtil.COMP_IFR_AND_USAGE_SUFFIX);
       compIFRealization.setName(_plus);
       EList<NamedElement> _clients = compIFRealization.getClients();
       _clients.add(umlComp);

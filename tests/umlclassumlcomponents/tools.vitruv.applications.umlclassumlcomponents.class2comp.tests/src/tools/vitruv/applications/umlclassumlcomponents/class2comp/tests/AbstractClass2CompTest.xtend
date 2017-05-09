@@ -1,6 +1,8 @@
 package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
@@ -10,19 +12,9 @@ import tools.vitruv.framework.domains.VitruvDomain
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
+import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
-import org.eclipse.uml2.uml.Class
-import org.eclipse.emf.ecore.resource.Resource
-import java.io.IOException
-import tools.vitruv.framework.util.datatypes.VURI
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import java.util.Collections
-import org.eclipse.uml2.uml.Component
-import org.eclipse.uml2.uml.Interface
-import org.eclipse.uml2.uml.InterfaceRealization
-import org.eclipse.uml2.uml.Usage
 
 abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
 

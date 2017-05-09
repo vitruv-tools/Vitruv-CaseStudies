@@ -39,6 +39,7 @@ public class AddClassDataTypePropertyRoutine extends AbstractRepairRoutineRealiz
     public void updateClassPropertyElement(final Property compProperty, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Property classProperty) {
       classProperty.setName(compProperty.getName());
       classProperty.setType(compProperty.getType());
+      classProperty.setVisibility(compProperty.getVisibility());
     }
     
     public EObject getElement2(final Property compProperty, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Property classProperty) {

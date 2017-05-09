@@ -81,9 +81,7 @@ class InterfaceRealizedReaction extends AbstractReactionRealization {
         final org.eclipse.uml2.uml.Package interfacePackage = classInterface.getPackage();
         boolean _notEquals = (!Objects.equal(classPackage, interfacePackage));
         if (_notEquals) {
-          _routinesFacade.createCompInterface(classInterface);
-          _routinesFacade.createRequiredRole(classIFRealization, classInterface, classPackage);
-          _routinesFacade.createProvidedRole(classIFRealization, classInterface, interfacePackage);
+          _routinesFacade.createRequiredAndProvidedRole(classInterface, classIFRealization, interfacePackage, classPackage);
         }
       }
     }

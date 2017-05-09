@@ -55,6 +55,7 @@ public class AddDataTypeOperationRoutine extends AbstractRepairRoutineRealizatio
     public void updateClassOperationElement(final Operation compOperation, final DataType compDataType, final org.eclipse.uml2.uml.Class dataTypeClass, final Operation classOperation) {
       classOperation.setName(compOperation.getName());
       classOperation.setType(compOperation.getType());
+      classOperation.setVisibility(compOperation.getVisibility());
     }
   }
   

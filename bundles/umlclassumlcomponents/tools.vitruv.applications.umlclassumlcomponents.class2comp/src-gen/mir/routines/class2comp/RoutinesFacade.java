@@ -151,6 +151,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void createRequiredAndProvidedRole(final Interface classInterface, final InterfaceRealization classIFRealizationReq, final org.eclipse.uml2.uml.Package interfacePackage, final org.eclipse.uml2.uml.Package classPackage) {
+    mir.routines.class2comp.CreateRequiredAndProvidedRoleRoutine effect = new mir.routines.class2comp.CreateRequiredAndProvidedRoleRoutine(this.executionState, calledBy,
+    	classInterface, classIFRealizationReq, interfacePackage, classPackage);
+    effect.applyRoutine();
+  }
+  
   public void createCompInterface(final Interface classInterface) {
     mir.routines.class2comp.CreateCompInterfaceRoutine effect = new mir.routines.class2comp.CreateCompInterfaceRoutine(this.executionState, calledBy,
     	classInterface);
@@ -181,9 +187,21 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void deleteInterfaceRealization(final InterfaceRealization classInterface) {
-    mir.routines.class2comp.DeleteInterfaceRealizationRoutine effect = new mir.routines.class2comp.DeleteInterfaceRealizationRoutine(this.executionState, calledBy,
+  public void removeInterface(final Interface classInterface) {
+    mir.routines.class2comp.RemoveInterfaceRoutine effect = new mir.routines.class2comp.RemoveInterfaceRoutine(this.executionState, calledBy,
     	classInterface);
+    effect.applyRoutine();
+  }
+  
+  public void removeInterfaceRealization(final InterfaceRealization classIFRealization) {
+    mir.routines.class2comp.RemoveInterfaceRealizationRoutine effect = new mir.routines.class2comp.RemoveInterfaceRealizationRoutine(this.executionState, calledBy,
+    	classIFRealization);
+    effect.applyRoutine();
+  }
+  
+  public void removeUsage(final InterfaceRealization classIFRealization) {
+    mir.routines.class2comp.RemoveUsageRoutine effect = new mir.routines.class2comp.RemoveUsageRoutine(this.executionState, calledBy,
+    	classIFRealization);
     effect.applyRoutine();
   }
 }
