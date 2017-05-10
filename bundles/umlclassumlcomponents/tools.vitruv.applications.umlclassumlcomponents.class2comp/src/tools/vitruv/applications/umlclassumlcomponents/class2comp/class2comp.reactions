@@ -442,7 +442,7 @@ routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlCo
 }
 
 
-reaction MoveClassToDifferentPackage {
+reaction MoveClassToDifferentPackage { //TODO Finish Implementation
 	after element replaced at umlclass::Class[package]
 	call movedClassToDifferentPackage(affectedEObject, oldValue, newValue)
 }

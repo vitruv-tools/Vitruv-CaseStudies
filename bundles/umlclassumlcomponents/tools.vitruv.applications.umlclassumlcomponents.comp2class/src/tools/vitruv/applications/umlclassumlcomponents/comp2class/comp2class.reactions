@@ -474,6 +474,3 @@ routine removeInterfaceRealizationForUsage(umlcomp::Usage compUsage) {
 		delete classIFRealization
 	}
 }
-
-//TODO Interface removed reaction
-

@@ -64,7 +64,7 @@ class PackageTest extends AbstractClass2CompTest{
 	
 //	@Test
 //	public def void testCreatePackageWithLinkSuccess() { //TODO Fix later with new package linking
-//		//Create Component without Package: //TODO not possible anymore
+//		//Create Component without Package:
 //		val umlClass = createClass(CLASS_NAME, 0)
 //		saveAndSynchronizeWithInteractions(umlClass)
 //		assertComponent(umlClass, CLASS_NAME)

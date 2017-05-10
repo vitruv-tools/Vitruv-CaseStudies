@@ -2,14 +2,14 @@ package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.DataType
-import org.junit.Test
+import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
+import org.eclipse.uml2.uml.UMLFactory
+import org.junit.Test
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.uml2.uml.Operation
 
 class DataTypeTest extends AbstractClass2CompTest {
 		
@@ -27,9 +27,7 @@ class DataTypeTest extends AbstractClass2CompTest {
 		val compDataType = correspondingElements.get(0)
 		assertTypeAndName(compDataType, DataType, CLASS_NAME)
 	}
-	
-	//TODO further tests with tags, property ect
-		
+
 	@Test
 	public def void testAddPropertyToDataType() {
 		val classDataType = createDataTypeClass(CLASS_NAME)

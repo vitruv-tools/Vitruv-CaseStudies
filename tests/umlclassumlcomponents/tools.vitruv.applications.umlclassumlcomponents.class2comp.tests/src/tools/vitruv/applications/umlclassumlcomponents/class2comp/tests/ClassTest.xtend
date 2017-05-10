@@ -59,17 +59,6 @@ class ClassTest extends AbstractClass2CompTest{
 		assertEquals(0, correspondingElements.size)
 		assertFalse(rootElement.packagedElements.contains(Component))
 	}
-	
-	//TODO: Currently unused, remove?
-	/*@Test
-	public def void testCreateComponentForClassPackageCheck() {
-		val umlClass = createClass(CLASS_NAME, 0, 1)
-		umlClass.package.name = "default"
-		saveAndSynchronizeWithInteractions(umlClass)
-		 
-		checkComponent(umlClass, CLASS_NAME)
-		assertEquals(CLASS_NAME + "-Package", umlClass.package.name)
-	}*/
 
 	@Test
     public def void testRenameClass() {

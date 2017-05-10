@@ -2,24 +2,24 @@ package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 
 import java.util.Collections
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
+import org.eclipse.uml2.uml.Usage
 import org.eclipse.uml2.uml.internal.impl.ClassImpl
 import org.eclipse.uml2.uml.internal.impl.ComponentImpl
 import org.eclipse.uml2.uml.internal.impl.DataTypeImpl
+import org.eclipse.uml2.uml.internal.impl.InterfaceImpl
+import org.eclipse.uml2.uml.internal.impl.InterfaceRealizationImpl
+import org.eclipse.uml2.uml.internal.impl.OperationImpl
 import org.eclipse.uml2.uml.internal.impl.PackageImpl
+import org.eclipse.uml2.uml.internal.impl.PropertyImpl
+import org.eclipse.uml2.uml.internal.impl.UsageImpl
 import org.junit.Test
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedIntegrationTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
-import org.eclipse.uml2.uml.internal.impl.InterfaceImpl
-import org.eclipse.uml2.uml.internal.impl.InterfaceRealizationImpl
-import org.eclipse.uml2.uml.InterfaceRealization
-import org.eclipse.uml2.uml.internal.impl.UsageImpl
-import org.eclipse.uml2.uml.Usage
-import org.eclipse.uml2.uml.internal.impl.PropertyImpl
-import org.eclipse.uml2.uml.internal.impl.OperationImpl
 
 class Class2CompIntegrationTest extends AbstractClass2CompTest {
 	
