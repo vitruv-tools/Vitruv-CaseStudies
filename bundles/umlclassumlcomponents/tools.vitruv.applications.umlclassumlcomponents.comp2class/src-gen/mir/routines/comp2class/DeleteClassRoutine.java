@@ -1,8 +1,8 @@
 package mir.routines.comp2class;
 
 import java.io.IOException;
+import java.util.Iterator;
 import mir.routines.comp2class.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.PackageableElement;
@@ -45,9 +45,12 @@ public class DeleteClassRoutine extends AbstractRepairRoutineRealization {
         final String question = (_plus + "\' and all its contained elements?");
         boolean _modalTextYesNoUserInteracting = SharedUtil.modalTextYesNoUserInteracting(this.userInteracting, question);
         if (_modalTextYesNoUserInteracting) {
-          EList<PackageableElement> _packagedElements = classPackage.getPackagedElements();
-          for (final PackageableElement classElement : _packagedElements) {
-            classElement.destroy();
+          for (final Iterator<PackageableElement> iter = classPackage.getPackagedElements().iterator(); iter.hasNext();) {
+            {
+              final PackageableElement classElement = iter.next();
+              iter.remove();
+              classElement.destroy();
+            }
           }
           classPackage.destroy();
         }

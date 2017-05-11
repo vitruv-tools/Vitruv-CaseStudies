@@ -57,7 +57,7 @@ class ComponentTest extends AbstractComp2ClassTest{
     }
 	
 	@Test
-    public def void testDeleteComponentWithoutPackage() { //TODO fix this test
+    public def void testDeleteComponentWithoutPackage() {
     	val umlComp = createComponent(COMP_NAME)    	
 		saveAndSynchronizeChanges(umlComp)
 		
@@ -79,7 +79,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 		queueUserInteractionSelections(1) //Decide to not delete Package
 		umlComp.destroy()
 		assertFalse(rootElement.packagedElements.contains(umlComp))
-		saveAndSynchronizeChanges(rootElement)
+		saveAndSynchronizeWithInteractions(rootElement)
 		
 		//Check if Class or Package exists:		
 		assertFalse(classPackage.packagedElements.contains(umlClass))
@@ -89,7 +89,7 @@ class ComponentTest extends AbstractComp2ClassTest{
     }
     
 	@Test
-    public def void testDeleteComponentWithPackageAndContents() { //TODO fix this test
+    public def void testDeleteComponentWithPackageAndContents() {
     	val umlComp = createComponent(COMP_NAME)    	
 		saveAndSynchronizeChanges(umlComp)
 		
@@ -111,7 +111,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 		queueUserInteractionSelections(0) //Decide to delete Package and Contents
 		umlComp.destroy()
 		assertFalse(rootElement.packagedElements.contains(umlComp))
-		saveAndSynchronizeChanges(rootElement)
+		saveAndSynchronizeWithInteractions(rootElement)
 		
 		//Check if Class or Package exists:		
 		assertFalse(classPackage.packagedElements.contains(umlClass))

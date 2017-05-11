@@ -461,7 +461,7 @@ routine movedClassToDifferentPackage(umlclass::Class umlClass, umlclass::Package
 		//add correspondence between umlClass and packageNewComp
 		
 		//TODO Implement rename handling concept
-		
+		//Removed old implementation for tests to work
 	}
 }
 
