@@ -2,7 +2,6 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
@@ -25,9 +24,6 @@ public class AddUmlElementToRootModelRoutine extends AbstractRepairRoutineRealiz
     
     public void callRoutine1(final PackageableElement uPackageable, final EObject persistedObject, @Extension final RoutinesFacade _routinesFacade) {
       final Model uModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
-      EList<PackageableElement> _packagedElements = uModel.getPackagedElements();
-      _packagedElements.add(uPackageable);
-      this.persistProjectRelative(persistedObject, uModel, JavaToUmlHelper.getRootModelFile());
     }
   }
   

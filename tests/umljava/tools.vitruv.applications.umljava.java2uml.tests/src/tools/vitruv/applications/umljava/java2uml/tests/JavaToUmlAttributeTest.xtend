@@ -1,5 +1,6 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
+import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Before
 import org.emftext.language.java.members.Field
@@ -17,12 +18,12 @@ import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.emf.ecore.util.EcoreUtil
+import tools.vitruv.applications.umljava.util.java.JavaStandardType
 
 class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName"
     private static val ATTRIBUTE_RENAME = "attributeRenamed"
     private static val STANDARD_ATTRIBUTE_NAME = "standardAttributName"
-    private static val PRIMITIVE_TYPE = "int"
     private static val CLASS_NAME = "ClassName"
     private static val TYPE_CLASS = "TypeClass"
     
@@ -34,7 +35,7 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     def void before() {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_CLASS)
-        jAttr = createJavaAttribute(ATTRIBUTE_NAME, TypesFactory.eINSTANCE.createInt, JavaVisibility.PRIVATE, false, false)
+        jAttr = createJavaAttribute(ATTRIBUTE_NAME, createJavaPrimitiveType(JavaStandardType.INT), JavaVisibility.PRIVATE, false, false)
         jClass.members += jAttr
         saveAndSynchronizeChanges(jClass);
     }
@@ -54,7 +55,7 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     }
     @Test
     def testCreatePrimitiveAttribute() {
-        val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, TypesFactory.eINSTANCE.createInt, JavaVisibility.PRIVATE, false, false)
+        val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, createJavaPrimitiveType(JavaStandardType.INT), JavaVisibility.PRIVATE, false, false)
         jClass.members += attr
         val getter = createJavaGetterForAttribute(attr, JavaVisibility.PRIVATE)
         jClass.members += getter
@@ -62,7 +63,7 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         
         val uAttr = getCorrespondingAttribute(attr)
         val uClass = getCorrespondingClass(jClass)
-        assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, createUmlPrimitiveType(PRIMITIVE_TYPE),
+        assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, createUmlPrimitiveType(JavaStandardType.INT),
             false, false, uClass, null, null)
         assertAttributeEquals(uAttr, attr)
     }

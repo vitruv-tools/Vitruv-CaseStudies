@@ -5,7 +5,10 @@ import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.classifiers.Enumeration;
+import org.emftext.language.java.containers.CompilationUnit;
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -21,53 +24,60 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Enumeration jEnum, final org.eclipse.uml2.uml.Enumeration uEnum) {
+    public EObject getElement1(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {
       return uEnum;
     }
     
-    public void updateUEnumElement(final Enumeration jEnum, final org.eclipse.uml2.uml.Enumeration uEnum) {
+    public void updateUEnumElement(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {
       uEnum.setName(jEnum.getName());
     }
     
-    public EObject getElement4(final Enumeration jEnum, final org.eclipse.uml2.uml.Enumeration uEnum) {
-      EObject _eContainer = jEnum.eContainer();
-      return _eContainer;
+    public EObject getElement4(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {
+      return jCompUnit;
     }
     
-    public EObject getElement2(final Enumeration jEnum, final org.eclipse.uml2.uml.Enumeration uEnum) {
+    public EObject getElement2(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {
       return jEnum;
     }
     
-    public EObject getElement3(final Enumeration jEnum, final org.eclipse.uml2.uml.Enumeration uEnum) {
+    public EObject getElement3(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {
       return uEnum;
     }
     
-    public void callRoutine1(final Enumeration jEnum, final org.eclipse.uml2.uml.Enumeration uEnum, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addUmlElementToRootModel(uEnum, jEnum);
+    public void callRoutine1(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum, @Extension final RoutinesFacade _routinesFacade) {
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jCompUnit.getNamespaces());
+      if (_isNullOrEmpty) {
+        _routinesFacade.addUmlElementToPackage(uEnum, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), jCompUnit);
+      } else {
+        _routinesFacade.addUmlElementToPackage(uEnum, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())), jCompUnit);
+      }
     }
   }
   
-  public CreateUmlEnumRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Enumeration jEnum) {
+  public CreateUmlEnumRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Enumeration jEnum, final CompilationUnit jCompUnit) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
-    this.jEnum = jEnum;
+    this.jEnum = jEnum;this.jCompUnit = jCompUnit;
   }
   
   private Enumeration jEnum;
   
+  private CompilationUnit jCompUnit;
+  
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlEnumRoutine with input:");
     getLogger().debug("   Enumeration: " + this.jEnum);
+    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
     
     org.eclipse.uml2.uml.Enumeration uEnum = UMLFactoryImpl.eINSTANCE.createEnumeration();
-    userExecution.updateUEnumElement(jEnum, uEnum);
+    userExecution.updateUEnumElement(jEnum, jCompUnit, uEnum);
     
-    userExecution.callRoutine1(jEnum, uEnum, actionsFacade);
+    userExecution.callRoutine1(jEnum, jCompUnit, uEnum, actionsFacade);
     
-    addCorrespondenceBetween(userExecution.getElement1(jEnum, uEnum), userExecution.getElement2(jEnum, uEnum), "");
+    addCorrespondenceBetween(userExecution.getElement1(jEnum, jCompUnit, uEnum), userExecution.getElement2(jEnum, jCompUnit, uEnum), "");
     
-    addCorrespondenceBetween(userExecution.getElement3(jEnum, uEnum), userExecution.getElement4(jEnum, uEnum), "");
+    addCorrespondenceBetween(userExecution.getElement3(jEnum, jCompUnit, uEnum), userExecution.getElement4(jEnum, jCompUnit, uEnum), "");
     
     postprocessElements();
   }

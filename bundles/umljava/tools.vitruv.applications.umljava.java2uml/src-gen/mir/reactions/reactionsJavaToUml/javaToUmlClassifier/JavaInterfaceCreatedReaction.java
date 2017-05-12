@@ -67,7 +67,7 @@ class JavaInterfaceCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createUmlInterface(newValue);
+      _routinesFacade.createUmlInterface(newValue, affectedEObject);
     }
   }
 }

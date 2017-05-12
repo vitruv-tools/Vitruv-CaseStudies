@@ -61,11 +61,11 @@ reaction JavaAttributeTypeChanged {
 routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
     match {
         val uAttr = retrieve uml::Property corresponding to jAttr
-        val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jType)
+        
     }
     action {
         update uAttr {
-            uAttr.type = getUmlType(jType, customType, getUmlModel(correspondenceModel, userInteracting))
+            uAttr.type = getUmlType(jType, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
         }
     }
 }

@@ -18,6 +18,7 @@ import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.BehavioredClassifier
 
 class UmlClassifierAndPackageUtil {
     
@@ -159,10 +160,38 @@ class UmlClassifierAndPackageUtil {
         return supers
     }
     
+    def static void addUmlSuperClassifier(Classifier subClassifier, Classifier superClassifier) {
+        if (subClassifier === null || superClassifier === null) {
+            throw new IllegalArgumentException("Can not create generalization relation for null")
+        }
+        subClassifier.generals += superClassifier
+    }
+    
+    def static void addUmlInterfaceRealization(BehavioredClassifier implementor, String realizationName, Interface interfaceToImplement) {
+        if (implementor === null || interfaceToImplement === null) {
+            throw new IllegalArgumentException("Can not create implementation relation for null")
+        }
+        implementor.createInterfaceRealization(realizationName, interfaceToImplement)
+    }
+    
+    def static void removeUmlGeneralClassifier(Classifier subClassifier, Classifier classifierToRemove) {
+        if (subClassifier === null || classifierToRemove === null) {
+            throw new IllegalArgumentException("Can not remove generalization relation for null")
+        }
+        removeClassifierFromIterator(subClassifier.generals.iterator, classifierToRemove)
+    }
+    
+    def static void removeUmlImplementedInterface(Class implementor, Interface interfaceToRemove) {
+        if (implementor === null || interfaceToRemove === null) {
+            throw new IllegalArgumentException("Can not remove class generalization relation for null")
+        }
+        removeClassifierFromIterator(implementor.implementedInterfaces.iterator, interfaceToRemove)
+    }
+    
     /**
      * Removes the elements in the Iterator iter with the same name as classif.
      */
-    def static void removeClassifierFromIterator(Iterator<? extends Classifier> iter, Classifier classif) {
+    def private static void removeClassifierFromIterator(Iterator<? extends Classifier> iter, Classifier classif) {
         while (iter.hasNext) {
             if (classif.name.equals(iter.next.name)) {
                 iter.remove;

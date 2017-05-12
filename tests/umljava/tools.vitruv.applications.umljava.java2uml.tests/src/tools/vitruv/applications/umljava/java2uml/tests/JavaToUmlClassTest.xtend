@@ -14,6 +14,9 @@ import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.containers.ContainersFactory
+import org.emftext.language.java.classifiers.ClassifiersFactory
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 
 class JavaToUmlClassTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";

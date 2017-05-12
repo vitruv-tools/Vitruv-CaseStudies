@@ -16,16 +16,10 @@ import org.emftext.language.java.types.TypedElement
 import org.emftext.language.java.types.TypesFactory
 import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import org.apache.log4j.Logger
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.types.ClassifierReference
 
 class JavaTypeUtil {
-    public static val BOOLEAN = "boolean";
-    public static val BYTE = "byte";
-    public static val CHAR = "char";
-    public static val DOUBLE = "double";
-    public static val FLOAT = "float";
-    public static val INT = "int";
-    public static val LONG = "long";
-    public static val SHORT = "short";
     
     private static val logger = Logger.getLogger(JavaTypeUtil.simpleName)
     private new() {}
@@ -59,7 +53,7 @@ class JavaTypeUtil {
         }
         val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
         var classifierRef = TypesFactory.eINSTANCE.createClassifierReference
-        classifierRef.target = concreteClassifier
+        classifierRef.target = EcoreUtil.copy(concreteClassifier)
         namespaceClassifierReference.classifierReferences.add(classifierRef)
         return namespaceClassifierReference
     }
@@ -79,19 +73,24 @@ class JavaTypeUtil {
         return null
     }
     
+    def static dispatch Type getJavaTypeFromTypeReference(PrimitiveType primType) {
+        return primType
+    }
+    
     def static dispatch Type getJavaTypeFromTypeReference(NamespaceClassifierReference namespaceRef) {
         if (namespaceRef.classifierReferences.nullOrEmpty) {
             throw new IllegalArgumentException(namespaceRef + " has no classifierReferences")
-        } else if (namespaceRef.classifierReferences.head.target === null) {
-            logger.warn("The first target of the classifierReference of " + namespaceRef + " is null")
-            return null
         } else {
-            return namespaceRef.classifierReferences.head.target
+            return getJavaTypeFromTypeReference(namespaceRef.classifierReferences.head)
         }
     }
     
-    def static dispatch Type getJavaTypeFromTypeReference(PrimitiveType primType) {
-        return primType
+    def static dispatch Type getJavaTypeFromTypeReference(ClassifierReference classifRef) {
+        if (classifRef.target === null) {
+            throw new IllegalArgumentException(classifRef + " contains no classifier")
+        } else {
+            return classifRef.target
+        }
     }
     
     def static dispatch Type getJavaTypeFromTypeReference(Void nullReference) {

@@ -5,6 +5,8 @@ import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -33,7 +35,12 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void callRoutine1(final org.emftext.language.java.containers.Package jPackage, final org.eclipse.uml2.uml.Package uPackage, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addUmlElementToRootModel(uPackage, jPackage);
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jPackage.getNamespaces());
+      if (_isNullOrEmpty) {
+        _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), jPackage);
+      } else {
+        _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jPackage.getNamespaces())), jPackage);
+      }
     }
   }
   

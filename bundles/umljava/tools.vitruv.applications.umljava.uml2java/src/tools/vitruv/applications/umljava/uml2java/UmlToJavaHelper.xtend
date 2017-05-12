@@ -15,7 +15,7 @@ import org.emftext.language.java.modifiers.Modifier
 import org.emftext.language.java.modifiers.ModifiersFactory
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
-
+import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
@@ -71,19 +71,10 @@ class UmlToJavaHelper {
 	 * Returns null if no corresponding Java-PrimitiveType could be found.
 	 */
 	def static org.emftext.language.java.types.PrimitiveType mapToJavaPrimitiveType(PrimitiveType pType) {
-	    switch pType.name {
-	        case BOOLEAN : return TypesFactory.eINSTANCE.createBoolean
-	        case BYTE : return TypesFactory.eINSTANCE.createByte
-	        case CHAR : return TypesFactory.eINSTANCE.createChar
-	        case DOUBLE : return TypesFactory.eINSTANCE.createDouble
-	        case FLOAT : return TypesFactory.eINSTANCE.createFloat
-	        case INT : return TypesFactory.eINSTANCE.createInt
-	        case LONG : return TypesFactory.eINSTANCE.createLong
-	        case SHORT : return TypesFactory.eINSTANCE.createShort
-	        default: {
-	            logger.warn("No corresponding Java-PrimitiveType for " + pType + ". Returning null.")
-	            return null
-	        }
+	    try {
+	        createJavaPrimitiveType(pType.name)
+	    } catch (IllegalArgumentException i){
+	        return null
 	    }
 	}
 	

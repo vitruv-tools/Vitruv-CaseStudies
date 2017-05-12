@@ -21,9 +21,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createUmlClass(final org.emftext.language.java.classifiers.Class jClass) {
+  public void createUmlClass(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit) {
     mir.routines.javaToUmlClassifier.CreateUmlClassRoutine effect = new mir.routines.javaToUmlClassifier.CreateUmlClassRoutine(this.executionState, calledBy,
-    	jClass);
+    	jClass, jCompUnit);
     effect.applyRoutine();
   }
   
@@ -33,9 +33,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createUmlInterface(final Interface jInterface) {
+  public void addUmlElementToPackage(final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage, final EObject persistedObject) {
+    mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine effect = new mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine(this.executionState, calledBy,
+    	uPackageable, uPackage, persistedObject);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlInterface(final Interface jInterface, final CompilationUnit jCompUnit) {
     mir.routines.javaToUmlClassifier.CreateUmlInterfaceRoutine effect = new mir.routines.javaToUmlClassifier.CreateUmlInterfaceRoutine(this.executionState, calledBy,
-    	jInterface);
+    	jInterface, jCompUnit);
     effect.applyRoutine();
   }
   
@@ -57,9 +63,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void addUmlSuperClassifier(final ConcreteClassifier jClass, final Classifier jSuperClassifier) {
-    mir.routines.javaToUmlClassifier.AddUmlSuperClassifierRoutine effect = new mir.routines.javaToUmlClassifier.AddUmlSuperClassifierRoutine(this.executionState, calledBy,
-    	jClass, jSuperClassifier);
+  public void addUmlSuperClass(final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class jSuperClass) {
+    mir.routines.javaToUmlClassifier.AddUmlSuperClassRoutine effect = new mir.routines.javaToUmlClassifier.AddUmlSuperClassRoutine(this.executionState, calledBy,
+    	jClass, jSuperClass);
+    effect.applyRoutine();
+  }
+  
+  public void addUmlSuperinterfaces(final Interface jInterface, final Classifier jSuperInterface) {
+    mir.routines.javaToUmlClassifier.AddUmlSuperinterfacesRoutine effect = new mir.routines.javaToUmlClassifier.AddUmlSuperinterfacesRoutine(this.executionState, calledBy,
+    	jInterface, jSuperInterface);
     effect.applyRoutine();
   }
   
@@ -69,21 +81,21 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void removeUmlSuperInterface(final Interface jI, final Classifier jSuper) {
+  public void removeUmlSuperInterface(final Interface jI, final Classifier jSuperClassifier) {
     mir.routines.javaToUmlClassifier.RemoveUmlSuperInterfaceRoutine effect = new mir.routines.javaToUmlClassifier.RemoveUmlSuperInterfaceRoutine(this.executionState, calledBy,
-    	jI, jSuper);
+    	jI, jSuperClassifier);
     effect.applyRoutine();
   }
   
-  public void addUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final Interface jI) {
+  public void addUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final Classifier jInterface) {
     mir.routines.javaToUmlClassifier.AddUmlClassImplementRoutine effect = new mir.routines.javaToUmlClassifier.AddUmlClassImplementRoutine(this.executionState, calledBy,
-    	jClass, jI);
+    	jClass, jInterface);
     effect.applyRoutine();
   }
   
-  public void removeUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final Interface jI) {
+  public void removeUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface) {
     mir.routines.javaToUmlClassifier.RemoveUmlClassImplementRoutine effect = new mir.routines.javaToUmlClassifier.RemoveUmlClassImplementRoutine(this.executionState, calledBy,
-    	jClass, jI);
+    	jClass, jInterface);
     effect.applyRoutine();
   }
   
@@ -117,9 +129,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createUmlEnum(final Enumeration jEnum) {
+  public void createUmlEnum(final Enumeration jEnum, final CompilationUnit jCompUnit) {
     mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine effect = new mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine(this.executionState, calledBy,
-    	jEnum);
+    	jEnum, jCompUnit);
     effect.applyRoutine();
   }
   

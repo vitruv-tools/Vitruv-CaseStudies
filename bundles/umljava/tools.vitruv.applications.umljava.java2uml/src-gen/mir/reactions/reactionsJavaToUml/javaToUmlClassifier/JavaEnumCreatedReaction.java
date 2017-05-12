@@ -67,7 +67,7 @@ class JavaEnumCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final Enumeration newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createUmlEnum(newValue);
+      _routinesFacade.createUmlEnum(newValue, affectedEObject);
     }
   }
 }

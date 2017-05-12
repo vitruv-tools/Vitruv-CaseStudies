@@ -4,11 +4,9 @@ import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
-import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
-import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -28,17 +26,12 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
       return jParam;
     }
     
-    public EObject getCorrepondenceSourceCustomType(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
-      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(jType);
-      return _classifierFromTypeReference;
-    }
-    
-    public EObject getElement1(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam, final org.eclipse.uml2.uml.Class customType) {
+    public EObject getElement1(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
       return uParam;
     }
     
-    public void update0Element(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam, final org.eclipse.uml2.uml.Class customType) {
-      uParam.setType(JavaToUmlHelper.getUmlType(jType, customType, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting)));
+    public void update0Element(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
+      uParam.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel));
     }
   }
   
@@ -67,14 +60,8 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
     	return;
     }
     registerObjectUnderModification(uParam);
-    org.eclipse.uml2.uml.Class customType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomType(jParam, jType, uParam), // correspondence source supplier
-    	org.eclipse.uml2.uml.Class.class,
-    	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(customType);
-    // val updatedElement userExecution.getElement1(jParam, jType, uParam, customType);
-    userExecution.update0Element(jParam, jType, uParam, customType);
+    // val updatedElement userExecution.getElement1(jParam, jType, uParam);
+    userExecution.update0Element(jParam, jType, uParam);
     
     postprocessElements();
   }

@@ -12,49 +12,49 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealization {
+public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private RemoveUmlSuperInterfaceRoutine.ActionUserExecution userExecution;
+  private AddUmlSuperinterfacesRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Interface jI, final Classifier jSuperClassifier, final org.eclipse.uml2.uml.Interface uInterface) {
+    public EObject getElement1(final Interface jInterface, final Classifier jSuperInterface, final org.eclipse.uml2.uml.Interface uInterface) {
       return uInterface;
     }
     
-    public void update0Element(final Interface jI, final Classifier jSuperClassifier, final org.eclipse.uml2.uml.Interface uInterface) {
-      UmlClassifierAndPackageUtil.removeUmlGeneralClassifier(uInterface, 
+    public void update0Element(final Interface jInterface, final Classifier jSuperInterface, final org.eclipse.uml2.uml.Interface uInterface) {
+      UmlClassifierAndPackageUtil.addUmlSuperClassifier(uInterface, 
         JavaToUmlHelper.<org.eclipse.uml2.uml.Interface>findFirstCorrespondeningUmlElementByNameAndType(this.correspondenceModel, 
-          jSuperClassifier.getName(), org.eclipse.uml2.uml.Interface.class));
+          jSuperInterface.getName(), org.eclipse.uml2.uml.Interface.class));
     }
     
-    public EObject getCorrepondenceSourceUInterface(final Interface jI, final Classifier jSuperClassifier) {
-      return jI;
+    public EObject getCorrepondenceSourceUInterface(final Interface jInterface, final Classifier jSuperInterface) {
+      return jInterface;
     }
   }
   
-  public RemoveUmlSuperInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface jI, final Classifier jSuperClassifier) {
+  public AddUmlSuperinterfacesRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface jInterface, final Classifier jSuperInterface) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.javaToUmlClassifier.RemoveUmlSuperInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.javaToUmlClassifier.AddUmlSuperinterfacesRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
-    this.jI = jI;this.jSuperClassifier = jSuperClassifier;
+    this.jInterface = jInterface;this.jSuperInterface = jSuperInterface;
   }
   
-  private Interface jI;
+  private Interface jInterface;
   
-  private Classifier jSuperClassifier;
+  private Classifier jSuperInterface;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine RemoveUmlSuperInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.jI);
-    getLogger().debug("   Classifier: " + this.jSuperClassifier);
+    getLogger().debug("Called routine AddUmlSuperinterfacesRoutine with input:");
+    getLogger().debug("   Interface: " + this.jInterface);
+    getLogger().debug("   Classifier: " + this.jSuperInterface);
     
     org.eclipse.uml2.uml.Interface uInterface = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUInterface(jI, jSuperClassifier), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUInterface(jInterface, jSuperInterface), // correspondence source supplier
     	org.eclipse.uml2.uml.Interface.class,
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
@@ -62,8 +62,8 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
     	return;
     }
     registerObjectUnderModification(uInterface);
-    // val updatedElement userExecution.getElement1(jI, jSuperClassifier, uInterface);
-    userExecution.update0Element(jI, jSuperClassifier, uInterface);
+    // val updatedElement userExecution.getElement1(jInterface, jSuperInterface, uInterface);
+    userExecution.update0Element(jInterface, jSuperInterface, uInterface);
     
     postprocessElements();
   }

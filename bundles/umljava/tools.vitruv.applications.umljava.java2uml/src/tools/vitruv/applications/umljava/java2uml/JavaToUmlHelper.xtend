@@ -1,5 +1,9 @@
 package tools.vitruv.applications.umljava.java2uml
 
+
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import java.util.Set
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Type
@@ -26,6 +30,12 @@ import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.userinteraction.UserInteracting
 import org.apache.log4j.Logger
+import org.eclipse.emf.ecore.EObject
+import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization.UserExecution
+import org.emftext.language.java.types.NamespaceClassifierReference
+import org.emftext.language.java.types.ClassifierReference
+import org.emftext.language.java.classifiers.Classifier
+import org.apache.log4j.PropertyConfigurator
 
 class JavaToUmlHelper {
     private static val logger = Logger.getLogger(JavaToUmlHelper.simpleName)
@@ -53,29 +63,35 @@ class JavaToUmlHelper {
     def static getRootModelFile() {
     	return ROOTMODELDIRECTORY + "/" + MODELNAME + ".uml"
     }
-    def static Type getUmlType(TypeReference jType, org.eclipse.uml2.uml.Class customType, Model model) {
-        if (jType == null || jType instanceof Void) {
-            return null
+    
+    def static dispatch Type getUmlType(org.emftext.language.java.types.Void jVoid, Model model, CorrespondenceModel correspondenceModel) {
+        return null
+    }
+    def static dispatch Type getUmlType(java.lang.Void nullReference, Model model, CorrespondenceModel correspondenceModel) {
+        return null
+    }
+    def static dispatch Type getUmlType(org.emftext.language.java.types.PrimitiveType jPrimtype, Model model, CorrespondenceModel correspondenceModel) {
+        return findUmlPrimitiveType(getTypeKeyword(jPrimtype), model)
+    }
+    
+    def static dispatch Type getUmlType(NamespaceClassifierReference jNamespaceRef, Model model, CorrespondenceModel correspondenceModel) {
+        return getUmlType(getJavaTypeFromTypeReference(jNamespaceRef), model, correspondenceModel)
+    }
+    
+    def static dispatch Type getUmlType(org.emftext.language.java.classifiers.Class jClass, Model model, CorrespondenceModel correspondenceModel) {
+        if ("String".equals(jClass.name)) {
+            return findUmlPrimitiveType("String", model)
+        } else {
+            return findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, jClass.name, org.eclipse.uml2.uml.Class)
         }
-        if (customType != null) {
-            return customType
-        }
-        val primType = UMLFactory.eINSTANCE.createPrimitiveType()
-        switch jType {
-            Void : return null
-            Int : primType.name = JavaTypeUtil.INT
-            Boolean: primType.name = JavaTypeUtil.BOOLEAN
-            Byte : primType.name = JavaTypeUtil.BYTE
-            Long : primType.name = JavaTypeUtil.LONG
-            Double : primType.name = JavaTypeUtil.DOUBLE
-            Short : primType.name = JavaTypeUtil.SHORT
-            Float : primType.name = JavaTypeUtil.FLOAT
-            Char : primType.name = JavaTypeUtil.CHAR
-            default: throw new IllegalArgumentException("no corresponding uml-primitiveType: for java TypeReference: " + jType.target)
-        }
-        model.packagedElements += primType;
-        println("primType: "+primType.name);
-        return primType;
+    }
+    
+    def static dispatch Type getUmlType(org.emftext.language.java.classifiers.Interface jInterface, Model model, CorrespondenceModel correspondenceModel) {
+        return findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, jInterface.name, org.eclipse.uml2.uml.Interface)
+    }
+    
+    def static dispatch Type getUmlType(org.emftext.language.java.classifiers.Enumeration jEnum, Model model, CorrespondenceModel correspondenceModel) {
+        return findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, jEnum.name, org.eclipse.uml2.uml.Enumeration)
     }
     
     def static Model getUmlModel(CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
@@ -103,5 +119,30 @@ class JavaToUmlHelper {
             logger.warn("found more than one repository. Returning the first")
         }
         return models.get(0)
+    }
+    
+    def static org.eclipse.uml2.uml.Package findUmlPackage(CorrespondenceModel correspondenceModel, String packageName) {
+        val Set<org.eclipse.uml2.uml.Package> allPackages = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(org.eclipse.uml2.uml.Package)
+        
+        val packages = allPackages.filter[name.equals(packageName)]
+        if (packages.nullOrEmpty) {
+            logger.warn("The UML-Package with the name " + packageName + " does not exist in the correspondence model")
+        }
+        return packages.head
+    }
+    
+    def static org.eclipse.uml2.uml.PrimitiveType findUmlPrimitiveType(String name, Model umlModel) {
+        val primType = umlModel.packagedElements.filter(org.eclipse.uml2.uml.PrimitiveType).filter[it.name.equals(name)]
+        if (primType.nullOrEmpty) {
+            val newPrimType = createUmlPrimitiveType(name)
+            umlModel.packagedElements += newPrimType
+            logger.debug("Creating a UML-PrimitiveType with the name " + name)
+            return newPrimType
+        }
+        return primType.head
+    }
+    
+    def static <T extends org.eclipse.uml2.uml.NamedElement> findFirstCorrespondeningUmlElementByNameAndType(CorrespondenceModel correspondenceModel, String name, Class<T> typeOfJavaElement) {
+        return correspondenceModel.getAllEObjectsOfTypeInCorrespondences(typeOfJavaElement).filter[it.name.equals(name)].head
     }
 }

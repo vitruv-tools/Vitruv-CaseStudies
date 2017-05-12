@@ -51,7 +51,7 @@ class JavaModifierUtil {
      */
     def static setJavaModifier(AnnotableAndModifiable jModifiable, Modifier mod, boolean add) {
         if (add) {
-            if (!jModifiable.hasModifier(mod.class)) {//TODO Schauen, ob es einen Fehler gibt
+            if (!jModifiable.hasModifier(mod.class)) {
                 jModifiable.addModifier(mod)  
             } else {
                 logger.warn("The Java AnnotableAndModifiable " + jModifiable.class + " already has the modifier " + mod.class)

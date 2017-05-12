@@ -13,6 +13,11 @@ in reaction to changes in UML
 execute actions in Java
 
 
+reaction UmlModel {
+    after element uml::Model inserted as root
+    call System.out.println("")
+}
+
 reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Package[packagedElement]
     call createJavaClass(newValue)

@@ -150,11 +150,10 @@ reaction JavaParameterTypeChanged {
 routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReference jType) {
     match {
         val uParam = retrieve uml::Parameter corresponding to jParam
-        val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jType)
     }
     action {
         update uParam {
-            uParam.type = getUmlType(jType, customType, getUmlModel(correspondenceModel, userInteracting));
+            uParam.type = getUmlType(jType, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
         }
     }
 }
@@ -167,11 +166,10 @@ reaction JavaReturnTypeChanged {
 routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
-        val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jType)
     }
      action {
          update uOperation {
-             uOperation.type = getUmlType(jType, customType, getUmlModel(correspondenceModel, userInteracting))
+             uOperation.type = getUmlType(jType, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
          }
      }
 }
