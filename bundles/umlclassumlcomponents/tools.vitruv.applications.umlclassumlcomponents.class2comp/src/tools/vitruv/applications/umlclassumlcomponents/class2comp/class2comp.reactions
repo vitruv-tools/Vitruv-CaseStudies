@@ -142,8 +142,7 @@ routine createUmlComponentForClass(umlclass::Class umlClass) {
 		
 		call {
 			val classPackage = umlClass.package
-			correspondenceModel.createAndAddCorrespondence(#[umlComp], #[classPackage])				
-			//add correspondence between umlComponent and umlClass.package
+			correspondenceModel.createAndAddCorrespondence(#[umlComp], #[classPackage])
 		}
 	}
 }
@@ -166,9 +165,7 @@ routine createDataTypeForClass(umlclass::Class umlClass) {
 
 reaction RenameClass {
 	after attribute replaced at umlclass::Class[name]
-	call {
-		renameComponent(affectedEObject)
-	}
+	call renameComponent(affectedEObject)
 }
 
 routine renameComponent(umlclass::Class umlClass) { 
@@ -396,7 +393,6 @@ reaction CreatePackage {
 	call createdPackage(newValue as Package)
 }
 
-//TODO only match if name matches Component?
 routine createdPackage(umlclass::Package classPackage) {
 	match {
 		val compModel = retrieve umlcomp::Model corresponding to classPackage.model
@@ -432,7 +428,6 @@ routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlCo
 			
 			if (oldPackage === null) {
 				correspondenceModel.createAndAddCorrespondence(#[umlComponent], #[newPackage])
-				//add correspondence between umlComponent and newPackage
 			} else {
 				val String errorMsg = "Chosen Component is already linked to existing Package '" + oldPackage.name + "'."
 				userInteracting.showMessage(UserInteractionType.MODELESS, errorMsg)

@@ -373,6 +373,7 @@ reaction AddedProvidedRole {
 routine createClassInterface(umlcomp::Interface compInterface, umlcomp::Component umlComp) {
 	match {
 		val umlClass = retrieve umlclass::Class corresponding to umlComp
+		require absence of umlclass::Interface corresponding to compInterface
 	} 
 	action {
 		val classInterface = create umlclass::Interface and initialize {

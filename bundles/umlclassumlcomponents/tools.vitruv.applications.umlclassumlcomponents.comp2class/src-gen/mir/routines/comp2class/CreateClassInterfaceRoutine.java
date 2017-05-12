@@ -51,6 +51,10 @@ public class CreateClassInterfaceRoutine extends AbstractRepairRoutineRealizatio
     public EObject getCorrepondenceSourceUmlClass(final Interface compInterface, final Component umlComp) {
       return umlComp;
     }
+    
+    public EObject getCorrepondenceSourcenull(final Interface compInterface, final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
+      return compInterface;
+    }
   }
   
   public CreateClassInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface compInterface, final Component umlComp) {
@@ -78,6 +82,13 @@ public class CreateClassInterfaceRoutine extends AbstractRepairRoutineRealizatio
     	return;
     }
     registerObjectUnderModification(umlClass);
+    if (getCorrespondingElement(
+    	userExecution.getCorrepondenceSourcenull(compInterface, umlComp, umlClass), // correspondence source supplier
+    	Interface.class,
+    	(Interface _element) -> true, // correspondence precondition checker
+    	null) != null) {
+    	return;
+    }
     Interface classInterface = UMLFactoryImpl.eINSTANCE.createInterface();
     userExecution.updateClassInterfaceElement(compInterface, umlComp, umlClass, classInterface);
     

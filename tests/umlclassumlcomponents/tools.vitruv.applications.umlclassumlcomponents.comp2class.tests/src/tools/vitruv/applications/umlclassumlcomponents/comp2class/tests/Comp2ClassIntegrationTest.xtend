@@ -222,4 +222,21 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		val ownedOperations = dataTypeClass.operations.map[e | e as NamedElement]
 		assertCountOfTypeInList(ownedOperations, OperationImpl, 1) //There should be 1 Operation
 	}
+	
+	@Test
+	def void integrationTestMatthiasSmallExampleResult() {
+		//This model was retrieved out of the BA PCM->Comp as the result of an integration
+		
+		//Decide to create a Class for the first DataType:
+		queueUserInteractionSelections(1)
+		//Decide to create a Class for the second DataType:
+		queueUserInteractionSelections(1)
+		//Decide to create a Class for the third DataType:
+		queueUserInteractionSelections(1)
+		
+		integrationTest("Matthias_small_example_Result.uml")	
+		
+		//Too complex for manual asserts, check result in junit-workspace	
+	}
+		
 }
