@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_rvKvYDckEeesdJ5LMdzGGQ" name="defaultRepository">
+  <packageImport xmi:id="_rvLWcDckEeesdJ5LMdzGGQ">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Package" xmi:id="_PzXCoDdiEeelHazXJAfr9A" name="Class DataTypes Package">
+    <packagedElement xmi:type="uml:Class" xmi:id="_PzZe4DdiEeelHazXJAfr9A" name="A"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_PzaF8DdiEeelHazXJAfr9A" name="BName">
+      <ownedAttribute xmi:id="_P08XADdiEeelHazXJAfr9A" name="InnerByte" visibility="public"/>
+      <ownedAttribute xmi:id="_P09lIDdiEeelHazXJAfr9A" name="aName" visibility="public"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_Pzb7IDdiEeelHazXJAfr9A" name="C"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_PzXpsDdiEeelHazXJAfr9A" name="WebShop Package">
+    <packagedElement xmi:type="uml:Class" xmi:id="_PzXpsTdiEeelHazXJAfr9A" name="WebShop">
+      <interfaceRealization xmi:id="_P1AocDdiEeelHazXJAfr9A" name="Provided_ISell_WebShop (Class)" client="_PzXpsTdiEeelHazXJAfr9A" supplier="_P0_aUDdiEeelHazXJAfr9A" contract="_P0_aUDdiEeelHazXJAfr9A"/>
+      <interfaceRealization xmi:id="_P1CdoDdiEeelHazXJAfr9A" name="Provided_IBuy_WebShop (Class)" client="_PzXpsTdiEeelHazXJAfr9A" supplier="_P1B2kDdiEeelHazXJAfr9A" contract="_P1B2kDdiEeelHazXJAfr9A"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_P0_aUDdiEeelHazXJAfr9A" name="ISell (Class)"/>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_P1B2kDdiEeelHazXJAfr9A" name="IBuy (Class)"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_PzY30DdiEeelHazXJAfr9A" name="OfflineShop Package">
+    <packagedElement xmi:type="uml:Class" xmi:id="_PzY30TdiEeelHazXJAfr9A" name="OfflineShop">
+      <interfaceRealization xmi:id="_P1DrwDdiEeelHazXJAfr9A" name="Provided_ISell_OfflineShop (Class)" client="_PzY30TdiEeelHazXJAfr9A" supplier="_P0_aUDdiEeelHazXJAfr9A" contract="_P0_aUDdiEeelHazXJAfr9A"/>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>

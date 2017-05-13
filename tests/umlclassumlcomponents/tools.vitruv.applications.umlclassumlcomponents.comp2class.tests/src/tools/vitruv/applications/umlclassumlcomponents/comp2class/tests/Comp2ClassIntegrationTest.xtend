@@ -224,7 +224,7 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	}
 	
 	@Test
-	def void integrationTestMatthiasSmallExampleResult() {
+	def void integrationTestMatthiasSmallExampleComponentResult() {
 		//This model was retrieved out of the BA PCM->Comp as the result of an integration
 		
 		//Decide to create a Class for the first DataType:
@@ -234,7 +234,7 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		//Decide to create a Class for the third DataType:
 		queueUserInteractionSelections(1)
 		
-		integrationTest("Matthias_small_example_Result.uml")	
+		integrationTest("Matthias_small_example_Component_Result.uml")	
 		
 		//Too complex for manual asserts, check result in junit-workspace	
 	}

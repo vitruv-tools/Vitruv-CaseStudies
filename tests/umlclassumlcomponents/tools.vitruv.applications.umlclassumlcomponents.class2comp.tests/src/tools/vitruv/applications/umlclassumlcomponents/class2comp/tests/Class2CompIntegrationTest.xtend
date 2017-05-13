@@ -218,4 +218,20 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 		assertTrue(umlComp2.packagedElements.contains(compUsage))		
 	}
 	
+	@Test
+	def void integrationTestMatthiasSmallExampleClassResult() {		
+		//Decide to create an empty Package:
+		queueUserInteractionSelections(0, 0)	
+		//Decide to create a Class as a DataType (no Interactions)
+		//Decide to create an empty Package:
+		queueUserInteractionSelections(0, 0)
+		//Decide to create a Component for the Class:
+		queueUserInteractionSelections(0)
+		//Decide to create an empty Package:
+		queueUserInteractionSelections(0, 0)
+		//Decide to create a Component for the Class:
+		queueUserInteractionSelections(0)
+		
+		integrationTest("Matthias_small_example_Class_Result.uml")
+	}	
 }
