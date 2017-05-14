@@ -17,7 +17,7 @@ class PcmJavaAdditionalsTest extends ModelConstructionTest {
 		Logger.rootLogger.level = Level.INFO
 		val resource = loadModel("model/small_example.repository")
 		val repository = resource.allContents.head as Repository
-		this.loadPrimitiveTypes()
+		/*this.loadPrimitiveTypes()
 		var types = repository.dataTypes__Repository.filter(CompositeDataType)
 		for (CompositeDataType type : types) {
 			println("> composite type " + type.entityName)
@@ -28,8 +28,20 @@ class PcmJavaAdditionalsTest extends ModelConstructionTest {
 					println((id.datatype_InnerDeclaration as PrimitiveDataType).type)
 				}
 			}
-		}
-		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
+		}*/
+		logger.level = Level.ALL
+		val r = constructRepository(repository)
+		validateCorrespondence(logger, r)
+		//createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
+		
+	}
+	
+	@Test
+	public def void mediastoreTest() {
+		Logger.rootLogger.level = Level.INFO
+		val resource = loadModel("model/mediastore.repository")
+		constructRepository(resource.allContents.head as Repository)
+		
 	}
 	
 }

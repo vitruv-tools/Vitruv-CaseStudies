@@ -7,11 +7,15 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.palladiosimulator.pcm.repository.Signature;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class AddOperationParameterRoutine extends AbstractRepairRoutineRealization {
@@ -32,7 +36,18 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
       ParameterDirectionKind _direction = umlParameter.getDirection();
       boolean _equals = Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL);
       if (_equals) {
-        _routinesFacade.changeInterfaceOperationType(umlOperation, umlParameter);
+        final Function1<Parameter, Boolean> _function = (Parameter p) -> {
+          ParameterDirectionKind _direction_1 = p.getDirection();
+          return Boolean.valueOf(Objects.equal(_direction_1, ParameterDirectionKind.RETURN_LITERAL));
+        };
+        final Iterable<Parameter> returnParameters = IterableExtensions.<Parameter>filter(umlOperation.getOwnedParameters(), _function);
+        int _length = ((Object[])Conversions.unwrapArray(returnParameters, Object.class)).length;
+        boolean _greaterThan = (_length > 0);
+        if (_greaterThan) {
+          this.userInteracting.showMessage(UserInteractionType.MODAL, "A second return type cannot be applied in the PCM model.");
+        } else {
+          _routinesFacade.changeInterfaceOperationType(umlOperation, umlParameter);
+        }
       } else {
         _routinesFacade.addInterfaceOperationParameter(umlOperation, umlParameter);
       }

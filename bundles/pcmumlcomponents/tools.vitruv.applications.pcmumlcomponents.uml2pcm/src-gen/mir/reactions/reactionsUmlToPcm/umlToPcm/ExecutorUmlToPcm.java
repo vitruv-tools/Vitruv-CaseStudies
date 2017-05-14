@@ -17,6 +17,8 @@ public class ExecutorUmlToPcm extends AbstractReactionsExecutor {
     tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.RenamedElementReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.RenamedElementReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedElementReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedElementReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityLowerReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityLowerReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedUmlModelReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedUmlModelReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedPrimitiveDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedPrimitiveDataTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedDataTypeReaction(userInteracting));

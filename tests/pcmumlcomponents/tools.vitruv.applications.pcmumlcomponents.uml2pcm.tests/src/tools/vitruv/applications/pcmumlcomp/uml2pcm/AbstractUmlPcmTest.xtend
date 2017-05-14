@@ -8,6 +8,7 @@ import org.eclipse.uml2.uml.resource.UMLResource
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 
 class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml";
@@ -48,13 +49,14 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	}
 	
 	protected def importPrimitiveTypes() {
-		val resourceSet = rootElement.eResource.resourceSet
+		//val resourceSet = rootElement.eResource.resourceSet
+		val resourceSet = new ResourceSetImpl()
 		resourceSet.createResource(URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI))
 		val primitiveTypesUri = URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI).appendFragment("_0")
 		val primitiveTypes = resourceSet.getEObject(primitiveTypesUri, true)
 		val package = primitiveTypes as Package
-		//rootElement.createPackageImport(package)
-		//saveAndSynchronizeChanges(rootElement)
+		rootElement.createPackageImport(package)
+		saveAndSynchronizeChanges(rootElement)
 		return package
 	}
 

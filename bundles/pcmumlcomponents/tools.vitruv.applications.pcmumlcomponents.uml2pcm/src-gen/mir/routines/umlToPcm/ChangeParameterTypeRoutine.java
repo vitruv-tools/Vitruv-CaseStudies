@@ -4,10 +4,10 @@ import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.palladiosimulator.pcm.repository.DataType;
-import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
+import org.palladiosimulator.pcm.repository.Repository;
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmTypesUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -28,14 +28,14 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Parameter umlParameter, final org.palladiosimulator.pcm.repository.Parameter pcmParameter, final DataType pcmType) {
-      if ((pcmType == null)) {
+      DataType resolvedType = pcmType;
+      if ((((resolvedType == null) && (umlParameter.getType() != null)) && (umlParameter.getType() instanceof org.eclipse.uml2.uml.DataType))) {
+        final boolean unbound = ((umlParameter.lowerBound() != 1) || (umlParameter.upperBound() != 1));
+        final Repository pcmRepository = pcmParameter.getOperationSignature__Parameter().getInterface__OperationSignature().getRepository__Interface();
         Type _type = umlParameter.getType();
-        if ((_type instanceof PrimitiveType)) {
-          pcmParameter.setDataType__Parameter(UmlToPcmUtil.getPcmPrimitiveType(umlParameter.getType().getName(), this.userInteracting));
-        }
-      } else {
-        pcmParameter.setDataType__Parameter(pcmType);
+        resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmRepository, Boolean.valueOf(unbound), this.userInteracting, this.correspondenceModel);
       }
+      pcmParameter.setDataType__Parameter(pcmType);
     }
     
     public EObject getCorrepondenceSourcePcmType(final Parameter umlParameter, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {

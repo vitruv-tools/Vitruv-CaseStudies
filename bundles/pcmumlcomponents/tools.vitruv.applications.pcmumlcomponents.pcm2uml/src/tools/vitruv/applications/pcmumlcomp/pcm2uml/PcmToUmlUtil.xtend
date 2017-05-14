@@ -65,7 +65,7 @@ class PcmToUmlUtil {
 		}
 		println(" > corresponding type")
 		println(correspondingType)
-		//correspondenceModel.createAndAddCorrespondence(#[pcmType], #[correspondingType])
+		correspondenceModel.createAndAddCorrespondence(#[pcmType], #[correspondingType])
 		return correspondingType
 	}
 	

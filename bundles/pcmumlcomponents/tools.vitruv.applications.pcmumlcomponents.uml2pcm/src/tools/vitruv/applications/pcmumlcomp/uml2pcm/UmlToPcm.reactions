@@ -9,6 +9,8 @@ import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil
 import tools.vitruv.framework.userinteraction.UserInteractionType
+import org.eclipse.ocl.ecore.UnlimitedNaturalLiteralExp
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmTypesUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
@@ -51,6 +53,26 @@ routine deleteElement(uml::Element umlElement) {
 	}
 }
 
+reaction ChangedMultiplicityLower {
+	after attribute replaced at uml::MultiplicityElement[lower]
+	call updateMultiplicityType(affectedEObject)
+}
+reaction ChangedMultiplicityUpper {
+	after attribute replaced at uml::MultiplicityElement[upper]
+	call updateMultiplicityType(affectedEObject)
+}
+routine updateMultiplicityType(uml::MultiplicityElement umlElement) {
+	match {
+		val pcmElement = retrieve EObject corresponding to umlElement
+	}
+	action {
+		call {
+			val isCollection = umlElement.lowerBound != 1 || umlElement.upperBound != 1
+			
+		}
+	}
+}
+
 // ###################################################
 // ############### CONTAINER REACTIONS ###############
 
@@ -82,13 +104,15 @@ routine createPrimitiveDataType(uml::PrimitiveType umlType) {
 		val pcmRepository = retrieve pcm::Repository corresponding to umlType.model 
 	}
 	action {
-		val pcmType = create pcm::PrimitiveDataType and initialize {
-			pcmType.type = UmlToPcmUtil.getPcmPrimitiveType(umlType.name)
-		}
-		update pcmRepository {
-			pcmRepository.dataTypes__Repository += pcmType
-		}
-		add correspondence between umlType and pcmType
+		//call UmlToPcmUtil.optionallyMapPrimitivePcmType(umlType, userInteracting, correspondenceModel, pcmRepository)
+		//val pcmType = create pcm::PrimitiveDataType and initialize {
+		//	pcmType.type = UmlToPcmUtil.getPcmPrimitiveType(umlType.name)
+		//}
+		//update pcmRepository {
+		//	pcmRepository.dataTypes__Repository += pcmType
+		//}
+		//add correspondence between umlType and pcmType
+		call UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, userInteracting, correspondenceModel)
 	}
 }
 
@@ -101,17 +125,7 @@ reaction CreatedDataType {
 routine createDataType(uml::DataType umlType) {
 	action {
 		call {
-			val userPromptMsg = "Please select the PCM type to create"
-			val pcmDataTypes = #[CollectionDataType, CompositeDataType]
-			val List<String> pcmDataTypeNames = new ArrayList<String>(pcmDataTypes.size)
-			for (collectionDataType : pcmDataTypes) {
-				pcmDataTypeNames.add(collectionDataType.name)
-			}
-			val userInput = userInteracting.selectFromMessage(UserInteractionType.MODAL, userPromptMsg, pcmDataTypeNames)
-			if (userInput == 0)
-				createCollectionDataType(umlType)
-			else
-				createCompositeDataType(umlType)
+			createCompositeDataType(umlType)
 		}
 	}
 }
@@ -168,7 +182,6 @@ reaction DeletedPropertyFromDataType {
 	after element uml::Property removed from uml::DataType[ownedAttribute]
 	call {
 		deleteInnerDeclarationOfProperty(oldValue)
-		unsetCollectionInnerType(affectedEObject)
 	}
 }
 routine deleteInnerDeclarationOfProperty(uml::Property umlProperty) {
@@ -179,56 +192,25 @@ routine deleteInnerDeclarationOfProperty(uml::Property umlProperty) {
 		delete innerDeclaration
 	}
 }
-routine unsetCollectionInnerType(uml::DataType umlType) {
-	match {
-		val pcmType = retrieve pcm::CollectionDataType corresponding to umlType
-	}
-	action {
-		call {
-			if (umlType.ownedAttributes.length == 0)
-				pcmType.innerType_CollectionDataType = null
-			else {
-				var foundProperty = false
-				for (attr: umlType.ownedAttributes) {
-					// TODO: additionally check for property name?
-					if (!foundProperty && attr.type instanceof DataType) {
-						changeCollectionType(umlType, attr.type as DataType)
-						foundProperty = true
-					}
-				}
-				if (!foundProperty)
-					pcmType.innerType_CollectionDataType = null
-			}
-		}
-	}
-}
 
 reaction ChangedPropertyType {
 	after element uml::DataType replaced at uml::Property[type]
 	call {
 		changePropertyType(affectedEObject, newValue)
-		changeCollectionType((affectedEObject.owner as DataType), newValue)
 	}
 }
 routine changePropertyType(uml::Property umlProperty, uml::DataType umlType) {
 	match {
 		val pcmDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty
-		val pcmType = retrieve pcm::DataType corresponding to umlType
+		//val pcmRepository = retrieve pcm::Repository corresponding to umlProperty.model
+		val pcmType = retrieve optional pcm::DataType corresponding to umlType
 	}
 	action {
 		update pcmDeclaration {
-			pcmDeclaration.datatype_InnerDeclaration = pcmType
-		}
-	}
-}
-routine changeCollectionType(uml::DataType umlOwner, uml::DataType umlType) {
-	match {
-		val pcmCollection = retrieve pcm::CollectionDataType corresponding to umlOwner
-		val pcmType = retrieve pcm::DataType corresponding to umlType
-	}
-	action {
-		update pcmCollection {
-			pcmCollection.innerType_CollectionDataType = pcmType
+			val unbound = umlProperty.lowerBound != 1 || umlProperty.upperBound != 1
+			//pcmDeclaration.datatype_InnerDeclaration = UmlToPcmUtil.retrievePcmType(umlType, userInteracting, correspondenceModel, unbound)
+			val pcmRepository = pcmDeclaration.compositeDataType_InnerDeclaration.repository__DataType
+			pcmDeclaration.datatype_InnerDeclaration = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, unbound, userInteracting, correspondenceModel)
 		}
 	}
 }
@@ -287,7 +269,12 @@ routine addOperationParameter(uml::Operation umlOperation, uml::Parameter umlPar
 	action {
 		call {
 			if (umlParameter.direction == ParameterDirectionKind.RETURN_LITERAL) {
-				changeInterfaceOperationType(umlOperation, umlParameter)
+				val returnParameters = umlOperation.ownedParameters.filter[p | p.direction == ParameterDirectionKind.RETURN_LITERAL]
+				if (returnParameters.length > 0) {
+					userInteracting.showMessage(UserInteractionType.MODAL, "A second return type cannot be applied in the PCM model.")
+				} else {
+					changeInterfaceOperationType(umlOperation, umlParameter)
+				}
 			}
 			else {
 				addInterfaceOperationParameter(umlOperation, umlParameter)
@@ -330,13 +317,13 @@ routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Parameter
 	}
 	action {
 		update pcmSignature {
-			if (pcmType === null) {
-				if (umlParameter.type instanceof PrimitiveType) {
-					pcmSignature.returnType__OperationSignature = UmlToPcmUtil.getPcmPrimitiveType(umlParameter.type.name, userInteracting)
-				}
-			} else {
-				pcmSignature.returnType__OperationSignature = pcmType
+			var resolvedType = pcmType
+			if (resolvedType === null && umlParameter.type !== null && umlParameter.type instanceof DataType) {
+				val unbound = umlParameter.lowerBound != 1 || umlParameter.upperBound != 1
+				//resolvedType = UmlToPcmUtil.retrievePcmType(umlParameter.type as DataType, userInteracting, correspondenceModel, unbound)
+				resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlParameter.type as DataType, pcmSignature.interface__OperationSignature.repository__Interface, unbound, userInteracting, correspondenceModel)
 			}
+			pcmSignature.returnType__OperationSignature = resolvedType
 		}
 	}
 }
@@ -365,13 +352,14 @@ routine changeParameterType(uml::Parameter umlParameter) {
 	}
 	action {
 		update pcmParameter {
-			if (pcmType === null) {
-				if (umlParameter.type instanceof PrimitiveType) {
-					pcmParameter.dataType__Parameter = UmlToPcmUtil.getPcmPrimitiveType(umlParameter.type.name, userInteracting)
-				}
-			} else {
-				pcmParameter.dataType__Parameter = pcmType
+			var resolvedType = pcmType
+			if (resolvedType === null && umlParameter.type !== null && umlParameter.type instanceof DataType) {
+				val unbound = umlParameter.lowerBound != 1 || umlParameter.upperBound != 1
+				//resolvedType = UmlToPcmUtil.retrievePcmType(umlParameter.type as DataType, userInteracting, correspondenceModel, unbound)
+				val pcmRepository = pcmParameter.operationSignature__Parameter.interface__OperationSignature.repository__Interface
+				resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlParameter.type as DataType, pcmRepository, unbound, userInteracting, correspondenceModel)
 			}
+			pcmParameter.dataType__Parameter = pcmType
 		}
 	}
 }
@@ -410,6 +398,7 @@ reaction ChangedParameterDirection {
 		}
 		// there is no parameter in the PCM (anymore)
 		else if (oldValue == ParameterDirectionKind.RETURN_LITERAL) {
+			unsetInterfaceOperationType(affectedEObject.owner as Operation)
 			addInterfaceOperationParameter((affectedEObject.owner as Operation), affectedEObject)
 		}
 		else
@@ -478,7 +467,7 @@ routine createCompositeComponent(uml::Component umlComponent) {
 		update pcmRepository {
 			pcmRepository.components__Repository += pcmComponent
 		}
-		add correspondence between umlComponent and pcmComponent tag with "composite"
+		add correspondence between umlComponent and pcmComponent
 	}
 }
 routine createBasicComponent(uml::Component umlComponent) {
@@ -492,7 +481,7 @@ routine createBasicComponent(uml::Component umlComponent) {
 		update pcmRepository {
 			pcmRepository.components__Repository += pcmComponent
 		}
-		add correspondence between umlComponent and pcmComponent tag with "basic"
+		add correspondence between umlComponent and pcmComponent
 	}
 }
 
@@ -525,12 +514,12 @@ routine changeRequiredInterface(uml::Usage umlUsage, uml::Interface umlInterface
 	}
 	action {
 		update pcmRole {
-			// TODO: when do I reject insertion of new entities into suppliers in the first place
 			if (umlUsage.suppliers.length == 0)
 				pcmRole.requiredInterface__OperationRequiredRole = null
 			else if (umlUsage.suppliers.length == 1)
 				pcmRole.requiredInterface__OperationRequiredRole = pcmInterface
 			else
+				// TODO consider adding further roles instead
 				userInteracting.showMessage(UserInteractionType.MODAL, "Further interfaces will not be required in the PCM")
 		}
 	}

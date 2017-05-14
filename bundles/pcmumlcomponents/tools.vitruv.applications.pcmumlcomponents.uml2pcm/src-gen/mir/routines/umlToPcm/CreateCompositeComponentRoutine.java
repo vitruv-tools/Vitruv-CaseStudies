@@ -50,10 +50,6 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     public EObject getElement3(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
       return pcmComponent;
     }
-    
-    public String getTag1(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
-      return "composite";
-    }
   }
   
   public CreateCompositeComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Component umlComponent) {
@@ -84,7 +80,7 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     // val updatedElement userExecution.getElement1(umlComponent, pcmRepository, pcmComponent);
     userExecution.update0Element(umlComponent, pcmRepository, pcmComponent);
     
-    addCorrespondenceBetween(userExecution.getElement2(umlComponent, pcmRepository, pcmComponent), userExecution.getElement3(umlComponent, pcmRepository, pcmComponent), userExecution.getTag1(umlComponent, pcmRepository, pcmComponent));
+    addCorrespondenceBetween(userExecution.getElement2(umlComponent, pcmRepository, pcmComponent), userExecution.getElement3(umlComponent, pcmRepository, pcmComponent), "");
     
     postprocessElements();
   }

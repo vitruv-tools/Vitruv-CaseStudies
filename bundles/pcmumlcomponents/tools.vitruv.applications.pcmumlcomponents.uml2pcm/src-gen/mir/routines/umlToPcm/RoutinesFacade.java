@@ -6,6 +6,7 @@ import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
@@ -30,6 +31,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   
   public void deleteElement(final Element umlElement) {
     mir.routines.umlToPcm.DeleteElementRoutine effect = new mir.routines.umlToPcm.DeleteElementRoutine(this.executionState, calledBy,
+    	umlElement);
+    effect.applyRoutine();
+  }
+  
+  public void updateMultiplicityType(final MultiplicityElement umlElement) {
+    mir.routines.umlToPcm.UpdateMultiplicityTypeRoutine effect = new mir.routines.umlToPcm.UpdateMultiplicityTypeRoutine(this.executionState, calledBy,
     	umlElement);
     effect.applyRoutine();
   }
@@ -76,21 +83,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void unsetCollectionInnerType(final DataType umlType) {
-    mir.routines.umlToPcm.UnsetCollectionInnerTypeRoutine effect = new mir.routines.umlToPcm.UnsetCollectionInnerTypeRoutine(this.executionState, calledBy,
-    	umlType);
-    effect.applyRoutine();
-  }
-  
   public void changePropertyType(final Property umlProperty, final DataType umlType) {
     mir.routines.umlToPcm.ChangePropertyTypeRoutine effect = new mir.routines.umlToPcm.ChangePropertyTypeRoutine(this.executionState, calledBy,
     	umlProperty, umlType);
-    effect.applyRoutine();
-  }
-  
-  public void changeCollectionType(final DataType umlOwner, final DataType umlType) {
-    mir.routines.umlToPcm.ChangeCollectionTypeRoutine effect = new mir.routines.umlToPcm.ChangeCollectionTypeRoutine(this.executionState, calledBy,
-    	umlOwner, umlType);
     effect.applyRoutine();
   }
   

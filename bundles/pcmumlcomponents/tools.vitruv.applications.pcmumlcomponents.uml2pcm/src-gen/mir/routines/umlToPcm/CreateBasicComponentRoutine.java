@@ -50,10 +50,6 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     public EObject getElement3(final Component umlComponent, final Repository pcmRepository, final BasicComponent pcmComponent) {
       return pcmComponent;
     }
-    
-    public String getTag1(final Component umlComponent, final Repository pcmRepository, final BasicComponent pcmComponent) {
-      return "basic";
-    }
   }
   
   public CreateBasicComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Component umlComponent) {
@@ -84,7 +80,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     // val updatedElement userExecution.getElement1(umlComponent, pcmRepository, pcmComponent);
     userExecution.update0Element(umlComponent, pcmRepository, pcmComponent);
     
-    addCorrespondenceBetween(userExecution.getElement2(umlComponent, pcmRepository, pcmComponent), userExecution.getElement3(umlComponent, pcmRepository, pcmComponent), userExecution.getTag1(umlComponent, pcmRepository, pcmComponent));
+    addCorrespondenceBetween(userExecution.getElement2(umlComponent, pcmRepository, pcmComponent), userExecution.getElement3(umlComponent, pcmRepository, pcmComponent), "");
     
     postprocessElements();
   }

@@ -451,7 +451,12 @@ routine createOperationSignatureParameter(pcm::OperationSignature pcmSignature, 
 }
 reaction RenamedParameter {
 	after attribute replaced at pcm::Parameter[parameterName]
-	call renameParameter(affectedEObject)
+	call {
+		println("> rename parameter")
+		println(affectedEObject.operationSignature__Parameter.entityName)
+		println(affectedEObject.entityName)
+		renameParameter(affectedEObject)
+		}
 }
 routine renameParameter(pcm::Parameter pcmParameter) {
 	match {

@@ -1,10 +1,9 @@
-package mir.reactions.reactionsPcmToUml.pcmToUml;
+package mir.reactions.reactionsUmlToPcm.umlToPcm;
 
-import mir.routines.pcmToUml.RoutinesFacade;
+import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
-import org.palladiosimulator.pcm.repository.Parameter;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -14,19 +13,19 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class RenamedParameterReaction extends AbstractReactionRealization {
-  public RenamedParameterReaction(final UserInteracting userInteracting) {
+class ChangedMultiplicityUpperReaction extends AbstractReactionRealization {
+  public ChangedMultiplicityUpperReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Parameter, String> typedChange = (ReplaceSingleValuedEAttribute<Parameter, String>)change;
-    Parameter affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<MultiplicityElement, Integer> typedChange = (ReplaceSingleValuedEAttribute<MultiplicityElement, Integer>)change;
+    MultiplicityElement affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
-    mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsPcmToUml.pcmToUml.RenamedParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.RenamedParameterReaction.ActionUserExecution(this.executionState, this);
+    Integer oldValue = typedChange.getOldValue();
+    Integer newValue = typedChange.getNewValue();
+    mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -35,17 +34,17 @@ class RenamedParameterReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<Parameter, String> relevantChange = (ReplaceSingleValuedEAttribute<Parameter, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
+    ReplaceSingleValuedEAttribute<MultiplicityElement, Integer> relevantChange = (ReplaceSingleValuedEAttribute<MultiplicityElement, Integer>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof MultiplicityElement)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("parameterName")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("upper")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof Integer)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof Integer)) {
     	return false;
     }
     return true;
@@ -69,11 +68,8 @@ class RenamedParameterReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      InputOutput.<String>println("> rename parameter");
-      InputOutput.<String>println(affectedEObject.getOperationSignature__Parameter().getEntityName());
-      InputOutput.<String>println(affectedEObject.getEntityName());
-      _routinesFacade.renameParameter(affectedEObject);
+    public void callRoutine1(final MultiplicityElement affectedEObject, final EAttribute affectedFeature, final Integer oldValue, final Integer newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.updateMultiplicityType(affectedEObject);
     }
   }
 }

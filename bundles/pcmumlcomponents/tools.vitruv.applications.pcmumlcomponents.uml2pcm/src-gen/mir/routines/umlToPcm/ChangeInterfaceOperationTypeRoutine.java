@@ -5,11 +5,10 @@ import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmTypesUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -30,14 +29,13 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     }
     
     public void update0Element(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType) {
-      if ((pcmType == null)) {
+      DataType resolvedType = pcmType;
+      if ((((resolvedType == null) && (umlParameter.getType() != null)) && (umlParameter.getType() instanceof org.eclipse.uml2.uml.DataType))) {
+        final boolean unbound = ((umlParameter.lowerBound() != 1) || (umlParameter.upperBound() != 1));
         Type _type = umlParameter.getType();
-        if ((_type instanceof PrimitiveType)) {
-          pcmSignature.setReturnType__OperationSignature(UmlToPcmUtil.getPcmPrimitiveType(umlParameter.getType().getName(), this.userInteracting));
-        }
-      } else {
-        pcmSignature.setReturnType__OperationSignature(pcmType);
+        resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmSignature.getInterface__OperationSignature().getRepository__Interface(), Boolean.valueOf(unbound), this.userInteracting, this.correspondenceModel);
       }
+      pcmSignature.setReturnType__OperationSignature(resolvedType);
     }
     
     public EObject getCorrepondenceSourcePcmType(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature) {

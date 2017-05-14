@@ -17,12 +17,18 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
+import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.userinteraction.UserInteractionType
+import tools.vitruv.framework.correspondence.Correspondence
+import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
 
+// TODO functionality concerning types defined in this file is deprecated
 class UmlToPcmUtil {
 	
 	public static val CollectionTypeAttributeName = "innerType" 
+	public static val COLLECTION_TYPE_TAG = "Collection" 
+	public static val COLLECTION_TYPE_SUFFIX = "Collection" 
 	
 	def static PrimitiveTypeEnum getPcmPrimitiveType(String typeName) {
 		if (typeName == "Integer")
@@ -35,6 +41,25 @@ class UmlToPcmUtil {
 		if (pcmType === null)
 			return PrimitiveTypeEnum.STRING
 		return pcmType
+	}
+	
+	def static DataType retrievePcmType(org.eclipse.uml2.uml.DataType umlType, UserInteracting userInteractor, CorrespondenceModel correspondenceModel, Boolean collectionType) {
+		var correspondences = correspondenceModel.getCorrespondences(#[umlType])
+		if (collectionType) {
+			val tagName = COLLECTION_TYPE_TAG
+			correspondences = correspondences.filter[c | (c as ReactionsCorrespondence).tag == tagName].toSet()
+		}
+		if (!correspondences.empty) {
+			return correspondences.head.bs.head as DataType
+		}
+		var DataType correspondingType = null
+		if (primitiveTypeMapping.containsKey(umlType.name)) {
+			correspondingType = getPcmPrimitiveType(umlType.name, userInteractor)
+			if (collectionType && correspondingType !== null) {
+				correspondingType = getPcmCollectionType(umlType, correspondingType, correspondingType.repository__DataType, correspondenceModel)
+			}
+		}
+		return correspondingType
 	}
 	
 	/**
@@ -115,6 +140,23 @@ class UmlToPcmUtil {
 	}
 	
 	/**
+	 * If there is no standard mapping for this new type the user is asked for a mapping and a correspondence is created
+	 */
+	def static void optionallyMapPrimitivePcmType(PrimitiveType umlType, UserInteracting userInteracting, CorrespondenceModel correspondenceModel, Repository pcmRepository) {
+		if (umlType.name === null)
+			return;
+		if (primitiveTypeMapping.containsKey(umlType.name))
+			return;
+		val promptMsg = "For this data type there is no mapping to a PCM primitive type available. Select an applicable type from the provided options"
+		var options = new ArrayList<String>(PrimitiveTypeEnum.values.map[pt | pt.getName])
+		options.add("Create a composite Type")
+		val userSelection = userInteracting.selectFromMessage(UserInteractionType.MODAL, promptMsg, options)
+		val selectedType = PrimitiveTypeEnum.get(userSelection)
+		val correspondingType = PrimitiveTypeCorrespondenceHelper.primitiveDataTypes.get(selectedType.getName())
+		correspondenceModel.createAndAddCorrespondence(#[umlType], #[correspondingType])
+	}
+	
+	/**
 	 * TODO: should be stored in the framework as well
 	 */
 	protected static var collectionTypeMapping = new HashMap<String, CollectionDataType>()
@@ -123,10 +165,10 @@ class UmlToPcmUtil {
 	 * Returns a collection-type wrapping a given pcmType. If necessary it is created on demand.
 	 * Created collection-types are named {umlType.name}Collection
 	 */
-	def static CollectionDataType getPcmCollectionType(org.eclipse.uml2.uml.DataType umlType, DataType pcmType, Repository pcmRepository) {
-		if (collectionTypeMapping.containsKey(umlType.name)) {
+	def static CollectionDataType getPcmCollectionType(org.eclipse.uml2.uml.DataType umlType, DataType pcmType, Repository pcmRepository, CorrespondenceModel correspondenceModel) {
+		/*if (collectionTypeMapping.containsKey(umlType.name)) {
 			return collectionTypeMapping.get(umlType.name)
-		}
+		}*/
 		var DataType correspondingType = null
 		if (umlType instanceof PrimitiveType) {
 			correspondingType = getPcmPrimitiveType(umlType.name, null)
@@ -135,10 +177,11 @@ class UmlToPcmUtil {
 		}
 		if (correspondingType !== null) {
 			val collectionType = RepositoryFactory.eINSTANCE.createCollectionDataType()
-			collectionType.entityName = umlType.name + "Collection"
+			collectionType.entityName = umlType.name + COLLECTION_TYPE_SUFFIX
 			collectionType.innerType_CollectionDataType = correspondingType
 			pcmRepository.dataTypes__Repository += collectionType
-			collectionTypeMapping.put(umlType.name, collectionType)
+			correspondenceModel.createAndAddCorrespondence(#[umlType], #[collectionType])
+			//collectionTypeMapping.put(umlType.name, collectionType)
 			return collectionType
 		}
 		return null
@@ -160,7 +203,8 @@ class UmlToPcmUtil {
 	 */
 	private static class PrimitiveTypeCorrespondenceHelper {
 		// TODO elements returned by this don't have a correct href
-		private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
+		//private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
+		private static val PRIMITIVETYPES_URI = "pathmap://PCM_MODELS/PrimitiveTypes.repository"
 		
 		private static var Repository primitiveTypesRepository
 		private static var Map<String, PrimitiveDataType> primitives = new HashMap<String, PrimitiveDataType>()

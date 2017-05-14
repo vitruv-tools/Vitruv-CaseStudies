@@ -15,13 +15,13 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		collectionType.innerType_CollectionDataType = getPrimitiveType(PrimitiveTypeEnum.BOOL)
 		rootElement.dataTypes__Repository += collectionType
 		
-		/*val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
+		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
 		pcmInterface.entityName = "i1"
 		val pcmOperation = RepositoryFactory.eINSTANCE.createOperationSignature()
 		pcmOperation.entityName = "o1"
 		pcmOperation.returnType__OperationSignature = collectionType
 		pcmInterface.signatures__OperationInterface += pcmOperation
-		rootElement.interfaces__Repository += pcmInterface*/
+		rootElement.interfaces__Repository += pcmInterface
 		
 		val compositeType = RepositoryFactory.eINSTANCE.createCompositeDataType()
 		compositeType.entityName = "foo"
@@ -37,16 +37,21 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		innerDeclaration3.entityName = "top"
 		innerDeclaration3.datatype_InnerDeclaration = collectionType
 		compositeType.innerDeclaration_CompositeDataType += innerDeclaration3
-		/*val innerDeclaration4 = RepositoryFactory.eINSTANCE.createInnerDeclaration()
+		val innerDeclaration4 = RepositoryFactory.eINSTANCE.createInnerDeclaration()
 		innerDeclaration4.entityName = "kek"
 		innerDeclaration4.datatype_InnerDeclaration = collectionType
 		compositeType.innerDeclaration_CompositeDataType += innerDeclaration4
 		rootElement.dataTypes__Repository += compositeType
 		
-		saveAndSynchronizeChanges(rootElement) 
+		saveAndSynchronizeChanges(rootElement)
+
+		val intCol = RepositoryFactory.eINSTANCE.createCollectionDataType()
+		intCol.entityName = "IntList"
+		intCol.innerType_CollectionDataType = getPrimitiveType(PrimitiveTypeEnum.INT)
+		rootElement.dataTypes__Repository += intCol
 		
-		innerDeclaration4.datatype_InnerDeclaration = getPrimitiveType(PrimitiveTypeEnum.INT)*/
-		rootElement.dataTypes__Repository += compositeType
+		innerDeclaration4.datatype_InnerDeclaration = intCol
+		//rootElement.dataTypes__Repository += compositeType
 		saveAndSynchronizeChanges(rootElement)
 		
 		/*val ref = EcoreUtil.UsageCrossReferencer.find(collectionType, rootElement)

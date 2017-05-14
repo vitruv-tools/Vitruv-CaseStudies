@@ -67,7 +67,6 @@ class DeletedPropertyFromDataTypeReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final DataType affectedEObject, final EReference affectedFeature, final Property oldValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteInnerDeclarationOfProperty(oldValue);
-      _routinesFacade.unsetCollectionInnerType(affectedEObject);
     }
   }
 }

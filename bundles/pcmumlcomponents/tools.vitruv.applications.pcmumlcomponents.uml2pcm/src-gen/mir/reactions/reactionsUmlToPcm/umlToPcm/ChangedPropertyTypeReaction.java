@@ -3,7 +3,6 @@ package mir.reactions.reactionsUmlToPcm.umlToPcm;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -72,8 +71,6 @@ class ChangedPropertyTypeReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final Property affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changePropertyType(affectedEObject, newValue);
-      Element _owner = affectedEObject.getOwner();
-      _routinesFacade.changeCollectionType(((DataType) _owner), newValue);
     }
   }
 }

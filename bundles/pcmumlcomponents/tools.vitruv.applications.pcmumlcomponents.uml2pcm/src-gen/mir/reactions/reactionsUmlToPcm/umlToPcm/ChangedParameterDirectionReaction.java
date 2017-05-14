@@ -82,7 +82,9 @@ class ChangedParameterDirectionReaction extends AbstractReactionRealization {
         boolean _equals_1 = Objects.equal(oldValue, ParameterDirectionKind.RETURN_LITERAL);
         if (_equals_1) {
           Element _owner_1 = affectedEObject.getOwner();
-          _routinesFacade.addInterfaceOperationParameter(((Operation) _owner_1), affectedEObject);
+          _routinesFacade.unsetInterfaceOperationType(((Operation) _owner_1));
+          Element _owner_2 = affectedEObject.getOwner();
+          _routinesFacade.addInterfaceOperationParameter(((Operation) _owner_2), affectedEObject);
         } else {
           _routinesFacade.changeParameterDirection(affectedEObject);
         }

@@ -2,15 +2,12 @@ package mir.routines.umlToPcm;
 
 import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PrimitiveType;
-import org.palladiosimulator.pcm.repository.DataType;
-import org.palladiosimulator.pcm.repository.PrimitiveDataType;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
-import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil;
+import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmTypesUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,30 +23,13 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final PrimitiveType umlType, final Repository pcmRepository, final PrimitiveDataType pcmType) {
-      return pcmRepository;
-    }
-    
     public EObject getCorrepondenceSourcePcmRepository(final PrimitiveType umlType) {
       Model _model = umlType.getModel();
       return _model;
     }
     
-    public void update0Element(final PrimitiveType umlType, final Repository pcmRepository, final PrimitiveDataType pcmType) {
-      EList<DataType> _dataTypes__Repository = pcmRepository.getDataTypes__Repository();
-      _dataTypes__Repository.add(pcmType);
-    }
-    
-    public EObject getElement2(final PrimitiveType umlType, final Repository pcmRepository, final PrimitiveDataType pcmType) {
-      return umlType;
-    }
-    
-    public void updatePcmTypeElement(final PrimitiveType umlType, final Repository pcmRepository, final PrimitiveDataType pcmType) {
-      pcmType.setType(UmlToPcmUtil.getPcmPrimitiveType(umlType.getName()));
-    }
-    
-    public EObject getElement3(final PrimitiveType umlType, final Repository pcmRepository, final PrimitiveDataType pcmType) {
-      return pcmType;
+    public void callRoutine1(final PrimitiveType umlType, final Repository pcmRepository, @Extension final RoutinesFacade _routinesFacade) {
+      UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, Boolean.valueOf(false), this.userInteracting, this.correspondenceModel);
     }
   }
   
@@ -75,13 +55,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     	return;
     }
     registerObjectUnderModification(pcmRepository);
-    PrimitiveDataType pcmType = RepositoryFactoryImpl.eINSTANCE.createPrimitiveDataType();
-    userExecution.updatePcmTypeElement(umlType, pcmRepository, pcmType);
-    
-    // val updatedElement userExecution.getElement1(umlType, pcmRepository, pcmType);
-    userExecution.update0Element(umlType, pcmRepository, pcmType);
-    
-    addCorrespondenceBetween(userExecution.getElement2(umlType, pcmRepository, pcmType), userExecution.getElement3(umlType, pcmRepository, pcmType), "");
+    userExecution.callRoutine1(umlType, pcmRepository, actionsFacade);
     
     postprocessElements();
   }

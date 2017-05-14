@@ -2,18 +2,19 @@ package tools.vitruv.applications.pcmumlcomp.pcm2uml
 
 import java.util.Map
 import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 import org.eclipse.uml2.uml.Model
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
@@ -77,6 +78,10 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	
 	protected def PrimitiveDataType getPrimitiveType(PrimitiveTypeEnum type) {
 		return loadPrimitiveTypes().dataTypes__Repository.get(type.value) as PrimitiveDataType
+	}
+	
+	protected def Iterable<EObject> correspondingElements(EObject element) {
+		return correspondenceModel.getCorrespondingEObjects(#[element]).flatten
 	}
 
 }
