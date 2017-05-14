@@ -4,7 +4,6 @@ import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Enumeration;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -23,8 +22,8 @@ class UmlDataTypeCreatedReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Model, DataType> typedChange = ((CreateAndInsertNonRoot<Model, DataType>)change).getInsertChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Package, DataType> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, DataType>)change).getInsertChange();
+    org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     DataType newValue = typedChange.getNewValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
@@ -37,8 +36,8 @@ class UmlDataTypeCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Model, DataType> relevantChange = ((CreateAndInsertNonRoot<Model, DataType>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    InsertEReference<org.eclipse.uml2.uml.Package, DataType> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, DataType>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Package)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
@@ -59,8 +58,8 @@ class UmlDataTypeCreatedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<Model, DataType> typedChange = ((CreateAndInsertNonRoot<Model, DataType>)change).getInsertChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Package, DataType> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, DataType>)change).getInsertChange();
+    org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     DataType newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
@@ -70,7 +69,7 @@ class UmlDataTypeCreatedReaction extends AbstractReactionRealization {
     return true;
   }
   
-  private boolean checkUserDefinedPrecondition(final Model affectedEObject, final EReference affectedFeature, final DataType newValue) {
+  private boolean checkUserDefinedPrecondition(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final DataType newValue) {
     return ((!(newValue instanceof PrimitiveType)) && (!(newValue instanceof Enumeration)));
   }
   
@@ -79,7 +78,7 @@ class UmlDataTypeCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createJavaClass(newValue);
     }
   }

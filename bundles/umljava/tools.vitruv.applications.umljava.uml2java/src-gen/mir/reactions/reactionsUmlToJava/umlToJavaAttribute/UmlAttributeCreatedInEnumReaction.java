@@ -2,7 +2,7 @@ package mir.reactions.reactionsUmlToJava.umlToJavaAttribute;
 
 import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -21,8 +21,8 @@ class UmlAttributeCreatedInEnumReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Enumeration, Property> typedChange = ((CreateAndInsertNonRoot<Enumeration, Property>)change).getInsertChange();
-    Enumeration affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<DataType, Property> typedChange = ((CreateAndInsertNonRoot<DataType, Property>)change).getInsertChange();
+    DataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     Property newValue = typedChange.getNewValue();
     mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
@@ -35,8 +35,8 @@ class UmlAttributeCreatedInEnumReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Enumeration, Property> relevantChange = ((CreateAndInsertNonRoot<Enumeration, Property>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Enumeration)) {
+    InsertEReference<DataType, Property> relevantChange = ((CreateAndInsertNonRoot<DataType, Property>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof DataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedAttribute")) {
@@ -66,7 +66,7 @@ class UmlAttributeCreatedInEnumReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Enumeration affectedEObject, final EReference affectedFeature, final Property newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final DataType affectedEObject, final EReference affectedFeature, final Property newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createJavaAttributeInEnum(affectedEObject, newValue);
     }
   }

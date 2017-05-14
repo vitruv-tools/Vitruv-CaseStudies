@@ -47,7 +47,7 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
 			if (jPackage !== null) {
 				javaCompilationUnit.namespaces += jPackage.javaPackageAsStringList
 			}
-            javaCompilationUnit.name = jClassifier.name;
+            javaCompilationUnit.name = jClassifier.name + ".java";
             javaCompilationUnit.classifiers += jClassifier;
             persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
         }
@@ -59,6 +59,8 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
         }
 	}
 }
+
+
 
 reaction UmlPackageCreated {
 	after element uml::Package created and inserted in uml::Package[packagedElement]
@@ -150,7 +152,6 @@ routine changePackageOfJavaCompilationUnit(java::Package jPackage, java::Compila
 		}
 	}
 }
-
 reaction UmlPackageDeleted {
 	after element uml::Package deleted and removed from uml::Package[packagedElement]
 	call deleteJavaPackage(oldValue)
@@ -180,7 +181,7 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
             javaClassifier.name = umlClassifier.name;
         }
         update javaCompilationUnit {
-            javaCompilationUnit.name = umlClassifier.name;
+            javaCompilationUnit.name = umlClassifier.name + ".java";
             persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
         }
     }
@@ -247,8 +248,12 @@ routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
         val superJavaClass = retrieve java::Class corresponding to superUMLClass
     }
     action {
-        update jClass {
-            jClass.extends = createTypeReference(null, superJavaClass);
+        call {
+            if (uClass.generals.size == 1) {
+                jClass.extends = createTypeReference(null, superJavaClass);
+            } else {
+                logger.warn("Routine not executed: Tried to set multiple inheritance for " + uClass)
+            }
         }
     }
 }
@@ -270,13 +275,13 @@ routine deleteJavaSuperClass(uml::Class uClass) {
 }
 
 reaction UmlDataTypeCreated {
-	after element uml::DataType created and inserted in uml::Model[packagedElement] with !(newValue instanceof org.eclipse.uml2.uml.PrimitiveType)
+	after element uml::DataType created and inserted in uml::Package[packagedElement] with !(newValue instanceof org.eclipse.uml2.uml.PrimitiveType)
 	&& !(newValue instanceof org.eclipse.uml2.uml.Enumeration) 
 	call createJavaClass(newValue)
 }
 
 reaction UmlCollectionDataTypeCreated {
-	after element uml::Property created and inserted in uml::DataType[ownedAttribute]
+	after element uml::Property created and inserted in uml::PrimitiveType[ownedAttribute]
 	call createJavaCollectionClass(affectedEObject, newValue)
 }
 

@@ -2,7 +2,7 @@ package mir.reactions.reactionsUmlToJava.umlToJavaClassifier;
 
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -21,8 +21,8 @@ class UmlCollectionDataTypeCreatedReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<DataType, Property> typedChange = ((CreateAndInsertNonRoot<DataType, Property>)change).getInsertChange();
-    DataType affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<PrimitiveType, Property> typedChange = ((CreateAndInsertNonRoot<PrimitiveType, Property>)change).getInsertChange();
+    PrimitiveType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     Property newValue = typedChange.getNewValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
@@ -35,8 +35,8 @@ class UmlCollectionDataTypeCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<DataType, Property> relevantChange = ((CreateAndInsertNonRoot<DataType, Property>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof DataType)) {
+    InsertEReference<PrimitiveType, Property> relevantChange = ((CreateAndInsertNonRoot<PrimitiveType, Property>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof PrimitiveType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedAttribute")) {
@@ -66,7 +66,7 @@ class UmlCollectionDataTypeCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final DataType affectedEObject, final EReference affectedFeature, final Property newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final PrimitiveType affectedEObject, final EReference affectedFeature, final Property newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createJavaCollectionClass(affectedEObject, newValue);
     }
   }

@@ -1,6 +1,6 @@
 package mir.routines.umlToJavaAttribute;
 
-import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Field;
@@ -20,7 +20,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createJavaAttributeInEnum(final Enumeration uEnum, final Property umlAttribute) {
+  public void createJavaAttributeInEnum(final DataType uEnum, final Property umlAttribute) {
     mir.routines.umlToJavaAttribute.CreateJavaAttributeInEnumRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaAttributeInEnumRoutine(this.executionState, calledBy,
     	uEnum, umlAttribute);
     effect.applyRoutine();

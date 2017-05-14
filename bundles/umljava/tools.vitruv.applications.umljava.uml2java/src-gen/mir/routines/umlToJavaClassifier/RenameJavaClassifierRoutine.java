@@ -43,7 +43,9 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update1Element(final Classifier umlClassifier, final ConcreteClassifier javaClassifier, final CompilationUnit javaCompilationUnit) {
-      javaCompilationUnit.setName(umlClassifier.getName());
+      String _name = umlClassifier.getName();
+      String _plus = (_name + ".java");
+      javaCompilationUnit.setName(_plus);
       this.persistProjectRelative(umlClassifier, javaCompilationUnit, JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit));
     }
   }

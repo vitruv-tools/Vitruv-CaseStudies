@@ -22,8 +22,8 @@ public abstract class AbstractChangePropagationSpecificationUmlToJava extends Co
 	 */
 	protected void setup() {
 		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.ExecutorUmlToJava(getUserInteracting()));
-		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.ExecutorUmlToJava(getUserInteracting()));
 		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToJava.umlToJavaMethod.ExecutorUmlToJava(getUserInteracting()));
+		this.addChangeMainprocessor(new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.ExecutorUmlToJava(getUserInteracting()));
 	}
 	
 }

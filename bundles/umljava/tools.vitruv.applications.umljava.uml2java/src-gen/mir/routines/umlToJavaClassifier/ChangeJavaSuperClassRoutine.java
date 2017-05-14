@@ -3,6 +3,7 @@ package mir.routines.umlToJavaClassifier;
 import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -19,20 +20,22 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class superJavaClass) {
-      return jClass;
-    }
-    
     public EObject getCorrepondenceSourceJClass(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass) {
       return uClass;
     }
     
-    public void update0Element(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class superJavaClass) {
-      jClass.setExtends(UmlToJavaHelper.createTypeReference(null, superJavaClass));
-    }
-    
     public EObject getCorrepondenceSourceSuperJavaClass(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass) {
       return superUMLClass;
+    }
+    
+    public void callRoutine1(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class superJavaClass, @Extension final RoutinesFacade _routinesFacade) {
+      int _size = uClass.getGenerals().size();
+      boolean _equals = (_size == 1);
+      if (_equals) {
+        jClass.setExtends(UmlToJavaHelper.createTypeReference(null, superJavaClass));
+      } else {
+        this.getLogger().warn(("Routine not executed: Tried to set multiple inheritance for " + uClass));
+      }
     }
   }
   
@@ -70,8 +73,7 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     	return;
     }
     registerObjectUnderModification(superJavaClass);
-    // val updatedElement userExecution.getElement1(superUMLClass, uClass, jClass, superJavaClass);
-    userExecution.update0Element(superUMLClass, uClass, jClass, superJavaClass);
+    userExecution.callRoutine1(superUMLClass, uClass, jClass, superJavaClass, actionsFacade);
     
     postprocessElements();
   }

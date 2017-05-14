@@ -47,7 +47,9 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
         Collection<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage);
         Iterables.<String>addAll(_namespaces, _javaPackageAsStringList);
       }
-      javaCompilationUnit.setName(jClassifier.getName());
+      String _name = jClassifier.getName();
+      String _plus = (_name + ".java");
+      javaCompilationUnit.setName(_plus);
       EList<ConcreteClassifier> _classifiers = javaCompilationUnit.getClassifiers();
       _classifiers.add(jClassifier);
       this.persistProjectRelative(umlClassifier, javaCompilationUnit, JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit));

@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -22,7 +23,7 @@ public class CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine extends Abstract
     }
     
     public void callRoutine1(final PrimitiveType uPrimType, @Extension final RoutinesFacade _routinesFacade) {
-      org.emftext.language.java.types.PrimitiveType _mapToJavaPrimitiveType = UmlToJavaHelper.mapToJavaPrimitiveType(uPrimType);
+      TypeReference _mapToJavaPrimitiveType = UmlToJavaHelper.mapToJavaPrimitiveType(uPrimType);
       boolean _tripleEquals = (_mapToJavaPrimitiveType == null);
       if (_tripleEquals) {
         this.userInteracting.showMessage(UserInteractionType.MODAL, ("There is no corresponding Java-PrimitiveType for " + uPrimType));
