@@ -252,6 +252,7 @@ routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
             if (uClass.generals.size == 1) {
                 jClass.extends = createTypeReference(null, superJavaClass);
             } else {
+                userInteracting.showMessage(UserInteractionType.MODAL, "Warning: Can not synchronize multiple inheritance for " + uClass)
                 logger.warn("Routine not executed: Tried to set multiple inheritance for " + uClass)
             }
         }

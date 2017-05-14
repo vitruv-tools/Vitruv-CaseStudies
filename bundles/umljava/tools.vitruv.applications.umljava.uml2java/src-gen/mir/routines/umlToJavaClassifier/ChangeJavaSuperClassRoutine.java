@@ -8,6 +8,7 @@ import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealization {
@@ -34,6 +35,7 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
       if (_equals) {
         jClass.setExtends(UmlToJavaHelper.createTypeReference(null, superJavaClass));
       } else {
+        this.userInteracting.showMessage(UserInteractionType.MODAL, ("Warning: Can not synchronize multiple inheritance for " + uClass));
         this.getLogger().warn(("Routine not executed: Tried to set multiple inheritance for " + uClass));
       }
     }
