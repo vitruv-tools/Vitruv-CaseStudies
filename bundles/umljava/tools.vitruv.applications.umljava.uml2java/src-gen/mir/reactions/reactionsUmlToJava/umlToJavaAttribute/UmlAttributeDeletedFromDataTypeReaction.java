@@ -2,6 +2,7 @@ package mir.reactions.reactionsUmlToJava.umlToJavaAttribute;
 
 import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -9,46 +10,46 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
-import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
+import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteNonRoot;
+import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class UmlAttributeCreatedInClassReaction extends AbstractReactionRealization {
-  public UmlAttributeCreatedInClassReaction(final UserInteracting userInteracting) {
+class UmlAttributeDeletedFromDataTypeReaction extends AbstractReactionRealization {
+  public UmlAttributeDeletedFromDataTypeReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Class, Property> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Property>)change).getInsertChange();
-    org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<DataType, Property> typedChange = ((RemoveAndDeleteNonRoot<DataType, Property>)change).getRemoveChange();
+    DataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Property newValue = typedChange.getNewValue();
+    Property oldValue = typedChange.getOldValue();
     mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeCreatedInClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeCreatedInClassReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeDeletedFromDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeDeletedFromDataTypeReaction.ActionUserExecution(this.executionState, this);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return CreateAndInsertNonRoot.class;
+    return RemoveAndDeleteNonRoot.class;
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Class, Property> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Property>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
+    RemoveEReference<DataType, Property> relevantChange = ((RemoveAndDeleteNonRoot<DataType, Property>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof DataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedAttribute")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Property)) {
+    if (!(relevantChange.getOldValue() instanceof Property)) {
     	return false;
     }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof CreateAndInsertNonRoot)) {
+    if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
     getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
@@ -65,8 +66,8 @@ class UmlAttributeCreatedInClassReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Property newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createJavaAttribute(affectedEObject, newValue);
+    public void callRoutine1(final DataType affectedEObject, final EReference affectedFeature, final Property oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.deleteJavaAttribute(oldValue);
     }
   }
 }

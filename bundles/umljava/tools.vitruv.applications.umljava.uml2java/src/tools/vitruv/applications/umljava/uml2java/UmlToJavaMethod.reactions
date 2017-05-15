@@ -25,9 +25,23 @@ reaction UmlMethodCreatedInEnum {
         createJavaMethod(affectedEObject, newValue)       
     }
 }
-routine createJavaMethod(uml::Classifier uClassifier, uml::Operation umlOp) {
+routine createJavaMethod(uml::Classifier uClassifier, uml::Operation uOperation) {
+    action {
+        call {
+            if (uClassifier.name.equals(uOperation.name)) {
+                createJavaConstructor(uClassifier, uOperation)
+            } else if (uClassifier instanceof org.eclipse.uml2.uml.Class
+                || uClassifier instanceof org.eclipse.uml2.uml.Enumeration
+                || uClassifier instanceof org.eclipse.uml2.uml.DataType) {
+                createJavaClassMethod(uClassifier, uOperation)
+            } else if (uClassifier instanceof org.eclipse.uml2.uml.Interface) {
+                createJavaInterfaceMethod(uClassifier, uOperation)
+            }
+        }
+    }
+}
+routine createJavaClassMethod(uml::Classifier uClassifier, uml::Operation umlOp) {
     match {
-        
         val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
         val customTypeClass = retrieve optional java::Class corresponding to umlOp.type
     }
@@ -44,6 +58,21 @@ routine createJavaMethod(uml::Classifier uClassifier, uml::Operation umlOp) {
     }
 }
 
+routine createJavaConstructor(uml::Classifier uClassifier, uml::Operation uOperation) {
+    match {
+        val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
+    }
+    action {
+        val jConstructor = create java::Constructor and initialize {
+            jConstructor.name = uOperation.name;
+            setJavaVisibility(jConstructor, uOperation.visibility)
+        }
+        update jClassifier {
+            jClassifier.members += jConstructor;
+        }
+        add correspondence between uOperation and jConstructor
+    }
+}
 
 
 reaction UmlClassMethodDeleted {
@@ -80,7 +109,7 @@ reaction UmlParameterCreated {
 
 routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
     match {
-        val javaMethod = retrieve java::Method corresponding to uMeth
+        val javaMethod = retrieve java::Parametrizable corresponding to uMeth
         val customTypeClass = retrieve optional java::Class corresponding to umlParam.type
     }
     action {
@@ -220,12 +249,12 @@ routine setJavaMethodAbstract(uml::Operation umlOp) {
 
 reaction UmlInterfaceMethodCreated {
     after element uml::Operation created and inserted in uml::Interface[ownedOperation]
-    call createJavaInterfaceMethod(newValue)
+    call createJavaMethod(affectedEObject, newValue)
 }
 
-routine createJavaInterfaceMethod(uml::Operation umlOp) {
+routine createJavaInterfaceMethod(uml::Interface uInterface, uml::Operation umlOp) {
     match {
-        val jInterface = retrieve java::Interface corresponding to umlOp.interface
+        val jInterface = retrieve java::Interface corresponding to uInterface
         val customTypeClass = retrieve optional java::Class corresponding to umlOp.type
     }
     action {

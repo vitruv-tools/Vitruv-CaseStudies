@@ -1,6 +1,6 @@
 package mir.routines.umlToJavaAttribute;
 
-import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Field;
@@ -14,15 +14,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createJavaAttributeInClass(final org.eclipse.uml2.uml.Class umlClass, final Property umlAttribute) {
-    mir.routines.umlToJavaAttribute.CreateJavaAttributeInClassRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaAttributeInClassRoutine(this.executionState, calledBy,
-    	umlClass, umlAttribute);
-    effect.applyRoutine();
-  }
-  
-  public void createJavaAttributeInEnum(final DataType uEnum, final Property umlAttribute) {
-    mir.routines.umlToJavaAttribute.CreateJavaAttributeInEnumRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaAttributeInEnumRoutine(this.executionState, calledBy,
-    	uEnum, umlAttribute);
+  public void createJavaAttribute(final Classifier uClassifier, final Property umlAttribute) {
+    mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine(this.executionState, calledBy,
+    	uClassifier, umlAttribute);
     effect.applyRoutine();
   }
   

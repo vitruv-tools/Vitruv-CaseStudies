@@ -2,6 +2,7 @@ package mir.routines.umlToJavaMethod;
 
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Feature;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
@@ -16,9 +17,21 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createJavaMethod(final Classifier uClassifier, final Operation umlOp) {
+  public void createJavaMethod(final Classifier uClassifier, final Operation uOperation) {
     mir.routines.umlToJavaMethod.CreateJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaMethodRoutine(this.executionState, calledBy,
+    	uClassifier, uOperation);
+    effect.applyRoutine();
+  }
+  
+  public void createJavaClassMethod(final Classifier uClassifier, final Operation umlOp) {
+    mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine(this.executionState, calledBy,
     	uClassifier, umlOp);
+    effect.applyRoutine();
+  }
+  
+  public void createJavaConstructor(final Classifier uClassifier, final Operation uOperation) {
+    mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine(this.executionState, calledBy,
+    	uClassifier, uOperation);
     effect.applyRoutine();
   }
   
@@ -70,9 +83,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createJavaInterfaceMethod(final Operation umlOp) {
+  public void createJavaInterfaceMethod(final Interface uInterface, final Operation umlOp) {
     mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine(this.executionState, calledBy,
-    	umlOp);
+    	uInterface, umlOp);
     effect.applyRoutine();
   }
   

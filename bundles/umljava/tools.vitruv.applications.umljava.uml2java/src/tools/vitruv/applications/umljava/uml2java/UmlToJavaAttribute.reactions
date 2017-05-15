@@ -14,50 +14,34 @@ execute actions in Java
 
 
 
+
 reaction UmlAttributeCreatedInClass {
     after element uml::Property created and inserted in uml::Class[ownedAttribute]
     call {
-        createJavaAttributeInClass(affectedEObject, newValue)
+        createJavaAttribute(affectedEObject, newValue)
     }
 }
 
-routine createJavaAttributeInClass(uml::Class umlClass, uml::Property umlAttribute) {
-    match {
-        val javaClass = retrieve java::Class corresponding to umlClass
-        val customTypeClass = retrieve optional java::Class corresponding to umlAttribute.type
-    }
-    action {
-        val javaAttribute = create java::Field and initialize {
-            javaAttribute.name = umlAttribute.name;
-            javaAttribute.makePublic
-        }
-        update javaClass {
-            javaClass.members += javaAttribute
-        }
-        add correspondence between umlAttribute and javaAttribute
-    }
-}
 //We can not define one single reaction for attribute creation in enums and classes because
 //They don't have a common superclass for "having ownedAttributes"
-reaction UmlAttributeCreatedInEnum {
-    after element uml::Property created and inserted in uml::Enumeration[ownedAttribute]
+reaction UmlAttributeCreatedInDataType {
+    after element uml::Property created and inserted in uml::DataType[ownedAttribute]
     call {
-        createJavaAttributeInEnum(affectedEObject, newValue)
+        createJavaAttribute(affectedEObject, newValue)
     }
 }
 
-routine createJavaAttributeInEnum(uml::Enumeration uEnum, uml::Property umlAttribute) {
+routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttribute) {
     match {
-        val jEnum = retrieve java::Enumeration corresponding to uEnum
-        val customTypeClass = retrieve optional java::Class corresponding to umlAttribute.type
+        val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
     }
     action {
         val javaAttribute = create java::Field and initialize {
             javaAttribute.name = umlAttribute.name;
             javaAttribute.makePublic
         }
-        update jEnum {
-            jEnum.members += javaAttribute
+        update jClassifier {
+            jClassifier.members += javaAttribute
         }
         add correspondence between umlAttribute and javaAttribute
     }
@@ -68,8 +52,8 @@ reaction UmlAttributeDeletedFromClass {
     call deleteJavaAttribute(oldValue)
 }
 
-reaction UmlAttributeDeletedFromEnum {
-    after element uml::Property deleted and removed from uml::Enumeration[ownedAttribute]
+reaction UmlAttributeDeletedFromDataType {
+    after element uml::Property deleted and removed from uml::DataType[ownedAttribute]
     call deleteJavaAttribute(oldValue)
 }
 
@@ -131,6 +115,7 @@ reaction UmlUpperMultiplicityChanged {
     after attribute replaced at uml::LiteralUnlimitedNatural[value]
     call handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
 }
+
 
 routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
     match {

@@ -8,8 +8,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
-import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.Parametrizable;
 import org.emftext.language.java.parameters.impl.ParametersFactoryImpl;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -27,25 +27,25 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
+    public EObject getElement1(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       return javaParam;
     }
     
-    public void update0Element(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
+    public void update0Element(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       EList<org.emftext.language.java.parameters.Parameter> _parameters = javaMethod.getParameters();
       _parameters.add(javaParam);
     }
     
-    public EObject getCorrepondenceSourceCustomTypeClass(final Operation uMeth, final Parameter umlParam, final Method javaMethod) {
+    public EObject getCorrepondenceSourceCustomTypeClass(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod) {
       Type _type = umlParam.getType();
       return _type;
     }
     
-    public EObject getElement2(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
+    public EObject getElement2(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       return umlParam;
     }
     
-    public EObject getElement3(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
+    public EObject getElement3(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       return javaMethod;
     }
     
@@ -53,7 +53,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
       return uMeth;
     }
     
-    public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Method javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
+    public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
       boolean _equals = Objects.equal(umlParam, null);
       if (_equals) {
         javaParam.setName("DefaultParameterName");
@@ -80,10 +80,10 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     getLogger().debug("   Operation: " + this.uMeth);
     getLogger().debug("   Parameter: " + this.umlParam);
     
-    Method javaMethod = getCorrespondingElement(
+    Parametrizable javaMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaMethod(uMeth, umlParam), // correspondence source supplier
-    	Method.class,
-    	(Method _element) -> true, // correspondence precondition checker
+    	Parametrizable.class,
+    	(Parametrizable _element) -> true, // correspondence precondition checker
     	null);
     if (javaMethod == null) {
     	return;

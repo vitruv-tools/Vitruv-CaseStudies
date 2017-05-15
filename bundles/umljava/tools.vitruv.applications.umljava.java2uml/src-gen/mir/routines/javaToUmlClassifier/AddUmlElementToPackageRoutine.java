@@ -39,7 +39,6 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
         if (_equals) {
           this.persistProjectRelative(persistedObject, uPackage, JavaToUmlHelper.getRootModelFile());
         }
-      } else {
       }
     }
   }

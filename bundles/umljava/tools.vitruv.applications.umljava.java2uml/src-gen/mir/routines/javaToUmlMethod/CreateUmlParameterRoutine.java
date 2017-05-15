@@ -8,8 +8,8 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.emftext.language.java.classifiers.Classifier;
-import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.Parametrizable;
 import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -26,51 +26,51 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceCustomType(final Method jMeth, final OrdinaryParameter jParam, final Operation uOperation) {
+    public EObject getCorrepondenceSourceCustomType(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation) {
       Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(jParam.getTypeReference());
       return _classifierFromTypeReference;
     }
     
-    public EObject getElement1(final Method jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public EObject getElement1(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
       return uParam;
     }
     
-    public void update0Element(final Method jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public void update0Element(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
       EList<Parameter> _ownedParameters = uOperation.getOwnedParameters();
       _ownedParameters.add(uParam);
     }
     
-    public void updateUParamElement(final Method jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public void updateUParamElement(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
       uParam.setName(jParam.getName());
     }
     
-    public EObject getElement2(final Method jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public EObject getElement2(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
       return jParam;
     }
     
-    public EObject getElement3(final Method jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public EObject getElement3(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
       return uOperation;
     }
     
-    public EObject getCorrepondenceSourceUOperation(final Method jMeth, final OrdinaryParameter jParam) {
+    public EObject getCorrepondenceSourceUOperation(final Parametrizable jMeth, final OrdinaryParameter jParam) {
       return jMeth;
     }
   }
   
-  public CreateUmlParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method jMeth, final OrdinaryParameter jParam) {
+  public CreateUmlParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parametrizable jMeth, final OrdinaryParameter jParam) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlMethod.CreateUmlParameterRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(getExecutionState(), this);
     this.jMeth = jMeth;this.jParam = jParam;
   }
   
-  private Method jMeth;
+  private Parametrizable jMeth;
   
   private OrdinaryParameter jParam;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlParameterRoutine with input:");
-    getLogger().debug("   Method: " + this.jMeth);
+    getLogger().debug("   Parametrizable: " + this.jMeth);
     getLogger().debug("   OrdinaryParameter: " + this.jParam);
     
     Operation uOperation = getCorrespondingElement(

@@ -13,15 +13,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createUmlAttributeInClass(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr) {
-    mir.routines.javaToUmlAttribute.CreateUmlAttributeInClassRoutine effect = new mir.routines.javaToUmlAttribute.CreateUmlAttributeInClassRoutine(this.executionState, calledBy,
-    	jClass, jAttr);
-    effect.applyRoutine();
-  }
-  
   public void createUmlAttributeInEnum(final Enumeration jEnum, final Field jAttr) {
     mir.routines.javaToUmlAttribute.CreateUmlAttributeInEnumRoutine effect = new mir.routines.javaToUmlAttribute.CreateUmlAttributeInEnumRoutine(this.executionState, calledBy,
     	jEnum, jAttr);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlAttributeInClass(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr) {
+    mir.routines.javaToUmlAttribute.CreateUmlAttributeInClassRoutine effect = new mir.routines.javaToUmlAttribute.CreateUmlAttributeInClassRoutine(this.executionState, calledBy,
+    	jClass, jAttr);
     effect.applyRoutine();
   }
   

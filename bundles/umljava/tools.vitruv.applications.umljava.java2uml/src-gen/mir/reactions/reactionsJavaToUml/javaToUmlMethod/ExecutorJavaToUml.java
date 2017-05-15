@@ -17,6 +17,7 @@ public class ExecutorJavaToUml extends AbstractReactionsExecutor {
     tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
     this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaInterfaceMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaInterfaceMethodCreatedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMemberDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMemberDeletedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeAbstractReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeAbstractReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonAbstractReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonAbstractReaction(userInteracting));

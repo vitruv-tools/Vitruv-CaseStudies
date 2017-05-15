@@ -111,10 +111,10 @@ class JavaMemberAndParameterUtil {
        return constructor
    }
    
-   def static createJavaConstructorAndAddToClass(Class jClass) {
+   def static createJavaConstructorAndAddToClass(Class jClass, JavaVisibility visibility) {
         val constructor = MembersFactory.eINSTANCE.createConstructor
         constructor.name = jClass.name
-        constructor.makePublic
+        setJavaVisibilityModifier(constructor, visibility) 
         jClass.members += constructor
         return constructor
    }

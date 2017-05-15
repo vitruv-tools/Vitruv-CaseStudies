@@ -2,10 +2,12 @@ package mir.routines.javaToUmlMethod;
 
 import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.ClassMethod;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -23,29 +25,32 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uOperation) {
+    public EObject getElement1(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final Classifier uClassifier, final Operation uOperation) {
       return uOperation;
-    }
-    
-    public void update0Element(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uOperation) {
-      EList<Operation> _ownedOperations = uClassifier.getOwnedOperations();
-      _ownedOperations.add(uOperation);
     }
     
     public EObject getCorrepondenceSourceUClassifier(final ClassMethod jMeth, final ConcreteClassifier jClassifier) {
       return jClassifier;
     }
     
-    public EObject getElement2(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uOperation) {
+    public EObject getElement2(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final Classifier uClassifier, final Operation uOperation) {
       return jMeth;
     }
     
-    public EObject getElement3(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uOperation) {
-      return uClassifier;
+    public void updateUOperationElement(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final Classifier uClassifier, final Operation uOperation) {
+      uOperation.setName(jMeth.getName());
     }
     
-    public void updateUOperationElement(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uOperation) {
-      uOperation.setName(jMeth.getName());
+    public void callRoutine1(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final Classifier uClassifier, final Operation uOperation, @Extension final RoutinesFacade _routinesFacade) {
+      if ((uClassifier instanceof org.eclipse.uml2.uml.Class)) {
+        _routinesFacade.addUmlOperationToClass(((org.eclipse.uml2.uml.Class)uClassifier), uOperation);
+      } else {
+        if ((uClassifier instanceof Enumeration)) {
+          _routinesFacade.addUmlOperationToEnum(((Enumeration)uClassifier), uOperation);
+        } else {
+          this.getLogger().warn(("Can not add ClassMethod to " + uClassifier));
+        }
+      }
     }
   }
   
@@ -65,10 +70,10 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     getLogger().debug("   ClassMethod: " + this.jMeth);
     getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
     
-    org.eclipse.uml2.uml.Class uClassifier = getCorrespondingElement(
+    Classifier uClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClassifier(jMeth, jClassifier), // correspondence source supplier
-    	org.eclipse.uml2.uml.Class.class,
-    	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
+    	Classifier.class,
+    	(Classifier _element) -> true, // correspondence precondition checker
     	null);
     if (uClassifier == null) {
     	return;
@@ -79,8 +84,7 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     
     addCorrespondenceBetween(userExecution.getElement1(jMeth, jClassifier, uClassifier, uOperation), userExecution.getElement2(jMeth, jClassifier, uClassifier, uOperation), "");
     
-    // val updatedElement userExecution.getElement3(jMeth, jClassifier, uClassifier, uOperation);
-    userExecution.update0Element(jMeth, jClassifier, uClassifier, uOperation);
+    userExecution.callRoutine1(jMeth, jClassifier, uClassifier, uOperation, actionsFacade);
     
     postprocessElements();
   }

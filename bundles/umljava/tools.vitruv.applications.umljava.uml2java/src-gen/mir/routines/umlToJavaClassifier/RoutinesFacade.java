@@ -1,14 +1,12 @@
 package mir.routines.umlToJavaClassifier;
 
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.PrimitiveType;
-import org.eclipse.uml2.uml.Property;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
@@ -90,12 +88,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void deleteJavaSuperClass(final org.eclipse.uml2.uml.Class uClass) {
     mir.routines.umlToJavaClassifier.DeleteJavaSuperClassRoutine effect = new mir.routines.umlToJavaClassifier.DeleteJavaSuperClassRoutine(this.executionState, calledBy,
     	uClass);
-    effect.applyRoutine();
-  }
-  
-  public void createJavaCollectionClass(final DataType dType, final Property innerType) {
-    mir.routines.umlToJavaClassifier.CreateJavaCollectionClassRoutine effect = new mir.routines.umlToJavaClassifier.CreateJavaCollectionClassRoutine(this.executionState, calledBy,
-    	dType, innerType);
     effect.applyRoutine();
   }
   

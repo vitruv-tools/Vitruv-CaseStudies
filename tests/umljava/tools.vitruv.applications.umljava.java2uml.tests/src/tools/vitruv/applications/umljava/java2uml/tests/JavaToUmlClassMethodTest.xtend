@@ -17,12 +17,14 @@ import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.eclipse.uml2.types.TypesFactory
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.emftext.language.java.members.MembersFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.containers.ContainersFactory
+import org.emftext.language.java.classifiers.ClassifiersFactory
+import org.emftext.language.java.types.TypesFactory
 
 class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
@@ -160,6 +162,18 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         val uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME)
         assertMethodEquals(uOperation, jMeth)
+    }
+    
+    @Test
+    def testCreateConstructor() {
+        val jConstr = createJavaConstructorAndAddToClass(jClass, JavaVisibility.PRIVATE)
+        saveAndSynchronizeChanges(jConstr)
+        
+        val uConstr = getCorrespondingMethod(jConstr)
+        assertNotNull(uConstr)
+        assertEquals(jConstr.name, uConstr.name)
+        assertUmlNamedElementHasVisibility(uConstr, VisibilityKind.PRIVATE_LITERAL)
+       
     }
     
 

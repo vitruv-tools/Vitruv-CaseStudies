@@ -82,7 +82,13 @@ class JavaToUmlHelper {
         if ("String".equals(jClass.name)) {
             return findUmlPrimitiveType("String", model)
         } else {
-            return findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, jClass.name, org.eclipse.uml2.uml.Class)
+            val correspUmltype = findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, jClass.name, org.eclipse.uml2.uml.Class)
+            if (correspUmltype === null) {
+                val umlTypeClass = createUmlClass(jClass.name, VisibilityKind.PUBLIC_LITERAL, false, false)
+                model.packagedElements += umlTypeClass
+                return umlTypeClass
+            }
+            return correspUmltype
         }
     }
     

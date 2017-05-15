@@ -35,18 +35,26 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage) {
-      jPackage.getNamespaces().clear();
-      EList<String> _namespaces = jPackage.getNamespaces();
-      List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
-      Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
-      jPackage.setName(uPackage.getName());
-      this.persistProjectRelative(uPackage, jPackage, JavaPersistenceHelper.buildJavaFilePath(jPackage));
+      boolean _equals = uPackage.getName().equals(jPackage.getName());
+      boolean _not = (!_equals);
+      if (_not) {
+        jPackage.getNamespaces().clear();
+        EList<String> _namespaces = jPackage.getNamespaces();
+        List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
+        Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
+        jPackage.setName(uPackage.getName());
+        this.persistProjectRelative(uPackage, jPackage, JavaPersistenceHelper.buildJavaFilePath(jPackage));
+      }
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, @Extension final RoutinesFacade _routinesFacade) {
-      EList<CompilationUnit> _compilationUnits = jPackage.getCompilationUnits();
-      for (final CompilationUnit compUnit : _compilationUnits) {
-        _routinesFacade.changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace);
+      boolean _equals = uPackage.getName().equals(jPackage.getName());
+      boolean _not = (!_equals);
+      if (_not) {
+        EList<CompilationUnit> _compilationUnits = jPackage.getCompilationUnits();
+        for (final CompilationUnit compUnit : _compilationUnits) {
+          _routinesFacade.changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace);
+        }
       }
     }
   }

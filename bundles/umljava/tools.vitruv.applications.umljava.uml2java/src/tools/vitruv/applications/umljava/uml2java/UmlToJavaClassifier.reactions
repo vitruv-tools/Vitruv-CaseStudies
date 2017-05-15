@@ -94,50 +94,31 @@ reaction UmlPackageRenamed {
 	call renameJavaPackage(affectedEObject, affectedEObject.namespace)
 }
 
-
-//routine renameJavaPackageAndClassifier(uml::Package uPackage) {
-//	match {
-//		val jPackage = retrieve java::Package corresponding to uPackage
-//	}
-//	action {
-//		call {
-//			renameJavaPackage(uPackage)
-//			for (subPackage : uPackage.packagedElements.filter(org.eclipse.uml2.uml.Package)) {
-//				renameJavaPackageAndClassifier(subPackage)
-//			}
-//			for (containedClassifier : uPackage.packagedElements.filter(org.eclipse.uml2.uml.Classifier)) {
-//				changePackageOfJavaCompilationUnit(uPackage, containedClassifier)
-//			}
-//		}
-//	}
-//}
-
- 
-//reaction UmlClassifierPackageChanged {
-//  after element uml::Classifier inserted in uml::Package[packagedElement]
-//  with !(affectedEObject instanceof org.eclipse.uml2.uml.Model)
-//  call changePackageOfJavaCompilationUnit(affectedEObject, newValue)
-//}
-
-
-
 routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
 	match {
 		val jPackage = retrieve java::Package corresponding to uPackage
 	}
 	action {
 		update jPackage {
-			jPackage.namespaces.clear
-			jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
-			jPackage.name = uPackage.name
-		    persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
+		    if (!uPackage.name.equals(jPackage.name)) {
+		        jPackage.namespaces.clear
+			    jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
+			    jPackage.name = uPackage.name
+		        persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
+		    }
+			
 		}
 		
 		call {
-            for (compUnit : jPackage.compilationUnits) {
-                changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
-            }
-            //for (subPackage : jPackage.subPackages)
+		    if (!uPackage.name.equals(jPackage.name)) {
+		        for (compUnit : jPackage.compilationUnits) {
+                    changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
+                }
+                //for (subPackage : jPackage.subPackages) {
+                //    Rename namespaces of subpackages
+                //}
+		    }
+            
         }
 	}
 }
@@ -279,30 +260,6 @@ reaction UmlDataTypeCreated {
 	after element uml::DataType created and inserted in uml::Package[packagedElement] with !(newValue instanceof org.eclipse.uml2.uml.PrimitiveType)
 	&& !(newValue instanceof org.eclipse.uml2.uml.Enumeration) 
 	call createJavaClass(newValue)
-}
-
-reaction UmlCollectionDataTypeCreated {
-	after element uml::Property created and inserted in uml::PrimitiveType[ownedAttribute]
-	call createJavaCollectionClass(affectedEObject, newValue)
-}
-
-routine createJavaCollectionClass(uml::DataType dType, uml::Property innerType) {
-	match {
-		val jCollectionClass = retrieve java::Class corresponding to dType
-		val jInnerType = retrieve optional java::Class corresponding to innerType.type
-	}
-	action {
-		update jCollectionClass {
-			if (jInnerType != null) {
-				//createTypeReference()
-			} else if (innerType.type instanceof org.eclipse.uml2.uml.PrimitiveType) {
-				//TODO Wrapper für Primitive Typen
-		        //--> org.emftext.language.java.references.PrimitiveTypeReference?
-			} else {
-				//verschachtelter DataType
-			}
-		}
-	}
 }
 
 reaction UmlInterfaceImplementerChanged {
@@ -505,7 +462,7 @@ routine checkIfCorrespondingJavaPrimitiveTypeExists(uml::PrimitiveType uPrimType
     action {
         call {
             if (mapToJavaPrimitiveType(uPrimType) === null) {
-                userInteracting.showMessage(UserInteractionType.MODAL, "There is no corresponding Java-PrimitiveType for " + uPrimType)
+                userInteracting.showMessage(UserInteractionType.MODAL, "There is no corresponding Java-PrimitiveType for " + uPrimType + " (case sensitive)")
             }
         }
     }

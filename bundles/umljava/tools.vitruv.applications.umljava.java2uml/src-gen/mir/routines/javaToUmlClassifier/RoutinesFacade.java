@@ -27,12 +27,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void addUmlElementToRootModel(final PackageableElement uPackageable, final EObject persistedObject) {
-    mir.routines.javaToUmlClassifier.AddUmlElementToRootModelRoutine effect = new mir.routines.javaToUmlClassifier.AddUmlElementToRootModelRoutine(this.executionState, calledBy,
-    	uPackageable, persistedObject);
-    effect.applyRoutine();
-  }
-  
   public void addUmlElementToPackage(final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage, final EObject persistedObject) {
     mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine effect = new mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine(this.executionState, calledBy,
     	uPackageable, uPackage, persistedObject);

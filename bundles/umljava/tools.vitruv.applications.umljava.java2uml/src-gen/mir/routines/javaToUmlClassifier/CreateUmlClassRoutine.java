@@ -72,11 +72,11 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
     org.eclipse.uml2.uml.Class uClass = UMLFactoryImpl.eINSTANCE.createClass();
     userExecution.updateUClassElement(jClass, jCompUnit, uClass);
     
-    userExecution.callRoutine1(jClass, jCompUnit, uClass, actionsFacade);
-    
     addCorrespondenceBetween(userExecution.getElement1(jClass, jCompUnit, uClass), userExecution.getElement2(jClass, jCompUnit, uClass), "");
     
     addCorrespondenceBetween(userExecution.getElement3(jClass, jCompUnit, uClass), userExecution.getElement4(jClass, jCompUnit, uClass), "");
+    
+    userExecution.callRoutine1(jClass, jCompUnit, uClass, actionsFacade);
     
     postprocessElements();
   }

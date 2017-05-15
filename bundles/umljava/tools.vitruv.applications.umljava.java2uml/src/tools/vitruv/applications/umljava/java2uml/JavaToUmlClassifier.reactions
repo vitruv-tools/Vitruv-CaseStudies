@@ -28,6 +28,8 @@ routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
         val uClass = create uml::Class and initialize {
             uClass.name = jClass.name;
         }
+        add correspondence between uClass and jClass
+        add correspondence between uClass and jCompUnit
         call {
             if (jCompUnit.namespaces.nullOrEmpty) {
                 addUmlElementToPackage(uClass, getUmlModel(correspondenceModel, userInteracting), jCompUnit)
@@ -36,18 +38,7 @@ routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
             }
         	
         }
-        add correspondence between uClass and jClass
-        add correspondence between uClass and jCompUnit
     }
-}
-
-routine addUmlElementToRootModel(uml::PackageableElement uPackageable, EObject persistedObject) {
-	action {
-		call {
-			val uModel = getUmlModel(correspondenceModel, userInteracting)
-            
-		}
-	}
 }
 
 routine addUmlElementToPackage(uml::PackageableElement uPackageable, uml::Package uPackage, EObject persistedObject) {
@@ -57,12 +48,9 @@ routine addUmlElementToPackage(uml::PackageableElement uPackageable, uml::Packag
         }
         call {
             if (uPackage instanceof org.eclipse.uml2.uml.Model) {
-                
                 if (uPackage.packagedElements.size == 1) {
                    persistProjectRelative(persistedObject, uPackage, rootModelFile)
                 }
-            } else {
-               
             }
         }
     }
@@ -79,6 +67,8 @@ routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCo
             uInterface.name = jInterface.name;
             uInterface.visibility = VisibilityKind.PUBLIC_LITERAL
         }
+        add correspondence between uInterface and jInterface
+        add correspondence between uInterface and jCompUnit
         call {
             if (jCompUnit.namespaces.nullOrEmpty) {
                 addUmlElementToPackage(uInterface, getUmlModel(correspondenceModel, userInteracting), jCompUnit)
@@ -86,8 +76,6 @@ routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCo
                 addUmlElementToPackage(uInterface, findUmlPackage(correspondenceModel, jCompUnit.namespaces.last), jCompUnit)
             }
         }   
-        add correspondence between uInterface and jInterface
-        add correspondence between uInterface and jCompUnit
     }
 }
 

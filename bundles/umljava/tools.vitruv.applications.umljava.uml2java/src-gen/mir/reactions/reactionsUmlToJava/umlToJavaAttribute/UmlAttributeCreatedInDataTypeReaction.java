@@ -1,10 +1,10 @@
-package mir.reactions.reactionsJavaToUml.javaToUmlMethod;
+package mir.reactions.reactionsUmlToJava.umlToJavaAttribute;
 
-import mir.routines.javaToUmlMethod.RoutinesFacade;
+import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.Parametrizable;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -15,18 +15,18 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class JavaParameterCreatedReaction extends AbstractReactionRealization {
-  public JavaParameterCreatedReaction(final UserInteracting userInteracting) {
+class UmlAttributeCreatedInDataTypeReaction extends AbstractReactionRealization {
+  public UmlAttributeCreatedInDataTypeReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Parametrizable, OrdinaryParameter> typedChange = ((CreateAndInsertNonRoot<Parametrizable, OrdinaryParameter>)change).getInsertChange();
-    Parametrizable affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<DataType, Property> typedChange = ((CreateAndInsertNonRoot<DataType, Property>)change).getInsertChange();
+    DataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OrdinaryParameter newValue = typedChange.getNewValue();
-    mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterCreatedReaction.ActionUserExecution(this.executionState, this);
+    Property newValue = typedChange.getNewValue();
+    mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeCreatedInDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeCreatedInDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -35,14 +35,14 @@ class JavaParameterCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Parametrizable, OrdinaryParameter> relevantChange = ((CreateAndInsertNonRoot<Parametrizable, OrdinaryParameter>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Parametrizable)) {
+    InsertEReference<DataType, Property> relevantChange = ((CreateAndInsertNonRoot<DataType, Property>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof DataType)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("parameters")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("ownedAttribute")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof OrdinaryParameter)) {
+    if (!(relevantChange.getNewValue() instanceof Property)) {
     	return false;
     }
     return true;
@@ -66,8 +66,8 @@ class JavaParameterCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parametrizable affectedEObject, final EReference affectedFeature, final OrdinaryParameter newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createUmlParameter(affectedEObject, newValue);
+    public void callRoutine1(final DataType affectedEObject, final EReference affectedFeature, final Property newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createJavaAttribute(affectedEObject, newValue);
     }
   }
 }

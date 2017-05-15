@@ -155,4 +155,13 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
         assertMethodEquals(uOperation, jMethod)
     }
+    
+    @Test
+    def testCreateConstructor() {
+        val uConstr = createSimpleUmlOperation(uClass.name)
+        uClass.ownedOperations += uConstr
+        saveAndSynchronizeChanges(uClass)
+        val jConstr = getCorrespondingConstructor(uConstr)
+        assertNotNull(jConstr)
+    }
 }

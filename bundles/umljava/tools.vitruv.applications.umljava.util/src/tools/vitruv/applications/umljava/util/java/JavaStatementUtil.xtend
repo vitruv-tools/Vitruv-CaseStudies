@@ -53,7 +53,7 @@ class JavaStatementUtil {
 
         // create constructor if none exists
         if (jClass.members.filter(Constructor).nullOrEmpty) {
-            createJavaConstructorAndAddToClass(jClass)
+            createJavaConstructorAndAddToClass(jClass, JavaVisibility.PUBLIC)
         }
         
         for (constructor : jClass.members.filter(Constructor)) {

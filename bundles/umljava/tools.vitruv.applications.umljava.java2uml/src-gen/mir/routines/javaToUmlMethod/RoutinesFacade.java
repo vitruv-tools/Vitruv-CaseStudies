@@ -1,13 +1,17 @@
 package mir.routines.javaToUmlMethod;
 
+import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.Operation;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.ClassMethod;
+import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.Parametrizable;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -25,9 +29,27 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void addUmlOperationToClass(final org.eclipse.uml2.uml.Class uClass, final Operation uOperation) {
+    mir.routines.javaToUmlMethod.AddUmlOperationToClassRoutine effect = new mir.routines.javaToUmlMethod.AddUmlOperationToClassRoutine(this.executionState, calledBy,
+    	uClass, uOperation);
+    effect.applyRoutine();
+  }
+  
+  public void addUmlOperationToEnum(final Enumeration uEnum, final Operation uOperation) {
+    mir.routines.javaToUmlMethod.AddUmlOperationToEnumRoutine effect = new mir.routines.javaToUmlMethod.AddUmlOperationToEnumRoutine(this.executionState, calledBy,
+    	uEnum, uOperation);
+    effect.applyRoutine();
+  }
+  
   public void createUmlInterfaceMethod(final InterfaceMethod jMeth, final Interface jI) {
     mir.routines.javaToUmlMethod.CreateUmlInterfaceMethodRoutine effect = new mir.routines.javaToUmlMethod.CreateUmlInterfaceMethodRoutine(this.executionState, calledBy,
     	jMeth, jI);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlConstructor(final Constructor jConstructor, final ConcreteClassifier jClassifier) {
+    mir.routines.javaToUmlMethod.CreateUmlConstructorRoutine effect = new mir.routines.javaToUmlMethod.CreateUmlConstructorRoutine(this.executionState, calledBy,
+    	jConstructor, jClassifier);
     effect.applyRoutine();
   }
   
@@ -49,7 +71,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createUmlParameter(final Method jMeth, final OrdinaryParameter jParam) {
+  public void createUmlParameter(final Parametrizable jMeth, final OrdinaryParameter jParam) {
     mir.routines.javaToUmlMethod.CreateUmlParameterRoutine effect = new mir.routines.javaToUmlMethod.CreateUmlParameterRoutine(this.executionState, calledBy,
     	jMeth, jParam);
     effect.applyRoutine();

@@ -67,7 +67,7 @@ class UmlInterfaceMethodCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final Operation newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createJavaInterfaceMethod(newValue);
+      _routinesFacade.createJavaMethod(affectedEObject, newValue);
     }
   }
 }

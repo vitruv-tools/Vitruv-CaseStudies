@@ -16,15 +16,37 @@ reaction JavaClassMethodCreated {
 
 routine createUmlClassMethod(java::ClassMethod jMeth, java::ConcreteClassifier jClassifier) {
     match {
-        val uClassifier = retrieve uml::Class corresponding to jClassifier
+        val uClassifier = retrieve uml::Classifier corresponding to jClassifier
     }
     action {
         val uOperation = create uml::Operation and initialize {
             uOperation.name = jMeth.name;
         }
         add correspondence between uOperation and jMeth
-        update uClassifier {
-            uClassifier.ownedOperations += uOperation;
+        call {
+            if (uClassifier instanceof org.eclipse.uml2.uml.Class) {
+                addUmlOperationToClass(uClassifier, uOperation)
+            } else if (uClassifier instanceof org.eclipse.uml2.uml.Enumeration) {
+                addUmlOperationToEnum(uClassifier, uOperation)
+            } else {
+                logger.warn("Can not add ClassMethod to " + uClassifier)
+            }
+        }
+    }
+}
+
+routine addUmlOperationToClass(uml::Class uClass, uml::Operation uOperation) {
+    action {
+        update uClass {
+            uClass.ownedOperations += uOperation
+        }
+    }
+}
+
+routine addUmlOperationToEnum(uml::Enumeration uEnum, uml::Operation uOperation) {
+    action {
+        update uEnum {
+            uEnum.ownedOperations += uOperation
         }
     }
 }
@@ -45,6 +67,26 @@ routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jI
         add correspondence between uOperation and jMeth
         update uInterface {
             uInterface.ownedOperations += uOperation;
+        }
+    }
+}
+
+reaction JavaConstructorCreated {
+    after element java::Constructor created and inserted in java::ConcreteClassifier[members]
+    call createUmlConstructor(newValue, affectedEObject)
+}
+
+routine createUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
+    match {
+        val uClassifier = retrieve uml::Class corresponding to jClassifier
+    }
+    action {
+        val uConstructor = create uml::Operation and initialize {
+            uConstructor.name = jConstructor.name
+        }
+        add correspondence between uConstructor and jConstructor
+        update uClassifier {
+            uClassifier.ownedOperations += uConstructor;
         }
     }
 }
@@ -108,11 +150,11 @@ routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Boolean isStatic
 }
 
 reaction JavaParameterCreated {
-    after element java::OrdinaryParameter created and inserted in java::Method[parameters]
+    after element java::OrdinaryParameter created and inserted in java::Parametrizable[parameters]
     call createUmlParameter(affectedEObject, newValue)
 }
 
-routine createUmlParameter(java::Method jMeth, java::OrdinaryParameter jParam) {
+routine createUmlParameter(java::Parametrizable jMeth, java::OrdinaryParameter jParam) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
         val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jParam.typeReference)

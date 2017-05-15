@@ -26,7 +26,7 @@ public class CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine extends Abstract
       TypeReference _mapToJavaPrimitiveType = UmlToJavaHelper.mapToJavaPrimitiveType(uPrimType);
       boolean _tripleEquals = (_mapToJavaPrimitiveType == null);
       if (_tripleEquals) {
-        this.userInteracting.showMessage(UserInteractionType.MODAL, ("There is no corresponding Java-PrimitiveType for " + uPrimType));
+        this.userInteracting.showMessage(UserInteractionType.MODAL, (("There is no corresponding Java-PrimitiveType for " + uPrimType) + " (case sensitive)"));
       }
     }
   }

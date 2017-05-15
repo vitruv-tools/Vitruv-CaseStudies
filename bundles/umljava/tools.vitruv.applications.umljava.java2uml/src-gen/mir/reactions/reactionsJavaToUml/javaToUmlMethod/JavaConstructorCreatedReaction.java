@@ -3,8 +3,8 @@ package mir.reactions.reactionsJavaToUml.javaToUmlMethod;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.Parametrizable;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.members.Constructor;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -15,18 +15,18 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class JavaParameterCreatedReaction extends AbstractReactionRealization {
-  public JavaParameterCreatedReaction(final UserInteracting userInteracting) {
+class JavaConstructorCreatedReaction extends AbstractReactionRealization {
+  public JavaConstructorCreatedReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertEReference<Parametrizable, OrdinaryParameter> typedChange = ((CreateAndInsertNonRoot<Parametrizable, OrdinaryParameter>)change).getInsertChange();
-    Parametrizable affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<ConcreteClassifier, Constructor> typedChange = ((CreateAndInsertNonRoot<ConcreteClassifier, Constructor>)change).getInsertChange();
+    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OrdinaryParameter newValue = typedChange.getNewValue();
+    Constructor newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterCreatedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -35,14 +35,14 @@ class JavaParameterCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Parametrizable, OrdinaryParameter> relevantChange = ((CreateAndInsertNonRoot<Parametrizable, OrdinaryParameter>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Parametrizable)) {
+    InsertEReference<ConcreteClassifier, Constructor> relevantChange = ((CreateAndInsertNonRoot<ConcreteClassifier, Constructor>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof ConcreteClassifier)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("parameters")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof OrdinaryParameter)) {
+    if (!(relevantChange.getNewValue() instanceof Constructor)) {
     	return false;
     }
     return true;
@@ -66,8 +66,8 @@ class JavaParameterCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parametrizable affectedEObject, final EReference affectedFeature, final OrdinaryParameter newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createUmlParameter(affectedEObject, newValue);
+    public void callRoutine1(final ConcreteClassifier affectedEObject, final EReference affectedFeature, final Constructor newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createUmlConstructor(newValue, affectedEObject);
     }
   }
 }
