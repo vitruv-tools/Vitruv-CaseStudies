@@ -24,6 +24,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     private static val OPERATION_RENAME = "classMethodRenamed";
     private static val PRIMITIVE_TYPE = "int"
     private static val PARAMETER_NAME = "parameterName";
+    private static val DATATYPE_NAME = "DataTypeName";
     
     private static var org.eclipse.uml2.uml.Class uClass
     private static var org.eclipse.uml2.uml.Class typeClass
@@ -72,6 +73,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         
         val jMethod = getCorrespondingClassMethod(operation)
         val jClass = getCorrespondingClass(uClass)
+        assertNotNull(jMethod)
         assertJavaMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
         	TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
         assertMethodEquals(operation, jMethod)
@@ -163,5 +165,35 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         saveAndSynchronizeChanges(uClass)
         val jConstr = getCorrespondingConstructor(uConstr)
         assertNotNull(jConstr)
+    }
+    
+    @Test
+    def void testCreateMethodInDataType() {
+        val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
+        val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
+        saveAndSynchronizeChanges(rootElement);
+        
+        val jMethod = getCorrespondingClassMethod(operation)
+        val jClass = getCorrespondingClass(dataType)
+        assertNotNull(jMethod)
+        assertJavaMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
+            TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
+        assertMethodEquals(operation, jMethod)
+    }
+    
+    @Test
+    def void testDeleteMethodInDataType() {
+        val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
+        val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
+        saveAndSynchronizeChanges(rootElement);
+        
+        var jMethod = getCorrespondingClassMethod(operation)
+        assertNotNull(jMethod)
+        
+        operation.destroy
+        saveAndSynchronizeChanges(dataType)
+        
+        val jClass = getCorrespondingClass(dataType)
+        assertJavaMemberContainerDontHaveMember(jClass, STANDARD_OPERATION_NAME)
     }
 }

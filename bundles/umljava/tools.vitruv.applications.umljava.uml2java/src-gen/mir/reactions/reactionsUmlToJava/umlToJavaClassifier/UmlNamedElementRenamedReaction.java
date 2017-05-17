@@ -4,6 +4,7 @@ import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -73,7 +74,7 @@ class UmlNamedElementRenamedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
-    return ((!(affectedEObject instanceof Classifier)) && (!(affectedEObject instanceof org.eclipse.uml2.uml.Package)));
+    return (((!(affectedEObject instanceof Classifier)) && (!(affectedEObject instanceof Property))) && (!(affectedEObject instanceof org.eclipse.uml2.uml.Package)));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

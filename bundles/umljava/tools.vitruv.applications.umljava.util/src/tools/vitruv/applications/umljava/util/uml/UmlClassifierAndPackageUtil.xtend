@@ -19,6 +19,7 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.BehavioredClassifier
+import org.eclipse.uml2.uml.DataType
 
 class UmlClassifierAndPackageUtil {
     
@@ -63,6 +64,13 @@ class UmlClassifierAndPackageUtil {
         val uInterface = createUmlInterface(name, superInterfaces)
         uPackage.packagedElements += uInterface
         return uInterface
+    }
+    
+    def static DataType createUmlDataType(Package uPackage, String name) {
+        val dataType = UMLFactory.eINSTANCE.createDataType
+        dataType.name = name
+        uPackage.packagedElements += dataType
+        return dataType
     }
     
     def static Enumeration createUmlEnumAndAddToPackage(Package uPackage, String name, VisibilityKind visibility, List<EnumerationLiteral> enumLiterals) {
@@ -178,23 +186,22 @@ class UmlClassifierAndPackageUtil {
         if (subClassifier === null || classifierToRemove === null) {
             throw new IllegalArgumentException("Can not remove generalization relation for null")
         }
-        removeClassifierFromIterator(subClassifier.generals.iterator, classifierToRemove)
+        val iter = subClassifier.generalizations.iterator
+        while (iter.hasNext) {
+            if (iter.next.general.name.equals(classifierToRemove.name)) {
+                iter.remove
+            }
+        }
     }
     
     def static void removeUmlImplementedInterface(Class implementor, Interface interfaceToRemove) {
         if (implementor === null || interfaceToRemove === null) {
             throw new IllegalArgumentException("Can not remove class generalization relation for null")
         }
-        removeClassifierFromIterator(implementor.implementedInterfaces.iterator, interfaceToRemove)
-    }
-    
-    /**
-     * Removes the elements in the Iterator iter with the same name as classif.
-     */
-    def private static void removeClassifierFromIterator(Iterator<? extends Classifier> iter, Classifier classif) {
+        val iter = implementor.interfaceRealizations.iterator
         while (iter.hasNext) {
-            if (classif.name.equals(iter.next.name)) {
-                iter.remove;
+            if (iter.next.contract.name.equals(interfaceToRemove.name)) {
+                iter.remove
             }
         }
     }

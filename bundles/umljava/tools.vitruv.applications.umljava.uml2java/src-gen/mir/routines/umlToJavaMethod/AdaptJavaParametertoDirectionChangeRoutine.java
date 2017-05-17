@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
@@ -43,7 +44,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     public void update0Element(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customTypeClass) {
       boolean _equals = Objects.equal(newDirection, ParameterDirectionKind.RETURN_LITERAL);
       if (_equals) {
-        jMethod.setTypeReference(UmlToJavaHelper.createTypeReference(uParam.getType(), customTypeClass));
+        jMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uParam.getType(), customTypeClass, jMethod.getContainingCompilationUnit(), this.userInteracting));
       } else {
         boolean _equals_1 = Objects.equal(oldDirection, ParameterDirectionKind.RETURN_LITERAL);
         if (_equals_1) {
@@ -59,7 +60,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     
     public void callRoutine1(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customTypeClass, @Extension final RoutinesFacade _routinesFacade) {
       if ((Objects.equal(newDirection, ParameterDirectionKind.RETURN_LITERAL) && (jParam != null))) {
-        _routinesFacade.deleteJavaParameter(uParam);
+        EcoreUtil.remove(jParam);
       } else {
         if ((Objects.equal(newDirection, ParameterDirectionKind.IN_LITERAL) && (jParam == null))) {
           _routinesFacade.createJavaParameter(uOperation, uParam);

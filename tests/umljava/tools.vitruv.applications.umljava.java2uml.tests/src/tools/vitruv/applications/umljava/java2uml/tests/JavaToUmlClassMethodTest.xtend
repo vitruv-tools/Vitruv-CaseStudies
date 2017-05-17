@@ -12,6 +12,7 @@ import tools.vitruv.framework.util.bridges.EcoreBridge
 import static org.junit.Assert.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
@@ -25,26 +26,37 @@ import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.types.TypesFactory
+import org.emftext.language.java.parameters.OrdinaryParameter
 
 class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
     private static val TYPE_NAME = "TypeName";
+    private static val TYPE_NAME2 = "TypeName2";
     private static val OPERATION_NAME = "classMethod";
+    private static val OPERATION_NAME2 = "classMethod2";
     private static val STANDARD_OPERATION_NAME = "standardMethod";
     private static val OPERATION_RENAME = "classMethodRenamed";
     private static val PARAMETER_NAME = "parameterName";
+    private static val PARAMETER_NAME2 = "parameterName2";
     private static val PARAMETER_RENAME = "parameterRenamed";
     
     private static var Class jClass;
     private static var Class typeClass;
+    private static var Class typeClass2;
     private static var ClassMethod jMeth;
+    private static var ClassMethod jParamMeth;
+    private static var OrdinaryParameter jParam;
     
     @Before
     def void before() {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME);
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_NAME);
+        typeClass2 = createSimpleJavaClassWithCompilationUnit(TYPE_NAME2);
         jMeth = createSimpleJavaOperation(OPERATION_NAME)
+        jParam = createJavaParameter(PARAMETER_NAME, createNamespaceReferenceFromClassifier(typeClass2))
+        jParamMeth = createJavaClassMethod(OPERATION_NAME2, TypesFactory.eINSTANCE.createBoolean, JavaVisibility.PUBLIC, false, false, #[jParam])
         jClass.members += jMeth;
+        jClass.members += jParamMeth
         saveAndSynchronizeChanges(jClass);
     }
     
@@ -109,8 +121,15 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jMeth.static = true
         saveAndSynchronizeChanges(jMeth)
         
-        val uOperation = getCorrespondingMethod(jMeth)
+        var uOperation = getCorrespondingMethod(jMeth)
         assertUmlFeatureHasStaticValue(uOperation, true)
+        assertMethodEquals(uOperation, jMeth)
+        
+        jMeth.static = false
+        saveAndSynchronizeChanges(jMeth)
+        
+        uOperation = getCorrespondingMethod(jMeth)
+        assertUmlFeatureHasStaticValue(uOperation, false)
         assertMethodEquals(uOperation, jMeth)
         
     }
@@ -120,8 +139,15 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jMeth.abstract = true
         saveAndSynchronizeChanges(jMeth)
         
-        val uOperation = getCorrespondingMethod(jMeth)
+        var uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasAbstractValue(uOperation, true)
+        assertMethodEquals(uOperation, jMeth)
+        
+        jMeth.abstract = false
+        saveAndSynchronizeChanges(jMeth)
+        
+        uOperation = getCorrespondingMethod(jMeth)
+        assertUmlOperationHasAbstractValue(uOperation, false)
         assertMethodEquals(uOperation, jMeth)
     }
     
@@ -130,8 +156,15 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jMeth.final = true
         saveAndSynchronizeChanges(jMeth)
         
-        val uOperation = getCorrespondingMethod(jMeth)
+        var uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasFinalValue(uOperation, true)
+        assertMethodEquals(uOperation, jMeth)
+        
+        jMeth.final = false
+        saveAndSynchronizeChanges(jMeth)
+        
+        uOperation = getCorrespondingMethod(jMeth)
+        assertUmlOperationHasFinalValue(uOperation, false)
         assertMethodEquals(uOperation, jMeth)
     }
     
@@ -155,24 +188,57 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     
     @Test
     def testCreateParameter() {
-        val jParam = createJavaParameter(PARAMETER_NAME, createNamespaceReferenceFromClassifier(typeClass))
-        jMeth.parameters += jParam
+        val param = createJavaParameter(PARAMETER_NAME2, createNamespaceReferenceFromClassifier(typeClass))
+        jMeth.parameters += param
         saveAndSynchronizeChanges(jMeth)
 
         val uOperation = getCorrespondingMethod(jMeth)
-        assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME)
-        assertMethodEquals(uOperation, jMeth)
+        val uParam = getCorrespondingParameter(param)
+        assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME2)
+        assertParameterEquals(uParam, param)
+    }
+    
+    @Test
+    def testRenameParameter() {
+        jParam.name = PARAMETER_RENAME
+        saveAndSynchronizeChanges(jMeth)
+
+        val uOperation = getCorrespondingMethod(jParamMeth)
+        val uParam = getCorrespondingParameter(jParam)
+        assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_RENAME)
+        assertParameterEquals(uParam, jParam)
+    }
+    
+    @Test
+    def testDeleteParameter() {
+        assertNotNull(jParam)
+        EcoreUtil.delete(jParam)
+        saveAndSynchronizeChanges(jMeth)
+        
+        val uOperation = getCorrespondingMethod(jMeth)
+        assertUmlOperationDontHaveParameter(uOperation, PARAMETER_NAME)
+    }
+    
+    @Test
+    def testChangeParameterType() {
+        jParam.typeReference = createNamespaceReferenceFromClassifier(typeClass)
+        saveAndSynchronizeChanges(jParam)
+
+        val uParam = getCorrespondingParameter(jParam)
+        val uTypeClass = getCorrespondingClass(typeClass)
+        assertUmlParameterTraits(uParam, PARAMETER_NAME, uTypeClass)
+        assertParameterEquals(uParam, jParam)
     }
     
     @Test
     def testCreateConstructor() {
-        val jConstr = createJavaConstructorAndAddToClass(jClass, JavaVisibility.PRIVATE)
+        val jConstr = createJavaConstructorAndAddToClass(jClass, JavaVisibility.PUBLIC)
         saveAndSynchronizeChanges(jConstr)
         
         val uConstr = getCorrespondingMethod(jConstr)
         assertNotNull(uConstr)
         assertEquals(jConstr.name, uConstr.name)
-        assertUmlNamedElementHasVisibility(uConstr, VisibilityKind.PRIVATE_LITERAL)
+        assertUmlNamedElementHasVisibility(uConstr, VisibilityKind.PUBLIC_LITERAL)
        
     }
     

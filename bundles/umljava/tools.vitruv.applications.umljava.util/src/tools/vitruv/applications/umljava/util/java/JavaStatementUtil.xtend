@@ -148,15 +148,27 @@ class JavaStatementUtil {
         return assignmentExpression
     }
     
-    def static boolean ExpressionHasAttributeSelfReference(ExpressionStatement expressionStatement, Field jAttribute) {
-        if (expressionStatement.expression !== null && expressionStatement.expression instanceof AssignmentExpression) {
-            val assignmentExpression = expressionStatement.expression as AssignmentExpression
-            if ((assignmentExpression.child as SelfReference).self instanceof This
-                && ((assignmentExpression.child as SelfReference).next as IdentifierReference).target.name == jAttribute.name) {
-                return true
-            }
+    def static boolean expressionHasAttributeSelfReference(ExpressionStatement expressionStatement, Field jAttribute) {
+        if (getAttributeSelfReferenceInExpressionStatement(expressionStatement, jAttribute.name) !== null) {
+            return true
         }
         return false
+    }
+    
+    def static getAttributeSelfReferenceInExpressionStatement(ExpressionStatement expressionStatement, String attributeName) {
+        if (expressionStatement.expression !== null && expressionStatement.expression instanceof AssignmentExpression) {
+            val assignmentExpression = expressionStatement.expression as AssignmentExpression
+            if ((assignmentExpression.child as SelfReference).self instanceof This) {
+                val selfReference = (assignmentExpression.child as SelfReference).next as IdentifierReference
+                if (selfReference.target.name.equals(attributeName)) {
+                    return selfReference
+                }
+                return null
+            }
+            return null
+        }
+        return null
+        
     }
     
     def static IdentifierReference createIdentifierReference(ReferenceableElement elem) {

@@ -2,6 +2,7 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
@@ -29,9 +30,19 @@ public class AddUmlSuperClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class jSuperClass, final org.eclipse.uml2.uml.Class uClass) {
-      UmlClassifierAndPackageUtil.addUmlSuperClassifier(uClass, 
-        JavaToUmlHelper.<org.eclipse.uml2.uml.Class>findFirstCorrespondeningUmlElementByNameAndType(this.correspondenceModel, 
-          jSuperClass.getName(), org.eclipse.uml2.uml.Class.class));
+      final org.eclipse.uml2.uml.Class uSuperClass = JavaToUmlHelper.<org.eclipse.uml2.uml.Class>findFirstCorrespondeningUmlElementByNameAndType(this.correspondenceModel, 
+        jSuperClass.getName(), org.eclipse.uml2.uml.Class.class);
+      if ((uSuperClass != null)) {
+        UmlClassifierAndPackageUtil.addUmlSuperClassifier(uClass, uSuperClass);
+      } else {
+        Logger _logger = this.getLogger();
+        String _name = jSuperClass.getName();
+        String _plus = ("Could not add " + _name);
+        String _plus_1 = (_plus + " as super class for ");
+        String _plus_2 = (_plus_1 + uClass);
+        String _plus_3 = (_plus_2 + " because the corresponding UML-SuperClass is null");
+        _logger.warn(_plus_3);
+      }
     }
   }
   

@@ -8,6 +8,7 @@ import tools.vitruv.applications.umljava.uml2java.tests.*
 
 @Suite.SuiteClasses(
     UmlToJavaClassTest,
+    UmlToJavaEnumTest,
     UmlToJavaInterfaceMethodTest,
     UmlToJavaInterfaceTest,
     UmlToJavaClassMethodTest,

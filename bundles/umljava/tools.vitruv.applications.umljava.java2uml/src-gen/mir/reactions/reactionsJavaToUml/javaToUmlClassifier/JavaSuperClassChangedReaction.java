@@ -61,8 +61,20 @@ class JavaSuperClassChangedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, TypeReference> typedChange = (ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
+    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    TypeReference oldValue = typedChange.getOldValue();
+    TypeReference newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue) {
+    return (newValue != null);
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

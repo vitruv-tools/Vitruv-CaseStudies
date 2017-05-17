@@ -27,6 +27,8 @@ import static tools.vitruv.applications.umljava.util.CommonUtil.*
 import org.emftext.language.java.expressions.ExpressionsFactory
 import org.emftext.language.java.literals.LiteralsFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.expressions.AssignmentExpression
+import org.emftext.language.java.statements.Return
 
 class JavaMemberAndParameterUtil {
     private static val logger = Logger.getLogger(JavaMemberAndParameterUtil.simpleName)
@@ -123,7 +125,7 @@ class JavaMemberAndParameterUtil {
     * @param visibility Visibility of the Getter
     */
    def static ClassMethod createJavaGetterForAttribute(Field jAttribute, JavaVisibility visibility) {
-       val getterMethod = createJavaClassMethod("get" + firstLettertoUppercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference), visibility, false, false, null)
+       val getterMethod = createJavaClassMethod(buildGetterName(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference), visibility, false, false, null)
        getterMethod.statements += createReturnStatement(createSelfReferenceToAttribute(jAttribute))
        return getterMethod
    }
@@ -133,7 +135,7 @@ class JavaMemberAndParameterUtil {
     */
    def static createJavaSetterForAttributeWithNullCheck(Field jAttribute, JavaVisibility visibility) {
        val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference))
-       val setterMethod = createJavaClassMethod("set" + firstLettertoUppercase(jAttribute.name), null, visibility, false, false, #[param])
+       val setterMethod = createJavaClassMethod(buildSetterName(jAttribute.name), null, visibility, false, false, #[param])
        val paramReference = createIdentifierReference(param)
        val attributeAssignment = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment, EcoreUtil.copy(paramReference))
        val assignmentStatement = wrapExpressionInExpressionStatement(attributeAssignment)
@@ -148,7 +150,7 @@ class JavaMemberAndParameterUtil {
     */
    def static createJavaSetterForAttribute(Field jAttribute, JavaVisibility visibility) {
        val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference))
-       val setterMethod = createJavaClassMethod("set" + firstLettertoUppercase(jAttribute.name), null, visibility, false, false, #[param])
+       val setterMethod = createJavaClassMethod(buildSetterName(jAttribute.name), null, visibility, false, false, #[param])
        val paramReference = createIdentifierReference(param)
        val attributeAssignment = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment, EcoreUtil.copy(paramReference))
        setterMethod.statements += wrapExpressionInExpressionStatement(attributeAssignment)
@@ -165,10 +167,11 @@ class JavaMemberAndParameterUtil {
         if (cons.statements.nullOrEmpty || cons.statements.filter(ExpressionStatement).nullOrEmpty) {
             return false
         }
-        if (!cons.statements.filter(ExpressionStatement).filter[ExpressionHasAttributeSelfReference(it, jAttribute)].nullOrEmpty) {
+        if (!cons.statements.filter(ExpressionStatement).filter[expressionHasAttributeSelfReference(it, jAttribute)].nullOrEmpty) {
             return true
         }
     }
+ 
     
     /**
     * Checks if a Java-Method is Getter for a given Java-Attribute by name.
@@ -202,12 +205,7 @@ class JavaMemberAndParameterUtil {
            logger.warn("Cannot retrieve Getters for Java-Attribute null. Returning empty List.")
            return Collections.<ClassMethod>emptyList
        }
-       val expectedSetterName = "get" + firstLettertoUppercase(jAttribute.name)
-       val jClass = jAttribute.eContainer as ConcreteClassifier
-       if (jClass === null) {
-           return Collections.<ClassMethod>emptyList 
-       }
-       return jClass.members.filter(ClassMethod)?.filter[expectedSetterName.equals(name)]?.toList
+       return getJavaGettersOfAttribute(jAttribute.containingConcreteClassifier, jAttribute.name)
    }
    
    /**
@@ -218,9 +216,22 @@ class JavaMemberAndParameterUtil {
            logger.warn("Cannot retrieve Setters for Java-Attribute null. Returning empty List.")
            return Collections.<ClassMethod>emptyList
        }
-       val expectedSetterName = "set" + firstLettertoUppercase(jAttribute.name)
-       val jClass = jAttribute.eContainer as ConcreteClassifier
-       return jClass.members.filter(ClassMethod)?.filter[expectedSetterName.equals(name)]?.toList
+       return getJavaSettersOfAttribute(jAttribute.containingConcreteClassifier, jAttribute.name)
+   }
+   
+   def static List<ClassMethod> getJavaClassMethodsWithName(ConcreteClassifier jClass, String name) {
+       if (jClass === null) {
+           return Collections.<ClassMethod>emptyList 
+       }
+       return jClass.members.filter(ClassMethod).filter[it.name.equals(name)].toList
+   }
+   
+   def static List<ClassMethod> getJavaSettersOfAttribute(ConcreteClassifier jClass, String jAttributeName) {
+       return getJavaClassMethodsWithName(jClass, buildSetterName(jAttributeName))
+   }
+   
+   def static List<ClassMethod> getJavaGettersOfAttribute(ConcreteClassifier jClass, String jAttributeName) {
+       return getJavaClassMethodsWithName(jClass, buildGetterName(jAttributeName))
    }
    
    def static void removeJavaGettersOfAttribute(Field jAttribute) {
@@ -239,5 +250,89 @@ class JavaMemberAndParameterUtil {
                EcoreUtil.remove(setter)
            }
        }
+    }
+    
+    /**
+     * @param jAttributeWithOldName the Attribute with the old  Name
+     */
+    def static void renameSettersOfAttribute(Field jAttributeWithnewName, String oldName) {
+        val setters = getJavaSettersOfAttribute(jAttributeWithnewName.containingConcreteClassifier, oldName)
+        for (setter : setters) {
+            renameSetter(setter, jAttributeWithnewName, oldName)
+        }
+        
+    }
+    /**
+     * @param newName new Setter name without set-Prefix
+     */
+    def static void renameSetter(ClassMethod setter, Field jAttribute, String oldName) {
+        setter.name = buildSetterName(jAttribute.name)
+        for (expStatement : setter.statements.filter(ExpressionStatement)) {
+            val selfReference = getAttributeSelfReferenceInExpressionStatement(expStatement, oldName)
+            selfReference.target = EcoreUtil.copy(jAttribute)
+        }
+        
+    }
+    
+    def static void updateAttributeTypeInSetters(Field jAttribute) {
+        val setters = getJavaSettersOfAttribute(jAttribute)
+        for (setter : setters) {
+            updateAttributeTypeInSetter(setter, jAttribute)
+        }
+    }
+    
+
+    /**
+     * Assumption: Setter has one parameter and one assignment for the attribute
+     * 
+     */
+    def static void updateAttributeTypeInSetter(ClassMethod setter, Field jAttribute) {
+        val param = setter.parameters.head
+        if (param !== null) {
+            param.typeReference = EcoreUtil.copy(jAttribute.typeReference)
+            val expStatement = setter.statements.filter(ExpressionStatement).head
+            if (expressionHasAttributeSelfReference(expStatement, jAttribute)) {
+                (expStatement.expression as AssignmentExpression).value = createIdentifierReference(param)
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param jAttribute the attribute with the new name
+     */
+    def static void renameGettersOfAttribute(Field jAttribute, String oldName) {
+        for (getter : getJavaGettersOfAttribute(jAttribute.containingConcreteClassifier, oldName)) {
+            renameGetterOfAttribute(getter, jAttribute)
+        }
+    }
+    
+    /**
+     * Assumption: standard getter that only returns the attribute
+     */
+    def static void renameGetterOfAttribute(ClassMethod getter, Field jAttribute) {
+        getter.name = buildGetterName(jAttribute.name)
+        val returnStatement = getter.statements.filter(Return).head
+        if (returnStatement !== null) {
+            returnStatement.returnValue = createSelfReferenceToAttribute(jAttribute)
+        }
+    }
+    
+    def static void updateAttributeTypeInGetters(Field jAttribute) {
+        for (getter : getJavaGettersOfAttribute(jAttribute)) {
+            updateAttributeTypeInGetter(getter, jAttribute)
+        }
+    }
+    
+    def static void updateAttributeTypeInGetter(ClassMethod getter, Field jAttribute) {
+        getter.typeReference = EcoreUtil.copy(jAttribute.typeReference)
+    }
+    
+    def static String buildSetterName(String attributeName) {
+        return "set" + firstLettertoUppercase(attributeName)
+    }
+    
+    def static String buildGetterName(String attributeName) {
+        return "get" + firstLettertoUppercase(attributeName)
     }
 }

@@ -12,6 +12,7 @@ import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.eclipse.uml2.uml.Package
+import org.junit.Ignore
 
 class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     
@@ -57,7 +58,6 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     @Test
     def void testDeletePackage() {
         deleteAndSynchronizeModel(buildJavaFilePath(jPackageLevel1))
-        
         assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Package, PACKAGE_LEVEL_1).nullOrEmpty)
         
     }
@@ -71,16 +71,6 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
         val uPackage = getCorrespondingPackage(jPackageLevel1)
         val uClass = getCorrespondingClass(javaClass)
         assertUmlPackageableElementIsInPackage(uClass, uPackage)
-    }
-    
-    @Test
-    def void testRemoveClassFromPackage() {
-        removeJavaClassifierFromPackage(jPackageLevel1, jClass)
-        saveAndSynchronizeChanges(jPackageLevel1)
-        
-        val uPackage = getCorrespondingPackage(jPackageLevel1)
-        val uClass = getCorrespondingClass(jClass)
-        
     }
     
 }

@@ -1,5 +1,7 @@
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*;
 import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import org.emftext.language.java.modifiers.Public
+
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
 
@@ -235,4 +237,9 @@ routine setUmlMethodFinal(java::Method jMethod, Boolean isFinal) {
             uOperation.isLeaf = isFinal
         }
     }
+}
+
+reaction JavaParameterMadeFinal {
+    after element java::Final created and inserted in java::Parameter[annotationsAndModifiers]
+    call showMessage(userInteracting, "Final parameters are not supported. Please remove the modifier from " + affectedEObject)
 }

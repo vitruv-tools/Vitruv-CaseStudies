@@ -25,6 +25,12 @@ import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import org.emftext.language.java.members.EnumConstant
 import org.emftext.language.java.classifiers.Enumeration
+import java.io.File
+import java.io.PrintWriter
+import org.emftext.language.java.commons.NamedElement
+import org.emftext.language.java.members.Member
+import org.emftext.language.java.parameters.Parameter
+import java.util.ArrayList
 
 class JavaContainerAndClassifierUtil {
     private static val logger = Logger.getLogger(JavaContainerAndClassifierUtil.simpleName)
@@ -125,11 +131,7 @@ class JavaContainerAndClassifierUtil {
         EcoreUtil.remove(javaRoot)
         return javaRoot
     }
-    
-     def static CompilationUnit getContainingCompilationUnit(ConcreteClassifier jClassifier) {
-        return jClassifier.eContainer as CompilationUnit
-    }
-    
+        
     /**
      * Entfernt alle Classifier von Iterator anhand des Namens.
      * 
@@ -146,10 +148,11 @@ class JavaContainerAndClassifierUtil {
     }
     
     def static getJavaPackageAsStringList(Package jPackage) {
-       if (jPackage === null) { //Defaultpackage
+       if (jPackage === null || jPackage.name.nullOrEmpty) { //Defaultpackage
            return Collections.<String>emptyList()
        }
-       val packageStringList = EcoreUtil.copyAll(jPackage.namespaces) //TODO Was ist, wenn namespaces null
+       val packageStringList = new ArrayList<String>()
+       packageStringList.addAll(jPackage.namespaces)
        packageStringList += jPackage.name
        return packageStringList
    }
@@ -173,12 +176,53 @@ class JavaContainerAndClassifierUtil {
        }
    }
    
-   def static removeJavaClassifierFromPackage(Package jPackage,ConcreteClassifier jClassifier) {
+   def static removeJavaClassifierFromPackage(Package jPackage, ConcreteClassifier jClassifier) {
         val iter = jPackage.compilationUnits.iterator
         while (iter.hasNext) {
             if (iter.next.name.equals(jClassifier.name)) {
                 iter.remove;
             }
         }
+    }
+    
+    def static File createPackageInfo(String directory, String packageName) {
+        val file = new File(directory +  "/package-info.java")
+        file.createNewFile
+        val writer = new PrintWriter(file)
+        writer.println("package " + packageName + ";")
+        writer.close
+        return file
+    }
+    
+    def static dispatch List<String> getJavaNamespace(CompilationUnit compUnit) {
+        return compUnit.namespaces
+    }
+    
+    def static dispatch List<String> getJavaNamespace(ConcreteClassifier classifier) {
+        return getJavaNamespace(classifier.eContainer as CompilationUnit)
+    }
+    
+    def static dispatch List<String> getJavaNamespace(NamedElement element) {
+        throw new IllegalArgumentException("Unsupported type for retrieving namespace: " + element)
+    }
+    def static dispatch List<String> getJavaNamespace(Void element) {
+        throw new IllegalArgumentException("Can not retrieve namespace for " + element)
+    }
+    
+    def static dispatch CompilationUnit getContainingCompilationUnit(ConcreteClassifier classifier) {
+        return classifier.eContainer as CompilationUnit
+    }
+    def static dispatch CompilationUnit getContainingCompilationUnit(Member mem) {
+        return getContainingCompilationUnit(mem.eContainer as ConcreteClassifier)
+    }
+    def static dispatch CompilationUnit getContainingCompilationUnit(Parameter param) {
+        return getContainingCompilationUnit(param.eContainer as Member)
+    }
+    
+    def static dispatch CompilationUnit getContainingCompilationUnit(NamedElement element) {
+        throw new IllegalArgumentException("Unsupported type for retrieving compilation unit: " + element)
+    }
+    def static dispatch CompilationUnit getContainingCompilationUnit(Void element) {
+        throw new IllegalArgumentException("Can not retrieve compilation unit for " + element)
     }
 }

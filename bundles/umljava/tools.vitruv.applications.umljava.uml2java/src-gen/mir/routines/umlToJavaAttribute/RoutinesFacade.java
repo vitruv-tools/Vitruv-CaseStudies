@@ -61,4 +61,10 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     	jAttribute);
     effect.applyRoutine();
   }
+  
+  public void renameJavaAttribute(final String oldName, final String newName, final Property uAttribute) {
+    mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine(this.executionState, calledBy,
+    	oldName, newName, uAttribute);
+    effect.applyRoutine();
+  }
 }

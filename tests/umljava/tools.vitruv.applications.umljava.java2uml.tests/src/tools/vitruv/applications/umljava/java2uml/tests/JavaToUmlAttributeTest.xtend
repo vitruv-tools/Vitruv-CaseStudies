@@ -40,19 +40,6 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         saveAndSynchronizeChanges(jClass);
     }
     
-    //@After
-    def void after() {
-        if (jClass != null) {
-
-        }
-        if (typeClass != null) {
-
-        }
-        if (jAttr != null) {
-
-        }
-        //saveAndSynchronizeChanges(rootElement);
-    }
     @Test
     def testCreatePrimitiveAttribute() {
         val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, createJavaPrimitiveType(JavaStandardType.INT), JavaVisibility.PRIVATE, false, false)
@@ -103,6 +90,19 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
 
         val uClass = getCorrespondingClass(jClass)
         assertUmlClassDontHaveOperation(uClass, ATTRIBUTE_NAME)
+    }
+    
+    @Test
+    def testChangeAttributeType() {
+        jAttr.typeReference = createNamespaceReferenceFromClassifier(typeClass)
+        saveAndSynchronizeChanges(jAttr)
+        
+        val uAttr = getCorrespondingAttribute(jAttr)
+        val uClass = getCorrespondingClass(jClass)
+        val uTypeClass = getCorrespondingClass(typeClass)
+        assertUmlPropertyTraits(uAttr, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, uTypeClass,
+            false, false, uClass, null, null)
+        assertAttributeEquals(uAttr, jAttr)
     }
 
     @Test

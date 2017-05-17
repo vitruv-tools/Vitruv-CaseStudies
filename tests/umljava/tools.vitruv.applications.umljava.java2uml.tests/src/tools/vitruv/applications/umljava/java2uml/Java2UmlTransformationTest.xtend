@@ -18,8 +18,9 @@ import org.eclipse.uml2.uml.Property
 import org.apache.log4j.Logger
 import java.util.List
 import org.emftext.language.java.members.EnumConstant
+import org.emftext.language.java.members.Member
 
-class Java2UmlTransformationTest extends AbstractUmlJavaTest {
+abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     private static val logger = Logger.getLogger(Java2UmlTransformationTest.simpleName)
     private static val UMLMODELPATH = "rootModelDirectory" //Directory of the Uml Model Path used in the java2uml tests
     private static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
@@ -46,7 +47,6 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
         val cls = createJavaClass(cName, vis, abstr, fin)
         cu.classifiers += cls;
         saveAndSynchronizeChanges(cu);
-        //this.changeRecorder.beginRecording(VURI.getInstance(cls.eResource), #[cls.eResource])
         return cls;
     }
     
@@ -88,7 +88,7 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     }
 
     /**
-     * @param Name ohne .java
+     * @param name ohne .java
      */
     def private createCompilationUnitAsModel(String name) {
         val cu = createEmptyCompilationUnit(name)
@@ -118,7 +118,7 @@ class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     def protected getCorrespondingEnum(org.emftext.language.java.classifiers.Enumeration jEnum) {
         return getFirstCorrespondingObjectWithClass(jEnum, org.eclipse.uml2.uml.Enumeration)
     }
-    def protected getCorrespondingMethod(Method jMethod) {
+    def protected getCorrespondingMethod(Member jMethod) {
         return getFirstCorrespondingObjectWithClass(jMethod, Operation)
     }
     def protected getCorrespondingAttribute(Field jAttribute) {

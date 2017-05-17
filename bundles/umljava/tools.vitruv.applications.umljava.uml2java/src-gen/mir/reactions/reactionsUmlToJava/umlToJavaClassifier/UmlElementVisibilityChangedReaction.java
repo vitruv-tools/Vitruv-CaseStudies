@@ -2,6 +2,8 @@ package mir.reactions.reactionsUmlToJava.umlToJavaClassifier;
 
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -60,8 +62,22 @@ class UmlElementVisibilityChangedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    ReplaceSingleValuedEAttribute<NamedElement, VisibilityKind> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, VisibilityKind>)change;
+    NamedElement affectedEObject = typedChange.getAffectedEObject();
+    EAttribute affectedFeature = typedChange.getAffectedFeature();
+    VisibilityKind oldValue = typedChange.getOldValue();
+    VisibilityKind newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final NamedElement affectedEObject, final EAttribute affectedFeature, final VisibilityKind oldValue, final VisibilityKind newValue) {
+    EObject _eContainer = affectedEObject.eContainer();
+    boolean _not = (!(_eContainer instanceof Interface));
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

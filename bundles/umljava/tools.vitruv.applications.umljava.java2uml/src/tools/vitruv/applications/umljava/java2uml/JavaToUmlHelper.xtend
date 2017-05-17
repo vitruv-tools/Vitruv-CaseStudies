@@ -151,4 +151,8 @@ class JavaToUmlHelper {
     def static <T extends org.eclipse.uml2.uml.NamedElement> findFirstCorrespondeningUmlElementByNameAndType(CorrespondenceModel correspondenceModel, String name, Class<T> typeOfJavaElement) {
         return correspondenceModel.getAllEObjectsOfTypeInCorrespondences(typeOfJavaElement).filter[it.name.equals(name)].head
     }
+    
+    def static void showMessage(UserInteracting userinteraction, String message) {
+        userinteraction.showMessage(message)
+    }
 }

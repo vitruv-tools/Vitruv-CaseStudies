@@ -27,6 +27,7 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     
     public void updateJavaInterfaceElement(final Interface umlInterface, final org.emftext.language.java.classifiers.Interface javaInterface) {
       javaInterface.setName(umlInterface.getName());
+      javaInterface.makePublic();
     }
     
     public EObject getElement2(final Interface umlInterface, final org.emftext.language.java.classifiers.Interface javaInterface) {

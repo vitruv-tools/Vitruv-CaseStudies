@@ -31,12 +31,7 @@ routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
         add correspondence between uClass and jClass
         add correspondence between uClass and jCompUnit
         call {
-            if (jCompUnit.namespaces.nullOrEmpty) {
-                addUmlElementToPackage(uClass, getUmlModel(correspondenceModel, userInteracting), jCompUnit)
-            } else {
-                addUmlElementToPackage(uClass, findUmlPackage(correspondenceModel, jCompUnit.namespaces.last), jCompUnit)
-            }
-        	
+            addUmlElementToModelOrPackage(jCompUnit, uClass)
         }
     }
 }
@@ -48,7 +43,7 @@ routine addUmlElementToPackage(uml::PackageableElement uPackageable, uml::Packag
         }
         call {
             if (uPackage instanceof org.eclipse.uml2.uml.Model) {
-                if (uPackage.packagedElements.size == 1) {
+                if (uPackage.packagedElements.size == 1) { //model needs to be persisted once
                    persistProjectRelative(persistedObject, uPackage, rootModelFile)
                 }
             }
@@ -65,16 +60,11 @@ routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCo
     action {
         val uInterface = create uml::Interface and initialize {
             uInterface.name = jInterface.name;
-            uInterface.visibility = VisibilityKind.PUBLIC_LITERAL
         }
         add correspondence between uInterface and jInterface
         add correspondence between uInterface and jCompUnit
         call {
-            if (jCompUnit.namespaces.nullOrEmpty) {
-                addUmlElementToPackage(uInterface, getUmlModel(correspondenceModel, userInteracting), jCompUnit)
-            } else {
-                addUmlElementToPackage(uInterface, findUmlPackage(correspondenceModel, jCompUnit.namespaces.last), jCompUnit)
-            }
+            addUmlElementToModelOrPackage(jCompUnit, uInterface)
         }   
     }
 }
@@ -147,11 +137,13 @@ routine setUmlClassAbstract(java::Class jClass, Boolean isAbstract) {
 
 reaction JavaSuperClassChanged {
     after element java::TypeReference replaced at java::Class[^extends]
+    with newValue !== null
     call addUmlSuperClass(affectedEObject, getClassifierFromTypeReference(newValue) as org.emftext.language.java.classifiers.Class)
 }
 
 reaction JavaSuperClassRemoved {
-    after element java::TypeReference removed from java::Class[^extends]
+    after element java::TypeReference replaced at java::Class[^extends]
+    with newValue === null
     call clearUmlSuperClassifiers(affectedEObject)
 }
 
@@ -164,10 +156,14 @@ routine addUmlSuperClass(java::Class jClass, java::Class jSuperClass) {
     }
     action {
         update uClass {
-            uClass.addUmlSuperClassifier(
-                findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, 
+            val uSuperClass = findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, 
                     jSuperClass.name, org.eclipse.uml2.uml.Class)
-            )
+            if (uSuperClass !== null) {
+                uClass.addUmlSuperClassifier(uSuperClass)
+            } else {
+                logger.warn("Could not add " + jSuperClass.name + " as super class for " + uClass + " because the corresponding UML-SuperClass is null")
+            }
+            
         }
     }
 }
@@ -181,10 +177,14 @@ routine addUmlSuperinterfaces(java::Interface jInterface, java::Classifier jSupe
     }
     action {
         update uInterface {
-            uInterface.addUmlSuperClassifier(
-                findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, 
+            val uSuperInterface = findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, 
                     jSuperInterface.name, org.eclipse.uml2.uml.Interface)
-            )
+            if (uSuperInterface !== null) {
+                uInterface.addUmlSuperClassifier(uSuperInterface)
+            } else {
+                logger.warn("Could not add " + jSuperInterface.name + " as super interface for " + uInterface + " because the corresponding UML-Superinterface is null")
+            }
+            
         }
     }
 }
@@ -238,7 +238,12 @@ routine addUmlClassImplement(java::Class jClass, java::Classifier jInterface) {
         update uClass {
             val uInterface = findFirstCorrespondeningUmlElementByNameAndType(correspondenceModel, 
                     jInterface.name, org.eclipse.uml2.uml.Interface)
-            uClass.createInterfaceRealization(DEFAULT_INTERFACEREALIZATION_NAME + uInterface.name, uInterface)
+            if (uInterface !== null) {
+                uClass.createInterfaceRealization(uInterface.name + uInterface.name, uInterface)
+            } else {
+                logger.warn("Could not add " + jInterface.name + " as implemented interface for " + uClass + " because the corresponding UML-Interface is null")
+            }
+            
         }
     }
 }
@@ -298,8 +303,8 @@ routine renameUmlNamedElement(java::NamedElement jElement) {
 }
 
 reaction JavaPackageCreated {
-	after element java::Package inserted as root
-	call createUmlPackage(newValue)
+    after element java::Package inserted as root
+    call createUmlPackage(newValue)
 }
 
 routine createUmlPackage(java::Package jPackage) {
@@ -316,6 +321,20 @@ routine createUmlPackage(java::Package jPackage) {
 		    }
 		}
 	}
+}
+
+reaction JavaPackageDeleted {
+    after element java::Package deleted and removed as root
+    call deleteUmlPackage(oldValue)
+}
+
+routine deleteUmlPackage(java::Package jPackage) {
+    match {
+        val uPackage = retrieve uml::Package corresponding to jPackage
+    }
+    action {
+        delete uPackage
+    }
 }
 
 reaction JavaCompilationUnitInsertedInPackage {
@@ -363,11 +382,7 @@ routine createUmlEnum(java::Enumeration jEnum, java::CompilationUnit jCompUnit) 
             uEnum.name = jEnum.name;
         }
         call {
-            if (jCompUnit.namespaces.nullOrEmpty) {
-                addUmlElementToPackage(uEnum, getUmlModel(correspondenceModel, userInteracting), jCompUnit)
-            } else {
-                addUmlElementToPackage(uEnum, findUmlPackage(correspondenceModel, jCompUnit.namespaces.last), jCompUnit)
-            }
+            addUmlElementToModelOrPackage(jCompUnit, uEnum)
         }
         add correspondence between uEnum and jEnum
         add correspondence between uEnum and jCompUnit
@@ -406,4 +421,27 @@ routine deleteUmlEnumLiteral(java::EnumConstant jConstant) {
     action {
         delete uLiteral
     }
+}
+
+routine addUmlElementToModelOrPackage(java::CompilationUnit jCompUnit, uml::Classifier uClassifier) {
+    action {
+       call {
+            if (jCompUnit.namespaces.nullOrEmpty) {
+                addUmlElementToPackage(uClassifier, getUmlModel(correspondenceModel, userInteracting), jCompUnit)
+            } else {
+                addUmlElementToPackage(uClassifier, findUmlPackage(correspondenceModel, jCompUnit.namespaces.last), jCompUnit)
+            }
+        }
+        
+    }
+}
+
+reaction JavaEnumerationImplementAdded {
+    after element java::TypeReference created and inserted in java::Enumeration[implements]
+    call showMessage(userInteracting, "Implement relations from enums are not supported. Please remove it from " + affectedEObject)
+}
+
+reaction JavaClassifierMadeStatic {
+    after element java::Static created and inserted in java::ConcreteClassifier[annotationsAndModifiers]
+    call showMessage(userInteracting, "Static classifiers are not supported. Please undo the change at " + affectedEObject)
 }

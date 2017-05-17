@@ -48,19 +48,19 @@ class UmlToJavaParameterTest extends Uml2JavaTransformationTest {
     
     //@After
     def void after() {
-        if (uOperation != null) {
+        if (uOperation !== null) {
             uOperation.destroy;
         }
-        if (uClass != null) {
+        if (uClass !== null) {
             uClass.destroy;
         }
-        if (typeClass != null) {
+        if (typeClass !== null) {
             typeClass.destroy;
         }
-        if (uParam != null) {
+        if (uParam !== null) {
             uParam.destroy
         }
-        if (pType != null) {
+        if (pType !== null) {
             pType.destroy
         }
         saveAndSynchronizeChanges(rootElement);
@@ -100,7 +100,18 @@ class UmlToJavaParameterTest extends Uml2JavaTransformationTest {
         assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
     }
     
-    @Test @Ignore("TUID Problem")
+    @Test
+    def testChangeParameterType() {
+        uParam.type = typeClass
+        saveAndSynchronizeChanges(uParam)
+        
+        val jParam = getCorrespondingParameter(uParam)
+        val jTypeClass = getCorrespondingClass(typeClass)
+        assertJavaParameterTraits(jParam, PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
+        assertParameterEquals(uParam, jParam)
+    }
+    
+    @Test
     def testChangeParameterDirectionToReturn() {
         uParam.direction = ParameterDirectionKind.RETURN_LITERAL
         saveAndSynchronizeChanges(uParam)
@@ -108,12 +119,5 @@ class UmlToJavaParameterTest extends Uml2JavaTransformationTest {
         var jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaElementHasTypeRef(jMethod, TypesFactory.eINSTANCE.createInt)
         
-        uParam.direction = ParameterDirectionKind.IN_LITERAL
-        saveAndSynchronizeChanges(uParam)
-        val jParam = getCorrespondingParameter(uParam)
-        assertJavaElementHasTypeRef(jParam, TypesFactory.eINSTANCE.createInt)
-        jMethod = getCorrespondingClassMethod(uOperation)
-        assertJavaElementHasTypeRef(jMethod, TypesFactory.eINSTANCE.createVoid)
-        assertParameterEquals(uParam, jParam)
     }
 }

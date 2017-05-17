@@ -31,7 +31,7 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customClass) {
-      jParam.setTypeReference(UmlToJavaHelper.createTypeReference(uType, customClass));
+      jParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit(), this.userInteracting));
     }
     
     public EObject getCorrepondenceSourceCustomClass(final Parameter uParam, final Type uType, final OrdinaryParameter jParam) {

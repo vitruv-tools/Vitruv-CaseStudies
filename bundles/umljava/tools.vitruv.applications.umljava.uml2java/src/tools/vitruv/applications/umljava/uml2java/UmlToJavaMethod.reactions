@@ -1,7 +1,9 @@
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.emftext.language.java.types.TypesFactory
+import org.eclipse.emf.ecore.util.EcoreUtil
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import org.eclipse.uml2.uml.VisibilityKind
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -19,8 +21,8 @@ reaction UmlMethodCreated {
 }
 //We need separate Reactions for Class and Enums, because they don't have a common
 //superClass for "having ownedOperation"
-reaction UmlMethodCreatedInEnum {
-    after element uml::Operation created and inserted in uml::Enumeration[ownedOperation]
+reaction UmlMethodCreatedInDataType {
+    after element uml::Operation created and inserted in uml::DataType[ownedOperation]
     call {
         createJavaMethod(affectedEObject, newValue)       
     }
@@ -31,7 +33,6 @@ routine createJavaMethod(uml::Classifier uClassifier, uml::Operation uOperation)
             if (uClassifier.name.equals(uOperation.name)) {
                 createJavaConstructor(uClassifier, uOperation)
             } else if (uClassifier instanceof org.eclipse.uml2.uml.Class
-                || uClassifier instanceof org.eclipse.uml2.uml.Enumeration
                 || uClassifier instanceof org.eclipse.uml2.uml.DataType) {
                 createJavaClassMethod(uClassifier, uOperation)
             } else if (uClassifier instanceof org.eclipse.uml2.uml.Interface) {
@@ -49,7 +50,7 @@ routine createJavaClassMethod(uml::Classifier uClassifier, uml::Operation umlOp)
         val javaMethod = create java::ClassMethod and initialize {
             javaMethod.name = umlOp.name;
             setJavaVisibility(javaMethod, umlOp.visibility)
-            javaMethod.typeReference = createTypeReference(umlOp.type, customTypeClass)
+            javaMethod.typeReference = createTypeReferenceAndUpdateImport(umlOp.type, customTypeClass, jClassifier.getContainingCompilationUnit, userInteracting)
         }
         update jClassifier {
             jClassifier.members += javaMethod;
@@ -79,15 +80,15 @@ reaction UmlClassMethodDeleted {
     after element uml::Operation deleted and removed from uml::Class[ownedOperation]
     call deleteJavaMethod(oldValue)
 }
-//uml::Interface and uml::Class and uml::Enumeration dont have a common superClass for "having ownedOperation",
+//uml::Interface and uml::Class and uml::DataType dont have a common superClass for "having ownedOperation",
 //so we need separate reactions
 reaction UmlInterfaceMethodDeleted {
     after element uml::Operation deleted and removed from uml::Interface[ownedOperation]
     call deleteJavaMethod(oldValue)
 }
-
-reaction UmlEnumMethodDeleted {
-    after element uml::Operation deleted and removed from uml::Enumeration[ownedOperation]
+//uml::Enumeration is a uml::DataType
+reaction UmlDataTypeMethodDeleted {
+    after element uml::Operation deleted and removed from uml::DataType[ownedOperation]
     call deleteJavaMethod(oldValue)
 }
 
@@ -102,7 +103,7 @@ routine deleteJavaMethod(uml::Operation umlOp) {
 
 reaction UmlParameterCreated {
     after element uml::Parameter created and inserted in uml::Operation[ownedParameter]
-    with newValue.direction != ParameterDirectionKind.RETURN_LITERAL && newValue.name != null
+    with newValue.direction == ParameterDirectionKind.IN_LITERAL && newValue.name !== null
     call createJavaParameter(affectedEObject, newValue)
 
 }
@@ -114,13 +115,8 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
     }
     action {
         val javaParam = create java::OrdinaryParameter and initialize {
-        	if (umlParam == null) {
-        		javaParam.name = "DefaultParameterName" //TODO notwendig?
-        	} else {
-        		javaParam.name = umlParam.name;
-        	}
-            
-            javaParam.typeReference = createTypeReference(umlParam.type, customTypeClass)
+        	javaParam.name = umlParam.name;
+            javaParam.typeReference = createTypeReferenceAndUpdateImport(umlParam.type, customTypeClass, javaMethod.getContainingCompilationUnit, userInteracting)
         }
         add correspondence between javaParam and umlParam
         update javaMethod {
@@ -131,7 +127,7 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
 
 reaction UmlParameterDeleted {
     after element uml::Parameter deleted and removed from uml::Operation[ownedParameter]
-    with oldValue.direction != ParameterDirectionKind.RETURN_LITERAL
+    with oldValue.direction == ParameterDirectionKind.IN_LITERAL
     call deleteJavaParameter(oldValue)
 }
 
@@ -146,7 +142,7 @@ routine deleteJavaParameter(uml::Parameter uParam) {
 
 reaction UmlParameterTypeChanged {
     after element uml::Type replaced at uml::Parameter[type]
-    with affectedEObject.direction != ParameterDirectionKind.RETURN_LITERAL
+    with affectedEObject.direction == ParameterDirectionKind.IN_LITERAL
     call  changeJavaParameterType(affectedEObject, newValue)
 }
 
@@ -157,7 +153,7 @@ routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
     }
     action {
         update jParam {
-            jParam.typeReference = createTypeReference(uType, customClass);
+            jParam.typeReference = createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit, userInteracting)
         }
     }
 }
@@ -184,15 +180,14 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
 	action {
 		update jMethod {
 			if (newDirection == ParameterDirectionKind.RETURN_LITERAL) {
-				jMethod.typeReference = createTypeReference(uParam.type, customTypeClass)
+				jMethod.typeReference = createTypeReferenceAndUpdateImport(uParam.type, customTypeClass, jMethod.getContainingCompilationUnit, userInteracting)
 			} else if (oldDirection == ParameterDirectionKind.RETURN_LITERAL) {
 				jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
 			}
 		}
-		
 		call {
 		    if (newDirection == ParameterDirectionKind.RETURN_LITERAL && jParam !== null) {
-			    deleteJavaParameter(uParam)
+			    EcoreUtil.remove(jParam)
 			} else if (newDirection == ParameterDirectionKind.IN_LITERAL && jParam === null) {
 			    createJavaParameter(uOperation, uParam)
 			}
@@ -207,7 +202,7 @@ routine setJavaMethodReturnType(uml::Operation uOperation) {
     }
     action {
         update javaMethod {
-            javaMethod.typeReference = createTypeReference(uOperation.type, returnType)
+            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, returnType, javaMethod.getContainingCompilationUnit, userInteracting)
         }
     }
 }
@@ -252,18 +247,18 @@ reaction UmlInterfaceMethodCreated {
     call createJavaMethod(affectedEObject, newValue)
 }
 
-routine createJavaInterfaceMethod(uml::Interface uInterface, uml::Operation umlOp) {
+routine createJavaInterfaceMethod(uml::Interface uInterface, uml::Operation uOperation) {
     match {
         val jInterface = retrieve java::Interface corresponding to uInterface
-        val customTypeClass = retrieve optional java::Class corresponding to umlOp.type
+        val customTypeClass = retrieve optional java::Class corresponding to uOperation.type
     }
     action {
         val javaMethod = create java::InterfaceMethod and initialize {
-            javaMethod.name = umlOp.name;
-            javaMethod.typeReference = createTypeReference(umlOp.type, customTypeClass)
+            javaMethod.name = uOperation.name;
+            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jInterface.getContainingCompilationUnit, userInteracting)
             javaMethod.makePublic
         }
-        add correspondence between umlOp and javaMethod
+        add correspondence between uOperation and javaMethod
         update jInterface {
             jInterface.members += javaMethod;
         }
@@ -272,7 +267,14 @@ routine createJavaInterfaceMethod(uml::Interface uInterface, uml::Operation umlO
 
 reaction UmlMethodMadeFinal {
     after attribute replaced at uml::Operation[isLeaf]
+    with !(affectedEObject.class_ instanceof org.eclipse.uml2.uml.Interface)
     call setJavaMethodFinal(affectedEObject, newValue)
+}
+
+reaction UmlInterfaceMethodMadeFinal {
+    after attribute replaced at uml::Operation[isLeaf]
+    with affectedEObject.class_ instanceof org.eclipse.uml2.uml.Interface
+    call showMessage(userInteracting, "Final Operations in Interfaces are not supported. Please undo it: " + affectedEObject)
 }
 
 routine setJavaMethodFinal(uml::Operation uOperation, Boolean isFinal) {
@@ -284,4 +286,11 @@ routine setJavaMethodFinal(uml::Operation uOperation, Boolean isFinal) {
             jMethod.final = isFinal
         }
     }
+}
+
+reaction UmlInterfaceMethodVisibilityChanged {
+    after attribute replaced at uml::Operation[visibility]
+    with (affectedEObject.eContainer instanceof org.eclipse.uml2.uml.Interface)
+    && newValue != VisibilityKind.PUBLIC_LITERAL
+    call showMessage(userInteracting, "Non-public operations in interface are not valid. Please set " + affectedEObject + " to public")
 }

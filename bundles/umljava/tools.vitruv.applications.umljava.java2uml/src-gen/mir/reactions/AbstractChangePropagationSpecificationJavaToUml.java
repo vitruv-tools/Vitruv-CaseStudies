@@ -22,8 +22,8 @@ public abstract class AbstractChangePropagationSpecificationJavaToUml extends Co
 	 */
 	protected void setup() {
 		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.ExecutorJavaToUml(getUserInteracting()));
-		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.ExecutorJavaToUml(getUserInteracting()));
 		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.ExecutorJavaToUml(getUserInteracting()));
+		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.ExecutorJavaToUml(getUserInteracting()));
 	}
 	
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Namespace;
 import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
 import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
@@ -38,14 +39,18 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateJPackageElement(final org.eclipse.uml2.uml.Package uPackage, final org.eclipse.uml2.uml.Package uSuperPackage, final org.emftext.language.java.containers.Package jSuperPackage, final org.emftext.language.java.containers.Package jPackage) {
-      Namespace _namespace = uPackage.getNamespace();
-      boolean _tripleNotEquals = (_namespace != null);
-      if (_tripleNotEquals) {
-        EList<String> _namespaces = jPackage.getNamespaces();
-        List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
-        Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
+      if ((uPackage instanceof Model)) {
+        jPackage.setName("");
+      } else {
+        Namespace _namespace = uPackage.getNamespace();
+        boolean _tripleNotEquals = (_namespace != null);
+        if (_tripleNotEquals) {
+          EList<String> _namespaces = jPackage.getNamespaces();
+          List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
+          Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
+        }
+        jPackage.setName(uPackage.getName());
       }
-      jPackage.setName(uPackage.getName());
       this.persistProjectRelative(uPackage, jPackage, JavaPersistenceHelper.buildJavaFilePath(jPackage));
     }
   }

@@ -2,6 +2,7 @@ package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -59,8 +60,22 @@ class UmlMethodMadeFinalReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    ReplaceSingleValuedEAttribute<Operation, Boolean> typedChange = (ReplaceSingleValuedEAttribute<Operation, Boolean>)change;
+    Operation affectedEObject = typedChange.getAffectedEObject();
+    EAttribute affectedFeature = typedChange.getAffectedFeature();
+    Boolean oldValue = typedChange.getOldValue();
+    Boolean newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final Operation affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue) {
+    org.eclipse.uml2.uml.Class _class_ = affectedEObject.getClass_();
+    boolean _not = (!(_class_ instanceof Interface));
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

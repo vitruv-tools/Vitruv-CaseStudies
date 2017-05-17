@@ -1,8 +1,8 @@
 package tools.vitruv.applications.umljava.util.java
 
 import org.apache.log4j.Logger
-import org.emftext.language.java.types.TypeReference
-
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.types.Boolean
 import org.emftext.language.java.types.Byte
 import org.emftext.language.java.types.Char
@@ -13,16 +13,7 @@ import org.emftext.language.java.types.Long
 import org.emftext.language.java.types.Short
 import org.emftext.language.java.types.Void
 import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.impl.VoidImpl
-import org.emftext.language.java.types.impl.ShortImpl
-import org.emftext.language.java.types.impl.LongImpl
 import org.emftext.language.java.types.TypesFactory
-import org.emftext.language.java.types.impl.FloatImpl
-import org.emftext.language.java.types.impl.DoubleImpl
-import org.emftext.language.java.types.impl.CharImpl
-import org.emftext.language.java.types.impl.ByteImpl
-import org.emftext.language.java.types.impl.BooleanImpl
-import org.emftext.language.java.types.impl.IntImpl
 
 /**
  * Util class with for Java-PrimitiveTypes and Java-String.
@@ -100,6 +91,7 @@ class JavaStandardType {
             case LONG: return TypesFactory.eINSTANCE.createLong
             case SHORT: return TypesFactory.eINSTANCE.createShort
             case VOID: return TypesFactory.eINSTANCE.createVoid
+            case STRING: return createNamespaceReferenceFromClassifier(createJavaClass(STRING, JavaVisibility.PUBLIC, false, false))
             default: throw new IllegalArgumentException("Unknown standard primitive type name: " +  standardTypeName)
         }
     }

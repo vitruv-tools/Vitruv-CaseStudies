@@ -99,13 +99,13 @@ class JavaTestUtil {
 	
 	
 	def static void assertJavaAttributeTraits(Field jAttribute, String name, JavaVisibility visibility, 
-		TypeReference typeRef, boolean isFinal, boolean isStatic, Class containedClass) {
+		TypeReference typeRef, boolean isFinal, boolean isStatic, ConcreteClassifier containedClassifier) {
 		assertEquals(name, jAttribute.name)
 		assertJavaModifiableHasVisibility(jAttribute, visibility)
         assertJavaElementHasTypeRef(jAttribute, typeRef)
         assertJavaModifiableFinal(jAttribute, isFinal)
         assertJavaModifiableStatic(jAttribute, isStatic)
-        assertEquals(containedClass.name , (jAttribute.eContainer as Class).name)
+        assertEquals(containedClassifier.name , (jAttribute.eContainer as ConcreteClassifier).name)
 	}
 	
 	def static void assertJavaModifiableFinal(AnnotableAndModifiable modifiable, boolean isFinal) {

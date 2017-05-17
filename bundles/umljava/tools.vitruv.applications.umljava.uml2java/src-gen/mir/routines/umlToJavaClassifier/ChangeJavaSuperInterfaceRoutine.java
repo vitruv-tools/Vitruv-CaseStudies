@@ -28,8 +28,8 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     
     public void update0Element(final Interface superUMLInterface, final Interface uI, final org.emftext.language.java.classifiers.Interface jI, final org.emftext.language.java.classifiers.Interface superJavaInterface) {
       EList<TypeReference> _extends = jI.getExtends();
-      TypeReference _createTypeReference = UmlToJavaHelper.createTypeReference(null, superJavaInterface);
-      _extends.add(_createTypeReference);
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, superJavaInterface, jI.getContainingCompilationUnit(), this.userInteracting);
+      _extends.add(_createTypeReferenceAndUpdateImport);
     }
     
     public EObject getCorrepondenceSourceSuperJavaInterface(final Interface superUMLInterface, final Interface uI, final org.emftext.language.java.classifiers.Interface jI) {

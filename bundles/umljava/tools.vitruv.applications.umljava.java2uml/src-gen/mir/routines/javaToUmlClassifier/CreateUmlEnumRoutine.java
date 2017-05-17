@@ -5,10 +5,8 @@ import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.containers.CompilationUnit;
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -45,12 +43,7 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void callRoutine1(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum, @Extension final RoutinesFacade _routinesFacade) {
-      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jCompUnit.getNamespaces());
-      if (_isNullOrEmpty) {
-        _routinesFacade.addUmlElementToPackage(uEnum, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), jCompUnit);
-      } else {
-        _routinesFacade.addUmlElementToPackage(uEnum, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())), jCompUnit);
-      }
+      _routinesFacade.addUmlElementToModelOrPackage(jCompUnit, uEnum);
     }
   }
   

@@ -2,7 +2,7 @@ package mir.routines.umlToJavaClassifier;
 
 import com.google.common.collect.Iterables;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -44,7 +44,7 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     public void updateJavaCompilationUnitElement(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit) {
       if ((jPackage != null)) {
         EList<String> _namespaces = javaCompilationUnit.getNamespaces();
-        Collection<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage);
+        List<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage);
         Iterables.<String>addAll(_namespaces, _javaPackageAsStringList);
       }
       String _name = jClassifier.getName();

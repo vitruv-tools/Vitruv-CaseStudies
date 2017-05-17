@@ -71,7 +71,7 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final Operation affectedEObject, final EReference affectedFeature, final Parameter newValue) {
-    return ((!Objects.equal(newValue.getDirection(), ParameterDirectionKind.RETURN_LITERAL)) && (!Objects.equal(newValue.getName(), null)));
+    return (Objects.equal(newValue.getDirection(), ParameterDirectionKind.IN_LITERAL) && (newValue.getName() != null));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

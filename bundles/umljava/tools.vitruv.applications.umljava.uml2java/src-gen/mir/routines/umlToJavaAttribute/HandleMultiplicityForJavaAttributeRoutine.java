@@ -45,29 +45,47 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
         int _upper = uAttribute.getUpper();
         boolean _equals_1 = (_upper == 1);
         if (_equals_1) {
-          jAttribute.setTypeReference(UmlToJavaHelper.createTypeReference(uAttribute.getType(), jType));
+          jAttribute.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uAttribute.getType(), jType, jAttribute.getContainingCompilationUnit(), this.userInteracting));
         } else {
           int _upper_1 = uAttribute.getUpper();
           boolean _equals_2 = (_upper_1 == LiteralUnlimitedNatural.UNLIMITED);
           if (_equals_2) {
             jAttribute.setTypeReference(JavaTypeUtil.createCollectiontypeReference(UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting), jType));
           } else {
+            int _lower_1 = uAttribute.getLower();
+            String _plus = ("We do not support the multiplicity [" + Integer.valueOf(_lower_1));
+            String _plus_1 = (_plus + "..");
             int _upper_2 = uAttribute.getUpper();
-            boolean _greaterThan = (_upper_2 > 1);
-            if (_greaterThan) {
-              jAttribute.setTypeReference(JavaTypeUtil.createCollectiontypeReference(UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting), jType));
-            }
+            String _plus_2 = (_plus_1 + Integer.valueOf(_upper_2));
+            String _plus_3 = (_plus_2 + ". Please change it to [0..1], [1..1] or [0..*].");
+            UmlToJavaHelper.showMessage(this.userInteracting, _plus_3);
           }
         }
       } else {
-        int _lower_1 = uAttribute.getLower();
-        boolean _equals_3 = (_lower_1 == 1);
+        int _lower_2 = uAttribute.getLower();
+        boolean _equals_3 = (_lower_2 == 1);
         if (_equals_3) {
           int _upper_3 = uAttribute.getUpper();
           boolean _equals_4 = (_upper_3 == 1);
           if (_equals_4) {
-            jAttribute.setTypeReference(UmlToJavaHelper.createTypeReference(uAttribute.getType(), jType));
+            jAttribute.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uAttribute.getType(), jType, jAttribute.getContainingCompilationUnit(), this.userInteracting));
+          } else {
+            int _lower_3 = uAttribute.getLower();
+            String _plus_4 = ("We do not support the multiplicity [" + Integer.valueOf(_lower_3));
+            String _plus_5 = (_plus_4 + "..");
+            int _upper_4 = uAttribute.getUpper();
+            String _plus_6 = (_plus_5 + Integer.valueOf(_upper_4));
+            String _plus_7 = (_plus_6 + ". Please change it to [0..1], [1..1] or [0..*].");
+            UmlToJavaHelper.showMessage(this.userInteracting, _plus_7);
           }
+        } else {
+          int _lower_4 = uAttribute.getLower();
+          String _plus_8 = ("We do not support the multiplicity [" + Integer.valueOf(_lower_4));
+          String _plus_9 = (_plus_8 + "..");
+          int _upper_5 = uAttribute.getUpper();
+          String _plus_10 = (_plus_9 + Integer.valueOf(_upper_5));
+          String _plus_11 = (_plus_10 + ". Please change it to [0..1], [1..1] or [0..*].");
+          UmlToJavaHelper.showMessage(this.userInteracting, _plus_11);
         }
       }
     }

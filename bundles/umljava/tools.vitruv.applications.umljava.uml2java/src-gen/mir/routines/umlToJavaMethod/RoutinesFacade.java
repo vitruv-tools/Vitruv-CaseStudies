@@ -83,9 +83,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createJavaInterfaceMethod(final Interface uInterface, final Operation umlOp) {
+  public void createJavaInterfaceMethod(final Interface uInterface, final Operation uOperation) {
     mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine(this.executionState, calledBy,
-    	uInterface, umlOp);
+    	uInterface, uOperation);
     effect.applyRoutine();
   }
   

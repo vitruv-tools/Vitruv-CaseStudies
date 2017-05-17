@@ -67,10 +67,6 @@ class UmlImplementedInterfaceChangedReaction extends AbstractReactionRealization
     }
     
     public void callRoutine1(final InterfaceRealization affectedEObject, final EReference affectedFeature, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
-      int _size = affectedEObject.getSuppliers().size();
-      boolean _greaterThan = (_size > 1);
-      if (_greaterThan) {
-      }
       EObject _eContainer = affectedEObject.eContainer();
       _routinesFacade.changeJavaImplementedInterface(newValue, null, ((org.eclipse.uml2.uml.Class) _eContainer));
     }

@@ -1,5 +1,6 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlPropertyAndAssociationUtil.*
@@ -23,9 +24,12 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	private static val LITERAL_NAME = "LITERALNAME"
 	private static val OPERATION_NAME = "operationName"
 	private static val TYPE_CLASS = "TypeClass"
+	private static val ATTRIBUTE_NAME = "attributeName"
 	private static var org.eclipse.uml2.uml.Enumeration uEnum
 	private static val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
 	private static val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
+    
+
     
     
 	
@@ -108,5 +112,20 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
             TypesFactory.eINSTANCE.createVoid, false, false, null, jEnum)
         assertMethodEquals(uOperation, jMethod)
 	}
+	
+	@Test
+    def testAddEnumAttribute() {
+        val typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS)
+        val attr = uEnum.createOwnedAttribute(ATTRIBUTE_NAME, typeClass);
+        saveAndSynchronizeChanges(rootElement);
+           
+        val jEnum = getCorrespondingEnum(uEnum)
+        val jTypeClass = getCorrespondingClass(typeClass)
+        val jAttr = getCorrespondingAttribute(attr)
+        assertJavaAttributeTraits(jAttr, ATTRIBUTE_NAME, JavaVisibility.PUBLIC, 
+            createNamespaceReferenceFromClassifier(jTypeClass), false, false, jEnum)
+        assertAttributeEquals(attr, jAttr)
+        
+    }
 
 }

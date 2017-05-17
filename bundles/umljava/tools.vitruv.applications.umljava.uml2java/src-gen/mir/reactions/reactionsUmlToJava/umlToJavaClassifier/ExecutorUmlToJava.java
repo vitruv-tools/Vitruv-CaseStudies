@@ -15,7 +15,6 @@ public class ExecutorUmlToJava extends AbstractReactionsExecutor {
   
   protected void setup() {
     tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlModelReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlModelReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlClassCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlClassCreatedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPackageCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPackageCreatedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPackageRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPackageRenamedReaction(userInteracting));

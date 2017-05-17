@@ -23,6 +23,7 @@ public class CreateJavaEnumRoutine extends AbstractRepairRoutineRealization {
     
     public void updateJEnumElement(final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum) {
       jEnum.setName(uEnum.getName());
+      jEnum.makePublic();
     }
     
     public EObject getElement1(final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum) {

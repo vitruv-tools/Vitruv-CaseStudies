@@ -2,6 +2,7 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
 import org.emftext.language.java.classifiers.Classifier;
@@ -32,9 +33,20 @@ public class AddUmlClassImplementRoutine extends AbstractRepairRoutineRealizatio
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Classifier jInterface, final org.eclipse.uml2.uml.Class uClass) {
       final Interface uInterface = JavaToUmlHelper.<Interface>findFirstCorrespondeningUmlElementByNameAndType(this.correspondenceModel, 
         jInterface.getName(), Interface.class);
-      String _name = uInterface.getName();
-      String _plus = (JavaToUmlHelper.DEFAULT_INTERFACEREALIZATION_NAME + _name);
-      uClass.createInterfaceRealization(_plus, uInterface);
+      if ((uInterface != null)) {
+        String _name = uInterface.getName();
+        String _name_1 = uInterface.getName();
+        String _plus = (_name + _name_1);
+        uClass.createInterfaceRealization(_plus, uInterface);
+      } else {
+        Logger _logger = this.getLogger();
+        String _name_2 = jInterface.getName();
+        String _plus_1 = ("Could not add " + _name_2);
+        String _plus_2 = (_plus_1 + " as implemented interface for ");
+        String _plus_3 = (_plus_2 + uClass);
+        String _plus_4 = (_plus_3 + " because the corresponding UML-Interface is null");
+        _logger.warn(_plus_4);
+      }
     }
   }
   

@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -28,7 +27,7 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
       if (_equals) {
         _routinesFacade.createJavaConstructor(uClassifier, uOperation);
       } else {
-        if ((((uClassifier instanceof org.eclipse.uml2.uml.Class) || (uClassifier instanceof Enumeration)) || (uClassifier instanceof DataType))) {
+        if (((uClassifier instanceof org.eclipse.uml2.uml.Class) || (uClassifier instanceof DataType))) {
           _routinesFacade.createJavaClassMethod(uClassifier, uOperation);
         } else {
           if ((uClassifier instanceof Interface)) {

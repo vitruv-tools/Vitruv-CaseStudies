@@ -1,6 +1,5 @@
 package mir.routines.umlToJavaMethod;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
@@ -54,13 +53,8 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
-      boolean _equals = Objects.equal(umlParam, null);
-      if (_equals) {
-        javaParam.setName("DefaultParameterName");
-      } else {
-        javaParam.setName(umlParam.getName());
-      }
-      javaParam.setTypeReference(UmlToJavaHelper.createTypeReference(umlParam.getType(), customTypeClass));
+      javaParam.setName(umlParam.getName());
+      javaParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(umlParam.getType(), customTypeClass, javaMethod.getContainingCompilationUnit(), this.userInteracting));
     }
   }
   

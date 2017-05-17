@@ -66,7 +66,7 @@ class UmlTestUtil {
         assertUmlTypedElementHasType(uProperty, type)
         assertUmlFeatureHasStaticValue(uProperty, isStatic)
         assertUmlPropertyHasFinalValue(uProperty, isFinal)
-        assertEquals(containingClassifier.name, uProperty.class_.name)
+        assertEquals(containingClassifier.name, (uProperty.eContainer as Classifier).name)
         assertUmlValueSpecificationEquals(lowerMultiplicity, uProperty.lowerValue)
         assertUmlValueSpecificationEquals(upperMultiplicity, uProperty.upperValue)
     }
@@ -79,11 +79,7 @@ class UmlTestUtil {
         assertUmlOperationHasReturntype(uOperation, returntype)
         assertUmlFeatureHasStaticValue(uOperation, isStatic)
         assertUmlOperationHasAbstractValue(uOperation, isAbstract)
-        if (containingClassifier instanceof org.eclipse.uml2.uml.Class) {
-            assertEquals(containingClassifier.name, uOperation.class_.name)
-        } else if (containingClassifier instanceof org.eclipse.uml2.uml.Interface) {
-            assertEquals(containingClassifier.name, uOperation.interface.name)
-        }
+        assertEquals(containingClassifier.name, (uOperation.eContainer as Classifier).name)
         assertUmlParameterListEquals(paramList, uOperation.ownedParameters)
     }
     
@@ -143,6 +139,14 @@ class UmlTestUtil {
     
     def static void assertUmlPackageableElementIsInPackage(PackageableElement packageable, Package uPackage) {
         assertThat(getUmlNamespaceAsStringList(uPackage), is(getUmlNamespaceAsStringList(packageable.namespace)))
+    }
+    
+    def static void assertUmlPackageableElementIsNotInPackage(PackageableElement packageable, Package uPackage) {
+        for (elem : uPackage.packagedElements) {
+            if (elem.name.equals(packageable.name) && elem.class.equals(packageable.class)) {
+                fail()
+            }
+        }
     }
     
     def static void assertUmlNamedElementHasVisibility(NamedElement uElement, VisibilityKind visibility) {

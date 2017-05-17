@@ -1,5 +1,6 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
@@ -22,6 +23,8 @@ class JavaToUmlEnumTest extends Java2UmlTransformationTest {
     private static val ENUM_LITERAL_NAMES_2 = #["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
     private static val CONSTANT_NAME = "CONSTANTNAME"
     private static val OPERATION_NAME = "operationName"
+    private static val ATTRIBUTE_NAME = "attributeName"
+    private static val TYPECLASS = "TypeClass"
     private static var org.emftext.language.java.classifiers.Enumeration jEnum
     private static val enumConstants1 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_1)
     private static val enumConstants2 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2)
@@ -90,15 +93,30 @@ class JavaToUmlEnumTest extends Java2UmlTransformationTest {
     
     @Test
     def void testAddEnumMethod() {
-        val jMethod = createJavaClassMethod(OPERATION_NAME, TypesFactory.eINSTANCE.createVoid, JavaVisibility.PRIVATE,
+        val jMethod = createJavaClassMethod(OPERATION_NAME, TypesFactory.eINSTANCE.createVoid, JavaVisibility.PUBLIC,
             false, false, null)
         jEnum.members += jMethod
         saveAndSynchronizeChanges(jEnum)
         
         val uOperation = getCorrespondingMethod(jMethod)
         val uEnum = getCorrespondingEnum(jEnum)
-        assertUmlOperationTraits(uOperation, OPERATION_NAME, VisibilityKind.PRIVATE_LITERAL, null, false,
+        assertUmlOperationTraits(uOperation, OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false,
             false, uEnum, null)
         assertMethodEquals(uOperation, jMethod)
+    }
+    
+    @Test
+    def void testAddEnumAttribute() {
+        val typeClass = createJavaClassWithCompilationUnit(TYPECLASS, JavaVisibility.PUBLIC, false, false)
+        val jAttr = createJavaAttribute(ATTRIBUTE_NAME, createNamespaceReferenceFromClassifier(typeClass), JavaVisibility.PRIVATE, false, false)
+        jEnum.members += jAttr
+        saveAndSynchronizeChanges(jEnum)
+        
+        val uAttr = getCorrespondingAttribute(jAttr)
+        val uTypeClass = getCorrespondingClass(typeClass)
+        val uEnum = getCorrespondingEnum(jEnum)
+        assertUmlPropertyTraits(uAttr, ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, uTypeClass,
+            false, false, uEnum, null, null)
+        assertAttributeEquals(uAttr, jAttr)
     }
 }

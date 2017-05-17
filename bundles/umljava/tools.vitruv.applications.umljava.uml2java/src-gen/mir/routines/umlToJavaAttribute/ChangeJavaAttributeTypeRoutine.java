@@ -5,8 +5,10 @@ import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
+import tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,16 +28,14 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
       return uType;
     }
     
-    public EObject getElement1(final Property uAttr, final Type uType, final Field jAttr, final org.emftext.language.java.classifiers.Class customType) {
-      return jAttr;
-    }
-    
-    public void update0Element(final Property uAttr, final Type uType, final Field jAttr, final org.emftext.language.java.classifiers.Class customType) {
-      jAttr.setTypeReference(UmlToJavaHelper.createTypeReference(uType, customType));
-    }
-    
     public EObject getCorrepondenceSourceJAttr(final Property uAttr, final Type uType) {
       return uAttr;
+    }
+    
+    public void callRoutine1(final Property uAttr, final Type uType, final Field jAttr, final org.emftext.language.java.classifiers.Class customType, @Extension final RoutinesFacade _routinesFacade) {
+      jAttr.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit(), this.userInteracting));
+      JavaMemberAndParameterUtil.updateAttributeTypeInSetters(jAttr);
+      JavaMemberAndParameterUtil.updateAttributeTypeInGetters(jAttr);
     }
   }
   
@@ -70,8 +70,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(customType);
-    // val updatedElement userExecution.getElement1(uAttr, uType, jAttr, customType);
-    userExecution.update0Element(uAttr, uType, jAttr, customType);
+    userExecution.callRoutine1(uAttr, uType, jAttr, customType, actionsFacade);
     
     postprocessElements();
   }

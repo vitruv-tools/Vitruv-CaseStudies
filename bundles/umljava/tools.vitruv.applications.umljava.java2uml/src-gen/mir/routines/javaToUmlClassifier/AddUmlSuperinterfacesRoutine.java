@@ -2,6 +2,7 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
@@ -27,9 +28,19 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Interface jInterface, final Classifier jSuperInterface, final org.eclipse.uml2.uml.Interface uInterface) {
-      UmlClassifierAndPackageUtil.addUmlSuperClassifier(uInterface, 
-        JavaToUmlHelper.<org.eclipse.uml2.uml.Interface>findFirstCorrespondeningUmlElementByNameAndType(this.correspondenceModel, 
-          jSuperInterface.getName(), org.eclipse.uml2.uml.Interface.class));
+      final org.eclipse.uml2.uml.Interface uSuperInterface = JavaToUmlHelper.<org.eclipse.uml2.uml.Interface>findFirstCorrespondeningUmlElementByNameAndType(this.correspondenceModel, 
+        jSuperInterface.getName(), org.eclipse.uml2.uml.Interface.class);
+      if ((uSuperInterface != null)) {
+        UmlClassifierAndPackageUtil.addUmlSuperClassifier(uInterface, uSuperInterface);
+      } else {
+        Logger _logger = this.getLogger();
+        String _name = jSuperInterface.getName();
+        String _plus = ("Could not add " + _name);
+        String _plus_1 = (_plus + " as super interface for ");
+        String _plus_2 = (_plus_1 + uInterface);
+        String _plus_3 = (_plus_2 + " because the corresponding UML-Superinterface is null");
+        _logger.warn(_plus_3);
+      }
     }
     
     public EObject getCorrepondenceSourceUInterface(final Interface jInterface, final Classifier jSuperInterface) {

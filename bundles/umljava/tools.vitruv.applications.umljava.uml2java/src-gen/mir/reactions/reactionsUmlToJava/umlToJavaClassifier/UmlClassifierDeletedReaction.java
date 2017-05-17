@@ -3,7 +3,6 @@ package mir.reactions.reactionsUmlToJava.umlToJavaClassifier;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -21,8 +20,8 @@ class UmlClassifierDeletedReaction extends AbstractReactionRealization {
   }
   
   public void executeReaction(final EChange change) {
-    RemoveEReference<Model, Classifier> typedChange = ((RemoveAndDeleteNonRoot<Model, Classifier>)change).getRemoveChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Package, Classifier> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Package, Classifier>)change).getRemoveChange();
+    org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     Classifier oldValue = typedChange.getOldValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
@@ -35,8 +34,8 @@ class UmlClassifierDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Model, Classifier> relevantChange = ((RemoveAndDeleteNonRoot<Model, Classifier>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    RemoveEReference<org.eclipse.uml2.uml.Package, Classifier> relevantChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Package, Classifier>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Package)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
@@ -66,7 +65,7 @@ class UmlClassifierDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final Classifier oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final Classifier oldValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteJavaClass(oldValue);
     }
   }

@@ -16,7 +16,7 @@ import org.eclipse.uml2.uml.Operation
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 
-class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
+abstract class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
     protected static val final Logger logger = Logger.getLogger(typeof(Uml2JavaTransformationTest).simpleName);
     
 	private static val MODEL_FILE_EXTENSION = "uml";
@@ -74,7 +74,7 @@ class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
     	return getFirstCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.InterfaceMethod)
     }
     
-    def protected getCorrespondingClass(org.eclipse.uml2.uml.Class uClass) {
+    def protected getCorrespondingClass(org.eclipse.uml2.uml.Classifier uClass) {
     	return getFirstCorrespondingObjectWithClass(uClass, org.emftext.language.java.classifiers.Class)
     }
     
@@ -95,6 +95,10 @@ class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
     
     def protected getCorrespondingPackage(org.eclipse.uml2.uml.Package uPackage) {
         return getFirstCorrespondingObjectWithClass(uPackage, org.emftext.language.java.containers.Package)
+    }
+    
+    def protected getCorrespondingConstructor(org.eclipse.uml2.uml.Operation uOperation) {
+        return getFirstCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.Constructor)
     }
     
     

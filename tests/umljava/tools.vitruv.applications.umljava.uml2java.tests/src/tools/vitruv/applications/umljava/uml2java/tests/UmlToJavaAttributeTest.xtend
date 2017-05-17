@@ -137,5 +137,14 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
         assertAttributeEquals(uAttr, jAttr)
     }
     
-
+    @Test
+    def testChangeAttributeType() {
+        uAttr.type = createUmlPrimitiveTypeAndAddToModel(rootElement, PRIMITIVE_TYPE)
+        saveAndSynchronizeChanges(rootElement)
+        
+        val jClass = getCorrespondingClass(uClass)
+        val jAttr = getCorrespondingAttribute(uAttr);
+        assertJavaAttributeTraits(jAttr, ATTRIBUTE_NAME, JavaVisibility.PUBLIC, TypesFactory.eINSTANCE.createInt, false, false, jClass)
+        assertAttributeEquals(uAttr, jAttr)
+    }
 }
