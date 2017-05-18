@@ -9,7 +9,7 @@ class MiscTest extends AbstractUmlPcmTest {
 	@Test
 	public def void fooTest() {
 		val types = importPrimitiveTypes()
-		val parameterType = types.ownedTypes.get(1)
+		val parameterType = types.ownedTypes.get(2)
 		val parameterType2 = UMLFactory.eINSTANCE.createPrimitiveType()
 		parameterType2.name = "Timestamp"
 		userInteractor.addNextSelections(1)

@@ -160,11 +160,13 @@ routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, pcm::
 			if (pcmDataType === null) {
 				umlProperty.type = null
 			} else {
-				if (umlType === null) {
-					umlProperty.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmDataType)
-				} else {
-					umlProperty.type = umlType
-				}
+				//if (umlType === null) {
+				//	umlProperty.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmDataType)
+				//} else {
+				//	umlProperty.type = umlType
+				//}
+				println(">> changeInnerDeclarationType for " + innerDeclaration.compositeDataType_InnerDeclaration.entityName + "@" + innerDeclaration.entityName)
+				umlProperty.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmDataType)
 				PcmToUmlUtil.updateMultiplicity(umlProperty, pcmDataType instanceof CollectionDataType)
 			}
 		}
@@ -451,12 +453,7 @@ routine createOperationSignatureParameter(pcm::OperationSignature pcmSignature, 
 }
 reaction RenamedParameter {
 	after attribute replaced at pcm::Parameter[parameterName]
-	call {
-		println("> rename parameter")
-		println(affectedEObject.operationSignature__Parameter.entityName)
-		println(affectedEObject.entityName)
-		renameParameter(affectedEObject)
-		}
+	call renameParameter(affectedEObject)
 }
 routine renameParameter(pcm::Parameter pcmParameter) {
 	match {
@@ -494,7 +491,10 @@ routine changeParameterType(pcm::Parameter pcmParameter, pcm::DataType pcmDataTy
 	action {
 		update umlParameter {
 			logger.info("Change Parameter type at " + pcmParameter.parameterName + ", " + pcmParameter.operationSignature__Parameter.entityName + " to " + pcmDataType)
-			umlParameter.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmDataType)
+			if (pcmParameter.parameterName === "customerType") {
+				println("!! " + (pcmDataType as PrimitiveDataType).type)
+			}
+			umlParameter.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmParameter.dataType__Parameter)
 			PcmToUmlUtil.updateMultiplicity(umlParameter, pcmDataType instanceof CollectionDataType)
 		}
 	}

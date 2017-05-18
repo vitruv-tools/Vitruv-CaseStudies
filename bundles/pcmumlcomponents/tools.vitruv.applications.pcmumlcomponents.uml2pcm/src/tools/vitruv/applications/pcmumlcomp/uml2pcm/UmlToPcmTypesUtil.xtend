@@ -25,7 +25,7 @@ class UmlToPcmTypesUtil {
 	public static val CollectionTypeAttributeName = "innerType"
 	public static val COLLECTION_TYPE_TAG = "Collection"
 	public static val COLLECTION_TYPE_SUFFIX = "Collection"
-	
+		
 	protected static val primitiveTypeMapping = newHashMap(
 		"Integer" -> PrimitiveTypeEnum.INT,
 		"Real" -> PrimitiveTypeEnum.DOUBLE,
@@ -34,6 +34,13 @@ class UmlToPcmTypesUtil {
 		// see http://www.omg.org/spec/UML/20131001/PrimitiveTypes.xmi
 		"UnlimitedNatural" -> PrimitiveTypeEnum.STRING
 	)
+	
+	private static def getReactionsView(CorrespondenceModel correspondenceModel) {
+		return correspondenceModel.getEditableView(
+			ReactionsCorrespondence,
+			[ReactionsFactory.eINSTANCE.createReactionsCorrespondence()]
+		)
+	}
 
 	static def org.palladiosimulator.pcm.repository.DataType retrieveCorrespondingPcmType(
 		DataType umlType,
@@ -46,7 +53,10 @@ class UmlToPcmTypesUtil {
 		var correspondences = correspondingElements
 		if (isCollection) {
 			val tagName = COLLECTION_TYPE_TAG
-			correspondences = correspondences.filter[c|(c as ReactionsCorrespondence).tag == tagName].toSet()
+			correspondences = correspondenceModel.reactionsView.getCorrespondences(#[umlType])
+							   .filter[c | c.tag == tagName]
+							   .map[c | c.bs.head]
+							   .toSet()
 		}
 		if (!correspondences.empty) {
 			return correspondences.head as org.palladiosimulator.pcm.repository.DataType
@@ -78,7 +88,7 @@ class UmlToPcmTypesUtil {
 		// There is a corresponding inner type but it's not a collection type
 		if (isCollection && correspondingType !== null) {
 			val pcmCollectionType = createCollectionDataType(umlType.name, correspondingType, pcmRepository)
-			val correspondence = createTaggedCorrespondence(umlType, pcmCollectionType, COLLECTION_TYPE_TAG)
+			val correspondence = createTaggedCorrespondence(correspondenceModel, umlType, pcmCollectionType, COLLECTION_TYPE_TAG)
 			correspondenceModel.addCorrespondence(correspondence)
 			return pcmCollectionType
 		}
@@ -94,11 +104,9 @@ class UmlToPcmTypesUtil {
 		return pcmCollectionType
 	}
 
-	protected static def ReactionsCorrespondence createTaggedCorrespondence(EObject elementA, EObject elementB,
+	protected static def ReactionsCorrespondence createTaggedCorrespondence(CorrespondenceModel correspondenceModel, EObject elementA, EObject elementB,
 		String tag) {
-		val correspondence = ReactionsFactory.eINSTANCE.createReactionsCorrespondence()
-		correspondence.^as += elementA
-		correspondence.bs += elementB
+		val correspondence = correspondenceModel.reactionsView.createAndAddCorrespondence(#[elementA], #[elementB]) as ReactionsCorrespondence
 		correspondence.tag = tag
 		return correspondence
 	}

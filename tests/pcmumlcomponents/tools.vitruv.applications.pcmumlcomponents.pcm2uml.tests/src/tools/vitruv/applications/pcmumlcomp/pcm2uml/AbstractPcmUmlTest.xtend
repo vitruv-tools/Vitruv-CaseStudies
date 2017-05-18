@@ -62,15 +62,18 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 		if (primitiveTypesRepository !== null) {
 			return primitiveTypesRepository
 		}
-			
-		val Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE
-		val Map<String, Object> m = reg.extensionToFactoryMap
-		m.put("repository", new XMIResourceFactoryImpl())
-		
-		val URI uri = URI.createURI(PRIMITIVETYPES_URI)
 		
 		val ResourceSet resSet = new ResourceSetImpl()
-		val Resource resource = resSet.getResource(uri, true)
+		return loadPrimitiveTypes(resSet)
+	}
+	
+	protected def Repository loadPrimitiveTypes(ResourceSet resourceSet) {
+		if (primitiveTypesRepository !== null) {
+			return primitiveTypesRepository
+		}
+		val URI uri = URI.createURI(PRIMITIVETYPES_URI)
+		
+		val Resource resource = resourceSet.getResource(uri, true)
 		
 		primitiveTypesRepository = resource.contents.head as Repository
 		return primitiveTypesRepository

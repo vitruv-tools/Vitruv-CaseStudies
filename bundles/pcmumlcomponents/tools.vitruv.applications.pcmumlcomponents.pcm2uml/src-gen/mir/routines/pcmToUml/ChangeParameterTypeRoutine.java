@@ -4,9 +4,12 @@ import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Parameter;
+import org.palladiosimulator.pcm.repository.PrimitiveDataType;
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -37,7 +40,14 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
       String _plus_3 = (_plus_2 + " to ");
       String _plus_4 = (_plus_3 + pcmDataType);
       _logger.info(_plus_4);
-      umlParameter.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType));
+      String _parameterName_1 = pcmParameter.getParameterName();
+      boolean _tripleEquals = (_parameterName_1 == "customerType");
+      if (_tripleEquals) {
+        PrimitiveTypeEnum _type = ((PrimitiveDataType) pcmDataType).getType();
+        String _plus_5 = ("!! " + _type);
+        InputOutput.<String>println(_plus_5);
+      }
+      umlParameter.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmParameter.getDataType__Parameter()));
       PcmToUmlUtil.updateMultiplicity(umlParameter, Boolean.valueOf((pcmDataType instanceof CollectionDataType)));
     }
     

@@ -3,7 +3,6 @@ package mir.reactions.reactionsPcmToUml.pcmToUml;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.Parameter;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -70,9 +69,6 @@ class RenamedParameterReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      InputOutput.<String>println("> rename parameter");
-      InputOutput.<String>println(affectedEObject.getOperationSignature__Parameter().getEntityName());
-      InputOutput.<String>println(affectedEObject.getEntityName());
       _routinesFacade.renameParameter(affectedEObject);
     }
   }

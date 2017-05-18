@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
@@ -35,11 +36,13 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
       if ((pcmDataType == null)) {
         umlProperty.setType(null);
       } else {
-        if ((umlType == null)) {
-          umlProperty.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType));
-        } else {
-          umlProperty.setType(umlType);
-        }
+        String _entityName = innerDeclaration.getCompositeDataType_InnerDeclaration().getEntityName();
+        String _plus = (">> changeInnerDeclarationType for " + _entityName);
+        String _plus_1 = (_plus + "@");
+        String _entityName_1 = innerDeclaration.getEntityName();
+        String _plus_2 = (_plus_1 + _entityName_1);
+        InputOutput.<String>println(_plus_2);
+        umlProperty.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType));
         PcmToUmlUtil.updateMultiplicity(umlProperty, Boolean.valueOf((pcmDataType instanceof CollectionDataType)));
       }
     }
