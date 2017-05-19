@@ -2,18 +2,13 @@ package tools.vitruv.applications.umljava.uml2java
 
 import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.UMLFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
-import tools.vitruv.domains.java.JavaDomain
-import tools.vitruv.domains.uml.UmlDomain
 
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import org.emftext.language.java.members.ClassMethod
 import org.eclipse.uml2.uml.Operation
-import tools.vitruv.framework.tests.VitruviusApplicationTest
 import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 
 abstract class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
@@ -51,16 +46,6 @@ abstract class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
     def protected assertJavaFileNotExists(String fileName, String[] namespaces) {
         assertModelNotExists(buildJavaFilePath(fileName, namespaces));
     }
-
-	def private <T extends ConcreteClassifier> T getJClassifFromName(Class<T> c, String name) {
-        val iter = getModelResource(buildJavaFilePath(name)).allContents.filter(c);
-        val returnClassif = iter.next() as T
-        if (iter.hasNext()) {
-            logger.info("Es gibt zum Namen " + name +  " des Typs " + c +  "mehr als eine Java-Datei")
-        }
-        return returnClassif
-    }
-
     
     def protected getCorrespondingAttribute(Property uAttribute) {
     	return getFirstCorrespondingObjectWithClass(uAttribute, org.emftext.language.java.members.Field)

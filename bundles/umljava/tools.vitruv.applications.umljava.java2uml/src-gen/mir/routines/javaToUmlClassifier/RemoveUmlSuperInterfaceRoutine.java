@@ -3,6 +3,7 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -22,39 +23,40 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Interface jI, final Classifier jSuperClassifier, final org.eclipse.uml2.uml.Interface uInterface) {
+    public EObject getElement1(final Interface jInterface, final Classifier jSuperClassifier, final org.eclipse.uml2.uml.Interface uInterface) {
       return uInterface;
     }
     
-    public void update0Element(final Interface jI, final Classifier jSuperClassifier, final org.eclipse.uml2.uml.Interface uInterface) {
-      UmlClassifierAndPackageUtil.removeUmlGeneralClassifier(uInterface, 
-        JavaToUmlHelper.<org.eclipse.uml2.uml.Interface>findFirstCorrespondeningUmlElementByNameAndType(this.correspondenceModel, 
-          jSuperClassifier.getName(), org.eclipse.uml2.uml.Interface.class));
+    public void update0Element(final Interface jInterface, final Classifier jSuperClassifier, final org.eclipse.uml2.uml.Interface uInterface) {
+      final Type uSuperInterface = JavaToUmlHelper.getUmlType(jInterface, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel);
+      if (((uSuperInterface != null) && (uSuperInterface instanceof org.eclipse.uml2.uml.Interface))) {
+        UmlClassifierAndPackageUtil.removeUmlGeneralClassifier(uInterface, ((org.eclipse.uml2.uml.Interface) uSuperInterface));
+      }
     }
     
-    public EObject getCorrepondenceSourceUInterface(final Interface jI, final Classifier jSuperClassifier) {
-      return jI;
+    public EObject getCorrepondenceSourceUInterface(final Interface jInterface, final Classifier jSuperClassifier) {
+      return jInterface;
     }
   }
   
-  public RemoveUmlSuperInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface jI, final Classifier jSuperClassifier) {
+  public RemoveUmlSuperInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface jInterface, final Classifier jSuperClassifier) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.RemoveUmlSuperInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
-    this.jI = jI;this.jSuperClassifier = jSuperClassifier;
+    this.jInterface = jInterface;this.jSuperClassifier = jSuperClassifier;
   }
   
-  private Interface jI;
+  private Interface jInterface;
   
   private Classifier jSuperClassifier;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveUmlSuperInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.jI);
+    getLogger().debug("   Interface: " + this.jInterface);
     getLogger().debug("   Classifier: " + this.jSuperClassifier);
     
     org.eclipse.uml2.uml.Interface uInterface = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUInterface(jI, jSuperClassifier), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUInterface(jInterface, jSuperClassifier), // correspondence source supplier
     	org.eclipse.uml2.uml.Interface.class,
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
@@ -62,8 +64,8 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
     	return;
     }
     registerObjectUnderModification(uInterface);
-    // val updatedElement userExecution.getElement1(jI, jSuperClassifier, uInterface);
-    userExecution.update0Element(jI, jSuperClassifier, uInterface);
+    // val updatedElement userExecution.getElement1(jInterface, jSuperClassifier, uInterface);
+    userExecution.update0Element(jInterface, jSuperClassifier, uInterface);
     
     postprocessElements();
   }

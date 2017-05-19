@@ -4,7 +4,6 @@ import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Before
 import org.emftext.language.java.members.Field
-import org.emftext.language.java.types.TypesFactory
 import org.junit.Test
 import static org.junit.Assert.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
@@ -13,13 +12,16 @@ import static extension tools.vitruv.applications.umljava.util.java.JavaModifier
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import org.emftext.language.java.modifiers.ModifiersFactory
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.eclipse.uml2.uml.VisibilityKind
-import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.applications.umljava.util.java.JavaStandardType
 
+
+/**
+ * Test class for testing the attribute reactions.
+ * 
+ */
 class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName"
     private static val ATTRIBUTE_RENAME = "attributeRenamed"
@@ -31,6 +33,9 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     private static var org.emftext.language.java.classifiers.Class jClass
     private static var org.emftext.language.java.classifiers.Class typeClass
     
+    /**
+     * Initializes two java classes. One class contains an attribute.
+     */
     @Before
     def void before() {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)
@@ -40,6 +45,10 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         saveAndSynchronizeChanges(jClass);
     }
     
+    /**
+     * Tests the creation of an attribute with primitive type.
+     * Checks if a corresponding uml attribute exists afterwards.
+     */
     @Test
     def testCreatePrimitiveAttribute() {
         val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, createJavaPrimitiveType(JavaStandardType.INT), JavaVisibility.PRIVATE, false, false)
@@ -55,6 +64,10 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         assertAttributeEquals(uAttr, attr)
     }
     
+    /**
+     * Tests the creation of an attribute with a type that references a class.
+     * Checks if a corresponding uml attribute exists afterwards.
+     */
     @Test
     def testCreateAttribute() {
         val attr = createJavaAttribute(STANDARD_ATTRIBUTE_NAME, createNamespaceReferenceFromClassifier(typeClass), JavaVisibility.PRIVATE, false, false)
@@ -69,6 +82,9 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         assertAttributeEquals(uAttr, attr)
     }
     
+    /**
+     * Tests if an attribute rename is correctly synchronized with the uml attribute.
+     */
     @Test
     def void testRenameAttribute() {
         jAttr.name = ATTRIBUTE_RENAME
@@ -81,6 +97,9 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         assertAttributeEquals(uAttr, jAttr)
     }
     
+    /**
+     * Test if deleting the java attribute also deletes the corresponding uml attribute.
+     */
     @Test
     def testDeleteAttribute() {
         assertNotNull(getCorrespondingAttribute(jAttr))
@@ -92,6 +111,9 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         assertUmlClassDontHaveOperation(uClass, ATTRIBUTE_NAME)
     }
     
+    /**
+     * Checks if a type change is correctly reflected on the uml attribute.
+     */
     @Test
     def testChangeAttributeType() {
         jAttr.typeReference = createNamespaceReferenceFromClassifier(typeClass)
@@ -105,6 +127,9 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         assertAttributeEquals(uAttr, jAttr)
     }
 
+    /**
+     *Tests if a change to static is correctly reflected on the uml attribute.
+     */
     @Test
     def testStaticAttribute() {
         jAttr.static = true
@@ -114,7 +139,9 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         assertTrue(uAttr.static)
         assertAttributeEquals(uAttr, jAttr)
     }
-    
+    /**
+     *Tests if a change to final is correctly reflected on the uml attribute.
+     */
     @Test
     def testFinalAttribute() {
         jAttr.final = true
@@ -125,6 +152,9 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         assertAttributeEquals(uAttr, jAttr)
     }
     
+    /**
+     *Tests if visibility changes are correctly reflected on the uml attribute.
+     */
     @Test
     def testAttributeVisibility() {
         jAttr.makePublic

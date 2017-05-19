@@ -9,15 +9,13 @@ import static extension tools.vitruv.applications.umljava.util.java.JavaContaine
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.eclipse.uml2.uml.Package
-import org.junit.Ignore
+import org.emftext.language.java.containers.CompilationUnit
 
 class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     
     private static val PACKAGE_LEVEL_1 = "level1"
-    private static val PACKAGE_LEVEL_2 = "level2"
     private static val PACKAGE_NAME = "packagename"
     private static val PACKAGE_RENAMED = "packagerenamed"
     private static val CLASS_NAME = "ClassName"
@@ -33,6 +31,16 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
         jPackageLevel1.compilationUnits += getContainingCompilationUnit(jClass)
         saveAndSynchronizeChanges(jPackageLevel1)
         
+    }
+    
+    @After
+    def void after() {
+        if (jClass !== null) {
+            deleteAndSynchronizeModel(buildJavaFilePath(jClass.eContainer as CompilationUnit))
+        }
+        if (jPackageLevel1 !== null) {
+            deleteAndSynchronizeModel(buildJavaFilePath(jPackageLevel1))
+        }
     }
     
     @Test

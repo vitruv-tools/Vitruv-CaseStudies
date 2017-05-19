@@ -20,30 +20,30 @@ public class DeleteJavaMethodRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Operation umlOp, final Method jMeth) {
+    public EObject getElement1(final Operation uOperation, final Method jMeth) {
       return jMeth;
     }
     
-    public EObject getCorrepondenceSourceJMeth(final Operation umlOp) {
-      return umlOp;
+    public EObject getCorrepondenceSourceJMeth(final Operation uOperation) {
+      return uOperation;
     }
   }
   
-  public DeleteJavaMethodRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation umlOp) {
+  public DeleteJavaMethodRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation uOperation) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(getExecutionState(), this);
-    this.umlOp = umlOp;
+    this.uOperation = uOperation;
   }
   
-  private Operation umlOp;
+  private Operation uOperation;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaMethodRoutine with input:");
-    getLogger().debug("   Operation: " + this.umlOp);
+    getLogger().debug("   Operation: " + this.uOperation);
     
     Method jMeth = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJMeth(umlOp), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceJMeth(uOperation), // correspondence source supplier
     	Method.class,
     	(Method _element) -> true, // correspondence precondition checker
     	null);
@@ -51,7 +51,7 @@ public class DeleteJavaMethodRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     registerObjectUnderModification(jMeth);
-    deleteObject(userExecution.getElement1(umlOp, jMeth));
+    deleteObject(userExecution.getElement1(uOperation, jMeth));
     
     postprocessElements();
   }

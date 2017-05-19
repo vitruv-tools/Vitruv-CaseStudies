@@ -10,7 +10,7 @@ import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
+import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -49,7 +49,7 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
     
     public void updateJConstructorElement(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Constructor jConstructor) {
       jConstructor.setName(uOperation.getName());
-      UmlToJavaHelper.setJavaVisibility(jConstructor, uOperation.getVisibility());
+      JavaModifierUtil.setJavaVisibility(jConstructor, uOperation.getVisibility());
     }
   }
   

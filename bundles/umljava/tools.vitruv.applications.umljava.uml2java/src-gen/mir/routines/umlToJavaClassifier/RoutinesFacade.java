@@ -4,7 +4,6 @@ import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
@@ -28,30 +27,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void createJavaCompilationUnit(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace) {
     mir.routines.umlToJavaClassifier.CreateJavaCompilationUnitRoutine effect = new mir.routines.umlToJavaClassifier.CreateJavaCompilationUnitRoutine(this.executionState, calledBy,
     	umlClassifier, jClassifier, uNamespace);
-    effect.applyRoutine();
-  }
-  
-  public void createJavaPackage(final org.eclipse.uml2.uml.Package uPackage, final org.eclipse.uml2.uml.Package uSuperPackage) {
-    mir.routines.umlToJavaClassifier.CreateJavaPackageRoutine effect = new mir.routines.umlToJavaClassifier.CreateJavaPackageRoutine(this.executionState, calledBy,
-    	uPackage, uSuperPackage);
-    effect.applyRoutine();
-  }
-  
-  public void renameJavaPackage(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace) {
-    mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine effect = new mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine(this.executionState, calledBy,
-    	uPackage, uNamespace);
-    effect.applyRoutine();
-  }
-  
-  public void changePackageOfJavaCompilationUnit(final org.emftext.language.java.containers.Package jPackage, final CompilationUnit jCompUnit, final Namespace uNamespace) {
-    mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine effect = new mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine(this.executionState, calledBy,
-    	jPackage, jCompUnit, uNamespace);
-    effect.applyRoutine();
-  }
-  
-  public void deleteJavaPackage(final org.eclipse.uml2.uml.Package uPackage) {
-    mir.routines.umlToJavaClassifier.DeleteJavaPackageRoutine effect = new mir.routines.umlToJavaClassifier.DeleteJavaPackageRoutine(this.executionState, calledBy,
-    	uPackage);
     effect.applyRoutine();
   }
   
@@ -91,15 +66,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeJavaImplementedInterface(final Interface uI, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
+  public void changeJavaImplementedInterface(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
     mir.routines.umlToJavaClassifier.ChangeJavaImplementedInterfaceRoutine effect = new mir.routines.umlToJavaClassifier.ChangeJavaImplementedInterfaceRoutine(this.executionState, calledBy,
-    	uI, oldInterface, uClass);
+    	uInterface, oldInterface, uClass);
     effect.applyRoutine();
   }
   
-  public void deleteJavaImplementedInterface(final Interface uI, final org.eclipse.uml2.uml.Class uClass) {
+  public void deleteJavaImplementedInterface(final Interface uInterface, final org.eclipse.uml2.uml.Class uClass) {
     mir.routines.umlToJavaClassifier.DeleteJavaImplementedInterfaceRoutine effect = new mir.routines.umlToJavaClassifier.DeleteJavaImplementedInterfaceRoutine(this.executionState, calledBy,
-    	uI, uClass);
+    	uInterface, uClass);
     effect.applyRoutine();
   }
   
@@ -139,15 +114,27 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeJavaElementVisibility(final NamedElement uElem) {
-    mir.routines.umlToJavaClassifier.ChangeJavaElementVisibilityRoutine effect = new mir.routines.umlToJavaClassifier.ChangeJavaElementVisibilityRoutine(this.executionState, calledBy,
-    	uElem);
+  public void createJavaPackage(final org.eclipse.uml2.uml.Package uPackage, final org.eclipse.uml2.uml.Package uSuperPackage) {
+    mir.routines.umlToJavaClassifier.CreateJavaPackageRoutine effect = new mir.routines.umlToJavaClassifier.CreateJavaPackageRoutine(this.executionState, calledBy,
+    	uPackage, uSuperPackage);
     effect.applyRoutine();
   }
   
-  public void renameJavaNamedElement(final NamedElement uElem, final String name) {
-    mir.routines.umlToJavaClassifier.RenameJavaNamedElementRoutine effect = new mir.routines.umlToJavaClassifier.RenameJavaNamedElementRoutine(this.executionState, calledBy,
-    	uElem, name);
+  public void renameJavaPackage(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace) {
+    mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine effect = new mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine(this.executionState, calledBy,
+    	uPackage, uNamespace);
+    effect.applyRoutine();
+  }
+  
+  public void changePackageOfJavaCompilationUnit(final org.emftext.language.java.containers.Package jPackage, final CompilationUnit jCompUnit, final Namespace uNamespace) {
+    mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine effect = new mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine(this.executionState, calledBy,
+    	jPackage, jCompUnit, uNamespace);
+    effect.applyRoutine();
+  }
+  
+  public void deleteJavaPackage(final org.eclipse.uml2.uml.Package uPackage) {
+    mir.routines.umlToJavaClassifier.DeleteJavaPackageRoutine effect = new mir.routines.umlToJavaClassifier.DeleteJavaPackageRoutine(this.executionState, calledBy,
+    	uPackage);
     effect.applyRoutine();
   }
   

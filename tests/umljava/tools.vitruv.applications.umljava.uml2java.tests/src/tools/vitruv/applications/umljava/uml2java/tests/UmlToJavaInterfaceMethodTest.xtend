@@ -8,10 +8,6 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static org.junit.Assert.*;
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.junit.Test
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.uml2.uml.Interface
-import org.emftext.language.java.members.InterfaceMethod
-import org.eclipse.uml2.uml.Operation
 import org.junit.Before
 import org.junit.After
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
@@ -41,13 +37,13 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
     
     @After
     def void after() {
-        if (uI != null) {
+        if (uI !== null) {
             uI.destroy;
         }
-        if (op != null) {
+        if (op !== null) {
             op.destroy;
         }
-        if (typeClass != null) {
+        if (typeClass !== null) {
             typeClass.destroy;
         }
         saveAndSynchronizeChanges(rootElement)
@@ -93,9 +89,6 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
         
         val jMethod = getCorrespondingInterfaceMethod(op)
         val jTypeClass = getCorrespondingClass(typeClass)
-        if (jTypeClass == null) {
-            println("customTypeClass is null")
-        }
         assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
         assertMethodEquals(op, jMethod)
     }

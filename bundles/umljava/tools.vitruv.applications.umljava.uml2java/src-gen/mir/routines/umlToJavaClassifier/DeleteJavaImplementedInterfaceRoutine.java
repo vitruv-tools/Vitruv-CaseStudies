@@ -20,41 +20,41 @@ public class DeleteJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Interface uI, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jI) {
+    public EObject getElement1(final Interface uInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface) {
       return jClass;
     }
     
-    public EObject getCorrepondenceSourceJClass(final Interface uI, final org.eclipse.uml2.uml.Class uClass) {
+    public EObject getCorrepondenceSourceJClass(final Interface uInterface, final org.eclipse.uml2.uml.Class uClass) {
       return uClass;
     }
     
-    public void update0Element(final Interface uI, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jI) {
-      JavaContainerAndClassifierUtil.removeClassifierFromIterator(jClass.getImplements().iterator(), jI);
+    public void update0Element(final Interface uInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface) {
+      JavaContainerAndClassifierUtil.removeClassifierFromIterator(jClass.getImplements().iterator(), jInterface);
     }
     
-    public EObject getCorrepondenceSourceJI(final Interface uI, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass) {
-      return uI;
+    public EObject getCorrepondenceSourceJInterface(final Interface uInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass) {
+      return uInterface;
     }
   }
   
-  public DeleteJavaImplementedInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface uI, final org.eclipse.uml2.uml.Class uClass) {
+  public DeleteJavaImplementedInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface uInterface, final org.eclipse.uml2.uml.Class uClass) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.DeleteJavaImplementedInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
-    this.uI = uI;this.uClass = uClass;
+    this.uInterface = uInterface;this.uClass = uClass;
   }
   
-  private Interface uI;
+  private Interface uInterface;
   
   private org.eclipse.uml2.uml.Class uClass;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaImplementedInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.uI);
+    getLogger().debug("   Interface: " + this.uInterface);
     getLogger().debug("   Class: " + this.uClass);
     
     org.emftext.language.java.classifiers.Class jClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJClass(uI, uClass), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceJClass(uInterface, uClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
@@ -62,17 +62,17 @@ public class DeleteJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	return;
     }
     registerObjectUnderModification(jClass);
-    org.emftext.language.java.classifiers.Interface jI = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJI(uI, uClass, jClass), // correspondence source supplier
+    org.emftext.language.java.classifiers.Interface jInterface = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceJInterface(uInterface, uClass, jClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
-    if (jI == null) {
+    if (jInterface == null) {
     	return;
     }
-    registerObjectUnderModification(jI);
-    // val updatedElement userExecution.getElement1(uI, uClass, jClass, jI);
-    userExecution.update0Element(uI, uClass, jClass, jI);
+    registerObjectUnderModification(jInterface);
+    // val updatedElement userExecution.getElement1(uInterface, uClass, jClass, jInterface);
+    userExecution.update0Element(uInterface, uClass, jClass, jInterface);
     
     postprocessElements();
   }

@@ -1,14 +1,9 @@
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractionType
-import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
-import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -17,6 +12,9 @@ reactions: UmlToJavaClassifier
 in reaction to changes in UML
 execute actions in Java
 
+//===========================================
+//=========================================== Class
+//===========================================
 
 
 reaction UmlClassCreated {
@@ -58,95 +56,6 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
                 jPackage.compilationUnits += javaCompilationUnit
             }
         }
-	}
-}
-
-
-
-reaction UmlPackageCreated {
-	after element uml::Package created and inserted in uml::Package[packagedElement]
-	call createJavaPackage(newValue, affectedEObject)
-}
-
-routine createJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
-    match {
-        val jSuperPackage = retrieve optional java::Package corresponding to uSuperPackage
-    }
-	action {
-		val jPackage = create java::Package and initialize {
-		    if (uPackage instanceof org.eclipse.uml2.uml.Model) {
-		        jPackage.name = ""
-		        
-		    } else {
-		        if (uPackage.namespace !== null) {
-				    jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
-			    }
-		        jPackage.name = uPackage.name
-		    }
-		    persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
-		}
-		add correspondence between jPackage and uPackage
-		//Subpackage-Feature not supported by this java-metamodel version
-		//update jSuperPackage {
-		//    if (jSuperPackage !== null) {
-		//        //add new Subpackage
-		//    }
-		//}
-	}
-}
-
-reaction UmlPackageRenamed {
-	after attribute replaced at uml::Package[name]
-	with !(affectedEObject instanceof org.eclipse.uml2.uml.Model)
-	call renameJavaPackage(affectedEObject, affectedEObject.namespace)
-}
-
-routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
-	match {
-		val jPackage = retrieve java::Package corresponding to uPackage
-	}
-	action {
-		update jPackage {
-		    jPackage.namespaces.clear
-            jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
-			jPackage.name = uPackage.name
-		    persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
-		}
-		call {
-		    if (!uPackage.name.equals(jPackage.name)) {
-		        for (compUnit : jPackage.compilationUnits) {
-                    changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
-                }
-                //Subpackage-Feature not supported by this java-metamodel version
-                //for (subPackage : jPackage.subPackages) {
-                //    Rename namespaces of subpackages
-                //}
-		   }
-        }
-	}
-}
-
-
-routine changePackageOfJavaCompilationUnit(java::Package jPackage, java::CompilationUnit jCompUnit, uml::Namespace uNamespace) {
-	action {
-		update jCompUnit {
-			jCompUnit.namespaces.clear
-			jCompUnit.namespaces += jPackage.javaPackageAsStringList
-			persistProjectRelative(uNamespace, jCompUnit, buildJavaFilePath(jCompUnit))
-		}
-	}
-}
-reaction UmlPackageDeleted {
-	after element uml::Package deleted and removed from uml::Package[packagedElement]
-	call deleteJavaPackage(oldValue)
-}
-
-routine deleteJavaPackage(uml::Package uPackage) {
-	match {
-		val jPackage = retrieve java::Package corresponding to uPackage
-	}
-	action {
-		delete jPackage
 	}
 }
 
@@ -259,12 +168,6 @@ routine deleteJavaSuperClass(uml::Class uClass) {
     }
 }
 
-reaction UmlDataTypeCreated {
-	after element uml::DataType created and inserted in uml::Package[packagedElement] with !(newValue instanceof org.eclipse.uml2.uml.PrimitiveType)
-	&& !(newValue instanceof org.eclipse.uml2.uml.Enumeration) 
-	call createJavaClass(newValue)
-}
-
 reaction UmlInterfaceImplementerChanged {
 	after element uml::Class replaced at uml::InterfaceRealization[implementingClassifier]
 	call {
@@ -279,10 +182,10 @@ reaction UmlImplementedInterfaceChanged {
 
 }
 
-routine changeJavaImplementedInterface(uml::Interface uI, uml::Interface oldInterface, uml::Class uClass) {
+routine changeJavaImplementedInterface(uml::Interface uInterface, uml::Interface oldInterface, uml::Class uClass) {
     match {
         val jClass = retrieve java::Class corresponding to uClass
-        val jI = retrieve java::Interface corresponding to uI
+        val jInterface = retrieve java::Interface corresponding to uInterface
     }
     action {
     	call {
@@ -291,7 +194,7 @@ routine changeJavaImplementedInterface(uml::Interface uI, uml::Interface oldInte
         	}
         }
         update jClass {
-            jClass.implements += createTypeReferenceAndUpdateImport(null, jI, jClass.containingCompilationUnit, userInteracting)
+            jClass.implements += createTypeReferenceAndUpdateImport(null, jInterface, jClass.containingCompilationUnit, userInteracting)
         }
     }
 }
@@ -301,18 +204,27 @@ reaction UmlImplementedInterfaceDeleted {
     call deleteJavaImplementedInterface(oldValue.suppliers.head as org.eclipse.uml2.uml.Interface , affectedEObject)
 }
 
-routine deleteJavaImplementedInterface(uml::Interface uI, uml::Class uClass) {
+routine deleteJavaImplementedInterface(uml::Interface uInterface, uml::Class uClass) {
     match {
         val jClass = retrieve java::Class corresponding to uClass
-        val jI = retrieve java::Interface corresponding to uI
+        val jInterface = retrieve java::Interface corresponding to uInterface
     }
     action {
         update jClass {
-            removeClassifierFromIterator(jClass.implements.iterator, jI) 
+            removeClassifierFromIterator(jClass.implements.iterator, jInterface) 
         }
     }
 }
 
+reaction UmlDataTypeCreated {
+    after element uml::DataType created and inserted in uml::Package[packagedElement] with !(newValue instanceof org.eclipse.uml2.uml.PrimitiveType)
+    && !(newValue instanceof org.eclipse.uml2.uml.Enumeration) 
+    call createJavaClass(newValue)
+}
+
+//===========================================
+//=========================================== Interface
+//===========================================
 
 
 reaction UmlInterfaceCreated {
@@ -367,6 +279,11 @@ routine deleteJavaSuperInterface(uml::Interface superUMLInterface, uml::Interfac
     }
 }
 
+//===========================================
+//=========================================== Enum
+//===========================================
+
+
 reaction UmlEnumCreated {
 	after element uml::Enumeration created and inserted in uml::Package[packagedElement]
 	call createJavaEnum(newValue)
@@ -419,41 +336,99 @@ routine deleteJavaEnumConstant(uml::EnumerationLiteral uLiteral) {
 	}
 }
 
-reaction UmlElementVisibilityChanged {
-    after attribute replaced at uml::NamedElement[visibility]
-    with !(affectedEObject.eContainer instanceof org.eclipse.uml2.uml.Interface)
-    call changeJavaElementVisibility(affectedEObject)
+//===========================================
+//=========================================== Package
+//===========================================
+
+
+reaction UmlPackageCreated {
+    after element uml::Package created and inserted in uml::Package[packagedElement]
+    call createJavaPackage(newValue, affectedEObject)
 }
 
-routine changeJavaElementVisibility(uml::NamedElement uElem) {
+routine createJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
     match {
-        val jElem = retrieve java::AnnotableAndModifiable corresponding to uElem
+        val jSuperPackage = retrieve optional java::Package corresponding to uSuperPackage
     }
     action {
-        update jElem {
-            setJavaVisibility(jElem, uElem.visibility);
+        val jPackage = create java::Package and initialize {
+            if (uPackage instanceof org.eclipse.uml2.uml.Model) {
+                jPackage.name = ""
+                
+            } else {
+                if (uPackage.namespace !== null) {
+                    jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
+                }
+                jPackage.name = uPackage.name
+            }
+            persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
+        }
+        add correspondence between jPackage and uPackage
+        //Subpackage-Feature not supported by this java-metamodel version
+        //update jSuperPackage {
+        //    if (jSuperPackage !== null) {
+        //        //add new Subpackage
+        //    }
+        //}
+    }
+}
+
+reaction UmlPackageRenamed {
+    after attribute replaced at uml::Package[name]
+    with !(affectedEObject instanceof org.eclipse.uml2.uml.Model)
+    call renameJavaPackage(affectedEObject, affectedEObject.namespace)
+}
+
+routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
+    match {
+        val jPackage = retrieve java::Package corresponding to uPackage
+    }
+    action {
+        update jPackage {
+            jPackage.namespaces.clear
+            jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
+            jPackage.name = uPackage.name
+            persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
+        }
+        call {
+            if (!uPackage.name.equals(jPackage.name)) {
+                for (compUnit : jPackage.compilationUnits) {
+                    changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
+                }
+                //Subpackage-Feature not supported by this java-metamodel version
+                //for (subPackage : jPackage.subPackages) {
+                //    Rename namespaces of subpackages
+                //}
+           }
         }
     }
 }
 
-reaction UmlNamedElementRenamed{
-	after attribute replaced at uml::NamedElement[name] 
-	with !(affectedEObject instanceof org.eclipse.uml2.uml.Classifier)
-	&& !(affectedEObject instanceof org.eclipse.uml2.uml.Property)
-	&& !(affectedEObject instanceof org.eclipse.uml2.uml.Package)
-	call renameJavaNamedElement(affectedEObject, newValue)
+
+routine changePackageOfJavaCompilationUnit(java::Package jPackage, java::CompilationUnit jCompUnit, uml::Namespace uNamespace) {
+    action {
+        update jCompUnit {
+            jCompUnit.namespaces.clear
+            jCompUnit.namespaces += jPackage.javaPackageAsStringList
+            persistProjectRelative(uNamespace, jCompUnit, buildJavaFilePath(jCompUnit))
+        }
+    }
+}
+reaction UmlPackageDeleted {
+    after element uml::Package deleted and removed from uml::Package[packagedElement]
+    call deleteJavaPackage(oldValue)
 }
 
-routine renameJavaNamedElement(uml::NamedElement uElem, String name) {
-	match {
-		val jElem = retrieve java::NamedElement corresponding to uElem
-	}
-	action {
-		update jElem {
-			jElem.name = name
-		}
-	}
+routine deleteJavaPackage(uml::Package uPackage) {
+    match {
+        val jPackage = retrieve java::Package corresponding to uPackage
+    }
+    action {
+        delete jPackage
+    }
 }
+
+
 
 reaction UmlPrimitiveTypeCreated {
     after element uml::PrimitiveType created and inserted in uml::Model[packagedElement]

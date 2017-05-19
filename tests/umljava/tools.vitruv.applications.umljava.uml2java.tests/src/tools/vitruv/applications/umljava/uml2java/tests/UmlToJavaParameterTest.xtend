@@ -14,7 +14,6 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.junit.Ignore
 
 class UmlToJavaParameterTest extends Uml2JavaTransformationTest {
     private static val CLASS_NAME = "ClassName";
@@ -46,7 +45,7 @@ class UmlToJavaParameterTest extends Uml2JavaTransformationTest {
         saveAndSynchronizeChanges(rootElement);
     }
     
-    //@After
+    @After
     def void after() {
         if (uOperation !== null) {
             uOperation.destroy;

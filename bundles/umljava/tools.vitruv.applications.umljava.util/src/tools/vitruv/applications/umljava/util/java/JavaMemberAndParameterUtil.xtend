@@ -16,15 +16,12 @@ import org.emftext.language.java.operators.OperatorsFactory
 import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.parameters.Parametrizable
-import org.emftext.language.java.references.ReferencesFactory
 import org.emftext.language.java.statements.ExpressionStatement
-import org.emftext.language.java.statements.StatementsFactory
 import org.emftext.language.java.types.TypeReference
 import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
-import org.emftext.language.java.expressions.ExpressionsFactory
 import org.emftext.language.java.literals.LiteralsFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.expressions.AssignmentExpression
@@ -166,10 +163,10 @@ class JavaMemberAndParameterUtil {
     def static boolean constructorContainsAttributeSelfReferenceStatement(Constructor cons, Field jAttribute) {
         if (cons.statements.nullOrEmpty || cons.statements.filter(ExpressionStatement).nullOrEmpty) {
             return false
-        }
-        if (!cons.statements.filter(ExpressionStatement).filter[expressionHasAttributeSelfReference(it, jAttribute)].nullOrEmpty) {
+        } else if (!cons.statements.filter(ExpressionStatement).filter[expressionHasAttributeSelfReference(it, jAttribute)].nullOrEmpty) {
             return true
         }
+        return false
     }
  
     

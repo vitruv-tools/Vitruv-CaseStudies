@@ -3,7 +3,6 @@ package tools.vitruv.applications.umljava.uml2java.tests
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 
@@ -13,9 +12,7 @@ import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.eclipse.uml2.uml.UMLFactory
-import org.emftext.language.java.classifiers.ClassifiersFactory
-import org.eclipse.emf.ecore.util.EcoreUtil
+import org.junit.After
 
 class UmlToJavaClassTest extends Uml2JavaTransformationTest {
 	private static val CLASS_NAME = "ClassName";
@@ -36,7 +33,7 @@ class UmlToJavaClassTest extends Uml2JavaTransformationTest {
         saveAndSynchronizeChanges(rootElement)
 	}
 	
-	//@After
+	@After
 	def void after() {
 	    if (uClass !== null) {
 	        uClass.destroy;

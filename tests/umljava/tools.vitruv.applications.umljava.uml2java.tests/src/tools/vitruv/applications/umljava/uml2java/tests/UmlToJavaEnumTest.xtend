@@ -3,7 +3,6 @@ package tools.vitruv.applications.umljava.uml2java.tests
 import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlPropertyAndAssociationUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
@@ -14,6 +13,7 @@ import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.emftext.language.java.types.TypesFactory
+import org.junit.After
 
 class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	private static val ENUM_NAME = "EnumName"
@@ -39,6 +39,7 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 		saveAndSynchronizeChanges(uEnum)
 	}
 	
+	@After
 	def void after() {
 		if (uEnum !== null) {
 			uEnum.destroy

@@ -1,15 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_F00m0OlLEeaMSINJQfdhLg" name="RootElement">
-  <packagedElement xmi:type="uml:Class" xmi:id="_9VyIwA-8EeeoQaYdkTlWJg" name="ClassName">
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_Gtb0oA-9EeeoQaYdkTlWJg" name="attributeName" visibility="private" type="_QIYFEA-9EeeoQaYdkTlWJg" isUnique="false"/>
-    <ownedOperation xmi:type="uml:Operation" xmi:id="_D5OnoA-9EeeoQaYdkTlWJg" name="operationName"/>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_rWNeoBS7EeequOOdof-U9A" name="RootElement">
+  <packagedElement xmi:type="uml:Class" xmi:id="_WG7A8BS8EeequOOdof-U9A" name="Class1" isAbstract="true">
+    <ownedAttribute xmi:id="_csaGABmEEeep-rPkdJ17sQ" name="Attribute1" type="_Tc_kkBmOEeep-rPkdJ17sQ" isReadOnly="true">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_h1KvkBmEEeep-rPkdJ17sQ"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_h1Xj4BmEEeep-rPkdJ17sQ" value="1"/>
+    </ownedAttribute>
+    <ownedOperation xmi:id="_E3tWMBmOEeep-rPkdJ17sQ" name="abstrMeth1" visibility="protected" isAbstract="true">
+      <ownedParameter xmi:id="_Mhl4sBmOEeep-rPkdJ17sQ" name="class3param" type="_x3ueIBmNEeep-rPkdJ17sQ"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_Gl9AsBmOEeep-rPkdJ17sQ" name="abstrMeth2" visibility="protected" isAbstract="true"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Interface" xmi:id="__3qPoA-8EeeoQaYdkTlWJg" name="InterfaceName"/>
-  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_QIYFEA-9EeeoQaYdkTlWJg" name="int"/>
-  <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_Xw87wO5aEeajnvrbMwWDyQ">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XxjYsO5aEeajnvrbMwWDyQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
-      <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_XjS4UBS8EeequOOdof-U9A" name="Class2">
+    <generalization xmi:id="_XmLngBmOEeep-rPkdJ17sQ" general="_WG7A8BS8EeequOOdof-U9A"/>
+    <ownedAttribute xmi:id="_o3EV8BmNEeep-rPkdJ17sQ" name="Attribute1" isStatic="true" type="_JmAt0BmNEeep-rPkdJ17sQ" isReadOnly="true"/>
+    <interfaceRealization xmi:id="_vpROoB7UEeeo1rP9ght68Q" name="ir" client="_XjS4UBS8EeequOOdof-U9A" supplier="_fQjusBmNEeep-rPkdJ17sQ" contract="_fQjusBmNEeep-rPkdJ17sQ"/>
+    <ownedOperation xmi:id="_zdXmQBmNEeep-rPkdJ17sQ" name="OperationWithReturn" visibility="package">
+      <ownedParameter xmi:id="__nnVkBmNEeep-rPkdJ17sQ" name="param1" type="_x3ueIBmNEeep-rPkdJ17sQ" direction="return"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_7cLacBmOEeep-rPkdJ17sQ" name="Operation1" visibility="private">
+      <ownedParameter xmi:id="_BpQnwBmPEeep-rPkdJ17sQ" name="inParam" type="_S3JskBmOEeep-rPkdJ17sQ"/>
+      <ownedParameter xmi:id="_Dkb7ABmPEeep-rPkdJ17sQ" type="_sc7z8BmOEeep-rPkdJ17sQ" direction="return"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_JmAt0BmNEeep-rPkdJ17sQ" name="boolean"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Mcz70BmNEeep-rPkdJ17sQ" name="Interface1">
+    <ownedOperation xmi:id="_Pi8J0BmOEeep-rPkdJ17sQ" name="Operation1">
+      <ownedParameter xmi:id="_b1-BsBmOEeep-rPkdJ17sQ" name="class4Param" type="_S3JskBmOEeep-rPkdJ17sQ"/>
+      <ownedParameter xmi:id="_fTClgBmOEeep-rPkdJ17sQ" name="class5param" type="_Tc_kkBmOEeep-rPkdJ17sQ"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_fQjusBmNEeep-rPkdJ17sQ" name="Interface2">
+    <generalization xmi:id="_mgGekBmNEeep-rPkdJ17sQ" general="_Mcz70BmNEeep-rPkdJ17sQ"/>
+    <ownedOperation xmi:id="_Qt8kYBmOEeep-rPkdJ17sQ" name="Operation1"/>
+    <ownedOperation xmi:id="_RB-6sBmOEeep-rPkdJ17sQ" name="Operation2"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_x3ueIBmNEeep-rPkdJ17sQ" name="Class3">
+    <ownedOperation xmi:id="_By46wDtCEeej9ODbYXDXAg"/>
+    <ownedOperation xmi:id="_DiR0wDtCEeej9ODbYXDXAg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_S3JskBmOEeep-rPkdJ17sQ" name="Class4">
+    <ownedAttribute xmi:id="_yHe78BmOEeep-rPkdJ17sQ" name="finalAttr" type="_Tc_kkBmOEeep-rPkdJ17sQ" isReadOnly="true"/>
+    <ownedAttribute xmi:id="_w-aPIDkLEeerAuwKtKs7SA" name="class3" type="_x3ueIBmNEeep-rPkdJ17sQ" association="_w988IDkLEeerAuwKtKs7SA"/>
+    <ownedAttribute xmi:id="_zrlnEzkLEeerAuwKtKs7SA" name="class2" type="_XjS4UBS8EeequOOdof-U9A" association="_zrlnEDkLEeerAuwKtKs7SA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Tc_kkBmOEeep-rPkdJ17sQ" name="Class5">
+    <ownedAttribute xmi:id="_nKWgABmOEeep-rPkdJ17sQ" name="staticAttr1" isStatic="true" type="_sc7z8BmOEeep-rPkdJ17sQ"/>
+    <ownedAttribute xmi:id="_ndISEBmOEeep-rPkdJ17sQ" name="staticAttr2" isStatic="true" type="_JmAt0BmNEeep-rPkdJ17sQ"/>
+    <ownedOperation xmi:id="_iAK6IBmOEeep-rPkdJ17sQ" name="Operation1" isStatic="true">
+      <ownedParameter xmi:id="_lH7VQBmOEeep-rPkdJ17sQ" name="class3param" type="_x3ueIBmNEeep-rPkdJ17sQ"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_sc7z8BmOEeep-rPkdJ17sQ" name="double"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_w988IDkLEeerAuwKtKs7SA" memberEnd="_w-aPIDkLEeerAuwKtKs7SA _w-bdQDkLEeerAuwKtKs7SA">
+    <eAnnotations xmi:id="_w-Xy4DkLEeerAuwKtKs7SA" source="org.eclipse.papyrus">
+      <details xmi:id="_w-YZ8DkLEeerAuwKtKs7SA" key="nature" value="UML_Nature"/>
     </eAnnotations>
-    <appliedProfile xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
-  </profileApplication>
+    <ownedEnd xmi:id="_w-bdQDkLEeerAuwKtKs7SA" name="class4" type="_S3JskBmOEeep-rPkdJ17sQ" association="_w988IDkLEeerAuwKtKs7SA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_zrlnEDkLEeerAuwKtKs7SA" visibility="public" memberEnd="_zrlnEzkLEeerAuwKtKs7SA _zrlnFDkLEeerAuwKtKs7SA">
+    <eAnnotations xmi:id="_zrlnETkLEeerAuwKtKs7SA" source="org.eclipse.papyrus">
+      <details xmi:id="_zrlnEjkLEeerAuwKtKs7SA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:id="_zrlnFDkLEeerAuwKtKs7SA" name="class4" type="_S3JskBmOEeep-rPkdJ17sQ" association="_zrlnEDkLEeerAuwKtKs7SA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_C85N8DkMEeerAuwKtKs7SA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_C9JFkDkMEeerAuwKtKs7SA" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_FWjM8DkMEeerAuwKtKs7SA" name="Package1">
+    <packagedElement xmi:type="uml:Class" xmi:id="_MGiTADkMEeerAuwKtKs7SA" name="ClassinPackage">
+      <ownedAttribute xmi:id="_NKu68DkMEeerAuwKtKs7SA" name="attribute" type="_WG7A8BS8EeequOOdof-U9A">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UbZFIDkMEeerAuwKtKs7SA"/>
+      </ownedAttribute>
+    </packagedElement>
+  </packagedElement>
 </uml:Model>

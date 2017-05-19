@@ -18,16 +18,15 @@ import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.ValueSpecification
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.EnumerationLiteral
 import java.util.List
 import org.eclipse.uml2.uml.Parameter
-import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
-import org.eclipse.uml2.uml.internal.impl.LiteralIntegerImpl
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
+import org.eclipse.uml2.uml.internal.impl.LiteralIntegerImpl
+import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
 
 class UmlTestUtil {
     private static val logger = Logger.getLogger(typeof(UmlTestUtil).simpleName)

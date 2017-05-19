@@ -3,7 +3,6 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -19,31 +18,31 @@ public class ClearUmlSuperClassifiersRoutine extends AbstractRepairRoutineRealiz
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final ConcreteClassifier jClass, final org.eclipse.uml2.uml.Class uClass) {
+    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass) {
       return uClass;
     }
     
-    public EObject getCorrepondenceSourceUClass(final ConcreteClassifier jClass) {
+    public EObject getCorrepondenceSourceUClass(final org.emftext.language.java.classifiers.Class jClass) {
       return jClass;
     }
     
-    public void update0Element(final ConcreteClassifier jClass, final org.eclipse.uml2.uml.Class uClass) {
+    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass) {
       uClass.getGeneralizations().clear();
     }
   }
   
-  public ClearUmlSuperClassifiersRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ConcreteClassifier jClass) {
+  public ClearUmlSuperClassifiersRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.ClearUmlSuperClassifiersRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
     this.jClass = jClass;
   }
   
-  private ConcreteClassifier jClass;
+  private org.emftext.language.java.classifiers.Class jClass;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ClearUmlSuperClassifiersRoutine with input:");
-    getLogger().debug("   ConcreteClassifier: " + this.jClass);
+    getLogger().debug("   Class: " + this.jClass);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass), // correspondence source supplier

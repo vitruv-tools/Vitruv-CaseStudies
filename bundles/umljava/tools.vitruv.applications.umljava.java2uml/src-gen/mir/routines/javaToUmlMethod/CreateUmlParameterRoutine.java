@@ -7,10 +7,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
-import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.Parametrizable;
-import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,29 +24,24 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceCustomType(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation) {
-      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(jParam.getTypeReference());
-      return _classifierFromTypeReference;
-    }
-    
-    public EObject getElement1(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public EObject getElement1(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
       return uParam;
     }
     
-    public void update0Element(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public void update0Element(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
       EList<Parameter> _ownedParameters = uOperation.getOwnedParameters();
       _ownedParameters.add(uParam);
     }
     
-    public void updateUParamElement(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public void updateUParamElement(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
       uParam.setName(jParam.getName());
     }
     
-    public EObject getElement2(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public EObject getElement2(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
       return jParam;
     }
     
-    public EObject getElement3(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final org.eclipse.uml2.uml.Class customType, final Parameter uParam) {
+    public EObject getElement3(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
       return uOperation;
     }
     
@@ -82,19 +75,13 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
     	return;
     }
     registerObjectUnderModification(uOperation);
-    org.eclipse.uml2.uml.Class customType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomType(jMeth, jParam, uOperation), // correspondence source supplier
-    	org.eclipse.uml2.uml.Class.class,
-    	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(customType);
     Parameter uParam = UMLFactoryImpl.eINSTANCE.createParameter();
-    userExecution.updateUParamElement(jMeth, jParam, uOperation, customType, uParam);
+    userExecution.updateUParamElement(jMeth, jParam, uOperation, uParam);
     
-    addCorrespondenceBetween(userExecution.getElement1(jMeth, jParam, uOperation, customType, uParam), userExecution.getElement2(jMeth, jParam, uOperation, customType, uParam), "");
+    addCorrespondenceBetween(userExecution.getElement1(jMeth, jParam, uOperation, uParam), userExecution.getElement2(jMeth, jParam, uOperation, uParam), "");
     
-    // val updatedElement userExecution.getElement3(jMeth, jParam, uOperation, customType, uParam);
-    userExecution.update0Element(jMeth, jParam, uOperation, customType, uParam);
+    // val updatedElement userExecution.getElement3(jMeth, jParam, uOperation, uParam);
+    userExecution.update0Element(jMeth, jParam, uOperation, uParam);
     
     postprocessElements();
   }

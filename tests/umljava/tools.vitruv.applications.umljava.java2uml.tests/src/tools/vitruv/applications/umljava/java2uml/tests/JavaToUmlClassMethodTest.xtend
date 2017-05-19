@@ -2,32 +2,29 @@ package tools.vitruv.applications.umljava.java2uml.tests
 
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.ClassMethod
-import org.emftext.language.java.modifiers.ModifiersFactory
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import tools.vitruv.framework.util.bridges.EcoreBridge
 
 import static org.junit.Assert.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import org.emftext.language.java.members.MembersFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.ContainersFactory
-import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.parameters.OrdinaryParameter
+import org.junit.After
 
+/**
+ * A Test Class to test the class method reactions.
+ * @author Fei
+ */
 class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
     private static val TYPE_NAME = "TypeName";
@@ -47,6 +44,11 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static var ClassMethod jParamMeth;
     private static var OrdinaryParameter jParam;
     
+    /**
+     * initializes and synchronizes three classes. One class has two methods.
+     * One of the methods owns a parameter.
+     * 
+     */
     @Before
     def void before() {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME);
@@ -60,7 +62,7 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         saveAndSynchronizeChanges(jClass);
     }
     
-    //@After
+    @After
     def void after() {
         if (jClass !== null) {
             deleteAndSynchronizeModel(buildJavaFilePath(jClass.eContainer as CompilationUnit))
@@ -68,10 +70,16 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         if (typeClass !== null) {
             deleteAndSynchronizeModel(buildJavaFilePath(typeClass.eContainer as CompilationUnit))
         }
+        if (typeClass2 !== null) {
+            deleteAndSynchronizeModel(buildJavaFilePath(typeClass2.eContainer as CompilationUnit))
+        }
     }
     
+    /**
+     * Tests if a corresponding uml method is created when a java method is created.
+     */
     @Test
-    def void testCreateSimpleMethod() {
+    def void testCreateMethod() {
         val meth = createSimpleJavaOperation(STANDARD_OPERATION_NAME)
         jClass.members += meth
         saveAndSynchronizeChanges(jClass)
@@ -82,6 +90,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertMethodEquals(uOperation, meth)
     }
     
+    /**
+     * Tests if a change of the return type is correctly reflected on the uml method.
+     */
     @Test
     def void testChangeReturnType() {
         jMeth.typeReference = createNamespaceReferenceFromClassifier(typeClass)
@@ -93,6 +104,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertMethodEquals(uOperation, jMeth)
     }
     
+    /**
+     * Tests if renaming the java method also renames the corresponding uml method.
+     */
     @Test
     def void testRenameMethod() {
         jMeth.name = OPERATION_RENAME
@@ -105,6 +119,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertMethodEquals(uOperation, jMeth)
     }
     
+    /**
+     * Tests if a deletion is reflected on the uml method.
+     */
     @Test
     def void testDeleteMethod() {
         assertNotNull(getCorrespondingMethod(jMeth))
@@ -116,6 +133,10 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertUmlClassDontHaveOperation(uClass, OPERATION_RENAME)
     }
     
+    /**
+     * Checks if changing the static modifier also changes the static property of
+     * the corresponding uml method.
+     */
     @Test
     def testStaticMethod() {
         jMeth.static = true
@@ -134,6 +155,10 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         
     }
     
+    /**
+     * Tests if changing the abstract modifier also changes the abstract property of
+     * the corresponding uml method.
+     */
     @Test
     def testAbstractMethod() {
         jMeth.abstract = true
@@ -151,6 +176,10 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertMethodEquals(uOperation, jMeth)
     }
     
+    /**
+     * Asserts that changing the final modifier also changes the final property of
+     * the corresponding uml method.
+     */
     @Test
     def testFinalMethod() {
         jMeth.final = true
@@ -168,6 +197,10 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertMethodEquals(uOperation, jMeth)
     }
     
+    /**
+     * Checks if changing the visibility modifier also changes the visibility of
+     * the corresponding uml method.
+     */
     @Test
     def testMethodVisibility() {
         jMeth.makeProtected
@@ -185,7 +218,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertMethodEquals(uOperation, jMeth)
     }
 
-    
+    /**
+     * Checks if a uml parameter is created after a java parameter is created.
+     */
     @Test
     def testCreateParameter() {
         val param = createJavaParameter(PARAMETER_NAME2, createNamespaceReferenceFromClassifier(typeClass))
@@ -198,6 +233,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertParameterEquals(uParam, param)
     }
     
+    /**
+     * Tests the rename reaction in the context of parameters.
+     */
     @Test
     def testRenameParameter() {
         jParam.name = PARAMETER_RENAME
@@ -209,6 +247,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertParameterEquals(uParam, jParam)
     }
     
+    /**
+     * Tests if the corresponding uml parameter is deleted when the java parameter is deleted.
+     */
     @Test
     def testDeleteParameter() {
         assertNotNull(jParam)
@@ -219,6 +260,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertUmlOperationDontHaveParameter(uOperation, PARAMETER_NAME)
     }
     
+    /**
+     * Tests if a change of the java parameter type is correctly propagated to the uml parameter.
+     */
     @Test
     def testChangeParameterType() {
         jParam.typeReference = createNamespaceReferenceFromClassifier(typeClass)
@@ -230,6 +274,9 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         assertParameterEquals(uParam, jParam)
     }
     
+    /**
+     * Tests if a constructor creates a fitting uml operation.
+     */
     @Test
     def testCreateConstructor() {
         val jConstr = createJavaConstructorAndAddToClass(jClass, JavaVisibility.PUBLIC)

@@ -46,21 +46,21 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         saveAndSynchronizeChanges(rootElement);
     }
     
-    //@After
+    @After
     def void after() {
-        if (uOperation != null) {
+        if (uOperation !== null) {
             uOperation.destroy;
         }
-        if (uClass != null) {
+        if (uClass !== null) {
             uClass.destroy;
         }
-        if (typeClass != null) {
+        if (typeClass !== null) {
             typeClass.destroy;
         }
-        if (uParam != null) {
+        if (uParam !== null) {
         	uParam.destroy
         }
-        if (pType != null) {
+        if (pType !== null) {
         	pType.destroy
         }
         saveAndSynchronizeChanges(rootElement);

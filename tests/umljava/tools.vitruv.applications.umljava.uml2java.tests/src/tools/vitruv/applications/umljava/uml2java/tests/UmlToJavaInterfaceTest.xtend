@@ -5,10 +5,8 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.uml2.uml.Interface
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
@@ -29,9 +27,9 @@ class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
         
     }
     
-    //@After
+   @After
     def void after() {
-        if (uI != null) {
+        if (uI !== null) {
             uI.destroy
         }
         saveAndSynchronizeChanges(rootElement)

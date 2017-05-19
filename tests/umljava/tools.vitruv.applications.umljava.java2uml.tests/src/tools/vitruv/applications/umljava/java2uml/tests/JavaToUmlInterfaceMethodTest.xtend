@@ -2,6 +2,7 @@ package tools.vitruv.applications.umljava.java2uml.tests
 
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Before
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.junit.After
 import static org.junit.Assert.*;
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
@@ -11,6 +12,7 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.junit.Test
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.containers.CompilationUnit
 
 class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName";
@@ -33,16 +35,13 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
         saveAndSynchronizeChanges(jInterface)
     }
     
-    //@After
+    @After
     def void after() {
-        if (jInterface != null) {
-            
+        if (jInterface !== null) {
+            deleteAndSynchronizeModel(buildJavaFilePath(jInterface.eContainer as CompilationUnit))
         }
-        if (jMeth != null) {
-            
-        }
-        if (typeClass != null) {
-            
+        if (typeClass !== null) {
+            deleteAndSynchronizeModel(buildJavaFilePath(typeClass.eContainer as CompilationUnit))
         }
     }
     

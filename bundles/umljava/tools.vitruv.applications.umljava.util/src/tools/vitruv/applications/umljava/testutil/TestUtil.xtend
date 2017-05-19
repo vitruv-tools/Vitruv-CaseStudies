@@ -17,16 +17,11 @@ import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import org.emftext.language.java.modifiers.Abstract
-import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.modifiers.Public
-import org.emftext.language.java.modifiers.Private
-import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.types.Void
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.NamespaceClassifierReference
 import java.util.List
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.eclipse.emf.common.util.EList
 import org.eclipse.uml2.uml.EnumerationLiteral
 import org.emftext.language.java.members.EnumConstant
 import org.apache.log4j.Logger
@@ -188,7 +183,7 @@ class TestUtil {
 	
 	def static void assertParameterListEquals(List<org.eclipse.uml2.uml.Parameter> uParamList, List<org.emftext.language.java.parameters.Parameter> jParamList) {
 		val uParamListWithoutReturn = uParamList.filter[direction != ParameterDirectionKind.RETURN_LITERAL]
-		if (uParamListWithoutReturn == null) {
+		if (uParamListWithoutReturn === null) {
 			assertNull(jParamList)
 		} else {
 			assertEquals(uParamListWithoutReturn.size, jParamList.size)

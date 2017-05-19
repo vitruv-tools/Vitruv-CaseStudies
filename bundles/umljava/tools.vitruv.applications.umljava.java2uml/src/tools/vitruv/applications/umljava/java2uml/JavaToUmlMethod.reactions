@@ -1,6 +1,8 @@
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*;
+import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*;
 import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
 import org.emftext.language.java.modifiers.Public
+import org.emftext.language.java.modifiers.Private
+import org.emftext.language.java.modifiers.Protected
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -8,6 +10,10 @@ import "http://www.emftext.org/java" as java
 reactions: JavaToUmlMethod
 in reaction to changes in Java
 execute actions in UML
+
+//===========================================
+//=========================================== Method
+//===========================================
 
 reaction JavaClassMethodCreated {
     after element java::ClassMethod created and inserted in java::ConcreteClassifier[members]
@@ -44,7 +50,7 @@ routine addUmlOperationToClass(uml::Class uClass, uml::Operation uOperation) {
         }
     }
 }
-
+//separate routines because Enum and Class don't have a common super class for "having ownedOperations"
 routine addUmlOperationToEnum(uml::Enumeration uEnum, uml::Operation uOperation) {
     action {
         update uEnum {
@@ -58,9 +64,9 @@ reaction JavaInterfaceMethodCreated {
     call createUmlInterfaceMethod(newValue, affectedEObject)
 }
 
-routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jI) {
+routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jInterface) {
     match {
-        val uInterface = retrieve uml::Interface corresponding to jI
+        val uInterface = retrieve uml::Interface corresponding to jInterface
     }
     action {
         val uOperation = create uml::Operation and initialize {
@@ -130,6 +136,27 @@ routine setUmlMethodAbstract(java::ClassMethod jMeth, Boolean isAbstract) {
     }
 }
 
+reaction JavaMethodMadeFinal {
+    after element java::Final created and inserted in java::ClassMethod[annotationsAndModifiers]
+    call setUmlMethodFinal(affectedEObject, true)
+}
+
+reaction JavaMethodMadeNonFinal {
+    after element java::Final deleted and removed from java::ClassMethod[annotationsAndModifiers]
+    call setUmlMethodFinal(affectedEObject, false)
+}
+
+routine setUmlMethodFinal(java::Method jMethod, Boolean isFinal) {
+    match {
+        val uOperation = retrieve uml::Operation corresponding to jMethod
+    }
+    action {
+        update uOperation {
+            uOperation.isLeaf = isFinal
+        }
+    }
+}
+
 reaction JavaElementMadeStatic {
     after element java::Static created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
     call setUmlFeatureStatic(affectedEObject, true)
@@ -139,7 +166,7 @@ reaction JavaMethodMadeNonStatic {
     after element java::Static deleted and removed from java::AnnotableAndModifiable[annotationsAndModifiers]
     call setUmlFeatureStatic(affectedEObject, false)
 }
-
+//UML-Feature =  {Property, Operation}
 routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Boolean isStatic) {
     match {
         val uFeature = retrieve uml::Feature corresponding to jElem
@@ -151,6 +178,10 @@ routine setUmlFeatureStatic(java::AnnotableAndModifiable jElem, Boolean isStatic
     }
 }
 
+//===========================================
+//=========================================== Parameter
+//===========================================
+
 reaction JavaParameterCreated {
     after element java::OrdinaryParameter created and inserted in java::Parametrizable[parameters]
     call createUmlParameter(affectedEObject, newValue)
@@ -159,7 +190,6 @@ reaction JavaParameterCreated {
 routine createUmlParameter(java::Parametrizable jMeth, java::OrdinaryParameter jParam) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
-        val customType = retrieve optional uml::Class corresponding to getClassifierFromTypeReference(jParam.typeReference)
     }
     action {
         val uParam = create uml::Parameter and initialize {
@@ -218,26 +248,54 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
      }
 }
 
-reaction JavaMethodMadeFinal {
-    after element java::Final created and inserted in java::ClassMethod[annotationsAndModifiers]
-    call setUmlMethodFinal(affectedEObject, true)
+//===========================================
+//=========================================== General
+//===========================================
+
+reaction JavaElementVisibilityChanged {
+    after element java::Modifier created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
+    with newValue instanceof Public || newValue instanceof Private || newValue instanceof Protected
+    call changeUmlNamedElementVisibility(affectedEObject, newValue)
 }
 
-reaction JavaMethodMadeNonFinal {
-    after element java::Final deleted and removed from java::ClassMethod[annotationsAndModifiers]
-    call setUmlMethodFinal(affectedEObject, false)
+reaction JavaElementMadePackagePrivate {
+    after element java::Modifier deleted and removed from java::Class[annotationsAndModifiers]
+    with oldValue instanceof Private
+    || oldValue instanceof Public
+    || oldValue instanceof Protected
+    call changeUmlNamedElementVisibility(affectedEObject, null)
 }
 
-routine setUmlMethodFinal(java::Method jMethod, Boolean isFinal) {
+routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem, java::Modifier mod) {
     match {
-        val uOperation = retrieve uml::Operation corresponding to jMethod
+        val uElem = retrieve uml::NamedElement corresponding to jElem
     }
     action {
-        update uOperation {
-            uOperation.isLeaf = isFinal
+        update uElem {
+            uElem.visibility = getUMLVisibilityKindFromJavaModifier(mod);
         }
     }
 }
+
+reaction JavaNamedElementRenamed {
+    after attribute replaced at java::NamedElement[name]
+    call renameUmlNamedElement(affectedEObject)
+}
+
+routine renameUmlNamedElement(java::NamedElement jElement) {
+    match {
+        val uElement = retrieve uml::NamedElement corresponding to jElement
+    }
+    action {
+        update uElement {
+            uElement.name = jElement.name;
+        }
+    }
+}
+
+//===========================================
+//=========================================== Unsupported
+//===========================================
 
 reaction JavaParameterMadeFinal {
     after element java::Final created and inserted in java::Parameter[annotationsAndModifiers]

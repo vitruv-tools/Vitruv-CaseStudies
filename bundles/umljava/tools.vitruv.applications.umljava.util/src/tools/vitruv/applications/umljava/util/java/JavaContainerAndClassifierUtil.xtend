@@ -113,7 +113,6 @@ class JavaContainerAndClassifierUtil {
                 "public class DummyClass {}";
         val dummyCU = createJavaRoot("DummyClass", content) as CompilationUnit;
         val classifierImport = (dummyCU.getImports().get(0) as ClassifierImport)
-        //EcoreUtil.copy(classifierImport);
         return classifierImport;
         
     }

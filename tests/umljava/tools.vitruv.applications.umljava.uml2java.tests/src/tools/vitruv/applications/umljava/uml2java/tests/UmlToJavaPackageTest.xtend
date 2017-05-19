@@ -28,7 +28,7 @@ class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
         
     }
     
-    //@After
+    @After
     def void after() {
         if (uPackageLevel1 !== null) {
             uPackageLevel1.destroy

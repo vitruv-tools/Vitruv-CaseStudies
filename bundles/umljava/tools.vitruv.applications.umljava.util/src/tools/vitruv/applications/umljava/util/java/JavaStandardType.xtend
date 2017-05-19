@@ -18,7 +18,6 @@ import org.emftext.language.java.types.TypesFactory
 /**
  * Util class with for Java-PrimitiveTypes and Java-String.
  * 
- * (Convert this class into an enum when Xtend supports enums with methods)
  * 
  */
 class JavaStandardType {

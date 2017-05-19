@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -28,10 +29,9 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Interface jInterface, final Classifier jSuperInterface, final org.eclipse.uml2.uml.Interface uInterface) {
-      final org.eclipse.uml2.uml.Interface uSuperInterface = JavaToUmlHelper.<org.eclipse.uml2.uml.Interface>findFirstCorrespondeningUmlElementByNameAndType(this.correspondenceModel, 
-        jSuperInterface.getName(), org.eclipse.uml2.uml.Interface.class);
-      if ((uSuperInterface != null)) {
-        UmlClassifierAndPackageUtil.addUmlSuperClassifier(uInterface, uSuperInterface);
+      final Type uSuperInterface = JavaToUmlHelper.getUmlType(jInterface, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel);
+      if (((uSuperInterface != null) && (uSuperInterface instanceof org.eclipse.uml2.uml.Interface))) {
+        UmlClassifierAndPackageUtil.addUmlSuperClassifier(uInterface, ((org.eclipse.uml2.uml.Interface) uSuperInterface));
       } else {
         Logger _logger = this.getLogger();
         String _name = jSuperInterface.getName();

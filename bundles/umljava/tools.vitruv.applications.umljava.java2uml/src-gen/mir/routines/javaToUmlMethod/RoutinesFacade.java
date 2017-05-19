@@ -4,12 +4,14 @@ import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Operation;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
+import org.emftext.language.java.commons.NamedElement;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
+import org.emftext.language.java.modifiers.Modifier;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.Parametrizable;
 import org.emftext.language.java.types.TypeReference;
@@ -41,9 +43,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createUmlInterfaceMethod(final InterfaceMethod jMeth, final Interface jI) {
+  public void createUmlInterfaceMethod(final InterfaceMethod jMeth, final Interface jInterface) {
     mir.routines.javaToUmlMethod.CreateUmlInterfaceMethodRoutine effect = new mir.routines.javaToUmlMethod.CreateUmlInterfaceMethodRoutine(this.executionState, calledBy,
-    	jMeth, jI);
+    	jMeth, jInterface);
     effect.applyRoutine();
   }
   
@@ -62,6 +64,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void setUmlMethodAbstract(final ClassMethod jMeth, final Boolean isAbstract) {
     mir.routines.javaToUmlMethod.SetUmlMethodAbstractRoutine effect = new mir.routines.javaToUmlMethod.SetUmlMethodAbstractRoutine(this.executionState, calledBy,
     	jMeth, isAbstract);
+    effect.applyRoutine();
+  }
+  
+  public void setUmlMethodFinal(final Method jMethod, final Boolean isFinal) {
+    mir.routines.javaToUmlMethod.SetUmlMethodFinalRoutine effect = new mir.routines.javaToUmlMethod.SetUmlMethodFinalRoutine(this.executionState, calledBy,
+    	jMethod, isFinal);
     effect.applyRoutine();
   }
   
@@ -95,9 +103,15 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void setUmlMethodFinal(final Method jMethod, final Boolean isFinal) {
-    mir.routines.javaToUmlMethod.SetUmlMethodFinalRoutine effect = new mir.routines.javaToUmlMethod.SetUmlMethodFinalRoutine(this.executionState, calledBy,
-    	jMethod, isFinal);
+  public void changeUmlNamedElementVisibility(final AnnotableAndModifiable jElem, final Modifier mod) {
+    mir.routines.javaToUmlMethod.ChangeUmlNamedElementVisibilityRoutine effect = new mir.routines.javaToUmlMethod.ChangeUmlNamedElementVisibilityRoutine(this.executionState, calledBy,
+    	jElem, mod);
+    effect.applyRoutine();
+  }
+  
+  public void renameUmlNamedElement(final NamedElement jElement) {
+    mir.routines.javaToUmlMethod.RenameUmlNamedElementRoutine effect = new mir.routines.javaToUmlMethod.RenameUmlNamedElementRoutine(this.executionState, calledBy,
+    	jElement);
     effect.applyRoutine();
   }
 }

@@ -21,47 +21,47 @@ public class DeleteUmlClassifierRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final ConcreteClassifier jClass, final CompilationUnit jCompUnit, final Classifier uClass) {
-      return uClass;
+    public EObject getElement1(final ConcreteClassifier jClassifier, final CompilationUnit jCompUnit, final Classifier uClassfier) {
+      return uClassfier;
     }
     
-    public EObject getCorrepondenceSourceUClass(final ConcreteClassifier jClass, final CompilationUnit jCompUnit) {
-      return jClass;
+    public EObject getCorrepondenceSourceUClassfier(final ConcreteClassifier jClassifier, final CompilationUnit jCompUnit) {
+      return jClassifier;
     }
     
-    public EObject getElement2(final ConcreteClassifier jClass, final CompilationUnit jCompUnit, final Classifier uClass) {
+    public EObject getElement2(final ConcreteClassifier jClassifier, final CompilationUnit jCompUnit, final Classifier uClassfier) {
       return jCompUnit;
     }
   }
   
-  public DeleteUmlClassifierRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ConcreteClassifier jClass, final CompilationUnit jCompUnit) {
+  public DeleteUmlClassifierRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ConcreteClassifier jClassifier, final CompilationUnit jCompUnit) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.DeleteUmlClassifierRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
-    this.jClass = jClass;this.jCompUnit = jCompUnit;
+    this.jClassifier = jClassifier;this.jCompUnit = jCompUnit;
   }
   
-  private ConcreteClassifier jClass;
+  private ConcreteClassifier jClassifier;
   
   private CompilationUnit jCompUnit;
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteUmlClassifierRoutine with input:");
-    getLogger().debug("   ConcreteClassifier: " + this.jClass);
+    getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
     getLogger().debug("   CompilationUnit: " + this.jCompUnit);
     
-    Classifier uClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUClass(jClass, jCompUnit), // correspondence source supplier
+    Classifier uClassfier = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUClassfier(jClassifier, jCompUnit), // correspondence source supplier
     	Classifier.class,
     	(Classifier _element) -> true, // correspondence precondition checker
     	null);
-    if (uClass == null) {
+    if (uClassfier == null) {
     	return;
     }
-    registerObjectUnderModification(uClass);
-    deleteObject(userExecution.getElement1(jClass, jCompUnit, uClass));
+    registerObjectUnderModification(uClassfier);
+    deleteObject(userExecution.getElement1(jClassifier, jCompUnit, uClassfier));
     
-    deleteObject(userExecution.getElement2(jClass, jCompUnit, uClass));
+    deleteObject(userExecution.getElement2(jClassifier, jCompUnit, uClassfier));
     
     postprocessElements();
   }

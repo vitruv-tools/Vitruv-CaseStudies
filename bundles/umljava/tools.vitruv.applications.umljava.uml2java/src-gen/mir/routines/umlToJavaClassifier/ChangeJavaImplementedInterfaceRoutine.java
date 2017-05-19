@@ -23,39 +23,39 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Interface uI, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jI) {
+    public EObject getElement1(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface) {
       return jClass;
     }
     
-    public EObject getCorrepondenceSourceJClass(final Interface uI, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
+    public EObject getCorrepondenceSourceJClass(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
       return uClass;
     }
     
-    public void update0Element(final Interface uI, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jI) {
+    public void update0Element(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface) {
       EList<TypeReference> _implements = jClass.getImplements();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jI, jClass.getContainingCompilationUnit(), this.userInteracting);
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, jClass.getContainingCompilationUnit(), this.userInteracting);
       _implements.add(_createTypeReferenceAndUpdateImport);
     }
     
-    public EObject getCorrepondenceSourceJI(final Interface uI, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass) {
-      return uI;
+    public EObject getCorrepondenceSourceJInterface(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass) {
+      return uInterface;
     }
     
-    public void callRoutine1(final Interface uI, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jI, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface, @Extension final RoutinesFacade _routinesFacade) {
       if ((oldInterface != null)) {
         _routinesFacade.deleteJavaImplementedInterface(oldInterface, uClass);
       }
     }
   }
   
-  public ChangeJavaImplementedInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface uI, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
+  public ChangeJavaImplementedInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.ChangeJavaImplementedInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
-    this.uI = uI;this.oldInterface = oldInterface;this.uClass = uClass;
+    this.uInterface = uInterface;this.oldInterface = oldInterface;this.uClass = uClass;
   }
   
-  private Interface uI;
+  private Interface uInterface;
   
   private Interface oldInterface;
   
@@ -63,12 +63,12 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaImplementedInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.uI);
+    getLogger().debug("   Interface: " + this.uInterface);
     getLogger().debug("   Interface: " + this.oldInterface);
     getLogger().debug("   Class: " + this.uClass);
     
     org.emftext.language.java.classifiers.Class jClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJClass(uI, oldInterface, uClass), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceJClass(uInterface, oldInterface, uClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
@@ -76,19 +76,19 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	return;
     }
     registerObjectUnderModification(jClass);
-    org.emftext.language.java.classifiers.Interface jI = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJI(uI, oldInterface, uClass, jClass), // correspondence source supplier
+    org.emftext.language.java.classifiers.Interface jInterface = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceJInterface(uInterface, oldInterface, uClass, jClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
-    if (jI == null) {
+    if (jInterface == null) {
     	return;
     }
-    registerObjectUnderModification(jI);
-    userExecution.callRoutine1(uI, oldInterface, uClass, jClass, jI, actionsFacade);
+    registerObjectUnderModification(jInterface);
+    userExecution.callRoutine1(uInterface, oldInterface, uClass, jClass, jInterface, actionsFacade);
     
-    // val updatedElement userExecution.getElement1(uI, oldInterface, uClass, jClass, jI);
-    userExecution.update0Element(uI, oldInterface, uClass, jClass, jI);
+    // val updatedElement userExecution.getElement1(uInterface, oldInterface, uClass, jClass, jInterface);
+    userExecution.update0Element(uInterface, oldInterface, uClass, jClass, jInterface);
     
     postprocessElements();
   }

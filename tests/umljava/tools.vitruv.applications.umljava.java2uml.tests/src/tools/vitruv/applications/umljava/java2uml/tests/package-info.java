@@ -1,4 +1,6 @@
 /**
+ * This package contains the unit tests for the java to uml direction.
+ * 
  * @author Fei
  *
  */

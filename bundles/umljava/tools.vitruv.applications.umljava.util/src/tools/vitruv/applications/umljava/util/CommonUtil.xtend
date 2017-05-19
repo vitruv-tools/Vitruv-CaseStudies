@@ -2,6 +2,11 @@ package tools.vitruv.applications.umljava.util
 
 import org.apache.log4j.Logger
 
+/**
+ * This class contains util functions that are not explicit attached to java or uml.
+ * 
+ * @author Fei
+ */
 class CommonUtil {
     private static val logger = Logger.getLogger(CommonUtil.simpleName)
     private new() {}

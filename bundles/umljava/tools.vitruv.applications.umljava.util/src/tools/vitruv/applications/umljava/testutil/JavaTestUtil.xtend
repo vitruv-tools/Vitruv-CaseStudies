@@ -8,7 +8,6 @@ import org.emftext.language.java.modifiers.Public
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Modifier
-import org.emftext.language.java.members.Member
 import org.emftext.language.java.members.MemberContainer
 import org.emftext.language.java.classifiers.Enumeration
 import org.emftext.language.java.members.EnumConstant
@@ -16,9 +15,7 @@ import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypedElement
 import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.modifiers.Final
 import org.emftext.language.java.modifiers.Static
@@ -199,7 +196,7 @@ class JavaTestUtil {
     }
     
     /**
-     * @param jMethod Java-Methode
+     * @param jMethod Java-Method
      * @param param Java-Parameter
      */
     def static void assertJavaMethodHasUniqueParameter(Method jMethod, String paramName, TypeReference paramTypeRef) {
@@ -217,7 +214,7 @@ class JavaTestUtil {
     
     /**
      * @param jMem Java-TypedElement (Attribute, Method, Parameter)
-     * @param uType Uml-Typ
+     * @param uType Uml-Type
      */
     def static void assertJavaElementHasTypeRef(TypedElement jTypedElement, TypeReference typeRef) {
         assertTypeEquals(typeRef, jTypedElement.typeReference)
@@ -228,8 +225,8 @@ class JavaTestUtil {
     }
     
     /**
-     * @param childClass Java-Kindklasse
-     * @param superClass Java-Superclass
+     * @param childClass Java Child class
+     * @param superClass Java Super class
      */
 	def static void assertHasSuperClass(Class childClass, Class superClass) {
 	    assertEquals(superClass.name, getClassifierFromTypeReference(childClass.extends).name);

@@ -1,4 +1,3 @@
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*;
 import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -16,12 +15,6 @@ reaction JavaAttributeCreatedInClass {
 reaction JavaAttributeCreatedInEnum {
     after element java::Field created and inserted in java::Enumeration[members]
     call createUmlAttributeInEnum(affectedEObject, newValue)
-}
-
-reaction JavaAttributeCreatedInInterface {
-    after element java::Field created and inserted in java::Interface[members]
-    call showMessage(userInteracting, "Adding fields to " + affectedEObject.class.simpleName +" is not supported. Please remove " + newValue)
-    
 }
 
 //UML-Enumeration and UMl-Class don't have a common superclass for "having ownedAttributes".
@@ -94,4 +87,14 @@ routine setUmlAttributeFinal(java::Field jAttr, Boolean isFinal) {
             uAttr.isReadOnly = isFinal
         }
     }
+}
+
+//===========================================
+//=========================================== Unsupported
+//===========================================
+
+reaction JavaAttributeCreatedInInterface {
+    after element java::Field created and inserted in java::Interface[members]
+    call showMessage(userInteracting, "Adding fields to " + affectedEObject.class.simpleName +" is not supported. Please remove " + newValue)
+    
 }

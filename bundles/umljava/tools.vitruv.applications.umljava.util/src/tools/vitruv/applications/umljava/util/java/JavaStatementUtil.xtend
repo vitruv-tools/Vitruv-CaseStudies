@@ -34,47 +34,31 @@ import org.emftext.language.java.expressions.EqualityExpressionChild
 import org.emftext.language.java.operators.EqualityOperator
 import org.emftext.language.java.expressions.EqualityExpression
 
+/**
+ * Util class for the creation and retrieving of statements.
+ * 
+ * @author Fei
+ */
 class JavaStatementUtil {
     private static val logger = Logger.getLogger(JavaStatementUtil.simpleName)
     private new() {}
     
+    /**
+     * Creates:
+     * 
+     * return <returnValue>
+     * 
+     * @param returnValue the expression that should placed behind the return key word
+     */
     def static Return createReturnStatement(Expression returnValue) {
        val returnStatement = StatementsFactory.eINSTANCE.createReturn
        returnStatement.returnValue = returnValue
        return returnStatement
    }
    
-   def static createNewForFieldInConstructor(Field jAttribute) {
-        val classifier = jAttribute.containingConcreteClassifier
-        if (classifier === null) {
-            return null
-        }
-        val jClass = classifier as Class
-
-        // create constructor if none exists
-        if (jClass.members.filter(Constructor).nullOrEmpty) {
-            createJavaConstructorAndAddToClass(jClass, JavaVisibility.PUBLIC)
-        }
-        
-        for (constructor : jClass.members.filter(Constructor)) {
-            if (!constructorContainsAttributeSelfReferenceStatement(constructor, jAttribute)) {
-                addNewStatementToConstructor(constructor, jAttribute, jClass.fields, constructor.parameters)
-            }
-        }
-    }
-   
-   def static addNewStatementToConstructor(Constructor constructor, Field jAttribute,
-        Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
-        val selfReference = createSelfReferenceToAttribute(jAttribute)
-        val newConstructorCall = createNewConstructorCall(jAttribute, fieldsToUseAsArgument, parametersToUseAsArgument)
-        val assignment = createAssignmentExpression(selfReference, 
-            OperatorsFactory.eINSTANCE.createAssignment, newConstructorCall)
-        constructor.statements += wrapExpressionInExpressionStatement(assignment)
-        return newConstructorCall
-    }
     
     /**
-     * Creates a this.jAttributename expression
+     * Creates a <this.jAttributename> expression
      */
     def static SelfReference createSelfReferenceToAttribute(Field jAttribute) {
         val selfReference = ReferencesFactory.eINSTANCE.createSelfReference
@@ -95,6 +79,58 @@ class JavaStatementUtil {
         return newConstructorCall
     }
     
+   /**
+    * 
+    * (taken from tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils, but modified)
+    */
+   def static createNewForFieldInConstructor(Field jAttribute) {
+        val classifier = jAttribute.containingConcreteClassifier
+        if (classifier === null) {
+            return null
+        }
+        val jClass = classifier as Class
+
+        if (jClass.members.filter(Constructor).nullOrEmpty) {
+            createJavaConstructorAndAddToClass(jClass, JavaVisibility.PUBLIC)
+        }
+        for (constructor : jClass.members.filter(Constructor)) {
+            if (!constructorContainsAttributeSelfReferenceStatement(constructor, jAttribute)) {
+                addNewStatementToConstructor(constructor, jAttribute, jClass.fields, constructor.parameters)
+            }
+        }
+    }
+   
+   /**
+    * (taken from tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils, but modified)
+    */
+   def static addNewStatementToConstructor(Constructor constructor, Field jAttribute,
+        Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
+        val selfReference = createSelfReferenceToAttribute(jAttribute)
+        val newConstructorCall = createNewConstructorCall(jAttribute, fieldsToUseAsArgument, parametersToUseAsArgument)
+        val assignment = createAssignmentExpression(selfReference, 
+            OperatorsFactory.eINSTANCE.createAssignment, newConstructorCall)
+        constructor.statements += wrapExpressionInExpressionStatement(assignment)
+        return newConstructorCall
+    }
+    
+    /**
+     * 
+     * Updates the Arguments of a Constructor Call of a given field inside a constructor A. First, it retrieves
+     * the constructor B of the type of the field. Then it tries to match the needed parameter
+     * of this constructor B with the parameter of the constructor A by their type. The parameters of the 
+     * constructor A is given by parametersToUseAsArguments. If there is a match, the parameterToUseAsArgument
+     * will be used as argument for the needed parameters. Otherwise it will try to match the needed parameters
+     * with the given fieldsToUseAsArguments.
+     * If no match could could be found, the needed Parameters becomes null.
+     * 
+     * constructorA (parametersToUseAsArguments) {
+     *     this.jAttribute = new ConstructorB(neededParameters);
+     * }
+     * 
+     * (taken from tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils)
+     * 
+     * @param jAttribute the field
+     */
     def static void updateArgumentsOfConstructorCall(Field jAttribute, Field[] fieldsToUseAsArgument,
         Parameter[] parametersToUseAsArgument, NewConstructorCall newConstructorCall) {
         val List<TypeReference> typeListForConstructor = new ArrayList<TypeReference>
@@ -121,6 +157,11 @@ class JavaStatementUtil {
         }
     }
     
+    
+    /**
+     * 
+     * (taken from tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils)
+     */
     def static ReferenceableElement findMatchingTypeInParametersOrFields(TypeReference typeReferenceToFind,
         Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
         for (parameter : parametersToUseAsArgument) {
@@ -149,6 +190,9 @@ class JavaStatementUtil {
     }
     
     def static boolean expressionHasAttributeSelfReference(ExpressionStatement expressionStatement, Field jAttribute) {
+        if (expressionStatement === null) {
+            return false
+        }
         if (getAttributeSelfReferenceInExpressionStatement(expressionStatement, jAttribute.name) !== null) {
             return true
         }
