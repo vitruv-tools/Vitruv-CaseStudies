@@ -4,15 +4,12 @@ import static org.junit.Assert.*;
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Test
 import org.junit.Before
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.junit.After
 
 class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName"
@@ -28,12 +25,6 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         jInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
     }
     
-    @After
-    def void after() {
-        if (jInterface !== null) {
-            deleteAndSynchronizeModel(buildJavaFilePath(jInterface.eContainer as CompilationUnit))
-        }
-    }
     
     @Test
     def void testCreateInterface() {

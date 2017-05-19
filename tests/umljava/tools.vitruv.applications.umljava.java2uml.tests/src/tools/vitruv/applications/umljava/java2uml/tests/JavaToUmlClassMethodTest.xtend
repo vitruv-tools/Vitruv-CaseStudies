@@ -13,13 +13,10 @@ import static extension tools.vitruv.applications.umljava.util.java.JavaModifier
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.parameters.OrdinaryParameter
-import org.junit.After
 
 /**
  * A Test Class to test the class method reactions.
@@ -60,19 +57,6 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         jClass.members += jMeth;
         jClass.members += jParamMeth
         saveAndSynchronizeChanges(jClass);
-    }
-    
-    @After
-    def void after() {
-        if (jClass !== null) {
-            deleteAndSynchronizeModel(buildJavaFilePath(jClass.eContainer as CompilationUnit))
-        }
-        if (typeClass !== null) {
-            deleteAndSynchronizeModel(buildJavaFilePath(typeClass.eContainer as CompilationUnit))
-        }
-        if (typeClass2 !== null) {
-            deleteAndSynchronizeModel(buildJavaFilePath(typeClass2.eContainer as CompilationUnit))
-        }
     }
     
     /**

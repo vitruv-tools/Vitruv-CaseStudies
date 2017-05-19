@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.java2uml.tests
 
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import static org.junit.Assert.*
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
@@ -11,7 +10,6 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.eclipse.uml2.uml.Package
-import org.emftext.language.java.containers.CompilationUnit
 
 class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     
@@ -31,16 +29,6 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
         jPackageLevel1.compilationUnits += getContainingCompilationUnit(jClass)
         saveAndSynchronizeChanges(jPackageLevel1)
         
-    }
-    
-    @After
-    def void after() {
-        if (jClass !== null) {
-            deleteAndSynchronizeModel(buildJavaFilePath(jClass.eContainer as CompilationUnit))
-        }
-        if (jPackageLevel1 !== null) {
-            deleteAndSynchronizeModel(buildJavaFilePath(jPackageLevel1))
-        }
     }
     
     @Test

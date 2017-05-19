@@ -29,8 +29,6 @@ import org.emftext.language.java.containers.CompilationUnit
  */
 class UmlToJavaHelper {
     
-    private val collectionDataTypes = #[ArrayList, LinkedList, HashSet]
-    
 	private new() {
 	}
     
@@ -90,16 +88,17 @@ class UmlToJavaHelper {
 	 * @return the selected name of the collection datatype by the user
 	 */
     def static letUserSelectCollectionTypeName(UserInteracting userInteracting) {
-    	var List<java.lang.Class<?>> collectionDataTypes = new ArrayList 
-		val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size)
-		for (collectionDataType : collectionDataTypes) {
-			collectionDataTypeNames.add(collectionDataType.name)
-		}
-		val String selectTypeMsg = "Select a Collectiontype for the association end"
-		val int selectedType = userInteracting.selectFromMessage(UserInteractionType.MODAL, selectTypeMsg,
-			collectionDataTypeNames)
-		val java.lang.Class<?> selectedClass = collectionDataTypes.get(selectedType)
-	    return selectedClass.name
+        var List<java.lang.Class<?>> collectionDataTypes = new ArrayList
+        collectionDataTypes += #[ArrayList, LinkedList, HashSet]
+        val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size)
+        for (collectionDataType : collectionDataTypes) {
+            collectionDataTypeNames.add(collectionDataType.name)
+        }
+        val String selectTypeMsg = "Select a Collectiontype for the association end"
+        val int selectedType = userInteracting.selectFromMessage(UserInteractionType.MODAL, selectTypeMsg,
+            collectionDataTypeNames)
+        val java.lang.Class<?> selectedClass = collectionDataTypes.get(selectedType)
+        return selectedClass.name
     }
     
     /**

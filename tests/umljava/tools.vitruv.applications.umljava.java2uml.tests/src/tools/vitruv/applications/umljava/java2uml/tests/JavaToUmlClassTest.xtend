@@ -13,8 +13,6 @@ import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.junit.After
-import org.emftext.language.java.containers.CompilationUnit
 
 class JavaToUmlClassTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
@@ -31,13 +29,6 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME);
     }
     
-    @After
-    def void after() {
-        if (jClass !== null) {
-            deleteAndSynchronizeModel(buildJavaFilePath(jClass.eContainer as CompilationUnit))
-        }
-    }
-
     @Test
     def void testCreateClass() {
         val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);

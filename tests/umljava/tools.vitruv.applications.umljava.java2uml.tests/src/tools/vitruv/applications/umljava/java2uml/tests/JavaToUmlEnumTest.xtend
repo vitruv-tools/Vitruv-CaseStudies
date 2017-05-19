@@ -14,9 +14,6 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.emftext.language.java.types.TypesFactory
-import org.junit.After
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import org.emftext.language.java.containers.CompilationUnit
 
 class JavaToUmlEnumTest extends Java2UmlTransformationTest {
     private static val ENUM_NAME = "EnumName"
@@ -35,13 +32,6 @@ class JavaToUmlEnumTest extends Java2UmlTransformationTest {
     @Before
     def void before() {
         jEnum = createJavaEnumWithCompilationUnit(ENUM_NAME, JavaVisibility.PUBLIC, enumConstants1)
-    }
-    
-    @After
-    def void after() {
-        if (jEnum !== null) {
-            deleteAndSynchronizeModel(buildJavaFilePath(jEnum.eContainer as CompilationUnit))
-        }
     }
     
     @Test
