@@ -40,9 +40,9 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
         
         val uOperation = getCorrespondingMethod(interfaceMethod)
         val uInterface = getCorrespondingInterface(jInterface)
-        assertUmlOperationTraits(uOperation, STANDARD_IOPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, false,
+        assertUmlOperationTraits(uOperation, STANDARD_IOPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false, true,
             uInterface, null)
-        assertMethodEquals(uOperation, interfaceMethod)
+        assertInterfaceMethodEquals(uOperation, interfaceMethod)
     }
      
     @Test
@@ -54,7 +54,7 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
         val uInterface = getCorrespondingInterface(jInterface)
         assertEquals(IOPERATION_RENAME, uOperation.name)
         assertUmlInterfaceDontHaveOperation(uInterface, IOPERATION_NAME)
-        assertMethodEquals(uOperation, jMeth)
+        assertInterfaceMethodEquals(uOperation, jMeth)
         
     }
     
@@ -76,7 +76,7 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
         val uOperation = getCorrespondingMethod(jMeth)
         val utypeClass = getCorrespondingClass(typeClass)
         assertUmlOperationHasReturntype(uOperation, utypeClass)
-        assertMethodEquals(uOperation, jMeth)
+        assertInterfaceMethodEquals(uOperation, jMeth)
     }
     
     @Test
@@ -87,6 +87,6 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
 
         val uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasUniqueParameter(uOperation, PARAMETER_NAME)
-        assertMethodEquals(uOperation, jMeth)
+        assertInterfaceMethodEquals(uOperation, jMeth)
     }
 }

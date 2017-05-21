@@ -61,7 +61,7 @@ class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
     }
     
     @Test @Ignore
-    def testDeletePackage() {//Delete or Refactoring java packages seems to lead to problems
+    def testDeletePackage() { //Delete or Refactoring java packages seems to lead to problems
         var jPackage = getCorrespondingPackage(uPackageLevel1)
         assertNotNull(jPackage)
         

@@ -46,6 +46,7 @@ public class CreateUmlInterfaceMethodRoutine extends AbstractRepairRoutineRealiz
     
     public void updateUOperationElement(final InterfaceMethod jMeth, final Interface jInterface, final org.eclipse.uml2.uml.Interface uInterface, final Operation uOperation) {
       uOperation.setName(jMeth.getName());
+      uOperation.setIsAbstract(true);
     }
   }
   

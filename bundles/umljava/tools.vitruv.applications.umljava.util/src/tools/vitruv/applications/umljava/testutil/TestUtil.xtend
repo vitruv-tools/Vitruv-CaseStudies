@@ -16,6 +16,7 @@ import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import org.emftext.language.java.modifiers.Abstract
 import org.emftext.language.java.types.Void
 import org.emftext.language.java.types.TypeReference
@@ -27,6 +28,9 @@ import org.emftext.language.java.members.EnumConstant
 import org.apache.log4j.Logger
 import org.emftext.language.java.containers.CompilationUnit
 import org.eclipse.uml2.uml.Model
+import org.emftext.language.java.members.InterfaceMethod
+import org.emftext.language.java.members.ClassMethod
+import org.eclipse.uml2.uml.VisibilityKind
 
 class TestUtil {
 	
@@ -102,7 +106,7 @@ class TestUtil {
 		assertEquals(uLiteral.name, jConstant.name)
 	}
 	
-	def static void assertMethodEquals(Operation uMethod, Method jMethod) {
+	def static void assertClassMethodEquals(Operation uMethod, ClassMethod jMethod) {
 		assertEquals(uMethod.name, jMethod.name)
 		assertStaticEquals(uMethod, jMethod)
 		assertFinalMethodEquals(uMethod, jMethod)
@@ -111,6 +115,18 @@ class TestUtil {
 		assertTypeEquals(uMethod.type, jMethod.typeReference)
 		assertParameterListEquals(uMethod.ownedParameters, jMethod.parameters)
 	}
+	
+	/**
+	 * For Methods without body
+	 * 
+	 */
+	def static void assertInterfaceMethodEquals(Operation uMethod, InterfaceMethod jMethod) {
+        assertEquals(uMethod.name, jMethod.name)
+        assertTrue(uMethod.abstract) //jMethod is always implicitly abstract
+        assertUmlNamedElementHasVisibility(uMethod, VisibilityKind.PUBLIC_LITERAL) //JMehod is always implicitly public
+        assertTypeEquals(uMethod.type, jMethod.typeReference)
+        assertParameterListEquals(uMethod.ownedParameters, jMethod.parameters)
+    }
 	
 	def static void assertStaticEquals(Feature uElement, AnnotableAndModifiable jElement) {
 		if (uElement.static) {

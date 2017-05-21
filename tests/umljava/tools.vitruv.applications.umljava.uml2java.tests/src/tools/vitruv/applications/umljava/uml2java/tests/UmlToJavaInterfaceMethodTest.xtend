@@ -56,9 +56,9 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
         
         val jMethod = getCorrespondingInterfaceMethod(interfaceMethod)
         val jInterface = getCorrespondingInterface(uI)
-        assertJavaMethodTraits(jMethod, STANDARD_IOPERATION_NAME, JavaVisibility.PUBLIC,
-        	TypesFactory.eINSTANCE.createVoid, false, false, null, jInterface)
-        assertMethodEquals(interfaceMethod, jMethod)
+        assertJavaInterfaceMethodTraits(jMethod, STANDARD_IOPERATION_NAME, 
+        	TypesFactory.eINSTANCE.createVoid, null, jInterface)
+        assertInterfaceMethodEquals(interfaceMethod, jMethod)
     }
      
     @Test
@@ -70,7 +70,7 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
         val jInterface = getCorrespondingInterface(uI)
         assertEquals(IOPERATION_RENAME, jMethod.name)
         assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
-        assertMethodEquals(op, jMethod)
+        assertInterfaceMethodEquals(op, jMethod)
     }
     
     @Test
@@ -90,7 +90,7 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
         val jMethod = getCorrespondingInterfaceMethod(op)
         val jTypeClass = getCorrespondingClass(typeClass)
         assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertMethodEquals(op, jMethod)
+        assertInterfaceMethodEquals(op, jMethod)
     }
         
     

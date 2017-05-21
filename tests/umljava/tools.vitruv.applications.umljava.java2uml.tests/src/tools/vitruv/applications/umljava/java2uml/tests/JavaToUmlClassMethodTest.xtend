@@ -71,7 +71,7 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         val uClass = getCorrespondingClass(jClass)
         assertUmlOperationTraits(uOperation, STANDARD_OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, 
             false, false, uClass, null)
-        assertMethodEquals(uOperation, meth)
+        assertClassMethodEquals(uOperation, meth)
     }
     
     /**
@@ -85,7 +85,7 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         val uOperation = getCorrespondingMethod(jMeth)
         val uTypeClass = getCorrespondingClass(typeClass)
         assertUmlOperationHasReturntype(uOperation, uTypeClass)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
     }
     
     /**
@@ -100,7 +100,7 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         val uClass = getCorrespondingClass(jClass)
         assertEquals(OPERATION_RENAME, uOperation.name)
         assertUmlClassHasUniqueOperation(uClass, OPERATION_RENAME)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
     }
     
     /**
@@ -128,14 +128,14 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         
         var uOperation = getCorrespondingMethod(jMeth)
         assertUmlFeatureHasStaticValue(uOperation, true)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
         
         jMeth.static = false
         saveAndSynchronizeChanges(jMeth)
         
         uOperation = getCorrespondingMethod(jMeth)
         assertUmlFeatureHasStaticValue(uOperation, false)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
         
     }
     
@@ -150,14 +150,14 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         
         var uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasAbstractValue(uOperation, true)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
         
         jMeth.abstract = false
         saveAndSynchronizeChanges(jMeth)
         
         uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasAbstractValue(uOperation, false)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
     }
     
     /**
@@ -171,14 +171,14 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         
         var uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasFinalValue(uOperation, true)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
         
         jMeth.final = false
         saveAndSynchronizeChanges(jMeth)
         
         uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasFinalValue(uOperation, false)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
     }
     
     /**
@@ -192,14 +192,14 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
         
         var uOperation = getCorrespondingMethod(jMeth)
         assertUmlNamedElementHasVisibility(uOperation, VisibilityKind.PROTECTED_LITERAL)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
         
         jMeth.makePrivate
         saveAndSynchronizeChanges(jMeth)
         
         uOperation = getCorrespondingMethod(jMeth)
         assertUmlNamedElementHasVisibility(uOperation, VisibilityKind.PRIVATE_LITERAL)
-        assertMethodEquals(uOperation, jMeth)
+        assertClassMethodEquals(uOperation, jMeth)
     }
 
     /**

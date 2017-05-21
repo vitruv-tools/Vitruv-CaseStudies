@@ -71,6 +71,7 @@ routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jI
     action {
         val uOperation = create uml::Operation and initialize {
             uOperation.name = jMeth.name;
+            uOperation.isAbstract = true;
         }
         add correspondence between uOperation and jMeth
         update uInterface {

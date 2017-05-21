@@ -23,6 +23,8 @@ import org.emftext.language.java.classifiers.Interface
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import java.util.List
 import org.emftext.language.java.modifiers.Abstract
+import org.emftext.language.java.members.InterfaceMethod
+import org.emftext.language.java.members.ClassMethod
 
 class JavaTestUtil {
 	
@@ -62,7 +64,7 @@ class JavaTestUtil {
 	    assertJavaModifiableHasVisibility(jInterface, visibility)
 	}
 	
-	def static void assertJavaMethodTraits(Method jMethod, String name, JavaVisibility visibility, 
+	def static void assertJavaClassMethodTraits(ClassMethod jMethod, String name, JavaVisibility visibility, 
 		TypeReference typeRef, boolean isStatic, boolean isAbstract, List<Parameter> parameterList,
 		ConcreteClassifier containedClassifier) {
 		assertEquals(name, jMethod.name)
@@ -72,6 +74,15 @@ class JavaTestUtil {
 		assertEquals(containedClassifier.name, (jMethod.eContainer as ConcreteClassifier).name)
 		assertJavaParameterListEquals(jMethod.parameters, parameterList)
 	}
+	
+	def static void assertJavaInterfaceMethodTraits(InterfaceMethod jMethod, String name,  
+        TypeReference typeRef, List<Parameter> parameterList, Interface containedInterface) {
+        assertEquals(name, jMethod.name)
+        assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PUBLIC)
+        assertJavaModifiableStatic(jMethod, false)
+        assertEquals(containedInterface.name, (jMethod.eContainer as Interface).name)
+        assertJavaParameterListEquals(jMethod.parameters, parameterList)
+    }
 	
 	def static void assertJavaParameterTraits(Parameter jParam, String name, TypeReference typeRef) {
 		assertEquals(name, jParam.name)

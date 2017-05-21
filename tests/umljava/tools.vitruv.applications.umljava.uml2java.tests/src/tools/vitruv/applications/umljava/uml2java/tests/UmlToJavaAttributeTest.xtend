@@ -145,3 +145,4 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
         assertAttributeEquals(uAttr, jAttr)
     }
 }
+		

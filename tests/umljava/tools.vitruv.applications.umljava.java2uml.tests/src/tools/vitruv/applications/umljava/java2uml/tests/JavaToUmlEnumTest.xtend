@@ -96,7 +96,7 @@ class JavaToUmlEnumTest extends Java2UmlTransformationTest {
         val uEnum = getCorrespondingEnum(jEnum)
         assertUmlOperationTraits(uOperation, OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, false,
             false, uEnum, null)
-        assertMethodEquals(uOperation, jMethod)
+        assertClassMethodEquals(uOperation, jMethod)
     }
     
     @Test

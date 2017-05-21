@@ -74,9 +74,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         val jMethod = getCorrespondingClassMethod(operation)
         val jClass = getCorrespondingClass(uClass)
         assertNotNull(jMethod)
-        assertJavaMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
+        assertJavaClassMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
         	TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
-        assertMethodEquals(operation, jMethod)
+        assertClassMethodEquals(operation, jMethod)
     }
     
     @Test
@@ -87,7 +87,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         val jMethod = getCorrespondingClassMethod(uOperation)
         val jTypeClass = getCorrespondingClass(typeClass)
         assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertMethodEquals(uOperation, jMethod)
+        assertClassMethodEquals(uOperation, jMethod)
     }
     
     @Test
@@ -98,7 +98,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         val jMethod = getCorrespondingClassMethod(uOperation)
         val jClass = getCorrespondingClass(uClass)
         assertEquals(OPERATION_RENAME, jMethod.name)
-        assertMethodEquals(uOperation, jMethod)
+        assertClassMethodEquals(uOperation, jMethod)
         assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
     }
     
@@ -118,7 +118,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableStatic(jMethod, true)
-        assertMethodEquals(uOperation, jMethod)
+        assertClassMethodEquals(uOperation, jMethod)
     }
     
     @Test
@@ -128,7 +128,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableFinal(jMethod, true)
-        assertMethodEquals(uOperation, jMethod)
+        assertClassMethodEquals(uOperation, jMethod)
     }
     
     @Test
@@ -138,7 +138,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableAbstract(jMethod, true)
-        assertMethodEquals(uOperation, jMethod)
+        assertClassMethodEquals(uOperation, jMethod)
     }
     
     @Test
@@ -148,14 +148,14 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         
         var jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PRIVATE)
-        assertMethodEquals(uOperation, jMethod)
+        assertClassMethodEquals(uOperation, jMethod)
         
         uOperation.visibility = VisibilityKind.PROTECTED_LITERAL;
         saveAndSynchronizeChanges(uOperation);
         
         jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
-        assertMethodEquals(uOperation, jMethod)
+        assertClassMethodEquals(uOperation, jMethod)
     }
     
     @Test
@@ -176,9 +176,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         val jMethod = getCorrespondingClassMethod(operation)
         val jClass = getCorrespondingClass(dataType)
         assertNotNull(jMethod)
-        assertJavaMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
+        assertJavaClassMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
             TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
-        assertMethodEquals(operation, jMethod)
+        assertClassMethodEquals(operation, jMethod)
     }
     
     @Test
