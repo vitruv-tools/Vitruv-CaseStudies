@@ -10,9 +10,14 @@ import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.junit.Test
 import org.junit.Before
 import org.junit.After
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.emftext.language.java.types.TypesFactory
 
+
+/**
+ * This class provides basic tests for creating, deleting and changing traits of interface methods.
+ * 
+ * @author Fei
+ */
 class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName";
     private static val TYPE_NAME = "TypeName";
@@ -20,28 +25,28 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
     private static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod";
     private static val IOPERATION_RENAME = "interfaceMethodRenamed";
     
-    private static var org.eclipse.uml2.uml.Interface uI;
+    private static var org.eclipse.uml2.uml.Interface uInterface;
     private static var org.eclipse.uml2.uml.Class typeClass;
-    private static var org.eclipse.uml2.uml.Operation op;
+    private static var org.eclipse.uml2.uml.Operation uOperation;
     
     @Before
     def void before() {
-        uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME);
-        op = createSimpleUmlOperation(IOPERATION_NAME);
-        uI.ownedOperations += op;
+        uInterface = createSimpleUmlInterface(rootElement, INTERFACE_NAME);
+        uOperation = createUmlInterfaceOperation(IOPERATION_NAME, null, null);
+        uInterface.ownedOperations += uOperation;
         typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
-        rootElement.packagedElements += uI;
+        rootElement.packagedElements += uInterface;
         rootElement.packagedElements += typeClass;
         saveAndSynchronizeChanges(rootElement);
     }
     
-    @After
+    //@After
     def void after() {
-        if (uI !== null) {
-            uI.destroy;
+        if (uInterface !== null) {
+            uInterface.destroy;
         }
-        if (op !== null) {
-            op.destroy;
+        if (uOperation !== null) {
+            uOperation.destroy;
         }
         if (typeClass !== null) {
             typeClass.destroy;
@@ -51,11 +56,12 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
     
     @Test
     def void testCreateInterfaceMethod() {
-        val interfaceMethod = uI.createOwnedOperation(STANDARD_IOPERATION_NAME, null, null, null)
-        saveAndSynchronizeChanges(uI);
+        val interfaceMethod = createUmlInterfaceOperation(STANDARD_IOPERATION_NAME, null, null)
+        uInterface.ownedOperations += interfaceMethod
+        saveAndSynchronizeChanges(uInterface);
         
         val jMethod = getCorrespondingInterfaceMethod(interfaceMethod)
-        val jInterface = getCorrespondingInterface(uI)
+        val jInterface = getCorrespondingInterface(uInterface)
         assertJavaInterfaceMethodTraits(jMethod, STANDARD_IOPERATION_NAME, 
         	TypesFactory.eINSTANCE.createVoid, null, jInterface)
         assertInterfaceMethodEquals(interfaceMethod, jMethod)
@@ -63,34 +69,35 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
      
     @Test
     def testRenameInterfaceMethod() {
-        op.name = IOPERATION_RENAME;
-        saveAndSynchronizeChanges(op);
+        uOperation.name = IOPERATION_RENAME;
+        saveAndSynchronizeChanges(uOperation);
         
-        val jMethod = getCorrespondingInterfaceMethod(op)
-        val jInterface = getCorrespondingInterface(uI)
+        val jMethod = getCorrespondingInterfaceMethod(uOperation)
+        val jInterface = getCorrespondingInterface(uInterface)
         assertEquals(IOPERATION_RENAME, jMethod.name)
         assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
-        assertInterfaceMethodEquals(op, jMethod)
+        assertInterfaceMethodEquals(uOperation, jMethod)
     }
     
     @Test
     def testDeleteInterfaceMethod() {
-        op.destroy;
+        assertNotNull(uOperation)
+        uOperation.destroy;
         saveAndSynchronizeChanges(rootElement);
         
-        val jInterface = getCorrespondingInterface(uI)
+        val jInterface = getCorrespondingInterface(uInterface)
         assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
     }
     
     @Test
     def testChangeInterfaceMethodReturnType() {
-        op.type = typeClass;
-        saveAndSynchronizeChanges(op);
+        uOperation.type = typeClass;
+        saveAndSynchronizeChanges(uOperation);
         
-        val jMethod = getCorrespondingInterfaceMethod(op)
+        val jMethod = getCorrespondingInterfaceMethod(uOperation)
         val jTypeClass = getCorrespondingClass(typeClass)
         assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertInterfaceMethodEquals(op, jMethod)
+        assertInterfaceMethodEquals(uOperation, jMethod)
     }
         
     

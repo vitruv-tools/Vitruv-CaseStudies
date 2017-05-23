@@ -15,6 +15,12 @@ import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.junit.After
 
+/**
+ * This Test class checks the creating, deleting and modifying of attributes in den uml to java
+ * direction.
+ * 
+ * @author Fei
+ */
 class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName";
     private static val ATTRIBUTE_RENAME = "attributeRenamed";

@@ -6,38 +6,32 @@ import org.junit.Test
 import java.io.File
 import org.apache.commons.io.FilenameUtils
 import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
-import org.junit.Ignore
 import java.util.List
 
 /**
  * Test class for the reconstruction of existing java models
  */
 class JavaConstructionSimulationTest extends Java2UmlTransformationTest {
-    
+       
     
     /**
      * Tests the files from the logger project by orhan obut
-     * https://github.com/orhanobut/logger
-     * 
-     * Add the "com" package of the testresource-folder to the src/ folder
-     * before you start the test, so the java files could be found on the class path 
-     * 
+     * https://github.com/orhanobut/logger (12.5.2017)
      */
-    @Test @Ignore("see javadoc")
+    @Test
     def void testOrhanobutLoggerProject() {
-        loadLoggerProjectIndividually("src/com", "com")
+        loadLoggerProjectIndividually("testresources/com", "com")
+        //Check junit workspace
     }
     
     /** Tests the (generated) files from "myproject" by suresh519
-     * https://github.com/orhanobut/logger
-     * 
-     * Add the files of the testresource-folder expect the com package folder to the src/ default package
-     * before you start the test, so the java files could be found on the class path 
-     * 
+     * https://repository.genmymodel.com/suresh519/MyProject (12.5.2017)
+     *
      */
-    @Test @Ignore("see javadoc")
+    @Test 
     def void testMyProject() {
-        loadMyProjectIndividually("src", "")
+        loadMyProjectIndividually("testresources", "")
+        //Check junit workspace
     }
     
     
@@ -114,8 +108,7 @@ class JavaConstructionSimulationTest extends Java2UmlTransformationTest {
     def private void loadFirstFileWithTheName(File[] fileList, String name) {
         val file = fileList.findFirst[it.name.equals(name)]
         if (file !== null && file.exists) {
-            val ress = getModelResource(URI.createFileURI(file.path))
-            val res = ress.allContents.head
+            val res = getModelResource(URI.createFileURI(file.path)).allContents.head
             createAndSynchronizeModel(file.path, res)
         }
     }

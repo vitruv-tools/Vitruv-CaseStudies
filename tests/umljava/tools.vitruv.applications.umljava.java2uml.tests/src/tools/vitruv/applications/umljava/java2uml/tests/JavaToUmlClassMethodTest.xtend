@@ -19,7 +19,7 @@ import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.parameters.OrdinaryParameter
 
 /**
- * A Test Class to test the class method reactions.
+ * A test class to test the class method reactions.
  * @author Fei
  */
 class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
@@ -42,9 +42,8 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
     private static var OrdinaryParameter jParam;
     
     /**
-     * initializes and synchronizes three classes. One class has two methods.
+     * Initializes and synchronizes three classes. One class has two methods.
      * One of the methods owns a parameter.
-     * 
      */
     @Before
     def void before() {

@@ -18,7 +18,7 @@ import org.emftext.language.java.types.TypesFactory
 /**
  * Util class with for Java-PrimitiveTypes and Java-String.
  * 
- * 
+ * @author Fei
  */
 class JavaStandardType {
     public static val BOOLEAN = "boolean";

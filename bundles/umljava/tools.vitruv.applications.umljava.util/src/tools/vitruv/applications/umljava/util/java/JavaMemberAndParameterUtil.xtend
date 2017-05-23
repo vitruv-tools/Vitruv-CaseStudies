@@ -27,6 +27,11 @@ import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.statements.Return
 
+/**
+ * A util class for field, method and parameter related util functions.
+ * 
+ * @author Fei
+ */
 class JavaMemberAndParameterUtil {
     private static val logger = Logger.getLogger(JavaMemberAndParameterUtil.simpleName)
     private new() {}
@@ -39,7 +44,16 @@ class JavaMemberAndParameterUtil {
     }
     
     /**
-     * return and params can be null
+     * Creates a new java class method with the given properties.
+     * The class method is not contained in any classifiers.
+     * 
+     * @param name the name of the class method
+     * @param returnType the return type of the class method
+     * @param visibility the visibility of the class method
+     * @param abstr if the class method should be abstract
+     * @param stat if the class method should be static
+     * @param params list of parameters for the class method
+     * @return the new class method
      */
     def static createJavaClassMethod(String name, TypeReference returnType, JavaVisibility visibility, boolean abstr, boolean stat, List<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createClassMethod;
@@ -55,7 +69,14 @@ class JavaMemberAndParameterUtil {
     
     
     /**
-     * Return an InterfaceMethod (public, not static, not abstract)
+     * Creates a new java interface method with the given properties.
+     * The interface method is not contained in any classifiers.
+     * The visibility of the interface method is set to public.
+     * 
+     * @param name the name of the interface method
+     * @param returnType return type of the interface method
+     * @param params list of parameters for the interface method
+     * @return the new interface method
      */
     def static createJavaInterfaceMethod(String name, TypeReference returnType, EList<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createInterfaceMethod;
@@ -66,6 +87,16 @@ class JavaMemberAndParameterUtil {
         return jMethod;
     }
     
+    /**
+     * Creates a new java attribute with the given properties.
+     * The attribute is not contained in any classifiers.
+     * 
+     * @param name the name of attribute
+     * @param visibility the visibility of the attribute
+     * @param fin if the attribute should be final
+     * @param stat if the attribute should be static
+     * @return the new attribute
+     */
     def static  createJavaAttribute(String name, TypeReference type, JavaVisibility visibility, boolean fin, boolean stat) {
         val jAttribute = MembersFactory.eINSTANCE.createField;
         setName(jAttribute, name)
@@ -98,7 +129,7 @@ class JavaMemberAndParameterUtil {
     }
     
     /**
-    * Adds a constructor to the class
+    * Creates and adds a constructor to the given class
     */
    def static Constructor addJavaConstructorToClass(Class jClass, JavaVisibility visibility, List<Parameter> params) {
        val constructor = MembersFactory.eINSTANCE.createConstructor
@@ -110,6 +141,13 @@ class JavaMemberAndParameterUtil {
        return constructor
    }
    
+   /**
+    * Creates a constructor with the given visibility and adds it to the given class.
+    * 
+    * @param jClass the class for which the constructor should be created
+    * @param visibility the visibility of the constructor
+    * @return the new constructor
+    */
    def static createJavaConstructorAndAddToClass(Class jClass, JavaVisibility visibility) {
         val constructor = MembersFactory.eINSTANCE.createConstructor
         constructor.name = jClass.name
@@ -127,20 +165,6 @@ class JavaMemberAndParameterUtil {
        return getterMethod
    }
    
-   /**
-    * @param visibility Visibility of the Setter
-    */
-   def static createJavaSetterForAttributeWithNullCheck(Field jAttribute, JavaVisibility visibility) {
-       val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference))
-       val setterMethod = createJavaClassMethod(buildSetterName(jAttribute.name), null, visibility, false, false, #[param])
-       val paramReference = createIdentifierReference(param)
-       val attributeAssignment = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment, EcoreUtil.copy(paramReference))
-       val assignmentStatement = wrapExpressionInExpressionStatement(attributeAssignment)
-       val ifCondition = createBinaryEqualityExpression(paramReference, OperatorsFactory.eINSTANCE.createNotEqual, LiteralsFactory.eINSTANCE.createNullLiteral)
-       val condition = createCondition(ifCondition, assignmentStatement, null)
-       setterMethod.statements += condition
-       return setterMethod
-   }
    
    /**
     * @param visibility Visibility of the Setter
@@ -160,14 +184,6 @@ class JavaMemberAndParameterUtil {
         }
     }
     
-    def static boolean constructorContainsAttributeSelfReferenceStatement(Constructor cons, Field jAttribute) {
-        if (cons.statements.nullOrEmpty || cons.statements.filter(ExpressionStatement).nullOrEmpty) {
-            return false
-        } else if (!cons.statements.filter(ExpressionStatement).filter[expressionHasAttributeSelfReference(it, jAttribute)].nullOrEmpty) {
-            return true
-        }
-        return false
-    }
  
     
     /**
@@ -250,7 +266,11 @@ class JavaMemberAndParameterUtil {
     }
     
     /**
-     * @param jAttributeWithOldName the Attribute with the old  Name
+     * Checks the containing class of the given attribute for existing setters with the old attribute name.
+     * Renames the setters to the new attribute name.
+     * 
+     * @param jAttributeWithOldName the Attribute with the new name
+     * @param the name of jAttribute before it was renamed
      */
     def static void renameSettersOfAttribute(Field jAttributeWithnewName, String oldName) {
         val setters = getJavaSettersOfAttribute(jAttributeWithnewName.containingConcreteClassifier, oldName)
@@ -260,7 +280,8 @@ class JavaMemberAndParameterUtil {
         
     }
     /**
-     * @param newName new Setter name without set-Prefix
+     * Renames the given setter so that it matches the name of the given attribute
+     * @param oldNaem new Setter name without set-Prefix
      */
     def static void renameSetter(ClassMethod setter, Field jAttribute, String oldName) {
         setter.name = buildSetterName(jAttribute.name)
@@ -295,6 +316,7 @@ class JavaMemberAndParameterUtil {
     }
     
     /**
+     * Renames all getters of the attribute that are contained in class of the attribute
      * 
      * @param jAttribute the attribute with the new name
      */
@@ -305,6 +327,7 @@ class JavaMemberAndParameterUtil {
     }
     
     /**
+     * Renames the given getter so that it matches the name of the given attribute
      * Assumption: standard getter that only returns the attribute
      */
     def static void renameGetterOfAttribute(ClassMethod getter, Field jAttribute) {
@@ -315,12 +338,20 @@ class JavaMemberAndParameterUtil {
         }
     }
     
+    /**
+     * Searches all getters of the given attribute in the same containing class
+     * and matches the return type of the getters to the type of the attribute.
+     * 
+     */
     def static void updateAttributeTypeInGetters(Field jAttribute) {
         for (getter : getJavaGettersOfAttribute(jAttribute)) {
             updateAttributeTypeInGetter(getter, jAttribute)
         }
     }
     
+    /**
+     * Updates the return type of the given getter to match the return type of the given attribute.
+     */
     def static void updateAttributeTypeInGetter(ClassMethod getter, Field jAttribute) {
         getter.typeReference = EcoreUtil.copy(jAttribute.typeReference)
     }

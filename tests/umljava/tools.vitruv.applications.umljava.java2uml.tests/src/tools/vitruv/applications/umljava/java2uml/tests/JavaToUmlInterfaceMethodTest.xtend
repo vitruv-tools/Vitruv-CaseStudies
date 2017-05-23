@@ -11,6 +11,12 @@ import org.junit.Test
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
 
+/**
+ * This class contains test cases for the creation, renaming and deleting of interface methods.
+ * Plus, it checks the change of parameters and return types of interface methods.
+ * 
+ * @author Fei
+ */
 class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName";
     private static val TYPE_NAME = "TypeName";

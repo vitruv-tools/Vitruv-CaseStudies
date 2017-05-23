@@ -17,7 +17,7 @@ reaction JavaAttributeCreatedInEnum {
     call createUmlAttributeInEnum(affectedEObject, newValue)
 }
 
-//UML-Enumeration and UMl-Class don't have a common superclass for "having ownedAttributes".
+//UML-Enumeration and UML-Class don't have a common superclass for "having ownedAttributes".
 //Therefore we implemented two separate routines
 routine createUmlAttributeInEnum(java::Enumeration jEnum, java::Field jAttr) {
     match {

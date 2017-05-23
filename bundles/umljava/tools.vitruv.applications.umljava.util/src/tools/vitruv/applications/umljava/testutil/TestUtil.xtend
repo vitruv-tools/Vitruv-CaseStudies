@@ -32,6 +32,10 @@ import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.ClassMethod
 import org.eclipse.uml2.uml.VisibilityKind
 
+/**
+ * Util class for assertions that works bidirectional.
+ * 
+ */
 class TestUtil {
 	
 	private static val logger = Logger.getLogger(TestUtil)
@@ -51,6 +55,9 @@ class TestUtil {
 		assertPackageEquals(uClass.namespace as org.eclipse.uml2.uml.Package, (jClass.eContainer as CompilationUnit).namespaces)
 	}
 	
+	/**
+     * Does not compare the methods and attributes of the interfaces
+     */
 	def static void assertInterfaceEquals(org.eclipse.uml2.uml.Interface uInterface, org.emftext.language.java.classifiers.Interface jInterface) {
 		assertEquals(uInterface.name, jInterface.name)
 		assertVisibilityEquals(uInterface, jInterface)
@@ -65,6 +72,9 @@ class TestUtil {
 		assertTypeEquals(uAttribute.type, jAttribute.typeReference)
 	}
 	
+	/**
+     * Does not compare the package contents
+     */
 	def static dispatch void assertPackageEquals(org.eclipse.uml2.uml.Package uPackage, org.emftext.language.java.containers.Package jPackage) {
 		assertEquals(uPackage.name, jPackage.name)
 	    assertEquals(getUmlParentNamespaceAsStringList(uPackage), jPackage.namespaces)
@@ -75,13 +85,16 @@ class TestUtil {
 	}
 	
 	def static dispatch void assertPackageEquals(Model uModel, java.lang.Void empty) {
-	    //Do Nothing, assertion passed
+	    //Do Nothing, assertion passed (Default package)
 	}
 	
 	def static dispatch void assertPackageEquals(Model uModel, List<String> list) {
         assertTrue(list.nullOrEmpty)
     }
 	
+	/**
+     * It does compare enum literals of the enums
+     */
 	def static void assertEnumEquals(org.eclipse.uml2.uml.Enumeration uEnum, org.emftext.language.java.classifiers.Enumeration jEnum) {
 		assertEquals(uEnum.name, jEnum.name)
 		assertVisibilityEquals(uEnum, jEnum)
@@ -106,6 +119,9 @@ class TestUtil {
 		assertEquals(uLiteral.name, jConstant.name)
 	}
 	
+	/**
+     * It does compare the parameter of the methods
+     */
 	def static void assertClassMethodEquals(Operation uMethod, ClassMethod jMethod) {
 		assertEquals(uMethod.name, jMethod.name)
 		assertStaticEquals(uMethod, jMethod)
@@ -117,7 +133,8 @@ class TestUtil {
 	}
 	
 	/**
-	 * For Methods without body
+	 * Interface methods = methods without body.
+	 * Also checks if uMethod is abstract.
 	 * 
 	 */
 	def static void assertInterfaceMethodEquals(Operation uMethod, InterfaceMethod jMethod) {

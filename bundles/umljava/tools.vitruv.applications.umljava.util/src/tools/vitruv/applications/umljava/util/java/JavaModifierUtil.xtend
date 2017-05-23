@@ -10,7 +10,8 @@ import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
 import org.apache.log4j.Logger
 
-/**Util class for java modifiers and visibilities.
+/**
+ * Util class for java modifiers and visibilities.
  * 
  * @author Fei
  */

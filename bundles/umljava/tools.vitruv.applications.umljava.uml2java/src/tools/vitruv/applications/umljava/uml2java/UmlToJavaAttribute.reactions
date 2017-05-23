@@ -2,7 +2,6 @@ import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
@@ -143,18 +142,9 @@ routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
         }
         call {
             if (uAttribute.lower == 1 && uAttribute.upper == 1) {
-                createJavaConstructor(jAttribute)
                 createJavaGetter(jAttribute)
-                createJavaSetterWithNullCheck(jAttribute)
+                createJavaSetter(jAttribute)
             }
-        }
-    }
-}
-
-routine createJavaConstructor(java::Field jAttribute) {
-    action {
-        call {
-            createNewForFieldInConstructor(jAttribute)
         }
     }
 }
@@ -169,11 +159,11 @@ routine createJavaGetter(java::Field jAttribute) {
     }
 }
 
-routine createJavaSetterWithNullCheck(java::Field jAttribute) {
+routine createJavaSetter(java::Field jAttribute) {
     action {
         call {
             if (!javaSetterForAttributeExists(jAttribute)) {
-                createSetterForAttributeWithNullCheck(jAttribute)
+                createSetterForAttribute(jAttribute)
             }
         }
     }

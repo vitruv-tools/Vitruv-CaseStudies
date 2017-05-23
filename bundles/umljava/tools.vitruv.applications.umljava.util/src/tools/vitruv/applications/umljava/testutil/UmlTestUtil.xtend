@@ -28,11 +28,20 @@ import static org.hamcrest.MatcherAssert.assertThat
 import org.eclipse.uml2.uml.internal.impl.LiteralIntegerImpl
 import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
 
+/**
+ * Class for assertions that only involves uml elements.
+ * 
+ * @author Fei
+ */
 class UmlTestUtil {
     private static val logger = Logger.getLogger(typeof(UmlTestUtil).simpleName)
     private new() {
     }
     
+    /**
+     * Asserts that the given class has the given traits. Does not check operations/attributes of the class.
+     * 
+     */
     def static void assertUmlClassTraits(Class uClass, String name, VisibilityKind visibility,
         boolean isAbstract, boolean isFinal, Package uPackage) {
         assertEquals(name, uClass.name)
@@ -42,6 +51,10 @@ class UmlTestUtil {
         assertUmlPackageableElementIsInPackage(uClass, uPackage)
     }
     
+    /**
+     * Asserts that the given interface has the given traits. Does not check operations/attributes of the interface.
+     * 
+     */
     def static void assertUmlInterfaceTraits(Interface uInterface, String name, VisibilityKind visibility,
         Package uPackage) {
         assertEquals(name, uInterface.name)
@@ -49,6 +62,11 @@ class UmlTestUtil {
         assertUmlPackageableElementIsInPackage(uInterface, uPackage)
     }
     
+    /**
+     * Asserts that the given enum has the given traits. Does not check operations/attributes of the enum.
+     * But it checks the enum literals if they are pairwise corresponding  to the given literals list (by name)
+     * 
+     */
     def static void assertUmlEnumTraits(Enumeration uEnum, String name, VisibilityKind visibility,
         boolean isAbstract, boolean isFinal, Package uPackage, List<EnumerationLiteral> enumLiteralList) {
         assertEquals(name, uEnum.name)
@@ -57,6 +75,10 @@ class UmlTestUtil {
         assertUmlEnumLiteralListEquals(enumLiteralList, uEnum.ownedLiterals)
     }
     
+    /**
+     * Asserts that the given property has the given traits.
+     * 
+     */
     def static void assertUmlPropertyTraits(Property uProperty, String name, VisibilityKind visibility,
         Type type, boolean isStatic, boolean isFinal, Classifier containingClassifier,
         ValueSpecification lowerMultiplicity,ValueSpecification upperMultiplicity) {
@@ -70,6 +92,10 @@ class UmlTestUtil {
         assertUmlValueSpecificationEquals(upperMultiplicity, uProperty.upperValue)
     }
     
+    /**
+     * Asserts that the given operation has the givven traits.
+     * 
+     */
     def static void assertUmlOperationTraits(Operation uOperation, String name, VisibilityKind visibility,
         Type returntype, boolean isStatic, boolean isAbstract, Classifier containingClassifier,
         List<Parameter> paramList) {
@@ -82,11 +108,20 @@ class UmlTestUtil {
         assertUmlParameterListEquals(paramList, uOperation.ownedParameters)
     }
     
+    /**
+     * Asserts that the given parameter has the givven traits.
+     * 
+     */
     def static void assertUmlParameterTraits(Parameter uParam, String name, Type type) {
         assertEquals(name, uParam.name)
         assertUmlTypedElementHasType(uParam, type)
     }
     
+    /**
+     * Asserts that the two given lists contain enum literals that correspond pairwise 
+     * by comparing their name
+     * 
+     */
     def static void assertUmlEnumLiteralListEquals(List<EnumerationLiteral> expectedList, List<EnumerationLiteral> actualList) {
         if (expectedList.nullOrEmpty) {
             assertTrue(actualList.nullOrEmpty)
@@ -101,7 +136,11 @@ class UmlTestUtil {
         }
         
     }
-        
+    /**
+     * Asserts that the two given lists contain parameters that correspond pairwise 
+     * by comparing their name
+     * 
+     */
     def static void assertUmlParameterListEquals(List<Parameter> expectedList, List<Parameter> actualList) {
         if (expectedList.nullOrEmpty) {
             if (!actualList.nullOrEmpty) {

@@ -41,7 +41,7 @@ class UmlToJavaHelper {
      * Creates Void if both Types are null
      * If none of the above cases apply, dType is a unknown type. it will create a Java-NamespaceClassifierReference
      * out of a dummy Java-Class with the name of dtype. The user will be requested to check
-     * these cirmucstances.
+     * these circumstances.
      * 
      * @param dType uml-DataType
      * @param cType java-ConcreteClassifier
@@ -121,15 +121,6 @@ class UmlToJavaHelper {
         (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += jSetter
     }
     
-    /**
-     * Creates a setter for the attribute which only set non-null values.
-     * 
-     * @param jAttribute the attribute for which a getter should be created
-     */
-    def static createSetterForAttributeWithNullCheck(Field jAttribute) {
-        val jSetter = createJavaSetterForAttributeWithNullCheck(jAttribute, JavaVisibility.PUBLIC)
-        (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += jSetter
-    }
     
     /**
      * Displays the given message with the userInteracting.

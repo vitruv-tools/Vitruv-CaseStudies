@@ -15,6 +15,12 @@ import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.emftext.language.java.types.TypesFactory
 
+/**
+ * This class contains Tests for creating, deleting and renaming enums.
+ * Furthermore there are test to check the adding of methods, attributes and enum constant to enums
+ * 
+ * @author Fei
+ */
 class JavaToUmlEnumTest extends Java2UmlTransformationTest {
     private static val ENUM_NAME = "EnumName"
     private static val ENUM_RENAME = "EnumRenamed"

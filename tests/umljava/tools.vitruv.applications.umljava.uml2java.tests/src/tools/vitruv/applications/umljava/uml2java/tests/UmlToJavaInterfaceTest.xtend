@@ -11,26 +11,31 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
+/**
+ * This class contains tests that deal with changes with interfaces.
+ * (creating, deleting, renaming,...)
+ * @author Fei
+ */
 class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName"
     private static val INTERFACE_RENAME = "InterfaceRename"
     private static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
     private static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
     private static val STANDARD_INTERFACE_NAME = "StandardInterfaceName"
-    private static var Interface uI
+    private static var Interface uInterface
     
     
     @Before
     def void before() {
-        uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
+        uInterface = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
         saveAndSynchronizeChanges(rootElement)
         
     }
     
    @After
     def void after() {
-        if (uI !== null) {
-            uI.destroy
+        if (uInterface !== null) {
+            uInterface.destroy
         }
         saveAndSynchronizeChanges(rootElement)
     }
@@ -47,18 +52,18 @@ class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
     
     @Test
     def testRenameInterface() {
-        uI.name = INTERFACE_RENAME;
-        saveAndSynchronizeChanges(uI);
+        uInterface.name = INTERFACE_RENAME;
+        saveAndSynchronizeChanges(uInterface);
         
         assertJavaFileExists(INTERFACE_RENAME, #[]);
-        val jInterface = getCorrespondingInterface(uI)
+        val jInterface = getCorrespondingInterface(uInterface)
         assertEquals(INTERFACE_RENAME, jInterface.name)
         assertJavaFileNotExists(INTERFACE_NAME, #[]);
     }
     
     @Test
     def testDeleteInterface() {
-        uI.destroy;
+        uInterface.destroy;
         saveAndSynchronizeChanges(rootElement);
         
         assertJavaFileNotExists(INTERFACE_NAME, #[]);
@@ -75,11 +80,11 @@ class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
     
     @Test
     def testRemoveSuperInterface() {
-        val uI = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
+        val uInterface = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
         saveAndSynchronizeChanges(rootElement)
-        uI.generalizations.remove(0);
+        uInterface.generalizations.remove(0);
         saveAndSynchronizeChanges(rootElement);
-        val jI = getCorrespondingInterface(uI)
+        val jI = getCorrespondingInterface(uInterface)
         assertTrue(jI.extends.size.toString, jI.extends.size == 1);
         assertEquals(SUPERINTERFACENAME_2, getClassifierFromTypeReference(jI.extends.get(0)).name)
         assertJavaFileExists(SUPERINTERFACENAME_1, #[]);
@@ -88,7 +93,7 @@ class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
 
     
     /**
-     * @return Das Interface namens iName, dass die anderen beiden SuperInterfaces superName1 & superName2 beerbt.
+     * @return an interface named iName which inherits from two other interfaces named superName1 an superName2
      */
     private def Interface createInterfaceWithTwoSuperInterfaces(String iName, String superName1, String superName2) {
         val super1 = createSimpleUmlInterface(rootElement, superName1);

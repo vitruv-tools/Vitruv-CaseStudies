@@ -21,6 +21,7 @@ import tools.vitruv.applications.umljava.util.java.JavaStandardType
 /**
  * Test class for testing the attribute reactions.
  * 
+ * @author Fei
  */
 class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName"

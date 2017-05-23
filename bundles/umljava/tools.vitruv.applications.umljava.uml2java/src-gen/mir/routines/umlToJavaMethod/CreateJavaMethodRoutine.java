@@ -32,6 +32,8 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
         } else {
           if ((uClassifier instanceof Interface)) {
             _routinesFacade.createJavaInterfaceMethod(((Interface)uClassifier), uOperation);
+          } else {
+            this.getLogger().warn((("Invalid creation of " + uOperation) + ", containing UML-Classifier is neither a Class, nor an Interface nor a DataType"));
           }
         }
       }

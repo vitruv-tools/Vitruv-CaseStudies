@@ -16,6 +16,11 @@ import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.emftext.language.java.types.TypesFactory
 
+/**
+ * A Test class to test class methods and its traits.
+ * 
+ * @author Fei
+ */
 class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     private static val CLASS_NAME = "ClassName";
     private static val TYPE_NAME = "TypeName";
@@ -32,6 +37,10 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     private static var org.eclipse.uml2.uml.PrimitiveType pType
     private static var Operation uOperation
     
+    /**
+     * Initializes two uml classes and a primitive type. One uml class contains 
+     * an operation with a parameter.
+     */
     @Before
     def void before() {
         uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
@@ -66,8 +75,12 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         saveAndSynchronizeChanges(rootElement);
     }
     
+    /**
+     * Tests if creating a uml operation also causes the creating of an corresponding
+     * java method.
+     */
     @Test
-    def void testCreateSimpleMethod() {
+    def void testCreateClassMethod() {
         val operation = uClass.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
         saveAndSynchronizeChanges(uClass);
         
@@ -79,6 +92,10 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertClassMethodEquals(operation, jMethod)
     }
     
+    /**
+     * Tests the change of the uml method return type. Checks if
+     * the corresponding java method adapated the corresponding type.
+     */
     @Test
     def void testChangeReturnType() {
         uOperation.type = typeClass;
@@ -90,6 +107,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertClassMethodEquals(uOperation, jMethod)
     }
     
+    /**
+     * Tests if renaming a method is correctly reflected on the java side.
+     */
     @Test
     def testRenameMethod() {
         uOperation.name = OPERATION_RENAME;
@@ -102,6 +122,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
     }
     
+    /**
+     * Tests if deleting a method is correctly reflected on the java side.
+     */
     @Test
     def testDeleteMethod() {
         uOperation.destroy;
@@ -111,6 +134,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
     }
     
+    /**
+     * Tests if setting a method static correctly reflected on the java side.
+     */
     @Test
     def testStaticMethod() {
         uOperation.isStatic = true;
@@ -121,6 +147,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertClassMethodEquals(uOperation, jMethod)
     }
     
+    /**
+     * Tests if setting a method final correctly reflected on the java side.
+     */
     @Test
     def testFinalMethod() {
         uOperation.isLeaf = true;
@@ -131,6 +160,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertClassMethodEquals(uOperation, jMethod)
     }
     
+    /**
+     * Tests if setting a method abstract is correctly reflected on the java side.
+     */
     @Test
     def testAbstractMethod() {
         uOperation.isAbstract = true;
@@ -141,6 +173,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertClassMethodEquals(uOperation, jMethod)
     }
     
+    /**
+     * Tests if visibility changes are propagated to the java method.
+     */
     @Test
     def testMethodVisibility() {
         uOperation.visibility = VisibilityKind.PRIVATE_LITERAL;
@@ -158,6 +193,10 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertClassMethodEquals(uOperation, jMethod)
     }
     
+    /**
+     * Tests the creation of a method that act as constructor and checks if a 
+     * constructor is created on the java side.
+     */
     @Test
     def testCreateConstructor() {
         val uConstr = createSimpleUmlOperation(uClass.name)
@@ -167,6 +206,9 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertNotNull(jConstr)
     }
     
+    /**
+     * Checks if method creating in datatypes is reflected in the corresponding java class.
+     */
     @Test
     def void testCreateMethodInDataType() {
         val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
@@ -181,6 +223,10 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
         assertClassMethodEquals(operation, jMethod)
     }
     
+    /**
+     * Tests the deletion of methods in data types and if the deletion is
+     * propagated to the java model.
+     */
     @Test
     def void testDeleteMethodInDataType() {
         val dataType = createUmlDataType(rootElement, DATATYPE_NAME)

@@ -92,9 +92,8 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     
     public void callRoutine1(final Property uAttribute, final Field jAttribute, final org.emftext.language.java.classifiers.Class jType, @Extension final RoutinesFacade _routinesFacade) {
       if (((uAttribute.getLower() == 1) && (uAttribute.getUpper() == 1))) {
-        _routinesFacade.createJavaConstructor(jAttribute);
         _routinesFacade.createJavaGetter(jAttribute);
-        _routinesFacade.createJavaSetterWithNullCheck(jAttribute);
+        _routinesFacade.createJavaSetter(jAttribute);
       }
     }
   }

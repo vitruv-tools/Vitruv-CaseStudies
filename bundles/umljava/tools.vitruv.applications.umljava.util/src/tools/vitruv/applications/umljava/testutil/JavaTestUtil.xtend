@@ -26,10 +26,18 @@ import org.emftext.language.java.modifiers.Abstract
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.ClassMethod
 
+/**
+ * Util class for assertions that only involves java elements.
+ * 
+ * @author Fei
+ */
 class JavaTestUtil {
 	
 	private new() {}
 	
+	/**
+	 * Asserts that the given java class has the given traits.
+	 */
 	def static void assertJavaClassTraits(Class jClass, String name, JavaVisibility visibility, 
 		boolean isAbstract, boolean isFinal) {
 	    assertEquals(name, jClass.name)
@@ -37,6 +45,9 @@ class JavaTestUtil {
 	    assertJavaModifiableFinal(jClass, isFinal)
 	    assertJavaModifiableAbstract(jClass, isAbstract)
 	}
+	/**
+     * Asserts that the given java enum has the given traits.
+     */
 	def static void assertJavaEnumTraits(Enumeration jEnum, String name, JavaVisibility visibility,
 		List<EnumConstant> constantsList) {
 		assertEquals(name, jEnum.name)
@@ -44,6 +55,9 @@ class JavaTestUtil {
 		assertJavaEnumConstantListEquals(constantsList, jEnum.constants)
 	}
 	
+	/**
+     * Asserts that the enum constants of both given lists correspond pairwise by name.
+     */
 	def static void assertJavaEnumConstantListEquals(List<EnumConstant> expectedList, List<EnumConstant> actualList) {
 		if (expectedList.nullOrEmpty) {
 		    assertTrue(actualList.nullOrEmpty)
@@ -58,12 +72,17 @@ class JavaTestUtil {
 		}
 		
 	}
-	
+	/**
+     * Asserts that the given java interface has the given traits.
+     */
 	def static void assertJavaInterfaceTraits(Interface jInterface, String name, JavaVisibility visibility) {
 	    assertEquals(name, jInterface.name)
 	    assertJavaModifiableHasVisibility(jInterface, visibility)
 	}
 	
+	/**
+     * Asserts that the given java class method has the given traits.
+     */
 	def static void assertJavaClassMethodTraits(ClassMethod jMethod, String name, JavaVisibility visibility, 
 		TypeReference typeRef, boolean isStatic, boolean isAbstract, List<Parameter> parameterList,
 		ConcreteClassifier containedClassifier) {
@@ -75,6 +94,11 @@ class JavaTestUtil {
 		assertJavaParameterListEquals(jMethod.parameters, parameterList)
 	}
 	
+	/**
+     * Asserts that the given java interface method has the given traits.
+     * Asserts that the given interface method has public visibility.
+     * Asserts that the given interface method is not static.
+     */
 	def static void assertJavaInterfaceMethodTraits(InterfaceMethod jMethod, String name,  
         TypeReference typeRef, List<Parameter> parameterList, Interface containedInterface) {
         assertEquals(name, jMethod.name)
@@ -84,12 +108,17 @@ class JavaTestUtil {
         assertJavaParameterListEquals(jMethod.parameters, parameterList)
     }
 	
+	/**
+     * Asserts that the given java parameter has the given traits.
+     */
 	def static void assertJavaParameterTraits(Parameter jParam, String name, TypeReference typeRef) {
 		assertEquals(name, jParam.name)
 		assertJavaElementHasTypeRef(jParam, typeRef)
 	}
 	
-
+    /**
+     * Asserts that the parameter in both given lists correspond pairwise by name.
+     */
 	def static void assertJavaParameterListEquals(List<Parameter> expectedList, List<Parameter> actualList) {
 	    if (expectedList.nullOrEmpty) {
 	        assertTrue(actualList.nullOrEmpty)
@@ -105,7 +134,9 @@ class JavaTestUtil {
 	    }
 	}
 	
-	
+	/**
+     * Asserts that the given java field has the given traits.
+     */
 	def static void assertJavaAttributeTraits(Field jAttribute, String name, JavaVisibility visibility, 
 		TypeReference typeRef, boolean isFinal, boolean isStatic, ConcreteClassifier containedClassifier) {
 		assertEquals(name, jAttribute.name)
@@ -179,13 +210,24 @@ class JavaTestUtil {
         assertFalse(modifiable.hasModifier(mod))
     }
     
+    /**
+     * Asserts that a member container (class, interface, enum) does not contain an element
+     * with the given name.
+     */
     def static void assertJavaMemberContainerDontHaveMember(MemberContainer memContainer, String name) {
     	assertTrue(memContainer.getMembersByName(name).nullOrEmpty)
     }
     
+    /**
+     * Asserts that an enum has a constant with the given name.
+     */
     def static void assertJavaEnumHasConstant(Enumeration jEnum, String constantName) {
     	assertNotNull(jEnum.getContainedConstant(constantName))
     }
+    
+    /**
+     * Asserts that an enum does not have a constant with the given name.
+     */
     def static void assertJavaEnumDontHaveConstant(Enumeration jEnum, String constantName) {
     	assertNull(jEnum.getContainedConstant(constantName))
     }
@@ -207,8 +249,7 @@ class JavaTestUtil {
     }
     
     /**
-     * @param jMethod Java-Method
-     * @param param Java-Parameter
+     * Asserts that a given method has exactly one parameter with the given name and the given type.
      */
     def static void assertJavaMethodHasUniqueParameter(Method jMethod, String paramName, TypeReference paramTypeRef) {
         assertFalse(jMethod.parameters.nullOrEmpty);
@@ -219,13 +260,16 @@ class JavaTestUtil {
         assertJavaElementHasTypeRef(paramToVerify, paramTypeRef)
     }
     
+    /**
+     * Asserts that a method does not have a parameter with the given name.
+     */
     def static void assertJavaMethodDontHaveParameter(Method jMethod, String paramName) {
     	assertTrue(jMethod.parameters.filter[it.name == paramName].nullOrEmpty)
     }
     
     /**
-     * @param jMem Java-TypedElement (Attribute, Method, Parameter)
-     * @param uType Uml-Type
+     * Asserts that a TypedElement (parameter, attribute, method)
+     * has the given type reference
      */
     def static void assertJavaElementHasTypeRef(TypedElement jTypedElement, TypeReference typeRef) {
         assertTypeEquals(typeRef, jTypedElement.typeReference)
@@ -236,6 +280,7 @@ class JavaTestUtil {
     }
     
     /**
+     * Asserts that the given childClass has the given superclass by checking their names.
      * @param childClass Java Child class
      * @param superClass Java Super class
      */

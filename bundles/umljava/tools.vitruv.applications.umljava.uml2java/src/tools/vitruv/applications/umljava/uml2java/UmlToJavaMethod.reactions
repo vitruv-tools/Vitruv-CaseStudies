@@ -41,6 +41,8 @@ routine createJavaMethod(uml::Classifier uClassifier, uml::Operation uOperation)
                 createJavaClassMethod(uClassifier, uOperation)
             } else if (uClassifier instanceof org.eclipse.uml2.uml.Interface) {
                 createJavaInterfaceMethod(uClassifier, uOperation)
+            } else {
+                logger.warn("Invalid creation of " + uOperation + ", containing UML-Classifier is neither a Class, nor an Interface nor a DataType")
             }
         }
     }
@@ -306,6 +308,8 @@ routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
 
 reaction UmlParameterDirectionChanged {
     after attribute replaced at uml::Parameter[direction]
+    with (newValue == ParameterDirectionKind.RETURN_LITERAL)
+    || (newValue == ParameterDirectionKind.IN_LITERAL)
     call adaptJavaParametertoDirectionChange(affectedEObject.operation, affectedEObject, oldValue, newValue)
 }
 
@@ -337,6 +341,13 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
 //===========================================
 //=========================================== Unsupported
 //===========================================
+
+reaction UmlParameterDirectionKindChangedInvalid {
+    after attribute replaced at uml::Parameter[direction]
+    with (newValue !== ParameterDirectionKind.RETURN_LITERAL)
+    && (newValue !== ParameterDirectionKind.IN_LITERAL)
+    call showMessage(userInteracting, "The ParameterDirectionKind " + newValue + " is not supported")
+}
 
 reaction UmlInterfaceMethodVisibilityChanged {
     after attribute replaced at uml::Operation[visibility]

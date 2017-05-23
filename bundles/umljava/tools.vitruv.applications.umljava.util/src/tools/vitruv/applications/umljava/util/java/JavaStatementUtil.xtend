@@ -1,23 +1,15 @@
 package tools.vitruv.applications.umljava.util.java
 
-import java.util.ArrayList
-import java.util.List
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.expressions.AssignmentExpressionChild
 import org.emftext.language.java.expressions.Expression
 import org.emftext.language.java.expressions.ExpressionsFactory
-import org.emftext.language.java.instantiations.InstantiationsFactory
-import org.emftext.language.java.instantiations.NewConstructorCall
 import org.emftext.language.java.literals.LiteralsFactory
 import org.emftext.language.java.literals.This
-import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.operators.AssignmentOperator
-import org.emftext.language.java.operators.OperatorsFactory
-import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.references.IdentifierReference
 import org.emftext.language.java.references.ReferenceableElement
 import org.emftext.language.java.references.ReferencesFactory
@@ -25,9 +17,6 @@ import org.emftext.language.java.references.SelfReference
 import org.emftext.language.java.statements.ExpressionStatement
 import org.emftext.language.java.statements.Return
 import org.emftext.language.java.statements.StatementsFactory
-import org.emftext.language.java.types.TypeReference
-import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import org.emftext.language.java.statements.Statement
 import org.emftext.language.java.statements.Condition
 import org.emftext.language.java.expressions.EqualityExpressionChild
@@ -70,112 +59,7 @@ class JavaStatementUtil {
         return selfReference
     }
     
-    def static NewConstructorCall createNewConstructorCall(Field jAttribute, 
-        Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
-        val newConstructorCall = InstantiationsFactory.eINSTANCE.createNewConstructorCall
-        newConstructorCall.typeReference = EcoreUtil.copy(jAttribute.typeReference)
-        updateArgumentsOfConstructorCall(jAttribute, fieldsToUseAsArgument, parametersToUseAsArgument, newConstructorCall)
-        
-        return newConstructorCall
-    }
-    
-   /**
-    * 
-    * (taken from tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils, but modified)
-    */
-   def static createNewForFieldInConstructor(Field jAttribute) {
-        val classifier = jAttribute.containingConcreteClassifier
-        if (classifier === null) {
-            return null
-        }
-        val jClass = classifier as Class
-
-        if (jClass.members.filter(Constructor).nullOrEmpty) {
-            createJavaConstructorAndAddToClass(jClass, JavaVisibility.PUBLIC)
-        }
-        for (constructor : jClass.members.filter(Constructor)) {
-            if (!constructorContainsAttributeSelfReferenceStatement(constructor, jAttribute)) {
-                addNewStatementToConstructor(constructor, jAttribute, jClass.fields, constructor.parameters)
-            }
-        }
-    }
    
-   /**
-    * (taken from tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils, but modified)
-    */
-   def static addNewStatementToConstructor(Constructor constructor, Field jAttribute,
-        Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
-        val selfReference = createSelfReferenceToAttribute(jAttribute)
-        val newConstructorCall = createNewConstructorCall(jAttribute, fieldsToUseAsArgument, parametersToUseAsArgument)
-        val assignment = createAssignmentExpression(selfReference, 
-            OperatorsFactory.eINSTANCE.createAssignment, newConstructorCall)
-        constructor.statements += wrapExpressionInExpressionStatement(assignment)
-        return newConstructorCall
-    }
-    
-    /**
-     * 
-     * Updates the Arguments of a Constructor Call of a given field inside a constructor A. First, it retrieves
-     * the constructor B of the type of the field. Then it tries to match the needed parameter
-     * of this constructor B with the parameter of the constructor A by their type. The parameters of the 
-     * constructor A is given by parametersToUseAsArguments. If there is a match, the parameterToUseAsArgument
-     * will be used as argument for the needed parameters. Otherwise it will try to match the needed parameters
-     * with the given fieldsToUseAsArguments.
-     * If no match could could be found, the needed Parameters becomes null.
-     * 
-     * constructorA (parametersToUseAsArguments) {
-     *     this.jAttribute = new ConstructorB(neededParameters);
-     * }
-     * 
-     * (taken from tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils)
-     * 
-     * @param jAttribute the field
-     */
-    def static void updateArgumentsOfConstructorCall(Field jAttribute, Field[] fieldsToUseAsArgument,
-        Parameter[] parametersToUseAsArgument, NewConstructorCall newConstructorCall) {
-        val List<TypeReference> typeListForConstructor = new ArrayList<TypeReference>
-        val classifierOfAttributeType = getClassifierFromTypeReference(jAttribute.typeReference)
-        if (classifierOfAttributeType !== null) {
-            val constructorListOfClass = (classifierOfAttributeType as Class).members.filter(Constructor)
-            if (!constructorListOfClass.nullOrEmpty) {
-                val firstConstructor = constructorListOfClass.head
-                for (constructorParam : firstConstructor.parameters) {
-                    typeListForConstructor += constructorParam.typeReference
-                }
-            }
-        }
-        for (typeRef : typeListForConstructor) {
-            val refElement = typeRef.findMatchingTypeInParametersOrFields(fieldsToUseAsArgument,
-                parametersToUseAsArgument)
-            if (refElement !== null) {
-                val identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-                identifierReference.target = refElement
-                newConstructorCall.arguments += identifierReference
-            } else {
-                newConstructorCall.arguments += LiteralsFactory.eINSTANCE.createNullLiteral
-            }
-        }
-    }
-    
-    
-    /**
-     * 
-     * (taken from tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils)
-     */
-    def static ReferenceableElement findMatchingTypeInParametersOrFields(TypeReference typeReferenceToFind,
-        Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
-        for (parameter : parametersToUseAsArgument) {
-            if (typeReferenceEquals(typeReferenceToFind, parameter.typeReference)) {
-                return parameter
-            }
-        }
-        for (field : fieldsToUseAsArgument) {
-            if (typeReferenceEquals(typeReferenceToFind, field.typeReference)) {
-                return field
-            }
-        }
-        return null
-    }
     
     /**
      * Creates leftSide <AssignmentOperator> rightSide

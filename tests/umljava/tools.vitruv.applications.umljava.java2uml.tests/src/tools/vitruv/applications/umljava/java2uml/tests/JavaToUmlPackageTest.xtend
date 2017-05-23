@@ -11,6 +11,12 @@ import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.eclipse.uml2.uml.Package
 
+
+/**
+ * This class contains basis tests for java packages.
+ * 
+ * @author Fei
+ */
 class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     
     private static val PACKAGE_LEVEL_1 = "level1"

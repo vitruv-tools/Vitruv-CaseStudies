@@ -32,6 +32,11 @@ import org.emftext.language.java.members.Member
 import org.emftext.language.java.parameters.Parameter
 import java.util.ArrayList
 
+/**
+ * Class for java classifier, package and compilation unit util functions
+ * 
+ * @author Fei
+ */
 class JavaContainerAndClassifierUtil {
     private static val logger = Logger.getLogger(JavaContainerAndClassifierUtil.simpleName)
     private new() {
@@ -39,7 +44,14 @@ class JavaContainerAndClassifierUtil {
     }
     
     /**
-     * The created Class is not contained in a compilationunit.
+     * Creates and return a  new java class with the given name, visibility and modifiers
+     * The new class is not contained in a compilation unit.
+     * 
+     * @param name the name of the class
+     * @param visibility the visibility of the class
+     * @param abstr if the class should be abstract
+     * @param fin if the class should be final
+     * @return the new class with the given attributes
      */
     def static createJavaClass(String name, JavaVisibility visibility, boolean abstr, boolean fin) {
         val jClass = ClassifiersFactory.eINSTANCE.createClass;
@@ -50,7 +62,13 @@ class JavaContainerAndClassifierUtil {
 
         return jClass;
     }
-    
+    /**
+     * Creates a new java package
+     * 
+     * @param name the name of the new package
+     * @param containingPackage the super package of the new package or null if it is the default package
+     * @return the new package
+     */
     def static createJavaPackage(String name, Package containingPackage) {
         val jPackage = ContainersFactory.eINSTANCE.createPackage
         setName(jPackage, name)
@@ -59,7 +77,12 @@ class JavaContainerAndClassifierUtil {
     }
     
     /**
-     * The created Interface is not contained in a compilationunit.
+     * Creates a new java interface with the given name and list of super interfaces
+     * The created interface is not contained in a compilation unit.
+     * 
+     * @param name the name of the interface
+     * @param superInterfaces the superinterfaces of the interface
+     * @return the new interface
      */
     def static createJavaInterface(String name, List<Interface> superInterfaces) {
         val jInterface = ClassifiersFactory.eINSTANCE.createInterface;
@@ -72,7 +95,13 @@ class JavaContainerAndClassifierUtil {
     }
     
     /**
+     * Creats a new java enum with the given properties
      * The created Enum is not contained in a compilationunit.
+     * 
+     * @param name the name of the enum
+     * @param visibility the visibility of the enum
+     * @param constantsList list of enum constants for the enum
+     * @return the new enum
      */
     def static createJavaEnum(String name, JavaVisibility visibility, List<EnumConstant> constantsList) {
         val jEnum = ClassifiersFactory.eINSTANCE.createEnumeration;
@@ -82,6 +111,10 @@ class JavaContainerAndClassifierUtil {
         return jEnum;
     }
     
+    /**
+     * Add constantList to the enum constants of the given jEnum if constantsList is not null or empty
+     * 
+     */
     def static addEnumConstantIfNotNull(Enumeration jEnum, List<EnumConstant> constantsList) {
         if (!constantsList.nullOrEmpty) {
             jEnum.constants.addAll(constantsList)
@@ -89,7 +122,12 @@ class JavaContainerAndClassifierUtil {
     }
     
     /**
-     * The Method automatically sets the .java FileExtension
+     * Creates a java compilation unit with the given naem
+     * The method automatically sets the .java FileExtension for the compilation unit name
+     * There are no classifiers in the compilation unit yet.
+     * 
+     * @param nameWithoutFileExtension the name without .java file extension
+     * @return the new compilation unit
      */
     def static createEmptyCompilationUnit(String nameWithoutFileExtension) {
         val cu = ContainersFactory.eINSTANCE.createCompilationUnit
@@ -132,10 +170,10 @@ class JavaContainerAndClassifierUtil {
     }
         
     /**
-     * Entfernt alle Classifier von Iterator anhand des Namens.
+     * Removes all classifiers of the iterator which has the same name as the given classifier classif
      * 
-     * @param iter Iterator über eine Liste von TypeReferences
-     * @param classif Klasse oder Interface, das entfernt werden soll
+     * @param iter iterator of typreferences
+     * @param classif classifier that shoud be removed from the iterator
      */
     def static removeClassifierFromIterator(Iterator<TypeReference> iter, ConcreteClassifier classif) {
         while (iter.hasNext) {
@@ -146,6 +184,11 @@ class JavaContainerAndClassifierUtil {
         }
     }
     
+    /**
+     * For org.example.package it will return [org, example, package]
+     * Returns empty list if jPackage is the default package.
+     * 
+     */
     def static getJavaPackageAsStringList(Package jPackage) {
        if (jPackage === null || jPackage.name.nullOrEmpty) { //Defaultpackage
            return Collections.<String>emptyList()
@@ -193,6 +236,10 @@ class JavaContainerAndClassifierUtil {
         return file
     }
     
+    /**
+     * Returns the namespace of the compilation unit where the given object is directly or indirectly contained
+     * 
+     */
     def static dispatch List<String> getJavaNamespace(CompilationUnit compUnit) {
         return compUnit.namespaces
     }

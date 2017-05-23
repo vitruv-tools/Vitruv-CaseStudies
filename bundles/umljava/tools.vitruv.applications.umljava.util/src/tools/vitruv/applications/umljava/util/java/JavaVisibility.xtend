@@ -5,6 +5,7 @@ package tools.vitruv.applications.umljava.util.java
  * enum because the java metamodell does not have a explicit value for
  * "package-private". 
  * 
+ * @author Fei
  */
 enum JavaVisibility {
     PUBLIC, PRIVATE, PROTECTED, PACKAGE

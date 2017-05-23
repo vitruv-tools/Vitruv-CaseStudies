@@ -15,6 +15,11 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
 import org.eclipse.uml2.uml.ParameterDirectionKind
 
+/**
+ * This class tests the change of parameter traits.
+ * 
+ * @author Fei
+ */
 class UmlToJavaParameterTest extends Uml2JavaTransformationTest {
     private static val CLASS_NAME = "ClassName";
     private static val TYPE_NAME = "TypeName";

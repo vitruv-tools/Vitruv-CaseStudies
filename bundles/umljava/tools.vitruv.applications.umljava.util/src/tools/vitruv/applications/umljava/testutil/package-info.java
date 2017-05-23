@@ -1,5 +1,5 @@
 /**
- * Util Klassen für Testfälle
+ * This package contains assertion functions for the tests and the abstract super class for all tests.
  * @author Fei
  *
  */

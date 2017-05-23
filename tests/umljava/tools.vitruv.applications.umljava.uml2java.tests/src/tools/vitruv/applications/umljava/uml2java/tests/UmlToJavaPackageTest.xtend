@@ -10,6 +10,11 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.After
 import org.junit.Ignore
 
+/**
+ * This test class contains basic test cases for package creation, renaming and deletion.
+ * 
+ * @author Fei
+ */
 class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
     private static val PACKAGE_LEVEL_1 = "level1"
     private static val PACKAGE_LEVEL_2 = "level2"

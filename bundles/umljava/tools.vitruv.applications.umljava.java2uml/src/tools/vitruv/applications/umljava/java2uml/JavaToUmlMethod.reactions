@@ -251,7 +251,7 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
 
 //===========================================
 //=========================================== General
-//===========================================
+//=========================================== 
 
 reaction JavaElementVisibilityChanged {
     after element java::Modifier created and inserted in java::AnnotableAndModifiable[annotationsAndModifiers]
@@ -297,6 +297,12 @@ routine renameUmlNamedElement(java::NamedElement jElement) {
 //===========================================
 //=========================================== Unsupported
 //===========================================
+
+//An interface can theoretically have static, non-abstract methods
+reaction JavaClassMethodCreatedInInterface {
+    after element java::ClassMethod created and inserted in java::Interface[members]
+    call showMessage(userInteracting, "ClassMethods are currently not supported in Interfaces. Please delete " + newValue)
+}
 
 reaction JavaParameterMadeFinal {
     after element java::Final created and inserted in java::Parameter[annotationsAndModifiers]

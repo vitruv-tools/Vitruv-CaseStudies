@@ -11,6 +11,12 @@ import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
 
+/**
+ * A Test class for interface tests. Checks their creation, renaming, deleting and the 
+ * change of their super interfaces.
+ * 
+ * @author Fei
+ */
 class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
     private static val INTERFACE_NAME = "InterfaceName"
     private static val INTERFACE_RENAME = "InterfaceRename"

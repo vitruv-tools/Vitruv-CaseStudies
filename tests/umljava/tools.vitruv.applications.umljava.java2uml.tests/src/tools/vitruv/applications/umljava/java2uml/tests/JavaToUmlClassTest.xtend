@@ -14,6 +14,11 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
 
+/**
+ * A Test class to test classes and their traits.
+ * 
+ * @author Fei
+ */
 class JavaToUmlClassTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME = "ClassName";
     private static val STANDARD_CLASS_NAME = "StandardClassName";
@@ -29,6 +34,9 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME);
     }
     
+    /**
+     * Tests if a corresponding java class is created when an uml class is created.
+     */
     @Test
     def void testCreateClass() {
         val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);
@@ -38,6 +46,9 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         assertClassEquals(uClass, cls)
     }
     
+    /**
+     * Tests if renaming a java class also renames the corresponding uml class.
+     */
     @Test
     def testRenameClass() {
         jClass.name = CLASS_RENAMED;
@@ -48,6 +59,10 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         assertClassEquals(uClass, jClass)
     }
     
+    /**
+     * Tests if deleting a java class also cause the deleting of the corresponding
+     * uml class.
+     */
     @Test
     def testDeleteClass() {
         assertNotNull(getCorrespondingClass(jClass))
@@ -60,6 +75,10 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         assertNull(uClass)
     }
     
+    /**
+     * Tests if deleting a java compilation unit also cause the deleting of the corresponding
+     * uml class.
+     */
     @Test
     def testDeleteCompilationUnit() {
         val compUnitFilePath = buildJavaFilePath(jClass.containingCompilationUnit)
@@ -69,6 +88,9 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).nullOrEmpty)
     }
     
+    /**
+     * Checks if visibility changes are propagated to the uml class.
+     */
     @Test
     def testChangeClassVisibility() {
         jClass.makeProtected;
@@ -86,6 +108,9 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
         assertClassEquals(uClass, jClass)
     }
     
+    /**
+     * Tests the change of the abstract value in uml.
+     */
    @Test
    def testChangeAbstractClass() {
        jClass.abstract = true
@@ -103,6 +128,10 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
        assertClassEquals(uClass, jClass)
    }
    
+   /**
+     * Checks if the changing the final value in the java class
+     * causes the correct change in the uml class.
+     */
    @Test
    def testChangeFinalClass() {
        jClass.final = true
@@ -120,6 +149,9 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
        assertClassEquals(uClass, jClass)
    }
    
+   /**
+     * Tests if add a super class is correctly reflected on the uml side.
+     */
    @Test
    def testSuperClassChanged() {
        val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME);
@@ -133,7 +165,9 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
        
        
    }
-   
+   /**
+    * Tests if removing a super class is reflected on the uml side.
+    */
    @Test
    def testRemoveSuperClass() {
        val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME)
@@ -150,6 +184,9 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
        assertUmlClassifierDontHaveSuperClassifier(uClass, uSuperClass)
    }
    
+   /**
+    * Check the creation of an interface implementation on the uml side.
+    */
    @Test
    def testAddClassImplement() {
        val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME);
@@ -162,6 +199,9 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
        assertClassEquals(uClass, jClass)
    }
    
+   /**
+    * Tests if Removing an implementation relation is correctly reflected on the java side.
+    */
    @Test
    def testRemoveClassImplement() {
        val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)

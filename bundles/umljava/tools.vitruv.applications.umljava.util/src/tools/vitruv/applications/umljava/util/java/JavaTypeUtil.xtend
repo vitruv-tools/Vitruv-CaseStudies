@@ -19,6 +19,10 @@ import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.types.ClassifierReference
 
+/**
+ * Class for type and typereference util function
+ * @author Fei
+ */
 class JavaTypeUtil {
     
     private static val logger = Logger.getLogger(JavaTypeUtil.simpleName)
@@ -45,7 +49,8 @@ class JavaTypeUtil {
     }
     
     /**
-     * Verpackt ein Java-ConcreteClassifier in ein NamespaceClassifierReference
+     * Wraps a copy of the given concreteClassifier into a ClassfierReference which is then wrapped into a namespaceClassifierReference
+     * @throws IllegalArgumentException if concreteCLassifier is null
      */
     def static NamespaceClassifierReference createNamespaceReferenceFromClassifier(ConcreteClassifier concreteClassifier) {
         if (concreteClassifier === null) {
@@ -58,6 +63,11 @@ class JavaTypeUtil {
         return namespaceClassifierReference
     }
     
+    /**
+     * 
+     * @return the classifier that is wrapped in the typeref. Returns null if the type reference does not contain
+     *          any classifier
+     */
     def static Classifier getClassifierFromTypeReference(TypeReference typeRef) {
         val type = getJavaTypeFromTypeReference(typeRef)
         if (type instanceof Classifier) {
@@ -68,6 +78,10 @@ class JavaTypeUtil {
         }
     }
     
+    /**
+     * Unwraps the type reference and returns the contained type.
+     * 
+     */
     def static dispatch Type getJavaTypeFromTypeReference(TypeReference typeRef) {
         logger.warn(typeRef + " is neither a NamespaceClassifierReference nor a PrimitiveType. Returning null.")
         return null
@@ -106,6 +120,12 @@ class JavaTypeUtil {
         }
     }
     
+    /**
+     * Compares two type references. Both type references must be primitive types or
+     * namespaceclassifierreferences or null.
+     * If they are primitive types, it will check if they are same primitive type
+     * If they are NamespaceClassifierReferences, it will check the name of their wrapped classifiers for equality
+     */
     def static dispatch typeReferenceEquals(TypeReference typeRef1, TypeReference typeRef2) {
         logger.warn("No dispatch Method found for the typeReferences " + typeRef1 + " and " + typeRef2 + ". Returning false.")
         return false

@@ -6,13 +6,18 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlPropertyAndAssociationUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.junit.Before
 
+
+/**
+ * This test class contains basic test for associations.
+ * 
+ * @author Fei
+ */
 class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
     
     private static val CLASSNAME_1 = "ClassName1"
@@ -53,11 +58,8 @@ class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
 		val jClass1 = getCorrespondingClass(uClass1)
 		val jAttribute = getCorrespondingAttribute(uAttribute)
 		val jClass2 = getCorrespondingClass(uClass2)
-		val jConstructor = jClass1.firstJavaConstructor
 		assertJavaElementHasTypeRef(jAttribute, createNamespaceReferenceFromClassifier(jClass2))
 		assertClassEquals(uClass1, jClass1)
-		assertNotNull(jConstructor)
-		assertTrue(constructorContainsAttributeSelfReferenceStatement(jConstructor, jAttribute))
 		assertTrue(javaGetterForAttributeExists(jAttribute))
         assertTrue(javaSetterForAttributeExists(jAttribute))
 	}

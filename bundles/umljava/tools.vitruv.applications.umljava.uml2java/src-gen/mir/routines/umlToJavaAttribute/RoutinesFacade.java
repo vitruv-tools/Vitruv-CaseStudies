@@ -44,20 +44,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createJavaConstructor(final Field jAttribute) {
-    mir.routines.umlToJavaAttribute.CreateJavaConstructorRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaConstructorRoutine(this.executionState, calledBy,
-    	jAttribute);
-    effect.applyRoutine();
-  }
-  
   public void createJavaGetter(final Field jAttribute) {
     mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine(this.executionState, calledBy,
     	jAttribute);
     effect.applyRoutine();
   }
   
-  public void createJavaSetterWithNullCheck(final Field jAttribute) {
-    mir.routines.umlToJavaAttribute.CreateJavaSetterWithNullCheckRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaSetterWithNullCheckRoutine(this.executionState, calledBy,
+  public void createJavaSetter(final Field jAttribute) {
+    mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine(this.executionState, calledBy,
     	jAttribute);
     effect.applyRoutine();
   }

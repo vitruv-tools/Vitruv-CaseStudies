@@ -1,11 +1,11 @@
 package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 
-import com.google.common.base.Objects;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.xtext.xbase.lib.Extension;
+import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -15,8 +15,8 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
-  public UmlParameterDirectionChangedReaction(final UserInteracting userInteracting) {
+class UmlParameterDirectionKindChangedInvalidReaction extends AbstractReactionRealization {
+  public UmlParameterDirectionKindChangedInvalidReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -27,7 +27,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     ParameterDirectionKind oldValue = typedChange.getOldValue();
     ParameterDirectionKind newValue = typedChange.getNewValue();
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionKindChangedInvalidReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionKindChangedInvalidReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -74,7 +74,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue) {
-    return (Objects.equal(newValue, ParameterDirectionKind.RETURN_LITERAL) || Objects.equal(newValue, ParameterDirectionKind.IN_LITERAL));
+    return ((newValue != ParameterDirectionKind.RETURN_LITERAL) && (newValue != ParameterDirectionKind.IN_LITERAL));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -83,7 +83,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.adaptJavaParametertoDirectionChange(affectedEObject.getOperation(), affectedEObject, oldValue, newValue);
+      UmlToJavaHelper.showMessage(this.userInteracting, (("The ParameterDirectionKind " + newValue) + " is not supported"));
     }
   }
 }

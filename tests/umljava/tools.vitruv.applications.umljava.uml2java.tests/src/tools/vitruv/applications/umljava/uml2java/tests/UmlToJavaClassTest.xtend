@@ -14,6 +14,10 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.junit.After
 
+/**
+ * This class provides tests for basic class tests in the uml to java direction
+ * @author Fei
+ */
 class UmlToJavaClassTest extends Uml2JavaTransformationTest {
 	private static val CLASS_NAME = "ClassName";
 	private static val DATATYPE_NAME = "DataTypeName";

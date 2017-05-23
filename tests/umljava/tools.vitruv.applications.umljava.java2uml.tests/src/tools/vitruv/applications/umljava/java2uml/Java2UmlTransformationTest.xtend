@@ -17,7 +17,7 @@ import org.emftext.language.java.members.Member
 
 /**
  * Abstract Class for Java To UML Tests. Contains functions to create Java-CompilationUnits 
- * and its classifiers as root models.
+ * as root models.
  * 
  * @author Fei
  */
@@ -205,6 +205,10 @@ abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     /**
      * Loads the uml root model given by the modelPath.
      * Returns null if no model could be found.
+     * 
+     * This method is primarily used for the java to uml tests to
+     * access the uml root model. The uml root model will be created
+     * when the first uml classifier creating reaction is executed.
      * 
      * @param modelPath the project root relative path of the uml model
      * @return the uml model or null if none could be found 
