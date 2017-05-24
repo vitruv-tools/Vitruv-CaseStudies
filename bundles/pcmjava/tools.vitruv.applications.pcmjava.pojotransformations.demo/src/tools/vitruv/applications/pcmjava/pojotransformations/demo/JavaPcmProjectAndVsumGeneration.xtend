@@ -57,7 +57,7 @@ class JavaPcmProjectAndVsumGeneration {
 	protected def IProject createTestProject(String projectName) throws CoreException {
         var project = TestUtil.getProjectByName(projectName);
         if (!project.exists()) {
-            project = TestUtil.createProject(projectName, false);
+            project = TestUtil.createPlatformProject(projectName, false);
         }
    		return project;
 	}

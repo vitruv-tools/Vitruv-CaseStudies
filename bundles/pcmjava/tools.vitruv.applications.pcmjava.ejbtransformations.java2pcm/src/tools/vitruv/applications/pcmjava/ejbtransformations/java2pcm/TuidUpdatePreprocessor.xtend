@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm
 
-import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.domains.java.echange.feature.JavaFeatureEChange
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.tuid.TuidManager
@@ -13,8 +12,8 @@ import tools.vitruv.domains.pcm.PcmDomainProvider
 
 class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 	
-	new(UserInteracting userInteracting) {
-		super(userInteracting, new JavaDomainProvider().domain, new PcmDomainProvider().domain)
+	new() {
+		super(new JavaDomainProvider().domain, new PcmDomainProvider().domain)
 	}
 	
 	override doesHandleChange(EChange change, CorrespondenceModel correspondenceModel) {

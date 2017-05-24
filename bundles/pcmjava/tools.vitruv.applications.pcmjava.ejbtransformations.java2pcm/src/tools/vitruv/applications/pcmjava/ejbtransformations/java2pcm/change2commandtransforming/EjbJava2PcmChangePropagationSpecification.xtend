@@ -6,8 +6,8 @@ import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmPackagePreprocess
 
 class EjbJava2PcmChangePropagationSpecification extends AbstractChangePropagationSpecificationJavaToPcm {
 	public override setup() {
-		addChangePreprocessor(new TuidUpdatePreprocessor(userInteracting));
-		addChangePreprocessor(new Java2PcmPackagePreprocessor(userInteracting));  
+		addChangePreprocessor(new TuidUpdatePreprocessor());
+		addChangePreprocessor(new Java2PcmPackagePreprocessor());  
 		super.setup();
 	}
 }

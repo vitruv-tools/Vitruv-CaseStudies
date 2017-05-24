@@ -9,8 +9,8 @@ import tools.vitruv.framework.domains.VitruvDomain
 abstract class TransformationExecutorChangeProcessor extends AbstractEChangePropagationSpecification {
 	private val TransformationExecutor transformationExecutor;
 
-	new(UserInteracting userInteracting, VitruvDomain sourceDomain, VitruvDomain targetDomain) {
-		super(userInteracting, sourceDomain, targetDomain);
+	new(VitruvDomain sourceDomain, VitruvDomain targetDomain) {
+		super(sourceDomain, targetDomain);
 		this.transformationExecutor = new TransformationExecutor();
 	} 
 

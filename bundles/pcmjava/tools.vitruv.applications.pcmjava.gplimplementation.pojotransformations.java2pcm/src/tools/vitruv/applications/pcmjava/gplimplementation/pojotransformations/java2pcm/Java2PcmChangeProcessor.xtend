@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm
 
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.util.transformationexecutor.TransformationExecutorChangeProcessor
-import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm.transformations.PackageMappingTransformation
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm.transformations.CompilationUnitMappingTransformation
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm.transformations.ClassMappingTransformation
@@ -18,8 +17,8 @@ import tools.vitruv.domains.pcm.PcmDomainProvider
 
 class Java2PcmChangeProcessor extends TransformationExecutorChangeProcessor {
 	
-	new(UserInteracting userInteracting) {
-		super(userInteracting, new JavaDomainProvider().domain, new PcmDomainProvider().domain)
+	new() {
+		super(new JavaDomainProvider().domain, new PcmDomainProvider().domain)
 
 		addMapping(new PackageMappingTransformation())
 		addMapping(new CompilationUnitMappingTransformation())

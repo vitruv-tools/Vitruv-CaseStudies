@@ -10,8 +10,7 @@ import tools.vitruv.domains.pcm.PcmDomainProvider;
  */
 public abstract class AbstractChangePropagationSpecificationJavaToPcm extends CompositeChangePropagationSpecification {
 	public AbstractChangePropagationSpecificationJavaToPcm() {
-		super(new tools.vitruv.framework.userinteraction.impl.UserInteractor(),
-			new JavaDomainProvider().getDomain(), 
+		super(new JavaDomainProvider().getDomain(), 
 			new PcmDomainProvider().getDomain());
 		setup();
 	}
@@ -21,7 +20,7 @@ public abstract class AbstractChangePropagationSpecificationJavaToPcm extends Co
 	 * For adding further change processors overwrite this method and call the super method at the right place.
 	 */
 	protected void setup() {
-		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToPcm.java2pcm.ExecutorJavaToPcm(getUserInteracting()));
+		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToPcm.java2pcm.ExecutorJavaToPcm());
 	}
 	
 }

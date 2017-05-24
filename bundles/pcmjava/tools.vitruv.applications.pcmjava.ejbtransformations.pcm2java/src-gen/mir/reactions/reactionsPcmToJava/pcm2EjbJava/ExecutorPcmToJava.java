@@ -3,13 +3,11 @@ package mir.reactions.reactionsPcmToJava.pcm2EjbJava;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorPcmToJava extends AbstractReactionsExecutor {
-  public ExecutorPcmToJava(final UserInteracting userInteracting) {
-    super(userInteracting,
-    	new PcmDomainProvider().getDomain(), 
+  public ExecutorPcmToJava() {
+    super(new PcmDomainProvider().getDomain(), 
     	new JavaDomainProvider().getDomain());
   }
   

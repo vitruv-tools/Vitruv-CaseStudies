@@ -632,7 +632,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
     }
     
     protected boolean existsClass(final String expectedClassName) throws Throwable {
-    	return containsClass(this.getCurrentTestProject().getLocation().toFile(), expectedClassName);
+    	return containsClass(this.getCurrentTestProjectFolder(), expectedClassName);
 //        final IProject testProject = TestUtil.getProjectByName(this.getCurrentTestProject().getName());
 //        
 //        final IJavaProject javaProject = JavaCore.create(testProject);

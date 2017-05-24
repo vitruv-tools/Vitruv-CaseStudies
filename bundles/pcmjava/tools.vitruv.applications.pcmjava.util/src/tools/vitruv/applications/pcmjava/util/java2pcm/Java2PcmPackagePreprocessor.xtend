@@ -10,7 +10,6 @@ import tools.vitruv.framework.change.echange.root.InsertRootEObject
 import tools.vitruv.domains.java.echange.feature.attribute.JavaReplaceSingleValuedEAttribute
 import tools.vitruv.framework.change.description.ConcreteChange
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.change.description.TransactionalChange
 import tools.vitruv.framework.change.processing.impl.AbstractChangePropagationSpecification
 import tools.vitruv.framework.util.command.ChangePropagationResult
@@ -18,8 +17,8 @@ import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.pcm.PcmDomainProvider
 
 class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification {
-	new(UserInteracting userInteracting) {
-		super(userInteracting, new JavaDomainProvider().domain, new PcmDomainProvider().domain)
+	new() {
+		super(new JavaDomainProvider().domain, new PcmDomainProvider().domain)
 	}
 	
 	override doesHandleChange(TransactionalChange change, CorrespondenceModel correspondenceModel) {

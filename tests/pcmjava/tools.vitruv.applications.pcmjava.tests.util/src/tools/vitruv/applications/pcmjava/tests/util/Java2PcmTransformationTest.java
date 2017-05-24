@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -126,9 +127,17 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected Package secondPackage;
 	private int expectedNumberOfSyncs = 0;
 	
+	public Java2PcmTransformationTest() {
+		setTestProjectCreator(projectName -> TestUtil.createPlatformProject(projectName, true).getLocation().toFile());
+	}
+	
 	@Override
 	protected Iterable<VitruvDomain> getVitruvDomains() {
 		return PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
+	}
+	
+	protected IProject getCurrentTestProject() {
+		return ResourcesPlugin.getWorkspace().getRoot().getProject(getCurrentTestProjectFolder().getName());
 	}
 	
 	@Override
@@ -146,6 +155,17 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		this.expectedNumberOfSyncs = 0;
 		// Pipe JaMoPP error output to null
 		java.lang.System.setErr(null);
+	}
+	
+	private String getPlatformModelPath(final String modelPathWithinProject) {
+		return this.getCurrentTestProject().getName() + "/" + modelPathWithinProject;
+	}
+
+	// We override the modelVuri getter, because we have to use platform URIs for the Java to PCM tests
+	// because otherwise the JDT AST will not recognize the changes
+	@Override
+	protected VURI getModelVuri(String modelPathWithinProject) {
+		return VURI.getInstance(getPlatformModelPath(modelPathWithinProject));
 	}
 
 	@Override
