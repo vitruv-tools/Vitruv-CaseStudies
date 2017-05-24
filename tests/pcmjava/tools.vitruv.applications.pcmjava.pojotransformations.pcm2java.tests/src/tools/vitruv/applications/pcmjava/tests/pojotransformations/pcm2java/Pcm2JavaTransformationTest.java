@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,12 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.JavaCore;
 import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.Classifier;
@@ -69,7 +65,6 @@ import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.tests.VitruviusApplicationTest;
-import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 
@@ -632,16 +627,33 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
     }
     
     protected boolean existsClass(final String expectedClassName) throws Throwable {
-        final IProject testProject = TestUtil.getProjectByName(this.getCurrentTestProject().getName());
-        final IJavaProject javaProject = JavaCore.create(testProject);
-        for (final IPackageFragment pkg : javaProject.getPackageFragments()) {
-            for (final ICompilationUnit unit : pkg.getCompilationUnits()) {
-                if (unit.getElementName().contains(expectedClassName)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    	return containsClass(this.getCurrentTestProject().getLocation().toFile(), expectedClassName);
+//        final IProject testProject = TestUtil.getProjectByName(this.getCurrentTestProject().getName());
+//        
+//        final IJavaProject javaProject = JavaCore.create(testProject);
+//        for (final IPackageFragment pkg : javaProject.getPackageFragments()) {
+//            for (final ICompilationUnit unit : pkg.getCompilationUnits()) {
+//                if (unit.getElementName().contains(expectedClassName)) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+    }
+    
+    private boolean containsClass(File packageFolder, String expectedClassName) {
+    	for (File file : packageFolder.listFiles()) {
+    		if (file.isDirectory()) {
+    			if (containsClass(file, expectedClassName)) {
+    				return true;
+    			}
+    		} else if (file.isFile()) {
+    			if (file.getName().equals(expectedClassName + ".java")) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     }
     
 	protected CollectionDataType addCollectionDatatypeAndSync(final Repository repo, final String name, final DataType innerType) throws IOException {
