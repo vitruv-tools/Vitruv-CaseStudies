@@ -140,7 +140,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		JavaClasspath.reset();
 		// add PCM Java Builder to Project under test
 		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
-		pcmJavaBuilder.addToProject(this.getCurrentTestProject(), getVirtualModel().getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
+		pcmJavaBuilder.addToProject(this.getCurrentTestProject(), getVirtualModel().getFolder(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(getCurrentTestProject(), VitruviusJavaBuilder.BUILDER_ID);
 		this.expectedNumberOfSyncs = 0;
