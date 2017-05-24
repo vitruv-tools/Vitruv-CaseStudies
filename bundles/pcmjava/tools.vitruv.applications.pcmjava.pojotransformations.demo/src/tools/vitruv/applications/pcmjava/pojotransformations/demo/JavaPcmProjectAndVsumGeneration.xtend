@@ -42,7 +42,9 @@ class JavaPcmProjectAndVsumGeneration {
 		val project = ResourcesPlugin.workspace.root.getProject(vsumName);
 		project.create(null);
     	project.open(null);
-		val virtualModel = TestUtil.createVirtualModel(project.location.toFile, false, metamodels, createChangePropagationSpecifications());
+		val virtualModel = TestUtil.createVirtualModel(project.location.toFile, false, metamodels, createChangePropagationSpecifications(),
+			new UserInteractor()
+		);
 		return virtualModel;
 	}
 	
