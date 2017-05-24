@@ -77,6 +77,11 @@ import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
 	
 	@Override
+	protected boolean unresolveChanges() {
+		return false;
+	}
+	
+	@Override
 	protected void setup() {
 		// This is necessary because otherwise Maven tests will fail as resources from previous
 		// tests are still in the classpath and accidentally resolved
