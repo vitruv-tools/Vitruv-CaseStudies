@@ -18,6 +18,7 @@ import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification
 import tools.vitruv.framework.domains.VitruvDomain
+import org.eclipse.core.resources.ResourcesPlugin
 
 class JavaPcmProjectAndVsumGeneration {
 	
@@ -29,8 +30,8 @@ class JavaPcmProjectAndVsumGeneration {
         // add PCM Java Builder to Project under test
 		val VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
 		val VitruviusEmfBuilderApplicator emfBuilder = new VitruviusEmfBuilderApplicator();
-		pcmJavaBuilder.addToProject(project , virtualModel.getName(), Collections.EMPTY_LIST);
-		emfBuilder.addToProject(project , virtualModel.getName(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
+		pcmJavaBuilder.addToProject(project, virtualModel.folder, Collections.EMPTY_LIST);
+		emfBuilder.addToProject(project, virtualModel.folder, Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(project, VitruviusJavaBuilder.BUILDER_ID);
 		ProjectBuildUtils.issueIncrementalBuild(project, VitruviusEmfBuilder.BUILDER_ID);
@@ -38,7 +39,10 @@ class JavaPcmProjectAndVsumGeneration {
 	
 	private def InternalVirtualModel createVirtualModel(String vsumName) {
 		val metamodels = this.createVitruvDomains();
-		val virtualModel = TestUtil.createVirtualModel(vsumName, false, metamodels, createChangePropagationSpecifications());
+		val project = ResourcesPlugin.workspace.root.getProject(vsumName);
+		project.create(null);
+    	project.open(null);
+		val virtualModel = TestUtil.createVirtualModel(project.location.toFile, false, metamodels, createChangePropagationSpecifications());
 		return virtualModel;
 	}
 	
