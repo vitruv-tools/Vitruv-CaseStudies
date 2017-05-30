@@ -16,6 +16,7 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
+import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRealization {
@@ -81,6 +82,7 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
         String _plus = ("Assembly context for " + _entityName);
         final String msg = (_plus + 
           "already exists. Only one assembly context per basic component is allowed.");
+        this.userInteracting.showMessage(UserInteractionType.MODAL, msg);
         return false;
       }
     }
