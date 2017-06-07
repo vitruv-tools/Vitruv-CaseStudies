@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 
 import org.emftext.language.java.members.ClassMethod;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -20,6 +21,7 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
 
     private static final String RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD = "resourceDemandingInternalBehaviourClassMethod";
 
+    @Ignore
     @Test
     public void testCreateResourceDemandingInternalBehavior() throws Throwable {
         final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
@@ -48,8 +50,8 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
             final BasicComponent basicComponent, final String resourceDemandingInternalBehaviourName) throws IOException {
         final ResourceDemandingInternalBehaviour resourceDemandingInternalBehaviour = SeffFactory.eINSTANCE
                 .createResourceDemandingInternalBehaviour();
-        resourceDemandingInternalBehaviour.setEntityName(resourceDemandingInternalBehaviourName);
-        basicComponent.getResourceDemandingInternalBehaviours__BasicComponent().add(resourceDemandingInternalBehaviour);
+//        resourceDemandingInternalBehaviour.setEntityName(resourceDemandingInternalBehaviourName);
+//        basicComponent.getResourceDemandingInternalBehaviours__BasicComponent().add(resourceDemandingInternalBehaviour);
         this.saveAndSynchronizeChanges(basicComponent);
         return resourceDemandingInternalBehaviour;
     }
