@@ -32,6 +32,7 @@ import tools.vitruv.framework.correspondence.Correspondence
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import org.palladiosimulator.pcm.repository.Parameter
 
 class PcmJavaUtils {
 	private static val Logger logger = Logger.getLogger(PcmJavaUtils.simpleName)
@@ -293,7 +294,13 @@ class PcmJavaUtils {
 					logger.error("corresponding object is null")
 				} else {
 					val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingObject)
-					correspondingObject.eSet(eStructuralFeature, newValue)
+					if (correspondingObject.eClass.EAllStructuralFeatures.contains(eStructuralFeature)) {
+						correspondingObject.eSet(eStructuralFeature, newValue)	
+					}
+					if (correspondingObject instanceof Parameter && eStructuralFeature.name == "entityName") {
+						setParameterName(correspondingObject as Parameter, newValue as String);
+					}
+					
 					oldTuid.updateTuid(correspondingObject)
 					if (saveFilesOfChangedEObjects) {
 						// nothing to do here?
@@ -301,4 +308,12 @@ class PcmJavaUtils {
 				}
 			}
 		}
+		
+	public static def void setParameterName(Parameter parameter, String newName) {
+		// Set entity name as well if existing
+		if (parameter.eClass.EAllAttributes.exists[name=="entityName"]) {
+			parameter.eSet(parameter.eClass.EAllAttributes.filter[name=="entityName"].claimOne, newName);
+		}
+		parameter.parameterName = newName;
+	}
 }

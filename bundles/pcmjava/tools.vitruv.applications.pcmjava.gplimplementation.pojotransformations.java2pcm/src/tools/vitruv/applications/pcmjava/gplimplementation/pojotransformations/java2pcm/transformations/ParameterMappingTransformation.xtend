@@ -10,6 +10,7 @@ import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 
 class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -38,7 +39,7 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 		pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.
 			getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.typeReference, correspondenceModel,
 				userInteracting, null, jaMoPPParam.arrayDimension)
-		pcmParameter.entityName = jaMoPPParam.name
+		PcmJavaUtils.setParameterName(pcmParameter, jaMoPPParam.name);
 		return pcmParameter.toList
 	}
 

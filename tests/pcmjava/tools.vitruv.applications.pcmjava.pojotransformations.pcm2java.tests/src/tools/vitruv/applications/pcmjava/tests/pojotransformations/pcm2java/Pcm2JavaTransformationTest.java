@@ -120,7 +120,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
     }
 
     protected <T> Set<NamedElement> assertCorrespondnecesAndCompareNames(
-            final org.palladiosimulator.pcm.core.entity.NamedElement pcmNamedElement, final int expectedSize,
+            final EObject pcmNamedElement, final int expectedSize,
             final java.lang.Class<? extends EObject>[] expectedClasses, final String[] expectedNames) throws Throwable {
         final Set<EObject> correspondences = (Set<EObject>) CollectionBridge.claimNotEmpty(
                 CorrespondenceModelUtil.getCorrespondingEObjects(this.getCorrespondenceModel(), pcmNamedElement));
@@ -263,8 +263,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
     protected Parameter addAndSyncParameterToSignature(final OperationSignature opSig, final DataType dataType,
             final String parameterName) throws IOException {
         final Parameter param = RepositoryFactory.eINSTANCE.createParameter();
-        param.setEntityName(parameterName);
-        param.setParameterName(parameterName);
+        PcmJavaUtils.setParameterName(param, parameterName);
         param.setDataType__Parameter(dataType);
         param.setModifier__Parameter(ParameterModifier.IN);
         param.setOperationSignature__Parameter(opSig);

@@ -49,7 +49,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
                 "String", Pcm2JavaTestUtils.PARAMETER_NAME, null);
 
         final Parameter newParameter = this.renameParameterInSignature(opInterface.getEntityName(),
-                opSig.getEntityName(), parameter.getEntityName(),
+                opSig.getEntityName(), parameter.getParameterName(),
                 Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
 
         this.assertParameter(opSig, newParameter, "String",
@@ -66,9 +66,9 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
         final String expectedParamType = "int";
 
         final Parameter changedParameter = this.changeParameterType(opInterface.getEntityName(), opSig.getEntityName(),
-                parameter.getEntityName(), expectedParamType);
+                parameter.getParameterName(), expectedParamType);
 
-        this.assertParameter(opSig, changedParameter, expectedParamType, changedParameter.getEntityName());
+        this.assertParameter(opSig, changedParameter, expectedParamType, changedParameter.getParameterName());
     }
 
     private Parameter renameParameterInSignature(final String interfaceName, final String methodName,
@@ -119,7 +119,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
             final String expectedTypeName, final String expectedName) throws Throwable {
         assertEquals("The parameter is not contained in the expected operation signature", opSig.getId(),
                 parameter.getOperationSignature__Parameter().getId());
-        this.assertPCMNamedElement(parameter, expectedName);
+        this.assertPcmParameter(parameter, expectedName);
         if (parameter.getDataType__Parameter() instanceof CollectionDataType
                 || parameter.getDataType__Parameter() instanceof CompositeDataType) {
             this.assertPCMNamedElement((NamedElement) parameter.getDataType__Parameter(), expectedTypeName);

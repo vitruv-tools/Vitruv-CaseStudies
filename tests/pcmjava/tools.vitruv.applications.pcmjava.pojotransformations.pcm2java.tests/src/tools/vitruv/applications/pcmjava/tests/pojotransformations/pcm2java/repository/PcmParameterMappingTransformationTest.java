@@ -18,6 +18,7 @@ import org.palladiosimulator.pcm.repository.Repository;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 
 public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
@@ -33,8 +34,7 @@ public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformatio
     public void testChangeParameterName() throws Throwable {
         final Parameter param = this.createAndSyncRepoOpSigAndParameter();
 
-        param.setEntityName(Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
-        param.setParameterName(Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
+        PcmJavaUtils.setParameterName(param, Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
         super.saveAndSynchronizeChanges(param);
 
         this.assertParameterCorrespondences(param);

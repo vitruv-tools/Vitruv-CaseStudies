@@ -536,6 +536,13 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 				pcmNamedElement.getEntityName());
 		this.assertResourceAndFileForEObjects(pcmNamedElement);
 	}
+	
+	protected void assertPcmParameter(final Parameter pcmParameter, final String expectedName)
+			throws Throwable {
+		assertEquals("The name of pcm parameter is not " + expectedName, expectedName,
+				pcmParameter.getParameterName());
+		this.assertResourceAndFileForEObjects(pcmParameter);
+	}
 
 	protected OperationInterface addInterfaceInContractsPackage() throws Throwable {
 		return this.createInterfaceInPackage("contracts");
