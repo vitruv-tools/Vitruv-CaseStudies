@@ -18,7 +18,6 @@ import org.emftext.language.java.references.IdentifierReference
 import org.emftext.language.java.references.SelfReference
 import org.emftext.language.java.statements.ExpressionStatement
 import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.TypesFactory
 import org.palladiosimulator.pcm.core.composition.AssemblyContext
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CollectionDataType
@@ -1095,55 +1094,55 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 // ################################################################################
 // ##################### RESOURCE DEMANDING INTERNAL BEHAVIOR #####################
 
-reaction CreatedResourceDemandingInternalBehavior { 
-	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-	call createMethodForResourceDemandingBehavior(newValue)
-}
-
-routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
-	match {
-		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
-	} 
-	action { 
-		val javaMethod = create java::ClassMethod and initialize {
-			javaMethod.name = behavior.entityName;
-			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
-		}
-		add correspondence between javaMethod and behavior
-		update componentClass {
-			componentClass.members += javaMethod;
-		}
-	}
-}
-
-reaction RenameResourceDemandingInternalBehavior { 
-	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
-	call renameMethodForResourceDemandingBehavior(affectedEObject)
-}
-
-routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
-	match {
-		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-	} 
-	action { 
-		update javaMethod {
-			javaMethod.name = behavior.entityName;
-		}
-	}
-}
-
-reaction DeletedDemandingInternalBehavior { 
-	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-	call deleteMethodForResourceDemandingBehavior(oldValue)
-}
-
-routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-	match {
-		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-	} action { 
-		delete javaMethod
-	}
-}
+//reaction CreatedResourceDemandingInternalBehavior { 
+//	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
+//	call createMethodForResourceDemandingBehavior(newValue)
+//}
+//
+//routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
+//	match {
+//		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
+//	} 
+//	action { 
+//		val javaMethod = create java::ClassMethod and initialize {
+//			javaMethod.name = behavior.entityName;
+//			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
+//		}
+//		add correspondence between javaMethod and behavior
+//		update componentClass {
+//			componentClass.members += javaMethod;
+//		}
+//	}
+//}
+//
+//reaction RenameResourceDemandingInternalBehavior { 
+//	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
+//	call renameMethodForResourceDemandingBehavior(affectedEObject)
+//}
+//
+//routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
+//	match {
+//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
+//	} 
+//	action { 
+//		update javaMethod {
+//			javaMethod.name = behavior.entityName;
+//		}
+//	}
+//}
+//
+//reaction DeletedDemandingInternalBehavior { 
+//	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
+//	call deleteMethodForResourceDemandingBehavior(oldValue)
+//}
+//
+//routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
+//	match {
+//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
+//	} action { 
+//		delete javaMethod
+//	}
+//}
 
 // ################################################################################
 // #################################### SEFFS #####################################

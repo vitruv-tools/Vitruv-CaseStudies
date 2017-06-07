@@ -27,7 +27,6 @@ import org.palladiosimulator.pcm.repository.ProvidedRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.repository.RequiredRole;
-import org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
@@ -325,24 +324,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void deleteParameter(final OperationSignature signature, final Parameter parameter) {
     mir.routines.pcm2depInjectJava.DeleteParameterRoutine effect = new mir.routines.pcm2depInjectJava.DeleteParameterRoutine(this.executionState, calledBy,
     	signature, parameter);
-    effect.applyRoutine();
-  }
-  
-  public void createMethodForResourceDemandingBehavior(final ResourceDemandingInternalBehaviour behavior) {
-    mir.routines.pcm2depInjectJava.CreateMethodForResourceDemandingBehaviorRoutine effect = new mir.routines.pcm2depInjectJava.CreateMethodForResourceDemandingBehaviorRoutine(this.executionState, calledBy,
-    	behavior);
-    effect.applyRoutine();
-  }
-  
-  public void renameMethodForResourceDemandingBehavior(final ResourceDemandingInternalBehaviour behavior) {
-    mir.routines.pcm2depInjectJava.RenameMethodForResourceDemandingBehaviorRoutine effect = new mir.routines.pcm2depInjectJava.RenameMethodForResourceDemandingBehaviorRoutine(this.executionState, calledBy,
-    	behavior);
-    effect.applyRoutine();
-  }
-  
-  public void deleteMethodForResourceDemandingBehavior(final ResourceDemandingInternalBehaviour behavior) {
-    mir.routines.pcm2depInjectJava.DeleteMethodForResourceDemandingBehaviorRoutine effect = new mir.routines.pcm2depInjectJava.DeleteMethodForResourceDemandingBehaviorRoutine(this.executionState, calledBy,
-    	behavior);
     effect.applyRoutine();
   }
   
