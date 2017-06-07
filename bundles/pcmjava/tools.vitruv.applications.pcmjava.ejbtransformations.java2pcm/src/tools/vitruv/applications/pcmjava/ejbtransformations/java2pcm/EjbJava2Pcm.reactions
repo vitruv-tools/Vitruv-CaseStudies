@@ -12,6 +12,7 @@ import java.util.Collections
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationSignature
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -238,8 +239,7 @@ routine createdParameterInInterfaceMethod(java::InterfaceMethod method, java::Pa
 routine createPCMParameter(java::Parameter jaMoPPParam, pcm::OperationSignature opSignature) {
 	action {
 		val pcmParameter = create pcm::Parameter and initialize {
-			pcmParameter.entityName = jaMoPPParam.name
-			pcmParameter.parameterName = jaMoPPParam.name
+			PcmJavaUtils.setParameterName(pcmParameter, jaMoPPParam.name)
 			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.typeReference, 
 				correspondenceModel, userInteracting, opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
 		}

@@ -80,7 +80,7 @@ class EjbInterfaceMappingTest extends EjbJava2PcmTransformationTest{
 	}
 	
 	private def assertPCMParam(Parameter pcmParam, String expectedName, PrimitiveTypeEnum expectedPrimiteveTypeEnum) {
-		assertEquals("PCM Parameter has not the expected name ", expectedName, pcmParam.entityName)
+		assertEquals("PCM Parameter has not the expected name ", expectedName, pcmParam.parameterName)
 		//expecting type byte[]	
 		assertTrue("PCM Parameter Type is not a collection Data type", pcmParam.dataType__Parameter instanceof CollectionDataType)
 		val CollectionDataType cdt = pcmParam.dataType__Parameter as CollectionDataType
