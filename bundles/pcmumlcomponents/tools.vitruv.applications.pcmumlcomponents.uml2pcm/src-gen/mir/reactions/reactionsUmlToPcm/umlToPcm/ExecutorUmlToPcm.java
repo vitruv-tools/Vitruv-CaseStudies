@@ -3,13 +3,11 @@ package mir.reactions.reactionsUmlToPcm.umlToPcm;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorUmlToPcm extends AbstractReactionsExecutor {
-  public ExecutorUmlToPcm(final UserInteracting userInteracting) {
-    super(userInteracting,
-    	new UmlDomainProvider().getDomain(), 
+  public ExecutorUmlToPcm() {
+    super(new UmlDomainProvider().getDomain(), 
     	new PcmDomainProvider().getDomain());
   }
   
@@ -17,6 +15,8 @@ public class ExecutorUmlToPcm extends AbstractReactionsExecutor {
     tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.RenamedElementReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.RenamedElementReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedElementReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedElementReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityLowerValueReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityLowerValueReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperValueReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperValueReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityLowerReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityLowerReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedUmlModelReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedUmlModelReaction(userInteracting));
@@ -25,6 +25,7 @@ public class ExecutorUmlToPcm extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedPropertyForDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedPropertyForDataTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedPropertyFromDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedPropertyFromDataTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedPropertyTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedPropertyTypeReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedDataTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedInterfaceReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedInterfaceOperationReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedInterfaceOperationReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsUmlToPcm.umlToPcm.AddedInterfaceOperationParameterReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToPcm.umlToPcm.AddedInterfaceOperationParameterReaction(userInteracting));

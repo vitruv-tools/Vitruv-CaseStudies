@@ -39,23 +39,25 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void createIntefaceOperation() {
+	public def void createIntefaceOperationTest() {
 		val logger = Logger.rootLogger
 		logger.level = Level.ALL
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
+		userInteractor.addNextSelections(10)
 		val p1Type = UMLFactory.eINSTANCE.createPrimitiveType()
-		p1Type.name = "t1";
+		p1Type.name = "dataType1";
 		rootElement.packagedElements += p1Type
-		/*val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
-		returnType.name = "Boolean"
-		rootElement.packagedElements += returnType*/
+		
+		userInteractor.addNextSelections(2)
+		val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
+		returnType.name = UML_TYPE_BOOL
+		rootElement.packagedElements += returnType
+		
 		val parameterNames = new BasicEList<String>()
 		parameterNames += PARAMETER_NAME
 		val parameterTypes = new BasicEList<Type>()
 		parameterTypes += p1Type
-		// TODO: this is not picked up correctly and creates parameters without further properties in the saved .repository
-		//val umlOperation = umlInterface.createOwnedOperation("o1", parameterNames, parameterTypes, returnType)
-		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, "Boolean")
+		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, parameterNames, parameterTypes, returnType)
 		saveAndSynchronizeChanges(rootElement);
 
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten;
@@ -66,11 +68,12 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(umlOperation.type.name),
 			(pcmOperation.returnType__OperationSignature as PrimitiveDataType).type)
 			
-		//assertEquals(1, pcmOperation.parameters__OperationSignature.length)
-		//assertEquals(parameterNames.get(0), pcmOperation.parameters__OperationSignature.get(0).entityName)
+		assertEquals(1, pcmOperation.parameters__OperationSignature.length)
+		assertEquals(parameterNames.get(0), pcmOperation.parameters__OperationSignature.get(0).entityName)
 	}
 	
 	protected def Operation createInterfaceOperation(Interface umlInterface, String operationName, String operationType) {
+		userInteractor.addNextSelections(getDataTypeUserSelection(operationType))
 		val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
 		returnType.name = operationType
 		rootElement.packagedElements += returnType
@@ -83,16 +86,16 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void changeInterfaceOperation() {
+	public def void changeInterfaceOperationTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, "Boolean")
+		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
 		var correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
 		var pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
 		umlOperation.name = OPERATION_NAME + "2"
 		saveAndSynchronizeChanges(umlOperation)
 		assertEquals(umlOperation.name, pcmSignature.entityName)
 		val newType = UMLFactory.eINSTANCE.createPrimitiveType()
-		newType.name = "Integer"
+		newType.name = UML_TYPE_INT
 		rootElement.packagedElements += newType
 		umlOperation.type = newType
 		saveAndSynchronizeChanges(umlOperation)
@@ -122,10 +125,10 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void addOperationParameter() {
+	public def void addOperationParameterTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, "Boolean")
-		val umlParameter = createParameter(umlOperation, PARAMETER_NAME, "Integer")
+		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
+		val umlParameter = createParameter(umlOperation, PARAMETER_NAME, UML_TYPE_INT)
 		
 		val pcmSignature = getCorrespondingSignature(umlOperation)
 		assertEquals(1, pcmSignature.parameters__OperationSignature.length)
@@ -152,10 +155,10 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void changeOperationParameter() {
+	public def void changeOperationParameterTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, "Boolean")
-		val umlParameter = createParameter(umlOperation, PARAMETER_NAME, "Integer")
+		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
+		val umlParameter = createParameter(umlOperation, PARAMETER_NAME, UML_TYPE_INT)
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlParameter]).flatten
 		assertEquals(1, correspondingElements.length)
@@ -181,12 +184,12 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void deleteOperationParameter() {
+	public def void deleteOperationParameterTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, "Boolean")
-		val parameter1 = createParameter(umlOperation, PARAMETER_NAME, "Integer")
+		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
+		val parameter1 = createParameter(umlOperation, PARAMETER_NAME, UML_TYPE_INT)
 		val remainingParameterName = PARAMETER_NAME_2
-		createParameter(umlOperation, remainingParameterName, "String")
+		createParameter(umlOperation, remainingParameterName, UML_TYPE_STRING)
 		
 		var pcmSignature = getCorrespondingSignature(umlOperation)
 		

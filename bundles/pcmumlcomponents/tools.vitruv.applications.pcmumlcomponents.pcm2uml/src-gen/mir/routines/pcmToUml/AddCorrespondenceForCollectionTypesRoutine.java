@@ -4,9 +4,8 @@ import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -27,7 +26,7 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
     }
     
     public String getRetrieveTag1(final CollectionDataType pcmType, final DataType innerType) {
-      return "collectionType";
+      return PcmToUmlUtil.COLLECTION_TYPE_TAG;
     }
     
     public EObject getElement2(final CollectionDataType pcmType, final DataType innerType, final DataType oldInnerType) {
@@ -35,15 +34,11 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
     }
     
     public String getTag1(final CollectionDataType pcmType, final DataType innerType, final DataType oldInnerType) {
-      return "collectionType";
+      return PcmToUmlUtil.COLLECTION_TYPE_TAG;
     }
     
     public EObject getCorrepondenceSourceOldInnerType(final CollectionDataType pcmType, final DataType innerType) {
       return pcmType;
-    }
-    
-    public void callRoutine1(final CollectionDataType pcmType, final DataType innerType, final DataType oldInnerType, @Extension final RoutinesFacade _routinesFacade) {
-      InputOutput.<String>println("created correspondence between an inner type and a uml type");
     }
   }
   
@@ -69,8 +64,6 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
     	(DataType _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(pcmType, innerType));
     registerObjectUnderModification(oldInnerType);
-    userExecution.callRoutine1(pcmType, innerType, oldInnerType, actionsFacade);
-    
     addCorrespondenceBetween(userExecution.getElement1(pcmType, innerType, oldInnerType), userExecution.getElement2(pcmType, innerType, oldInnerType), userExecution.getTag1(pcmType, innerType, oldInnerType));
     
     postprocessElements();

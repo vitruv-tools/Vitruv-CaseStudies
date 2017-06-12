@@ -10,6 +10,8 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 
 import static org.junit.Assert.*
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.Operation
 
 class DataTypesTest extends AbstractPcmUmlTest {
 	
@@ -32,7 +34,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		val umlModel = getUmlModel()
 		val umlType = umlModel.getOwnedType(PcmToUmlUtil.getUmlPrimitiveTypeName(pcmDataType.type))
 		assertNotNull(umlType)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.BOOL), umlType.name)
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BOOL), umlType.name)
 	}
 	
 	@Test
@@ -79,7 +81,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		val umlType = (correspondingElements.get(0) as DataType)
 		assertEquals(1, umlType.ownedAttributes.length)
 		assertEquals(attributeName, umlType.ownedAttributes.get(0).name)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.BOOL), umlType.ownedAttributes.get(0).type.name)
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BOOL), umlType.ownedAttributes.get(0).type.name)
 	}
 	
 	@Test
@@ -137,33 +139,43 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		return pcmDataType
 	}
 	
-	@Deprecated
-	public def void testCollectionDataTypeCreate() {
-		val pcmDataType = initCollectionDataType("c1", PrimitiveTypeEnum.INT)
-		
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
-		assertEquals(1, correspondingElements.length)
-		val umlType = (correspondingElements.get(0) as DataType)
-		assertEquals(1, umlType.ownedAttributes.length)
-		assertEquals("innerType", umlType.ownedAttributes.get(0).name)
-	}
-	
-	@Deprecated
-	public def void testCollectionDataTypeChangeType() {
-		val pcmDataType = initCollectionDataType("c2", PrimitiveTypeEnum.INT)
-		
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
-		val umlType = (correspondingElements.get(0) as DataType)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.INT), umlType.ownedAttributes.get(0).type.name)
-		
-		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
-		innerType.type = PrimitiveTypeEnum.DOUBLE
-		rootElement.dataTypes__Repository += innerType
-		pcmDataType.innerType_CollectionDataType = innerType
+	@Test
+	public def void importedDataTypesTest() {
+		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
+		pcmInterface.entityName = INTERFACE_NAME
+		val pcmOperation = RepositoryFactory.eINSTANCE.createOperationSignature()
+		pcmOperation.entityName = OPERATION_NAME
+		pcmInterface.signatures__OperationInterface += pcmOperation
+		pcmOperation.returnType__OperationSignature = getPrimitiveType(PrimitiveTypeEnum.BOOL)
+		val pcmParameter = RepositoryFactory.eINSTANCE.createParameter()
+		pcmParameter.entityName = PARAMETER_NAME
+		pcmParameter.dataType__Parameter = getPrimitiveType(PrimitiveTypeEnum.STRING)
+		pcmOperation.parameters__OperationSignature += pcmParameter
+		rootElement.interfaces__Repository += pcmInterface
 		saveAndSynchronizeChanges(rootElement)
 		
-		val changedCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
-		val changedUmlType = (changedCorrespondingElements.get(0) as DataType)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(PrimitiveTypeEnum.DOUBLE), changedUmlType.ownedAttributes.get(0).type.name)
+		val umlParameter = pcmParameter.correspondingElements.head as Parameter
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.STRING), umlParameter.type.name) 
+		
+		val umlOperation = pcmOperation.correspondingElements.head as Operation
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BOOL), umlOperation.type.name) 
+	}
+	
+	@Test
+	public def void unmappedDataTypeTest() {
+		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
+		pcmInterface.entityName = INTERFACE_NAME
+		val pcmOperation = RepositoryFactory.eINSTANCE.createOperationSignature()
+		pcmOperation.entityName = OPERATION_NAME
+		pcmInterface.signatures__OperationInterface += pcmOperation
+		val pcmParameter = RepositoryFactory.eINSTANCE.createParameter()
+		pcmParameter.entityName = PARAMETER_NAME
+		pcmParameter.dataType__Parameter = getPrimitiveType(PrimitiveTypeEnum.BYTE)
+		pcmOperation.parameters__OperationSignature += pcmParameter
+		rootElement.interfaces__Repository += pcmInterface
+		saveAndSynchronizeChanges(rootElement)
+		
+		val umlParameter = pcmParameter.correspondingElements.head as Parameter
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BYTE), umlParameter.type.name) 
 	}
 }

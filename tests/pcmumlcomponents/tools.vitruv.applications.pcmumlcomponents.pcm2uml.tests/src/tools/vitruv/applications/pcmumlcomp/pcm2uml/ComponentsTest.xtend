@@ -119,7 +119,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(pcmComponent)
 		
 		val umlComponent = getCorrespondingUmlComponent(pcmComponent)
-		assertEquals(0, umlComponent.requireds.length)
+		assertEquals(0, umlComponent.packagedElements.length)
 	}
 	
 	@Test
@@ -184,6 +184,6 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(pcmComponent)
 		
 		val umlComponent = getCorrespondingUmlComponent(pcmComponent)
-		assertEquals(0, umlComponent.provideds.length)
+		assertEquals(0, umlComponent.packagedElements.length)
 	}
 }

@@ -1,12 +1,10 @@
 package tools.vitruv.applications.pcmumlcomp.pcm2uml
 
-import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
@@ -19,8 +17,15 @@ import tools.vitruv.framework.tests.VitruviusApplicationTest
 class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
 	protected static val MODEL_NAME = "model";
-	// private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
+	//private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
 	private static val PRIMITIVETYPES_URI = "pathmap://PCM_MODELS/PrimitiveTypes.repository"
+	
+	protected val INTERFACE_NAME = "TestInterface"
+	protected val OPERATION_NAME = "fooOperation"
+	protected val OPERATION_NAME_2 = "barOperation"
+	protected val PARAMETER_NAME = "fooParameter"
+	protected val PARAMETER_NAME_2 = "barParameter"
+	protected val ATTRIBUTE_NAME = "fooAttribute"
 	
 	protected static var Repository primitiveTypesRepository = null
 	

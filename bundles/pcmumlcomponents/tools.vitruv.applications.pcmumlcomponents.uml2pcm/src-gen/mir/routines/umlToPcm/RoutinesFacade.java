@@ -89,6 +89,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void deleteDataType(final DataType umlDataType) {
+    mir.routines.umlToPcm.DeleteDataTypeRoutine effect = new mir.routines.umlToPcm.DeleteDataTypeRoutine(this.executionState, calledBy,
+    	umlDataType);
+    effect.applyRoutine();
+  }
+  
   public void createInterface(final Interface umlInterface) {
     mir.routines.umlToPcm.CreateInterfaceRoutine effect = new mir.routines.umlToPcm.CreateInterfaceRoutine(this.executionState, calledBy,
     	umlInterface);

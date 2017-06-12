@@ -10,8 +10,7 @@ import tools.vitruv.domains.pcm.PcmDomainProvider;
  */
 public abstract class AbstractChangePropagationSpecificationPcmToUml extends CompositeChangePropagationSpecification {
 	public AbstractChangePropagationSpecificationPcmToUml() {
-		super(new tools.vitruv.framework.userinteraction.impl.UserInteractor(),
-			new PcmDomainProvider().getDomain(), 
+		super(new PcmDomainProvider().getDomain(), 
 			new UmlDomainProvider().getDomain());
 		setup();
 	}
@@ -21,7 +20,7 @@ public abstract class AbstractChangePropagationSpecificationPcmToUml extends Com
 	 * For adding further change processors overwrite this method and call the super method at the right place.
 	 */
 	protected void setup() {
-		this.addChangeMainprocessor(new mir.reactions.reactionsPcmToUml.pcmToUml.ExecutorPcmToUml(getUserInteracting()));
+		this.addChangeMainprocessor(new mir.reactions.reactionsPcmToUml.pcmToUml.ExecutorPcmToUml());
 	}
 	
 }

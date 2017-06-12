@@ -1,10 +1,10 @@
-package mir.reactions.reactionsPcmToUml.pcmToUml;
+package mir.reactions.reactionsUmlToPcm.umlToPcm;
 
-import mir.routines.pcmToUml.RoutinesFacade;
+import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.MultiplicityElement;
+import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.palladiosimulator.pcm.repository.CollectionDataType;
-import org.palladiosimulator.pcm.repository.DataType;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -14,19 +14,19 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class ChangedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealization {
-  public ChangedCollectionDataTypeInnerTypeReaction(final UserInteracting userInteracting) {
+class ChangedMultiplicityUpperValueReaction extends AbstractReactionRealization {
+  public ChangedMultiplicityUpperValueReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<CollectionDataType, DataType> typedChange = (ReplaceSingleValuedEReference<CollectionDataType, DataType>)change;
-    CollectionDataType affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification> typedChange = (ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification>)change;
+    MultiplicityElement affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType oldValue = typedChange.getOldValue();
-    DataType newValue = typedChange.getNewValue();
-    mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsPcmToUml.pcmToUml.ChangedCollectionDataTypeInnerTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.ChangedCollectionDataTypeInnerTypeReaction.ActionUserExecution(this.executionState, this);
+    ValueSpecification oldValue = typedChange.getOldValue();
+    ValueSpecification newValue = typedChange.getNewValue();
+    mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperValueReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperValueReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
@@ -35,17 +35,17 @@ class ChangedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealiza
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<CollectionDataType, DataType> relevantChange = (ReplaceSingleValuedEReference<CollectionDataType, DataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CollectionDataType)) {
+    ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification> relevantChange = (ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof MultiplicityElement)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("innerType_CollectionDataType")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("upperValue")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof ValueSpecification)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof ValueSpecification)) {
     	return false;
     }
     return true;
@@ -69,8 +69,8 @@ class ChangedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealiza
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CollectionDataType affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeCollectionDataTypeInnerType(affectedEObject, newValue);
+    public void callRoutine1(final MultiplicityElement affectedEObject, final EReference affectedFeature, final ValueSpecification oldValue, final ValueSpecification newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.updateMultiplicityType(affectedEObject);
     }
   }
 }

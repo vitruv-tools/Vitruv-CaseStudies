@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<repository:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:repository="http://palladiosimulator.org/PalladioComponentModel/Repository/5.1" xmlns:seff="http://palladiosimulator.org/PalladioComponentModel/SEFF/5.1" id="_jpILgFxcEeSTz_OnR9Pwug" entityName="defaultRepository" repositoryDescription="">
+<repository:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:repository="http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" xmlns:seff="http://palladiosimulator.org/PalladioComponentModel/SEFF/5.1" id="_jpILgFxcEeSTz_OnR9Pwug" entityName="defaultRepository" repositoryDescription="">
   <components__Repository xsi:type="repository:BasicComponent" id="_km0i0FxcEeSTz_OnR9Pwug" entityName="WebShop">
     <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_uY0oYFxcEeSTz_OnR9Pwug" entityName="Provided_ISell_WebShop" providedInterface__OperationProvidedRole="_lnWLsFxcEeSTz_OnR9Pwug"/>
     <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_vFh9YFxcEeSTz_OnR9Pwug" entityName="Provided_IBuy_WebShop" providedInterface__OperationProvidedRole="_qvd8EFxcEeSTz_OnR9Pwug"/>

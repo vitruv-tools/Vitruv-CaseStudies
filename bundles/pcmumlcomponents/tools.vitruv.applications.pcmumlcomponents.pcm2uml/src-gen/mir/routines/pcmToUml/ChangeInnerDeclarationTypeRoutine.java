@@ -3,11 +3,12 @@ package mir.routines.pcmToUml;
 import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
+import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -24,31 +25,26 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceUmlType(final InnerDeclaration innerDeclaration, final DataType pcmDataType, final Property umlProperty) {
-      return pcmDataType;
-    }
-    
-    public EObject getElement1(final InnerDeclaration innerDeclaration, final DataType pcmDataType, final Property umlProperty, final org.eclipse.uml2.uml.DataType umlType) {
+    public EObject getElement1(final InnerDeclaration innerDeclaration, final DataType pcmDataType, final Property umlProperty, final Model umlModel) {
       return umlProperty;
     }
     
-    public void update0Element(final InnerDeclaration innerDeclaration, final DataType pcmDataType, final Property umlProperty, final org.eclipse.uml2.uml.DataType umlType) {
-      if ((pcmDataType == null)) {
+    public void update0Element(final InnerDeclaration innerDeclaration, final DataType pcmDataType, final Property umlProperty, final Model umlModel) {
+      if (((pcmDataType == null) || ((pcmDataType instanceof CollectionDataType) && (((CollectionDataType) pcmDataType).getInnerType_CollectionDataType() == null)))) {
         umlProperty.setType(null);
       } else {
-        String _entityName = innerDeclaration.getCompositeDataType_InnerDeclaration().getEntityName();
-        String _plus = (">> changeInnerDeclarationType for " + _entityName);
-        String _plus_1 = (_plus + "@");
-        String _entityName_1 = innerDeclaration.getEntityName();
-        String _plus_2 = (_plus_1 + _entityName_1);
-        InputOutput.<String>println(_plus_2);
-        umlProperty.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType));
-        PcmToUmlUtil.updateMultiplicity(umlProperty, Boolean.valueOf((pcmDataType instanceof CollectionDataType)));
+        umlProperty.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType, umlModel));
       }
+      PcmToUmlUtil.updateMultiplicity(umlProperty, Boolean.valueOf(((umlProperty.getType() != null) && (pcmDataType instanceof CollectionDataType))));
     }
     
     public EObject getCorrepondenceSourceUmlProperty(final InnerDeclaration innerDeclaration, final DataType pcmDataType) {
       return innerDeclaration;
+    }
+    
+    public EObject getCorrepondenceSourceUmlModel(final InnerDeclaration innerDeclaration, final DataType pcmDataType, final Property umlProperty) {
+      Repository _repository__DataType = innerDeclaration.getCompositeDataType_InnerDeclaration().getRepository__DataType();
+      return _repository__DataType;
     }
   }
   
@@ -77,14 +73,17 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	return;
     }
     registerObjectUnderModification(umlProperty);
-    org.eclipse.uml2.uml.DataType umlType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlType(innerDeclaration, pcmDataType, umlProperty), // correspondence source supplier
-    	org.eclipse.uml2.uml.DataType.class,
-    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
+    Model umlModel = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlModel(innerDeclaration, pcmDataType, umlProperty), // correspondence source supplier
+    	Model.class,
+    	(Model _element) -> true, // correspondence precondition checker
     	null);
-    registerObjectUnderModification(umlType);
-    // val updatedElement userExecution.getElement1(innerDeclaration, pcmDataType, umlProperty, umlType);
-    userExecution.update0Element(innerDeclaration, pcmDataType, umlProperty, umlType);
+    if (umlModel == null) {
+    	return;
+    }
+    registerObjectUnderModification(umlModel);
+    // val updatedElement userExecution.getElement1(innerDeclaration, pcmDataType, umlProperty, umlModel);
+    userExecution.update0Element(innerDeclaration, pcmDataType, umlProperty, umlModel);
     
     postprocessElements();
   }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Element;
-import org.palladiosimulator.pcm.core.entity.Entity;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -20,7 +19,7 @@ public class DeleteElementRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Element umlElement, final Entity pcmElement) {
+    public EObject getElement1(final Element umlElement, final EObject pcmElement) {
       return pcmElement;
     }
     
@@ -42,10 +41,10 @@ public class DeleteElementRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine DeleteElementRoutine with input:");
     getLogger().debug("   Element: " + this.umlElement);
     
-    Entity pcmElement = getCorrespondingElement(
+    EObject pcmElement = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmElement(umlElement), // correspondence source supplier
-    	Entity.class,
-    	(Entity _element) -> true, // correspondence precondition checker
+    	EObject.class,
+    	(EObject _element) -> true, // correspondence precondition checker
     	null);
     if (pcmElement == null) {
     	return;

@@ -23,22 +23,18 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Property umlProperty, final DataType umlType, final InnerDeclaration pcmDeclaration, final org.palladiosimulator.pcm.repository.DataType pcmType) {
+    public EObject getElement1(final Property umlProperty, final DataType umlType, final InnerDeclaration pcmDeclaration) {
       return pcmDeclaration;
     }
     
-    public void update0Element(final Property umlProperty, final DataType umlType, final InnerDeclaration pcmDeclaration, final org.palladiosimulator.pcm.repository.DataType pcmType) {
-      final boolean unbound = ((umlProperty.lowerBound() != 1) || (umlProperty.upperBound() != 1));
+    public void update0Element(final Property umlProperty, final DataType umlType, final InnerDeclaration pcmDeclaration) {
+      final boolean unbounded = ((umlProperty.upperBound() != 1) || (umlProperty.lowerBound() != 1));
       final Repository pcmRepository = pcmDeclaration.getCompositeDataType_InnerDeclaration().getRepository__DataType();
-      pcmDeclaration.setDatatype_InnerDeclaration(UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, Boolean.valueOf(unbound), this.userInteracting, this.correspondenceModel));
+      pcmDeclaration.setDatatype_InnerDeclaration(UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel));
     }
     
     public EObject getCorrepondenceSourcePcmDeclaration(final Property umlProperty, final DataType umlType) {
       return umlProperty;
-    }
-    
-    public EObject getCorrepondenceSourcePcmType(final Property umlProperty, final DataType umlType, final InnerDeclaration pcmDeclaration) {
-      return umlType;
     }
   }
   
@@ -67,14 +63,8 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
     	return;
     }
     registerObjectUnderModification(pcmDeclaration);
-    org.palladiosimulator.pcm.repository.DataType pcmType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmType(umlProperty, umlType, pcmDeclaration), // correspondence source supplier
-    	org.palladiosimulator.pcm.repository.DataType.class,
-    	(org.palladiosimulator.pcm.repository.DataType _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(pcmType);
-    // val updatedElement userExecution.getElement1(umlProperty, umlType, pcmDeclaration, pcmType);
-    userExecution.update0Element(umlProperty, umlType, pcmDeclaration, pcmType);
+    // val updatedElement userExecution.getElement1(umlProperty, umlType, pcmDeclaration);
+    userExecution.update0Element(umlProperty, umlType, pcmDeclaration);
     
     postprocessElements();
   }

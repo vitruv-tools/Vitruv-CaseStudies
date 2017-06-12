@@ -1,17 +1,17 @@
-import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 import org.eclipse.emf.common.util.URI
-import org.eclipse.uml2.uml.resource.UMLResource
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import org.palladiosimulator.pcm.repository.CollectionDataType
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.palladiosimulator.pcm.repository.OperationSignature
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.resource.UMLResource
+import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.InnerDeclaration
+import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.Parameter
+import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
-import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: PcmToUml
 in reaction to changes in PCM
@@ -61,7 +61,7 @@ routine createUmlModel(pcm::Repository pcmRepository) {
 			val resourceSet = new ResourceSetImpl()
 			val primitiveTypesUri = URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI).appendFragment("_0")
 			val primitiveTypes = resourceSet.getEObject(primitiveTypesUri, true)
-			packageImport.importedPackage = primitiveTypes as org.eclipse.uml2.uml.Package
+			packageImport.importedPackage = primitiveTypes as Package
 		}
 		val umlModel = create uml::Model and initialize {
 			umlModel.name = pcmRepository.entityName
@@ -153,22 +153,17 @@ reaction ChangedInnerDeclarationType {
 routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, pcm::DataType pcmDataType) {
 	match {
 		val umlProperty = retrieve uml::Property corresponding to innerDeclaration
-		val umlType = retrieve optional uml::DataType corresponding to pcmDataType
+		val umlModel = retrieve uml::Model corresponding to innerDeclaration.compositeDataType_InnerDeclaration.repository__DataType
 	}
 	action {
 		update umlProperty {
-			if (pcmDataType === null) {
+			if (pcmDataType === null ||
+				(pcmDataType instanceof CollectionDataType && (pcmDataType as CollectionDataType).innerType_CollectionDataType === null)) {
 				umlProperty.type = null
 			} else {
-				//if (umlType === null) {
-				//	umlProperty.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmDataType)
-				//} else {
-				//	umlProperty.type = umlType
-				//}
-				println(">> changeInnerDeclarationType for " + innerDeclaration.compositeDataType_InnerDeclaration.entityName + "@" + innerDeclaration.entityName)
-				umlProperty.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmDataType)
-				PcmToUmlUtil.updateMultiplicity(umlProperty, pcmDataType instanceof CollectionDataType)
+				umlProperty.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmDataType, umlModel)
 			}
+			PcmToUmlUtil.updateMultiplicity(umlProperty, umlProperty.type !== null && pcmDataType instanceof CollectionDataType)
 		}
 	}
 }
@@ -228,84 +223,65 @@ routine removeCompositeDataTypeParent(pcm::CompositeDataType dataType, pcm::Comp
 
 reaction ChangedCollectionDataTypeInnerType {
 	after element replaced at pcm::CollectionDataType[innerType_CollectionDataType]
-	call createCollectionDataTypeInnerType(affectedEObject, newValue)
+	call changeCollectionDataTypeInnerType(affectedEObject, newValue)
 }
 
-routine createCollectionDataTypeInnerType(pcm::CollectionDataType pcmDataType, pcm::DataType pcmInnerType) {
+routine changeCollectionDataTypeInnerType(pcm::CollectionDataType pcmDataType, pcm::DataType pcmInnerType) {
 	match {
 		val umlInnerType = retrieve optional uml::DataType corresponding to pcmInnerType
+		val umlModel = retrieve uml::Model corresponding to pcmDataType.repository__DataType
 	}
 	action {
 		call {
 			if (pcmInnerType instanceof CollectionDataType) {
 				userInteracting.showMessage(UserInteractionType.MODAL,
 					"Nested collection types are not transformed to UML. Consider using a composite type.")
+			}
+			var innerType = umlInnerType
+			if (innerType === null) {
+				innerType = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmInnerType, umlModel)
+			}
+			if (innerType !== null && !(pcmInnerType instanceof CollectionDataType)) {
+				logger.info("collection type: " + pcmDataType.entityName)
+				logger.info(pcmInnerType)
+				logger.info(innerType)
+				clearCorrespondenceForCollectionTypes(pcmDataType)
+				addCorrespondenceForCollectionTypes(pcmDataType, innerType)
 			} else {
-				var innerType = umlInnerType
-				if (innerType === null) {
-					innerType = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmInnerType)
-				}
-				if (innerType === null) {
-					logger.info("collection type: " + pcmDataType.entityName)
-					logger.info(pcmInnerType)
-					logger.info((pcmInnerType as PrimitiveDataType).type)
-					logger.info(innerType)
-					clearCorrespondenceForCollectionTypes(pcmDataType)
-					addCorrespondenceForCollectionTypes(pcmDataType, innerType)
-					val references = EcoreUtil.UsageCrossReferencer.find(pcmDataType, pcmDataType.repository__DataType)
-					for (reference : references) {
-						if (reference.EObject instanceof OperationSignature && reference.EStructuralFeature.name == "returnType__OperationSignature") {
-							changeUmlOperationType(reference.EObject as OperationSignature)
-						} else if (reference.EObject instanceof InnerDeclaration && reference.EStructuralFeature.name == "datatype_InnerDeclaration") {
-							changeInnerDeclarationType(reference.EObject as InnerDeclaration, pcmInnerType)
-						} else if (reference.EObject instanceof Parameter && reference.EStructuralFeature.name == "dataType__Parameter") {
-							changeParameterType(reference.EObject as Parameter, pcmInnerType)
-						} else {
-							logger.warn("Inner collection type changed at unhandled reference for " + reference.EObject.class.name +
-								" at " + reference.EStructuralFeature.name)
-						}
-						logger.info("reference for collection type: ")
-						logger.info(reference.EObject)
-						logger.info(reference.EStructuralFeature)
-					}
+				logger.warn("CollectionDataType inner type could not be resolved")
+			}
+			val references = EcoreUtil.UsageCrossReferencer.find(pcmDataType, pcmDataType.repository__DataType)
+			for (reference : references) {
+				if (reference.EObject instanceof OperationSignature && reference.EStructuralFeature.name == "returnType__OperationSignature") {
+					changeUmlOperationType(reference.EObject as OperationSignature)
+				} else if (reference.EObject instanceof InnerDeclaration && reference.EStructuralFeature.name == "datatype_InnerDeclaration") {
+					changeInnerDeclarationType(reference.EObject as InnerDeclaration, pcmDataType)
+				} else if (reference.EObject instanceof Parameter && reference.EStructuralFeature.name == "dataType__Parameter") {
+					changeParameterType(reference.EObject as Parameter, pcmDataType)
 				} else {
-					logger.warn("CollectionDataType inner type could not be resolved")
+					logger.warn("Inner collection type changed at unhandled reference for " + reference.EObject.class.name +
+						" at " + reference.EStructuralFeature.name)
 				}
 			}
+				
 		}
-	}
-}
-
-reaction RemovedCollectionDataTypeInnerType {
-	after element removed from pcm::CollectionDataType[innerType_CollectionDataType]
-	call removeCollectionDataTypeInnerType(affectedEObject, oldValue)
-}
-
-routine removeCollectionDataTypeInnerType(pcm::CollectionDataType pcmDataType, pcm::DataType pcmInnerType) {
-	match {
-		val umlInnerType = retrieve uml::DataType corresponding to pcmInnerType
-	}
-	action {
-		call PcmToUmlUtil.unsetTypeOccurences(pcmDataType)
 	}
 }
 
 routine clearCorrespondenceForCollectionTypes(pcm::CollectionDataType pcmType) {
 	match {
-		val oldInnerType = retrieve uml::DataType corresponding to pcmType tagged with "collectionType"
+		val oldInnerType = retrieve uml::DataType corresponding to pcmType tagged with PcmToUmlUtil.COLLECTION_TYPE_TAG
 	}
 	action {
-		call println("cleared correspondence between an inner type and a uml type")
 		remove correspondence between pcmType and oldInnerType
 	}
 }
 routine addCorrespondenceForCollectionTypes(pcm::CollectionDataType pcmType, uml::DataType innerType) {
 	match {
-		val oldInnerType = retrieve optional uml::DataType corresponding to pcmType tagged with "collectionType"
+		val oldInnerType = retrieve optional uml::DataType corresponding to pcmType tagged with PcmToUmlUtil.COLLECTION_TYPE_TAG
 	}
 	action {
-		call println("created correspondence between an inner type and a uml type")
-		add correspondence between pcmType and innerType tag with "collectionType"
+		add correspondence between pcmType and innerType tag with PcmToUmlUtil.COLLECTION_TYPE_TAG
 	}
 }
 
@@ -384,6 +360,7 @@ reaction ChangedOperationSignatureType {
 
 routine changeUmlOperationType(pcm::OperationSignature pcmSignature) {
 	match {
+		val umlModel = retrieve uml::Model corresponding to pcmSignature.interface__OperationSignature.repository__Interface
 		val umlOperation = retrieve uml::Operation corresponding to pcmSignature
 		val umlReturnType = retrieve optional uml::DataType corresponding to pcmSignature.returnType__OperationSignature
 	}
@@ -391,26 +368,13 @@ routine changeUmlOperationType(pcm::OperationSignature pcmSignature) {
 		update umlOperation {
 			var returnType = umlReturnType
 			if (returnType === null) {
-				if (pcmSignature.returnType__OperationSignature instanceof PrimitiveDataType) {
-					println("> is primitive type")
-					returnType = PcmToUmlUtil.getUmlPrimitiveType((pcmSignature.returnType__OperationSignature as PrimitiveDataType).type)
-					println(returnType)
-				} else if (pcmSignature.returnType__OperationSignature instanceof CollectionDataType) {
-					val innerType = pcmSignature.returnType__OperationSignature
-					if (innerType instanceof PrimitiveDataType) {
-						println("> innerType is primitive type")
-						returnType = PcmToUmlUtil.getUmlPrimitiveType(innerType.type)
-						println(returnType)
-					}
-				} else {
-					println("> is not primitive")
-					println(pcmSignature.returnType__OperationSignature)
-				}
+				returnType = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmSignature.returnType__OperationSignature, umlModel)
 			}
 			umlOperation.type = returnType
 			PcmToUmlUtil.updateOperationReturnTypeMultiplicity(
 				umlOperation,
-				pcmSignature.returnType__OperationSignature instanceof CollectionDataType
+				pcmSignature.returnType__OperationSignature instanceof CollectionDataType &&
+				(pcmSignature.returnType__OperationSignature as CollectionDataType).innerType_CollectionDataType !== null
 				)
 		}
 	}
@@ -486,16 +450,17 @@ reaction ChangedParameterType {
 routine changeParameterType(pcm::Parameter pcmParameter, pcm::DataType pcmDataType) {
 	match {
 		val umlParameter = retrieve uml::Parameter corresponding to pcmParameter
-		// val umlType = retrieve optional uml::DataType corresponding to pcmParameter.dataType__Parameter
+		val umlModel = retrieve uml::Model corresponding to pcmParameter.operationSignature__Parameter.interface__OperationSignature.repository__Interface
 	}
 	action {
 		update umlParameter {
-			logger.info("Change Parameter type at " + pcmParameter.parameterName + ", " + pcmParameter.operationSignature__Parameter.entityName + " to " + pcmDataType)
-			if (pcmParameter.parameterName === "customerType") {
-				println("!! " + (pcmDataType as PrimitiveDataType).type)
+			if (pcmDataType === null ||
+				(pcmDataType instanceof CollectionDataType && (pcmDataType as CollectionDataType).innerType_CollectionDataType === null)) {
+				umlParameter.type = null
+			} else {
+				umlParameter.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmParameter.dataType__Parameter, umlModel)
 			}
-			umlParameter.type = PcmToUmlUtil.retrieveUmlType(correspondenceModel, pcmParameter.dataType__Parameter)
-			PcmToUmlUtil.updateMultiplicity(umlParameter, pcmDataType instanceof CollectionDataType)
+			PcmToUmlUtil.updateMultiplicity(umlParameter, umlParameter.type !== null && pcmDataType instanceof CollectionDataType)
 		}
 	}
 }
@@ -577,7 +542,6 @@ reaction AddedOperationProvidedRoleInterface {
 	after element replaced at pcm::OperationProvidedRole[providedInterface__OperationProvidedRole]
 	call addOperationProvidedRoleInterface(affectedEObject, newValue)
 }
-// TODO: interface is not created at this point
 routine addOperationProvidedRoleInterface(pcm::OperationProvidedRole pcmRole, pcm::OperationInterface pcmInterface) {
 	match {
 		val interfaceRealization = retrieve uml::InterfaceRealization corresponding to pcmRole

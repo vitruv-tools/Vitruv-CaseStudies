@@ -5,7 +5,7 @@ import org.palladiosimulator.pcm.repository.Repository
 
 import static org.junit.Assert.*
 
-class UmlToPcmTest extends AbstractUmlPcmTest {
+class ModelTest extends AbstractUmlPcmTest {
 
 	@Test
 	public def void testRepositoryCreation() {

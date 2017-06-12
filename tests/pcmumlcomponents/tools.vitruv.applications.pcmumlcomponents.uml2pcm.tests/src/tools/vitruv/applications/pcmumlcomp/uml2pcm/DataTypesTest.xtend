@@ -14,10 +14,12 @@ import static org.junit.Assert.*
 
 class DataTypesTest extends AbstractUmlPcmTest {
 	
+	protected val DATATYPE_NAME = "fooType"
+	
 	@Test
 	public def void primitiveTypeCreate() {
 		val primitiveType = UMLFactory.eINSTANCE.createPrimitiveType()
-		primitiveType.name = "Boolean"
+		primitiveType.name = UML_TYPE_BOOL
 		rootElement.packagedElements += primitiveType
 		saveAndSynchronizeChanges(rootElement)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[primitiveType]).flatten
@@ -26,37 +28,10 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		assertTrue(pcmType instanceof PrimitiveDataType)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(primitiveType.name), (pcmType as PrimitiveDataType).type)
 	}
-	
-	@Test
-	public def void collectionTypeCreate() {
-		val innerType = UMLFactory.eINSTANCE.createPrimitiveType()
-		innerType.name = "Integer"
-		rootElement.packagedElements += innerType
 		
-		userInteractor.addNextSelections(0)
-		val umlType = UMLFactory.eINSTANCE.createDataType()
-		umlType.name = "IntList"
-		rootElement.packagedElements += umlType
-		
-		val umlProperty = UMLFactory.eINSTANCE.createProperty()
-		umlProperty.name = UmlToPcmUtil.CollectionTypeAttributeName
-		umlProperty.type = innerType
-		umlType.ownedAttributes += umlProperty
-		
-		saveAndSynchronizeChanges(rootElement)
-		
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlType]).flatten
-		assertEquals(1, correspondingElements.length)
-		assertTrue(correspondingElements.get(0) instanceof CollectionDataType)
-		val pcmType = (correspondingElements.get(0) as CollectionDataType)
-		assertEquals(umlType.name, pcmType.entityName)
-		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(innerType.name), (pcmType.innerType_CollectionDataType as PrimitiveDataType).type)
-		
-	}
-	
 	@Test
 	public def void compositeTypeCreate() {
-		val typeName = "t1"
+		val typeName = DATATYPE_NAME
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = typeName
 		val nrOwnedTypesBefore = rootElement.ownedTypes.length
@@ -72,16 +47,14 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void compositeTypeAddProperty() {
-		//Logger.rootLogger.level = Level.ALL
 		val dataType = UMLFactory.eINSTANCE.createDataType()
-		dataType.name = "t2"
+		dataType.name = DATATYPE_NAME
 		rootElement.packagedElements += dataType
 		userInteractor.addNextSelections(1)
-		val propertyName = "p1"
+		val propertyName = PARAMETER_NAME
 		val propertyType = UMLFactory.eINSTANCE.createPrimitiveType()
-		propertyType.name = "Integer"
+		propertyType.name = UML_TYPE_INT
 		rootElement.packagedElements += propertyType
-		//val property = dataType.createOwnedAttribute(propertyName, propertyType)
 		val property = UMLFactory.eINSTANCE.createProperty()
 		property.name = propertyName
 		property.type = propertyType
@@ -95,18 +68,9 @@ class DataTypesTest extends AbstractUmlPcmTest {
 			(pcmType.innerDeclaration_CompositeDataType.get(0).datatype_InnerDeclaration as PrimitiveDataType).type)
 	}
 	
-	protected def DataType createCollectionDataType(String name) {
-		val dataType = UMLFactory.eINSTANCE.createDataType()
-		dataType.name = "t2"
-		rootElement.packagedElements += dataType
-		userInteractor.addNextSelections(0)
-		saveAndSynchronizeChanges(rootElement)
-		return dataType
-	}
-	
 	protected def DataType createCompositeDataType(String name) {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
-		dataType.name = "t2"
+		dataType.name = DATATYPE_NAME
 		rootElement.packagedElements += dataType
 		userInteractor.addNextSelections(1)
 		saveAndSynchronizeChanges(rootElement)
@@ -132,15 +96,15 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void compositeTypeChangeProperty() {
-		val umlType = createCompositeDataType("t1")
-		val umlProperty = createProperty(umlType, "p1", "Integer")
+		val umlType = createCompositeDataType(DATATYPE_NAME)
+		val umlProperty = createProperty(umlType, PARAMETER_NAME, UML_TYPE_INT)
 		
 		val newType = UMLFactory.eINSTANCE.createPrimitiveType()
-		newType.name = "Boolean"
+		newType.name = UML_TYPE_BOOL
 		rootElement.packagedElements += newType
 		umlProperty.type = newType
 		
-		val newPropertyName = "p11"
+		val newPropertyName = PARAMETER_NAME_2
 		umlProperty.name = newPropertyName
 		
 		saveAndSynchronizeChanges(rootElement)
@@ -153,10 +117,10 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void compositeTypeDeleteProperty() {
-		val umlType = createCompositeDataType("t1")
-		val property1 = createProperty(umlType, "p1", "Integer")
-		val remainingPropertyName = "p2"
-		createProperty(umlType, remainingPropertyName, "Real")
+		val umlType = createCompositeDataType(DATATYPE_NAME)
+		val property1 = createProperty(umlType, PARAMETER_NAME, UML_TYPE_INT)
+		val remainingPropertyName = PARAMETER_NAME_2
+		createProperty(umlType, remainingPropertyName, UML_TYPE_REAL)
 		
 		umlType.ownedAttributes -= property1
 		
@@ -166,25 +130,5 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		assertEquals(1, pcmType.innerDeclaration_CompositeDataType.length())
 		assertEquals(remainingPropertyName, pcmType.innerDeclaration_CompositeDataType.get(0).entityName)
 	}
-	
-	@Test
-	public def void collectionTypeDeleteProperty() {
-		val umlType = createCollectionDataType("t4")
-		val property1 = createProperty(umlType, "p1", "Integer")
-		val property2 = createProperty(umlType, "p2", "Boolean")
 		
-		var pcmType = (getCorrespondingDataType(umlType) as CollectionDataType)
-		assertEquals(PrimitiveTypeEnum.BOOL, (pcmType.innerType_CollectionDataType as PrimitiveDataType).type)
-		
-		umlType.ownedAttributes -= property2
-		saveAndSynchronizeChanges(umlType)
-		pcmType = (getCorrespondingDataType(umlType) as CollectionDataType)
-		assertEquals(PrimitiveTypeEnum.INT, (pcmType.innerType_CollectionDataType as PrimitiveDataType).type)
-		
-		umlType.ownedAttributes -= property1
-		saveAndSynchronizeChanges(umlType)
-		pcmType = (getCorrespondingDataType(umlType) as CollectionDataType)
-		assertNull(pcmType.innerType_CollectionDataType)
-	}
-	
 }

@@ -2,6 +2,7 @@ package mir.reactions.reactionsUmlToPcm.umlToPcm;
 
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -56,8 +57,19 @@ class DeletedElementReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    RemoveEReference<Model, PackageableElement> typedChange = (RemoveEReference<Model, PackageableElement>)change;
+    Model affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    PackageableElement oldValue = typedChange.getOldValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final Model affectedEObject, final EReference affectedFeature, final PackageableElement oldValue) {
+    return (!(oldValue instanceof DataType));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

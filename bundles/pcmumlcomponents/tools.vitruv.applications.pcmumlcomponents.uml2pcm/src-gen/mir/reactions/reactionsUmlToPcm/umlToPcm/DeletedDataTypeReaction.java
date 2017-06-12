@@ -1,10 +1,10 @@
-package mir.reactions.reactionsPcmToUml.pcmToUml;
+package mir.reactions.reactionsUmlToPcm.umlToPcm;
 
-import mir.routines.pcmToUml.RoutinesFacade;
+import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.palladiosimulator.pcm.repository.CollectionDataType;
-import org.palladiosimulator.pcm.repository.DataType;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -14,18 +14,18 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class RemovedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealization {
-  public RemovedCollectionDataTypeInnerTypeReaction(final UserInteracting userInteracting) {
+class DeletedDataTypeReaction extends AbstractReactionRealization {
+  public DeletedDataTypeReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    RemoveEReference<CollectionDataType, DataType> typedChange = (RemoveEReference<CollectionDataType, DataType>)change;
-    CollectionDataType affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<Model, DataType> typedChange = (RemoveEReference<Model, DataType>)change;
+    Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     DataType oldValue = typedChange.getOldValue();
-    mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCollectionDataTypeInnerTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCollectionDataTypeInnerTypeReaction.ActionUserExecution(this.executionState, this);
+    mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
   }
   
@@ -34,11 +34,11 @@ class RemovedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealiza
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<CollectionDataType, DataType> relevantChange = (RemoveEReference<CollectionDataType, DataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CollectionDataType)) {
+    RemoveEReference<Model, DataType> relevantChange = (RemoveEReference<Model, DataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("innerType_CollectionDataType")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
     if (!(relevantChange.getOldValue() instanceof DataType)) {
@@ -65,8 +65,8 @@ class RemovedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealiza
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CollectionDataType affectedEObject, final EReference affectedFeature, final DataType oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.removeCollectionDataTypeInnerType(affectedEObject, oldValue);
+    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final DataType oldValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.deleteDataType(oldValue);
     }
   }
 }

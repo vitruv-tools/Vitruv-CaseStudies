@@ -4,11 +4,11 @@ import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.PrimitiveDataType;
+import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -25,47 +25,33 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final OperationSignature pcmSignature, final Operation umlOperation, final DataType umlReturnType) {
+    public EObject getElement1(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation, final DataType umlReturnType) {
       return umlOperation;
     }
     
-    public void update0Element(final OperationSignature pcmSignature, final Operation umlOperation, final DataType umlReturnType) {
+    public void update0Element(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation, final DataType umlReturnType) {
       DataType returnType = umlReturnType;
       if ((returnType == null)) {
-        org.palladiosimulator.pcm.repository.DataType _returnType__OperationSignature = pcmSignature.getReturnType__OperationSignature();
-        if ((_returnType__OperationSignature instanceof PrimitiveDataType)) {
-          InputOutput.<String>println("> is primitive type");
-          org.palladiosimulator.pcm.repository.DataType _returnType__OperationSignature_1 = pcmSignature.getReturnType__OperationSignature();
-          returnType = PcmToUmlUtil.getUmlPrimitiveType(((PrimitiveDataType) _returnType__OperationSignature_1).getType());
-          InputOutput.<DataType>println(returnType);
-        } else {
-          org.palladiosimulator.pcm.repository.DataType _returnType__OperationSignature_2 = pcmSignature.getReturnType__OperationSignature();
-          if ((_returnType__OperationSignature_2 instanceof CollectionDataType)) {
-            final org.palladiosimulator.pcm.repository.DataType innerType = pcmSignature.getReturnType__OperationSignature();
-            if ((innerType instanceof PrimitiveDataType)) {
-              InputOutput.<String>println("> innerType is primitive type");
-              returnType = PcmToUmlUtil.getUmlPrimitiveType(((PrimitiveDataType)innerType).getType());
-              InputOutput.<DataType>println(returnType);
-            }
-          } else {
-            InputOutput.<String>println("> is not primitive");
-            InputOutput.<org.palladiosimulator.pcm.repository.DataType>println(pcmSignature.getReturnType__OperationSignature());
-          }
-        }
+        returnType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmSignature.getReturnType__OperationSignature(), umlModel);
       }
       umlOperation.setType(returnType);
-      org.palladiosimulator.pcm.repository.DataType _returnType__OperationSignature_3 = pcmSignature.getReturnType__OperationSignature();
       PcmToUmlUtil.updateOperationReturnTypeMultiplicity(umlOperation, 
-        Boolean.valueOf((_returnType__OperationSignature_3 instanceof CollectionDataType)));
+        Boolean.valueOf(((pcmSignature.getReturnType__OperationSignature() instanceof CollectionDataType) && 
+          (((CollectionDataType) pcmSignature.getReturnType__OperationSignature()).getInnerType_CollectionDataType() != null))));
     }
     
-    public EObject getCorrepondenceSourceUmlOperation(final OperationSignature pcmSignature) {
+    public EObject getCorrepondenceSourceUmlOperation(final OperationSignature pcmSignature, final Model umlModel) {
       return pcmSignature;
     }
     
-    public EObject getCorrepondenceSourceUmlReturnType(final OperationSignature pcmSignature, final Operation umlOperation) {
+    public EObject getCorrepondenceSourceUmlReturnType(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation) {
       org.palladiosimulator.pcm.repository.DataType _returnType__OperationSignature = pcmSignature.getReturnType__OperationSignature();
       return _returnType__OperationSignature;
+    }
+    
+    public EObject getCorrepondenceSourceUmlModel(final OperationSignature pcmSignature) {
+      Repository _repository__Interface = pcmSignature.getInterface__OperationSignature().getRepository__Interface();
+      return _repository__Interface;
     }
   }
   
@@ -82,8 +68,17 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     getLogger().debug("Called routine ChangeUmlOperationTypeRoutine with input:");
     getLogger().debug("   OperationSignature: " + this.pcmSignature);
     
+    Model umlModel = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlModel(pcmSignature), // correspondence source supplier
+    	Model.class,
+    	(Model _element) -> true, // correspondence precondition checker
+    	null);
+    if (umlModel == null) {
+    	return;
+    }
+    registerObjectUnderModification(umlModel);
     Operation umlOperation = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature, umlModel), // correspondence source supplier
     	Operation.class,
     	(Operation _element) -> true, // correspondence precondition checker
     	null);
@@ -92,13 +87,13 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     }
     registerObjectUnderModification(umlOperation);
     DataType umlReturnType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlReturnType(pcmSignature, umlOperation), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUmlReturnType(pcmSignature, umlModel, umlOperation), // correspondence source supplier
     	DataType.class,
     	(DataType _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(umlReturnType);
-    // val updatedElement userExecution.getElement1(pcmSignature, umlOperation, umlReturnType);
-    userExecution.update0Element(pcmSignature, umlOperation, umlReturnType);
+    // val updatedElement userExecution.getElement1(pcmSignature, umlModel, umlOperation, umlReturnType);
+    userExecution.update0Element(pcmSignature, umlModel, umlOperation, umlReturnType);
     
     postprocessElements();
   }

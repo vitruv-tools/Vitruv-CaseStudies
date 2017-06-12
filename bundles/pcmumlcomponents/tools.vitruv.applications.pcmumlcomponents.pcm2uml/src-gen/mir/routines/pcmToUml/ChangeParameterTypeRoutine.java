@@ -2,14 +2,12 @@ package mir.routines.pcmToUml;
 
 import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
-import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.xbase.lib.InputOutput;
+import org.eclipse.uml2.uml.Model;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Parameter;
-import org.palladiosimulator.pcm.repository.PrimitiveDataType;
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
+import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -26,33 +24,26 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Parameter pcmParameter, final DataType pcmDataType, final org.eclipse.uml2.uml.Parameter umlParameter) {
+    public EObject getElement1(final Parameter pcmParameter, final DataType pcmDataType, final org.eclipse.uml2.uml.Parameter umlParameter, final Model umlModel) {
       return umlParameter;
     }
     
-    public void update0Element(final Parameter pcmParameter, final DataType pcmDataType, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      Logger _logger = this.getLogger();
-      String _parameterName = pcmParameter.getParameterName();
-      String _plus = ("Change Parameter type at " + _parameterName);
-      String _plus_1 = (_plus + ", ");
-      String _entityName = pcmParameter.getOperationSignature__Parameter().getEntityName();
-      String _plus_2 = (_plus_1 + _entityName);
-      String _plus_3 = (_plus_2 + " to ");
-      String _plus_4 = (_plus_3 + pcmDataType);
-      _logger.info(_plus_4);
-      String _parameterName_1 = pcmParameter.getParameterName();
-      boolean _tripleEquals = (_parameterName_1 == "customerType");
-      if (_tripleEquals) {
-        PrimitiveTypeEnum _type = ((PrimitiveDataType) pcmDataType).getType();
-        String _plus_5 = ("!! " + _type);
-        InputOutput.<String>println(_plus_5);
+    public void update0Element(final Parameter pcmParameter, final DataType pcmDataType, final org.eclipse.uml2.uml.Parameter umlParameter, final Model umlModel) {
+      if (((pcmDataType == null) || ((pcmDataType instanceof CollectionDataType) && (((CollectionDataType) pcmDataType).getInnerType_CollectionDataType() == null)))) {
+        umlParameter.setType(null);
+      } else {
+        umlParameter.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmParameter.getDataType__Parameter(), umlModel));
       }
-      umlParameter.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmParameter.getDataType__Parameter()));
-      PcmToUmlUtil.updateMultiplicity(umlParameter, Boolean.valueOf((pcmDataType instanceof CollectionDataType)));
+      PcmToUmlUtil.updateMultiplicity(umlParameter, Boolean.valueOf(((umlParameter.getType() != null) && (pcmDataType instanceof CollectionDataType))));
     }
     
     public EObject getCorrepondenceSourceUmlParameter(final Parameter pcmParameter, final DataType pcmDataType) {
       return pcmParameter;
+    }
+    
+    public EObject getCorrepondenceSourceUmlModel(final Parameter pcmParameter, final DataType pcmDataType, final org.eclipse.uml2.uml.Parameter umlParameter) {
+      Repository _repository__Interface = pcmParameter.getOperationSignature__Parameter().getInterface__OperationSignature().getRepository__Interface();
+      return _repository__Interface;
     }
   }
   
@@ -81,8 +72,17 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	return;
     }
     registerObjectUnderModification(umlParameter);
-    // val updatedElement userExecution.getElement1(pcmParameter, pcmDataType, umlParameter);
-    userExecution.update0Element(pcmParameter, pcmDataType, umlParameter);
+    Model umlModel = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlModel(pcmParameter, pcmDataType, umlParameter), // correspondence source supplier
+    	Model.class,
+    	(Model _element) -> true, // correspondence precondition checker
+    	null);
+    if (umlModel == null) {
+    	return;
+    }
+    registerObjectUnderModification(umlModel);
+    // val updatedElement userExecution.getElement1(pcmParameter, pcmDataType, umlParameter, umlModel);
+    userExecution.update0Element(pcmParameter, pcmDataType, umlParameter, umlModel);
     
     postprocessElements();
   }

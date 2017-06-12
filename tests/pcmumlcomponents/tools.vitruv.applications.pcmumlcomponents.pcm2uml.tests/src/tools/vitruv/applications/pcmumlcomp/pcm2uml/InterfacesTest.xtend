@@ -16,13 +16,7 @@ import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.ParameterModifier
 
 class InterfacesTest extends AbstractPcmUmlTest {
-	
-	protected val INTERFACE_NAME = "TestInterface"
-	protected val OPERATION_NAME = "fooOperation"
-	protected val OPERATION_NAME_2 = "barOperation"
-	protected val PARAMETER_NAME = "fooParameter"
-	protected val PARAMETER_NAME_2 = "barParameter"
-	
+		
 	protected def OperationInterface createOperationInterface(String name) {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
 		pcmInterface.entityName = name
@@ -73,7 +67,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		assertEquals(1, correspondingOperation.length)
 		val umlOperation = (correspondingOperation.get(0) as Operation)
 		assertEquals(operationName, umlOperation.name)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(returnType.type), umlOperation.type.name)
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(returnType.type), umlOperation.type.name)
 	}
 	
 	@Test
@@ -87,7 +81,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(rootElement)
 		var correspondingOperation = correspondenceModel.getCorrespondingEObjects(#[pcmOperation]).flatten
 		var umlOperation = (correspondingOperation.get(0) as Operation)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType(newReturnType.type), umlOperation.type.name)
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(newReturnType.type), umlOperation.type.name)
 		
 		val newOperationName = OPERATION_NAME_2
 		pcmOperation.entityName = newOperationName
@@ -151,7 +145,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		val umlParameter = umlOperation.ownedParameters.get(1)
 		
 		assertEquals(parameterName, umlParameter.name)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType((parameterType as PrimitiveDataType).type),
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName((parameterType as PrimitiveDataType).type),
 			umlParameter.type.name)
 	}
 	
@@ -173,7 +167,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
 		umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
 				
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveType((newType as PrimitiveDataType).type),
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName((newType as PrimitiveDataType).type),
 			umlParameter.type.name)
 
 		val newName = PARAMETER_NAME_2

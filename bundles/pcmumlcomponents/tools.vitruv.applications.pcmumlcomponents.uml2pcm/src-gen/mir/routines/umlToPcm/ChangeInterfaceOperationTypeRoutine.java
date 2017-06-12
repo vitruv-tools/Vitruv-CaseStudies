@@ -24,23 +24,18 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType) {
+    public EObject getElement1(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature) {
       return pcmSignature;
     }
     
-    public void update0Element(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final DataType pcmType) {
-      DataType resolvedType = pcmType;
+    public void update0Element(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature) {
+      DataType resolvedType = null;
       if ((((resolvedType == null) && (umlParameter.getType() != null)) && (umlParameter.getType() instanceof org.eclipse.uml2.uml.DataType))) {
-        final boolean unbound = ((umlParameter.lowerBound() != 1) || (umlParameter.upperBound() != 1));
+        final boolean unbounded = ((umlParameter.lowerBound() != 1) || (umlParameter.upperBound() != 1));
         Type _type = umlParameter.getType();
-        resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmSignature.getInterface__OperationSignature().getRepository__Interface(), Boolean.valueOf(unbound), this.userInteracting, this.correspondenceModel);
+        resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmSignature.getInterface__OperationSignature().getRepository__Interface(), Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel);
       }
       pcmSignature.setReturnType__OperationSignature(resolvedType);
-    }
-    
-    public EObject getCorrepondenceSourcePcmType(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature) {
-      Type _type = umlParameter.getType();
-      return _type;
     }
     
     public EObject getCorrepondenceSourcePcmSignature(final Operation umlOperation, final Parameter umlParameter) {
@@ -73,14 +68,8 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     	return;
     }
     registerObjectUnderModification(pcmSignature);
-    DataType pcmType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmType(umlOperation, umlParameter, pcmSignature), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(pcmType);
-    // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmType);
-    userExecution.update0Element(umlOperation, umlParameter, pcmSignature, pcmType);
+    // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature);
+    userExecution.update0Element(umlOperation, umlParameter, pcmSignature);
     
     postprocessElements();
   }

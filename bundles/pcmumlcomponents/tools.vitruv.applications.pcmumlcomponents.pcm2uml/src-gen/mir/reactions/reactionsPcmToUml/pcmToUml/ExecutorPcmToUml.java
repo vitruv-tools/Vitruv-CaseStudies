@@ -3,13 +3,11 @@ package mir.reactions.reactionsPcmToUml.pcmToUml;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorPcmToUml extends AbstractReactionsExecutor {
-  public ExecutorPcmToUml(final UserInteracting userInteracting) {
-    super(userInteracting,
-    	new PcmDomainProvider().getDomain(), 
+  public ExecutorPcmToUml() {
+    super(new PcmDomainProvider().getDomain(), 
     	new UmlDomainProvider().getDomain());
   }
   
@@ -26,7 +24,6 @@ public class ExecutorPcmToUml extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsPcmToUml.pcmToUml.AddedCompositeDataTypeParentReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToUml.pcmToUml.AddedCompositeDataTypeParentReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCompositeDataTypeParentReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCompositeDataTypeParentReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToUml.pcmToUml.ChangedCollectionDataTypeInnerTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToUml.pcmToUml.ChangedCollectionDataTypeInnerTypeReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCollectionDataTypeInnerTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCollectionDataTypeInnerTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmInterfaceReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToUml.pcmToUml.DeletedPcmInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToUml.pcmToUml.DeletedPcmInterfaceReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToUml.pcmToUml.CreatedOperationInterfaceSignatureReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedOperationInterfaceSignatureReaction(userInteracting));

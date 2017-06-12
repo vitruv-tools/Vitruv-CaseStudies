@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_sEGN4E7bEeeBTYuTX5df2A" name="MediaStore">
+  <packageImport xmi:id="_sEGN4U7bEeeBTYuTX5df2A">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN4k7bEeeBTYuTX5df2A" name="WebGUI">
+    <interfaceRealization xmi:id="_sEGN407bEeeBTYuTX5df2A" name="Provided_IHTTP_WebGUI" client="_sEGN4k7bEeeBTYuTX5df2A" supplier="_sEGN_U7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN5E7bEeeBTYuTX5df2A" name="Required_IMediaStore_WebGUI" client="_sEGN4k7bEeeBTYuTX5df2A" supplier="_sEGOBU7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN5U7bEeeBTYuTX5df2A" name="MediaStore">
+    <interfaceRealization xmi:id="_sEGN5k7bEeeBTYuTX5df2A" name="Provided_IMediaStore_MediaStore" client="_sEGN5U7bEeeBTYuTX5df2A" supplier="_sEGOBU7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN507bEeeBTYuTX5df2A" name="Required_IAudioDB_MediaStore" client="_sEGN5U7bEeeBTYuTX5df2A" supplier="_sEGODk7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN6E7bEeeBTYuTX5df2A" name="Required_ISound_MediaStore" client="_sEGN5U7bEeeBTYuTX5df2A" supplier="_sEGOFk7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN6U7bEeeBTYuTX5df2A" name="AudioDB">
+    <interfaceRealization xmi:id="_sEGN6k7bEeeBTYuTX5df2A" name="Provided_IAudioDB_AudioDB" client="_sEGN6U7bEeeBTYuTX5df2A" supplier="_sEGODk7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN607bEeeBTYuTX5df2A" name="DigitalWatermarking">
+    <interfaceRealization xmi:id="_sEGN7E7bEeeBTYuTX5df2A" name="Provided_ISound_DigitalWatermarking" client="_sEGN607bEeeBTYuTX5df2A" supplier="_sEGOFk7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN7U7bEeeBTYuTX5df2A" name="Encoding">
+    <interfaceRealization xmi:id="_sEGN7k7bEeeBTYuTX5df2A" name="IEncode_Prov" client="_sEGN7U7bEeeBTYuTX5df2A" supplier="_sEGOGk7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN707bEeeBTYuTX5df2A" name="DBCache">
+    <interfaceRealization xmi:id="_sEGN8E7bEeeBTYuTX5df2A" name="Provided_IAudioDB_DBCache" client="_sEGN707bEeeBTYuTX5df2A" supplier="_sEGODk7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN8U7bEeeBTYuTX5df2A" name="Required_IAudioDB_DBCache" client="_sEGN707bEeeBTYuTX5df2A" supplier="_sEGODk7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN8k7bEeeBTYuTX5df2A" name="EncodingMediaStore">
+    <interfaceRealization xmi:id="_sEGN807bEeeBTYuTX5df2A" name="IMediaStore_Prov" client="_sEGN8k7bEeeBTYuTX5df2A" supplier="_sEGOBU7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN9E7bEeeBTYuTX5df2A" name="IEncode_Req" client="_sEGN8k7bEeeBTYuTX5df2A" supplier="_sEGOGk7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN9U7bEeeBTYuTX5df2A" name="IAudioDB_Req" client="_sEGN8k7bEeeBTYuTX5df2A" supplier="_sEGODk7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN9k7bEeeBTYuTX5df2A" name="Required_ISound_EncodingMediaStore" client="_sEGN8k7bEeeBTYuTX5df2A" supplier="_sEGOFk7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN907bEeeBTYuTX5df2A" name="PoolingAudioDB">
+    <interfaceRealization xmi:id="_sEGN-E7bEeeBTYuTX5df2A" name="Provided_IAudioDB_PoolingAudioDB" client="_sEGN907bEeeBTYuTX5df2A" supplier="_sEGODk7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_sEGN-U7bEeeBTYuTX5df2A" name="PrioritizingMediaStore">
+    <interfaceRealization xmi:id="_sEGN-k7bEeeBTYuTX5df2A" name="Provided_IMediaStore_PrioritizingMediaStore" client="_sEGN-U7bEeeBTYuTX5df2A" supplier="_sEGOBU7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN-07bEeeBTYuTX5df2A" name="Required_IAudioDB_PrioritizingMediaStore" client="_sEGN-U7bEeeBTYuTX5df2A" supplier="_sEGODk7bEeeBTYuTX5df2A"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_sEGN_E7bEeeBTYuTX5df2A" name="Required_ISound_PrioritizingMediaStore" client="_sEGN-U7bEeeBTYuTX5df2A" supplier="_sEGOFk7bEeeBTYuTX5df2A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_sEGN_U7bEeeBTYuTX5df2A" name="IHTTP">
+    <ownedOperation xmi:id="_sEGN_k7bEeeBTYuTX5df2A" name="HTTPDownload">
+      <ownedParameter xmi:id="_sEGN_07bEeeBTYuTX5df2A" name="request" type="_sEGOH07bEeeBTYuTX5df2A"/>
+      <ownedParameter xmi:id="_sEGOAE7bEeeBTYuTX5df2A" type="_sEGOHk7bEeeBTYuTX5df2A" direction="return">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sEGOAU7bEeeBTYuTX5df2A"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sEGOAk7bEeeBTYuTX5df2A" value="*"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_sEGOA07bEeeBTYuTX5df2A" name="HTTPUpload">
+      <ownedParameter xmi:id="_sEGOBE7bEeeBTYuTX5df2A" name="file" type="_sEGOHk7bEeeBTYuTX5df2A"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_sEGOBU7bEeeBTYuTX5df2A" name="IMediaStore">
+    <ownedOperation xmi:id="_sEGOBk7bEeeBTYuTX5df2A" name="download">
+      <ownedParameter xmi:id="_sEGOB07bEeeBTYuTX5df2A" name="ids">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_sEGOCE7bEeeBTYuTX5df2A" name="customerType">
+        <type xmi:type="uml:PrimitiveType" href="platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_sEGOCU7bEeeBTYuTX5df2A" type="_sEGOHk7bEeeBTYuTX5df2A" direction="return">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sEGOCk7bEeeBTYuTX5df2A"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sEGOC07bEeeBTYuTX5df2A" value="*"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_sEGODE7bEeeBTYuTX5df2A" name="upload">
+      <ownedParameter xmi:id="_sEGODU7bEeeBTYuTX5df2A" name="file" type="_sEGOHk7bEeeBTYuTX5df2A"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_sEGODk7bEeeBTYuTX5df2A" name="IAudioDB">
+    <ownedOperation xmi:id="_sEGOD07bEeeBTYuTX5df2A" name="queryDB">
+      <ownedParameter xmi:id="_sEGOEE7bEeeBTYuTX5df2A" name="ids">
+        <type xmi:type="uml:PrimitiveType" href="platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_sEGOEU7bEeeBTYuTX5df2A" type="_sEGOHk7bEeeBTYuTX5df2A" direction="return">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sEGOEk7bEeeBTYuTX5df2A"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sEGOE07bEeeBTYuTX5df2A" value="*"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_sEGOFE7bEeeBTYuTX5df2A" name="addFile">
+      <ownedParameter xmi:id="_sEGOFU7bEeeBTYuTX5df2A" name="file" type="_sEGOHk7bEeeBTYuTX5df2A"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_sEGOFk7bEeeBTYuTX5df2A" name="ISound">
+    <ownedOperation xmi:id="_sEGOF07bEeeBTYuTX5df2A" name="watermark">
+      <ownedParameter xmi:id="_sEGOGE7bEeeBTYuTX5df2A" name="file" type="_sEGOHk7bEeeBTYuTX5df2A"/>
+      <ownedParameter xmi:id="_sEGOGU7bEeeBTYuTX5df2A" type="_sEGOHk7bEeeBTYuTX5df2A" direction="return"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_sEGOGk7bEeeBTYuTX5df2A" name="IEncode">
+    <ownedOperation xmi:id="_sEGOG07bEeeBTYuTX5df2A" name="encode">
+      <ownedParameter xmi:id="_sEGOHE7bEeeBTYuTX5df2A" name="file" type="_sEGOHk7bEeeBTYuTX5df2A"/>
+      <ownedParameter xmi:id="_sEGOHU7bEeeBTYuTX5df2A" type="_sEGOHk7bEeeBTYuTX5df2A" direction="return"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_sEGOHk7bEeeBTYuTX5df2A" name="File"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_sEGOH07bEeeBTYuTX5df2A" name="Request">
+    <ownedAttribute xmi:id="_sEGOIE7bEeeBTYuTX5df2A" name="requestedFiles">
+      <type xmi:type="uml:PrimitiveType" href="platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml#Integer"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_sEGOIU7bEeeBTYuTX5df2A" name="customerType">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_sEGOIk7bEeeBTYuTX5df2A" name="StringFT">
+    <ownedAttribute xmi:id="_sEGOI07bEeeBTYuTX5df2A" name="Value">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_sEGOJE7bEeeBTYuTX5df2A" name="Failure">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+    </ownedAttribute>
+  </packagedElement>
+</uml:Model>

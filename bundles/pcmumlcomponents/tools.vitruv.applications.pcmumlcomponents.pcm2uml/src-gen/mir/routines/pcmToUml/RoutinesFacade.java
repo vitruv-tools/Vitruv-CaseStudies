@@ -93,14 +93,8 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createCollectionDataTypeInnerType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
-    mir.routines.pcmToUml.CreateCollectionDataTypeInnerTypeRoutine effect = new mir.routines.pcmToUml.CreateCollectionDataTypeInnerTypeRoutine(this.executionState, calledBy,
-    	pcmDataType, pcmInnerType);
-    effect.applyRoutine();
-  }
-  
-  public void removeCollectionDataTypeInnerType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
-    mir.routines.pcmToUml.RemoveCollectionDataTypeInnerTypeRoutine effect = new mir.routines.pcmToUml.RemoveCollectionDataTypeInnerTypeRoutine(this.executionState, calledBy,
+  public void changeCollectionDataTypeInnerType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
+    mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine effect = new mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine(this.executionState, calledBy,
     	pcmDataType, pcmInnerType);
     effect.applyRoutine();
   }

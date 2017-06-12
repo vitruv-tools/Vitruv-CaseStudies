@@ -3,17 +3,14 @@ package tools.vitruv.applications.pcmumlcomp.uml2pcm
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.Map
-import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.uml2.uml.DataType
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
+import tools.vitruv.domains.pcm.util.RepositoryModelLoader
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsFactory
 import tools.vitruv.framework.correspondence.CorrespondenceModel
@@ -41,6 +38,14 @@ class UmlToPcmTypesUtil {
 			[ReactionsFactory.eINSTANCE.createReactionsCorrespondence()]
 		)
 	}
+	
+	static def PrimitiveTypeEnum getDataTypeEnumValue(String typeName) {
+		return
+			if (primitiveTypeMapping.containsKey(typeName))
+				primitiveTypeMapping.get(typeName)
+			else
+				null
+	}
 
 	static def org.palladiosimulator.pcm.repository.DataType retrieveCorrespondingPcmType(
 		DataType umlType,
@@ -51,13 +56,11 @@ class UmlToPcmTypesUtil {
 	) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlType]).flatten
 		var correspondences = correspondingElements
-		if (isCollection) {
-			val tagName = COLLECTION_TYPE_TAG
-			correspondences = correspondenceModel.reactionsView.getCorrespondences(#[umlType])
+		val tagName = if (isCollection) COLLECTION_TYPE_TAG else ""
+		correspondences = correspondenceModel.reactionsView.getCorrespondences(#[umlType])
 							   .filter[c | c.tag == tagName]
 							   .map[c | c.bs.head]
 							   .toSet()
-		}
 		if (!correspondences.empty) {
 			return correspondences.head as org.palladiosimulator.pcm.repository.DataType
 		}
@@ -79,17 +82,17 @@ class UmlToPcmTypesUtil {
 					val compositeType = RepositoryFactory.eINSTANCE.createCompositeDataType()
 					compositeType.entityName = umlType.name
 					correspondingType = compositeType
+					pcmRepository.dataTypes__Repository += compositeType
 				} else {
 					correspondingType = PrimitiveTypesHelper.get(selectedType)
 				}
 			}
-			correspondenceModel.createAndAddCorrespondence(#[umlType], #[correspondingType])
+			createTaggedCorrespondence(correspondenceModel, umlType, correspondingType, "")
 		}
 		// There is a corresponding inner type but it's not a collection type
 		if (isCollection && correspondingType !== null) {
 			val pcmCollectionType = createCollectionDataType(umlType.name, correspondingType, pcmRepository)
-			val correspondence = createTaggedCorrespondence(correspondenceModel, umlType, pcmCollectionType, COLLECTION_TYPE_TAG)
-			correspondenceModel.addCorrespondence(correspondence)
+			createTaggedCorrespondence(correspondenceModel, umlType, pcmCollectionType, COLLECTION_TYPE_TAG)
 			return pcmCollectionType
 		}
 		return correspondingType
@@ -113,8 +116,8 @@ class UmlToPcmTypesUtil {
 	
 	protected static class PrimitiveTypesHelper {
 		
-		//protected static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
 		protected static val PRIMITIVETYPES_URI = "pathmap://PCM_MODELS/PrimitiveTypes.repository"
+		protected static val PRIMITIVETYPES_URI_LOCAL = "resources/PrimitiveTypes.repository"
 		
 		protected static var Repository primitiveTypesRepository = null
 		protected static var Map<PrimitiveTypeEnum, PrimitiveDataType> primitives = new HashMap<PrimitiveTypeEnum, PrimitiveDataType>()
@@ -123,12 +126,14 @@ class UmlToPcmTypesUtil {
 			getPrimitiveTypes().get(pcmType)
 		}
 		
+		// TODO change this if loading of pathmaps doesn't break anymore
 		protected static def loadPrimitiveTypesRepository() {
-			if (primitiveTypesRepository === null) {				
-				val URI uri = URI.createURI(PRIMITIVETYPES_URI)
+			if (primitiveTypesRepository === null) {
+				/*val URI uri = URI.createURI(PRIMITIVETYPES_URI)			
 			
 				val ResourceSet resSet = new ResourceSetImpl()
-				val Resource resource = resSet.getResource(uri, true)
+				val Resource resource = resSet.getResource(uri, true)*/
+				val resource = RepositoryModelLoader.loadPcmResource(PRIMITIVETYPES_URI_LOCAL)
 				
 				primitiveTypesRepository = resource.contents.head as Repository
 			}
