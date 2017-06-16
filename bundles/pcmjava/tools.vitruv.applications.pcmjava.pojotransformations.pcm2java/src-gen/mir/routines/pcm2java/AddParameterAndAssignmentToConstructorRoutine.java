@@ -2,13 +2,11 @@ package mir.routines.pcm2java;
 
 import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.Parameter;
 import org.emftext.language.java.parameters.impl.ParametersFactoryImpl;
 import org.emftext.language.java.statements.Statement;
 import org.emftext.language.java.types.NamespaceClassifierReference;
@@ -34,17 +32,14 @@ public class AddParameterAndAssignmentToConstructorRoutine extends AbstractRepai
     }
     
     public void update0Element(final NamedElement parameterCorrespondenceSource, final Constructor constructor, final NamespaceClassifierReference typeReference, final Field fieldToBeAssigned, final String parameterName, final OrdinaryParameter newParameter) {
-      EList<Parameter> _parameters = constructor.getParameters();
-      _parameters.add(newParameter);
+      constructor.getParameters().add(newParameter);
       final Statement asssignment = Pcm2JavaHelper.createAssignmentFromParameterToField(fieldToBeAssigned, newParameter);
-      EList<Statement> _statements = constructor.getStatements();
-      _statements.add(asssignment);
+      constructor.getStatements().add(asssignment);
     }
     
     public void updateNewParameterElement(final NamedElement parameterCorrespondenceSource, final Constructor constructor, final NamespaceClassifierReference typeReference, final Field fieldToBeAssigned, final String parameterName, final OrdinaryParameter newParameter) {
       newParameter.setName(parameterName);
-      NamespaceClassifierReference _copy = EcoreUtil.<NamespaceClassifierReference>copy(typeReference);
-      newParameter.setTypeReference(_copy);
+      newParameter.setTypeReference(EcoreUtil.<NamespaceClassifierReference>copy(typeReference));
     }
     
     public EObject getElement2(final NamedElement parameterCorrespondenceSource, final Constructor constructor, final NamespaceClassifierReference typeReference, final Field fieldToBeAssigned, final String parameterName, final OrdinaryParameter newParameter) {

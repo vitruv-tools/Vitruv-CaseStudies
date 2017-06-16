@@ -6,14 +6,12 @@ import mir.routines.pcm2java.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.generics.GenericsFactory;
 import org.emftext.language.java.generics.QualifiedTypeArgument;
 import org.emftext.language.java.generics.TypeArgument;
 import org.emftext.language.java.imports.ClassifierImport;
 import org.emftext.language.java.imports.Import;
-import org.emftext.language.java.types.ClassifierReference;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.emftext.language.java.types.TypeReference;
 import org.emftext.language.java.types.impl.TypesFactoryImpl;
@@ -49,16 +47,10 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void updateNamespaceClassifierElement(final DataType dataType, final TypeReference innerTypeReference, final String superTypeQualifiedName, final org.emftext.language.java.classifiers.Class dataTypeImplementation, final CompilationUnit dataTypeImplementationCU, final NamespaceClassifierReference namespaceClassifier) {
-      EList<Import> _imports = dataTypeImplementationCU.getImports();
-      Iterable<ClassifierImport> _filter = Iterables.<ClassifierImport>filter(_imports, ClassifierImport.class);
-      ClassifierImport _last = IterableExtensions.<ClassifierImport>last(_filter);
-      ConcreteClassifier _classifier = _last.getClassifier();
-      Pcm2JavaHelper.createNamespaceClassifierReference(namespaceClassifier, _classifier);
+      Pcm2JavaHelper.createNamespaceClassifierReference(namespaceClassifier, IterableExtensions.<ClassifierImport>last(Iterables.<ClassifierImport>filter(dataTypeImplementationCU.getImports(), ClassifierImport.class)).getClassifier());
       final QualifiedTypeArgument qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
       qualifiedTypeArgument.setTypeReference(innerTypeReference);
-      EList<ClassifierReference> _classifierReferences = namespaceClassifier.getClassifierReferences();
-      ClassifierReference _get = _classifierReferences.get(0);
-      EList<TypeArgument> _typeArguments = _get.getTypeArguments();
+      EList<TypeArgument> _typeArguments = namespaceClassifier.getClassifierReferences().get(0).getTypeArguments();
       _typeArguments.add(qualifiedTypeArgument);
     }
     

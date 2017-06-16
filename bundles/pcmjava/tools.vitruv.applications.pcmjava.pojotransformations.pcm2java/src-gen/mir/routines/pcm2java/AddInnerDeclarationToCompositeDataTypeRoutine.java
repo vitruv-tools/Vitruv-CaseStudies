@@ -35,8 +35,7 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
       _members_1.add(getterMethod);
       EList<Member> _members_2 = dataTypeClass.getMembers();
       _members_2.add(setterMethod);
-      EList<Member> _members_3 = dataTypeClass.getMembers();
-      Pcm2JavaHelper.sortMembers(_members_3);
+      Pcm2JavaHelper.sortMembers(dataTypeClass.getMembers());
     }
     
     public EObject getCorrepondenceSourceDataTypeClass(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final TypeReference dataTypeReference) {
@@ -84,9 +83,7 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     }
     
     public void updateInnerDataTypeFieldElement(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final TypeReference dataTypeReference, final org.emftext.language.java.classifiers.Class dataTypeClass, final Field innerDataTypeField) {
-      TypeReference _copy = EcoreUtil.<TypeReference>copy(dataTypeReference);
-      String _entityName = innerDeclaration.getEntityName();
-      Pcm2JavaHelper.createPrivateField(innerDataTypeField, _copy, _entityName);
+      Pcm2JavaHelper.createPrivateField(innerDataTypeField, EcoreUtil.<TypeReference>copy(dataTypeReference), innerDeclaration.getEntityName());
     }
     
     public void updateGetterMethodElement(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final TypeReference dataTypeReference, final org.emftext.language.java.classifiers.Class dataTypeClass, final Field innerDataTypeField, final ClassMethod getterMethod) {

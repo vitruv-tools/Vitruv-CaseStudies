@@ -20,7 +20,7 @@ class Java2PcmChangeProcessor extends TransformationExecutorChangeProcessor {
 	new() {
 		super(new JavaDomainProvider().domain, new PcmDomainProvider().domain)
 
-		addMapping(new PackageMappingTransformation())
+		//addMapping(new PackageMappingTransformation())
 		addMapping(new CompilationUnitMappingTransformation())
 		addMapping(new ClassMappingTransformation())
 		addMapping(new InterfaceMappingTransformation())

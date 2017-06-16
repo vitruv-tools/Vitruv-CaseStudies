@@ -7,7 +7,6 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
 import org.emftext.language.java.modifiers.ModifiersFactory;
-import org.emftext.language.java.modifiers.Public;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -30,8 +29,7 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     
     public void updateJavaInterfaceElement(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className, final Interface javaInterface) {
       javaInterface.setName(className);
-      Public _createPublic = ModifiersFactory.eINSTANCE.createPublic();
-      javaInterface.addModifier(_createPublic);
+      javaInterface.addModifier(ModifiersFactory.eINSTANCE.createPublic());
     }
     
     public EObject getElement2(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className, final Interface javaInterface) {

@@ -34,8 +34,7 @@ public class RenameInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void callRoutine1(final OperationInterface interf, final org.emftext.language.java.containers.Package contractsPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = interf.getEntityName();
-      _routinesFacade.renameJavaClassifier(interf, contractsPackage, _entityName);
+      _routinesFacade.renameJavaClassifier(interf, contractsPackage, interf.getEntityName());
     }
   }
   

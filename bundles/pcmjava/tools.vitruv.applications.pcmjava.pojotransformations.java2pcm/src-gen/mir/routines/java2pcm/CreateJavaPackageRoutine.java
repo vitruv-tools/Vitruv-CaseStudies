@@ -1,9 +1,8 @@
-package mir.routines.pcm2java;
+package mir.routines.java2pcm;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.io.IOException;
-import mir.routines.pcm2java.RoutinesFacade;
+import mir.routines.java2pcm.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
@@ -44,8 +43,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateJavaPackageElement(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag, final org.emftext.language.java.containers.Package javaPackage) {
-      boolean _notEquals = (!Objects.equal(parentPackage, null));
-      if (_notEquals) {
+      if ((parentPackage != null)) {
         EList<String> _namespaces = javaPackage.getNamespaces();
         EList<String> _namespaces_1 = parentPackage.getNamespaces();
         Iterables.<String>addAll(_namespaces, _namespaces_1);
@@ -60,8 +58,8 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   public CreateJavaPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.pcm2java.CreateJavaPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2java.RoutinesFacade(getExecutionState(), this);
+    this.userExecution = new mir.routines.java2pcm.CreateJavaPackageRoutine.ActionUserExecution(getExecutionState(), this);
+    this.actionsFacade = new mir.routines.java2pcm.RoutinesFacade(getExecutionState(), this);
     this.sourceElementMappedToPackage = sourceElementMappedToPackage;this.parentPackage = parentPackage;this.packageName = packageName;this.newTag = newTag;
   }
   

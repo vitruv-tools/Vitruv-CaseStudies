@@ -25,5 +25,7 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.util,
  tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm,
  tools.vitruv.domains.java,
- tools.vitruv.domains.pcm
+ tools.vitruv.domains.pcm,
+ tools.vitruv.domains.java.util;bundle-version="0.2.0",
+ tools.vitruv.domains.pcm.util;bundle-version="0.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

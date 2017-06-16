@@ -26,10 +26,8 @@ public class CreateMethodForResourceDemandingBehaviorRoutine extends AbstractRep
     }
     
     public void updateJavaMethodElement(final ResourceDemandingInternalBehaviour behavior, final org.emftext.language.java.classifiers.Class componentClass, final ClassMethod javaMethod) {
-      String _entityName = behavior.getEntityName();
-      javaMethod.setName(_entityName);
-      org.emftext.language.java.types.Void _createVoid = TypesFactory.eINSTANCE.createVoid();
-      javaMethod.setTypeReference(_createVoid);
+      javaMethod.setName(behavior.getEntityName());
+      javaMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
     }
     
     public EObject getElement1(final ResourceDemandingInternalBehaviour behavior, final org.emftext.language.java.classifiers.Class componentClass, final ClassMethod javaMethod) {

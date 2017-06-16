@@ -34,8 +34,7 @@ public class CreateInterfaceImplementationRoutine extends AbstractRepairRoutineR
     }
     
     public void callRoutine1(final Interface interf, final org.emftext.language.java.containers.Package contractsPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = interf.getEntityName();
-      _routinesFacade.createJavaInterface(interf, contractsPackage, _entityName);
+      _routinesFacade.createJavaInterface(interf, contractsPackage, interf.getEntityName());
     }
   }
   

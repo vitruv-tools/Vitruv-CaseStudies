@@ -28,20 +28,18 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final NamedElement sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String expectedTag, final org.emftext.language.java.containers.Package javaPackage) {
-      EList<String> _namespaces = javaPackage.getNamespaces();
-      _namespaces.clear();
+      javaPackage.getNamespaces().clear();
       boolean _notEquals = (!Objects.equal(parentPackage, null));
       if (_notEquals) {
-        EList<String> _namespaces_1 = javaPackage.getNamespaces();
-        EList<String> _namespaces_2 = parentPackage.getNamespaces();
-        Iterables.<String>addAll(_namespaces_1, _namespaces_2);
-        EList<String> _namespaces_3 = javaPackage.getNamespaces();
+        EList<String> _namespaces = javaPackage.getNamespaces();
+        EList<String> _namespaces_1 = parentPackage.getNamespaces();
+        Iterables.<String>addAll(_namespaces, _namespaces_1);
+        EList<String> _namespaces_2 = javaPackage.getNamespaces();
         String _name = parentPackage.getName();
-        _namespaces_3.add(_name);
+        _namespaces_2.add(_name);
       }
       javaPackage.setName(packageName);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaPackage);
-      this.persistProjectRelative(sourceElementMappedToPackage, javaPackage, _buildJavaFilePath);
+      this.persistProjectRelative(sourceElementMappedToPackage, javaPackage, JavaPersistenceHelper.buildJavaFilePath(javaPackage));
     }
     
     public String getRetrieveTag1(final NamedElement sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String expectedTag) {

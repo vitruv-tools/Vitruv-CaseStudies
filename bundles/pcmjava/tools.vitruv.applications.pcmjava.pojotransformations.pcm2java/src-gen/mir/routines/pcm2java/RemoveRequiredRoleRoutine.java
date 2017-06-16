@@ -3,13 +3,11 @@ package mir.routines.pcm2java;
 import com.google.common.collect.Iterables;
 import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.imports.ClassifierImport;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.members.Member;
 import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.repository.RequiredRole;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -48,12 +46,10 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void callRoutine1(final RequiredRole requiredRole, final InterfaceRequiringEntity requiringEntity, final ClassifierImport requiredInterfaceImport, final Field requiredInterfaceField, final org.emftext.language.java.classifiers.Class javaClass, @Extension final RoutinesFacade _routinesFacade) {
-      EList<Member> _members = javaClass.getMembers();
-      Iterable<Constructor> _filter = Iterables.<Constructor>filter(_members, Constructor.class);
+      Iterable<Constructor> _filter = Iterables.<Constructor>filter(javaClass.getMembers(), Constructor.class);
       for (final Constructor ctor : _filter) {
         {
-          String _entityName = requiredRole.getEntityName();
-          _routinesFacade.removeParameterToFieldAssignmentFromConstructor(ctor, _entityName);
+          _routinesFacade.removeParameterToFieldAssignmentFromConstructor(ctor, requiredRole.getEntityName());
           _routinesFacade.removeCorrespondingParameterFromConstructor(ctor, requiredRole);
         }
       }

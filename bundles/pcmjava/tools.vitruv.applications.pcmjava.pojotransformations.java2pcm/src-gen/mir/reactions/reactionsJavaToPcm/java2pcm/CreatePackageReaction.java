@@ -1,6 +1,6 @@
-package mir.reactions.reactionsPcmToJava.pcm2java;
+package mir.reactions.reactionsJavaToPcm.java2pcm;
 
-import mir.routines.pcm2java.RoutinesFacade;
+import mir.routines.java2pcm.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -12,16 +12,16 @@ import tools.vitruv.framework.change.echange.root.InsertRootEObject;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class CreatedSystemReaction extends AbstractReactionRealization {
-  public CreatedSystemReaction(final UserInteracting userInteracting) {
+class CreatePackageReaction extends AbstractReactionRealization {
+  public CreatePackageReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
   public void executeReaction(final EChange change) {
-    InsertRootEObject<org.palladiosimulator.pcm.system.System> typedChange = ((CreateAndInsertRoot<org.palladiosimulator.pcm.system.System>)change).getInsertChange();
-    org.palladiosimulator.pcm.system.System newValue = typedChange.getNewValue();
-    mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsPcmToJava.pcm2java.CreatedSystemReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.CreatedSystemReaction.ActionUserExecution(this.executionState, this);
+    InsertRootEObject<org.emftext.language.java.containers.Package> typedChange = ((CreateAndInsertRoot<org.emftext.language.java.containers.Package>)change).getInsertChange();
+    org.emftext.language.java.containers.Package newValue = typedChange.getNewValue();
+    mir.routines.java2pcm.RoutinesFacade routinesFacade = new mir.routines.java2pcm.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2pcm.CreatePackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2pcm.CreatePackageReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
   }
   
@@ -30,8 +30,8 @@ class CreatedSystemReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertRootEObject<org.palladiosimulator.pcm.system.System> relevantChange = ((CreateAndInsertRoot<org.palladiosimulator.pcm.system.System>)change).getInsertChange();
-    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.system.System)) {
+    InsertRootEObject<org.emftext.language.java.containers.Package> relevantChange = ((CreateAndInsertRoot<org.emftext.language.java.containers.Package>)change).getInsertChange();
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.containers.Package)) {
     	return false;
     }
     return true;
@@ -55,10 +55,10 @@ class CreatedSystemReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.palladiosimulator.pcm.system.System newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final org.palladiosimulator.pcm.system.System system = newValue;
-      _routinesFacade.createJavaPackage(system, null, system.getEntityName(), "root_system");
-      _routinesFacade.createImplementationForSystem(system);
+    public void callRoutine1(final org.emftext.language.java.containers.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
+      final org.emftext.language.java.containers.Package javaPackage = newValue;
+      _routinesFacade.createPCMRepository(javaPackage, javaPackage.getName(), "package_root");
+      _routinesFacade.createJavaSubPackages(javaPackage);
     }
   }
 }

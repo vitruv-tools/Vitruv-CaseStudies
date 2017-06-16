@@ -25,8 +25,7 @@ public class RenameMethodForResourceDemandingBehaviorRoutine extends AbstractRep
     }
     
     public void update0Element(final ResourceDemandingInternalBehaviour behavior, final ClassMethod javaMethod) {
-      String _entityName = behavior.getEntityName();
-      javaMethod.setName(_entityName);
+      javaMethod.setName(behavior.getEntityName());
     }
     
     public EObject getCorrepondenceSourceJavaMethod(final ResourceDemandingInternalBehaviour behavior) {
