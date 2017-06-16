@@ -7,8 +7,10 @@ reactions: java2pcm
 in reaction to changes in Java
 execute actions in PCM
 
+// TODO: Ensure that this reaction does only handle the creation of the repository root package 
 reaction CreatePackage {
-	after element java::Package created and inserted as root 
+	after element java::Package inserted as root
+	with !newValue.name.contains("contracts") && !newValue.name.contains("datatypes")
 		call {
 			val javaPackage = newValue
 			createPCMRepository(javaPackage, javaPackage.name, "package_root")
@@ -23,7 +25,7 @@ routine createPCMRepository(EObject sourceElementMappedToRepository, String pack
 	action {
 		val pcmRepository = create pcm::Repository and initialize {
 			pcmRepository.entityName = packageName
-			persistProjectRelative(sourceElementMappedToRepository, pcmRepository, "pcm/" + pcmRepository.entityName + ".pcm")
+			persistProjectRelative(sourceElementMappedToRepository, pcmRepository, "model/" + pcmRepository.entityName + ".repository")
 		}
 		
 		add correspondence between pcmRepository and sourceElementMappedToRepository 
@@ -54,7 +56,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 				javaPackage.namespaces += parentPackage.name; 
 			}
 			javaPackage.name = packageName;
-			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
+			persistProjectRelative(parentPackage, javaPackage, buildJavaFilePath(javaPackage));
 		}
 		add correspondence between javaPackage and sourceElementMappedToPackage
 			tag with newTag
