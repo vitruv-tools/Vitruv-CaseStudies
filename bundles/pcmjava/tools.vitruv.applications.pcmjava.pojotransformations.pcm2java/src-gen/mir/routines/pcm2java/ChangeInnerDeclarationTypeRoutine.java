@@ -2,7 +2,6 @@ package mir.routines.pcm2java;
 
 import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -31,8 +30,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     }
     
     public void update0Element(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference, final Field compositeTypeField, final Method compositeTypeGetterMethod, final Method compositeTypeSetterMethod) {
-      TypeReference _copy = EcoreUtil.<TypeReference>copy(newTypeReference);
-      compositeTypeField.setTypeReference(_copy);
+      compositeTypeField.setTypeReference(EcoreUtil.<TypeReference>copy(newTypeReference));
     }
     
     public String getRetrieveTag1(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference, final Field compositeTypeField) {
@@ -64,20 +62,16 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     }
     
     public void update2Element(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference, final Field compositeTypeField, final Method compositeTypeGetterMethod, final Method compositeTypeSetterMethod) {
-      EList<Parameter> _parameters = compositeTypeSetterMethod.getParameters();
-      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(_parameters);
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(compositeTypeSetterMethod.getParameters());
       boolean _not = (!_isNullOrEmpty);
       if (_not) {
-        EList<Parameter> _parameters_1 = compositeTypeSetterMethod.getParameters();
-        final Parameter parameter = _parameters_1.get(0);
-        TypeReference _copy = EcoreUtil.<TypeReference>copy(newTypeReference);
-        parameter.setTypeReference(_copy);
+        final Parameter parameter = compositeTypeSetterMethod.getParameters().get(0);
+        parameter.setTypeReference(EcoreUtil.<TypeReference>copy(newTypeReference));
       }
     }
     
     public void update1Element(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference, final Field compositeTypeField, final Method compositeTypeGetterMethod, final Method compositeTypeSetterMethod) {
-      TypeReference _copy = EcoreUtil.<TypeReference>copy(newTypeReference);
-      compositeTypeGetterMethod.setTypeReference(_copy);
+      compositeTypeGetterMethod.setTypeReference(EcoreUtil.<TypeReference>copy(newTypeReference));
     }
   }
   

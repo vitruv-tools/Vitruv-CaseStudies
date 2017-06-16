@@ -2,13 +2,11 @@ package mir.routines.pcm2java;
 
 import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.imports.ClassifierImport;
 import org.emftext.language.java.imports.impl.ImportsFactoryImpl;
 import org.emftext.language.java.types.NamespaceClassifierReference;
-import org.emftext.language.java.types.TypeReference;
 import org.emftext.language.java.types.impl.TypesFactoryImpl;
 import org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity;
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -34,8 +32,7 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final OperationProvidedRole providedRole, final Interface operationProvidingInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport interfaceImport, final NamespaceClassifierReference namespaceClassifierReference) {
-      EList<TypeReference> _implements = javaClass.getImplements();
-      _implements.add(namespaceClassifierReference);
+      javaClass.getImplements().add(namespaceClassifierReference);
     }
     
     public EObject getCorrepondenceSourceJavaClass(final OperationProvidedRole providedRole, final Interface operationProvidingInterface) {

@@ -47,9 +47,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     public void update0Element(final OperationRequiredRole requiredRole, final Interface requiredInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport requiredInterfaceImport, final Field requiredInterfaceField) {
       EList<Member> _members = javaClass.getMembers();
       _members.add(requiredInterfaceField);
-      EList<Member> _members_1 = javaClass.getMembers();
-      Iterable<Constructor> _filter = Iterables.<Constructor>filter(_members_1, Constructor.class);
-      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(_filter);
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(Iterables.<Constructor>filter(javaClass.getMembers(), Constructor.class));
       if (_isNullOrEmpty) {
         Pcm2JavaHelper.addConstructorToClass(javaClass);
       }
@@ -79,8 +77,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     public void updateRequiredInterfaceFieldElement(final OperationRequiredRole requiredRole, final Interface requiredInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport requiredInterfaceImport, final Field requiredInterfaceField) {
       final NamespaceClassifierReference typeRef = Pcm2JavaHelper.createNamespaceClassifierReference(requiredInterface);
       final String requiredRoleName = requiredRole.getEntityName();
-      NamespaceClassifierReference _copy = EcoreUtil.<NamespaceClassifierReference>copy(typeRef);
-      Pcm2JavaHelper.createPrivateField(requiredInterfaceField, _copy, requiredRoleName);
+      Pcm2JavaHelper.createPrivateField(requiredInterfaceField, EcoreUtil.<NamespaceClassifierReference>copy(typeRef), requiredRoleName);
     }
     
     public void updateRequiredInterfaceImportElement(final OperationRequiredRole requiredRole, final Interface requiredInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport requiredInterfaceImport) {
@@ -90,8 +87,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     public void callRoutine1(final OperationRequiredRole requiredRole, final Interface requiredInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport requiredInterfaceImport, final Field requiredInterfaceField, @Extension final RoutinesFacade _routinesFacade) {
       final NamespaceClassifierReference typeRef = Pcm2JavaHelper.createNamespaceClassifierReference(requiredInterface);
       final String requiredRoleName = requiredRole.getEntityName();
-      EList<Member> _members = javaClass.getMembers();
-      Iterable<Constructor> _filter = Iterables.<Constructor>filter(_members, Constructor.class);
+      Iterable<Constructor> _filter = Iterables.<Constructor>filter(javaClass.getMembers(), Constructor.class);
       for (final Constructor ctor : _filter) {
         _routinesFacade.addParameterAndAssignmentToConstructor(requiredRole, ctor, typeRef, requiredInterfaceField, requiredRoleName);
       }

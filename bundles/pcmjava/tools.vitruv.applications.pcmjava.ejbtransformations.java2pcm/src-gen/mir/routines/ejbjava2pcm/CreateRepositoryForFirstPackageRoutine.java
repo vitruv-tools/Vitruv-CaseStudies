@@ -31,8 +31,7 @@ public class CreateRepositoryForFirstPackageRoutine extends AbstractRepairRoutin
     }
     
     public void updateRepositoryElement(final org.emftext.language.java.containers.Package javaPackage, final Repository repository) {
-      String _name = javaPackage.getName();
-      repository.setEntityName(_name);
+      repository.setEntityName(javaPackage.getName());
       String _entityName = repository.getEntityName();
       String _plus = ("model/" + _entityName);
       String _plus_1 = (_plus + ".repository");

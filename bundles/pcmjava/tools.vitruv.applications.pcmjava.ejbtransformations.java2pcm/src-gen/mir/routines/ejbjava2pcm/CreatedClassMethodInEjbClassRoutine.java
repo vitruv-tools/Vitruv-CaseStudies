@@ -40,8 +40,7 @@ public class CreatedClassMethodInEjbClassRoutine extends AbstractRepairRoutineRe
       boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(correspondingEObjects);
       boolean _not = (!_isNullOrEmpty);
       if (_not) {
-        OperationSignature _get = ((OperationSignature[])Conversions.unwrapArray(correspondingEObjects, OperationSignature.class))[0];
-        opSignature = _get;
+        opSignature = ((OperationSignature[])Conversions.unwrapArray(correspondingEObjects, OperationSignature.class))[0];
       }
       _routinesFacade.createSEFFForClassMethod(basicComponent, opSignature, classMethod);
     }

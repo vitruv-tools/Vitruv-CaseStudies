@@ -34,8 +34,7 @@ public class CreateCompositeDataTypeImplementationRoutine extends AbstractRepair
     }
     
     public void callRoutine1(final CompositeDataType compositeDataType, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = compositeDataType.getEntityName();
-      _routinesFacade.createJavaClass(compositeDataType, datatypesPackage, _entityName);
+      _routinesFacade.createJavaClass(compositeDataType, datatypesPackage, compositeDataType.getEntityName());
     }
   }
   
