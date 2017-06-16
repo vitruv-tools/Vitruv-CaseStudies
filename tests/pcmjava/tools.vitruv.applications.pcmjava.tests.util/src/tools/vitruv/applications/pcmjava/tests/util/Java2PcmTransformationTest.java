@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -121,13 +122,14 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	private static final int SELECT_COMPOSITE_COMPONENT = 1;
 	private static final int SELECT_SYSTEM = 2;
 	protected static final int SELECT_NOTHING_DECIDE_LATER = 3;
-	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
+	private static int MAXIMUM_SYNC_WAITING_TIME = 100000;
 	
 	protected Package mainPackage;
 	protected Package secondPackage;
 	private int expectedNumberOfSyncs = 0;
 	
 	public Java2PcmTransformationTest() {
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		setTestProjectCreator(projectName -> TestUtil.createPlatformProject(projectName, true).getLocation().toFile());
 	}
 	
@@ -191,12 +193,12 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 				// If we had more wakeups than expected sync calls, we had a timeout
 				// and so the synchronization was not finished as expected
 				if (wakeups > numberOfExpectedSynchronizationCalls) {
+					expectedNumberOfSyncs = 0;
 					fail("Waiting for synchronization timed out");
 				}
 			}
 		} catch (InterruptedException e) {
 		} finally {
-			expectedNumberOfSyncs = 0;
 			logger.debug("Finished waiting for synchronization");
 		}
 	}
