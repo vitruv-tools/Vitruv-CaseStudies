@@ -14,5 +14,8 @@ public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
   protected void setup() {
     tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
     this.addReaction(mir.reactions.reactionsJavaToPcm.java2pcm.CreatePackageReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2pcm.CreatePackageReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2pcm.CreateSubPackageReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2pcm.CreateSubPackageReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2pcm.CreateInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2pcm.CreateInterfaceReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2pcm.CreateClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2pcm.CreateClassReaction(userInteracting));
   }
 }

@@ -1,6 +1,7 @@
 package mir.routines.java2pcm;
 
 import org.eclipse.emf.ecore.EObject;
+import org.emftext.language.java.classifiers.Interface;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -14,6 +15,36 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void createPCMRepository(final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
     mir.routines.java2pcm.CreatePCMRepositoryRoutine effect = new mir.routines.java2pcm.CreatePCMRepositoryRoutine(this.executionState, calledBy,
     	sourceElementMappedToRepository, packageName, newTag);
+    effect.applyRoutine();
+  }
+  
+  public void createSystem(final org.emftext.language.java.containers.Package javaPackage) {
+    mir.routines.java2pcm.CreateSystemRoutine effect = new mir.routines.java2pcm.CreateSystemRoutine(this.executionState, calledBy,
+    	javaPackage);
+    effect.applyRoutine();
+  }
+  
+  public void createBasicComponent(final org.emftext.language.java.containers.Package javaPackage) {
+    mir.routines.java2pcm.CreateBasicComponentRoutine effect = new mir.routines.java2pcm.CreateBasicComponentRoutine(this.executionState, calledBy,
+    	javaPackage);
+    effect.applyRoutine();
+  }
+  
+  public void createCompositeComponent(final org.emftext.language.java.containers.Package javaPackage) {
+    mir.routines.java2pcm.CreateCompositeComponentRoutine effect = new mir.routines.java2pcm.CreateCompositeComponentRoutine(this.executionState, calledBy,
+    	javaPackage);
+    effect.applyRoutine();
+  }
+  
+  public void createPCMInterface(final Interface javaIface) {
+    mir.routines.java2pcm.CreatePCMInterfaceRoutine effect = new mir.routines.java2pcm.CreatePCMInterfaceRoutine(this.executionState, calledBy,
+    	javaIface);
+    effect.applyRoutine();
+  }
+  
+  public void createCompositeDataType(final org.emftext.language.java.classifiers.Class cls) {
+    mir.routines.java2pcm.CreateCompositeDataTypeRoutine effect = new mir.routines.java2pcm.CreateCompositeDataTypeRoutine(this.executionState, calledBy,
+    	cls);
     effect.applyRoutine();
   }
   
