@@ -52,8 +52,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
         _namespaces_2.add(_name);
       }
       javaPackage.setName(packageName);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaPackage);
-      this.persistProjectRelative(parentPackage, javaPackage, _buildJavaFilePath);
+      this.persistProjectRelative(parentPackage, javaPackage, JavaPersistenceHelper.buildJavaFilePath(javaPackage));
     }
   }
   
