@@ -65,8 +65,7 @@ class CreatePackageReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final org.emftext.language.java.containers.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
       final org.emftext.language.java.containers.Package javaPackage = newValue;
-      String _name = javaPackage.getName();
-      _routinesFacade.createPCMRepository(javaPackage, _name, "package_root");
+      _routinesFacade.createPCMRepository(javaPackage, javaPackage.getName(), "package_root");
       _routinesFacade.createJavaSubPackages(javaPackage);
     }
   }
