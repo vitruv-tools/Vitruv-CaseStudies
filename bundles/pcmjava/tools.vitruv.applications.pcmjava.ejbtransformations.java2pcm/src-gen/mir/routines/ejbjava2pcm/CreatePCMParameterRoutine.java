@@ -2,16 +2,10 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.parameters.Parameter;
-import org.emftext.language.java.types.TypeReference;
-import org.palladiosimulator.pcm.repository.DataType;
-import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
-import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -33,8 +27,7 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void update0Element(final Parameter jaMoPPParam, final OperationSignature opSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
-      EList<org.palladiosimulator.pcm.repository.Parameter> _parameters__OperationSignature = opSignature.getParameters__OperationSignature();
-      _parameters__OperationSignature.add(pcmParameter);
+      opSignature.getParameters__OperationSignature().add(pcmParameter);
     }
     
     public EObject getElement2(final Parameter jaMoPPParam, final OperationSignature opSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
@@ -46,15 +39,10 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updatePcmParameterElement(final Parameter jaMoPPParam, final OperationSignature opSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
-      String _name = jaMoPPParam.getName();
-      PcmJavaUtils.setParameterName(pcmParameter, _name);
-      TypeReference _typeReference = jaMoPPParam.getTypeReference();
-      OperationInterface _interface__OperationSignature = opSignature.getInterface__OperationSignature();
-      Repository _repository__Interface = _interface__OperationSignature.getRepository__Interface();
-      long _arrayDimension = jaMoPPParam.getArrayDimension();
-      DataType _correspondingPCMDataTypeForTypeReference = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(_typeReference, 
-        this.correspondenceModel, this.userInteracting, _repository__Interface, _arrayDimension);
-      pcmParameter.setDataType__Parameter(_correspondingPCMDataTypeForTypeReference);
+      pcmParameter.setEntityName(jaMoPPParam.getName());
+      pcmParameter.setParameterName(jaMoPPParam.getName());
+      pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.getTypeReference(), 
+        this.correspondenceModel, this.userInteracting, opSignature.getInterface__OperationSignature().getRepository__Interface(), jaMoPPParam.getArrayDimension()));
     }
   }
   

@@ -42,16 +42,14 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     
     public void update1Element(final NamedElement classSourceElement, final org.emftext.language.java.containers.Package containingPackage, final String className, final CompilationUnit compilationUnit, final ConcreteClassifier javaClassifier) {
       compilationUnit.setName(className);
+      compilationUnit.getNamespaces().clear();
       EList<String> _namespaces = compilationUnit.getNamespaces();
-      _namespaces.clear();
-      EList<String> _namespaces_1 = compilationUnit.getNamespaces();
-      EList<String> _namespaces_2 = containingPackage.getNamespaces();
-      Iterables.<String>addAll(_namespaces_1, _namespaces_2);
-      EList<String> _namespaces_3 = compilationUnit.getNamespaces();
+      EList<String> _namespaces_1 = containingPackage.getNamespaces();
+      Iterables.<String>addAll(_namespaces, _namespaces_1);
+      EList<String> _namespaces_2 = compilationUnit.getNamespaces();
       String _name = containingPackage.getName();
-      _namespaces_3.add(_name);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(compilationUnit);
-      this.persistProjectRelative(classSourceElement, compilationUnit, _buildJavaFilePath);
+      _namespaces_2.add(_name);
+      this.persistProjectRelative(classSourceElement, compilationUnit, JavaPersistenceHelper.buildJavaFilePath(compilationUnit));
     }
     
     public EObject getCorrepondenceSourceCompilationUnit(final NamedElement classSourceElement, final org.emftext.language.java.containers.Package containingPackage, final String className) {

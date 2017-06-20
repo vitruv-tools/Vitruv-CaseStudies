@@ -34,8 +34,7 @@ public class RenameCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final CompositeDataType compositeDataType, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = compositeDataType.getEntityName();
-      _routinesFacade.renameJavaClassifier(compositeDataType, datatypesPackage, _entityName);
+      _routinesFacade.renameJavaClassifier(compositeDataType, datatypesPackage, compositeDataType.getEntityName());
     }
   }
   

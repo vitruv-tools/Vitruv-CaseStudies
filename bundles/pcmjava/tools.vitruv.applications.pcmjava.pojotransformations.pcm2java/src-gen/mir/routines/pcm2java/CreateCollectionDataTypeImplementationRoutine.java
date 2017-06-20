@@ -56,29 +56,24 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     }
     
     public void callRoutine1(final CollectionDataType dataType, final org.emftext.language.java.classifiers.Class innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
-      DataType _innerType_CollectionDataType = dataType.getInnerType_CollectionDataType();
-      final TypeReference innerTypeRef = Pcm2JavaHelper.createTypeReference(_innerType_CollectionDataType, innerTypeClass);
+      final TypeReference innerTypeRef = Pcm2JavaHelper.createTypeReference(dataType.getInnerType_CollectionDataType(), innerTypeClass);
       TypeReference innerTypeClassOrWrapper = innerTypeRef;
       if ((innerTypeRef instanceof PrimitiveType)) {
-        TypeReference _wrapperTypeReferenceForPrimitiveType = Pcm2JavaHelper.getWrapperTypeReferenceForPrimitiveType(innerTypeRef);
-        innerTypeClassOrWrapper = _wrapperTypeReferenceForPrimitiveType;
+        innerTypeClassOrWrapper = Pcm2JavaHelper.getWrapperTypeReferenceForPrimitiveType(innerTypeRef);
       }
       Set<Class<?>> collectionDataTypes = new HashSet<Class<?>>();
       Iterables.<Class<?>>addAll(collectionDataTypes, Collections.<Class<? extends AbstractCollection>>unmodifiableList(CollectionLiterals.<Class<? extends AbstractCollection>>newArrayList(ArrayList.class, LinkedList.class, Vector.class, Stack.class, HashSet.class)));
       int _size = collectionDataTypes.size();
       final List<String> collectionDataTypeNames = new ArrayList<String>(_size);
       for (final Class<?> collectionDataType : collectionDataTypes) {
-        String _name = collectionDataType.getName();
-        collectionDataTypeNames.add(_name);
+        collectionDataTypeNames.add(collectionDataType.getName());
       }
       final String selectTypeMsg = "Please select type (or interface) that should be used for the type";
       final int selectedType = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, selectTypeMsg, ((String[])Conversions.unwrapArray(collectionDataTypeNames, String.class)));
       final Set<Class<?>> _converted_collectionDataTypes = (Set<Class<?>>)collectionDataTypes;
       final Class<?> selectedClass = ((Class<?>[])Conversions.unwrapArray(_converted_collectionDataTypes, Class.class))[selectedType];
-      String _entityName = dataType.getEntityName();
-      _routinesFacade.createJavaClass(dataType, datatypesPackage, _entityName);
-      String _name_1 = selectedClass.getName();
-      _routinesFacade.addSuperTypeToDataType(dataType, innerTypeClassOrWrapper, _name_1);
+      _routinesFacade.createJavaClass(dataType, datatypesPackage, dataType.getEntityName());
+      _routinesFacade.addSuperTypeToDataType(dataType, innerTypeClassOrWrapper, selectedClass.getName());
     }
   }
   

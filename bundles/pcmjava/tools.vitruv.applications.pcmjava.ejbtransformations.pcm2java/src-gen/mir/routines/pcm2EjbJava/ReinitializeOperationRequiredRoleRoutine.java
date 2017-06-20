@@ -3,7 +3,6 @@ package mir.routines.pcm2EjbJava;
 import java.io.IOException;
 import mir.routines.pcm2EjbJava.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -21,8 +20,7 @@ public class ReinitializeOperationRequiredRoleRoutine extends AbstractRepairRout
     }
     
     public void callRoutine1(final OperationRequiredRole requiredRole, @Extension final RoutinesFacade _routinesFacade) {
-      InterfaceRequiringEntity _requiringEntity_RequiredRole = requiredRole.getRequiringEntity_RequiredRole();
-      _routinesFacade.removeRequiredRole(requiredRole, _requiringEntity_RequiredRole);
+      _routinesFacade.removeRequiredRole(requiredRole, requiredRole.getRequiringEntity_RequiredRole());
       _routinesFacade.addRequiredRole(requiredRole);
     }
   }

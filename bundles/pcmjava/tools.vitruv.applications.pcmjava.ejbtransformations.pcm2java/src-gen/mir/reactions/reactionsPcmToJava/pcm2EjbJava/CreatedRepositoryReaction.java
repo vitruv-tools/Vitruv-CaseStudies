@@ -58,8 +58,7 @@ class CreatedRepositoryReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final Repository newValue, @Extension final RoutinesFacade _routinesFacade) {
       final Repository repository = newValue;
-      String _entityName = repository.getEntityName();
-      _routinesFacade.createJavaPackage(repository, null, _entityName, "repository_root");
+      _routinesFacade.createJavaPackage(repository, null, repository.getEntityName(), "repository_root");
       _routinesFacade.createRepositorySubPackages(repository);
     }
   }

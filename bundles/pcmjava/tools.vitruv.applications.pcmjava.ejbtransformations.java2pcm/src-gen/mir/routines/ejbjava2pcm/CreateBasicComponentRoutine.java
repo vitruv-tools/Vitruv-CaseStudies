@@ -2,12 +2,10 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.commons.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -29,13 +27,11 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final Repository repo, final NamedElement namedElement, final BasicComponent basicComponent) {
-      EList<RepositoryComponent> _components__Repository = repo.getComponents__Repository();
-      _components__Repository.add(basicComponent);
+      repo.getComponents__Repository().add(basicComponent);
     }
     
     public void updateBasicComponentElement(final Repository repo, final NamedElement namedElement, final BasicComponent basicComponent) {
-      String _name = namedElement.getName();
-      basicComponent.setEntityName(_name);
+      basicComponent.setEntityName(namedElement.getName());
     }
     
     public EObject getElement2(final Repository repo, final NamedElement namedElement, final BasicComponent basicComponent) {

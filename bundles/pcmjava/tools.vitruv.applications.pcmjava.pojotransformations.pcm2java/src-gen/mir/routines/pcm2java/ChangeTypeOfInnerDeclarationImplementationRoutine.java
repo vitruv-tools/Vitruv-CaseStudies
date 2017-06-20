@@ -29,8 +29,7 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
     }
     
     public void callRoutine1(final InnerDeclaration innerDeclaration, final org.emftext.language.java.classifiers.Class newJavaDataType, @Extension final RoutinesFacade _routinesFacade) {
-      DataType _datatype_InnerDeclaration = innerDeclaration.getDatatype_InnerDeclaration();
-      final TypeReference newDataTypeReference = Pcm2JavaHelper.createTypeReference(_datatype_InnerDeclaration, newJavaDataType);
+      final TypeReference newDataTypeReference = Pcm2JavaHelper.createTypeReference(innerDeclaration.getDatatype_InnerDeclaration(), newJavaDataType);
       _routinesFacade.changeInnerDeclarationType(innerDeclaration, newDataTypeReference);
     }
   }

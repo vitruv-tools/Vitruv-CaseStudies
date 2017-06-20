@@ -34,8 +34,7 @@ public class RenameCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void callRoutine1(final CollectionDataType collectionDataType, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = collectionDataType.getEntityName();
-      _routinesFacade.renameJavaClassifier(collectionDataType, datatypesPackage, _entityName);
+      _routinesFacade.renameJavaClassifier(collectionDataType, datatypesPackage, collectionDataType.getEntityName());
     }
   }
   

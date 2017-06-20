@@ -3,12 +3,10 @@ package mir.routines.ejbjava2pcm;
 import java.io.IOException;
 import java.util.function.Consumer;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.parameters.Parameter;
-import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
@@ -36,17 +34,13 @@ public class CreateOperationSignatureRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void callRoutine1(final InterfaceMethod interfaceMethod, final OperationInterface opInterface, final OperationSignature opSignature, @Extension final RoutinesFacade _routinesFacade) {
-      String _name = interfaceMethod.getName();
-      opSignature.setEntityName(_name);
-      EList<OperationSignature> _signatures__OperationInterface = opInterface.getSignatures__OperationInterface();
-      _signatures__OperationInterface.add(opSignature);
-      EList<Parameter> _parameters = interfaceMethod.getParameters();
+      opSignature.setEntityName(interfaceMethod.getName());
+      opInterface.getSignatures__OperationInterface().add(opSignature);
       final Consumer<Parameter> _function = (Parameter it) -> {
         _routinesFacade.createPCMParameter(it, opSignature);
       };
-      _parameters.forEach(_function);
-      TypeReference _typeReference = interfaceMethod.getTypeReference();
-      _routinesFacade.createPCMReturnType(_typeReference, opSignature, interfaceMethod);
+      interfaceMethod.getParameters().forEach(_function);
+      _routinesFacade.createPCMReturnType(interfaceMethod.getTypeReference(), opSignature, interfaceMethod);
     }
   }
   
