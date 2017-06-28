@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_vPGeYDtgEeelTP4YnW3V3w" name="model">
+  <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeYTtgEeelTP4YnW3V3w" source="genmymodel">
+    <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeYjtgEeelTP4YnW3V3w" key="uuid" value="e97d2798-2ac1-4902-b541-6c8199d391ac"/>
+    <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeYztgEeelTP4YnW3V3w" key="author" value="suresh519"/>
+  </eAnnotations>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_vPGeZDtgEeelTP4YnW3V3w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeZTtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeZjtgEeelTP4YnW3V3w" key="uuid" value="_nReUQTK_EeerNZyIpikxPQ"/>
+    </eAnnotations>
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGekTtgEeelTP4YnW3V3w" name="TimerTask">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGekjtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGekztgEeelTP4YnW3V3w" key="uuid" value="_yxZpkBfDEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_vPGelDtgEeelTP4YnW3V3w" name="scheduleAtFixedRate">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGelTtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeljtgEeelTP4YnW3V3w" key="uuid" value="_uaWhYRjiEDW0xr9sOhCh1w"/>
+      </eAnnotations>
+      <ownedParameter xmi:type="uml:Parameter" xmi:id="_vPGelztgEeelTP4YnW3V3w" name="returnParameter" isUnique="false" direction="return">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGemDtgEeelTP4YnW3V3w" source="genmymodel">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGemTtgEeelTP4YnW3V3w" key="uuid" value="_uaWhYBjiEDW0xr9sOhCh1w"/>
+        </eAnnotations>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGeZztgEeelTP4YnW3V3w" name="MoveMonitorCls">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeaDtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeaTtgEeelTP4YnW3V3w" key="uuid" value="_-YAVwRfCEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <generalization xmi:type="uml:Generalization" xmi:id="_vPGeajtgEeelTP4YnW3V3w" general="_vPGekTtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeaztgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGebDtgEeelTP4YnW3V3w" key="uuid" value="_1ahA4BfDEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </generalization>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGebTtgEeelTP4YnW3V3w" name="moveOrdersList" type="_vPGefztgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGebjtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGebztgEeelTP4YnW3V3w" key="uuid" value="_FczOMBfDEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGexztgEeelTP4YnW3V3w" name="moveFunctionCls" type="_vPGeuztgEeelTP4YnW3V3w" association="_vPGexDtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeyDtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeyTtgEeelTP4YnW3V3w" key="uuid" value="_MpvEEBfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPGeyjtgEeelTP4YnW3V3w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPGeyztgEeelTP4YnW3V3w" value="1"/>
+    </ownedAttribute>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_vPGecDtgEeelTP4YnW3V3w" name="processMoveOrders">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGecTtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGecjtgEeelTP4YnW3V3w" key="uuid" value="_Bx6Q0RfDEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <ownedParameter xmi:type="uml:Parameter" xmi:id="_vPGecztgEeelTP4YnW3V3w" name="returnParameter" isUnique="false" direction="return">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGedDtgEeelTP4YnW3V3w" source="genmymodel">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGedTtgEeelTP4YnW3V3w" key="uuid" value="_Bx6Q0BfDEDWkV9Q4HXTFIg"/>
+        </eAnnotations>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_vPGefztgEeelTP4YnW3V3w" name="ArrayList">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGegDtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGegTtgEeelTP4YnW3V3w" key="uuid" value="_RZfpsBfDEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGegjtgEeelTP4YnW3V3w" name="GameTimeInfoCls">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGegztgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGehDtgEeelTP4YnW3V3w" key="uuid" value="_aLNW8BfDEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGehTtgEeelTP4YnW3V3w" name="currentGameTime" type="_vPGeiztgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGehjtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGehztgEeelTP4YnW3V3w" key="uuid" value="_b1l1IBfDEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGeiDtgEeelTP4YnW3V3w" name="timeScale" type="_tmBgYDtjEeej9ODbYXDXAg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeiTtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeijtgEeelTP4YnW3V3w" key="uuid" value="_glFDEBfDEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_vPGeiztgEeelTP4YnW3V3w" name="Date">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGejDtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGejTtgEeelTP4YnW3V3w" key="uuid" value="_f70DoBfDEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Dependency" xmi:id="_vPGejjtgEeelTP4YnW3V3w" client="_vPGeZztgEeelTP4YnW3V3w" supplier="_vPGegjtgEeelTP4YnW3V3w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGejztgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGekDtgEeelTP4YnW3V3w" key="uuid" value="_s63UABfDEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_vPGemjtgEeelTP4YnW3V3w" name="IGISInterface">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGemztgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGenDtgEeelTP4YnW3V3w" key="uuid" value="_6hdFgBfDEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_vPGenTtgEeelTP4YnW3V3w" name="calculateNewLoc">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGenjtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGenztgEeelTP4YnW3V3w" key="uuid" value="_4YSxMRjiEDW0xr9sOhCh1w"/>
+      </eAnnotations>
+      <ownedParameter xmi:type="uml:Parameter" xmi:id="_vPGeoDtgEeelTP4YnW3V3w" name="returnParameter" isUnique="false" direction="return">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeoTtgEeelTP4YnW3V3w" source="genmymodel">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeojtgEeelTP4YnW3V3w" key="uuid" value="_4YSxMBjiEDW0xr9sOhCh1w"/>
+        </eAnnotations>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_vPGeoztgEeelTP4YnW3V3w" name="IProxyDB">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGepDtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGepTtgEeelTP4YnW3V3w" key="uuid" value="_BVRisBfEEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_vPGepjtgEeelTP4YnW3V3w" name="readOrders">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGepztgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeqDtgEeelTP4YnW3V3w" key="uuid" value="_rVy-MRfEEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <ownedParameter xmi:type="uml:Parameter" xmi:id="_vPGeqTtgEeelTP4YnW3V3w" name="returnParameter" type="_vPGefztgEeelTP4YnW3V3w" isUnique="false" direction="return">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeqjtgEeelTP4YnW3V3w" source="genmymodel">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeqztgEeelTP4YnW3V3w" key="uuid" value="_rVy-MBfEEDWkV9Q4HXTFIg"/>
+        </eAnnotations>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGerDtgEeelTP4YnW3V3w" name="CheckObstacleCls">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGerTtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGerjtgEeelTP4YnW3V3w" key="uuid" value="_X3Gw4BfEEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGerztgEeelTP4YnW3V3w" name="obstacleList" type="_vPGefztgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGesDtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGesTtgEeelTP4YnW3V3w" key="uuid" value="_kOngIBfEEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_vPGesjtgEeelTP4YnW3V3w" name="IMsg">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGesztgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGetDtgEeelTP4YnW3V3w" key="uuid" value="_6YCOUBfEEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_vPGetTtgEeelTP4YnW3V3w" name="sendMessage">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGetjtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGetztgEeelTP4YnW3V3w" key="uuid" value="_8engUBfEEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <ownedParameter xmi:type="uml:Parameter" xmi:id="_vPGeuDtgEeelTP4YnW3V3w" name="returnParameter" isUnique="false" direction="return">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGeuTtgEeelTP4YnW3V3w" source="genmymodel">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGeujtgEeelTP4YnW3V3w" key="uuid" value="_8eeWYBfEEDWkV9Q4HXTFIg"/>
+        </eAnnotations>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGeuztgEeelTP4YnW3V3w" name="MoveFunctionCls">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGevDtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGevTtgEeelTP4YnW3V3w" key="uuid" value="_Er1ZYBfFEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGe2jtgEeelTP4YnW3V3w" name="proxyDB" type="_vPGe0TtgEeelTP4YnW3V3w" association="_vPGe1ztgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe2ztgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe3DtgEeelTP4YnW3V3w" key="uuid" value="_gI-D8BfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPGe3TtgEeelTP4YnW3V3w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPGe3jtgEeelTP4YnW3V3w" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGfGztgEeelTP4YnW3V3w" name="proxyGIS" type="_vPGfDztgEeelTP4YnW3V3w" association="_vPGfGDtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfHDtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfHTtgEeelTP4YnW3V3w" key="uuid" value="_11p9YBfGEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPGfHjtgEeelTP4YnW3V3w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPGfHztgEeelTP4YnW3V3w" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGezDtgEeelTP4YnW3V3w" name="moveExecutorCls" type="_vPGeZztgEeelTP4YnW3V3w" association="_vPGexDtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGezTtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGezjtgEeelTP4YnW3V3w" key="uuid" value="_MpvEERfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPGezztgEeelTP4YnW3V3w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPGe0DtgEeelTP4YnW3V3w" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGe8DtgEeelTP4YnW3V3w" name="msgCls" type="_vPGe5DtgEeelTP4YnW3V3w" association="_vPGe7TtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe8TtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe8jtgEeelTP4YnW3V3w" key="uuid" value="_qDOtoBfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPGe8ztgEeelTP4YnW3V3w"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPGe9DtgEeelTP4YnW3V3w" value="1"/>
+    </ownedAttribute>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_vPGevjtgEeelTP4YnW3V3w" name="calculateNextLocation">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGevztgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGewDtgEeelTP4YnW3V3w" key="uuid" value="_-JElERfGEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <ownedParameter xmi:type="uml:Parameter" xmi:id="_vPGewTtgEeelTP4YnW3V3w" name="returnParameter" isUnique="false" direction="return">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGewjtgEeelTP4YnW3V3w" source="genmymodel">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGewztgEeelTP4YnW3V3w" key="uuid" value="_-JElEBfGEDWkV9Q4HXTFIg"/>
+        </eAnnotations>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_vPGexDtgEeelTP4YnW3V3w" name="MoveExecutorCls_MoveFunctionCls" memberEnd="_vPGexztgEeelTP4YnW3V3w _vPGezDtgEeelTP4YnW3V3w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGexTtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGexjtgEeelTP4YnW3V3w" key="uuid" value="_MpvEEhfFEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGe0TtgEeelTP4YnW3V3w" name="ProxyDB">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe0jtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe0ztgEeelTP4YnW3V3w" key="uuid" value="_ZI5TcBfFEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGe3ztgEeelTP4YnW3V3w" name="moveFunctionCls" type="_vPGeuztgEeelTP4YnW3V3w" association="_vPGe1ztgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe4DtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe4TtgEeelTP4YnW3V3w" key="uuid" value="_gI-D8RfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPGe4jtgEeelTP4YnW3V3w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPGe4ztgEeelTP4YnW3V3w" value="1"/>
+    </ownedAttribute>
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_vPGe1DtgEeelTP4YnW3V3w" client="_vPGe0TtgEeelTP4YnW3V3w" supplier="_vPGeoztgEeelTP4YnW3V3w" contract="_vPGeoztgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe1TtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe1jtgEeelTP4YnW3V3w" key="uuid" value="_7oiXcBfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </interfaceRealization>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_vPGe1ztgEeelTP4YnW3V3w" name="MoveFunctionCls_ProxyDB" visibility="private" memberEnd="_vPGe2jtgEeelTP4YnW3V3w _vPGe3ztgEeelTP4YnW3V3w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe2DtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe2TtgEeelTP4YnW3V3w" key="uuid" value="_gI-D8hfFEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGe5DtgEeelTP4YnW3V3w" name="MsgCls">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe5TtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe5jtgEeelTP4YnW3V3w" key="uuid" value="_mt1fIBfFEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGe5ztgEeelTP4YnW3V3w" name="msgObject" visibility="protected" type="_vPGe-jtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe6DtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe6TtgEeelTP4YnW3V3w" key="uuid" value="_rUh9cBfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGe9TtgEeelTP4YnW3V3w" name="moveFunctionCls" type="_vPGeuztgEeelTP4YnW3V3w" association="_vPGe7TtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe9jtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe9ztgEeelTP4YnW3V3w" key="uuid" value="_qDOtoRfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPGe-DtgEeelTP4YnW3V3w"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPGe-TtgEeelTP4YnW3V3w" value="1"/>
+    </ownedAttribute>
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_vPGe6jtgEeelTP4YnW3V3w" client="_vPGe5DtgEeelTP4YnW3V3w" supplier="_vPGesjtgEeelTP4YnW3V3w" contract="_vPGesjtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe6ztgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe7DtgEeelTP4YnW3V3w" key="uuid" value="_69OJkBfFEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </interfaceRealization>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_vPGe7TtgEeelTP4YnW3V3w" name="MoveFunctionCls_MsgCls" memberEnd="_vPGe8DtgEeelTP4YnW3V3w _vPGe9TtgEeelTP4YnW3V3w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe7jtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe7ztgEeelTP4YnW3V3w" key="uuid" value="_qDOtohfFEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_vPGe-jtgEeelTP4YnW3V3w" name="MsgBean">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe-ztgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe_DtgEeelTP4YnW3V3w" key="uuid" value="_45pvUBfFEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGe_TtgEeelTP4YnW3V3w" name="FuelConsumptionCls">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGe_jtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGe_ztgEeelTP4YnW3V3w" key="uuid" value="_As_v0BfGEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGfADtgEeelTP4YnW3V3w" name="fuelType" type="_tmBgYDtjEeej9ODbYXDXAg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfATtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfAjtgEeelTP4YnW3V3w" key="uuid" value="_R3MyABfGEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGfAztgEeelTP4YnW3V3w" name="fuelQty" type="_tmBgYDtjEeej9ODbYXDXAg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfBDtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfBTtgEeelTP4YnW3V3w" key="uuid" value="_XYbl8BfGEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </ownedAttribute>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_vPGfBjtgEeelTP4YnW3V3w" name="calculateFuelConsumption">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfBztgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfCDtgEeelTP4YnW3V3w" key="uuid" value="_Z7mGQRfGEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <ownedParameter xmi:type="uml:Parameter" xmi:id="_vPGfCTtgEeelTP4YnW3V3w" name="returnParameter" isUnique="false" direction="return">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfCjtgEeelTP4YnW3V3w" source="genmymodel">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfCztgEeelTP4YnW3V3w" key="uuid" value="_Z7mGQBfGEDWkV9Q4HXTFIg"/>
+        </eAnnotations>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_vPGfDDtgEeelTP4YnW3V3w" client="_vPGeuztgEeelTP4YnW3V3w" supplier="_vPGe_TtgEeelTP4YnW3V3w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfDTtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfDjtgEeelTP4YnW3V3w" key="uuid" value="_INOnEBfGEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vPGfDztgEeelTP4YnW3V3w" name="ProxyGIS">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vPGfIDtgEeelTP4YnW3V3w" name="moveFunctionCls" type="_vPGeuztgEeelTP4YnW3V3w" association="_vPGfGDtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfITtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfIjtgEeelTP4YnW3V3w" key="uuid" value="_11p9YRfGEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPGfIztgEeelTP4YnW3V3w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPGfJDtgEeelTP4YnW3V3w" value="1"/>
+    </ownedAttribute>
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_vPGfFTtgEeelTP4YnW3V3w" client="_vPGfDztgEeelTP4YnW3V3w" supplier="_vPGemjtgEeelTP4YnW3V3w" contract="_vPGemjtgEeelTP4YnW3V3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfFjtgEeelTP4YnW3V3w" source="genmymodel">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfFztgEeelTP4YnW3V3w" key="uuid" value="_8GoMMBfGEDWkV9Q4HXTFIg"/>
+      </eAnnotations>
+    </interfaceRealization>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_vPGfGDtgEeelTP4YnW3V3w" name="MoveFunctionCls_ProxyGIS" memberEnd="_vPGfGztgEeelTP4YnW3V3w _vPGfIDtgEeelTP4YnW3V3w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfGTtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfGjtgEeelTP4YnW3V3w" key="uuid" value="_11p9YhfGEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Dependency" xmi:id="_vPGfJTtgEeelTP4YnW3V3w" client="_vPGeuztgEeelTP4YnW3V3w" supplier="_vPGerDtgEeelTP4YnW3V3w">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vPGfJjtgEeelTP4YnW3V3w" source="genmymodel">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vPGfJztgEeelTP4YnW3V3w" key="uuid" value="_EXICwBfHEDWkV9Q4HXTFIg"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_tmBgYDtjEeej9ODbYXDXAg" name="int"/>
+</uml:Model>

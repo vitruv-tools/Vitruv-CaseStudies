@@ -1,0 +1,361 @@
+package tools.vitruv.applications.umljava.util.uml
+
+import java.util.ArrayList
+import java.util.List
+import org.eclipse.emf.common.util.EList
+import org.eclipse.uml2.uml.Classifier
+import org.eclipse.uml2.uml.Enumeration
+import org.eclipse.uml2.uml.EnumerationLiteral
+import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.NamedElement
+import org.eclipse.uml2.uml.Namespace
+import org.eclipse.uml2.uml.PackageableElement
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.BehavioredClassifier
+import org.eclipse.uml2.uml.DataType
+import java.util.Collections
+
+/**
+ * Util class for classifier and package functions.
+ * 
+ * @author Fei
+ * 
+ */
+class UmlClassifierAndPackageUtil {
+    
+    /**
+     * Prevents instantiation
+     */
+    private new () {}
+    
+    def static Package createUmlPackageAndAddToSuperPackage(String name, Package superPackage) {
+        val uPackage = UMLFactory.eINSTANCE.createPackage
+        uPackage.name = name
+        superPackage.packagedElements += uPackage
+        return uPackage
+    }
+    
+    /**
+     * Creates a simple Uml CLass (public, not static, not abstract, no fields, no operations)
+     */
+    def static createSimpleUmlClass(Package uPackage, String name) {
+        return createUmlClassAndAddToPackage(uPackage, name, VisibilityKind.PUBLIC_LITERAL, false, false);
+    }
+    
+    /**
+     * Creates a simple uml interface (public, no super interfaces, no operations no attributes)
+     * 
+     */
+    def static createSimpleUmlInterface(Package uPackage, String name) {
+        return createUmlInterfaceAndAddToPackage(uPackage, name, null);
+    }
+    
+    /**
+     * Creates and returns a new Uml Class. It is added to the given package.
+     * 
+     * @param uPackage the package that contains the new class
+     * @param name the name of the new class
+     * @param visibilty the visibility of the class
+     * @param abstr if the class should be abstract
+     * @param fin if the class should be final
+     * @return the new uml class
+     */
+    def static Class createUmlClassAndAddToPackage(Package uPackage, String name, VisibilityKind visibility, boolean abstr, boolean fin) {
+        val uClass = createUmlClass(name, visibility, abstr, fin)
+        uPackage.packagedElements += uClass
+        return uClass
+    }
+    
+    /**
+     * Creates and returns a new Uml interface. It is added to the given package.
+     * The visibility of the new intrface is public by default.
+     * 
+     * @param uPackage the package that contains the new interface
+     * @param name the name of the new interface
+     * @param superInterfaces super interfaces of the new interface
+     * @return the new uml interface
+     */
+    def static Interface createUmlInterfaceAndAddToPackage(Package uPackage, String name, List<Interface> superInterfaces) {
+        val uInterface = createUmlInterface(name, superInterfaces)
+        uPackage.packagedElements += uInterface
+        return uInterface
+    }
+    
+    /**
+     * Creates and returns a new Uml datatype. It is added to the given package.
+     * 
+     * @param uPackage the package that contains the new datatype
+     * @param name the name of the new datatype
+     * @return the new datatype
+     */
+    def static DataType createUmlDataType(Package uPackage, String name) {
+        val dataType = UMLFactory.eINSTANCE.createDataType
+        dataType.name = name
+        uPackage.packagedElements += dataType
+        return dataType
+    }
+    
+    /**
+     * Creates and returns a new Uml enumeration. It is added to the given package.
+     * 
+     * @param uPackage the package that contains the new enum
+     * @param name the name of the new enum
+     * @param visibility the visibility of the enum
+     * @param enumLiterals the enum constants of the new enum
+     * @return the new enum
+     */
+    def static Enumeration createUmlEnumAndAddToPackage(Package uPackage, String name, VisibilityKind visibility, List<EnumerationLiteral> enumLiterals) {
+        val uEnum = createUmlEnum(name, visibility, enumLiterals)
+        uPackage.packagedElements += uEnum
+        return uEnum
+    }
+    
+    /**
+     * Creates and returns a new Uml enumeration.
+     * It is not contained in any package.
+     * 
+     * @param name the name of the new enum
+     * @param visibility the visibility of the enum
+     * @param enumLiterals the enum constants of the new enum
+     * @return the new enum
+     */
+    def static Enumeration createUmlEnum(String name, VisibilityKind visibility, List<EnumerationLiteral> enumLiterals) {
+        val uEnum = UMLFactory.eINSTANCE.createEnumeration
+        setName(uEnum, name)
+        uEnum.visibility = visibility
+        if (!enumLiterals.nullOrEmpty) {
+            uEnum.ownedLiterals.addAll(enumLiterals)
+        }
+        return uEnum
+    }
+    
+    /**
+     * Creates a enum literal with the given name.
+     * The enum literal is not contained in an enum.
+     * 
+     * @param name the name of the enum literal
+     * @return the new enum literal
+     */
+    def static EnumerationLiteral createUmlEnumerationLiteral(String name) {
+        val literal = UMLFactory.eINSTANCE.createEnumerationLiteral
+        literal.name = name
+        return literal
+    }
+    
+    /**
+     * Creates for each name in the given enumLiteralNames a new enum literal object.
+     * @enumLiteralName list of enum literal names
+     * @return the list with the new enum literals
+     */
+    def static List<EnumerationLiteral> createUmlEnumLiteralsFromList(List<String> enumLiteralNames) {
+        val enumLiterals = new ArrayList<EnumerationLiteral>
+        for (name : enumLiteralNames) {
+            enumLiterals += createUmlEnumerationLiteral(name)
+        }
+        return enumLiterals
+    }
+    
+    /**
+     * Creates and returns a Uml-Class.
+     * The class is not contained in a package.
+     * 
+     * @param name the name of the new class
+     * @param visibilty the visibility of the class
+     * @param abstr if the class should be abstract
+     * @param fin if the class should be final
+     * @return the new uml class
+     */
+    def static Class createUmlClass(String name, VisibilityKind visibility, boolean abstr, boolean fin) {
+        val uClass = UMLFactory.eINSTANCE.createClass;
+        setName(uClass, name)
+        uClass.visibility = visibility;
+        uClass.isAbstract = abstr;
+        uClass.isFinalSpecialization = fin;
+        return uClass;
+    }
+    
+    /**
+     * Creates and returns an Interface.
+     * Visibility is automatically set to public.
+     * SuperInterfaces can be null.
+     * The interface is not contained in a package.
+     * 
+     * @param uPackage the package that contains the new interface
+     * @param name the name of the new interface
+     * @param superInterfaces super interfaces of the new interface
+     * @return the new uml interface
+     */
+    def static Interface createUmlInterface(String name, List<Interface> superInterfaces) {
+        val uInterface = UMLFactory.eINSTANCE.createInterface;
+        setName(uInterface, name)
+        uInterface.visibility = VisibilityKind.PUBLIC_LITERAL;
+        if (!superInterfaces.nullOrEmpty) {
+            uInterface.generals.addAll(superInterfaces);
+        }        
+        return uInterface;
+    }
+    
+    /**
+     * Creates and returns a PrimitiveType with the given name. It is added to the given package.
+     * 
+     * @param uPackage the package that contains the new primitive type
+     * @param pTypeName the name of the new primitive type
+     * @return a new primitive type with the given name
+     */
+    def static PrimitiveType createUmlPrimitiveTypeAndAddToModel(Package uPackage, String pTypeName) {
+        val pType = createUmlPrimitiveType(pTypeName);
+        uPackage.packagedElements += pType
+        return pType
+    }
+    
+    /**
+     * Returns a PrimitiveType with the given name. It is not contained in a package.
+     * 
+     * @param name the name of the new primitive type
+     * @return a new primitive type with the given name
+     */
+    def static createUmlPrimitiveType (String name) {
+        val pType = UMLFactory.eINSTANCE.createPrimitiveType;
+        setName(pType, name)
+        return pType;
+    }
+    
+    /**
+     * Extracts the list of superinterfaces of umlInterface. Returns null if umlInterface has no
+     * superinterfaces.
+     * 
+     * @return the list of supper interfaces of the given umlInterface
+     */
+    def static EList<Classifier> extractSuperInterfaces(Interface umlInterface) {
+        val supers = umlInterface?.generals
+        if (supers.nullOrEmpty) {
+            return null
+        }
+        return supers
+    }
+    
+    /**
+     * Adds the superclassifier to the given subclassifier
+     * 
+     * @param subClassifier the classifier who inherits the super clsssifier
+     * @param super classifier the new super classifier of the sub classifier
+     */
+    def static void addUmlSuperClassifier(Classifier subClassifier, Classifier superClassifier) {
+        if (subClassifier === null || superClassifier === null) {
+            throw new IllegalArgumentException("Can not create generalization relation for null")
+        }
+        subClassifier.generals += superClassifier
+    }
+    
+    /**
+     * Adds a new interface realization of the given interface to the implementor
+     * 
+     * @param implementor the classifier that implements the interface
+     * @param realizationName the name of the interface implementation relation
+     * @param interfaceToImplement the interface that the implementor implements
+     */
+    def static void addUmlInterfaceRealization(BehavioredClassifier implementor, String realizationName, Interface interfaceToImplement) {
+        if (implementor === null || interfaceToImplement === null) {
+            throw new IllegalArgumentException("Can not create implementation relation for null")
+        }
+        implementor.createInterfaceRealization(realizationName, interfaceToImplement)
+    }
+    
+    /**
+     * Removes a super classifier from a given sub classifier
+     * 
+     * @param classifierToRemove the classifier that should be removed as super classifier of sub classifier
+     */
+    def static void removeUmlGeneralClassifier(Classifier subClassifier, Classifier classifierToRemove) {
+        if (subClassifier === null || classifierToRemove === null) {
+            throw new IllegalArgumentException("Can not remove generalization relation for null")
+        }
+        val iter = subClassifier.generalizations.iterator
+        while (iter.hasNext) {
+            if (iter.next.general.name.equals(classifierToRemove.name)) {
+                iter.remove
+            }
+        }
+    }
+    /**
+     * Removes a implemented interface from an implementor
+     * 
+     */
+    def static void removeUmlImplementedInterface(Class implementor, Interface interfaceToRemove) {
+        if (implementor === null || interfaceToRemove === null) {
+            throw new IllegalArgumentException("Can not remove class generalization relation for null")
+        }
+        val iter = implementor.interfaceRealizations.iterator
+        while (iter.hasNext) {
+            if (iter.next.contract.name.equals(interfaceToRemove.name)) {
+                iter.remove
+            }
+        }
+    }
+    
+    /**
+     * Converts the namespace of the given namespace into a list of Strings
+     * 
+     * org.example.test.test2 --> [org, example, test]
+     * 
+     * If the given namepace is a uml model (org.eclipse.uml2.uml.Model), it will return
+     * an empty list
+     * 
+     */
+    def static List<String> getUmlParentNamespaceAsStringList(Namespace uNamespace) {
+        if (!(uNamespace.namespace instanceof Model)) {
+            return buildNamespaceStringList(uNamespace.namespace, new ArrayList<String>)
+        } else {
+            return Collections.<String>emptyList
+        }
+        
+    }
+    
+    /**
+     * Converts the namespace of the given namespace into a list of Strings
+     * and appends the name of the given namespace to the end of the list
+     * 
+     * org.example.test.test2 --> [org, example, test, test2]
+     * 
+     */
+    def static List<String> getUmlNamespaceAsStringList(Namespace uNamespace) {
+        return buildNamespaceStringList(uNamespace, new ArrayList<String>)
+    }
+    
+    def private static List<String> buildNamespaceStringList(Namespace uNamespace, List<String> namespace) {
+        namespace += uNamespace?.name
+        if (uNamespace?.namespace !== null && !(uNamespace?.namespace instanceof Model)) {
+            return buildNamespaceStringList(uNamespace.namespace, namespace)
+        } else {
+            return namespace.reverse
+        }
+    }
+    
+    def static void setName(NamedElement namedElement, String name) {
+        if (name === null) {
+            throw new IllegalArgumentException("Invalid name: " + name + " for " + namedElement);
+        }
+        namedElement.name = name;
+    }
+    
+    /**
+     * Removes the given packageable element from the given package.
+     * 
+     * @param uPackage the package from which the packageable element should be removed
+     * @param packageable the packageable element that should be removed from the fiven package
+     * 
+     */
+    def static removePackagedElementFromPackage(Package uPackage, PackageableElement packageable) {
+        val iter = uPackage.packagedElements.iterator
+        while (iter.hasNext) {
+            if (iter.next.name.equals(packageable.name)) {
+                iter.remove;
+            }
+        }
+    }
+}

@@ -1,0 +1,100 @@
+import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
+
+reactions: JavaToUmlAttribute
+in reaction to changes in Java
+execute actions in UML
+
+
+reaction JavaAttributeCreatedInClass {
+    after element java::Field created and inserted in java::Class[members]
+    call createUmlAttributeInClass(affectedEObject, newValue)
+}
+
+reaction JavaAttributeCreatedInEnum {
+    after element java::Field created and inserted in java::Enumeration[members]
+    call createUmlAttributeInEnum(affectedEObject, newValue)
+}
+
+//UML-Enumeration and UML-Class don't have a common superclass for "having ownedAttributes".
+//Therefore we implemented two separate routines
+routine createUmlAttributeInEnum(java::Enumeration jEnum, java::Field jAttr) {
+    match {
+        val uEnum = retrieve uml::Enumeration corresponding to jEnum
+    }
+    action {
+        val uAttr = create uml::Property and initialize {
+            uAttr.name = jAttr.name;
+        }
+        add correspondence between uAttr and jAttr
+        update uEnum {
+            uEnum.ownedAttributes += uAttr;
+        }
+    }
+}
+
+routine createUmlAttributeInClass(java::Class jClass, java::Field jAttr) {
+    match {
+        val uClass = retrieve uml::Class corresponding to jClass
+    }
+    action {
+        val uAttr = create uml::Property and initialize {
+            uAttr.name = jAttr.name;
+        }
+        add correspondence between uAttr and jAttr
+        update uClass {
+            uClass.ownedAttributes += uAttr;
+        }
+    }
+}
+
+reaction JavaAttributeTypeChanged {
+    after element java::TypeReference replaced at java::Field[typeReference]
+    call {
+        changeUmlAttributeType(affectedEObject, newValue)
+        }
+}
+
+routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr
+        
+    }
+    action {
+        update uAttr {
+            uAttr.type = getUmlType(jType, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+        }
+    }
+}
+
+reaction JavaAttributeMadeFinal {
+    after element java::Final created and inserted in java::Field[annotationsAndModifiers]
+    call setUmlAttributeFinal(affectedEObject, true)
+}
+
+reaction JavaAttributeMadeNonFinal {
+    after element java::Final deleted and removed from java::Field[annotationsAndModifiers]
+    call setUmlAttributeFinal(affectedEObject, false)
+}
+
+routine setUmlAttributeFinal(java::Field jAttr, Boolean isFinal) {
+    match {
+        val uAttr = retrieve uml::Property corresponding to jAttr 
+    }
+    action {
+        update uAttr {
+            uAttr.isReadOnly = isFinal
+        }
+    }
+}
+
+//===========================================
+//=========================================== Unsupported
+//===========================================
+
+reaction JavaAttributeCreatedInInterface {
+    after element java::Field created and inserted in java::Interface[members]
+    call showMessage(userInteracting, "Adding fields to " + affectedEObject.class.simpleName +" is not supported. Please remove " + newValue)
+    
+}

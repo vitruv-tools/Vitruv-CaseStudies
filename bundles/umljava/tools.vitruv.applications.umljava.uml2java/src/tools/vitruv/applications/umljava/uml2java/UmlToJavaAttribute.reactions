@@ -1,0 +1,200 @@
+import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
+
+reactions: UmlToJavaAttribute
+in reaction to changes in UML
+execute actions in Java
+
+reaction UmlAttributeCreatedInClass {
+    after element uml::Property created and inserted in uml::Class[ownedAttribute]
+    call {
+        createJavaAttribute(affectedEObject, newValue)
+    }
+}
+
+//We can not define one single reaction for attribute creation in enums and classes because
+//They don't have a common superclass for "having ownedAttributes"
+reaction UmlAttributeCreatedInDataType {//Enum is a DataType
+    after element uml::Property created and inserted in uml::DataType[ownedAttribute]
+    call {
+        createJavaAttribute(affectedEObject, newValue)
+    }
+}
+
+routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttribute) {
+    match {
+        val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
+    }
+    action {
+        val javaAttribute = create java::Field and initialize {
+            javaAttribute.name = umlAttribute.name;
+            javaAttribute.makePublic
+        }
+        update jClassifier {
+            jClassifier.members += javaAttribute
+        }
+        add correspondence between umlAttribute and javaAttribute
+    }
+}
+
+reaction UmlAttributeDeletedFromClass {
+    after element uml::Property deleted and removed from uml::Class[ownedAttribute]
+    call deleteJavaAttribute(oldValue)
+}
+
+reaction UmlAttributeDeletedFromDataType {
+    after element uml::Property deleted and removed from uml::DataType[ownedAttribute]
+    call deleteJavaAttribute(oldValue)
+}
+
+routine deleteJavaAttribute(uml::Property umlAttr) {
+    match {
+        val jAttr = retrieve java::Field corresponding to umlAttr
+    }
+    action {
+        call {
+            removeJavaGettersOfAttribute(jAttr)
+            removeJavaSettersOfAttribute(jAttr)
+        }
+        delete jAttr
+        
+    }
+}
+
+reaction UmlAttributeMadeFinal {
+    after attribute replaced at uml::Property[isReadOnly]
+    call setJavaAttributeFinal(affectedEObject) 
+}
+
+routine setJavaAttributeFinal(uml::Property umlAttr) {
+    match {
+        val jAttr = retrieve java::Field corresponding to umlAttr
+    }
+    action {
+        update jAttr {
+            jAttr.final = umlAttr.readOnly
+        }
+    }
+}
+
+reaction UmlAttributeTypeChanged {
+    after element uml::Type replaced at uml::Property[type]
+    call changeJavaAttributeType(affectedEObject, newValue)
+}
+
+routine changeJavaAttributeType(uml::Property uAttr, uml::Type uType) {
+    match {
+        val jAttr = retrieve java::Field corresponding to uAttr
+        val customType = retrieve optional java::Class corresponding to uType
+    }
+    action {
+        call {
+            jAttr.typeReference = createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit, userInteracting)
+            updateAttributeTypeInSetters(jAttr)
+            updateAttributeTypeInGetters(jAttr)
+        }
+    }
+}
+
+reaction UmlLowerMultiplicityChanged {
+    after attribute replaced at uml::LiteralInteger[value]
+    call {
+        handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
+    }
+}
+
+reaction UmlUpperMultiplicityChanged {
+    after attribute replaced at uml::LiteralUnlimitedNatural[value]
+    call handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
+}
+
+
+routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
+    match {
+        val jAttribute = retrieve java::Field corresponding to uAttribute
+        val jType = retrieve java::Class corresponding to uAttribute.type
+    }
+    action {
+        update jAttribute {
+            if (uAttribute.lower == 0) {
+                if (uAttribute.upper == 1) {
+                    jAttribute.typeReference = createTypeReferenceAndUpdateImport(uAttribute.type, jType, jAttribute.getContainingCompilationUnit, userInteracting)
+                } else if (uAttribute.upper == LiteralUnlimitedNatural.UNLIMITED) {
+                    jAttribute.typeReference = createCollectiontypeReference(letUserSelectCollectionTypeName(userInteracting), jType)
+                } else {
+                    showMessage(userInteracting, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
+                }
+            } else if (uAttribute.lower == 1) {
+                if (uAttribute.upper == 1) {
+                    jAttribute.typeReference = createTypeReferenceAndUpdateImport(uAttribute.type, jType, jAttribute.getContainingCompilationUnit, userInteracting)
+                } else {
+                    showMessage(userInteracting, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
+                }
+            } else {
+                showMessage(userInteracting, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
+            }
+        }
+        call {
+            if (uAttribute.lower == 1 && uAttribute.upper == 1) {
+                createJavaGetter(jAttribute)
+                createJavaSetter(jAttribute)
+            }
+        }
+    }
+}
+
+routine createJavaGetter(java::Field jAttribute) {
+    action {
+        call {
+            if (!javaGetterForAttributeExists(jAttribute)) {
+                createGetterForAttribute(jAttribute)
+            }
+        }
+    }
+}
+
+routine createJavaSetter(java::Field jAttribute) {
+    action {
+        call {
+            if (!javaSetterForAttributeExists(jAttribute)) {
+                createSetterForAttribute(jAttribute)
+            }
+        }
+    }
+}
+
+reaction UmlAttributeRenamed {
+    after attribute replaced at uml::Property[name]
+    call renameJavaAttribute(newValue, oldValue, affectedEObject)
+}
+
+routine renameJavaAttribute(String oldName, String newName, uml::Property uAttribute) {
+    match {
+        val jAttribute = retrieve java::Field corresponding to uAttribute
+    }
+    action {
+        call {
+            jAttribute.name = uAttribute.name
+            renameGettersOfAttribute(jAttribute, oldName)
+            renameSettersOfAttribute(jAttribute, oldName)
+        }
+    }
+}
+
+reaction UmlAttributeCreatedInInterface {
+    after element uml::Property created and inserted in uml::Interface[ownedAttribute]
+    call showMessage(userInteracting, "We do not support adding attributes to interfaces. Please delete " + newValue + " from " + affectedEObject)
+}
+
+reaction UmlInterfaceMadeFinal {
+    after attribute replaced at uml::Interface[isFinalSpecialization]
+    with newValue == true
+    call showMessage(userInteracting, "We do not support making final interfaces. Please change " + affectedEObject + " to non-final. ")
+}
+
