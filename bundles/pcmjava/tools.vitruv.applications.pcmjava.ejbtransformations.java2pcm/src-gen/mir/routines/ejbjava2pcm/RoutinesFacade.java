@@ -106,8 +106,8 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void createdClassMethodInEJBClass(final org.emftext.language.java.classifiers.Class clazz, final ClassMethod classMethod) {
-    mir.routines.ejbjava2pcm.CreatedClassMethodInEJBClassRoutine effect = new mir.routines.ejbjava2pcm.CreatedClassMethodInEJBClassRoutine(this.executionState, calledBy,
+  public void createdClassMethodInEjbClass(final org.emftext.language.java.classifiers.Class clazz, final ClassMethod classMethod) {
+    mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine effect = new mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine(this.executionState, calledBy,
     	clazz, classMethod);
     effect.applyRoutine();
   }

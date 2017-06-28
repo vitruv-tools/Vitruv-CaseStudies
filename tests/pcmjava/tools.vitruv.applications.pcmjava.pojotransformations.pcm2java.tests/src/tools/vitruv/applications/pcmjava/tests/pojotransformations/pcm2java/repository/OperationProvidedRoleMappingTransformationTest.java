@@ -11,13 +11,12 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 
-public class OperationProvidedRoleMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testAddOperationProvidedRole() throws Throwable {
@@ -34,10 +33,10 @@ public class OperationProvidedRoleMappingTransformationTest extends PCM2JaMoPPTr
         final Repository repo = operationProvidedRole.getProvidedInterface__OperationProvidedRole()
                 .getRepository__Interface();
         final OperationInterface newInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME + PCM2JaMoPPTestUtils.RENAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
 
         operationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertOperationProvidedRole(operationProvidedRole);
     }
@@ -51,7 +50,7 @@ public class OperationProvidedRoleMappingTransformationTest extends PCM2JaMoPPTr
         final BasicComponent newBasicComponent = this.addBasicComponentAndSync(repo, "NewProvidingComponent");
 
         operationProvidedRole.setProvidingEntity_ProvidedRole(newBasicComponent);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertOperationProvidedRole(operationProvidedRole);
     }
@@ -64,7 +63,7 @@ public class OperationProvidedRoleMappingTransformationTest extends PCM2JaMoPPTr
                 .getRepository__Interface();
         final BasicComponent basicComponent = (BasicComponent) operationProvidedRole.getProvidingEntity_ProvidedRole();
         final OperationInterface newInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME + PCM2JaMoPPTestUtils.RENAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
 
         final OperationProvidedRole newOperationProvidedRole = RepositoryFactory.eINSTANCE
                 .createOperationProvidedRole();
@@ -72,8 +71,7 @@ public class OperationProvidedRoleMappingTransformationTest extends PCM2JaMoPPTr
         newOperationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
         newOperationProvidedRole.setProvidingEntity_ProvidedRole(basicComponent);
         basicComponent.getProvidedRoles_InterfaceProvidingEntity().add(newOperationProvidedRole);
-        final VURI vuri = VURI.getInstance(repo.eResource());
-        super.triggerSynchronization(vuri);
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertOperationProvidedRole(operationProvidedRole);
         this.assertOperationProvidedRole(newOperationProvidedRole);
@@ -87,18 +85,17 @@ public class OperationProvidedRoleMappingTransformationTest extends PCM2JaMoPPTr
                 .getRepository__Interface();
         final BasicComponent basicComponent = (BasicComponent) operationProvidedRole.getProvidingEntity_ProvidedRole();
         final OperationInterface newInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME + PCM2JaMoPPTestUtils.RENAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
         final OperationProvidedRole newOperationProvidedRole = RepositoryFactory.eINSTANCE
                 .createOperationProvidedRole();
         newOperationProvidedRole.setEntityName("NewOperationProvidedRole");
         newOperationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
         newOperationProvidedRole.setProvidingEntity_ProvidedRole(basicComponent);
         basicComponent.getProvidedRoles_InterfaceProvidingEntity().add(newOperationProvidedRole);
-        final VURI vuri = VURI.getInstance(repo.eResource());
-        super.triggerSynchronization(vuri);
+        super.saveAndSynchronizeChanges(repo);
 
         basicComponent.getProvidedRoles_InterfaceProvidingEntity().remove(newOperationProvidedRole);
-        super.triggerSynchronization(vuri);
+        super.saveAndSynchronizeChanges(repo);
 
         this.assertOperationProvidedRole(operationProvidedRole);
         final CompilationUnit jaMoPPCu = CollectionBridge
@@ -111,11 +108,11 @@ public class OperationProvidedRoleMappingTransformationTest extends PCM2JaMoPPTr
 
     @Test
     public void testOperationProvidedRoleToSystem() throws Throwable {
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final OperationInterface opInterface = super.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
         final org.palladiosimulator.pcm.system.System system = super.createAndSyncSystem(
-                PCM2JaMoPPTestUtils.SYSTEM_NAME);
+                Pcm2JavaTestUtils.SYSTEM_NAME);
 
         final OperationProvidedRole operationProvidedRole = super.createAndSyncOperationProvidedRole(opInterface,
                 system);

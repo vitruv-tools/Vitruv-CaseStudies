@@ -74,9 +74,8 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     if (umlModel == null) {
     	return;
     }
-    initializeRetrieveElementState(umlModel);
+    registerObjectUnderModification(umlModel);
     Component umlComponent = UMLFactoryImpl.eINSTANCE.createComponent();
-    initializeCreateElementState(umlComponent);
     userExecution.updateUmlComponentElement(pcmComponent, umlModel, umlComponent);
     
     // val updatedElement userExecution.getElement1(pcmComponent, umlModel, umlComponent);
@@ -84,6 +83,6 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     
     addCorrespondenceBetween(userExecution.getElement2(pcmComponent, umlModel, umlComponent), userExecution.getElement3(pcmComponent, umlModel, umlComponent), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

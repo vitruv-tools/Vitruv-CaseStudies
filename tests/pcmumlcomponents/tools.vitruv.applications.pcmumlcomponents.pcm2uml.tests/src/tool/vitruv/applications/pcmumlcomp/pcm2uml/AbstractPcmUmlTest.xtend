@@ -1,13 +1,13 @@
 package tool.vitruv.applications.pcmumlcomp.pcm2uml
 
-import tools.vitruv.domains.uml.UmlDomain
-import tools.vitruv.framework.tests.VitruviusChangePropagationTest
 import tools.vitruv.aplications.pcmumlcomp.pcm2uml.PcmToUmlComponentsChangePropagationSpecification
-import tools.vitruv.domains.pcm.PcmDomain
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.palladiosimulator.pcm.repository.Repository
+import tools.vitruv.framework.tests.VitruviusApplicationTest
+import tools.vitruv.domains.uml.UmlDomainProvider
+import tools.vitruv.domains.pcm.PcmDomainProvider
 
-class AbstractPcmUmlTest extends VitruviusChangePropagationTest {
+class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
 	protected static val MODEL_NAME = "model";
 	
@@ -16,21 +16,25 @@ class AbstractPcmUmlTest extends VitruviusChangePropagationTest {
 	}
 	
 	protected def Repository getRootElement() {
-		return MODEL_NAME.projectModelPath.root as Repository;
+		return MODEL_NAME.projectModelPath.firstRootElement as Repository;
 	}
 	
 	override protected createChangePropagationSpecifications() {
 		return #[new PcmToUmlComponentsChangePropagationSpecification()]; 
 	}
 	
-	override protected createMetamodels() {
-		return #[new UmlDomain().metamodel, new PcmDomain().metamodel];
+	override protected getVitruvDomains() {
+		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain];
 	}
 	
-	override protected initializeTestModel() {
+	override protected setup() {
 		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository();
 		pcmRepository.entityName = MODEL_NAME;
 		createAndSynchronizeModel(MODEL_NAME.projectModelPath, pcmRepository);
 	}
 
+	override protected cleanup() {
+		// Do nothing
+	}
+	
 }

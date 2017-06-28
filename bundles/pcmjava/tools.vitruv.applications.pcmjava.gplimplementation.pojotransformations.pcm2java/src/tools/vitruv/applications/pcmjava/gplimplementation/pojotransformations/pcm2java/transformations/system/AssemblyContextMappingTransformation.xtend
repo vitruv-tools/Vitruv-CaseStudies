@@ -17,9 +17,9 @@ import org.palladiosimulator.pcm.repository.RepositoryComponent
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class AssemblyContextMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -28,7 +28,7 @@ class AssemblyContextMappingTransformation extends EmptyEObjectMappingTransforma
 	}
 
 	override setCorrespondenceForFeatures() {
-		PCM2JaMoPPUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
+		Pcm2JavaUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
 	}
 
 	/**
@@ -53,7 +53,7 @@ class AssemblyContextMappingTransformation extends EmptyEObjectMappingTransforma
 	 */
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
-		PCM2JaMoPPUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
+		Pcm2JavaUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
 			featureCorrespondenceMap, correspondenceModel)
 	}
 
@@ -79,7 +79,7 @@ class AssemblyContextMappingTransformation extends EmptyEObjectMappingTransforma
 				val newEObjects = this.createFieldForAssemblyContext(assemblyContext,
 					newValue as RepositoryComponent);
 				val composedProvidingRequiringEntity = assemblyContext.parentStructure__AssemblyContext
-				PCM2JaMoPPUtils.
+				Pcm2JavaUtils.
 					handleAssemblyContextAddedAsNonRootEObjectInList(composedProvidingRequiringEntity, assemblyContext,
 						newEObjects, correspondenceModel)
 
@@ -89,9 +89,9 @@ class AssemblyContextMappingTransformation extends EmptyEObjectMappingTransforma
 
 				//update existing correspondence
 				for (typedElement : typedElementCorrespondences) {
-					val oldTUID = correspondenceModel.calculateTUIDFromEObject(typedElement)
-					typedElement.typeReference = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPClass)
-					oldTUID.updateTuid(typedElement)
+					val oldTuid = correspondenceModel.calculateTuidFromEObject(typedElement)
+					typedElement.typeReference = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPClass)
+					oldTuid.updateTuid(typedElement)
 				}
 			}
 		}
@@ -118,12 +118,12 @@ class AssemblyContextMappingTransformation extends EmptyEObjectMappingTransforma
 			return Lists.newArrayList
 		}
 
-		val TypeReference typeRef = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPClass)
+		val TypeReference typeRef = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPClass)
 		val String name = assemblyContext.entityName
 
 		val List<EObject> newEObjects = new ArrayList<EObject>()
 
-		val field = PCM2JaMoPPUtils.createPrivateField(typeRef, name)
+		val field = Pcm2JavaUtils.createPrivateField(typeRef, name)
 		jaMoPPCompositeClass.members.add(field)
 
 		newEObjects.add(field)
@@ -131,16 +131,16 @@ class AssemblyContextMappingTransformation extends EmptyEObjectMappingTransforma
 		val constructors = jaMoPPCompositeClass.members.filter(typeof(Constructor))
 
 		if (constructors.nullOrEmpty) {
-			newEObjects.add(PCM2JaMoPPUtils.addConstructorToClass(jaMoPPCompositeClass))
+			newEObjects.add(Pcm2JavaUtils.addConstructorToClass(jaMoPPCompositeClass))
 		} else {
 			newEObjects.addAll(constructors)
 		}
 
-		newEObjects.add(PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(jaMoPPCompositeClass, jaMoPPClass))
+		newEObjects.add(Pcm2JavaUtils.addImportToCompilationUnitOfClassifier(jaMoPPCompositeClass, jaMoPPClass))
 
 		// add creation of EObject to each constructor
 		for (ctor : jaMoPPCompositeClass.members.filter(typeof(Constructor))) {
-			newEObjects.addAll(PCM2JaMoPPUtils.createNewForFieldInConstructor(field))
+			newEObjects.addAll(Pcm2JavaUtils.createNewForFieldInConstructor(field))
 		}
 
 		newEObjects

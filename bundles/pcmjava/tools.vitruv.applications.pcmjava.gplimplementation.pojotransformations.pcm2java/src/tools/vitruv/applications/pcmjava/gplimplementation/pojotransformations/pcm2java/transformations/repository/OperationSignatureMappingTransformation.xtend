@@ -25,11 +25,11 @@ import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.ecore.EObjectUtil
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import org.emftext.language.java.members.Method
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -89,16 +89,16 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 		val Parameter newParameter = newCorrespondingParameter.get(0) as Parameter
 		val paramType = newParameter.typeReference
 		for (interfaceMethod : jaMoPPIfMethods) {
-			val oldTUID = correspondenceModel.calculateTUIDFromEObject(interfaceMethod)
+			val oldTuid = correspondenceModel.calculateTuidFromEObject(interfaceMethod)
 
 			// add import if paramType is namespaceclassifier reference
 			if (paramType instanceof NamespaceClassifierReference) {
-				PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(interfaceMethod.containingConcreteClassifier,
+				Pcm2JavaUtils.addImportToCompilationUnitOfClassifier(interfaceMethod.containingConcreteClassifier,
 					paramType)
 			}
 			interfaceMethod.parameters.add(index, newParameter)
 			correspondenceModel.createAndAddCorrespondence(newValue, newParameter)
-			oldTUID.updateTuid(interfaceMethod)
+			oldTuid.updateTuid(interfaceMethod)
 		}
 		transformationResult
 	}
@@ -110,8 +110,8 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
 		val correspondingObjects = correspondenceModel.getCorrespondingEObjects(newAffectedEObject).filter(Method);
 		val correspondingMethod = correspondingObjects.claimOne;
-		val oldTuid = correspondenceModel.calculateTUIDFromEObject(correspondingMethod);
-		val result = PCMJaMoPPUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
+		val oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingMethod);
+		val result = PcmJavaUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
 		oldTuid.updateTuid(correspondingMethod); 
 		return result
 	}
@@ -122,13 +122,13 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
 		val transformationResult = new ChangePropagationResult
-		var Set<EObject> correspondingEObjects = PCM2JaMoPPUtils.checkKeyAndCorrespondingObjects(affectedEObject,
+		var Set<EObject> correspondingEObjects = Pcm2JavaUtils.checkKeyAndCorrespondingObjects(affectedEObject,
 			affectedAttribute, featureCorrespondenceMap, correspondenceModel);
 		if (correspondingEObjects.nullOrEmpty) {
 			return transformationResult
 		}
 		val boolean saveFilesOfChangedEObjects = true;
-		PCM2JaMoPPUtils.updateNameAttribute(correspondingEObjects, newValue, affectedAttribute,
+		Pcm2JavaUtils.updateNameAttribute(correspondingEObjects, newValue, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel, saveFilesOfChangedEObjects)
 		// also update the name attribute of implementing SEFFs (if any)
 		val opSig = affectedEObject as OperationSignature
@@ -147,9 +147,9 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 				val correspondingClassMethods = correspondenceModel.getCorrespondingEObjectsByType(it, ClassMethod)
 				if(!correspondingClassMethods.nullOrEmpty){
 					correspondingClassMethods.forEach[
-						val oldTUID = correspondenceModel.calculateTUIDFromEObject(it)
+						val oldTuid = correspondenceModel.calculateTuidFromEObject(it)
 						it.name = newValue.toString
-						oldTUID.updateTuid(it)
+						oldTuid.updateTuid(it)
 					]
 				}	
 			]
@@ -165,7 +165,7 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 	override updateSingleValuedNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
 		EObject oldValue, EObject newValue) {
 		val transformationResult = new ChangePropagationResult
-		val Set<EObject> correspondingEObjects = PCM2JaMoPPUtils.checkKeyAndCorrespondingObjects(affectedEObject,
+		val Set<EObject> correspondingEObjects = Pcm2JavaUtils.checkKeyAndCorrespondingObjects(affectedEObject,
 			affectedReference, featureCorrespondenceMap, correspondenceModel)
 		if (newValue == oldValue) {
 			// type not really changed
@@ -178,11 +178,11 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 			getCorrespondingEObjectsByType(affectedEObject, InterfaceMethod).claimOne
 		val TypeReference newTypeReference = DataTypeCorrespondenceHelper.
 			claimUniqueCorrespondingJaMoPPDataTypeReference(newValue as DataType, correspondenceModel)
-		val oldTUID = correspondenceModel.calculateTUIDFromEObject(correspondingInterfaceMethod)
+		val oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingInterfaceMethod)
 		correspondingInterfaceMethod.typeReference = newTypeReference;
-		oldTUID.updateTuid(correspondingInterfaceMethod)
+		oldTuid.updateTuid(correspondingInterfaceMethod)
 		if (newTypeReference instanceof NamespaceClassifierReference) {
-			PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(
+			Pcm2JavaUtils.addImportToCompilationUnitOfClassifier(
 				correspondingInterfaceMethod.containingConcreteClassifier, newTypeReference)
 		}
 		return transformationResult
@@ -192,7 +192,7 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 	 * set correspondence for the name attribute
 	 */
 	override setCorrespondenceForFeatures() {
-		PCM2JaMoPPUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
+		Pcm2JavaUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
 		val OperationSignature pcmDummyOpSig = RepositoryFactory.eINSTANCE.createOperationSignature
 		val InterfaceMethod jaMoPPDummyInterfaceMethod = MembersFactory.eINSTANCE.createInterfaceMethod
 		val EReference pcmOpSigDataTypeReference = EObjectUtil.getReferenceByName(

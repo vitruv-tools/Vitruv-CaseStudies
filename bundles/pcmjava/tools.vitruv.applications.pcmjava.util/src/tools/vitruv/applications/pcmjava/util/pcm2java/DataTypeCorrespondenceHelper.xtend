@@ -68,7 +68,7 @@ class DataTypeCorrespondenceHelper {
 		if (type instanceof TypeReference) {
 			return type
 		} else if (type instanceof ConcreteClassifier) {
-			return PCM2JaMoPPUtils.createNamespaceClassifierReference(type as ConcreteClassifier)
+			return Pcm2JavaUtils.createNamespaceClassifierReference(type as ConcreteClassifier)
 		}
 		logger.warn(
 			"found type " + type +

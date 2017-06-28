@@ -17,9 +17,9 @@ import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.domains.pcm.PcmNamespace
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 /**
  * Maps a composite DataType to a class in the data types package.
@@ -35,7 +35,7 @@ class CompositeDataTypeMappingTransformation extends EmptyEObjectMappingTransfor
 	 * Set Correspondence for name 
 	 */
 	override setCorrespondenceForFeatures() {
-		PCM2JaMoPPUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
+		Pcm2JavaUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
 	}
 
 	/**
@@ -51,7 +51,7 @@ class CompositeDataTypeMappingTransformation extends EmptyEObjectMappingTransfor
 		compUnit.classifiers.add(classifier)
 		classifier.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
 
-		var datatypePackage = PCM2JaMoPPUtils.getDatatypePackage(correspondenceModel,
+		var datatypePackage = Pcm2JavaUtils.getDatatypePackage(correspondenceModel,
 			cdt.repository__DataType, cdt.entityName, userInteracting)
 		compUnit.name = cdt.entityName + "." + JavaNamespace.FILE_EXTENSION
 		if (null != datatypePackage) {
@@ -72,7 +72,7 @@ class CompositeDataTypeMappingTransformation extends EmptyEObjectMappingTransfor
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
 		val transformationResult = new ChangePropagationResult
-		val affectedEObjects = PCM2JaMoPPUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
+		val affectedEObjects = Pcm2JavaUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel)
 		if (affectedEObjects.nullOrEmpty) {
 			return transformationResult
@@ -80,7 +80,7 @@ class CompositeDataTypeMappingTransformation extends EmptyEObjectMappingTransfor
 		val cus = affectedEObjects.filter(typeof(CompilationUnit))
 		if (!cus.nullOrEmpty) {
 			val CompilationUnit cu = cus.get(0)
-			PCM2JaMoPPUtils.handleJavaRootNameChange(cu, affectedAttribute, newValue, correspondenceModel, false,
+			Pcm2JavaUtils.handleJavaRootNameChange(cu, affectedAttribute, newValue, correspondenceModel, false,
 				transformationResult, eObject)
 		}
 		transformationResult
@@ -104,8 +104,8 @@ class CompositeDataTypeMappingTransformation extends EmptyEObjectMappingTransfor
 			}
 			correspondenceModel.createAndAddCorrespondence(newValue, newCorrespondingEObject)
 			if (newCorrespondingEObject instanceof JavaRoot) {
-				PCMJaMoPPUtils.addRootChangeToTransformationResult(newCorrespondingEObject, correspondenceModel,
-					PCM2JaMoPPUtils.getSourceModelVURI(newAffectedEObject), transformationResult)
+				PcmJavaUtils.addRootChangeToTransformationResult(newCorrespondingEObject, correspondenceModel,
+					Pcm2JavaUtils.getSourceModelVURI(newAffectedEObject), transformationResult)
 			}
 		}
 		transformationResult

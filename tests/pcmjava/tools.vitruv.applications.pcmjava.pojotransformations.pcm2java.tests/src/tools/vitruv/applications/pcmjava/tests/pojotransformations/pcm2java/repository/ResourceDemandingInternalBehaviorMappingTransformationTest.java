@@ -2,28 +2,32 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.rep
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.emftext.language.java.members.ClassMethod;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour;
 import org.palladiosimulator.pcm.seff.SeffFactory;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 
-public class ResourceDemandingInternalBehaviorMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class ResourceDemandingInternalBehaviorMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     private static final String RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD = "resourceDemandingInternalBehaviourClassMethod";
 
+    @Ignore
     @Test
     public void testCreateResourceDemandingInternalBehavior() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent bc1 = this.addBasicComponentAndSync(repo);
 
-        this.testUserInteractor.addNextSelections(RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD);
+        this.getUserInteractor().addNextSelections(RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD);
         final ResourceDemandingInternalBehaviour resourceDemandingInternalBehaviour = this
                 .createAndSyncResourceDemandingInternalBehavior(bc1,
                         RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD);
@@ -43,12 +47,12 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
     }
 
     private ResourceDemandingInternalBehaviour createAndSyncResourceDemandingInternalBehavior(
-            final BasicComponent basicComponent, final String resourceDemandingInternalBehaviourName) {
+            final BasicComponent basicComponent, final String resourceDemandingInternalBehaviourName) throws IOException {
         final ResourceDemandingInternalBehaviour resourceDemandingInternalBehaviour = SeffFactory.eINSTANCE
                 .createResourceDemandingInternalBehaviour();
-        resourceDemandingInternalBehaviour.setEntityName(resourceDemandingInternalBehaviourName);
-        basicComponent.getResourceDemandingInternalBehaviours__BasicComponent().add(resourceDemandingInternalBehaviour);
-        this.triggerSynchronization(basicComponent);
+//        resourceDemandingInternalBehaviour.setEntityName(resourceDemandingInternalBehaviourName);
+//        basicComponent.getResourceDemandingInternalBehaviours__BasicComponent().add(resourceDemandingInternalBehaviour);
+        this.saveAndSynchronizeChanges(basicComponent);
         return resourceDemandingInternalBehaviour;
     }
 }

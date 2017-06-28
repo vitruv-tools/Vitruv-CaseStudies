@@ -60,6 +60,6 @@ public class CreatePCMReturnTypeRoutine extends AbstractRepairRoutineRealization
     // val updatedElement userExecution.getElement1(returnType, opSignature, javaMethod);
     userExecution.update0Element(returnType, opSignature, javaMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

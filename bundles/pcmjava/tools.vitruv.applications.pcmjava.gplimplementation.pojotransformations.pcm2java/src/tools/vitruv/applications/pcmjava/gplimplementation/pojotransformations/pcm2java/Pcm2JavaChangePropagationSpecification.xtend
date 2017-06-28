@@ -1,26 +1,17 @@
 package tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.pcm2java
 
-import org.palladiosimulator.pcm.PcmPackage
-import org.emftext.language.java.JavaPackage
-import tools.vitruv.framework.util.datatypes.MetamodelPair
-import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import tools.vitruv.framework.change.processing.impl.CompositeChangePropagationSpecification
+import tools.vitruv.domains.pcm.PcmDomainProvider
+import tools.vitruv.domains.java.JavaDomainProvider
 
 class Pcm2JavaChangePropagationSpecification extends CompositeChangePropagationSpecification {
-	private MetamodelPair metamodelPair;
-	
 	new() {
-		super(new UserInteractor())
-		this.metamodelPair = new MetamodelPair(PcmPackage.eNS_URI, JavaPackage.eNS_URI);
+		super(new PcmDomainProvider().domain, new JavaDomainProvider().domain);
 		setup();
 	}
 
 	def protected setup() {
-		addChangeMainprocessor(new Pcm2JavaChangeProcessor(userInteracting));
-	}
-	
-	override getMetamodelPair() {
-		return metamodelPair;
+		addChangeMainprocessor(new Pcm2JavaChangeProcessor());
 	}
 	
 }

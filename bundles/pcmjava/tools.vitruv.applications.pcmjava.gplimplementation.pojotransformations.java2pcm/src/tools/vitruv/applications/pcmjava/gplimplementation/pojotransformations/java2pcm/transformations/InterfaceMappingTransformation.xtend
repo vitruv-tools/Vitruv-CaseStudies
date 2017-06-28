@@ -13,10 +13,10 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 /**
  * Maps a JaMoPP interface to a PCM interface 
@@ -40,7 +40,7 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 	override createEObject(EObject eObject) {
 		val Interface jaMoPPInterface = eObject as Interface
 		try {
-			val Package jaMoPPPackage = PCM2JaMoPPUtils.
+			val Package jaMoPPPackage = Pcm2JavaUtils.
 				getContainingPackageFromCorrespondenceModel(jaMoPPInterface, correspondenceModel)
 			var boolean createInterface = false
 			if (null != jaMoPPPackage && jaMoPPPackage.name.equals("contracts")) {
@@ -58,7 +58,7 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 				logger.debug("Created interface: " + eObject);
 				var OperationInterface opInterface = RepositoryFactory.eINSTANCE.createOperationInterface
 				opInterface.setEntityName(jaMoPPInterface.name)
-				val Repository repo = JaMoPP2PCMUtils.getRepository(correspondenceModel)
+				val Repository repo = Java2PcmUtils.getRepository(correspondenceModel)
 				opInterface.setRepository__Interface(repo)
 				return opInterface.toList
 			}
@@ -76,7 +76,7 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject, EReference affectedReference, EObject newValue,
 		int index, EObject[] newCorrespondingEObjects) {
 		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.
+		Java2PcmUtils.
 			createNewCorrespondingEObjects(newValue, newCorrespondingEObjects,
 				correspondenceModel, transformationResult)
 		return transformationResult
@@ -97,13 +97,13 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject, EReference affectedReference, EObject oldValue,
 		int index, EObject[] oldCorrespondingEObjectsToDelete) {
-			PCMJaMoPPUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel)
+			PcmJavaUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel)
 	}
 
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
 		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
+		Java2PcmUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
 			featureCorrespondenceMap, correspondenceModel, transformationResult)
 		return transformationResult
 	}

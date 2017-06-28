@@ -22,9 +22,9 @@ import org.palladiosimulator.pcm.repository.OperationInterface
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.domains.java.JavaNamespace
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class OperationInterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -35,7 +35,7 @@ class OperationInterfaceMappingTransformation extends EmptyEObjectMappingTransfo
 	}
 
 	override void setCorrespondenceForFeatures() {
-		PCM2JaMoPPUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
+		Pcm2JavaUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
 	}
 
 	override createEObject(EObject eObject) {
@@ -73,7 +73,7 @@ class OperationInterfaceMappingTransformation extends EmptyEObjectMappingTransfo
 				stringList.add(candidate.name)
 			}
 		} else {
-			val package = PCM2JaMoPPUtils.createPackage("contracts")
+			val package = Pcm2JavaUtils.createPackage("contracts")
 			stringList.add(package.name)
 		}
 
@@ -122,7 +122,7 @@ class OperationInterfaceMappingTransformation extends EmptyEObjectMappingTransfo
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
 		EReference affectedReference, EObject oldValue, int index, EObject[] oldMethods) {
-		PCMJaMoPPUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
+		PcmJavaUtils.deleteNonRootEObjectInList(null, oldValue, correspondenceModel)
 	}
 
 	override removeEObject(EObject eObject) {
@@ -142,14 +142,14 @@ class OperationInterfaceMappingTransformation extends EmptyEObjectMappingTransfo
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
 		val transformationResult = new ChangePropagationResult
-		var Set<EObject> correspondingEObjects = PCM2JaMoPPUtils.
+		var Set<EObject> correspondingEObjects = Pcm2JavaUtils.
 			checkKeyAndCorrespondingObjects(eObject, affectedAttribute, featureCorrespondenceMap,
 				correspondenceModel);
 		if (correspondingEObjects.nullOrEmpty) {
 			return transformationResult
 		}
 		val cu = correspondingEObjects.filter(typeof(CompilationUnit)).get(0)
-		PCM2JaMoPPUtils.handleJavaRootNameChange(cu, affectedAttribute, newValue, correspondenceModel, false,
+		Pcm2JavaUtils.handleJavaRootNameChange(cu, affectedAttribute, newValue, correspondenceModel, false,
 			transformationResult, eObject)
 		return transformationResult
 

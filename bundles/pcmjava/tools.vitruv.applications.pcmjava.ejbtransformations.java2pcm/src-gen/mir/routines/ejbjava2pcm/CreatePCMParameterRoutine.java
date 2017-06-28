@@ -11,6 +11,7 @@ import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -46,9 +47,7 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     
     public void updatePcmParameterElement(final Parameter jaMoPPParam, final OperationSignature opSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
       String _name = jaMoPPParam.getName();
-      pcmParameter.setEntityName(_name);
-      String _name_1 = jaMoPPParam.getName();
-      pcmParameter.setParameterName(_name_1);
+      PcmJavaUtils.setParameterName(pcmParameter, _name);
       TypeReference _typeReference = jaMoPPParam.getTypeReference();
       OperationInterface _interface__OperationSignature = opSignature.getInterface__OperationSignature();
       Repository _repository__Interface = _interface__OperationSignature.getRepository__Interface();
@@ -76,7 +75,6 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("   OperationSignature: " + this.opSignature);
     
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = RepositoryFactoryImpl.eINSTANCE.createParameter();
-    initializeCreateElementState(pcmParameter);
     userExecution.updatePcmParameterElement(jaMoPPParam, opSignature, pcmParameter);
     
     // val updatedElement userExecution.getElement1(jaMoPPParam, opSignature, pcmParameter);
@@ -84,6 +82,6 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     
     addCorrespondenceBetween(userExecution.getElement2(jaMoPPParam, opSignature, pcmParameter), userExecution.getElement3(jaMoPPParam, opSignature, pcmParameter), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

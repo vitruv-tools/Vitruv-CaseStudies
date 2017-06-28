@@ -50,9 +50,9 @@ public class DeleteMethodForSeffRoutine extends AbstractRepairRoutineRealization
     if (classMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(classMethod);
+    registerObjectUnderModification(classMethod);
     deleteObject(userExecution.getElement1(seff, classMethod));
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

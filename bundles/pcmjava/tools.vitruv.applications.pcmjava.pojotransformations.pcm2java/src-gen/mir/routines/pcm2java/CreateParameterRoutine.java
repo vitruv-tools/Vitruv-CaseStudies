@@ -11,7 +11,7 @@ import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -84,15 +84,14 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     if (interfaceMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceMethod);
+    registerObjectUnderModification(interfaceMethod);
     org.emftext.language.java.classifiers.Class javaParameterTypeClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaParameterTypeClass(parameter, interfaceMethod), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(javaParameterTypeClass);
+    registerObjectUnderModification(javaParameterTypeClass);
     OrdinaryParameter javaParameter = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
-    initializeCreateElementState(javaParameter);
     userExecution.updateJavaParameterElement(parameter, interfaceMethod, javaParameterTypeClass, javaParameter);
     
     addCorrespondenceBetween(userExecution.getElement1(parameter, interfaceMethod, javaParameterTypeClass, javaParameter), userExecution.getElement2(parameter, interfaceMethod, javaParameterTypeClass, javaParameter), "");
@@ -100,6 +99,6 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     // val updatedElement userExecution.getElement3(parameter, interfaceMethod, javaParameterTypeClass, javaParameter);
     userExecution.update0Element(parameter, interfaceMethod, javaParameterTypeClass, javaParameter);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

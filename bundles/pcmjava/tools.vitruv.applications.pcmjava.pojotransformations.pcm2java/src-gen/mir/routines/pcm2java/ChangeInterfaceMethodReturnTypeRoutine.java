@@ -6,7 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.DataType;
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -57,10 +57,10 @@ public class ChangeInterfaceMethodReturnTypeRoutine extends AbstractRepairRoutin
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(returnTypeClass);
+    registerObjectUnderModification(returnTypeClass);
     // val updatedElement userExecution.getElement1(interfaceMethod, returnType, returnTypeClass);
     userExecution.update0Element(interfaceMethod, returnType, returnTypeClass);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

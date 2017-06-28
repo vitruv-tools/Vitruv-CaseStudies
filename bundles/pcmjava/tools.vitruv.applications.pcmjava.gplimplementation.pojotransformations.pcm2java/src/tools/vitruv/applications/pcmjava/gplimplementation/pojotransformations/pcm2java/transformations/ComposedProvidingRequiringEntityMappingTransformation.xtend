@@ -7,9 +7,9 @@ import org.eclipse.emf.ecore.EReference
 import org.emftext.language.java.containers.Package
 import org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity
 import org.palladiosimulator.pcm.core.entity.NamedElement
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 /**
  * base class for RepositoryComponentMappingTransformation and SystemMappingTransformation
@@ -17,7 +17,7 @@ import tools.vitruv.domains.pcm.PcmNamespace
 abstract class ComposedProvidingRequiringEntityMappingTransformation extends EmptyEObjectMappingTransformation {
 
 	override setCorrespondenceForFeatures() {
-		PCM2JaMoPPUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
+		Pcm2JavaUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
 	}
 
 	def Package getParentPackage(EObject eObject)
@@ -31,7 +31,7 @@ abstract class ComposedProvidingRequiringEntityMappingTransformation extends Emp
 		val Package parentPackage = getParentPackage(eObject)
 
 		//create all elements
-		val createdEObjects = PCM2JaMoPPUtils.createPackageCompilationUnitAndJaMoPPClass(composedEntity, parentPackage)
+		val createdEObjects = Pcm2JavaUtils.createPackageCompilationUnitAndJaMoPPClass(composedEntity, parentPackage)
 
 		return createdEObjects
 	}
@@ -42,7 +42,7 @@ abstract class ComposedProvidingRequiringEntityMappingTransformation extends Emp
 
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
-		PCM2JaMoPPUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
+		Pcm2JavaUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
 			featureCorrespondenceMap, correspondenceModel)
 	}
 
@@ -55,7 +55,7 @@ abstract class ComposedProvidingRequiringEntityMappingTransformation extends Emp
 			affectedReference.name.equals(PcmNamespace.COMPONENT_PROVIDED_ROLES_INTERFACE_PROVIDING_ENTITY) ||
 			affectedReference.name.equals(PcmNamespace.COMPONENT_REQUIRED_ROLES_INTERFACE_REQUIRING_ENTITY)) &&
 			newValue instanceof NamedElement) {
-			PCM2JaMoPPUtils.
+			Pcm2JavaUtils.
 				handleAssemblyContextAddedAsNonRootEObjectInList(newAffectedEObject as ComposedProvidingRequiringEntity,
 					newValue as NamedElement, newCorrespondingEObjects, correspondenceModel)
 		} 

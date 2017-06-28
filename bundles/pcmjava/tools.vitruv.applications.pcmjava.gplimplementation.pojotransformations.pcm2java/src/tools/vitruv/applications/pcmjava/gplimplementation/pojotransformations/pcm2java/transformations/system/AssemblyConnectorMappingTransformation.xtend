@@ -15,7 +15,7 @@ import org.palladiosimulator.pcm.core.entity.NamedElement
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class AssemblyConnectorMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -50,7 +50,7 @@ class AssemblyConnectorMappingTransformation extends EmptyEObjectMappingTransfor
 			}
 			val constructorCall = correspondenceModel.
 				getCorrespondingEObjectsByType(assemblyContext, NewConstructorCall).claimOne
-			PCM2JaMoPPUtils.updateArgumentsOfConstructorCall(field, fields, parameters, constructorCall)
+			Pcm2JavaUtils.updateArgumentsOfConstructorCall(field, fields, parameters, constructorCall)
 		} catch (RuntimeException re) {
 			logger.trace("Can not create corresponding objects for PCMElement " + pcmElement.entityName)
 		}

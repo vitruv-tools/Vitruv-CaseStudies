@@ -12,7 +12,7 @@ import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -121,21 +121,18 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     if (dataTypeClass == null) {
     	return;
     }
-    initializeRetrieveElementState(dataTypeClass);
+    registerObjectUnderModification(dataTypeClass);
     Field innerDataTypeField = MembersFactoryImpl.eINSTANCE.createField();
-    initializeCreateElementState(innerDataTypeField);
     userExecution.updateInnerDataTypeFieldElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField);
     
     addCorrespondenceBetween(userExecution.getElement1(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField), userExecution.getElement2(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField), "");
     
     ClassMethod getterMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
-    initializeCreateElementState(getterMethod);
     userExecution.updateGetterMethodElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod);
     
     addCorrespondenceBetween(userExecution.getElement3(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod), userExecution.getElement4(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod), userExecution.getTag1(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod));
     
     ClassMethod setterMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
-    initializeCreateElementState(setterMethod);
     userExecution.updateSetterMethodElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     
     addCorrespondenceBetween(userExecution.getElement5(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod), userExecution.getElement6(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod), userExecution.getTag2(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod));
@@ -143,6 +140,6 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     // val updatedElement userExecution.getElement7(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     userExecution.update0Element(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

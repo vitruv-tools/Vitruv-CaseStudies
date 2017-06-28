@@ -12,10 +12,10 @@ import java.util.ArrayList
 import java.util.LinkedList
 import java.util.Vector
 import java.util.Stack
-import java.util.List
+import java.util.List 
 import tools.vitruv.framework.userinteraction.UserInteractionType
 import org.emftext.language.java.generics.GenericsFactory
-import static extension tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper.*
+import static extension  tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CompositeDataType
@@ -25,17 +25,16 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.emftext.language.java.members.Constructor
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.members.Field
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.emftext.language.java.imports.ClassifierImport
 
 import "http://www.emftext.org/java" as java
-import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: pcm2java
-in reaction to changes in pcm 
-execute actions in java
+in reaction to changes in PCM 
+execute actions in Java
 
 // ###################################################
 // ################ PACKAGE REACTIONS ################
@@ -163,10 +162,6 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 		val newConstructorCall = create java::NewConstructorCall
 		val contextClassImport = create java::ClassifierImport
 		val constructor = create java::Constructor
-		add correspondence between assemblyContextField and assemblyContext
-		add correspondence between newConstructorCall and assemblyContext
-		add correspondence between contextClassImport and assemblyContext
-		add correspondence between constructor and assemblyContext
 		update compositeComponentJavaClass {
 			compositeComponentJavaClass.members += assemblyContextField;
 			addConstructorToClass(constructor, compositeComponentJavaClass)
@@ -175,6 +170,10 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 		update constructor {
 			createNewForFieldInConstructor(newConstructorCall, constructor, assemblyContextField);
 		}
+		add correspondence between assemblyContextField and assemblyContext
+		add correspondence between newConstructorCall and assemblyContext
+		add correspondence between contextClassImport and assemblyContext
+		add correspondence between constructor and assemblyContext
 	}
 }
 
@@ -588,7 +587,7 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 		val compilationUnit = create java::CompilationUnit and initialize {
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
-			compilationUnit.name = classifier.name;
+			compilationUnit.name = classifier.name + ".java";
 			compilationUnit.classifiers.add(classifier);
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
 		}
@@ -607,7 +606,7 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 			javaClassifier.name = className;
 		}
 		update compilationUnit {
-			compilationUnit.name = className;
+			compilationUnit.name = className + ".java";
 			compilationUnit.namespaces.clear;
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
@@ -998,7 +997,7 @@ reaction ChangedParameterType {
 
 routine changeParameterType(pcm::Parameter parameter) { 
 	match {
-		// retrieve the interface method to update the TUID according to the new parameter type
+		// retrieve the interface method to update the Tuid according to the new parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to parameter.operationSignature__Parameter
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 		val javaParameterTypeClass = retrieve optional java::Class corresponding to parameter.dataType__Parameter
@@ -1018,7 +1017,7 @@ reaction DeletedParameter {
 
 routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parameter) { 
 	match {
-		// retrieve the interface method to update the TUID according to the removed parameter type
+		// retrieve the interface method to update the Tuid according to the removed parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to signature
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 	} 
@@ -1030,55 +1029,54 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 // ################################################################################
 // ##################### RESOURCE DEMANDING INTERNAL BEHAVIOR #####################
 
-reaction CreatedResourceDemandingInternalBehavior { 
-	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-	call createMethodForResourceDemandingBehavior(newValue)
-}
-
-routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
-	match {
-		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
-	} 
-	action { 
-		val javaMethod = create java::ClassMethod and initialize {
-			javaMethod.name = behavior.entityName;
-			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
-		}
-		add correspondence between javaMethod and behavior
-		update componentClass {
-			componentClass.members += javaMethod;
-		}
-	}
-}
-
-reaction RenameResourceDemandingInternalBehavior { 
-	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
-	call renameMethodForResourceDemandingBehavior(affectedEObject)
-}
-
-routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
-	match {
-		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-	} 
-	action { 
-		update javaMethod {
-			javaMethod.name = behavior.entityName;
-		}
-	}
-}
-
-reaction DeletedDemandingInternalBehavior { 
-	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-	call deleteMethodForResourceDemandingBehavior(oldValue)
-}
-
-routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-	match {
-		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-	} action { 
-		delete javaMethod
-	}
-}
+//reaction CreatedResourceDemandingInternalBehavior { 
+//	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
+//	call createMethodForResourceDemandingBehavior(newValue)
+//}
+//
+//routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
+//	match {
+//		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
+//	} 
+//	action { 
+//		val javaMethod = create java::ClassMethod and initialize {
+//			javaMethod.name = behavior.entityName;
+//			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
+//		}
+//		update componentClass {
+//			componentClass.members += javaMethod;
+//		}
+//	}
+//}
+//
+//reaction RenameResourceDemandingInternalBehavior { 
+//	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
+//	call renameMethodForResourceDemandingBehavior(affectedEObject)
+//}
+//
+//routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
+//	match {
+//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
+//	} 
+//	action { 
+//		update javaMethod {
+//			javaMethod.name = behavior.entityName;
+//		}
+//	}
+//}
+//
+//reaction DeletedDemandingInternalBehavior { 
+//	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
+//	call deleteMethodForResourceDemandingBehavior(oldValue)
+//}
+//
+//routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
+//	match {
+//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
+//	} action { 
+//		delete javaMethod
+//	}
+//}
 
 // ################################################################################
 // #################################### SEFFS #####################################

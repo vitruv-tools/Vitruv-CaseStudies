@@ -55,9 +55,9 @@ public class CreatedInterfaceMethodRoutine extends AbstractRepairRoutineRealizat
     if (opInterface == null) {
     	return;
     }
-    initializeRetrieveElementState(opInterface);
+    registerObjectUnderModification(opInterface);
     userExecution.callRoutine1(interf, method, opInterface, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

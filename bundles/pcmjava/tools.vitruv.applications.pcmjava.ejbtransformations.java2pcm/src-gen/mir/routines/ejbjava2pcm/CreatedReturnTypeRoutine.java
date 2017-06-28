@@ -55,9 +55,9 @@ public class CreatedReturnTypeRoutine extends AbstractRepairRoutineRealization {
     if (opSignature == null) {
     	return;
     }
-    initializeRetrieveElementState(opSignature);
+    registerObjectUnderModification(opSignature);
     userExecution.callRoutine1(method, type, opSignature, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

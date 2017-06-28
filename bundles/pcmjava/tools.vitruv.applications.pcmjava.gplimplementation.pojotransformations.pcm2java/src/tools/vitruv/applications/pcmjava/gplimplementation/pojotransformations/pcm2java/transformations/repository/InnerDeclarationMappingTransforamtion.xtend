@@ -1,7 +1,7 @@
 package tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.pcm2java.transformations.repository
 
 import com.google.common.collect.Sets
-import tools.vitruv.framework.tuid.TUID
+import tools.vitruv.framework.tuid.Tuid
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.util.transformationexecutor.EmptyEObjectMappingTransformation
 import java.util.ArrayList
 import java.util.List
@@ -21,9 +21,9 @@ import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransformation {
 
@@ -34,7 +34,7 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 	}
 
 	override setCorrespondenceForFeatures() {
-		PCM2JaMoPPUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
+		Pcm2JavaUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
 		var innerDatatypeAttribute = RepositoryFactory.eINSTANCE.createInnerDeclaration.eClass.EAllReferences.filter[attribute|
 			attribute.name.equals(PcmNamespace.DATATYPE_INNERDECLARATION)].iterator.next
 		var typeRefAttribute = MembersFactory.eINSTANCE.createClassMethod.eClass.EAllReferences.filter[attribute|
@@ -52,13 +52,13 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 		val TypeReference typeRef = DataTypeCorrespondenceHelper.
 			claimUniqueCorrespondingJaMoPPDataTypeReference(innerType, correspondenceModel)
 		val members = addFieldGetterAndSetterToClassifier(typeRef, innerDec.entityName)
-		PCM2JaMoPPUtils.sortMembers(members)
+		Pcm2JavaUtils.sortMembers(members)
 		return members
 	}
 
 	def private List<EObject> addFieldGetterAndSetterToClassifier(TypeReference reference, String name) {
 		val List<EObject> ret = new ArrayList<EObject>()
-		val Field field = PCM2JaMoPPUtils.createPrivateField(reference, name)
+		val Field field = Pcm2JavaUtils.createPrivateField(reference, name)
 		ret.add(field)
 		ret.addAll(createGetterAndSetter(field, reference))
 		return ret
@@ -69,20 +69,20 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 
 		//ret.add(createGetter(field, reference))
 		//ret.add(createSetter(field, reference))
-		val String commonContent = '''private «PCM2JaMoPPUtils.getNameFromJaMoPPType(reference)» «field.name»;
+		val String commonContent = '''private «Pcm2JavaUtils.getNameFromJaMoPPType(reference)» «field.name»;
 			''' + "\n"
 		val String getterContent = commonContent + '''
-			public «PCM2JaMoPPUtils.getNameFromJaMoPPType(reference)» get«field.name.toFirstUpper»(){
+			public «Pcm2JavaUtils.getNameFromJaMoPPType(reference)» get«field.name.toFirstUpper»(){
 			   return «field.name»;
 			}
 		'''
 		val String setterContent = commonContent + '''
-			public void set«field.name.toFirstUpper»(«PCM2JaMoPPUtils.getNameFromJaMoPPType(reference)» «field.name»){
+			public void set«field.name.toFirstUpper»(«Pcm2JavaUtils.getNameFromJaMoPPType(reference)» «field.name»){
 			   this.«field.name» = «field.name»;
 			}
 		'''
-		val getter = PCM2JaMoPPUtils.createJaMoPPMethod(getterContent)
-		val setter = PCM2JaMoPPUtils.createJaMoPPMethod(setterContent)
+		val getter = Pcm2JavaUtils.createJaMoPPMethod(getterContent)
+		val setter = Pcm2JavaUtils.createJaMoPPMethod(setterContent)
 		ret.add(getter)
 		ret.add(setter)
 		return ret
@@ -151,7 +151,7 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 		if(oldValue == newValue){
 			return transformationResult  
 		}
-		val affectedEObjects = PCM2JaMoPPUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
+		val affectedEObjects = Pcm2JavaUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel)
 		if (affectedEObjects.nullOrEmpty) {
 			return transformationResult
@@ -162,11 +162,11 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 			return transformationResult
 		}
 		val field = fields.get(0)
-		PCM2JaMoPPUtils.updateNameAttribute(Sets.newHashSet(field), newValue, affectedAttribute,
+		Pcm2JavaUtils.updateNameAttribute(Sets.newHashSet(field), newValue, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel, true)
 		val methods = affectedEObjects.filter(typeof(ClassMethod))
 		for (method : methods) {
-			val TUID oldTUID = correspondenceModel.calculateTUIDFromEObject(method)
+			val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(method)
 			if (isGetter(method)) {
 				method.name = "get" + newValue.toString.toFirstUpper
 
@@ -181,7 +181,7 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 				//TODO: change assignemnt
 				}
 			}
-			oldTUID.updateTuid(method)
+			oldTuid.updateTuid(method)
 		}
 		transformationResult
 	}
@@ -192,7 +192,7 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 	override updateSingleValuedNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
 		EObject oldValue, EObject newValue) {
 		val transformationResult = new ChangePropagationResult
-		val affectedEObjects = PCM2JaMoPPUtils.checkKeyAndCorrespondingObjects(affectedEObject, affectedReference,
+		val affectedEObjects = Pcm2JavaUtils.checkKeyAndCorrespondingObjects(affectedEObject, affectedReference,
 			featureCorrespondenceMap, correspondenceModel)
 		if (affectedEObjects.nullOrEmpty) {
 			return transformationResult
@@ -212,14 +212,14 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 		}
 		val field = fields.get(0)
 
-		val oldFieldTUID = correspondenceModel.calculateTUIDFromEObject(field)
+		val oldFieldTuid = correspondenceModel.calculateTuidFromEObject(field)
 		field.typeReference = EcoreUtil.copy(newJaMoPPType)
-		oldFieldTUID.updateTuid(field)
+		oldFieldTuid.updateTuid(field)
 		
 		//Change method type/parameter
 		val methods = affectedEObjects.filter(typeof(Method))
 		for (method : methods) {
-			val TUID oldTUID = correspondenceModel.calculateTUIDFromEObject(method)
+			val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(method)
 			if (isGetter(method)) {
 				method.typeReference = EcoreUtil.copy(newJaMoPPType)
 			} else if (isSetter(method)) {
@@ -228,7 +228,7 @@ class InnerDeclarationMappingTransforamtion extends EmptyEObjectMappingTransform
 					parameter.typeReference = EcoreUtil.copy(newJaMoPPType)
 				}
 			}
-			oldTUID.updateTuid(method)
+			oldTuid.updateTuid(method)
 		}
 		transformationResult
 	}

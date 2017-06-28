@@ -16,7 +16,7 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBJava2PcmHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -39,7 +39,7 @@ public class CreatedAnnotationForFieldRoutine extends AbstractRepairRoutineReali
     
     public void callRoutine1(final Field annotatedField, final BasicComponent basicComponent, @Extension final RoutinesFacade _routinesFacade) {
       TypeReference _typeReference = annotatedField.getTypeReference();
-      Classifier _classifier = EJBJava2PcmHelper.getClassifier(_typeReference);
+      Classifier _classifier = EjbJava2PcmHelper.getClassifier(_typeReference);
       final String interfaceName = _classifier.getName();
       Repository _repository__RepositoryComponent = basicComponent.getRepository__RepositoryComponent();
       EList<Interface> _interfaces__Repository = _repository__RepositoryComponent.getInterfaces__Repository();
@@ -74,9 +74,9 @@ public class CreatedAnnotationForFieldRoutine extends AbstractRepairRoutineReali
     if (basicComponent == null) {
     	return;
     }
-    initializeRetrieveElementState(basicComponent);
+    registerObjectUnderModification(basicComponent);
     userExecution.callRoutine1(annotatedField, basicComponent, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

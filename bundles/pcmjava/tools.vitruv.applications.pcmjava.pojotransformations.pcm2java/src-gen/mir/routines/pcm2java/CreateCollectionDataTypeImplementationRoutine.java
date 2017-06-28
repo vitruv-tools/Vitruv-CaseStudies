@@ -22,7 +22,7 @@ import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
-import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -100,7 +100,7 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(innerTypeClass);
+    registerObjectUnderModification(innerTypeClass);
     org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDatatypesPackage(dataType, innerTypeClass), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
@@ -109,9 +109,9 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     if (datatypesPackage == null) {
     	return;
     }
-    initializeRetrieveElementState(datatypesPackage);
+    registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(dataType, innerTypeClass, datatypesPackage, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

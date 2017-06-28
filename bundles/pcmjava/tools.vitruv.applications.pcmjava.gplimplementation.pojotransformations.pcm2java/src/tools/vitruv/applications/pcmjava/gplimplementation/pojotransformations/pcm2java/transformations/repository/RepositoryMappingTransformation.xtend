@@ -15,9 +15,9 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class RepositoryMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -63,8 +63,8 @@ class RepositoryMappingTransformation extends EmptyEObjectMappingTransformation 
 			return transformationResult
 		}
 		newCorrespondingEObjects.forEach [ newCorrespondingEObject |
-			PCMJaMoPPUtils.addRootChangeToTransformationResult(newCorrespondingEObject, correspondenceModel,
-				PCMJaMoPPUtils.getSourceModelVURI(newRootEObject), transformationResult)
+			PcmJavaUtils.addRootChangeToTransformationResult(newCorrespondingEObject, correspondenceModel,
+				PcmJavaUtils.getSourceModelVURI(newRootEObject), transformationResult)
 		]
 		for (correspondingEObject : newCorrespondingEObjects) {
 			correspondenceModel.createAndAddCorrespondence(newRootEObject, correspondingEObject)
@@ -78,18 +78,18 @@ class RepositoryMappingTransformation extends EmptyEObjectMappingTransformation 
 
 	override deleteRootEObject(EObject oldRootEObject, EObject[] oldCorrespondingEObjectsToDelete) {
 		val transformationResult = new ChangePropagationResult
-		PCMJaMoPPUtils.removeCorrespondenceAndAllObjects(oldRootEObject, null, correspondenceModel)
+		PcmJavaUtils.removeCorrespondenceAndAllObjects(oldRootEObject, null, correspondenceModel)
 		return transformationResult 
 	}
 
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
 		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		return PCMJaMoPPUtils.removeCorrespondenceAndAllObjects(oldValue, null, correspondenceModel)
+		return PcmJavaUtils.removeCorrespondenceAndAllObjects(oldValue, null, correspondenceModel)
 	}
 
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
-		PCM2JaMoPPUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
+		Pcm2JavaUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
 			featureCorrespondenceMap, correspondenceModel)
 	}
 
@@ -101,8 +101,8 @@ class RepositoryMappingTransformation extends EmptyEObjectMappingTransformation 
 		}
 		val javaRoots = newCorrespondingEObjects.filter(typeof(JavaRoot))
 		javaRoots.forEach [ javaRoot |
-			PCMJaMoPPUtils.addRootChangeToTransformationResult(javaRoot, correspondenceModel,
-				PCMJaMoPPUtils.getSourceModelVURI(newAffectedEObject), transformationResult)
+			PcmJavaUtils.addRootChangeToTransformationResult(javaRoot, correspondenceModel,
+				PcmJavaUtils.getSourceModelVURI(newAffectedEObject), transformationResult)
 		]
 
 		for (jaMoPPElement : newCorrespondingEObjects) {
@@ -113,8 +113,8 @@ class RepositoryMappingTransformation extends EmptyEObjectMappingTransformation 
 
 	def findPackageWithName(String packageName, Iterable<Correspondence> correspondences) {
 		for (correspondence : correspondences) {
-			if (correspondence.ATUIDs.exists[it.toString.contains(packageName)] ||
-				correspondence.BTUIDs.exists[it.toString.contains(packageName)]) {
+			if (correspondence.ATuids.exists[it.toString.contains(packageName)] ||
+				correspondence.BTuids.exists[it.toString.contains(packageName)]) {
 				return correspondence
 			}
 		}

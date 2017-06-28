@@ -12,9 +12,9 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.util.transformationexecutor.DefaultEObjectMappingTransformation
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 class TypeReferenceMappingTransformation extends DefaultEObjectMappingTransformation {
 	private static val logger = Logger.getLogger(TypeReferenceMappingTransformation)
@@ -34,23 +34,27 @@ class TypeReferenceMappingTransformation extends DefaultEObjectMappingTransforma
 			logger.debug("Added interface implementation: " + eObject + " for " + eObject.eContainer);
 			val jaMoPPClass = eObject.eContainer as Class
 
-			var interfaceClassifier = JaMoPP2PCMUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(
+			var interfaceClassifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(
 				eObject as TypeReference)
+			logger.debug("Interface classifier: " + interfaceClassifier);
 			if(null == interfaceClassifier){
 				return null
 			}
 			val correspondingInterfaces = correspondenceModel.getCorrespondingEObjectsByType(if (interfaceClassifier.eIsProxy) EcoreUtil.resolve(interfaceClassifier, eObject) else interfaceClassifier,
 				OperationInterface)
+			logger.debug("Corresponding interface: " + correspondingInterfaces);
 			if (correspondingInterfaces.nullOrEmpty) {
 				return null
 			}
 			val operationInterface = correspondingInterfaces.get(0)
 			val correspondingBasicComponents = correspondenceModel.
 				getCorrespondingEObjectsByType(jaMoPPClass, BasicComponent)
+			logger.debug("Corresponding basic components: " + correspondingBasicComponents);
 			if (correspondingBasicComponents.nullOrEmpty) {
 				return null
 			}
 			val basicComponent = correspondingBasicComponents.get(0)
+			logger.debug("Propagated interface implementation change with target: " + interfaceClassifier);
 			return createOperationProvidedRole(basicComponent, operationInterface).toList
 		}
 		return null

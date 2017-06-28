@@ -18,11 +18,11 @@ import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 
 import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHelper;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 
-public class JaMoPPParameterMappingTransformationTest extends Java2PCMPackageMappingTransformationTest {
+public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
     @Test
     public void testAddParameter() throws Throwable {
@@ -31,9 +31,9 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PCMPackageMap
         final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
 
         final Parameter parameter = super.addParameterToSignature(opInterface.getEntityName(), opSig.getEntityName(),
-                "String", PCM2JaMoPPTestUtils.PARAMETER_NAME, null);
+                "String", Pcm2JavaTestUtils.PARAMETER_NAME, null);
 
-        this.assertParameter(opSig, parameter, "String", PCM2JaMoPPTestUtils.PARAMETER_NAME);
+        this.assertParameter(opSig, parameter, "String", Pcm2JavaTestUtils.PARAMETER_NAME);
     }
 
     /**
@@ -46,14 +46,14 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PCMPackageMap
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
         final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
         final Parameter parameter = super.addParameterToSignature(opInterface.getEntityName(), opSig.getEntityName(),
-                "String", PCM2JaMoPPTestUtils.PARAMETER_NAME, null);
+                "String", Pcm2JavaTestUtils.PARAMETER_NAME, null);
 
         final Parameter newParameter = this.renameParameterInSignature(opInterface.getEntityName(),
-                opSig.getEntityName(), parameter.getEntityName(),
-                PCM2JaMoPPTestUtils.PARAMETER_NAME + PCM2JaMoPPTestUtils.RENAME);
+                opSig.getEntityName(), parameter.getParameterName(),
+                Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
 
         this.assertParameter(opSig, newParameter, "String",
-                PCM2JaMoPPTestUtils.PARAMETER_NAME + PCM2JaMoPPTestUtils.RENAME);
+                Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
     }
 
     @Test
@@ -62,19 +62,19 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PCMPackageMap
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
         final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
         final Parameter parameter = super.addParameterToSignature(opInterface.getEntityName(), opSig.getEntityName(),
-                "String", PCM2JaMoPPTestUtils.PARAMETER_NAME, null);
+                "String", Pcm2JavaTestUtils.PARAMETER_NAME, null);
         final String expectedParamType = "int";
 
         final Parameter changedParameter = this.changeParameterType(opInterface.getEntityName(), opSig.getEntityName(),
-                parameter.getEntityName(), expectedParamType);
+                parameter.getParameterName(), expectedParamType);
 
-        this.assertParameter(opSig, changedParameter, expectedParamType, changedParameter.getEntityName());
+        this.assertParameter(opSig, changedParameter, expectedParamType, changedParameter.getParameterName());
     }
 
     private Parameter renameParameterInSignature(final String interfaceName, final String methodName,
             final String oldParameterName, final String newParameterName) throws Throwable {
         final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(interfaceName,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IMethod iMethod = this.findIMethodByName(interfaceName, methodName, icu);
         final ILocalVariable localVariable = this.findParameterInIMethod(iMethod, oldParameterName);
         final String typeName = localVariable.getSource().split(" ")[0];
@@ -92,7 +92,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PCMPackageMap
     private Parameter changeParameterType(final String interfaceName, final String methodName, final String paramName,
             final String newTypeName) throws Throwable {
         final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(interfaceName,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IMethod iMethod = this.findIMethodByName(interfaceName, methodName, icu);
         final ILocalVariable parameter = this.findParameterInIMethod(iMethod, paramName);
         final int offset = parameter.getSourceRange().getOffset();
@@ -119,7 +119,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PCMPackageMap
             final String expectedTypeName, final String expectedName) throws Throwable {
         assertEquals("The parameter is not contained in the expected operation signature", opSig.getId(),
                 parameter.getOperationSignature__Parameter().getId());
-        this.assertPCMNamedElement(parameter, expectedName);
+        this.assertPcmParameter(parameter, expectedName);
         if (parameter.getDataType__Parameter() instanceof CollectionDataType
                 || parameter.getDataType__Parameter() instanceof CompositeDataType) {
             this.assertPCMNamedElement((NamedElement) parameter.getDataType__Parameter(), expectedTypeName);

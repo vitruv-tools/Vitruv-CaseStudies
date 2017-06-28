@@ -62,11 +62,10 @@ public class CreateOperationRequiredRoleRoutine extends AbstractRepairRoutineRea
     getLogger().debug("   Field: " + this.field);
     
     OperationRequiredRole orr = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
-    initializeCreateElementState(orr);
     userExecution.updateOrrElement(basicComponent, opInterface, field, orr);
     
     addCorrespondenceBetween(userExecution.getElement1(basicComponent, opInterface, field, orr), userExecution.getElement2(basicComponent, opInterface, field, orr), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

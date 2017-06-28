@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM-Java EJB Transformations Java -> PCM
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm;singleton:=true
-Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Version: 0.1.0.qualifier
+Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming
 Require-Bundle: org.apache.log4j,
  com.google.guava,
  org.eclipse.xtend.lib,
@@ -21,5 +21,7 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.extensions.dslsruntime.mapping,
  tools.vitruv.domains.java.echange,
- tools.vitruv.applications.pcmjava.util
-Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming
+ tools.vitruv.applications.pcmjava.util,
+ tools.vitruv.domains.java,
+ tools.vitruv.domains.pcm
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

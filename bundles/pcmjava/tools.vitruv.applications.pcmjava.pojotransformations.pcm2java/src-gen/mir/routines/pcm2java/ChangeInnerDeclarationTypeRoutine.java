@@ -105,7 +105,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     if (compositeTypeField == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeTypeField);
+    registerObjectUnderModification(compositeTypeField);
     Method compositeTypeGetterMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeTypeGetterMethod(innerDeclaration, newTypeReference, compositeTypeField), // correspondence source supplier
     	Method.class,
@@ -114,7 +114,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     if (compositeTypeGetterMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeTypeGetterMethod);
+    registerObjectUnderModification(compositeTypeGetterMethod);
     Method compositeTypeSetterMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeTypeSetterMethod(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod), // correspondence source supplier
     	Method.class,
@@ -123,7 +123,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     if (compositeTypeSetterMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(compositeTypeSetterMethod);
+    registerObjectUnderModification(compositeTypeSetterMethod);
     // val updatedElement userExecution.getElement1(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     userExecution.update0Element(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     
@@ -133,6 +133,6 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     // val updatedElement userExecution.getElement3(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     userExecution.update2Element(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

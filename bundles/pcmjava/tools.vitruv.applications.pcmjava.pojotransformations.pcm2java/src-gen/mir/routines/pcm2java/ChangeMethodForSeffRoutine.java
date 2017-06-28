@@ -52,11 +52,11 @@ public class ChangeMethodForSeffRoutine extends AbstractRepairRoutineRealization
     	ClassMethod.class,
     	(ClassMethod _element) -> true, // correspondence precondition checker
     	null);
-    initializeRetrieveElementState(oldClassMethod);
+    registerObjectUnderModification(oldClassMethod);
     deleteObject(userExecution.getElement1(seff, oldClassMethod));
     
     userExecution.callRoutine1(seff, oldClassMethod, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

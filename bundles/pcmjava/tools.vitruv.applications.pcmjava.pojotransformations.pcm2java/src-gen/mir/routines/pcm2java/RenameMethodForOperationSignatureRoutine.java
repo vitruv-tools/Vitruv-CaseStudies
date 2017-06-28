@@ -105,12 +105,12 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
     if (interfaceMethod == null) {
     	return;
     }
-    initializeRetrieveElementState(interfaceMethod);
+    registerObjectUnderModification(interfaceMethod);
     // val updatedElement userExecution.getElement1(operationSignature, interfaceMethod);
     userExecution.update0Element(operationSignature, interfaceMethod);
     
     userExecution.callRoutine1(operationSignature, interfaceMethod, actionsFacade);
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

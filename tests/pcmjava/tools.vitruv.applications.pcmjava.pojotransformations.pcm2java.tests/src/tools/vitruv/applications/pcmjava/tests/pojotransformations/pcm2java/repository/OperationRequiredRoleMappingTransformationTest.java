@@ -11,11 +11,10 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
-import tools.vitruv.framework.util.datatypes.VURI;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class OperationRequiredRoleMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testAddOperationRequiredRole() throws Throwable, Throwable {
@@ -27,10 +26,10 @@ public class OperationRequiredRoleMappingTransformationTest extends PCM2JaMoPPTr
 
     @Test
     public void testAddOperationRequiredToSystem() throws Throwable {
-        final System system = super.createAndSyncSystem(PCM2JaMoPPTestUtils.SYSTEM_NAME);
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
 
         final OperationRequiredRole operationRequiredRole = this
                 .createAndSyncOperationRequiredRole(opInterface, system);
@@ -40,11 +39,11 @@ public class OperationRequiredRoleMappingTransformationTest extends PCM2JaMoPPTr
 
     @Test
     public void testAddOperationRequiredRoleToCompositeComponent() throws Throwable {
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
         final CompositeComponent compositeComponent = super.createAndSyncCompositeComponent(repo,
-                PCM2JaMoPPTestUtils.COMPOSITE_COMPONENT_NAME);
+                Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
 
         // test: add the requried Role
         final OperationRequiredRole operationRequiredRole = this.createAndSyncOperationRequiredRole(opInterface,
@@ -60,12 +59,12 @@ public class OperationRequiredRoleMappingTransformationTest extends PCM2JaMoPPTr
         final Repository repo = opr.getRequiredInterface__OperationRequiredRole().getRepository__Interface();
 
         final OperationInterface newInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME + PCM2JaMoPPTestUtils.RENAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
         final BasicComponent newBasicComponent = this.addBasicComponentAndSync(repo,
-                PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + PCM2JaMoPPTestUtils.RENAME);
+                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME);
         opr.setRequiredInterface__OperationRequiredRole(newInterface);
         opr.setRequiringEntity_RequiredRole(newBasicComponent);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         this.getVirtualModel().executeCommand(new Callable<Void>() {
             @Override
@@ -85,7 +84,7 @@ public class OperationRequiredRoleMappingTransformationTest extends PCM2JaMoPPTr
         final OperationRequiredRole opr = this.createAndSyncRepoBasicCompInterfaceAndOperationReqiredRole();
 
         opr.setEntityName("operationReqRoleNameChange");
-        super.triggerSynchronization(VURI.getInstance(opr.eResource()));
+        super.saveAndSynchronizeChanges(opr);
 
         this.assertOperationRequiredRole(opr);
     }
@@ -96,19 +95,19 @@ public class OperationRequiredRoleMappingTransformationTest extends PCM2JaMoPPTr
         final Repository repo = opr.getRequiredInterface__OperationRequiredRole().getRepository__Interface();
 
         final OperationInterface newInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME + PCM2JaMoPPTestUtils.RENAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
         opr.setRequiredInterface__OperationRequiredRole(newInterface);
-        super.triggerSynchronization(VURI.getInstance(opr.eResource()));
+        super.saveAndSynchronizeChanges(opr);
 
         this.assertOperationRequiredRole(opr);
     }
 
     @Test
     public void testAddOperationRequiredRoleToSystem() throws Throwable {
-        final Repository repo = super.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
-        final System system = super.createAndSyncSystem(PCM2JaMoPPTestUtils.SYSTEM_NAME);
+        final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final System system = super.createAndSyncSystem(Pcm2JavaTestUtils.SYSTEM_NAME);
         final OperationInterface opInterface = super.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
 
         final OperationRequiredRole orr = super.createAndSyncOperationRequiredRole(opInterface, system);
 

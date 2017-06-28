@@ -6,7 +6,7 @@ import mir.routines.ejbjava2pcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBJava2PcmHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -40,7 +40,7 @@ public class CreateRepositoryForFirstPackageRoutine extends AbstractRepairRoutin
     }
     
     public boolean checkMatcherPrecondition1(final org.emftext.language.java.containers.Package javaPackage) {
-      Repository _findRepository = EJBJava2PcmHelper.findRepository(this.correspondenceModel);
+      Repository _findRepository = EjbJava2PcmHelper.findRepository(this.correspondenceModel);
       boolean _equals = Objects.equal(_findRepository, null);
       return _equals;
     }
@@ -63,11 +63,10 @@ public class CreateRepositoryForFirstPackageRoutine extends AbstractRepairRoutin
     	return;
     }
     Repository repository = RepositoryFactoryImpl.eINSTANCE.createRepository();
-    initializeCreateElementState(repository);
     userExecution.updateRepositoryElement(javaPackage, repository);
     
     addCorrespondenceBetween(userExecution.getElement1(javaPackage, repository), userExecution.getElement2(javaPackage, repository), "");
     
-    postprocessElementStates();
+    postprocessElements();
   }
 }

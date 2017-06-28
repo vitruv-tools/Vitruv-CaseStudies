@@ -6,7 +6,7 @@
          point="org.eclipse.ui.newWizards">
       <wizard
             category="tools.vitruv.applications.vitruvius_projects"
-            class="tools.vitruv.applications.pcmjava.ui.projectwizard.NewPCMJavaProjectWizard"
+            class="tools.vitruv.applications.pcmjava.ui.projectwizard.NewPcmJavaProjectWizard"
             finalPerspective="org.palladiosimulator.pcmbench.perspectives.palladio"
             hasPages="true"
             id="tools.vitruv.applications.pcmjava.PCMJavaWizard"
