@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.util.uml
 
 import java.util.ArrayList
 import java.util.List
-import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.EList
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Enumeration
@@ -28,8 +27,6 @@ import java.util.Collections
  * 
  */
 class UmlClassifierAndPackageUtil {
-    
-    private static val logger = Logger.getLogger(UmlClassifierAndPackageUtil.simpleName)
     
     /**
      * Prevents instantiation

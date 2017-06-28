@@ -22,7 +22,6 @@ import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
-import org.emftext.language.java.literals.LiteralsFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.statements.Return

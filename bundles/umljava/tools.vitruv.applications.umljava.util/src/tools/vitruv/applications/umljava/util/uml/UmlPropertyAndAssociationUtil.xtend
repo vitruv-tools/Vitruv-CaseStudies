@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.util.uml
 
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.AggregationKind
 import org.eclipse.uml2.uml.Association
 import org.eclipse.uml2.uml.Class
@@ -18,7 +17,6 @@ import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackage
  * @author Fei
  */
 class UmlPropertyAndAssociationUtil {
-    private static val logger = Logger.getLogger(UmlPropertyAndAssociationUtil.simpleName)
     
     /**
      * Prevents instantiation

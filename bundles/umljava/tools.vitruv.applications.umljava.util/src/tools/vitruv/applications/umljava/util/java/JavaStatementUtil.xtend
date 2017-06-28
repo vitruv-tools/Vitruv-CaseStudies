@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.util.java
 
-import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.expressions.AssignmentExpressionChild
@@ -29,7 +28,6 @@ import org.emftext.language.java.expressions.EqualityExpression
  * @author Fei
  */
 class JavaStatementUtil {
-    private static val logger = Logger.getLogger(JavaStatementUtil.simpleName)
     private new() {}
     
     /**

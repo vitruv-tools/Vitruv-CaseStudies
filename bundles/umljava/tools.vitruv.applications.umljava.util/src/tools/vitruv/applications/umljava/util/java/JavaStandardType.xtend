@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.util.java
 
-import org.apache.log4j.Logger
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.types.Boolean
@@ -31,8 +30,6 @@ class JavaStandardType {
     public static val SHORT = "short";
     public static val STRING = "String"
     public static val VOID = "void"
-    
-    private static val logger = Logger.getLogger(JavaStandardType.simpleName)
     
     private new() {}
     

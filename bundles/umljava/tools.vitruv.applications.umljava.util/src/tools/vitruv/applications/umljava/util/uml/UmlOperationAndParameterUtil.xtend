@@ -1,7 +1,6 @@
 package tools.vitruv.applications.umljava.util.uml
 
 import java.util.List
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
@@ -17,8 +16,6 @@ import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackage
  * @author Fei
  */
 class UmlOperationAndParameterUtil {
-    private static val logger = Logger.getLogger(UmlOperationAndParameterUtil.simpleName)
-    
     /**
      * Prevents instantiation
      */

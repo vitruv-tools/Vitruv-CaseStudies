@@ -10,7 +10,6 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.TypedElement
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.Classifier
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.Enumeration
@@ -25,8 +24,8 @@ import org.eclipse.uml2.uml.ParameterDirectionKind
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static org.hamcrest.CoreMatchers.*
 import static org.hamcrest.MatcherAssert.assertThat
-import org.eclipse.uml2.uml.internal.impl.LiteralIntegerImpl
-import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
+import org.eclipse.uml2.uml.LiteralInteger
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
 /**
  * Class for assertions that only involves uml elements.
@@ -34,7 +33,6 @@ import org.eclipse.uml2.uml.internal.impl.LiteralUnlimitedNaturalImpl
  * @author Fei
  */
 class UmlTestUtil {
-    private static val logger = Logger.getLogger(typeof(UmlTestUtil).simpleName)
     private new() {
     }
     
@@ -162,13 +160,13 @@ class UmlTestUtil {
         fail("We currently only support LiteralInteger and LiteralUnlimitedNatural ValueSpecifications")
     }
     
-    def static dispatch void assertUmlValueSpecificationEquals(LiteralIntegerImpl value1, LiteralIntegerImpl value2) {
+    def static dispatch void assertUmlValueSpecificationEquals(LiteralInteger value1, LiteralInteger value2) {
         assertNotNull(value1.integerValue)
         assertNotNull(value2.integerValue)
         assertEquals(value1.integerValue, value2.integerValue)
     }
     
-    def static dispatch void assertUmlValueSpecificationEquals(LiteralUnlimitedNaturalImpl value1, LiteralUnlimitedNaturalImpl value2) {
+    def static dispatch void assertUmlValueSpecificationEquals(LiteralUnlimitedNatural value1, LiteralUnlimitedNatural value2) {
         //Do nothing -> Assertion passed
     }
     def static dispatch void assertUmlValueSpecificationEquals(Void value1, Void value2) {

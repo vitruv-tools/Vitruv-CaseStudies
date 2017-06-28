@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream
 import java.util.Collections
 import java.util.Iterator
 import java.util.List
-import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
@@ -38,7 +37,6 @@ import java.util.ArrayList
  * @author Fei
  */
 class JavaContainerAndClassifierUtil {
-    private static val logger = Logger.getLogger(JavaContainerAndClassifierUtil.simpleName)
     private new() {
         
     }
