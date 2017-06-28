@@ -1,8 +1,9 @@
 package tools.vitruv.applications.umljava.uml2java.constructionsimulationtest
 
 import org.junit.Test
-import tools.vitruv.applications.umljava.constructionsimulation.strategy.UmlIntegrationStrategy
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.common.util.URI
 
 class UmlConstructionSimulationTest extends Uml2JavaTransformationTest {
 	
@@ -38,13 +39,10 @@ class UmlConstructionSimulationTest extends Uml2JavaTransformationTest {
     }
     
     
-    /**
-     * @param modelPath path relative to the project root
-     */
     def private void testUmlModel(String modelPath) {
-    	val iStrategy = new UmlIntegrationStrategy
-        val res = iStrategy.loadModel(modelPath)
-        createAndSynchronizeModel("model/model.uml", res.allContents.head)
+		val resourceSet = new ResourceSetImpl();
+		val res = resourceSet.getResource(URI.createFileURI(modelPath), true);
+   	    createAndSynchronizeModel("model/model.uml", res.allContents.head)
     }
     
 	

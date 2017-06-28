@@ -7,8 +7,5 @@ Fragment-Host: tools.vitruv.applications.umljava.uml2java;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: tools.vitruv.framework.tests.util,
  tools.vitruv.framework.change.processing,
- org.junit,
- tools.vitruv.applications.umljava.constructionsimulation;bundle-version="1.0.0",
- tools.vitruv.extensions.constructionsimulation;bundle-version="0.2.0",
- tools.vitruv.extensions.constructionsimulation.util;bundle-version="0.2.0"
+ org.junit
 
