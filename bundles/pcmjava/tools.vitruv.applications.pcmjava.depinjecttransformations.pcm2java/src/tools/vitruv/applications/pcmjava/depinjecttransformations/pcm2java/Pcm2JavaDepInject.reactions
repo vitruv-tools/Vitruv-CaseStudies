@@ -664,7 +664,7 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 		val compilationUnit = create java::CompilationUnit and initialize {
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
-			compilationUnit.name = classifier.name;
+			compilationUnit.name = classifier.name + ".java";
 			compilationUnit.classifiers.add(classifier);
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
 		}
@@ -683,7 +683,7 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 			javaClassifier.name = className;
 		}
 		update compilationUnit {
-			compilationUnit.name = className;
+			compilationUnit.name = className + ".java";
 			compilationUnit.namespaces.clear;
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
