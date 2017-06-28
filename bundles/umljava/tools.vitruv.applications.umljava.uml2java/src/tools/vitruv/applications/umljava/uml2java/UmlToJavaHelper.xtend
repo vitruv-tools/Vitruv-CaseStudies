@@ -129,7 +129,7 @@ class UmlToJavaHelper {
      * @param message the message to display
      */
     def static void showMessage(UserInteracting userInteracting, String message) {
-        userInteracting.showMessage(message)
+        userInteracting.showMessage(UserInteractionType.MODAL, message)
     }
 	
 }
