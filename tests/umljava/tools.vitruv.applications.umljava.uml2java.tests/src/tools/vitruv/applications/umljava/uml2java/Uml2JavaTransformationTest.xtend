@@ -1,7 +1,6 @@
 package tools.vitruv.applications.umljava.uml2java
 
 import org.apache.log4j.Logger
-import org.apache.log4j.PropertyConfigurator
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.UMLFactory
@@ -42,14 +41,13 @@ abstract class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
         val umlModel = UMLFactory.eINSTANCE.createModel();
         umlModel.name = MODEL_NAME;
         createAndSynchronizeModel(MODEL_NAME.projectModelPath, umlModel);
-        PropertyConfigurator.configure("log4j.properties")
     }
 
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {
-	    assertModelExists(buildJavaFilePath(fileName, namespaces));
+	    assertModelExists(buildJavaFilePath(fileName + ".java", namespaces));
 	}
     def protected assertJavaFileNotExists(String fileName, String[] namespaces) {
-        assertModelNotExists(buildJavaFilePath(fileName, namespaces));
+        assertModelNotExists(buildJavaFilePath(fileName + ".java", namespaces));
     }
     
     /**
