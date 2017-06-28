@@ -28,7 +28,8 @@ public class RenameUmlNamedElementRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final NamedElement jElement, final org.eclipse.uml2.uml.NamedElement uElement) {
-      uElement.setName(jElement.getName());
+      String _name = jElement.getName();
+      uElement.setName(_name);
     }
   }
   

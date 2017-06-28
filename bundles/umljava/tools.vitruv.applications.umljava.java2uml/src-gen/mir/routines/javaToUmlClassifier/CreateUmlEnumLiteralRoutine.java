@@ -45,7 +45,8 @@ public class CreateUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updateULiteralElement(final Enumeration jEnum, final EnumConstant jConstant, final org.eclipse.uml2.uml.Enumeration uEnum, final EnumerationLiteral uLiteral) {
-      uLiteral.setName(jConstant.getName());
+      String _name = jConstant.getName();
+      uLiteral.setName(_name);
     }
   }
   

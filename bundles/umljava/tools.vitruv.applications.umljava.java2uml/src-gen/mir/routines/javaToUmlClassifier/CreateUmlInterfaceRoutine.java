@@ -39,7 +39,8 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUInterfaceElement(final Interface jInterface, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Interface uInterface) {
-      uInterface.setName(jInterface.getName());
+      String _name = jInterface.getName();
+      uInterface.setName(_name);
     }
     
     public void callRoutine1(final Interface jInterface, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Interface uInterface, @Extension final RoutinesFacade _routinesFacade) {

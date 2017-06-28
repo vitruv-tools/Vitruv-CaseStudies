@@ -27,7 +27,8 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUEnumElement(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {
-      uEnum.setName(jEnum.getName());
+      String _name = jEnum.getName();
+      uEnum.setName(_name);
     }
     
     public EObject getElement4(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {

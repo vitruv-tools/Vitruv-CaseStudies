@@ -37,7 +37,8 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updateUConstructorElement(final Constructor jConstructor, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uConstructor) {
-      uConstructor.setName(jConstructor.getName());
+      String _name = jConstructor.getName();
+      uConstructor.setName(_name);
     }
     
     public EObject getElement2(final Constructor jConstructor, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uConstructor) {

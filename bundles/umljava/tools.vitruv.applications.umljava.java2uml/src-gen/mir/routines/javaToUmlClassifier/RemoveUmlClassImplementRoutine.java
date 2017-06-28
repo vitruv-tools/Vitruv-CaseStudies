@@ -3,6 +3,7 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.Interface;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -31,7 +32,8 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface, final org.eclipse.uml2.uml.Class uClass) {
-      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel);
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, _umlModel, this.correspondenceModel);
       if (((uInterface != null) && (uInterface instanceof org.eclipse.uml2.uml.Interface))) {
         UmlClassifierAndPackageUtil.removeUmlImplementedInterface(uClass, ((org.eclipse.uml2.uml.Interface) uInterface));
       }

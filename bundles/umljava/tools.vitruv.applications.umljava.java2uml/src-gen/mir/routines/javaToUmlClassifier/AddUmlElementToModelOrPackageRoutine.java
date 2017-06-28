@@ -2,7 +2,9 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.containers.CompilationUnit;
@@ -23,11 +25,16 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
     }
     
     public void callRoutine1(final CompilationUnit jCompUnit, final Classifier uClassifier, @Extension final RoutinesFacade _routinesFacade) {
-      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jCompUnit.getNamespaces());
+      EList<String> _namespaces = jCompUnit.getNamespaces();
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(_namespaces);
       if (_isNullOrEmpty) {
-        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), jCompUnit);
+        Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+        _routinesFacade.addUmlElementToPackage(uClassifier, _umlModel, jCompUnit);
       } else {
-        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())), jCompUnit);
+        EList<String> _namespaces_1 = jCompUnit.getNamespaces();
+        String _last = IterableExtensions.<String>last(_namespaces_1);
+        org.eclipse.uml2.uml.Package _findUmlPackage = JavaToUmlHelper.findUmlPackage(this.correspondenceModel, _last);
+        _routinesFacade.addUmlElementToPackage(uClassifier, _findUmlPackage, jCompUnit);
       }
     }
   }

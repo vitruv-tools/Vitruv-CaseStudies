@@ -2,7 +2,9 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Generalization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -27,7 +29,8 @@ public class ClearUmlSuperClassifiersRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final org.eclipse.uml2.uml.Class uClass) {
-      uClass.getGeneralizations().clear();
+      EList<Generalization> _generalizations = uClass.getGeneralizations();
+      _generalizations.clear();
     }
   }
   

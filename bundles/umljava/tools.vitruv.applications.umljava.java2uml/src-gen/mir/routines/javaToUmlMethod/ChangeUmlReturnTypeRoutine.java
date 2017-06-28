@@ -3,7 +3,9 @@ package mir.routines.javaToUmlMethod;
 import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -27,7 +29,9 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Method jMeth, final TypeReference jType, final Operation uOperation) {
-      uOperation.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel));
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+      Type _umlType = JavaToUmlHelper.getUmlType(jType, _umlModel, this.correspondenceModel);
+      uOperation.setType(_umlType);
     }
     
     public EObject getCorrepondenceSourceUOperation(final Method jMeth, final TypeReference jType) {

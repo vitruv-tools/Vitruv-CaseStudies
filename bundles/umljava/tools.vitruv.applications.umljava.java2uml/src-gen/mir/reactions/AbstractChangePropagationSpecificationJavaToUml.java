@@ -10,8 +10,7 @@ import tools.vitruv.framework.change.processing.impl.CompositeChangePropagationS
  */
 public abstract class AbstractChangePropagationSpecificationJavaToUml extends CompositeChangePropagationSpecification {
 	public AbstractChangePropagationSpecificationJavaToUml() {
-		super(new tools.vitruv.framework.userinteraction.impl.UserInteractor(),
-			new JavaDomainProvider().getDomain(), 
+		super(new JavaDomainProvider().getDomain(), 
 			new UmlDomainProvider().getDomain());
 		setup();
 	}
@@ -21,10 +20,9 @@ public abstract class AbstractChangePropagationSpecificationJavaToUml extends Co
 	 * For adding further change processors overwrite this method and call the super method at the right place.
 	 */
 	protected void setup() {
-		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.ExecutorJavaToUml(getUserInteracting()));
-		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.ExecutorJavaToUml(getUserInteracting()));
-		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.ExecutorJavaToUml(getUserInteracting()));
-		
+		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.ExecutorJavaToUml());
+		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.ExecutorJavaToUml());
+		this.addChangeMainprocessor(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.ExecutorJavaToUml());
 	}
 	
 }

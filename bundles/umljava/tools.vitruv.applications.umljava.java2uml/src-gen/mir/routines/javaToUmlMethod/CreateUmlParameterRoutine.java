@@ -34,7 +34,8 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUParamElement(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
-      uParam.setName(jParam.getName());
+      String _name = jParam.getName();
+      uParam.setName(_name);
     }
     
     public EObject getElement2(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {

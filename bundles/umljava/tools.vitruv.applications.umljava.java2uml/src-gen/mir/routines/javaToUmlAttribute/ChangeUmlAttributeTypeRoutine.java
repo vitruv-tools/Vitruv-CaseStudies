@@ -3,7 +3,9 @@ package mir.routines.javaToUmlAttribute;
 import java.io.IOException;
 import mir.routines.javaToUmlAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -31,7 +33,9 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void update0Element(final Field jAttr, final TypeReference jType, final Property uAttr) {
-      uAttr.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel));
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+      Type _umlType = JavaToUmlHelper.getUmlType(jType, _umlModel, this.correspondenceModel);
+      uAttr.setType(_umlType);
     }
   }
   

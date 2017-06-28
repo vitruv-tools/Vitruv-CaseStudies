@@ -68,7 +68,8 @@ class JavaAttributeCreatedInInterfaceReaction extends AbstractReactionRealizatio
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
-      String _simpleName = affectedEObject.getClass().getSimpleName();
+      Class<? extends Interface> _class = affectedEObject.getClass();
+      String _simpleName = _class.getSimpleName();
       String _plus = ("Adding fields to " + _simpleName);
       String _plus_1 = (_plus + " is not supported. Please remove ");
       String _plus_2 = (_plus_1 + newValue);

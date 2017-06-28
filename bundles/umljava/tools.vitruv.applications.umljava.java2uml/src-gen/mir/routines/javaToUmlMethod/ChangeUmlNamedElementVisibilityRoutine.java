@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.uml2.uml.VisibilityKind;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.modifiers.Modifier;
 import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
@@ -27,7 +28,8 @@ public class ChangeUmlNamedElementVisibilityRoutine extends AbstractRepairRoutin
     }
     
     public void update0Element(final AnnotableAndModifiable jElem, final Modifier mod, final NamedElement uElem) {
-      uElem.setVisibility(JavaModifierUtil.getUMLVisibilityKindFromJavaModifier(mod));
+      VisibilityKind _uMLVisibilityKindFromJavaModifier = JavaModifierUtil.getUMLVisibilityKindFromJavaModifier(mod);
+      uElem.setVisibility(_uMLVisibilityKindFromJavaModifier);
     }
     
     public EObject getCorrepondenceSourceUElem(final AnnotableAndModifiable jElem, final Modifier mod) {

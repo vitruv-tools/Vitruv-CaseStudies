@@ -45,7 +45,8 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updateUAttrElement(final Enumeration jEnum, final Field jAttr, final org.eclipse.uml2.uml.Enumeration uEnum, final Property uAttr) {
-      uAttr.setName(jAttr.getName());
+      String _name = jAttr.getName();
+      uAttr.setName(_name);
     }
   }
   

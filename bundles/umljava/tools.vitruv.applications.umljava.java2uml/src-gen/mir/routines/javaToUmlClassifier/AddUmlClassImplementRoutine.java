@@ -5,6 +5,7 @@ import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.Classifier;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -32,7 +33,8 @@ public class AddUmlClassImplementRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Classifier jInterface, final org.eclipse.uml2.uml.Class uClass) {
-      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel);
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, _umlModel, this.correspondenceModel);
       if (((uInterface != null) && (uInterface instanceof Interface))) {
         String _name = uInterface.getName();
         String _name_1 = uInterface.getName();

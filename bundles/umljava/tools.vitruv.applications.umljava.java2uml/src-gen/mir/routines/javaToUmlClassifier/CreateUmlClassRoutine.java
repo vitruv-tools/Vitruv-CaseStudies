@@ -38,7 +38,8 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUClassElement(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Class uClass) {
-      uClass.setName(jClass.getName());
+      String _name = jClass.getName();
+      uClass.setName(_name);
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Class uClass, @Extension final RoutinesFacade _routinesFacade) {

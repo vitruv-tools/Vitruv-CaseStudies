@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
@@ -31,7 +32,8 @@ public class AddUmlSuperClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class jSuperClass, final org.eclipse.uml2.uml.Class uClass) {
-      final Type uSuperClass = JavaToUmlHelper.getUmlType(jSuperClass, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel);
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+      final Type uSuperClass = JavaToUmlHelper.getUmlType(jSuperClass, _umlModel, this.correspondenceModel);
       if (((uSuperClass != null) && (uSuperClass instanceof org.eclipse.uml2.uml.Class))) {
         UmlClassifierAndPackageUtil.addUmlSuperClassifier(uClass, ((org.eclipse.uml2.uml.Class) uSuperClass));
       } else {

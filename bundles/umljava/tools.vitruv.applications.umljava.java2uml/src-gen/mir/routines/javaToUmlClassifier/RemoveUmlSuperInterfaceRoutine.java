@@ -3,6 +3,7 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
@@ -28,7 +29,8 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Interface jInterface, final Classifier jSuperClassifier, final org.eclipse.uml2.uml.Interface uInterface) {
-      final Type uSuperInterface = JavaToUmlHelper.getUmlType(jSuperClassifier, JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting), this.correspondenceModel);
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+      final Type uSuperInterface = JavaToUmlHelper.getUmlType(jSuperClassifier, _umlModel, this.correspondenceModel);
       if (((uSuperInterface != null) && (uSuperInterface instanceof org.eclipse.uml2.uml.Interface))) {
         UmlClassifierAndPackageUtil.removeUmlGeneralClassifier(uInterface, ((org.eclipse.uml2.uml.Interface) uSuperInterface));
       }

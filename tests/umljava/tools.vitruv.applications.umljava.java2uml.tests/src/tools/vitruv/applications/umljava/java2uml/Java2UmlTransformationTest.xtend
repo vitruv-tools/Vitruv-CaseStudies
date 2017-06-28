@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.java2uml
 
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.Model
-import org.apache.log4j.PropertyConfigurator
 import org.emftext.language.java.classifiers.Interface
 import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.members.Field
@@ -31,7 +30,6 @@ abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     }
     
     override protected setup() {
-        PropertyConfigurator.configure("log4j.properties")
         userInteractor.addNextSelections(UMLMODELNAME, UMLMODELPATH)
     }
 	

@@ -34,10 +34,12 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
     
     public void callRoutine1(final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage, final EObject persistedObject, @Extension final RoutinesFacade _routinesFacade) {
       if ((uPackage instanceof Model)) {
-        int _size = ((Model)uPackage).getPackagedElements().size();
+        EList<PackageableElement> _packagedElements = ((Model)uPackage).getPackagedElements();
+        int _size = _packagedElements.size();
         boolean _equals = (_size == 1);
         if (_equals) {
-          this.persistProjectRelative(persistedObject, uPackage, JavaToUmlHelper.getRootModelFile());
+          String _rootModelFile = JavaToUmlHelper.getRootModelFile();
+          this.persistProjectRelative(persistedObject, uPackage, _rootModelFile);
         }
       }
     }

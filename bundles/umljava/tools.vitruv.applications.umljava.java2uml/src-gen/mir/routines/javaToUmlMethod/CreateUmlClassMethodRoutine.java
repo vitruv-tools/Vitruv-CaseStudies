@@ -2,6 +2,7 @@ package mir.routines.javaToUmlMethod;
 
 import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
+import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
@@ -38,7 +39,8 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updateUOperationElement(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final Classifier uClassifier, final Operation uOperation) {
-      uOperation.setName(jMeth.getName());
+      String _name = jMeth.getName();
+      uOperation.setName(_name);
     }
     
     public void callRoutine1(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final Classifier uClassifier, final Operation uOperation, @Extension final RoutinesFacade _routinesFacade) {
@@ -48,7 +50,8 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
         if ((uClassifier instanceof Enumeration)) {
           _routinesFacade.addUmlOperationToEnum(((Enumeration)uClassifier), uOperation);
         } else {
-          this.getLogger().warn(("Can not add ClassMethod to " + uClassifier));
+          Logger _logger = this.getLogger();
+          _logger.warn(("Can not add ClassMethod to " + uClassifier));
         }
       }
     }

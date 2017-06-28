@@ -3,6 +3,7 @@ package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
@@ -67,7 +68,8 @@ class JavaSuperInterfaceRemovedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final TypeReference oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.removeUmlSuperInterface(affectedEObject, JavaTypeUtil.getClassifierFromTypeReference(oldValue));
+      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(oldValue);
+      _routinesFacade.removeUmlSuperInterface(affectedEObject, _classifierFromTypeReference);
     }
   }
 }

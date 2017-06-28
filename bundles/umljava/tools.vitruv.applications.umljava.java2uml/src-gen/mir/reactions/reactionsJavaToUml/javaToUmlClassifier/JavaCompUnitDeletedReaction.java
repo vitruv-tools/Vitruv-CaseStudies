@@ -1,6 +1,7 @@
 package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
 
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
@@ -58,7 +59,9 @@ class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.deleteUmlClassifier(IterableExtensions.<ConcreteClassifier>head(oldValue.getClassifiers()), oldValue);
+      EList<ConcreteClassifier> _classifiers = oldValue.getClassifiers();
+      ConcreteClassifier _head = IterableExtensions.<ConcreteClassifier>head(_classifiers);
+      _routinesFacade.deleteUmlClassifier(_head, oldValue);
     }
   }
 }

@@ -44,7 +44,8 @@ public class CreateUmlAttributeInClassRoutine extends AbstractRepairRoutineReali
     }
     
     public void updateUAttrElement(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Property uAttr) {
-      uAttr.setName(jAttr.getName());
+      String _name = jAttr.getName();
+      uAttr.setName(_name);
     }
   }
   

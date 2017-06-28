@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.java2uml
 
-
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
@@ -9,34 +8,13 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import org.emftext.language.java.modifiers.Modifier
-import org.emftext.language.java.modifiers.Private
-import org.emftext.language.java.modifiers.Protected
-import org.emftext.language.java.modifiers.Public
-import org.emftext.language.java.types.Boolean
-import org.emftext.language.java.types.Byte
-import org.emftext.language.java.types.Char
-import org.emftext.language.java.types.Double
-import org.emftext.language.java.types.Float
-import org.emftext.language.java.types.Int
-import org.emftext.language.java.types.Long
-import org.emftext.language.java.types.Short
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.types.Void
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.userinteraction.UserInteracting
 import org.apache.log4j.Logger
-import org.eclipse.emf.ecore.EObject
-import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization.UserExecution
 import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.ClassifierReference
-import org.emftext.language.java.classifiers.Classifier
-import org.apache.log4j.PropertyConfigurator
-
 
 /**
  * Helper class for the Java2Uml reactions. Contains functions who depends on

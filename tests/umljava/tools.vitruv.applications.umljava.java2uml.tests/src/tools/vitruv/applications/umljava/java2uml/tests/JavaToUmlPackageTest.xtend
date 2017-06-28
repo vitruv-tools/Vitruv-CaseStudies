@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.java2uml.tests
 
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import static org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
@@ -28,8 +27,8 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     private static var org.emftext.language.java.containers.Package jPackageLevel1
     private static var org.emftext.language.java.classifiers.Class jClass
     
-    @Before
-    def void before() {
+    def override setup() {
+    	super.setup();
         jPackageLevel1 = createJavaPackageAsModel(PACKAGE_LEVEL_1, null)
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)
         jPackageLevel1.compilationUnits += getContainingCompilationUnit(jClass)

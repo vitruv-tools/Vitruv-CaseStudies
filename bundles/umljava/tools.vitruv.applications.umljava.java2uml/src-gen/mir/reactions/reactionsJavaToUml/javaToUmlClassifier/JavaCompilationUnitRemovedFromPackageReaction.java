@@ -1,6 +1,7 @@
 package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
 
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -67,7 +68,9 @@ class JavaCompilationUnitRemovedFromPackageReaction extends AbstractReactionReal
     }
     
     public void callRoutine1(final org.emftext.language.java.containers.Package affectedEObject, final EReference affectedFeature, final CompilationUnit oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.removeUmlPackageOfClass(affectedEObject, IterableExtensions.<ConcreteClassifier>head(oldValue.getClassifiers()));
+      EList<ConcreteClassifier> _classifiers = oldValue.getClassifiers();
+      ConcreteClassifier _head = IterableExtensions.<ConcreteClassifier>head(_classifiers);
+      _routinesFacade.removeUmlPackageOfClass(affectedEObject, _head);
     }
   }
 }
