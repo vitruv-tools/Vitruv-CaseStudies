@@ -66,6 +66,6 @@ abstract class AbstractUmlJavaTest extends VitruviusApplicationTest {
         } else if (correspondingObjectList.size > 1) {
             logger.warn("There are more than one corresponding object for " + obj + " of the type " + c.class + ". Returning the first.")
         }
-        return correspondingObjectList.head as T
+        return correspondingObjectList.head
     }
 }

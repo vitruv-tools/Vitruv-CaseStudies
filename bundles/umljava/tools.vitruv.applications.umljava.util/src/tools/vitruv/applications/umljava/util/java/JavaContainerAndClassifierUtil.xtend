@@ -201,7 +201,7 @@ class JavaContainerAndClassifierUtil {
        val candidates = jClass.members.filter(Field)
        for (member : candidates) {
            if (member.name == attributeName) {
-               return member as Field
+               return member
            }
        }
        return null

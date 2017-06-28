@@ -71,7 +71,7 @@ class JavaTypeUtil {
     def static Classifier getClassifierFromTypeReference(TypeReference typeRef) {
         val type = getJavaTypeFromTypeReference(typeRef)
         if (type instanceof Classifier) {
-            return type as Classifier
+            return type
         } else {
             logger.warn("The TypeReference " + typeRef + " does not contain a Classifier. Returning null.")
             return null
