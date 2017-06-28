@@ -3,14 +3,9 @@ package tools.vitruv.applications.umljava.uml2java.constructionsimulationtest
 import org.junit.Test
 import tools.vitruv.applications.umljava.constructionsimulation.strategy.UmlIntegrationStrategy
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import org.apache.log4j.PropertyConfigurator
 
 class UmlConstructionSimulationTest extends Uml2JavaTransformationTest {
 	
-	override protected setup() {
-        PropertyConfigurator.configure("log4j.properties")
-    }
-    
 	@Test
     def void testModel1() {
         //selections are needed when collection data types are created in java
