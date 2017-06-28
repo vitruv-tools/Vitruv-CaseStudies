@@ -49,9 +49,11 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
           List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
           Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
         }
-        jPackage.setName(uPackage.getName());
+        String _name = uPackage.getName();
+        jPackage.setName(_name);
       }
-      this.persistProjectRelative(uPackage, jPackage, JavaPersistenceHelper.buildJavaFilePath(jPackage));
+      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(jPackage);
+      this.persistProjectRelative(uPackage, jPackage, _buildJavaFilePath);
     }
   }
   

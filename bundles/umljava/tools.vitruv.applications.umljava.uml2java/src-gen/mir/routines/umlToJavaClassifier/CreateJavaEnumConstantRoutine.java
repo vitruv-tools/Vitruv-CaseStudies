@@ -41,7 +41,8 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void updateJConstantElement(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
-      jConstant.setName(uLiteral.getName());
+      String _name = uLiteral.getName();
+      jConstant.setName(_name);
     }
     
     public EObject getCorrepondenceSourceJEnum(final EnumerationLiteral uLiteral, final Enumeration uEnum) {

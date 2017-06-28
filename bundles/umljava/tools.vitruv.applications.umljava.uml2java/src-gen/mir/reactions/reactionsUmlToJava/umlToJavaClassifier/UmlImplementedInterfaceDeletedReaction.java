@@ -1,6 +1,7 @@
 package mir.reactions.reactionsUmlToJava.umlToJavaClassifier;
 
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
@@ -68,7 +69,8 @@ class UmlImplementedInterfaceDeletedReaction extends AbstractReactionRealization
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final InterfaceRealization oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      NamedElement _head = IterableExtensions.<NamedElement>head(oldValue.getSuppliers());
+      EList<NamedElement> _suppliers = oldValue.getSuppliers();
+      NamedElement _head = IterableExtensions.<NamedElement>head(_suppliers);
       _routinesFacade.deleteJavaImplementedInterface(((Interface) _head), affectedEObject);
     }
   }

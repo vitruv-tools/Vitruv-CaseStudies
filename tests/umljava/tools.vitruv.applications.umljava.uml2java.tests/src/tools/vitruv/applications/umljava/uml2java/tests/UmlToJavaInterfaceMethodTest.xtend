@@ -9,7 +9,6 @@ import static org.junit.Assert.*;
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.junit.Test
 import org.junit.Before
-import org.junit.After
 import org.emftext.language.java.types.TypesFactory
 
 

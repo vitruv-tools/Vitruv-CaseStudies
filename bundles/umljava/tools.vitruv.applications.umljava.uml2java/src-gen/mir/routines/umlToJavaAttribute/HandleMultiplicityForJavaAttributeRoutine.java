@@ -7,7 +7,9 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.Field;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -45,12 +47,17 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
         int _upper = uAttribute.getUpper();
         boolean _equals_1 = (_upper == 1);
         if (_equals_1) {
-          jAttribute.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uAttribute.getType(), jType, jAttribute.getContainingCompilationUnit(), this.userInteracting));
+          Type _type = uAttribute.getType();
+          CompilationUnit _containingCompilationUnit = jAttribute.getContainingCompilationUnit();
+          TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type, jType, _containingCompilationUnit, this.userInteracting);
+          jAttribute.setTypeReference(_createTypeReferenceAndUpdateImport);
         } else {
           int _upper_1 = uAttribute.getUpper();
           boolean _equals_2 = (_upper_1 == LiteralUnlimitedNatural.UNLIMITED);
           if (_equals_2) {
-            jAttribute.setTypeReference(JavaTypeUtil.createCollectiontypeReference(UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting), jType));
+            String _letUserSelectCollectionTypeName = UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting);
+            TypeReference _createCollectiontypeReference = JavaTypeUtil.createCollectiontypeReference(_letUserSelectCollectionTypeName, jType);
+            jAttribute.setTypeReference(_createCollectiontypeReference);
           } else {
             int _lower_1 = uAttribute.getLower();
             String _plus = ("We do not support the multiplicity [" + Integer.valueOf(_lower_1));
@@ -68,7 +75,10 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
           int _upper_3 = uAttribute.getUpper();
           boolean _equals_4 = (_upper_3 == 1);
           if (_equals_4) {
-            jAttribute.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uAttribute.getType(), jType, jAttribute.getContainingCompilationUnit(), this.userInteracting));
+            Type _type_1 = uAttribute.getType();
+            CompilationUnit _containingCompilationUnit_1 = jAttribute.getContainingCompilationUnit();
+            TypeReference _createTypeReferenceAndUpdateImport_1 = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type_1, jType, _containingCompilationUnit_1, this.userInteracting);
+            jAttribute.setTypeReference(_createTypeReferenceAndUpdateImport_1);
           } else {
             int _lower_3 = uAttribute.getLower();
             String _plus_4 = ("We do not support the multiplicity [" + Integer.valueOf(_lower_3));

@@ -52,7 +52,8 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
       javaCompilationUnit.setName(_plus);
       EList<ConcreteClassifier> _classifiers = javaCompilationUnit.getClassifiers();
       _classifiers.add(jClassifier);
-      this.persistProjectRelative(umlClassifier, javaCompilationUnit, JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit));
+      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit);
+      this.persistProjectRelative(umlClassifier, javaCompilationUnit, _buildJavaFilePath);
     }
     
     public void callRoutine1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit, @Extension final RoutinesFacade _routinesFacade) {

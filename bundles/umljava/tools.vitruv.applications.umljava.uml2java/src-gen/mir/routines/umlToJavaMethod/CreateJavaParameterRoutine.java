@@ -7,9 +7,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
+import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.Parametrizable;
 import org.emftext.language.java.parameters.impl.ParametersFactoryImpl;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -53,8 +55,12 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
-      javaParam.setName(umlParam.getName());
-      javaParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(umlParam.getType(), customTypeClass, javaMethod.getContainingCompilationUnit(), this.userInteracting));
+      String _name = umlParam.getName();
+      javaParam.setName(_name);
+      Type _type = umlParam.getType();
+      CompilationUnit _containingCompilationUnit = javaMethod.getContainingCompilationUnit();
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type, customTypeClass, _containingCompilationUnit, this.userInteracting);
+      javaParam.setTypeReference(_createTypeReferenceAndUpdateImport);
     }
   }
   

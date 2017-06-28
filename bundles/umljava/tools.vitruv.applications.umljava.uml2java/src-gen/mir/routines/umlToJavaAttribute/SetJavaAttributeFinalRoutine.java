@@ -26,7 +26,8 @@ public class SetJavaAttributeFinalRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Property umlAttr, final Field jAttr) {
-      JavaModifierUtil.setFinal(jAttr, umlAttr.isReadOnly());
+      boolean _isReadOnly = umlAttr.isReadOnly();
+      JavaModifierUtil.setFinal(jAttr, _isReadOnly);
     }
     
     public EObject getCorrepondenceSourceJAttr(final Property umlAttr) {

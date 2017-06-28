@@ -27,7 +27,8 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final Classifier umlClassifier, final ConcreteClassifier javaClassifier, final CompilationUnit javaCompilationUnit) {
-      javaClassifier.setName(umlClassifier.getName());
+      String _name = umlClassifier.getName();
+      javaClassifier.setName(_name);
     }
     
     public EObject getElement2(final Classifier umlClassifier, final ConcreteClassifier javaClassifier, final CompilationUnit javaCompilationUnit) {
@@ -46,7 +47,8 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
       String _name = umlClassifier.getName();
       String _plus = (_name + ".java");
       javaCompilationUnit.setName(_plus);
-      this.persistProjectRelative(umlClassifier, javaCompilationUnit, JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit));
+      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit);
+      this.persistProjectRelative(umlClassifier, javaCompilationUnit, _buildJavaFilePath);
     }
   }
   

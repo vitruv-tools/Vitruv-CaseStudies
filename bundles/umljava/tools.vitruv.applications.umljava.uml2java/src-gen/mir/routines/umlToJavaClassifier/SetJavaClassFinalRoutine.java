@@ -28,7 +28,8 @@ public class SetJavaClassFinalRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass) {
-      JavaModifierUtil.setFinal(jClass, umlClass.isFinalSpecialization());
+      boolean _isFinalSpecialization = umlClass.isFinalSpecialization();
+      JavaModifierUtil.setFinal(jClass, _isFinalSpecialization);
     }
   }
   

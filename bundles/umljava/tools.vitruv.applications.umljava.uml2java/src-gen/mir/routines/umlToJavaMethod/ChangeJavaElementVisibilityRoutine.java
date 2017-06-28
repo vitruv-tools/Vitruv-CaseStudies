@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.uml2.uml.VisibilityKind;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -26,7 +27,8 @@ public class ChangeJavaElementVisibilityRoutine extends AbstractRepairRoutineRea
     }
     
     public void update0Element(final NamedElement uElem, final AnnotableAndModifiable jElem) {
-      JavaModifierUtil.setJavaVisibility(jElem, uElem.getVisibility());
+      VisibilityKind _visibility = uElem.getVisibility();
+      JavaModifierUtil.setJavaVisibility(jElem, _visibility);
     }
     
     public EObject getCorrepondenceSourceJElem(final NamedElement uElem) {

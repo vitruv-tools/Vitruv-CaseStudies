@@ -28,7 +28,8 @@ public class SetJavaClassAbstractRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass) {
-      JavaModifierUtil.setAbstract(jClass, umlClass.isAbstract());
+      boolean _isAbstract = umlClass.isAbstract();
+      JavaModifierUtil.setAbstract(jClass, _isAbstract);
     }
   }
   

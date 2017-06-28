@@ -26,7 +26,8 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updateJavaAttributeElement(final Classifier uClassifier, final Property umlAttribute, final ConcreteClassifier jClassifier, final Field javaAttribute) {
-      javaAttribute.setName(umlAttribute.getName());
+      String _name = umlAttribute.getName();
+      javaAttribute.setName(_name);
       javaAttribute.makePublic();
     }
     

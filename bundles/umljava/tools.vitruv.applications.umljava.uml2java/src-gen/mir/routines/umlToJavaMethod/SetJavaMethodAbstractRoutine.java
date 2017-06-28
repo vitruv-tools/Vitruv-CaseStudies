@@ -26,7 +26,8 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Operation uOperation, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod javaMethod) {
-      JavaModifierUtil.setAbstract(javaMethod, uOperation.isAbstract());
+      boolean _isAbstract = uOperation.isAbstract();
+      JavaModifierUtil.setAbstract(javaMethod, _isAbstract);
     }
     
     public EObject getCorrepondenceSourceJavaClass(final Operation uOperation) {

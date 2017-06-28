@@ -27,7 +27,8 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void callRoutine1(final String oldName, final String newName, final Property uAttribute, final Field jAttribute, @Extension final RoutinesFacade _routinesFacade) {
-      jAttribute.setName(uAttribute.getName());
+      String _name = uAttribute.getName();
+      jAttribute.setName(_name);
       JavaMemberAndParameterUtil.renameGettersOfAttribute(jAttribute, oldName);
       JavaMemberAndParameterUtil.renameSettersOfAttribute(jAttribute, oldName);
     }

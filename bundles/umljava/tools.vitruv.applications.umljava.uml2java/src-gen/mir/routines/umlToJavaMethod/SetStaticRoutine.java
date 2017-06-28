@@ -32,7 +32,8 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Feature uFeat, final AnnotableAndModifiable jMod, final Static staticMod) {
-      JavaModifierUtil.setStatic(jMod, uFeat.isStatic());
+      boolean _isStatic = uFeat.isStatic();
+      JavaModifierUtil.setStatic(jMod, _isStatic);
     }
   }
   

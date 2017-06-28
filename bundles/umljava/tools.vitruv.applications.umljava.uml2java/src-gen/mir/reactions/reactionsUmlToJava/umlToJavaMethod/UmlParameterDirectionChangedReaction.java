@@ -3,6 +3,7 @@ package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 import com.google.common.base.Objects;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -83,7 +84,8 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.adaptJavaParametertoDirectionChange(affectedEObject.getOperation(), affectedEObject, oldValue, newValue);
+      Operation _operation = affectedEObject.getOperation();
+      _routinesFacade.adaptJavaParametertoDirectionChange(_operation, affectedEObject, oldValue, newValue);
     }
   }
 }

@@ -30,11 +30,13 @@ public class ChangePackageOfJavaCompilationUnitRoutine extends AbstractRepairRou
     }
     
     public void update0Element(final org.emftext.language.java.containers.Package jPackage, final CompilationUnit jCompUnit, final Namespace uNamespace) {
-      jCompUnit.getNamespaces().clear();
       EList<String> _namespaces = jCompUnit.getNamespaces();
+      _namespaces.clear();
+      EList<String> _namespaces_1 = jCompUnit.getNamespaces();
       List<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage);
-      Iterables.<String>addAll(_namespaces, _javaPackageAsStringList);
-      this.persistProjectRelative(uNamespace, jCompUnit, JavaPersistenceHelper.buildJavaFilePath(jCompUnit));
+      Iterables.<String>addAll(_namespaces_1, _javaPackageAsStringList);
+      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(jCompUnit);
+      this.persistProjectRelative(uNamespace, jCompUnit, _buildJavaFilePath);
     }
   }
   

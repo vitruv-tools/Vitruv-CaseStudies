@@ -5,7 +5,9 @@ import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
+import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -31,7 +33,9 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customClass) {
-      jParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit(), this.userInteracting));
+      CompilationUnit _containingCompilationUnit = jParam.getContainingCompilationUnit();
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customClass, _containingCompilationUnit, this.userInteracting);
+      jParam.setTypeReference(_createTypeReferenceAndUpdateImport);
     }
     
     public EObject getCorrepondenceSourceCustomClass(final Parameter uParam, final Type uType, final OrdinaryParameter jParam) {

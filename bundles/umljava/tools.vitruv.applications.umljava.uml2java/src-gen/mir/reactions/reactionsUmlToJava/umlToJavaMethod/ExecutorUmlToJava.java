@@ -3,13 +3,11 @@ package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorUmlToJava extends AbstractReactionsExecutor {
-  public ExecutorUmlToJava(final UserInteracting userInteracting) {
-    super(userInteracting,
-    	new UmlDomainProvider().getDomain(), 
+  public ExecutorUmlToJava() {
+    super(new UmlDomainProvider().getDomain(), 
     	new JavaDomainProvider().getDomain());
   }
   

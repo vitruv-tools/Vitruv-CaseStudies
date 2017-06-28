@@ -3,6 +3,7 @@ package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 import com.google.common.base.Objects;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
@@ -86,7 +87,8 @@ class UmlMethodReturnTypeChangedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setJavaMethodReturnType(affectedEObject.getOperation());
+      Operation _operation = affectedEObject.getOperation();
+      _routinesFacade.setJavaMethodReturnType(_operation);
     }
   }
 }

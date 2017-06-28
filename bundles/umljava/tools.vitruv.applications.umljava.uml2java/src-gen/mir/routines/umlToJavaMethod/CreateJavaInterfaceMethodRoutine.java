@@ -7,9 +7,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
+import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -27,8 +29,12 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     }
     
     public void updateJavaMethodElement(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final org.emftext.language.java.classifiers.Class customTypeClass, final InterfaceMethod javaMethod) {
-      javaMethod.setName(uOperation.getName());
-      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jInterface.getContainingCompilationUnit(), this.userInteracting));
+      String _name = uOperation.getName();
+      javaMethod.setName(_name);
+      Type _type = uOperation.getType();
+      CompilationUnit _containingCompilationUnit = jInterface.getContainingCompilationUnit();
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type, customTypeClass, _containingCompilationUnit, this.userInteracting);
+      javaMethod.setTypeReference(_createTypeReferenceAndUpdateImport);
       javaMethod.makePublic();
     }
     

@@ -6,7 +6,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.Field;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -33,7 +35,9 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final Property uAttr, final Type uType, final Field jAttr, final org.emftext.language.java.classifiers.Class customType, @Extension final RoutinesFacade _routinesFacade) {
-      jAttr.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit(), this.userInteracting));
+      CompilationUnit _containingCompilationUnit = jAttr.getContainingCompilationUnit();
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customType, _containingCompilationUnit, this.userInteracting);
+      jAttr.setTypeReference(_createTypeReferenceAndUpdateImport);
       JavaMemberAndParameterUtil.updateAttributeTypeInSetters(jAttr);
       JavaMemberAndParameterUtil.updateAttributeTypeInGetters(jAttr);
     }

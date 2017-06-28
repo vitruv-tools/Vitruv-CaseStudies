@@ -2,6 +2,7 @@ package mir.routines.umlToJavaMethod;
 
 import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
+import org.apache.log4j.Logger;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Interface;
@@ -23,7 +24,9 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void callRoutine1(final Classifier uClassifier, final Operation uOperation, @Extension final RoutinesFacade _routinesFacade) {
-      boolean _equals = uClassifier.getName().equals(uOperation.getName());
+      String _name = uClassifier.getName();
+      String _name_1 = uOperation.getName();
+      boolean _equals = _name.equals(_name_1);
       if (_equals) {
         _routinesFacade.createJavaConstructor(uClassifier, uOperation);
       } else {
@@ -33,7 +36,8 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
           if ((uClassifier instanceof Interface)) {
             _routinesFacade.createJavaInterfaceMethod(((Interface)uClassifier), uOperation);
           } else {
-            this.getLogger().warn((("Invalid creation of " + uOperation) + ", containing UML-Classifier is neither a Class, nor an Interface nor a DataType"));
+            Logger _logger = this.getLogger();
+            _logger.warn((("Invalid creation of " + uOperation) + ", containing UML-Classifier is neither a Class, nor an Interface nor a DataType"));
           }
         }
       }

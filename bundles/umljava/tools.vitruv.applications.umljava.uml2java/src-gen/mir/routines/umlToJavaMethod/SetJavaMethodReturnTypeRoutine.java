@@ -5,7 +5,9 @@ import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
+import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.Method;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -27,7 +29,10 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Operation uOperation, final Method javaMethod, final org.emftext.language.java.classifiers.Class returnType) {
-      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), returnType, javaMethod.getContainingCompilationUnit(), this.userInteracting));
+      Type _type = uOperation.getType();
+      CompilationUnit _containingCompilationUnit = javaMethod.getContainingCompilationUnit();
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type, returnType, _containingCompilationUnit, this.userInteracting);
+      javaMethod.setTypeReference(_createTypeReferenceAndUpdateImport);
     }
     
     public EObject getCorrepondenceSourceJavaMethod(final Operation uOperation) {

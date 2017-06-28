@@ -6,6 +6,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -33,7 +34,8 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     
     public void update0Element(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface) {
       EList<TypeReference> _implements = jClass.getImplements();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, jClass.getContainingCompilationUnit(), this.userInteracting);
+      CompilationUnit _containingCompilationUnit = jClass.getContainingCompilationUnit();
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, _containingCompilationUnit, this.userInteracting);
       _implements.add(_createTypeReferenceAndUpdateImport);
     }
     

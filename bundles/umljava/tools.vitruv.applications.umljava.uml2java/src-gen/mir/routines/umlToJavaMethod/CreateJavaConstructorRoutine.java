@@ -6,6 +6,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.VisibilityKind;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.Member;
@@ -48,8 +49,10 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void updateJConstructorElement(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Constructor jConstructor) {
-      jConstructor.setName(uOperation.getName());
-      JavaModifierUtil.setJavaVisibility(jConstructor, uOperation.getVisibility());
+      String _name = uOperation.getName();
+      jConstructor.setName(_name);
+      VisibilityKind _visibility = uOperation.getVisibility();
+      JavaModifierUtil.setJavaVisibility(jConstructor, _visibility);
     }
   }
   
