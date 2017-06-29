@@ -84,6 +84,7 @@ import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
 
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
@@ -103,7 +104,6 @@ import tools.vitruv.framework.monitorededitor.ProjectBuildUtils;
 import tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest;
 import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
-import tools.vitruv.framework.util.bridges.EMFBridge;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
 
@@ -271,7 +271,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected Package renamePackage(final Package packageToRename, String newName) throws CoreException  {
 		final Resource resource = packageToRename.eResource();
-		final IFile iFile = EMFBridge.getIFileForEMFUri(resource.getURI());
+		final IFile iFile = URIUtil.getIFileForEMFUri(resource.getURI());
 		IPath iPath = iFile.getProjectRelativePath();
 		iPath = iPath.removeLastSegments(1);
 		final String oldPackageName = packageToRename.getName();
@@ -439,7 +439,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	}
 
 	private <T extends JavaRoot> T getJaMoPPRootForVURI(final VURI vuri) {
-		final Resource resource = EcoreResourceBridge.loadResourceAtURI(vuri.getEMFUri(), new ResourceSetImpl());
+		final Resource resource = URIUtil.loadResourceAtURI(vuri.getEMFUri(), new ResourceSetImpl());
 		// unchecked is OK for the test.
 		@SuppressWarnings("unchecked")
 		final T javaRoot = (T) resource.getContents().get(0);
@@ -490,7 +490,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		for (final EObject eObject : eObjects) {
 			final Resource eResource = eObject.eResource();
 			assertNotNull("Resource of eObject " + eObject + " is null", eResource);
-			final IFile iFile = EMFBridge.getIFileForEMFUri(eResource.getURI());
+			final IFile iFile = URIUtil.getIFileForEMFUri(eResource.getURI());
 			assertTrue("No IFile for eObject " + eObject + " in resource " + eResource + " found.", iFile.exists());
 		}
 	}
@@ -498,7 +498,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected void assertFilesOnlyForEObjects(final EObject... eObjects) throws Throwable {
 		final Set<String> fullFilePaths = new HashSet<String>();
 		for (final EObject eObject : eObjects) {
-			final IFile iFile = EMFBridge.getIFileForEMFUri(eObject.eResource().getURI());
+			final IFile iFile = URIUtil.getIFileForEMFUri(eObject.eResource().getURI());
 			fullFilePaths.add(iFile.getFullPath().toString());
 		}
 		final IFolder folder = this.getCurrentTestProject().getFolder("model");

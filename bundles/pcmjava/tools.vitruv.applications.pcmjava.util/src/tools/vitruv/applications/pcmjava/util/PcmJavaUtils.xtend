@@ -3,7 +3,6 @@ package tools.vitruv.applications.pcmjava.util
 import com.google.common.collect.Sets
 import tools.vitruv.framework.tuid.Tuid
 import tools.vitruv.framework.util.datatypes.VURI
-import tools.vitruv.framework.util.bridges.EMFBridge
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 import java.util.Map
 import java.util.Set
@@ -33,6 +32,7 @@ import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 import org.palladiosimulator.pcm.repository.Parameter
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 
 class PcmJavaUtils {
 	private static val Logger logger = Logger.getLogger(PcmJavaUtils.simpleName)
@@ -182,7 +182,7 @@ class PcmJavaUtils {
 	}
 
 	private static def String getFolderPathInProjectOfResource(VURI sourceModelVURI, String folderName) {
-		val IFile fileSourceModel = EMFBridge.getIFileForEMFUri(sourceModelVURI.getEMFUri());
+		val IFile fileSourceModel = URIUtil.getIFileForEMFUri(sourceModelVURI.getEMFUri());
 		val IProject projectSourceModel = fileSourceModel.getProject();
 		var String srcFolderPath = projectSourceModel.getFullPath().toString() + "/" + folderName + "/";
 		if (srcFolderPath.startsWith("/")) {
