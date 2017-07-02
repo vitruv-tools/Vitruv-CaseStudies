@@ -239,4 +239,13 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		//Too complex for manual asserts, check result in junit-workspace	
 	}
 		
+	@Test
+	def void integrationTestCoCOME() {
+		//This model originates out of the CoCoME project
+		
+		integrationTest("UMLCoCoME.uml")	
+		
+		//Too complex for manual asserts, check result in junit-workspace	
+	}
+	
 }

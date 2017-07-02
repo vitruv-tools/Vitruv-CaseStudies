@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_IL-ogF3YEeeb98aIPudDYA" name="RootElement">
+  <packagedElement xmi:type="uml:Interface" xmi:id="_XjHKkF3YEeeb98aIPudDYA" name="PersistenceIf"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_ZPga8F3YEeeb98aIPudDYA" name="ReportingIf"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_x0hcUF3tEeeb98aIPudDYA" name="StoreIf"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Bh-zsF3uEeeb98aIPudDYA" name="StoreQueryIf"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_DA0JMF3uEeeb98aIPudDYA" name="EnterpriseQueryIf"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_G3QZ0F3vEeeb98aIPudDYA" name="SaleRegisteredEvent"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_KfwxkF3vEeeb98aIPudDYA" name="ProductDispatcherIf"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_G4K7oF32Eeeb98aIPudDYA" name="CashDeskConnectorIf"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_P2_MYF3YEeeb98aIPudDYA" name="TradingSystem.Inventory.Application.Reporting">
+    <interfaceRealization xmi:id="_2tum8F3tEeeb98aIPudDYA" name="provide ReportingIf" client="_P2_MYF3YEeeb98aIPudDYA" supplier="_ZPga8F3YEeeb98aIPudDYA" contract="_ZPga8F3YEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_LHWn8F3tEeeb98aIPudDYA" name="require PersistenceIf" client="_P2_MYF3YEeeb98aIPudDYA" supplier="_XjHKkF3YEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_pu15MF3uEeeb98aIPudDYA" name="require StoreQuery" client="_P2_MYF3YEeeb98aIPudDYA" supplier="_Bh-zsF3uEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_qhlkwF3uEeeb98aIPudDYA" name="require EnterpriseQuery" client="_P2_MYF3YEeeb98aIPudDYA" supplier="_DA0JMF3uEeeb98aIPudDYA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_UoInMF3YEeeb98aIPudDYA" name="TradingSystem.Inventory.GUI.Store">
+    <packagedElement xmi:type="uml:Usage" xmi:id="_16eEYF31Eeeb98aIPudDYA" name="require StoreIf" client="_UoInMF3YEeeb98aIPudDYA" supplier="_x0hcUF3tEeeb98aIPudDYA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_aGmD4F3sEeeb98aIPudDYA" name="TradingSystem.Inventory.GUI.Reporting">
+    <packagedElement xmi:type="uml:Usage" xmi:id="_HxCzcF3tEeeb98aIPudDYA" name="require ReportingIf" client="_aGmD4F3sEeeb98aIPudDYA" supplier="_ZPga8F3YEeeb98aIPudDYA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_dRt8EF3sEeeb98aIPudDYA" name="TradingSystem.Invertory.Data.Persistence">
+    <interfaceRealization xmi:id="_46v4IF3tEeeb98aIPudDYA" name="provide PersitenceIf" client="_dRt8EF3sEeeb98aIPudDYA" supplier="_XjHKkF3YEeeb98aIPudDYA" contract="_XjHKkF3YEeeb98aIPudDYA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_uUmjYF3uEeeb98aIPudDYA" name="TradingSystem.Invetory.Data.Store">
+    <interfaceRealization xmi:id="_ygAz4F3uEeeb98aIPudDYA" name="provide StoreQueryIf" client="_uUmjYF3uEeeb98aIPudDYA" supplier="_Bh-zsF3uEeeb98aIPudDYA" contract="_Bh-zsF3uEeeb98aIPudDYA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_1CpvwF3uEeeb98aIPudDYA" name="TradingSystem.Inventory.Data.Enterprise">
+    <interfaceRealization xmi:id="_4Yd1AF3uEeeb98aIPudDYA" name="provide EnterpriseQueryIf" client="_1CpvwF3uEeeb98aIPudDYA" supplier="_DA0JMF3uEeeb98aIPudDYA" contract="_DA0JMF3uEeeb98aIPudDYA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="__xw90F3uEeeb98aIPudDYA" name="TradingSystem.Inventory.Application.Store">
+    <interfaceRealization xmi:id="_MyQJ4F31Eeeb98aIPudDYA" name="provideStoreIf" client="__xw90F3uEeeb98aIPudDYA" supplier="_x0hcUF3tEeeb98aIPudDYA" contract="_x0hcUF3tEeeb98aIPudDYA"/>
+    <interfaceRealization xmi:id="_Lej38F32Eeeb98aIPudDYA" name="provide CashDeskConnectorIf" client="__xw90F3uEeeb98aIPudDYA" supplier="_G4K7oF32Eeeb98aIPudDYA" contract="_G4K7oF32Eeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_FeB9EF3vEeeb98aIPudDYA" name="require StoreQuretyIf" client="__xw90F3uEeeb98aIPudDYA" supplier="_Bh-zsF3uEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_S9P7QF3vEeeb98aIPudDYA" name="require SaleRegisteredEvent" client="__xw90F3uEeeb98aIPudDYA" supplier="_G3QZ0F3vEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_UQXwAF3vEeeb98aIPudDYA" name="require ProdctDispatcherIf" client="__xw90F3uEeeb98aIPudDYA" supplier="_KfwxkF3vEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_xbILQF31Eeeb98aIPudDYA" name="require PersistenceIf" client="__xw90F3uEeeb98aIPudDYA" supplier="_XjHKkF3YEeeb98aIPudDYA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_iU7doF30Eeeb98aIPudDYA" name="TradingSystem.Invetory.Application.ProductDispatcher">
+    <interfaceRealization xmi:id="_swrDwF30Eeeb98aIPudDYA" name="provide ProductDispatcherIf" client="_iU7doF30Eeeb98aIPudDYA" supplier="_KfwxkF3vEeeb98aIPudDYA" contract="_KfwxkF3vEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_zd7l8F30Eeeb98aIPudDYA" name="require EnterpriseQueryIf" client="_iU7doF30Eeeb98aIPudDYA" supplier="_DA0JMF3uEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_6T1GwF30Eeeb98aIPudDYA" name="require StoreQueryIf" client="_iU7doF30Eeeb98aIPudDYA" supplier="_Bh-zsF3uEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_PFv2gF31Eeeb98aIPudDYA" name="require StoreIf" client="_iU7doF30Eeeb98aIPudDYA" supplier="_x0hcUF3tEeeb98aIPudDYA"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_ak-58F31Eeeb98aIPudDYA" name="require PersistenceIf" client="_iU7doF30Eeeb98aIPudDYA" supplier="_XjHKkF3YEeeb98aIPudDYA"/>
+  </packagedElement>
+</uml:Model>

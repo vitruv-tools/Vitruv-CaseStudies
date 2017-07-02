@@ -20,10 +20,12 @@ class SharedTestUtil {
 	public static val INTERFACE_REALIZATION_NAME = "TestInterfaceRealization"
 	public static val INTERFACE_REALIZATION_NAME2 = "TestInterfaceRealization2"
 	public static val USAGE_NAME = "TestUsage"
+	public static val USAGE_NAME2 = "TestUsage2"
 	
 	//Component	
 	public static val COMP_NAME = "TestUmlComp"
 	public static val COMP_NAME2 = "TestUmlComp2"
+	public static val COMP_NAME3 = "TestUmlComp3"
 	public static val DATATYPE_NAME = "TestDataType"
 	public static val PROPERTY_NAME = "TestProperty"
 	public static val OPERATION_NAME = "TestOperation"
