@@ -1,5 +1,6 @@
 package mir.routines.pcm2depInjectJava;
 
+import edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +52,7 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
       ConcreteClassifier _containingConcreteClassifier = configureMethod.getContainingConcreteClassifier();
       final org.emftext.language.java.classifiers.Class systemClass = ((org.emftext.language.java.classifiers.Class) _containingConcreteClassifier);
       Set<Interface> _correspondingEObjectsByType = CorrespondenceModelUtil.<Interface, Correspondence>getCorrespondingEObjectsByType(this.correspondenceModel, opInterface, Interface.class);
-      final Interface jaMoPPInterface = CollectionBridge.<Interface>claimOne(_correspondingEObjectsByType);
+      final Interface jaMoPPInterface = IterableUtil.<Set<Interface>, Interface>claimOne(_correspondingEObjectsByType);
       final NamespaceClassifierReference namespaceClassifierRef = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPInterface);
       EList<TypeReference> _implements = systemClass.getImplements();
       for (final TypeReference impl : _implements) {
