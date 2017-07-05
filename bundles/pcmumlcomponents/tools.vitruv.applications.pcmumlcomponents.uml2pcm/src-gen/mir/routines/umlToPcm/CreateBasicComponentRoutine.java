@@ -40,7 +40,8 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updatePcmComponentElement(final Component umlComponent, final Repository pcmRepository, final BasicComponent pcmComponent) {
-      pcmComponent.setEntityName(umlComponent.getName());
+      String _name = umlComponent.getName();
+      pcmComponent.setEntityName(_name);
     }
     
     public EObject getElement2(final Component umlComponent, final Repository pcmRepository, final BasicComponent pcmComponent) {

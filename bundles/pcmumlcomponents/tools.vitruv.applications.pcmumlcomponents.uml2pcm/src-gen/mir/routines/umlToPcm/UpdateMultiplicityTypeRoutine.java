@@ -5,6 +5,7 @@ import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.MultiplicityElement;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Property;
@@ -34,7 +35,8 @@ public class UpdateMultiplicityTypeRoutine extends AbstractRepairRoutineRealizat
         ParameterDirectionKind _direction = ((Parameter)umlElement).getDirection();
         boolean _tripleEquals = (_direction == ParameterDirectionKind.RETURN_LITERAL);
         if (_tripleEquals) {
-          _routinesFacade.changeInterfaceOperationType(((Parameter)umlElement).getOperation(), ((Parameter)umlElement));
+          Operation _operation = ((Parameter)umlElement).getOperation();
+          _routinesFacade.changeInterfaceOperationType(_operation, ((Parameter)umlElement));
         } else {
           _routinesFacade.changeParameterType(((Parameter)umlElement));
         }

@@ -1,5 +1,6 @@
 package mir.routines.umlToPcm;
 
+import edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil;
 import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
@@ -24,8 +25,8 @@ public class ChangeParameterNameRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Parameter umlParameter, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
-      pcmParameter.setParameterName(umlParameter.getName());
-      pcmParameter.setEntityName(umlParameter.getName());
+      String _name = umlParameter.getName();
+      ParameterUtil.setName(pcmParameter, _name);
     }
     
     public EObject getCorrepondenceSourcePcmParameter(final Parameter umlParameter) {

@@ -26,9 +26,10 @@ public class CreatePcmRepositoryRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updatePcmRepositoryElement(final Model umlModel, final Repository pcmRepository) {
-      pcmRepository.setEntityName(umlModel.getName());
       String _name = umlModel.getName();
-      String _plus = ("repository/" + _name);
+      pcmRepository.setEntityName(_name);
+      String _name_1 = umlModel.getName();
+      String _plus = ("repository/" + _name_1);
       String _plus_1 = (_plus + ".repository");
       this.persistProjectRelative(umlModel, pcmRepository, _plus_1);
     }

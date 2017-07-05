@@ -47,7 +47,8 @@ public class CreateProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updatePcmRoleElement(final Component umlComponent, final InterfaceRealization interfaceRealization, final BasicComponent pcmComponent, final OperationProvidedRole pcmRole) {
-      pcmRole.setEntityName(interfaceRealization.getName());
+      String _name = interfaceRealization.getName();
+      pcmRole.setEntityName(_name);
     }
   }
   

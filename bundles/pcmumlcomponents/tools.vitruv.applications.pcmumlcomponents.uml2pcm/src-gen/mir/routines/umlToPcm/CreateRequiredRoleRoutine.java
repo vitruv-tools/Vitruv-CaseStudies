@@ -47,7 +47,8 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updatePcmRoleElement(final Component umlComponent, final Usage umlUsage, final BasicComponent pcmComponent, final OperationRequiredRole pcmRole) {
-      pcmRole.setEntityName(umlUsage.getName());
+      String _name = umlUsage.getName();
+      pcmRole.setEntityName(_name);
     }
   }
   

@@ -2,8 +2,10 @@ package mir.routines.umlToPcm;
 
 import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Usage;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -29,12 +31,14 @@ public class ChangeRequiredInterfaceRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Usage umlUsage, final Interface umlInterface, final OperationInterface pcmInterface, final OperationRequiredRole pcmRole) {
-      int _length = ((Object[])Conversions.unwrapArray(umlUsage.getSuppliers(), Object.class)).length;
+      EList<NamedElement> _suppliers = umlUsage.getSuppliers();
+      int _length = ((Object[])Conversions.unwrapArray(_suppliers, Object.class)).length;
       boolean _equals = (_length == 0);
       if (_equals) {
         pcmRole.setRequiredInterface__OperationRequiredRole(null);
       } else {
-        int _length_1 = ((Object[])Conversions.unwrapArray(umlUsage.getSuppliers(), Object.class)).length;
+        EList<NamedElement> _suppliers_1 = umlUsage.getSuppliers();
+        int _length_1 = ((Object[])Conversions.unwrapArray(_suppliers_1, Object.class)).length;
         boolean _equals_1 = (_length_1 == 1);
         if (_equals_1) {
           pcmRole.setRequiredInterface__OperationRequiredRole(pcmInterface);

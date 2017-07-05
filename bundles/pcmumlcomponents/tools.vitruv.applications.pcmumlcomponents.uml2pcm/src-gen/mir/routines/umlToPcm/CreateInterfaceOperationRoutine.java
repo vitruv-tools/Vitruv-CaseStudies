@@ -25,7 +25,8 @@ public class CreateInterfaceOperationRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updatePcmOperationElement(final Operation umlOperation, final OperationInterface pcmInterface, final OperationSignature pcmOperation) {
-      pcmOperation.setEntityName(umlOperation.getName());
+      String _name = umlOperation.getName();
+      pcmOperation.setEntityName(_name);
     }
     
     public EObject getElement1(final Operation umlOperation, final OperationInterface pcmInterface, final OperationSignature pcmOperation) {

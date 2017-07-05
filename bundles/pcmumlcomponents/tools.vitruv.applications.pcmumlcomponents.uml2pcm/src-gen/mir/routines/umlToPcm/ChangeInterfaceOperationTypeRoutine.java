@@ -7,7 +7,9 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
 import org.palladiosimulator.pcm.repository.DataType;
+import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmTypesUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -33,7 +35,10 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
       if ((((resolvedType == null) && (umlParameter.getType() != null)) && (umlParameter.getType() instanceof org.eclipse.uml2.uml.DataType))) {
         final boolean unbounded = ((umlParameter.lowerBound() != 1) || (umlParameter.upperBound() != 1));
         Type _type = umlParameter.getType();
-        resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmSignature.getInterface__OperationSignature().getRepository__Interface(), Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel);
+        OperationInterface _interface__OperationSignature = pcmSignature.getInterface__OperationSignature();
+        Repository _repository__Interface = _interface__OperationSignature.getRepository__Interface();
+        DataType _retrieveCorrespondingPcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), _repository__Interface, Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel);
+        resolvedType = _retrieveCorrespondingPcmType;
       }
       pcmSignature.setReturnType__OperationSignature(resolvedType);
     }

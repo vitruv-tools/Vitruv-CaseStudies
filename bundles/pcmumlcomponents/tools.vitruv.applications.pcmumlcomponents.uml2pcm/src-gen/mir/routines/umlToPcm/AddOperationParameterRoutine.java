@@ -3,6 +3,7 @@ package mir.routines.umlToPcm;
 import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
@@ -36,11 +37,12 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
       ParameterDirectionKind _direction = umlParameter.getDirection();
       boolean _equals = Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL);
       if (_equals) {
+        EList<Parameter> _ownedParameters = umlOperation.getOwnedParameters();
         final Function1<Parameter, Boolean> _function = (Parameter p) -> {
           ParameterDirectionKind _direction_1 = p.getDirection();
           return Boolean.valueOf(Objects.equal(_direction_1, ParameterDirectionKind.RETURN_LITERAL));
         };
-        final Iterable<Parameter> returnParameters = IterableExtensions.<Parameter>filter(umlOperation.getOwnedParameters(), _function);
+        final Iterable<Parameter> returnParameters = IterableExtensions.<Parameter>filter(_ownedParameters, _function);
         int _length = ((Object[])Conversions.unwrapArray(returnParameters, Object.class)).length;
         boolean _greaterThan = (_length > 0);
         if (_greaterThan) {
