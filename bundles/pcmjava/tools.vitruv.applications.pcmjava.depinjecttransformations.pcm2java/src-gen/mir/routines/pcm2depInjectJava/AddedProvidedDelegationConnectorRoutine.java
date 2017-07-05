@@ -20,8 +20,8 @@ import org.palladiosimulator.pcm.core.composition.ComposedStructure;
 import org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils;
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils;
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -52,17 +52,17 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
       final org.emftext.language.java.classifiers.Class systemClass = ((org.emftext.language.java.classifiers.Class) _containingConcreteClassifier);
       Set<Interface> _correspondingEObjectsByType = CorrespondenceModelUtil.<Interface, Correspondence>getCorrespondingEObjectsByType(this.correspondenceModel, opInterface, Interface.class);
       final Interface jaMoPPInterface = CollectionBridge.<Interface>claimOne(_correspondingEObjectsByType);
-      final NamespaceClassifierReference namespaceClassifierRef = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPInterface);
+      final NamespaceClassifierReference namespaceClassifierRef = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPInterface);
       EList<TypeReference> _implements = systemClass.getImplements();
       for (final TypeReference impl : _implements) {
-        boolean _hasSameTargetReference = PCMJaMoPPUtils.hasSameTargetReference(namespaceClassifierRef, impl);
+        boolean _hasSameTargetReference = PcmJavaUtils.hasSameTargetReference(namespaceClassifierRef, impl);
         if (_hasSameTargetReference) {
           return;
         }
       }
       EList<TypeReference> _implements_1 = systemClass.getImplements();
       _implements_1.add(namespaceClassifierRef);
-      final Import classifierImport = PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface);
+      final Import classifierImport = Pcm2JavaUtils.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface);
       List<EObject> _list = CollectionBridge.<EObject>toList(pcmSystem);
       this.correspondenceModel.createAndAddCorrespondence(_list, Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(namespaceClassifierRef, classifierImport)));
     }

@@ -6,8 +6,8 @@ import org.palladiosimulator.pcm.system.System
 import org.emftext.language.java.containers.JavaRoot
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 
 class SystemMappingTransformation extends ComposedProvidingRequiringEntityMappingTransformation {
 
@@ -29,8 +29,8 @@ class SystemMappingTransformation extends ComposedProvidingRequiringEntityMappin
 			return transformationResult
 		}
 		newCorrespondingEObjects.filter(JavaRoot).forEach [ newCorrespondingEObject |
-			PCMJaMoPPUtils.addRootChangeToTransformationResult(newCorrespondingEObject, correspondenceModel,
-				PCMJaMoPPUtils.getSourceModelVURI(newRootEObject), transformationResult)
+			PcmJavaUtils.addRootChangeToTransformationResult(newCorrespondingEObject, correspondenceModel,
+				PcmJavaUtils.getSourceModelVURI(newRootEObject), transformationResult)
 		]
 		for (correspondingEObject : newCorrespondingEObjects) {
 			correspondenceModel.createAndAddCorrespondence(newRootEObject, correspondingEObject)

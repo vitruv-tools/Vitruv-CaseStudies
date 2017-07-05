@@ -15,14 +15,14 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
 
-public class DataTypeCorrespondenceHelperTest extends PCM2JaMoPPTransformationTest {
+public class DataTypeCorrespondenceHelperTest extends Pcm2JavaTransformationTest {
 
 	@Test
 	public void testCorrespondenceForCompositeDataType() throws Throwable {
-		final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
 		// Create and sync CompositeDataType
 		final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
@@ -52,12 +52,12 @@ public class DataTypeCorrespondenceHelperTest extends PCM2JaMoPPTransformationTe
 
 	@Test
     public void testCorrespondenceForCollectionDataType() throws Throwable {
-    	final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+    	final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
     	// Create and sync CollectionDataType
-    	this.testUserInteractor.addNextSelections(0);
+    	this.getUserInteractor().addNextSelections(0);
     	final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
-                PCM2JaMoPPTestUtils.COLLECTION_DATA_TYPE_NAME, null);
+                Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null);
     	
     	final TypeReference type = DataTypeCorrespondenceHelper.claimUniqueCorrespondingJaMoPPDataTypeReference(collectionDataType,
     			super.getCorrespondenceModel());

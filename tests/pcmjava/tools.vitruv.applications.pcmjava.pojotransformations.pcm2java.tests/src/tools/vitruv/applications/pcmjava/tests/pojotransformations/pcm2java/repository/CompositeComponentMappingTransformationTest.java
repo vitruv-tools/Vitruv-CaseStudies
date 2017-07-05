@@ -16,28 +16,28 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class CompositeComponentMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testCreateCompositeComponent() throws Throwable {
         final CompositeComponent compositeComponent = this.createAndSyncRepoAndCompositeComponent();
 
-        this.assertCompositeComponentCorrespondences(compositeComponent, PCM2JaMoPPTestUtils.COMPOSITE_COMPONENT_NAME);
+        this.assertCompositeComponentCorrespondences(compositeComponent, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
     }
 
     @Test
     public void testAddProvidedRoleToCompositeComponent() throws Throwable {
         final CompositeComponent compositeComponent = this.createAndSyncRepoAndCompositeComponent();
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(
-                compositeComponent.getRepository__RepositoryComponent(), PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                compositeComponent.getRepository__RepositoryComponent(), Pcm2JavaTestUtils.INTERFACE_NAME);
 
         final OperationProvidedRole providedRole = super.createAndSyncOperationProvidedRole(opInterface,
                 compositeComponent);
 
-        this.assertCompositeComponentCorrespondences(compositeComponent, PCM2JaMoPPTestUtils.COMPOSITE_COMPONENT_NAME);
+        this.assertCompositeComponentCorrespondences(compositeComponent, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
         this.assertOperationProvidedRole(providedRole);
     }
 
@@ -45,12 +45,12 @@ public class CompositeComponentMappingTransformationTest extends PCM2JaMoPPTrans
     public void testAddRequiredRoleToCompositeComponent() throws Throwable {
         final CompositeComponent compositeComponent = this.createAndSyncRepoAndCompositeComponent();
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(
-                compositeComponent.getRepository__RepositoryComponent(), PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                compositeComponent.getRepository__RepositoryComponent(), Pcm2JavaTestUtils.INTERFACE_NAME);
 
         final OperationRequiredRole operationRequiredRole = super.createAndSyncOperationRequiredRole(opInterface,
                 compositeComponent);
 
-        this.assertCompositeComponentCorrespondences(compositeComponent, PCM2JaMoPPTestUtils.COMPOSITE_COMPONENT_NAME);
+        this.assertCompositeComponentCorrespondences(compositeComponent, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
         this.assertOperationRequiredRole(operationRequiredRole);
     }
 
@@ -62,7 +62,7 @@ public class CompositeComponentMappingTransformationTest extends PCM2JaMoPPTrans
 
         final AssemblyContext assemblyContext = this.createAndSyncAssemblyContext(compositeComponent, basicComponent);
 
-        this.assertCompositeComponentCorrespondences(compositeComponent, PCM2JaMoPPTestUtils.COMPOSITE_COMPONENT_NAME);
+        this.assertCompositeComponentCorrespondences(compositeComponent, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
         super.assertAssemblyContext(assemblyContext);
     }
 
@@ -70,21 +70,21 @@ public class CompositeComponentMappingTransformationTest extends PCM2JaMoPPTrans
     public void testAddRequiredDelegationRoleToCompositeComponent() throws Throwable {
         final CompositeComponent compositeComponent = this.createAndSyncRepoAndCompositeComponent();
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(
-                compositeComponent.getRepository__RepositoryComponent(), PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                compositeComponent.getRepository__RepositoryComponent(), Pcm2JavaTestUtils.INTERFACE_NAME);
         Assert.assertNotNull(opInterface);
     }
 
     private CompositeComponent createAndSyncRepoAndCompositeComponent() throws IOException {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeComponent compositeComponent = this.addCompositeComponentAndSync(repo);
         return compositeComponent;
     }
 
-    private CompositeComponent addCompositeComponentAndSync(final Repository repo) {
+    private CompositeComponent addCompositeComponentAndSync(final Repository repo) throws IOException {
         final CompositeComponent cc = RepositoryFactory.eINSTANCE.createCompositeComponent();
-        cc.setEntityName(PCM2JaMoPPTestUtils.COMPOSITE_COMPONENT_NAME);
+        cc.setEntityName(Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
         cc.setRepository__RepositoryComponent(repo);
-        super.triggerSynchronization(repo);
+        super.saveAndSynchronizeChanges(repo);
         return cc;
     }
 

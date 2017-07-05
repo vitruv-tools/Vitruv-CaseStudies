@@ -12,7 +12,7 @@ import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.ComposedStructure;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PCMJaMoPPUtilsGuice;
+import tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -55,8 +55,8 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     
     public void callRoutine1(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, @Extension final RoutinesFacade _routinesFacade) {
       final RepositoryComponent component = assemblyContext.getEncapsulatedComponent__AssemblyContext();
-      final ClassMethod configureMethod = PCMJaMoPPUtilsGuice.createConfigureMethodForAssemblyContext(assemblyContext, component, this.correspondenceModel, this.userInteracting);
-      PCMJaMoPPUtilsGuice.createBindCall(assemblyContext, component, configureMethod, this.correspondenceModel, this.userInteracting);
+      final ClassMethod configureMethod = PcmJamoppUtilsGuice.createConfigureMethodForAssemblyContext(assemblyContext, component, this.correspondenceModel, this.userInteracting);
+      PcmJamoppUtilsGuice.createBindCall(assemblyContext, component, configureMethod, this.correspondenceModel, this.userInteracting);
     }
   }
   

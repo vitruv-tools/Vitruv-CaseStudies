@@ -14,8 +14,8 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.util.transformationexecutor.DefaultEObjectMappingTransformation
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class SEFFMappingTransformation extends DefaultEObjectMappingTransformation {
 
@@ -91,7 +91,7 @@ class SEFFMappingTransformation extends DefaultEObjectMappingTransformation {
 				return null
 			}
 			val correspondingInterfaceMethod = correspondingMethods.get(0)
-			val ClassMethod classMethod = PCM2JaMoPPUtils.createClassMethod(correspondingInterfaceMethod, true)
+			val ClassMethod classMethod = Pcm2JavaUtils.createClassMethod(correspondingInterfaceMethod, true)
 			val correspondingClass = correspondingClasses.get(0)
 			var ClassMethod correspondinClassgMethod = correspondingClass.findMethodInClass(classMethod)
 			if (null == correspondinClassgMethod) {

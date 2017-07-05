@@ -20,9 +20,9 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF
 import org.palladiosimulator.pcm.seff.SeffFactory
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 class ClassMethodMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -140,13 +140,13 @@ class ClassMethodMappingTransformation extends EmptyEObjectMappingTransformation
 	}
 	
 	def private sameSignature(Method interfaceMethod, ClassMethod classMethod) {
-		PCMJaMoPPUtils.hasSameSignature(interfaceMethod, classMethod)
+		PcmJavaUtils.hasSameSignature(interfaceMethod, classMethod)
 	}
 	
 	def private findImplementingInterfacesFromTypeRefs(EList<TypeReference> typeReferences) {
 		val implementingInterfaces = new ArrayList<Interface>
 		for(typeRef : typeReferences){
-			val classifier = JaMoPP2PCMUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeRef)
+			val classifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeRef)
 			if(classifier instanceof Interface){
 				implementingInterfaces.add(classifier)
 			}

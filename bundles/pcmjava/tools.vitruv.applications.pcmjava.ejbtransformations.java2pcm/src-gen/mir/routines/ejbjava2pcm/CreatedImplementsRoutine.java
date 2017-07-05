@@ -18,7 +18,7 @@ import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBJava2PcmHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -48,7 +48,7 @@ public class CreatedImplementsRoutine extends AbstractRepairRoutineRealization {
       Iterable<OperationInterface> _filter = Iterables.<OperationInterface>filter(_interfaces__Repository, OperationInterface.class);
       final Function1<OperationInterface, Boolean> _function = (OperationInterface it) -> {
         String _entityName = it.getEntityName();
-        Classifier _classifier = EJBJava2PcmHelper.getClassifier(implementz);
+        Classifier _classifier = EjbJava2PcmHelper.getClassifier(implementz);
         String _name = _classifier.getName();
         return Boolean.valueOf(_entityName.equals(_name));
       };

@@ -1,14 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: PCM 2 Java EJB
+Bundle-Name: Vitruvius PCM-Java EJB Transformations PCM -> Java
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 Bundle-Version: 0.1.0.qualifier
-<<<<<<< HEAD
-Export-Package: mir.reactions.reactions5_1ToJava.pcm2ejbJava,
-=======
-Export-Package: mir.reactions.reactionsPcmToJava.pcm2ejbJava,
->>>>>>> master
- tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
+Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 Require-Bundle: org.eclipse.emf.ecore,
  com.google.guava,
  org.apache.log4j,
@@ -32,5 +27,7 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.domains.java.util.jamoppparser,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.domains.java.util
+ tools.vitruv.domains.java.util,
+ tools.vitruv.domains.pcm,
+ tools.vitruv.domains.java
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

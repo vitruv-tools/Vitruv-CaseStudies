@@ -8,9 +8,9 @@ import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm.transformations.ClassMappingTransformation;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class TypeReferenceMappingTransformationTest extends Java2PCMPackageMappingTransformationTest {
+public class TypeReferenceMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
     @Test
     public void testAddImplementsToClassWithCorrespondingComponent() throws Throwable {
@@ -18,11 +18,11 @@ public class TypeReferenceMappingTransformationTest extends Java2PCMPackageMappi
         this.addRepoContractsAndDatatypesPackage();
         // create class
         this.addSecondPackageCorrespondsWithoutCorrespondences();
-        this.testUserInteractor.addNextSelections(ClassMappingTransformation.SELECT_CREATE_BASIC_COMPONENT);
+        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_BASIC_COMPONENT);
         final BasicComponent basicComponent = this.addClassInSecondPackage(BasicComponent.class);
         // create interface
         final OperationInterface opInterface = this.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts",
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
 
         // add the implement relation
         final OperationProvidedRole opr = super.addImplementsCorrespondingToOperationProvidedRoleToClass(

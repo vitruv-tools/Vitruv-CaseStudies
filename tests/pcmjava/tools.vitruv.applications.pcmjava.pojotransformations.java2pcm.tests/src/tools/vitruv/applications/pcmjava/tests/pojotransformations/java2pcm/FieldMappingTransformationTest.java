@@ -23,11 +23,11 @@ import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 
 import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHelper;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 
-public class FieldMappingTransformationTest extends Java2PCMPackageMappingTransformationTest {
+public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
     @Test
     public void testAddFieldToClassThatCorrespondsToCompositeDatatype() throws Throwable {
@@ -50,7 +50,7 @@ public class FieldMappingTransformationTest extends Java2PCMPackageMappingTransf
         final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
         this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
 
-        final String newFieldName = fieldName + PCM2JaMoPPTestUtils.RENAME;
+        final String newFieldName = fieldName + Pcm2JavaTestUtils.RENAME;
         final InnerDeclaration newInnerDeclaration = this.renameFieldInClass(cdt.getEntityName(), fieldName,
                 newFieldName);
 
@@ -95,11 +95,11 @@ public class FieldMappingTransformationTest extends Java2PCMPackageMappingTransf
     public void testAddFieldWithTypeOfInterface() throws Throwable {
         this.createRepoBasicComponentAndInterface();
 
-        // create required role from PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Requiring" to
+        // create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" to
         // Interface
         final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
-                PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl", PCM2JaMoPPTestUtils.INTERFACE_NAME,
-                "i" + PCM2JaMoPPTestUtils.INTERFACE_NAME, OperationRequiredRole.class);
+                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME,
+                "i" + Pcm2JavaTestUtils.INTERFACE_NAME, OperationRequiredRole.class);
 
         this.assertOperationRequiredRole(orrToInterface);
     }
@@ -108,12 +108,12 @@ public class FieldMappingTransformationTest extends Java2PCMPackageMappingTransf
     public void testAddFieldWithTypeOfBasicComponentToClass() throws Throwable {
         this.createRepoBasicComponentAndInterface();
 
-        // create required role from PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Requiring" to
-        // PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Providing"
+        // create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" to
+        // Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing"
         final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
-                PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl",
-                PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl",
-                PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME.toLowerCase() + "Providing", OperationRequiredRole.class);
+                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl",
+                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl",
+                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME.toLowerCase() + "Providing", OperationRequiredRole.class);
 
         this.assertOperationRequiredRole(orrToInterface);
     }
@@ -122,13 +122,13 @@ public class FieldMappingTransformationTest extends Java2PCMPackageMappingTransf
         // create main package
         super.addRepoContractsAndDatatypesPackage();
         // create package and classes
-        this.addPackageAndImplementingClass(PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Providing");
-        this.addPackageAndImplementingClass(PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Requiring");
+        this.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing");
+        this.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring");
         // create interface
-        super.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts", PCM2JaMoPPTestUtils.INTERFACE_NAME);
+        super.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts", Pcm2JavaTestUtils.INTERFACE_NAME);
         // create provided role from providing compontent to interface
         super.addImplementsCorrespondingToOperationProvidedRoleToClass(
-                PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl", PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME);
     }
 
     private void assertOperationRequiredRole(final OperationRequiredRole operationRequiredRole) throws Throwable {
@@ -166,7 +166,7 @@ public class FieldMappingTransformationTest extends Java2PCMPackageMappingTransf
     private InnerDeclaration renameFieldInClass(final String className, final String fieldName,
             final String newFieldName) throws Throwable {
         final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IType type = icu.getType(className);
         final IField fieldToRename = type.getField(fieldName);
         final String fieldToRenameStr = fieldToRename.getSource();
@@ -186,7 +186,7 @@ public class FieldMappingTransformationTest extends Java2PCMPackageMappingTransf
     private InnerDeclaration changeFieldTypeInClass(final String className, final String fieldName,
             final String newFieldTypeName) throws Throwable {
         final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-                this.currentTestProject);
+                this.getCurrentTestProject());
         final IType type = icu.getType(className);
         final IField fieldToRename = type.getField(fieldName);
         final String fieldSrc = fieldToRename.getSource();

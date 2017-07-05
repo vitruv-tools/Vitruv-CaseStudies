@@ -14,8 +14,8 @@ import org.palladiosimulator.pcm.core.composition.RequiredDelegationConnector
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class RequiredDelegationConnectorMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -52,7 +52,7 @@ class RequiredDelegationConnectorMappingTransformation extends EmptyEObjectMappi
 			}
 			val fieldsToUseAsPossibleParameters = (field.containingConcreteClassifier as Class).fields
 
-			PCM2JaMoPPUtils.updateArgumentsOfConstructorCall(field, fieldsToUseAsPossibleParameters, parametersToUse,
+			Pcm2JavaUtils.updateArgumentsOfConstructorCall(field, fieldsToUseAsPossibleParameters, parametersToUse,
 				constructorCallForField)
 			return field.toList
 		} catch (RuntimeException re) {

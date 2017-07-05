@@ -4,13 +4,12 @@ import org.junit.Test;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
-import org.palladiosimulator.pcm.repository.RepositoryFactory;
+import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
-import tools.vitruv.framework.util.datatypes.VURI;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class InnerDeclarationMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testAddInnerDeclaration() throws Throwable {
@@ -23,8 +22,8 @@ public class InnerDeclarationMappingTransformationTest extends PCM2JaMoPPTransfo
     public void testRenameInnerDeclaration() throws Throwable {
         final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
 
-        innerDec.setEntityName(PCM2JaMoPPTestUtils.INNER_DEC_NAME + PCM2JaMoPPTestUtils.RENAME);
-        super.triggerSynchronization(VURI.getInstance(innerDec.eResource()));
+        innerDec.setEntityName(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME);
+        super.saveAndSynchronizeChanges(innerDec);
 
         this.assertInnerDeclaration(innerDec);
     }
@@ -33,10 +32,10 @@ public class InnerDeclarationMappingTransformationTest extends PCM2JaMoPPTransfo
     public void testChangeInnerDeclarationType() throws Throwable {
         final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
 
-        final PrimitiveDataType newPDT = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
-        newPDT.setType(PrimitiveTypeEnum.STRING);
+        final Repository repo = innerDec.getCompositeDataType_InnerDeclaration().getRepository__DataType();
+        final PrimitiveDataType newPDT = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
         innerDec.setDatatype_InnerDeclaration(newPDT);
-        super.triggerSynchronization(VURI.getInstance(innerDec.eResource()));
+        super.saveAndSynchronizeChanges(innerDec);
 
         this.assertInnerDeclaration(innerDec);
     }

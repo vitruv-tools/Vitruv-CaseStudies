@@ -6,7 +6,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBAnnotationHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -70,7 +70,7 @@ class CreateInterfaceMethodReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final Interface affectedEObject, final EReference affectedFeature, final Member newValue) {
-    return ((newValue instanceof InterfaceMethod) && EJBAnnotationHelper.isEJBBuisnessInterface(affectedEObject));
+    return ((newValue instanceof InterfaceMethod) && EjbAnnotationHelper.isEjbBuisnessInterface(affectedEObject));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

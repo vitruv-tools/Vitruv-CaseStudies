@@ -12,17 +12,16 @@ import org.junit.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
-import tools.vitruv.framework.util.datatypes.VURI;
 
-public class RepositoryMappingTransformaitonTest extends PCM2JaMoPPTransformationTest {
+public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testAddRepository() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         this.assertRepositoryCorrespondences(repo);
     }
@@ -30,12 +29,12 @@ public class RepositoryMappingTransformaitonTest extends PCM2JaMoPPTransformatio
     @Test
     public void testRepositoryNameChange() throws Throwable {
         // setup
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         // Test
-        repo.setEntityName(PCM2JaMoPPTestUtils.REPOSITORY_NAME + PCM2JaMoPPTestUtils.RENAME);
+        repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
         EcoreResourceBridge.saveResource(repo.eResource());
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         // check
         this.assertRepositoryCorrespondences(repo);
@@ -44,13 +43,13 @@ public class RepositoryMappingTransformaitonTest extends PCM2JaMoPPTransformatio
     @Test
     public void testRepositoryNameChangeWithComponents() throws Throwable {
         // setup
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
         
         // Test
-        repo.setEntityName(PCM2JaMoPPTestUtils.REPOSITORY_NAME + PCM2JaMoPPTestUtils.RENAME);
+        repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
         EcoreResourceBridge.saveResource(repo.eResource());
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         // check
         this.assertRepositoryCorrespondences(repo);

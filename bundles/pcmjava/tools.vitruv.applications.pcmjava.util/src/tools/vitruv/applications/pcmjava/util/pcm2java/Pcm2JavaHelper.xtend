@@ -49,11 +49,11 @@ import org.emftext.language.java.types.Void
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import tools.vitruv.domains.java.util.jamoppparser.JaMoPPParser
 import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
+import tools.vitruv.domains.java.util.jamoppparser.JamoppParser
 
 class Pcm2JavaHelper{
 	
@@ -510,7 +510,7 @@ class Pcm2JavaHelper{
 	}
 
 	def static JavaRoot createJavaRoot(String name, String content) {
-		val JaMoPPParser jaMoPPParser = new JaMoPPParser
+		val JamoppParser jaMoPPParser = new JamoppParser
 		val inStream = new ByteArrayInputStream(content.bytes)
 		val javaRoot = jaMoPPParser.parseCompilationUnitFromInputStream(URI.createFileURI(name + ".java"),
 			inStream)

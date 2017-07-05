@@ -1,12 +1,14 @@
 package mir.reactions.reactionsJavaToPcm.ejbjava2pcm;
 
+import tools.vitruv.domains.java.JavaDomainProvider;
+import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
-  public ExecutorJavaToPcm(final UserInteracting userInteracting) {
-    super(userInteracting, new tools.vitruv.framework.util.datatypes.MetamodelPair(org.emftext.language.java.impl.JavaPackageImpl.eNS_URI, org.palladiosimulator.pcm.impl.PcmPackageImpl.eNS_URI));
+  public ExecutorJavaToPcm() {
+    super(new JavaDomainProvider().getDomain(), 
+    	new PcmDomainProvider().getDomain());
   }
   
   protected void setup() {
@@ -23,6 +25,6 @@ public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateParameterInInterfaceMethodReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateParameterInInterfaceMethodReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.ReturnTypeCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.ReturnTypeCreatedReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateFieldInDatatypeClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateFieldInDatatypeClassReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateClassMethodInEJBClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateClassMethodInEJBClassReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateClassMethodInEjbClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateClassMethodInEjbClassReaction(userInteracting));
   }
 }

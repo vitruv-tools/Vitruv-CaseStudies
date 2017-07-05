@@ -1,12 +1,14 @@
 package mir.reactions.reactionsPcmToJava.pcm2depInjectJava;
 
+import tools.vitruv.domains.java.JavaDomainProvider;
+import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 public class ExecutorPcmToJava extends AbstractReactionsExecutor {
-  public ExecutorPcmToJava(final UserInteracting userInteracting) {
-    super(userInteracting, new tools.vitruv.framework.util.datatypes.MetamodelPair(org.palladiosimulator.pcm.impl.PcmPackageImpl.eNS_URI, org.emftext.language.java.impl.JavaPackageImpl.eNS_URI));
+  public ExecutorPcmToJava() {
+    super(new PcmDomainProvider().getDomain(), 
+    	new JavaDomainProvider().getDomain());
   }
   
   protected void setup() {
@@ -51,9 +53,6 @@ public class ExecutorPcmToJava extends AbstractReactionsExecutor {
     this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedParameterReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedParameterReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedParameterTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedParameterTypeReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedParameterReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedParameterReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedResourceDemandingInternalBehaviorReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedResourceDemandingInternalBehaviorReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameResourceDemandingInternalBehaviorReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameResourceDemandingInternalBehaviorReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedDemandingInternalBehaviorReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedDemandingInternalBehaviorReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSEFFReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSEFFReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationSignatureOfSeffReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationSignatureOfSeffReaction(userInteracting));
     this.addReaction(mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSeffReaction.getExpectedChangeType(), new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSeffReaction(userInteracting));

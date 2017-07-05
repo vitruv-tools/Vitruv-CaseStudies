@@ -14,6 +14,7 @@
 	<name>Test Modules</name>
 
 	<modules>
+		<module>umljava</module>
 		<module>pcmjava</module>
 	</modules>
 

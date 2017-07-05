@@ -7,7 +7,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.core.composition.AssemblyConnector;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PCMJaMoPPUtilsGuice;
+import tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -28,7 +28,7 @@ public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
       RepositoryComponent _encapsulatedComponent__AssemblyContext = assemblyContext.getEncapsulatedComponent__AssemblyContext();
       boolean _notEquals = (!Objects.equal(_encapsulatedComponent__AssemblyContext, null));
       if (_notEquals) {
-        PCMJaMoPPUtilsGuice.createBindCallForConnector(assemblyContext, assemblyConnector, this.correspondenceModel, this.userInteracting);
+        PcmJamoppUtilsGuice.createBindCallForConnector(assemblyContext, assemblyConnector, this.correspondenceModel, this.userInteracting);
       } else {
       }
     }

@@ -6,20 +6,19 @@ import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class CollectionDataTypeMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testAddCollectionDataTypeWithoutInnerType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
-        this.testUserInteractor.addNextSelections(0);
+        this.getUserInteractor().addNextSelections(0);
         final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
-                PCM2JaMoPPTestUtils.COLLECTION_DATA_TYPE_NAME, null);
+                Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null);
 
         this.assertDataTypeCorrespondence(collectionDataType);
     }
@@ -37,25 +36,23 @@ public class CollectionDataTypeMappingTransformationTest extends PCM2JaMoPPTrans
 
     @Test
     public void testAddCollectionDataTypeWithComplexInnerType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType compositeDataType = this.createAndSyncCompositeDataType(repo);
 
-        this.testUserInteractor.addNextSelections(0);
+        this.getUserInteractor().addNextSelections(0);
         final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
-                PCM2JaMoPPTestUtils.COLLECTION_DATA_TYPE_NAME, compositeDataType);
+                Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, compositeDataType);
 
         this.assertDataTypeCorrespondence(collectionDataType);
     }
 
     protected void testAddCollectionDataTypeWithPrimitiveInnerType(final PrimitiveTypeEnum pte) throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
-        final PrimitiveDataType primitiveType = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
-        primitiveType.setType(pte);
-        primitiveType.setRepository__DataType(repo);
-
-        this.testUserInteractor.addNextSelections(0);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final PrimitiveDataType primitiveType = createPrimitiveDataType(pte, repo);
+        
+        this.getUserInteractor().addNextSelections(0);
         final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
-                PCM2JaMoPPTestUtils.COLLECTION_DATA_TYPE_NAME, primitiveType);
+                Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, primitiveType);
 
         this.assertDataTypeCorrespondence(collectionDataType);
     }

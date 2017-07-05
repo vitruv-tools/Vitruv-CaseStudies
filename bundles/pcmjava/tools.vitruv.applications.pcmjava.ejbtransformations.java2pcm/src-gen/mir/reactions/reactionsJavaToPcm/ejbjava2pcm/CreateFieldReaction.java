@@ -5,7 +5,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.Member;
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EJBAnnotationHelper;
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -69,8 +69,8 @@ class CreateFieldReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Member newValue) {
-    boolean _hasEJBAnnotation = EJBAnnotationHelper.hasEJBAnnotation(newValue);
-    return _hasEJBAnnotation;
+    boolean _hasEjbAnnotation = EjbAnnotationHelper.hasEjbAnnotation(newValue);
+    return _hasEjbAnnotation;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

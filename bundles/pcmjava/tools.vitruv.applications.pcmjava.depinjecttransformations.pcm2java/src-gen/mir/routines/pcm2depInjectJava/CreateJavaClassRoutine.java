@@ -13,7 +13,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory;
 import org.emftext.language.java.modifiers.Public;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
-import tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PCMJaMoPPUtilsGuice;
+import tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -47,11 +47,11 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     public void callRoutine1(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className, final org.emftext.language.java.classifiers.Class javaClass, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createCompilationUnit(sourceElementMappedToClass, javaClass, containingPackage);
       if ((sourceElementMappedToClass instanceof BasicComponent)) {
-        PCMJaMoPPUtilsGuice.ensureConstructorWithInjectAnnotation(javaClass);
+        PcmJamoppUtilsGuice.ensureConstructorWithInjectAnnotation(javaClass);
       } else {
         if ((sourceElementMappedToClass instanceof org.palladiosimulator.pcm.system.System)) {
-          PCMJaMoPPUtilsGuice.addGuiceModuleInterfaceToClass(javaClass);
-          final ClassMethod method = PCMJaMoPPUtilsGuice.addConfigureMethodToModule(javaClass);
+          PcmJamoppUtilsGuice.addGuiceModuleInterfaceToClass(javaClass);
+          final ClassMethod method = PcmJamoppUtilsGuice.addConfigureMethodToModule(javaClass);
           List<EObject> _list = CollectionBridge.<EObject>toList(method);
           this.correspondenceModel.createAndAddCorrespondence(Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(sourceElementMappedToClass)), _list);
         }

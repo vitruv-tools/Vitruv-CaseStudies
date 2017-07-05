@@ -23,9 +23,9 @@ import org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class ProvidedDelegationConnectorMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -118,13 +118,13 @@ class ProvidedDelegationConnectorMappingTransformation extends EmptyEObjectMappi
 	private def ClassMethod findOrCreateMethodDeclarationInClassifier(Method method, ConcreteClassifier classifier) {
 
 		for (classifierMethod : classifier.methods) {
-			if (PCMJaMoPPUtils.hasSameSignature(classifierMethod, method) && classifierMethod instanceof ClassMethod) {
+			if (PcmJavaUtils.hasSameSignature(classifierMethod, method) && classifierMethod instanceof ClassMethod) {
 				return classifierMethod as ClassMethod;
 			}
 		}
 
 		// no method found: create it in classifier
-		val ClassMethod classMethod = PCM2JaMoPPUtils.createClassMethod(method, true)
+		val ClassMethod classMethod = Pcm2JavaUtils.createClassMethod(method, true)
 		return classMethod
 	}
 	

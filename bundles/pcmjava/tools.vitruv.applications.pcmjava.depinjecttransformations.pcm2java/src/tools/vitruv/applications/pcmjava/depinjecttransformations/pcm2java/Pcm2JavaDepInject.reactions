@@ -18,7 +18,6 @@ import org.emftext.language.java.references.IdentifierReference
 import org.emftext.language.java.references.SelfReference
 import org.emftext.language.java.statements.ExpressionStatement
 import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.TypesFactory
 import org.palladiosimulator.pcm.core.composition.AssemblyContext
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CollectionDataType
@@ -28,12 +27,11 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.system.System
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
-import static tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PCMJaMoPPUtilsGuice.*
-import static tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils.*
-import static tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils.*
+import static tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice.*
+import static tools.vitruv.applications.pcmjava.util.PcmJavaUtils.*
+import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import static extension tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
@@ -41,11 +39,11 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 
 import "http://www.emftext.org/java" as java 
-import "http://palladiosimulator.org/PalladioComponentModel/5.1" as pcm
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: pcm2depInjectJava
-in reaction to changes in pcm 
-execute actions in java
+in reaction to changes in PCM 
+execute actions in Java
 
 // ###################################################
 // ################ PACKAGE RESPONSES ################
@@ -169,7 +167,7 @@ reaction AddedAssemblyContextToComposedStructure {
 					//until correspondenceModel is available, we assume that each ac has a corresponding element
 					val msg = "Assembly context for " + component.entityName +
 					"already exists. Only one assembly context per basic component is allowed."
-					//userInteracting.showMessage(UserInteractionType.MODAL, msg)
+					userInteracting.showMessage(UserInteractionType.MODAL, msg)
 					return false
 				}
 			}
@@ -231,14 +229,14 @@ routine addedProvidedDelegationConnector(pcm::ProvidedDelegationConnector provid
 			val opInterface = providedDelegationConnector.innerProvidedRole_ProvidedDelegationConnector.providedInterface__OperationProvidedRole
 			val systemClass = configureMethod.containingConcreteClassifier as org.emftext.language.java.classifiers.Class
 			val jaMoPPInterface = correspondenceModel.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
-			val namespaceClassifierRef = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPInterface)
+			val namespaceClassifierRef = createNamespaceClassifierReference(jaMoPPInterface)
 			for (impl : systemClass.implements) {
 				if (hasSameTargetReference(namespaceClassifierRef, impl)) {
 					return
 				}
 			}
 			systemClass.implements.add(namespaceClassifierRef)
-			val classifierImport = PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface)
+			val classifierImport = addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface)
 			correspondenceModel.createAndAddCorrespondence(pcmSystem.toList, #[namespaceClassifierRef, classifierImport])
 		}
 	}
@@ -666,7 +664,7 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 		val compilationUnit = create java::CompilationUnit and initialize {
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
-			compilationUnit.name = classifier.name;
+			compilationUnit.name = classifier.name + ".java";
 			compilationUnit.classifiers.add(classifier);
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
 		}
@@ -685,7 +683,7 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 			javaClassifier.name = className;
 		}
 		update compilationUnit {
-			compilationUnit.name = className;
+			compilationUnit.name = className + ".java";
 			compilationUnit.namespaces.clear;
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
@@ -1064,7 +1062,7 @@ reaction ChangedParameterType {
 
 routine changeParameterType(pcm::Parameter parameter) { 
 	match {
-		// retrieve the interface method to update the TUID according to the new parameter type
+		// retrieve the interface method to update the Tuid according to the new parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to parameter.operationSignature__Parameter
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 		val javaParameterTypeClass = retrieve optional java::Class corresponding to parameter.dataType__Parameter
@@ -1084,7 +1082,7 @@ reaction DeletedParameter {
 
 routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parameter) { 
 	match {
-		// retrieve the interface method to update the TUID according to the removed parameter type
+		// retrieve the interface method to update the Tuid according to the removed parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to signature
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 	} 
@@ -1096,55 +1094,55 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 // ################################################################################
 // ##################### RESOURCE DEMANDING INTERNAL BEHAVIOR #####################
 
-reaction CreatedResourceDemandingInternalBehavior { 
-	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-	call createMethodForResourceDemandingBehavior(newValue)
-}
-
-routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
-	match {
-		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
-	} 
-	action { 
-		val javaMethod = create java::ClassMethod and initialize {
-			javaMethod.name = behavior.entityName;
-			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
-		}
-		add correspondence between javaMethod and behavior
-		update componentClass {
-			componentClass.members += javaMethod;
-		}
-	}
-}
-
-reaction RenameResourceDemandingInternalBehavior { 
-	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
-	call renameMethodForResourceDemandingBehavior(affectedEObject)
-}
-
-routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
-	match {
-		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-	} 
-	action { 
-		update javaMethod {
-			javaMethod.name = behavior.entityName;
-		}
-	}
-}
-
-reaction DeletedDemandingInternalBehavior { 
-	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
-	call deleteMethodForResourceDemandingBehavior(oldValue)
-}
-
-routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
-	match {
-		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-	} action { 
-		delete javaMethod
-	}
-}
+//reaction CreatedResourceDemandingInternalBehavior { 
+//	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
+//	call createMethodForResourceDemandingBehavior(newValue)
+//}
+//
+//routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
+//	match {
+//		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
+//	} 
+//	action { 
+//		val javaMethod = create java::ClassMethod and initialize {
+//			javaMethod.name = behavior.entityName;
+//			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
+//		}
+//		add correspondence between javaMethod and behavior
+//		update componentClass {
+//			componentClass.members += javaMethod;
+//		}
+//	}
+//}
+//
+//reaction RenameResourceDemandingInternalBehavior { 
+//	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
+//	call renameMethodForResourceDemandingBehavior(affectedEObject)
+//}
+//
+//routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
+//	match {
+//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
+//	} 
+//	action { 
+//		update javaMethod {
+//			javaMethod.name = behavior.entityName;
+//		}
+//	}
+//}
+//
+//reaction DeletedDemandingInternalBehavior { 
+//	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
+//	call deleteMethodForResourceDemandingBehavior(oldValue)
+//}
+//
+//routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
+//	match {
+//		val javaMethod = retrieve java::ClassMethod corresponding to behavior
+//	} action { 
+//		delete javaMethod
+//	}
+//}
 
 // ################################################################################
 // #################################### SEFFS #####################################

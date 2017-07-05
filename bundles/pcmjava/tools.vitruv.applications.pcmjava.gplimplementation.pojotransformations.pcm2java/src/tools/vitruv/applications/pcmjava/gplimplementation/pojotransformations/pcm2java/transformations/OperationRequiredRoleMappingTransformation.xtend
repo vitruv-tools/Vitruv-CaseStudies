@@ -20,8 +20,8 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 class OperationRequiredRoleMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -32,7 +32,7 @@ class OperationRequiredRoleMappingTransformation extends EmptyEObjectMappingTran
 	}
 
 	override setCorrespondenceForFeatures() {
-		PCM2JaMoPPUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
+		Pcm2JavaUtils.addEntityName2NameCorrespondence(featureCorrespondenceMap)
 	}
 
 	/**
@@ -58,27 +58,27 @@ class OperationRequiredRoleMappingTransformation extends EmptyEObjectMappingTran
 		}
 
 		val name = operationRequiredRole.entityName
-		val TypeReference type = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPInterface)
+		val TypeReference type = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPInterface)
 
 		//create import
-		val import = PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(jaMoPPClass, jaMoPPInterface)
+		val import = Pcm2JavaUtils.addImportToCompilationUnitOfClassifier(jaMoPPClass, jaMoPPInterface)
 		newEObjects.add(import)
 
 		//create field
-		val field = PCM2JaMoPPUtils.createPrivateField(EcoreUtil.copy(type), name)
+		val field = Pcm2JavaUtils.createPrivateField(EcoreUtil.copy(type), name)
 		jaMoPPClass.members.add(field)
 		newEObjects.add(field)
 
 		//create constructor if none exists
 		if (jaMoPPClass.members.filter(typeof(Constructor)).nullOrEmpty) {
-			PCM2JaMoPPUtils.addConstructorToClass(jaMoPPClass)
+			Pcm2JavaUtils.addConstructorToClass(jaMoPPClass)
 		}
 
 		//add param to contructor
 		for (ctor : jaMoPPClass.members.filter(typeof(Constructor))) {
-			val Parameter newParam = PCM2JaMoPPUtils.createOrdinaryParameter(EcoreUtil.copy(type), name)
+			val Parameter newParam = Pcm2JavaUtils.createOrdinaryParameter(EcoreUtil.copy(type), name)
 			ctor.parameters.add(newParam)
-			val Statement asssignment = PCM2JaMoPPUtils.createAssignmentFromParameterToField(field, newParam)
+			val Statement asssignment = Pcm2JavaUtils.createAssignmentFromParameterToField(field, newParam)
 			ctor.statements.add(asssignment)
 			newEObjects.add(newParam)
 		}
@@ -124,16 +124,16 @@ class OperationRequiredRoleMappingTransformation extends EmptyEObjectMappingTran
 	 */
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
 		Object newValue) {
-		val affectedEObjects = PCM2JaMoPPUtils.checkKeyAndCorrespondingObjects(affectedEObject, affectedAttribute,
+		val affectedEObjects = Pcm2JavaUtils.checkKeyAndCorrespondingObjects(affectedEObject, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel)
 		if (affectedEObjects.nullOrEmpty) {
 			return new ChangePropagationResult 
 		}
 		val affectedField = affectedEObjects.filter(typeof(Field))
-		PCM2JaMoPPUtils.updateNameAttribute(Sets.newHashSet(affectedField), newValue, affectedAttribute,
+		Pcm2JavaUtils.updateNameAttribute(Sets.newHashSet(affectedField), newValue, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel, true)
 		val affectedParam = affectedEObjects.filter(typeof(Parameter))
-			PCM2JaMoPPUtils.updateNameAttribute(Sets.newHashSet(affectedParam), newValue, affectedAttribute,
+			Pcm2JavaUtils.updateNameAttribute(Sets.newHashSet(affectedParam), newValue, affectedAttribute,
 				featureCorrespondenceMap, correspondenceModel, true)
 		return new ChangePropagationResult
 	}

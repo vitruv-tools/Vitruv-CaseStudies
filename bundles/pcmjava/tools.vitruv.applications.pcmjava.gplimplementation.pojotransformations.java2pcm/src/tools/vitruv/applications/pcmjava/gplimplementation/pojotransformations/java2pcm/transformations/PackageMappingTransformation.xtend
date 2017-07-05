@@ -15,9 +15,9 @@ import org.palladiosimulator.pcm.system.SystemFactory
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -138,7 +138,7 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 
 	override createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects) {
 		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.
+		Java2PcmUtils.
 			createNewCorrespondingEObjects(newRootEObject, newCorrespondingEObjects,
 				correspondenceModel, transformationResult)
 		return transformationResult
@@ -184,13 +184,13 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 			}
 		}
 		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newVarValue,
+		Java2PcmUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newVarValue,
 			featureCorrespondenceMap, correspondenceModel, transformationResult)
 		return transformationResult
 	}
 
 	override setCorrespondenceForFeatures() {
-		JaMoPP2PCMUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap);
+		Java2PcmUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap);
 	}
 
 	override createNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference, EObject newValue,

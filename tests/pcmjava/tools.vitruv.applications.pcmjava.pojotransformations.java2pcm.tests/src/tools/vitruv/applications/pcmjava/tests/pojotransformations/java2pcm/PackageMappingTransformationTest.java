@@ -14,12 +14,12 @@ import org.palladiosimulator.pcm.repository.CompositeComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.CollectionBridge;
 
-public class PackageMappingTransformationTest extends Java2PCMPackageMappingTransformationTest {
+public class PackageMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
     /**
      * first package is created --> should be mapped to a repository
@@ -30,14 +30,14 @@ public class PackageMappingTransformationTest extends Java2PCMPackageMappingTran
     public void testAddFirstPackage() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
         assertEquals("Name of the repository is not the same as the name of the package",
-                PCM2JaMoPPTestUtils.REPOSITORY_NAME, repo.getEntityName());
+                Pcm2JavaTestUtils.REPOSITORY_NAME, repo.getEntityName());
         this.assertResourceAndFileForEObjects(repo);
         this.assertFilesOnlyForEObjects(repo);
     }
 
     @Test
     public void testAddFirstPackageWithoutFile() throws Throwable {
-        super.createPackage(new String[] { PCM2JaMoPPTestUtils.REPOSITORY_NAME });
+        super.createPackage(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
         final CorrespondenceModel ci = this.getCorrespondenceModel();
         assertTrue("CorrespondenceModel == null", null != ci);
         assertTrue("No repository found in correspondence instance.",
@@ -55,7 +55,7 @@ public class PackageMappingTransformationTest extends Java2PCMPackageMappingTran
 
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
-        this.assertRepositoryAndPCMName(repo, bc, PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME);
+        this.assertRepositoryAndPCMName(repo, bc, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
         this.assertFilesOnlyForEObjects(bc);
     }
 
@@ -65,7 +65,7 @@ public class PackageMappingTransformationTest extends Java2PCMPackageMappingTran
 
         final CompositeComponent cc = super.addSecondPackageCorrespondsToCompositeComponent();
 
-        this.assertRepositoryAndPCMName(repo, cc, PCM2JaMoPPTestUtils.COMPOSITE_COMPONENT_NAME);
+        this.assertRepositoryAndPCMName(repo, cc, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
         this.assertFilesOnlyForEObjects(cc);
     }
 
@@ -75,7 +75,7 @@ public class PackageMappingTransformationTest extends Java2PCMPackageMappingTran
 
         final System system = super.addSecondPackageCorrespondsToSystem();
 
-        this.assertPCMNamedElement(system, PCM2JaMoPPTestUtils.SYSTEM_NAME);
+        this.assertPCMNamedElement(system, Pcm2JavaTestUtils.SYSTEM_NAME);
         this.assertFilesOnlyForEObjects(repository, system);
     }
 
@@ -93,7 +93,7 @@ public class PackageMappingTransformationTest extends Java2PCMPackageMappingTran
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
         super.addSecondPackageCorrespondsToBasicComponent();
 
-        final String packageName = PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + PCM2JaMoPPTestUtils.RENAME;
+        final String packageName = Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME;
 
         final Package renamedPackage = super.renamePackage(this.secondPackage, packageName);
 
