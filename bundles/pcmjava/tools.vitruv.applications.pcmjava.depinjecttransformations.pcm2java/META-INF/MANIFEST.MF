@@ -3,11 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PCM 2 Java Dependency Injection
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java
 Bundle-Version: 0.1.0.qualifier
-<<<<<<< HEAD
-Export-Package: mir.reactions.reactions5_1ToJava.pcm2depInjectJava,
-=======
 Export-Package: mir.reactions.reactionsPcmToJava.pcm2depInjectJava,
->>>>>>> master
  tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
