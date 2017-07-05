@@ -3,8 +3,8 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.PrimitiveType
-import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmTypesUtil
-import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil
+import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil
+import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
 import tools.vitruv.framework.userinteraction.UserInteractionType
 import org.eclipse.uml2.uml.Property
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;

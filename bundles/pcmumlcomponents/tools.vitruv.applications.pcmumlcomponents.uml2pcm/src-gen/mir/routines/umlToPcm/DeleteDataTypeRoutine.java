@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.DataType;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
-import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmTypesUtil;
+import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;

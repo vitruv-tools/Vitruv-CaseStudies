@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomp.uml2pcm.constructionsimulation
+package tools.vitruv.applications.pcmumlcomponents.uml2pcm.constructionsimulation
 
 import org.junit.Test
 

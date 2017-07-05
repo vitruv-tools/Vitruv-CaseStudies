@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
 import java.util.Arrays
 import java.util.List

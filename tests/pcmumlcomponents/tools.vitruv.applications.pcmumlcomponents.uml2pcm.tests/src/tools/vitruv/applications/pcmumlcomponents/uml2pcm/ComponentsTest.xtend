@@ -1,6 +1,5 @@
-package tools.vitruv.applications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
-import tools.vitruv.applications.pcmumlcomp.uml2pcm.AbstractUmlPcmTest
 import org.junit.Test
 import static org.junit.Assert.*
 import org.eclipse.uml2.uml.UMLFactory

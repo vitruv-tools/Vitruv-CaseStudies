@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.palladiosimulator.pcm.repository.ParameterModifier

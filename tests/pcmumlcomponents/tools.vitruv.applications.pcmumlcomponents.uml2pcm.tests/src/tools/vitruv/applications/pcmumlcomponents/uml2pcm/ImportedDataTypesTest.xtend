@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.PrimitiveDataType

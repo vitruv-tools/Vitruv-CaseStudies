@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomp.uml2pcm
+package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.uml2.uml.Interface
@@ -10,7 +10,7 @@ import org.palladiosimulator.pcm.repository.OperationSignature
 
 import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Operation
-import tools.vitruv.applications.pcmumlcomp.uml2pcm.UmlToPcmUtil
+import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
