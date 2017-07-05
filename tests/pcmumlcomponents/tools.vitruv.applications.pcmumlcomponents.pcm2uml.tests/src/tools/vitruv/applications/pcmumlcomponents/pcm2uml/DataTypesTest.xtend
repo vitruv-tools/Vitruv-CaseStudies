@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomp.pcm2uml
+package tools.vitruv.applications.pcmumlcomponents.pcm2uml
 
 import org.eclipse.uml2.uml.DataType
 import org.junit.Test
@@ -7,7 +7,7 @@ import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
+import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil
 
 import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Parameter

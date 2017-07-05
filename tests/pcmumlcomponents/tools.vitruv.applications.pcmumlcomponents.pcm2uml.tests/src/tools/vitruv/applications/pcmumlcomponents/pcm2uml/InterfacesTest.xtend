@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomp.pcm2uml
+package tools.vitruv.applications.pcmumlcomponents.pcm2uml
 
 import org.junit.Test
 import static org.junit.Assert.*
@@ -9,7 +9,7 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.eclipse.uml2.uml.Operation
-import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
+import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Parameter

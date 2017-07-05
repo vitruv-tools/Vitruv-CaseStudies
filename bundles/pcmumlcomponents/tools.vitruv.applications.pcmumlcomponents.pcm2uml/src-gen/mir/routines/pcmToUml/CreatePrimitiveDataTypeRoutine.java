@@ -11,7 +11,7 @@ import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
-import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil;
+import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;

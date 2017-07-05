@@ -7,7 +7,7 @@ import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.Parameter
-import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
+import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml

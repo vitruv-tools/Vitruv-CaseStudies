@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomp.pcm2uml.constructionsimulation
+package tools.vitruv.applications.pcmumlcomponents.pcm2uml.constructionsimulation
 
 import org.eclipse.emf.ecore.resource.Resource
 import org.junit.Test

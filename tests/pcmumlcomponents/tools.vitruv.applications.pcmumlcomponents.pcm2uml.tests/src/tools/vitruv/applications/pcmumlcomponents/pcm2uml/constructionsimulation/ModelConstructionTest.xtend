@@ -1,9 +1,9 @@
-package tools.vitruv.applications.pcmumlcomp.pcm2uml.constructionsimulation
+package tools.vitruv.applications.pcmumlcomponents.pcm2uml.constructionsimulation
 
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.resource.Resource
 import org.palladiosimulator.pcm.repository.Repository
-import tools.vitruv.applications.pcmumlcomp.pcm2uml.AbstractPcmUmlTest
+import tools.vitruv.applications.pcmumlcomponents.pcm2uml.AbstractPcmUmlTest
 import tools.vitruv.domains.pcm.util.RepositoryModelLoader
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import static org.junit.Assert.*
