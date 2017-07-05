@@ -13,7 +13,7 @@ import org.palladiosimulator.pcm.core.composition.AssemblyConnector
 import org.palladiosimulator.pcm.core.composition.AssemblyContext
 import org.palladiosimulator.pcm.core.entity.NamedElement
 
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 

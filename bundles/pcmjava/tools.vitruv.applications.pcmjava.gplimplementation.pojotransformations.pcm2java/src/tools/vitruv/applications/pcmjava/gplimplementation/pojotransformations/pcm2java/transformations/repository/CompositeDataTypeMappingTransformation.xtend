@@ -13,7 +13,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.emftext.language.java.containers.JavaRoot
 
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.domains.pcm.PcmNamespace

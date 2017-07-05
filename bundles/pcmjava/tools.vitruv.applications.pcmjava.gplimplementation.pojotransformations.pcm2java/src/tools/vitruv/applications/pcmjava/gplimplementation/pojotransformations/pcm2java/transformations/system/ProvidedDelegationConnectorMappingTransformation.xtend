@@ -21,7 +21,7 @@ import org.emftext.language.java.statements.ExpressionStatement
 import org.emftext.language.java.statements.StatementsFactory
 import org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector
 
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils

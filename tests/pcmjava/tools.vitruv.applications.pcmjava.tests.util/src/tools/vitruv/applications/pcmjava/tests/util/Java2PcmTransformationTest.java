@@ -103,9 +103,9 @@ import tools.vitruv.framework.modelsynchronization.ChangePropagationListener;
 import tools.vitruv.framework.monitorededitor.ProjectBuildUtils;
 import tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest;
 import tools.vitruv.framework.tests.util.TestUtil;
-import tools.vitruv.framework.util.bridges.CollectionBridge;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 /**
  * Test class that contains utillity methods that can be used by JaMoPP2PCM
@@ -113,7 +113,8 @@ import tools.vitruv.framework.util.datatypes.VURI;
  *
  */
 @SuppressWarnings("restriction")
-public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApplicationTest implements ChangePropagationListener, SynchronizationAwaitCallback {
+public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApplicationTest
+		implements ChangePropagationListener, SynchronizationAwaitCallback {
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 
@@ -122,46 +123,49 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	private static final int SELECT_SYSTEM = 2;
 	protected static final int SELECT_NOTHING_DECIDE_LATER = 3;
 	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
-	
+
 	protected Package mainPackage;
 	protected Package secondPackage;
 	private int expectedNumberOfSyncs = 0;
-	
+
 	public Java2PcmTransformationTest() {
 		setTestProjectCreator(projectName -> TestUtil.createPlatformProject(projectName, true).getLocation().toFile());
 	}
-	
+
 	@Override
 	protected Iterable<VitruvDomain> getVitruvDomains() {
 		return PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
 	}
-	
+
 	protected IProject getCurrentTestProject() {
 		return ResourcesPlugin.getWorkspace().getRoot().getProject(getCurrentTestProjectFolder().getName());
 	}
-	
+
 	@Override
 	public void beforeTest() {
 		super.beforeTest();
 		this.getVirtualModel().addChangePropagationListener(this);
-		// This is necessary because otherwise Maven tests will fail as resources from previous
+		// This is necessary because otherwise Maven tests will fail as
+		// resources from previous
 		// tests are still in the classpath and accidentally resolved
 		JavaClasspath.reset();
 		// add PCM Java Builder to Project under test
 		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
-		pcmJavaBuilder.addToProject(this.getCurrentTestProject(), getVirtualModel().getFolder(), Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
+		pcmJavaBuilder.addToProject(this.getCurrentTestProject(), getVirtualModel().getFolder(),
+				Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(getCurrentTestProject(), VitruviusJavaBuilder.BUILDER_ID);
 		this.expectedNumberOfSyncs = 0;
 		// Pipe JaMoPP error output to null
 		java.lang.System.setErr(null);
 	}
-	
+
 	private String getPlatformModelPath(final String modelPathWithinProject) {
 		return this.getCurrentTestProject().getName() + "/" + modelPathWithinProject;
 	}
 
-	// We override the modelVuri getter, because we have to use platform URIs for the Java to PCM tests
+	// We override the modelVuri getter, because we have to use platform URIs
+	// for the Java to PCM tests
 	// because otherwise the JDT AST will not recognize the changes
 	@Override
 	protected VURI getModelVuri(String modelPathWithinProject) {
@@ -175,20 +179,21 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		pcmJavaRemoveBuilder.removeBuilderFromProject(this.getCurrentTestProject());
 	}
 
-	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits)
-            throws JavaModelException {
+	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits) throws JavaModelException {
 		CompilationUnitManipulatorHelper.editCompilationUnit(cu, this, edits);
-    }
-	
+	}
+
 	public synchronized void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
 		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
-		logger.debug("Starting to wait for finished synchronization. Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: " + expectedNumberOfSyncs);
+		logger.debug("Starting to wait for finished synchronization. Expected syncs: "
+				+ numberOfExpectedSynchronizationCalls + ", remaining syncs: " + expectedNumberOfSyncs);
 		try {
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
 				wait(MAXIMUM_SYNC_WAITING_TIME);
 				wakeups++;
-				// If we had more wakeups than expected sync calls, we had a timeout
+				// If we had more wakeups than expected sync calls, we had a
+				// timeout
 				// and so the synchronization was not finished as expected
 				if (wakeups > numberOfExpectedSynchronizationCalls) {
 					fail("Waiting for synchronization timed out");
@@ -200,11 +205,11 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 			logger.debug("Finished waiting for synchronization");
 		}
 	}
-	
+
 	@Override
 	public synchronized void startedChangePropagation() {
 	}
-	
+
 	@Override
 	public synchronized void finishedChangePropagation() {
 		expectedNumberOfSyncs--;
@@ -218,7 +223,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		logger.debug("Reducing number of expected syncs to: " + expectedNumberOfSyncs);
 		this.notifyAll();
 	}
-	
+
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
 		this.mainPackage = this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
 		this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts" });
@@ -227,7 +232,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		if (null == ci) {
 			throw new RuntimeException("Could not get correspondence instance.");
 		}
-		final Repository repo = CollectionBridge.claimOne(
+		final Repository repo = claimOne(
 				CorrespondenceModelUtil.getCorrespondingEObjectsByType(ci, this.mainPackage, Repository.class));
 		return repo;
 	}
@@ -240,8 +245,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected <T> T createSecondPackage(final Class<T> correspondingType, final String... namespace) throws Throwable {
 		this.secondPackage = this.createPackageWithPackageInfo(namespace);
-		return CollectionBridge.claimOne(CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), this.secondPackage, correspondingType));
+		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+				this.secondPackage, correspondingType));
 	}
 
 	private void createSecondPackageWithoutCorrespondence(final String... namespace) throws Throwable {
@@ -255,8 +260,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		packageRoot.createPackageFragment(namespaceDotted, force, new NullProgressMonitor());
 		waitForSynchronization(1);
 	}
-	
-	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException  {
+
+	protected Package createPackageWithPackageInfo(final String... namespace) throws IOException {
 		String packageFile = StringUtils.join(namespace, "/");
 		packageFile = packageFile + "/package-info.java";
 		final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
@@ -269,7 +274,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		return jaMoPPPackage;
 	}
 
-	protected Package renamePackage(final Package packageToRename, String newName) throws CoreException  {
+	protected Package renamePackage(final Package packageToRename, String newName) throws CoreException {
 		final Resource resource = packageToRename.eResource();
 		final IFile iFile = URIUtil.getIFileForEMFUri(resource.getURI());
 		IPath iPath = iFile.getProjectRelativePath();
@@ -316,8 +321,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 			editCompilationUnit(cu, edit);
 			final VURI vuri = VURI.getInstance(cu.getResource());
 			final Classifier jaMoPPClass = this.getJaMoPPClassifierForVURI(vuri);
-			return CollectionBridge.claimOne(CorrespondenceModelUtil
-					.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPClass, type));
+			return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+					jaMoPPClass, type));
 		} catch (final Throwable e) {
 			logger.warn(e.getMessage());
 		}
@@ -325,7 +330,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	}
 
-	private Package findJaMoPPPackageWithName(final String newName) throws JavaModelException  {
+	private Package findJaMoPPPackageWithName(final String newName) throws JavaModelException {
 		final IJavaProject javaProject = JavaCore.create(this.getCurrentTestProject());
 		for (final IPackageFragmentRoot packageFragmentRoot : javaProject.getPackageFragmentRoots()) {
 			final IJavaElement[] children = packageFragmentRoot.getChildren();
@@ -361,7 +366,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		throw new RuntimeException("Could not find a compilation unit with name " + newName);
 	}
 
-	private IPackageFragmentRoot getIJavaProject() throws CoreException  {
+	private IPackageFragmentRoot getIJavaProject() throws CoreException {
 		final IProject project = this.getCurrentTestProject();
 		final IJavaProject javaProject = JavaCore.create(project);
 		final IFolder sourceFolder = project.getFolder(TestUtil.SOURCE_FOLDER);
@@ -394,7 +399,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		final Classifier jaMoPPClass = this.createClassInPackage(packageForClass, implementingClassName);
 		final Set<T> eObjectsByType = CorrespondenceModelUtil
 				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPClass, classOfCorrespondingObject);
-		return CollectionBridge.claimOne(eObjectsByType);
+		return claimOne(eObjectsByType);
 	}
 
 	protected Classifier createClassInPackage(final Package packageForClass, final String implementingClassName)
@@ -404,7 +409,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		return createClassInPackage(implementingClassName, packageNamespace);
 	}
 
-	protected Classifier createClassInPackage(final String implementingClassName, String packageNamespace) throws CoreException {
+	protected Classifier createClassInPackage(final String implementingClassName, String packageNamespace)
+			throws CoreException {
 		final IPackageFragment packageFragment = this.getPackageFragment(packageNamespace);
 		createEmptyClass(packageFragment, implementingClassName);
 		final VURI vuri = this.getVURIForElementInPackage(packageFragment, implementingClassName);
@@ -422,7 +428,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		return vuri;
 	}
 
-	private IPackageFragment getPackageFragment(String packageNamespace) throws CoreException  {
+	private IPackageFragment getPackageFragment(String packageNamespace) throws CoreException {
 		final IPackageFragmentRoot packageRoot = this.getIJavaProject();
 		for (final IJavaElement javaElement : packageRoot.getChildren()) {
 			if (javaElement instanceof IPackageFragment && javaElement.getElementName().equals(packageNamespace)) {
@@ -453,12 +459,16 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	 *
 	 * @throws Throwable
 	 */
-//	private void setUserInteractor(final UserInteracting newUserInteracting) throws Throwable {
-////		final PCMJavaBuilder pcmJavaBuilder = this.getPCMJavaBuilderFromProject();
-////		final Change2CommandTransformingProviding transformingProviding = JavaBridge
-////				.getFieldFromClass(VitruviusEmfBuilder.class, "transformingProviding", pcmJavaBuilder);
-//		this.setUserInteractor(newUserInteracting);
-//	}
+	// private void setUserInteractor(final UserInteracting newUserInteracting)
+	// throws Throwable {
+	//// final PCMJavaBuilder pcmJavaBuilder =
+	// this.getPCMJavaBuilderFromProject();
+	//// final Change2CommandTransformingProviding transformingProviding =
+	// JavaBridge
+	//// .getFieldFromClass(VitruviusEmfBuilder.class, "transformingProviding",
+	// pcmJavaBuilder);
+	// this.setUserInteractor(newUserInteracting);
+	// }
 
 	protected CompositeComponent addSecondPackageCorrespondsToCompositeComponent() throws Throwable {
 		this.getUserInteractor().addNextSelections(SELECT_COMPOSITE_COMPONENT);
@@ -536,11 +546,9 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 				pcmNamedElement.getEntityName());
 		this.assertResourceAndFileForEObjects(pcmNamedElement);
 	}
-	
-	protected void assertPcmParameter(final Parameter pcmParameter, final String expectedName)
-			throws Throwable {
-		assertEquals("The name of pcm parameter is not " + expectedName, expectedName,
-				pcmParameter.getParameterName());
+
+	protected void assertPcmParameter(final Parameter pcmParameter, final String expectedName) throws Throwable {
+		assertEquals("The name of pcm parameter is not " + expectedName, expectedName, pcmParameter.getParameterName());
 		this.assertResourceAndFileForEObjects(pcmParameter);
 	}
 
@@ -561,47 +569,54 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 				interfaceName, true);
 	}
 
-	protected ConcreteClassifier createInterfaceInPackageBasedOnJaMoPPPackageWithoutCorrespondence(final String packageName,
-			final String interfaceName) throws Throwable, CoreException, InterruptedException {
+	protected ConcreteClassifier createInterfaceInPackageBasedOnJaMoPPPackageWithoutCorrespondence(
+			final String packageName, final String interfaceName)
+			throws Throwable, CoreException, InterruptedException {
 		Package jaMoPPPackage = this.getPackageWithNameFromCorrespondenceModel(packageName);
-		return this.createJaMoPPInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(), interfaceName);
+		return this.createJaMoPPInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(),
+				interfaceName);
 	}
 
-	protected OperationInterface createInterfaceInPackage(String packageNamespace, final String interfaceName, boolean claimOne) throws CoreException {
+	protected OperationInterface createInterfaceInPackage(String packageNamespace, final String interfaceName,
+			boolean claimOne) throws CoreException {
 		final Classifier jaMoPPIf = createJaMoPPInterfaceInPackage(packageNamespace, interfaceName);
-		Set<OperationInterface> correspondingOpInterfaces = CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPIf, OperationInterface.class);
-		if(claimOne){
-			return CollectionBridge.claimOne(correspondingOpInterfaces);
+		Set<OperationInterface> correspondingOpInterfaces = CorrespondenceModelUtil
+				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPIf, OperationInterface.class);
+		if (claimOne) {
+			return claimOne(correspondingOpInterfaces);
 		}
-		if(null==correspondingOpInterfaces || 0 == correspondingOpInterfaces.size()){
+		if (null == correspondingOpInterfaces || 0 == correspondingOpInterfaces.size()) {
 			return null;
 		}
 		logger.warn("More than one corresponding interfaces found for interface " + jaMoPPIf + ". Returning the first");
 		return correspondingOpInterfaces.iterator().next();
 	}
 
-	protected ConcreteClassifier createJaMoPPInterfaceInPackage(String packageNamespace, final String interfaceName) throws CoreException {
+	protected ConcreteClassifier createJaMoPPInterfaceInPackage(String packageNamespace, final String interfaceName)
+			throws CoreException {
 		final IPackageFragment packageFragment = this.getPackageFragment(packageNamespace);
 		createEmptyInterface(packageFragment, interfaceName);
 		final VURI vuri = this.getVURIForElementInPackage(packageFragment, interfaceName);
 		final ConcreteClassifier jaMoPPIf = this.getJaMoPPClassifierForVURI(vuri);
-		
+
 		return jaMoPPIf;
 	}
-	
-	private void createEmptyCompilationUnit(IPackageFragment packageFragment, String typeName, String cuName) throws JavaModelException {
-		String lineDelimiter= null;
-		lineDelimiter= StubUtility.getLineDelimiterUsed(packageFragment.getJavaProject());
+
+	private void createEmptyCompilationUnit(IPackageFragment packageFragment, String typeName, String cuName)
+			throws JavaModelException {
+		String lineDelimiter = null;
+		lineDelimiter = StubUtility.getLineDelimiterUsed(packageFragment.getJavaProject());
 		ICompilationUnit compilationUnit = packageFragment.createCompilationUnit(cuName + ".java", "", false, null);
-		InsertEdit edit = new InsertEdit(0, "package " + packageFragment.getElementName() + ";" + lineDelimiter + lineDelimiter + 
-				"public " + typeName + " " + cuName + " { }");
+		InsertEdit edit = new InsertEdit(0, "package " + packageFragment.getElementName() + ";" + lineDelimiter
+				+ lineDelimiter + "public " + typeName + " " + cuName + " { }");
 		editCompilationUnit(compilationUnit, edit);
 	}
-	
-	protected void createEmptyInterface(IPackageFragment packageFragment, String interfaceName) throws JavaModelException {
+
+	protected void createEmptyInterface(IPackageFragment packageFragment, String interfaceName)
+			throws JavaModelException {
 		createEmptyCompilationUnit(packageFragment, "interface", interfaceName);
 	}
-	
+
 	protected void createEmptyClass(IPackageFragment packageFragment, String className) throws JavaModelException {
 		createEmptyCompilationUnit(packageFragment, "class", className);
 	}
@@ -615,7 +630,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected EObject addInterfaceInPackageWithoutCorrespondence(final String packageName) throws Throwable {
 		this.getUserInteractor().addNextSelections(1);
 		Package jaMoPPPackage = this.getPackageWithNameFromCorrespondenceModel(packageName);
-		return this.createInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(), "I" + packageName, false);
+		return this.createInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(),
+				"I" + packageName, false);
 	}
 
 	protected Package getPackageWithNameFromCorrespondenceModel(final String name) throws CoreException {
@@ -649,8 +665,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 				methodString, this.getCurrentTestProject(), this);
 		final Method jaMoPPMethod = this.findJaMoPPMethodInICU(icu, methodName);
 		final ClassMethod classMethod = (ClassMethod) jaMoPPMethod;
-		return CollectionBridge.claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
-				this.getCorrespondenceModel(), classMethod, ResourceDemandingSEFF.class));
+		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+				classMethod, ResourceDemandingSEFF.class));
 	}
 
 	protected OperationSignature findOperationSignatureForJaMoPPMethodInCompilationUnit(final String methodName,
@@ -660,8 +676,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		final Interface jaMoPPInterface = (Interface) classifier;
 		for (final Method jaMoPPMethod : jaMoPPInterface.getMethods()) {
 			if (jaMoPPMethod.getName().equals(methodName)) {
-				return CollectionBridge.claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
-						this.getCorrespondenceModel(), jaMoPPMethod, OperationSignature.class));
+				return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+						jaMoPPMethod, OperationSignature.class));
 			}
 		}
 		logger.warn("No JaMoPP method with name " + methodName + " found in " + interfaceName);
@@ -722,7 +738,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected Parameter addParameterToSignature(final String interfaceName, final String methodName,
 			final String typeName, final String parameterName, final String[] parameterTypeSignatures)
-					throws Throwable {
+			throws Throwable {
 		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(interfaceName,
 				this.getCurrentTestProject());
 		final IMethod iMethod = icu.getType(interfaceName).getMethod(methodName, parameterTypeSignatures);
@@ -732,7 +748,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected Parameter insertParameterIntoSignature(final String methodName, final String parameterName,
 			final ICompilationUnit icu, final IMethod iMethod, final String parameterStr)
-					throws JavaModelException, Throwable {
+			throws JavaModelException, Throwable {
 		final int offset = iMethod.getSourceRange().getOffset() + iMethod.getSourceRange().getLength() - 2;
 		final InsertEdit insertEdit = new InsertEdit(offset, parameterStr);
 		editCompilationUnit(icu, insertEdit);
@@ -741,8 +757,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		final Method jaMoPPMethod = (Method) concreateClassifier.getMembersByName(methodName).get(0);
 		final org.emftext.language.java.parameters.Parameter jaMoPPParam = this
 				.getJaMoPPParameterFromJaMoPPMethod(jaMoPPMethod, parameterName);
-		return CollectionBridge.claimOne(CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPParam, Parameter.class));
+		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+				jaMoPPParam, Parameter.class));
 	}
 
 	protected OperationSignature addReturnTypeToSignature(final String interfaceName, final String methodName,
@@ -761,8 +777,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		final ConcreteClassifier concreateClassifier = this
 				.getJaMoPPClassifierForVURI(VURI.getInstance(icu.getResource()));
 		final Method jaMoPPMethod = (Method) concreateClassifier.getMembersByName(methodName).get(0);
-		return CollectionBridge.claimOne(CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPMethod, OperationSignature.class));
+		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+				jaMoPPMethod, OperationSignature.class));
 	}
 
 	protected org.emftext.language.java.parameters.Parameter getJaMoPPParameterFromJaMoPPMethod(
@@ -834,20 +850,25 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected OperationProvidedRole addImplementsCorrespondingToOperationProvidedRoleToClass(final String className,
 			final String implementingInterfaceName) throws CoreException {
 		// TODO Somehow, we have to wait some time here.
-		// If we do not wait, some effect of the previous interface creation has not finished and thus
-		// adding the implements statement to the class will result in an unsuccessful proxy resolution
-		// for the implemented interface, which means that no correspondence gets created.
-		// Even forcing a reload of the interface and class models in the VSUM does not have any positive effect.
-		// ADDITION: Using Maven, changes run properly without the sleep, so it is removed by now. 
+		// If we do not wait, some effect of the previous interface creation has
+		// not finished and thus
+		// adding the implements statement to the class will result in an
+		// unsuccessful proxy resolution
+		// for the implemented interface, which means that no correspondence
+		// gets created.
+		// Even forcing a reload of the interface and class models in the VSUM
+		// does not have any positive effect.
+		// ADDITION: Using Maven, changes run properly without the sleep, so it
+		// is removed by now.
 		// In Eclipse, it does not work without the sleep.
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//		}
+		// try {
+		// Thread.sleep(5000);
+		// } catch (InterruptedException e) {
+		// }
 		final ICompilationUnit classCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(className, this.getCurrentTestProject());
 		this.importCompilationUnitWithName(implementingInterfaceName, classCompilationUnit);
-		
+
 		final IType classType = classCompilationUnit.getType(className);
 		final String newSource = " implements " + implementingInterfaceName;
 		int offset = classType.getSourceRange().getOffset();
@@ -896,8 +917,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		if (correspondingType == null) {
 			return null;
 		}
-		return CollectionBridge.claimOne(CorrespondenceModelUtil
-				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPField, correspondingType));
+		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+				jaMoPPField, correspondingType));
 	}
 
 	protected Field getJaMoPPFieldFromClass(final ICompilationUnit icu, final String fieldName) {
@@ -916,7 +937,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 			final String annotationName) throws Throwable {
 		final JavaInsertEReference<EObject, EObject> createChange = ReferenceFactory.eINSTANCE
 				.createJavaInsertEReference();
-		//createChange.setIsCreate(true);
+		// createChange.setIsCreate(true);
 		createChange.setOldAffectedEObject(annotableAndModifiable);
 		final AnnotationInstance newAnnotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance();
 		final Classifier classifier = this.createClassifierFromName(annotationName);
@@ -931,8 +952,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		createChange.setIndex(index);
 		createChange.setNewValue(newAnnotation);
 		final VURI vuri = VURI.getInstance(annotableAndModifiable.eResource());
-		final ConcreteChange change = VitruviusChangeFactory.getInstance()
-				.createConcreteChange(createChange, vuri);
+		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteChange(createChange, vuri);
 		getVirtualModel().propagateChange(change);
 	}
 
@@ -947,7 +967,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		editCompilationUnit(cu, insertEdit);
 		final Set<T> eObjectsByType = CorrespondenceModelUtil
 				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), annotable, classOfCorrespondingObject);
-		return CollectionBridge.claimOne(eObjectsByType);
+		return claimOne(eObjectsByType);
 	}
 
 	// add Annotation via the framework
@@ -962,7 +982,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		final Field jaMoPPField = this.getJaMoPPFieldFromClass(cu, fieldName);
 		final Set<T> eObjectsByType = CorrespondenceModelUtil
 				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), jaMoPPField, classOfCorrespondingObject);
-		return CollectionBridge.claimOne(eObjectsByType);
+		return claimOne(eObjectsByType);
 	}
 
 	private Classifier createClassifierFromName(final String annotationName) {
@@ -973,7 +993,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected void assertCorrespondingSEFF(final ResourceDemandingSEFF correspondingSeff, String methodName)
 			throws Throwable {
-		final ClassMethod jaMoPPMethod = CollectionBridge.claimOne(CorrespondenceModelUtil
+		final ClassMethod jaMoPPMethod = claimOne(CorrespondenceModelUtil
 				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), correspondingSeff, ClassMethod.class));
 		assertEquals(jaMoPPMethod.getName(), methodName);
 	}

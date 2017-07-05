@@ -16,7 +16,7 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.util.bridges.CollectionBridge;
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 public class MethodMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
@@ -83,7 +83,7 @@ public class MethodMappingTransformationTest extends Java2PcmPackageMappingTrans
             public Void call() {
                 Method jaMoPPMethod;
                 try {
-                    jaMoPPMethod = CollectionBridge.claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
+                    jaMoPPMethod = claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
                             MethodMappingTransformationTest.this.getCorrespondenceModel(), opSig, Method.class));
                 } catch (final Throwable e) {
                     throw new RuntimeException(e);

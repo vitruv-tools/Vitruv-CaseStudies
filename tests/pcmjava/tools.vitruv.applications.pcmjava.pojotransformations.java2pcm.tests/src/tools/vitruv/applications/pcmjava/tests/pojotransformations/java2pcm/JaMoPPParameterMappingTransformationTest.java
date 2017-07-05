@@ -20,7 +20,7 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.util.bridges.CollectionBridge;
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
@@ -85,7 +85,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
         editCompilationUnit(icu, replaceEdit);
         final org.emftext.language.java.parameters.Parameter newJaMoPPParameter = super.findJaMoPPParameterInICU(icu,
                 interfaceName, methodName, newParameterName);
-        return CollectionBridge.claimOne(CorrespondenceModelUtil
+        return claimOne(CorrespondenceModelUtil
                 .getCorrespondingEObjectsByType(this.getCorrespondenceModel(), newJaMoPPParameter, Parameter.class));
     }
 
@@ -101,7 +101,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
         editCompilationUnit(icu, replaceEdit);
         final org.emftext.language.java.parameters.Parameter newJaMoPPParameter = super.findJaMoPPParameterInICU(icu,
                 interfaceName, methodName, paramName);
-        return CollectionBridge.claimOne(CorrespondenceModelUtil
+        return claimOne(CorrespondenceModelUtil
                 .getCorrespondingEObjectsByType(this.getCorrespondenceModel(), newJaMoPPParameter, Parameter.class));
     }
 

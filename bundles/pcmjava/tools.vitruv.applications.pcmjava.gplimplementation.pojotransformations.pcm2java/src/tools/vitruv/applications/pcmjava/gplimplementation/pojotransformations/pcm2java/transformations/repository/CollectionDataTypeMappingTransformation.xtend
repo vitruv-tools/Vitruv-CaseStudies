@@ -23,11 +23,11 @@ import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.DataType
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
 class CollectionDataTypeMappingTransformation extends EmptyEObjectMappingTransformation {
 

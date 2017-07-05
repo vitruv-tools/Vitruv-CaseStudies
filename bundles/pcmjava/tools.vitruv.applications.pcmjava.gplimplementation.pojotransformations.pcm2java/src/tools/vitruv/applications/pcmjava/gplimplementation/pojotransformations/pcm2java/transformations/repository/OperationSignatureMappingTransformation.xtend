@@ -22,6 +22,7 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper

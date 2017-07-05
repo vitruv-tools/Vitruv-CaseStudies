@@ -15,9 +15,9 @@ import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
 /**
  * Mapping transformation for primitive data types

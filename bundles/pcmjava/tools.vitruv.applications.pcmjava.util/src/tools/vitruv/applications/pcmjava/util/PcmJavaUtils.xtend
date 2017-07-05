@@ -33,6 +33,7 @@ import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 import org.palladiosimulator.pcm.repository.Parameter
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
 class PcmJavaUtils {
 	private static val Logger logger = Logger.getLogger(PcmJavaUtils.simpleName)

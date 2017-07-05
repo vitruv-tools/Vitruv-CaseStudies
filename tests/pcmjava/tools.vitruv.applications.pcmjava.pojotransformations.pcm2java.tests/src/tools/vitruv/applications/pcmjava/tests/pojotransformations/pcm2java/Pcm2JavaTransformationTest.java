@@ -65,8 +65,8 @@ import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.tests.VitruviusApplicationTest;
-import tools.vitruv.framework.util.bridges.CollectionBridge;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 /**
  * super class for all repository and system tests. Contains helper methods
@@ -122,13 +122,13 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
     protected <T> Set<NamedElement> assertCorrespondnecesAndCompareNames(
             final EObject pcmNamedElement, final int expectedSize,
             final java.lang.Class<? extends EObject>[] expectedClasses, final String[] expectedNames) throws Throwable {
-        final Set<EObject> correspondences = (Set<EObject>) CollectionBridge.claimNotEmpty(
+        final Set<EObject> correspondences = (Set<EObject>) claimNotEmpty(
                 CorrespondenceModelUtil.getCorrespondingEObjects(this.getCorrespondenceModel(), pcmNamedElement));
         assertEquals("correspondences.size should be " + expectedSize, expectedSize, correspondences.size());
         final Set<NamedElement> jaMoPPElements = new HashSet<NamedElement>();
         for (int i = 0; i < expectedClasses.length; i++) {
             final java.lang.Class<? extends EObject> expectedClass = expectedClasses[i];
-            final EObject correspondingEObject = CollectionBridge.claimOne(CorrespondenceModelUtil
+            final EObject correspondingEObject = claimOne(CorrespondenceModelUtil
                     .getCorrespondingEObjectsByType(this.getCorrespondenceModel(), pcmNamedElement, expectedClass));
             if (!expectedClass.isInstance(correspondingEObject)) {
                 fail("Corresponding EObject " + correspondingEObject + " is not an instance of " + expectedClass);
@@ -150,7 +150,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
 
     protected void assertEmptyCorrespondence(final EObject eObject) throws Throwable {
         try {
-            final Set<EObject> correspondences = (Set<EObject>) CollectionBridge.claimNotEmpty(
+            final Set<EObject> correspondences = (Set<EObject>) claimNotEmpty(
                     CorrespondenceModelUtil.getCorrespondingEObjects(this.getCorrespondenceModel(), eObject));
             fail("correspondences.size should be " + 0 + " but is " + correspondences.size());
         } catch (final RuntimeException re) {

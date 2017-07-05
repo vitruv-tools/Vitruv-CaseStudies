@@ -17,7 +17,7 @@ import org.palladiosimulator.pcm.system.System;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.util.bridges.CollectionBridge;
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 public class PackageMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
@@ -102,7 +102,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
 
         final Set<EObject> correspondingEObjects = CorrespondenceModelUtil
                 .getCorrespondingEObjects(this.getCorrespondenceModel(), renamedPackage);
-        final EObject correspondingEObject = CollectionBridge.claimOne(correspondingEObjects);
+        final EObject correspondingEObject = claimOne(correspondingEObjects);
         assertTrue("The corresponding EObject for the package has to be a BasicComponent",
                 correspondingEObject instanceof BasicComponent);
         final BasicComponent bc = (BasicComponent) correspondingEObject;

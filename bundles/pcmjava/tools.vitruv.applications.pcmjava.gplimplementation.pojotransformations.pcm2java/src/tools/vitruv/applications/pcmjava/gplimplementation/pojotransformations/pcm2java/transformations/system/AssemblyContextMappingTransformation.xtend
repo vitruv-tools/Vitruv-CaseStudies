@@ -15,7 +15,7 @@ import org.emftext.language.java.types.TypeReference
 import org.palladiosimulator.pcm.core.composition.AssemblyContext
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.pcm.PcmNamespace

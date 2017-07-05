@@ -49,7 +49,7 @@ import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils

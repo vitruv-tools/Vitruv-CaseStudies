@@ -12,6 +12,7 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.parameters.Parameter
 import org.palladiosimulator.pcm.core.composition.RequiredDelegationConnector
 
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.util.command.ChangePropagationResult

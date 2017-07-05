@@ -25,7 +25,7 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.util.bridges.CollectionBridge;
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
@@ -179,7 +179,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
         final InsertEdit insertEdit = new InsertEdit(offset, newFieldName + ";");
         editCompilationUnit(icu, deleteEdit, insertEdit);
         final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, newFieldName);
-        return CollectionBridge.claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
+        return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
                 this.getCorrespondenceModel(), newJaMoPPField, InnerDeclaration.class));
     }
 
@@ -197,7 +197,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
         final InsertEdit insertEdit = new InsertEdit(offset, newFieldTypeName);
         editCompilationUnit(icu, deleteEdit, insertEdit);
         final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, fieldName);
-        return CollectionBridge.claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
+        return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
                 this.getCorrespondenceModel(), newJaMoPPField, InnerDeclaration.class));
     }
 

@@ -9,9 +9,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.Interface
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
