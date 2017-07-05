@@ -3,9 +3,9 @@
       id="tools.vitruv.applications.pcmjava.pojotransformations.demo.feature"
       label="%featureName"
       version="0.1.0.qualifier"
-      provider-name="%providerName"	  
+      provider-name="%providerName"
       license-feature="tools.vitruv.license.feature"
-	  license-feature-version="1.0.0">
+      license-feature-version="1.0.0">
 
    <description>
       %description
@@ -20,7 +20,28 @@
    </license>
 
    <requires>
-      <import feature="tools.vitruv.applications.pcmjava.pojotransformations.feature" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.google.guava"/>
+      <import plugin="org.eclipse.xtext.xbase.lib"/>
+      <import plugin="org.eclipse.xtend.lib"/>
+      <import plugin="org.eclipse.xtend.lib.macro"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="tools.vitruv.framework.tests.util"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="tools.vitruv.framework.tuid"/>
+      <import plugin="tools.vitruv.framework.metamodel"/>
+      <import plugin="tools.vitruv.framework.change.processing"/>
+      <import plugin="tools.vitruv.applications.pcmjava.pojotransformations.java2pcm"/>
+      <import plugin="tools.vitruv.applications.pcmjava.pojotransformations.pcm2java"/>
+      <import plugin="tools.vitruv.domains.java.builder"/>
+      <import plugin="tools.vitruv.framework.vsum"/>
+      <import plugin="tools.vitruv.domains.pcm"/>
+      <import plugin="tools.vitruv.domains.emf"/>
+      <import plugin="tools.vitruv.framework.util"/>
+      <import plugin="tools.vitruv.framework.monitorededitor"/>
+      <import plugin="tools.vitruv.applications.pcmjava.util"/>
    </requires>
 
    <plugin

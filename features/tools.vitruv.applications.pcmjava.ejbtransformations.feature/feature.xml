@@ -23,6 +23,37 @@
          id="tools.vitruv.applications.pcmjava.feature"
          version="0.1.0.qualifier"/>
 
+   <requires>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="com.google.guava"/>
+      <import plugin="org.eclipse.xtend.lib"/>
+      <import plugin="org.eclipse.xtend.lib.macro"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="tools.vitruv.framework.userinteraction"/>
+      <import plugin="org.palladiosimulator.pcm"/>
+      <import plugin="org.emftext.language.java"/>
+      <import plugin="tools.vitruv.framework.util"/>
+      <import plugin="tools.vitruv.framework.change"/>
+      <import plugin="tools.vitruv.framework.tuid"/>
+      <import plugin="tools.vitruv.framework.change.processing"/>
+      <import plugin="tools.vitruv.framework.correspondence"/>
+      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
+      <import plugin="tools.vitruv.extensions.dslsruntime.mapping"/>
+      <import plugin="tools.vitruv.domains.java.echange"/>
+      <import plugin="tools.vitruv.applications.pcmjava.util"/>
+      <import plugin="tools.vitruv.domains.java"/>
+      <import plugin="tools.vitruv.domains.pcm"/>
+      <import plugin="org.eclipse.emf.ecore.xmi" version="2.9.1" match="greaterOrEqual"/>
+      <import plugin="org.emftext.language.java.resource"/>
+      <import plugin="org.emftext.language.java.resource.java"/>
+      <import plugin="org.emftext.commons.antlr3_4_0" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.emftext.language.java.resource.bcel"/>
+      <import plugin="tools.vitruv.framework.change.echange"/>
+      <import plugin="tools.vitruv.domains.java.util.jamoppparser"/>
+      <import plugin="tools.vitruv.domains.java.util"/>
+   </requires>
+
    <plugin
          id="tools.vitruv.applications.pcmjava.ejbtransformations"
          download-size="0"
