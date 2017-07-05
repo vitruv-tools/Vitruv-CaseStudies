@@ -6,6 +6,15 @@
    <feature url="features/tools.vitruv.applications.pcmjava.pojotransformations.demo.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.pcmjava.pojotransformations.demo.feature" version="0.1.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
+   <feature url="features/tools.vitruv.applications.umljava.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.umljava.feature" version="0.1.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
+   <feature url="features/tools.vitruv.applications.pcmjava.ejbtransformations.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.pcmjava.ejbtransformations.feature" version="0.1.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
+   <feature url="features/tools.vitruv.applications.pcmumlcomponents.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.pcmumlcomponents.feature" version="0.1.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
    <category-def name="Vitruv Applications for Component-based Systems" label="Vitruv Applications for Component-based Systems">
       <description>
          Domains for Vitruv
