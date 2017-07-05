@@ -33,7 +33,8 @@ public class CreateUmlPropertyForDatatypeRoutine extends AbstractRepairRoutineRe
     }
     
     public void updatePropertyElement(final DataType type, final InnerDeclaration counterpart, final DataType owner, final Property property) {
-      property.setName(counterpart.getEntityName());
+      String _entityName = counterpart.getEntityName();
+      property.setName(_entityName);
       property.setType(type);
     }
     

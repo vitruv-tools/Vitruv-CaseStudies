@@ -28,7 +28,8 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
     
     public void updatePackageImportElement(final Repository pcmRepository, final PackageImport packageImport) {
       final ResourceSetImpl resourceSet = new ResourceSetImpl();
-      final URI primitiveTypesUri = URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI).appendFragment("_0");
+      URI _createURI = URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI);
+      final URI primitiveTypesUri = _createURI.appendFragment("_0");
       final EObject primitiveTypes = resourceSet.getEObject(primitiveTypesUri, true);
       packageImport.setImportedPackage(((org.eclipse.uml2.uml.Package) primitiveTypes));
     }
@@ -42,11 +43,12 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUmlModelElement(final Repository pcmRepository, final PackageImport packageImport, final Model umlModel) {
-      umlModel.setName(pcmRepository.getEntityName());
+      String _entityName = pcmRepository.getEntityName();
+      umlModel.setName(_entityName);
       EList<PackageImport> _packageImports = umlModel.getPackageImports();
       _packageImports.add(packageImport);
-      String _entityName = pcmRepository.getEntityName();
-      String _plus = ("model/" + _entityName);
+      String _entityName_1 = pcmRepository.getEntityName();
+      String _plus = ("model/" + _entityName_1);
       String _plus_1 = (_plus + ".uml");
       this.persistProjectRelative(pcmRepository, umlModel, _plus_1);
     }

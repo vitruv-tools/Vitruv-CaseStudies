@@ -2,6 +2,7 @@ package mir.routines.pcmToUml;
 
 import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Property;
@@ -32,7 +33,8 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void callRoutine1(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final DataType compositeType, final Property umlProperty, @Extension final RoutinesFacade _routinesFacade) {
-      compositeType.getOwnedAttributes().remove(umlProperty);
+      EList<Property> _ownedAttributes = compositeType.getOwnedAttributes();
+      _ownedAttributes.remove(umlProperty);
     }
   }
   

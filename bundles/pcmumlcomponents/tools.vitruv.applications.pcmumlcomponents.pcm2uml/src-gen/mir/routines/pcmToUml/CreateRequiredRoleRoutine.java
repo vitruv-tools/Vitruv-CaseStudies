@@ -40,7 +40,8 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUsageElement(final InterfaceRequiringEntity pcmComponent, final OperationRequiredRole requiredRole, final Component umlComponent, final Usage usage) {
-      usage.setName(requiredRole.getEntityName());
+      String _entityName = requiredRole.getEntityName();
+      usage.setName(_entityName);
       EList<NamedElement> _clients = usage.getClients();
       _clients.add(umlComponent);
     }

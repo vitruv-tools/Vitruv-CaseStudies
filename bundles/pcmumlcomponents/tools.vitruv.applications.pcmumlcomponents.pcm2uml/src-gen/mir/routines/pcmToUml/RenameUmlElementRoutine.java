@@ -24,7 +24,8 @@ public class RenameUmlElementRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final NamedElement pcmElement, final org.eclipse.uml2.uml.NamedElement umlElement) {
-      umlElement.setName(pcmElement.getEntityName());
+      String _entityName = pcmElement.getEntityName();
+      umlElement.setName(_entityName);
     }
     
     public EObject getCorrepondenceSourceUmlElement(final NamedElement pcmElement) {

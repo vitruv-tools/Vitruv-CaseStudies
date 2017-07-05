@@ -24,7 +24,8 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Parameter pcmParameter, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      umlParameter.setName(pcmParameter.getParameterName());
+      String _parameterName = pcmParameter.getParameterName();
+      umlParameter.setName(_parameterName);
     }
     
     public EObject getCorrepondenceSourceUmlParameter(final Parameter pcmParameter) {

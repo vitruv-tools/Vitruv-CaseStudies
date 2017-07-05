@@ -34,7 +34,8 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUmlInterfaceElement(final Interface pcmInterface, final Model umlModel, final org.eclipse.uml2.uml.Interface umlInterface) {
-      umlInterface.setName(pcmInterface.getEntityName());
+      String _entityName = pcmInterface.getEntityName();
+      umlInterface.setName(_entityName);
     }
     
     public EObject getElement2(final Interface pcmInterface, final Model umlModel, final org.eclipse.uml2.uml.Interface umlInterface) {
