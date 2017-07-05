@@ -2,9 +2,14 @@ package mir.routines.pcmToUml;
 
 import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.PackageImport;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
+import org.eclipse.uml2.uml.resource.UMLResource;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -21,17 +26,27 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Repository pcmRepository, final Model umlModel) {
+    public void updatePackageImportElement(final Repository pcmRepository, final PackageImport packageImport) {
+      final ResourceSetImpl resourceSet = new ResourceSetImpl();
+      URI _createURI = URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI);
+      final URI primitiveTypesUri = _createURI.appendFragment("_0");
+      final EObject primitiveTypes = resourceSet.getEObject(primitiveTypesUri, true);
+      packageImport.setImportedPackage(((org.eclipse.uml2.uml.Package) primitiveTypes));
+    }
+    
+    public EObject getElement1(final Repository pcmRepository, final PackageImport packageImport, final Model umlModel) {
       return pcmRepository;
     }
     
-    public EObject getElement2(final Repository pcmRepository, final Model umlModel) {
+    public EObject getElement2(final Repository pcmRepository, final PackageImport packageImport, final Model umlModel) {
       return umlModel;
     }
     
-    public void updateUmlModelElement(final Repository pcmRepository, final Model umlModel) {
+    public void updateUmlModelElement(final Repository pcmRepository, final PackageImport packageImport, final Model umlModel) {
       String _entityName = pcmRepository.getEntityName();
       umlModel.setName(_entityName);
+      EList<PackageImport> _packageImports = umlModel.getPackageImports();
+      _packageImports.add(packageImport);
       String _entityName_1 = pcmRepository.getEntityName();
       String _plus = ("model/" + _entityName_1);
       String _plus_1 = (_plus + ".uml");
@@ -52,10 +67,13 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreateUmlModelRoutine with input:");
     getLogger().debug("   Repository: " + this.pcmRepository);
     
-    Model umlModel = UMLFactoryImpl.eINSTANCE.createModel();
-    userExecution.updateUmlModelElement(pcmRepository, umlModel);
+    PackageImport packageImport = UMLFactoryImpl.eINSTANCE.createPackageImport();
+    userExecution.updatePackageImportElement(pcmRepository, packageImport);
     
-    addCorrespondenceBetween(userExecution.getElement1(pcmRepository, umlModel), userExecution.getElement2(pcmRepository, umlModel), "");
+    Model umlModel = UMLFactoryImpl.eINSTANCE.createModel();
+    userExecution.updateUmlModelElement(pcmRepository, packageImport, umlModel);
+    
+    addCorrespondenceBetween(userExecution.getElement1(pcmRepository, packageImport, umlModel), userExecution.getElement2(pcmRepository, packageImport, umlModel), "");
     
     postprocessElements();
   }

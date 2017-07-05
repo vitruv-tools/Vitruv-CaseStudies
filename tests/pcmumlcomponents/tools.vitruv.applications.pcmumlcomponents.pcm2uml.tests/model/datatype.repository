@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<repository:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:repository="http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" id="_E3YdwB26Eee6SPeha_Z0Cw" entityName="RootElement">
+  <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_E9YYEB26Eee6SPeha_Z0Cw" entityName="Vec3">
+    <innerDeclaration_CompositeDataType entityName="X" datatype_InnerDeclaration="//@dataTypes__Repository.1"/>
+    <innerDeclaration_CompositeDataType entityName="Y" datatype_InnerDeclaration="//@dataTypes__Repository.1"/>
+    <innerDeclaration_CompositeDataType entityName="Z" datatype_InnerDeclaration="//@dataTypes__Repository.1"/>
+  </dataTypes__Repository>
+  <dataTypes__Repository xsi:type="repository:PrimitiveDataType" type="DOUBLE"/>
+</repository:Repository>

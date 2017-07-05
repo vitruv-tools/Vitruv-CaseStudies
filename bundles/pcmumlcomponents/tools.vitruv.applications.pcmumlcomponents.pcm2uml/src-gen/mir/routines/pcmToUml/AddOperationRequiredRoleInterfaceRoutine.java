@@ -1,0 +1,86 @@
+package mir.routines.pcmToUml;
+
+import java.io.IOException;
+import mir.routines.pcmToUml.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.uml2.uml.Usage;
+import org.palladiosimulator.pcm.repository.OperationInterface;
+import org.palladiosimulator.pcm.repository.OperationRequiredRole;
+import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
+import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+
+@SuppressWarnings("all")
+public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRoutineRealization {
+  private RoutinesFacade actionsFacade;
+  
+  private AddOperationRequiredRoleInterfaceRoutine.ActionUserExecution userExecution;
+  
+  private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
+    public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
+      super(reactionExecutionState);
+    }
+    
+    public EObject getElement1(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface, final Usage umlUsage, final Interface umlInterface) {
+      return umlUsage;
+    }
+    
+    public void update0Element(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface, final Usage umlUsage, final Interface umlInterface) {
+      EList<NamedElement> _suppliers = umlUsage.getSuppliers();
+      _suppliers.clear();
+      EList<NamedElement> _suppliers_1 = umlUsage.getSuppliers();
+      _suppliers_1.add(umlInterface);
+    }
+    
+    public EObject getCorrepondenceSourceUmlInterface(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface, final Usage umlUsage) {
+      return pcmInterface;
+    }
+    
+    public EObject getCorrepondenceSourceUmlUsage(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface) {
+      return pcmRole;
+    }
+  }
+  
+  public AddOperationRequiredRoleInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationRequiredRole pcmRole, final OperationInterface pcmInterface) {
+    super(reactionExecutionState, calledBy);
+    this.userExecution = new mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
+    this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
+    this.pcmRole = pcmRole;this.pcmInterface = pcmInterface;
+  }
+  
+  private OperationRequiredRole pcmRole;
+  
+  private OperationInterface pcmInterface;
+  
+  protected void executeRoutine() throws IOException {
+    getLogger().debug("Called routine AddOperationRequiredRoleInterfaceRoutine with input:");
+    getLogger().debug("   OperationRequiredRole: " + this.pcmRole);
+    getLogger().debug("   OperationInterface: " + this.pcmInterface);
+    
+    Usage umlUsage = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlUsage(pcmRole, pcmInterface), // correspondence source supplier
+    	Usage.class,
+    	(Usage _element) -> true, // correspondence precondition checker
+    	null);
+    if (umlUsage == null) {
+    	return;
+    }
+    registerObjectUnderModification(umlUsage);
+    Interface umlInterface = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUmlInterface(pcmRole, pcmInterface, umlUsage), // correspondence source supplier
+    	Interface.class,
+    	(Interface _element) -> true, // correspondence precondition checker
+    	null);
+    if (umlInterface == null) {
+    	return;
+    }
+    registerObjectUnderModification(umlInterface);
+    // val updatedElement userExecution.getElement1(pcmRole, pcmInterface, umlUsage, umlInterface);
+    userExecution.update0Element(pcmRole, pcmInterface, umlUsage, umlInterface);
+    
+    postprocessElements();
+  }
+}
