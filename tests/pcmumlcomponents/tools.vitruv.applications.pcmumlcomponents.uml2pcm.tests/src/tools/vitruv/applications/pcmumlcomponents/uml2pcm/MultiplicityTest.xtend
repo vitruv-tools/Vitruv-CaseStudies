@@ -86,7 +86,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(rootElement)
 
 		val pcmRepository = rootElement.correspondingElements.head as Repository
-		val collectionType = pcmRepository.dataTypes__Repository.findFirst[t|t instanceof CollectionDataType]
+		val collectionType = pcmRepository.dataTypes__Repository.findFirst[t|t instanceof CompositeDataType]
 		val pcmOperation = umlOperation.correspondingElements.head as OperationSignature
 		assertEquals(collectionType, pcmOperation.returnType__OperationSignature)
 	}
