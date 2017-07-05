@@ -113,7 +113,6 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 		assertNotNull(umlInnerType)
 		
 		val umlAttribute = innerDeclaration.correspondingElements.head as org.eclipse.uml2.uml.Property
-		println("[" + umlAttribute.lowerBound + ".." + umlAttribute.upperBound + "]")
 		assertEquals(0, umlAttribute.lowerBound)
 		assertEquals(-1, umlAttribute.upperBound)
 		assertEquals(umlInnerType, umlAttribute.type)
