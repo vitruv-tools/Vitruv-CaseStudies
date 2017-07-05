@@ -8,7 +8,6 @@ import tools.vitruv.domains.pcm.util.RepositoryModelLoader
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Model
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
@@ -57,11 +56,11 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 	}
 	
 	protected def void validateCorrespondence(Logger logger, Parameter pcmParameter) {
-		logger.debug("Checking for correspondence for pcm::Parameter " + pcmParameter.entityName)
+		logger.debug("Checking for correspondence for pcm::Parameter " + pcmParameter.parameterName)
 		val correspondingElements = pcmParameter.correspondingElements
 		assertEquals(1, correspondingElements.length)
 		val umlParameter = correspondingElements.head.returnType(org.eclipse.uml2.uml.Parameter)
-		assertEquals(pcmParameter.entityName, umlParameter.name)
+		assertEquals(pcmParameter.parameterName, umlParameter.name)
 	}
 	
 	protected def void validateCorrespondence(Logger logger, OperationSignature pcmSignature) {

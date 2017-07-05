@@ -9,6 +9,7 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Parameter
+import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
 
 class CollectionTypesTest extends AbstractPcmUmlTest {
 	
@@ -49,7 +50,7 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 	
 	protected def Parameter createInterfaceWithParameterizedOperation(DataType parameterType) {
 		val pcmParameter = RepositoryFactory.eINSTANCE.createParameter()
-		pcmParameter.entityName = PARAMETER_NAME
+		pcmParameter.name = PARAMETER_NAME
 		pcmParameter.dataType__Parameter = parameterType
 		val pcmOperation = RepositoryFactory.eINSTANCE.createOperationSignature()
 		pcmOperation.entityName = OPERATION_NAME

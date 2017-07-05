@@ -12,6 +12,7 @@ import tools.vitruv.applications.pcmumlcomp.pcm2uml.PcmToUmlUtil
 import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Operation
+import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
 
 class DataTypesTest extends AbstractPcmUmlTest {
 	
@@ -148,7 +149,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		pcmInterface.signatures__OperationInterface += pcmOperation
 		pcmOperation.returnType__OperationSignature = getPrimitiveType(PrimitiveTypeEnum.BOOL)
 		val pcmParameter = RepositoryFactory.eINSTANCE.createParameter()
-		pcmParameter.entityName = PARAMETER_NAME
+		pcmParameter.name = PARAMETER_NAME
 		pcmParameter.dataType__Parameter = getPrimitiveType(PrimitiveTypeEnum.STRING)
 		pcmOperation.parameters__OperationSignature += pcmParameter
 		rootElement.interfaces__Repository += pcmInterface
@@ -169,7 +170,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		pcmOperation.entityName = OPERATION_NAME
 		pcmInterface.signatures__OperationInterface += pcmOperation
 		val pcmParameter = RepositoryFactory.eINSTANCE.createParameter()
-		pcmParameter.entityName = PARAMETER_NAME
+		pcmParameter.name = PARAMETER_NAME
 		pcmParameter.dataType__Parameter = getPrimitiveType(PrimitiveTypeEnum.BYTE)
 		pcmOperation.parameters__OperationSignature += pcmParameter
 		rootElement.interfaces__Repository += pcmInterface

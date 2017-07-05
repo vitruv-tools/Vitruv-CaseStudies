@@ -14,6 +14,7 @@ import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.ParameterModifier
+import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
 
 class InterfacesTest extends AbstractPcmUmlTest {
 		
@@ -123,7 +124,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	
 	protected def Parameter createOperationParameter(OperationSignature pcmSignature, String name, DataType type) {
 		val pcmParameter = RepositoryFactory.eINSTANCE.createParameter()
-		pcmParameter.entityName = name
+		pcmParameter.name = name
 		pcmParameter.dataType__Parameter = type
 		pcmSignature.parameters__OperationSignature += pcmParameter
 		saveAndSynchronizeChanges(pcmSignature)
@@ -171,7 +172,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 			umlParameter.type.name)
 
 		val newName = PARAMETER_NAME_2
-		pcmParameter.entityName = newName
+		pcmParameter.name = newName
 		saveAndSynchronizeChanges(pcmParameter)
 		assertEquals(newName, umlParameter.name)
 		

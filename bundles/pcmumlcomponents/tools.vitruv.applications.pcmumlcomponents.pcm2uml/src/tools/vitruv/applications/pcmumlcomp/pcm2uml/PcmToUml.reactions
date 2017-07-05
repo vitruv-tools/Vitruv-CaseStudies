@@ -407,7 +407,7 @@ routine createOperationSignatureParameter(pcm::OperationSignature pcmSignature, 
 	}
 	action {
 		val umlParameter = create uml::Parameter and initialize {
-			umlParameter.name = pcmParameter.entityName
+			umlParameter.name = pcmParameter.parameterName
 		}
 		update umlOperation {
 			umlOperation.ownedParameters += umlParameter
