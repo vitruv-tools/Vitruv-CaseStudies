@@ -69,7 +69,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 			(pcmOperation.returnType__OperationSignature as PrimitiveDataType).type)
 			
 		assertEquals(1, pcmOperation.parameters__OperationSignature.length)
-		assertEquals(parameterNames.get(0), pcmOperation.parameters__OperationSignature.get(0).entityName)
+		assertEquals(parameterNames.get(0), pcmOperation.parameters__OperationSignature.get(0).parameterName)
 	}
 	
 	protected def Operation createInterfaceOperation(Interface umlInterface, String operationName, String operationType) {
@@ -138,7 +138,6 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		assertTrue(correspondingElements.get(0) instanceof org.palladiosimulator.pcm.repository.Parameter)
 		val pcmParameter = (correspondingElements.get(0) as org.palladiosimulator.pcm.repository.Parameter)
 		assertEquals(umlParameter.name, pcmParameter.parameterName)
-		assertEquals(umlParameter.name, pcmParameter.entityName)
 		// TODO: pcm modifier is not set or explicitly changed per default, uml sets IN as default
 		// assertEquals(UmlToPcmUtil.getPcmParameterModifier(umlParameter.direction), pcmParameter.modifier__Parameter)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(umlParameter.type.name), (pcmParameter.dataType__Parameter as PrimitiveDataType).type)
@@ -200,7 +199,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		
 		pcmSignature = getCorrespondingSignature(umlOperation)
 		assertEquals(1, pcmSignature.parameters__OperationSignature.length)
-		assertEquals(remainingParameterName, pcmSignature.parameters__OperationSignature.get(0).entityName)
+		assertEquals(remainingParameterName, pcmSignature.parameters__OperationSignature.get(0).parameterName)
 		
 		umlOperation.ownedParameters.remove(0)
 		saveAndSynchronizeChanges(umlOperation)
