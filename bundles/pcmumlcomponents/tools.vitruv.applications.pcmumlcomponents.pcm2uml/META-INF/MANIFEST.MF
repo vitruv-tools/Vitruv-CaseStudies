@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruvius Applications PCM-UML Components
+Bundle-Name: Vitruvius PCM-UML Components Transformations PCM -> UML
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents.pcm2uml
 Bundle-Version: 0.1.0.qualifier
 Export-Package: tools.vitruv.applications.pcmumlcomponents.pcm2uml

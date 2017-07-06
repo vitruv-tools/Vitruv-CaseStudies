@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: UmlJava Util
+Bundle-Name: Vitruvius UML-Java Transformations Utils
 Bundle-SymbolicName: tools.vitruv.applications.umljava.util
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: com.google.guava,

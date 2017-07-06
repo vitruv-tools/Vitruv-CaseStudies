@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruvius Applications Java-UML Tests
+Bundle-Name: Vitruvius UML-Java Transformations Tests Java -> UML
 Bundle-SymbolicName: tool.vitruv.applications.umljava.java2uml.tests
 Bundle-Version: 1.0.0.qualifier
 Fragment-Host: tools.vitruv.applications.umljava.java2uml;bundle-version="1.0.0"
