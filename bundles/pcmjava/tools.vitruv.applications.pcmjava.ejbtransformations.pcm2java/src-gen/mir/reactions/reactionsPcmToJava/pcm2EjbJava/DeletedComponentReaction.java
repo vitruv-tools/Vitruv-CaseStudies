@@ -67,8 +67,7 @@ class DeletedComponentReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final RepositoryComponent oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = oldValue.getEntityName();
-      _routinesFacade.deleteJavaPackage(oldValue, _entityName, "");
+      _routinesFacade.deleteJavaPackage(oldValue, oldValue.getEntityName(), "");
       _routinesFacade.deleteJavaClassifier(oldValue);
     }
   }

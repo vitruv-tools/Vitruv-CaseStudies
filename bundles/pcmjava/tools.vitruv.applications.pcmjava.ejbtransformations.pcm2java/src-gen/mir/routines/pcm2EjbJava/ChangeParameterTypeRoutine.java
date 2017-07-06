@@ -30,8 +30,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Parameter parameter, final InterfaceMethod interfaceMethod, final OrdinaryParameter javaParameter, final org.emftext.language.java.classifiers.Class javaParameterTypeClass) {
-      DataType _dataType__Parameter = parameter.getDataType__Parameter();
-      final TypeReference parameterTypeReference = Pcm2JavaHelper.createTypeReference(_dataType__Parameter, javaParameterTypeClass);
+      final TypeReference parameterTypeReference = Pcm2JavaHelper.createTypeReference(parameter.getDataType__Parameter(), javaParameterTypeClass);
       javaParameter.setTypeReference(parameterTypeReference);
     }
     

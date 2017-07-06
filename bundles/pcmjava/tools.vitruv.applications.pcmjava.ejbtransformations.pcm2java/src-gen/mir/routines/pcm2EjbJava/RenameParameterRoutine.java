@@ -25,8 +25,7 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Parameter parameter, final OrdinaryParameter javaParameter) {
-      String _parameterName = parameter.getParameterName();
-      javaParameter.setName(_parameterName);
+      javaParameter.setName(parameter.getParameterName());
     }
     
     public EObject getCorrepondenceSourceJavaParameter(final Parameter parameter) {

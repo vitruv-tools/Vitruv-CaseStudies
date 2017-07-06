@@ -9,7 +9,6 @@ import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -41,10 +40,8 @@ public class CreateMethodForOperationSignatureRoutine extends AbstractRepairRout
     }
     
     public void callRoutine1(final OperationSignature operationSignature, final Interface javaInterface, final InterfaceMethod interfaceMethod, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = operationSignature.getEntityName();
-      interfaceMethod.setName(_entityName);
-      DataType _returnType__OperationSignature = operationSignature.getReturnType__OperationSignature();
-      _routinesFacade.changeInterfaceMethodReturnType(interfaceMethod, _returnType__OperationSignature);
+      interfaceMethod.setName(operationSignature.getEntityName());
+      _routinesFacade.changeInterfaceMethodReturnType(interfaceMethod, operationSignature.getReturnType__OperationSignature());
       EList<Member> _members = javaInterface.getMembers();
       _members.add(interfaceMethod);
     }

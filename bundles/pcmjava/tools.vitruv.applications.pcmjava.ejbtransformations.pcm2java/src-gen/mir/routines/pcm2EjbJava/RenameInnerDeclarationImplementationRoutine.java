@@ -2,7 +2,6 @@ package mir.routines.pcm2EjbJava;
 
 import java.io.IOException;
 import mir.routines.pcm2EjbJava.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
@@ -30,8 +29,7 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     }
     
     public void update0Element(final InnerDeclaration innerDeclaration, final Field compositeTypeField, final ClassMethod compositeTypeGetterMethod, final ClassMethod compositeTypeSetterMethod) {
-      String _entityName = innerDeclaration.getEntityName();
-      compositeTypeField.setName(_entityName);
+      compositeTypeField.setName(innerDeclaration.getEntityName());
     }
     
     public String getRetrieveTag1(final InnerDeclaration innerDeclaration, final Field compositeTypeField) {
@@ -63,22 +61,18 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     }
     
     public void update2Element(final InnerDeclaration innerDeclaration, final Field compositeTypeField, final ClassMethod compositeTypeGetterMethod, final ClassMethod compositeTypeSetterMethod) {
-      EList<Parameter> _parameters = compositeTypeSetterMethod.getParameters();
-      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(_parameters);
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(compositeTypeSetterMethod.getParameters());
       boolean _not = (!_isNullOrEmpty);
       if (_not) {
-        EList<Parameter> _parameters_1 = compositeTypeSetterMethod.getParameters();
-        final Parameter parameter = _parameters_1.get(0);
-        String _entityName = innerDeclaration.getEntityName();
-        String _firstUpper = StringExtensions.toFirstUpper(_entityName);
+        final Parameter parameter = compositeTypeSetterMethod.getParameters().get(0);
+        String _firstUpper = StringExtensions.toFirstUpper(innerDeclaration.getEntityName());
         String _plus = ("set" + _firstUpper);
         parameter.setName(_plus);
       }
     }
     
     public void update1Element(final InnerDeclaration innerDeclaration, final Field compositeTypeField, final ClassMethod compositeTypeGetterMethod, final ClassMethod compositeTypeSetterMethod) {
-      String _entityName = innerDeclaration.getEntityName();
-      String _firstUpper = StringExtensions.toFirstUpper(_entityName);
+      String _firstUpper = StringExtensions.toFirstUpper(innerDeclaration.getEntityName());
       String _plus = ("get" + _firstUpper);
       compositeTypeGetterMethod.setName(_plus);
     }

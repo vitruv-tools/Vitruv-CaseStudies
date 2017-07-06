@@ -5,7 +5,6 @@ import mir.routines.pcm2EjbJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.InterfaceMethod;
-import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -27,8 +26,7 @@ public class ChangeReturnTypeOfMethodForOperationSignatureRoutine extends Abstra
     }
     
     public void callRoutine1(final OperationSignature operationSignature, final InterfaceMethod interfaceMethod, @Extension final RoutinesFacade _routinesFacade) {
-      DataType _returnType__OperationSignature = operationSignature.getReturnType__OperationSignature();
-      _routinesFacade.changeInterfaceMethodReturnType(interfaceMethod, _returnType__OperationSignature);
+      _routinesFacade.changeInterfaceMethodReturnType(interfaceMethod, operationSignature.getReturnType__OperationSignature());
     }
   }
   

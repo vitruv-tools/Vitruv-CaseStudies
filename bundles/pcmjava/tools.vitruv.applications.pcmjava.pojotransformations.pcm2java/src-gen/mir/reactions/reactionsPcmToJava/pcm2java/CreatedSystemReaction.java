@@ -57,8 +57,7 @@ class CreatedSystemReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final org.palladiosimulator.pcm.system.System newValue, @Extension final RoutinesFacade _routinesFacade) {
       final org.palladiosimulator.pcm.system.System system = newValue;
-      String _entityName = system.getEntityName();
-      _routinesFacade.createJavaPackage(system, null, _entityName, "root_system");
+      _routinesFacade.createJavaPackage(system, null, system.getEntityName(), "root_system");
       _routinesFacade.createImplementationForSystem(system);
     }
   }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.ClassMethod;
-import org.palladiosimulator.pcm.repository.Signature;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -26,9 +25,7 @@ public class UpdateSEFFImplementingMethodNameRoutine extends AbstractRepairRouti
     }
     
     public void update0Element(final ServiceEffectSpecification seff, final ClassMethod classMethod) {
-      Signature _describedService__SEFF = seff.getDescribedService__SEFF();
-      String _entityName = _describedService__SEFF.getEntityName();
-      classMethod.setName(_entityName);
+      classMethod.setName(seff.getDescribedService__SEFF().getEntityName());
     }
     
     public EObject getCorrepondenceSourceClassMethod(final ServiceEffectSpecification seff) {

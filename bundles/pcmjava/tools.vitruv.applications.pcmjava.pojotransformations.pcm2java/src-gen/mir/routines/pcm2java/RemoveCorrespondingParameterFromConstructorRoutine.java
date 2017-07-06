@@ -2,11 +2,9 @@ package mir.routines.pcm2java;
 
 import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.Parameter;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -28,8 +26,7 @@ public class RemoveCorrespondingParameterFromConstructorRoutine extends Abstract
     }
     
     public boolean getCorrespondingModelElementsPreconditionParam(final Constructor ctor, final NamedElement correspondenceSource, final OrdinaryParameter param) {
-      EList<Parameter> _parameters = ctor.getParameters();
-      boolean _contains = _parameters.contains(param);
+      boolean _contains = ctor.getParameters().contains(param);
       return _contains;
     }
     

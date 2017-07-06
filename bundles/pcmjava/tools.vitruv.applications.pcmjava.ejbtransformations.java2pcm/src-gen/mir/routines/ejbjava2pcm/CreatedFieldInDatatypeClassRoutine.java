@@ -2,14 +2,10 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
-import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
-import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -32,8 +28,7 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class clazz, final Field field, final CompositeDataType compositeDataType, final InnerDeclaration innerDec) {
-      EList<InnerDeclaration> _innerDeclaration_CompositeDataType = compositeDataType.getInnerDeclaration_CompositeDataType();
-      _innerDeclaration_CompositeDataType.add(innerDec);
+      compositeDataType.getInnerDeclaration_CompositeDataType().add(innerDec);
     }
     
     public EObject getCorrepondenceSourceCompositeDataType(final org.emftext.language.java.classifiers.Class clazz, final Field field) {
@@ -49,14 +44,9 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     }
     
     public void updateInnerDecElement(final org.emftext.language.java.classifiers.Class clazz, final Field field, final CompositeDataType compositeDataType, final InnerDeclaration innerDec) {
-      TypeReference _typeReference = field.getTypeReference();
-      Repository _repository__DataType = compositeDataType.getRepository__DataType();
-      long _arrayDimension = field.getArrayDimension();
-      DataType _correspondingPCMDataTypeForTypeReference = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(_typeReference, this.correspondenceModel, 
-        this.userInteracting, _repository__DataType, _arrayDimension);
-      innerDec.setDatatype_InnerDeclaration(_correspondingPCMDataTypeForTypeReference);
-      String _name = field.getName();
-      innerDec.setEntityName(_name);
+      innerDec.setDatatype_InnerDeclaration(TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(field.getTypeReference(), this.correspondenceModel, 
+        this.userInteracting, compositeDataType.getRepository__DataType(), field.getArrayDimension()));
+      innerDec.setEntityName(field.getName());
     }
   }
   

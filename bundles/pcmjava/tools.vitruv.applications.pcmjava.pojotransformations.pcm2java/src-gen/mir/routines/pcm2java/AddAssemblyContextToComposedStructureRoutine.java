@@ -90,8 +90,7 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     
     public void updateAssemblyContextFieldElement(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField) {
       final TypeReference typeRef = Pcm2JavaHelper.createNamespaceClassifierReference(encapsulatedComponentJavaClass);
-      String _entityName = assemblyContext.getEntityName();
-      Pcm2JavaHelper.createPrivateField(assemblyContextField, typeRef, _entityName);
+      Pcm2JavaHelper.createPrivateField(assemblyContextField, typeRef, assemblyContext.getEntityName());
     }
     
     public EObject getElement3(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, final ClassifierImport contextClassImport, final Constructor constructor) {
