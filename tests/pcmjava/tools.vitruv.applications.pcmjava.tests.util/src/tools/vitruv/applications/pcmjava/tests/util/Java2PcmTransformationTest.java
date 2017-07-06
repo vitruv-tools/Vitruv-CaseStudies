@@ -200,8 +200,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 				}
 			}
 		} catch (InterruptedException e) {
+			fail("An interrupt occurred unexpectedly");
 		} finally {
-			expectedNumberOfSyncs = 0;
 			logger.debug("Finished waiting for synchronization");
 		}
 	}
