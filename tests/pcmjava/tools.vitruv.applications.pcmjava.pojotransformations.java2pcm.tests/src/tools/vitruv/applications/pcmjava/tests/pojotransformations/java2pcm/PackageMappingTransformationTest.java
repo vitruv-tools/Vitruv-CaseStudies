@@ -53,6 +53,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
     public void testAddSecondPackage() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
 
+        this.getUserInteractor().addNextSelections(0);
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
         this.assertRepositoryAndPCMName(repo, bc, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
@@ -63,6 +64,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
     public void testCreateCompositeComponent() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
 
+        this.getUserInteractor().addNextSelections(0);
         final CompositeComponent cc = super.addSecondPackageCorrespondsToCompositeComponent();
 
         this.assertRepositoryAndPCMName(repo, cc, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
@@ -73,6 +75,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
     public void testCreateSystem() throws Throwable {
         final Repository repository = super.addRepoContractsAndDatatypesPackage();
 
+        this.getUserInteractor().addNextSelections(0);
         final System system = super.addSecondPackageCorrespondsToSystem();
 
         this.assertPCMNamedElement(system, Pcm2JavaTestUtils.SYSTEM_NAME);

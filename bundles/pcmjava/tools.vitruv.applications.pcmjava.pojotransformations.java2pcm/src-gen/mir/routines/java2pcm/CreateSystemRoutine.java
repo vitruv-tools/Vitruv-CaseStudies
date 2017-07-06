@@ -3,8 +3,8 @@ package mir.routines.java2pcm;
 import java.io.IOException;
 import mir.routines.java2pcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.impl.SystemFactoryImpl;
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -20,19 +20,19 @@ public class CreateSystemRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final Repository pcmRepository, final org.palladiosimulator.pcm.system.System pcmSystem) {
+    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final org.palladiosimulator.pcm.system.System pcmSystem) {
       return pcmSystem;
     }
     
-    public EObject getCorrepondenceSourcePcmRepository(final org.emftext.language.java.containers.Package javaPackage) {
-      return javaPackage;
+    public void updatePcmSystemElement(final org.emftext.language.java.containers.Package javaPackage, final org.palladiosimulator.pcm.system.System pcmSystem) {
+      pcmSystem.setEntityName(Java2PcmHelper.getLastPackageName(javaPackage.getName()));
+      String _entityName = pcmSystem.getEntityName();
+      String _plus = ("model/" + _entityName);
+      String _plus_1 = (_plus + ".system");
+      this.persistProjectRelative(javaPackage, pcmSystem, _plus_1);
     }
     
-    public void updatePcmSystemElement(final org.emftext.language.java.containers.Package javaPackage, final Repository pcmRepository, final org.palladiosimulator.pcm.system.System pcmSystem) {
-      pcmSystem.setEntityName(javaPackage.getName());
-    }
-    
-    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final Repository pcmRepository, final org.palladiosimulator.pcm.system.System pcmSystem) {
+    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final org.palladiosimulator.pcm.system.System pcmSystem) {
       return javaPackage;
     }
   }
@@ -50,19 +50,10 @@ public class CreateSystemRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreateSystemRoutine with input:");
     getLogger().debug("   Package: " + this.javaPackage);
     
-    Repository pcmRepository = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmRepository(javaPackage), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
-    	null);
-    if (pcmRepository == null) {
-    	return;
-    }
-    registerObjectUnderModification(pcmRepository);
     org.palladiosimulator.pcm.system.System pcmSystem = SystemFactoryImpl.eINSTANCE.createSystem();
-    userExecution.updatePcmSystemElement(javaPackage, pcmRepository, pcmSystem);
+    userExecution.updatePcmSystemElement(javaPackage, pcmSystem);
     
-    addCorrespondenceBetween(userExecution.getElement1(javaPackage, pcmRepository, pcmSystem), userExecution.getElement2(javaPackage, pcmRepository, pcmSystem), "");
+    addCorrespondenceBetween(userExecution.getElement1(javaPackage, pcmSystem), userExecution.getElement2(javaPackage, pcmSystem), "");
     
     postprocessElements();
   }

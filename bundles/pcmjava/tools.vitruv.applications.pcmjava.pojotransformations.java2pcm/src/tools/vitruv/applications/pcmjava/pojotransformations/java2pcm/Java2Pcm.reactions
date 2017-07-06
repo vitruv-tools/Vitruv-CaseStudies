@@ -1,12 +1,5 @@
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import org.palladiosimulator.pcm.repository.Repository
-import org.palladiosimulator.pcm.system.System
-import java.util.Set
-import java.util.HashSet
-import org.palladiosimulator.pcm.repository.BasicComponent
-import org.palladiosimulator.pcm.repository.CompositeComponent
-import java.util.List
-import java.util.ArrayList
+import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import "http://www.emftext.org/java" as java
@@ -17,16 +10,37 @@ in reaction to changes in Java
 execute actions in PCM
 
 ///Repository
-
 // TODO: Ensure that this reaction does only handle the creation of the repository root package 
-reaction CreatePackage {
+reaction PackageCreated {
 	after element java::Package inserted as root
 	with !newValue.name.contains("contracts") && !newValue.name.contains("datatypes")
-		call {
+		
+	call {
+		if (noCorrespondenceRepository(correspondenceModel)) {
 			val javaPackage = newValue
 			createPCMRepository(javaPackage, javaPackage.name, "package_root")
 			createJavaSubPackages(javaPackage)
+		} else {
+			createArchitecturalElement(newValue)
 		}
+	}
+
+}
+
+routine createArchitecturalElement(java::Package javaPackage) {
+	action {
+		call {
+			val String userMsg = "A package has been created. Please decide whether and which corresponding architectural element should be created"
+		val String[] selections = #["Create basic component", "Create composite component", "Create system",
+			"Do nothing/Decide later"]
+			val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
+			switch(selected) {
+				case 0: createBasicComponent(javaPackage) 
+				case 1: createCompositeComponent(javaPackage)
+				case 2: createSystem(javaPackage)
+			}
+		}
+	}
 }
 
 routine createPCMRepository(EObject sourceElementMappedToRepository, String packageName, String newTag) {
@@ -44,91 +58,67 @@ routine createPCMRepository(EObject sourceElementMappedToRepository, String pack
 	}
 }
 
+
 //Component
 
-reaction CreateSubPackage { 
-	after element java::Package inserted in java::Package
-	with !newValue.name.contains("contracts") && !newValue.name.contains("datatypes")
-		call {
-			// Let user select the class to map the collection type to
-			var Set<Class<?>> architecturalElements = new HashSet
-			architecturalElements += #[BasicComponent, CompositeComponent, System, null]
-			val List<String> architecturalElementsNames = new ArrayList<String>(architecturalElements.size)
-			for (architecturalElement : architecturalElements) {
-				architecturalElementsNames.add(architecturalElement.name)
-			}
-			val String selectElementMsg = "A package has been created. Please decide whether and which corresponding architectural element should be created"
-			val int selectedType = userInteracting.selectFromMessage(UserInteractionType.MODAL, selectElementMsg,
-				architecturalElementsNames)
-			
-			if (selectedType == 0) {
-				createBasicComponent(newValue)
-			} else if (selectedType == 1) {
-				createCompositeComponent(newValue)
-			} else if (selectedType == 2) {
-				createSystem(newValue)
-			} else if (selectedType == 3) {
-				//nothing
-			}
-		}
-	
-}
 
 routine createSystem(java::Package javaPackage) {
-	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage
-	}
 	action {
 		val pcmSystem = create pcm::System and initialize {
-			pcmSystem.entityName = javaPackage.name
+			pcmSystem.entityName = getLastPackageName(javaPackage.name)
+			persistProjectRelative(javaPackage, pcmSystem, "model/" + pcmSystem.entityName + ".system")
 		}
 		add correspondence between pcmSystem and javaPackage
 	}
 }
+
 routine createBasicComponent(java::Package javaPackage) {
-	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage
-	}
 	action {
 		val pcmBasicComponent = create pcm::BasicComponent and initialize {
-			pcmBasicComponent.entityName = javaPackage.name
+			pcmBasicComponent.entityName = getLastPackageName(javaPackage.name)
 		}
 		add correspondence between pcmBasicComponent and javaPackage
+		
+		call addComponentToRepository(pcmBasicComponent, findPcmRepository(correspondenceModel, javaPackage.name))
+		
 	}
 }
+
 routine createCompositeComponent(java::Package javaPackage) {
-	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage
-	}
 	action {
 		val pcmCompositeComponent = create pcm::CompositeComponent and initialize {
-			pcmCompositeComponent.entityName = javaPackage.name
+			pcmCompositeComponent.entityName = getLastPackageName(javaPackage.name)
 		}
-		
 		add correspondence between pcmCompositeComponent and javaPackage
+		
+		call addComponentToRepository(pcmCompositeComponent, findPcmRepository(correspondenceModel, javaPackage.name))
+	}
+}
+
+routine addComponentToRepository(pcm::ImplementationComponentType pcmComponent, pcm::Repository pcmRepository) {
+	action {
+		update pcmRepository {
+			pcmRepository.components__Repository += pcmComponent
+		}
 	}
 }
 
 
-///Interface
-
-// TODO error + how to ensure package is contracts tagged with?
 reaction CreateInterface {
-	after element java::Interface inserted in java::Package 
-		call createPCMInterface(newValue)		
+	after element java::Interface created and inserted in java::CompilationUnit[classifiers]
+	call createPCMInterface(newValue, affectedEObject)		
 		
 }
 
-routine createPCMInterface(java::Interface javaIface) {
-	match {
-		val ifacePackage = retrieve java::Package corresponding to javaIface tagged with "contracts"
-		val pcmRepository = retrieve pcm::Repository corresponding to ifacePackage
-	}
+routine createPCMInterface(java::Interface javaInterface, java::CompilationUnit javaPackage) {
 	action {
 		val pcmIface = create pcm::OperationInterface and initialize {
-			pcmIface.entityName = javaIface.name
+			pcmIface.entityName = javaInterface.name
 		}
-		add correspondence between pcmIface and javaIface
+	
+		
+		
+		add correspondence between pcmIface and javaInterface
 	}
 }
 
@@ -136,20 +126,20 @@ routine createPCMInterface(java::Interface javaIface) {
 
 // TODO error + how to ensure package is datatypes
 reaction CreateClass {
-	after element java::Class inserted in java::Package
+	after element java::Class inserted in java::Package[compilationUnits]
 	call createCompositeDataType(newValue)
 	
 }
 
 routine createCompositeDataType(java::Class cls) {
-	match {
-		val clsPackage = retrieve java::Package corresponding to cls tagged with "datatypes"
-		val pcmRepository = retrieve pcm::Repository corresponding to clsPackage
-	}
 	action {
 		val pcmCompositeDataType = create pcm::CompositeDataType and initialize {
 			pcmCompositeDataType.entityName = cls.name
+			pcmCompositeDataType.repository__DataType = null
 		}
+		//update pcmRepository {
+		//	pcmRepository.dataTypes__Repository += pcmCompositeDataType
+		//}
 		add correspondence between pcmCompositeDataType and cls
 	}
 }

@@ -2,6 +2,7 @@ package mir.reactions.reactionsJavaToPcm.java2pcm;
 
 import mir.routines.java2pcm.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -11,8 +12,8 @@ import tools.vitruv.framework.change.echange.root.InsertRootEObject;
 import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
-class CreatePackageReaction extends AbstractReactionRealization {
-  public CreatePackageReaction(final UserInteracting userInteracting) {
+class PackageCreatedReaction extends AbstractReactionRealization {
+  public PackageCreatedReaction(final UserInteracting userInteracting) {
     super(userInteracting);
   }
   
@@ -20,7 +21,7 @@ class CreatePackageReaction extends AbstractReactionRealization {
     InsertRootEObject<org.emftext.language.java.containers.Package> typedChange = (InsertRootEObject<org.emftext.language.java.containers.Package>)change;
     org.emftext.language.java.containers.Package newValue = typedChange.getNewValue();
     mir.routines.java2pcm.RoutinesFacade routinesFacade = new mir.routines.java2pcm.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2pcm.CreatePackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2pcm.CreatePackageReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2pcm.PackageCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2pcm.PackageCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
   }
   
@@ -64,9 +65,14 @@ class CreatePackageReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.emftext.language.java.containers.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final org.emftext.language.java.containers.Package javaPackage = newValue;
-      _routinesFacade.createPCMRepository(javaPackage, javaPackage.getName(), "package_root");
-      _routinesFacade.createJavaSubPackages(javaPackage);
+      boolean _noCorrespondenceRepository = Java2PcmHelper.noCorrespondenceRepository(this.correspondenceModel);
+      if (_noCorrespondenceRepository) {
+        final org.emftext.language.java.containers.Package javaPackage = newValue;
+        _routinesFacade.createPCMRepository(javaPackage, javaPackage.getName(), "package_root");
+        _routinesFacade.createJavaSubPackages(javaPackage);
+      } else {
+        _routinesFacade.createArchitecturalElement(newValue);
+      }
     }
   }
 }
