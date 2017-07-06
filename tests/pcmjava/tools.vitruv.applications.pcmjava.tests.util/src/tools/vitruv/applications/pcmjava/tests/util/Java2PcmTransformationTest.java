@@ -861,10 +861,10 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		// ADDITION: Using Maven, changes run properly without the sleep, so it
 		// is removed by now.
 		// In Eclipse, it does not work without the sleep.
-		// try {
-		// Thread.sleep(5000);
-		// } catch (InterruptedException e) {
-		// }
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+		}
 		final ICompilationUnit classCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(className, this.getCurrentTestProject());
 		this.importCompilationUnitWithName(implementingInterfaceName, classCompilationUnit);

@@ -3,9 +3,10 @@ package mir.routines.java2pcm;
 import java.io.IOException;
 import mir.routines.java2pcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.CompositeComponent;
-import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -21,20 +22,20 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
       super(reactionExecutionState);
     }
     
-    public void updatePcmCompositeComponentElement(final org.emftext.language.java.containers.Package javaPackage, final Repository pcmRepository, final CompositeComponent pcmCompositeComponent) {
-      pcmCompositeComponent.setEntityName(javaPackage.getName());
+    public void updatePcmCompositeComponentElement(final org.emftext.language.java.containers.Package javaPackage, final CompositeComponent pcmCompositeComponent) {
+      pcmCompositeComponent.setEntityName(Java2PcmHelper.getLastPackageName(javaPackage.getName()));
     }
     
-    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final Repository pcmRepository, final CompositeComponent pcmCompositeComponent) {
+    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final CompositeComponent pcmCompositeComponent) {
       return pcmCompositeComponent;
     }
     
-    public EObject getCorrepondenceSourcePcmRepository(final org.emftext.language.java.containers.Package javaPackage) {
+    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final CompositeComponent pcmCompositeComponent) {
       return javaPackage;
     }
     
-    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final Repository pcmRepository, final CompositeComponent pcmCompositeComponent) {
-      return javaPackage;
+    public void callRoutine1(final org.emftext.language.java.containers.Package javaPackage, final CompositeComponent pcmCompositeComponent, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.addComponentToRepository(pcmCompositeComponent, Java2PcmHelper.findPcmRepository(this.correspondenceModel, javaPackage.getName()));
     }
   }
   
@@ -51,19 +52,12 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     getLogger().debug("Called routine CreateCompositeComponentRoutine with input:");
     getLogger().debug("   Package: " + this.javaPackage);
     
-    Repository pcmRepository = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmRepository(javaPackage), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
-    	null);
-    if (pcmRepository == null) {
-    	return;
-    }
-    registerObjectUnderModification(pcmRepository);
     CompositeComponent pcmCompositeComponent = RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
-    userExecution.updatePcmCompositeComponentElement(javaPackage, pcmRepository, pcmCompositeComponent);
+    userExecution.updatePcmCompositeComponentElement(javaPackage, pcmCompositeComponent);
     
-    addCorrespondenceBetween(userExecution.getElement1(javaPackage, pcmRepository, pcmCompositeComponent), userExecution.getElement2(javaPackage, pcmRepository, pcmCompositeComponent), "");
+    addCorrespondenceBetween(userExecution.getElement1(javaPackage, pcmCompositeComponent), userExecution.getElement2(javaPackage, pcmCompositeComponent), "");
+    
+    userExecution.callRoutine1(javaPackage, pcmCompositeComponent, actionsFacade);
     
     postprocessElements();
   }

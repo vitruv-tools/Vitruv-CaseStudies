@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.java2pcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
-import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -21,27 +20,16 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceClsPackage(final org.emftext.language.java.classifiers.Class cls) {
-      return cls;
-    }
-    
-    public EObject getElement1(final org.emftext.language.java.classifiers.Class cls, final org.emftext.language.java.containers.Package clsPackage, final Repository pcmRepository, final CompositeDataType pcmCompositeDataType) {
+    public EObject getElement1(final org.emftext.language.java.classifiers.Class cls, final CompositeDataType pcmCompositeDataType) {
       return pcmCompositeDataType;
     }
     
-    public EObject getCorrepondenceSourcePcmRepository(final org.emftext.language.java.classifiers.Class cls, final org.emftext.language.java.containers.Package clsPackage) {
-      return clsPackage;
-    }
-    
-    public String getRetrieveTag1(final org.emftext.language.java.classifiers.Class cls) {
-      return "datatypes";
-    }
-    
-    public void updatePcmCompositeDataTypeElement(final org.emftext.language.java.classifiers.Class cls, final org.emftext.language.java.containers.Package clsPackage, final Repository pcmRepository, final CompositeDataType pcmCompositeDataType) {
+    public void updatePcmCompositeDataTypeElement(final org.emftext.language.java.classifiers.Class cls, final CompositeDataType pcmCompositeDataType) {
       pcmCompositeDataType.setEntityName(cls.getName());
+      pcmCompositeDataType.setRepository__DataType(null);
     }
     
-    public EObject getElement2(final org.emftext.language.java.classifiers.Class cls, final org.emftext.language.java.containers.Package clsPackage, final Repository pcmRepository, final CompositeDataType pcmCompositeDataType) {
+    public EObject getElement2(final org.emftext.language.java.classifiers.Class cls, final CompositeDataType pcmCompositeDataType) {
       return cls;
     }
   }
@@ -59,28 +47,10 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     getLogger().debug("Called routine CreateCompositeDataTypeRoutine with input:");
     getLogger().debug("   Class: " + this.cls);
     
-    org.emftext.language.java.containers.Package clsPackage = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceClsPackage(cls), // correspondence source supplier
-    	org.emftext.language.java.containers.Package.class,
-    	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(cls));
-    if (clsPackage == null) {
-    	return;
-    }
-    registerObjectUnderModification(clsPackage);
-    Repository pcmRepository = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmRepository(cls, clsPackage), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
-    	null);
-    if (pcmRepository == null) {
-    	return;
-    }
-    registerObjectUnderModification(pcmRepository);
     CompositeDataType pcmCompositeDataType = RepositoryFactoryImpl.eINSTANCE.createCompositeDataType();
-    userExecution.updatePcmCompositeDataTypeElement(cls, clsPackage, pcmRepository, pcmCompositeDataType);
+    userExecution.updatePcmCompositeDataTypeElement(cls, pcmCompositeDataType);
     
-    addCorrespondenceBetween(userExecution.getElement1(cls, clsPackage, pcmRepository, pcmCompositeDataType), userExecution.getElement2(cls, clsPackage, pcmRepository, pcmCompositeDataType), "");
+    addCorrespondenceBetween(userExecution.getElement1(cls, pcmCompositeDataType), userExecution.getElement2(cls, pcmCompositeDataType), "");
     
     postprocessElements();
   }

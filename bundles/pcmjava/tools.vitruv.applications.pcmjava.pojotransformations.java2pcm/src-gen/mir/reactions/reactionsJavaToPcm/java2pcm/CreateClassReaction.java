@@ -1,6 +1,7 @@
 package mir.reactions.reactionsJavaToPcm.java2pcm;
 
 import mir.routines.java2pcm.RoutinesFacade;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -19,10 +20,11 @@ class CreateClassReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
     InsertEReference<org.emftext.language.java.containers.Package, org.emftext.language.java.classifiers.Class> typedChange = (InsertEReference<org.emftext.language.java.containers.Package, org.emftext.language.java.classifiers.Class>)change;
     org.emftext.language.java.containers.Package affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
     org.emftext.language.java.classifiers.Class newValue = typedChange.getNewValue();
     mir.routines.java2pcm.RoutinesFacade routinesFacade = new mir.routines.java2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2pcm.CreateClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2pcm.CreateClassReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, newValue, routinesFacade);
+    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
@@ -32,6 +34,9 @@ class CreateClassReaction extends AbstractReactionRealization {
   private boolean checkChangeProperties(final EChange change) {
     InsertEReference<org.emftext.language.java.containers.Package, org.emftext.language.java.classifiers.Class> relevantChange = (InsertEReference<org.emftext.language.java.containers.Package, org.emftext.language.java.classifiers.Class>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.containers.Package)) {
+    	return false;
+    }
+    if (!relevantChange.getAffectedFeature().getName().equals("compilationUnits")) {
     	return false;
     }
     if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.classifiers.Class)) {
@@ -58,7 +63,7 @@ class CreateClassReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.containers.Package affectedEObject, final org.emftext.language.java.classifiers.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.emftext.language.java.containers.Package affectedEObject, final EReference affectedFeature, final org.emftext.language.java.classifiers.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createCompositeDataType(newValue);
     }
   }
