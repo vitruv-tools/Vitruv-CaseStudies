@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class JavaAttributeCreatedInEnumReaction extends AbstractReactionRealization {
-  public JavaAttributeCreatedInEnumReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<Enumeration, Field> typedChange = ((CreateAndInsertNonRoot<Enumeration, Field>)change).getInsertChange();
     Enumeration affectedEObject = typedChange.getAffectedEObject();

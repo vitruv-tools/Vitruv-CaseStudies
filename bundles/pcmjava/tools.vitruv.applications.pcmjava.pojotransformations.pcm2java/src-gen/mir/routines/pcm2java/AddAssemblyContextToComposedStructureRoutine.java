@@ -134,13 +134,17 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     }
     registerObjectUnderModification(encapsulatedComponentJavaClass);
     Field assemblyContextField = MembersFactoryImpl.eINSTANCE.createField();
+    notifyObjectCreated(assemblyContextField);
     userExecution.updateAssemblyContextFieldElement(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField);
     
     NewConstructorCall newConstructorCall = InstantiationsFactoryImpl.eINSTANCE.createNewConstructorCall();
+    notifyObjectCreated(newConstructorCall);
     
     ClassifierImport contextClassImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
+    notifyObjectCreated(contextClassImport);
     
     Constructor constructor = MembersFactoryImpl.eINSTANCE.createConstructor();
+    notifyObjectCreated(constructor);
     
     // val updatedElement userExecution.getElement1(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall, contextClassImport, constructor);
     userExecution.update0Element(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall, contextClassImport, constructor);

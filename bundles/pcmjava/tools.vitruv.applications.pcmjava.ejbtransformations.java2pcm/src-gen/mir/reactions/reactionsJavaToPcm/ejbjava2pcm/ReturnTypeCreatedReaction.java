@@ -11,14 +11,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class ReturnTypeCreatedReaction extends AbstractReactionRealization {
-  public ReturnTypeCreatedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> typedChange = (ReplaceSingleValuedEReference<InterfaceMethod, TypeReference>)change;
     InterfaceMethod affectedEObject = typedChange.getAffectedEObject();

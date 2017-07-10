@@ -11,14 +11,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class ChangedOperationSignatureTypeReaction extends AbstractReactionRealization {
-  public ChangedOperationSignatureTypeReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEReference<OperationSignature, DataType> typedChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
     OperationSignature affectedEObject = typedChange.getAffectedEObject();

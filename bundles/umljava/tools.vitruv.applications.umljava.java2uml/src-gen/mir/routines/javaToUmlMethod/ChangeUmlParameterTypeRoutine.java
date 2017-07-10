@@ -33,7 +33,7 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void update0Element(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
-      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
       Type _umlType = JavaToUmlHelper.getUmlType(jType, _umlModel, this.correspondenceModel);
       uParam.setType(_umlType);
     }

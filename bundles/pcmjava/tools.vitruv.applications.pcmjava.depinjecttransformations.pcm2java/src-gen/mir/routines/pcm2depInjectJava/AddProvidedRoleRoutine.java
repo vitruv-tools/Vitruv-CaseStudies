@@ -105,11 +105,13 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     }
     registerObjectUnderModification(javaClass);
     ClassifierImport interfaceImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
+    notifyObjectCreated(interfaceImport);
     userExecution.updateInterfaceImportElement(providedRole, operationProvidingInterface, javaClass, interfaceImport);
     
     addCorrespondenceBetween(userExecution.getElement1(providedRole, operationProvidingInterface, javaClass, interfaceImport), userExecution.getElement2(providedRole, operationProvidingInterface, javaClass, interfaceImport), "");
     
     NamespaceClassifierReference namespaceClassifierReference = TypesFactoryImpl.eINSTANCE.createNamespaceClassifierReference();
+    notifyObjectCreated(namespaceClassifierReference);
     userExecution.updateNamespaceClassifierReferenceElement(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference);
     
     addCorrespondenceBetween(userExecution.getElement3(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference), userExecution.getElement4(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference), "");

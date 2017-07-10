@@ -10,14 +10,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class ChangedMultiplicityLowerReaction extends AbstractReactionRealization {
-  public ChangedMultiplicityLowerReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEAttribute<MultiplicityElement, Integer> typedChange = (ReplaceSingleValuedEAttribute<MultiplicityElement, Integer>)change;
     MultiplicityElement affectedEObject = typedChange.getAffectedEObject();

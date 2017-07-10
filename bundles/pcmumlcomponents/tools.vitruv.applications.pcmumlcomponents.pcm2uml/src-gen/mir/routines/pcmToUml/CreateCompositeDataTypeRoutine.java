@@ -76,6 +76,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     registerObjectUnderModification(umlModel);
     DataType umlType = UMLFactoryImpl.eINSTANCE.createDataType();
+    notifyObjectCreated(umlType);
     userExecution.updateUmlTypeElement(dataType, umlModel, umlType);
     
     // val updatedElement userExecution.getElement1(dataType, umlModel, umlType);

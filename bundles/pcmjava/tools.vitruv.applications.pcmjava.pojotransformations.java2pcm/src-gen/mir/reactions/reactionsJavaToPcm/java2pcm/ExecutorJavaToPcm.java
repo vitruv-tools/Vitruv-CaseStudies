@@ -12,6 +12,6 @@ public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
+    
   }
 }

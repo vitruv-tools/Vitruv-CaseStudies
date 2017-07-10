@@ -79,6 +79,7 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     registerObjectUnderModification(jClassifier);
     Field javaAttribute = MembersFactoryImpl.eINSTANCE.createField();
+    notifyObjectCreated(javaAttribute);
     userExecution.updateJavaAttributeElement(uClassifier, umlAttribute, jClassifier, javaAttribute);
     
     // val updatedElement userExecution.getElement1(uClassifier, umlAttribute, jClassifier, javaAttribute);

@@ -14,14 +14,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class CreatedClassReaction extends AbstractReactionRealization {
-  public CreatedClassReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<CompilationUnit, ConcreteClassifier> typedChange = (InsertEReference<CompilationUnit, ConcreteClassifier>)change;
     CompilationUnit affectedEObject = typedChange.getAffectedEObject();

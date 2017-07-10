@@ -75,6 +75,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     registerObjectUnderModification(pcmRepository);
     CompositeDataType pcmType = RepositoryFactoryImpl.eINSTANCE.createCompositeDataType();
+    notifyObjectCreated(pcmType);
     userExecution.updatePcmTypeElement(umlType, pcmRepository, pcmType);
     
     // val updatedElement userExecution.getElement1(umlType, pcmRepository, pcmType);

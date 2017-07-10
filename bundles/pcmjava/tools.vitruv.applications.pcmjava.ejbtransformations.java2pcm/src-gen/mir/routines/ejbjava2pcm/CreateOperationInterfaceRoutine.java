@@ -64,6 +64,7 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
     getLogger().debug("   NamedElement: " + this.namedElement);
     
     OperationInterface operationInterface = RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
+    notifyObjectCreated(operationInterface);
     userExecution.updateOperationInterfaceElement(repo, namedElement, operationInterface);
     
     addCorrespondenceBetween(userExecution.getElement1(repo, namedElement, operationInterface), userExecution.getElement2(repo, namedElement, operationInterface), "");

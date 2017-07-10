@@ -75,6 +75,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
     registerObjectUnderModification(umlModel);
     org.eclipse.uml2.uml.Interface umlInterface = UMLFactoryImpl.eINSTANCE.createInterface();
+    notifyObjectCreated(umlInterface);
     userExecution.updateUmlInterfaceElement(pcmInterface, umlModel, umlInterface);
     
     // val updatedElement userExecution.getElement1(pcmInterface, umlModel, umlInterface);

@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class CreateAnnotationForFieldReaction extends AbstractReactionRealization {
-  public CreateAnnotationForFieldReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<Field, AnnotationInstanceOrModifier> typedChange = (InsertEReference<Field, AnnotationInstanceOrModifier>)change;
     Field affectedEObject = typedChange.getAffectedEObject();

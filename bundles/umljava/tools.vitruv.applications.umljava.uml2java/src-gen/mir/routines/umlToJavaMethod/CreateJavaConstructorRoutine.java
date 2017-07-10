@@ -82,6 +82,7 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
     }
     registerObjectUnderModification(jClassifier);
     Constructor jConstructor = MembersFactoryImpl.eINSTANCE.createConstructor();
+    notifyObjectCreated(jConstructor);
     userExecution.updateJConstructorElement(uClassifier, uOperation, jClassifier, jConstructor);
     
     // val updatedElement userExecution.getElement1(uClassifier, uOperation, jClassifier, jConstructor);

@@ -79,6 +79,7 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     }
     registerObjectUnderModification(pcmRepository);
     CollectionDataType pcmType = RepositoryFactoryImpl.eINSTANCE.createCollectionDataType();
+    notifyObjectCreated(pcmType);
     userExecution.updatePcmTypeElement(umlType, pcmRepository, pcmType);
     
     // val updatedElement userExecution.getElement1(umlType, pcmRepository, pcmType);

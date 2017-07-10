@@ -65,6 +65,7 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   CompilationUnit: " + this.jCompUnit);
     
     org.eclipse.uml2.uml.Enumeration uEnum = UMLFactoryImpl.eINSTANCE.createEnumeration();
+    notifyObjectCreated(uEnum);
     userExecution.updateUEnumElement(jEnum, jCompUnit, uEnum);
     
     userExecution.callRoutine1(jEnum, jCompUnit, uEnum, actionsFacade);

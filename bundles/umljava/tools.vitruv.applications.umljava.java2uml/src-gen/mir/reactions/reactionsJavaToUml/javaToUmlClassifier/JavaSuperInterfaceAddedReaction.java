@@ -13,14 +13,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class JavaSuperInterfaceAddedReaction extends AbstractReactionRealization {
-  public JavaSuperInterfaceAddedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<Interface, TypeReference> typedChange = (InsertEReference<Interface, TypeReference>)change;
     Interface affectedEObject = typedChange.getAffectedEObject();

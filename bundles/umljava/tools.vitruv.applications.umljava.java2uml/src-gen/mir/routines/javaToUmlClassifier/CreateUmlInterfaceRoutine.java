@@ -65,6 +65,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("   CompilationUnit: " + this.jCompUnit);
     
     org.eclipse.uml2.uml.Interface uInterface = UMLFactoryImpl.eINSTANCE.createInterface();
+    notifyObjectCreated(uInterface);
     userExecution.updateUInterfaceElement(jInterface, jCompUnit, uInterface);
     
     addCorrespondenceBetween(userExecution.getElement1(jInterface, jCompUnit, uInterface), userExecution.getElement2(jInterface, jCompUnit, uInterface), "");

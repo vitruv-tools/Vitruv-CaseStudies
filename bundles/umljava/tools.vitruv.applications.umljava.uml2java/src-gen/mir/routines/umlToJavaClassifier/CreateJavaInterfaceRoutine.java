@@ -56,6 +56,7 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     getLogger().debug("   Interface: " + this.umlInterface);
     
     org.emftext.language.java.classifiers.Interface javaInterface = ClassifiersFactoryImpl.eINSTANCE.createInterface();
+    notifyObjectCreated(javaInterface);
     userExecution.updateJavaInterfaceElement(umlInterface, javaInterface);
     
     addCorrespondenceBetween(userExecution.getElement1(umlInterface, javaInterface), userExecution.getElement2(umlInterface, javaInterface), "");

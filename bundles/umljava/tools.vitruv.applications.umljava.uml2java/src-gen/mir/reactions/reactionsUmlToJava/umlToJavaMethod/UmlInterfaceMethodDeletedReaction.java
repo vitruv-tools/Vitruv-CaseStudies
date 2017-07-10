@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlInterfaceMethodDeletedReaction extends AbstractReactionRealization {
-  public UmlInterfaceMethodDeletedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     RemoveEReference<Interface, Operation> typedChange = ((RemoveAndDeleteNonRoot<Interface, Operation>)change).getRemoveChange();
     Interface affectedEObject = typedChange.getAffectedEObject();

@@ -131,7 +131,7 @@ routine addUmlSuperClass(java::Class jClass, java::Class jSuperClass) {
     }
     action {
         update uClass {
-            val uSuperClass = getUmlType(jSuperClass, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+            val uSuperClass = getUmlType(jSuperClass, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
             if (uSuperClass !== null && uSuperClass instanceof org.eclipse.uml2.uml.Class) {
                 uClass.addUmlSuperClassifier(uSuperClass as org.eclipse.uml2.uml.Class)
             } else {
@@ -166,7 +166,7 @@ routine addUmlClassImplement(java::Class jClass, java::Classifier jInterface) {
     }
     action {
         update uClass {
-            val uInterface = getUmlType(jInterface, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+            val uInterface = getUmlType(jInterface, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
             if (uInterface !== null && uInterface instanceof org.eclipse.uml2.uml.Interface) {
                 uClass.createInterfaceRealization(uInterface.name + uInterface.name, uInterface as org.eclipse.uml2.uml.Interface)
             } else {
@@ -190,7 +190,7 @@ routine removeUmlClassImplement(java::Class jClass, java::Interface jInterface) 
     }
     action {
         update uClass {
-            val uInterface = getUmlType(jInterface, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+            val uInterface = getUmlType(jInterface, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
             if (uInterface !== null && uInterface instanceof org.eclipse.uml2.uml.Interface) {
                 uClass.removeUmlImplementedInterface(uInterface as org.eclipse.uml2.uml.Interface)
             }
@@ -228,7 +228,7 @@ routine addUmlSuperinterfaces(java::Interface jInterface, java::Classifier jSupe
     }
     action {
         update uInterface {
-            val uSuperInterface = getUmlType(jSuperInterface, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+            val uSuperInterface = getUmlType(jSuperInterface, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
             if (uSuperInterface !== null && uSuperInterface instanceof org.eclipse.uml2.uml.Interface) {
                 uInterface.addUmlSuperClassifier(uSuperInterface as org.eclipse.uml2.uml.Interface)
             } else {
@@ -257,7 +257,7 @@ routine removeUmlSuperInterface(java::Interface jInterface, java::Classifier jSu
     }
     action {
         update uInterface {
-            val uSuperInterface = getUmlType(jSuperClassifier, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+            val uSuperInterface = getUmlType(jSuperClassifier, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
             if (uSuperInterface !== null && uSuperInterface instanceof org.eclipse.uml2.uml.Interface) {
                 uInterface.removeUmlGeneralClassifier(uSuperInterface as org.eclipse.uml2.uml.Interface)
             }
@@ -282,7 +282,7 @@ routine createUmlPackage(java::Package jPackage) {
 		add correspondence between uPackage and jPackage
 		call {
 		    if (jPackage.namespaces.nullOrEmpty) {
-		        addUmlElementToPackage(uPackage, getUmlModel(correspondenceModel, userInteracting), jPackage)
+		        addUmlElementToPackage(uPackage, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), jPackage)
 		    } else {
 		        addUmlElementToPackage(uPackage, findUmlPackage(correspondenceModel, jPackage.namespaces.last), jPackage)
 		    }
@@ -342,7 +342,7 @@ routine addUmlElementToModelOrPackage(java::CompilationUnit jCompUnit, uml::Clas
     action {
        call {
             if (jCompUnit.namespaces.nullOrEmpty) {
-                addUmlElementToPackage(uClassifier, getUmlModel(correspondenceModel, userInteracting), jCompUnit)
+                addUmlElementToPackage(uClassifier, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), jCompUnit)
             } else {
                 addUmlElementToPackage(uClassifier, findUmlPackage(correspondenceModel, jCompUnit.namespaces.last), jCompUnit)
             }

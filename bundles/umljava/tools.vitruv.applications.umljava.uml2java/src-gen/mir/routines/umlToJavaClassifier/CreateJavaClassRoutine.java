@@ -56,6 +56,7 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   Classifier: " + this.umlClassifier);
     
     org.emftext.language.java.classifiers.Class javaClassifier = ClassifiersFactoryImpl.eINSTANCE.createClass();
+    notifyObjectCreated(javaClassifier);
     userExecution.updateJavaClassifierElement(umlClassifier, javaClassifier);
     
     addCorrespondenceBetween(userExecution.getElement1(umlClassifier, javaClassifier), userExecution.getElement2(umlClassifier, javaClassifier), "");

@@ -76,6 +76,7 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
     }
     registerObjectUnderModification(uEnum);
     Property uAttr = UMLFactoryImpl.eINSTANCE.createProperty();
+    notifyObjectCreated(uAttr);
     userExecution.updateUAttrElement(jEnum, jAttr, uEnum, uAttr);
     
     addCorrespondenceBetween(userExecution.getElement1(jEnum, jAttr, uEnum, uAttr), userExecution.getElement2(jEnum, jAttr, uEnum, uAttr), "");

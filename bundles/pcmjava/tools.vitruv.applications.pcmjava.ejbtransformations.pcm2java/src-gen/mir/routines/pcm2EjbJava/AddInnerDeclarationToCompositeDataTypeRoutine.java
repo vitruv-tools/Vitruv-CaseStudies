@@ -123,16 +123,19 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     }
     registerObjectUnderModification(dataTypeClass);
     Field innerDataTypeField = MembersFactoryImpl.eINSTANCE.createField();
+    notifyObjectCreated(innerDataTypeField);
     userExecution.updateInnerDataTypeFieldElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField);
     
     addCorrespondenceBetween(userExecution.getElement1(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField), userExecution.getElement2(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField), "");
     
     ClassMethod getterMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
+    notifyObjectCreated(getterMethod);
     userExecution.updateGetterMethodElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod);
     
     addCorrespondenceBetween(userExecution.getElement3(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod), userExecution.getElement4(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod), userExecution.getTag1(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod));
     
     ClassMethod setterMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
+    notifyObjectCreated(setterMethod);
     userExecution.updateSetterMethodElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     
     addCorrespondenceBetween(userExecution.getElement5(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod), userExecution.getElement6(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod), userExecution.getTag2(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod));

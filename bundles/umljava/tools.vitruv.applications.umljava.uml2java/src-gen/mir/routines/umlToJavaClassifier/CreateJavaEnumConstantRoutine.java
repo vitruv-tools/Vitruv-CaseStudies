@@ -76,6 +76,7 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     }
     registerObjectUnderModification(jEnum);
     EnumConstant jConstant = MembersFactoryImpl.eINSTANCE.createEnumConstant();
+    notifyObjectCreated(jConstant);
     userExecution.updateJConstantElement(uLiteral, uEnum, jEnum, jConstant);
     
     addCorrespondenceBetween(userExecution.getElement1(uLiteral, uEnum, jEnum, jConstant), userExecution.getElement2(uLiteral, uEnum, jEnum, jConstant), "");

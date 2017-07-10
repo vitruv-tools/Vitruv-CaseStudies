@@ -95,6 +95,7 @@ public class CreatedImplementsRoutine extends AbstractRepairRoutineRealization {
     }
     registerObjectUnderModification(basicComponent);
     OperationProvidedRole opr = RepositoryFactoryImpl.eINSTANCE.createOperationProvidedRole();
+    notifyObjectCreated(opr);
     
     // val updatedElement userExecution.getElement1(clazz, implementz, basicComponent, opr);
     userExecution.update0Element(clazz, implementz, basicComponent, opr);

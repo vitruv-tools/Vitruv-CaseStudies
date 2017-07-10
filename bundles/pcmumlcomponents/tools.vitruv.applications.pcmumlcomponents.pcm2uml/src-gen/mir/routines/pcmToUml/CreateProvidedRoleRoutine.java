@@ -80,6 +80,7 @@ public class CreateProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     }
     registerObjectUnderModification(umlComponent);
     InterfaceRealization interfaceRealization = UMLFactoryImpl.eINSTANCE.createInterfaceRealization();
+    notifyObjectCreated(interfaceRealization);
     userExecution.updateInterfaceRealizationElement(pcmComponent, pcmProvidedRole, umlComponent, interfaceRealization);
     
     // val updatedElement userExecution.getElement1(pcmComponent, pcmProvidedRole, umlComponent, interfaceRealization);

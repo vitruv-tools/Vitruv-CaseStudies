@@ -98,13 +98,14 @@ import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
-import tools.vitruv.framework.modelsynchronization.ChangePropagationAbortCause;
-import tools.vitruv.framework.modelsynchronization.ChangePropagationListener;
 import tools.vitruv.framework.monitorededitor.ProjectBuildUtils;
 import tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest;
 import tools.vitruv.framework.tests.util.TestUtil;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
+import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationAbortCause;
+import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationListener;
+
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
 /**

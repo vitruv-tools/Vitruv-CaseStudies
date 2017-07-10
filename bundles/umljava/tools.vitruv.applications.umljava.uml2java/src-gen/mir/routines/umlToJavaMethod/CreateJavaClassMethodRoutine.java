@@ -101,6 +101,7 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
     	null);
     registerObjectUnderModification(customTypeClass);
     ClassMethod javaMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
+    notifyObjectCreated(javaMethod);
     userExecution.updateJavaMethodElement(uClassifier, uOperation, jClassifier, customTypeClass, javaMethod);
     
     // val updatedElement userExecution.getElement1(uClassifier, uOperation, jClassifier, customTypeClass, javaMethod);

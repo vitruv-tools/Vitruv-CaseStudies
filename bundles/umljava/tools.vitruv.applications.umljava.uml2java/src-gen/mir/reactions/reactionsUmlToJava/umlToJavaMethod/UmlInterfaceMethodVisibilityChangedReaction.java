@@ -14,14 +14,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlInterfaceMethodVisibilityChangedReaction extends AbstractReactionRealization {
-  public UmlInterfaceMethodVisibilityChangedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEAttribute<Operation, VisibilityKind> typedChange = (ReplaceSingleValuedEAttribute<Operation, VisibilityKind>)change;
     Operation affectedEObject = typedChange.getAffectedEObject();

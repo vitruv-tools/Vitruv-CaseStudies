@@ -11,14 +11,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
-  public UmlInterfaceMadeFinalReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEAttribute<Interface, Boolean> typedChange = (ReplaceSingleValuedEAttribute<Interface, Boolean>)change;
     Interface affectedEObject = typedChange.getAffectedEObject();

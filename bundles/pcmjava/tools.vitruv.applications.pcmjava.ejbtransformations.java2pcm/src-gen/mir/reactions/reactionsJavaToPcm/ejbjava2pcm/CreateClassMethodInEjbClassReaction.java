@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class CreateClassMethodInEjbClassReaction extends AbstractReactionRealization {
-  public CreateClassMethodInEjbClassReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();

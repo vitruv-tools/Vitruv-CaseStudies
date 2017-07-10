@@ -13,14 +13,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlParameterTypeChangedReaction extends AbstractReactionRealization {
-  public UmlParameterTypeChangedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEReference<Parameter, Type> typedChange = (ReplaceSingleValuedEReference<Parameter, Type>)change;
     Parameter affectedEObject = typedChange.getAffectedEObject();

@@ -15,14 +15,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class JavaElementVisibilityChangedReaction extends AbstractReactionRealization {
-  public JavaElementVisibilityChangedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<AnnotableAndModifiable, Modifier> typedChange = ((CreateAndInsertNonRoot<AnnotableAndModifiable, Modifier>)change).getInsertChange();
     AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();

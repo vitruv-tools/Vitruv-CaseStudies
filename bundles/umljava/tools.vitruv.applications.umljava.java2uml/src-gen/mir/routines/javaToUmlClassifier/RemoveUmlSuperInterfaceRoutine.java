@@ -29,7 +29,7 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Interface jInterface, final Classifier jSuperClassifier, final org.eclipse.uml2.uml.Interface uInterface) {
-      Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+      Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
       final Type uSuperInterface = JavaToUmlHelper.getUmlType(jSuperClassifier, _umlModel, this.correspondenceModel);
       if (((uSuperInterface != null) && (uSuperInterface instanceof org.eclipse.uml2.uml.Interface))) {
         UmlClassifierAndPackageUtil.removeUmlGeneralClassifier(uInterface, ((org.eclipse.uml2.uml.Interface) uSuperInterface));

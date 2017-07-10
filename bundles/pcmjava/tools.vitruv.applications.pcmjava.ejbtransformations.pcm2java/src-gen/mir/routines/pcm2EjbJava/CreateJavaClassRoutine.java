@@ -70,6 +70,7 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   String: " + this.className);
     
     org.emftext.language.java.classifiers.Class javaClass = ClassifiersFactoryImpl.eINSTANCE.createClass();
+    notifyObjectCreated(javaClass);
     userExecution.updateJavaClassElement(sourceElementMappedToClass, containingPackage, className, javaClass);
     
     addCorrespondenceBetween(userExecution.getElement1(sourceElementMappedToClass, containingPackage, className, javaClass), userExecution.getElement2(sourceElementMappedToClass, containingPackage, className, javaClass), "");

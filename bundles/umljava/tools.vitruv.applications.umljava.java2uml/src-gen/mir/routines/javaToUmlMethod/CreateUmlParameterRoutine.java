@@ -77,6 +77,7 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
     }
     registerObjectUnderModification(uOperation);
     Parameter uParam = UMLFactoryImpl.eINSTANCE.createParameter();
+    notifyObjectCreated(uParam);
     userExecution.updateUParamElement(jMeth, jParam, uOperation, uParam);
     
     addCorrespondenceBetween(userExecution.getElement1(jMeth, jParam, uOperation, uParam), userExecution.getElement2(jMeth, jParam, uOperation, uParam), "");

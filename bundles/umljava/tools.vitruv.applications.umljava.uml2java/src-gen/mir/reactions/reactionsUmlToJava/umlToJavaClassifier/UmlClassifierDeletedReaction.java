@@ -11,14 +11,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlClassifierDeletedReaction extends AbstractReactionRealization {
-  public UmlClassifierDeletedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     RemoveEReference<org.eclipse.uml2.uml.Package, Classifier> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Package, Classifier>)change).getRemoveChange();
     org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();

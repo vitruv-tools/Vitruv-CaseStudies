@@ -63,7 +63,7 @@ routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
     }
     action {
         update uAttr {
-            uAttr.type = getUmlType(jType, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+            uAttr.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
         }
     }
 }

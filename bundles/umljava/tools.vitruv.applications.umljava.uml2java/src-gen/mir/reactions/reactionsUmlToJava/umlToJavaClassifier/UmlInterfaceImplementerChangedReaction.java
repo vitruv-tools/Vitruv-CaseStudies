@@ -14,14 +14,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlInterfaceImplementerChangedReaction extends AbstractReactionRealization {
-  public UmlInterfaceImplementerChangedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEReference<InterfaceRealization, org.eclipse.uml2.uml.Class> typedChange = (ReplaceSingleValuedEReference<InterfaceRealization, org.eclipse.uml2.uml.Class>)change;
     InterfaceRealization affectedEObject = typedChange.getAffectedEObject();

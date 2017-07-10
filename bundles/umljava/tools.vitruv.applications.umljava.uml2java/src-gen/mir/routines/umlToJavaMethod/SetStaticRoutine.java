@@ -60,6 +60,7 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     }
     registerObjectUnderModification(jMod);
     Static staticMod = ModifiersFactoryImpl.eINSTANCE.createStatic();
+    notifyObjectCreated(staticMod);
     
     // val updatedElement userExecution.getElement1(uFeat, jMod, staticMod);
     userExecution.update0Element(uFeat, jMod, staticMod);

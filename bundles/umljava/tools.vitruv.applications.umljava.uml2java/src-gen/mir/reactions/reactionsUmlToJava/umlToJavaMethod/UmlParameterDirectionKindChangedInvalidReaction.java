@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlParameterDirectionKindChangedInvalidReaction extends AbstractReactionRealization {
-  public UmlParameterDirectionKindChangedInvalidReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind> typedChange = (ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind>)change;
     Parameter affectedEObject = typedChange.getAffectedEObject();

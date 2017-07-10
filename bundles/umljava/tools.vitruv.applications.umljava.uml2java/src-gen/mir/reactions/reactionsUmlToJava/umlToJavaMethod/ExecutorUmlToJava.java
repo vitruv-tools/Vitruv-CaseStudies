@@ -12,25 +12,24 @@ public class ExecutorUmlToJava extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedInDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedInDataTypeReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlClassMethodDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlClassMethodDeletedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodDeletedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlDataTypeMethodDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlDataTypeMethodDeletedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodReturnTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodReturnTypeChangedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlFeatureMadeStaticReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlFeatureMadeStaticReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeAbstractReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeAbstractReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodCreatedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeFinalReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeFinalReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlElementVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlElementVisibilityChangedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlNamedElementRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlNamedElementRenamedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterCreatedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDeletedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterTypeChangedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionKindChangedInvalidReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionKindChangedInvalidReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodVisibilityChangedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodMadeFinalReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodMadeFinalReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedInDataTypeReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedInDataTypeReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlClassMethodDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlClassMethodDeletedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodDeletedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlDataTypeMethodDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlDataTypeMethodDeletedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodReturnTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodReturnTypeChangedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlFeatureMadeStaticReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlFeatureMadeStaticReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeAbstractReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeAbstractReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodCreatedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeFinalReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodMadeFinalReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlElementVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlElementVisibilityChangedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlNamedElementRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlNamedElementRenamedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterCreatedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDeletedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterTypeChangedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionKindChangedInvalidReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionKindChangedInvalidReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodVisibilityChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodVisibilityChangedReaction());
+    this.addReaction(mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodMadeFinalReaction.getExpectedChangeType(), new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlInterfaceMethodMadeFinalReaction());
   }
 }

@@ -75,6 +75,7 @@ public class CreateInterfaceOperationRoutine extends AbstractRepairRoutineRealiz
     }
     registerObjectUnderModification(pcmInterface);
     OperationSignature pcmOperation = RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
+    notifyObjectCreated(pcmOperation);
     userExecution.updatePcmOperationElement(umlOperation, pcmInterface, pcmOperation);
     
     // val updatedElement userExecution.getElement1(umlOperation, pcmInterface, pcmOperation);

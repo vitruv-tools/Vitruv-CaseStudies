@@ -73,6 +73,7 @@ public class CreateMethodForOperationSignatureRoutine extends AbstractRepairRout
     }
     registerObjectUnderModification(javaInterface);
     InterfaceMethod interfaceMethod = MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
+    notifyObjectCreated(interfaceMethod);
     
     addCorrespondenceBetween(userExecution.getElement1(operationSignature, javaInterface, interfaceMethod), userExecution.getElement2(operationSignature, javaInterface, interfaceMethod), "");
     

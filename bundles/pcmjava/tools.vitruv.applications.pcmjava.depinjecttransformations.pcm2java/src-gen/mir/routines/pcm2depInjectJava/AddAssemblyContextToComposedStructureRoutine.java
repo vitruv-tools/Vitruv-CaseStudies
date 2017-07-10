@@ -95,8 +95,10 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     }
     registerObjectUnderModification(encapsulatedComponentJavaClass);
     Field assemblyContextField = MembersFactoryImpl.eINSTANCE.createField();
+    notifyObjectCreated(assemblyContextField);
     
     NewConstructorCall newConstructorCall = InstantiationsFactoryImpl.eINSTANCE.createNewConstructorCall();
+    notifyObjectCreated(newConstructorCall);
     
     addCorrespondenceBetween(userExecution.getElement1(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall), userExecution.getElement2(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall), "");
     

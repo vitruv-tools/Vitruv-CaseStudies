@@ -28,7 +28,7 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
       EList<String> _namespaces = jCompUnit.getNamespaces();
       boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(_namespaces);
       if (_isNullOrEmpty) {
-        Model _umlModel = JavaToUmlHelper.getUmlModel(this.correspondenceModel, this.userInteracting);
+        Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
         _routinesFacade.addUmlElementToPackage(uClassifier, _umlModel, jCompUnit);
       } else {
         EList<String> _namespaces_1 = jCompUnit.getNamespaces();

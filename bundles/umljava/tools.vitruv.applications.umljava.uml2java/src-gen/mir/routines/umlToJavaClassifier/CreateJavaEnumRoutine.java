@@ -56,6 +56,7 @@ public class CreateJavaEnumRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   Enumeration: " + this.uEnum);
     
     org.emftext.language.java.classifiers.Enumeration jEnum = ClassifiersFactoryImpl.eINSTANCE.createEnumeration();
+    notifyObjectCreated(jEnum);
     userExecution.updateJEnumElement(uEnum, jEnum);
     
     addCorrespondenceBetween(userExecution.getElement1(uEnum, jEnum), userExecution.getElement2(uEnum, jEnum), "");

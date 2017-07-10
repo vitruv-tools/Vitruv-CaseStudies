@@ -67,6 +67,7 @@ public class CreateOperationSignatureRoutine extends AbstractRepairRoutineRealiz
     getLogger().debug("   OperationInterface: " + this.opInterface);
     
     OperationSignature opSignature = RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
+    notifyObjectCreated(opSignature);
     
     addCorrespondenceBetween(userExecution.getElement1(interfaceMethod, opInterface, opSignature), userExecution.getElement2(interfaceMethod, opInterface, opSignature), "");
     
