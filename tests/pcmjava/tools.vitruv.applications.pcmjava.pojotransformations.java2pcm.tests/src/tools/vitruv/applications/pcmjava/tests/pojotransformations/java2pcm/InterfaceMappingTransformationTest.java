@@ -2,7 +2,10 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm;
 
 import static org.junit.Assert.assertTrue;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
+import org.junit.Before;
 import org.junit.Test;
 
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -13,6 +16,10 @@ import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
 public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
+	@Before
+	public void logger() {
+		Logger.getRootLogger().setLevel(Level.ALL);
+	}
     /**
      * interface in contracts package --> should automatically be mapped to operation interface
      *
@@ -35,8 +42,10 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testAddArchitecturalInterfaceInNonRepositoryPackage() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
+        this.getUserInteractor().addNextSelections(0);
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
+        this.getUserInteractor().addNextSelections(0);
         final OperationInterface opInterface = super.addInterfaceInSecondPackageWithCorrespondence(bc.getEntityName());
 
         this.assertOperationInterface(repo, opInterface, Pcm2JavaTestUtils.INTERFACE_NAME);
@@ -50,8 +59,10 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testAddTechnicalInterfaceInNonRepositoryPackage() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
+        this.getUserInteractor().addNextSelections(0);
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
+        this.getUserInteractor().addNextSelections(1);
         final EObject eObject = super.addInterfaceInPackageWithoutCorrespondence(bc.getEntityName());
 
         assertTrue("Corresponding object for interface that is created in non main package is not null: " + eObject,
@@ -61,6 +72,7 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testRenameInterfaceWithCorrespondence() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
+        this.getUserInteractor().addNextSelections(0);
         super.addSecondPackageCorrespondsToBasicComponent();
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
 

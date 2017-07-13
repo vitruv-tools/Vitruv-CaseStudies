@@ -37,6 +37,10 @@ public class Java2PcmHelper {
 	}
 	
 	def static String getRootPackageName(String packageName) {
+		val index = packageName.indexOf('.')
+		if (index < 0) {
+			return packageName
+		}
 		return packageName.substring(0, packageName.indexOf('.'))
 	}
 	

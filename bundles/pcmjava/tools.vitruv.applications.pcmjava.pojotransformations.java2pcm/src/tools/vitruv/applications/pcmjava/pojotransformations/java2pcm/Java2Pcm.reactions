@@ -1,6 +1,10 @@
-import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
+import org.emftext.language.java.classifiers.Classifier
+import org.emftext.language.java.members.InterfaceMethod
+import org.palladiosimulator.pcm.repository.OperationInterface
 import tools.vitruv.framework.userinteraction.UserInteractionType
+
+import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
+import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -31,8 +35,8 @@ routine createArchitecturalElement(java::Package javaPackage) {
 	action {
 		call {
 			val String userMsg = "A package has been created. Please decide whether and which corresponding architectural element should be created"
-		val String[] selections = #["Create basic component", "Create composite component", "Create system",
-			"Do nothing/Decide later"]
+			val String[] selections = #["Create basic component", "Create composite component", "Create system",
+										"Do nothing/Decide later"]
 			val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
 			switch(selected) {
 				case 0: createBasicComponent(javaPackage) 
@@ -102,31 +106,61 @@ routine addComponentToRepository(pcm::ImplementationComponentType pcmComponent, 
 		}
 	}
 }
+routine addInterfaceToRepository(pcm::OperationInterface pcmInterface, pcm::Repository pcmRepository, java::Interface javaInterface, java::CompilationUnit compilationUnit) {
+	action {
+		
+		add correspondence between pcmInterface and javaInterface
+		add correspondence between pcmInterface and compilationUnit	
+			
+		update pcmRepository {
+			pcmRepository.interfaces__Repository += pcmInterface
+		}
+	}
+}
 
 
 reaction CreateInterface {
-	after element java::Interface created and inserted in java::CompilationUnit[classifiers]
+	after element java::Interface inserted in java::CompilationUnit[classifiers]
 	call createPCMInterface(newValue, affectedEObject)		
-		
 }
 
-routine createPCMInterface(java::Interface javaInterface, java::CompilationUnit javaPackage) {
+routine createPCMInterface(java::Interface javaInterface, java::CompilationUnit compilationUnit) {
 	action {
 		val pcmIface = create pcm::OperationInterface and initialize {
 			pcmIface.entityName = javaInterface.name
+		}		
+		call {
+			if (!compilationUnit.namespaces.last.equals("contracts")) {
+				val String userMsg = "The created interface is not in the contracts packages. Should an architectural interface be created for the interface " +
+					javaInterface.name + " ?"
+				val String[] selections = #["yes", "no"]
+				val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
+				if (selected == 0) {
+					val repo = findPcmRepository(correspondenceModel, compilationUnit.namespaces.head)
+					addInterfaceToRepository(pcmIface, repo, javaInterface, compilationUnit)
+				}
+			} else {
+				val repo = findPcmRepository(correspondenceModel, compilationUnit.namespaces.head)
+				addInterfaceToRepository(pcmIface, repo, javaInterface, compilationUnit)
+			}
 		}
-	
-		
-		
-		add correspondence between pcmIface and javaInterface
 	}
 }
+
+routine addCorrespondence(pcm::OperationInterface pcmInterface, java::Interface javaInterface, java::CompilationUnit compilationUnit) {
+	action {
+		add correspondence between pcmInterface and javaInterface
+		add correspondence between pcmInterface and compilationUnit		
+	}
+}
+
+
 
 //DataType
 
 // TODO error + how to ensure package is datatypes
 reaction CreateClass {
-	after element java::Class inserted in java::Package[compilationUnits]
+	after element java::Class created and inserted in java::CompilationUnit[classifiers]
 	call createCompositeDataType(newValue)
 	
 }
