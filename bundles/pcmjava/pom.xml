@@ -22,7 +22,6 @@
 		<module>tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm</module>
 		<module>tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.util</module>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations</module>
-		<module>tools.vitruv.applications.pcmjava.pojotransformations.demo</module>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm</module>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.pcm2java</module>
 		<module>tools.vitruv.applications.pcmjava.util</module>
