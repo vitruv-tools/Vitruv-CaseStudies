@@ -18,4 +18,9 @@ public class PcmJavaPojoApplication extends AbstractVitruvApplication {
 		return specs;
 	}
 
+	@Override
+	public String getName() {
+		return "PCM-Java POJO";
+	}
+
 }
