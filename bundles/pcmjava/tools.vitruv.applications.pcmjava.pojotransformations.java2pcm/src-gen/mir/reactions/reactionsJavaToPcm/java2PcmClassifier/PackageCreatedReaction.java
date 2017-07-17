@@ -1,6 +1,6 @@
-package mir.reactions.reactionsJavaToPcm.java2pcm;
+package mir.reactions.reactionsJavaToPcm.java2PcmClassifier;
 
-import mir.routines.java2pcm.RoutinesFacade;
+import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
@@ -20,8 +20,8 @@ class PackageCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
     InsertRootEObject<org.emftext.language.java.containers.Package> typedChange = (InsertRootEObject<org.emftext.language.java.containers.Package>)change;
     org.emftext.language.java.containers.Package newValue = typedChange.getNewValue();
-    mir.routines.java2pcm.RoutinesFacade routinesFacade = new mir.routines.java2pcm.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2pcm.PackageCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2pcm.PackageCreatedReaction.ActionUserExecution(this.executionState, this);
+    mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
   }
   

@@ -1,8 +1,8 @@
-package mir.routines.java2pcm;
+package mir.routines.java2PcmClassifier;
 
 import com.google.common.collect.Iterables;
 import java.io.IOException;
-import mir.routines.java2pcm.RoutinesFacade;
+import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
@@ -58,8 +58,8 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   public CreateJavaPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.java2pcm.CreateJavaPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2pcm.RoutinesFacade(getExecutionState(), this);
+    this.userExecution = new mir.routines.java2PcmClassifier.CreateJavaPackageRoutine.ActionUserExecution(getExecutionState(), this);
+    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.sourceElementMappedToPackage = sourceElementMappedToPackage;this.parentPackage = parentPackage;this.packageName = packageName;this.newTag = newTag;
   }
   

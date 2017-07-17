@@ -1,6 +1,3 @@
-import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.members.InterfaceMethod
-import org.palladiosimulator.pcm.repository.OperationInterface
 import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
@@ -9,7 +6,7 @@ import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
-reactions: java2pcm
+reactions: Java2PcmClassifier
 in reaction to changes in Java
 execute actions in PCM
 
@@ -147,6 +144,7 @@ routine createPCMInterface(java::Interface javaInterface, java::CompilationUnit 
 	}
 }
 
+
 routine addCorrespondence(pcm::OperationInterface pcmInterface, java::Interface javaInterface, java::CompilationUnit compilationUnit) {
 	action {
 		add correspondence between pcmInterface and javaInterface
@@ -160,21 +158,43 @@ routine addCorrespondence(pcm::OperationInterface pcmInterface, java::Interface 
 
 // TODO error + how to ensure package is datatypes
 reaction CreateClass {
-	after element java::Class created and inserted in java::CompilationUnit[classifiers]
-	call createCompositeDataType(newValue)
+	after element java::Class inserted in java::CompilationUnit[classifiers]
+	call {
+		if (affectedEObject.namespaces.last.equals("contracts")) {
+			createCompositeDataType(newValue, affectedEObject)			
+		} else {
+			val package = getContainingPackageFromCorrespondanceModel(newValue, correspondenceModel)
+		if (package !== null) {
+			createArchitecturalElement(package)
+		}
+		}//else if hat package correspondirte klasse?
+		//else if keine correspondance -> basic/composite component oder system
+	}
 	
 }
 
-routine createCompositeDataType(java::Class cls) {
+routine createCompositeDataType(java::Class cls, java::CompilationUnit compilationUnit) {
 	action {
 		val pcmCompositeDataType = create pcm::CompositeDataType and initialize {
 			pcmCompositeDataType.entityName = cls.name
 			pcmCompositeDataType.repository__DataType = null
 		}
-		//update pcmRepository {
-		//	pcmRepository.dataTypes__Repository += pcmCompositeDataType
-		//}
+		
 		add correspondence between pcmCompositeDataType and cls
+		add correspondence between compilationUnit and cls
+		
+		call {
+			val repo = findPcmRepository(correspondenceModel, compilationUnit.namespaces.head)
+			addDataTypeInRepository(repo, pcmCompositeDataType)
+		}
+	}
+}
+
+routine addDataTypeInRepository(pcm::Repository pcmRepository, pcm::CompositeDataType pcmDataType) {
+	action {
+		update pcmRepository {
+			pcmRepository.dataTypes__Repository += pcmDataType
+		}
 	}
 }
 

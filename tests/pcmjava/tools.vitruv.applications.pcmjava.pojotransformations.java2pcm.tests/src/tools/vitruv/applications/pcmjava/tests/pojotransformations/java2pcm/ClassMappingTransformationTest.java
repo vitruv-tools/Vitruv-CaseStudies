@@ -47,6 +47,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     @Test
     public void testAddSystemClassInPackageWithCorrespondingSystem() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
+        this.getUserInteractor().addNextSelections(2);
         final System pcmSystem = super.addSecondPackageCorrespondsToSystem();
 
         this.getUserInteractor().addNextSelections(0);

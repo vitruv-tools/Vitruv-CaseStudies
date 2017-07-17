@@ -1,7 +1,7 @@
-package mir.routines.java2pcm;
+package mir.routines.java2PcmClassifier;
 
 import java.io.IOException;
-import mir.routines.java2pcm.RoutinesFacade;
+import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.palladiosimulator.pcm.system.impl.SystemFactoryImpl;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
@@ -39,8 +39,8 @@ public class CreateSystemRoutine extends AbstractRepairRoutineRealization {
   
   public CreateSystemRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.java2pcm.CreateSystemRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2pcm.RoutinesFacade(getExecutionState(), this);
+    this.userExecution = new mir.routines.java2PcmClassifier.CreateSystemRoutine.ActionUserExecution(getExecutionState(), this);
+    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaPackage = javaPackage;
   }
   

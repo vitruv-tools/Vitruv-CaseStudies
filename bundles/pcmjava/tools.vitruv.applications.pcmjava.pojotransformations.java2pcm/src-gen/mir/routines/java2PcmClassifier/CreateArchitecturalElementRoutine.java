@@ -1,7 +1,7 @@
-package mir.routines.java2pcm;
+package mir.routines.java2PcmClassifier;
 
 import java.io.IOException;
-import mir.routines.java2pcm.RoutinesFacade;
+import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -39,8 +39,8 @@ public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineReal
   
   public CreateArchitecturalElementRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.java2pcm.CreateArchitecturalElementRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2pcm.RoutinesFacade(getExecutionState(), this);
+    this.userExecution = new mir.routines.java2PcmClassifier.CreateArchitecturalElementRoutine.ActionUserExecution(getExecutionState(), this);
+    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaPackage = javaPackage;
   }
   

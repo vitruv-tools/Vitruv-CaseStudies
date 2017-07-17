@@ -1,7 +1,7 @@
-package mir.routines.java2pcm;
+package mir.routines.java2PcmClassifier;
 
 import java.io.IOException;
-import mir.routines.java2pcm.RoutinesFacade;
+import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.palladiosimulator.pcm.repository.ImplementationComponentType;
@@ -34,8 +34,8 @@ public class AddComponentToRepositoryRoutine extends AbstractRepairRoutineRealiz
   
   public AddComponentToRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ImplementationComponentType pcmComponent, final Repository pcmRepository) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.java2pcm.AddComponentToRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2pcm.RoutinesFacade(getExecutionState(), this);
+    this.userExecution = new mir.routines.java2PcmClassifier.AddComponentToRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
+    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.pcmComponent = pcmComponent;this.pcmRepository = pcmRepository;
   }
   

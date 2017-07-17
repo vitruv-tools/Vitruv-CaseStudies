@@ -1,0 +1,65 @@
+import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
+
+import "http://www.emftext.org/java" as java
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: Java2PcmMethod
+in reaction to changes in Java
+execute actions in PCM
+
+reaction JavaNamedElementRenamed {
+    after attribute replaced at java::NamedElement[name]
+    call renameUmlNamedElement(affectedEObject)
+}
+
+routine renameUmlNamedElement(java::NamedElement jElement) {
+    match {
+        val uElement = retrieve pcm::NamedElement corresponding to jElement
+    }
+    action {
+        update uElement {
+            uElement.entityName = jElement.name;
+        }
+    }
+}
+
+
+reaction CreateInterfaceMethod {
+	after element java::InterfaceMethod inserted in java::Interface[members] 
+	call createPCMSignature(newValue)
+}
+
+routine createPCMSignature(java::InterfaceMethod method) {
+	match {
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to method.containingConcreteClassifier
+	}
+	action {
+		val operationSignature = create pcm::OperationSignature and initialize {
+			operationSignature.entityName = method.name
+			operationSignature.interface__OperationSignature = pcmInterface
+		}
+		
+		update pcmInterface {
+			pcmInterface.signatures__OperationInterface += operationSignature
+		}
+		
+		add correspondence between operationSignature and method
+	}
+}
+
+reaction JavaReturnTypeChanged {
+    after element java::TypeReference replaced at java::Method[typeReference]
+    call changeUmlReturnType(affectedEObject, newValue)
+}
+
+routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
+    match {
+        val operationSignature = retrieve pcm::OperationSignature corresponding to jMeth
+    }
+     action {
+         update operationSignature {
+         	val repository = operationSignature.interface__OperationSignature.repository__Interface
+             operationSignature.returnType__OperationSignature = getPCMDataTypeForTypeReference(jType, correspondenceModel, userInteracting, repository, jMeth)
+         }
+     }
+}
