@@ -75,6 +75,7 @@ public class CreateInnerDeclarationOffPropertyRoutine extends AbstractRepairRout
     }
     registerObjectUnderModification(pcmCompositeType);
     InnerDeclaration declaration = RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
+    notifyObjectCreated(declaration);
     userExecution.updateDeclarationElement(property, pcmCompositeType, declaration);
     
     // val updatedElement userExecution.getElement1(property, pcmCompositeType, declaration);

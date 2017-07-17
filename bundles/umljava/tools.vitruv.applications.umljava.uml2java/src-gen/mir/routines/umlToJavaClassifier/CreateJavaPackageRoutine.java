@@ -80,6 +80,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	null);
     registerObjectUnderModification(jSuperPackage);
     org.emftext.language.java.containers.Package jPackage = ContainersFactoryImpl.eINSTANCE.createPackage();
+    notifyObjectCreated(jPackage);
     userExecution.updateJPackageElement(uPackage, uSuperPackage, jSuperPackage, jPackage);
     
     addCorrespondenceBetween(userExecution.getElement1(uPackage, uSuperPackage, jSuperPackage, jPackage), userExecution.getElement2(uPackage, uSuperPackage, jSuperPackage, jPackage), "");

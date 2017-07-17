@@ -9,14 +9,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlClassMadeAbstractReaction extends AbstractReactionRealization {
-  public UmlClassMadeAbstractReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Class, Boolean> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Class, Boolean>)change;
     org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();

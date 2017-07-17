@@ -105,6 +105,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     ClassMethod classMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
+    notifyObjectCreated(classMethod);
     userExecution.updateClassMethodElement(seff, componentClass, interfaceMethod, classMethod);
     
     addCorrespondenceBetween(userExecution.getElement1(seff, componentClass, interfaceMethod, classMethod), userExecution.getElement2(seff, componentClass, interfaceMethod, classMethod), "");

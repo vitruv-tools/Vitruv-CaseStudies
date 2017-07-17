@@ -14,8 +14,6 @@ import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.apache.log4j.Logger
-import org.apache.log4j.Level
 
 class InterfacesTest extends AbstractUmlPcmTest {
 	
@@ -40,8 +38,6 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	
 	@Test
 	public def void createIntefaceOperationTest() {
-		val logger = Logger.rootLogger
-		logger.level = Level.ALL
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		userInteractor.addNextSelections(10)
 		val p1Type = UMLFactory.eINSTANCE.createPrimitiveType()

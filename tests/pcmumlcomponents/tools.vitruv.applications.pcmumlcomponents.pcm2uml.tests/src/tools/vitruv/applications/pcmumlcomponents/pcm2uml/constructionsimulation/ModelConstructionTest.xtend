@@ -18,6 +18,7 @@ import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.eclipse.uml2.uml.Operation
 import org.palladiosimulator.pcm.repository.Parameter
+import org.eclipse.emf.common.util.URI
 
 abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 		
@@ -26,7 +27,7 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 	protected val TARGET_MODEL_NAME = "model/model.repository"
 	
 	protected def Resource loadModel(String path) {
-		return RepositoryModelLoader.loadPcmResource(path)
+		return RepositoryModelLoader.loadPcmResource(URI.createURI("platform:/plugin/tools.vitruv.applications.pcmumlcomponents.pcm2uml.tests/" + path))
 	}
 	
 	protected def Repository getRootElement(Resource resource) {

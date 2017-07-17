@@ -27,7 +27,6 @@ Require-Bundle: org.junit,
  tools.vitruv.framework.monitorededitor,
  tools.vitruv.domains.java.echange,
  tools.vitruv.domains.java.monitorededitor,
- tools.vitruv.domains.emf,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.domains.java.builder
 Export-Package: tools.vitruv.applications.pcmjava.tests.util

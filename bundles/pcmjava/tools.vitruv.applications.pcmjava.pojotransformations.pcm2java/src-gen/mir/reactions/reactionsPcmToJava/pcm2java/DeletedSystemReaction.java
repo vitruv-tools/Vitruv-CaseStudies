@@ -9,14 +9,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteRoot;
 import tools.vitruv.framework.change.echange.root.RemoveRootEObject;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class DeletedSystemReaction extends AbstractReactionRealization {
-  public DeletedSystemReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     RemoveRootEObject<org.palladiosimulator.pcm.system.System> typedChange = ((RemoveAndDeleteRoot<org.palladiosimulator.pcm.system.System>)change).getRemoveChange();
     org.palladiosimulator.pcm.system.System oldValue = typedChange.getOldValue();

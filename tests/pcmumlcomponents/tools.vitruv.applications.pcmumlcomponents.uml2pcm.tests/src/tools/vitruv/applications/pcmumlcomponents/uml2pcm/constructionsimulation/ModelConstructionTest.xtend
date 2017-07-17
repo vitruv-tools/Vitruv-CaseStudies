@@ -19,7 +19,7 @@ class ModelConstructionTest extends AbstractUmlPcmTest {
 	
 	protected def loadModel(String path) {
 		val resourceSet = new ResourceSetImpl()
-		return resourceSet.getResource(URI.createFileURI(path), true)
+		return resourceSet.getResource(URI.createURI("platform:/plugin/tools.vitruv.applications.pcmumlcomponents.uml2pcm.tests/" + path), true)
 	}
 	
 }

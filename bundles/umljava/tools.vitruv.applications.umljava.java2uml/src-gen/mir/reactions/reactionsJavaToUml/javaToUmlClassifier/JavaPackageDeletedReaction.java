@@ -9,14 +9,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteRoot;
 import tools.vitruv.framework.change.echange.root.RemoveRootEObject;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class JavaPackageDeletedReaction extends AbstractReactionRealization {
-  public JavaPackageDeletedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     RemoveRootEObject<org.emftext.language.java.containers.Package> typedChange = ((RemoveAndDeleteRoot<org.emftext.language.java.containers.Package>)change).getRemoveChange();
     org.emftext.language.java.containers.Package oldValue = typedChange.getOldValue();

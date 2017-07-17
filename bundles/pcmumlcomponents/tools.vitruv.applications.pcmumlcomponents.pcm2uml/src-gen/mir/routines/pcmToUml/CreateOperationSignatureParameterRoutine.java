@@ -76,6 +76,7 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     }
     registerObjectUnderModification(umlOperation);
     org.eclipse.uml2.uml.Parameter umlParameter = UMLFactoryImpl.eINSTANCE.createParameter();
+    notifyObjectCreated(umlParameter);
     userExecution.updateUmlParameterElement(pcmSignature, pcmParameter, umlOperation, umlParameter);
     
     // val updatedElement userExecution.getElement1(pcmSignature, pcmParameter, umlOperation, umlParameter);

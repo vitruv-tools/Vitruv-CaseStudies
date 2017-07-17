@@ -14,14 +14,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class UmlParameterCreatedReaction extends AbstractReactionRealization {
-  public UmlParameterCreatedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<Operation, Parameter> typedChange = ((CreateAndInsertNonRoot<Operation, Parameter>)change).getInsertChange();
     Operation affectedEObject = typedChange.getAffectedEObject();

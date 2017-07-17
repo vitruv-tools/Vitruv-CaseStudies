@@ -13,14 +13,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class JavaCompilationUnitRemovedFromPackageReaction extends AbstractReactionRealization {
-  public JavaCompilationUnitRemovedFromPackageReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     RemoveEReference<org.emftext.language.java.containers.Package, CompilationUnit> typedChange = (RemoveEReference<org.emftext.language.java.containers.Package, CompilationUnit>)change;
     org.emftext.language.java.containers.Package affectedEObject = typedChange.getAffectedEObject();

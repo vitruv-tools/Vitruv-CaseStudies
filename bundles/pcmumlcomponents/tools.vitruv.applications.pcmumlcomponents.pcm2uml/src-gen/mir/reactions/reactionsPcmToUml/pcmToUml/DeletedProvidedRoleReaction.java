@@ -11,14 +11,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class DeletedProvidedRoleReaction extends AbstractReactionRealization {
-  public DeletedProvidedRoleReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     RemoveEReference<InterfaceProvidingEntity, ProvidedRole> typedChange = (RemoveEReference<InterfaceProvidingEntity, ProvidedRole>)change;
     InterfaceProvidingEntity affectedEObject = typedChange.getAffectedEObject();

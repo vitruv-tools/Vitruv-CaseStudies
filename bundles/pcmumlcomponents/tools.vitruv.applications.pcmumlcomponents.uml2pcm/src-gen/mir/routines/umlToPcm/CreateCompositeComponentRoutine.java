@@ -76,6 +76,7 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     }
     registerObjectUnderModification(pcmRepository);
     CompositeComponent pcmComponent = RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
+    notifyObjectCreated(pcmComponent);
     userExecution.updatePcmComponentElement(umlComponent, pcmRepository, pcmComponent);
     
     // val updatedElement userExecution.getElement1(umlComponent, pcmRepository, pcmComponent);

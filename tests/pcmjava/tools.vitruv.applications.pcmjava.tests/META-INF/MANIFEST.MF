@@ -23,3 +23,5 @@ Require-Bundle: org.junit,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests,
  tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests
+Export-Package: tools.vitruv.applications.pcmjava.tests,
+ tools.vitruv.applications.pcmjava.tests.transformations

@@ -64,6 +64,7 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   CompilationUnit: " + this.jCompUnit);
     
     org.eclipse.uml2.uml.Class uClass = UMLFactoryImpl.eINSTANCE.createClass();
+    notifyObjectCreated(uClass);
     userExecution.updateUClassElement(jClass, jCompUnit, uClass);
     
     addCorrespondenceBetween(userExecution.getElement1(jClass, jCompUnit, uClass), userExecution.getElement2(jClass, jCompUnit, uClass), "");

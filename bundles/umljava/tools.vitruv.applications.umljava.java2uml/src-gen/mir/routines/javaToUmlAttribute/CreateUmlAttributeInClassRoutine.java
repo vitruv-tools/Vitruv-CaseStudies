@@ -75,6 +75,7 @@ public class CreateUmlAttributeInClassRoutine extends AbstractRepairRoutineReali
     }
     registerObjectUnderModification(uClass);
     Property uAttr = UMLFactoryImpl.eINSTANCE.createProperty();
+    notifyObjectCreated(uAttr);
     userExecution.updateUAttrElement(jClass, jAttr, uClass, uAttr);
     
     addCorrespondenceBetween(userExecution.getElement1(jClass, jAttr, uClass, uAttr), userExecution.getElement2(jClass, jAttr, uClass, uAttr), "");

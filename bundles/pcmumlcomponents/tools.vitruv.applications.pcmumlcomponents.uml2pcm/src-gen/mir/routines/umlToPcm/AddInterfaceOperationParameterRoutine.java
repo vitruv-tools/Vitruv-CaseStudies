@@ -77,6 +77,7 @@ public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutine
     }
     registerObjectUnderModification(pcmSignature);
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = RepositoryFactoryImpl.eINSTANCE.createParameter();
+    notifyObjectCreated(pcmParameter);
     userExecution.updatePcmParameterElement(umlOperation, umlParameter, pcmSignature, pcmParameter);
     
     // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature, pcmParameter);

@@ -110,11 +110,13 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     }
     registerObjectUnderModification(javaClass);
     ClassifierImport requiredInterfaceImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
+    notifyObjectCreated(requiredInterfaceImport);
     userExecution.updateRequiredInterfaceImportElement(requiredRole, requiredInterface, javaClass, requiredInterfaceImport);
     
     addCorrespondenceBetween(userExecution.getElement1(requiredRole, requiredInterface, javaClass, requiredInterfaceImport), userExecution.getElement2(requiredRole, requiredInterface, javaClass, requiredInterfaceImport), "");
     
     Field requiredInterfaceField = MembersFactoryImpl.eINSTANCE.createField();
+    notifyObjectCreated(requiredInterfaceField);
     userExecution.updateRequiredInterfaceFieldElement(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField);
     
     addCorrespondenceBetween(userExecution.getElement3(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField), userExecution.getElement4(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField), "");

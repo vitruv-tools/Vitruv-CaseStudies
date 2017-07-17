@@ -76,6 +76,7 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     }
     registerObjectUnderModification(compositeDataType);
     InnerDeclaration innerDec = RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
+    notifyObjectCreated(innerDec);
     userExecution.updateInnerDecElement(clazz, field, compositeDataType, innerDec);
     
     addCorrespondenceBetween(userExecution.getElement1(clazz, field, compositeDataType, innerDec), userExecution.getElement2(clazz, field, compositeDataType, innerDec), "");

@@ -78,6 +78,7 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
     registerObjectUnderModification(pcmComponent);
     OperationRequiredRole pcmRole = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
+    notifyObjectCreated(pcmRole);
     userExecution.updatePcmRoleElement(umlComponent, umlUsage, pcmComponent, pcmRole);
     
     // val updatedElement userExecution.getElement1(umlComponent, umlUsage, pcmComponent, pcmRole);

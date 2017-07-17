@@ -64,6 +64,7 @@ public class CreateSEFFForClassMethodRoutine extends AbstractRepairRoutineRealiz
     getLogger().debug("   ClassMethod: " + this.classMethod);
     
     ResourceDemandingSEFF seff = SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
+    notifyObjectCreated(seff);
     userExecution.updateSeffElement(basicComponent, opSignature, classMethod, seff);
     
     addCorrespondenceBetween(userExecution.getElement1(basicComponent, opSignature, classMethod, seff), userExecution.getElement2(basicComponent, opSignature, classMethod, seff), "");

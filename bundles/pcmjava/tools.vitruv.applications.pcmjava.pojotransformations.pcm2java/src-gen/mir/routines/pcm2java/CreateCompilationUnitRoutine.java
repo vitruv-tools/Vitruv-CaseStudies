@@ -70,6 +70,7 @@ public class CreateCompilationUnitRoutine extends AbstractRepairRoutineRealizati
     getLogger().debug("   Package: " + this.containingPackage);
     
     CompilationUnit compilationUnit = ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
+    notifyObjectCreated(compilationUnit);
     userExecution.updateCompilationUnitElement(sourceElementMappedToClass, classifier, containingPackage, compilationUnit);
     
     addCorrespondenceBetween(userExecution.getElement1(sourceElementMappedToClass, classifier, containingPackage, compilationUnit), userExecution.getElement2(sourceElementMappedToClass, classifier, containingPackage, compilationUnit), "");

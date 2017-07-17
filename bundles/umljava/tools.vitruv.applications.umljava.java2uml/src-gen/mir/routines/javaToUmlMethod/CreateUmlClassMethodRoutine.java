@@ -83,6 +83,7 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     }
     registerObjectUnderModification(uClassifier);
     Operation uOperation = UMLFactoryImpl.eINSTANCE.createOperation();
+    notifyObjectCreated(uOperation);
     userExecution.updateUOperationElement(jMeth, jClassifier, uClassifier, uOperation);
     
     addCorrespondenceBetween(userExecution.getElement1(jMeth, jClassifier, uClassifier, uOperation), userExecution.getElement2(jMeth, jClassifier, uClassifier, uOperation), "");

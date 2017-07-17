@@ -11,14 +11,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class DeletedOperationSignatureParameterReaction extends AbstractReactionRealization {
-  public DeletedOperationSignatureParameterReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     RemoveEReference<OperationSignature, Parameter> typedChange = (RemoveEReference<OperationSignature, Parameter>)change;
     OperationSignature affectedEObject = typedChange.getAffectedEObject();

@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
-  public CreatedInnerDeclarationReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<CompositeDataType, InnerDeclaration> typedChange = ((CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration>)change).getInsertChange();
     CompositeDataType affectedEObject = typedChange.getAffectedEObject();

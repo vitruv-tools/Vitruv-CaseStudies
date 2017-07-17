@@ -116,6 +116,7 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     userExecution.update0Element(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU);
     
     NamespaceClassifierReference namespaceClassifier = TypesFactoryImpl.eINSTANCE.createNamespaceClassifierReference();
+    notifyObjectCreated(namespaceClassifier);
     userExecution.updateNamespaceClassifierElement(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU, namespaceClassifier);
     
     addCorrespondenceBetween(userExecution.getElement2(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU, namespaceClassifier), userExecution.getElement3(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation, dataTypeImplementationCU, namespaceClassifier), "");

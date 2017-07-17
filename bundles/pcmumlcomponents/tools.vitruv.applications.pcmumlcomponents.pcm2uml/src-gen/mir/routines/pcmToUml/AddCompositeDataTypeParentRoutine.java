@@ -81,6 +81,7 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
     }
     registerObjectUnderModification(parentType);
     Generalization generalization = UMLFactoryImpl.eINSTANCE.createGeneralization();
+    notifyObjectCreated(generalization);
     userExecution.updateGeneralizationElement(dataType, parent, compositeType, parentType, generalization);
     
     // val updatedElement userExecution.getElement1(dataType, parent, compositeType, parentType, generalization);

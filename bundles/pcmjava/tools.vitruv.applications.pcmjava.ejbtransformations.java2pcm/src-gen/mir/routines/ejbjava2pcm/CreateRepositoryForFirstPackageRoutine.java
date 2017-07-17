@@ -62,6 +62,7 @@ public class CreateRepositoryForFirstPackageRoutine extends AbstractRepairRoutin
     	return;
     }
     Repository repository = RepositoryFactoryImpl.eINSTANCE.createRepository();
+    notifyObjectCreated(repository);
     userExecution.updateRepositoryElement(javaPackage, repository);
     
     addCorrespondenceBetween(userExecution.getElement1(javaPackage, repository), userExecution.getElement2(javaPackage, repository), "");

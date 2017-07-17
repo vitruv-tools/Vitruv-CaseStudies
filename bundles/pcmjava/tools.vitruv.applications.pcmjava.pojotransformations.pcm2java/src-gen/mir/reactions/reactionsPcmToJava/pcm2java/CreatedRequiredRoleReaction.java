@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.CreateAndInsertNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class CreatedRequiredRoleReaction extends AbstractReactionRealization {
-  public CreatedRequiredRoleReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<InterfaceRequiringEntity, OperationRequiredRole> typedChange = ((CreateAndInsertNonRoot<InterfaceRequiringEntity, OperationRequiredRole>)change).getInsertChange();
     InterfaceRequiringEntity affectedEObject = typedChange.getAffectedEObject();

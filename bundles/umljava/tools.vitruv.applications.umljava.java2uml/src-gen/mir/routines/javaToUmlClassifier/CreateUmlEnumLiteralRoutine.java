@@ -76,6 +76,7 @@ public class CreateUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
     }
     registerObjectUnderModification(uEnum);
     EnumerationLiteral uLiteral = UMLFactoryImpl.eINSTANCE.createEnumerationLiteral();
+    notifyObjectCreated(uLiteral);
     userExecution.updateULiteralElement(jEnum, jConstant, uEnum, uLiteral);
     
     addCorrespondenceBetween(userExecution.getElement1(jEnum, jConstant, uEnum, uLiteral), userExecution.getElement2(jEnum, jConstant, uEnum, uLiteral), "");

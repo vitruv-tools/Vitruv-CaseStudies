@@ -60,6 +60,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     getLogger().debug("   NamedElement: " + this.namedElement);
     
     BasicComponent basicComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
+    notifyObjectCreated(basicComponent);
     userExecution.updateBasicComponentElement(repo, namedElement, basicComponent);
     
     addCorrespondenceBetween(userExecution.getElement1(repo, namedElement, basicComponent), userExecution.getElement2(repo, namedElement, basicComponent), "");

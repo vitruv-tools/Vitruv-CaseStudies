@@ -81,6 +81,7 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
     registerObjectUnderModification(umlComponent);
     Usage usage = UMLFactoryImpl.eINSTANCE.createUsage();
+    notifyObjectCreated(usage);
     userExecution.updateUsageElement(pcmComponent, requiredRole, umlComponent, usage);
     
     // val updatedElement userExecution.getElement1(pcmComponent, requiredRole, umlComponent, usage);

@@ -63,6 +63,7 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("   OperationSignature: " + this.opSignature);
     
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = RepositoryFactoryImpl.eINSTANCE.createParameter();
+    notifyObjectCreated(pcmParameter);
     userExecution.updatePcmParameterElement(jaMoPPParam, opSignature, pcmParameter);
     
     // val updatedElement userExecution.getElement1(jaMoPPParam, opSignature, pcmParameter);

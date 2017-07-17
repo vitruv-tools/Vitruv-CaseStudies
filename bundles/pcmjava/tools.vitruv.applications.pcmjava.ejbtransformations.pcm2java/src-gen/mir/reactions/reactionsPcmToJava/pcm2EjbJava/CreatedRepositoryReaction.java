@@ -10,14 +10,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.CreateAndInsertRoot;
 import tools.vitruv.framework.change.echange.root.InsertRootEObject;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class CreatedRepositoryReaction extends AbstractReactionRealization {
-  public CreatedRepositoryReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertRootEObject<Repository> typedChange = ((CreateAndInsertRoot<Repository>)change).getInsertChange();
     Repository newValue = typedChange.getNewValue();

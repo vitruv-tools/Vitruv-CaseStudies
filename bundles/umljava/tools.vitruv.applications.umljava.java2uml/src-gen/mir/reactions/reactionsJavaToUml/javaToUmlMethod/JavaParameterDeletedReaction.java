@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteNonRoot;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class JavaParameterDeletedReaction extends AbstractReactionRealization {
-  public JavaParameterDeletedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     RemoveEReference<Method, OrdinaryParameter> typedChange = ((RemoveAndDeleteNonRoot<Method, OrdinaryParameter>)change).getRemoveChange();
     Method affectedEObject = typedChange.getAffectedEObject();

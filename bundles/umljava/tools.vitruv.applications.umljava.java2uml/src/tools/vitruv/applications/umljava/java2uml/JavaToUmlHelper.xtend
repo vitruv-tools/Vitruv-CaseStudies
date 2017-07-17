@@ -15,6 +15,7 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import tools.vitruv.framework.userinteraction.UserInteracting
 import org.apache.log4j.Logger
 import org.emftext.language.java.types.NamespaceClassifierReference
+import tools.vitruv.framework.change.processing.ChangePropagationObservable
 
 /**
  * Helper class for the Java2Uml reactions. Contains functions who depends on
@@ -103,7 +104,7 @@ class JavaToUmlHelper {
      * @param userInteracting the userinteracting to promt the user if a new uml model must be created
      * @return the uml root model
      */
-    def static Model getUmlModel(CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
+    def static Model getUmlModel(ChangePropagationObservable observable, CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
         val Set<Model> models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
         if (models.nullOrEmpty) {
 			val model = UMLFactory.eINSTANCE.createModel();
@@ -119,6 +120,7 @@ class JavaToUmlHelper {
                 ROOTMODELDIRECTORY = userModelPath;
             }
             //We add a correspondence of the model with itself to save it in the correspondence model
+            observable.notifyObjectCreated(model);
 			correspondenceModel.createAndAddCorrespondence(model, model)
 			return model;
         }

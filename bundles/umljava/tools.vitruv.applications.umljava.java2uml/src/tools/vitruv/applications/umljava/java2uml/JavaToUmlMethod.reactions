@@ -228,7 +228,7 @@ routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReferen
     }
     action {
         update uParam {
-            uParam.type = getUmlType(jType, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+            uParam.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
         }
     }
 }
@@ -244,7 +244,7 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
     }
      action {
          update uOperation {
-             uOperation.type = getUmlType(jType, getUmlModel(correspondenceModel, userInteracting), correspondenceModel)
+             uOperation.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
          }
      }
 }

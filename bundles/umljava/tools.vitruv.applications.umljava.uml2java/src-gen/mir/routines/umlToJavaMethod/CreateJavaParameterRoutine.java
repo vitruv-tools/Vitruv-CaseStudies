@@ -96,6 +96,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     	null);
     registerObjectUnderModification(customTypeClass);
     OrdinaryParameter javaParam = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
+    notifyObjectCreated(javaParam);
     userExecution.updateJavaParamElement(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     
     addCorrespondenceBetween(userExecution.getElement1(uMeth, umlParam, javaMethod, customTypeClass, javaParam), userExecution.getElement2(uMeth, umlParam, javaMethod, customTypeClass, javaParam), "");

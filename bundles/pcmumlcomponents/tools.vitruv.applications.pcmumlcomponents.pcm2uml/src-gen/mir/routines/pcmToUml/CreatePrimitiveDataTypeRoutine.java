@@ -79,6 +79,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     registerObjectUnderModification(umlModel);
     PrimitiveType umlType = UMLFactoryImpl.eINSTANCE.createPrimitiveType();
+    notifyObjectCreated(umlType);
     userExecution.updateUmlTypeElement(dataType, umlModel, umlType);
     
     // val updatedElement userExecution.getElement1(dataType, umlModel, umlType);

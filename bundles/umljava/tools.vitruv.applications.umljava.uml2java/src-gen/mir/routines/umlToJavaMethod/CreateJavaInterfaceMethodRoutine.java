@@ -97,6 +97,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     	null);
     registerObjectUnderModification(customTypeClass);
     InterfaceMethod javaMethod = MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
+    notifyObjectCreated(javaMethod);
     userExecution.updateJavaMethodElement(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
     
     addCorrespondenceBetween(userExecution.getElement1(uInterface, uOperation, jInterface, customTypeClass, javaMethod), userExecution.getElement2(uInterface, uOperation, jInterface, customTypeClass, javaMethod), "");
