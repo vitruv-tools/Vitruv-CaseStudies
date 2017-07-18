@@ -953,7 +953,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		createChange.setIndex(index);
 		createChange.setNewValue(newAnnotation);
 		final VURI vuri = VURI.getInstance(annotableAndModifiable.eResource());
-		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteChange(createChange, vuri);
+		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteChangeWithVuri(createChange, vuri);
 		getVirtualModel().propagateChange(change);
 	}
 
