@@ -29,22 +29,12 @@
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.uml2.uml"/>
       <import plugin="org.emftext.language.java"/>
-      <import plugin="tools.vitruv.applications.umljava.util" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="tools.vitruv.applications.umljava.uml2java" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io" version="2.2.0" match="greaterOrEqual"/>
-      <import plugin="tools.vitruv.domains.uml"/>
-      <import plugin="tools.vitruv.domains.java"/>
-      <import plugin="tools.vitruv.framework.util"/>
-      <import plugin="tools.vitruv.framework.change"/>
-      <import plugin="tools.vitruv.framework.change.processing"/>
-      <import plugin="tools.vitruv.framework.correspondence"/>
-      <import plugin="tools.vitruv.framework.userinteraction"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.mapping"/>
-      <import plugin="tools.vitruv.domains.java.util"/>
       <import plugin="org.junit" version="4.12.0" match="greaterOrEqual"/>
-      <import plugin="tools.vitruv.domains.java.util.jamoppparser" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="tools.vitruv.framework.tests.util" version="0.2.0" match="greaterOrEqual"/>
+      <import feature="tools.vitruv.framework.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.java.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.uml.feature" version="0.2.0"/>
    </requires>
 
    <plugin

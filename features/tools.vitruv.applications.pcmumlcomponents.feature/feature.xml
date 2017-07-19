@@ -24,22 +24,14 @@
       <import plugin="org.eclipse.xtext.xbase.lib"/>
       <import plugin="org.eclipse.xtend.lib"/>
       <import plugin="org.eclipse.xtend.lib.macro"/>
-      <import plugin="tools.vitruv.domains.uml"/>
-      <import plugin="tools.vitruv.domains.pcm"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="tools.vitruv.framework.util"/>
-      <import plugin="tools.vitruv.framework.change"/>
-      <import plugin="tools.vitruv.framework.change.processing"/>
-      <import plugin="tools.vitruv.framework.correspondence"/>
-      <import plugin="tools.vitruv.framework.userinteraction"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.mapping"/>
-      <import plugin="tools.vitruv.domains.pcm.util"/>
       <import plugin="org.eclipse.uml2.uml"/>
-      <import plugin="org.palladiosimulator.pcm"/>
-      <import plugin="org.palladiosimulator.pcm.resources" version="4.0.0" match="greaterOrEqual"/>
+      <import feature="tools.vitruv.framework.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.uml.feature" version="0.2.0"/>
    </requires>
 
    <plugin
