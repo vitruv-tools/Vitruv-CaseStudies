@@ -20,7 +20,7 @@ public class UmlJavaApplication extends AbstractVitruvApplication {
 
 	@Override
 	public String getName() {
-		return "UML-Java";
+		return "UML <> Java";
 	}
 
 }

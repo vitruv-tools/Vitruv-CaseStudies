@@ -6,7 +6,7 @@
 
 <plugin>
    <extension
-         id="umlJavaPojoApplication"
+         id="umlJavaApplication"
          name="UML-Java Application"
          point="tools.vitruv.framework.applications.application">
       <application
