@@ -47,12 +47,12 @@ class OperationSignatureMappingTransformation extends EmptyEObjectMappingTransfo
 	 */
 	override createEObject(EObject eObject) {
 		val OperationSignature opSig = eObject as OperationSignature
-		if (null != opSig.returnType__OperationSignature || !opSig.parameters__OperationSignature.nullOrEmpty) {
+		if (null !== opSig.returnType__OperationSignature || !opSig.parameters__OperationSignature.nullOrEmpty) {
 			logger.debug("Operation signature either has return type or parameters directly after creating it.")
 		}
 		var InterfaceMethod ifMethod = MembersFactory.eINSTANCE.createInterfaceMethod
 		ifMethod.setName(opSig.entityName)
-		if (null == opSig.returnType__OperationSignature) {
+		if (null === opSig.returnType__OperationSignature) {
 			ifMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid)
 		} else {
 			val retTypeRef = DataTypeCorrespondenceHelper.

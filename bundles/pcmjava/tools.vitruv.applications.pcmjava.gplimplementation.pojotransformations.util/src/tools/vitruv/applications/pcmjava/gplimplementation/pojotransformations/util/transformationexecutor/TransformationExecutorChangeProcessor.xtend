@@ -31,7 +31,7 @@ abstract class TransformationExecutorChangeProcessor extends AbstractEChangeProp
 	
 	override setUserInteracting(UserInteracting userInteracting) {
 		super.userInteracting = userInteracting;
-		if (transformationExecutor != null) this.transformationExecutor.userInteracting = userInteracting
+		if (transformationExecutor !== null) this.transformationExecutor.userInteracting = userInteracting
 	}
 
 }

@@ -25,7 +25,6 @@ class OperationInterfaceMappingGplTransformationTest extends OperationInterfaceM
 
 	// We override the modelVuri getter, because we have to use platform URIs for the Java to PCM tests
 	// because otherwise the JDT AST will not recognize the changes
-	@Override
 	protected override VURI getModelVuri(String modelPathWithinProject) {
 		return VURI.getInstance(getPlatformModelPath(modelPathWithinProject));
 	}

@@ -116,7 +116,7 @@ class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 			if (!operationSignatues.nullOrEmpty) {
 				for (opSig : operationSignatues) {
 					for (pcmParameter : pcmParameters) {
-						if (null == pcmParameter.dataType__Parameter.repository__DataType) {
+						if (null === pcmParameter.dataType__Parameter.repository__DataType) {
 							pcmParameter.dataType__Parameter.repository__DataType = opSig.interface__OperationSignature.
 								repository__Interface
 						}

@@ -131,7 +131,7 @@ class PcmJavaUtils {
 	}
 
 	def static VURI getSourceModelVURI(EObject eObject) {
-		if (null == eObject || null == eObject.eResource) {
+		if (null === eObject || null === eObject.eResource) {
 			logger.warn("can not get SourceModelVURI cause eObject or its resource is null: " + eObject)
 			return VURI.getInstance("")
 		}
@@ -219,7 +219,7 @@ class PcmJavaUtils {
 	def static ChangePropagationResult removeCorrespondenceAndAllObjects(EObject object, EObject exRootObject,
 		CorrespondenceModel correspondenceModel, Set<Class<?>> rootObjects) {
 		var Set<Correspondence> correspondences = null
-		if (null != exRootObject) {
+		if (null !== exRootObject) {
 			val rootTuid = correspondenceModel.calculateTuidFromEObject(exRootObject)
 			val String prefix = rootTuid.toString
 			EcoreUtil.remove(object)
@@ -242,7 +242,7 @@ class PcmJavaUtils {
 		for (tuid : tuids) {
 			try {
 				val eObject = correspondenceModel.resolveEObjectFromTuid(tuid)
-				if (null != eObject) {
+				if (null !== eObject) {
 					EcoreUtil.delete(eObject)
 				}
 				if (eObject.isInstanceOfARootClass(rootObjectClasses)) {
@@ -291,7 +291,7 @@ class PcmJavaUtils {
 				return
 			}
 			for (EObject correspondingObject : correspondingEObjects) {
-				if (null == correspondingObject) {
+				if (null === correspondingObject) {
 					logger.error("corresponding object is null")
 				} else {
 					val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingObject)

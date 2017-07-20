@@ -43,7 +43,7 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 			val Package jaMoPPPackage = Pcm2JavaUtils.
 				getContainingPackageFromCorrespondenceModel(jaMoPPInterface, correspondenceModel)
 			var boolean createInterface = false
-			if (null != jaMoPPPackage && jaMoPPPackage.name.equals("contracts")) {
+			if (null !== jaMoPPPackage && jaMoPPPackage.name.equals("contracts")) {
 
 				//i)
 				createInterface = true

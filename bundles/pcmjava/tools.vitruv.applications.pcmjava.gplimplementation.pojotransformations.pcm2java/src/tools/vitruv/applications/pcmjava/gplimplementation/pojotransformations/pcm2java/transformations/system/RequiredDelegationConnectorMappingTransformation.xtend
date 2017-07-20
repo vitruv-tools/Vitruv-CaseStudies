@@ -48,7 +48,7 @@ class RequiredDelegationConnectorMappingTransformation extends EmptyEObjectMappi
 			var parametersToUse = emptyList
 			val correspondingConstructors = correspondenceModel.
 				getCorrespondingEObjectsByType(assemblyContext, Constructor)
-			if (null != correspondingConstructors) {
+			if (null !== correspondingConstructors) {
 				parametersToUse = correspondingConstructors.get(0).parameters
 			}
 			val fieldsToUseAsPossibleParameters = (field.containingConcreteClassifier as Class).fields

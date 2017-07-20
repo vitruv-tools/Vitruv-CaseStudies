@@ -51,7 +51,7 @@ class OperationRequiredRoleMappingTransformation extends EmptyEObjectMappingTran
 		val jaMoPPInterface = correspondenceModel.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
 		val List<EObject> newEObjects = new ArrayList
 
-		if (null == jaMoPPInterface) {
+		if (null === jaMoPPInterface) {
 			logger.info(
 				"No corresponding Java Interface found for OperationInterface " + opInterface +
 					" not created an field for the operation required role (yet)")
@@ -106,13 +106,13 @@ class OperationRequiredRoleMappingTransformation extends EmptyEObjectMappingTran
 		val EObject[] oldEObjects = removeEObject(affectedEObject)
 		for (oldEObject : oldEObjects) {
 			correspondenceModel.removeCorrespondencesThatInvolveAtLeastAndDependend(oldEObject.toSet)
-			if (null != oldEObject.eContainer) {
+			if (null !== oldEObject.eContainer) {
 				return new ChangePropagationResult
 			}
 			EcoreUtil.remove(oldEObject)
 		}
 		val EObject[] newEObjects = createEObject(affectedEObject)
-		if (null != newEObjects) {
+		if (null !== newEObjects) {
 			for (newEObject : newEObjects) {
 				correspondenceModel.createAndAddCorrespondence(newEObject, affectedEObject)
 			}

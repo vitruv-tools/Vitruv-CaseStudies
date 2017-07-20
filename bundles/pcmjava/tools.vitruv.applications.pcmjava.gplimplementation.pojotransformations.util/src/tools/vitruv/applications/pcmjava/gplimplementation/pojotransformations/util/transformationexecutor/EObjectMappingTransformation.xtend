@@ -104,7 +104,7 @@ abstract class EObjectMappingTransformation {
 
 	def void setCorrespondenceModel(CorrespondenceModel correspondenceModel) {
 		this.correspondenceModel = correspondenceModel
-		if (null != correspondenceModel) {
+		if (null !== correspondenceModel) {
 			setCorrespondenceForFeatures()
 		}
 	}
@@ -114,7 +114,7 @@ abstract class EObjectMappingTransformation {
 	}
 
 	def protected UserInteracting getUserInteracting() {
-		if (null == userInteracting) {
+		if (null === userInteracting) {
 			throw new RuntimeException(
 				"getUserInteracting failed: Reason: UserInteracting is not set (==null)." +
 					"UserInteracting has to be set before using it.")

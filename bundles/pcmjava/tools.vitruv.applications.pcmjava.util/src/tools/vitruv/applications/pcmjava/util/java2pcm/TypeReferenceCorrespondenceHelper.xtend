@@ -98,7 +98,7 @@ class TypeReferenceCorrespondenceHelper {
 		if (primitiveType instanceof Void) {
 			return null
 		}
-		if (null == primitveTypeMappingMap) {
+		if (null === primitveTypeMappingMap) {
 			initPrimitiveTypeMap()
 		}
 		return primitveTypeMappingMap.claimValueForKey(primitiveType.class)
@@ -119,11 +119,11 @@ class TypeReferenceCorrespondenceHelper {
 				pcmDataType = getPCMDataTypeForNamespaceClassifierReference(typeReference as NamespaceClassifierReference,
 					correspondenceModel, userInteracting, repo)
 			}
-			if (arrayDimension > 0 && null != pcmDataType && null != repo) {
+			if (arrayDimension > 0 && null !== pcmDataType && null !== repo) {
 				// find CollectionDatatype list for innerValue or create new one
 				val typeName = "List_" + Pcm2JavaUtils.getNameFromPCMDataType(pcmDataType)
 				var collectionDataType = repo.dataTypes__Repository.filter(CollectionDataType).findFirst[it.entityName.equals(typeName)]
-				if (null == collectionDataType) {
+				if (null === collectionDataType) {
 					collectionDataType = RepositoryFactory.eINSTANCE.createCollectionDataType
 					collectionDataType.innerType_CollectionDataType = pcmDataType
 					collectionDataType.entityName = typeName
@@ -136,7 +136,7 @@ class TypeReferenceCorrespondenceHelper {
 				}
 				pcmDataType = collectionDataType
 			}
-			if (null == pcmDataType) {
+			if (null === pcmDataType) {
 				logger.error("Could not find a PCM data type for type reference " + typeReference)
 			}
 			return pcmDataType
@@ -149,7 +149,7 @@ class TypeReferenceCorrespondenceHelper {
 
 				// just create the data type from the first classifier that is non null
 				for (classifierRef : reference.classifierReferences) {
-					if (null != classifierRef) {
+					if (null !== classifierRef) {
 						return getPCMDataTypeForClassifierReference(classifierRef, correspondenceModel,
 							userInteracting, repo)
 					}
@@ -163,7 +163,7 @@ class TypeReferenceCorrespondenceHelper {
 		def private static DataType getPCMDataTypeForClassifierReference(ClassifierReference classifierReference,
 			CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo) {
 			val Classifier classifier = classifierReference.target
-			if (null != classifier) {
+			if (null !== classifier) {
 
 				// if classifier is string return primitive type string
 				if (classifier.name.equalsIgnoreCase("String")) {
@@ -198,7 +198,7 @@ class TypeReferenceCorrespondenceHelper {
 
 		def private static DataType createDataTypeForClassifier(Classifier classifier,
 			CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo) {
-			if (null == classifier) {
+			if (null === classifier) {
 				logger.warn("Classifier is null! Can not create a data type for the classifier")
 				return null
 			}
@@ -248,7 +248,7 @@ class TypeReferenceCorrespondenceHelper {
 				 * @return A cached map of primitive data types.
 				 */
 				def public static Map<String, PrimitiveDataType> getPrimitiveDataTypes() {
-					if (primitiveTypesRepository == null) {
+					if (primitiveTypesRepository === null) {
 						primitiveTypesRepository = getPrimitiveTypesRepository();
 						for (DataType d : primitiveTypesRepository.getDataTypes__Repository()) {
 							if (d instanceof PrimitiveDataType) {
@@ -261,7 +261,7 @@ class TypeReferenceCorrespondenceHelper {
 				}
 
 				def private static Repository getPrimitiveTypesRepository() {
-					if (primitiveTypesRepository != null) {
+					if (primitiveTypesRepository !== null) {
 						return primitiveTypesRepository;
 					}
 

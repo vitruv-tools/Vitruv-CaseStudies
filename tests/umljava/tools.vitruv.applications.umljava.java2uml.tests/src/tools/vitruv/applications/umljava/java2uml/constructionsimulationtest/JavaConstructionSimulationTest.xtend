@@ -39,7 +39,7 @@ class JavaConstructionSimulationTest extends Java2UmlTransformationTest {
      * Loads a directory without manual sorting
      * 
      */
-    def private void loadDirectoryContents(String directoryPath, String namespace) {
+    def protected void loadDirectoryContents(String directoryPath, String namespace) {
         val directoryContents = new File(directoryPath).listFiles
          
         createAndSyncPackageInfo(directoryContents, directoryPath, namespace)

@@ -84,7 +84,7 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 		val jaMoPPPackage = Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(jaMoPPClass,
 			correspondenceModel)
 		var InterfaceProvidingRequiringEntity pcmComponentOrSystem = null
-		if (null != jaMoPPPackage) {
+		if (null !== jaMoPPPackage) {
 			if (jaMoPPPackage.name.equals("datatypes")) {
 
 				// vi) class is in the datatypes packge --> create a new datatype
@@ -104,9 +104,9 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 
 		}
 
-		if (null == pcmComponentOrSystem) {
+		if (null === pcmComponentOrSystem) {
 			pcmComponentOrSystem = askUserWhetherToCreateComponentOrSystem(jaMoPPClass)
-			if (null == pcmComponentOrSystem) {
+			if (null === pcmComponentOrSystem) {
 				return null
 			} else {
 				return pcmComponentOrSystem.toList
@@ -174,7 +174,7 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 		val jaMoPPClass = eObject as Class
 		val correspondences = correspondenceModel.getCorrespondences(jaMoPPClass.toList);
 		var eObjectsToDelete = new ArrayList<EObject>()
-		if (null != correspondences && 0 < correspondences.size) {
+		if (null !== correspondences && 0 < correspondences.size) {
 			val classifiersInSamePackage = jaMoPPClass.containingCompilationUnit.classifiersInSamePackage
 			if (!classifiersInSamePackage.nullOrEmpty) {
 

@@ -37,7 +37,7 @@ class TypeReferenceMappingTransformation extends DefaultEObjectMappingTransforma
 			var interfaceClassifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(
 				eObject as TypeReference)
 			logger.debug("Interface classifier: " + interfaceClassifier);
-			if(null == interfaceClassifier){
+			if(null === interfaceClassifier){
 				return null
 			}
 			val correspondingInterfaces = correspondenceModel.getCorrespondingEObjectsByType(if (interfaceClassifier.eIsProxy) EcoreUtil.resolve(interfaceClassifier, eObject) else interfaceClassifier,

@@ -69,11 +69,11 @@ class SEFFMappingTransformation extends DefaultEObjectMappingTransformation {
 
 	private def EObject[] checkSEFFAndCreateCorrespondences(ResourceDemandingSEFF seff) {
 		val basicComponent = seff.basicComponent_ServiceEffectSpecification
-		if (null == basicComponent) {
+		if (null === basicComponent) {
 			return null
 		}
 		val signature = seff.describedService__SEFF
-		if (null == signature) {
+		if (null === signature) {
 			return null
 		}
 		val sigIsOpSig = signature instanceof OperationSignature
@@ -94,7 +94,7 @@ class SEFFMappingTransformation extends DefaultEObjectMappingTransformation {
 			val ClassMethod classMethod = Pcm2JavaUtils.createClassMethod(correspondingInterfaceMethod, true)
 			val correspondingClass = correspondingClasses.get(0)
 			var ClassMethod correspondinClassgMethod = correspondingClass.findMethodInClass(classMethod)
-			if (null == correspondinClassgMethod) {
+			if (null === correspondinClassgMethod) {
 				correspondingClass.members.add(classMethod)
 				correspondinClassgMethod = classMethod
 			}else{
