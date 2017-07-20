@@ -18,7 +18,7 @@ public class PcmJavaEjbApplication extends AbstractVitruvApplication {
 
 	@Override
 	public String getName() {
-		return "PCM <> Java POJO";
+		return "PCM <> Java EJB";
 	}
 
 }
