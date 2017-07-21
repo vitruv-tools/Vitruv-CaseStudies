@@ -22,42 +22,46 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
       super(reactionExecutionState);
     }
     
-    public void updatePcmCompositeComponentElement(final org.emftext.language.java.containers.Package javaPackage, final CompositeComponent pcmCompositeComponent) {
-      pcmCompositeComponent.setEntityName(Java2PcmHelper.getLastPackageName(javaPackage.getName()));
+    public void updatePcmCompositeComponentElement(final org.emftext.language.java.containers.Package javaPackage, final String name, final CompositeComponent pcmCompositeComponent) {
+      pcmCompositeComponent.setEntityName(name);
     }
     
-    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final CompositeComponent pcmCompositeComponent) {
+    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final String name, final CompositeComponent pcmCompositeComponent) {
       return pcmCompositeComponent;
     }
     
-    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final CompositeComponent pcmCompositeComponent) {
+    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final String name, final CompositeComponent pcmCompositeComponent) {
       return javaPackage;
     }
     
-    public void callRoutine1(final org.emftext.language.java.containers.Package javaPackage, final CompositeComponent pcmCompositeComponent, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addComponentToRepository(pcmCompositeComponent, Java2PcmHelper.findPcmRepository(this.correspondenceModel, javaPackage.getName()));
+    public void callRoutine1(final org.emftext.language.java.containers.Package javaPackage, final String name, final CompositeComponent pcmCompositeComponent, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.addComponentToRepository(pcmCompositeComponent, Java2PcmHelper.findPcmRepository(this.correspondenceModel, name));
     }
   }
   
-  public CreateCompositeComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage) {
+  public CreateCompositeComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateCompositeComponentRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
-    this.javaPackage = javaPackage;
+    this.javaPackage = javaPackage;this.name = name;
   }
   
   private org.emftext.language.java.containers.Package javaPackage;
   
+  private String name;
+  
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeComponentRoutine with input:");
     getLogger().debug("   Package: " + this.javaPackage);
+    getLogger().debug("   String: " + this.name);
     
     CompositeComponent pcmCompositeComponent = RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
-    userExecution.updatePcmCompositeComponentElement(javaPackage, pcmCompositeComponent);
+    notifyObjectCreated(pcmCompositeComponent);
+    userExecution.updatePcmCompositeComponentElement(javaPackage, name, pcmCompositeComponent);
     
-    addCorrespondenceBetween(userExecution.getElement1(javaPackage, pcmCompositeComponent), userExecution.getElement2(javaPackage, pcmCompositeComponent), "");
+    addCorrespondenceBetween(userExecution.getElement1(javaPackage, name, pcmCompositeComponent), userExecution.getElement2(javaPackage, name, pcmCompositeComponent), "");
     
-    userExecution.callRoutine1(javaPackage, pcmCompositeComponent, actionsFacade);
+    userExecution.callRoutine1(javaPackage, name, pcmCompositeComponent, actionsFacade);
     
     postprocessElements();
   }

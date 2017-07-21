@@ -1,4 +1,6 @@
 import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
+import org.emftext.language.java.classifiers.Enumeration
+import org.emftext.language.java.classifiers.Class
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -7,6 +9,7 @@ reactions: Java2PcmMethod
 in reaction to changes in Java
 execute actions in PCM
 
+//Rename
 reaction JavaNamedElementRenamed {
     after attribute replaced at java::NamedElement[name]
     call renameUmlNamedElement(affectedEObject)
@@ -23,7 +26,46 @@ routine renameUmlNamedElement(java::NamedElement jElement) {
     }
 }
 
+//Class Method
+reaction CreateClassMethod {
+	after element java::ClassMethod inserted in java::Class[members]
+	call createUmlClassMethod(newValue, affectedEObject)
+}
 
+routine createUmlClassMethod(java::ClassMethod classMethod, java::Class cls) {
+	action {
+		call {
+			val methods = findImplementingInterfacesFromTypeRefs(cls.implements)
+			.filter[x | hasCorrespondance(x, correspondenceModel)]
+			.map[x|x.methods]
+			.flatten
+			.filter[sameSignature(classMethod)]
+			
+			for (method : methods) {
+				createSEFF(method, cls)
+			}
+			
+		}
+	}
+}
+
+routine createSEFF(java::Method method, java::Class cls) {
+	match {
+		val opSignature = retrieve pcm::OperationSignature corresponding to method
+		val basicComponent = retrieve pcm::BasicComponent corresponding to cls
+	}
+	action {
+		val rdseff = create pcm::ResourceDemandingSEFF and initialize {
+			rdseff.describedService__SEFF = opSignature
+			rdseff.basicComponent_ServiceEffectSpecification = basicComponent
+		}
+		add correspondence between cls and rdseff
+	}
+}
+
+
+
+//Interface Method
 reaction CreateInterfaceMethod {
 	after element java::InterfaceMethod inserted in java::Interface[members] 
 	call createPCMSignature(newValue)

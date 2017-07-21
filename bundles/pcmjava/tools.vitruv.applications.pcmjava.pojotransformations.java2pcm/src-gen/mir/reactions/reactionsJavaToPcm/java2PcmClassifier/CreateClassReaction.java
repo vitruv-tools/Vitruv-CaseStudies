@@ -12,14 +12,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class CreateClassReaction extends AbstractReactionRealization {
-  public CreateClassReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class> typedChange = (InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class>)change;
     CompilationUnit affectedEObject = typedChange.getAffectedEObject();
@@ -67,13 +62,19 @@ class CreateClassReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final org.emftext.language.java.classifiers.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
-      boolean _equals = IterableExtensions.<String>last(affectedEObject.getNamespaces()).equals("contracts");
+      boolean _equals = IterableExtensions.<String>last(affectedEObject.getNamespaces()).equals("datatypes");
       if (_equals) {
         _routinesFacade.createCompositeDataType(newValue, affectedEObject);
       } else {
-        final org.emftext.language.java.containers.Package package_ = Java2PcmHelper.getContainingPackageFromCorrespondanceModel(newValue, this.correspondenceModel);
-        if ((package_ != null)) {
-          _routinesFacade.createArchitecturalElement(package_);
+        final org.emftext.language.java.containers.Package package_ = Java2PcmHelper.getContainingPackageFromCorrespondanceModel(affectedEObject.getNamespaces(), this.correspondenceModel);
+        _routinesFacade.checkComponentCorrespondance(package_, newValue);
+        _routinesFacade.checkSystemCorrespondance(package_, newValue);
+        boolean _hasCorrespondance = Java2PcmHelper.hasCorrespondance(newValue, this.correspondenceModel);
+        boolean _not = (!_hasCorrespondance);
+        if (_not) {
+          _routinesFacade.createArchitecturalElement(package_, newValue.getName());
+          _routinesFacade.checkComponentCorrespondance(package_, newValue);
+          _routinesFacade.checkSystemCorrespondance(package_, newValue);
         }
       }
     }

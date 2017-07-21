@@ -337,7 +337,10 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 		var Set<Package> packagesWithCorrespondences = correspondenceModel.
 			getAllEObjectsOfTypeInCorrespondences(Package)
 		val packagesWithNamespace = packagesWithCorrespondences.filter [ pack |
-			finalNamespace.equals(pack.namespacesAsString + pack.name)
+			val foo = pack.namespacesAsString
+			val packName = pack.name
+			val fn = foo + packName
+			finalNamespace.equals(fn)
 		]
 		if (null != packagesWithNamespace && 0 < packagesWithNamespace.size &&
 			null != packagesWithNamespace.iterator.next) {

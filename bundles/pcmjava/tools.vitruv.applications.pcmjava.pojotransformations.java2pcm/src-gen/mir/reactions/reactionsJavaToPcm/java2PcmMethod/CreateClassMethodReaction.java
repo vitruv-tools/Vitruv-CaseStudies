@@ -1,10 +1,9 @@
-package mir.reactions.reactionsJavaToPcm.java2PcmClassifier;
+package mir.reactions.reactionsJavaToPcm.java2PcmMethod;
 
-import mir.routines.java2PcmClassifier.RoutinesFacade;
+import mir.routines.java2PcmMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.classifiers.Interface;
-import org.emftext.language.java.containers.CompilationUnit;
+import org.emftext.language.java.members.ClassMethod;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -13,14 +12,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreateInterfaceReaction extends AbstractReactionRealization {
+class CreateClassMethodReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<CompilationUnit, Interface> typedChange = (InsertEReference<CompilationUnit, Interface>)change;
-    CompilationUnit affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod>)change;
+    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Interface newValue = typedChange.getNewValue();
-    mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateInterfaceReaction.ActionUserExecution(this.executionState, this);
+    ClassMethod newValue = typedChange.getNewValue();
+    mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateClassMethodReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateClassMethodReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -29,14 +28,14 @@ class CreateInterfaceReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<CompilationUnit, Interface> relevantChange = (InsertEReference<CompilationUnit, Interface>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CompilationUnit)) {
+    InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("classifiers")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Interface)) {
+    if (!(relevantChange.getNewValue() instanceof ClassMethod)) {
     	return false;
     }
     return true;
@@ -60,8 +59,8 @@ class CreateInterfaceReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createPCMInterface(newValue, affectedEObject);
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final ClassMethod newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createUmlClassMethod(newValue, affectedEObject);
     }
   }
 }

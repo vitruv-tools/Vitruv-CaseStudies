@@ -69,6 +69,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     getLogger().debug("   CompilationUnit: " + this.compilationUnit);
     
     CompositeDataType pcmCompositeDataType = RepositoryFactoryImpl.eINSTANCE.createCompositeDataType();
+    notifyObjectCreated(pcmCompositeDataType);
     userExecution.updatePcmCompositeDataTypeElement(cls, compilationUnit, pcmCompositeDataType);
     
     addCorrespondenceBetween(userExecution.getElement1(cls, compilationUnit, pcmCompositeDataType), userExecution.getElement2(cls, compilationUnit, pcmCompositeDataType), "");

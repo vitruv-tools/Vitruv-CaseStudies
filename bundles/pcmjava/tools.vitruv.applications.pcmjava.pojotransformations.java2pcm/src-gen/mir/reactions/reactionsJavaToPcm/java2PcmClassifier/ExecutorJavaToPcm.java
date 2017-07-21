@@ -12,9 +12,8 @@ public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateInterfaceReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateClassReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction());
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateInterfaceReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateInterfaceReaction());
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateClassReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateClassReaction());
   }
 }

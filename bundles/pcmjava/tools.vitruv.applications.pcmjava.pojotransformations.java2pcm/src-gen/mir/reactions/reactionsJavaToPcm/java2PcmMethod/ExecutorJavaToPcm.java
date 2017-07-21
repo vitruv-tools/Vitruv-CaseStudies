@@ -12,9 +12,9 @@ public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    tools.vitruv.framework.userinteraction.UserInteracting userInteracting = getUserInteracting();
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateInterfaceMethodReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateInterfaceMethodReaction(userInteracting));
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction(userInteracting));
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction());
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateClassMethodReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateClassMethodReaction());
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateInterfaceMethodReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateInterfaceMethodReaction());
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction());
   }
 }

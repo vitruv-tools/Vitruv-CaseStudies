@@ -76,6 +76,7 @@ public class CreatePCMRepositoryRoutine extends AbstractRepairRoutineRealization
     	return;
     }
     Repository pcmRepository = RepositoryFactoryImpl.eINSTANCE.createRepository();
+    notifyObjectCreated(pcmRepository);
     userExecution.updatePcmRepositoryElement(sourceElementMappedToRepository, packageName, newTag, pcmRepository);
     
     addCorrespondenceBetween(userExecution.getElement1(sourceElementMappedToRepository, packageName, newTag, pcmRepository), userExecution.getElement2(sourceElementMappedToRepository, packageName, newTag, pcmRepository), userExecution.getTag1(sourceElementMappedToRepository, packageName, newTag, pcmRepository));

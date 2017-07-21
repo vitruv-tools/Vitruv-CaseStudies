@@ -67,6 +67,7 @@ public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("   CompilationUnit: " + this.compilationUnit);
     
     OperationInterface pcmIface = RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
+    notifyObjectCreated(pcmIface);
     userExecution.updatePcmIfaceElement(javaInterface, compilationUnit, pcmIface);
     
     userExecution.callRoutine1(javaInterface, compilationUnit, pcmIface, actionsFacade);

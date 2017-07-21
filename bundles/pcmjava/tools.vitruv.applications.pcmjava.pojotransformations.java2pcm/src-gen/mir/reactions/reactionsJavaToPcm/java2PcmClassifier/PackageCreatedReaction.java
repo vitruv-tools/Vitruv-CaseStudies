@@ -9,14 +9,9 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.root.InsertRootEObject;
-import tools.vitruv.framework.userinteraction.UserInteracting;
 
 @SuppressWarnings("all")
 class PackageCreatedReaction extends AbstractReactionRealization {
-  public PackageCreatedReaction(final UserInteracting userInteracting) {
-    super(userInteracting);
-  }
-  
   public void executeReaction(final EChange change) {
     InsertRootEObject<org.emftext.language.java.containers.Package> typedChange = (InsertRootEObject<org.emftext.language.java.containers.Package>)change;
     org.emftext.language.java.containers.Package newValue = typedChange.getNewValue();
@@ -67,11 +62,10 @@ class PackageCreatedReaction extends AbstractReactionRealization {
     public void callRoutine1(final org.emftext.language.java.containers.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
       boolean _noCorrespondenceRepository = Java2PcmHelper.noCorrespondenceRepository(this.correspondenceModel);
       if (_noCorrespondenceRepository) {
-        final org.emftext.language.java.containers.Package javaPackage = newValue;
-        _routinesFacade.createPCMRepository(javaPackage, javaPackage.getName(), "package_root");
-        _routinesFacade.createJavaSubPackages(javaPackage);
+        _routinesFacade.createPCMRepository(newValue, newValue.getName(), "package_root");
+        _routinesFacade.createJavaSubPackages(newValue);
       } else {
-        _routinesFacade.createArchitecturalElement(newValue);
+        _routinesFacade.createArchitecturalElement(newValue, Java2PcmHelper.getLastPackageName(newValue.getName()));
       }
     }
   }

@@ -1,6 +1,7 @@
 package mir.routines.java2PcmMethod;
 
 import org.emftext.language.java.commons.NamedElement;
+import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypeReference;
@@ -17,6 +18,18 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void renameUmlNamedElement(final NamedElement jElement) {
     mir.routines.java2PcmMethod.RenameUmlNamedElementRoutine effect = new mir.routines.java2PcmMethod.RenameUmlNamedElementRoutine(this.executionState, calledBy,
     	jElement);
+    effect.applyRoutine();
+  }
+  
+  public void createUmlClassMethod(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls) {
+    mir.routines.java2PcmMethod.CreateUmlClassMethodRoutine effect = new mir.routines.java2PcmMethod.CreateUmlClassMethodRoutine(this.executionState, calledBy,
+    	classMethod, cls);
+    effect.applyRoutine();
+  }
+  
+  public void createSEFF(final Method method, final org.emftext.language.java.classifiers.Class cls) {
+    mir.routines.java2PcmMethod.CreateSEFFRoutine effect = new mir.routines.java2PcmMethod.CreateSEFFRoutine(this.executionState, calledBy,
+    	method, cls);
     effect.applyRoutine();
   }
   

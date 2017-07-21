@@ -37,8 +37,8 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 
 	// for component/system decision 
 	val public static int SELECT_CREATE_BASIC_COMPONENT = 0
-	val public static int SELECT_CREATE_SYSTEM = 1
-	val public static int SELECT_CREATE_COMPOSITE_COMPONENT = 2
+	val public static int SELECT_CREATE_COMPOSITE_COMPONENT = 1
+	val public static int SELECT_CREATE_SYSTEM = 2
 	val public static int SELECT_NO_CORRESPONDENCE = 3
 
 	// for data type decision

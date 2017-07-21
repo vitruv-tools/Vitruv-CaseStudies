@@ -1,18 +1,29 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
 
-import tools.vitruv.framework.correspondence.CorrespondenceModel
+import java.util.List
 import org.apache.log4j.Logger
-import org.palladiosimulator.pcm.repository.Repository
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.framework.correspondence.Correspondence
-import org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.containers.Package
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
-import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
-import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.members.Method
+import org.emftext.language.java.types.TypeReference
+import org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity
+import org.palladiosimulator.pcm.repository.Repository
+import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
+import tools.vitruv.framework.correspondence.Correspondence
+import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteracting
+
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import org.eclipse.emf.common.util.EList
+import java.util.ArrayList
+import org.emftext.language.java.classifiers.Interface
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import org.eclipse.emf.ecore.EObject
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import org.emftext.language.java.members.ClassMethod
+import java.util.Set
+import org.palladiosimulator.pcm.repository.OperationInterface
 
 public class Java2PcmHelper {
 	private static val logger = Logger.getLogger(Java2PcmHelper)
@@ -41,8 +52,25 @@ public class Java2PcmHelper {
 		return !correspondenceModel.getCorrespondingEObjectsByType(package, InterfaceProvidingRequiringEntity).empty
 	}
 	
-	def static Package getContainingPackageFromCorrespondanceModel(Class cls, CorrespondenceModel correspondenceModel) {
-		return Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(cls, correspondenceModel)
+	def static Package getContainingPackageFromCorrespondanceModel(List<String> namespaces, CorrespondenceModel correspondenceModel) {
+		//return Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(cls, correspondenceModel)
+		var pack = Pcm2JavaUtils.findCorrespondingPackageByName(namespaces.last, correspondenceModel, findPcmRepository(correspondenceModel, namespaces.head))
+		if (pack === null && namespaces.size > 1) {
+			namespaces.remove(namespaces.last)
+			pack = getContainingPackageFromCorrespondanceModel(namespaces, correspondenceModel)
+		}
+		return pack
+	}
+	
+	def static boolean hasCorrespondance(EObject eObject, CorrespondenceModel correspondenceModel) {
+		return !correspondenceModel.getCorrespondingEObjects(eObject).isNullOrEmpty
+	}
+	def static Set<OperationInterface> getCorrespondingOperationInterface(EObject eObject, CorrespondenceModel correspondenceModel) {
+		return correspondenceModel.getCorrespondingEObjectsByType(eObject, OperationInterface)
+	}
+	
+	def static sameSignature(Method interfaceMethod, ClassMethod classMethod) {
+		PcmJavaUtils.hasSameSignature(interfaceMethod, classMethod)
 	}
 	
 	/**
@@ -70,6 +98,17 @@ public class Java2PcmHelper {
 	
 	def static String getLastPackageName(String packageName) {
 		return packageName.substring(packageName.indexOf('.') + 1)
+	}
+	
+	def static findImplementingInterfacesFromTypeRefs(EList<TypeReference> typeReferences) {
+		val implementingInterfaces = new ArrayList<Interface>
+		for(typeRef : typeReferences){
+			val classifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeRef)
+			if(classifier instanceof Interface){
+				implementingInterfaces.add(classifier)
+			}
+		}
+		return implementingInterfaces
 	}
 	
 
