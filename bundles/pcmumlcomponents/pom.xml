@@ -16,6 +16,7 @@
 	<modules>
 		<module>tools.vitruv.applications.pcmumlcomponents.pcm2uml</module>
 		<module>tools.vitruv.applications.pcmumlcomponents.uml2pcm</module>
+		<module>tools.vitruv.applications.pcmumlcomponents</module>
 	</modules>
 
 </project>

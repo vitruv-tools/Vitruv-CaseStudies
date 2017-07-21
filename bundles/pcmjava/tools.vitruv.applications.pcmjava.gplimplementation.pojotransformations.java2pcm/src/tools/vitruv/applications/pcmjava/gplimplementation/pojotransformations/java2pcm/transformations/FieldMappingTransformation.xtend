@@ -47,7 +47,6 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * iv) AssemblyContext: If the field is in a class that represents a ComposedProvidingRequiringEntity
 	 * 	   (a CompositeComponent or a System) it can either correspond to an assemblyContext or an OperationRequiredRole
 	 */
-	@Override
 	override createEObject(EObject eObject) {
 		val field = eObject as Field
 
@@ -70,13 +69,13 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 		}
 
 		val correspondingOperationRequiredRoles = field.checkAndAddOperationRequiredRolesCorrepondencesToField()
-		if (null != correspondingOperationRequiredRoles) {
+		if (null !== correspondingOperationRequiredRoles) {
 			newCorrespondingEObjects.addAll(correspondingOperationRequiredRoles)
 		}
 		val correspondingComposedProvidingRequiringEntitys = fieldContainingClassifierCorrespondences.filter(
 			typeof(ComposedProvidingRequiringEntity))
 		if (!correspondingComposedProvidingRequiringEntitys.nullOrEmpty &&
-			null != Java2PcmUtils.getTargetClassifierFromTypeReference(field.typeReference)) {
+			null !== Java2PcmUtils.getTargetClassifierFromTypeReference(field.typeReference)) {
 			// new field is in a ComposedProvidingRequiringEntity
 			val classifierOfField = Java2PcmUtils.getTargetClassifierFromTypeReference(field.typeReference)
 			val correspondingComponents = correspondenceModel.getCorrespondingEObjectsByType(classifierOfField,
@@ -145,7 +144,7 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 			// add new OperationRequiredRoles that correspond to the field now
 			if (newValue instanceof TypeReference) {
 				val classifier = Java2PcmUtils.getTargetClassifierFromTypeReference(newValue as TypeReference)
-				if (null != classifier) {
+				if (null !== classifier) {
 					val newField = newAffectedEObject as Field
 					val newCorrespondingEObjects = newField.checkAndAddOperationRequiredRolesCorrepondencesToField()
 					if (!newCorrespondingEObjects.nullOrEmpty) {

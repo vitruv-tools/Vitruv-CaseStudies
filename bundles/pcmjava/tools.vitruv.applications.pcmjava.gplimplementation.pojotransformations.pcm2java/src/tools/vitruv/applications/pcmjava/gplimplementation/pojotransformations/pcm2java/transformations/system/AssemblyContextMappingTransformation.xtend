@@ -39,7 +39,7 @@ class AssemblyContextMappingTransformation extends EmptyEObjectMappingTransforma
 	override createEObject(EObject eObject) {
 		val AssemblyContext assemblyContext = eObject as AssemblyContext
 		val component = assemblyContext.encapsulatedComponent__AssemblyContext
-		if (null == component) {
+		if (null === component) {
 
 			// we are not able to create a field if the component in the assembly context is null
 			// the following methods have to be aware of that

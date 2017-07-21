@@ -40,7 +40,7 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 		jaMoPPParam.setName(parameter.parameterName)
 		val TypeReference typeReference = DataTypeCorrespondenceHelper.
 			claimUniqueCorrespondingJaMoPPDataTypeReference(parameter.dataType__Parameter, correspondenceModel)
-		if (null == typeReference) {
+		if (null === typeReference) {
 			logger.warn(
 				"No corresponding for data type " + parameter.dataType__Parameter +
 					" found. Can not create correspondence for the parameter " + parameter)

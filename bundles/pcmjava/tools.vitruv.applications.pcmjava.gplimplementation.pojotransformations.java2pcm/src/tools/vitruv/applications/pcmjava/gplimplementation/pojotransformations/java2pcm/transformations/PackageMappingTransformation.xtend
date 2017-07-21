@@ -45,7 +45,7 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 
 	def boolean checkCorrespondenceRepository() {
 		val repositorys = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)
-		if (null == repositorys || 0 == repositorys.size) {
+		if (null === repositorys || 0 == repositorys.size) {
 			correspondenceRepositoryAlreadyExists = false
 		} else {
 			if (1 != repositorys.size) {

@@ -24,11 +24,16 @@
       <import plugin="org.eclipse.xtext.xbase.lib"/>
       <import plugin="org.eclipse.xtend.lib"/>
       <import plugin="org.eclipse.xtend.lib.macro"/>
-      <import plugin="tools.vitruv.domains.uml"/>
-      <import plugin="tools.vitruv.domains.pcm"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.uml2.uml"/>
+      <import feature="tools.vitruv.framework.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.uml.feature" version="0.2.0"/>
+      <import plugin="tools.vitruv.domains.uml"/>
+      <import plugin="tools.vitruv.domains.pcm"/>
       <import plugin="tools.vitruv.framework.util"/>
       <import plugin="tools.vitruv.framework.change"/>
       <import plugin="tools.vitruv.framework.change.processing"/>
@@ -37,9 +42,9 @@
       <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
       <import plugin="tools.vitruv.extensions.dslsruntime.mapping"/>
       <import plugin="tools.vitruv.domains.pcm.util"/>
-      <import plugin="org.eclipse.uml2.uml"/>
       <import plugin="org.palladiosimulator.pcm"/>
       <import plugin="org.palladiosimulator.pcm.resources" version="4.0.0" match="greaterOrEqual"/>
+      <import plugin="tools.vitruv.framework.applications"/>
    </requires>
 
    <plugin
@@ -51,6 +56,13 @@
 
    <plugin
          id="tools.vitruv.applications.pcmumlcomponents.uml2pcm"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="tools.vitruv.applications.pcmumlcomponents"
          download-size="0"
          install-size="0"
          version="0.0.0"

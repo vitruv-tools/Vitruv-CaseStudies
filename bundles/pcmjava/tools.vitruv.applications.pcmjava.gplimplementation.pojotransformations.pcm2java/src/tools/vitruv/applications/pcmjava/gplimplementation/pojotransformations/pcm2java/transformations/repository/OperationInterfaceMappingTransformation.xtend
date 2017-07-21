@@ -78,7 +78,7 @@ class OperationInterfaceMappingTransformation extends EmptyEObjectMappingTransfo
 		}
 
 		var String ifName = "";
-		if (null != correspondingInterface && null != correspondingInterface.name) {
+		if (null !== correspondingInterface && null !== correspondingInterface.name) {
 			ifName = correspondingInterface.name
 		}
 		var int selection = userInteracting.selectFromMessage(UserInteractionType.MODAL,

@@ -218,7 +218,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	def public static EObject[] checkAndAddOperationRequiredRole(TypedElement typedElement,
 		CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
 		val Type type = getTargetClassifierFromImplementsReferenceAndNormalizeURI(typedElement.typeReference)
-		if (null == type) {
+		if (null === type) {
 			return null
 		}
 		val Set<EObject> newCorrespondingEObjects = new HashSet
@@ -231,7 +231,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 				// ii)a)
 				repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
 					typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
-				if (null == repoComponent) {
+				if (null === repoComponent) {
 					return null
 				}
 				val OperationRequiredRole operationRequiredRole = RepositoryFactory.eINSTANCE.
@@ -250,11 +250,11 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	
 				val correspondingComponents = fieldTypeCorrespondences.filter(typeof(RepositoryComponent))
 				if (!correspondingComponents.nullOrEmpty) {
-					if (null == repoComponent) {
+					if (null === repoComponent) {
 						repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
 							typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
 					}
-					if (null == repoComponent) {
+					if (null === repoComponent) {
 						return null
 					}
 	
@@ -283,7 +283,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	def public static Classifier getTargetClassifierFromImplementsReferenceAndNormalizeURI(
 		TypeReference reference) {
 		var interfaceClassifier = Java2PcmUtils.getTargetClassifierFromTypeReference(reference)
-		if (null == interfaceClassifier) {
+		if (null === interfaceClassifier) {
 			return null
 		}
 		
@@ -296,7 +296,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	}
 
 	def public static normalizeURI(EObject eObject) {
-		if (null == eObject.eResource || null == eObject.eResource.resourceSet) {
+		if (null === eObject.eResource || null === eObject.eResource.resourceSet) {
 			return false
 		}
 		val resource = eObject.eResource

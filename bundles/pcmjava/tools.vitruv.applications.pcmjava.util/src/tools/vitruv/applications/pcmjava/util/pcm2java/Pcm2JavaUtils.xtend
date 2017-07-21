@@ -186,7 +186,7 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 				(javaRoot as CompilationUnit).classifiers.get(0))
 		}
 		var VURI vuriToDelete = null
-		if (null != javaRoot.eResource) {
+		if (null !== javaRoot.eResource) {
 			vuriToDelete = VURI.getInstance(javaRoot.eResource)
 		}
 		// change name
@@ -298,8 +298,8 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 	def static Import addImportToCompilationUnitOfClassifier(Classifier classifier,
 		ConcreteClassifier classifierToImport) {
 		val classifierImport = ImportsFactory.eINSTANCE.createClassifierImport
-		if (null != classifierToImport.containingCompilationUnit) {
-			if (null != classifierToImport.containingCompilationUnit.namespaces) {
+		if (null !== classifierToImport.containingCompilationUnit) {
+			if (null !== classifierToImport.containingCompilationUnit.namespaces) {
 				classifierImport.namespaces.addAll(classifierToImport.containingCompilationUnit.namespaces)
 			}
 			classifier.containingCompilationUnit.imports.add(classifierImport)
@@ -337,13 +337,10 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 		var Set<Package> packagesWithCorrespondences = correspondenceModel.
 			getAllEObjectsOfTypeInCorrespondences(Package)
 		val packagesWithNamespace = packagesWithCorrespondences.filter [ pack |
-			val foo = pack.namespacesAsString
-			val packName = pack.name
-			val fn = foo + packName
-			finalNamespace.equals(fn)
+			finalNamespace.equals(pack.namespacesAsString + pack.name)
 		]
-		if (null != packagesWithNamespace && 0 < packagesWithNamespace.size &&
-			null != packagesWithNamespace.iterator.next) {
+		if (null !== packagesWithNamespace && 0 < packagesWithNamespace.size &&
+			null !== packagesWithNamespace.iterator.next) {
 			return packagesWithNamespace.iterator.next
 		}
 		return null;
@@ -352,7 +349,7 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 	def public static Package findCorrespondingPackageByName(String name, CorrespondenceModel correspondenceModel,
 		Repository repo) {
 		val packages = correspondenceModel.getCorrespondingEObjectsByType(repo, Package)
-		if (null == packages) {
+		if (null === packages) {
 			return null
 		}
 		for (package : packages) {
@@ -458,7 +455,7 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 	def static createPackageProgrammatically(NamedElement pcmNamedElement, Package rootPackage) {
 		val Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage
 		jaMoPPPackage.name = pcmNamedElement.entityName
-		if (null != rootPackage) {
+		if (null !== rootPackage) {
 			jaMoPPPackage.namespaces.addAll(rootPackage.namespaces)
 			jaMoPPPackage.namespaces.add(rootPackage.name)
 		}
@@ -563,8 +560,8 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 	def static updateArgumentsOfConstructorCall(Field field, Field[] fieldsToUseAsArgument,
 		Parameter[] parametersToUseAsArgument, NewConstructorCall newConstructorCall) {
 		val List<TypeReference> typeListForConstructor = new ArrayList<TypeReference>
-		if (null != field.typeReference && null != field.typeReference.pureClassifierReference &&
-			null != field.typeReference.pureClassifierReference.target) {
+		if (null !== field.typeReference && null !== field.typeReference.pureClassifierReference &&
+			null !== field.typeReference.pureClassifierReference.target) {
 			val classifier = EcoreUtil.copy(field.typeReference.pureClassifierReference.target)
 			if (classifier instanceof Class) {
 				val jaMoPPClass = classifier as Class
@@ -582,7 +579,7 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 		for (typeRef : typeListForConstructor) {
 			val refElement = typeRef.findMatchingTypeInParametersOrFields(fieldsToUseAsArgument,
 				parametersToUseAsArgument)
-			if (refElement != null) {
+			if (refElement !== null) {
 				val IdentifierReference identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference
 				identifierReference.target = refElement
 			} else {
@@ -639,7 +636,7 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 	def static getDatatypePackage(CorrespondenceModel correspondenceModel, Repository repo, String dataTypeName,
 		UserInteracting userInteracting) {
 		var datatypePackage = Pcm2JavaUtils.findCorrespondingPackageByName("datatypes", correspondenceModel, repo)
-		if (null == datatypePackage) {
+		if (null === datatypePackage) {
 			logger.info("datatype package not found")
 			val String message = "Datatype " + dataTypeName +
 				" created. Please specify to which package the datatype should be added"
@@ -699,10 +696,10 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 		Parameter[] parameters, boolean ensurePublic) {
 		val ClassMethod classMethod = MembersFactory.eINSTANCE.createClassMethod
 		classMethod.name = name
-		if (null != typeReference) {
+		if (null !== typeReference) {
 			classMethod.typeReference = EcoreUtil.copy(typeReference)
 		}
-		if (null != modifiers) {
+		if (null !== modifiers) {
 			classMethod.annotationsAndModifiers.addAll(EcoreUtil.copyAll(modifiers))
 		}
 		if (ensurePublic) {
@@ -711,7 +708,7 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 				classMethod.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
 			}
 		}
-		if (null != parameters) {
+		if (null !== parameters) {
 			classMethod.parameters.addAll(EcoreUtil.copyAll(parameters))
 		}
 		return classMethod

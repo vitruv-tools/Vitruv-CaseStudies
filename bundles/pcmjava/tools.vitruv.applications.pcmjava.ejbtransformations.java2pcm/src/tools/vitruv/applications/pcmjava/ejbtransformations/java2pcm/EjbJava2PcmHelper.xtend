@@ -18,14 +18,14 @@ class EjbJava2PcmHelper {
 	}
 	
 	public static def boolean  overridesInterfaceMethod(ClassMethod classMethod, Class jaMoPPClass){
-		return null != getOoverridenInterfaceMethod(classMethod, jaMoPPClass) 
+		return null !== getOoverridenInterfaceMethod(classMethod, jaMoPPClass) 
 	}
 	
 	public static def getOoverridenInterfaceMethod(ClassMethod classMethod, Class jaMoPPClass){
 		val implementedEjbInterfaces = jaMoPPClass.implements.map[it.classifier].filter(typeof(Interface)).filter[EjbAnnotationHelper.isEjbBuisnessInterface(it)]
 		for(ejbInterface : implementedEjbInterfaces){
 			val method = ejbInterface.methods.findFirst[Java2PcmUtils.hasSameSignature(it, classMethod)]
-			if(null != method){
+			if(null !== method){
 				return method
 			}
 		}

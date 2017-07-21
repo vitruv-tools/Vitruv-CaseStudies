@@ -36,11 +36,11 @@ class OperationProvidedRoleMappingTransformation extends EmptyEObjectMappingTran
 		val OperationProvidedRole opr = eObject as OperationProvidedRole
 		val opInterface = opr.providedInterface__OperationProvidedRole
 		val providingEntity = opr.providingEntity_ProvidedRole
-		if (null == opInterface) {
+		if (null === opInterface) {
 			logger.warn("operation interface is null. Can not synchronize creation of opeation provided role: " + opr)
 			return null
 		}
-		if (null == providingEntity) {
+		if (null === providingEntity) {
 			logger.warn("Basic component is null. Can not synchronize creation of opeation provided role: " + opr)
 			return null
 		}
@@ -69,14 +69,14 @@ class OperationProvidedRoleMappingTransformation extends EmptyEObjectMappingTran
 			logger.debug("oldValue == newValue (value: )" + oldValue + ". Nothing has to be done here.")
 			return new ChangePropagationResult
 		}
-		if (null != oldValue) {
+		if (null !== oldValue) {
 			correspondenceModel.removeCorrespondencesThatInvolveAtLeastAndDependend(oldValue.toSet)
 			EcoreUtil.remove(oldValue)
  	 	}
  	 	// if the new value already has a correspondence we do not need to create newEObjects
 		if (!this.correspondenceModel.hasCorrespondences(newValue.toList)) {
 			val EObject[] newEObjects = createEObject(affectedEObject)
-			if (null != newEObjects) {
+			if (null !== newEObjects) {
 				for (newEObject : newEObjects) {
 					correspondenceModel.createAndAddCorrespondence(newEObject.toList, affectedEObject.toList)
 				}

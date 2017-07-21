@@ -24,7 +24,7 @@ class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 		if (change instanceof JavaFeatureEChange<?, ?>) {
 			val oldAffectedEObject = change.oldAffectedEObject as EObject // Cast necessary due to Xcore/Xtend problem
 			val newAffectedEObject = change.affectedEObject as EObject // Cast necessary due to Xcore/Xtend problem
-			if (null != oldAffectedEObject && null != newAffectedEObject) {
+			if (null !== oldAffectedEObject && null !== newAffectedEObject) {
 				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject);
 			}
 		}

@@ -3,18 +3,30 @@
    <feature url="features/tools.vitruv.applications.pcmjava.pojotransformations.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.pcmjava.pojotransformations.feature" version="0.1.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
+   <feature id="tools.vitruv.applications.pcmjava.pojotransformations.feature.source" version="0.1.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
    <feature url="features/tools.vitruv.applications.umljava.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.umljava.feature" version="0.1.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
+   <feature id="tools.vitruv.applications.umljava.feature.source" version="0.1.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
    <feature url="features/tools.vitruv.applications.pcmjava.ejbtransformations.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.pcmjava.ejbtransformations.feature" version="0.1.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
+   <feature id="tools.vitruv.applications.pcmjava.ejbtransformations.feature.source" version="0.1.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
    <feature url="features/tools.vitruv.applications.pcmumlcomponents.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.pcmumlcomponents.feature" version="0.1.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
+   <feature id="tools.vitruv.applications.pcmumlcomponents.feature.source" version="0.1.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
    <category-def name="Vitruv Applications for Component-based Systems" label="Vitruv Applications for Component-based Systems">
       <description>
-         Domains for Vitruv
+         Applications for Vitruv and Component-based Systems
       </description>
    </category-def>
    <repository-reference location="http://https://kit-sdq.github.io/updatesite/nightly/asem/" enabled="true" />

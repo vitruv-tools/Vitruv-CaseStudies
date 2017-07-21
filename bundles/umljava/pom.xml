@@ -17,6 +17,7 @@
 		<module>tools.vitruv.applications.umljava.java2uml</module>
 		<module>tools.vitruv.applications.umljava.uml2java</module>
 		<module>tools.vitruv.applications.umljava.util</module>
+		<module>tools.vitruv.applications.umljava</module>
 	</modules>
 
 </project>

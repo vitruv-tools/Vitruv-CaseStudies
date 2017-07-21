@@ -71,7 +71,7 @@ public class TransformationExecutor {
 			val JavaFeatureEChange<?,?> eFeatureChange = change as JavaFeatureEChange<?,?>
 			val EObject oldAffectedEObject = eFeatureChange.oldAffectedEObject
 			val EObject newAffectedEObject = eFeatureChange.affectedEObject
-			if (null != oldAffectedEObject && null != newAffectedEObject) {
+			if (null !== oldAffectedEObject && null !== newAffectedEObject) {
 				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject)
 			}
 		}
@@ -190,7 +190,7 @@ public class TransformationExecutor {
 			replaceSingleValuedEReference.affectedEObject;
 		}
 		if (replaceSingleValuedEReference.isContainment) {
-		if (replaceSingleValuedEReference.oldValue == null && replaceSingleValuedEReference.newValue != null) {
+		if (replaceSingleValuedEReference.oldValue === null && replaceSingleValuedEReference.newValue !== null) {
 		mappingTransformations.claimForMappedClassOrImplementingInterface(replaceSingleValuedEReference.newValue.class)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class)
@@ -202,7 +202,7 @@ public class TransformationExecutor {
 			replaceSingleValuedEReference.affectedEObject.class).createNonRootEObjectSingle(
 			oldAffectedEObject, replaceSingleValuedEReference.affectedFeature,
 			replaceSingleValuedEReference.newValue, createdEObjects)
-		} else if (replaceSingleValuedEReference.oldValue != null && replaceSingleValuedEReference.newValue == null) {
+		} else if (replaceSingleValuedEReference.oldValue !== null && replaceSingleValuedEReference.newValue === null) {
 			mappingTransformations.claimForMappedClassOrImplementingInterface(replaceSingleValuedEReference.oldValue.class)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class)
@@ -353,7 +353,7 @@ public class TransformationExecutor {
 //	}
 
 	def public addMapping(EObjectMappingTransformation transformation) {
-		if (null != correspondenceModel) {
+		if (null !== correspondenceModel) {
 			transformation.setCorrespondenceModel(correspondenceModel)
 		}
 		mappingTransformations.putClaimingNullOrSameMapped(transformation.classOfMappedEObject, transformation)

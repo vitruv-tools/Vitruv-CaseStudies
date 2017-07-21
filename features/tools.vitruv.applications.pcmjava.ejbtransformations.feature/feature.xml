@@ -30,28 +30,16 @@
       <import plugin="org.eclipse.xtend.lib.macro"/>
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="tools.vitruv.framework.userinteraction"/>
-      <import plugin="org.palladiosimulator.pcm"/>
       <import plugin="org.emftext.language.java"/>
-      <import plugin="tools.vitruv.framework.util"/>
-      <import plugin="tools.vitruv.framework.change"/>
-      <import plugin="tools.vitruv.framework.tuid"/>
-      <import plugin="tools.vitruv.framework.change.processing"/>
-      <import plugin="tools.vitruv.framework.correspondence"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.mapping"/>
-      <import plugin="tools.vitruv.domains.java.echange"/>
-      <import plugin="tools.vitruv.applications.pcmjava.util"/>
-      <import plugin="tools.vitruv.domains.java"/>
-      <import plugin="tools.vitruv.domains.pcm"/>
       <import plugin="org.eclipse.emf.ecore.xmi" version="2.9.1" match="greaterOrEqual"/>
       <import plugin="org.emftext.language.java.resource"/>
       <import plugin="org.emftext.language.java.resource.java"/>
       <import plugin="org.emftext.commons.antlr3_4_0" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.emftext.language.java.resource.bcel"/>
-      <import plugin="tools.vitruv.framework.change.echange"/>
-      <import plugin="tools.vitruv.domains.java.util.jamoppparser"/>
-      <import plugin="tools.vitruv.domains.java.util"/>
+      <import feature="tools.vitruv.framework.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.java.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="0.2.0"/>
    </requires>
 
    <plugin

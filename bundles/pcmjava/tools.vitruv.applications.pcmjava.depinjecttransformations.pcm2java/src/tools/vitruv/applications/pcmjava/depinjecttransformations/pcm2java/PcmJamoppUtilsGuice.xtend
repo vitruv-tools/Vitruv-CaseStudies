@@ -113,11 +113,11 @@ public class PcmJamoppUtilsGuice {
 
 				val interfaceAndClassName = PcmJamoppUtilsGuice.returnInterfaceAndClassNameForBindExpression(expr)
 
-				if (interfaceAndClassName != null) {
+				if (interfaceAndClassName !== null) {
 					val interfaceName = interfaceAndClassName.key
 					val className = interfaceAndClassName.value
 
-					if (className != null && interfaceName == interfaceClass.name) {
+					if (className !== null && interfaceName == interfaceClass.name) {
 						if (className != implClass.name) { // this condition is to avoid adding the same statement twice
 						// A binding for opInterface already exists and the new binding binds it to a different implementation
 						// The user must decide whether to only keep the old binding, or replace it with the new one	
@@ -144,7 +144,7 @@ public class PcmJamoppUtilsGuice {
 
 				// create assembly connector
 				if (PcmJamoppUtilsGuice.createAssemblyConnector(opInterface, component, assemblyContext, providedRole,
-					system, userInteracting) != null) {
+					system, userInteracting) !== null) {
 					updateSystem = true
 				}
 
@@ -154,7 +154,7 @@ public class PcmJamoppUtilsGuice {
 		val affectedClass = configureMethod.containingConcreteClassifier as ConcreteClassifier
 		PcmJamoppUtilsGuice.saveResourceForClass(affectedClass)
 
-		if (acToRemove != null) {
+		if (acToRemove !== null) {
 			EcoreUtil.remove(acToRemove)
 			updateSystem = true
 		}
@@ -288,7 +288,7 @@ public class PcmJamoppUtilsGuice {
 			val interfaceAndClassName = returnInterfaceAndClassNameForBindExpression(expr)
 			val interfaceName = interfaceAndClassName.key
 			val className = interfaceAndClassName.value
-			if (interfaceName != null) {
+			if (interfaceName !== null) {
 				// logger.info("oldstatement bind " + interfaceName + " to " + className)
 				interfaceToImplMappings.put(interfaceName, className)
 			}
@@ -299,7 +299,7 @@ public class PcmJamoppUtilsGuice {
 			val interfaceAndClassName = returnInterfaceAndClassNameForBindExpression(expr)
 			val interfaceName = interfaceAndClassName.key
 			//val className = interfaceAndClassName.value
-			if (interfaceName != null) {
+			if (interfaceName !== null) {
 				// logger.info("newstatement bind " + interfaceName + " to " + className)
 				newMappings.add(interfaceAndClassName)
 			}
@@ -319,7 +319,7 @@ public class PcmJamoppUtilsGuice {
 			val interfaceAndClassName = returnInterfaceAndClassNameForBindExpression(next as ExpressionStatement)
 			val interfaceName = interfaceAndClassName.key
 			val className = interfaceAndClassName.value
-			if (interfaceName != null && interfaceToImplMappings.get(interfaceName) == className) {
+			if (interfaceName !== null && interfaceToImplMappings.get(interfaceName) == className) {
 				iterNewMinusOld.remove
 			}
 		}
@@ -329,11 +329,11 @@ public class PcmJamoppUtilsGuice {
 			// logger.info("statement removed or modified")
 			for (ExpressionStatement expr : oldMinusNew.filter(ExpressionStatement)) {
 				val interfaceAndClassName = returnInterfaceAndClassNameForBindExpression(expr)
-				if (interfaceAndClassName != null) {
+				if (interfaceAndClassName !== null) {
 					val interfaceName = interfaceAndClassName.key
 					val className = interfaceAndClassName.value
 					// TODO: differentiate between modified and removed statement
-					if (className != null) {
+					if (className !== null) {
 						EcoreUtil.remove(interfaceToConnectorMappings.get(interfaceName))
 						saveSystemResource = true
 					}
@@ -346,18 +346,18 @@ public class PcmJamoppUtilsGuice {
 			// logger.info("statement added or modified")
 			for (ExpressionStatement expr : newMinusOld.filter(ExpressionStatement)) {
 				val interfaceAndClassName = returnInterfaceAndClassNameForBindExpression(expr)
-				if (interfaceAndClassName != null) {
+				if (interfaceAndClassName !== null) {
 					val interfaceName = interfaceAndClassName.key
 					val className = interfaceAndClassName.value
-					if (className != null) {
+					if (className !== null) {
 						val classAlreadyMappedToInterface = interfaceToImplMappings.get(interfaceName)
-						if (classAlreadyMappedToInterface != null && classAlreadyMappedToInterface != className) {
+						if (classAlreadyMappedToInterface !== null && classAlreadyMappedToInterface != className) {
 
 							if (!newMappings.contains(interfaceAndClassName)) {
 								// An existing statement has been modified -> only update the assembly connector
 								// logger.info("existing statement modified -> modify assembly context/connector")
 								val acToUpdate = interfaceToConnectorMappings.get(interfaceName)
-								if (acToUpdate != null) {
+								if (acToUpdate !== null) {
 									// change providing assembly context of connector
 									updateProvidedRoleOfAssemblyConnector(acToUpdate,
 										findOperationInterfaceByName(interfaceName, ci),
@@ -387,7 +387,7 @@ public class PcmJamoppUtilsGuice {
 							}
 							saveSystemResource = true
 
-						} else if (classAlreadyMappedToInterface == null) {
+						} else if (classAlreadyMappedToInterface === null) {
 							// This is the first mapping for the interface -> create new assembly connector
 							// logger.info("first mapping for interface -> create new assembly connector")
 							createAssemblyConnector(
@@ -442,9 +442,9 @@ public class PcmJamoppUtilsGuice {
 		val interfaceToConnectorMappings = new HashMap<String, AssemblyConnector>()
 		for (AssemblyConnector ac : assemblyConnectors) {
 			val providedRole = ac.providedRole_AssemblyConnector
-			if (providedRole != null) {
+			if (providedRole !== null) {
 				val opInterface = providedRole.providedInterface__OperationProvidedRole
-				if (opInterface != null) {
+				if (opInterface !== null) {
 					val interfaceClass = ci.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
 					interfaceToConnectorMappings.put(interfaceClass.name, ac)
 				}
@@ -455,12 +455,12 @@ public class PcmJamoppUtilsGuice {
 
 	def static returnInterfaceAndClassNameForBindExpression(ExpressionStatement expr) {
 		val binderReference = expr.expression as IdentifierReference
-		if (binderReference != null) {
+		if (binderReference !== null) {
 			val bindCall = binderReference.next as MethodCall
 			if (!bindCall.arguments.nullOrEmpty) {
 				val interfaceRef = bindCall.arguments.get(0) as IdentifierReference
 				val interfaceName = interfaceRef.target.name.split("\\.").get(0)
-				if (bindCall.next != null) {
+				if (bindCall.next !== null) {
 					if (bindCall.next instanceof MethodCall) {
 						val toCall = bindCall.next as MethodCall
 						if (!toCall.arguments.nullOrEmpty) {
@@ -478,7 +478,7 @@ public class PcmJamoppUtilsGuice {
 	private def static interfaceAndClassNameEqualBindExpressionArguments(ExpressionStatement expr, String interfaceName,
 		String className) {
 		val interfaceAndClassName = returnInterfaceAndClassNameForBindExpression(expr)
-		if (interfaceAndClassName != null) {
+		if (interfaceAndClassName !== null) {
 			val interfaceNameInExpression = interfaceAndClassName.key
 			if (interfaceNameInExpression == interfaceName) {
 				val classNameInExpression = interfaceAndClassName.value
@@ -583,7 +583,7 @@ public class PcmJamoppUtilsGuice {
 	) {
 
 		var ac = assemblyContext
-		if (ac == null) {
+		if (ac === null) {
 			ac = CompositionFactory.eINSTANCE.createAssemblyContext
 			ac.setEntityName("assemblyContext_" + component.entityName)
 			ac.setEncapsulatedComponent__AssemblyContext(component)
@@ -591,7 +591,7 @@ public class PcmJamoppUtilsGuice {
 		}
 
 		val acWithRequiredRole = findRequiredRoleInSystem(opInterface, system)
-		if (acWithRequiredRole != null) {
+		if (acWithRequiredRole !== null) {
 			// create assembly connector
 			val assemblyConnector = CompositionFactory.eINSTANCE.createAssemblyConnector
 			assemblyConnector.setProvidingAssemblyContext_AssemblyConnector(ac)
@@ -600,7 +600,7 @@ public class PcmJamoppUtilsGuice {
 				"assemblyConnector_" + ac.encapsulatedComponent__AssemblyContext.entityName + "_" +
 					acWithRequiredRole.key.encapsulatedComponent__AssemblyContext.entityName)
 			var provRole = providedRole
-			if (provRole == null) {
+			if (provRole === null) {
 				provRole = findProvidedRoleForComponentAndInterface(component, opInterface)
 			}
 			assemblyConnector.setProvidedRole_AssemblyConnector(provRole)
@@ -612,7 +612,7 @@ public class PcmJamoppUtilsGuice {
 				ProvidedDelegationConnector)) {
 				val OperationProvidedRole sysProvidedRole = connector.innerProvidedRole_ProvidedDelegationConnector
 				val providedInterface = sysProvidedRole.providedInterface__OperationProvidedRole
-				if (providedInterface != null && providedInterface.equals(opInterface)) {
+				if (providedInterface !== null && providedInterface.equals(opInterface)) {
 					return null // system operation required role -> don't display warning
 				}
 			}
@@ -629,7 +629,7 @@ public class PcmJamoppUtilsGuice {
 		UserInteracting userInteracting) {
 
 			var ac = findAssemblyContextForBasicComponent(component, system)
-			if (ac == null) {
+			if (ac === null) {
 				ac = CompositionFactory.eINSTANCE.createAssemblyContext
 				ac.setEntityName("assemblyContext_" + component.entityName)
 				ac.setEncapsulatedComponent__AssemblyContext(component)
@@ -658,7 +658,7 @@ public class PcmJamoppUtilsGuice {
 				RequiredDelegationConnector)) {
 				val OperationRequiredRole requiredRole = connector.innerRequiredRole_RequiredDelegationConnector
 				val reqInterface = requiredRole.requiredInterface__OperationRequiredRole
-				if (reqInterface != null && reqInterface.equals(opInterface)) {
+				if (reqInterface !== null && reqInterface.equals(opInterface)) {
 					return connector.assemblyContext_RequiredDelegationConnector -> requiredRole
 				}
 			}
@@ -777,7 +777,7 @@ public class PcmJamoppUtilsGuice {
 								// Remove old assembly connector
 								connectorToRemove = ac
 							} else {
-								if (newStatement != null) { // New binding has already been readded to the list of statements
+								if (newStatement !== null) { // New binding has already been readded to the list of statements
 								// -> remove it
 									configureMethod.statements.remove(newStatement)
 								} else { // New binding will be handled later in the loop -> remember not to add it
@@ -792,9 +792,9 @@ public class PcmJamoppUtilsGuice {
 							val expressionStatement = PcmJamoppUtilsGuice.addBindCallToConfigureMethod(configureMethod,
 								interfaceClass.name, implClass.name)
 
-							if (expressionStatement != null && ac.equals(assemblyConnector)) {
+							if (expressionStatement !== null && ac.equals(assemblyConnector)) {
 								newStatement = expressionStatement
-							} else if (expressionStatement == null &&
+							} else if (expressionStatement === null &&
 								ac.requiringAssemblyContext_AssemblyConnector ==
 									assemblyConnector.requiringAssemblyContext_AssemblyConnector &&
 								ac.requiredRole_AssemblyConnector == assemblyConnector.requiredRole_AssemblyConnector) {
@@ -808,7 +808,7 @@ public class PcmJamoppUtilsGuice {
 				val affectedClass = configureMethod.containingConcreteClassifier as ConcreteClassifier
 				PcmJamoppUtilsGuice.saveResourceForClass(affectedClass)
 
-				if (connectorToRemove != null) {
+				if (connectorToRemove !== null) {
 					EcoreUtil.remove(connectorToRemove)
 					PcmJamoppUtilsGuice.saveResourceForSystem(system)
 				}

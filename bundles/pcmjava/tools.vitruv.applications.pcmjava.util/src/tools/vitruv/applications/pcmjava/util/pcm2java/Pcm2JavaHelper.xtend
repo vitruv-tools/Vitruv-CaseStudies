@@ -224,8 +224,8 @@ class Pcm2JavaHelper{
 
 	def static addImportToCompilationUnitOfClassifier(ClassifierImport classifierImport, Classifier classifier,
 		ConcreteClassifier classifierToImport) {
-		if (null != classifierToImport.containingCompilationUnit) {
-			if (null != classifierToImport.containingCompilationUnit.namespaces) {
+		if (null !== classifierToImport.containingCompilationUnit) {
+			if (null !== classifierToImport.containingCompilationUnit.namespaces) {
 				classifierImport.namespaces.addAll(classifierToImport.containingCompilationUnit.namespaces)
 			}
 			classifier.containingCompilationUnit.imports.add(classifierImport)
@@ -276,8 +276,8 @@ class Pcm2JavaHelper{
 	def static updateArgumentsOfConstructorCall(Field field, Field[] fieldsToUseAsArgument,
 		Parameter[] parametersToUseAsArgument, NewConstructorCall newConstructorCall) {
 		val List<TypeReference> typeListForConstructor = new ArrayList<TypeReference>
-		if (null != field.typeReference && null != field.typeReference.pureClassifierReference &&
-			null != field.typeReference.pureClassifierReference.target) {
+		if (null !== field.typeReference && null !== field.typeReference.pureClassifierReference &&
+			null !== field.typeReference.pureClassifierReference.target) {
 			val classifier = EcoreUtil.copy(field.typeReference.pureClassifierReference.target)
 			if (classifier instanceof Class) {
 				val jaMoPPClass = classifier as Class
@@ -295,7 +295,7 @@ class Pcm2JavaHelper{
 		for (typeRef : typeListForConstructor) {
 			val refElement = typeRef.findMatchingTypeInParametersOrFields(fieldsToUseAsArgument,
 				parametersToUseAsArgument)
-			if (refElement != null) {
+			if (refElement !== null) {
 				val IdentifierReference identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference
 				identifierReference.target = refElement
 			} else {
@@ -415,14 +415,14 @@ class Pcm2JavaHelper{
 	}
 
 	public synchronized def static Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType pdt) {
-		if (null == primitveTypeMappingMap) {
+		if (null === primitveTypeMappingMap) {
 			initPrimitiveTypeMap()
 		}
 		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
 	}
 	
 	public static def TypeReference createTypeReference(DataType originalDataType, Class correspondingJavaClassIfExisting) {
-		if (null == originalDataType) {
+		if (null === originalDataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
 		var TypeReference innerDataTypeReference = null;
@@ -435,7 +435,7 @@ class Pcm2JavaHelper{
 			} else {
 				// This cannot be since the claimForPrimitiveType function does only return TypeReference or ConcreteClassifier
 			}
-		} else if (correspondingJavaClassIfExisting != null) {
+		} else if (correspondingJavaClassIfExisting !== null) {
 			innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting);	
 		} else {
 			throw new IllegalArgumentException("Either the dataType must be primitive or a correspondingJavaClass must be specified");
@@ -450,10 +450,10 @@ class Pcm2JavaHelper{
 	public static def void initializeClassMethod(ClassMethod classMethod, String name, TypeReference typeReference, Modifier[] modifiers,
 		Parameter[] parameters, boolean ensurePublic) {
 		classMethod.name = name
-		if (null != typeReference) {
+		if (null !== typeReference) {
 			classMethod.typeReference = EcoreUtil.copy(typeReference)
 		}
-		if (null != modifiers) {
+		if (null !== modifiers) {
 			classMethod.annotationsAndModifiers.addAll(EcoreUtil.copyAll(modifiers))
 		}
 		if (ensurePublic) {
@@ -462,7 +462,7 @@ class Pcm2JavaHelper{
 				classMethod.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
 			}
 		}
-		if (null != parameters) {
+		if (null !== parameters) {
 			classMethod.parameters.addAll(EcoreUtil.copyAll(parameters))
 		}
 	}

@@ -51,14 +51,14 @@ class CollectionDataTypeMappingTransformation extends EmptyEObjectMappingTransfo
 	override createEObject(EObject eObject) {
 		val CollectionDataType cdt = eObject as CollectionDataType
 		var String jaMoPPInnerDataTypeName = "?"
-		if (null != cdt.innerType_CollectionDataType) {
+		if (null !== cdt.innerType_CollectionDataType) {
 			var jaMoPPInnerDataType = DataTypeCorrespondenceHelper.
 				claimUniqueCorrespondingJaMoPPDataTypeReference(cdt.innerType_CollectionDataType, correspondenceModel)
 			if(jaMoPPInnerDataType instanceof PrimitiveType){
 				//get class object for inner type, e.g, for int get the class Integer
 				jaMoPPInnerDataType = Pcm2JavaUtils.getWrapperTypeReferenceForPrimitiveType(jaMoPPInnerDataType)
 			}
-			if (null != jaMoPPInnerDataType && null != Java2PcmUtils.getTargetClassifierFromTypeReference(jaMoPPInnerDataType)) {
+			if (null !== jaMoPPInnerDataType && null !== Java2PcmUtils.getTargetClassifierFromTypeReference(jaMoPPInnerDataType)) {
 				jaMoPPInnerDataTypeName = Java2PcmUtils.getTargetClassifierFromTypeReference(jaMoPPInnerDataType).name
 			}
 		}
@@ -151,7 +151,7 @@ public class «cdt.entityName» extends «selectedClass.simpleName»<«jaMoPPInn
 		val transformationResult = new ChangePropagationResult
 		val innerType = DataTypeCorrespondenceHelper.
 			claimUniqueCorrespondingJaMoPPDataType(newValue as DataType, correspondenceModel)
-		if (null == innerType || !(innerType instanceof ConcreteClassifier)) {
+		if (null === innerType || !(innerType instanceof ConcreteClassifier)) {
 			return transformationResult
 		}
 		val innerClassifier = innerType as ConcreteClassifier

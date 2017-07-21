@@ -40,7 +40,7 @@ class BasicComponentMappingTransformation extends EmptyEObjectMappingTransformat
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
 		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
 		val transformationResult = new ChangePropagationResult
-		if (null == newCorrespondingEObjects) {
+		if (null === newCorrespondingEObjects) {
 			return transformationResult
 		}
 		for (jaMoPPElement : newCorrespondingEObjects) {
@@ -117,7 +117,7 @@ class BasicComponentMappingTransformation extends EmptyEObjectMappingTransformat
 		val transformationResult = new ChangePropagationResult
 		if (affectedReference.name.equals(PcmNamespace.COMPONENT_PROVIDED_ROLES_INTERFACE_PROVIDING_ENTITY) ||
 			affectedReference.name.equals(PcmNamespace.COMPONENT_REQUIRED_ROLES_INTERFACE_REQUIRING_ENTITY)) {
-			if (null != affectedEObject) {
+			if (null !== affectedEObject) {
 				return transformationResult
 			}
 		}

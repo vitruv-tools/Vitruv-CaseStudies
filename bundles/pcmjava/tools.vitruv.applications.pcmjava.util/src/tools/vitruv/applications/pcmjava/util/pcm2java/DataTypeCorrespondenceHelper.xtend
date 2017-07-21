@@ -53,7 +53,7 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	public synchronized def static Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType pdt) {
-		if (null == primitveTypeMappingMap) {
+		if (null === primitveTypeMappingMap) {
 			initPrimitiveTypeMap()
 		}
 		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
@@ -61,7 +61,7 @@ class DataTypeCorrespondenceHelper {
 
 	public static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,
 		CorrespondenceModel ci) {
-		if (null == dataType) {
+		if (null === dataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
 		val Type type = claimUniqueCorrespondingType(dataType, ci)
@@ -77,7 +77,7 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	public static def Type claimUniqueCorrespondingJaMoPPDataType(DataType dataType, CorrespondenceModel ci) {
-		if (null == dataType) {
+		if (null === dataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
 		return claimUniqueCorrespondingType(dataType, ci)

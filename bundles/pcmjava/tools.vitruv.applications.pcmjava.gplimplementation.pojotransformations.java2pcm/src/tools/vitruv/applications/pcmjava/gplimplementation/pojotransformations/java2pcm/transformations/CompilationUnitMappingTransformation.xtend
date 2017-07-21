@@ -54,7 +54,7 @@ class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransforma
 				val systems = newCorrespondingEObjects.filter(typeof(System))
 				if (!systems.nullOrEmpty) {
 					for (system : systems) {
-						if (null == system.eResource) {
+						if (null === system.eResource) {
 							PcmJavaUtils.addRootChangeToTransformationResult(system, correspondenceModel, PcmJavaUtils.getSourceModelVURI(newAffectedEObject), transformationResult)
 						} else {
 							//do nothing, cause save is done later

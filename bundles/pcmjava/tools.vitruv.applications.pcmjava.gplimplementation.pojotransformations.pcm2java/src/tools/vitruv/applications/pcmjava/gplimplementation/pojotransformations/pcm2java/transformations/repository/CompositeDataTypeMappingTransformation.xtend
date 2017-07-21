@@ -54,7 +54,7 @@ class CompositeDataTypeMappingTransformation extends EmptyEObjectMappingTransfor
 		var datatypePackage = Pcm2JavaUtils.getDatatypePackage(correspondenceModel,
 			cdt.repository__DataType, cdt.entityName, userInteracting)
 		compUnit.name = cdt.entityName + "." + JavaNamespace.FILE_EXTENSION
-		if (null != datatypePackage) {
+		if (null !== datatypePackage) {
 			compUnit.namespaces.addAll(datatypePackage.namespaces)
 			compUnit.namespaces.add(datatypePackage.name)
 		}
