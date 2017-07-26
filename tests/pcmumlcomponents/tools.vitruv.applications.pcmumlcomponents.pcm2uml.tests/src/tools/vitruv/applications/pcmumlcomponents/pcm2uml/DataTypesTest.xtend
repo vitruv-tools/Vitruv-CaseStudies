@@ -16,10 +16,10 @@ import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.r
 import org.junit.Ignore
 
 class DataTypesTest extends AbstractPcmUmlTest {
-	
+
 	protected val ATTRIBUTE_NAME = "attr"
 	protected val DATATYPE_NAME = "TestType"
-	
+
 	protected def PrimitiveDataType createPrimitiveDataType() {
 		val pcmDataType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		pcmDataType.type = PrimitiveTypeEnum.BOOL
@@ -27,7 +27,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(pcmDataType);
 		return pcmDataType
 	}
-	
+
 	@Test
 	public def void testPrimitiveDataTypeCreate() {
 		val pcmDataType = createPrimitiveDataType()
@@ -38,7 +38,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		assertNotNull(umlType)
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BOOL), umlType.name)
 	}
-	
+
 	@Test
 	public def void testPrimitiveDataTypeDelete() {
 		val dataTypesBefore = rootElement.dataTypes__Repository.length
@@ -46,7 +46,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		rootElement.dataTypes__Repository.remove(pcmDataType)
 		assertEquals(dataTypesBefore, rootElement.dataTypes__Repository.length)
 	}
-	
+
 	protected def CompositeDataType createCompositeDataType(String name) {
 		val pcmDataType = RepositoryFactory.eINSTANCE.createCompositeDataType();
 		pcmDataType.entityName = name
@@ -54,7 +54,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(pcmDataType);
 		return pcmDataType
 	}
-	
+
 	protected def CompositeDataType initCompositeDataTypeDeclaration(String name, String attribute) {
 		val dataType = createCompositeDataType(name)
 		val declaration = RepositoryFactory.eINSTANCE.createInnerDeclaration()
@@ -64,7 +64,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(dataType)
 		return dataType
 	}
-	
+
 	@Test
 	public def void testCompositeDataTypeCreate() {
 		val pcmDataType = createCompositeDataType(DATATYPE_NAME)
@@ -74,7 +74,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		val umlType = umlModel.getOwnedType(pcmDataType.entityName)
 		assertNotNull(umlType)
 	}
-	
+
 	@Test
 	public def void testCompositeDataTypeDeclarationAdd() {
 		val attributeName = ATTRIBUTE_NAME
@@ -83,9 +83,10 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		val umlType = (correspondingElements.get(0) as DataType)
 		assertEquals(1, umlType.ownedAttributes.length)
 		assertEquals(attributeName, umlType.ownedAttributes.get(0).name)
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BOOL), umlType.ownedAttributes.get(0).type.name)
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BOOL),
+			umlType.ownedAttributes.get(0).type.name)
 	}
-	
+
 	@Test
 	public def void testCompositeDataTypeDeclarationEdit() {
 		val attributeName = ATTRIBUTE_NAME
@@ -99,12 +100,13 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		assertEquals(1, umlType.ownedAttributes.length)
 		assertEquals(attributeName, umlType.ownedAttributes.get(0).name)
 	}
+
 	@Ignore
 	@Test
 	public def void testCompositeDataTypeDeclarationDelete() {
 		val attributeName = ATTRIBUTE_NAME
 		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
-		innerType.type = PrimitiveTypeEnum .INT
+		innerType.type = PrimitiveTypeEnum.INT
 		rootElement.dataTypes__Repository += innerType
 		val pcmDataType = initCompositeDataTypeDeclaration(DATATYPE_NAME, attributeName)
 		val declaration = RepositoryFactory.eINSTANCE.createInnerDeclaration()
@@ -120,7 +122,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(pcmDataType)
 		assertEquals("synchronized type should only have one owned attribute left", 1, umlType.ownedAttributes.length)
 	}
-	
+
 	@Test
 	public def void testCompositeDataTypeDelete() {
 		val dataTypesBefore = rootElement.dataTypes__Repository.length
@@ -128,7 +130,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		rootElement.dataTypes__Repository.remove(pcmDataType)
 		assertEquals(dataTypesBefore, rootElement.dataTypes__Repository.length)
 	}
-	
+
 	protected def CollectionDataType initCollectionDataType(String name, PrimitiveTypeEnum innerTypeValue) {
 		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		innerType.type = innerTypeValue
@@ -140,7 +142,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(rootElement)
 		return pcmDataType
 	}
-	
+
 	@Test
 	public def void importedDataTypesTest() {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
@@ -155,14 +157,14 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		pcmOperation.parameters__OperationSignature += pcmParameter
 		rootElement.interfaces__Repository += pcmInterface
 		saveAndSynchronizeChanges(rootElement)
-		
+
 		val umlParameter = pcmParameter.correspondingElements.head as Parameter
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.STRING), umlParameter.type.name) 
-		
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.STRING), umlParameter.type.name)
+
 		val umlOperation = pcmOperation.correspondingElements.head as Operation
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BOOL), umlOperation.type.name) 
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BOOL), umlOperation.type.name)
 	}
-	
+
 	@Test
 	public def void unmappedDataTypeTest() {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
@@ -176,8 +178,8 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		pcmOperation.parameters__OperationSignature += pcmParameter
 		rootElement.interfaces__Repository += pcmInterface
 		saveAndSynchronizeChanges(rootElement)
-		
+
 		val umlParameter = pcmParameter.correspondingElements.head as Parameter
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BYTE), umlParameter.type.name) 
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(PrimitiveTypeEnum.BYTE), umlParameter.type.name)
 	}
 }
