@@ -1,27 +1,27 @@
 package tools.vitruv.applications.pcmumlcomponents.pcm2uml
 
-import org.junit.Test
-import org.palladiosimulator.pcm.repository.RepositoryFactory
 
-import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Component
-import org.palladiosimulator.pcm.repository.OperationInterface
-import org.palladiosimulator.pcm.repository.BasicComponent
+import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Usage
-import org.eclipse.uml2.uml.Interface
-import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.junit.Ignore
+import org.junit.Test
+import org.palladiosimulator.pcm.repository.BasicComponent
+import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.repository.RepositoryComponent
+import org.palladiosimulator.pcm.repository.RepositoryFactory
+import static org.junit.Assert.*
 
 class ComponentsTest extends AbstractPcmUmlTest {
-	private static val COMPONENT_NAME = "TestComponent";
-	private static val INTERFACE_NAME = "TestInterface1"
-	private static val INTERFACE_NAME2 = "TestInterface2"
+	static val COMPONENT_NAME = "TestComponent"
+	static val INTERFACE_NAME = "TestInterface1"
+	static val INTERFACE_NAME2 = "TestInterface2"
 	protected static val PROVIDED_ROLE_NAME = "TestProvided"
 	protected static val REQUIRED_ROLE_NAME = "TestRequired"
 
 	protected def OperationInterface createInterface(String name) {
-		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
+		val pcmInterface = RepositoryFactory::eINSTANCE.createOperationInterface
 		pcmInterface.entityName = name
 		rootElement.interfaces__Repository += pcmInterface
 		saveAndSynchronizeChanges(rootElement)
@@ -29,10 +29,10 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 
 	protected def BasicComponent createBasicComponent(String name) {
-		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
-		pcmComponent.entityName = COMPONENT_NAME;
-		rootElement.components__Repository += pcmComponent;
-		saveAndSynchronizeChanges(pcmComponent);
+		val pcmComponent = RepositoryFactory::eINSTANCE.createBasicComponent
+		pcmComponent.entityName = COMPONENT_NAME
+		rootElement.components__Repository += pcmComponent
+		saveAndSynchronizeChanges(pcmComponent)
 		return pcmComponent
 	}
 
@@ -47,23 +47,23 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 
 	@Test
-	public def void testCreateComponent() {
-		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
-		pcmComponent.entityName = COMPONENT_NAME;
-		rootElement.components__Repository += pcmComponent;
-		saveAndSynchronizeChanges(pcmComponent);
+	def void testCreateComponent() {
+		val pcmComponent = RepositoryFactory::eINSTANCE.createBasicComponent
+		pcmComponent.entityName = COMPONENT_NAME
+		rootElement.components__Repository += pcmComponent
+		saveAndSynchronizeChanges(pcmComponent)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent]).flatten
-		assertEquals(1, correspondingElements.size);
-		val umlComponent = correspondingElements.get(0);
-		assertTrue(umlComponent instanceof Component);
-		assertEquals(COMPONENT_NAME, (umlComponent as Component).name);
+		assertEquals(1, correspondingElements.size)
+		val umlComponent = correspondingElements.get(0)
+		assertTrue(umlComponent instanceof Component)
+		assertEquals(COMPONENT_NAME, (umlComponent as Component).name)
 	}
 
 	@Test
-	public def void testCreateRequiredRole() {
+	def void testCreateRequiredRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface = createInterface(INTERFACE_NAME)
-		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
+		val requiredRole = RepositoryFactory::eINSTANCE.createOperationRequiredRole
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface
 		requiredRole.entityName = REQUIRED_ROLE_NAME
 		requiredRole.requiringEntity_RequiredRole = pcmComponent
@@ -87,10 +87,10 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 
 	@Test
-	public def void testChangeRequiredRole() {
+	def void testChangeRequiredRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface1 = createInterface(INTERFACE_NAME)
-		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
+		val requiredRole = RepositoryFactory::eINSTANCE.createOperationRequiredRole
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface1
 		requiredRole.entityName = REQUIRED_ROLE_NAME
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
@@ -107,10 +107,10 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 
 	@Test
-	public def void testRemoveRequiredRole() {
+	def void testRemoveRequiredRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface = createInterface(INTERFACE_NAME)
-		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
+		val requiredRole = RepositoryFactory::eINSTANCE.createOperationRequiredRole
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface
 		requiredRole.entityName = REQUIRED_ROLE_NAME
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
@@ -125,10 +125,10 @@ class ComponentsTest extends AbstractPcmUmlTest {
 
 	@Ignore
 	@Test
-	public def void testCreateProvidedRole() {
+	def void testCreateProvidedRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface = createInterface(INTERFACE_NAME)
-		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()
+		val providedRole = RepositoryFactory::eINSTANCE.createOperationProvidedRole
 		providedRole.providedInterface__OperationProvidedRole = pcmInterface
 		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent
@@ -153,10 +153,10 @@ class ComponentsTest extends AbstractPcmUmlTest {
 
 	@Ignore
 	@Test
-	public def void testChangeRovidedRole() {
+	def void testChangeRovidedRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface1 = createInterface(INTERFACE_NAME)
-		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()
+		val providedRole = RepositoryFactory::eINSTANCE.createOperationProvidedRole
 		providedRole.providedInterface__OperationProvidedRole = pcmInterface1
 		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent
@@ -173,10 +173,10 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 
 	@Test
-	public def void testRemoveRovidedRole() {
+	def void testRemoveRovidedRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface = createInterface(INTERFACE_NAME)
-		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()
+		val providedRole = RepositoryFactory::eINSTANCE.createOperationProvidedRole
 		providedRole.providedInterface__OperationProvidedRole = pcmInterface
 		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent

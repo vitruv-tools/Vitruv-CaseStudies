@@ -15,10 +15,10 @@ import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
 class AbstractPcmUmlTest extends VitruviusApplicationTest {
-	protected static val MODEL_FILE_EXTENSION = "repository";
-	protected static val MODEL_NAME = "model";
-	// private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
-	private static val PRIMITIVETYPES_URI = "pathmap://PCM_MODELS/PrimitiveTypes.repository"
+	protected static val MODEL_FILE_EXTENSION = "repository"
+	protected static val MODEL_NAME = "model"
+// static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
+	static val PRIMITIVETYPES_URI = "pathmap://PCM_MODELS/PrimitiveTypes.repository"
 
 	protected val INTERFACE_NAME = "TestInterface"
 	protected val OPERATION_NAME = "fooOperation"
@@ -27,32 +27,32 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected val PARAMETER_NAME_2 = "barParameter"
 	protected val ATTRIBUTE_NAME = "fooAttribute"
 
-	override protected unresolveChanges() {
+	override unresolveChanges() {
 		return false
 	}
 
 	protected static var Repository primitiveTypesRepository = null
 
 	private def String getProjectModelPath(String modelName) {
-		"model/" + modelName + "." + MODEL_FILE_EXTENSION;
+		"model/" + modelName + "." + MODEL_FILE_EXTENSION
 	}
 
 	protected def Repository getRootElement() {
-		return MODEL_NAME.projectModelPath.firstRootElement as Repository;
+		return MODEL_NAME.projectModelPath.firstRootElement as Repository
 	}
 
-	override protected createChangePropagationSpecifications() {
-		return #[new PcmToUmlComponentsChangePropagationSpecification()];
+	override createChangePropagationSpecifications() {
+		return #[new PcmToUmlComponentsChangePropagationSpecification]
 	}
 
-	override protected getVitruvDomains() {
-		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain];
+	override getVitruvDomains() {
+		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain]
 	}
 
 	protected def initializeTestModel() {
-		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository();
-		pcmRepository.entityName = MODEL_NAME;
-		createAndSynchronizeModel(MODEL_NAME.projectModelPath, pcmRepository);
+		val pcmRepository = RepositoryFactory::eINSTANCE.createRepository
+		pcmRepository.entityName = MODEL_NAME
+		createAndSynchronizeModel(MODEL_NAME.projectModelPath, pcmRepository)
 	}
 
 	protected def Model getUmlModel() {
@@ -60,27 +60,25 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 		return (correspondingElements.get(0) as Model)
 	}
 
-	override protected cleanup() {
+	override cleanup() {
 	}
 
-	override protected setup() {
+	override setup() {
 		initializeTestModel()
 	}
 
 	protected def Repository loadPrimitiveTypes() {
-		if (primitiveTypesRepository !== null) {
+		if (primitiveTypesRepository !== null)
 			return primitiveTypesRepository
-		}
 
-		val ResourceSet resSet = new ResourceSetImpl()
+		val ResourceSet resSet = new ResourceSetImpl
 		return loadPrimitiveTypes(resSet)
 	}
 
 	protected def Repository loadPrimitiveTypes(ResourceSet resourceSet) {
-		if (primitiveTypesRepository !== null) {
+		if (primitiveTypesRepository !== null)
 			return primitiveTypesRepository
-		}
-		val URI uri = URI.createURI(PRIMITIVETYPES_URI)
+		val URI uri = URI::createURI(PRIMITIVETYPES_URI)
 
 		val Resource resource = resourceSet.getResource(uri, true)
 
