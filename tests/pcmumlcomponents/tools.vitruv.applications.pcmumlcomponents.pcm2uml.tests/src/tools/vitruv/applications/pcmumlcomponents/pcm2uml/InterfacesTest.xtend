@@ -15,6 +15,7 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.ParameterModifier
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
+import org.junit.Ignore
 
 class InterfacesTest extends AbstractPcmUmlTest {
 		
@@ -95,7 +96,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		umlOperation = (correspondingOperation.get(0) as Operation)
 		assertEquals(null, umlOperation.type)
 	}
-	
+	@Ignore
 	@Test
 	public def void testInterfaceRemoveOperation() {
 		val pcmInterface = createOperationInterface(INTERFACE_NAME)

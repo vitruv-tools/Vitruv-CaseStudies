@@ -8,5 +8,4 @@ import tools.vitruv.applications.pcmumlcomponents.pcm2uml.constructionsimulation
 @RunWith(Suite)
 @SuiteClasses(CollectionTypesTest, ComponentsTest, DataTypesTest, InterfacesTest, UmlModelTest, DatatypeConstructionTest)
 class Pcm2UmlTestSuite {
-	
 }

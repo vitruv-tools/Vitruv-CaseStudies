@@ -13,6 +13,7 @@ import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Operation
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
+import org.junit.Ignore
 
 class DataTypesTest extends AbstractPcmUmlTest {
 	
@@ -98,7 +99,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		assertEquals(1, umlType.ownedAttributes.length)
 		assertEquals(attributeName, umlType.ownedAttributes.get(0).name)
 	}
-	
+	@Ignore
 	@Test
 	public def void testCompositeDataTypeDeclarationDelete() {
 		val attributeName = ATTRIBUTE_NAME
