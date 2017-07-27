@@ -15,6 +15,11 @@ import static org.junit.Assert.assertThat
 import tools.vitruv.framework.versioning.emfstore.impl.LocalRepositoryImpl
 import tools.vitruv.framework.versioning.emfstore.impl.RemoteRepositoryImpl
 import tools.vitruv.framework.util.datatypes.VURI
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
+import org.eclipse.uml2.uml.Model
+import org.palladiosimulator.pcm.repository.BasicComponent
 
 class VersioningTest extends AbstractPcmUmlTest {
 	Author author1
@@ -47,6 +52,30 @@ class VersioningTest extends AbstractPcmUmlTest {
 	}
 
 	@Test
+	def void testCreate() {
+		val pcmComponent1 = RepositoryFactory::eINSTANCE.createBasicComponent
+		pcmComponent1.entityName = componentName
+		rootElement.components__Repository += pcmComponent1
+		saveAndSynchronizeChanges(pcmComponent1)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent1]).flatten
+
+		assertThat(correspondingElements.size, is(1))
+		val umlComponent = correspondingElements.get(0) as Component
+		assertThat(umlComponent, is(instanceOf(Component)))
+		assertThat(umlComponent.name, equalTo(componentName))
+		val ResourceSet testResourceSet = new ResourceSetImpl
+		testResourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("*", new XMIResourceFactoryImpl)
+		val sourceModel = testResourceSet.getResource(umlComponent.eResource.URI, true)
+		val newUmlComponent = sourceModel.allContents.findFirst[it instanceof Component] as Component
+		newUmlComponent.name = "newName"
+		newUmlComponent.saveAndSynchronizeChanges
+
+		val newSourceModel = testResourceSet.getResource(pcmComponent1.eResource.URI, true)
+		val newPCMComponent = newSourceModel.allContents.findFirst[it instanceof BasicComponent] as BasicComponent
+		assertThat(newPCMComponent.entityName, equalTo("newName"))
+	}
+
+	@Test
 	def void testCreateComponent() {
 
 		val pcmComponent1 = RepositoryFactory::eINSTANCE.createBasicComponent
@@ -59,6 +88,7 @@ class VersioningTest extends AbstractPcmUmlTest {
 		assertThat(umlComponent, is(instanceOf(Component)))
 		assertThat(umlComponent.name, equalTo(componentName))
 		sourceVURI = VURI::getInstance(pcmComponent1.eResource)
+
 		val commit = localRepository1.commit("New component created", virtualModel, sourceVURI)
 		assertThat(commit.changes.length, is(1))
 		localRepository1.push
