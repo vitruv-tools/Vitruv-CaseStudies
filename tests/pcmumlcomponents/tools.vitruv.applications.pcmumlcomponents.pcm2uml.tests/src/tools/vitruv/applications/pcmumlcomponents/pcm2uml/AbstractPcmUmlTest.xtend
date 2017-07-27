@@ -28,10 +28,10 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected val ATTRIBUTE_NAME = "fooAttribute"
 
 	override unresolveChanges() {
-		return false
+		return true
 	}
 
-	protected static var Repository primitiveTypesRepository = null
+	protected static Repository primitiveTypesRepository = null
 
 	private def String getProjectModelPath(String modelName) {
 		"model/" + modelName + "." + MODEL_FILE_EXTENSION
@@ -64,7 +64,7 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	}
 
 	override setup() {
-		initializeTestModel()
+		initializeTestModel
 	}
 
 	protected def Repository loadPrimitiveTypes() {
