@@ -20,6 +20,9 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.BasicComponent
+import tools.vitruv.framework.tuid.TuidManager
+import tools.vitruv.framework.tuid.TuidResolver
+import org.eclipse.uml2.uml.internal.impl.ComponentImpl
 
 class VersioningTest extends AbstractPcmUmlTest {
 	Author author1
@@ -67,12 +70,14 @@ class VersioningTest extends AbstractPcmUmlTest {
 		testResourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("*", new XMIResourceFactoryImpl)
 		val sourceModel = testResourceSet.getResource(umlComponent.eResource.URI, true)
 		val newUmlComponent = sourceModel.allContents.findFirst[it instanceof Component] as Component
+		TuidManager::instance.registerObjectUnderModification(newUmlComponent)
 		newUmlComponent.name = "newName"
-		newUmlComponent.saveAndSynchronizeChanges
+		TuidManager::instance.updateTuidsOfRegisteredObjects
+		val viceVersaCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[newUmlComponent]).flatten
+		assertThat(viceVersaCorrespondingElements.size, is(1))
+		val pcmComponent2 = viceVersaCorrespondingElements.get(0) as BasicComponent
+		assertThat(pcmComponent2.entityName, equalTo(componentName))
 
-		val newSourceModel = testResourceSet.getResource(pcmComponent1.eResource.URI, true)
-		val newPCMComponent = newSourceModel.allContents.findFirst[it instanceof BasicComponent] as BasicComponent
-		assertThat(newPCMComponent.entityName, equalTo("newName"))
 	}
 
 	@Test
@@ -90,7 +95,7 @@ class VersioningTest extends AbstractPcmUmlTest {
 		sourceVURI = VURI::getInstance(pcmComponent1.eResource)
 
 		val commit = localRepository1.commit("New component created", virtualModel, sourceVURI)
-		assertThat(commit.changes.length, is(1))
+		assertThat(commit.changes.length, is(2))
 		localRepository1.push
 		localRepository2.pull
 		assertThat(localRepository1.commits.length, is(localRepository2.commits.length))
