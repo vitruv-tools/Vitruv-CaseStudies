@@ -31,7 +31,7 @@ class AbstractPcmUmlBothDirectionsTest extends VitruviusApplicationTest {
 // static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
 	protected static Repository primitiveTypesRepository = null
 
-	override unresolveChanges() { true }
+	override unresolveChanges() { false }
 
 	override cleanup() {}
 
@@ -41,15 +41,15 @@ class AbstractPcmUmlBothDirectionsTest extends VitruviusApplicationTest {
 
 	override createChangePropagationSpecifications() {
 		return #[
-			new PcmToUmlComponentsChangePropagationSpecification,
-			new UmlToPcmComponentsChangePropagationSpecification
+			new UmlToPcmComponentsChangePropagationSpecification,
+			new PcmToUmlComponentsChangePropagationSpecification
 		]
 	}
 
 	override getVitruvDomains() {
 		return #[
-			new PcmDomainProvider().domain,
-			new UmlDomainProvider().domain
+			new UmlDomainProvider().domain,
+			new PcmDomainProvider().domain
 		]
 	}
 

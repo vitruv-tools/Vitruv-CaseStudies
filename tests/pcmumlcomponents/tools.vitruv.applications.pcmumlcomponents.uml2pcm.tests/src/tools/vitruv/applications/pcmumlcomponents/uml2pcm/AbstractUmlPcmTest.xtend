@@ -60,7 +60,7 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	}
 
 	override setup() {
-		this.initializeTestModel
+		initializeTestModel
 	}
 
 	protected def importPrimitiveTypes() {

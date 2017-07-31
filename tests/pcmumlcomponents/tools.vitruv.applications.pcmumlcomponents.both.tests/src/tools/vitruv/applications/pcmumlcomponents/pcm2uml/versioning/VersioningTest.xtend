@@ -85,9 +85,10 @@ class VersioningTest extends AbstractPcmUmlBothDirectionsTest {
 		registerObjectUnderModification(newUmlComponent)
 		newUmlComponent.name = "newName"
 		updateTuidsOfRegisteredObjects
-		val propagatedChanges = saveAndSynchronizeChanges(model)
+		val propagatedChanges = saveAndSynchronizeChanges(newUmlComponent)
 		assertThat(propagatedChanges.length, is(1))
 		val propagatedChange = propagatedChanges.get(0)
+		assertThat(propagatedChange.originalChange.EChanges.empty, is(false))
 		assertThat(propagatedChange.consequentialChanges.EChanges.empty, is(false))
 		val viceVersaCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[newUmlComponent]).flatten
 		assertThat(viceVersaCorrespondingElements.size, is(1))

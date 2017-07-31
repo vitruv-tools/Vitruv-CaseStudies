@@ -19,43 +19,6 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	protected static val USAGE_NAME = "testUsage"
 	protected static val INTERFACE_REALIZATION_NAME = "testInterfaceRealization"
 
-	protected def Component createUmlComponent(String name, Boolean isComposable) {
-		val umlComponent = createComponent
-		umlComponent.name = name
-		rootElement.packagedElements += umlComponent
-		val componentMode = if(isComposable) 0 else 1
-		userInteractor.addNextSelections(componentMode)
-		saveAndSynchronizeChanges(rootElement)
-		return umlComponent
-	}
-
-	protected def Component createUmlComponent(String name) {
-		createUmlComponent(name, false)
-	}
-
-	protected def Interface createUmlInterface(String name) {
-		val umlInterface = createInterface
-		umlInterface.name = name
-		rootElement.packagedElements += umlInterface
-		saveAndSynchronizeChanges(rootElement)
-		return umlInterface
-	}
-
-	protected def CompositeComponent getCorrespondingCompositeComponent(Component umlComponent) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		return (correspondingElements.get(0) as CompositeComponent)
-	}
-
-	protected def BasicComponent getCorrespondingBasicComponent(Component umlComponent) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		return (correspondingElements.get(0) as BasicComponent)
-	}
-
-	protected def OperationInterface getCorrespondingInterface(Interface umlInterface) {
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten
-		return (correspondingElements.get(0) as OperationInterface)
-	}
-
 	@Test
 	def void testCreateBasicComponent() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
@@ -153,8 +116,8 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(umlComponent)
 
 		val umlInterface2 = createUmlInterface(INTERFACE_NAME + "2")
-// usage.suppliers.clear
-// usage.suppliers += #[umlInterface2]
+		// usage.suppliers.clear
+		// usage.suppliers += #[umlInterface2]
 		usage.suppliers.set(0, umlInterface2)
 		saveAndSynchronizeChanges(usage)
 
@@ -209,5 +172,60 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		assertThat(propagatedChange.consequentialChanges.EChanges.empty, is(false))
 		val pcmComponent2 = getCorrespondingCompositeComponent(umlComponent)
 		assertThat(umlComponent.name, equalTo(pcmComponent2.entityName))
+	}
+
+	@Test
+	def void testCreateBasicComponentAndChangeName() {
+		val umlComponent = createUmlComponent(COMPONENT_NAME, false)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
+		assertThat(1, equalTo(correspondingElements.length))
+		assertThat(correspondingElements.get(0) instanceof BasicComponent, is(true))
+		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
+		assertThat(umlComponent.name, equalTo(pcmComponent.entityName))
+		val newName = "newName"
+		umlComponent.name = newName
+		val propagatedChanges = saveAndSynchronizeChanges(umlComponent)
+		assertThat(propagatedChanges.length, is(1))
+		val propagatedChange = propagatedChanges.get(0)
+		assertThat(propagatedChange.consequentialChanges.EChanges.empty, is(false))
+		val pcmComponent2 = getCorrespondingBasicComponent(umlComponent)
+		assertThat(umlComponent.name, equalTo(pcmComponent2.entityName))
+	}
+
+	protected def Component createUmlComponent(String name, Boolean isComposable) {
+		val umlComponent = createComponent
+		umlComponent.name = name
+		rootElement.packagedElements += umlComponent
+		val componentMode = if(isComposable) 0 else 1
+		userInteractor.addNextSelections(componentMode)
+		saveAndSynchronizeChanges(rootElement)
+		return umlComponent
+	}
+
+	protected def Component createUmlComponent(String name) {
+		createUmlComponent(name, false)
+	}
+
+	protected def Interface createUmlInterface(String name) {
+		val umlInterface = createInterface
+		umlInterface.name = name
+		rootElement.packagedElements += umlInterface
+		saveAndSynchronizeChanges(rootElement)
+		return umlInterface
+	}
+
+	protected def CompositeComponent getCorrespondingCompositeComponent(Component umlComponent) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
+		return (correspondingElements.get(0) as CompositeComponent)
+	}
+
+	protected def BasicComponent getCorrespondingBasicComponent(Component umlComponent) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
+		return (correspondingElements.get(0) as BasicComponent)
+	}
+
+	protected def OperationInterface getCorrespondingInterface(Interface umlInterface) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten
+		return (correspondingElements.get(0) as OperationInterface)
 	}
 }
