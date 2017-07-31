@@ -2,7 +2,6 @@ package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
 import org.junit.Test
 
-import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Interface
 
@@ -21,7 +20,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	protected static val INTERFACE_REALIZATION_NAME = "testInterfaceRealization"
 
 	protected def Component createUmlComponent(String name, Boolean isComposable) {
-		val umlComponent = UMLFactory::eINSTANCE.createComponent
+		val umlComponent = createComponent
 		umlComponent.name = name
 		rootElement.packagedElements += umlComponent
 		val componentMode = if(isComposable) 0 else 1
@@ -35,7 +34,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	}
 
 	protected def Interface createUmlInterface(String name) {
-		val umlInterface = UMLFactory::eINSTANCE.createInterface
+		val umlInterface = createInterface
 		umlInterface.name = name
 		rootElement.packagedElements += umlInterface
 		saveAndSynchronizeChanges(rootElement)
@@ -71,7 +70,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	def void testAddProvidedInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		val interfaceRealization = UMLFactory::eINSTANCE.createInterfaceRealization
+		val interfaceRealization = createInterfaceRealization
 		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface
 		umlComponent.interfaceRealizations += interfaceRealization
@@ -89,7 +88,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	def void testChangeProvidedInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
 		val umlInterface1 = createUmlInterface(INTERFACE_NAME)
-		val interfaceRealization = UMLFactory::eINSTANCE.createInterfaceRealization
+		val interfaceRealization = createInterfaceRealization
 		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface1
 		umlComponent.interfaceRealizations += interfaceRealization
@@ -112,7 +111,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	def void testRemoveProvidedInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		val interfaceRealization = UMLFactory::eINSTANCE.createInterfaceRealization
+		val interfaceRealization = createInterfaceRealization
 		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface
 		umlComponent.interfaceRealizations += interfaceRealization
@@ -129,7 +128,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	def void testAddRequiredInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		val usage = UMLFactory::eINSTANCE.createUsage
+		val usage = createUsage
 		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface
 		umlComponent.packagedElements += usage
@@ -147,7 +146,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	def void testChangeRequiredInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
 		val umlInterface1 = createUmlInterface(INTERFACE_NAME)
-		val usage = UMLFactory::eINSTANCE.createUsage
+		val usage = createUsage
 		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface1
 		umlComponent.packagedElements += usage
@@ -171,7 +170,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	def void testRemoveRequiredInterface() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		val usage = UMLFactory::eINSTANCE.createUsage
+		val usage = createUsage
 		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface
 		umlComponent.packagedElements += usage

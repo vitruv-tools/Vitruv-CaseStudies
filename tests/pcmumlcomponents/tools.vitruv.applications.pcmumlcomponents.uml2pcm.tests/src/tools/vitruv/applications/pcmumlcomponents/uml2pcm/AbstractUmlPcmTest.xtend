@@ -2,6 +2,8 @@ package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
 import java.util.Arrays
 import java.util.List
+
+import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
@@ -10,13 +12,15 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.resource.UMLResource
+
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
+
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
-import org.eclipse.emf.common.util.BasicEList
 
 class AbstractUmlPcmTest extends VitruviusApplicationTest {
+	protected static extension UMLFactory = UMLFactory::eINSTANCE
 	protected static val MODEL_FILE_EXTENSION = "uml"
 	protected static val MODEL_NAME = "model"
 	protected static val COMPONENT_NAME = "TestComponent"
@@ -47,7 +51,7 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	}
 
 	protected def initializeTestModel() {
-		val umlModel = UMLFactory::eINSTANCE.createModel
+		val umlModel = createModel
 		umlModel.name = MODEL_NAME
 		createAndSynchronizeModel(MODEL_NAME.getProjectModelPath, umlModel)
 	}
@@ -62,7 +66,7 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected def importPrimitiveTypes() {
 		// val resourceSet = rootElement.eResource.resourceSet
 		val resourceSet = new ResourceSetImpl
-		resourceSet.createResource(URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI))
+		resourceSet.createResource(URI::createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI))
 		val primitiveTypesUri = URI::createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI).appendFragment("_0")
 		val primitiveTypes = resourceSet.getEObject(primitiveTypesUri, true)
 		val package = primitiveTypes as Package
