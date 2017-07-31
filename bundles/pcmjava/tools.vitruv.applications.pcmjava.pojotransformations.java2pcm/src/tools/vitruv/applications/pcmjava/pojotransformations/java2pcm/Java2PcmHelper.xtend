@@ -1,16 +1,10 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
 
-import java.util.List
 import org.apache.log4j.Logger
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.containers.Package
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
-import org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
-import tools.vitruv.framework.correspondence.Correspondence
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteracting
 
@@ -47,24 +41,14 @@ public class Java2PcmHelper {
 		return repository.head
 	}
 	
-	def static boolean alreadyHasClassCorrespondence(Class cls, CorrespondenceModel correspondenceModel) {
-		val package = Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(cls, correspondenceModel)
-		return !correspondenceModel.getCorrespondingEObjectsByType(package, InterfaceProvidingRequiringEntity).empty
+	def static Repository findPcmRepository(CorrespondenceModel correspondenceModel) {
+		return Java2PcmUtils.getRepository(correspondenceModel)
 	}
-	
-	def static Package getContainingPackageFromCorrespondanceModel(List<String> namespaces, CorrespondenceModel correspondenceModel) {
-		//return Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(cls, correspondenceModel)
-		var pack = Pcm2JavaUtils.findCorrespondingPackageByName(namespaces.last, correspondenceModel, findPcmRepository(correspondenceModel, namespaces.head))
-		if (pack === null && namespaces.size > 1) {
-			namespaces.remove(namespaces.last)
-			pack = getContainingPackageFromCorrespondanceModel(namespaces, correspondenceModel)
-		}
-		return pack
-	}
-	
+
 	def static boolean hasCorrespondance(EObject eObject, CorrespondenceModel correspondenceModel) {
 		return !correspondenceModel.getCorrespondingEObjects(eObject).isNullOrEmpty
 	}
+	
 	def static Set<OperationInterface> getCorrespondingOperationInterface(EObject eObject, CorrespondenceModel correspondenceModel) {
 		return correspondenceModel.getCorrespondingEObjectsByType(eObject, OperationInterface)
 	}

@@ -22,46 +22,49 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
       super(reactionExecutionState);
     }
     
-    public void updatePcmCompositeComponentElement(final org.emftext.language.java.containers.Package javaPackage, final String name, final CompositeComponent pcmCompositeComponent) {
+    public void updatePcmCompositeComponentElement(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final CompositeComponent pcmCompositeComponent) {
       pcmCompositeComponent.setEntityName(name);
     }
     
-    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final String name, final CompositeComponent pcmCompositeComponent) {
+    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final CompositeComponent pcmCompositeComponent) {
       return pcmCompositeComponent;
     }
     
-    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final String name, final CompositeComponent pcmCompositeComponent) {
+    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final CompositeComponent pcmCompositeComponent) {
       return javaPackage;
     }
     
-    public void callRoutine1(final org.emftext.language.java.containers.Package javaPackage, final String name, final CompositeComponent pcmCompositeComponent, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addComponentToRepository(pcmCompositeComponent, Java2PcmHelper.findPcmRepository(this.correspondenceModel, name));
+    public void callRoutine1(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final CompositeComponent pcmCompositeComponent, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.addComponentToRepository(pcmCompositeComponent, Java2PcmHelper.findPcmRepository(this.correspondenceModel));
     }
   }
   
-  public CreateCompositeComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name) {
+  public CreateCompositeComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateCompositeComponentRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
-    this.javaPackage = javaPackage;this.name = name;
+    this.javaPackage = javaPackage;this.name = name;this.rootPackageName = rootPackageName;
   }
   
   private org.emftext.language.java.containers.Package javaPackage;
   
   private String name;
   
+  private String rootPackageName;
+  
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeComponentRoutine with input:");
     getLogger().debug("   Package: " + this.javaPackage);
     getLogger().debug("   String: " + this.name);
+    getLogger().debug("   String: " + this.rootPackageName);
     
     CompositeComponent pcmCompositeComponent = RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
     notifyObjectCreated(pcmCompositeComponent);
-    userExecution.updatePcmCompositeComponentElement(javaPackage, name, pcmCompositeComponent);
+    userExecution.updatePcmCompositeComponentElement(javaPackage, name, rootPackageName, pcmCompositeComponent);
     
-    addCorrespondenceBetween(userExecution.getElement1(javaPackage, name, pcmCompositeComponent), userExecution.getElement2(javaPackage, name, pcmCompositeComponent), "");
+    addCorrespondenceBetween(userExecution.getElement1(javaPackage, name, rootPackageName, pcmCompositeComponent), userExecution.getElement2(javaPackage, name, rootPackageName, pcmCompositeComponent), "");
     
-    userExecution.callRoutine1(javaPackage, name, pcmCompositeComponent, actionsFacade);
+    userExecution.callRoutine1(javaPackage, name, rootPackageName, pcmCompositeComponent, actionsFacade);
     
     postprocessElements();
   }

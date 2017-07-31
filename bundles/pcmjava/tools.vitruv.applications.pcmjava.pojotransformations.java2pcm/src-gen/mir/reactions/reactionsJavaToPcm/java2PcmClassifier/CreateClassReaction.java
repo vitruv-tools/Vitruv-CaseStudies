@@ -5,7 +5,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.containers.CompilationUnit;
+import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -62,19 +64,18 @@ class CreateClassReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final org.emftext.language.java.classifiers.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
+      final org.emftext.language.java.containers.Package jaMoPPPackage = Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(newValue, 
+        this.correspondenceModel);
       boolean _equals = IterableExtensions.<String>last(affectedEObject.getNamespaces()).equals("datatypes");
       if (_equals) {
         _routinesFacade.createCompositeDataType(newValue, affectedEObject);
       } else {
-        final org.emftext.language.java.containers.Package package_ = Java2PcmHelper.getContainingPackageFromCorrespondanceModel(affectedEObject.getNamespaces(), this.correspondenceModel);
-        _routinesFacade.checkComponentCorrespondance(package_, newValue);
-        _routinesFacade.checkSystemCorrespondance(package_, newValue);
+        _routinesFacade.checkSystemAndComponent(jaMoPPPackage, newValue);
         boolean _hasCorrespondance = Java2PcmHelper.hasCorrespondance(newValue, this.correspondenceModel);
         boolean _not = (!_hasCorrespondance);
         if (_not) {
-          _routinesFacade.createArchitecturalElement(package_, newValue.getName());
-          _routinesFacade.checkComponentCorrespondance(package_, newValue);
-          _routinesFacade.checkSystemCorrespondance(package_, newValue);
+          final Repository repository = Java2PcmHelper.findPcmRepository(this.correspondenceModel);
+          _routinesFacade.createElement(repository, newValue, affectedEObject);
         }
       }
     }

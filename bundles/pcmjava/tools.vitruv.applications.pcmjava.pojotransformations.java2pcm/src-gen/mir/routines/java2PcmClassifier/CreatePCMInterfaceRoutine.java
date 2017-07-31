@@ -40,11 +40,11 @@ public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization 
         final String[] selections = { "yes", "no" };
         final int selected = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections);
         if ((selected == 0)) {
-          final Repository repo = Java2PcmHelper.findPcmRepository(this.correspondenceModel, IterableExtensions.<String>head(compilationUnit.getNamespaces()));
+          final Repository repo = Java2PcmHelper.findPcmRepository(this.correspondenceModel);
           _routinesFacade.addInterfaceToRepository(pcmIface, repo, javaInterface, compilationUnit);
         }
       } else {
-        final Repository repo_1 = Java2PcmHelper.findPcmRepository(this.correspondenceModel, IterableExtensions.<String>head(compilationUnit.getNamespaces()));
+        final Repository repo_1 = Java2PcmHelper.findPcmRepository(this.correspondenceModel);
         _routinesFacade.addInterfaceToRepository(pcmIface, repo_1, javaInterface, compilationUnit);
       }
     }

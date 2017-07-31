@@ -348,6 +348,9 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 
 	def public static Package findCorrespondingPackageByName(String name, CorrespondenceModel correspondenceModel,
 		Repository repo) {
+		if (repo === null) {
+			return null
+		}
 		val packages = correspondenceModel.getCorrespondingEObjectsByType(repo, Package)
 		if (null === packages) {
 			return null

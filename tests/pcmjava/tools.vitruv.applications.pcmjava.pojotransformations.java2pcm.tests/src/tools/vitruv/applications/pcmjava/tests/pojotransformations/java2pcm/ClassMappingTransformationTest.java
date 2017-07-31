@@ -37,10 +37,10 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     @Test
     public void testAddCompositeComponentClassInPackageWithCorrespondingCompositeComponent() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_COMPOSITE_COMPONENT);
+        this.getUserInteractor().addNextSelections(1);
         final CompositeComponent cc = super.addSecondPackageCorrespondsToCompositeComponent();
 
-        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_COMPOSITE_COMPONENT);
+        this.getUserInteractor().addNextSelections(1);
         final CompositeComponent ccForClass = this.addClassInSecondPackage(CompositeComponent.class);
 
         super.assertRepositoryAndPCMName(repo, ccForClass, cc.getEntityName());
@@ -49,10 +49,10 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     @Test
     public void testAddSystemClassInPackageWithCorrespondingSystem() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_SYSTEM);
+        this.getUserInteractor().addNextSelections(2);
         final System pcmSystem = super.addSecondPackageCorrespondsToSystem();
 
-        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_SYSTEM);
+        this.getUserInteractor().addNextSelections(2);
         final System systemForClass = super.addClassInSecondPackage(System.class);
 
         super.assertPCMNamedElement(systemForClass, pcmSystem.getEntityName());
@@ -93,7 +93,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
         super.addSecondPackageCorrespondsWithoutCorrespondences();
 
-        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_COMPOSITE_COMPONENT);
+        this.getUserInteractor().addNextSelections(1);
         final CompositeComponent cc = super.addClassInSecondPackage(CompositeComponent.class);
 
         super.assertRepositoryAndPCMName(repo, cc, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
@@ -104,7 +104,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         this.addRepoContractsAndDatatypesPackage();
         super.addSecondPackageCorrespondsWithoutCorrespondences();
 
-        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_SYSTEM);
+        this.getUserInteractor().addNextSelections(2);
         final System pcmSystem = super.addClassInSecondPackage(System.class);
 
         this.assertPCMNamedElement(pcmSystem, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);

@@ -65,7 +65,7 @@ class PackageCreatedReaction extends AbstractReactionRealization {
         _routinesFacade.createPCMRepository(newValue, newValue.getName(), "package_root");
         _routinesFacade.createJavaSubPackages(newValue);
       } else {
-        _routinesFacade.createArchitecturalElement(newValue, Java2PcmHelper.getLastPackageName(newValue.getName()));
+        _routinesFacade.createArchitecturalElement(newValue, Java2PcmHelper.getLastPackageName(newValue.getName()), Java2PcmHelper.getRootPackageName(newValue.getName()));
       }
     }
   }

@@ -2,6 +2,7 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -20,13 +21,13 @@ reaction PackageCreated {
 			createPCMRepository(newValue, newValue.name, "package_root")
 			createJavaSubPackages(newValue)
 		} else {
-			createArchitecturalElement(newValue, getLastPackageName(newValue.name))
+			createArchitecturalElement(newValue, getLastPackageName(newValue.name), getRootPackageName(newValue.name))
 		}
 	}
 
 }
 
-routine createArchitecturalElement(java::Package javaPackage, String name) {
+routine createArchitecturalElement(java::Package javaPackage, String name, String rootPackageName) {
 	action {
 		call {
 			val String userMsg = "A package has been created. Please decide whether and which corresponding architectural element should be created"
@@ -34,8 +35,8 @@ routine createArchitecturalElement(java::Package javaPackage, String name) {
 										"Do nothing/Decide later"]
 			val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
 			switch(selected) {
-				case 0: createBasicComponent(javaPackage, name) 
-				case 1: createCompositeComponent(javaPackage, name)
+				case 0: createBasicComponent(javaPackage, name, rootPackageName) 
+				case 1: createCompositeComponent(javaPackage, name, rootPackageName)
 				case 2: createSystem(javaPackage, name)
 			}
 		}
@@ -71,26 +72,26 @@ routine createSystem(java::Package javaPackage, String name) {
 	}
 }
 
-routine createBasicComponent(java::Package javaPackage, String name) {
+routine createBasicComponent(java::Package javaPackage, String name, String rootPackageName) {
 	action {
 		val pcmBasicComponent = create pcm::BasicComponent and initialize {
 			pcmBasicComponent.entityName = name
 		}
 		add correspondence between pcmBasicComponent and javaPackage
 		
-		call addComponentToRepository(pcmBasicComponent, findPcmRepository(correspondenceModel, name))
+		call addComponentToRepository(pcmBasicComponent, findPcmRepository(correspondenceModel))
 		
 	}
 }
 
-routine createCompositeComponent(java::Package javaPackage, String name) {
+routine createCompositeComponent(java::Package javaPackage, String name, String rootPackageName) {
 	action {
 		val pcmCompositeComponent = create pcm::CompositeComponent and initialize {
 			pcmCompositeComponent.entityName = name
 		}
 		add correspondence between pcmCompositeComponent and javaPackage
 		
-		call addComponentToRepository(pcmCompositeComponent, findPcmRepository(correspondenceModel, name))
+		call addComponentToRepository(pcmCompositeComponent, findPcmRepository(correspondenceModel))
 	}
 }
 
@@ -120,11 +121,11 @@ routine createPCMInterface(java::Interface javaInterface, java::CompilationUnit 
 				val String[] selections = #["yes", "no"]
 				val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
 				if (selected == 0) {
-					val repo = findPcmRepository(correspondenceModel, compilationUnit.namespaces.head)
+					val repo = findPcmRepository(correspondenceModel)
 					addInterfaceToRepository(pcmIface, repo, javaInterface, compilationUnit)
 				}
 			} else {
-				val repo = findPcmRepository(correspondenceModel, compilationUnit.namespaces.head)
+				val repo = findPcmRepository(correspondenceModel)
 				addInterfaceToRepository(pcmIface, repo, javaInterface, compilationUnit)
 			}
 		}
@@ -147,37 +148,39 @@ routine addInterfaceToRepository(pcm::OperationInterface pcmInterface, pcm::Repo
 reaction CreateClass {
 	after element java::Class inserted in java::CompilationUnit[classifiers]
 	call {
+		val jaMoPPPackage = Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(newValue,
+			correspondenceModel)
 		if (affectedEObject.namespaces.last.equals("datatypes")) {
 			createCompositeDataType(newValue, affectedEObject)			
-		} else {
-			val package = getContainingPackageFromCorrespondanceModel(affectedEObject.namespaces, correspondenceModel)
-			checkComponentCorrespondance(package, newValue)
-			checkSystemCorrespondance(package, newValue) 
+		} else {	
+			checkSystemAndComponent(jaMoPPPackage, newValue)
 			if (!hasCorrespondance(newValue, correspondenceModel)) {
-				createArchitecturalElement(package, newValue.name)			
-				checkComponentCorrespondance(package, newValue)
-				checkSystemCorrespondance(package, newValue) 
+				val repository = findPcmRepository(correspondenceModel)
+				createElement(repository, newValue, affectedEObject)
 			}
 		}
 	}
 	
 }
 
-
-routine checkComponentCorrespondance(java::Package javaPackage, java::Class javaClass) {
+routine createElement(pcm::Repository repository, java::Class javaClass, java::CompilationUnit compilationUnit) {
 	match {
-		val pcmComponent = retrieve pcm::ImplementationComponentType corresponding to javaPackage
+		val javaPackage = retrieve java::Package corresponding to repository tagged with "package_root" 
 	}
 	action {
-		add correspondence between pcmComponent and javaClass
+		call {
+			createArchitecturalElement(javaPackage, javaClass.name, compilationUnit.namespaces.head)			
+			checkSystemAndComponent(javaPackage, javaClass)
+		}
 	}
 }
-routine checkSystemCorrespondance(java::Package javaPackage, java::Class javaClass) {
+
+routine checkSystemAndComponent(java::Package javaPackage, java::Class javaClass) {
 	match {
-		val pcmSystem = retrieve pcm::System corresponding to javaPackage
+		val foo = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to javaPackage 
 	}
 	action {
-		add correspondence between pcmSystem and javaClass
+		add correspondence between javaClass and foo
 	}
 }
 
@@ -192,7 +195,7 @@ routine createCompositeDataType(java::Class cls, java::CompilationUnit compilati
 		add correspondence between compilationUnit and cls
 		
 		call {
-			val repo = findPcmRepository(correspondenceModel, compilationUnit.namespaces.head)
+			val repo = findPcmRepository(correspondenceModel)
 			addDataTypeInRepository(repo, pcmCompositeDataType)
 		}
 	}

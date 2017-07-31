@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -47,7 +46,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType, @Extension final RoutinesFacade _routinesFacade) {
-      final Repository repo = Java2PcmHelper.findPcmRepository(this.correspondenceModel, IterableExtensions.<String>head(compilationUnit.getNamespaces()));
+      final Repository repo = Java2PcmHelper.findPcmRepository(this.correspondenceModel);
       _routinesFacade.addDataTypeInRepository(repo, pcmCompositeDataType);
     }
   }
