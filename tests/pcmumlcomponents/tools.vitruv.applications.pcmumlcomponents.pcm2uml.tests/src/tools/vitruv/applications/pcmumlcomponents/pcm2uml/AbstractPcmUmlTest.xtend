@@ -15,6 +15,7 @@ import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
 class AbstractPcmUmlTest extends VitruviusApplicationTest {
+	protected static extension RepositoryFactory = RepositoryFactory::eINSTANCE
 	protected static val MODEL_FILE_EXTENSION = "repository"
 	protected static val MODEL_NAME = "model"
 // static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
@@ -42,15 +43,20 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	}
 
 	override createChangePropagationSpecifications() {
-		return #[new PcmToUmlComponentsChangePropagationSpecification]
+		return #[
+			new PcmToUmlComponentsChangePropagationSpecification
+		]
 	}
 
 	override getVitruvDomains() {
-		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain]
+		return #[
+			new UmlDomainProvider().domain,
+			new PcmDomainProvider().domain
+		]
 	}
 
 	protected def initializeTestModel() {
-		val pcmRepository = RepositoryFactory::eINSTANCE.createRepository
+		val pcmRepository = createRepository
 		pcmRepository.entityName = MODEL_NAME
 		createAndSynchronizeModel(MODEL_NAME.projectModelPath, pcmRepository)
 	}

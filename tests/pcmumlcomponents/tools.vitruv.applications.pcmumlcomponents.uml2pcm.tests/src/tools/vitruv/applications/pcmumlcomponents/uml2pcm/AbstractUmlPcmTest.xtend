@@ -39,7 +39,7 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	}
 
 	override createChangePropagationSpecifications() {
-		return #[new UmlToPcmComponentsChangePropagationSpecification];
+		return #[new UmlToPcmComponentsChangePropagationSpecification]
 	}
 
 	override getVitruvDomains() {
@@ -60,7 +60,7 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	}
 
 	protected def importPrimitiveTypes() {
-//val resourceSet = rootElement.eResource.resourceSet
+		// val resourceSet = rootElement.eResource.resourceSet
 		val resourceSet = new ResourceSetImpl
 		resourceSet.createResource(URI.createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI))
 		val primitiveTypesUri = URI::createURI(UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI).appendFragment("_0")
