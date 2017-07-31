@@ -1,15 +1,20 @@
 package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
 import org.junit.Test
-import static org.junit.Assert.*
+
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Interface
+
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
+
+import static org.hamcrest.CoreMatchers.equalTo
+import static org.hamcrest.CoreMatchers.is
+import static org.junit.Assert.assertThat
 
 class ComponentsTest extends AbstractUmlPcmTest {
 	protected static val USAGE_NAME = "testUsage"
@@ -47,7 +52,6 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		return (correspondingElements.get(0) as BasicComponent)
 	}
 
-
 	protected def OperationInterface getCorrespondingInterface(Interface umlInterface) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten
 		return (correspondingElements.get(0) as OperationInterface)
@@ -57,10 +61,10 @@ class ComponentsTest extends AbstractUmlPcmTest {
 	def void testCreateBasicComponent() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		assertEquals(1, correspondingElements.length)
-		assertTrue(correspondingElements.get(0) instanceof BasicComponent)
+		assertThat(1, equalTo(correspondingElements.length))
+		assertThat(correspondingElements.get(0) instanceof BasicComponent, is(true))
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
-		assertEquals(umlComponent.name, pcmComponent.entityName)
+		assertThat(umlComponent.name, equalTo(pcmComponent.entityName))
 	}
 
 	@Test
@@ -74,11 +78,11 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(umlComponent)
 
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
-		assertEquals(1, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
+		assertThat(1, equalTo(pcmComponent.providedRoles_InterfaceProvidingEntity.length))
 		val pcmRole = (pcmComponent.providedRoles_InterfaceProvidingEntity.get(0) as OperationProvidedRole)
-		assertEquals(interfaceRealization.name, pcmRole.entityName)
+		assertThat(interfaceRealization.name, equalTo(pcmRole.entityName))
 		val pcmInterface = getCorrespondingInterface(umlInterface)
-		assertEquals(pcmInterface, pcmRole.providedInterface__OperationProvidedRole)
+		assertThat(pcmInterface, equalTo(pcmRole.providedInterface__OperationProvidedRole))
 	}
 
 	@Test
@@ -97,11 +101,11 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(interfaceRealization)
 
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
-		assertEquals(1, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
+		assertThat(1, equalTo(pcmComponent.providedRoles_InterfaceProvidingEntity.length))
 		val pcmRole = (pcmComponent.providedRoles_InterfaceProvidingEntity.get(0) as OperationProvidedRole)
-		assertEquals(interfaceRealization.name, pcmRole.entityName)
+		assertThat(interfaceRealization.name, equalTo(pcmRole.entityName))
 		val pcmInterface = getCorrespondingInterface(umlInterface2)
-		assertEquals(pcmInterface, pcmRole.providedInterface__OperationProvidedRole)
+		assertThat(pcmInterface, equalTo(pcmRole.providedInterface__OperationProvidedRole))
 	}
 
 	@Test
@@ -118,7 +122,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(umlComponent)
 
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
-		assertEquals(0, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
+		assertThat(0, equalTo(pcmComponent.providedRoles_InterfaceProvidingEntity.length))
 	}
 
 	@Test
@@ -132,11 +136,11 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(umlComponent)
 
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
-		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)
+		assertThat(1, equalTo(pcmComponent.requiredRoles_InterfaceRequiringEntity.length))
 		val pcmRole = (pcmComponent.requiredRoles_InterfaceRequiringEntity.get(0) as OperationRequiredRole)
-		assertEquals(usage.name, pcmRole.entityName)
+		assertThat(usage.name, equalTo(pcmRole.entityName))
 		val pcmInterface = getCorrespondingInterface(umlInterface)
-		assertEquals(pcmInterface, pcmRole.requiredInterface__OperationRequiredRole)
+		assertThat(pcmInterface, equalTo(pcmRole.requiredInterface__OperationRequiredRole))
 	}
 
 	@Test
@@ -156,11 +160,11 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(usage)
 
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
-		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)
+		assertThat(1, equalTo(pcmComponent.requiredRoles_InterfaceRequiringEntity.length))
 		val pcmRole = (pcmComponent.requiredRoles_InterfaceRequiringEntity.get(0) as OperationRequiredRole)
-		assertEquals(usage.name, pcmRole.entityName)
+		assertThat(usage.name, equalTo(pcmRole.entityName))
 		val pcmInterface = getCorrespondingInterface(umlInterface2)
-		assertEquals(pcmInterface, pcmRole.requiredInterface__OperationRequiredRole)
+		assertThat(pcmInterface, equalTo(pcmRole.requiredInterface__OperationRequiredRole))
 	}
 
 	@Test
@@ -177,16 +181,34 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(umlComponent)
 
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
-		assertEquals(0, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)
+		assertThat(0, equalTo(pcmComponent.requiredRoles_InterfaceRequiringEntity.length))
 	}
 
 	@Test
 	def void testCreateCompositeComponent() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME, true)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		assertEquals(1, correspondingElements.length)
-		assertTrue(correspondingElements.get(0) instanceof CompositeComponent)
+		assertThat(1, equalTo(correspondingElements.length))
+		assertThat(correspondingElements.get(0) instanceof CompositeComponent, is(true))
 		val pcmComponent = getCorrespondingCompositeComponent(umlComponent)
-		assertEquals(umlComponent.name, pcmComponent.entityName)
+		assertThat(umlComponent.name, equalTo(pcmComponent.entityName))
+	}
+
+	@Test
+	def void testCreateCompositeComponentAndChangeName() {
+		val umlComponent = createUmlComponent(COMPONENT_NAME, true)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
+		assertThat(1, equalTo(correspondingElements.length))
+		assertThat(correspondingElements.get(0) instanceof CompositeComponent, is(true))
+		val pcmComponent = getCorrespondingCompositeComponent(umlComponent)
+		assertThat(umlComponent.name, equalTo(pcmComponent.entityName))
+		val newName = "newName"
+		umlComponent.name = newName
+		val propagatedChanges = saveAndSynchronizeChanges(umlComponent)
+		assertThat(propagatedChanges.length, is(1))
+		val propagatedChange = propagatedChanges.get(0)
+		assertThat(propagatedChange.consequentialChanges.EChanges.empty, is(false))
+		val pcmComponent2 = getCorrespondingCompositeComponent(umlComponent)
+		assertThat(umlComponent.name, equalTo(pcmComponent2.entityName))
 	}
 }
