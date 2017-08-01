@@ -5,6 +5,7 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.UMLFactory
 
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
@@ -17,7 +18,8 @@ import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
-class AbstractPcmUmlBothDirectionsTest extends VitruviusApplicationTest {
+class AbstractPcmToUmlBothDirectionsTest extends VitruviusApplicationTest {
+	protected static extension UMLFactory = UMLFactory::eINSTANCE
 	protected static extension RepositoryFactory = RepositoryFactory::eINSTANCE
 	protected static val MODEL_FILE_EXTENSION = "repository"
 	protected static val MODEL_NAME = "model"

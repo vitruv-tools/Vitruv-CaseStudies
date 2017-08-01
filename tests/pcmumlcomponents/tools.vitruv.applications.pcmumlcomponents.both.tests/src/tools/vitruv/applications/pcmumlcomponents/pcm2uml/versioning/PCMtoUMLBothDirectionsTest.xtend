@@ -11,8 +11,7 @@ import org.junit.Test
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.Repository
 
-import tools.vitruv.applications.pcmumlcomponents.both.tests.AbstractPcmUmlBothDirectionsTest
-import tools.vitruv.framework.tuid.TuidManager
+import tools.vitruv.applications.pcmumlcomponents.both.tests.AbstractPcmToUmlBothDirectionsTest
 import tools.vitruv.framework.util.datatypes.VURI
 import tools.vitruv.framework.versioning.author.Author
 import tools.vitruv.framework.versioning.emfstore.LocalRepository
@@ -27,10 +26,10 @@ import static org.hamcrest.CoreMatchers.instanceOf
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
 import static org.junit.Assert.assertThat
+import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute
 
-class VersioningTest extends AbstractPcmUmlBothDirectionsTest {
+class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 	static val newModelName = "model2"
-	static extension TuidManager = TuidManager::instance
 	static extension URIRemapper = URIRemapper::instance
 
 	Author author1
@@ -82,9 +81,38 @@ class VersioningTest extends AbstractPcmUmlBothDirectionsTest {
 		val model = sourceModel.contents.get(0) as Model
 		val newUmlComponent = model.packagedElements.get(0)
 		startRecordingChanges(model)
-		registerObjectUnderModification(newUmlComponent)
 		newUmlComponent.name = "newName"
-		updateTuidsOfRegisteredObjects
+		val propagatedChanges = saveAndSynchronizeChanges(newUmlComponent)
+		assertThat(propagatedChanges.length, is(1))
+		val propagatedChange = propagatedChanges.get(0)
+		assertThat(propagatedChange.originalChange.EChanges.empty, is(false))
+		assertThat(propagatedChange.consequentialChanges.EChanges.length, is(1))
+		val consequentialEChange1 = propagatedChange.consequentialChanges.EChanges.get(0)
+		assertThat(consequentialEChange1, instanceOf(ReplaceSingleValuedEAttribute))
+		val viceVersaCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[newUmlComponent]).flatten
+		assertThat(viceVersaCorrespondingElements.size, is(1))
+		val pcmComponent2 = viceVersaCorrespondingElements.get(0) as BasicComponent
+		assertThat(pcmComponent2.entityName, equalTo("newName"))
+	}
+
+	def void changeNameInUMLAndAfterwardsInPCM() {
+		val pcmComponent1 = createBasicComponent
+		pcmComponent1.entityName = componentName
+		rootElement.components__Repository += pcmComponent1
+		saveAndSynchronizeChanges(pcmComponent1)
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent1]).flatten
+
+		assertThat(correspondingElements.size, is(1))
+		val umlComponent = correspondingElements.get(0) as Component
+		assertThat(umlComponent, is(instanceOf(Component)))
+		assertThat(umlComponent.name, equalTo(componentName))
+		val ResourceSet testResourceSet = new ResourceSetImpl
+		testResourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("*", new XMIResourceFactoryImpl)
+		val sourceModel = testResourceSet.getResource(umlComponent.eResource.URI, true)
+		val model = sourceModel.contents.get(0) as Model
+		val newUmlComponent = model.packagedElements.get(0)
+		startRecordingChanges(model)
+		newUmlComponent.name = "newName"
 		val propagatedChanges = saveAndSynchronizeChanges(newUmlComponent)
 		assertThat(propagatedChanges.length, is(1))
 		val propagatedChange = propagatedChanges.get(0)
@@ -133,10 +161,7 @@ class VersioningTest extends AbstractPcmUmlBothDirectionsTest {
 		testResourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("*", new XMIResourceFactoryImpl)
 		val sourceModel = testResourceSet.getResource(umlComponent.eResource.URI, true)
 		val modifiableUmlComponent = sourceModel.allContents.findFirst[it instanceof Component] as Component
-		registerObjectUnderModification(modifiableUmlComponent)
 		modifiableUmlComponent.name = newName2
-		updateTuidsOfRegisteredObjects
-		flushRegisteredObjectsUnderModification
 		val viceVersaCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[modifiableUmlComponent]).
 			flatten
 		assertThat(viceVersaCorrespondingElements.size, is(1))
