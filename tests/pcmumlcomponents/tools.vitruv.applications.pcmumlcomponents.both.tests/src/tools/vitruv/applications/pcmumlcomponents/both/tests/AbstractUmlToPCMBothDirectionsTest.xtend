@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlcomponents.uml2pcm
+package tools.vitruv.applications.pcmumlcomponents.both.tests
 
 import java.util.Arrays
 import java.util.List
@@ -8,19 +8,27 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.resource.UMLResource
 
+import org.palladiosimulator.pcm.repository.BasicComponent
+import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
+import org.palladiosimulator.pcm.repository.RepositoryFactory
 
+import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlComponentsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmComponentsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
-class AbstractUmlPcmTest extends VitruviusApplicationTest {
+class AbstractUmlToPCMBothDirectionsTest extends VitruviusApplicationTest {
 	protected static extension UMLFactory = UMLFactory::eINSTANCE
+	protected static extension RepositoryFactory = RepositoryFactory::eINSTANCE
 	protected static val MODEL_FILE_EXTENSION = "uml"
 	protected static val MODEL_NAME = "model"
 	protected static val COMPONENT_NAME = "TestComponent"
@@ -34,24 +42,26 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected static val UML_TYPE_REAL = "Real"
 	protected static val UML_TYPE_STRING = "String"
 
-	private def String getProjectModelPath(String modelName) {
-		"repository/" + modelName + "." + MODEL_FILE_EXTENSION
-	}
+	override unresolveChanges() { true }
 
-	protected def Model getRootElement() {
-		return MODEL_NAME.getProjectModelPath.firstRootElement as Model
-	}
+	override cleanup() {}
 
-	override protected unresolveChanges() {
-		true
+	override setup() {
+		initializeTestModel
 	}
 
 	override createChangePropagationSpecifications() {
-		return #[new UmlToPcmComponentsChangePropagationSpecification]
+		return #[
+			new UmlToPcmComponentsChangePropagationSpecification,
+			new PcmToUmlComponentsChangePropagationSpecification
+		]
 	}
 
 	override getVitruvDomains() {
-		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain]
+		return #[
+			new UmlDomainProvider().domain,
+			new PcmDomainProvider().domain
+		]
 	}
 
 	protected def initializeTestModel() {
@@ -60,11 +70,13 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 		createAndSynchronizeModel(MODEL_NAME.getProjectModelPath, umlModel)
 	}
 
-	override cleanup() {
+	protected def Model getUmlModel() {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
+		return (correspondingElements.get(0) as Model)
 	}
 
-	override setup() {
-		initializeTestModel
+	protected def Model getRootElement() {
+		return MODEL_NAME.getProjectModelPath.firstRootElement as Model
 	}
 
 	protected def importPrimitiveTypes() {
@@ -94,4 +106,17 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 		return eList
 	}
 
+	private def String getProjectModelPath(String modelName) {
+		"repository/" + modelName + "." + MODEL_FILE_EXTENSION
+	}
+
+	protected def CompositeComponent getCorrespondingCompositeComponent(Component umlComponent) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
+		return (correspondingElements.get(0) as CompositeComponent)
+	}
+
+	protected def BasicComponent getCorrespondingBasicComponent(Component umlComponent) {
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
+		return (correspondingElements.get(0) as BasicComponent)
+	}
 }
