@@ -42,6 +42,10 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 		return MODEL_NAME.getProjectModelPath.firstRootElement as Model
 	}
 
+	override protected unresolveChanges() {
+		true
+	}
+
 	override createChangePropagationSpecifications() {
 		return #[new UmlToPcmComponentsChangePropagationSpecification]
 	}

@@ -97,7 +97,7 @@ class UmlToPCMBothDirectionsTest extends AbstractUmlToPCMBothDirectionsTest {
 		rootElement.packagedElements += umlComponent
 		val componentMode = if(isComposable) 0 else 1
 		userInteractor.addNextSelections(componentMode)
-		saveAndSynchronizeChanges(rootElement)
+		saveAndSynchronizeChanges(umlComponent)
 		return umlComponent
 	}
 

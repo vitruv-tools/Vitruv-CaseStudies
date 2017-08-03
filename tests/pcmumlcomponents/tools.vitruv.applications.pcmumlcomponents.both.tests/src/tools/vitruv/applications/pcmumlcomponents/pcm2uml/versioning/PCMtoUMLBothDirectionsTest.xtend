@@ -29,9 +29,10 @@ import static org.junit.Assert.assertThat
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute
 
 class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
-	static val newModelName = "model2"
 	static extension URIRemapper = URIRemapper::instance
-
+	static val componentName = "ComponentName"
+	static val newModelName = "model2"
+	
 	Author author1
 	Author author2
 	LocalRepository localRepository1
@@ -39,7 +40,6 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 	RemoteRepository remoteRepository
 	VURI newSourceVURI
 	VURI sourceVURI
-	static val componentName = "ComponentName"
 
 	override setup() {
 		super.setup
@@ -68,7 +68,8 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 		val pcmComponent1 = createBasicComponent
 		pcmComponent1.entityName = componentName
 		rootElement.components__Repository += pcmComponent1
-		saveAndSynchronizeChanges(pcmComponent1)
+		val ppC1 = saveAndSynchronizeChanges(pcmComponent1)
+		assertThat(ppC1.length, is(1))
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent1]).flatten
 
 		assertThat(correspondingElements.size, is(1))
@@ -142,6 +143,7 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 		localRepository2.pull
 
 		pcmComponent1.entityName = newName1
+		saveAndSynchronizeChanges(pcmComponent1)
 		val simpleCommit2 = localRepository1.commit('''Name changed to «newName1»''', virtualModel, sourceVURI)
 		assertThat(simpleCommit2.changes.size, is(1))
 
@@ -153,15 +155,20 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 		val pcmRepositoryCopy = virtualModel.getModelInstance(newSourceVURI).firstRootEObject as Repository
 		val pcmComponent2 = pcmRepositoryCopy.components__Repository.findFirst[entityName == componentName]
 		assertThat(pcmComponent2, not(equalTo(null)))
+		assertThat(pcmComponent2.entityName, equalTo(componentName))
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent2]).flatten
 		assertThat(correspondingElements.size, is(1))
 		val umlComponent = correspondingElements.get(0) as Component
+		assertThat(umlComponent.name, equalTo(componentName))
 
 		val ResourceSet testResourceSet = new ResourceSetImpl
 		testResourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("*", new XMIResourceFactoryImpl)
 		val sourceModel = testResourceSet.getResource(umlComponent.eResource.URI, true)
-		val modifiableUmlComponent = sourceModel.allContents.findFirst[it instanceof Component] as Component
+		val modifiableUmlModel = sourceModel.contents.get(0) as Model
+
+		val modifiableUmlComponent = modifiableUmlModel.packagedElements.get(0) as Component
 		modifiableUmlComponent.name = newName2
+		saveAndSynchronizeChanges(modifiableUmlComponent)
 		val viceVersaCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[modifiableUmlComponent]).
 			flatten
 		assertThat(viceVersaCorrespondingElements.size, is(1))

@@ -33,7 +33,7 @@ class AbstractPcmToUmlBothDirectionsTest extends VitruviusApplicationTest {
 // static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
 	protected static Repository primitiveTypesRepository = null
 
-	override unresolveChanges() { false }
+	override unresolveChanges() { true }
 
 	override cleanup() {}
 

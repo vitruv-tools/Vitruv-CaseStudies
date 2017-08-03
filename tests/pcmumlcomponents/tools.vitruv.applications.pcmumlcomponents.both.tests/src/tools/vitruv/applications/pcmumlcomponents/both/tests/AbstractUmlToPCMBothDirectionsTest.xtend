@@ -42,7 +42,7 @@ class AbstractUmlToPCMBothDirectionsTest extends VitruviusApplicationTest {
 	protected static val UML_TYPE_REAL = "Real"
 	protected static val UML_TYPE_STRING = "String"
 
-	override unresolveChanges() { false }
+	override unresolveChanges() { true }
 
 	override cleanup() {}
 
