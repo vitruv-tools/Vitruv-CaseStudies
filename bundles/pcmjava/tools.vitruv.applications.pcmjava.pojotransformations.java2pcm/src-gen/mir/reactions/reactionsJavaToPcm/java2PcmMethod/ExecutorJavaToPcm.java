@@ -13,6 +13,7 @@ public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
   
   protected void setup() {
     this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction());
+    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateFieldReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateFieldReaction());
     this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateClassMethodReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateClassMethodReaction());
     this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateInterfaceMethodReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateInterfaceMethodReaction());
     this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction());

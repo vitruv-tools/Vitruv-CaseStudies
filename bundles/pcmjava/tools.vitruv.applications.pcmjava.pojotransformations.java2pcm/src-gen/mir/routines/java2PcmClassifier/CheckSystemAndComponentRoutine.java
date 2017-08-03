@@ -19,16 +19,16 @@ public class CheckSystemAndComponentRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceFoo(final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass) {
+    public EObject getCorrepondenceSourceComponentOrSystem(final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass) {
       return javaPackage;
     }
     
-    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass, final InterfaceProvidingRequiringEntity foo) {
+    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass, final InterfaceProvidingRequiringEntity componentOrSystem) {
       return javaClass;
     }
     
-    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass, final InterfaceProvidingRequiringEntity foo) {
-      return foo;
+    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass, final InterfaceProvidingRequiringEntity componentOrSystem) {
+      return componentOrSystem;
     }
   }
   
@@ -48,16 +48,16 @@ public class CheckSystemAndComponentRoutine extends AbstractRepairRoutineRealiza
     getLogger().debug("   Package: " + this.javaPackage);
     getLogger().debug("   Class: " + this.javaClass);
     
-    InterfaceProvidingRequiringEntity foo = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceFoo(javaPackage, javaClass), // correspondence source supplier
+    InterfaceProvidingRequiringEntity componentOrSystem = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceComponentOrSystem(javaPackage, javaClass), // correspondence source supplier
     	InterfaceProvidingRequiringEntity.class,
     	(InterfaceProvidingRequiringEntity _element) -> true, // correspondence precondition checker
     	null);
-    if (foo == null) {
+    if (componentOrSystem == null) {
     	return;
     }
-    registerObjectUnderModification(foo);
-    addCorrespondenceBetween(userExecution.getElement1(javaPackage, javaClass, foo), userExecution.getElement2(javaPackage, javaClass, foo), "");
+    registerObjectUnderModification(componentOrSystem);
+    addCorrespondenceBetween(userExecution.getElement1(javaPackage, javaClass, componentOrSystem), userExecution.getElement2(javaPackage, javaClass, componentOrSystem), "");
     
     postprocessElements();
   }

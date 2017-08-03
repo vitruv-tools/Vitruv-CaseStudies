@@ -90,29 +90,29 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	def static void updateNameAttributeForPCMRootObjects(Iterable<NamedElement> pcmRootElements,
 		EStructuralFeature affectedFeature, Object newValue, CorrespondenceModel correspondenceModel,
 		ChangePropagationResult transformationResult) {
-			for (pcmRoot : pcmRootElements) {
-				if (!(pcmRoot instanceof Repository) && !(pcmRoot instanceof System)) {
-					logger.warn("EObject " + pcmRoot + " is not an instance of a PCM Root object - element" + pcmRoot +
-						"will not be renamed")
+		for (pcmRoot : pcmRootElements) {
+			if (!(pcmRoot instanceof Repository) && !(pcmRoot instanceof System)) {
+				logger.warn("EObject " + pcmRoot + " is not an instance of a PCM Root object - element" + pcmRoot +
+					"will not be renamed")
 
 			} else {
 				val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(pcmRoot)
-	
+
 				// change name		
 				pcmRoot.entityName = newValue.toString;
-	
+
 				val VURI oldVURI = VURI.getInstance(pcmRoot.eResource.getURI)
-				PcmJavaUtils.handleRootChanges(pcmRoot, correspondenceModel, oldVURI, transformationResult, oldVURI, oldTuid)
-				// Not necessary any more because VSUM does this
-				//transformationResult.addVuriToDeleteIfNotNull(oldVURI)
+				PcmJavaUtils.handleRootChanges(pcmRoot, correspondenceModel, oldVURI, transformationResult, oldVURI,
+					oldTuid)
+			// Not necessary any more because VSUM does this
+			// transformationResult.addVuriToDeleteIfNotNull(oldVURI)
 			}
 		}
 	}
-	
-	def static void updateNameAsSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute,
-		Object oldValue, Object newValue,
-		ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap, CorrespondenceModel correspondenceModel, 
-		ChangePropagationResult transformationResult) {
+
+	def static void updateNameAsSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
+		Object newValue, ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap,
+		CorrespondenceModel correspondenceModel, ChangePropagationResult transformationResult) {
 		val correspondingEObjects = PcmJavaUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel)
 		if (correspondingEObjects.nullOrEmpty) {
@@ -125,15 +125,15 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 		if (!rootPCMEObjects.nullOrEmpty) {
 			saveFilesOfChangedEObjects = false
 		}
-		Java2PcmUtils.updateNameAttribute(correspondingEObjects, newValue, affectedAttribute,
-			featureCorrespondenceMap, correspondenceModel, saveFilesOfChangedEObjects)
+		Java2PcmUtils.updateNameAttribute(correspondingEObjects, newValue, affectedAttribute, featureCorrespondenceMap,
+			correspondenceModel, saveFilesOfChangedEObjects)
 		if (!rootPCMEObjects.nullOrEmpty) {
 			Java2PcmUtils.updateNameAttributeForPCMRootObjects(rootPCMEObjects, affectedAttribute, newValue,
 				correspondenceModel, transformationResult)
 		}
 		return
 	}
-	
+
 	def static createNewCorrespondingEObjects(EObject newEObject, EObject[] newCorrespondingEObjects,
 		CorrespondenceModel correspondenceModel, ChangePropagationResult transformationResult) {
 		if (newCorrespondingEObjects.nullOrEmpty) {
@@ -149,26 +149,26 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 			correspondenceModel.createAndAddCorrespondence(pcmElement, newEObject)
 		}
 	}
-	
+
 	def dispatch static Classifier getTargetClassifierFromTypeReference(TypeReference reference) {
 		return null
 	}
-	
+
 	def dispatch static Classifier getTargetClassifierFromTypeReference(NamespaceClassifierReference reference) {
 		if (reference.classifierReferences.nullOrEmpty) {
 			return null
 		}
 		return getTargetClassifierFromTypeReference(reference.classifierReferences.get(0))
 	}
-	
+
 	def dispatch static Classifier getTargetClassifierFromTypeReference(ClassifierReference reference) {
 		return reference.target
 	}
-	
+
 	def dispatch static Classifier getTargetClassifierFromTypeReference(PrimitiveType reference) {
 		return null
 	}
-	
+
 	/**
 	 * Try to automatically find the corresponding repository component for a given classifier by 
 	 * a) looking for a direct component
@@ -179,28 +179,27 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	 */
 	def static RepositoryComponent getComponentOfConcreteClassifier(ConcreteClassifier classifier,
 		CorrespondenceModel ci, UserInteracting userInteracting) {
-	
+
 		// a)
 		var correspondingComponents = ci.getCorrespondingEObjectsByType(classifier, RepositoryComponent)
 		if (!correspondingComponents.nullOrEmpty) {
 			return correspondingComponents.get(0)
 		}
-	
+
 		// a2)
 		var correspondingComposedProvidingRequiringEntitys = ci.getCorrespondingEObjectsByType(classifier, System)
 		if (!correspondingComposedProvidingRequiringEntitys.nullOrEmpty) {
 			return null
 		}
-	
+
 		// b)
 		for (Classifier classifierInSamePackage : classifier.containingCompilationUnit.classifiersInSamePackage) {
-			correspondingComponents = ci.getCorrespondingEObjectsByType(classifierInSamePackage,
-				RepositoryComponent)
+			correspondingComponents = ci.getCorrespondingEObjectsByType(classifierInSamePackage, RepositoryComponent)
 			if (!correspondingComponents.nullOrEmpty) {
 				return correspondingComponents.get(0)
 			}
 		}
-	
+
 		// c)
 		val repo = getRepository(ci)
 		val String msg = "Please specify the component for class: " +
@@ -214,7 +213,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 		}
 		return repo.components__Repository.get(selection)
 	}
-	
+
 	def public static EObject[] checkAndAddOperationRequiredRole(TypedElement typedElement,
 		CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
 		val Type type = getTargetClassifierFromImplementsReferenceAndNormalizeURI(typedElement.typeReference)
@@ -227,7 +226,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 		var RepositoryComponent repoComponent = null
 		if (!correspondingInterfaces.nullOrEmpty) {
 			for (correspondingInterface : correspondingInterfaces) {
-	
+
 				// ii)a)
 				repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
 					typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
@@ -243,53 +242,50 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 				newCorrespondingEObjects.add(operationRequiredRole)
 				userInteracting.showMessage(UserInteractionType.MODELESS,
 					"An OperationRequiredRole (from component " + repoComponent.entityName + " to interface " +
-						correspondingInterface.entityName + ") for the element: " + typedElement +
-						" has been created.")
-					}
-				}
-	
-				val correspondingComponents = fieldTypeCorrespondences.filter(typeof(RepositoryComponent))
-				if (!correspondingComponents.nullOrEmpty) {
-					if (null === repoComponent) {
-						repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
-							typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
-					}
-					if (null === repoComponent) {
-						return null
-					}
-	
-					// ii)b)
-					for (correspondingComponent : correspondingComponents) {
-						for (OperationProvidedRole operationProvidedRole : correspondingComponent.
-							providedRoles_InterfaceProvidingEntity.filter(typeof(OperationProvidedRole))) {
-							var operationInterface = operationProvidedRole.providedInterface__OperationProvidedRole
-							val OperationRequiredRole operationRequiredRole = RepositoryFactory.eINSTANCE.
-								createOperationRequiredRole
-							operationRequiredRole.requiredInterface__OperationRequiredRole = operationInterface
-							operationRequiredRole.requiringEntity_RequiredRole = repoComponent
-							operationRequiredRole.entityName = "Component_" + repoComponent.entityName +
-								"_requires_" + operationInterface.entityName
-							userInteracting.showMessage(UserInteractionType.MODELESS,
-								"An OperationRequiredRole (from component " + repoComponent.entityName +
-									" to interface " + operationInterface.entityName + ") for the element: " +
-									typedElement + " has been created.")
-							newCorrespondingEObjects.add(operationRequiredRole)
-						}
-					}
-				}
-				return newCorrespondingEObjects
+						correspondingInterface.entityName + ") for the element: " + typedElement + " has been created.")
 			}
-	
-	def public static Classifier getTargetClassifierFromImplementsReferenceAndNormalizeURI(
-		TypeReference reference) {
+		}
+
+		val correspondingComponents = fieldTypeCorrespondences.filter(typeof(RepositoryComponent))
+		if (!correspondingComponents.nullOrEmpty) {
+			if (null === repoComponent) {
+				repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
+					typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
+			}
+			if (null === repoComponent) {
+				return null
+			}
+
+			// ii)b)
+			for (correspondingComponent : correspondingComponents) {
+				for (OperationProvidedRole operationProvidedRole : correspondingComponent.
+					providedRoles_InterfaceProvidingEntity.filter(typeof(OperationProvidedRole))) {
+					var operationInterface = operationProvidedRole.providedInterface__OperationProvidedRole
+					val OperationRequiredRole operationRequiredRole = RepositoryFactory.eINSTANCE.
+						createOperationRequiredRole
+					operationRequiredRole.requiredInterface__OperationRequiredRole = operationInterface
+					operationRequiredRole.requiringEntity_RequiredRole = repoComponent
+					operationRequiredRole.entityName = "Component_" + repoComponent.entityName + "_requires_" +
+						operationInterface.entityName
+					userInteracting.showMessage(UserInteractionType.MODELESS,
+						"An OperationRequiredRole (from component " + repoComponent.entityName + " to interface " +
+							operationInterface.entityName + ") for the element: " + typedElement + " has been created.")
+					newCorrespondingEObjects.add(operationRequiredRole)
+				}
+			}
+		}
+		return newCorrespondingEObjects
+	}
+
+	def public static Classifier getTargetClassifierFromImplementsReferenceAndNormalizeURI(TypeReference reference) {
 		var interfaceClassifier = Java2PcmUtils.getTargetClassifierFromTypeReference(reference)
 		if (null === interfaceClassifier) {
 			return null
 		}
-		
-		if(interfaceClassifier.eIsProxy){
+
+		if (interfaceClassifier.eIsProxy) {
 			val resSet = reference.eResource.resourceSet
-			interfaceClassifier = EcoreUtil.resolve(interfaceClassifier, resSet) as Classifier			
+			interfaceClassifier = EcoreUtil.resolve(interfaceClassifier, resSet) as Classifier
 		}
 		normalizeURI(interfaceClassifier)
 		return interfaceClassifier

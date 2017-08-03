@@ -34,7 +34,6 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     
     public void updatePcmCompositeDataTypeElement(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
       pcmCompositeDataType.setEntityName(cls.getName());
-      pcmCompositeDataType.setRepository__DataType(null);
     }
     
     public EObject getElement2(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {

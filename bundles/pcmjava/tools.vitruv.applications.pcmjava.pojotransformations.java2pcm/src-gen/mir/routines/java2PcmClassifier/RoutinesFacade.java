@@ -1,9 +1,11 @@
 package mir.routines.java2PcmClassifier;
 
 import org.eclipse.emf.ecore.EObject;
+import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
-import org.palladiosimulator.pcm.repository.CompositeDataType;
+import org.emftext.language.java.types.TypeReference;
+import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.ImplementationComponentType;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -65,6 +67,12 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void createDataType(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
+    mir.routines.java2PcmClassifier.CreateDataTypeRoutine effect = new mir.routines.java2PcmClassifier.CreateDataTypeRoutine(this.executionState, calledBy,
+    	cls, compilationUnit);
+    effect.applyRoutine();
+  }
+  
   public void createElement(final Repository repository, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
     mir.routines.java2PcmClassifier.CreateElementRoutine effect = new mir.routines.java2PcmClassifier.CreateElementRoutine(this.executionState, calledBy,
     	repository, javaClass, compilationUnit);
@@ -83,9 +91,27 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void addDataTypeInRepository(final Repository pcmRepository, final CompositeDataType pcmDataType) {
+  public void createCollectionDataType(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
+    mir.routines.java2PcmClassifier.CreateCollectionDataTypeRoutine effect = new mir.routines.java2PcmClassifier.CreateCollectionDataTypeRoutine(this.executionState, calledBy,
+    	cls, compilationUnit);
+    effect.applyRoutine();
+  }
+  
+  public void addDataTypeInRepository(final Repository pcmRepository, final DataType pcmDataType) {
     mir.routines.java2PcmClassifier.AddDataTypeInRepositoryRoutine effect = new mir.routines.java2PcmClassifier.AddDataTypeInRepositoryRoutine(this.executionState, calledBy,
     	pcmRepository, pcmDataType);
+    effect.applyRoutine();
+  }
+  
+  public void createOperationProvidedRole(final TypeReference typeReference) {
+    mir.routines.java2PcmClassifier.CreateOperationProvidedRoleRoutine effect = new mir.routines.java2PcmClassifier.CreateOperationProvidedRoleRoutine(this.executionState, calledBy,
+    	typeReference);
+    effect.applyRoutine();
+  }
+  
+  public void createOperationProvidedRoleFromTypeReference(final Classifier classifier, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference) {
+    mir.routines.java2PcmClassifier.CreateOperationProvidedRoleFromTypeReferenceRoutine effect = new mir.routines.java2PcmClassifier.CreateOperationProvidedRoleFromTypeReferenceRoutine(this.executionState, calledBy,
+    	classifier, javaClass, reference);
     effect.applyRoutine();
   }
   

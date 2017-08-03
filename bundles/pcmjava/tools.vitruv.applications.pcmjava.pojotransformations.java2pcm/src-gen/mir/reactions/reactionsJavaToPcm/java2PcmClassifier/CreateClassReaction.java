@@ -68,7 +68,7 @@ class CreateClassReaction extends AbstractReactionRealization {
         this.correspondenceModel);
       boolean _equals = IterableExtensions.<String>last(affectedEObject.getNamespaces()).equals("datatypes");
       if (_equals) {
-        _routinesFacade.createCompositeDataType(newValue, affectedEObject);
+        _routinesFacade.createDataType(newValue, affectedEObject);
       } else {
         _routinesFacade.checkSystemAndComponent(jaMoPPPackage, newValue);
         boolean _hasCorrespondance = Java2PcmHelper.hasCorrespondance(newValue, this.correspondenceModel);

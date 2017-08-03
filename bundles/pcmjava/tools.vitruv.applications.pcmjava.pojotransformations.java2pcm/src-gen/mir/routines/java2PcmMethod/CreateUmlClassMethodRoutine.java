@@ -38,7 +38,7 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
       };
       final Iterable<Method> methods = IterableExtensions.<Method>filter(Iterables.<Method>concat(IterableExtensions.<Interface, EList<Method>>map(IterableExtensions.<Interface>filter(Java2PcmHelper.findImplementingInterfacesFromTypeRefs(cls.getImplements()), _function), _function_1)), _function_2);
       for (final Method method : methods) {
-        _routinesFacade.createSEFF(method, cls);
+        _routinesFacade.createSEFF(method, cls, classMethod);
       }
     }
   }

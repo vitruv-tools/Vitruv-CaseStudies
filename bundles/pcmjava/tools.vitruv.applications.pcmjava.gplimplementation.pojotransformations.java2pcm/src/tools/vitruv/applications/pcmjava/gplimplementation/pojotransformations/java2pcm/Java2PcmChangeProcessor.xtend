@@ -29,7 +29,7 @@ class Java2PcmChangeProcessor extends TransformationExecutorChangeProcessor {
 		addMapping(new ModifierMappingTransformation())
 		addMapping(new FieldMappingTransformation())
 		//addMapping(new ClassMethodMappingTransformation())
-		addMapping(new TypeReferenceMappingTransformation())
+		//addMapping(new TypeReferenceMappingTransformation())
 		// Mapping for EObjects in order to avoid runtime exceptions
 		addMapping(new DefaultEObjectMappingTransformation());
 	}

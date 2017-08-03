@@ -3,6 +3,8 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
+import org.emftext.language.java.classifiers.Class
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -151,7 +153,7 @@ reaction CreateClass {
 		val jaMoPPPackage = Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(newValue,
 			correspondenceModel)
 		if (affectedEObject.namespaces.last.equals("datatypes")) {
-			createCompositeDataType(newValue, affectedEObject)			
+			createDataType(newValue, affectedEObject)			
 		} else {	
 			checkSystemAndComponent(jaMoPPPackage, newValue)
 			if (!hasCorrespondance(newValue, correspondenceModel)) {
@@ -161,6 +163,21 @@ reaction CreateClass {
 		}
 	}
 	
+}
+
+routine createDataType(java::Class cls, java::CompilationUnit compilationUnit) {
+	action {
+		call {
+			val String userMsg = "Class " + cls.name +
+						"has been created in the datatypes pacakage. Please decide which kind of data type should be created."
+			val String[] selections = #["Create CompositeDataType", "CreateCollectionDataType", "Do not create a data type (not recommended)"]
+			val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
+			switch(selected) {
+				case 0: createCompositeDataType(cls, compilationUnit)
+				case 1: createCollectionDataType(cls, compilationUnit)
+			}
+		}
+	}
 }
 
 routine createElement(pcm::Repository repository, java::Class javaClass, java::CompilationUnit compilationUnit) {
@@ -177,10 +194,10 @@ routine createElement(pcm::Repository repository, java::Class javaClass, java::C
 
 routine checkSystemAndComponent(java::Package javaPackage, java::Class javaClass) {
 	match {
-		val foo = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to javaPackage 
+		val componentOrSystem = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to javaPackage 
 	}
 	action {
-		add correspondence between javaClass and foo
+		add correspondence between javaClass and componentOrSystem
 	}
 }
 
@@ -188,7 +205,6 @@ routine createCompositeDataType(java::Class cls, java::CompilationUnit compilati
 	action {
 		val pcmCompositeDataType = create pcm::CompositeDataType and initialize {
 			pcmCompositeDataType.entityName = cls.name
-			pcmCompositeDataType.repository__DataType = null
 		}
 		
 		add correspondence between pcmCompositeDataType and cls
@@ -200,12 +216,70 @@ routine createCompositeDataType(java::Class cls, java::CompilationUnit compilati
 		}
 	}
 }
-
-routine addDataTypeInRepository(pcm::Repository pcmRepository, pcm::CompositeDataType pcmDataType) {
+routine createCollectionDataType(java::Class cls, java::CompilationUnit compilationUnit) {
 	action {
+		val pcmCollectionDataType = create pcm::CollectionDataType and initialize {
+			pcmCollectionDataType.entityName = cls.name
+		}
+		
+		add correspondence between pcmCollectionDataType and cls
+		add correspondence between compilationUnit and cls
+		
+		call {
+			val repo = findPcmRepository(correspondenceModel)
+			addDataTypeInRepository(repo, pcmCollectionDataType)
+		}
+	}
+}
+
+routine addDataTypeInRepository(pcm::Repository pcmRepository, pcm::DataType pcmDataType) {
+	action {
+		update pcmDataType {
+			pcmDataType.repository__DataType = pcmRepository
+		}
 		update pcmRepository {
 			pcmRepository.dataTypes__Repository += pcmDataType
 		}
+	}
+}
+
+//TypeReference
+reaction CreateNamespaceClassifierReference {
+	after element java::NamespaceClassifierReference inserted in java::Class[implements]
+	call {
+		createOperationProvidedRole(newValue)
+	}
+}
+reaction CreateClassifierReference {
+	after element java::ClassifierReference inserted in java::Class[implements]
+	call {
+		createOperationProvidedRole(newValue)
+	}
+}
+
+routine createOperationProvidedRole(java::TypeReference typeReference) {
+	action {
+		call {
+			val javaClass = typeReference.eContainer as Class
+			var javaInterfaceClassifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference)
+			createOperationProvidedRoleFromTypeReference(javaInterfaceClassifier, javaClass, typeReference)
+		}
+	}
+}
+
+routine createOperationProvidedRoleFromTypeReference(java::Classifier classifier, java::Class javaClass, java::TypeReference reference) {
+	match {
+		val opInterface = retrieve pcm::OperationInterface corresponding to classifier
+		val basicComponent = retrieve pcm::BasicComponent corresponding to javaClass
+	}
+	action {
+		val operationProvidedRole = create pcm::OperationProvidedRole and initialize {
+			operationProvidedRole.providedInterface__OperationProvidedRole = opInterface
+			operationProvidedRole.providingEntity_ProvidedRole = basicComponent
+			operationProvidedRole.entityName = basicComponent.entityName + "_provides_" + opInterface.entityName
+		}
+		add correspondence between operationProvidedRole and reference
+		
 	}
 }
 

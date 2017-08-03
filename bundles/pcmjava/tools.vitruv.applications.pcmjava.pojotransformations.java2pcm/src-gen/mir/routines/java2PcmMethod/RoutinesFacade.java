@@ -1,7 +1,9 @@
 package mir.routines.java2PcmMethod;
 
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.commons.NamedElement;
 import org.emftext.language.java.members.ClassMethod;
+import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypeReference;
@@ -21,15 +23,21 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
+  public void foo(final ConcreteClassifier classifier, final Field field) {
+    mir.routines.java2PcmMethod.FooRoutine effect = new mir.routines.java2PcmMethod.FooRoutine(this.executionState, calledBy,
+    	classifier, field);
+    effect.applyRoutine();
+  }
+  
   public void createUmlClassMethod(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls) {
     mir.routines.java2PcmMethod.CreateUmlClassMethodRoutine effect = new mir.routines.java2PcmMethod.CreateUmlClassMethodRoutine(this.executionState, calledBy,
     	classMethod, cls);
     effect.applyRoutine();
   }
   
-  public void createSEFF(final Method method, final org.emftext.language.java.classifiers.Class cls) {
+  public void createSEFF(final Method method, final org.emftext.language.java.classifiers.Class cls, final ClassMethod classMethod) {
     mir.routines.java2PcmMethod.CreateSEFFRoutine effect = new mir.routines.java2PcmMethod.CreateSEFFRoutine(this.executionState, calledBy,
-    	method, cls);
+    	method, cls, classMethod);
     effect.applyRoutine();
   }
   

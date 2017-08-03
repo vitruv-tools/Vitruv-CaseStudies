@@ -114,6 +114,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     public void testAddCompsiteDatatypeClassInDatatypePackage() throws Throwable {
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
 
+        this.getUserInteractor().addNextSelections(0);
         final CompositeDataType cdt = this.addClassThatCorrespondsToCompositeDatatype();
 
         this.assertRepositoryAndPCMNameForDatatype(repo, cdt, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
@@ -123,7 +124,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     public void testAddCollectionDatatypeClassInDatatypePackage() throws Throwable {
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
 
-        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_COLLECTION_DATA_TYPE);
+        this.getUserInteractor().addNextSelections(1);
         final CollectionDataType collection = super.addClassInPackage(this.getDatatypesPackage(),
                 CollectionDataType.class);
 

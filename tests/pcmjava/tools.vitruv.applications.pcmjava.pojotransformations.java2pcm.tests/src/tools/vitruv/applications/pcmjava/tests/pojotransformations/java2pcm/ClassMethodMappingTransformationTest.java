@@ -12,7 +12,7 @@ public class ClassMethodMappingTransformationTest extends Java2PcmPackageMapping
     public void testAddClassMethodWithCorrespondence() throws Throwable {
         // create repo
         super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(Java2PcmTransformationTest.SELECT_NOTHING_DECIDE_LATER);
+        //this.getUserInteractor().addNextSelections(0);
         // create component implementing class
         super.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
         // create interface
