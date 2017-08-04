@@ -12,6 +12,7 @@ import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.Repository
 
 import tools.vitruv.applications.pcmumlcomponents.both.tests.AbstractPcmToUmlBothDirectionsTest
+import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute
 import tools.vitruv.framework.util.datatypes.VURI
 import tools.vitruv.framework.versioning.author.Author
 import tools.vitruv.framework.versioning.emfstore.LocalRepository
@@ -25,14 +26,17 @@ import static org.hamcrest.CoreMatchers.equalTo
 import static org.hamcrest.CoreMatchers.instanceOf
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize
+import static org.hamcrest.collection.IsEmptyCollection.empty
+
 import static org.junit.Assert.assertThat
-import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute
 
 class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 	static extension URIRemapper = URIRemapper::instance
 	static val componentName = "ComponentName"
 	static val newModelName = "model2"
-	
+
 	Author author1
 	Author author2
 	LocalRepository localRepository1
@@ -69,12 +73,12 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 		pcmComponent1.entityName = componentName
 		rootElement.components__Repository += pcmComponent1
 		val ppC1 = saveAndSynchronizeChanges(pcmComponent1)
-		assertThat(ppC1.length, is(1))
+		assertThat(ppC1, hasSize(1))
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent1]).flatten
 
 		assertThat(correspondingElements.size, is(1))
 		val umlComponent = correspondingElements.get(0) as Component
-		assertThat(umlComponent, is(instanceOf(Component)))
+		assertThat(umlComponent, instanceOf(Component))
 		assertThat(umlComponent.name, equalTo(componentName))
 		val ResourceSet testResourceSet = new ResourceSetImpl
 		testResourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("*", new XMIResourceFactoryImpl)
@@ -84,10 +88,10 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 		startRecordingChanges(model)
 		newUmlComponent.name = "newName"
 		val propagatedChanges = saveAndSynchronizeChanges(newUmlComponent)
-		assertThat(propagatedChanges.length, is(1))
+		assertThat(propagatedChanges, hasSize(1))
 		val propagatedChange = propagatedChanges.get(0)
-		assertThat(propagatedChange.originalChange.EChanges.empty, is(false))
-		assertThat(propagatedChange.consequentialChanges.EChanges.length, is(1))
+		assertThat(propagatedChange.originalChange.EChanges, not(empty))
+		assertThat(propagatedChange.consequentialChanges.EChanges, hasSize(1))
 		val consequentialEChange1 = propagatedChange.consequentialChanges.EChanges.get(0)
 		assertThat(consequentialEChange1, instanceOf(ReplaceSingleValuedEAttribute))
 		val viceVersaCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[newUmlComponent]).flatten
@@ -105,7 +109,7 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 
 		assertThat(correspondingElements.size, is(1))
 		val umlComponent = correspondingElements.get(0) as Component
-		assertThat(umlComponent, is(instanceOf(Component)))
+		assertThat(umlComponent, instanceOf(Component))
 		assertThat(umlComponent.name, equalTo(componentName))
 		val ResourceSet testResourceSet = new ResourceSetImpl
 		testResourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("*", new XMIResourceFactoryImpl)
@@ -115,10 +119,10 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 		startRecordingChanges(model)
 		newUmlComponent.name = "newName"
 		val propagatedChanges = saveAndSynchronizeChanges(newUmlComponent)
-		assertThat(propagatedChanges.length, is(1))
+		assertThat(propagatedChanges, hasSize(1))
 		val propagatedChange = propagatedChanges.get(0)
-		assertThat(propagatedChange.originalChange.EChanges.empty, is(false))
-		assertThat(propagatedChange.consequentialChanges.EChanges.empty, is(false))
+		assertThat(propagatedChange.originalChange.EChanges, not(empty))
+		assertThat(propagatedChange.consequentialChanges.EChanges, not(empty))
 		val viceVersaCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[newUmlComponent]).flatten
 		assertThat(viceVersaCorrespondingElements.size, is(1))
 		val pcmComponent2 = viceVersaCorrespondingElements.get(0) as BasicComponent
@@ -186,12 +190,12 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent1]).flatten
 		assertThat(correspondingElements.size, is(1))
 		val umlComponent = correspondingElements.get(0) as Component
-		assertThat(umlComponent, is(instanceOf(Component)))
+		assertThat(umlComponent, instanceOf(Component))
 		assertThat(umlComponent.name, equalTo(componentName))
 		sourceVURI = VURI::getInstance(pcmComponent1.eResource)
 
 		val commit = localRepository1.commit("New component created", virtualModel, sourceVURI)
-		assertThat(commit.changes.length, is(2))
+		assertThat(commit.changes, hasSize(2))
 		localRepository1.push
 		localRepository2.pull
 		assertThat(localRepository1.commits.length, is(localRepository2.commits.length))
