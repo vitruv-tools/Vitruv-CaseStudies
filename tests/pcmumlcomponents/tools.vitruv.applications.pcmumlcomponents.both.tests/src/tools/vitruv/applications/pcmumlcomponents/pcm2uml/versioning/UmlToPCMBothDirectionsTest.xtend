@@ -12,6 +12,7 @@ import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.Repository
 
 import tools.vitruv.applications.pcmumlcomponents.both.tests.AbstractUmlToPCMBothDirectionsTest
+import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute
 
 import static org.hamcrest.CoreMatchers.equalTo
 import static org.hamcrest.CoreMatchers.instanceOf
@@ -86,10 +87,10 @@ class UmlToPCMBothDirectionsTest extends AbstractUmlToPCMBothDirectionsTest {
 		assertThat(propagatedChanges2, hasSize(1))
 		val propagatedChange2 = propagatedChanges2.get(0)
 		assertThat(propagatedChange2.originalChange.EChanges, not(empty))
-//		assertThat(propagatedChange2.consequentialChanges.EChanges, not(empty))
-//		val consequentialEChange1 = propagatedChange2.consequentialChanges.EChanges.get(0)
-//		assertThat(consequentialEChange1, instanceOf(ReplaceSingleValuedEAttribute))
-//		assertThat(propagatedChange2.consequentialChanges.EChanges, hasSize(1))
+		assertThat(propagatedChange2.consequentialChanges.EChanges, not(empty))
+		val consequentialEChange1 = propagatedChange2.consequentialChanges.EChanges.get(0)
+		assertThat(consequentialEChange1, instanceOf(ReplaceSingleValuedEAttribute))
+		assertThat(propagatedChange2.consequentialChanges.EChanges, hasSize(1))
 		val viceVersaCorrespondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent3]).flatten
 		assertThat(viceVersaCorrespondingElements, iterableWithSize(1))
 		val umlComponent2 = viceVersaCorrespondingElements.get(0) as Component
