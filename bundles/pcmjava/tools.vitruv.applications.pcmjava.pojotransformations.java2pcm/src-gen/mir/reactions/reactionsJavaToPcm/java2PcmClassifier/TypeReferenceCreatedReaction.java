@@ -4,6 +4,8 @@ import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.types.ClassifierReference;
+import org.emftext.language.java.types.NamespaceClassifierReference;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -12,14 +14,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreateClassifierReferenceReaction extends AbstractReactionRealization {
+class TypeReferenceCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, ClassifierReference> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, ClassifierReference>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, TypeReference> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ClassifierReference newValue = typedChange.getNewValue();
+    TypeReference newValue = typedChange.getNewValue();
     mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateClassifierReferenceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateClassifierReferenceReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmClassifier.TypeReferenceCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.TypeReferenceCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -28,14 +30,14 @@ class CreateClassifierReferenceReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, ClassifierReference> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, ClassifierReference>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, TypeReference> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("implements")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof ClassifierReference)) {
+    if (!(relevantChange.getNewValue() instanceof TypeReference)) {
     	return false;
     }
     return true;
@@ -50,8 +52,19 @@ class CreateClassifierReferenceReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    InsertEReference<org.emftext.language.java.classifiers.Class, TypeReference> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
+    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    EReference affectedFeature = typedChange.getAffectedFeature();
+    TypeReference newValue = typedChange.getNewValue();
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    	return false;
+    }
     getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference newValue) {
+    return ((newValue instanceof NamespaceClassifierReference) || (newValue instanceof ClassifierReference));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -59,7 +72,7 @@ class CreateClassifierReferenceReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final ClassifierReference newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createOperationProvidedRole(newValue);
     }
   }

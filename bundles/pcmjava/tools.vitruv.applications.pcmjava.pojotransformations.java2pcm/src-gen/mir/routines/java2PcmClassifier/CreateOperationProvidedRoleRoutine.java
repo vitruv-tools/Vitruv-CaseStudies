@@ -6,7 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils;
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -25,7 +25,7 @@ public class CreateOperationProvidedRoleRoutine extends AbstractRepairRoutineRea
     public void callRoutine1(final TypeReference typeReference, @Extension final RoutinesFacade _routinesFacade) {
       EObject _eContainer = typeReference.eContainer();
       final org.emftext.language.java.classifiers.Class javaClass = ((org.emftext.language.java.classifiers.Class) _eContainer);
-      Classifier javaInterfaceClassifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference);
+      Classifier javaInterfaceClassifier = Java2PcmHelper.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference);
       _routinesFacade.createOperationProvidedRoleFromTypeReference(javaInterfaceClassifier, javaClass, typeReference);
     }
   }

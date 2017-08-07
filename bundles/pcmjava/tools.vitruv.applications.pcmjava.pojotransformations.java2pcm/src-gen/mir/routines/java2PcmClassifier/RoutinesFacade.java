@@ -49,9 +49,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void addComponentToRepository(final ImplementationComponentType pcmComponent, final Repository pcmRepository) {
-    mir.routines.java2PcmClassifier.AddComponentToRepositoryRoutine effect = new mir.routines.java2PcmClassifier.AddComponentToRepositoryRoutine(this.executionState, calledBy,
-    	pcmComponent, pcmRepository);
+  public void addCorrespondanceAndUpdateRepository(final ImplementationComponentType pcmComponent, final Repository pcmRepository, final org.emftext.language.java.containers.Package javaPackage) {
+    mir.routines.java2PcmClassifier.AddCorrespondanceAndUpdateRepositoryRoutine effect = new mir.routines.java2PcmClassifier.AddCorrespondanceAndUpdateRepositoryRoutine(this.executionState, calledBy,
+    	pcmComponent, pcmRepository, javaPackage);
     effect.applyRoutine();
   }
   
@@ -61,8 +61,8 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void addInterfaceToRepository(final OperationInterface pcmInterface, final Repository pcmRepository, final Interface javaInterface, final CompilationUnit compilationUnit) {
-    mir.routines.java2PcmClassifier.AddInterfaceToRepositoryRoutine effect = new mir.routines.java2PcmClassifier.AddInterfaceToRepositoryRoutine(this.executionState, calledBy,
+  public void addCorrespondanceToInterfaceAndUpdateRepository(final OperationInterface pcmInterface, final Repository pcmRepository, final Interface javaInterface, final CompilationUnit compilationUnit) {
+    mir.routines.java2PcmClassifier.AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine effect = new mir.routines.java2PcmClassifier.AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine(this.executionState, calledBy,
     	pcmInterface, pcmRepository, javaInterface, compilationUnit);
     effect.applyRoutine();
   }

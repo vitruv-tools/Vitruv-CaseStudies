@@ -2,7 +2,6 @@ package mir.routines.java2PcmClassifier;
 
 import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
@@ -22,20 +21,12 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final BasicComponent pcmBasicComponent) {
-      return pcmBasicComponent;
-    }
-    
-    public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final BasicComponent pcmBasicComponent) {
-      return javaPackage;
-    }
-    
     public void updatePcmBasicComponentElement(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final BasicComponent pcmBasicComponent) {
       pcmBasicComponent.setEntityName(name);
     }
     
     public void callRoutine1(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final BasicComponent pcmBasicComponent, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addComponentToRepository(pcmBasicComponent, Java2PcmHelper.findPcmRepository(this.correspondenceModel));
+      _routinesFacade.addCorrespondanceAndUpdateRepository(pcmBasicComponent, Java2PcmHelper.findPcmRepository(this.correspondenceModel), javaPackage);
     }
   }
   
@@ -61,8 +52,6 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     BasicComponent pcmBasicComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
     notifyObjectCreated(pcmBasicComponent);
     userExecution.updatePcmBasicComponentElement(javaPackage, name, rootPackageName, pcmBasicComponent);
-    
-    addCorrespondenceBetween(userExecution.getElement1(javaPackage, name, rootPackageName, pcmBasicComponent), userExecution.getElement2(javaPackage, name, rootPackageName, pcmBasicComponent), "");
     
     userExecution.callRoutine1(javaPackage, name, rootPackageName, pcmBasicComponent, actionsFacade);
     

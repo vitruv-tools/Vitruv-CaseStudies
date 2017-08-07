@@ -2,9 +2,9 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 import org.emftext.language.java.classifiers.Class
-import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import org.emftext.language.java.types.NamespaceClassifierReference
+import org.emftext.language.java.types.ClassifierReference
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -60,10 +60,7 @@ routine createPCMRepository(EObject sourceElementMappedToRepository, String pack
 	}
 }
 
-
 //Component
-
-
 routine createSystem(java::Package javaPackage, String name) {
 	action {
 		val pcmSystem = create pcm::System and initialize {
@@ -79,10 +76,7 @@ routine createBasicComponent(java::Package javaPackage, String name, String root
 		val pcmBasicComponent = create pcm::BasicComponent and initialize {
 			pcmBasicComponent.entityName = name
 		}
-		add correspondence between pcmBasicComponent and javaPackage
-		
-		call addComponentToRepository(pcmBasicComponent, findPcmRepository(correspondenceModel))
-		
+		call addCorrespondanceAndUpdateRepository(pcmBasicComponent, findPcmRepository(correspondenceModel), javaPackage)
 	}
 }
 
@@ -90,15 +84,15 @@ routine createCompositeComponent(java::Package javaPackage, String name, String 
 	action {
 		val pcmCompositeComponent = create pcm::CompositeComponent and initialize {
 			pcmCompositeComponent.entityName = name
-		}
-		add correspondence between pcmCompositeComponent and javaPackage
-		
-		call addComponentToRepository(pcmCompositeComponent, findPcmRepository(correspondenceModel))
+		}		
+		call addCorrespondanceAndUpdateRepository(pcmCompositeComponent, findPcmRepository(correspondenceModel), javaPackage)
 	}
 }
 
-routine addComponentToRepository(pcm::ImplementationComponentType pcmComponent, pcm::Repository pcmRepository) {
+routine addCorrespondanceAndUpdateRepository(pcm::ImplementationComponentType pcmComponent, pcm::Repository pcmRepository, java::Package javaPackage) {
 	action {
+		add correspondence between pcmComponent and javaPackage
+		
 		update pcmRepository {
 			pcmRepository.components__Repository += pcmComponent
 		}
@@ -124,19 +118,18 @@ routine createPCMInterface(java::Interface javaInterface, java::CompilationUnit 
 				val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
 				if (selected == 0) {
 					val repo = findPcmRepository(correspondenceModel)
-					addInterfaceToRepository(pcmIface, repo, javaInterface, compilationUnit)
+					addCorrespondanceToInterfaceAndUpdateRepository(pcmIface, repo, javaInterface, compilationUnit)
 				}
 			} else {
 				val repo = findPcmRepository(correspondenceModel)
-				addInterfaceToRepository(pcmIface, repo, javaInterface, compilationUnit)
+				addCorrespondanceToInterfaceAndUpdateRepository(pcmIface, repo, javaInterface, compilationUnit)
 			}
 		}
 	}
 }
 
-routine addInterfaceToRepository(pcm::OperationInterface pcmInterface, pcm::Repository pcmRepository, java::Interface javaInterface, java::CompilationUnit compilationUnit) {
+routine addCorrespondanceToInterfaceAndUpdateRepository(pcm::OperationInterface pcmInterface, pcm::Repository pcmRepository, java::Interface javaInterface, java::CompilationUnit compilationUnit) {
 	action {
-		
 		add correspondence between pcmInterface and javaInterface
 		add correspondence between pcmInterface and compilationUnit	
 			
@@ -147,10 +140,10 @@ routine addInterfaceToRepository(pcm::OperationInterface pcmInterface, pcm::Repo
 }
 
 //Class
-reaction CreateClass {
+reaction ClassCreated {
 	after element java::Class inserted in java::CompilationUnit[classifiers]
 	call {
-		val jaMoPPPackage = Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(newValue,
+		val jaMoPPPackage = getContainingPackageFromCorrespondenceModel(newValue,
 			correspondenceModel)
 		if (affectedEObject.namespaces.last.equals("datatypes")) {
 			createDataType(newValue, affectedEObject)			
@@ -244,14 +237,9 @@ routine addDataTypeInRepository(pcm::Repository pcmRepository, pcm::DataType pcm
 }
 
 //TypeReference
-reaction CreateNamespaceClassifierReference {
-	after element java::NamespaceClassifierReference inserted in java::Class[implements]
-	call {
-		createOperationProvidedRole(newValue)
-	}
-}
-reaction CreateClassifierReference {
-	after element java::ClassifierReference inserted in java::Class[implements]
+reaction TypeReferenceCreated {
+	after element java::TypeReference inserted in java::Class[implements]
+	with newValue instanceof NamespaceClassifierReference || newValue instanceof ClassifierReference
 	call {
 		createOperationProvidedRole(newValue)
 	}
@@ -261,7 +249,7 @@ routine createOperationProvidedRole(java::TypeReference typeReference) {
 	action {
 		call {
 			val javaClass = typeReference.eContainer as Class
-			var javaInterfaceClassifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference)
+			var javaInterfaceClassifier = getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference)
 			createOperationProvidedRoleFromTypeReference(javaInterfaceClassifier, javaClass, typeReference)
 		}
 	}

@@ -13,14 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreateInterfaceMethodReaction extends AbstractReactionRealization {
+class InterfaceMethodCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
     InsertEReference<Interface, InterfaceMethod> typedChange = (InsertEReference<Interface, InterfaceMethod>)change;
     Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     InterfaceMethod newValue = typedChange.getNewValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateInterfaceMethodReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateInterfaceMethodReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   

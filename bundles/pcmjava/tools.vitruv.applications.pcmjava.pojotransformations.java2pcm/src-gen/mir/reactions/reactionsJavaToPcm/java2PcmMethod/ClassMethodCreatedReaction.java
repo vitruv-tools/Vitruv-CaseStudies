@@ -3,7 +3,7 @@ package mir.reactions.reactionsJavaToPcm.java2PcmMethod;
 import mir.routines.java2PcmMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.members.Field;
+import org.emftext.language.java.members.ClassMethod;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -12,14 +12,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreateFieldReaction extends AbstractReactionRealization {
+class ClassMethodCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Field> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Field>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Field newValue = typedChange.getNewValue();
+    ClassMethod newValue = typedChange.getNewValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateFieldReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.CreateFieldReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmMethod.ClassMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ClassMethodCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -28,14 +28,14 @@ class CreateFieldReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Field> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Field>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, ClassMethod>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Field)) {
+    if (!(relevantChange.getNewValue() instanceof ClassMethod)) {
     	return false;
     }
     return true;
@@ -59,8 +59,8 @@ class CreateFieldReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.foo(newValue.getContainingConcreteClassifier(), newValue);
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final ClassMethod newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createUmlClassMethod(newValue, affectedEObject);
     }
   }
 }

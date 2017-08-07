@@ -1,9 +1,9 @@
-package mir.reactions.reactionsJavaToPcm.java2PcmClassifier;
+package mir.reactions.reactionsJavaToPcm.java2PcmMethod;
 
-import mir.routines.java2PcmClassifier.RoutinesFacade;
+import mir.routines.java2PcmMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.types.NamespaceClassifierReference;
+import org.emftext.language.java.members.Field;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -12,14 +12,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreateNamespaceClassifierReferenceReaction extends AbstractReactionRealization {
+class FieldCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, NamespaceClassifierReference> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, NamespaceClassifierReference>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, Field> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Field>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    NamespaceClassifierReference newValue = typedChange.getNewValue();
-    mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateNamespaceClassifierReferenceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateNamespaceClassifierReferenceReaction.ActionUserExecution(this.executionState, this);
+    Field newValue = typedChange.getNewValue();
+    mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -28,14 +28,14 @@ class CreateNamespaceClassifierReferenceReaction extends AbstractReactionRealiza
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, NamespaceClassifierReference> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, NamespaceClassifierReference>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, Field> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Field>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("implements")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof NamespaceClassifierReference)) {
+    if (!(relevantChange.getNewValue() instanceof Field)) {
     	return false;
     }
     return true;
@@ -59,8 +59,8 @@ class CreateNamespaceClassifierReferenceReaction extends AbstractReactionRealiza
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final NamespaceClassifierReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createOperationProvidedRole(newValue);
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.foo(newValue.getContainingConcreteClassifier(), newValue);
     }
   }
 }

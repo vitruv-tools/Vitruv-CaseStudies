@@ -7,7 +7,6 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -16,14 +15,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreateClassReaction extends AbstractReactionRealization {
+class ClassCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
     InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class> typedChange = (InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class>)change;
     CompilationUnit affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     org.emftext.language.java.classifiers.Class newValue = typedChange.getNewValue();
     mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.CreateClassReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmClassifier.ClassCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.ClassCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -64,7 +63,7 @@ class CreateClassReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final org.emftext.language.java.classifiers.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final org.emftext.language.java.containers.Package jaMoPPPackage = Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(newValue, 
+      final org.emftext.language.java.containers.Package jaMoPPPackage = Java2PcmHelper.getContainingPackageFromCorrespondenceModel(newValue, 
         this.correspondenceModel);
       boolean _equals = IterableExtensions.<String>last(affectedEObject.getNamespaces()).equals("datatypes");
       if (_equals) {

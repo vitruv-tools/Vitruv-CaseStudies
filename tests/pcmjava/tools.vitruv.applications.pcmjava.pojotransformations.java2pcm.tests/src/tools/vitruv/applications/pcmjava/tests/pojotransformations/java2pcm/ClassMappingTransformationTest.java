@@ -68,7 +68,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         super.addRepoContractsAndDatatypesPackage();
         super.addSecondPackageCorrespondsWithoutCorrespondences();
 
-        this.getUserInteractor().addNextSelections(0);
+        this.getUserInteractor().addNextSelections(3);
         try {
             final EObject eObject = super.addClassInPackage(this.secondPackage, EObject.class);
             fail("The class should not have any correspondences, but it has a correspondence to eObject: " + eObject);

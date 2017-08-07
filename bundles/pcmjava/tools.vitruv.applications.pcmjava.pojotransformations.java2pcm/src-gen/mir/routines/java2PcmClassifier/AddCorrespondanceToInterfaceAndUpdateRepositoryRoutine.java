@@ -13,10 +13,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class AddInterfaceToRepositoryRoutine extends AbstractRepairRoutineRealization {
+public class AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private AddInterfaceToRepositoryRoutine.ActionUserExecution userExecution;
+  private AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
@@ -49,9 +49,9 @@ public class AddInterfaceToRepositoryRoutine extends AbstractRepairRoutineRealiz
     }
   }
   
-  public AddInterfaceToRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationInterface pcmInterface, final Repository pcmRepository, final Interface javaInterface, final CompilationUnit compilationUnit) {
+  public AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationInterface pcmInterface, final Repository pcmRepository, final Interface javaInterface, final CompilationUnit compilationUnit) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.java2PcmClassifier.AddInterfaceToRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.java2PcmClassifier.AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.pcmInterface = pcmInterface;this.pcmRepository = pcmRepository;this.javaInterface = javaInterface;this.compilationUnit = compilationUnit;
   }
@@ -65,7 +65,7 @@ public class AddInterfaceToRepositoryRoutine extends AbstractRepairRoutineRealiz
   private CompilationUnit compilationUnit;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine AddInterfaceToRepositoryRoutine with input:");
+    getLogger().debug("Called routine AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine with input:");
     getLogger().debug("   OperationInterface: " + this.pcmInterface);
     getLogger().debug("   Repository: " + this.pcmRepository);
     getLogger().debug("   Interface: " + this.javaInterface);

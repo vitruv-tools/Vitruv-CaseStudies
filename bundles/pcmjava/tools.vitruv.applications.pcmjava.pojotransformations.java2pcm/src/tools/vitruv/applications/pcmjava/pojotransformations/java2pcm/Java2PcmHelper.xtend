@@ -12,37 +12,29 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import org.eclipse.emf.common.util.EList
 import java.util.ArrayList
 import org.emftext.language.java.classifiers.Interface
-import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import org.emftext.language.java.containers.Package
 import org.eclipse.emf.ecore.EObject
-import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
-import org.emftext.language.java.members.ClassMethod
 import java.util.Set
 import org.palladiosimulator.pcm.repository.OperationInterface
+import org.emftext.language.java.classifiers.Classifier
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.types.NamespaceClassifierReference
+import org.emftext.language.java.types.ClassifierReference
+import org.emftext.language.java.types.PrimitiveType
 
 public class Java2PcmHelper {
 	private static val logger = Logger.getLogger(Java2PcmHelper)
 
-	/** 
-	 * Searches and retrieves the first PCM-Repository in the correspondence model that has an
-	 * equal name as the given java package name.
-	 * @param correspondenceModel the correspondenceModel in which the PCM-Repository should be searched
-	 * @param packageName the package name for which a fitting PCM-Repository should be retrieved
-	 * @return the corresponding PCM-Repository or null if none could be found 
-	 */
-	def static Repository findPcmRepository(CorrespondenceModel correspondenceModel, String packageName) {
-
-		val allRepositories = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)
-		val repository = allRepositories.filter[entityName.equals(getRootPackageName(packageName))]
-
-		if (repository.nullOrEmpty) {
-			logger.warn("The PCM-Repository with the name " + packageName + " does not exist in the correspondence model")
+	//Copied from Java2PCMUtils (getRepository)
+	def static Repository findPcmRepository(CorrespondenceModel correspondenceModel) {
+		val Set<Repository> repos = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)
+		if (repos.nullOrEmpty) {
 			return null
 		}
-		return repository.head
-	}
-	
-	def static Repository findPcmRepository(CorrespondenceModel correspondenceModel) {
-		return Java2PcmUtils.getRepository(correspondenceModel)
+		if (1 != repos.size) {
+			logger.warn("found more than one repository. Retruning the first")
+		}
+		return repos.get(0)
 	}
 
 	def static boolean hasCorrespondance(EObject eObject, CorrespondenceModel correspondenceModel) {
@@ -53,8 +45,42 @@ public class Java2PcmHelper {
 		return correspondenceModel.getCorrespondingEObjectsByType(eObject, OperationInterface)
 	}
 	
-	def static sameSignature(Method interfaceMethod, ClassMethod classMethod) {
-		PcmJavaUtils.hasSameSignature(interfaceMethod, classMethod)
+	/**
+	 * Signatures are considered equal if methods have the same name, the same parameter types and the same return type
+	 * We do not consider modifiers (e.g. public or private here)
+	 */
+	 //Copied from pcmJavaUtils
+	def static sameSignature(Method method1, Method method2) {
+		if (method1 == method2) {
+			return true
+		}
+		if (!method1.name.equals(method2.name)) {
+			return false
+		}
+		if (!method1.typeReference.hasSameTargetReference(method2.typeReference)) {
+			return false
+		}
+		if (method1.parameters.size != method2.parameters.size) {
+			return false
+		}
+		var int i = 0
+		for (param1 : method1.parameters) {
+			if (!hasSameTargetReference(param1.typeReference, method2.parameters.get(i).typeReference)) {
+				return false
+			}
+			i++
+		}
+		return true
+	
+	}
+	//Copied from pcmJavaUtils
+	def private static boolean hasSameTargetReference(TypeReference reference1, TypeReference reference2) {
+		if (reference1 == reference2 || reference1.equals(reference2)) {
+			return true
+		}
+		val target1 = getTargetClassifierFromTypeReference(reference1)
+		val target2 = getTargetClassifierFromTypeReference(reference2)
+		return target1 == target2 || target1.equals(target2)
 	}
 	
 	/**
@@ -87,12 +113,80 @@ public class Java2PcmHelper {
 	def static findImplementingInterfacesFromTypeRefs(EList<TypeReference> typeReferences) {
 		val implementingInterfaces = new ArrayList<Interface>
 		for(typeRef : typeReferences){
-			val classifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeRef)
+			val classifier = getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeRef)
 			if(classifier instanceof Interface){
 				implementingInterfaces.add(classifier)
 			}
 		}
 		return implementingInterfaces
+	}
+	
+	//Copied from Java2PCMUtils
+	def static Classifier getTargetClassifierFromImplementsReferenceAndNormalizeURI(TypeReference reference) {
+		var interfaceClassifier = getTargetClassifierFromTypeReference(reference)
+		if (null === interfaceClassifier) {
+			return null
+		}
+
+		if (interfaceClassifier.eIsProxy) {
+			val resSet = reference.eResource.resourceSet
+			interfaceClassifier = EcoreUtil.resolve(interfaceClassifier, resSet) as Classifier
+		}
+		normalizeURI(interfaceClassifier)
+		return interfaceClassifier
+	}
+	
+	def dispatch static Classifier getTargetClassifierFromTypeReference(TypeReference reference) {
+		return null
+	}
+
+	def dispatch static Classifier getTargetClassifierFromTypeReference(NamespaceClassifierReference reference) {
+		if (reference.classifierReferences.nullOrEmpty) {
+			return null
+		}
+		return getTargetClassifierFromTypeReference(reference.classifierReferences.get(0))
+	}
+
+	def dispatch static Classifier getTargetClassifierFromTypeReference(ClassifierReference reference) {
+		return reference.target
+	}
+
+	def dispatch static Classifier getTargetClassifierFromTypeReference(PrimitiveType reference) {
+		return null
+	}
+
+	//Copied from Java2PCMUtils
+	def private static normalizeURI(EObject eObject) {
+		if (null === eObject.eResource || null === eObject.eResource.resourceSet) {
+			return false
+		}
+		val resource = eObject.eResource
+		val resourceSet = resource.resourceSet
+		val uri = resource.getURI
+		val uriConverter = resourceSet.getURIConverter
+		val normalizedURI = uriConverter.normalize(uri)
+		resource.URI = normalizedURI
+		return true
+	}
+	
+	//Copied from PCM2JavaUtils
+	def static Package getContainingPackageFromCorrespondenceModel(Classifier classifier,
+		CorrespondenceModel correspondenceModel) {
+		var namespace = classifier.containingCompilationUnit.namespacesAsString
+		if (namespace.endsWith("$") || namespace.endsWith(".")) {
+			namespace = namespace.substring(0, namespace.length - 1)
+		}
+		val finalNamespace = namespace
+		var Set<Package> packagesWithCorrespondences = correspondenceModel.
+			getAllEObjectsOfTypeInCorrespondences(Package)
+		val packagesWithNamespace = packagesWithCorrespondences.filter [ pack |
+			finalNamespace.equals(pack.namespacesAsString + pack.name)
+		]
+		if (null !== packagesWithNamespace && 0 < packagesWithNamespace.size &&
+			null !== packagesWithNamespace.iterator.next) {
+			return packagesWithNamespace.iterator.next
+		}
+		return null;
 	}
 	
 
