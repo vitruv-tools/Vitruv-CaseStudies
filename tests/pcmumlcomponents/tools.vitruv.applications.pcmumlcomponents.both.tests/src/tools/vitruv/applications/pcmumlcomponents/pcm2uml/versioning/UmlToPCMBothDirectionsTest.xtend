@@ -21,11 +21,12 @@ import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize
 import static org.hamcrest.collection.IsEmptyCollection.empty
 import static org.hamcrest.collection.IsIterableWithSize.iterableWithSize
+
 import static org.junit.Assert.assertThat
 
 class UmlToPCMBothDirectionsTest extends AbstractUmlToPCMBothDirectionsTest {
-	static val newName = "newName"
-	static val newName2 = "newName2"
+	protected static val newName = "newName"
+	protected static val newName2 = "newName2"
 
 	@Test
 	def void testCreateCompositeComponentAndChangeName() {
@@ -48,7 +49,7 @@ class UmlToPCMBothDirectionsTest extends AbstractUmlToPCMBothDirectionsTest {
 	def void testCreateBasicComponentAndChangeName() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME, false)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		assertThat(1, equalTo(correspondingElements.length))
+		assertThat(correspondingElements, iterableWithSize(1))
 		assertThat(correspondingElements.get(0), instanceOf(BasicComponent))
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertThat(umlComponent.name, equalTo(pcmComponent.entityName))
@@ -65,7 +66,7 @@ class UmlToPCMBothDirectionsTest extends AbstractUmlToPCMBothDirectionsTest {
 	def void testCreateBasicComponentAndChangeNameAndAfterwardsInPCM() {
 		val umlComponent = createUmlComponent(COMPONENT_NAME, false)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlComponent]).flatten
-		assertThat(1, equalTo(correspondingElements.length))
+		assertThat(correspondingElements, iterableWithSize(1))
 		assertThat(correspondingElements.get(0), instanceOf(BasicComponent))
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertThat(umlComponent.name, equalTo(pcmComponent.entityName))
