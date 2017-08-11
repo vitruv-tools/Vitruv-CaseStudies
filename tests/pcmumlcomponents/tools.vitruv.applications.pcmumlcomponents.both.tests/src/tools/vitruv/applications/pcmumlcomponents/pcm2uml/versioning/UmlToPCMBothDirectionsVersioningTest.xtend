@@ -89,7 +89,7 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		saveAndSynchronizeChanges(rootElement)
 		assertThat(mylocalRepository.commit("Base commit").changes, hasSize(2))
 		assertThat(mylocalRepository.push, is(PushState::SUCCESS))
-		
+
 		mylocalRepository.virtualModel.deregisterCorrespondenceModelFromTUIDManager
 		theirLocalRepository.virtualModel.registerCorrespondenceModelToTUIDManager
 
@@ -110,7 +110,7 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		// See https://github.com/vitruv-tools/Vitruv/issues/114
 		mylocalRepository.virtualModel.registerCorrespondenceModelToTUIDManager
 		theirLocalRepository.virtualModel.deregisterCorrespondenceModelFromTUIDManager
-		
+
 		myUMLComponent.name = myName
 		saveAndSynchronizeChanges(rootElement)
 		mylocalRepository.virtualModel.deregisterCorrespondenceModelFromTUIDManager
@@ -121,7 +121,8 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 
 		// PS Change name in pcm, commit and push should abort 
 		val correspondences = theirLocalRepository.virtualModel.correspondenceModel.
-			getCorrespondingEObjects(#[umlComponent]).flatten
+			getCorrespondingEObjects(#[umlComponent]).flatten.toList
+		assertThat(correspondences, hasSize(1))
 		val theirPCMComponent = correspondences.get(0) as BasicComponent
 		assertThat(theirPCMComponent.entityName, equalTo(COMPONENT_NAME))
 		val ResourceSet testResourceSet = new ResourceSetImpl

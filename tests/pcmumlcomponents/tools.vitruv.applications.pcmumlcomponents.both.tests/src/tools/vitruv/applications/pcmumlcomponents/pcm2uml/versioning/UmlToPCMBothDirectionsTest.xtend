@@ -96,6 +96,7 @@ class UmlToPCMBothDirectionsTest extends AbstractUmlToPCMBothDirectionsTest {
 		assertThat(viceVersaCorrespondingElements, iterableWithSize(1))
 		val umlComponent2 = viceVersaCorrespondingElements.get(0) as Component
 		assertThat(umlComponent2.name, equalTo(newName2))
+		
 	}
 
 	protected def Component createUmlComponent(String name, Boolean isComposable) {
