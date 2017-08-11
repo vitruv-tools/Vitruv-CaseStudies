@@ -20,19 +20,19 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 	protected static val INNER_DATATYPE_NAME = "innerType"
 
 	protected def DataType createInnerDataType() {
-		val type = UMLFactory.eINSTANCE.createDataType()
+		val type = UMLFactory::eINSTANCE.createDataType
 		type.name = INNER_DATATYPE_NAME
 		rootElement.packagedElements += type
 		return type
 	}
 
 	@Test
-	public def void attributeMultiplicityTest() {
+	def void attributeMultiplicityTest() {
 		val innerDataType = createInnerDataType()
-		val umlDataType = UMLFactory.eINSTANCE.createDataType()
+		val umlDataType = UMLFactory::eINSTANCE.createDataType
 		umlDataType.name = "fooType"
 		rootElement.packagedElements += umlDataType
-		umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 0, UnlimitedNaturalLiteralExp.UNLIMITED)
+		umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 0, UnlimitedNaturalLiteralExp::UNLIMITED)
 		saveAndSynchronizeChanges(rootElement)
 
 		val pcmRepository = rootElement.correspondingElements.head as Repository
@@ -40,26 +40,26 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 
 		val collectionType = pcmRepository.dataTypes__Repository.findFirst[t|t instanceof CollectionDataType]
 		assertNotNull(collectionType)
-		assertEquals(INNER_DATATYPE_NAME + UmlToPcmTypesUtil.COLLECTION_TYPE_SUFFIX,
+		assertEquals(INNER_DATATYPE_NAME + UmlToPcmTypesUtil::COLLECTION_TYPE_SUFFIX,
 			(collectionType as CollectionDataType).entityName)
 
 		val compositeType = umlDataType.correspondingElements.head as CompositeDataType
 		assertEquals(collectionType, compositeType.innerDeclaration_CompositeDataType.head.datatype_InnerDeclaration)
 
-		val pcmInnerType = pcmRepository.dataTypes__Repository.findFirst [t |
+		val pcmInnerType = pcmRepository.dataTypes__Repository.findFirst [ t |
 			t instanceof CompositeDataType && (t as CompositeDataType).entityName == INNER_DATATYPE_NAME
 		]
 		assertEquals(pcmInnerType, (collectionType as CollectionDataType).innerType_CollectionDataType)
 	}
 
 	@Test
-	public def void parameterMultiplicityTest() {
+	def void parameterMultiplicityTest() {
 		val parameterType = createInnerDataType()
-		val umlInterface = UMLFactory.eINSTANCE.createInterface()
+		val umlInterface = UMLFactory::eINSTANCE.createInterface
 		umlInterface.name = INTERFACE_NAME
 		rootElement.packagedElements += umlInterface
-		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, #[PARAMETER_NAME].toEList(),
-			#[parameterType as Type].toEList())
+		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, #[PARAMETER_NAME].toEList,
+			#[parameterType as Type].toEList)
 		val umlParameter = umlOperation.ownedParameters.head
 		umlParameter.lower = 0
 		saveAndSynchronizeChanges(rootElement)
@@ -73,14 +73,15 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 
 		assertEquals(collectionType, pcmParameter.dataType__Parameter)
 	}
-	
+
 	@Test
-	public def void returnTypeMultiplicityTest() {
+	def void returnTypeMultiplicityTest() {
 		val returnType = createInnerDataType()
-		val umlInterface = UMLFactory.eINSTANCE.createInterface()
+		val umlInterface = UMLFactory::eINSTANCE.createInterface
 		umlInterface.name = INTERFACE_NAME
 		rootElement.packagedElements += umlInterface
-		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, new BasicEList<String>(), new BasicEList<Type>(), returnType)
+		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, new BasicEList<String>,
+			new BasicEList<Type>, returnType)
 		val umlParameter = umlOperation.ownedParameters.head
 		umlParameter.lower = 0
 		saveAndSynchronizeChanges(rootElement)
@@ -93,16 +94,17 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 
 	/**
 	 * Whilst setting <i>umlAttribute.upper = 1</i> resulted in a correct serialization in the output (and correct assertions),
-	 * the corresponding transformation-code recognized the lowerBound as <i>0</i> at this point, thus not setting the data 
-	 * type back to the non-list representation. 
+	 * the corresponding transformation-code recognized the lowerBound as <i>0</i> at this point, thus not setting the data
+	 * type back to the non-list representation.
 	 */
 	@Test
-	public def void unsetMultiplicityTest() {
+	def void unsetMultiplicityTest() {
 		val innerDataType = createInnerDataType()
-		val umlDataType = UMLFactory.eINSTANCE.createDataType()
+		val umlDataType = UMLFactory::eINSTANCE.createDataType
 		umlDataType.name = "fooType"
 		rootElement.packagedElements += umlDataType
-		val umlAttribute = umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1, UnlimitedNaturalLiteralExp.UNLIMITED)
+		val umlAttribute = umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1,
+			UnlimitedNaturalLiteralExp::UNLIMITED)
 		saveAndSynchronizeChanges(rootElement)
 
 		umlAttribute.upperValue = null
@@ -111,32 +113,33 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		assertEquals(1, umlAttribute.lowerBound)
 		assertEquals(umlAttribute.upper, umlAttribute.upperBound)
 		assertEquals(umlAttribute.lowerBound, umlAttribute.upperBound)
-		
+
 		val pcmInnerDeclaration = umlAttribute.correspondingElements.head as InnerDeclaration
 		assertTrue(pcmInnerDeclaration.datatype_InnerDeclaration instanceof CompositeDataType)
-		assertEquals(INNER_DATATYPE_NAME, (pcmInnerDeclaration.datatype_InnerDeclaration as CompositeDataType).entityName)
+		assertEquals(INNER_DATATYPE_NAME,
+			(pcmInnerDeclaration.datatype_InnerDeclaration as CompositeDataType).entityName)
 	}
-	
+
 	@Test
-	public def void deleteMultiplicityType() {
+	def void deleteMultiplicityType() {
 		val innerDataType = createInnerDataType()
 		saveAndSynchronizeChanges(rootElement)
 		var pcmRepository = rootElement.correspondingElements.head as Repository
 		assertEquals(1, pcmRepository.dataTypes__Repository.length)
-		
-		val umlDataType = UMLFactory.eINSTANCE.createDataType()
+
+		val umlDataType = UMLFactory::eINSTANCE.createDataType
 		umlDataType.name = "fooType"
 		rootElement.packagedElements += umlDataType
-		umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1, UnlimitedNaturalLiteralExp.UNLIMITED)
+		umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1, UnlimitedNaturalLiteralExp::UNLIMITED)
 		saveAndSynchronizeChanges(rootElement)
 		pcmRepository = rootElement.correspondingElements.head as Repository
 		assertEquals(3, pcmRepository.dataTypes__Repository.length)
-		
+
 		rootElement.packagedElements -= umlDataType
 		saveAndSynchronizeChanges(rootElement)
 		pcmRepository = rootElement.correspondingElements.head as Repository
 		assertEquals(2, pcmRepository.dataTypes__Repository.length)
-		
+
 		rootElement.packagedElements -= innerDataType
 		saveAndSynchronizeChanges(rootElement)
 		pcmRepository = rootElement.correspondingElements.head as Repository
