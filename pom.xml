@@ -21,23 +21,24 @@
 		<java.version>1.8</java.version>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
-		<xtext.version>2.10.0</xtext.version>
-		<tycho.version>0.26.0</tycho.version>
+		<xtext.version>2.12.0</xtext.version>
+		<tycho.version>1.0.0</tycho.version>
 		<surefire.version>2.19.1</surefire.version>
 	</properties>
 
 	<repositories>
 		<!-- If you adjust a repository here, please also adjust the repository in the b3 aggregator. -->
 		<repository>
-			<id>Eclipse Neon</id>
+			<id>Eclipse Oxygen</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/neon</url>
+			<!--<url>http://download.eclipse.org/releases/oxygen</url>-->
+			<url>https://sdqbuild.ipd.kit.edu/nexus/content/groups/eclipse-oxygen-complete/</url>
 		</repository>
-		<repository>
-			<id>Eclipse Neon Updates</id>
+		<!--<repository>
+			<id>Eclipse Oxygen Updates</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/4.6</url>
-		</repository>
+			<url>http://download.eclipse.org/eclipse/updates/4.7</url>
+		</repository>-->
 		<repository>
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
@@ -47,11 +48,6 @@
 			<id>Vitruv Domains</id>
 			<layout>p2</layout>
 			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/</url>
-		</repository>
-		<repository>
-			<id>Xtext</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.12.0</url>
 		</repository>
 	</repositories>
 
