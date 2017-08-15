@@ -17,5 +17,6 @@ Require-Bundle: com.google.guava,
  tools.vitruv.applications.pcmumlcomponents.pcm2uml;bundle-version="0.1.0",
  tools.vitruv.applications.pcmumlcomponents.uml2pcm;bundle-version="0.1.0",
  tools.vitruv.framework.versioning;bundle-version="0.1.1",
- tools.vitruv.applications.pcmumlcomponents;bundle-version="0.1.0"
+ tools.vitruv.applications.pcmumlcomponents;bundle-version="0.1.0",
+ org.hamcrest.library;bundle-version="1.3.0"
 

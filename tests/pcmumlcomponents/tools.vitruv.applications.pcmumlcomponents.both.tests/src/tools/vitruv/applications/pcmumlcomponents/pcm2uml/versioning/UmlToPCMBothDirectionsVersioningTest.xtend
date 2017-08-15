@@ -29,9 +29,14 @@ import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize
+import static org.hamcrest.collection.IsIterableWithSize.iterableWithSize
 import static org.junit.Assert.assertThat
+import tools.vitruv.framework.versioning.extensions.URIRemapper
+import org.eclipse.emf.ecore.EObject
+import tools.vitruv.framework.versioning.ConflictDetector
 
 class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
+	static extension URIRemapper = URIRemapper::instance
 	static val myName = "myComponent"
 	static val theirName = "theirComponent"
 	static val acceptTheirChangesCallback = [ Conflict c |
@@ -48,15 +53,31 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		} else
 			#[]
 	]
+	protected ConflictDetector conflictDetector = ConflictDetector::createConflictDetector
 	Author author1
 	Author author2
 	LocalRepository<RemoteRepository> mylocalRepository
 	LocalRepository<RemoteRepository> theirLocalRepository
 	RemoteRepository remoteRepository
-	VURI sourceVURI
+	VURI myPCMVURI
+	VURI myUMLVURI
+	VURI theirPCMVURI
+	VURI theirUMLVURI
+
+	private def VURI getCorrespondentVURI(EObject e) {
+		val correspondences1 = correspondenceModel.getCorrespondingEObjects(#[myUMLModel])
+		assertThat(correspondences1, hasSize(1))
+		val pcmRepo = correspondences1.flatten.get(0)
+		myPCMVURI = VURI::getInstance(pcmRepo.eResource)
+	}
 
 	override setup() {
 		super.setup
+		myUMLVURI = VURI::getInstance(myUMLModel.eResource)
+		myPCMVURI = myUMLModel.correspondentVURI
+		theirUMLVURI = myUMLVURI.createVURIByReplacing(MY_MODEL_NAME, THEIR_MODEL_NAME)
+		theirPCMVURI = myPCMVURI.createVURIByReplacing(MY_MODEL_NAME, THEIR_MODEL_NAME)
+
 		mylocalRepository = new LocalRepositoryImpl
 		theirLocalRepository = new LocalRepositoryImpl
 		remoteRepository = new RemoteRepositoryImpl
@@ -77,46 +98,41 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		val currentBranch2 = theirLocalRepository.currentBranch
 		mylocalRepository.addOrigin(currentBranch1, remoteRepository)
 		theirLocalRepository.addOrigin(currentBranch2, remoteRepository)
-
-		theirLocalRepository.virtualModel.deregisterCorrespondenceModelFromTUIDManager
 	}
 
 	@Test
 	def void testCreateAndRenameConflict() {
 		// PS Same base in both virtual models.
 		val myUMLComponent = createUmlComponent(COMPONENT_NAME, false)
-		sourceVURI = VURI::getInstance(myUMLComponent.eResource)
+
 		saveAndSynchronizeChanges(rootElement)
-		assertThat(mylocalRepository.commit("Base commit").changes, hasSize(2))
+		assertThat(mylocalRepository.commit("Base commit", myUMLVURI).changes, hasSize(2))
 		assertThat(mylocalRepository.push, is(PushState::SUCCESS))
 
-		mylocalRepository.virtualModel.deregisterCorrespondenceModelFromTUIDManager
-		theirLocalRepository.virtualModel.registerCorrespondenceModelToTUIDManager
-
 		theirLocalRepository.pull
-		theirLocalRepository.checkout
+		theirLocalRepository.checkout(theirUMLVURI)
 
 		// PS Check if changes are in new virtual model.
-		val model = theirLocalRepository.virtualModel.getModelInstance(sourceVURI).firstRootEObject as Model
+		val model = theirLocalRepository.virtualModel.getModelInstance(theirUMLVURI).firstRootEObject as Model
+		val myRepo = mylocalRepository.virtualModel.getModelInstance(myPCMVURI).firstRootEObject as Repository
+		val theirRep = theirLocalRepository.virtualModel.getModelInstance(theirPCMVURI).firstRootEObject as Repository
+		assertThat(theirRep.id, equalTo(myRepo.id))
+		val myPCMComponent = myRepo.components__Repository.get(0) as BasicComponent
+		val theirPCMComponent1 = theirRep.components__Repository.get(0) as BasicComponent
+		assertThat(myPCMComponent.id, equalTo(theirPCMComponent1.id))
 		val umlComponent = model.packagedElements.get(0) as Component
 		assertThat(umlComponent.name, equalTo(COMPONENT_NAME))
 		val correspondences1 = theirLocalRepository.virtualModel.correspondenceModel.
 			getCorrespondingEObjects(#[umlComponent]).flatten
+		assertThat(correspondences1, iterableWithSize(1))
 		val basicComponent1 = correspondences1.get(0) as BasicComponent
 		assertThat(basicComponent1.entityName, equalTo(COMPONENT_NAME))
 
-		// PS Change name in uml, commit and push
-		// FIXME Deregistering is needed. 
-		// See https://github.com/vitruv-tools/Vitruv/issues/114
-		mylocalRepository.virtualModel.registerCorrespondenceModelToTUIDManager
-		theirLocalRepository.virtualModel.deregisterCorrespondenceModelFromTUIDManager
-
+		// PS Change 
 		myUMLComponent.name = myName
 		saveAndSynchronizeChanges(rootElement)
-		mylocalRepository.virtualModel.deregisterCorrespondenceModelFromTUIDManager
-		theirLocalRepository.virtualModel.registerCorrespondenceModelToTUIDManager
 
-		assertThat(mylocalRepository.commit("My commit").changes, hasSize(1))
+		assertThat(mylocalRepository.commit("My commit", myUMLVURI).changes, hasSize(1))
 		assertThat(mylocalRepository.push, is(PushState::SUCCESS))
 
 		// PS Change name in pcm, commit and push should abort 
@@ -133,7 +149,13 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		startRecordingChanges(repo)
 		theirModifiableComponent.entityName = theirName
 		saveAndSynchronizeChanges(theirLocalRepository.virtualModel, repo)
-		assertThat(theirLocalRepository.commit("My commit").changes, hasSize(1))
+		theirPCMVURI = VURI::getInstance(theirPCMComponent.eResource)
+		val rootToRootMap = #{
+			myUMLVURI.EMFUri.toFileString -> theirUMLVURI.EMFUri.toFileString,
+			myPCMVURI.EMFUri.toFileString -> theirPCMVURI.EMFUri.toFileString
+		}
+		conflictDetector.addMap(rootToRootMap)
+		assertThat(theirLocalRepository.commit("Their commit", theirPCMVURI).changes, hasSize(1))
 		assertThat(theirLocalRepository.push, is(PushState::COMMIT_NOT_ACCEPTED))
 
 		// PS Pull new commit and merge 
@@ -145,17 +167,19 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		val lastLocalCommit = theirLocalRepository.getCommits(theirLocalRepository.currentBranch).last
 		assertThat(lastRemoteCommit.identifier, not(equalTo(lastLocalCommit.identifier)))
 
-//		// PS Merge and accept their changes 
-//		val mergeCommit = newLocalRepository.merge(
-//			remoteBranch,
-//			newLocalRepository.currentBranch,
-//			acceptTheirChangesCallback,
-//			triggeredCallback
-//		)
-//		assertThat(mergeCommit.changes, hasSize(1))
-//		assertThat(newLocalRepository.push, is(PushState::SUCCESS))
-//		val modelAgain = newLocalRepository.virtualModel.getModelInstance(sourceVURI).firstRootEObject as Model
-//		val umlComponentAgain = modelAgain.packagedElements.get(0) as Component
-//		assertThat(umlComponentAgain.name, is(myName))
+		// PS Merge and accept their changes 
+		val mergeCommit = theirLocalRepository.merge(
+			remoteBranch,
+			theirLocalRepository.currentBranch,
+			acceptTheirChangesCallback,
+			triggeredCallback,
+			theirLocalRepository.virtualModel,
+			mylocalRepository.virtualModel
+		)
+		assertThat(mergeCommit.changes, hasSize(1))
+		assertThat(theirLocalRepository.push, is(PushState::SUCCESS))
+		val modelAgain = theirLocalRepository.virtualModel.getModelInstance(theirUMLVURI).firstRootEObject as Model
+		val umlComponentAgain = modelAgain.packagedElements.get(0) as Component
+		assertThat(umlComponentAgain.name, is(myName))
 	}
 }
