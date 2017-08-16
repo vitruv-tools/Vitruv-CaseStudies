@@ -1,53 +1,52 @@
 package mir.reactions.reactionsJavaToPcm.java2PcmMethod;
 
 import mir.routines.java2PcmMethod.RoutinesFacade;
-import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.members.Method;
-import org.emftext.language.java.types.TypeReference;
+import org.emftext.language.java.parameters.Parameter;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
+import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
 
 @SuppressWarnings("all")
-class JavaReturnTypeChangedReaction extends AbstractReactionRealization {
+class ParameterNameChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<Method, TypeReference> typedChange = (ReplaceSingleValuedEReference<Method, TypeReference>)change;
-    Method affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    TypeReference oldValue = typedChange.getOldValue();
-    TypeReference newValue = typedChange.getNewValue();
+    ReplaceSingleValuedEAttribute<Parameter, String> typedChange = (ReplaceSingleValuedEAttribute<Parameter, String>)change;
+    Parameter affectedEObject = typedChange.getAffectedEObject();
+    EAttribute affectedFeature = typedChange.getAffectedFeature();
+    String oldValue = typedChange.getOldValue();
+    String newValue = typedChange.getNewValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterNameChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterNameChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
   }
   
   public static Class<? extends EChange> getExpectedChangeType() {
-    return ReplaceSingleValuedEReference.class;
+    return ReplaceSingleValuedEAttribute.class;
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<Method, TypeReference> relevantChange = (ReplaceSingleValuedEReference<Method, TypeReference>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Method)) {
+    ReplaceSingleValuedEAttribute<Parameter, String> relevantChange = (ReplaceSingleValuedEAttribute<Parameter, String>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("typeReference")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("name")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof TypeReference)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof TypeReference)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
     	return false;
     }
     return true;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEReference)) {
+    if (!(change instanceof ReplaceSingleValuedEAttribute)) {
     	return false;
     }
     getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
@@ -64,8 +63,8 @@ class JavaReturnTypeChangedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Method affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeReturnType(affectedEObject, newValue);
+    public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeParameterName(newValue, affectedEObject);
     }
   }
 }

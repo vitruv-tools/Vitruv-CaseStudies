@@ -3,9 +3,8 @@ package mir.reactions.reactionsJavaToPcm.java2PcmMethod;
 import mir.routines.java2PcmMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.classifiers.Classifier;
-import org.emftext.language.java.members.Field;
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
+import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.Parametrizable;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -14,14 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class FieldCreatedReaction extends AbstractReactionRealization {
+class ParameterCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Field> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Field>)change;
-    org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<Parametrizable, OrdinaryParameter> typedChange = (InsertEReference<Parametrizable, OrdinaryParameter>)change;
+    Parametrizable affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Field newValue = typedChange.getNewValue();
+    OrdinaryParameter newValue = typedChange.getNewValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
-    mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
   }
   
@@ -30,14 +29,14 @@ class FieldCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Field> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Field>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
+    InsertEReference<Parametrizable, OrdinaryParameter> relevantChange = (InsertEReference<Parametrizable, OrdinaryParameter>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof Parametrizable)) {
     	return false;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("members")) {
+    if (!relevantChange.getAffectedFeature().getName().equals("parameters")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Field)) {
+    if (!(relevantChange.getNewValue() instanceof OrdinaryParameter)) {
     	return false;
     }
     return true;
@@ -61,12 +60,8 @@ class FieldCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createInnerDeclaration(newValue.getContainingConcreteClassifier(), newValue);
-      final Classifier type = Java2PcmHelper.getTargetClassifierFromImplementsReferenceAndNormalizeURI(newValue.getTypeReference());
-      _routinesFacade.fieldCreatedCorrespondingToOperationInterface(type, newValue);
-      _routinesFacade.fieldCreatedCorrespondingToRepositoryComponent(type, newValue);
-      _routinesFacade.createAssemblyContext(newValue.getContainingConcreteClassifier(), newValue);
+    public void callRoutine1(final Parametrizable affectedEObject, final EReference affectedFeature, final OrdinaryParameter newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createParameter(newValue, affectedEObject);
     }
   }
 }

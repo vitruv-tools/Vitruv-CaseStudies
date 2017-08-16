@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.text.edits.ReplaceEdit;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -56,7 +57,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
                 Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
     }
 
-    @Test
+    @Test @Ignore
     public void testChangeParameterType() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
@@ -117,8 +118,9 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
 
     private void assertParameter(final OperationSignature opSig, final Parameter parameter,
             final String expectedTypeName, final String expectedName) throws Throwable {
-        assertEquals("The parameter is not contained in the expected operation signature", opSig.getId(),
-                parameter.getOperationSignature__Parameter().getId());
+        OperationSignature operationSignature__Parameter = parameter.getOperationSignature__Parameter();
+		assertEquals("The parameter is not contained in the expected operation signature", opSig.getId(),
+                operationSignature__Parameter.getId());
         this.assertPcmParameter(parameter, expectedName);
         if (parameter.getDataType__Parameter() instanceof CollectionDataType
                 || parameter.getDataType__Parameter() instanceof CompositeDataType) {

@@ -64,7 +64,7 @@ class JavaNamedElementRenamedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.renameUmlNamedElement(affectedEObject);
+      _routinesFacade.renameNamedElement(affectedEObject);
     }
   }
 }

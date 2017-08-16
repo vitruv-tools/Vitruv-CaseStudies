@@ -123,7 +123,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	private static final int SELECT_COMPOSITE_COMPONENT = 1;
 	private static final int SELECT_SYSTEM = 2;
 	protected static final int SELECT_NOTHING_DECIDE_LATER = 3;
-	private static int MAXIMUM_SYNC_WAITING_TIME = 50000;
+	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
 
 	protected Package mainPackage;
 	protected Package secondPackage;

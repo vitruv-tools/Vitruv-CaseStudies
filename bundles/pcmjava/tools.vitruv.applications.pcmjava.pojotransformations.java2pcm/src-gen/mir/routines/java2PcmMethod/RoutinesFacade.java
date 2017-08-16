@@ -1,12 +1,19 @@
 package mir.routines.java2PcmMethod;
 
+import org.eclipse.emf.ecore.EObject;
+import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.commons.NamedElement;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Method;
+import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.Parameter;
+import org.emftext.language.java.parameters.Parametrizable;
 import org.emftext.language.java.types.TypeReference;
+import org.palladiosimulator.pcm.repository.OperationInterface;
+import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -17,15 +24,69 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void renameUmlNamedElement(final NamedElement jElement) {
-    mir.routines.java2PcmMethod.RenameUmlNamedElementRoutine effect = new mir.routines.java2PcmMethod.RenameUmlNamedElementRoutine(this.executionState, calledBy,
-    	jElement);
+  public void renameNamedElement(final NamedElement javaElement) {
+    mir.routines.java2PcmMethod.RenameNamedElementRoutine effect = new mir.routines.java2PcmMethod.RenameNamedElementRoutine(this.executionState, calledBy,
+    	javaElement);
     effect.applyRoutine();
   }
   
-  public void foo(final ConcreteClassifier classifier, final Field field) {
-    mir.routines.java2PcmMethod.FooRoutine effect = new mir.routines.java2PcmMethod.FooRoutine(this.executionState, calledBy,
+  public void createParameter(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod) {
+    mir.routines.java2PcmMethod.CreateParameterRoutine effect = new mir.routines.java2PcmMethod.CreateParameterRoutine(this.executionState, calledBy,
+    	jaMoPPParam, javaMethod);
+    effect.applyRoutine();
+  }
+  
+  public void changeParameterType(final TypeReference typeReference) {
+    mir.routines.java2PcmMethod.ChangeParameterTypeRoutine effect = new mir.routines.java2PcmMethod.ChangeParameterTypeRoutine(this.executionState, calledBy,
+    	typeReference);
+    effect.applyRoutine();
+  }
+  
+  public void changeParameterName(final String newName, final Parameter parameter) {
+    mir.routines.java2PcmMethod.ChangeParameterNameRoutine effect = new mir.routines.java2PcmMethod.ChangeParameterNameRoutine(this.executionState, calledBy,
+    	newName, parameter);
+    effect.applyRoutine();
+  }
+  
+  public void createInnerDeclaration(final ConcreteClassifier classifier, final Field field) {
+    mir.routines.java2PcmMethod.CreateInnerDeclarationRoutine effect = new mir.routines.java2PcmMethod.CreateInnerDeclarationRoutine(this.executionState, calledBy,
     	classifier, field);
+    effect.applyRoutine();
+  }
+  
+  public void createAssemblyContext(final ConcreteClassifier classifier, final Field field) {
+    mir.routines.java2PcmMethod.CreateAssemblyContextRoutine effect = new mir.routines.java2PcmMethod.CreateAssemblyContextRoutine(this.executionState, calledBy,
+    	classifier, field);
+    effect.applyRoutine();
+  }
+  
+  public void fieldCreatedCorrespondingToOperationInterface(final Classifier classifier, final Field field) {
+    mir.routines.java2PcmMethod.FieldCreatedCorrespondingToOperationInterfaceRoutine effect = new mir.routines.java2PcmMethod.FieldCreatedCorrespondingToOperationInterfaceRoutine(this.executionState, calledBy,
+    	classifier, field);
+    effect.applyRoutine();
+  }
+  
+  public void fieldCreatedCorrespondingToRepositoryComponent(final Classifier classifier, final Field field) {
+    mir.routines.java2PcmMethod.FieldCreatedCorrespondingToRepositoryComponentRoutine effect = new mir.routines.java2PcmMethod.FieldCreatedCorrespondingToRepositoryComponentRoutine(this.executionState, calledBy,
+    	classifier, field);
+    effect.applyRoutine();
+  }
+  
+  public void createOperationRequiredRoleCorrespondingToField(final Field field, final OperationInterface operationInterface, final RepositoryComponent repoComponent) {
+    mir.routines.java2PcmMethod.CreateOperationRequiredRoleCorrespondingToFieldRoutine effect = new mir.routines.java2PcmMethod.CreateOperationRequiredRoleCorrespondingToFieldRoutine(this.executionState, calledBy,
+    	field, operationInterface, repoComponent);
+    effect.applyRoutine();
+  }
+  
+  public void foo(final Field field, final EObject eObject) {
+    mir.routines.java2PcmMethod.FooRoutine effect = new mir.routines.java2PcmMethod.FooRoutine(this.executionState, calledBy,
+    	field, eObject);
+    effect.applyRoutine();
+  }
+  
+  public void changeInnerDeclarationType(final TypeReference typeReference, final Field javaField) {
+    mir.routines.java2PcmMethod.ChangeInnerDeclarationTypeRoutine effect = new mir.routines.java2PcmMethod.ChangeInnerDeclarationTypeRoutine(this.executionState, calledBy,
+    	typeReference, javaField);
     effect.applyRoutine();
   }
   
@@ -47,8 +108,8 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeUmlReturnType(final Method jMeth, final TypeReference jType) {
-    mir.routines.java2PcmMethod.ChangeUmlReturnTypeRoutine effect = new mir.routines.java2PcmMethod.ChangeUmlReturnTypeRoutine(this.executionState, calledBy,
+  public void changeReturnType(final Method jMeth, final TypeReference jType) {
+    mir.routines.java2PcmMethod.ChangeReturnTypeRoutine effect = new mir.routines.java2PcmMethod.ChangeReturnTypeRoutine(this.executionState, calledBy,
     	jMeth, jType);
     effect.applyRoutine();
   }

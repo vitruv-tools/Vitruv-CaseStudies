@@ -3,12 +3,7 @@ package mir.routines.java2PcmMethod;
 import java.io.IOException;
 import mir.routines.java2PcmMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Field;
-import org.palladiosimulator.pcm.repository.CompositeDataType;
-import org.palladiosimulator.pcm.repository.InnerDeclaration;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
-import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -24,46 +19,32 @@ public class FooRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceF(final ConcreteClassifier classifier, final Field field) {
-      return classifier;
+    public EObject getElement1(final Field field, final EObject eObject) {
+      return field;
     }
     
-    public void updateInnerDeclarationElement(final ConcreteClassifier classifier, final Field field, final CompositeDataType f, final InnerDeclaration innerDeclaration) {
-      innerDeclaration.setEntityName(field.getName());
-      innerDeclaration.setDatatype_InnerDeclaration(TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(field.getTypeReference(), this.correspondenceModel, 
-        this.userInteracting, null, field.getArrayDimension()));
-      innerDeclaration.setCompositeDataType_InnerDeclaration(f);
+    public EObject getElement2(final Field field, final EObject eObject) {
+      return eObject;
     }
   }
   
-  public FooRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ConcreteClassifier classifier, final Field field) {
+  public FooRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Field field, final EObject eObject) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.FooRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.classifier = classifier;this.field = field;
+    this.field = field;this.eObject = eObject;
   }
-  
-  private ConcreteClassifier classifier;
   
   private Field field;
   
+  private EObject eObject;
+  
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine FooRoutine with input:");
-    getLogger().debug("   ConcreteClassifier: " + this.classifier);
     getLogger().debug("   Field: " + this.field);
+    getLogger().debug("   EObject: " + this.eObject);
     
-    CompositeDataType f = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceF(classifier, field), // correspondence source supplier
-    	CompositeDataType.class,
-    	(CompositeDataType _element) -> true, // correspondence precondition checker
-    	null);
-    if (f == null) {
-    	return;
-    }
-    registerObjectUnderModification(f);
-    InnerDeclaration innerDeclaration = RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
-    notifyObjectCreated(innerDeclaration);
-    userExecution.updateInnerDeclarationElement(classifier, field, f, innerDeclaration);
+    addCorrespondenceBetween(userExecution.getElement1(field, eObject), userExecution.getElement2(field, eObject), "");
     
     postprocessElements();
   }

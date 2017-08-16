@@ -13,10 +13,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization {
+public class ChangeReturnTypeRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private ChangeUmlReturnTypeRoutine.ActionUserExecution userExecution;
+  private ChangeReturnTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
@@ -37,9 +37,9 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     }
   }
   
-  public ChangeUmlReturnTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method jMeth, final TypeReference jType) {
+  public ChangeReturnTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method jMeth, final TypeReference jType) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.java2PcmMethod.ChangeUmlReturnTypeRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.java2PcmMethod.ChangeReturnTypeRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
     this.jMeth = jMeth;this.jType = jType;
   }
@@ -49,7 +49,7 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
   private TypeReference jType;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine ChangeUmlReturnTypeRoutine with input:");
+    getLogger().debug("Called routine ChangeReturnTypeRoutine with input:");
     getLogger().debug("   Method: " + this.jMeth);
     getLogger().debug("   TypeReference: " + this.jType);
     
