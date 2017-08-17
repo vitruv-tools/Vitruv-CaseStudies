@@ -40,8 +40,8 @@ class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {
 
 	Author author1
 	Author author2
-	LocalRepository localRepository1
-	LocalRepository localRepository2
+	LocalRepository<RemoteRepository> localRepository1
+	LocalRepository<RemoteRepository> localRepository2
 	RemoteRepository remoteRepository
 	VURI newSourceVURI
 	VURI sourceVURI

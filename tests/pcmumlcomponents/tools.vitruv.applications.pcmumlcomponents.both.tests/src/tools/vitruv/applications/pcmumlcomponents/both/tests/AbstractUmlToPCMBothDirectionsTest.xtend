@@ -29,25 +29,28 @@ import tools.vitruv.framework.tests.VitruviusApplicationTest
 class AbstractUmlToPCMBothDirectionsTest extends VitruviusApplicationTest {
 	protected static extension UMLFactory = UMLFactory::eINSTANCE
 	protected static extension RepositoryFactory = RepositoryFactory::eINSTANCE
-	protected static val MODEL_FILE_EXTENSION = "uml"
-	protected static val MODEL_NAME = "model"
+
 	protected static val COMPONENT_NAME = "TestComponent"
 	protected static val INTERFACE_NAME = "TestInterface"
+	protected static val MODEL_FILE_EXTENSION = "uml"
+	protected static val MY_MODEL_NAME = "my_model"
+	protected static val THEIR_MODEL_NAME = "their_model"
 	protected static val OPERATION_NAME = "fooOperation"
 	protected static val PARAMETER_NAME = "fooParameter"
 	protected static val PARAMETER_NAME_2 = "barParameter"
-
 	protected static val UML_TYPE_BOOL = "Boolean"
 	protected static val UML_TYPE_INT = "Integer"
 	protected static val UML_TYPE_REAL = "Real"
 	protected static val UML_TYPE_STRING = "String"
+
+	protected Model myUMLModel
 
 	override unresolveChanges() { true }
 
 	override cleanup() {}
 
 	override setup() {
-		initializeTestModel
+		initializeMyTestModel
 	}
 
 	override createChangePropagationSpecifications() {
@@ -64,10 +67,10 @@ class AbstractUmlToPCMBothDirectionsTest extends VitruviusApplicationTest {
 		]
 	}
 
-	protected def initializeTestModel() {
-		val umlModel = createModel
-		umlModel.name = MODEL_NAME
-		createAndSynchronizeModel(MODEL_NAME.getProjectModelPath, umlModel)
+	protected def initializeMyTestModel() {
+		myUMLModel = createModel
+		myUMLModel.name = MY_MODEL_NAME
+		createAndSynchronizeModel(MY_MODEL_NAME.getProjectModelPath, myUMLModel)
 	}
 
 	protected def Model getUmlModel() {
@@ -76,7 +79,7 @@ class AbstractUmlToPCMBothDirectionsTest extends VitruviusApplicationTest {
 	}
 
 	protected def Model getRootElement() {
-		return MODEL_NAME.getProjectModelPath.firstRootElement as Model
+		return MY_MODEL_NAME.getProjectModelPath.firstRootElement as Model
 	}
 
 	protected def importPrimitiveTypes() {
