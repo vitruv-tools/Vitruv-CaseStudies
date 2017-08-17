@@ -24,7 +24,6 @@ import tools.vitruv.framework.versioning.emfstore.PushState
 import tools.vitruv.framework.versioning.emfstore.RemoteRepository
 import tools.vitruv.framework.versioning.emfstore.impl.LocalRepositoryImpl
 import tools.vitruv.framework.versioning.emfstore.impl.RemoteRepositoryImpl
-import tools.vitruv.framework.versioning.extensions.URIRemapper
 import tools.vitruv.framework.vsum.VersioningVirtualModel
 
 import static org.hamcrest.CoreMatchers.equalTo
@@ -33,12 +32,16 @@ import static org.hamcrest.CoreMatchers.not
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize
 import static org.hamcrest.collection.IsIterableWithSize.iterableWithSize
+
 import static org.junit.Assert.assertThat
 
 class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
-	static extension URIRemapper = URIRemapper::instance
-	static val myName = "myComponent"
-	static val theirName = "theirComponent"
+	// Static values.
+	static val AUTHOR_NAMES = #["Me", "Not me"]
+	static val MY_NAME = "myComponent"
+	static val THEIR_NAME = "theirComponent"
+
+	// Static functions.
 	static val acceptTheirChangesCallback = [ Conflict c |
 		if (c instanceof MultiChangeConflict) {
 			return c.targetChanges
@@ -47,6 +50,7 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		} else
 			#[]
 	]
+
 	static val acceptMyChangesCallback = [ Conflict c |
 		if (c instanceof MultiChangeConflict) {
 			return c.sourceChanges
@@ -55,14 +59,15 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		} else
 			#[]
 	]
+
 	static val triggeredCallback = [ Conflict c |
 		if (c instanceof MultiChangeConflict) {
 			return c.triggeredTargetChanges
 		} else
 			#[]
 	]
+	// Variables.
 	protected ConflictDetector conflictDetector = ConflictDetector::createConflictDetector
-	static val AUTHOR_NAMES = #["Me", "Not me"]
 	LocalRepository<RemoteRepository> mylocalRepository
 	LocalRepository<RemoteRepository> theirLocalRepository
 	RemoteRepository remoteRepository
@@ -93,18 +98,19 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		localRepos.forEach[addRemoteRepository(remoteRepository)]
 		localRepos.forEach[r, i|r.author = Author::createAuthor(AUTHOR_NAMES.get(i))]
 
-		val VersioningVirtualModel newVirtualModel = TestUtil::createVirtualModel("newVMname", true, vitruvDomains,
-			createChangePropagationSpecifications, userInteractor) as VersioningVirtualModel
+		val VersioningVirtualModel newVirtualModel = TestUtil::createVirtualModel(
+			"newVMname",
+			true,
+			vitruvDomains,
+			createChangePropagationSpecifications,
+			userInteractor
+		) as VersioningVirtualModel
 
 		mylocalRepository.virtualModel = virtualModel
 		theirLocalRepository.virtualModel = newVirtualModel
 
 		mylocalRepository.addOrigin(mylocalRepository.currentBranch, remoteRepository)
 		theirLocalRepository.addOrigin(theirLocalRepository.currentBranch, remoteRepository)
-		localRepos.forEach [ r |
-			r.virtualModel.addMappedVURIs(myUMLVURI, theirUMLVURI)
-			r.virtualModel.addMappedVURIs(myPCMVURI, theirPCMVURI)
-		]
 	}
 
 	@Test
@@ -141,7 +147,8 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		assertThat(basicComponent1.entityName, equalTo(COMPONENT_NAME))
 
 		// PS Change 
-		myUMLComponent.name = myName
+		myUMLComponent.name = tools.vitruv.applications.pcmumlcomponents.pcm2uml.versioning.
+			UmlToPCMBothDirectionsVersioningTest.MY_NAME
 		saveAndSynchronizeChanges(rootElement)
 
 		assertThat(mylocalRepository.commit("My commit", myUMLVURI).changes, hasSize(1))
@@ -159,7 +166,8 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		val repo = sourceModel.contents.get(0) as Repository
 		val theirModifiableComponent = repo.components__Repository.get(0) as BasicComponent
 		startRecordingChanges(repo)
-		theirModifiableComponent.entityName = theirName
+		theirModifiableComponent.entityName = tools.vitruv.applications.pcmumlcomponents.pcm2uml.versioning.
+			UmlToPCMBothDirectionsVersioningTest.THEIR_NAME
 		saveAndSynchronizeChanges(theirLocalRepository.virtualModel, repo)
 		theirPCMVURI = VURI::getInstance(theirPCMComponent.eResource)
 		val rootToRootMap = #{
@@ -181,23 +189,22 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 
 		// PS Merge and accept their changes 
 		val mergeCommit = theirLocalRepository.merge(
-			remoteBranch,
-			theirLocalRepository.currentBranch,
+			remoteBranch -> mylocalRepository.virtualModel,
+			theirLocalRepository.currentBranch -> theirLocalRepository.virtualModel,
 			acceptTheirChangesCallback,
 			triggeredCallback,
-			theirLocalRepository.virtualModel,
-			mylocalRepository.virtualModel
+			theirLocalRepository.virtualModel
 		)
 		assertThat(mergeCommit.changes, hasSize(1))
 		assertThat(theirLocalRepository.push, is(PushState::SUCCESS))
 		val modelAgain = theirLocalRepository.virtualModel.getModelInstance(theirUMLVURI).firstRootEObject as Model
 		val umlComponentAgain = modelAgain.packagedElements.get(0) as Component
-		assertThat(umlComponentAgain.name, is(theirName))
+		assertThat(umlComponentAgain.name, is(THEIR_NAME))
 		val correspondences2 = theirLocalRepository.virtualModel.correspondenceModel.
 			getCorrespondingEObjects(#[umlComponentAgain]).flatten.toList
 		assertThat(correspondences2, hasSize(1))
 		val pcmComponentAgain = correspondences2.get(0) as BasicComponent
-		assertThat(pcmComponentAgain.entityName, is(theirName))
+		assertThat(pcmComponentAgain.entityName, is(THEIR_NAME))
 	}
 
 	@Test
@@ -234,7 +241,8 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		assertThat(basicComponent1.entityName, equalTo(COMPONENT_NAME))
 
 		// PS Change 
-		myUMLComponent.name = myName
+		myUMLComponent.name = tools.vitruv.applications.pcmumlcomponents.pcm2uml.versioning.
+			UmlToPCMBothDirectionsVersioningTest.MY_NAME
 		saveAndSynchronizeChanges(rootElement)
 
 		assertThat(mylocalRepository.commit("My commit", myUMLVURI).changes, hasSize(1))
@@ -252,7 +260,8 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 		val repo = sourceModel.contents.get(0) as Repository
 		val theirModifiableComponent = repo.components__Repository.get(0) as BasicComponent
 		startRecordingChanges(repo)
-		theirModifiableComponent.entityName = theirName
+		theirModifiableComponent.entityName = tools.vitruv.applications.pcmumlcomponents.pcm2uml.versioning.
+			UmlToPCMBothDirectionsVersioningTest.THEIR_NAME
 		saveAndSynchronizeChanges(theirLocalRepository.virtualModel, repo)
 		theirPCMVURI = VURI::getInstance(theirPCMComponent.eResource)
 		val rootToRootMap = #{
@@ -274,22 +283,21 @@ class UmlToPCMBothDirectionsVersioningTest extends UmlToPCMBothDirectionsTest {
 
 		// PS Merge and accept their changes 
 		val mergeCommit = theirLocalRepository.merge(
-			remoteBranch,
-			theirLocalRepository.currentBranch,
+			remoteBranch -> mylocalRepository.virtualModel,
+			theirLocalRepository.currentBranch -> theirLocalRepository.virtualModel,
 			acceptMyChangesCallback,
 			triggeredCallback,
-			theirLocalRepository.virtualModel,
-			mylocalRepository.virtualModel
+			theirLocalRepository.virtualModel
 		)
 		assertThat(mergeCommit.changes, hasSize(1))
 		assertThat(theirLocalRepository.push, is(PushState::SUCCESS))
 		val modelAgain = theirLocalRepository.virtualModel.getModelInstance(theirUMLVURI).firstRootEObject as Model
 		val umlComponentAgain = modelAgain.packagedElements.get(0) as Component
-		assertThat(umlComponentAgain.name, is(myName))
+		assertThat(umlComponentAgain.name, is(MY_NAME))
 		val correspondences2 = theirLocalRepository.virtualModel.correspondenceModel.
 			getCorrespondingEObjects(#[umlComponentAgain]).flatten.toList
 		assertThat(correspondences2, hasSize(1))
 		val pcmComponentAgain = correspondences2.get(0) as BasicComponent
-		assertThat(pcmComponentAgain.entityName, is(myName))
+		assertThat(pcmComponentAgain.entityName, is(MY_NAME))
 	}
 }
