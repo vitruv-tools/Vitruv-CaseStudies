@@ -14,8 +14,8 @@ import tools.vitruv.framework.change.echange.root.InsertRootEObject;
 @SuppressWarnings("all")
 class CreatedPcmRepositoryReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertRootEObject<Repository> typedChange = ((CreateAndInsertRoot<Repository>)change).getInsertChange();
-    Repository newValue = typedChange.getNewValue();
+    InsertRootEObject<org.palladiosimulator.pcm.repository.Repository> typedChange = ((CreateAndInsertRoot<org.palladiosimulator.pcm.repository.Repository>)change).getInsertChange();
+    org.palladiosimulator.pcm.repository.Repository newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmRepositoryReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmRepositoryReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
@@ -26,8 +26,8 @@ class CreatedPcmRepositoryReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertRootEObject<Repository> relevantChange = ((CreateAndInsertRoot<Repository>)change).getInsertChange();
-    if (!(relevantChange.getNewValue() instanceof Repository)) {
+    InsertRootEObject<org.palladiosimulator.pcm.repository.Repository> relevantChange = ((CreateAndInsertRoot<org.palladiosimulator.pcm.repository.Repository>)change).getInsertChange();
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.Repository)) {
     	return false;
     }
     return true;

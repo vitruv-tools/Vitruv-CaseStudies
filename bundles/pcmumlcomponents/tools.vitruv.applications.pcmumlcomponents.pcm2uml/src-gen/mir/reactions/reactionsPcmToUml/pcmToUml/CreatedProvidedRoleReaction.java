@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedProvidedRoleReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<InterfaceProvidingEntity, ProvidedRole> typedChange = ((CreateAndInsertNonRoot<InterfaceProvidingEntity, ProvidedRole>)change).getInsertChange();
-    InterfaceProvidingEntity affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity, org.palladiosimulator.pcm.repository.ProvidedRole> typedChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity, org.palladiosimulator.pcm.repository.ProvidedRole>)change).getInsertChange();
+    org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ProvidedRole newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.ProvidedRole newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.CreatedProvidedRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedProvidedRoleReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class CreatedProvidedRoleReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<InterfaceProvidingEntity, ProvidedRole> relevantChange = ((CreateAndInsertNonRoot<InterfaceProvidingEntity, ProvidedRole>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof InterfaceProvidingEntity)) {
+    InsertEReference<org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity, org.palladiosimulator.pcm.repository.ProvidedRole> relevantChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity, org.palladiosimulator.pcm.repository.ProvidedRole>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("providedRoles_InterfaceProvidingEntity")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof ProvidedRole)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.ProvidedRole)) {
     	return false;
     }
     return true;

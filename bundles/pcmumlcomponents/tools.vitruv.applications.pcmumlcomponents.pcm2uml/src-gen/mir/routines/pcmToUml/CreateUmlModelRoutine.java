@@ -8,7 +8,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageImport;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -63,13 +62,13 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlModelRoutine with input:");
-    getLogger().debug("   Repository: " + this.pcmRepository);
+    getLogger().debug("   pcmRepository: " + this.pcmRepository);
     
-    PackageImport packageImport = UMLFactoryImpl.eINSTANCE.createPackageImport();
+    org.eclipse.uml2.uml.PackageImport packageImport = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createPackageImport();
     notifyObjectCreated(packageImport);
     userExecution.updatePackageImportElement(pcmRepository, packageImport);
     
-    Model umlModel = UMLFactoryImpl.eINSTANCE.createModel();
+    org.eclipse.uml2.uml.Model umlModel = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createModel();
     notifyObjectCreated(umlModel);
     userExecution.updateUmlModelElement(pcmRepository, packageImport, umlModel);
     

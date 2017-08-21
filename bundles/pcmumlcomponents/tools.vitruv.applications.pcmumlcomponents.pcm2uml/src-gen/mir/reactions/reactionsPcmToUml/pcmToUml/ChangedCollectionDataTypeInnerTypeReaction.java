@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<CollectionDataType, DataType> typedChange = (ReplaceSingleValuedEReference<CollectionDataType, DataType>)change;
-    CollectionDataType affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.CollectionDataType, org.palladiosimulator.pcm.repository.DataType> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.CollectionDataType, org.palladiosimulator.pcm.repository.DataType>)change;
+    org.palladiosimulator.pcm.repository.CollectionDataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType oldValue = typedChange.getOldValue();
-    DataType newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.DataType oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.DataType newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.ChangedCollectionDataTypeInnerTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.ChangedCollectionDataTypeInnerTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ChangedCollectionDataTypeInnerTypeReaction extends AbstractReactionRealiza
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<CollectionDataType, DataType> relevantChange = (ReplaceSingleValuedEReference<CollectionDataType, DataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CollectionDataType)) {
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.CollectionDataType, org.palladiosimulator.pcm.repository.DataType> relevantChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.CollectionDataType, org.palladiosimulator.pcm.repository.DataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.CollectionDataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("innerType_CollectionDataType")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
     return true;

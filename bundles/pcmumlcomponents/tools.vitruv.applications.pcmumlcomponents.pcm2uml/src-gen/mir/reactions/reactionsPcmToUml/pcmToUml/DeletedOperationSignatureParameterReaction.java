@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedOperationSignatureParameterReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<OperationSignature, Parameter> typedChange = (RemoveEReference<OperationSignature, Parameter>)change;
-    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter> typedChange = (RemoveEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter>)change;
+    org.palladiosimulator.pcm.repository.OperationSignature affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.Parameter oldValue = typedChange.getOldValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.DeletedOperationSignatureParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.DeletedOperationSignatureParameterReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class DeletedOperationSignatureParameterReaction extends AbstractReactionRealiza
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<OperationSignature, Parameter> relevantChange = (RemoveEReference<OperationSignature, Parameter>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
+    RemoveEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter> relevantChange = (RemoveEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.OperationSignature)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parameters__OperationSignature")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Parameter)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.Parameter)) {
     	return false;
     }
     return true;

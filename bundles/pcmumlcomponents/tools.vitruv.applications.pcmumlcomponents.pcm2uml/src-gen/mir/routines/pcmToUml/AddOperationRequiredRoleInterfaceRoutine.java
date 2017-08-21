@@ -56,22 +56,22 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddOperationRequiredRoleInterfaceRoutine with input:");
-    getLogger().debug("   OperationRequiredRole: " + this.pcmRole);
-    getLogger().debug("   OperationInterface: " + this.pcmInterface);
+    getLogger().debug("   pcmRole: " + this.pcmRole);
+    getLogger().debug("   pcmInterface: " + this.pcmInterface);
     
-    Usage umlUsage = getCorrespondingElement(
+    org.eclipse.uml2.uml.Usage umlUsage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlUsage(pcmRole, pcmInterface), // correspondence source supplier
-    	Usage.class,
-    	(Usage _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Usage.class,
+    	(org.eclipse.uml2.uml.Usage _element) -> true, // correspondence precondition checker
     	null);
     if (umlUsage == null) {
     	return;
     }
     registerObjectUnderModification(umlUsage);
-    Interface umlInterface = getCorrespondingElement(
+    org.eclipse.uml2.uml.Interface umlInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlInterface(pcmRole, pcmInterface, umlUsage), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (umlInterface == null) {
     	return;

@@ -5,7 +5,6 @@ import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -62,19 +61,19 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationSignatureParameterRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.pcmSignature);
-    getLogger().debug("   Parameter: " + this.pcmParameter);
+    getLogger().debug("   pcmSignature: " + this.pcmSignature);
+    getLogger().debug("   pcmParameter: " + this.pcmParameter);
     
-    Operation umlOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation umlOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature, pcmParameter), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (umlOperation == null) {
     	return;
     }
     registerObjectUnderModification(umlOperation);
-    org.eclipse.uml2.uml.Parameter umlParameter = UMLFactoryImpl.eINSTANCE.createParameter();
+    org.eclipse.uml2.uml.Parameter umlParameter = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createParameter();
     notifyObjectCreated(umlParameter);
     userExecution.updateUmlParameterElement(pcmSignature, pcmParameter, umlOperation, umlParameter);
     

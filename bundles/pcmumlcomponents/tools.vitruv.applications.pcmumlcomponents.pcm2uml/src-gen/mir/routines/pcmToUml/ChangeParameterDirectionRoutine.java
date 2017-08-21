@@ -44,7 +44,7 @@ public class ChangeParameterDirectionRoutine extends AbstractRepairRoutineRealiz
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeParameterDirectionRoutine with input:");
-    getLogger().debug("   Parameter: " + this.pcmParameter);
+    getLogger().debug("   pcmParameter: " + this.pcmParameter);
     
     org.eclipse.uml2.uml.Parameter umlParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlParameter(pcmParameter), // correspondence source supplier

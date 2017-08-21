@@ -6,7 +6,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Generalization;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -59,28 +58,28 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddCompositeDataTypeParentRoutine with input:");
-    getLogger().debug("   CompositeDataType: " + this.dataType);
-    getLogger().debug("   CompositeDataType: " + this.parent);
+    getLogger().debug("   dataType: " + this.dataType);
+    getLogger().debug("   parent: " + this.parent);
     
-    DataType compositeType = getCorrespondingElement(
+    org.eclipse.uml2.uml.DataType compositeType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeType(dataType, parent), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeType == null) {
     	return;
     }
     registerObjectUnderModification(compositeType);
-    DataType parentType = getCorrespondingElement(
+    org.eclipse.uml2.uml.DataType parentType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceParentType(dataType, parent, compositeType), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (parentType == null) {
     	return;
     }
     registerObjectUnderModification(parentType);
-    Generalization generalization = UMLFactoryImpl.eINSTANCE.createGeneralization();
+    org.eclipse.uml2.uml.Generalization generalization = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createGeneralization();
     notifyObjectCreated(generalization);
     userExecution.updateGeneralizationElement(dataType, parent, compositeType, parentType, generalization);
     

@@ -56,7 +56,7 @@ routine createPCMRepository(EObject sourceElementMappedToRepository, String pack
 		}
 		
 		add correspondence between pcmRepository and sourceElementMappedToRepository 
-			tag with newTag
+			tagged with newTag
 	}
 }
 
@@ -299,6 +299,6 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 			persistProjectRelative(parentPackage, javaPackage, buildJavaFilePath(javaPackage));
 		}
 		add correspondence between javaPackage and sourceElementMappedToPackage
-			tag with newTag
+			tagged with newTag
 	}
 }

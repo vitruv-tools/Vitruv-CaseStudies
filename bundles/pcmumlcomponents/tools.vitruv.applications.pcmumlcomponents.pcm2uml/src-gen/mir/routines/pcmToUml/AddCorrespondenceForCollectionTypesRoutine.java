@@ -55,13 +55,13 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddCorrespondenceForCollectionTypesRoutine with input:");
-    getLogger().debug("   CollectionDataType: " + this.pcmType);
-    getLogger().debug("   DataType: " + this.innerType);
+    getLogger().debug("   pcmType: " + this.pcmType);
+    getLogger().debug("   innerType: " + this.innerType);
     
-    DataType oldInnerType = getCorrespondingElement(
+    org.eclipse.uml2.uml.DataType oldInnerType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceOldInnerType(pcmType, innerType), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(pcmType, innerType));
     registerObjectUnderModification(oldInnerType);
     addCorrespondenceBetween(userExecution.getElement1(pcmType, innerType, oldInnerType), userExecution.getElement2(pcmType, innerType, oldInnerType), userExecution.getTag1(pcmType, innerType, oldInnerType));

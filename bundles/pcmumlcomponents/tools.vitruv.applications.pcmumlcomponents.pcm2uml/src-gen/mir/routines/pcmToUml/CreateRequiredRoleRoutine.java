@@ -8,7 +8,6 @@ import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.Usage;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -67,19 +66,19 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRequiredRoleRoutine with input:");
-    getLogger().debug("   InterfaceRequiringEntity: " + this.pcmComponent);
-    getLogger().debug("   OperationRequiredRole: " + this.requiredRole);
+    getLogger().debug("   pcmComponent: " + this.pcmComponent);
+    getLogger().debug("   requiredRole: " + this.requiredRole);
     
-    Component umlComponent = getCorrespondingElement(
+    org.eclipse.uml2.uml.Component umlComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlComponent(pcmComponent, requiredRole), // correspondence source supplier
-    	Component.class,
-    	(Component _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Component.class,
+    	(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
     	null);
     if (umlComponent == null) {
     	return;
     }
     registerObjectUnderModification(umlComponent);
-    Usage usage = UMLFactoryImpl.eINSTANCE.createUsage();
+    org.eclipse.uml2.uml.Usage usage = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createUsage();
     notifyObjectCreated(usage);
     userExecution.updateUsageElement(pcmComponent, requiredRole, umlComponent, usage);
     

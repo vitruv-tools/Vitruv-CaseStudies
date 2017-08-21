@@ -105,8 +105,8 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeCollectionDataTypeInnerTypeRoutine with input:");
-    getLogger().debug("   CollectionDataType: " + this.pcmDataType);
-    getLogger().debug("   DataType: " + this.pcmInnerType);
+    getLogger().debug("   pcmDataType: " + this.pcmDataType);
+    getLogger().debug("   pcmInnerType: " + this.pcmInnerType);
     
     org.eclipse.uml2.uml.DataType umlInnerType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlInnerType(pcmDataType, pcmInnerType), // correspondence source supplier
@@ -114,10 +114,10 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(umlInnerType);
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(pcmDataType, pcmInnerType, umlInnerType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;

@@ -14,10 +14,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class AddedCompositeDataTypeParentReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<CompositeDataType, CompositeDataType> typedChange = (InsertEReference<CompositeDataType, CompositeDataType>)change;
-    CompositeDataType affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.CompositeDataType> typedChange = (InsertEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.CompositeDataType>)change;
+    org.palladiosimulator.pcm.repository.CompositeDataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    CompositeDataType newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.CompositeDataType newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.AddedCompositeDataTypeParentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.AddedCompositeDataTypeParentReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -28,14 +28,14 @@ class AddedCompositeDataTypeParentReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<CompositeDataType, CompositeDataType> relevantChange = (InsertEReference<CompositeDataType, CompositeDataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CompositeDataType)) {
+    InsertEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.CompositeDataType> relevantChange = (InsertEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.CompositeDataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parentType_CompositeDataType")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof CompositeDataType)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
     	return false;
     }
     return true;

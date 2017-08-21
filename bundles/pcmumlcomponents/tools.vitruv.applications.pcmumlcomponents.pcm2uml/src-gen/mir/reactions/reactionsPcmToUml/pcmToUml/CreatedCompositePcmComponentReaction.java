@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedCompositePcmComponentReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Repository, CompositeComponent> typedChange = ((CreateAndInsertNonRoot<Repository, CompositeComponent>)change).getInsertChange();
-    Repository affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeComponent> typedChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeComponent>)change).getInsertChange();
+    org.palladiosimulator.pcm.repository.Repository affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    CompositeComponent newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.CompositeComponent newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.CreatedCompositePcmComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedCompositePcmComponentReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class CreatedCompositePcmComponentReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Repository, CompositeComponent> relevantChange = ((CreateAndInsertNonRoot<Repository, CompositeComponent>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
+    InsertEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeComponent> relevantChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeComponent>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Repository)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("components__Repository")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof CompositeComponent)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.CompositeComponent)) {
     	return false;
     }
     return true;

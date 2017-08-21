@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil;
@@ -64,18 +63,18 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePrimitiveDataTypeRoutine with input:");
-    getLogger().debug("   PrimitiveDataType: " + this.dataType);
+    getLogger().debug("   dataType: " + this.dataType);
     
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(dataType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;
     }
     registerObjectUnderModification(umlModel);
-    PrimitiveType umlType = UMLFactoryImpl.eINSTANCE.createPrimitiveType();
+    org.eclipse.uml2.uml.PrimitiveType umlType = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createPrimitiveType();
     notifyObjectCreated(umlType);
     userExecution.updateUmlTypeElement(dataType, umlModel, umlType);
     

@@ -44,12 +44,12 @@ public class UnsetUmlOperationTypeRoutine extends AbstractRepairRoutineRealizati
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine UnsetUmlOperationTypeRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.pcmSignature);
+    getLogger().debug("   pcmSignature: " + this.pcmSignature);
     
-    Operation umlOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation umlOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (umlOperation == null) {
     	return;

@@ -61,22 +61,22 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInnerDeclarationTypeRoutine with input:");
-    getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
-    getLogger().debug("   DataType: " + this.pcmDataType);
+    getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
+    getLogger().debug("   pcmDataType: " + this.pcmDataType);
     
-    Property umlProperty = getCorrespondingElement(
+    org.eclipse.uml2.uml.Property umlProperty = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlProperty(innerDeclaration, pcmDataType), // correspondence source supplier
-    	Property.class,
-    	(Property _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Property.class,
+    	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
     	null);
     if (umlProperty == null) {
     	return;
     }
     registerObjectUnderModification(umlProperty);
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(innerDeclaration, pcmDataType, umlProperty), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;

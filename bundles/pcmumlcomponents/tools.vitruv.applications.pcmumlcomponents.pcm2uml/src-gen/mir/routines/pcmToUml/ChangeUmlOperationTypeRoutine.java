@@ -66,30 +66,30 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlOperationTypeRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.pcmSignature);
+    getLogger().debug("   pcmSignature: " + this.pcmSignature);
     
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(pcmSignature), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;
     }
     registerObjectUnderModification(umlModel);
-    Operation umlOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation umlOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature, umlModel), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (umlOperation == null) {
     	return;
     }
     registerObjectUnderModification(umlOperation);
-    DataType umlReturnType = getCorrespondingElement(
+    org.eclipse.uml2.uml.DataType umlReturnType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlReturnType(pcmSignature, umlModel, umlOperation), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(umlReturnType);
     // val updatedElement userExecution.getElement1(pcmSignature, umlModel, umlOperation, umlReturnType);

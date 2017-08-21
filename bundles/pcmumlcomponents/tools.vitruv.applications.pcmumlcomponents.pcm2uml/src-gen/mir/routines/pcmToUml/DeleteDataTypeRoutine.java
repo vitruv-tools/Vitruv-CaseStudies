@@ -40,12 +40,12 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteDataTypeRoutine with input:");
-    getLogger().debug("   DataType: " + this.dataType);
+    getLogger().debug("   dataType: " + this.dataType);
     
-    Type umlType = getCorrespondingElement(
+    org.eclipse.uml2.uml.Type umlType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlType(dataType), // correspondence source supplier
-    	Type.class,
-    	(Type _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Type.class,
+    	(org.eclipse.uml2.uml.Type _element) -> true, // correspondence precondition checker
     	null);
     if (umlType == null) {
     	return;

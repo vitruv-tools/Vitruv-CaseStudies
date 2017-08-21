@@ -281,7 +281,7 @@ routine addCorrespondenceForCollectionTypes(pcm::CollectionDataType pcmType, uml
 		val oldInnerType = retrieve optional uml::DataType corresponding to pcmType tagged with PcmToUmlUtil.COLLECTION_TYPE_TAG
 	}
 	action {
-		add correspondence between pcmType and innerType tag with PcmToUmlUtil.COLLECTION_TYPE_TAG
+		add correspondence between pcmType and innerType tagged with PcmToUmlUtil.COLLECTION_TYPE_TAG
 	}
 }
 
@@ -499,7 +499,7 @@ routine createUmlComponent(pcm::RepositoryComponent pcmComponent, String corresp
 		update umlModel {
 			umlModel.packagedElements += umlComponent;
 		}
-		add correspondence between pcmComponent and umlComponent tag with correspondenceTag
+		add correspondence between pcmComponent and umlComponent tagged with correspondenceTag
 	}
 }
 reaction DeletedComponent {

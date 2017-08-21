@@ -63,31 +63,31 @@ public class AddOperationProvidedRoleInterfaceRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddOperationProvidedRoleInterfaceRoutine with input:");
-    getLogger().debug("   OperationProvidedRole: " + this.pcmRole);
-    getLogger().debug("   OperationInterface: " + this.pcmInterface);
+    getLogger().debug("   pcmRole: " + this.pcmRole);
+    getLogger().debug("   pcmInterface: " + this.pcmInterface);
     
-    InterfaceRealization interfaceRealization = getCorrespondingElement(
+    org.eclipse.uml2.uml.InterfaceRealization interfaceRealization = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceRealization(pcmRole, pcmInterface), // correspondence source supplier
-    	InterfaceRealization.class,
-    	(InterfaceRealization _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.InterfaceRealization.class,
+    	(org.eclipse.uml2.uml.InterfaceRealization _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceRealization == null) {
     	return;
     }
     registerObjectUnderModification(interfaceRealization);
-    Interface umlInterface = getCorrespondingElement(
+    org.eclipse.uml2.uml.Interface umlInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlInterface(pcmRole, pcmInterface, interfaceRealization), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (umlInterface == null) {
     	return;
     }
     registerObjectUnderModification(umlInterface);
-    Component umlComponent = getCorrespondingElement(
+    org.eclipse.uml2.uml.Component umlComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlComponent(pcmRole, pcmInterface, interfaceRealization, umlInterface), // correspondence source supplier
-    	Component.class,
-    	(Component _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Component.class,
+    	(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
     	null);
     if (umlComponent == null) {
     	return;
