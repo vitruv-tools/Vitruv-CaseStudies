@@ -5,12 +5,15 @@ import java.io.IOException;
 import mir.routines.java2PcmMethod.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.Parametrizable;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -54,11 +57,16 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     
     public void updatePcmParameterElement(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
       pcmParameter.setOperationSignature__Parameter(operationSignature);
-      pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.getTypeReference(), this.correspondenceModel, 
-        this.userInteracting, null, jaMoPPParam.getArrayDimension()));
+      pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(jaMoPPParam.getTypeReference(), this.correspondenceModel, 
+        this.userInteracting, null));
       DataType _dataType__Parameter = pcmParameter.getDataType__Parameter();
       _dataType__Parameter.setRepository__DataType(operationSignature.getInterface__OperationSignature().getRepository__Interface());
       ParameterUtil.setName(pcmParameter, jaMoPPParam.getName());
+    }
+    
+    public void callRoutine1(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter, @Extension final RoutinesFacade _routinesFacade) {
+      final EObject a = IterableExtensions.<EObject>head(Java2PcmHelper.foos(jaMoPPParam, this.correspondenceModel));
+      final int b = 0;
     }
   }
   
@@ -99,6 +107,8 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     userExecution.updatePcmParameterElement(jaMoPPParam, javaMethod, operationSignature, pcmParameter);
     
     addCorrespondenceBetween(userExecution.getElement1(jaMoPPParam, javaMethod, operationSignature, pcmParameter), userExecution.getElement2(jaMoPPParam, javaMethod, operationSignature, pcmParameter), "");
+    
+    userExecution.callRoutine1(jaMoPPParam, javaMethod, operationSignature, pcmParameter, actionsFacade);
     
     // val updatedElement userExecution.getElement3(jaMoPPParam, javaMethod, operationSignature, pcmParameter);
     userExecution.update0Element(jaMoPPParam, javaMethod, operationSignature, pcmParameter);

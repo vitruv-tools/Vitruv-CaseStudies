@@ -7,7 +7,6 @@ import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
-import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil;
@@ -33,9 +32,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     public void update0Element(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation, final DataType umlReturnType) {
       DataType returnType = umlReturnType;
       if ((returnType == null)) {
-        org.palladiosimulator.pcm.repository.DataType _returnType__OperationSignature = pcmSignature.getReturnType__OperationSignature();
-        DataType _retrieveUmlType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, _returnType__OperationSignature, umlModel);
-        returnType = _retrieveUmlType;
+        returnType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmSignature.getReturnType__OperationSignature(), umlModel);
       }
       umlOperation.setType(returnType);
       PcmToUmlUtil.updateOperationReturnTypeMultiplicity(umlOperation, 
@@ -53,8 +50,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public EObject getCorrepondenceSourceUmlModel(final OperationSignature pcmSignature) {
-      OperationInterface _interface__OperationSignature = pcmSignature.getInterface__OperationSignature();
-      Repository _repository__Interface = _interface__OperationSignature.getRepository__Interface();
+      Repository _repository__Interface = pcmSignature.getInterface__OperationSignature().getRepository__Interface();
       return _repository__Interface;
     }
   }

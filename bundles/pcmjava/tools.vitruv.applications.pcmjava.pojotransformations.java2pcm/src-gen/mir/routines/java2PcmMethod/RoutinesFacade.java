@@ -1,6 +1,5 @@
 package mir.routines.java2PcmMethod;
 
-import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.commons.NamedElement;
@@ -36,9 +35,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     effect.applyRoutine();
   }
   
-  public void changeParameterType(final TypeReference typeReference) {
-    mir.routines.java2PcmMethod.ChangeParameterTypeRoutine effect = new mir.routines.java2PcmMethod.ChangeParameterTypeRoutine(this.executionState, calledBy,
-    	typeReference);
+  public void deleteParameter(final OrdinaryParameter jParam) {
+    mir.routines.java2PcmMethod.DeleteParameterRoutine effect = new mir.routines.java2PcmMethod.DeleteParameterRoutine(this.executionState, calledBy,
+    	jParam);
     effect.applyRoutine();
   }
   
@@ -75,12 +74,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public void createOperationRequiredRoleCorrespondingToField(final Field field, final OperationInterface operationInterface, final RepositoryComponent repoComponent) {
     mir.routines.java2PcmMethod.CreateOperationRequiredRoleCorrespondingToFieldRoutine effect = new mir.routines.java2PcmMethod.CreateOperationRequiredRoleCorrespondingToFieldRoutine(this.executionState, calledBy,
     	field, operationInterface, repoComponent);
-    effect.applyRoutine();
-  }
-  
-  public void foo(final Field field, final EObject eObject) {
-    mir.routines.java2PcmMethod.FooRoutine effect = new mir.routines.java2PcmMethod.FooRoutine(this.executionState, calledBy,
-    	field, eObject);
     effect.applyRoutine();
   }
   

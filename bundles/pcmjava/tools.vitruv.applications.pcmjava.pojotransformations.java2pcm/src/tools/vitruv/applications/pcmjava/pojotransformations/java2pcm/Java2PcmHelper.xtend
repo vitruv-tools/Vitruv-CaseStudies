@@ -21,6 +21,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.ClassifierReference
 import org.emftext.language.java.types.PrimitiveType
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.palladiosimulator.pcm.repository.CollectionDataType
+import org.palladiosimulator.pcm.repository.CompositeDataType
 
 public class Java2PcmHelper {
 	private static val logger = Logger.getLogger(Java2PcmHelper)
@@ -39,6 +42,10 @@ public class Java2PcmHelper {
 
 	def static boolean hasCorrespondance(EObject eObject, CorrespondenceModel correspondenceModel) {
 		return !correspondenceModel.getCorrespondingEObjects(eObject).isNullOrEmpty
+	}
+	
+	def static Set<EObject> foos(EObject object, CorrespondenceModel correspondenceModel) {
+		return correspondenceModel.getCorrespondingEObjects(object)
 	}
 	
 	def static Set<OperationInterface> getCorrespondingOperationInterface(EObject eObject, CorrespondenceModel correspondenceModel) {
@@ -186,8 +193,19 @@ public class Java2PcmHelper {
 			null !== packagesWithNamespace.iterator.next) {
 			return packagesWithNamespace.iterator.next
 		}
-		return null;
+		return null
 	}
 	
+	//PCMJavaUtils
+	public dispatch static def getNameFromPCMDataType(PrimitiveDataType primitiveDataType) {
+		return primitiveDataType.type.getName
+	}
 
+	public dispatch static def getNameFromPCMDataType(CollectionDataType collectionDataType) {
+		return collectionDataType.entityName
+	}
+
+	public dispatch static def getNameFromPCMDataType(CompositeDataType compositeDataType) {
+		return compositeDataType.entityName
+	}
 }

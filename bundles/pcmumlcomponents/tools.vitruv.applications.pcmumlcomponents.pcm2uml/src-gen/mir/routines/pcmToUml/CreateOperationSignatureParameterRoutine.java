@@ -33,8 +33,7 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     }
     
     public void updateUmlParameterElement(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      String _parameterName = pcmParameter.getParameterName();
-      umlParameter.setName(_parameterName);
+      umlParameter.setName(pcmParameter.getParameterName());
     }
     
     public EObject getElement2(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {

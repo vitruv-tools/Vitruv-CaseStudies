@@ -3,6 +3,8 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Set;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
@@ -57,7 +59,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
                 Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
     }
 
-    @Test @Ignore
+    @Test
     public void testChangeParameterType() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
@@ -102,8 +104,9 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
         editCompilationUnit(icu, replaceEdit);
         final org.emftext.language.java.parameters.Parameter newJaMoPPParameter = super.findJaMoPPParameterInICU(icu,
                 interfaceName, methodName, paramName);
-        return claimOne(CorrespondenceModelUtil
-                .getCorrespondingEObjectsByType(this.getCorrespondenceModel(), newJaMoPPParameter, Parameter.class));
+        Set<Parameter> correspondingEObjectsByType = CorrespondenceModelUtil
+                .getCorrespondingEObjectsByType(this.getCorrespondenceModel(), newJaMoPPParameter, Parameter.class);
+		return claimOne(correspondingEObjectsByType);
     }
 
     private ILocalVariable findParameterInIMethod(final IMethod iMethod, final String parameterName)

@@ -38,8 +38,8 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     
     public void updateInnerDeclarationElement(final ConcreteClassifier classifier, final Field field, final CompositeDataType compositeDataType, final InnerDeclaration innerDeclaration) {
       innerDeclaration.setEntityName(field.getName());
-      innerDeclaration.setDatatype_InnerDeclaration(TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(field.getTypeReference(), this.correspondenceModel, 
-        this.userInteracting, null, field.getArrayDimension()));
+      innerDeclaration.setDatatype_InnerDeclaration(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(field.getTypeReference(), this.correspondenceModel, 
+        this.userInteracting, null));
       innerDeclaration.setCompositeDataType_InnerDeclaration(compositeDataType);
     }
   }

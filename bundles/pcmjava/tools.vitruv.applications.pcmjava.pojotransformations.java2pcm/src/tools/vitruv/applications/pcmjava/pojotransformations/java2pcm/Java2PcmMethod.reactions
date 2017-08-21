@@ -44,14 +44,17 @@ routine createParameter(java::OrdinaryParameter jaMoPPParam, java::Parametrizabl
 	action {
 		val pcmParameter = create pcm::Parameter and initialize {
 			pcmParameter.operationSignature__Parameter = operationSignature
-			//TODO refactor this 
 			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.
-				getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.typeReference, correspondenceModel,
-				userInteracting, null, jaMoPPParam.arrayDimension)
+				getDataTypeFromTypeReference(jaMoPPParam.typeReference, correspondenceModel,
+				userInteracting, null)
 			pcmParameter.dataType__Parameter.repository__DataType = operationSignature.interface__OperationSignature.repository__Interface
 			pcmParameter.name = jaMoPPParam.name
 		}
 		add correspondence between jaMoPPParam and pcmParameter
+		call {
+			val a = foos(jaMoPPParam, correspondenceModel).head
+			val b = 0
+		}
 		
 		update operationSignature {
 			operationSignature.parameters__OperationSignature += pcmParameter
@@ -59,17 +62,26 @@ routine createParameter(java::OrdinaryParameter jaMoPPParam, java::Parametrizabl
 	}
 }
 
-reaction ParameterTypeChanged {
-	after element replaced at java::OrdinaryParameter[typeReference]
-	call changeParameterType(newValue)
+reaction ParameterDeleted {
+    after element java::OrdinaryParameter removed from java::Parametrizable[parameters]
+    call {
+    	val a = foos(oldValue, correspondenceModel).head
+    	deleteParameter(oldValue)
+    	
+    }
 }
 
-routine changeParameterType(java::TypeReference typeReference) {
-	action {
-		call {
-			val a = 0
-		}
-	}
+routine deleteParameter(java::OrdinaryParameter jParam) {
+    //match {
+      //  val pcmParam = retrieve pcm::Parameter corresponding to jParam
+   // }
+    action{
+    	call {
+    		val a = foos(jParam, correspondenceModel).head
+    		val b = 0
+    	}
+        //delete pcmParam         
+    }
 }
 
 reaction ParameterNameChanged {
@@ -108,8 +120,8 @@ routine createInnerDeclaration(java::ConcreteClassifier classifier, java::Field 
 		val innerDeclaration = create pcm::InnerDeclaration and initialize {
 			innerDeclaration.entityName = field.name
 			innerDeclaration.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
-				getCorrespondingPCMDataTypeForTypeReference(field.typeReference, correspondenceModel,
-					userInteracting, null, field.arrayDimension)
+				getDataTypeFromTypeReference(field.typeReference, correspondenceModel,
+					userInteracting, null)
 			innerDeclaration.compositeDataType_InnerDeclaration = compositeDataType
 		}
 		add correspondence between innerDeclaration and field
@@ -124,11 +136,10 @@ routine createAssemblyContext(java::ConcreteClassifier classifier, java::Field f
 	}
 	action {
 		val assemblyContext = create pcm::AssemblyContext and initialize {
-				assemblyContext.entityName = field.name
-				assemblyContext.encapsulatedComponent__AssemblyContext = repositoryComponent
-				assemblyContext.parentStructure__AssemblyContext = composedProvidingRequiringEntity
-				
-				}
+			assemblyContext.entityName = field.name
+			assemblyContext.encapsulatedComponent__AssemblyContext = repositoryComponent
+			assemblyContext.parentStructure__AssemblyContext = composedProvidingRequiringEntity	
+		}
 		add correspondence between assemblyContext and field
 			
 	}
@@ -168,18 +179,10 @@ routine createOperationRequiredRoleCorrespondingToField(java::Field field, pcm::
 			operationRequiredRole.requiringEntity_RequiredRole = repoComponent
 			operationRequiredRole.entityName = "Component_" + repoComponent.entityName + "_requires_" +
 				operationInterface.entityName
-						
 		}
 		add correspondence between operationRequiredRole and field
 	}
 }
-
-routine foo(java::Field field, EObject eObject) {
-	action {
-		add correspondence between field and eObject
-	}
-}
-
 
 reaction FieldTypeChange {
 	after element replaced at java::Field[typeReference]
@@ -193,8 +196,8 @@ routine changeInnerDeclarationType(java::TypeReference typeReference, java::Fiel
 	action {
 		update innerDeclaration {
 			innerDeclaration.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
-						getCorrespondingPCMDataTypeForTypeReference(typeReference, correspondenceModel,
-							userInteracting, null, javaField.arrayDimension )
+						getDataTypeFromTypeReference(typeReference, correspondenceModel,
+							userInteracting, null)
 		}
 	}
 }
@@ -238,8 +241,6 @@ routine createSEFF(java::Method method, java::Class cls, java::ClassMethod class
 		}
 	}
 }
-
-
 
 //Interface Method
 reaction InterfaceMethodCreated {

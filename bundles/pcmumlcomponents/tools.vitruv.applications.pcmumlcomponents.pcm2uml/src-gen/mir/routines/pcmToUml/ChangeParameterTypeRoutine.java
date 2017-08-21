@@ -6,8 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
-import org.palladiosimulator.pcm.repository.OperationInterface;
-import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil;
@@ -34,9 +32,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
       if (((pcmDataType == null) || ((pcmDataType instanceof CollectionDataType) && (((CollectionDataType) pcmDataType).getInnerType_CollectionDataType() == null)))) {
         umlParameter.setType(null);
       } else {
-        DataType _dataType__Parameter = pcmParameter.getDataType__Parameter();
-        org.eclipse.uml2.uml.DataType _retrieveUmlType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, _dataType__Parameter, umlModel);
-        umlParameter.setType(_retrieveUmlType);
+        umlParameter.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmParameter.getDataType__Parameter(), umlModel));
       }
       PcmToUmlUtil.updateMultiplicity(umlParameter, Boolean.valueOf(((umlParameter.getType() != null) && (pcmDataType instanceof CollectionDataType))));
     }
@@ -46,9 +42,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public EObject getCorrepondenceSourceUmlModel(final Parameter pcmParameter, final DataType pcmDataType, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      OperationSignature _operationSignature__Parameter = pcmParameter.getOperationSignature__Parameter();
-      OperationInterface _interface__OperationSignature = _operationSignature__Parameter.getInterface__OperationSignature();
-      Repository _repository__Interface = _interface__OperationSignature.getRepository__Interface();
+      Repository _repository__Interface = pcmParameter.getOperationSignature__Parameter().getInterface__OperationSignature().getRepository__Interface();
       return _repository__Interface;
     }
   }

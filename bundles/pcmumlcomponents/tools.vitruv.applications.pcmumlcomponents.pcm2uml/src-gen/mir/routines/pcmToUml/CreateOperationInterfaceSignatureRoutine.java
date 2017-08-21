@@ -34,8 +34,7 @@ public class CreateOperationInterfaceSignatureRoutine extends AbstractRepairRout
     }
     
     public void updateUmlOperationElement(final OperationSignature pcmSignature, final Interface umlInterface, final Operation umlOperation) {
-      String _entityName = pcmSignature.getEntityName();
-      umlOperation.setName(_entityName);
+      umlOperation.setName(pcmSignature.getEntityName());
     }
     
     public EObject getCorrepondenceSourceUmlInterface(final OperationSignature pcmSignature) {

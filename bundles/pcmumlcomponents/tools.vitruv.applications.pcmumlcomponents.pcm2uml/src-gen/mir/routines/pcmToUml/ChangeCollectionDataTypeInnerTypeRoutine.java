@@ -49,26 +49,21 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
       }
       org.eclipse.uml2.uml.DataType innerType = umlInnerType;
       if ((innerType == null)) {
-        org.eclipse.uml2.uml.DataType _retrieveUmlType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmInnerType, umlModel);
-        innerType = _retrieveUmlType;
+        innerType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmInnerType, umlModel);
       }
       if (((innerType != null) && (!(pcmInnerType instanceof CollectionDataType)))) {
         Logger _logger = this.getLogger();
         String _entityName = pcmDataType.getEntityName();
         String _plus = ("collection type: " + _entityName);
         _logger.info(_plus);
-        Logger _logger_1 = this.getLogger();
-        _logger_1.info(pcmInnerType);
-        Logger _logger_2 = this.getLogger();
-        _logger_2.info(innerType);
+        this.getLogger().info(pcmInnerType);
+        this.getLogger().info(innerType);
         _routinesFacade.clearCorrespondenceForCollectionTypes(pcmDataType);
         _routinesFacade.addCorrespondenceForCollectionTypes(pcmDataType, innerType);
       } else {
-        Logger _logger_3 = this.getLogger();
-        _logger_3.warn("CollectionDataType inner type could not be resolved");
+        this.getLogger().warn("CollectionDataType inner type could not be resolved");
       }
-      Repository _repository__DataType = pcmDataType.getRepository__DataType();
-      final Collection<EStructuralFeature.Setting> references = EcoreUtil.UsageCrossReferencer.find(pcmDataType, _repository__DataType);
+      final Collection<EStructuralFeature.Setting> references = EcoreUtil.UsageCrossReferencer.find(pcmDataType, pcmDataType.getRepository__DataType());
       for (final EStructuralFeature.Setting reference : references) {
         if (((reference.getEObject() instanceof OperationSignature) && Objects.equal(reference.getEStructuralFeature().getName(), "returnType__OperationSignature"))) {
           EObject _eObject = reference.getEObject();
@@ -82,17 +77,14 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
               EObject _eObject_2 = reference.getEObject();
               _routinesFacade.changeParameterType(((Parameter) _eObject_2), pcmDataType);
             } else {
-              Logger _logger_4 = this.getLogger();
-              EObject _eObject_3 = reference.getEObject();
-              Class<? extends EObject> _class = _eObject_3.getClass();
-              String _name = _class.getName();
+              Logger _logger_1 = this.getLogger();
+              String _name = reference.getEObject().getClass().getName();
               String _plus_1 = ("Inner collection type changed at unhandled reference for " + _name);
               String _plus_2 = (_plus_1 + 
                 " at ");
-              EStructuralFeature _eStructuralFeature = reference.getEStructuralFeature();
-              String _name_1 = _eStructuralFeature.getName();
+              String _name_1 = reference.getEStructuralFeature().getName();
               String _plus_3 = (_plus_2 + _name_1);
-              _logger_4.warn(_plus_3);
+              _logger_1.warn(_plus_3);
             }
           }
         }

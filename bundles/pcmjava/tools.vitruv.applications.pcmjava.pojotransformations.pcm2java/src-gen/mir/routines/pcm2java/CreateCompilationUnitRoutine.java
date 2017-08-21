@@ -39,10 +39,8 @@ public class CreateCompilationUnitRoutine extends AbstractRepairRoutineRealizati
       String _name_1 = classifier.getName();
       String _plus = (_name_1 + ".java");
       compilationUnit.setName(_plus);
-      EList<ConcreteClassifier> _classifiers = compilationUnit.getClassifiers();
-      _classifiers.add(classifier);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(compilationUnit);
-      this.persistProjectRelative(sourceElementMappedToClass, compilationUnit, _buildJavaFilePath);
+      compilationUnit.getClassifiers().add(classifier);
+      this.persistProjectRelative(sourceElementMappedToClass, compilationUnit, JavaPersistenceHelper.buildJavaFilePath(compilationUnit));
     }
     
     public EObject getElement2(final NamedElement sourceElementMappedToClass, final ConcreteClassifier classifier, final org.emftext.language.java.containers.Package containingPackage, final CompilationUnit compilationUnit) {

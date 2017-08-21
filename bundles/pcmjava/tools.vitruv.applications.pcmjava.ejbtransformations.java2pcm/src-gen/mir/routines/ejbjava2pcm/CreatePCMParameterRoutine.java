@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.parameters.Parameter;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -39,8 +40,7 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updatePcmParameterElement(final Parameter jaMoPPParam, final OperationSignature opSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
-      pcmParameter.setEntityName(jaMoPPParam.getName());
-      pcmParameter.setParameterName(jaMoPPParam.getName());
+      PcmJavaUtils.setParameterName(pcmParameter, jaMoPPParam.getName());
       pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.getTypeReference(), 
         this.correspondenceModel, this.userInteracting, opSignature.getInterface__OperationSignature().getRepository__Interface(), jaMoPPParam.getArrayDimension()));
     }

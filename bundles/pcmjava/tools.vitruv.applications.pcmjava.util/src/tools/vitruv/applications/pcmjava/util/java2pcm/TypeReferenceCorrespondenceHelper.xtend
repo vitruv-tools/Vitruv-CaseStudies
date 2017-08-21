@@ -1,8 +1,5 @@
 package tools.vitruv.applications.pcmjava.util.java2pcm
 
-import tools.vitruv.framework.userinteraction.UserInteracting
-import tools.vitruv.framework.util.datatypes.ClaimableHashMap
-import tools.vitruv.framework.util.datatypes.ClaimableMap
 import java.util.HashMap
 import java.util.Map
 import java.util.Set
@@ -41,10 +38,13 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
+import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.framework.userinteraction.UserInteracting
+import tools.vitruv.framework.util.datatypes.ClaimableHashMap
+import tools.vitruv.framework.util.datatypes.ClaimableMap
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 /**
  * Helper to map type References to PCM data types
@@ -107,16 +107,9 @@ class TypeReferenceCorrespondenceHelper {
 	public def static DataType getCorrespondingPCMDataTypeForTypeReference(TypeReference typeReference,
 		CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo,
 		long arrayDimension) {
-			var DataType pcmDataType = null
-			if (typeReference instanceof PrimitiveType) {
-				pcmDataType = claimPCMDataTypeForJaMoPPPrimitiveType(typeReference as PrimitiveType)
-			} else if (typeReference instanceof ClassifierReference) {
-				pcmDataType = getPCMDataTypeForClassifierReference(typeReference as ClassifierReference,
-					correspondenceModel, userInteracting, repo)
-			} else if (typeReference instanceof NamespaceClassifierReference) {
-				pcmDataType = getPCMDataTypeForNamespaceClassifierReference(
-					typeReference as NamespaceClassifierReference, correspondenceModel, userInteracting, repo)
-			}
+			var DataType pcmDataType = getDataTypeFromTypeReference(typeReference, correspondenceModel, userInteracting,
+				repo)
+
 			if (arrayDimension > 0 && null !== pcmDataType && null !== repo) {
 				// find CollectionDatatype list for innerValue or create new one
 				val typeName = "List_" + Pcm2JavaUtils.getNameFromPCMDataType(pcmDataType)
@@ -140,6 +133,20 @@ class TypeReferenceCorrespondenceHelper {
 				logger.error("Could not find a PCM data type for type reference " + typeReference)
 			}
 			return pcmDataType
+		}
+
+		def static DataType getDataTypeFromTypeReference(TypeReference typeReference,
+			CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo) {
+			if (typeReference instanceof PrimitiveType) {
+				return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference as PrimitiveType)
+			} else if (typeReference instanceof ClassifierReference) {
+				return getPCMDataTypeForClassifierReference(typeReference as ClassifierReference, correspondenceModel,
+					userInteracting, repo)
+			} else if (typeReference instanceof NamespaceClassifierReference) {
+				return getPCMDataTypeForNamespaceClassifierReference(typeReference as NamespaceClassifierReference,
+					correspondenceModel, userInteracting, repo)
+			}
+			return null
 		}
 
 		def private static DataType getPCMDataTypeForNamespaceClassifierReference(

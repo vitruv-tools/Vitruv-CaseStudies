@@ -6,6 +6,7 @@ import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmPackagePreprocess
 
 class Java2PcmChangePropagationSpecification extends AbstractChangePropagationSpecificationJavaToPcm {
 	protected override setup() {
+		//TODO zeile raus
 		addChangeMainprocessor(new Java2PcmChangeProcessor());
 		super.setup();
 		addChangePreprocessor(new Java2PcmPackagePreprocessor());

@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
-import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -34,8 +33,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
       if (((pcmDataType == null) || ((pcmDataType instanceof CollectionDataType) && (((CollectionDataType) pcmDataType).getInnerType_CollectionDataType() == null)))) {
         umlProperty.setType(null);
       } else {
-        org.eclipse.uml2.uml.DataType _retrieveUmlType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType, umlModel);
-        umlProperty.setType(_retrieveUmlType);
+        umlProperty.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType, umlModel));
       }
       PcmToUmlUtil.updateMultiplicity(umlProperty, Boolean.valueOf(((umlProperty.getType() != null) && (pcmDataType instanceof CollectionDataType))));
     }
@@ -45,8 +43,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     }
     
     public EObject getCorrepondenceSourceUmlModel(final InnerDeclaration innerDeclaration, final DataType pcmDataType, final Property umlProperty) {
-      CompositeDataType _compositeDataType_InnerDeclaration = innerDeclaration.getCompositeDataType_InnerDeclaration();
-      Repository _repository__DataType = _compositeDataType_InnerDeclaration.getRepository__DataType();
+      Repository _repository__DataType = innerDeclaration.getCompositeDataType_InnerDeclaration().getRepository__DataType();
       return _repository__DataType;
     }
   }
