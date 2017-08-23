@@ -18,10 +18,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class ParameterDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Parametrizable, OrdinaryParameter> typedChange = (RemoveEReference<Parametrizable, OrdinaryParameter>)change;
-    Parametrizable affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter> typedChange = (RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>)change;
+    org.emftext.language.java.parameters.Parametrizable affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OrdinaryParameter oldValue = typedChange.getOldValue();
+    org.emftext.language.java.parameters.OrdinaryParameter oldValue = typedChange.getOldValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -32,14 +32,14 @@ class ParameterDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Parametrizable, OrdinaryParameter> relevantChange = (RemoveEReference<Parametrizable, OrdinaryParameter>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Parametrizable)) {
+    RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter> relevantChange = (RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.parameters.Parametrizable)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parameters")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof OrdinaryParameter)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.parameters.OrdinaryParameter)) {
     	return false;
     }
     return true;
@@ -64,7 +64,7 @@ class ParameterDeletedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parametrizable affectedEObject, final EReference affectedFeature, final OrdinaryParameter oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      final EObject a = IterableExtensions.<EObject>head(Java2PcmHelper.foos(oldValue, this.correspondenceModel));
+      final EObject a = IterableExtensions.<EObject>head(Java2PcmHelper.getCorresponding(oldValue, this.correspondenceModel));
       _routinesFacade.deleteParameter(oldValue);
     }
   }

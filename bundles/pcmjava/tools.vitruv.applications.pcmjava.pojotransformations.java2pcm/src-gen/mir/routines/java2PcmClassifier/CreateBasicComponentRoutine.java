@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.BasicComponent;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -45,11 +44,11 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateBasicComponentRoutine with input:");
-    getLogger().debug("   Package: " + this.javaPackage);
-    getLogger().debug("   String: " + this.name);
-    getLogger().debug("   String: " + this.rootPackageName);
+    getLogger().debug("   javaPackage: " + this.javaPackage);
+    getLogger().debug("   name: " + this.name);
+    getLogger().debug("   rootPackageName: " + this.rootPackageName);
     
-    BasicComponent pcmBasicComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
+    org.palladiosimulator.pcm.repository.BasicComponent pcmBasicComponent = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
     notifyObjectCreated(pcmBasicComponent);
     userExecution.updatePcmBasicComponentElement(javaPackage, name, rootPackageName, pcmBasicComponent);
     

@@ -9,6 +9,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
+/**
+ * *nCreates datatypes and contracts package into given javaPackage after it was created.
+ *  
+ */
 @SuppressWarnings("all")
 public class CreateJavaSubPackagesRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
@@ -41,12 +45,12 @@ public class CreateJavaSubPackagesRoutine extends AbstractRepairRoutineRealizati
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaSubPackagesRoutine with input:");
-    getLogger().debug("   Package: " + this.javaPackage);
+    getLogger().debug("   javaPackage: " + this.javaPackage);
     
-    Repository repository = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.Repository repository = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepository(javaPackage), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.Repository.class,
+    	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	null);
     if (repository == null) {
     	return;

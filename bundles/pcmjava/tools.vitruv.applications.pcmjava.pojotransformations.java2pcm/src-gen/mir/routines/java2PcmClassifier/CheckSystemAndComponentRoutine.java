@@ -8,6 +8,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
+/**
+ * *nCheck if package has a correspndance with a component or system. nIf there is one create correspondance between component or system and the given class.
+ *  
+ */
 @SuppressWarnings("all")
 public class CheckSystemAndComponentRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
@@ -45,13 +49,13 @@ public class CheckSystemAndComponentRoutine extends AbstractRepairRoutineRealiza
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CheckSystemAndComponentRoutine with input:");
-    getLogger().debug("   Package: " + this.javaPackage);
-    getLogger().debug("   Class: " + this.javaClass);
+    getLogger().debug("   javaPackage: " + this.javaPackage);
+    getLogger().debug("   javaClass: " + this.javaClass);
     
-    InterfaceProvidingRequiringEntity componentOrSystem = getCorrespondingElement(
+    org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity componentOrSystem = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceComponentOrSystem(javaPackage, javaClass), // correspondence source supplier
-    	InterfaceProvidingRequiringEntity.class,
-    	(InterfaceProvidingRequiringEntity _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity.class,
+    	(org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity _element) -> true, // correspondence precondition checker
     	null);
     if (componentOrSystem == null) {
     	return;

@@ -10,7 +10,6 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
-import org.palladiosimulator.pcm.seff.impl.SeffFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -72,29 +71,29 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSEFFRoutine with input:");
-    getLogger().debug("   Method: " + this.method);
-    getLogger().debug("   Class: " + this.cls);
-    getLogger().debug("   ClassMethod: " + this.classMethod);
+    getLogger().debug("   method: " + this.method);
+    getLogger().debug("   cls: " + this.cls);
+    getLogger().debug("   classMethod: " + this.classMethod);
     
-    OperationSignature opSignature = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationSignature opSignature = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceOpSignature(method, cls, classMethod), // correspondence source supplier
-    	OperationSignature.class,
-    	(OperationSignature _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationSignature.class,
+    	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (opSignature == null) {
     	return;
     }
     registerObjectUnderModification(opSignature);
-    BasicComponent basicComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.BasicComponent basicComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceBasicComponent(method, cls, classMethod, opSignature), // correspondence source supplier
-    	BasicComponent.class,
-    	(BasicComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.BasicComponent.class,
+    	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
     	return;
     }
     registerObjectUnderModification(basicComponent);
-    ResourceDemandingSEFF rdseff = SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
+    org.palladiosimulator.pcm.seff.ResourceDemandingSEFF rdseff = org.palladiosimulator.pcm.seff.impl.SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
     notifyObjectCreated(rdseff);
     userExecution.updateRdseffElement(method, cls, classMethod, opSignature, basicComponent, rdseff);
     

@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class ParameterCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Parametrizable, OrdinaryParameter> typedChange = (InsertEReference<Parametrizable, OrdinaryParameter>)change;
-    Parametrizable affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter> typedChange = (InsertEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>)change;
+    org.emftext.language.java.parameters.Parametrizable affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OrdinaryParameter newValue = typedChange.getNewValue();
+    org.emftext.language.java.parameters.OrdinaryParameter newValue = typedChange.getNewValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class ParameterCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Parametrizable, OrdinaryParameter> relevantChange = (InsertEReference<Parametrizable, OrdinaryParameter>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Parametrizable)) {
+    InsertEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter> relevantChange = (InsertEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.parameters.Parametrizable)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parameters")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof OrdinaryParameter)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.parameters.OrdinaryParameter)) {
     	return false;
     }
     return true;

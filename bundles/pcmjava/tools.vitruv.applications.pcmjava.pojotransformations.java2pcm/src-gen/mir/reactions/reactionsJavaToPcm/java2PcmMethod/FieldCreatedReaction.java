@@ -13,13 +13,17 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
+/**
+ * *nCheck if Field has correspondance to CompositeDataType, ComposedProvidingRequiringEntity, nOperationInterface or RepositoryComponent and react accordingly.
+ *  
+ */
 @SuppressWarnings("all")
 class FieldCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Field> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Field>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Field> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Field>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Field newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.Field newValue = typedChange.getNewValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +34,14 @@ class FieldCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Field> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Field>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Field> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Field>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Field)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.Field)) {
     	return false;
     }
     return true;

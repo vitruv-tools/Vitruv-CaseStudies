@@ -7,13 +7,10 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.palladiosimulator.pcm.repository.OperationInterface;
-import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization {
@@ -34,18 +31,9 @@ public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization 
       boolean _equals = IterableExtensions.<String>last(compilationUnit.getNamespaces()).equals("contracts");
       boolean _not = (!_equals);
       if (_not) {
-        String _name = javaInterface.getName();
-        String _plus = ("The created interface is not in the contracts packages. Should an architectural interface be created for the interface " + _name);
-        final String userMsg = (_plus + " ?");
-        final String[] selections = { "yes", "no" };
-        final int selected = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections);
-        if ((selected == 0)) {
-          final Repository repo = Java2PcmHelper.findPcmRepository(this.correspondenceModel);
-          _routinesFacade.addCorrespondanceToInterfaceAndUpdateRepository(pcmIface, repo, javaInterface, compilationUnit);
-        }
+        _routinesFacade.createdInterfaceNotInContracts(javaInterface, pcmIface, compilationUnit);
       } else {
-        final Repository repo_1 = Java2PcmHelper.findPcmRepository(this.correspondenceModel);
-        _routinesFacade.addCorrespondanceToInterfaceAndUpdateRepository(pcmIface, repo_1, javaInterface, compilationUnit);
+        _routinesFacade.addCorrespondanceToInterfaceAndUpdateRepository(pcmIface, Java2PcmHelper.findPcmRepository(this.correspondenceModel), javaInterface, compilationUnit);
       }
     }
   }
@@ -63,10 +51,10 @@ public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePCMInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.javaInterface);
-    getLogger().debug("   CompilationUnit: " + this.compilationUnit);
+    getLogger().debug("   javaInterface: " + this.javaInterface);
+    getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
-    OperationInterface pcmIface = RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
+    org.palladiosimulator.pcm.repository.OperationInterface pcmIface = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
     notifyObjectCreated(pcmIface);
     userExecution.updatePcmIfaceElement(javaInterface, compilationUnit, pcmIface);
     

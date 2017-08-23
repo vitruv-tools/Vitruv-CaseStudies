@@ -3,10 +3,8 @@ package mir.routines.java2PcmMethod;
 import java.io.IOException;
 import mir.routines.java2PcmMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
+import org.palladiosimulator.pcm.repository.Parameter;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -22,9 +20,12 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OrdinaryParameter jParam, @Extension final RoutinesFacade _routinesFacade) {
-      final EObject a = IterableExtensions.<EObject>head(Java2PcmHelper.foos(jParam, this.correspondenceModel));
-      final int b = 0;
+    public EObject getElement1(final OrdinaryParameter jParam, final Parameter pcmParam) {
+      return pcmParam;
+    }
+    
+    public EObject getCorrepondenceSourcePcmParam(final OrdinaryParameter jParam) {
+      return jParam;
     }
   }
   
@@ -39,9 +40,18 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteParameterRoutine with input:");
-    getLogger().debug("   OrdinaryParameter: " + this.jParam);
+    getLogger().debug("   jParam: " + this.jParam);
     
-    userExecution.callRoutine1(jParam, actionsFacade);
+    org.palladiosimulator.pcm.repository.Parameter pcmParam = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourcePcmParam(jParam), // correspondence source supplier
+    	org.palladiosimulator.pcm.repository.Parameter.class,
+    	(org.palladiosimulator.pcm.repository.Parameter _element) -> true, // correspondence precondition checker
+    	null);
+    if (pcmParam == null) {
+    	return;
+    }
+    registerObjectUnderModification(pcmParam);
+    deleteObject(userExecution.getElement1(jParam, pcmParam));
     
     postprocessElements();
   }

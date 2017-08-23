@@ -7,7 +7,6 @@ import org.emftext.language.java.members.Field;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -58,11 +57,11 @@ public class CreateOperationRequiredRoleCorrespondingToFieldRoutine extends Abst
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationRequiredRoleCorrespondingToFieldRoutine with input:");
-    getLogger().debug("   Field: " + this.field);
-    getLogger().debug("   OperationInterface: " + this.operationInterface);
-    getLogger().debug("   RepositoryComponent: " + this.repoComponent);
+    getLogger().debug("   field: " + this.field);
+    getLogger().debug("   operationInterface: " + this.operationInterface);
+    getLogger().debug("   repoComponent: " + this.repoComponent);
     
-    OperationRequiredRole operationRequiredRole = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
+    org.palladiosimulator.pcm.repository.OperationRequiredRole operationRequiredRole = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
     notifyObjectCreated(operationRequiredRole);
     userExecution.updateOperationRequiredRoleElement(field, operationInterface, repoComponent, operationRequiredRole);
     

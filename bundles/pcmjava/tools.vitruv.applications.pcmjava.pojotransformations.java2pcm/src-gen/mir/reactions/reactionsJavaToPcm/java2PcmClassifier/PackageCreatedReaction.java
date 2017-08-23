@@ -62,7 +62,7 @@ class PackageCreatedReaction extends AbstractReactionRealization {
     public void callRoutine1(final org.emftext.language.java.containers.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
       boolean _noCorrespondenceRepository = Java2PcmHelper.noCorrespondenceRepository(this.correspondenceModel);
       if (_noCorrespondenceRepository) {
-        _routinesFacade.createPCMRepository(newValue, newValue.getName(), "package_root");
+        _routinesFacade.createRepository(newValue, newValue.getName(), "package_root");
         _routinesFacade.createJavaSubPackages(newValue);
       } else {
         _routinesFacade.createArchitecturalElement(newValue, Java2PcmHelper.getLastPackageName(newValue.getName()), Java2PcmHelper.getRootPackageName(newValue.getName()));

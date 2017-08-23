@@ -3,6 +3,7 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm;
 import org.junit.Test;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
 public class ClassMethodMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
@@ -11,7 +12,7 @@ public class ClassMethodMappingTransformationTest extends Java2PcmPackageMapping
     public void testAddClassMethodWithCorrespondence() throws Throwable {
         // create repo
         super.addRepoContractsAndDatatypesPackage();
-        //this.getUserInteractor().addNextSelections(0);
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         // create component implementing class
         super.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
         // create interface

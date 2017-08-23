@@ -7,7 +7,6 @@ import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Field;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -57,19 +56,19 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInnerDeclarationRoutine with input:");
-    getLogger().debug("   ConcreteClassifier: " + this.classifier);
-    getLogger().debug("   Field: " + this.field);
+    getLogger().debug("   classifier: " + this.classifier);
+    getLogger().debug("   field: " + this.field);
     
-    CompositeDataType compositeDataType = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.CompositeDataType compositeDataType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeDataType(classifier, field), // correspondence source supplier
-    	CompositeDataType.class,
-    	(CompositeDataType _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.CompositeDataType.class,
+    	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeDataType == null) {
     	return;
     }
     registerObjectUnderModification(compositeDataType);
-    InnerDeclaration innerDeclaration = RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
+    org.palladiosimulator.pcm.repository.InnerDeclaration innerDeclaration = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
     notifyObjectCreated(innerDeclaration);
     userExecution.updateInnerDeclarationElement(classifier, field, compositeDataType, innerDeclaration);
     

@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class InterfaceMethodCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Interface, InterfaceMethod> typedChange = (InsertEReference<Interface, InterfaceMethod>)change;
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod>)change;
+    org.emftext.language.java.classifiers.Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    InterfaceMethod newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.InterfaceMethod newValue = typedChange.getNewValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class InterfaceMethodCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Interface, InterfaceMethod> relevantChange = (InsertEReference<Interface, InterfaceMethod>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Interface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof InterfaceMethod)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.InterfaceMethod)) {
     	return false;
     }
     return true;

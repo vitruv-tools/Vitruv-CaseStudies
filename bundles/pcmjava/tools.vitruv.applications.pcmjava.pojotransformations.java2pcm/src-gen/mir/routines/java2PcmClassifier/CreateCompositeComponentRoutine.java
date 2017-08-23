@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.CompositeComponent;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -45,11 +44,11 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeComponentRoutine with input:");
-    getLogger().debug("   Package: " + this.javaPackage);
-    getLogger().debug("   String: " + this.name);
-    getLogger().debug("   String: " + this.rootPackageName);
+    getLogger().debug("   javaPackage: " + this.javaPackage);
+    getLogger().debug("   name: " + this.name);
+    getLogger().debug("   rootPackageName: " + this.rootPackageName);
     
-    CompositeComponent pcmCompositeComponent = RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
+    org.palladiosimulator.pcm.repository.CompositeComponent pcmCompositeComponent = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
     notifyObjectCreated(pcmCompositeComponent);
     userExecution.updatePcmCompositeComponentElement(javaPackage, name, rootPackageName, pcmCompositeComponent);
     

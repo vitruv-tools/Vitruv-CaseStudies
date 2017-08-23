@@ -50,13 +50,13 @@ public class ChangeReturnTypeRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeReturnTypeRoutine with input:");
-    getLogger().debug("   Method: " + this.jMeth);
-    getLogger().debug("   TypeReference: " + this.jType);
+    getLogger().debug("   jMeth: " + this.jMeth);
+    getLogger().debug("   jType: " + this.jType);
     
-    OperationSignature operationSignature = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationSignature operationSignature = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceOperationSignature(jMeth, jType), // correspondence source supplier
-    	OperationSignature.class,
-    	(OperationSignature _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationSignature.class,
+    	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (operationSignature == null) {
     	return;

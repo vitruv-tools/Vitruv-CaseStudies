@@ -3,7 +3,6 @@ package mir.routines.java2PcmClassifier;
 import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.palladiosimulator.pcm.system.impl.SystemFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -49,10 +48,10 @@ public class CreateSystemRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSystemRoutine with input:");
-    getLogger().debug("   Package: " + this.javaPackage);
-    getLogger().debug("   String: " + this.name);
+    getLogger().debug("   javaPackage: " + this.javaPackage);
+    getLogger().debug("   name: " + this.name);
     
-    org.palladiosimulator.pcm.system.System pcmSystem = SystemFactoryImpl.eINSTANCE.createSystem();
+    org.palladiosimulator.pcm.system.System pcmSystem = org.palladiosimulator.pcm.system.impl.SystemFactoryImpl.eINSTANCE.createSystem();
     notifyObjectCreated(pcmSystem);
     userExecution.updatePcmSystemElement(javaPackage, name, pcmSystem);
     

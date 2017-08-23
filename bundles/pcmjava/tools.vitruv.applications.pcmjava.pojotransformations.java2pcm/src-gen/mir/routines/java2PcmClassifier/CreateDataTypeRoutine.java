@@ -1,14 +1,20 @@
 package mir.routines.java2PcmClassifier;
 
+import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.containers.CompilationUnit;
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.userinteraction.UserInteractionType;
 
+/**
+ * *nUser can choose if a composite or collection data type should be created.
+ *  
+ */
 @SuppressWarnings("all")
 public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
@@ -25,15 +31,23 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
       String _plus = ("Class " + _name);
       final String userMsg = (_plus + 
         "has been created in the datatypes pacakage. Please decide which kind of data type should be created.");
-      final String[] selections = { "Create CompositeDataType", "CreateCollectionDataType", "Do not create a data type (not recommended)" };
+      String _message = Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getMessage();
+      String _message_1 = Java2PcmUserSelection.SELECT_COLLECTION_DATA_TYPE.getMessage();
+      String _message_2 = Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getMessage();
+      final String[] selections = new String[] { _message, _message_1, _message_2 };
       final int selected = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections);
-      switch (selected) {
-        case 0:
-          _routinesFacade.createCompositeDataType(cls, compilationUnit);
-          break;
-        case 1:
+      boolean _matched = false;
+      int _selection = Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getSelection();
+      if (Objects.equal(selected, _selection)) {
+        _matched=true;
+        _routinesFacade.createCompositeDataType(cls, compilationUnit);
+      }
+      if (!_matched) {
+        int _selection_1 = Java2PcmUserSelection.SELECT_COLLECTION_DATA_TYPE.getSelection();
+        if (Objects.equal(selected, _selection_1)) {
+          _matched=true;
           _routinesFacade.createCollectionDataType(cls, compilationUnit);
-          break;
+        }
       }
     }
   }
@@ -51,8 +65,8 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateDataTypeRoutine with input:");
-    getLogger().debug("   Class: " + this.cls);
-    getLogger().debug("   CompilationUnit: " + this.compilationUnit);
+    getLogger().debug("   cls: " + this.cls);
+    getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
     userExecution.callRoutine1(cls, compilationUnit, actionsFacade);
     

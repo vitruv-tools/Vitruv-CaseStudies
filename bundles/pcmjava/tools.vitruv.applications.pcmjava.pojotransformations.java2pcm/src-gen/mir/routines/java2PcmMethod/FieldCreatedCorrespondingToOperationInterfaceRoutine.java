@@ -51,22 +51,22 @@ public class FieldCreatedCorrespondingToOperationInterfaceRoutine extends Abstra
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine FieldCreatedCorrespondingToOperationInterfaceRoutine with input:");
-    getLogger().debug("   Classifier: " + this.classifier);
-    getLogger().debug("   Field: " + this.field);
+    getLogger().debug("   classifier: " + this.classifier);
+    getLogger().debug("   field: " + this.field);
     
-    OperationInterface correspondingInterface = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationInterface correspondingInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCorrespondingInterface(classifier, field), // correspondence source supplier
-    	OperationInterface.class,
-    	(OperationInterface _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationInterface.class,
+    	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (correspondingInterface == null) {
     	return;
     }
     registerObjectUnderModification(correspondingInterface);
-    RepositoryComponent repoComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.RepositoryComponent repoComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepoComponent(classifier, field, correspondingInterface), // correspondence source supplier
-    	RepositoryComponent.class,
-    	(RepositoryComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.RepositoryComponent.class,
+    	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
     	null);
     if (repoComponent == null) {
     	return;

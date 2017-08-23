@@ -8,7 +8,6 @@ import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -66,29 +65,29 @@ public class CreateOperationProvidedRoleFromTypeReferenceRoutine extends Abstrac
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationProvidedRoleFromTypeReferenceRoutine with input:");
-    getLogger().debug("   Classifier: " + this.classifier);
-    getLogger().debug("   Class: " + this.javaClass);
-    getLogger().debug("   TypeReference: " + this.reference);
+    getLogger().debug("   classifier: " + this.classifier);
+    getLogger().debug("   javaClass: " + this.javaClass);
+    getLogger().debug("   reference: " + this.reference);
     
-    OperationInterface opInterface = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationInterface opInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceOpInterface(classifier, javaClass, reference), // correspondence source supplier
-    	OperationInterface.class,
-    	(OperationInterface _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationInterface.class,
+    	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (opInterface == null) {
     	return;
     }
     registerObjectUnderModification(opInterface);
-    BasicComponent basicComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.BasicComponent basicComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceBasicComponent(classifier, javaClass, reference, opInterface), // correspondence source supplier
-    	BasicComponent.class,
-    	(BasicComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.BasicComponent.class,
+    	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
     	return;
     }
     registerObjectUnderModification(basicComponent);
-    OperationProvidedRole operationProvidedRole = RepositoryFactoryImpl.eINSTANCE.createOperationProvidedRole();
+    org.palladiosimulator.pcm.repository.OperationProvidedRole operationProvidedRole = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationProvidedRole();
     notifyObjectCreated(operationProvidedRole);
     userExecution.updateOperationProvidedRoleElement(classifier, javaClass, reference, opInterface, basicComponent, operationProvidedRole);
     

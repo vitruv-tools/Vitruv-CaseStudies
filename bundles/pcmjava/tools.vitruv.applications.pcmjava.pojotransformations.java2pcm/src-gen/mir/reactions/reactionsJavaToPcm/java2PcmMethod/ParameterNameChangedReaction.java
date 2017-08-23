@@ -11,14 +11,18 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
 
+/**
+ * *nNeed a special reaction, because Parameter is not a NamedElement.
+ *  
+ */
 @SuppressWarnings("all")
 class ParameterNameChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Parameter, String> typedChange = (ReplaceSingleValuedEAttribute<Parameter, String>)change;
-    Parameter affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.emftext.language.java.parameters.Parameter, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.emftext.language.java.parameters.Parameter, java.lang.String>)change;
+    org.emftext.language.java.parameters.Parameter affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    java.lang.String oldValue = typedChange.getOldValue();
+    java.lang.String newValue = typedChange.getNewValue();
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterNameChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterNameChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -29,17 +33,17 @@ class ParameterNameChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<Parameter, String> relevantChange = (ReplaceSingleValuedEAttribute<Parameter, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
+    ReplaceSingleValuedEAttribute<org.emftext.language.java.parameters.Parameter, java.lang.String> relevantChange = (ReplaceSingleValuedEAttribute<org.emftext.language.java.parameters.Parameter, java.lang.String>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.parameters.Parameter)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("name")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.String)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.String)) {
     	return false;
     }
     return true;

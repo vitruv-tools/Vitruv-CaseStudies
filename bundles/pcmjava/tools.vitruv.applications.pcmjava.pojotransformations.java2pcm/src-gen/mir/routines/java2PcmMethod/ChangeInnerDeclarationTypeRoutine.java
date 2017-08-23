@@ -49,13 +49,13 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInnerDeclarationTypeRoutine with input:");
-    getLogger().debug("   TypeReference: " + this.typeReference);
-    getLogger().debug("   Field: " + this.javaField);
+    getLogger().debug("   typeReference: " + this.typeReference);
+    getLogger().debug("   javaField: " + this.javaField);
     
-    InnerDeclaration innerDeclaration = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.InnerDeclaration innerDeclaration = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInnerDeclaration(typeReference, javaField), // correspondence source supplier
-    	InnerDeclaration.class,
-    	(InnerDeclaration _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.InnerDeclaration.class,
+    	(org.palladiosimulator.pcm.repository.InnerDeclaration _element) -> true, // correspondence precondition checker
     	null);
     if (innerDeclaration == null) {
     	return;

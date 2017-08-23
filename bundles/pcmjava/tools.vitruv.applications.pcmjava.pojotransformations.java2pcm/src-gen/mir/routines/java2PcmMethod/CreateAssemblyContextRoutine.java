@@ -7,7 +7,6 @@ import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Field;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
-import org.palladiosimulator.pcm.core.composition.impl.CompositionFactoryImpl;
 import org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
@@ -63,28 +62,28 @@ public class CreateAssemblyContextRoutine extends AbstractRepairRoutineRealizati
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateAssemblyContextRoutine with input:");
-    getLogger().debug("   ConcreteClassifier: " + this.classifier);
-    getLogger().debug("   Field: " + this.field);
+    getLogger().debug("   classifier: " + this.classifier);
+    getLogger().debug("   field: " + this.field);
     
-    ComposedProvidingRequiringEntity composedProvidingRequiringEntity = getCorrespondingElement(
+    org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity composedProvidingRequiringEntity = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceComposedProvidingRequiringEntity(classifier, field), // correspondence source supplier
-    	ComposedProvidingRequiringEntity.class,
-    	(ComposedProvidingRequiringEntity _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity.class,
+    	(org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity _element) -> true, // correspondence precondition checker
     	null);
     if (composedProvidingRequiringEntity == null) {
     	return;
     }
     registerObjectUnderModification(composedProvidingRequiringEntity);
-    RepositoryComponent repositoryComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.RepositoryComponent repositoryComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepositoryComponent(classifier, field, composedProvidingRequiringEntity), // correspondence source supplier
-    	RepositoryComponent.class,
-    	(RepositoryComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.RepositoryComponent.class,
+    	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
     	null);
     if (repositoryComponent == null) {
     	return;
     }
     registerObjectUnderModification(repositoryComponent);
-    AssemblyContext assemblyContext = CompositionFactoryImpl.eINSTANCE.createAssemblyContext();
+    org.palladiosimulator.pcm.core.composition.AssemblyContext assemblyContext = org.palladiosimulator.pcm.core.composition.impl.CompositionFactoryImpl.eINSTANCE.createAssemblyContext();
     notifyObjectCreated(assemblyContext);
     userExecution.updateAssemblyContextElement(classifier, field, composedProvidingRequiringEntity, repositoryComponent, assemblyContext);
     

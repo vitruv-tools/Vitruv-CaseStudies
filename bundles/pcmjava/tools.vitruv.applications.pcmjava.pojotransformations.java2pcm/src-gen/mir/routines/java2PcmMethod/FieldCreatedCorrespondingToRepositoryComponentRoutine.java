@@ -55,22 +55,22 @@ public class FieldCreatedCorrespondingToRepositoryComponentRoutine extends Abstr
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine FieldCreatedCorrespondingToRepositoryComponentRoutine with input:");
-    getLogger().debug("   Classifier: " + this.classifier);
-    getLogger().debug("   Field: " + this.field);
+    getLogger().debug("   classifier: " + this.classifier);
+    getLogger().debug("   field: " + this.field);
     
-    RepositoryComponent repositoryComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.RepositoryComponent repositoryComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepositoryComponent(classifier, field), // correspondence source supplier
-    	RepositoryComponent.class,
-    	(RepositoryComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.RepositoryComponent.class,
+    	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
     	null);
     if (repositoryComponent == null) {
     	return;
     }
     registerObjectUnderModification(repositoryComponent);
-    RepositoryComponent repoComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.RepositoryComponent repoComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepoComponent(classifier, field, repositoryComponent), // correspondence source supplier
-    	RepositoryComponent.class,
-    	(RepositoryComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.RepositoryComponent.class,
+    	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
     	null);
     if (repoComponent == null) {
     	return;

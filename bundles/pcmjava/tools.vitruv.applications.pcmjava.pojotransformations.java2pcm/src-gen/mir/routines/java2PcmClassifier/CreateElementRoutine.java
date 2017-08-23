@@ -11,6 +11,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
+/**
+ * *nCreates a new architectural element and add correspondance.
+ *  
+ */
 @SuppressWarnings("all")
 public class CreateElementRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
@@ -51,9 +55,9 @@ public class CreateElementRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateElementRoutine with input:");
-    getLogger().debug("   Repository: " + this.repository);
-    getLogger().debug("   Class: " + this.javaClass);
-    getLogger().debug("   CompilationUnit: " + this.compilationUnit);
+    getLogger().debug("   repository: " + this.repository);
+    getLogger().debug("   javaClass: " + this.javaClass);
+    getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
     org.emftext.language.java.containers.Package javaPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaPackage(repository, javaClass, compilationUnit), // correspondence source supplier

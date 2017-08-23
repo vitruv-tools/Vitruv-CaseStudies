@@ -12,6 +12,7 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
 
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
 public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
@@ -42,10 +43,10 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testAddArchitecturalInterfaceInNonRepositoryPackage() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(0);
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
-        this.getUserInteractor().addNextSelections(0);
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
         final OperationInterface opInterface = super.addInterfaceInSecondPackageWithCorrespondence(bc.getEntityName());
 
         this.assertOperationInterface(repo, opInterface, Pcm2JavaTestUtils.INTERFACE_NAME);
@@ -59,10 +60,10 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testAddTechnicalInterfaceInNonRepositoryPackage() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(0);
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
-        this.getUserInteractor().addNextSelections(1);
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
         final EObject eObject = super.addInterfaceInPackageWithoutCorrespondence(bc.getEntityName());
 
         assertTrue("Corresponding object for interface that is created in non main package is not null: " + eObject,
@@ -72,7 +73,7 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testRenameInterfaceWithCorrespondence() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(0);
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         super.addSecondPackageCorrespondsToBasicComponent();
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
 

@@ -4,16 +4,19 @@ import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
+/**
+ * *nCreates Repository.
+ *  
+ */
 @SuppressWarnings("all")
-public class CreatePCMRepositoryRoutine extends AbstractRepairRoutineRealization {
+public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
   
-  private CreatePCMRepositoryRoutine.ActionUserExecution userExecution;
+  private CreateRepositoryRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
@@ -49,9 +52,9 @@ public class CreatePCMRepositoryRoutine extends AbstractRepairRoutineRealization
     }
   }
   
-  public CreatePCMRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
+  public CreateRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
     super(reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.java2PcmClassifier.CreatePCMRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.java2PcmClassifier.CreateRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.sourceElementMappedToRepository = sourceElementMappedToRepository;this.packageName = packageName;this.newTag = newTag;
   }
@@ -63,19 +66,19 @@ public class CreatePCMRepositoryRoutine extends AbstractRepairRoutineRealization
   private String newTag;
   
   protected void executeRoutine() throws IOException {
-    getLogger().debug("Called routine CreatePCMRepositoryRoutine with input:");
-    getLogger().debug("   EObject: " + this.sourceElementMappedToRepository);
-    getLogger().debug("   String: " + this.packageName);
-    getLogger().debug("   String: " + this.newTag);
+    getLogger().debug("Called routine CreateRepositoryRoutine with input:");
+    getLogger().debug("   sourceElementMappedToRepository: " + this.sourceElementMappedToRepository);
+    getLogger().debug("   packageName: " + this.packageName);
+    getLogger().debug("   newTag: " + this.newTag);
     
     if (getCorrespondingElement(
     	userExecution.getCorrepondenceSourcenull(sourceElementMappedToRepository, packageName, newTag), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.Repository.class,
+    	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(sourceElementMappedToRepository, packageName, newTag)) != null) {
     	return;
     }
-    Repository pcmRepository = RepositoryFactoryImpl.eINSTANCE.createRepository();
+    org.palladiosimulator.pcm.repository.Repository pcmRepository = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createRepository();
     notifyObjectCreated(pcmRepository);
     userExecution.updatePcmRepositoryElement(sourceElementMappedToRepository, packageName, newTag, pcmRepository);
     

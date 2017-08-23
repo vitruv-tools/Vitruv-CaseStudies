@@ -51,39 +51,35 @@ routine createParameter(java::OrdinaryParameter jaMoPPParam, java::Parametrizabl
 			pcmParameter.name = jaMoPPParam.name
 		}
 		add correspondence between jaMoPPParam and pcmParameter
-		call {
-			val a = foos(jaMoPPParam, correspondenceModel).head
-			val b = 0
-		}
-		
+			
 		update operationSignature {
 			operationSignature.parameters__OperationSignature += pcmParameter
 		}
 	}
 }
 
+//TODO changed Parameter
 reaction ParameterDeleted {
     after element java::OrdinaryParameter removed from java::Parametrizable[parameters]
     call {
-    	val a = foos(oldValue, correspondenceModel).head
+    	//TODO oldValue has no correspondance element...
+    	val a = getCorresponding(oldValue, correspondenceModel).head
     	deleteParameter(oldValue)
-    	
     }
 }
 
 routine deleteParameter(java::OrdinaryParameter jParam) {
-    //match {
-      //  val pcmParam = retrieve pcm::Parameter corresponding to jParam
-   // }
+    match {
+    	val pcmParam = retrieve pcm::Parameter corresponding to jParam
+    }
     action{
-    	call {
-    		val a = foos(jParam, correspondenceModel).head
-    		val b = 0
-    	}
-        //delete pcmParam         
+    	delete pcmParam         
     }
 }
 
+/**
+ * Need a special reaction, because Parameter is not a NamedElement.
+ */
 reaction ParameterNameChanged {
 	after attribute replaced at java::Parameter[name]
 	call changeParameterName(newValue, affectedEObject)
@@ -101,6 +97,10 @@ routine changeParameterName(String newName, java::Parameter parameter) {
 }
 
 //Field
+/**
+ * Check if Field has correspondance to CompositeDataType, ComposedProvidingRequiringEntity, 
+ * OperationInterface or RepositoryComponent and react accordingly.
+ */
 reaction FieldCreated {
 	after element java::Field inserted in java::Class[members]
 	call {
@@ -204,22 +204,30 @@ routine changeInnerDeclarationType(java::TypeReference typeReference, java::Fiel
 //Class Method
 reaction ClassMethodCreated {
 	after element java::ClassMethod inserted in java::Class[members]
-	call createUmlClassMethod(newValue, affectedEObject)
+	call createSeffFromImplementingInterfaces(newValue, affectedEObject)
 }
 
-routine createUmlClassMethod(java::ClassMethod classMethod, java::Class cls) {
+routine createSeffFromImplementingInterfaces(java::ClassMethod classMethod, java::Class cls) {
 	action {
 		call {
-			val methods = findImplementingInterfacesFromTypeRefs(cls.implements)
-			.filter[x | hasCorrespondance(x, correspondenceModel)]
-			.map[x|x.methods]
-			.flatten
-			.filter[sameSignature(classMethod)]
-			
+			val implementingInterfaces = findImplementingInterfacesFromTypeRefs(cls.implements)
+			for (implementingInterface : implementingInterfaces) {
+				createSeffFromImplementingInterface(classMethod, cls, implementingInterface)
+			}
+		}
+	}
+}
+
+routine createSeffFromImplementingInterface(java::ClassMethod classMethod, java::Class cls, java::Interface iface) {
+	match {
+		val operationInterface = retrieve pcm::OperationInterface corresponding to iface
+	} 
+	action {
+		call {
+			val methods = iface.methods.filter[sameSignature(classMethod)]
 			for (method : methods) {
 				createSEFF(method, cls, classMethod)
 			}
-			
 		}
 	}
 }
@@ -267,7 +275,7 @@ routine createPCMSignature(java::InterfaceMethod method) {
 }
 
 reaction JavaReturnTypeChanged {
-     after element java::TypeReference replaced at java::Method[typeReference]
+    after element java::TypeReference replaced at java::Method[typeReference]
     call changeReturnType(affectedEObject, newValue)
 }
 

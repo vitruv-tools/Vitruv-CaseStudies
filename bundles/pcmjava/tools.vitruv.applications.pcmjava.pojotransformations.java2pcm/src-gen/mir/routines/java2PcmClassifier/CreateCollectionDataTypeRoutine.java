@@ -7,7 +7,6 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -63,10 +62,10 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCollectionDataTypeRoutine with input:");
-    getLogger().debug("   Class: " + this.cls);
-    getLogger().debug("   CompilationUnit: " + this.compilationUnit);
+    getLogger().debug("   cls: " + this.cls);
+    getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
-    CollectionDataType pcmCollectionDataType = RepositoryFactoryImpl.eINSTANCE.createCollectionDataType();
+    org.palladiosimulator.pcm.repository.CollectionDataType pcmCollectionDataType = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createCollectionDataType();
     notifyObjectCreated(pcmCollectionDataType);
     userExecution.updatePcmCollectionDataTypeElement(cls, compilationUnit, pcmCollectionDataType);
     

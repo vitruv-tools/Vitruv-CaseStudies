@@ -52,8 +52,8 @@ public class AddDataTypeInRepositoryRoutine extends AbstractRepairRoutineRealiza
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddDataTypeInRepositoryRoutine with input:");
-    getLogger().debug("   Repository: " + this.pcmRepository);
-    getLogger().debug("   DataType: " + this.pcmDataType);
+    getLogger().debug("   pcmRepository: " + this.pcmRepository);
+    getLogger().debug("   pcmDataType: " + this.pcmDataType);
     
     // val updatedElement userExecution.getElement1(pcmRepository, pcmDataType);
     userExecution.update0Element(pcmRepository, pcmDataType);

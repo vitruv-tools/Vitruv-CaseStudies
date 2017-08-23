@@ -7,7 +7,6 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -63,10 +62,10 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeDataTypeRoutine with input:");
-    getLogger().debug("   Class: " + this.cls);
-    getLogger().debug("   CompilationUnit: " + this.compilationUnit);
+    getLogger().debug("   cls: " + this.cls);
+    getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
-    CompositeDataType pcmCompositeDataType = RepositoryFactoryImpl.eINSTANCE.createCompositeDataType();
+    org.palladiosimulator.pcm.repository.CompositeDataType pcmCompositeDataType = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createCompositeDataType();
     notifyObjectCreated(pcmCompositeDataType);
     userExecution.updatePcmCompositeDataTypeElement(cls, compilationUnit, pcmCompositeDataType);
     

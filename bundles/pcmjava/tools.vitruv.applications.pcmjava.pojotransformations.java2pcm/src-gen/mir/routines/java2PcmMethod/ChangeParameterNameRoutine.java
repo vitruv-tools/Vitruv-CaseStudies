@@ -46,8 +46,8 @@ public class ChangeParameterNameRoutine extends AbstractRepairRoutineRealization
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeParameterNameRoutine with input:");
-    getLogger().debug("   String: " + this.newName);
-    getLogger().debug("   Parameter: " + this.parameter);
+    getLogger().debug("   newName: " + this.newName);
+    getLogger().debug("   parameter: " + this.parameter);
     
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmParameter(newName, parameter), // correspondence source supplier

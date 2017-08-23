@@ -37,14 +37,15 @@ public class Java2PcmHelper {
 		if (1 != repos.size) {
 			logger.warn("found more than one repository. Retruning the first")
 		}
-		return repos.get(0)
+		return repos.head
 	}
 
 	def static boolean hasCorrespondance(EObject eObject, CorrespondenceModel correspondenceModel) {
 		return !correspondenceModel.getCorrespondingEObjects(eObject).isNullOrEmpty
 	}
 	
-	def static Set<EObject> foos(EObject object, CorrespondenceModel correspondenceModel) {
+	//TODO delete if not needed anymore
+	def static Set<EObject> getCorresponding(EObject object, CorrespondenceModel correspondenceModel) {
 		return correspondenceModel.getCorrespondingEObjects(object)
 	}
 	

@@ -11,6 +11,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
+/**
+ * *nAdds correspondance between component and package and add component into repository.
+ *  
+ */
 @SuppressWarnings("all")
 public class AddCorrespondanceAndUpdateRepositoryRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
@@ -55,9 +59,9 @@ public class AddCorrespondanceAndUpdateRepositoryRoutine extends AbstractRepairR
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddCorrespondanceAndUpdateRepositoryRoutine with input:");
-    getLogger().debug("   ImplementationComponentType: " + this.pcmComponent);
-    getLogger().debug("   Repository: " + this.pcmRepository);
-    getLogger().debug("   Package: " + this.javaPackage);
+    getLogger().debug("   pcmComponent: " + this.pcmComponent);
+    getLogger().debug("   pcmRepository: " + this.pcmRepository);
+    getLogger().debug("   javaPackage: " + this.javaPackage);
     
     addCorrespondenceBetween(userExecution.getElement1(pcmComponent, pcmRepository, javaPackage), userExecution.getElement2(pcmComponent, pcmRepository, javaPackage), "");
     

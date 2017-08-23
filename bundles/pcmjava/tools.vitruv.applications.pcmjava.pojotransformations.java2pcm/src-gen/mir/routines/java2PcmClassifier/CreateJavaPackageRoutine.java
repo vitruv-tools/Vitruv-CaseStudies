@@ -5,12 +5,15 @@ import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
+/**
+ * *nCreate java package and tag it.
+ *  
+ */
 @SuppressWarnings("all")
 public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
@@ -73,10 +76,10 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaPackageRoutine with input:");
-    getLogger().debug("   EObject: " + this.sourceElementMappedToPackage);
-    getLogger().debug("   Package: " + this.parentPackage);
-    getLogger().debug("   String: " + this.packageName);
-    getLogger().debug("   String: " + this.newTag);
+    getLogger().debug("   sourceElementMappedToPackage: " + this.sourceElementMappedToPackage);
+    getLogger().debug("   parentPackage: " + this.parentPackage);
+    getLogger().debug("   packageName: " + this.packageName);
+    getLogger().debug("   newTag: " + this.newTag);
     
     if (getCorrespondingElement(
     	userExecution.getCorrepondenceSourcenull(sourceElementMappedToPackage, parentPackage, packageName, newTag), // correspondence source supplier
@@ -85,7 +88,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getRetrieveTag1(sourceElementMappedToPackage, parentPackage, packageName, newTag)) != null) {
     	return;
     }
-    org.emftext.language.java.containers.Package javaPackage = ContainersFactoryImpl.eINSTANCE.createPackage();
+    org.emftext.language.java.containers.Package javaPackage = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createPackage();
     notifyObjectCreated(javaPackage);
     userExecution.updateJavaPackageElement(sourceElementMappedToPackage, parentPackage, packageName, newTag, javaPackage);
     

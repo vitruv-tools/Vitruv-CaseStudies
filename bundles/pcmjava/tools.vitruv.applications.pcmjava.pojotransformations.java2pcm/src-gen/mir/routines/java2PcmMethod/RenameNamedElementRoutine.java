@@ -43,7 +43,7 @@ public class RenameNamedElementRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameNamedElementRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.javaElement);
+    getLogger().debug("   javaElement: " + this.javaElement);
     
     org.palladiosimulator.pcm.core.entity.NamedElement pcmElement = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmElement(javaElement), // correspondence source supplier

@@ -14,11 +14,15 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
+/**
+ * *nCreates Datatype if class was in datatypes package created or checks if there can be a correspondance and if nnot create a new pcm element.
+ *  
+ */
 @SuppressWarnings("all")
 class ClassCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class> typedChange = (InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class>)change;
-    CompilationUnit affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Class> typedChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Class>)change;
+    org.emftext.language.java.containers.CompilationUnit affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     org.emftext.language.java.classifiers.Class newValue = typedChange.getNewValue();
     mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
@@ -31,8 +35,8 @@ class ClassCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class> relevantChange = (InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CompilationUnit)) {
+    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Class> relevantChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Class>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("classifiers")) {

@@ -12,6 +12,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
+/**
+ * *nAdd correspondance between OperationInterface and JavaInterface and CompilationUnit. Also adds OperationInterface into Repository.
+ *  
+ */
 @SuppressWarnings("all")
 public class AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine extends AbstractRepairRoutineRealization {
   private RoutinesFacade actionsFacade;
@@ -66,10 +70,10 @@ public class AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine extends Abst
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine with input:");
-    getLogger().debug("   OperationInterface: " + this.pcmInterface);
-    getLogger().debug("   Repository: " + this.pcmRepository);
-    getLogger().debug("   Interface: " + this.javaInterface);
-    getLogger().debug("   CompilationUnit: " + this.compilationUnit);
+    getLogger().debug("   pcmInterface: " + this.pcmInterface);
+    getLogger().debug("   pcmRepository: " + this.pcmRepository);
+    getLogger().debug("   javaInterface: " + this.javaInterface);
+    getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
     addCorrespondenceBetween(userExecution.getElement1(pcmInterface, pcmRepository, javaInterface, compilationUnit), userExecution.getElement2(pcmInterface, pcmRepository, javaInterface, compilationUnit), "");
     
