@@ -47,7 +47,7 @@ public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineReal
         }
       }
       if (!_matched) {
-        int _selection_2 = Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection();
+        int _selection_2 = Java2PcmUserSelection.SELECT_SYSTEM.getSelection();
         if (Objects.equal(selected, _selection_2)) {
           _matched=true;
           _routinesFacade.createSystem(javaPackage, name);

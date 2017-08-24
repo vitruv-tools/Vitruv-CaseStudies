@@ -47,10 +47,6 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
       return javaMethod;
     }
     
-    public EObject getCorrepondenceSourcenull(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature) {
-      return jaMoPPParam;
-    }
-    
     public void updatePcmParameterElement(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
       pcmParameter.setOperationSignature__Parameter(operationSignature);
       pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(jaMoPPParam.getTypeReference(), this.correspondenceModel, 
@@ -86,13 +82,6 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     registerObjectUnderModification(operationSignature);
-    if (getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcenull(jaMoPPParam, javaMethod, operationSignature), // correspondence source supplier
-    	org.palladiosimulator.pcm.repository.Parameter.class,
-    	(org.palladiosimulator.pcm.repository.Parameter _element) -> true, // correspondence precondition checker
-    	null) != null) {
-    	return;
-    }
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createParameter();
     notifyObjectCreated(pcmParameter);
     userExecution.updatePcmParameterElement(jaMoPPParam, javaMethod, operationSignature, pcmParameter);

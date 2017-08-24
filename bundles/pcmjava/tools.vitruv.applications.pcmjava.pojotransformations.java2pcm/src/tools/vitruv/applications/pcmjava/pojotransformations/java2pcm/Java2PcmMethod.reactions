@@ -14,7 +14,11 @@ execute actions in PCM
 //Rename
 reaction JavaNamedElementRenamed {
     after attribute replaced at java::NamedElement[name]
-    call renameNamedElement(affectedEObject)
+    call {
+    	val a = getCorresponding(affectedEObject, correspondenceModel)
+    	renameNamedElement(affectedEObject)
+    	
+    	}
 }
 
 routine renameNamedElement(java::NamedElement javaElement) {
@@ -32,6 +36,7 @@ routine renameNamedElement(java::NamedElement javaElement) {
 reaction ParameterCreated {
 	after element java::OrdinaryParameter inserted in java::Parametrizable[parameters]
 	call {
+		val a = getCorresponding(affectedEObject, correspondenceModel)
 		createParameter(newValue, affectedEObject)
 	}
 }
@@ -39,7 +44,6 @@ reaction ParameterCreated {
 routine createParameter(java::OrdinaryParameter jaMoPPParam, java::Parametrizable javaMethod) {
 	match {
 		val operationSignature = retrieve pcm::OperationSignature corresponding to javaMethod
-		require absence of pcm::Parameter corresponding to jaMoPPParam
 	}
 	action {
 		val pcmParameter = create pcm::Parameter and initialize {
