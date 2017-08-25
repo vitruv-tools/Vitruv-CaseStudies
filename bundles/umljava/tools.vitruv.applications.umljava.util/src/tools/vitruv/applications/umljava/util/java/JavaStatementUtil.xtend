@@ -99,7 +99,7 @@ class JavaStatementUtil {
     
     def static IdentifierReference createIdentifierReference(ReferenceableElement elem) {
         val reference = ReferencesFactory.eINSTANCE.createIdentifierReference
-        reference.target = EcoreUtil.copy(elem)
+        reference.target = elem
         return reference
     }
     

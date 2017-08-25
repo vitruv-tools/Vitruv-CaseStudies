@@ -286,7 +286,7 @@ class JavaMemberAndParameterUtil {
         setter.name = buildSetterName(jAttribute.name)
         for (expStatement : setter.statements.filter(ExpressionStatement)) {
             val selfReference = getAttributeSelfReferenceInExpressionStatement(expStatement, oldName)
-            selfReference.target = EcoreUtil.copy(jAttribute)
+            selfReference.target = jAttribute
         }
         
     }
