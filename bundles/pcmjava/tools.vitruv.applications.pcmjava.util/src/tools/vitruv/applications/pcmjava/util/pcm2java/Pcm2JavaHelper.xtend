@@ -90,7 +90,7 @@ class Pcm2JavaHelper{
 	def static NamespaceClassifierReference createNamespaceClassifierReference(ConcreteClassifier concreteClassifier) {
 		val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
 		val classifierRef = TypesFactory.eINSTANCE.createClassifierReference
-		classifierRef.target = EcoreUtil.copy(concreteClassifier)
+		classifierRef.target = concreteClassifier
 		namespaceClassifierReference.classifierReferences.add(classifierRef)
 
 		// namespaceClassifierReference.namespaces.addAll(concreteClassifier.containingCompilationUnit.namespaces)
@@ -99,7 +99,7 @@ class Pcm2JavaHelper{
 	
 	def static createNamespaceClassifierReference(NamespaceClassifierReference namespaceClassifierReference, ConcreteClassifier concreteClassifier) {
 		val classifierRef = TypesFactory.eINSTANCE.createClassifierReference
-		classifierRef.target = EcoreUtil.copy(concreteClassifier)
+		classifierRef.target = concreteClassifier
 		namespaceClassifierReference.classifierReferences.add(classifierRef)
 
 		// namespaceClassifierReference.namespaces.addAll(concreteClassifier.containingCompilationUnit.namespaces)
@@ -188,7 +188,7 @@ class Pcm2JavaHelper{
 
 		// .fieldname
 		val fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-		fieldReference.target = EcoreUtil.copy(field)
+		fieldReference.target = field
 		selfReference.next = fieldReference
 
 		// =
@@ -256,7 +256,7 @@ class Pcm2JavaHelper{
 
 		// .fieldname
 		val fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-		fieldReference.target = EcoreUtil.copy(field)
+		fieldReference.target = field
 		selfReference.next = EcoreUtil.copy(fieldReference)
 
 		// =
@@ -278,7 +278,7 @@ class Pcm2JavaHelper{
 		val List<TypeReference> typeListForConstructor = new ArrayList<TypeReference>
 		if (null !== field.typeReference && null !== field.typeReference.pureClassifierReference &&
 			null !== field.typeReference.pureClassifierReference.target) {
-			val classifier = EcoreUtil.copy(field.typeReference.pureClassifierReference.target)
+			val classifier = field.typeReference.pureClassifierReference.target
 			if (classifier instanceof Class) {
 				val jaMoPPClass = classifier as Class
 				val constructorsForClass = jaMoPPClass.members.filter(typeof(Constructor))
@@ -479,14 +479,18 @@ class Pcm2JavaHelper{
 	}
 	
 	def static ClassifierImport getJavaClassImport(String name) {
+//		val uri = resSet.URIConverter.normalize(URI.createURI("pathmap:/javaclass/" + name + ".java"));
+//		val res = resSet.getResource(uri, false)
+//		return res.contents.get(0) as ClassifierImport;
+//		
 		val content = "package dummyPackage;\n " +
 				"import " + name + ";\n" +
 				"public class DummyClass {}";
 		val dummyCU = createCompilationUnit("DummyClass", content);
 		val classifierImport = (dummyCU.getImports().get(0) as ClassifierImport)
-		EcoreUtil.copy(classifierImport);
-		return classifierImport;
-		
+		val copy = EcoreUtil.copy(classifierImport);
+		EcoreUtil.remove(copy);
+		return copy;
 	}
 	
 	def static ConcreteClassifier getJavaClass(String name) {
@@ -495,8 +499,9 @@ class Pcm2JavaHelper{
 				"public class DummyClass {}";
 		val dummyCU = createCompilationUnit("DummyClass", content);
 		val classifier = (dummyCU.getImports().get(0) as ClassifierImport).getClassifier();
-		EcoreUtil.copy(classifier);
-		return classifier;
+		val copy = EcoreUtil.copy(classifier);
+		EcoreUtil.remove(copy);
+		return copy;
 		
 	}
 	
