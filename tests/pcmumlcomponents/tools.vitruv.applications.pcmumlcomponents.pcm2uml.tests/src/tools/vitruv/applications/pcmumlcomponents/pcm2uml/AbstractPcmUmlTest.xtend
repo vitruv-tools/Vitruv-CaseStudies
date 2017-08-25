@@ -27,10 +27,6 @@ class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected val PARAMETER_NAME_2 = "barParameter"
 	protected val ATTRIBUTE_NAME = "fooAttribute"
 	
-	override protected unresolveChanges() {
-		return false;
-	}
-	
 	protected static var Repository primitiveTypesRepository = null
 	
 	private def String getProjectModelPath(String modelName) {
