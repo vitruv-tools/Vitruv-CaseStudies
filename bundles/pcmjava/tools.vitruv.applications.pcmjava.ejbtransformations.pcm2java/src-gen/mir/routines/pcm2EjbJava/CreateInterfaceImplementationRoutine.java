@@ -34,8 +34,7 @@ public class CreateInterfaceImplementationRoutine extends AbstractRepairRoutineR
     }
     
     public void callRoutine1(final Interface interf, final org.emftext.language.java.containers.Package contractsPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = interf.getEntityName();
-      _routinesFacade.createJavaInterface(interf, contractsPackage, _entityName);
+      _routinesFacade.createJavaInterface(interf, contractsPackage, interf.getEntityName());
     }
   }
   
@@ -50,7 +49,7 @@ public class CreateInterfaceImplementationRoutine extends AbstractRepairRoutineR
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInterfaceImplementationRoutine with input:");
-    getLogger().debug("   Interface: " + this.interf);
+    getLogger().debug("   interf: " + this.interf);
     
     org.emftext.language.java.containers.Package contractsPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceContractsPackage(interf), // correspondence source supplier

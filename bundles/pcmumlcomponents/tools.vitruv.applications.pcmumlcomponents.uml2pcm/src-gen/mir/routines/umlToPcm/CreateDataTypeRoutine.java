@@ -35,7 +35,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateDataTypeRoutine with input:");
-    getLogger().debug("   DataType: " + this.umlType);
+    getLogger().debug("   umlType: " + this.umlType);
     
     userExecution.callRoutine1(umlType, actionsFacade);
     

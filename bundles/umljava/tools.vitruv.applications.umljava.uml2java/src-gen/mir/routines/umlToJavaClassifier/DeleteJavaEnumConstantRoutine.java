@@ -40,12 +40,12 @@ public class DeleteJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaEnumConstantRoutine with input:");
-    getLogger().debug("   EnumerationLiteral: " + this.uLiteral);
+    getLogger().debug("   uLiteral: " + this.uLiteral);
     
-    EnumConstant jConst = getCorrespondingElement(
+    org.emftext.language.java.members.EnumConstant jConst = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJConst(uLiteral), // correspondence source supplier
-    	EnumConstant.class,
-    	(EnumConstant _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.EnumConstant.class,
+    	(org.emftext.language.java.members.EnumConstant _element) -> true, // correspondence precondition checker
     	null);
     if (jConst == null) {
     	return;

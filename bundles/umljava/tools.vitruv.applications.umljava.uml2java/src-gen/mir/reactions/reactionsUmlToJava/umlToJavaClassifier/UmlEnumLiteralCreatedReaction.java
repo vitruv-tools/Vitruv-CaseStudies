@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class UmlEnumLiteralCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Enumeration, EnumerationLiteral> typedChange = ((CreateAndInsertNonRoot<Enumeration, EnumerationLiteral>)change).getInsertChange();
-    Enumeration affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Enumeration, org.eclipse.uml2.uml.EnumerationLiteral> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Enumeration, org.eclipse.uml2.uml.EnumerationLiteral>)change).getInsertChange();
+    org.eclipse.uml2.uml.Enumeration affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    EnumerationLiteral newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.EnumerationLiteral newValue = typedChange.getNewValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumLiteralCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumLiteralCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class UmlEnumLiteralCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Enumeration, EnumerationLiteral> relevantChange = ((CreateAndInsertNonRoot<Enumeration, EnumerationLiteral>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Enumeration)) {
+    InsertEReference<org.eclipse.uml2.uml.Enumeration, org.eclipse.uml2.uml.EnumerationLiteral> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Enumeration, org.eclipse.uml2.uml.EnumerationLiteral>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Enumeration)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedLiteral")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof EnumerationLiteral)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.EnumerationLiteral)) {
     	return false;
     }
     return true;

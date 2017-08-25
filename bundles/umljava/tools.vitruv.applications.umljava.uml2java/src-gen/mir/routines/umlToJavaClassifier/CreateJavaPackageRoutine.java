@@ -49,11 +49,9 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
           List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
           Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
         }
-        String _name = uPackage.getName();
-        jPackage.setName(_name);
+        jPackage.setName(uPackage.getName());
       }
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(jPackage);
-      this.persistProjectRelative(uPackage, jPackage, _buildJavaFilePath);
+      this.persistProjectRelative(uPackage, jPackage, JavaPersistenceHelper.buildJavaFilePath(jPackage));
     }
   }
   
@@ -70,8 +68,8 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.uPackage);
-    getLogger().debug("   Package: " + this.uSuperPackage);
+    getLogger().debug("   uPackage: " + this.uPackage);
+    getLogger().debug("   uSuperPackage: " + this.uSuperPackage);
     
     org.emftext.language.java.containers.Package jSuperPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJSuperPackage(uPackage, uSuperPackage), // correspondence source supplier

@@ -1,7 +1,6 @@
 package mir.reactions.reactionsUmlToJava.umlToJavaClassifier;
 
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
@@ -18,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class UmlImplementedInterfaceDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.eclipse.uml2.uml.Class, InterfaceRealization> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Class, InterfaceRealization>)change;
+    RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.InterfaceRealization> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.InterfaceRealization>)change;
     org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    InterfaceRealization oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.InterfaceRealization oldValue = typedChange.getOldValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlImplementedInterfaceDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlImplementedInterfaceDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -32,14 +31,14 @@ class UmlImplementedInterfaceDeletedReaction extends AbstractReactionRealization
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.eclipse.uml2.uml.Class, InterfaceRealization> relevantChange = (RemoveEReference<org.eclipse.uml2.uml.Class, InterfaceRealization>)change;
+    RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.InterfaceRealization> relevantChange = (RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.InterfaceRealization>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("interfaceRealization")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof InterfaceRealization)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
     	return false;
     }
     return true;
@@ -64,8 +63,7 @@ class UmlImplementedInterfaceDeletedReaction extends AbstractReactionRealization
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final InterfaceRealization oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      EList<NamedElement> _suppliers = oldValue.getSuppliers();
-      NamedElement _head = IterableExtensions.<NamedElement>head(_suppliers);
+      NamedElement _head = IterableExtensions.<NamedElement>head(oldValue.getSuppliers());
       _routinesFacade.deleteJavaImplementedInterface(((Interface) _head), affectedEObject);
     }
   }

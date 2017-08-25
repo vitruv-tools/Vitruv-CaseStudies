@@ -3,7 +3,6 @@ package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
@@ -17,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaSuperInterfaceAddedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Interface, TypeReference> typedChange = (InsertEReference<Interface, TypeReference>)change;
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.types.TypeReference> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.types.TypeReference>)change;
+    org.emftext.language.java.classifiers.Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    TypeReference newValue = typedChange.getNewValue();
+    org.emftext.language.java.types.TypeReference newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperInterfaceAddedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperInterfaceAddedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +30,14 @@ class JavaSuperInterfaceAddedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Interface, TypeReference> relevantChange = (InsertEReference<Interface, TypeReference>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.types.TypeReference> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.types.TypeReference>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Interface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("extends")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof TypeReference)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
     return true;
@@ -63,8 +62,7 @@ class JavaSuperInterfaceAddedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(newValue);
-      _routinesFacade.addUmlSuperinterfaces(affectedEObject, _classifierFromTypeReference);
+      _routinesFacade.addUmlSuperinterfaces(affectedEObject, JavaTypeUtil.getClassifierFromTypeReference(newValue));
     }
   }
 }

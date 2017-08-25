@@ -25,8 +25,7 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Parameter parameter, final OrdinaryParameter javaParameter) {
-      String _parameterName = parameter.getParameterName();
-      javaParameter.setName(_parameterName);
+      javaParameter.setName(parameter.getParameterName());
     }
     
     public EObject getCorrepondenceSourceJavaParameter(final Parameter parameter) {
@@ -45,12 +44,12 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameParameterRoutine with input:");
-    getLogger().debug("   Parameter: " + this.parameter);
+    getLogger().debug("   parameter: " + this.parameter);
     
-    OrdinaryParameter javaParameter = getCorrespondingElement(
+    org.emftext.language.java.parameters.OrdinaryParameter javaParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaParameter(parameter), // correspondence source supplier
-    	OrdinaryParameter.class,
-    	(OrdinaryParameter _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.parameters.OrdinaryParameter.class,
+    	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
     	null);
     if (javaParameter == null) {
     	return;

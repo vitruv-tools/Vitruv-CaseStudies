@@ -45,8 +45,7 @@ public class CreateUmlInterfaceMethodRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updateUOperationElement(final InterfaceMethod jMeth, final Interface jInterface, final org.eclipse.uml2.uml.Interface uInterface, final Operation uOperation) {
-      String _name = jMeth.getName();
-      uOperation.setName(_name);
+      uOperation.setName(jMeth.getName());
       uOperation.setIsAbstract(true);
     }
   }
@@ -64,8 +63,8 @@ public class CreateUmlInterfaceMethodRoutine extends AbstractRepairRoutineRealiz
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlInterfaceMethodRoutine with input:");
-    getLogger().debug("   InterfaceMethod: " + this.jMeth);
-    getLogger().debug("   Interface: " + this.jInterface);
+    getLogger().debug("   jMeth: " + this.jMeth);
+    getLogger().debug("   jInterface: " + this.jInterface);
     
     org.eclipse.uml2.uml.Interface uInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUInterface(jMeth, jInterface), // correspondence source supplier
@@ -76,7 +75,7 @@ public class CreateUmlInterfaceMethodRoutine extends AbstractRepairRoutineRealiz
     	return;
     }
     registerObjectUnderModification(uInterface);
-    Operation uOperation = UMLFactoryImpl.eINSTANCE.createOperation();
+    org.eclipse.uml2.uml.Operation uOperation = UMLFactoryImpl.eINSTANCE.createOperation();
     notifyObjectCreated(uOperation);
     userExecution.updateUOperationElement(jMeth, jInterface, uInterface, uOperation);
     

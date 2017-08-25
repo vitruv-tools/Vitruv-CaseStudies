@@ -40,8 +40,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updatePcmComponentElement(final Component umlComponent, final Repository pcmRepository, final BasicComponent pcmComponent) {
-      String _name = umlComponent.getName();
-      pcmComponent.setEntityName(_name);
+      pcmComponent.setEntityName(umlComponent.getName());
     }
     
     public EObject getElement2(final Component umlComponent, final Repository pcmRepository, final BasicComponent pcmComponent) {
@@ -64,18 +63,18 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateBasicComponentRoutine with input:");
-    getLogger().debug("   Component: " + this.umlComponent);
+    getLogger().debug("   umlComponent: " + this.umlComponent);
     
-    Repository pcmRepository = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.Repository pcmRepository = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmRepository(umlComponent), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.Repository.class,
+    	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	null);
     if (pcmRepository == null) {
     	return;
     }
     registerObjectUnderModification(pcmRepository);
-    BasicComponent pcmComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
+    org.palladiosimulator.pcm.repository.BasicComponent pcmComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
     notifyObjectCreated(pcmComponent);
     userExecution.updatePcmComponentElement(umlComponent, pcmRepository, pcmComponent);
     

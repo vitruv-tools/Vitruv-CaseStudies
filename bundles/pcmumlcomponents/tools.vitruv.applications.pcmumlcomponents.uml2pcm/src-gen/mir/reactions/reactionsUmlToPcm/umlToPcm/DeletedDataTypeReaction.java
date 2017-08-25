@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedDataTypeReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Model, DataType> typedChange = (RemoveEReference<Model, DataType>)change;
-    Model affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType>)change;
+    org.eclipse.uml2.uml.Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.DataType oldValue = typedChange.getOldValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class DeletedDataTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Model, DataType> relevantChange = (RemoveEReference<Model, DataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    RemoveEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType> relevantChange = (RemoveEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Model)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof DataType)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.DataType)) {
     	return false;
     }
     return true;

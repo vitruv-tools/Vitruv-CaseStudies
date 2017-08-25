@@ -24,10 +24,9 @@ public class ChangeSystemImplementationNameRoutine extends AbstractRepairRoutine
     }
     
     public void callRoutine1(final org.palladiosimulator.pcm.system.System system, final org.emftext.language.java.containers.Package systemPackage, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.renameJavaPackage(system, null, system.getEntityName(), null);
       String _entityName = system.getEntityName();
-      _routinesFacade.renameJavaPackage(system, null, _entityName, null);
-      String _entityName_1 = system.getEntityName();
-      String _plus = (_entityName_1 + "Impl");
+      String _plus = (_entityName + "Impl");
       _routinesFacade.renameJavaClassifier(system, systemPackage, _plus);
     }
   }
@@ -43,7 +42,7 @@ public class ChangeSystemImplementationNameRoutine extends AbstractRepairRoutine
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeSystemImplementationNameRoutine with input:");
-    getLogger().debug("   System: " + this.system);
+    getLogger().debug("   system: " + this.system);
     
     org.emftext.language.java.containers.Package systemPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceSystemPackage(system), // correspondence source supplier

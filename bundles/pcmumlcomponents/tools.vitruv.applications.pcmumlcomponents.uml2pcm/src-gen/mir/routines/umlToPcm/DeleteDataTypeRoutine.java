@@ -71,24 +71,24 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteDataTypeRoutine with input:");
-    getLogger().debug("   DataType: " + this.umlDataType);
+    getLogger().debug("   umlDataType: " + this.umlDataType);
     
-    CompositeDataType pcmCompositeType = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.CompositeDataType pcmCompositeType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmCompositeType(umlDataType), // correspondence source supplier
-    	CompositeDataType.class,
-    	(CompositeDataType _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.CompositeDataType.class,
+    	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(umlDataType));
     registerObjectUnderModification(pcmCompositeType);
-    PrimitiveDataType pcmPrimitiveType = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.PrimitiveDataType pcmPrimitiveType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmPrimitiveType(umlDataType, pcmCompositeType), // correspondence source supplier
-    	PrimitiveDataType.class,
-    	(PrimitiveDataType _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.PrimitiveDataType.class,
+    	(org.palladiosimulator.pcm.repository.PrimitiveDataType _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag2(umlDataType, pcmCompositeType));
     registerObjectUnderModification(pcmPrimitiveType);
-    CollectionDataType pcmCollectionType = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.CollectionDataType pcmCollectionType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmCollectionType(umlDataType, pcmCompositeType, pcmPrimitiveType), // correspondence source supplier
-    	CollectionDataType.class,
-    	(CollectionDataType _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.CollectionDataType.class,
+    	(org.palladiosimulator.pcm.repository.CollectionDataType _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag3(umlDataType, pcmCompositeType, pcmPrimitiveType));
     registerObjectUnderModification(pcmCollectionType);
     deleteObject(userExecution.getElement1(umlDataType, pcmCompositeType, pcmPrimitiveType, pcmCollectionType));

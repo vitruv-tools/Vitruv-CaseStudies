@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class AddedInterfaceOperationParameterReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Operation, Parameter> typedChange = (InsertEReference<Operation, Parameter>)change;
-    Operation affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> typedChange = (InsertEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change;
+    org.eclipse.uml2.uml.Operation affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Parameter newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.AddedInterfaceOperationParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.AddedInterfaceOperationParameterReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class AddedInterfaceOperationParameterReaction extends AbstractReactionRealizati
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Operation, Parameter> relevantChange = (InsertEReference<Operation, Parameter>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Operation)) {
+    InsertEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> relevantChange = (InsertEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Operation)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedParameter")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Parameter)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Parameter)) {
     	return false;
     }
     return true;

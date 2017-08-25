@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaAttributeCreatedInInterfaceReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Interface, Field> typedChange = ((CreateAndInsertNonRoot<Interface, Field>)change).getInsertChange();
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.Field> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.Field>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Field newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.Field newValue = typedChange.getNewValue();
     mir.routines.javaToUmlAttribute.RoutinesFacade routinesFacade = new mir.routines.javaToUmlAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeCreatedInInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeCreatedInInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +31,14 @@ class JavaAttributeCreatedInInterfaceReaction extends AbstractReactionRealizatio
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Interface, Field> relevantChange = ((CreateAndInsertNonRoot<Interface, Field>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.Field> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.Field>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Interface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Field)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.Field)) {
     	return false;
     }
     return true;
@@ -63,8 +63,7 @@ class JavaAttributeCreatedInInterfaceReaction extends AbstractReactionRealizatio
     }
     
     public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
-      Class<? extends Interface> _class = affectedEObject.getClass();
-      String _simpleName = _class.getSimpleName();
+      String _simpleName = affectedEObject.getClass().getSimpleName();
       String _plus = ("Adding fields to " + _simpleName);
       String _plus_1 = (_plus + " is not supported. Please remove ");
       String _plus_2 = (_plus_1 + newValue);

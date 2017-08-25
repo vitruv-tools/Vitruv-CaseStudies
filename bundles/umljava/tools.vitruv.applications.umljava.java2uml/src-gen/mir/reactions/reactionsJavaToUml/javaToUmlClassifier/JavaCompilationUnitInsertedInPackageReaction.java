@@ -1,7 +1,6 @@
 package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
 
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -17,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaCompilationUnitInsertedInPackageReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.containers.Package, CompilationUnit> typedChange = (InsertEReference<org.emftext.language.java.containers.Package, CompilationUnit>)change;
+    InsertEReference<org.emftext.language.java.containers.Package, org.emftext.language.java.containers.CompilationUnit> typedChange = (InsertEReference<org.emftext.language.java.containers.Package, org.emftext.language.java.containers.CompilationUnit>)change;
     org.emftext.language.java.containers.Package affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    CompilationUnit newValue = typedChange.getNewValue();
+    org.emftext.language.java.containers.CompilationUnit newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompilationUnitInsertedInPackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompilationUnitInsertedInPackageReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +30,14 @@ class JavaCompilationUnitInsertedInPackageReaction extends AbstractReactionReali
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.containers.Package, CompilationUnit> relevantChange = (InsertEReference<org.emftext.language.java.containers.Package, CompilationUnit>)change;
+    InsertEReference<org.emftext.language.java.containers.Package, org.emftext.language.java.containers.CompilationUnit> relevantChange = (InsertEReference<org.emftext.language.java.containers.Package, org.emftext.language.java.containers.CompilationUnit>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.containers.Package)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("compilationUnits")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof CompilationUnit)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.containers.CompilationUnit)) {
     	return false;
     }
     return true;
@@ -63,9 +62,7 @@ class JavaCompilationUnitInsertedInPackageReaction extends AbstractReactionReali
     }
     
     public void callRoutine1(final org.emftext.language.java.containers.Package affectedEObject, final EReference affectedFeature, final CompilationUnit newValue, @Extension final RoutinesFacade _routinesFacade) {
-      EList<ConcreteClassifier> _classifiers = newValue.getClassifiers();
-      ConcreteClassifier _head = IterableExtensions.<ConcreteClassifier>head(_classifiers);
-      _routinesFacade.addUmlPackageOfClass(affectedEObject, _head);
+      _routinesFacade.addUmlPackageOfClass(affectedEObject, IterableExtensions.<ConcreteClassifier>head(newValue.getClassifiers()));
     }
   }
 }

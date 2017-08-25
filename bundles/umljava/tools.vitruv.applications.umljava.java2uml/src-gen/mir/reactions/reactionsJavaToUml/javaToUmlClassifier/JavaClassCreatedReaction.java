@@ -15,8 +15,8 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaClassCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class> typedChange = ((CreateAndInsertNonRoot<CompilationUnit, org.emftext.language.java.classifiers.Class>)change).getInsertChange();
-    CompilationUnit affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Class> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Class>)change).getInsertChange();
+    org.emftext.language.java.containers.CompilationUnit affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     org.emftext.language.java.classifiers.Class newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
@@ -29,8 +29,8 @@ class JavaClassCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<CompilationUnit, org.emftext.language.java.classifiers.Class> relevantChange = ((CreateAndInsertNonRoot<CompilationUnit, org.emftext.language.java.classifiers.Class>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof CompilationUnit)) {
+    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Class> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Class>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("classifiers")) {

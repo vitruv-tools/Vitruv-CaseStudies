@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedOperationSignatureParameterReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<OperationSignature, Parameter> typedChange = (InsertEReference<OperationSignature, Parameter>)change;
-    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter> typedChange = (InsertEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter>)change;
+    org.palladiosimulator.pcm.repository.OperationSignature affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.Parameter newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.CreatedOperationSignatureParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedOperationSignatureParameterReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class CreatedOperationSignatureParameterReaction extends AbstractReactionRealiza
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<OperationSignature, Parameter> relevantChange = (InsertEReference<OperationSignature, Parameter>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
+    InsertEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter> relevantChange = (InsertEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.OperationSignature)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parameters__OperationSignature")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Parameter)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.Parameter)) {
     	return false;
     }
     return true;

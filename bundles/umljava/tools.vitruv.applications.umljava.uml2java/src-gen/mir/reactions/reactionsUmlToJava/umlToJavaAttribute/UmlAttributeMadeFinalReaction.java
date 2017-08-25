@@ -14,11 +14,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class UmlAttributeMadeFinalReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Property, Boolean> typedChange = (ReplaceSingleValuedEAttribute<Property, Boolean>)change;
-    Property affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Property, java.lang.Boolean> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Property, java.lang.Boolean>)change;
+    org.eclipse.uml2.uml.Property affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    Boolean oldValue = typedChange.getOldValue();
-    Boolean newValue = typedChange.getNewValue();
+    java.lang.Boolean oldValue = typedChange.getOldValue();
+    java.lang.Boolean newValue = typedChange.getNewValue();
     mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeMadeFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeMadeFinalReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -29,17 +29,17 @@ class UmlAttributeMadeFinalReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<Property, Boolean> relevantChange = (ReplaceSingleValuedEAttribute<Property, Boolean>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Property)) {
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Property, java.lang.Boolean> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Property, java.lang.Boolean>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Property)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("isReadOnly")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof Boolean)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.Boolean)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof Boolean)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.Boolean)) {
     	return false;
     }
     return true;

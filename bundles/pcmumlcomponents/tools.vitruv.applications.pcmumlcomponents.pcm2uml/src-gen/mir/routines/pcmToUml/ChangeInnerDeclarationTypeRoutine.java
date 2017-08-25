@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
-import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -34,8 +33,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
       if (((pcmDataType == null) || ((pcmDataType instanceof CollectionDataType) && (((CollectionDataType) pcmDataType).getInnerType_CollectionDataType() == null)))) {
         umlProperty.setType(null);
       } else {
-        org.eclipse.uml2.uml.DataType _retrieveUmlType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType, umlModel);
-        umlProperty.setType(_retrieveUmlType);
+        umlProperty.setType(PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmDataType, umlModel));
       }
       PcmToUmlUtil.updateMultiplicity(umlProperty, Boolean.valueOf(((umlProperty.getType() != null) && (pcmDataType instanceof CollectionDataType))));
     }
@@ -45,8 +43,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     }
     
     public EObject getCorrepondenceSourceUmlModel(final InnerDeclaration innerDeclaration, final DataType pcmDataType, final Property umlProperty) {
-      CompositeDataType _compositeDataType_InnerDeclaration = innerDeclaration.getCompositeDataType_InnerDeclaration();
-      Repository _repository__DataType = _compositeDataType_InnerDeclaration.getRepository__DataType();
+      Repository _repository__DataType = innerDeclaration.getCompositeDataType_InnerDeclaration().getRepository__DataType();
       return _repository__DataType;
     }
   }
@@ -64,22 +61,22 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInnerDeclarationTypeRoutine with input:");
-    getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
-    getLogger().debug("   DataType: " + this.pcmDataType);
+    getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
+    getLogger().debug("   pcmDataType: " + this.pcmDataType);
     
-    Property umlProperty = getCorrespondingElement(
+    org.eclipse.uml2.uml.Property umlProperty = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlProperty(innerDeclaration, pcmDataType), // correspondence source supplier
-    	Property.class,
-    	(Property _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Property.class,
+    	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
     	null);
     if (umlProperty == null) {
     	return;
     }
     registerObjectUnderModification(umlProperty);
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(innerDeclaration, pcmDataType, umlProperty), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;

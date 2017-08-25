@@ -48,8 +48,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void updateUmlTypeElement(final CompositeDataType dataType, final Model umlModel, final DataType umlType) {
-      String _entityName = dataType.getEntityName();
-      umlType.setName(_entityName);
+      umlType.setName(dataType.getEntityName());
     }
   }
   
@@ -64,18 +63,18 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeDataTypeRoutine with input:");
-    getLogger().debug("   CompositeDataType: " + this.dataType);
+    getLogger().debug("   dataType: " + this.dataType);
     
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(dataType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;
     }
     registerObjectUnderModification(umlModel);
-    DataType umlType = UMLFactoryImpl.eINSTANCE.createDataType();
+    org.eclipse.uml2.uml.DataType umlType = UMLFactoryImpl.eINSTANCE.createDataType();
     notifyObjectCreated(umlType);
     userExecution.updateUmlTypeElement(dataType, umlModel, umlType);
     

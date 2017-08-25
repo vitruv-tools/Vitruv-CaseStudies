@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<CompositeDataType, InnerDeclaration> typedChange = ((CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration>)change).getInsertChange();
-    CompositeDataType affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.InnerDeclaration> typedChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.InnerDeclaration>)change).getInsertChange();
+    org.palladiosimulator.pcm.repository.CompositeDataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    InnerDeclaration newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.InnerDeclaration newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.CreatedInnerDeclarationReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.CreatedInnerDeclarationReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<CompositeDataType, InnerDeclaration> relevantChange = ((CreateAndInsertNonRoot<CompositeDataType, InnerDeclaration>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof CompositeDataType)) {
+    InsertEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.InnerDeclaration> relevantChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.InnerDeclaration>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("innerDeclaration_CompositeDataType")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof InnerDeclaration)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.InnerDeclaration)) {
     	return false;
     }
     return true;

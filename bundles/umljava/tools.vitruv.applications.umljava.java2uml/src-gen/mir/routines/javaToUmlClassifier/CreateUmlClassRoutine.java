@@ -38,8 +38,7 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUClassElement(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Class uClass) {
-      String _name = jClass.getName();
-      uClass.setName(_name);
+      uClass.setName(jClass.getName());
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Class uClass, @Extension final RoutinesFacade _routinesFacade) {
@@ -60,8 +59,8 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlClassRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
     org.eclipse.uml2.uml.Class uClass = UMLFactoryImpl.eINSTANCE.createClass();
     notifyObjectCreated(uClass);

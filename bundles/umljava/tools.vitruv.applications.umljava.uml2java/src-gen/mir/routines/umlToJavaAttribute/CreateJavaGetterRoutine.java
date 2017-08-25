@@ -41,7 +41,7 @@ public class CreateJavaGetterRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaGetterRoutine with input:");
-    getLogger().debug("   Field: " + this.jAttribute);
+    getLogger().debug("   jAttribute: " + this.jAttribute);
     
     userExecution.callRoutine1(jAttribute, actionsFacade);
     

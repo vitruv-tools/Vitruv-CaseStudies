@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangedProvidingEntityOfProvidedRoleReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<OperationProvidedRole, InterfaceProvidingEntity> typedChange = (ReplaceSingleValuedEReference<OperationProvidedRole, InterfaceProvidingEntity>)change;
-    OperationProvidedRole affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationProvidedRole, org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationProvidedRole, org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity>)change;
+    org.palladiosimulator.pcm.repository.OperationProvidedRole affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    InterfaceProvidingEntity oldValue = typedChange.getOldValue();
-    InterfaceProvidingEntity newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity newValue = typedChange.getNewValue();
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.ChangedProvidingEntityOfProvidedRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.ChangedProvidingEntityOfProvidedRoleReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ChangedProvidingEntityOfProvidedRoleReaction extends AbstractReactionReali
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<OperationProvidedRole, InterfaceProvidingEntity> relevantChange = (ReplaceSingleValuedEReference<OperationProvidedRole, InterfaceProvidingEntity>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof OperationProvidedRole)) {
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationProvidedRole, org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity> relevantChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationProvidedRole, org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.OperationProvidedRole)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("providingEntity_ProvidedRole")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof InterfaceProvidingEntity)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof InterfaceProvidingEntity)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity)) {
     	return false;
     }
     return true;

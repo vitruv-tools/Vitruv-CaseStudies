@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -50,9 +49,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void updateUmlTypeElement(final PrimitiveDataType dataType, final Model umlModel, final PrimitiveType umlType) {
-      PrimitiveTypeEnum _type = dataType.getType();
-      String _umlPrimitiveTypeName = PcmToUmlUtil.getUmlPrimitiveTypeName(_type);
-      umlType.setName(_umlPrimitiveTypeName);
+      umlType.setName(PcmToUmlUtil.getUmlPrimitiveTypeName(dataType.getType()));
     }
   }
   
@@ -67,18 +64,18 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePrimitiveDataTypeRoutine with input:");
-    getLogger().debug("   PrimitiveDataType: " + this.dataType);
+    getLogger().debug("   dataType: " + this.dataType);
     
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(dataType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;
     }
     registerObjectUnderModification(umlModel);
-    PrimitiveType umlType = UMLFactoryImpl.eINSTANCE.createPrimitiveType();
+    org.eclipse.uml2.uml.PrimitiveType umlType = UMLFactoryImpl.eINSTANCE.createPrimitiveType();
     notifyObjectCreated(umlType);
     userExecution.updateUmlTypeElement(dataType, umlModel, umlType);
     

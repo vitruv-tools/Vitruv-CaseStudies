@@ -16,11 +16,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class JavaSuperClassChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, TypeReference> typedChange = (ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
+    ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference> typedChange = (ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    TypeReference oldValue = typedChange.getOldValue();
-    TypeReference newValue = typedChange.getNewValue();
+    org.emftext.language.java.types.TypeReference oldValue = typedChange.getOldValue();
+    org.emftext.language.java.types.TypeReference newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperClassChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperClassChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -31,17 +31,17 @@ class JavaSuperClassChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, TypeReference> relevantChange = (ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
+    ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference> relevantChange = (ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("extends")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof TypeReference)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof TypeReference)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
     return true;
@@ -56,11 +56,11 @@ class JavaSuperClassChangedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, TypeReference> typedChange = (ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
+    ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference> typedChange = (ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    TypeReference oldValue = typedChange.getOldValue();
-    TypeReference newValue = typedChange.getNewValue();
+    org.emftext.language.java.types.TypeReference oldValue = typedChange.getOldValue();
+    org.emftext.language.java.types.TypeReference newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }

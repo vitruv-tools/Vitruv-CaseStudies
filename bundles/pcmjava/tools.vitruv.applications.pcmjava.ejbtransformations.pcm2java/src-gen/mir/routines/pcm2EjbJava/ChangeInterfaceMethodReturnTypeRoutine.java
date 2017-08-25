@@ -49,8 +49,8 @@ public class ChangeInterfaceMethodReturnTypeRoutine extends AbstractRepairRoutin
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInterfaceMethodReturnTypeRoutine with input:");
-    getLogger().debug("   InterfaceMethod: " + this.interfaceMethod);
-    getLogger().debug("   DataType: " + this.returnType);
+    getLogger().debug("   interfaceMethod: " + this.interfaceMethod);
+    getLogger().debug("   returnType: " + this.returnType);
     
     org.emftext.language.java.classifiers.Class returnTypeClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceReturnTypeClass(interfaceMethod, returnType), // correspondence source supplier

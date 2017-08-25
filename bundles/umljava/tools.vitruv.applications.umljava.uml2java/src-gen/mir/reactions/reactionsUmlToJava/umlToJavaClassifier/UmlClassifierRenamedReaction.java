@@ -14,11 +14,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class UmlClassifierRenamedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Classifier, String> typedChange = (ReplaceSingleValuedEAttribute<Classifier, String>)change;
-    Classifier affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Classifier, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Classifier, java.lang.String>)change;
+    org.eclipse.uml2.uml.Classifier affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    java.lang.String oldValue = typedChange.getOldValue();
+    java.lang.String newValue = typedChange.getNewValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlClassifierRenamedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlClassifierRenamedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -29,17 +29,17 @@ class UmlClassifierRenamedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<Classifier, String> relevantChange = (ReplaceSingleValuedEAttribute<Classifier, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Classifier)) {
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Classifier, java.lang.String> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Classifier, java.lang.String>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Classifier)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("name")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.String)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.String)) {
     	return false;
     }
     return true;

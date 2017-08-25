@@ -44,8 +44,8 @@ public class SetUmlClassFinalRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlClassFinalRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Boolean: " + this.isFinal);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   isFinal: " + this.isFinal);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, isFinal), // correspondence source supplier

@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedDataTypeReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Repository, DataType> typedChange = ((RemoveAndDeleteNonRoot<Repository, DataType>)change).getRemoveChange();
-    Repository affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.DataType> typedChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.DataType>)change).getRemoveChange();
+    org.palladiosimulator.pcm.repository.Repository affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.DataType oldValue = typedChange.getOldValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.DeletedDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.DeletedDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class DeletedDataTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Repository, DataType> relevantChange = ((RemoveAndDeleteNonRoot<Repository, DataType>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
+    RemoveEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.DataType> relevantChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.DataType>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Repository)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("dataTypes__Repository")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof DataType)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
     return true;

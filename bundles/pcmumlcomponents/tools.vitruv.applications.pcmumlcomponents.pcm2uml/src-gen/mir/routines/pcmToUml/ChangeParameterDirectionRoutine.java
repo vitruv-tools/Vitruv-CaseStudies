@@ -3,9 +3,7 @@ package mir.routines.pcmToUml;
 import java.io.IOException;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.palladiosimulator.pcm.repository.Parameter;
-import org.palladiosimulator.pcm.repository.ParameterModifier;
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -27,9 +25,7 @@ public class ChangeParameterDirectionRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final Parameter pcmParameter, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      ParameterModifier _modifier__Parameter = pcmParameter.getModifier__Parameter();
-      ParameterDirectionKind _umlParameterDirection = PcmToUmlUtil.getUmlParameterDirection(_modifier__Parameter);
-      umlParameter.setDirection(_umlParameterDirection);
+      umlParameter.setDirection(PcmToUmlUtil.getUmlParameterDirection(pcmParameter.getModifier__Parameter()));
     }
     
     public EObject getCorrepondenceSourceUmlParameter(final Parameter pcmParameter) {
@@ -48,7 +44,7 @@ public class ChangeParameterDirectionRoutine extends AbstractRepairRoutineRealiz
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeParameterDirectionRoutine with input:");
-    getLogger().debug("   Parameter: " + this.pcmParameter);
+    getLogger().debug("   pcmParameter: " + this.pcmParameter);
     
     org.eclipse.uml2.uml.Parameter umlParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlParameter(pcmParameter), // correspondence source supplier

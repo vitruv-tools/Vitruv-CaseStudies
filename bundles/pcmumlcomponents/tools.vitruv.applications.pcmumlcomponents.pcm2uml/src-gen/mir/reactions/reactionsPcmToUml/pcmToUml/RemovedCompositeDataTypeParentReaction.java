@@ -14,10 +14,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class RemovedCompositeDataTypeParentReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<CompositeDataType, CompositeDataType> typedChange = (RemoveEReference<CompositeDataType, CompositeDataType>)change;
-    CompositeDataType affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.CompositeDataType> typedChange = (RemoveEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.CompositeDataType>)change;
+    org.palladiosimulator.pcm.repository.CompositeDataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    CompositeDataType oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.CompositeDataType oldValue = typedChange.getOldValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCompositeDataTypeParentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.RemovedCompositeDataTypeParentReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -28,14 +28,14 @@ class RemovedCompositeDataTypeParentReaction extends AbstractReactionRealization
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<CompositeDataType, CompositeDataType> relevantChange = (RemoveEReference<CompositeDataType, CompositeDataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CompositeDataType)) {
+    RemoveEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.CompositeDataType> relevantChange = (RemoveEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.CompositeDataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parentType_CompositeDataType")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof CompositeDataType)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
     	return false;
     }
     return true;

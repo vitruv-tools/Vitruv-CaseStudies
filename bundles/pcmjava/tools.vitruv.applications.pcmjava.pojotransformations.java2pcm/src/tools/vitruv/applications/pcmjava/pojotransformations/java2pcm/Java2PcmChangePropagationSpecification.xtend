@@ -1,10 +1,10 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
 
-import mir.reactions.AbstractChangePropagationSpecificationJavaToPcm
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm.Java2PcmChangeProcessor
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmPackagePreprocessor
+import mir.reactions.JavaToPcmChangePropagationSpecification
 
-class Java2PcmChangePropagationSpecification extends AbstractChangePropagationSpecificationJavaToPcm {
+class Java2PcmChangePropagationSpecification extends JavaToPcmChangePropagationSpecification {
 	protected override setup() {
 		addChangeMainprocessor(new Java2PcmChangeProcessor());
 		super.setup();

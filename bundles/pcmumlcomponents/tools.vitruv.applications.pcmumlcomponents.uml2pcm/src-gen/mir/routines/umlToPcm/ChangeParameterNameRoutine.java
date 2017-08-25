@@ -25,8 +25,7 @@ public class ChangeParameterNameRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Parameter umlParameter, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
-      String _name = umlParameter.getName();
-      ParameterUtil.setName(pcmParameter, _name);
+      ParameterUtil.setName(pcmParameter, umlParameter.getName());
     }
     
     public EObject getCorrepondenceSourcePcmParameter(final Parameter umlParameter) {
@@ -45,7 +44,7 @@ public class ChangeParameterNameRoutine extends AbstractRepairRoutineRealization
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeParameterNameRoutine with input:");
-    getLogger().debug("   Parameter: " + this.umlParameter);
+    getLogger().debug("   umlParameter: " + this.umlParameter);
     
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmParameter(umlParameter), // correspondence source supplier

@@ -44,8 +44,7 @@ public class CreateUmlAttributeInClassRoutine extends AbstractRepairRoutineReali
     }
     
     public void updateUAttrElement(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Property uAttr) {
-      String _name = jAttr.getName();
-      uAttr.setName(_name);
+      uAttr.setName(jAttr.getName());
     }
   }
   
@@ -62,8 +61,8 @@ public class CreateUmlAttributeInClassRoutine extends AbstractRepairRoutineReali
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlAttributeInClassRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Field: " + this.jAttr);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   jAttr: " + this.jAttr);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, jAttr), // correspondence source supplier
@@ -74,7 +73,7 @@ public class CreateUmlAttributeInClassRoutine extends AbstractRepairRoutineReali
     	return;
     }
     registerObjectUnderModification(uClass);
-    Property uAttr = UMLFactoryImpl.eINSTANCE.createProperty();
+    org.eclipse.uml2.uml.Property uAttr = UMLFactoryImpl.eINSTANCE.createProperty();
     notifyObjectCreated(uAttr);
     userExecution.updateUAttrElement(jClass, jAttr, uClass, uAttr);
     

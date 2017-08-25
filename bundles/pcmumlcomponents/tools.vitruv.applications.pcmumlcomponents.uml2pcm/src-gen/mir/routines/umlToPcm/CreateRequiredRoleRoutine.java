@@ -47,8 +47,7 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updatePcmRoleElement(final Component umlComponent, final Usage umlUsage, final BasicComponent pcmComponent, final OperationRequiredRole pcmRole) {
-      String _name = umlUsage.getName();
-      pcmRole.setEntityName(_name);
+      pcmRole.setEntityName(umlUsage.getName());
     }
   }
   
@@ -65,19 +64,19 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRequiredRoleRoutine with input:");
-    getLogger().debug("   Component: " + this.umlComponent);
-    getLogger().debug("   Usage: " + this.umlUsage);
+    getLogger().debug("   umlComponent: " + this.umlComponent);
+    getLogger().debug("   umlUsage: " + this.umlUsage);
     
-    BasicComponent pcmComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.BasicComponent pcmComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmComponent(umlComponent, umlUsage), // correspondence source supplier
-    	BasicComponent.class,
-    	(BasicComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.BasicComponent.class,
+    	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (pcmComponent == null) {
     	return;
     }
     registerObjectUnderModification(pcmComponent);
-    OperationRequiredRole pcmRole = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
+    org.palladiosimulator.pcm.repository.OperationRequiredRole pcmRole = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
     notifyObjectCreated(pcmRole);
     userExecution.updatePcmRoleElement(umlComponent, umlUsage, pcmComponent, pcmRole);
     

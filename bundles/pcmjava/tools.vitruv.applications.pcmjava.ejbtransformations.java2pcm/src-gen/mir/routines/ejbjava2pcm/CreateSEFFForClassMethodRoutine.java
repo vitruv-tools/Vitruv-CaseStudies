@@ -2,13 +2,11 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.ClassMethod;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
-import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 import org.palladiosimulator.pcm.seff.impl.SeffFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -30,8 +28,7 @@ public class CreateSEFFForClassMethodRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final BasicComponent basicComponent, final OperationSignature opSignature, final ClassMethod classMethod, final ResourceDemandingSEFF seff) {
-      EList<ServiceEffectSpecification> _serviceEffectSpecifications__BasicComponent = basicComponent.getServiceEffectSpecifications__BasicComponent();
-      _serviceEffectSpecifications__BasicComponent.add(seff);
+      basicComponent.getServiceEffectSpecifications__BasicComponent().add(seff);
     }
     
     public EObject getElement2(final BasicComponent basicComponent, final OperationSignature opSignature, final ClassMethod classMethod, final ResourceDemandingSEFF seff) {
@@ -62,11 +59,11 @@ public class CreateSEFFForClassMethodRoutine extends AbstractRepairRoutineRealiz
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSEFFForClassMethodRoutine with input:");
-    getLogger().debug("   BasicComponent: " + this.basicComponent);
-    getLogger().debug("   OperationSignature: " + this.opSignature);
-    getLogger().debug("   ClassMethod: " + this.classMethod);
+    getLogger().debug("   basicComponent: " + this.basicComponent);
+    getLogger().debug("   opSignature: " + this.opSignature);
+    getLogger().debug("   classMethod: " + this.classMethod);
     
-    ResourceDemandingSEFF seff = SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
+    org.palladiosimulator.pcm.seff.ResourceDemandingSEFF seff = SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
     notifyObjectCreated(seff);
     userExecution.updateSeffElement(basicComponent, opSignature, classMethod, seff);
     

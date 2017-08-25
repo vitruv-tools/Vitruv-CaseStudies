@@ -1,13 +1,10 @@
 package mir.routines.pcm2java;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.InterfaceMethod;
-import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -35,14 +32,11 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     
     public void update0Element(final ServiceEffectSpecification seff, final org.emftext.language.java.classifiers.Class componentClass, final InterfaceMethod interfaceMethod, final ClassMethod classMethod) {
       ClassMethod correspondingClassMethod = Pcm2JavaHelper.findMethodInClass(componentClass, classMethod);
-      boolean _equals = Objects.equal(null, correspondingClassMethod);
-      if (_equals) {
-        EList<Member> _members = componentClass.getMembers();
-        _members.add(classMethod);
+      if ((null == correspondingClassMethod)) {
+        componentClass.getMembers().add(classMethod);
         correspondingClassMethod = classMethod;
       } else {
-        String _name = interfaceMethod.getName();
-        correspondingClassMethod.setName(_name);
+        correspondingClassMethod.setName(interfaceMethod.getName());
       }
     }
     
@@ -85,7 +79,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSEFFRoutine with input:");
-    getLogger().debug("   ServiceEffectSpecification: " + this.seff);
+    getLogger().debug("   seff: " + this.seff);
     
     org.emftext.language.java.classifiers.Class componentClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceComponentClass(seff), // correspondence source supplier
@@ -96,10 +90,10 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     	return;
     }
     registerObjectUnderModification(componentClass);
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(seff, componentClass), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceMethod == null) {
     	return;
@@ -108,7 +102,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     if (!userExecution.checkMatcherPrecondition1(seff, componentClass, interfaceMethod)) {
     	return;
     }
-    ClassMethod classMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
+    org.emftext.language.java.members.ClassMethod classMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
     notifyObjectCreated(classMethod);
     userExecution.updateClassMethodElement(seff, componentClass, interfaceMethod, classMethod);
     

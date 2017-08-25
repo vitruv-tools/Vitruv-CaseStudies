@@ -14,8 +14,8 @@ import tools.vitruv.framework.change.echange.root.InsertRootEObject;
 @SuppressWarnings("all")
 class CreatedUmlModelReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertRootEObject<Model> typedChange = ((CreateAndInsertRoot<Model>)change).getInsertChange();
-    Model newValue = typedChange.getNewValue();
+    InsertRootEObject<org.eclipse.uml2.uml.Model> typedChange = ((CreateAndInsertRoot<org.eclipse.uml2.uml.Model>)change).getInsertChange();
+    org.eclipse.uml2.uml.Model newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedUmlModelReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedUmlModelReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
@@ -26,8 +26,8 @@ class CreatedUmlModelReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertRootEObject<Model> relevantChange = ((CreateAndInsertRoot<Model>)change).getInsertChange();
-    if (!(relevantChange.getNewValue() instanceof Model)) {
+    InsertRootEObject<org.eclipse.uml2.uml.Model> relevantChange = ((CreateAndInsertRoot<org.eclipse.uml2.uml.Model>)change).getInsertChange();
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Model)) {
     	return false;
     }
     return true;

@@ -49,21 +49,21 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveProvidedRoleRoutine with input:");
-    getLogger().debug("   ProvidedRole: " + this.providedRole);
+    getLogger().debug("   providedRole: " + this.providedRole);
     
-    ClassifierImport requiredInterfaceImport = getCorrespondingElement(
+    org.emftext.language.java.imports.ClassifierImport requiredInterfaceImport = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRequiredInterfaceImport(providedRole), // correspondence source supplier
-    	ClassifierImport.class,
-    	(ClassifierImport _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.imports.ClassifierImport.class,
+    	(org.emftext.language.java.imports.ClassifierImport _element) -> true, // correspondence precondition checker
     	null);
     if (requiredInterfaceImport == null) {
     	return;
     }
     registerObjectUnderModification(requiredInterfaceImport);
-    NamespaceClassifierReference namespaceClassifierReference = getCorrespondingElement(
+    org.emftext.language.java.types.NamespaceClassifierReference namespaceClassifierReference = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceNamespaceClassifierReference(providedRole, requiredInterfaceImport), // correspondence source supplier
-    	NamespaceClassifierReference.class,
-    	(NamespaceClassifierReference _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.types.NamespaceClassifierReference.class,
+    	(org.emftext.language.java.types.NamespaceClassifierReference _element) -> true, // correspondence precondition checker
     	null);
     if (namespaceClassifierReference == null) {
     	return;

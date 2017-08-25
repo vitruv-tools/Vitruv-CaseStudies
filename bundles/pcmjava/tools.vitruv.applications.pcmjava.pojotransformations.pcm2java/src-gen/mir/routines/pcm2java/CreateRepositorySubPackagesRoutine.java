@@ -41,7 +41,7 @@ public class CreateRepositorySubPackagesRoutine extends AbstractRepairRoutineRea
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRepositorySubPackagesRoutine with input:");
-    getLogger().debug("   Repository: " + this.repository);
+    getLogger().debug("   repository: " + this.repository);
     
     org.emftext.language.java.containers.Package repositoryPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepositoryPackage(repository), // correspondence source supplier

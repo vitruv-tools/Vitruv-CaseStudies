@@ -33,8 +33,7 @@ public class CreateUmlPropertyForDatatypeRoutine extends AbstractRepairRoutineRe
     }
     
     public void updatePropertyElement(final DataType type, final InnerDeclaration counterpart, final DataType owner, final Property property) {
-      String _entityName = counterpart.getEntityName();
-      property.setName(_entityName);
+      property.setName(counterpart.getEntityName());
       property.setType(type);
     }
     
@@ -62,11 +61,11 @@ public class CreateUmlPropertyForDatatypeRoutine extends AbstractRepairRoutineRe
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlPropertyForDatatypeRoutine with input:");
-    getLogger().debug("   DataType: " + this.type);
-    getLogger().debug("   InnerDeclaration: " + this.counterpart);
-    getLogger().debug("   DataType: " + this.owner);
+    getLogger().debug("   type: " + this.type);
+    getLogger().debug("   counterpart: " + this.counterpart);
+    getLogger().debug("   owner: " + this.owner);
     
-    Property property = UMLFactoryImpl.eINSTANCE.createProperty();
+    org.eclipse.uml2.uml.Property property = UMLFactoryImpl.eINSTANCE.createProperty();
     notifyObjectCreated(property);
     userExecution.updatePropertyElement(type, counterpart, owner, property);
     

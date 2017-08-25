@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class JavaReturnTypeChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<Method, TypeReference> typedChange = (ReplaceSingleValuedEReference<Method, TypeReference>)change;
-    Method affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.emftext.language.java.members.Method, org.emftext.language.java.types.TypeReference> typedChange = (ReplaceSingleValuedEReference<org.emftext.language.java.members.Method, org.emftext.language.java.types.TypeReference>)change;
+    org.emftext.language.java.members.Method affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    TypeReference oldValue = typedChange.getOldValue();
-    TypeReference newValue = typedChange.getNewValue();
+    org.emftext.language.java.types.TypeReference oldValue = typedChange.getOldValue();
+    org.emftext.language.java.types.TypeReference newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaReturnTypeChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaReturnTypeChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class JavaReturnTypeChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<Method, TypeReference> relevantChange = (ReplaceSingleValuedEReference<Method, TypeReference>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Method)) {
+    ReplaceSingleValuedEReference<org.emftext.language.java.members.Method, org.emftext.language.java.types.TypeReference> relevantChange = (ReplaceSingleValuedEReference<org.emftext.language.java.members.Method, org.emftext.language.java.types.TypeReference>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.members.Method)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("typeReference")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof TypeReference)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof TypeReference)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
     return true;

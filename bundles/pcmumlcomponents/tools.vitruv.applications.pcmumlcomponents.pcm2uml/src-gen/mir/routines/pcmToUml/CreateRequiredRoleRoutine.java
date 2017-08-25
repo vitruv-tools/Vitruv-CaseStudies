@@ -40,8 +40,7 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUsageElement(final InterfaceRequiringEntity pcmComponent, final OperationRequiredRole requiredRole, final Component umlComponent, final Usage usage) {
-      String _entityName = requiredRole.getEntityName();
-      usage.setName(_entityName);
+      usage.setName(requiredRole.getEntityName());
       EList<NamedElement> _clients = usage.getClients();
       _clients.add(umlComponent);
     }
@@ -68,19 +67,19 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRequiredRoleRoutine with input:");
-    getLogger().debug("   InterfaceRequiringEntity: " + this.pcmComponent);
-    getLogger().debug("   OperationRequiredRole: " + this.requiredRole);
+    getLogger().debug("   pcmComponent: " + this.pcmComponent);
+    getLogger().debug("   requiredRole: " + this.requiredRole);
     
-    Component umlComponent = getCorrespondingElement(
+    org.eclipse.uml2.uml.Component umlComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlComponent(pcmComponent, requiredRole), // correspondence source supplier
-    	Component.class,
-    	(Component _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Component.class,
+    	(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
     	null);
     if (umlComponent == null) {
     	return;
     }
     registerObjectUnderModification(umlComponent);
-    Usage usage = UMLFactoryImpl.eINSTANCE.createUsage();
+    org.eclipse.uml2.uml.Usage usage = UMLFactoryImpl.eINSTANCE.createUsage();
     notifyObjectCreated(usage);
     userExecution.updateUsageElement(pcmComponent, requiredRole, umlComponent, usage);
     

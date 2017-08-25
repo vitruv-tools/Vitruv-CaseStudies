@@ -5,9 +5,7 @@ import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.Method;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -29,10 +27,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Operation uOperation, final Method javaMethod, final org.emftext.language.java.classifiers.Class returnType) {
-      Type _type = uOperation.getType();
-      CompilationUnit _containingCompilationUnit = javaMethod.getContainingCompilationUnit();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type, returnType, _containingCompilationUnit, this.userInteracting);
-      javaMethod.setTypeReference(_createTypeReferenceAndUpdateImport);
+      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), returnType, javaMethod.getContainingCompilationUnit(), this.userInteracting));
     }
     
     public EObject getCorrepondenceSourceJavaMethod(final Operation uOperation) {
@@ -56,12 +51,12 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetJavaMethodReturnTypeRoutine with input:");
-    getLogger().debug("   Operation: " + this.uOperation);
+    getLogger().debug("   uOperation: " + this.uOperation);
     
-    Method javaMethod = getCorrespondingElement(
+    org.emftext.language.java.members.Method javaMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaMethod(uOperation), // correspondence source supplier
-    	Method.class,
-    	(Method _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.Method.class,
+    	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
     	null);
     if (javaMethod == null) {
     	return;

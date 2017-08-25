@@ -46,13 +46,13 @@ public class SetUmlMethodFinalRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlMethodFinalRoutine with input:");
-    getLogger().debug("   Method: " + this.jMethod);
-    getLogger().debug("   Boolean: " + this.isFinal);
+    getLogger().debug("   jMethod: " + this.jMethod);
+    getLogger().debug("   isFinal: " + this.isFinal);
     
-    Operation uOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation uOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUOperation(jMethod, isFinal), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (uOperation == null) {
     	return;

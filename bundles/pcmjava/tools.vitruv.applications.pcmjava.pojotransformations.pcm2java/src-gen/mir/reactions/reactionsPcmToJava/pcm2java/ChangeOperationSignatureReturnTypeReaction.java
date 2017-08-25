@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<OperationSignature, DataType> typedChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
-    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.DataType> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.DataType>)change;
+    org.palladiosimulator.pcm.repository.OperationSignature affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType oldValue = typedChange.getOldValue();
-    DataType newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.DataType oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.DataType newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<OperationSignature, DataType> relevantChange = (ReplaceSingleValuedEReference<OperationSignature, DataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.DataType> relevantChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.DataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.OperationSignature)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("returnType__OperationSignature")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
     return true;

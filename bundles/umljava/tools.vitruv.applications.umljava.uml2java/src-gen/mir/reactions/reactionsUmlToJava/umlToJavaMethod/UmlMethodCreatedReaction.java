@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class UmlMethodCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Class, Operation> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Operation>)change).getInsertChange();
+    InsertEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation>)change).getInsertChange();
     org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Operation newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Operation newValue = typedChange.getNewValue();
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class UmlMethodCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Class, Operation> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, Operation>)change).getInsertChange();
+    InsertEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Operation>)change).getInsertChange();
     if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedOperation")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Operation)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Operation)) {
     	return false;
     }
     return true;

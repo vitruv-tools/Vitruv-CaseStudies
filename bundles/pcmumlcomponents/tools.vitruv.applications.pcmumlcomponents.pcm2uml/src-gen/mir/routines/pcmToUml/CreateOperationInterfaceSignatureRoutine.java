@@ -34,8 +34,7 @@ public class CreateOperationInterfaceSignatureRoutine extends AbstractRepairRout
     }
     
     public void updateUmlOperationElement(final OperationSignature pcmSignature, final Interface umlInterface, final Operation umlOperation) {
-      String _entityName = pcmSignature.getEntityName();
-      umlOperation.setName(_entityName);
+      umlOperation.setName(pcmSignature.getEntityName());
     }
     
     public EObject getCorrepondenceSourceUmlInterface(final OperationSignature pcmSignature) {
@@ -63,18 +62,18 @@ public class CreateOperationInterfaceSignatureRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationInterfaceSignatureRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.pcmSignature);
+    getLogger().debug("   pcmSignature: " + this.pcmSignature);
     
-    Interface umlInterface = getCorrespondingElement(
+    org.eclipse.uml2.uml.Interface umlInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlInterface(pcmSignature), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (umlInterface == null) {
     	return;
     }
     registerObjectUnderModification(umlInterface);
-    Operation umlOperation = UMLFactoryImpl.eINSTANCE.createOperation();
+    org.eclipse.uml2.uml.Operation umlOperation = UMLFactoryImpl.eINSTANCE.createOperation();
     notifyObjectCreated(umlOperation);
     userExecution.updateUmlOperationElement(pcmSignature, umlInterface, umlOperation);
     

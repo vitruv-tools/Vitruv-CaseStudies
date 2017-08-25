@@ -90,8 +90,7 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     
     public void updateAssemblyContextFieldElement(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField) {
       final TypeReference typeRef = Pcm2JavaHelper.createNamespaceClassifierReference(encapsulatedComponentJavaClass);
-      String _entityName = assemblyContext.getEntityName();
-      Pcm2JavaHelper.createPrivateField(assemblyContextField, typeRef, _entityName);
+      Pcm2JavaHelper.createPrivateField(assemblyContextField, typeRef, assemblyContext.getEntityName());
     }
     
     public EObject getElement3(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, final ClassifierImport contextClassImport, final Constructor constructor) {
@@ -112,8 +111,8 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddAssemblyContextToComposedStructureRoutine with input:");
-    getLogger().debug("   ComposedStructure: " + this.composedStructure);
-    getLogger().debug("   AssemblyContext: " + this.assemblyContext);
+    getLogger().debug("   composedStructure: " + this.composedStructure);
+    getLogger().debug("   assemblyContext: " + this.assemblyContext);
     
     org.emftext.language.java.classifiers.Class compositeComponentJavaClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeComponentJavaClass(composedStructure, assemblyContext), // correspondence source supplier
@@ -133,17 +132,17 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     	return;
     }
     registerObjectUnderModification(encapsulatedComponentJavaClass);
-    Field assemblyContextField = MembersFactoryImpl.eINSTANCE.createField();
+    org.emftext.language.java.members.Field assemblyContextField = MembersFactoryImpl.eINSTANCE.createField();
     notifyObjectCreated(assemblyContextField);
     userExecution.updateAssemblyContextFieldElement(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField);
     
-    NewConstructorCall newConstructorCall = InstantiationsFactoryImpl.eINSTANCE.createNewConstructorCall();
+    org.emftext.language.java.instantiations.NewConstructorCall newConstructorCall = InstantiationsFactoryImpl.eINSTANCE.createNewConstructorCall();
     notifyObjectCreated(newConstructorCall);
     
-    ClassifierImport contextClassImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
+    org.emftext.language.java.imports.ClassifierImport contextClassImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
     notifyObjectCreated(contextClassImport);
     
-    Constructor constructor = MembersFactoryImpl.eINSTANCE.createConstructor();
+    org.emftext.language.java.members.Constructor constructor = MembersFactoryImpl.eINSTANCE.createConstructor();
     notifyObjectCreated(constructor);
     
     // val updatedElement userExecution.getElement1(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall, contextClassImport, constructor);

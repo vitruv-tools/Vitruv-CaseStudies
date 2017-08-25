@@ -42,7 +42,7 @@ public class CreateImplementationForComponentRoutine extends AbstractRepairRouti
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateImplementationForComponentRoutine with input:");
-    getLogger().debug("   RepositoryComponent: " + this.component);
+    getLogger().debug("   component: " + this.component);
     
     org.emftext.language.java.containers.Package componentPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceComponentPackage(component), // correspondence source supplier

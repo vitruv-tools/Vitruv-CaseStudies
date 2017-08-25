@@ -26,8 +26,7 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updateJavaAttributeElement(final Classifier uClassifier, final Property umlAttribute, final ConcreteClassifier jClassifier, final Field javaAttribute) {
-      String _name = umlAttribute.getName();
-      javaAttribute.setName(_name);
+      javaAttribute.setName(umlAttribute.getName());
       javaAttribute.makePublic();
     }
     
@@ -66,19 +65,19 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaAttributeRoutine with input:");
-    getLogger().debug("   Classifier: " + this.uClassifier);
-    getLogger().debug("   Property: " + this.umlAttribute);
+    getLogger().debug("   uClassifier: " + this.uClassifier);
+    getLogger().debug("   umlAttribute: " + this.umlAttribute);
     
-    ConcreteClassifier jClassifier = getCorrespondingElement(
+    org.emftext.language.java.classifiers.ConcreteClassifier jClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJClassifier(uClassifier, umlAttribute), // correspondence source supplier
-    	ConcreteClassifier.class,
-    	(ConcreteClassifier _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.classifiers.ConcreteClassifier.class,
+    	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
     if (jClassifier == null) {
     	return;
     }
     registerObjectUnderModification(jClassifier);
-    Field javaAttribute = MembersFactoryImpl.eINSTANCE.createField();
+    org.emftext.language.java.members.Field javaAttribute = MembersFactoryImpl.eINSTANCE.createField();
     notifyObjectCreated(javaAttribute);
     userExecution.updateJavaAttributeElement(uClassifier, umlAttribute, jClassifier, javaAttribute);
     

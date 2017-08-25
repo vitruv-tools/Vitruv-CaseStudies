@@ -14,11 +14,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class JavaNamedElementRenamedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<NamedElement, String> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    NamedElement affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.emftext.language.java.commons.NamedElement, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.emftext.language.java.commons.NamedElement, java.lang.String>)change;
+    org.emftext.language.java.commons.NamedElement affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    java.lang.String oldValue = typedChange.getOldValue();
+    java.lang.String newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaNamedElementRenamedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaNamedElementRenamedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -29,17 +29,17 @@ class JavaNamedElementRenamedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<NamedElement, String> relevantChange = (ReplaceSingleValuedEAttribute<NamedElement, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof NamedElement)) {
+    ReplaceSingleValuedEAttribute<org.emftext.language.java.commons.NamedElement, java.lang.String> relevantChange = (ReplaceSingleValuedEAttribute<org.emftext.language.java.commons.NamedElement, java.lang.String>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.commons.NamedElement)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("name")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.String)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.String)) {
     	return false;
     }
     return true;

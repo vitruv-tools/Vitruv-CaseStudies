@@ -41,8 +41,7 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void updateJConstantElement(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
-      String _name = uLiteral.getName();
-      jConstant.setName(_name);
+      jConstant.setName(uLiteral.getName());
     }
     
     public EObject getCorrepondenceSourceJEnum(final EnumerationLiteral uLiteral, final Enumeration uEnum) {
@@ -63,8 +62,8 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaEnumConstantRoutine with input:");
-    getLogger().debug("   EnumerationLiteral: " + this.uLiteral);
-    getLogger().debug("   Enumeration: " + this.uEnum);
+    getLogger().debug("   uLiteral: " + this.uLiteral);
+    getLogger().debug("   uEnum: " + this.uEnum);
     
     org.emftext.language.java.classifiers.Enumeration jEnum = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJEnum(uLiteral, uEnum), // correspondence source supplier
@@ -75,7 +74,7 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     	return;
     }
     registerObjectUnderModification(jEnum);
-    EnumConstant jConstant = MembersFactoryImpl.eINSTANCE.createEnumConstant();
+    org.emftext.language.java.members.EnumConstant jConstant = MembersFactoryImpl.eINSTANCE.createEnumConstant();
     notifyObjectCreated(jConstant);
     userExecution.updateJConstantElement(uLiteral, uEnum, jEnum, jConstant);
     

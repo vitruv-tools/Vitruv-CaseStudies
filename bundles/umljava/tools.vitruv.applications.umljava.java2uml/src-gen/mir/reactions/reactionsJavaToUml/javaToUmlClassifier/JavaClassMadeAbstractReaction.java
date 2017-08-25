@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaClassMadeAbstractReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Abstract> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Abstract>)change).getInsertChange();
+    InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Abstract> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Abstract>)change).getInsertChange();
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Abstract newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.Abstract newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeAbstractReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeAbstractReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class JavaClassMadeAbstractReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Abstract> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, Abstract>)change).getInsertChange();
+    InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Abstract> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Abstract>)change).getInsertChange();
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Abstract)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.modifiers.Abstract)) {
     	return false;
     }
     return true;

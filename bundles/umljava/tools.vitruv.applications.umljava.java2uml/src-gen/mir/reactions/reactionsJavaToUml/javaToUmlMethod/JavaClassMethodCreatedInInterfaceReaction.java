@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaClassMethodCreatedInInterfaceReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Interface, ClassMethod> typedChange = ((CreateAndInsertNonRoot<Interface, ClassMethod>)change).getInsertChange();
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.ClassMethod> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.ClassMethod>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ClassMethod newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.ClassMethod newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedInInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedInInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +31,14 @@ class JavaClassMethodCreatedInInterfaceReaction extends AbstractReactionRealizat
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Interface, ClassMethod> relevantChange = ((CreateAndInsertNonRoot<Interface, ClassMethod>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.ClassMethod> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.ClassMethod>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Interface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof ClassMethod)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.ClassMethod)) {
     	return false;
     }
     return true;

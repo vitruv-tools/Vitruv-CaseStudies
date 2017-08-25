@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class UmlEnumLiteralDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Enumeration, EnumerationLiteral> typedChange = ((RemoveAndDeleteNonRoot<Enumeration, EnumerationLiteral>)change).getRemoveChange();
-    Enumeration affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Enumeration, org.eclipse.uml2.uml.EnumerationLiteral> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Enumeration, org.eclipse.uml2.uml.EnumerationLiteral>)change).getRemoveChange();
+    org.eclipse.uml2.uml.Enumeration affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    EnumerationLiteral oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.EnumerationLiteral oldValue = typedChange.getOldValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumLiteralDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumLiteralDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class UmlEnumLiteralDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Enumeration, EnumerationLiteral> relevantChange = ((RemoveAndDeleteNonRoot<Enumeration, EnumerationLiteral>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Enumeration)) {
+    RemoveEReference<org.eclipse.uml2.uml.Enumeration, org.eclipse.uml2.uml.EnumerationLiteral> relevantChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Enumeration, org.eclipse.uml2.uml.EnumerationLiteral>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Enumeration)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedLiteral")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof EnumerationLiteral)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.EnumerationLiteral)) {
     	return false;
     }
     return true;

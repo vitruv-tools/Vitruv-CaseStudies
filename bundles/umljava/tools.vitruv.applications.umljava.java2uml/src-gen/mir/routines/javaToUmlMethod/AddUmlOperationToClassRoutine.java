@@ -43,8 +43,8 @@ public class AddUmlOperationToClassRoutine extends AbstractRepairRoutineRealizat
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlOperationToClassRoutine with input:");
-    getLogger().debug("   Class: " + this.uClass);
-    getLogger().debug("   Operation: " + this.uOperation);
+    getLogger().debug("   uClass: " + this.uClass);
+    getLogger().debug("   uOperation: " + this.uOperation);
     
     // val updatedElement userExecution.getElement1(uClass, uOperation);
     userExecution.update0Element(uClass, uOperation);

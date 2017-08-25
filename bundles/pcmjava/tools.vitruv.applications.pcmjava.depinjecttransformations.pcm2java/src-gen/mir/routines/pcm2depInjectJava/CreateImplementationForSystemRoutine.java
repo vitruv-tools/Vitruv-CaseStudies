@@ -41,7 +41,7 @@ public class CreateImplementationForSystemRoutine extends AbstractRepairRoutineR
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateImplementationForSystemRoutine with input:");
-    getLogger().debug("   System: " + this.system);
+    getLogger().debug("   system: " + this.system);
     
     org.emftext.language.java.containers.Package systemPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceSystemPackage(system), // correspondence source supplier

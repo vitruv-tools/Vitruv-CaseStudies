@@ -9,7 +9,6 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
 import org.emftext.language.java.modifiers.ModifiersFactory;
-import org.emftext.language.java.modifiers.Public;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -33,8 +32,7 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     
     public void updateJavaInterfaceElement(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className, final Interface javaInterface) {
       javaInterface.setName(className);
-      Public _createPublic = ModifiersFactory.eINSTANCE.createPublic();
-      javaInterface.addModifier(_createPublic);
+      javaInterface.addModifier(ModifiersFactory.eINSTANCE.createPublic());
       Pcm2JavaHelper.addAnnotationToAnnotableAndModifiable(javaInterface, "Remote");
       Pcm2JavaHelper.addImportToClassFromString(javaInterface, Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("javax", "ejb")), "Remote");
     }
@@ -63,11 +61,11 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaInterfaceRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.sourceElementMappedToClass);
-    getLogger().debug("   Package: " + this.containingPackage);
-    getLogger().debug("   String: " + this.className);
+    getLogger().debug("   sourceElementMappedToClass: " + this.sourceElementMappedToClass);
+    getLogger().debug("   containingPackage: " + this.containingPackage);
+    getLogger().debug("   className: " + this.className);
     
-    Interface javaInterface = ClassifiersFactoryImpl.eINSTANCE.createInterface();
+    org.emftext.language.java.classifiers.Interface javaInterface = ClassifiersFactoryImpl.eINSTANCE.createInterface();
     notifyObjectCreated(javaInterface);
     userExecution.updateJavaInterfaceElement(sourceElementMappedToClass, containingPackage, className, javaInterface);
     

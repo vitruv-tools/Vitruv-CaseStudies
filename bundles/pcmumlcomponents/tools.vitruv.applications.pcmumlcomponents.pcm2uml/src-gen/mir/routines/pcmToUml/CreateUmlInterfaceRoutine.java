@@ -34,8 +34,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUmlInterfaceElement(final Interface pcmInterface, final Model umlModel, final org.eclipse.uml2.uml.Interface umlInterface) {
-      String _entityName = pcmInterface.getEntityName();
-      umlInterface.setName(_entityName);
+      umlInterface.setName(pcmInterface.getEntityName());
     }
     
     public EObject getElement2(final Interface pcmInterface, final Model umlModel, final org.eclipse.uml2.uml.Interface umlInterface) {
@@ -63,12 +62,12 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.pcmInterface);
+    getLogger().debug("   pcmInterface: " + this.pcmInterface);
     
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(pcmInterface), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;

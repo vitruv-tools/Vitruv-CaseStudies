@@ -28,8 +28,7 @@ public class RenameUmlNamedElementRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final NamedElement jElement, final org.eclipse.uml2.uml.NamedElement uElement) {
-      String _name = jElement.getName();
-      uElement.setName(_name);
+      uElement.setName(jElement.getName());
     }
   }
   
@@ -44,7 +43,7 @@ public class RenameUmlNamedElementRoutine extends AbstractRepairRoutineRealizati
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameUmlNamedElementRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.jElement);
+    getLogger().debug("   jElement: " + this.jElement);
     
     org.eclipse.uml2.uml.NamedElement uElement = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUElement(jElement), // correspondence source supplier

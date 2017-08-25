@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class JavaMemberDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<ConcreteClassifier, Member> typedChange = ((RemoveAndDeleteNonRoot<ConcreteClassifier, Member>)change).getRemoveChange();
-    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.Member> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.Member>)change).getRemoveChange();
+    org.emftext.language.java.classifiers.ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Member oldValue = typedChange.getOldValue();
+    org.emftext.language.java.members.Member oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMemberDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMemberDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaMemberDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<ConcreteClassifier, Member> relevantChange = ((RemoveAndDeleteNonRoot<ConcreteClassifier, Member>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof ConcreteClassifier)) {
+    RemoveEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.Member> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.Member>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.ConcreteClassifier)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Member)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.members.Member)) {
     	return false;
     }
     return true;

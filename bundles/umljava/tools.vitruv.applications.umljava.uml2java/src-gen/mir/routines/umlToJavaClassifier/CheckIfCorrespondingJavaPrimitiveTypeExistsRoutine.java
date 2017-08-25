@@ -42,7 +42,7 @@ public class CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine extends Abstract
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine with input:");
-    getLogger().debug("   PrimitiveType: " + this.uPrimType);
+    getLogger().debug("   uPrimType: " + this.uPrimType);
     
     userExecution.callRoutine1(uPrimType, actionsFacade);
     

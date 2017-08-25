@@ -43,8 +43,7 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUmlComponentElement(final RepositoryComponent pcmComponent, final String correspondenceTag, final Model umlModel, final Component umlComponent) {
-      String _entityName = pcmComponent.getEntityName();
-      umlComponent.setName(_entityName);
+      umlComponent.setName(pcmComponent.getEntityName());
     }
     
     public String getTag1(final RepositoryComponent pcmComponent, final String correspondenceTag, final Model umlModel, final Component umlComponent) {
@@ -70,19 +69,19 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlComponentRoutine with input:");
-    getLogger().debug("   RepositoryComponent: " + this.pcmComponent);
-    getLogger().debug("   String: " + this.correspondenceTag);
+    getLogger().debug("   pcmComponent: " + this.pcmComponent);
+    getLogger().debug("   correspondenceTag: " + this.correspondenceTag);
     
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(pcmComponent, correspondenceTag), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;
     }
     registerObjectUnderModification(umlModel);
-    Component umlComponent = UMLFactoryImpl.eINSTANCE.createComponent();
+    org.eclipse.uml2.uml.Component umlComponent = UMLFactoryImpl.eINSTANCE.createComponent();
     notifyObjectCreated(umlComponent);
     userExecution.updateUmlComponentElement(pcmComponent, correspondenceTag, umlModel, umlComponent);
     

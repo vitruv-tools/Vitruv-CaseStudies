@@ -39,8 +39,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUInterfaceElement(final Interface jInterface, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Interface uInterface) {
-      String _name = jInterface.getName();
-      uInterface.setName(_name);
+      uInterface.setName(jInterface.getName());
     }
     
     public void callRoutine1(final Interface jInterface, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Interface uInterface, @Extension final RoutinesFacade _routinesFacade) {
@@ -61,8 +60,8 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.jInterface);
-    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
+    getLogger().debug("   jInterface: " + this.jInterface);
+    getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
     org.eclipse.uml2.uml.Interface uInterface = UMLFactoryImpl.eINSTANCE.createInterface();
     notifyObjectCreated(uInterface);

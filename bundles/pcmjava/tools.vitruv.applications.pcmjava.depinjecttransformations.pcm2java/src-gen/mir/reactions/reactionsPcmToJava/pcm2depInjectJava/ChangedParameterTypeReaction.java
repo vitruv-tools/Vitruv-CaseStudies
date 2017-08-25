@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangedParameterTypeReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<Parameter, DataType> typedChange = (ReplaceSingleValuedEReference<Parameter, DataType>)change;
-    Parameter affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.DataType> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.DataType>)change;
+    org.palladiosimulator.pcm.repository.Parameter affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType oldValue = typedChange.getOldValue();
-    DataType newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.DataType oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.DataType newValue = typedChange.getNewValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedParameterTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedParameterTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ChangedParameterTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<Parameter, DataType> relevantChange = (ReplaceSingleValuedEReference<Parameter, DataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.DataType> relevantChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.DataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Parameter)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("dataType__Parameter")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
     return true;

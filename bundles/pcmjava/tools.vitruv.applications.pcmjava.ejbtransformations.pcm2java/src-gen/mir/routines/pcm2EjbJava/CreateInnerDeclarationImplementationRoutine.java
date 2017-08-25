@@ -5,7 +5,6 @@ import mir.routines.pcm2EjbJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.types.TypeReference;
-import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
@@ -30,10 +29,8 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
     }
     
     public void callRoutine1(final InnerDeclaration innerDeclaration, final org.emftext.language.java.classifiers.Class nonPrimitiveInnerDataTypeClass, @Extension final RoutinesFacade _routinesFacade) {
-      DataType _datatype_InnerDeclaration = innerDeclaration.getDatatype_InnerDeclaration();
-      final TypeReference innerDataTypeReference = Pcm2JavaHelper.createTypeReference(_datatype_InnerDeclaration, nonPrimitiveInnerDataTypeClass);
-      CompositeDataType _compositeDataType_InnerDeclaration = innerDeclaration.getCompositeDataType_InnerDeclaration();
-      _routinesFacade.addInnerDeclarationToCompositeDataType(_compositeDataType_InnerDeclaration, innerDeclaration, innerDataTypeReference);
+      final TypeReference innerDataTypeReference = Pcm2JavaHelper.createTypeReference(innerDeclaration.getDatatype_InnerDeclaration(), nonPrimitiveInnerDataTypeClass);
+      _routinesFacade.addInnerDeclarationToCompositeDataType(innerDeclaration.getCompositeDataType_InnerDeclaration(), innerDeclaration, innerDataTypeReference);
     }
   }
   
@@ -48,7 +45,7 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInnerDeclarationImplementationRoutine with input:");
-    getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
+    getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
     org.emftext.language.java.classifiers.Class nonPrimitiveInnerDataTypeClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceNonPrimitiveInnerDataTypeClass(innerDeclaration), // correspondence source supplier

@@ -3,7 +3,6 @@ package mir.reactions.reactionsUmlToJava.umlToJavaMethod;
 import com.google.common.base.Objects;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -17,11 +16,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind> typedChange = (ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind>)change;
-    Parameter affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind>)change;
+    org.eclipse.uml2.uml.Parameter affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    ParameterDirectionKind oldValue = typedChange.getOldValue();
-    ParameterDirectionKind newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.ParameterDirectionKind oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.ParameterDirectionKind newValue = typedChange.getNewValue();
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -32,17 +31,17 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind> relevantChange = (ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Parameter)) {
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Parameter)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("direction")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof ParameterDirectionKind)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.ParameterDirectionKind)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof ParameterDirectionKind)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.ParameterDirectionKind)) {
     	return false;
     }
     return true;
@@ -57,11 +56,11 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind> typedChange = (ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind>)change;
-    Parameter affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind>)change;
+    org.eclipse.uml2.uml.Parameter affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    ParameterDirectionKind oldValue = typedChange.getOldValue();
-    ParameterDirectionKind newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.ParameterDirectionKind oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.ParameterDirectionKind newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }
@@ -79,8 +78,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
-      Operation _operation = affectedEObject.getOperation();
-      _routinesFacade.adaptJavaParametertoDirectionChange(_operation, affectedEObject, oldValue, newValue);
+      _routinesFacade.adaptJavaParametertoDirectionChange(affectedEObject.getOperation(), affectedEObject, oldValue, newValue);
     }
   }
 }

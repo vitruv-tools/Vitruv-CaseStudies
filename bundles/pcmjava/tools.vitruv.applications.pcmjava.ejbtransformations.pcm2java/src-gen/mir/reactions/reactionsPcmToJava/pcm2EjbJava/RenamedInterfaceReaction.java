@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class RenamedInterfaceReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Interface, String> typedChange = (ReplaceSingleValuedEAttribute<Interface, String>)change;
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Interface, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Interface, java.lang.String>)change;
+    org.palladiosimulator.pcm.repository.Interface affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    java.lang.String oldValue = typedChange.getOldValue();
+    java.lang.String newValue = typedChange.getNewValue();
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.RenamedInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.RenamedInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class RenamedInterfaceReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<Interface, String> relevantChange = (ReplaceSingleValuedEAttribute<Interface, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Interface, java.lang.String> relevantChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Interface, java.lang.String>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Interface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.String)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.String)) {
     	return false;
     }
     return true;

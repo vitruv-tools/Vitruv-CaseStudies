@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> typedChange = (ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature>)change;
-    ResourceDemandingSEFF affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.seff.ResourceDemandingSEFF, org.palladiosimulator.pcm.repository.OperationSignature> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.seff.ResourceDemandingSEFF, org.palladiosimulator.pcm.repository.OperationSignature>)change;
+    org.palladiosimulator.pcm.seff.ResourceDemandingSEFF affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OperationSignature oldValue = typedChange.getOldValue();
-    OperationSignature newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.OperationSignature oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.OperationSignature newValue = typedChange.getNewValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationSignatureOfSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationSignatureOfSeffReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> relevantChange = (ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof ResourceDemandingSEFF)) {
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.seff.ResourceDemandingSEFF, org.palladiosimulator.pcm.repository.OperationSignature> relevantChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.seff.ResourceDemandingSEFF, org.palladiosimulator.pcm.repository.OperationSignature>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.seff.ResourceDemandingSEFF)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("describedService__SEFF")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof OperationSignature)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.OperationSignature)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof OperationSignature)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.OperationSignature)) {
     	return false;
     }
     return true;

@@ -38,7 +38,7 @@ public class DeleteUmlPackageRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteUmlPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.jPackage);
+    getLogger().debug("   jPackage: " + this.jPackage);
     
     org.eclipse.uml2.uml.Package uPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUPackage(jPackage), // correspondence source supplier

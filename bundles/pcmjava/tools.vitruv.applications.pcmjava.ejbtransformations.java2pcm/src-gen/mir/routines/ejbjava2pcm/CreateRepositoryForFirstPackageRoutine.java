@@ -1,6 +1,5 @@
 package mir.routines.ejbjava2pcm;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
@@ -31,8 +30,7 @@ public class CreateRepositoryForFirstPackageRoutine extends AbstractRepairRoutin
     }
     
     public void updateRepositoryElement(final org.emftext.language.java.containers.Package javaPackage, final Repository repository) {
-      String _name = javaPackage.getName();
-      repository.setEntityName(_name);
+      repository.setEntityName(javaPackage.getName());
       String _entityName = repository.getEntityName();
       String _plus = ("model/" + _entityName);
       String _plus_1 = (_plus + ".repository");
@@ -41,8 +39,8 @@ public class CreateRepositoryForFirstPackageRoutine extends AbstractRepairRoutin
     
     public boolean checkMatcherPrecondition1(final org.emftext.language.java.containers.Package javaPackage) {
       Repository _findRepository = EjbJava2PcmHelper.findRepository(this.correspondenceModel);
-      boolean _equals = Objects.equal(_findRepository, null);
-      return _equals;
+      boolean _tripleEquals = (_findRepository == null);
+      return _tripleEquals;
     }
   }
   
@@ -57,12 +55,12 @@ public class CreateRepositoryForFirstPackageRoutine extends AbstractRepairRoutin
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRepositoryForFirstPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.javaPackage);
+    getLogger().debug("   javaPackage: " + this.javaPackage);
     
     if (!userExecution.checkMatcherPrecondition1(javaPackage)) {
     	return;
     }
-    Repository repository = RepositoryFactoryImpl.eINSTANCE.createRepository();
+    org.palladiosimulator.pcm.repository.Repository repository = RepositoryFactoryImpl.eINSTANCE.createRepository();
     notifyObjectCreated(repository);
     userExecution.updateRepositoryElement(javaPackage, repository);
     

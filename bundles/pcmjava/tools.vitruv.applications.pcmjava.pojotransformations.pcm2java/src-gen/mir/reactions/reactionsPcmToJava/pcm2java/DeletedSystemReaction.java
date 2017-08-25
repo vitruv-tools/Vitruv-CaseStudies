@@ -52,8 +52,7 @@ class DeletedSystemReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final org.palladiosimulator.pcm.system.System oldValue, @Extension final RoutinesFacade _routinesFacade) {
       final org.palladiosimulator.pcm.system.System system = oldValue;
-      String _entityName = system.getEntityName();
-      _routinesFacade.deleteJavaPackage(system, _entityName, "root_system");
+      _routinesFacade.deleteJavaPackage(system, system.getEntityName(), "root_system");
       _routinesFacade.deleteJavaClassifier(system);
     }
   }

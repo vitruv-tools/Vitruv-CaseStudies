@@ -6,7 +6,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -34,8 +33,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     
     public void update0Element(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface) {
       EList<TypeReference> _implements = jClass.getImplements();
-      CompilationUnit _containingCompilationUnit = jClass.getContainingCompilationUnit();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, _containingCompilationUnit, this.userInteracting);
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, jClass.getContainingCompilationUnit(), this.userInteracting);
       _implements.add(_createTypeReferenceAndUpdateImport);
     }
     
@@ -65,9 +63,9 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaImplementedInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.uInterface);
-    getLogger().debug("   Interface: " + this.oldInterface);
-    getLogger().debug("   Class: " + this.uClass);
+    getLogger().debug("   uInterface: " + this.uInterface);
+    getLogger().debug("   oldInterface: " + this.oldInterface);
+    getLogger().debug("   uClass: " + this.uClass);
     
     org.emftext.language.java.classifiers.Class jClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJClass(uInterface, oldInterface, uClass), // correspondence source supplier

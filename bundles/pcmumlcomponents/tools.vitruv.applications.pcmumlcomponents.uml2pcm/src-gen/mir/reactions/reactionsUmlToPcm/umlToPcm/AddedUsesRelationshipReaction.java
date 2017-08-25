@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class AddedUsesRelationshipReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Component, Usage> typedChange = (InsertEReference<Component, Usage>)change;
-    Component affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage> typedChange = (InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage>)change;
+    org.eclipse.uml2.uml.Component affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Usage newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Usage newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.AddedUsesRelationshipReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.AddedUsesRelationshipReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class AddedUsesRelationshipReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Component, Usage> relevantChange = (InsertEReference<Component, Usage>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Component)) {
+    InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage> relevantChange = (InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Component)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Usage)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Usage)) {
     	return false;
     }
     return true;

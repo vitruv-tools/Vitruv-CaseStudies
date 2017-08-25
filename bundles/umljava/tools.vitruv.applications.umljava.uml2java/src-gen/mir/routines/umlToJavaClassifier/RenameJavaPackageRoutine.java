@@ -35,21 +35,16 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage) {
+      jPackage.getNamespaces().clear();
       EList<String> _namespaces = jPackage.getNamespaces();
-      _namespaces.clear();
-      EList<String> _namespaces_1 = jPackage.getNamespaces();
       List<String> _umlParentNamespaceAsStringList = UmlClassifierAndPackageUtil.getUmlParentNamespaceAsStringList(uPackage);
-      Iterables.<String>addAll(_namespaces_1, _umlParentNamespaceAsStringList);
-      String _name = uPackage.getName();
-      jPackage.setName(_name);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(jPackage);
-      this.persistProjectRelative(uPackage, jPackage, _buildJavaFilePath);
+      Iterables.<String>addAll(_namespaces, _umlParentNamespaceAsStringList);
+      jPackage.setName(uPackage.getName());
+      this.persistProjectRelative(uPackage, jPackage, JavaPersistenceHelper.buildJavaFilePath(jPackage));
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _name = uPackage.getName();
-      String _name_1 = jPackage.getName();
-      boolean _equals = _name.equals(_name_1);
+      boolean _equals = uPackage.getName().equals(jPackage.getName());
       boolean _not = (!_equals);
       if (_not) {
         EList<CompilationUnit> _compilationUnits = jPackage.getCompilationUnits();
@@ -73,8 +68,8 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.uPackage);
-    getLogger().debug("   Namespace: " + this.uNamespace);
+    getLogger().debug("   uPackage: " + this.uPackage);
+    getLogger().debug("   uNamespace: " + this.uNamespace);
     
     org.emftext.language.java.containers.Package jPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJPackage(uPackage, uNamespace), // correspondence source supplier

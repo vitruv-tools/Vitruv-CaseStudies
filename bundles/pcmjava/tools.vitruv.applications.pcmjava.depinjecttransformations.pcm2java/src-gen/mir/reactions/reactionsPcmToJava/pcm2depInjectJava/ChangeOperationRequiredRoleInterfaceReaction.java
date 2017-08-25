@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangeOperationRequiredRoleInterfaceReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<OperationRequiredRole, OperationInterface> typedChange = (ReplaceSingleValuedEReference<OperationRequiredRole, OperationInterface>)change;
-    OperationRequiredRole affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationRequiredRole, org.palladiosimulator.pcm.repository.OperationInterface> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationRequiredRole, org.palladiosimulator.pcm.repository.OperationInterface>)change;
+    org.palladiosimulator.pcm.repository.OperationRequiredRole affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OperationInterface oldValue = typedChange.getOldValue();
-    OperationInterface newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.OperationInterface oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.OperationInterface newValue = typedChange.getNewValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationRequiredRoleInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationRequiredRoleInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ChangeOperationRequiredRoleInterfaceReaction extends AbstractReactionReali
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<OperationRequiredRole, OperationInterface> relevantChange = (ReplaceSingleValuedEReference<OperationRequiredRole, OperationInterface>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof OperationRequiredRole)) {
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationRequiredRole, org.palladiosimulator.pcm.repository.OperationInterface> relevantChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.OperationRequiredRole, org.palladiosimulator.pcm.repository.OperationInterface>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.OperationRequiredRole)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("requiredInterface__OperationRequiredRole")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof OperationInterface)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.OperationInterface)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof OperationInterface)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.OperationInterface)) {
     	return false;
     }
     return true;

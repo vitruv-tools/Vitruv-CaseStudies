@@ -44,8 +44,8 @@ public class SetUmlClassAbstractRoutine extends AbstractRepairRoutineRealization
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlClassAbstractRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Boolean: " + this.isAbstract);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   isAbstract: " + this.isAbstract);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, isAbstract), // correspondence source supplier

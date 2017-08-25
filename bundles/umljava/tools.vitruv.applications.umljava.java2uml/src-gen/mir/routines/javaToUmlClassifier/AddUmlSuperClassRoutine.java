@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
@@ -32,8 +31,7 @@ public class AddUmlSuperClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class jSuperClass, final org.eclipse.uml2.uml.Class uClass) {
-      Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
-      final Type uSuperClass = JavaToUmlHelper.getUmlType(jSuperClass, _umlModel, this.correspondenceModel);
+      final Type uSuperClass = JavaToUmlHelper.getUmlType(jSuperClass, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel);
       if (((uSuperClass != null) && (uSuperClass instanceof org.eclipse.uml2.uml.Class))) {
         UmlClassifierAndPackageUtil.addUmlSuperClassifier(uClass, ((org.eclipse.uml2.uml.Class) uSuperClass));
       } else {
@@ -61,8 +59,8 @@ public class AddUmlSuperClassRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlSuperClassRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Class: " + this.jSuperClass);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   jSuperClass: " + this.jSuperClass);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, jSuperClass), // correspondence source supplier

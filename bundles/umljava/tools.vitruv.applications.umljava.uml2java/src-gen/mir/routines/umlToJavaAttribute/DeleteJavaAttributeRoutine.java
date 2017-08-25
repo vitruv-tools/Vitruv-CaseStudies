@@ -47,12 +47,12 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaAttributeRoutine with input:");
-    getLogger().debug("   Property: " + this.umlAttr);
+    getLogger().debug("   umlAttr: " + this.umlAttr);
     
-    Field jAttr = getCorrespondingElement(
+    org.emftext.language.java.members.Field jAttr = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJAttr(umlAttr), // correspondence source supplier
-    	Field.class,
-    	(Field _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.Field.class,
+    	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (jAttr == null) {
     	return;

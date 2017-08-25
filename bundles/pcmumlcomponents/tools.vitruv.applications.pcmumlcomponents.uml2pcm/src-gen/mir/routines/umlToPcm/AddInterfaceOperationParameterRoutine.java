@@ -46,8 +46,7 @@ public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutine
     }
     
     public void updatePcmParameterElement(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
-      String _name = umlParameter.getName();
-      ParameterUtil.setName(pcmParameter, _name);
+      ParameterUtil.setName(pcmParameter, umlParameter.getName());
     }
   }
   
@@ -64,13 +63,13 @@ public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutine
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddInterfaceOperationParameterRoutine with input:");
-    getLogger().debug("   Operation: " + this.umlOperation);
-    getLogger().debug("   Parameter: " + this.umlParameter);
+    getLogger().debug("   umlOperation: " + this.umlOperation);
+    getLogger().debug("   umlParameter: " + this.umlParameter);
     
-    OperationSignature pcmSignature = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationSignature pcmSignature = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmSignature(umlOperation, umlParameter), // correspondence source supplier
-    	OperationSignature.class,
-    	(OperationSignature _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationSignature.class,
+    	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (pcmSignature == null) {
     	return;

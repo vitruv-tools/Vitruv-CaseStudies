@@ -1,6 +1,5 @@
 package mir.routines.pcm2java;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
@@ -44,8 +43,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateJavaPackageElement(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag, final org.emftext.language.java.containers.Package javaPackage) {
-      boolean _notEquals = (!Objects.equal(parentPackage, null));
-      if (_notEquals) {
+      if ((parentPackage != null)) {
         EList<String> _namespaces = javaPackage.getNamespaces();
         EList<String> _namespaces_1 = parentPackage.getNamespaces();
         Iterables.<String>addAll(_namespaces, _namespaces_1);
@@ -54,8 +52,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
         _namespaces_2.add(_name);
       }
       javaPackage.setName(packageName);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaPackage);
-      this.persistProjectRelative(sourceElementMappedToPackage, javaPackage, _buildJavaFilePath);
+      this.persistProjectRelative(sourceElementMappedToPackage, javaPackage, JavaPersistenceHelper.buildJavaFilePath(javaPackage));
     }
   }
   
@@ -76,10 +73,10 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaPackageRoutine with input:");
-    getLogger().debug("   EObject: " + this.sourceElementMappedToPackage);
-    getLogger().debug("   Package: " + this.parentPackage);
-    getLogger().debug("   String: " + this.packageName);
-    getLogger().debug("   String: " + this.newTag);
+    getLogger().debug("   sourceElementMappedToPackage: " + this.sourceElementMappedToPackage);
+    getLogger().debug("   parentPackage: " + this.parentPackage);
+    getLogger().debug("   packageName: " + this.packageName);
+    getLogger().debug("   newTag: " + this.newTag);
     
     if (getCorrespondingElement(
     	userExecution.getCorrepondenceSourcenull(sourceElementMappedToPackage, parentPackage, packageName, newTag), // correspondence source supplier

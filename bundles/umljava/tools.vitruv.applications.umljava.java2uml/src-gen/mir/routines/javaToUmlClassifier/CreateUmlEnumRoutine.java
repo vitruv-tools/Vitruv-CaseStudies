@@ -27,8 +27,7 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUEnumElement(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {
-      String _name = jEnum.getName();
-      uEnum.setName(_name);
+      uEnum.setName(jEnum.getName());
     }
     
     public EObject getElement4(final Enumeration jEnum, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Enumeration uEnum) {
@@ -61,8 +60,8 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlEnumRoutine with input:");
-    getLogger().debug("   Enumeration: " + this.jEnum);
-    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
+    getLogger().debug("   jEnum: " + this.jEnum);
+    getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
     org.eclipse.uml2.uml.Enumeration uEnum = UMLFactoryImpl.eINSTANCE.createEnumeration();
     notifyObjectCreated(uEnum);

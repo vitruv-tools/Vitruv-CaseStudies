@@ -25,8 +25,7 @@ public class CreateInterfaceOperationRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updatePcmOperationElement(final Operation umlOperation, final OperationInterface pcmInterface, final OperationSignature pcmOperation) {
-      String _name = umlOperation.getName();
-      pcmOperation.setEntityName(_name);
+      pcmOperation.setEntityName(umlOperation.getName());
     }
     
     public EObject getElement1(final Operation umlOperation, final OperationInterface pcmInterface, final OperationSignature pcmOperation) {
@@ -63,18 +62,18 @@ public class CreateInterfaceOperationRoutine extends AbstractRepairRoutineRealiz
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInterfaceOperationRoutine with input:");
-    getLogger().debug("   Operation: " + this.umlOperation);
+    getLogger().debug("   umlOperation: " + this.umlOperation);
     
-    OperationInterface pcmInterface = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationInterface pcmInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmInterface(umlOperation), // correspondence source supplier
-    	OperationInterface.class,
-    	(OperationInterface _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationInterface.class,
+    	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (pcmInterface == null) {
     	return;
     }
     registerObjectUnderModification(pcmInterface);
-    OperationSignature pcmOperation = RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
+    org.palladiosimulator.pcm.repository.OperationSignature pcmOperation = RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
     notifyObjectCreated(pcmOperation);
     userExecution.updatePcmOperationElement(umlOperation, pcmInterface, pcmOperation);
     

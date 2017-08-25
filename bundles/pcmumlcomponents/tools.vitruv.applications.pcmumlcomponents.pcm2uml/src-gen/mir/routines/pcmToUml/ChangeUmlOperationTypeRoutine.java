@@ -7,7 +7,6 @@ import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
-import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil;
@@ -33,9 +32,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     public void update0Element(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation, final DataType umlReturnType) {
       DataType returnType = umlReturnType;
       if ((returnType == null)) {
-        org.palladiosimulator.pcm.repository.DataType _returnType__OperationSignature = pcmSignature.getReturnType__OperationSignature();
-        DataType _retrieveUmlType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, _returnType__OperationSignature, umlModel);
-        returnType = _retrieveUmlType;
+        returnType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmSignature.getReturnType__OperationSignature(), umlModel);
       }
       umlOperation.setType(returnType);
       PcmToUmlUtil.updateOperationReturnTypeMultiplicity(umlOperation, 
@@ -53,8 +50,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public EObject getCorrepondenceSourceUmlModel(final OperationSignature pcmSignature) {
-      OperationInterface _interface__OperationSignature = pcmSignature.getInterface__OperationSignature();
-      Repository _repository__Interface = _interface__OperationSignature.getRepository__Interface();
+      Repository _repository__Interface = pcmSignature.getInterface__OperationSignature().getRepository__Interface();
       return _repository__Interface;
     }
   }
@@ -70,30 +66,30 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlOperationTypeRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.pcmSignature);
+    getLogger().debug("   pcmSignature: " + this.pcmSignature);
     
-    Model umlModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(pcmSignature), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
     	return;
     }
     registerObjectUnderModification(umlModel);
-    Operation umlOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation umlOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature, umlModel), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (umlOperation == null) {
     	return;
     }
     registerObjectUnderModification(umlOperation);
-    DataType umlReturnType = getCorrespondingElement(
+    org.eclipse.uml2.uml.DataType umlReturnType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlReturnType(pcmSignature, umlModel, umlOperation), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(umlReturnType);
     // val updatedElement userExecution.getElement1(pcmSignature, umlModel, umlOperation, umlReturnType);

@@ -16,11 +16,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class UmlLowerMultiplicityChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<LiteralInteger, Integer> typedChange = (ReplaceSingleValuedEAttribute<LiteralInteger, Integer>)change;
-    LiteralInteger affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.LiteralInteger, java.lang.Integer> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.LiteralInteger, java.lang.Integer>)change;
+    org.eclipse.uml2.uml.LiteralInteger affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    Integer oldValue = typedChange.getOldValue();
-    Integer newValue = typedChange.getNewValue();
+    java.lang.Integer oldValue = typedChange.getOldValue();
+    java.lang.Integer newValue = typedChange.getNewValue();
     mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlLowerMultiplicityChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlLowerMultiplicityChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -31,17 +31,17 @@ class UmlLowerMultiplicityChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<LiteralInteger, Integer> relevantChange = (ReplaceSingleValuedEAttribute<LiteralInteger, Integer>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof LiteralInteger)) {
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.LiteralInteger, java.lang.Integer> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.LiteralInteger, java.lang.Integer>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.LiteralInteger)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("value")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof Integer)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.Integer)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof Integer)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.Integer)) {
     	return false;
     }
     return true;

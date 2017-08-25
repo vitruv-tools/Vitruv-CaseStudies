@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -27,8 +26,7 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updateJavaInterfaceElement(final Interface umlInterface, final org.emftext.language.java.classifiers.Interface javaInterface) {
-      String _name = umlInterface.getName();
-      javaInterface.setName(_name);
+      javaInterface.setName(umlInterface.getName());
       javaInterface.makePublic();
     }
     
@@ -37,8 +35,7 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     }
     
     public void callRoutine1(final Interface umlInterface, final org.emftext.language.java.classifiers.Interface javaInterface, @Extension final RoutinesFacade _routinesFacade) {
-      Namespace _namespace = umlInterface.getNamespace();
-      _routinesFacade.createJavaCompilationUnit(umlInterface, javaInterface, _namespace);
+      _routinesFacade.createJavaCompilationUnit(umlInterface, javaInterface, umlInterface.getNamespace());
     }
   }
   
@@ -53,7 +50,7 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.umlInterface);
+    getLogger().debug("   umlInterface: " + this.umlInterface);
     
     org.emftext.language.java.classifiers.Interface javaInterface = ClassifiersFactoryImpl.eINSTANCE.createInterface();
     notifyObjectCreated(javaInterface);

@@ -18,10 +18,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class UmlParameterCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Operation, Parameter> typedChange = ((CreateAndInsertNonRoot<Operation, Parameter>)change).getInsertChange();
-    Operation affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change).getInsertChange();
+    org.eclipse.uml2.uml.Operation affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Parameter newValue = typedChange.getNewValue();
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -32,14 +32,14 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Operation, Parameter> relevantChange = ((CreateAndInsertNonRoot<Operation, Parameter>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Operation)) {
+    InsertEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Operation)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedParameter")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Parameter)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Parameter)) {
     	return false;
     }
     return true;
@@ -54,10 +54,10 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<Operation, Parameter> typedChange = ((CreateAndInsertNonRoot<Operation, Parameter>)change).getInsertChange();
-    Operation affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change).getInsertChange();
+    org.eclipse.uml2.uml.Operation affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Parameter newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }

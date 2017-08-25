@@ -50,10 +50,8 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateJavaParameterElement(final Parameter parameter, final InterfaceMethod interfaceMethod, final org.emftext.language.java.classifiers.Class javaParameterTypeClass, final OrdinaryParameter javaParameter) {
-      String _parameterName = parameter.getParameterName();
-      javaParameter.setName(_parameterName);
-      DataType _dataType__Parameter = parameter.getDataType__Parameter();
-      final TypeReference parameterTypeReference = Pcm2JavaHelper.createTypeReference(_dataType__Parameter, javaParameterTypeClass);
+      javaParameter.setName(parameter.getParameterName());
+      final TypeReference parameterTypeReference = Pcm2JavaHelper.createTypeReference(parameter.getDataType__Parameter(), javaParameterTypeClass);
       javaParameter.setTypeReference(parameterTypeReference);
     }
     
@@ -74,12 +72,12 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateParameterRoutine with input:");
-    getLogger().debug("   Parameter: " + this.parameter);
+    getLogger().debug("   parameter: " + this.parameter);
     
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(parameter), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceMethod == null) {
     	return;
@@ -91,7 +89,7 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(javaParameterTypeClass);
-    OrdinaryParameter javaParameter = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
+    org.emftext.language.java.parameters.OrdinaryParameter javaParameter = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
     notifyObjectCreated(javaParameter);
     userExecution.updateJavaParameterElement(parameter, interfaceMethod, javaParameterTypeClass, javaParameter);
     

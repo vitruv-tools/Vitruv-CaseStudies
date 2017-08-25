@@ -2,10 +2,8 @@ package mir.routines.umlToPcm;
 
 import java.io.IOException;
 import mir.routines.umlToPcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Usage;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -31,14 +29,12 @@ public class ChangeRequiredInterfaceRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Usage umlUsage, final Interface umlInterface, final OperationInterface pcmInterface, final OperationRequiredRole pcmRole) {
-      EList<NamedElement> _suppliers = umlUsage.getSuppliers();
-      int _length = ((Object[])Conversions.unwrapArray(_suppliers, Object.class)).length;
+      int _length = ((Object[])Conversions.unwrapArray(umlUsage.getSuppliers(), Object.class)).length;
       boolean _equals = (_length == 0);
       if (_equals) {
         pcmRole.setRequiredInterface__OperationRequiredRole(null);
       } else {
-        EList<NamedElement> _suppliers_1 = umlUsage.getSuppliers();
-        int _length_1 = ((Object[])Conversions.unwrapArray(_suppliers_1, Object.class)).length;
+        int _length_1 = ((Object[])Conversions.unwrapArray(umlUsage.getSuppliers(), Object.class)).length;
         boolean _equals_1 = (_length_1 == 1);
         if (_equals_1) {
           pcmRole.setRequiredInterface__OperationRequiredRole(pcmInterface);
@@ -70,22 +66,22 @@ public class ChangeRequiredInterfaceRoutine extends AbstractRepairRoutineRealiza
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeRequiredInterfaceRoutine with input:");
-    getLogger().debug("   Usage: " + this.umlUsage);
-    getLogger().debug("   Interface: " + this.umlInterface);
+    getLogger().debug("   umlUsage: " + this.umlUsage);
+    getLogger().debug("   umlInterface: " + this.umlInterface);
     
-    OperationInterface pcmInterface = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationInterface pcmInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmInterface(umlUsage, umlInterface), // correspondence source supplier
-    	OperationInterface.class,
-    	(OperationInterface _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationInterface.class,
+    	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (pcmInterface == null) {
     	return;
     }
     registerObjectUnderModification(pcmInterface);
-    OperationRequiredRole pcmRole = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationRequiredRole pcmRole = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmRole(umlUsage, umlInterface, pcmInterface), // correspondence source supplier
-    	OperationRequiredRole.class,
-    	(OperationRequiredRole _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationRequiredRole.class,
+    	(org.palladiosimulator.pcm.repository.OperationRequiredRole _element) -> true, // correspondence precondition checker
     	null);
     if (pcmRole == null) {
     	return;

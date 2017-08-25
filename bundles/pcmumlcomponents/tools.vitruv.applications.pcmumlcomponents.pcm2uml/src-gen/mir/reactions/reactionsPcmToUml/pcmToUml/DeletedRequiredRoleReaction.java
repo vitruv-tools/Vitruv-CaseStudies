@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedRequiredRoleReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole> typedChange = (RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole>)change;
-    InterfaceRequiringEntity affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity, org.palladiosimulator.pcm.repository.OperationRequiredRole> typedChange = (RemoveEReference<org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity, org.palladiosimulator.pcm.repository.OperationRequiredRole>)change;
+    org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OperationRequiredRole oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.OperationRequiredRole oldValue = typedChange.getOldValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.DeletedRequiredRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.DeletedRequiredRoleReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class DeletedRequiredRoleReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole> relevantChange = (RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof InterfaceRequiringEntity)) {
+    RemoveEReference<org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity, org.palladiosimulator.pcm.repository.OperationRequiredRole> relevantChange = (RemoveEReference<org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity, org.palladiosimulator.pcm.repository.OperationRequiredRole>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("requiredRoles_InterfaceRequiringEntity")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof OperationRequiredRole)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.OperationRequiredRole)) {
     	return false;
     }
     return true;

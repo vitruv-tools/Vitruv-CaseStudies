@@ -40,8 +40,7 @@ public class CreatedClassMethodInEjbClassRoutine extends AbstractRepairRoutineRe
       boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(correspondingEObjects);
       boolean _not = (!_isNullOrEmpty);
       if (_not) {
-        OperationSignature _get = ((OperationSignature[])Conversions.unwrapArray(correspondingEObjects, OperationSignature.class))[0];
-        opSignature = _get;
+        opSignature = ((OperationSignature[])Conversions.unwrapArray(correspondingEObjects, OperationSignature.class))[0];
       }
       _routinesFacade.createSEFFForClassMethod(basicComponent, opSignature, classMethod);
     }
@@ -60,13 +59,13 @@ public class CreatedClassMethodInEjbClassRoutine extends AbstractRepairRoutineRe
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedClassMethodInEjbClassRoutine with input:");
-    getLogger().debug("   Class: " + this.clazz);
-    getLogger().debug("   ClassMethod: " + this.classMethod);
+    getLogger().debug("   clazz: " + this.clazz);
+    getLogger().debug("   classMethod: " + this.classMethod);
     
-    BasicComponent basicComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.BasicComponent basicComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceBasicComponent(clazz, classMethod), // correspondence source supplier
-    	BasicComponent.class,
-    	(BasicComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.BasicComponent.class,
+    	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
     	return;

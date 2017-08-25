@@ -30,8 +30,7 @@ public class CreateProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateInterfaceRealizationElement(final InterfaceProvidingEntity pcmComponent, final ProvidedRole pcmProvidedRole, final Component umlComponent, final InterfaceRealization interfaceRealization) {
-      String _entityName = pcmProvidedRole.getEntityName();
-      interfaceRealization.setName(_entityName);
+      interfaceRealization.setName(pcmProvidedRole.getEntityName());
       EList<NamedElement> _clients = interfaceRealization.getClients();
       _clients.add(umlComponent);
     }
@@ -67,19 +66,19 @@ public class CreateProvidedRoleRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateProvidedRoleRoutine with input:");
-    getLogger().debug("   InterfaceProvidingEntity: " + this.pcmComponent);
-    getLogger().debug("   ProvidedRole: " + this.pcmProvidedRole);
+    getLogger().debug("   pcmComponent: " + this.pcmComponent);
+    getLogger().debug("   pcmProvidedRole: " + this.pcmProvidedRole);
     
-    Component umlComponent = getCorrespondingElement(
+    org.eclipse.uml2.uml.Component umlComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlComponent(pcmComponent, pcmProvidedRole), // correspondence source supplier
-    	Component.class,
-    	(Component _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Component.class,
+    	(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
     	null);
     if (umlComponent == null) {
     	return;
     }
     registerObjectUnderModification(umlComponent);
-    InterfaceRealization interfaceRealization = UMLFactoryImpl.eINSTANCE.createInterfaceRealization();
+    org.eclipse.uml2.uml.InterfaceRealization interfaceRealization = UMLFactoryImpl.eINSTANCE.createInterfaceRealization();
     notifyObjectCreated(interfaceRealization);
     userExecution.updateInterfaceRealizationElement(pcmComponent, pcmProvidedRole, umlComponent, interfaceRealization);
     

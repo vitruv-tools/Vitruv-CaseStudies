@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedProvidedRoleFromSystemReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.palladiosimulator.pcm.system.System, ProvidedRole> typedChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.system.System, ProvidedRole>)change).getRemoveChange();
+    RemoveEReference<org.palladiosimulator.pcm.system.System, org.palladiosimulator.pcm.repository.ProvidedRole> typedChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.system.System, org.palladiosimulator.pcm.repository.ProvidedRole>)change).getRemoveChange();
     org.palladiosimulator.pcm.system.System affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ProvidedRole oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.ProvidedRole oldValue = typedChange.getOldValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedProvidedRoleFromSystemReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedProvidedRoleFromSystemReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class DeletedProvidedRoleFromSystemReaction extends AbstractReactionRealization 
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.palladiosimulator.pcm.system.System, ProvidedRole> relevantChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.system.System, ProvidedRole>)change).getRemoveChange();
+    RemoveEReference<org.palladiosimulator.pcm.system.System, org.palladiosimulator.pcm.repository.ProvidedRole> relevantChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.system.System, org.palladiosimulator.pcm.repository.ProvidedRole>)change).getRemoveChange();
     if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.system.System)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("providedRoles_InterfaceProvidingEntity")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof ProvidedRole)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.ProvidedRole)) {
     	return false;
     }
     return true;

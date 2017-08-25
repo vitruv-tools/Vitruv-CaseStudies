@@ -45,8 +45,7 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updateUAttrElement(final Enumeration jEnum, final Field jAttr, final org.eclipse.uml2.uml.Enumeration uEnum, final Property uAttr) {
-      String _name = jAttr.getName();
-      uAttr.setName(_name);
+      uAttr.setName(jAttr.getName());
     }
   }
   
@@ -63,8 +62,8 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlAttributeInEnumRoutine with input:");
-    getLogger().debug("   Enumeration: " + this.jEnum);
-    getLogger().debug("   Field: " + this.jAttr);
+    getLogger().debug("   jEnum: " + this.jEnum);
+    getLogger().debug("   jAttr: " + this.jAttr);
     
     org.eclipse.uml2.uml.Enumeration uEnum = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUEnum(jEnum, jAttr), // correspondence source supplier
@@ -75,7 +74,7 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
     	return;
     }
     registerObjectUnderModification(uEnum);
-    Property uAttr = UMLFactoryImpl.eINSTANCE.createProperty();
+    org.eclipse.uml2.uml.Property uAttr = UMLFactoryImpl.eINSTANCE.createProperty();
     notifyObjectCreated(uAttr);
     userExecution.updateUAttrElement(jEnum, jAttr, uEnum, uAttr);
     

@@ -47,9 +47,9 @@ public class DeleteJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaPackageRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.sourceElementMappedToPackage);
-    getLogger().debug("   String: " + this.packageName);
-    getLogger().debug("   String: " + this.expectedTag);
+    getLogger().debug("   sourceElementMappedToPackage: " + this.sourceElementMappedToPackage);
+    getLogger().debug("   packageName: " + this.packageName);
+    getLogger().debug("   expectedTag: " + this.expectedTag);
     
     org.emftext.language.java.containers.Package javaPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaPackage(sourceElementMappedToPackage, packageName, expectedTag), // correspondence source supplier

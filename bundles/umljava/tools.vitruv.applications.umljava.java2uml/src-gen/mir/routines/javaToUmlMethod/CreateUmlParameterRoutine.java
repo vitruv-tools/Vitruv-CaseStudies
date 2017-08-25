@@ -34,8 +34,7 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUParamElement(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
-      String _name = jParam.getName();
-      uParam.setName(_name);
+      uParam.setName(jParam.getName());
     }
     
     public EObject getElement2(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
@@ -64,19 +63,19 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlParameterRoutine with input:");
-    getLogger().debug("   Parametrizable: " + this.jMeth);
-    getLogger().debug("   OrdinaryParameter: " + this.jParam);
+    getLogger().debug("   jMeth: " + this.jMeth);
+    getLogger().debug("   jParam: " + this.jParam);
     
-    Operation uOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation uOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUOperation(jMeth, jParam), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (uOperation == null) {
     	return;
     }
     registerObjectUnderModification(uOperation);
-    Parameter uParam = UMLFactoryImpl.eINSTANCE.createParameter();
+    org.eclipse.uml2.uml.Parameter uParam = UMLFactoryImpl.eINSTANCE.createParameter();
     notifyObjectCreated(uParam);
     userExecution.updateUParamElement(jMeth, jParam, uOperation, uParam);
     

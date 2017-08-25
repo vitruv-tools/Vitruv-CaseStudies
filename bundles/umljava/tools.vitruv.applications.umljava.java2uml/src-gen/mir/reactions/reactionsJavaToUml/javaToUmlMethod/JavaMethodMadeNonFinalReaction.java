@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class JavaMethodMadeNonFinalReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<ClassMethod, Final> typedChange = ((RemoveAndDeleteNonRoot<ClassMethod, Final>)change).getRemoveChange();
-    ClassMethod affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.emftext.language.java.members.ClassMethod, org.emftext.language.java.modifiers.Final> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.members.ClassMethod, org.emftext.language.java.modifiers.Final>)change).getRemoveChange();
+    org.emftext.language.java.members.ClassMethod affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Final oldValue = typedChange.getOldValue();
+    org.emftext.language.java.modifiers.Final oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonFinalReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaMethodMadeNonFinalReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<ClassMethod, Final> relevantChange = ((RemoveAndDeleteNonRoot<ClassMethod, Final>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof ClassMethod)) {
+    RemoveEReference<org.emftext.language.java.members.ClassMethod, org.emftext.language.java.modifiers.Final> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.members.ClassMethod, org.emftext.language.java.modifiers.Final>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.members.ClassMethod)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Final)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.modifiers.Final)) {
     	return false;
     }
     return true;

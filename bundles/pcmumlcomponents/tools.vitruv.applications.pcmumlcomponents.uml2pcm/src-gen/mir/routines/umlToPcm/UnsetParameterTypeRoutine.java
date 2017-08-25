@@ -43,7 +43,7 @@ public class UnsetParameterTypeRoutine extends AbstractRepairRoutineRealization 
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine UnsetParameterTypeRoutine with input:");
-    getLogger().debug("   Parameter: " + this.umlParameter);
+    getLogger().debug("   umlParameter: " + this.umlParameter);
     
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmParameter(umlParameter), // correspondence source supplier

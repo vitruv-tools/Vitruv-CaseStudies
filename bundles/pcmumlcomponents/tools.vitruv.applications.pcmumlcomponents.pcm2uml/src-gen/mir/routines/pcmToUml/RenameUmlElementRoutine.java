@@ -24,8 +24,7 @@ public class RenameUmlElementRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final NamedElement pcmElement, final org.eclipse.uml2.uml.NamedElement umlElement) {
-      String _entityName = pcmElement.getEntityName();
-      umlElement.setName(_entityName);
+      umlElement.setName(pcmElement.getEntityName());
     }
     
     public EObject getCorrepondenceSourceUmlElement(final NamedElement pcmElement) {
@@ -44,7 +43,7 @@ public class RenameUmlElementRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameUmlElementRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.pcmElement);
+    getLogger().debug("   pcmElement: " + this.pcmElement);
     
     org.eclipse.uml2.uml.NamedElement umlElement = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlElement(pcmElement), // correspondence source supplier

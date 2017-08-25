@@ -14,11 +14,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class RenamedCollectionDataTypeReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<CollectionDataType, String> typedChange = (ReplaceSingleValuedEAttribute<CollectionDataType, String>)change;
-    CollectionDataType affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.CollectionDataType, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.CollectionDataType, java.lang.String>)change;
+    org.palladiosimulator.pcm.repository.CollectionDataType affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    java.lang.String oldValue = typedChange.getOldValue();
+    java.lang.String newValue = typedChange.getNewValue();
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.RenamedCollectionDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.RenamedCollectionDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -29,17 +29,17 @@ class RenamedCollectionDataTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<CollectionDataType, String> relevantChange = (ReplaceSingleValuedEAttribute<CollectionDataType, String>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CollectionDataType)) {
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.CollectionDataType, java.lang.String> relevantChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.CollectionDataType, java.lang.String>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.CollectionDataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.String)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.String)) {
     	return false;
     }
     return true;

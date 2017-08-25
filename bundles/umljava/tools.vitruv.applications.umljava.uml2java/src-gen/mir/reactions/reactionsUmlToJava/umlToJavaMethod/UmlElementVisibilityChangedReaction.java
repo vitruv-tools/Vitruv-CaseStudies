@@ -17,11 +17,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class UmlElementVisibilityChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<NamedElement, VisibilityKind> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, VisibilityKind>)change;
-    NamedElement affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.NamedElement, org.eclipse.uml2.uml.VisibilityKind> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.NamedElement, org.eclipse.uml2.uml.VisibilityKind>)change;
+    org.eclipse.uml2.uml.NamedElement affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    VisibilityKind oldValue = typedChange.getOldValue();
-    VisibilityKind newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.VisibilityKind oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.VisibilityKind newValue = typedChange.getNewValue();
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlElementVisibilityChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlElementVisibilityChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -32,17 +32,17 @@ class UmlElementVisibilityChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<NamedElement, VisibilityKind> relevantChange = (ReplaceSingleValuedEAttribute<NamedElement, VisibilityKind>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof NamedElement)) {
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.NamedElement, org.eclipse.uml2.uml.VisibilityKind> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.NamedElement, org.eclipse.uml2.uml.VisibilityKind>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.NamedElement)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("visibility")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof VisibilityKind)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.VisibilityKind)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof VisibilityKind)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.VisibilityKind)) {
     	return false;
     }
     return true;
@@ -57,11 +57,11 @@ class UmlElementVisibilityChangedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEAttribute<NamedElement, VisibilityKind> typedChange = (ReplaceSingleValuedEAttribute<NamedElement, VisibilityKind>)change;
-    NamedElement affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.NamedElement, org.eclipse.uml2.uml.VisibilityKind> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.NamedElement, org.eclipse.uml2.uml.VisibilityKind>)change;
+    org.eclipse.uml2.uml.NamedElement affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    VisibilityKind oldValue = typedChange.getOldValue();
-    VisibilityKind newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.VisibilityKind oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.VisibilityKind newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }

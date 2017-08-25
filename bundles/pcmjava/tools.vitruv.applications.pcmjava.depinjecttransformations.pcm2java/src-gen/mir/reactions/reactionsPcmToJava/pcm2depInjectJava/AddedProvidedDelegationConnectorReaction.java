@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class AddedProvidedDelegationConnectorReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<ComposedStructure, ProvidedDelegationConnector> typedChange = ((CreateAndInsertNonRoot<ComposedStructure, ProvidedDelegationConnector>)change).getInsertChange();
-    ComposedStructure affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.core.composition.ComposedStructure, org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector> typedChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.core.composition.ComposedStructure, org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector>)change).getInsertChange();
+    org.palladiosimulator.pcm.core.composition.ComposedStructure affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ProvidedDelegationConnector newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector newValue = typedChange.getNewValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedProvidedDelegationConnectorReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedProvidedDelegationConnectorReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class AddedProvidedDelegationConnectorReaction extends AbstractReactionRealizati
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<ComposedStructure, ProvidedDelegationConnector> relevantChange = ((CreateAndInsertNonRoot<ComposedStructure, ProvidedDelegationConnector>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof ComposedStructure)) {
+    InsertEReference<org.palladiosimulator.pcm.core.composition.ComposedStructure, org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector> relevantChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.core.composition.ComposedStructure, org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.core.composition.ComposedStructure)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("connectors__ComposedStructure")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof ProvidedDelegationConnector)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector)) {
     	return false;
     }
     return true;

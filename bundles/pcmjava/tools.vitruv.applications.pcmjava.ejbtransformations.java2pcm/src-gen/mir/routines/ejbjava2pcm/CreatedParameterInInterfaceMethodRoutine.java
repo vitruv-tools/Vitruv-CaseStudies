@@ -44,13 +44,13 @@ public class CreatedParameterInInterfaceMethodRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedParameterInInterfaceMethodRoutine with input:");
-    getLogger().debug("   InterfaceMethod: " + this.method);
-    getLogger().debug("   Parameter: " + this.parameter);
+    getLogger().debug("   method: " + this.method);
+    getLogger().debug("   parameter: " + this.parameter);
     
-    OperationSignature opSignature = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationSignature opSignature = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceOpSignature(method, parameter), // correspondence source supplier
-    	OperationSignature.class,
-    	(OperationSignature _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationSignature.class,
+    	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (opSignature == null) {
     	return;

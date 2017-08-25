@@ -1,7 +1,6 @@
 package mir.reactions.reactionsUmlToJava.umlToJavaClassifier;
 
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
@@ -18,8 +17,8 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class UmlInterfaceImplementerChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<InterfaceRealization, org.eclipse.uml2.uml.Class> typedChange = (ReplaceSingleValuedEReference<InterfaceRealization, org.eclipse.uml2.uml.Class>)change;
-    InterfaceRealization affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class> typedChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class>)change;
+    org.eclipse.uml2.uml.InterfaceRealization affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
     org.eclipse.uml2.uml.Class oldValue = typedChange.getOldValue();
     org.eclipse.uml2.uml.Class newValue = typedChange.getNewValue();
@@ -33,8 +32,8 @@ class UmlInterfaceImplementerChangedReaction extends AbstractReactionRealization
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<InterfaceRealization, org.eclipse.uml2.uml.Class> relevantChange = (ReplaceSingleValuedEReference<InterfaceRealization, org.eclipse.uml2.uml.Class>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof InterfaceRealization)) {
+    ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class> relevantChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("implementingClassifier")) {
@@ -68,11 +67,9 @@ class UmlInterfaceImplementerChangedReaction extends AbstractReactionRealization
     }
     
     public void callRoutine1(final InterfaceRealization affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, final org.eclipse.uml2.uml.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
-      EList<NamedElement> _suppliers = affectedEObject.getSuppliers();
-      NamedElement _head = IterableExtensions.<NamedElement>head(_suppliers);
+      NamedElement _head = IterableExtensions.<NamedElement>head(affectedEObject.getSuppliers());
       _routinesFacade.deleteJavaImplementedInterface(((Interface) _head), oldValue);
-      EList<NamedElement> _suppliers_1 = affectedEObject.getSuppliers();
-      NamedElement _head_1 = IterableExtensions.<NamedElement>head(_suppliers_1);
+      NamedElement _head_1 = IterableExtensions.<NamedElement>head(affectedEObject.getSuppliers());
       _routinesFacade.changeJavaImplementedInterface(((Interface) _head_1), null, newValue);
     }
   }

@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreateAnnotationForFieldReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Field, AnnotationInstanceOrModifier> typedChange = (InsertEReference<Field, AnnotationInstanceOrModifier>)change;
-    Field affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.members.Field, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier> typedChange = (InsertEReference<org.emftext.language.java.members.Field, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier>)change;
+    org.emftext.language.java.members.Field affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateAnnotationForFieldReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateAnnotationForFieldReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class CreateAnnotationForFieldReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Field, AnnotationInstanceOrModifier> relevantChange = (InsertEReference<Field, AnnotationInstanceOrModifier>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Field)) {
+    InsertEReference<org.emftext.language.java.members.Field, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier> relevantChange = (InsertEReference<org.emftext.language.java.members.Field, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.members.Field)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof AnnotationInstanceOrModifier)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.modifiers.AnnotationInstanceOrModifier)) {
     	return false;
     }
     return true;
@@ -52,10 +52,10 @@ class CreateAnnotationForFieldReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<Field, AnnotationInstanceOrModifier> typedChange = (InsertEReference<Field, AnnotationInstanceOrModifier>)change;
-    Field affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.members.Field, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier> typedChange = (InsertEReference<org.emftext.language.java.members.Field, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier>)change;
+    org.emftext.language.java.members.Field affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }

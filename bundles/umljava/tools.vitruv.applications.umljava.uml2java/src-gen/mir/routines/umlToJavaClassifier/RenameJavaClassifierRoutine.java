@@ -27,8 +27,7 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final Classifier umlClassifier, final ConcreteClassifier javaClassifier, final CompilationUnit javaCompilationUnit) {
-      String _name = umlClassifier.getName();
-      javaClassifier.setName(_name);
+      javaClassifier.setName(umlClassifier.getName());
     }
     
     public EObject getElement2(final Classifier umlClassifier, final ConcreteClassifier javaClassifier, final CompilationUnit javaCompilationUnit) {
@@ -47,8 +46,7 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
       String _name = umlClassifier.getName();
       String _plus = (_name + ".java");
       javaCompilationUnit.setName(_plus);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit);
-      this.persistProjectRelative(umlClassifier, javaCompilationUnit, _buildJavaFilePath);
+      this.persistProjectRelative(umlClassifier, javaCompilationUnit, JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit));
     }
   }
   
@@ -63,21 +61,21 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaClassifierRoutine with input:");
-    getLogger().debug("   Classifier: " + this.umlClassifier);
+    getLogger().debug("   umlClassifier: " + this.umlClassifier);
     
-    ConcreteClassifier javaClassifier = getCorrespondingElement(
+    org.emftext.language.java.classifiers.ConcreteClassifier javaClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClassifier(umlClassifier), // correspondence source supplier
-    	ConcreteClassifier.class,
-    	(ConcreteClassifier _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.classifiers.ConcreteClassifier.class,
+    	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
     if (javaClassifier == null) {
     	return;
     }
     registerObjectUnderModification(javaClassifier);
-    CompilationUnit javaCompilationUnit = getCorrespondingElement(
+    org.emftext.language.java.containers.CompilationUnit javaCompilationUnit = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaCompilationUnit(umlClassifier, javaClassifier), // correspondence source supplier
-    	CompilationUnit.class,
-    	(CompilationUnit _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.containers.CompilationUnit.class,
+    	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
     	null);
     if (javaCompilationUnit == null) {
     	return;

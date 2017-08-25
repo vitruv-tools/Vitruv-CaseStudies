@@ -46,11 +46,9 @@ public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends Abst
               if ((fieldReference instanceof IdentifierReference)) {
                 final ReferenceableElement field = ((IdentifierReference)fieldReference).getTarget();
                 if ((field instanceof Field)) {
-                  String _name = ((Field)field).getName();
-                  boolean _equals = _name.equals(fieldName);
+                  boolean _equals = ((Field)field).getName().equals(fieldName);
                   if (_equals) {
-                    EList<Statement> _statements_1 = ctor.getStatements();
-                    _statements_1.remove(statement);
+                    ctor.getStatements().remove(statement);
                     return;
                   }
                 }
@@ -75,8 +73,8 @@ public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends Abst
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveParameterToFieldAssignmentFromConstructorRoutine with input:");
-    getLogger().debug("   Constructor: " + this.ctor);
-    getLogger().debug("   String: " + this.fieldName);
+    getLogger().debug("   ctor: " + this.ctor);
+    getLogger().debug("   fieldName: " + this.fieldName);
     
     // val updatedElement userExecution.getElement1(ctor, fieldName);
     userExecution.update0Element(ctor, fieldName);

@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedPrimitiveDataTypeReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Repository, PrimitiveDataType> typedChange = ((CreateAndInsertNonRoot<Repository, PrimitiveDataType>)change).getInsertChange();
-    Repository affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.PrimitiveDataType> typedChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.PrimitiveDataType>)change).getInsertChange();
+    org.palladiosimulator.pcm.repository.Repository affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    PrimitiveDataType newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.PrimitiveDataType newValue = typedChange.getNewValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPrimitiveDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPrimitiveDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class CreatedPrimitiveDataTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Repository, PrimitiveDataType> relevantChange = ((CreateAndInsertNonRoot<Repository, PrimitiveDataType>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Repository)) {
+    InsertEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.PrimitiveDataType> relevantChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.PrimitiveDataType>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Repository)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("dataTypes__Repository")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof PrimitiveDataType)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.PrimitiveDataType)) {
     	return false;
     }
     return true;

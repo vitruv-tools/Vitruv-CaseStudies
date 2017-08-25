@@ -1,14 +1,12 @@
 package mir.reactions.reactionsPcmToJava.pcm2depInjectJava;
 
-import tools.vitruv.domains.java.JavaDomainProvider;
-import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 
 @SuppressWarnings("all")
 public class ExecutorPcmToJava extends AbstractReactionsExecutor {
   public ExecutorPcmToJava() {
-    super(new PcmDomainProvider().getDomain(), 
-    	new JavaDomainProvider().getDomain());
+    super(new tools.vitruv.domains.pcm.PcmDomainProvider().getDomain(), 
+    	new tools.vitruv.domains.java.JavaDomainProvider().getDomain());
   }
   
   protected void setup() {

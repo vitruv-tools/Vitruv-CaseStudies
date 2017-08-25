@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedOperationSignatureReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<OperationInterface, OperationSignature> typedChange = ((RemoveAndDeleteNonRoot<OperationInterface, OperationSignature>)change).getRemoveChange();
-    OperationInterface affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.palladiosimulator.pcm.repository.OperationInterface, org.palladiosimulator.pcm.repository.OperationSignature> typedChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.OperationInterface, org.palladiosimulator.pcm.repository.OperationSignature>)change).getRemoveChange();
+    org.palladiosimulator.pcm.repository.OperationInterface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OperationSignature oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.OperationSignature oldValue = typedChange.getOldValue();
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.DeletedOperationSignatureReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.DeletedOperationSignatureReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class DeletedOperationSignatureReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<OperationInterface, OperationSignature> relevantChange = ((RemoveAndDeleteNonRoot<OperationInterface, OperationSignature>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof OperationInterface)) {
+    RemoveEReference<org.palladiosimulator.pcm.repository.OperationInterface, org.palladiosimulator.pcm.repository.OperationSignature> relevantChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.OperationInterface, org.palladiosimulator.pcm.repository.OperationSignature>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.OperationInterface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("signatures__OperationInterface")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof OperationSignature)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.OperationSignature)) {
     	return false;
     }
     return true;

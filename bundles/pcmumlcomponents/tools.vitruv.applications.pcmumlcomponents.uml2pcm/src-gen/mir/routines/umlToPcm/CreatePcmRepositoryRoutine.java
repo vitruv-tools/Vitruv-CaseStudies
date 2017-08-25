@@ -26,10 +26,9 @@ public class CreatePcmRepositoryRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updatePcmRepositoryElement(final Model umlModel, final Repository pcmRepository) {
+      pcmRepository.setEntityName(umlModel.getName());
       String _name = umlModel.getName();
-      pcmRepository.setEntityName(_name);
-      String _name_1 = umlModel.getName();
-      String _plus = ("repository/" + _name_1);
+      String _plus = ("repository/" + _name);
       String _plus_1 = (_plus + ".repository");
       this.persistProjectRelative(umlModel, pcmRepository, _plus_1);
     }
@@ -50,9 +49,9 @@ public class CreatePcmRepositoryRoutine extends AbstractRepairRoutineRealization
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePcmRepositoryRoutine with input:");
-    getLogger().debug("   Model: " + this.umlModel);
+    getLogger().debug("   umlModel: " + this.umlModel);
     
-    Repository pcmRepository = RepositoryFactoryImpl.eINSTANCE.createRepository();
+    org.palladiosimulator.pcm.repository.Repository pcmRepository = RepositoryFactoryImpl.eINSTANCE.createRepository();
     notifyObjectCreated(pcmRepository);
     userExecution.updatePcmRepositoryElement(umlModel, pcmRepository);
     

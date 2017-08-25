@@ -3,7 +3,6 @@ package mir.reactions.reactionsUmlToJava.umlToJavaClassifier;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -15,11 +14,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class UmlPackageRenamedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String>)change;
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, java.lang.String>)change;
     org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    java.lang.String oldValue = typedChange.getOldValue();
+    java.lang.String newValue = typedChange.getNewValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPackageRenamedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPackageRenamedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +29,17 @@ class UmlPackageRenamedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String>)change;
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, java.lang.String> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, java.lang.String>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Package)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("name")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.String)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.String)) {
     	return false;
     }
     return true;
@@ -55,11 +54,11 @@ class UmlPackageRenamedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, String>)change;
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Package, java.lang.String>)change;
     org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    java.lang.String oldValue = typedChange.getOldValue();
+    java.lang.String newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }
@@ -77,8 +76,7 @@ class UmlPackageRenamedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
-      Namespace _namespace = affectedEObject.getNamespace();
-      _routinesFacade.renameJavaPackage(affectedEObject, _namespace);
+      _routinesFacade.renameJavaPackage(affectedEObject, affectedEObject.getNamespace());
     }
   }
 }

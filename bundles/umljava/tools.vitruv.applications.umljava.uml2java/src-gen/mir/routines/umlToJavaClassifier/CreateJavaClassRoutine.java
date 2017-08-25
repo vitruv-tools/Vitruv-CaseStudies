@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -31,14 +30,12 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateJavaClassifierElement(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier) {
-      String _name = umlClassifier.getName();
-      javaClassifier.setName(_name);
+      javaClassifier.setName(umlClassifier.getName());
       javaClassifier.makePublic();
     }
     
     public void callRoutine1(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier, @Extension final RoutinesFacade _routinesFacade) {
-      Namespace _namespace = umlClassifier.getNamespace();
-      _routinesFacade.createJavaCompilationUnit(umlClassifier, javaClassifier, _namespace);
+      _routinesFacade.createJavaCompilationUnit(umlClassifier, javaClassifier, umlClassifier.getNamespace());
     }
   }
   
@@ -53,7 +50,7 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaClassRoutine with input:");
-    getLogger().debug("   Classifier: " + this.umlClassifier);
+    getLogger().debug("   umlClassifier: " + this.umlClassifier);
     
     org.emftext.language.java.classifiers.Class javaClassifier = ClassifiersFactoryImpl.eINSTANCE.createClass();
     notifyObjectCreated(javaClassifier);

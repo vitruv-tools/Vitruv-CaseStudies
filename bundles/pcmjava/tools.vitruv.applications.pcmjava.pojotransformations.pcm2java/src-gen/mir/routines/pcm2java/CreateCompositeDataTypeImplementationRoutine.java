@@ -34,8 +34,7 @@ public class CreateCompositeDataTypeImplementationRoutine extends AbstractRepair
     }
     
     public void callRoutine1(final CompositeDataType dataType, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = dataType.getEntityName();
-      _routinesFacade.createJavaClass(dataType, datatypesPackage, _entityName);
+      _routinesFacade.createJavaClass(dataType, datatypesPackage, dataType.getEntityName());
     }
   }
   
@@ -50,7 +49,7 @@ public class CreateCompositeDataTypeImplementationRoutine extends AbstractRepair
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeDataTypeImplementationRoutine with input:");
-    getLogger().debug("   CompositeDataType: " + this.dataType);
+    getLogger().debug("   dataType: " + this.dataType);
     
     org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDatatypesPackage(dataType), // correspondence source supplier

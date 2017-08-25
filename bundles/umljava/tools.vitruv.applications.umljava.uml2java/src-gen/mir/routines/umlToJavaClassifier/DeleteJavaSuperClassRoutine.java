@@ -42,7 +42,7 @@ public class DeleteJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaSuperClassRoutine with input:");
-    getLogger().debug("   Class: " + this.uClass);
+    getLogger().debug("   uClass: " + this.uClass);
     
     org.emftext.language.java.classifiers.Class jClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJClass(uClass), // correspondence source supplier

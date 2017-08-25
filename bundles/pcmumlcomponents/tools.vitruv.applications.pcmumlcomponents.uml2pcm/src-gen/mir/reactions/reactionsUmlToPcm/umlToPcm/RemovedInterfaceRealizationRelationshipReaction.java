@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class RemovedInterfaceRealizationRelationshipReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Component, InterfaceRealization> typedChange = (RemoveEReference<Component, InterfaceRealization>)change;
-    Component affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.InterfaceRealization> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.InterfaceRealization>)change;
+    org.eclipse.uml2.uml.Component affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    InterfaceRealization oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.InterfaceRealization oldValue = typedChange.getOldValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.RemovedInterfaceRealizationRelationshipReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.RemovedInterfaceRealizationRelationshipReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class RemovedInterfaceRealizationRelationshipReaction extends AbstractReactionRe
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Component, InterfaceRealization> relevantChange = (RemoveEReference<Component, InterfaceRealization>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Component)) {
+    RemoveEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.InterfaceRealization> relevantChange = (RemoveEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.InterfaceRealization>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Component)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("interfaceRealization")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof InterfaceRealization)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
     	return false;
     }
     return true;

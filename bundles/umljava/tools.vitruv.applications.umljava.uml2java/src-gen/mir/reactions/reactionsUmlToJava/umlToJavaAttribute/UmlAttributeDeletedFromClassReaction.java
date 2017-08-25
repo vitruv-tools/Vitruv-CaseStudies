@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class UmlAttributeDeletedFromClassReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.eclipse.uml2.uml.Class, Property> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Class, Property>)change).getRemoveChange();
+    RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Property> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Property>)change).getRemoveChange();
     org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Property oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.Property oldValue = typedChange.getOldValue();
     mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeDeletedFromClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeDeletedFromClassReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class UmlAttributeDeletedFromClassReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.eclipse.uml2.uml.Class, Property> relevantChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Class, Property>)change).getRemoveChange();
+    RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Property> relevantChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Property>)change).getRemoveChange();
     if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedAttribute")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Property)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.Property)) {
     	return false;
     }
     return true;

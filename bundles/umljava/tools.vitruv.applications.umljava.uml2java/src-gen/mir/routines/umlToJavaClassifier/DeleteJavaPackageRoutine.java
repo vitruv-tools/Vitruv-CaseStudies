@@ -38,7 +38,7 @@ public class DeleteJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.uPackage);
+    getLogger().debug("   uPackage: " + this.uPackage);
     
     org.emftext.language.java.containers.Package jPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJPackage(uPackage), // correspondence source supplier

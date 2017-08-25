@@ -53,22 +53,22 @@ public class RemoveCompositeDataTypeParentRoutine extends AbstractRepairRoutineR
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveCompositeDataTypeParentRoutine with input:");
-    getLogger().debug("   CompositeDataType: " + this.dataType);
-    getLogger().debug("   CompositeDataType: " + this.parent);
+    getLogger().debug("   dataType: " + this.dataType);
+    getLogger().debug("   parent: " + this.parent);
     
-    DataType compositeType = getCorrespondingElement(
+    org.eclipse.uml2.uml.DataType compositeType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeType(dataType, parent), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeType == null) {
     	return;
     }
     registerObjectUnderModification(compositeType);
-    DataType parentType = getCorrespondingElement(
+    org.eclipse.uml2.uml.DataType parentType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceParentType(dataType, parent, compositeType), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (parentType == null) {
     	return;

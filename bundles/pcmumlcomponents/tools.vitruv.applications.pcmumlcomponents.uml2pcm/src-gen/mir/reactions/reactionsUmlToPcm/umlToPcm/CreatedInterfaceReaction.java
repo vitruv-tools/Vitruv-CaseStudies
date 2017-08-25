@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedInterfaceReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Model, Interface> typedChange = ((CreateAndInsertNonRoot<Model, Interface>)change).getInsertChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.Interface> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.Interface>)change).getInsertChange();
+    org.eclipse.uml2.uml.Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Interface newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Interface newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class CreatedInterfaceReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Model, Interface> relevantChange = ((CreateAndInsertNonRoot<Model, Interface>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    InsertEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.Interface> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.Interface>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Model)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Interface)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Interface)) {
     	return false;
     }
     return true;

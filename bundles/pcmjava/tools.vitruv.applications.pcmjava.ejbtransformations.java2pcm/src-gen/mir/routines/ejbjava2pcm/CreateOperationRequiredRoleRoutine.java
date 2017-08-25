@@ -57,11 +57,11 @@ public class CreateOperationRequiredRoleRoutine extends AbstractRepairRoutineRea
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationRequiredRoleRoutine with input:");
-    getLogger().debug("   BasicComponent: " + this.basicComponent);
-    getLogger().debug("   OperationInterface: " + this.opInterface);
-    getLogger().debug("   Field: " + this.field);
+    getLogger().debug("   basicComponent: " + this.basicComponent);
+    getLogger().debug("   opInterface: " + this.opInterface);
+    getLogger().debug("   field: " + this.field);
     
-    OperationRequiredRole orr = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
+    org.palladiosimulator.pcm.repository.OperationRequiredRole orr = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
     notifyObjectCreated(orr);
     userExecution.updateOrrElement(basicComponent, opInterface, field, orr);
     

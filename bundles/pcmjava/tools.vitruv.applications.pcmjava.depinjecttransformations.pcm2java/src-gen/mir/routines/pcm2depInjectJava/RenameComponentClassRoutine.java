@@ -42,7 +42,7 @@ public class RenameComponentClassRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameComponentClassRoutine with input:");
-    getLogger().debug("   RepositoryComponent: " + this.component);
+    getLogger().debug("   component: " + this.component);
     
     org.emftext.language.java.containers.Package componentPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceComponentPackage(component), // correspondence source supplier

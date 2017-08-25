@@ -40,12 +40,12 @@ public class DeleteMethodForOperationSignatureRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteMethodForOperationSignatureRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.operationSignature);
+    getLogger().debug("   operationSignature: " + this.operationSignature);
     
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(operationSignature), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceMethod == null) {
     	return;

@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedInnerDeclarationReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<CompositeDataType, InnerDeclaration> typedChange = (RemoveEReference<CompositeDataType, InnerDeclaration>)change;
-    CompositeDataType affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.InnerDeclaration> typedChange = (RemoveEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.InnerDeclaration>)change;
+    org.palladiosimulator.pcm.repository.CompositeDataType affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    InnerDeclaration oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.InnerDeclaration oldValue = typedChange.getOldValue();
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.DeletedInnerDeclarationReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.DeletedInnerDeclarationReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class DeletedInnerDeclarationReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<CompositeDataType, InnerDeclaration> relevantChange = (RemoveEReference<CompositeDataType, InnerDeclaration>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof CompositeDataType)) {
+    RemoveEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.InnerDeclaration> relevantChange = (RemoveEReference<org.palladiosimulator.pcm.repository.CompositeDataType, org.palladiosimulator.pcm.repository.InnerDeclaration>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("innerDeclaration_CompositeDataType")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof InnerDeclaration)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.InnerDeclaration)) {
     	return false;
     }
     return true;

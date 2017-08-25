@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaEnumerationImplementAddedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Enumeration, TypeReference> typedChange = ((CreateAndInsertNonRoot<Enumeration, TypeReference>)change).getInsertChange();
-    Enumeration affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.types.TypeReference> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.types.TypeReference>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Enumeration affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    TypeReference newValue = typedChange.getNewValue();
+    org.emftext.language.java.types.TypeReference newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaEnumerationImplementAddedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaEnumerationImplementAddedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +31,14 @@ class JavaEnumerationImplementAddedReaction extends AbstractReactionRealization 
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Enumeration, TypeReference> relevantChange = ((CreateAndInsertNonRoot<Enumeration, TypeReference>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Enumeration)) {
+    InsertEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.types.TypeReference> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.types.TypeReference>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Enumeration)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("implements")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof TypeReference)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
     return true;

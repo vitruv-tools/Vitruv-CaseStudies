@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class JavaParameterDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Method, OrdinaryParameter> typedChange = ((RemoveAndDeleteNonRoot<Method, OrdinaryParameter>)change).getRemoveChange();
-    Method affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.emftext.language.java.members.Method, org.emftext.language.java.parameters.OrdinaryParameter> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.members.Method, org.emftext.language.java.parameters.OrdinaryParameter>)change).getRemoveChange();
+    org.emftext.language.java.members.Method affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    OrdinaryParameter oldValue = typedChange.getOldValue();
+    org.emftext.language.java.parameters.OrdinaryParameter oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaParameterDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Method, OrdinaryParameter> relevantChange = ((RemoveAndDeleteNonRoot<Method, OrdinaryParameter>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Method)) {
+    RemoveEReference<org.emftext.language.java.members.Method, org.emftext.language.java.parameters.OrdinaryParameter> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.members.Method, org.emftext.language.java.parameters.OrdinaryParameter>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.members.Method)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parameters")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof OrdinaryParameter)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.parameters.OrdinaryParameter)) {
     	return false;
     }
     return true;

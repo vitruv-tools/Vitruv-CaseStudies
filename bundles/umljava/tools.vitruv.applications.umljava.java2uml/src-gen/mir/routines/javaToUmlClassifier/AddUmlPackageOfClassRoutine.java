@@ -53,13 +53,13 @@ public class AddUmlPackageOfClassRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlPackageOfClassRoutine with input:");
-    getLogger().debug("   Package: " + this.jPackage);
-    getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
+    getLogger().debug("   jPackage: " + this.jPackage);
+    getLogger().debug("   jClassifier: " + this.jClassifier);
     
-    Classifier uClassifier = getCorrespondingElement(
+    org.eclipse.uml2.uml.Classifier uClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClassifier(jPackage, jClassifier), // correspondence source supplier
-    	Classifier.class,
-    	(Classifier _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Classifier.class,
+    	(org.eclipse.uml2.uml.Classifier _element) -> true, // correspondence precondition checker
     	null);
     if (uClassifier == null) {
     	return;

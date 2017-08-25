@@ -1,7 +1,6 @@
 package mir.reactions.reactionsJavaToUml.javaToUmlClassifier;
 
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
@@ -16,8 +15,8 @@ import tools.vitruv.framework.change.echange.root.RemoveRootEObject;
 @SuppressWarnings("all")
 class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveRootEObject<CompilationUnit> typedChange = (RemoveRootEObject<CompilationUnit>)change;
-    CompilationUnit oldValue = typedChange.getOldValue();
+    RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit> typedChange = (RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit>)change;
+    org.emftext.language.java.containers.CompilationUnit oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompUnitDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompUnitDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(oldValue, routinesFacade);
@@ -28,8 +27,8 @@ class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveRootEObject<CompilationUnit> relevantChange = (RemoveRootEObject<CompilationUnit>)change;
-    if (!(relevantChange.getOldValue() instanceof CompilationUnit)) {
+    RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit> relevantChange = (RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit>)change;
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.containers.CompilationUnit)) {
     	return false;
     }
     return true;
@@ -54,9 +53,7 @@ class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit oldValue, @Extension final RoutinesFacade _routinesFacade) {
-      EList<ConcreteClassifier> _classifiers = oldValue.getClassifiers();
-      ConcreteClassifier _head = IterableExtensions.<ConcreteClassifier>head(_classifiers);
-      _routinesFacade.deleteUmlClassifier(_head, oldValue);
+      _routinesFacade.deleteUmlClassifier(IterableExtensions.<ConcreteClassifier>head(oldValue.getClassifiers()), oldValue);
     }
   }
 }

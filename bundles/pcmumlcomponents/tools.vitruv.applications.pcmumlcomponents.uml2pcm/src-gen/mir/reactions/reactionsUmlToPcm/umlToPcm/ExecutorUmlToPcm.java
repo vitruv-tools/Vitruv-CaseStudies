@@ -1,14 +1,12 @@
 package mir.reactions.reactionsUmlToPcm.umlToPcm;
 
-import tools.vitruv.domains.pcm.PcmDomainProvider;
-import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 
 @SuppressWarnings("all")
 public class ExecutorUmlToPcm extends AbstractReactionsExecutor {
   public ExecutorUmlToPcm() {
-    super(new UmlDomainProvider().getDomain(), 
-    	new PcmDomainProvider().getDomain());
+    super(new tools.vitruv.domains.uml.UmlDomainProvider().getDomain(), 
+    	new tools.vitruv.domains.pcm.PcmDomainProvider().getDomain());
   }
   
   protected void setup() {

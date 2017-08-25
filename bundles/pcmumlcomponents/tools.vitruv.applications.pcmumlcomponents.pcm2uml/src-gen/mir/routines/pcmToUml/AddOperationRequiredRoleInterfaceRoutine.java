@@ -29,10 +29,9 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
     }
     
     public void update0Element(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface, final Usage umlUsage, final Interface umlInterface) {
+      umlUsage.getSuppliers().clear();
       EList<NamedElement> _suppliers = umlUsage.getSuppliers();
-      _suppliers.clear();
-      EList<NamedElement> _suppliers_1 = umlUsage.getSuppliers();
-      _suppliers_1.add(umlInterface);
+      _suppliers.add(umlInterface);
     }
     
     public EObject getCorrepondenceSourceUmlInterface(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface, final Usage umlUsage) {
@@ -57,22 +56,22 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddOperationRequiredRoleInterfaceRoutine with input:");
-    getLogger().debug("   OperationRequiredRole: " + this.pcmRole);
-    getLogger().debug("   OperationInterface: " + this.pcmInterface);
+    getLogger().debug("   pcmRole: " + this.pcmRole);
+    getLogger().debug("   pcmInterface: " + this.pcmInterface);
     
-    Usage umlUsage = getCorrespondingElement(
+    org.eclipse.uml2.uml.Usage umlUsage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlUsage(pcmRole, pcmInterface), // correspondence source supplier
-    	Usage.class,
-    	(Usage _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Usage.class,
+    	(org.eclipse.uml2.uml.Usage _element) -> true, // correspondence precondition checker
     	null);
     if (umlUsage == null) {
     	return;
     }
     registerObjectUnderModification(umlUsage);
-    Interface umlInterface = getCorrespondingElement(
+    org.eclipse.uml2.uml.Interface umlInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlInterface(pcmRole, pcmInterface, umlUsage), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (umlInterface == null) {
     	return;

@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaConstructorCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<ConcreteClassifier, Constructor> typedChange = ((CreateAndInsertNonRoot<ConcreteClassifier, Constructor>)change).getInsertChange();
-    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.Constructor> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.Constructor>)change).getInsertChange();
+    org.emftext.language.java.classifiers.ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Constructor newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.Constructor newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaConstructorCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<ConcreteClassifier, Constructor> relevantChange = ((CreateAndInsertNonRoot<ConcreteClassifier, Constructor>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof ConcreteClassifier)) {
+    InsertEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.Constructor> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.Constructor>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.ConcreteClassifier)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Constructor)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.Constructor)) {
     	return false;
     }
     return true;

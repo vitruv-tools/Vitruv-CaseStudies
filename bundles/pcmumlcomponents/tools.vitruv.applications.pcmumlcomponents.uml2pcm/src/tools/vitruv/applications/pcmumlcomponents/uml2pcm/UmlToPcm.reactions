@@ -170,7 +170,7 @@ routine createCollectionDataType(uml::DataType umlType) {
 		update pcmRepository {
 			pcmRepository.dataTypes__Repository += pcmType
 		}
-		add correspondence between umlType and pcmType tag with "collection"
+		add correspondence between umlType and pcmType tagged with "collection"
 	}
 }
 

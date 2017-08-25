@@ -44,8 +44,8 @@ public class AddUmlOperationToEnumRoutine extends AbstractRepairRoutineRealizati
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlOperationToEnumRoutine with input:");
-    getLogger().debug("   Enumeration: " + this.uEnum);
-    getLogger().debug("   Operation: " + this.uOperation);
+    getLogger().debug("   uEnum: " + this.uEnum);
+    getLogger().debug("   uOperation: " + this.uOperation);
     
     // val updatedElement userExecution.getElement1(uEnum, uOperation);
     userExecution.update0Element(uEnum, uOperation);

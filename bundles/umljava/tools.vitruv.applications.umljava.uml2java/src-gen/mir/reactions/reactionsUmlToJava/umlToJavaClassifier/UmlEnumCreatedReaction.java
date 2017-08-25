@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class UmlEnumCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Package, Enumeration> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, Enumeration>)change).getInsertChange();
+    InsertEReference<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Enumeration> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Enumeration>)change).getInsertChange();
     org.eclipse.uml2.uml.Package affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Enumeration newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Enumeration newValue = typedChange.getNewValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class UmlEnumCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Package, Enumeration> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, Enumeration>)change).getInsertChange();
+    InsertEReference<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Enumeration> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Enumeration>)change).getInsertChange();
     if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Package)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Enumeration)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Enumeration)) {
     	return false;
     }
     return true;

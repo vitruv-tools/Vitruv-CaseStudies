@@ -31,8 +31,7 @@ public class CreateComponentImplementationRoutine extends AbstractRepairRoutineR
     }
     
     public void callRoutine1(final RepositoryComponent component, final org.emftext.language.java.containers.Package repositoryPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = component.getEntityName();
-      _routinesFacade.createJavaPackage(component, repositoryPackage, _entityName, null);
+      _routinesFacade.createJavaPackage(component, repositoryPackage, component.getEntityName(), null);
       _routinesFacade.createImplementationForComponent(component);
     }
   }
@@ -48,7 +47,7 @@ public class CreateComponentImplementationRoutine extends AbstractRepairRoutineR
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateComponentImplementationRoutine with input:");
-    getLogger().debug("   RepositoryComponent: " + this.component);
+    getLogger().debug("   component: " + this.component);
     
     org.emftext.language.java.containers.Package repositoryPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepositoryPackage(component), // correspondence source supplier

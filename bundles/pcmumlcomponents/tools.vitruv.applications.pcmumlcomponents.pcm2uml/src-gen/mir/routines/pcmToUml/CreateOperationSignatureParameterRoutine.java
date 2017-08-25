@@ -33,8 +33,7 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     }
     
     public void updateUmlParameterElement(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
-      String _parameterName = pcmParameter.getParameterName();
-      umlParameter.setName(_parameterName);
+      umlParameter.setName(pcmParameter.getParameterName());
     }
     
     public EObject getElement2(final OperationSignature pcmSignature, final Parameter pcmParameter, final Operation umlOperation, final org.eclipse.uml2.uml.Parameter umlParameter) {
@@ -63,13 +62,13 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationSignatureParameterRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.pcmSignature);
-    getLogger().debug("   Parameter: " + this.pcmParameter);
+    getLogger().debug("   pcmSignature: " + this.pcmSignature);
+    getLogger().debug("   pcmParameter: " + this.pcmParameter);
     
-    Operation umlOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation umlOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature, pcmParameter), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (umlOperation == null) {
     	return;

@@ -1,8 +1,8 @@
 package tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java
 
-import mir.reactions.AbstractChangePropagationSpecificationPcmToJava
+import mir.reactions.PcmToJavaChangePropagationSpecification
 
-class Pcm2EjbJavaChangePropagationSpecification extends AbstractChangePropagationSpecificationPcmToJava {
+class Pcm2EjbJavaChangePropagationSpecification extends PcmToJavaChangePropagationSpecification {
 	
 	override protected setup() {
 		super.setup()

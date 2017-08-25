@@ -37,8 +37,7 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updateUConstructorElement(final Constructor jConstructor, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uConstructor) {
-      String _name = jConstructor.getName();
-      uConstructor.setName(_name);
+      uConstructor.setName(jConstructor.getName());
     }
     
     public EObject getElement2(final Constructor jConstructor, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uConstructor) {
@@ -63,8 +62,8 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlConstructorRoutine with input:");
-    getLogger().debug("   Constructor: " + this.jConstructor);
-    getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
+    getLogger().debug("   jConstructor: " + this.jConstructor);
+    getLogger().debug("   jClassifier: " + this.jClassifier);
     
     org.eclipse.uml2.uml.Class uClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClassifier(jConstructor, jClassifier), // correspondence source supplier
@@ -75,7 +74,7 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
     	return;
     }
     registerObjectUnderModification(uClassifier);
-    Operation uConstructor = UMLFactoryImpl.eINSTANCE.createOperation();
+    org.eclipse.uml2.uml.Operation uConstructor = UMLFactoryImpl.eINSTANCE.createOperation();
     notifyObjectCreated(uConstructor);
     userExecution.updateUConstructorElement(jConstructor, jClassifier, uClassifier, uConstructor);
     

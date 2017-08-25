@@ -46,13 +46,13 @@ public class SetUmlMethodAbstractRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlMethodAbstractRoutine with input:");
-    getLogger().debug("   ClassMethod: " + this.jMeth);
-    getLogger().debug("   Boolean: " + this.isAbstract);
+    getLogger().debug("   jMeth: " + this.jMeth);
+    getLogger().debug("   isAbstract: " + this.isAbstract);
     
-    Operation uOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation uOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUOperation(jMeth, isAbstract), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (uOperation == null) {
     	return;

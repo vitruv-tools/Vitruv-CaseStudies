@@ -28,8 +28,7 @@ public class SetJavaClassAbstractRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final org.eclipse.uml2.uml.Class umlClass, final org.emftext.language.java.classifiers.Class jClass) {
-      boolean _isAbstract = umlClass.isAbstract();
-      JavaModifierUtil.setAbstract(jClass, _isAbstract);
+      JavaModifierUtil.setAbstract(jClass, umlClass.isAbstract());
     }
   }
   
@@ -44,7 +43,7 @@ public class SetJavaClassAbstractRoutine extends AbstractRepairRoutineRealizatio
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine SetJavaClassAbstractRoutine with input:");
-    getLogger().debug("   Class: " + this.umlClass);
+    getLogger().debug("   umlClass: " + this.umlClass);
     
     org.emftext.language.java.classifiers.Class jClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJClass(umlClass), // correspondence source supplier

@@ -7,9 +7,7 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -47,17 +45,12 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
         int _upper = uAttribute.getUpper();
         boolean _equals_1 = (_upper == 1);
         if (_equals_1) {
-          Type _type = uAttribute.getType();
-          CompilationUnit _containingCompilationUnit = jAttribute.getContainingCompilationUnit();
-          TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type, jType, _containingCompilationUnit, this.userInteracting);
-          jAttribute.setTypeReference(_createTypeReferenceAndUpdateImport);
+          jAttribute.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uAttribute.getType(), jType, jAttribute.getContainingCompilationUnit(), this.userInteracting));
         } else {
           int _upper_1 = uAttribute.getUpper();
           boolean _equals_2 = (_upper_1 == LiteralUnlimitedNatural.UNLIMITED);
           if (_equals_2) {
-            String _letUserSelectCollectionTypeName = UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting);
-            TypeReference _createCollectiontypeReference = JavaTypeUtil.createCollectiontypeReference(_letUserSelectCollectionTypeName, jType);
-            jAttribute.setTypeReference(_createCollectiontypeReference);
+            jAttribute.setTypeReference(JavaTypeUtil.createCollectiontypeReference(UmlToJavaHelper.letUserSelectCollectionTypeName(this.userInteracting), jType));
           } else {
             int _lower_1 = uAttribute.getLower();
             String _plus = ("We do not support the multiplicity [" + Integer.valueOf(_lower_1));
@@ -75,10 +68,7 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
           int _upper_3 = uAttribute.getUpper();
           boolean _equals_4 = (_upper_3 == 1);
           if (_equals_4) {
-            Type _type_1 = uAttribute.getType();
-            CompilationUnit _containingCompilationUnit_1 = jAttribute.getContainingCompilationUnit();
-            TypeReference _createTypeReferenceAndUpdateImport_1 = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type_1, jType, _containingCompilationUnit_1, this.userInteracting);
-            jAttribute.setTypeReference(_createTypeReferenceAndUpdateImport_1);
+            jAttribute.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uAttribute.getType(), jType, jAttribute.getContainingCompilationUnit(), this.userInteracting));
           } else {
             int _lower_3 = uAttribute.getLower();
             String _plus_4 = ("We do not support the multiplicity [" + Integer.valueOf(_lower_3));
@@ -119,12 +109,12 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
   
   protected void executeRoutine() throws IOException {
     getLogger().debug("Called routine HandleMultiplicityForJavaAttributeRoutine with input:");
-    getLogger().debug("   Property: " + this.uAttribute);
+    getLogger().debug("   uAttribute: " + this.uAttribute);
     
-    Field jAttribute = getCorrespondingElement(
+    org.emftext.language.java.members.Field jAttribute = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJAttribute(uAttribute), // correspondence source supplier
-    	Field.class,
-    	(Field _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.Field.class,
+    	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (jAttribute == null) {
     	return;

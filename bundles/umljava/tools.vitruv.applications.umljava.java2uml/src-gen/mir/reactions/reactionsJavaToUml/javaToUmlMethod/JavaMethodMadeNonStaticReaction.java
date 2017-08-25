@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class JavaMethodMadeNonStaticReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<AnnotableAndModifiable, Static> typedChange = ((RemoveAndDeleteNonRoot<AnnotableAndModifiable, Static>)change).getRemoveChange();
-    AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Static> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Static>)change).getRemoveChange();
+    org.emftext.language.java.modifiers.AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Static oldValue = typedChange.getOldValue();
+    org.emftext.language.java.modifiers.Static oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonStaticReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonStaticReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaMethodMadeNonStaticReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<AnnotableAndModifiable, Static> relevantChange = ((RemoveAndDeleteNonRoot<AnnotableAndModifiable, Static>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof AnnotableAndModifiable)) {
+    RemoveEReference<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Static> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Static>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.modifiers.AnnotableAndModifiable)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Static)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.modifiers.Static)) {
     	return false;
     }
     return true;
