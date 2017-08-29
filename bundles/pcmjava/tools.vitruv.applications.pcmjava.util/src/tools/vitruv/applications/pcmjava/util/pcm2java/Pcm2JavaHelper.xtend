@@ -54,6 +54,8 @@ import tools.vitruv.framework.util.datatypes.ClaimableMap
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
 import tools.vitruv.domains.java.util.jamoppparser.JamoppParser
+import org.emftext.language.java.JavaClasspath
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 
 class Pcm2JavaHelper{
 	
@@ -479,30 +481,14 @@ class Pcm2JavaHelper{
 	}
 	
 	def static ClassifierImport getJavaClassImport(String name) {
-//		val uri = resSet.URIConverter.normalize(URI.createURI("pathmap:/javaclass/" + name + ".java"));
-//		val res = resSet.getResource(uri, false)
-//		return res.contents.get(0) as ClassifierImport;
-//		
-		val content = "package dummyPackage;\n " +
-				"import " + name + ";\n" +
-				"public class DummyClass {}";
-		val dummyCU = createCompilationUnit("DummyClass", content);
-		val classifierImport = (dummyCU.getImports().get(0) as ClassifierImport)
-		val copy = EcoreUtil.copy(classifierImport);
-		EcoreUtil.remove(copy);
-		return copy;
+		val classifier = tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.loadClassiferFromStdLib(name);
+		val classifierImport = ImportsFactory.eINSTANCE.createClassifierImport();
+		classifierImport.classifier = classifier;
+		return classifierImport
 	}
 	
 	def static ConcreteClassifier getJavaClass(String name) {
-		val content = "package dummyPackage;\n " +
-				"import " + name + ";\n" +
-				"public class DummyClass {}";
-		val dummyCU = createCompilationUnit("DummyClass", content);
-		val classifier = (dummyCU.getImports().get(0) as ClassifierImport).getClassifier();
-		val copy = EcoreUtil.copy(classifier);
-		EcoreUtil.remove(copy);
-		return copy;
-		
+		return tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.loadClassiferFromStdLib(name);
 	}
 	
 	def static CompilationUnit createCompilationUnit(String name, String content) {
@@ -570,8 +556,7 @@ class Pcm2JavaHelper{
 	
 	def static NamespaceClassifierReference createAndReturnNamespaceClassifierReferenceForName(String namespace,
 		String name) {
-		val classifier = ClassifiersFactory.eINSTANCE.createClass
-		classifier.setName(name)
+		val classifier = tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.loadClassiferFromStdLib(namespace + "." + name)
 		val classifierReference = TypesFactory.eINSTANCE.createClassifierReference
 		classifierReference.setTarget(classifier)
 		val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
@@ -582,6 +567,13 @@ class Pcm2JavaHelper{
 			namespaceClassifierReference.namespaces.add("")
 		}
 		return namespaceClassifierReference
+	}
+	
+	def static ConcreteClassifier loadClassiferFromStdLib(String name) {
+		// This requires stlib to be registered (JavaClasspath.get().registerStdLib). Should be done by domain
+		var classifier = JavaClasspath.get().getClassifier(name) as ConcreteClassifier
+		val resourceSet = new ResourceSetImpl();
+		classifier = EcoreUtil.resolve(classifier, resourceSet) as ConcreteClassifier
 	}
 }
 	
