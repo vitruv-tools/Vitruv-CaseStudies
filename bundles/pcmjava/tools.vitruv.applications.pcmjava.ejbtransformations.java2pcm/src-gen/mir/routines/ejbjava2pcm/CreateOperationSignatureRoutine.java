@@ -9,7 +9,6 @@ import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.parameters.Parameter;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -55,12 +54,12 @@ public class CreateOperationSignatureRoutine extends AbstractRepairRoutineRealiz
   
   private OperationInterface opInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationSignatureRoutine with input:");
     getLogger().debug("   interfaceMethod: " + this.interfaceMethod);
     getLogger().debug("   opInterface: " + this.opInterface);
     
-    org.palladiosimulator.pcm.repository.OperationSignature opSignature = RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
+    org.palladiosimulator.pcm.repository.OperationSignature opSignature = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
     notifyObjectCreated(opSignature);
     
     addCorrespondenceBetween(userExecution.getElement1(interfaceMethod, opInterface, opSignature), userExecution.getElement2(interfaceMethod, opInterface, opSignature), "");
@@ -68,5 +67,7 @@ public class CreateOperationSignatureRoutine extends AbstractRepairRoutineRealiz
     userExecution.callRoutine1(interfaceMethod, opInterface, opSignature, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

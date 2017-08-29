@@ -10,11 +10,9 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.imports.ClassifierImport;
-import org.emftext.language.java.imports.impl.ImportsFactoryImpl;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.Member;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationInterface;
@@ -103,7 +101,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
   
   private OperationRequiredRole requiredRole;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddRequiredRoleRoutine with input:");
     getLogger().debug("   requiredRole: " + this.requiredRole);
     
@@ -113,7 +111,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (requiredInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(requiredInterface);
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
@@ -122,16 +120,16 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (javaClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClass);
-    org.emftext.language.java.imports.ClassifierImport requiredInterfaceImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
+    org.emftext.language.java.imports.ClassifierImport requiredInterfaceImport = org.emftext.language.java.imports.impl.ImportsFactoryImpl.eINSTANCE.createClassifierImport();
     notifyObjectCreated(requiredInterfaceImport);
     userExecution.updateRequiredInterfaceImportElement(requiredRole, requiredInterface, javaClass, requiredInterfaceImport);
     
     addCorrespondenceBetween(userExecution.getElement1(requiredRole, requiredInterface, javaClass, requiredInterfaceImport), userExecution.getElement2(requiredRole, requiredInterface, javaClass, requiredInterfaceImport), "");
     
-    org.emftext.language.java.members.Field requiredInterfaceField = MembersFactoryImpl.eINSTANCE.createField();
+    org.emftext.language.java.members.Field requiredInterfaceField = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createField();
     notifyObjectCreated(requiredInterfaceField);
     userExecution.updateRequiredInterfaceFieldElement(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField);
     
@@ -143,5 +141,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

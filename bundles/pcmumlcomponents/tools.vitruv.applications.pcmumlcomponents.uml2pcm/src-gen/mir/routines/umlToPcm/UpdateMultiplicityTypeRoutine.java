@@ -63,7 +63,7 @@ public class UpdateMultiplicityTypeRoutine extends AbstractRepairRoutineRealizat
   
   private MultiplicityElement umlElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine UpdateMultiplicityTypeRoutine with input:");
     getLogger().debug("   umlElement: " + this.umlElement);
     
@@ -73,11 +73,13 @@ public class UpdateMultiplicityTypeRoutine extends AbstractRepairRoutineRealizat
     	(org.eclipse.emf.ecore.EObject _element) -> true, // correspondence precondition checker
     	null);
     if (pcmElement == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmElement);
     userExecution.callRoutine1(umlElement, pcmElement, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

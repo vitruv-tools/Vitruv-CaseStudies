@@ -42,12 +42,14 @@ public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
   
   private AssemblyConnector assemblyConnector;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddConnectorRoutine with input:");
     getLogger().debug("   assemblyConnector: " + this.assemblyConnector);
     
     userExecution.callRoutine1(assemblyConnector, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

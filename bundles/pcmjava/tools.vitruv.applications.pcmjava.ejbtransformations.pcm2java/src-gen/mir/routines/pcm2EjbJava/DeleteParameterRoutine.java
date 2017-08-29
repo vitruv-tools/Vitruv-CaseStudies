@@ -46,7 +46,7 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
   
   private Parameter parameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteParameterRoutine with input:");
     getLogger().debug("   signature: " + this.signature);
     getLogger().debug("   parameter: " + this.parameter);
@@ -57,7 +57,7 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
     org.emftext.language.java.parameters.OrdinaryParameter javaParameter = getCorrespondingElement(
@@ -66,11 +66,13 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
     	null);
     if (javaParameter == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaParameter);
     deleteObject(userExecution.getElement1(signature, parameter, interfaceMethod, javaParameter));
     
     postprocessElements();
+    
+    return true;
   }
 }

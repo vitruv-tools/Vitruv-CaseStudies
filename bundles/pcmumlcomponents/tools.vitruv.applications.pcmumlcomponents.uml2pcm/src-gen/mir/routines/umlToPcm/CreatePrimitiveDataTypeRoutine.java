@@ -42,7 +42,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   private PrimitiveType umlType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePrimitiveDataTypeRoutine with input:");
     getLogger().debug("   umlType: " + this.umlType);
     
@@ -52,11 +52,13 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	null);
     if (pcmRepository == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmRepository);
     userExecution.callRoutine1(umlType, pcmRepository, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

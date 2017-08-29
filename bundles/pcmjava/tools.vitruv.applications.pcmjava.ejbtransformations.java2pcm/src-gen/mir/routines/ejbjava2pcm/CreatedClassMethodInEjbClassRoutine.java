@@ -57,7 +57,7 @@ public class CreatedClassMethodInEjbClassRoutine extends AbstractRepairRoutineRe
   
   private ClassMethod classMethod;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedClassMethodInEjbClassRoutine with input:");
     getLogger().debug("   clazz: " + this.clazz);
     getLogger().debug("   classMethod: " + this.classMethod);
@@ -68,11 +68,13 @@ public class CreatedClassMethodInEjbClassRoutine extends AbstractRepairRoutineRe
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(basicComponent);
     userExecution.callRoutine1(clazz, classMethod, basicComponent, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

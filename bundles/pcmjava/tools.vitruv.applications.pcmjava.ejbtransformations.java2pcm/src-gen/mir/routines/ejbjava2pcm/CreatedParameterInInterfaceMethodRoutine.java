@@ -42,7 +42,7 @@ public class CreatedParameterInInterfaceMethodRoutine extends AbstractRepairRout
   
   private Parameter parameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedParameterInInterfaceMethodRoutine with input:");
     getLogger().debug("   method: " + this.method);
     getLogger().debug("   parameter: " + this.parameter);
@@ -53,11 +53,13 @@ public class CreatedParameterInInterfaceMethodRoutine extends AbstractRepairRout
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (opSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(opSignature);
     userExecution.callRoutine1(method, parameter, opSignature, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

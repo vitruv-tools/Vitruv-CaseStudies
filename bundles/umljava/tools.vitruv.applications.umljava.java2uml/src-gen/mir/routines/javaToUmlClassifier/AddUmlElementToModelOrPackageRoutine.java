@@ -43,7 +43,7 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
   
   private Classifier uClassifier;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlElementToModelOrPackageRoutine with input:");
     getLogger().debug("   jCompUnit: " + this.jCompUnit);
     getLogger().debug("   uClassifier: " + this.uClassifier);
@@ -51,5 +51,7 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
     userExecution.callRoutine1(jCompUnit, uClassifier, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

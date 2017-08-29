@@ -51,7 +51,7 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaMethodRoutine with input:");
     getLogger().debug("   uClassifier: " + this.uClassifier);
     getLogger().debug("   uOperation: " + this.uOperation);
@@ -59,5 +59,7 @@ public class CreateJavaMethodRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(uClassifier, uOperation, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

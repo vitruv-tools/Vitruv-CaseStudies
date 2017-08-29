@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.Operation;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.Member;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -64,7 +63,7 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaConstructorRoutine with input:");
     getLogger().debug("   uClassifier: " + this.uClassifier);
     getLogger().debug("   uOperation: " + this.uOperation);
@@ -75,10 +74,10 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
     	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
     if (jClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jClassifier);
-    org.emftext.language.java.members.Constructor jConstructor = MembersFactoryImpl.eINSTANCE.createConstructor();
+    org.emftext.language.java.members.Constructor jConstructor = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createConstructor();
     notifyObjectCreated(jConstructor);
     userExecution.updateJConstructorElement(uClassifier, uOperation, jClassifier, jConstructor);
     
@@ -88,5 +87,7 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
     addCorrespondenceBetween(userExecution.getElement2(uClassifier, uOperation, jClassifier, jConstructor), userExecution.getElement3(uClassifier, uOperation, jClassifier, jConstructor), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

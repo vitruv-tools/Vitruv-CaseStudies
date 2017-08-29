@@ -5,10 +5,8 @@ import mir.routines.pcm2depInjectJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.instantiations.NewConstructorCall;
-import org.emftext.language.java.instantiations.impl.InstantiationsFactoryImpl;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.ComposedStructure;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
@@ -71,7 +69,7 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
   
   private AssemblyContext assemblyContext;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddAssemblyContextToComposedStructureRoutine with input:");
     getLogger().debug("   composedStructure: " + this.composedStructure);
     getLogger().debug("   assemblyContext: " + this.assemblyContext);
@@ -82,7 +80,7 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (compositeComponentJavaClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeComponentJavaClass);
     org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass = getCorrespondingElement(
@@ -91,13 +89,13 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (encapsulatedComponentJavaClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(encapsulatedComponentJavaClass);
-    org.emftext.language.java.members.Field assemblyContextField = MembersFactoryImpl.eINSTANCE.createField();
+    org.emftext.language.java.members.Field assemblyContextField = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createField();
     notifyObjectCreated(assemblyContextField);
     
-    org.emftext.language.java.instantiations.NewConstructorCall newConstructorCall = InstantiationsFactoryImpl.eINSTANCE.createNewConstructorCall();
+    org.emftext.language.java.instantiations.NewConstructorCall newConstructorCall = org.emftext.language.java.instantiations.impl.InstantiationsFactoryImpl.eINSTANCE.createNewConstructorCall();
     notifyObjectCreated(newConstructorCall);
     
     addCorrespondenceBetween(userExecution.getElement1(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall), userExecution.getElement2(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall), "");
@@ -107,5 +105,7 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     userExecution.callRoutine1(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

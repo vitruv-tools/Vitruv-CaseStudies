@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.commons.NamedElement;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -54,12 +53,12 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
   
   private NamedElement namedElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationInterfaceRoutine with input:");
     getLogger().debug("   repo: " + this.repo);
     getLogger().debug("   namedElement: " + this.namedElement);
     
-    org.palladiosimulator.pcm.repository.OperationInterface operationInterface = RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
+    org.palladiosimulator.pcm.repository.OperationInterface operationInterface = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
     notifyObjectCreated(operationInterface);
     userExecution.updateOperationInterfaceElement(repo, namedElement, operationInterface);
     
@@ -69,5 +68,7 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
     userExecution.update0Element(repo, namedElement, operationInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

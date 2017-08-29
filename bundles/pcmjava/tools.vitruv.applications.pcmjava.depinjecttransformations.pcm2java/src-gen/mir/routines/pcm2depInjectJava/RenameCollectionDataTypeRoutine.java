@@ -47,7 +47,7 @@ public class RenameCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
   
   private CollectionDataType collectionDataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameCollectionDataTypeRoutine with input:");
     getLogger().debug("   collectionDataType: " + this.collectionDataType);
     
@@ -57,11 +57,13 @@ public class RenameCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(collectionDataType, _element), // correspondence precondition checker
     	null);
     if (datatypesPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(collectionDataType, datatypesPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

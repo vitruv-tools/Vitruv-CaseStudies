@@ -41,7 +41,7 @@ public class SetJavaClassAbstractRoutine extends AbstractRepairRoutineRealizatio
   
   private org.eclipse.uml2.uml.Class umlClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetJavaClassAbstractRoutine with input:");
     getLogger().debug("   umlClass: " + this.umlClass);
     
@@ -51,12 +51,14 @@ public class SetJavaClassAbstractRoutine extends AbstractRepairRoutineRealizatio
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (jClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jClass);
     // val updatedElement userExecution.getElement1(umlClass, jClass);
     userExecution.update0Element(umlClass, jClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

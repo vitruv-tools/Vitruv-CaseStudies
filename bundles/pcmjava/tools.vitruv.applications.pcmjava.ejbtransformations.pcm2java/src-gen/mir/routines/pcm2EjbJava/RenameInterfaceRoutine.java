@@ -47,7 +47,7 @@ public class RenameInterfaceRoutine extends AbstractRepairRoutineRealization {
   
   private OperationInterface interf;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameInterfaceRoutine with input:");
     getLogger().debug("   interf: " + this.interf);
     
@@ -57,11 +57,13 @@ public class RenameInterfaceRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionContractsPackage(interf, _element), // correspondence precondition checker
     	null);
     if (contractsPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(contractsPackage);
     userExecution.callRoutine1(interf, contractsPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

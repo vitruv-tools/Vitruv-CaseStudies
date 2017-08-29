@@ -42,7 +42,7 @@ public class UnsetUmlOperationTypeRoutine extends AbstractRepairRoutineRealizati
   
   private OperationSignature pcmSignature;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine UnsetUmlOperationTypeRoutine with input:");
     getLogger().debug("   pcmSignature: " + this.pcmSignature);
     
@@ -52,12 +52,14 @@ public class UnsetUmlOperationTypeRoutine extends AbstractRepairRoutineRealizati
     	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (umlOperation == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlOperation);
     // val updatedElement userExecution.getElement1(pcmSignature, umlOperation);
     userExecution.update0Element(pcmSignature, umlOperation);
     
     postprocessElements();
+    
+    return true;
   }
 }

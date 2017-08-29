@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.Parametrizable;
-import org.emftext.language.java.parameters.impl.ParametersFactoryImpl;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -69,7 +68,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
   
   private Parameter umlParam;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaParameterRoutine with input:");
     getLogger().debug("   uMeth: " + this.uMeth);
     getLogger().debug("   umlParam: " + this.umlParam);
@@ -80,7 +79,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     	(org.emftext.language.java.parameters.Parametrizable _element) -> true, // correspondence precondition checker
     	null);
     if (javaMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaMethod);
     org.emftext.language.java.classifiers.Class customTypeClass = getCorrespondingElement(
@@ -89,7 +88,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(customTypeClass);
-    org.emftext.language.java.parameters.OrdinaryParameter javaParam = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
+    org.emftext.language.java.parameters.OrdinaryParameter javaParam = org.emftext.language.java.parameters.impl.ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
     notifyObjectCreated(javaParam);
     userExecution.updateJavaParamElement(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     
@@ -99,5 +98,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     userExecution.update0Element(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     
     postprocessElements();
+    
+    return true;
   }
 }

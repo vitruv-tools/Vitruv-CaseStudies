@@ -58,7 +58,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
   
   private Parameter parameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeParameterTypeRoutine with input:");
     getLogger().debug("   parameter: " + this.parameter);
     
@@ -68,7 +68,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
     org.emftext.language.java.parameters.OrdinaryParameter javaParameter = getCorrespondingElement(
@@ -77,7 +77,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
     	null);
     if (javaParameter == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaParameter);
     org.emftext.language.java.classifiers.Class javaParameterTypeClass = getCorrespondingElement(
@@ -90,5 +90,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     userExecution.update0Element(parameter, interfaceMethod, javaParameter, javaParameterTypeClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

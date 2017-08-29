@@ -84,7 +84,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
   
   private ParameterDirectionKind newDirection;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AdaptJavaParametertoDirectionChangeRoutine with input:");
     getLogger().debug("   uOperation: " + this.uOperation);
     getLogger().debug("   uParam: " + this.uParam);
@@ -97,7 +97,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
     	null);
     if (jMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jMethod);
     org.emftext.language.java.parameters.OrdinaryParameter jParam = getCorrespondingElement(
@@ -118,5 +118,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     userExecution.callRoutine1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, customTypeClass, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

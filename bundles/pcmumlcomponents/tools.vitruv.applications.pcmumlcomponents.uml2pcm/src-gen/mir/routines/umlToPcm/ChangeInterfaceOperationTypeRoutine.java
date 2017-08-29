@@ -54,7 +54,7 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
   
   private Parameter umlParameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInterfaceOperationTypeRoutine with input:");
     getLogger().debug("   umlOperation: " + this.umlOperation);
     getLogger().debug("   umlParameter: " + this.umlParameter);
@@ -65,12 +65,14 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (pcmSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmSignature);
     // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature);
     userExecution.update0Element(umlOperation, umlParameter, pcmSignature);
     
     postprocessElements();
+    
+    return true;
   }
 }

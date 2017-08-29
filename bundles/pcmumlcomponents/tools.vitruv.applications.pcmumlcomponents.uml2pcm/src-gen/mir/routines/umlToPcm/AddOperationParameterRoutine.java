@@ -65,7 +65,7 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
   
   private Parameter umlParameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddOperationParameterRoutine with input:");
     getLogger().debug("   umlOperation: " + this.umlOperation);
     getLogger().debug("   umlParameter: " + this.umlParameter);
@@ -76,11 +76,13 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
     	(org.palladiosimulator.pcm.repository.Signature _element) -> true, // correspondence precondition checker
     	null);
     if (pcmSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmSignature);
     userExecution.callRoutine1(umlOperation, umlParameter, pcmSignature, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

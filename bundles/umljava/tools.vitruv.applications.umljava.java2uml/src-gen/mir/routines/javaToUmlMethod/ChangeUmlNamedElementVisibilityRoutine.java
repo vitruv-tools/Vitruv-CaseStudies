@@ -46,7 +46,7 @@ public class ChangeUmlNamedElementVisibilityRoutine extends AbstractRepairRoutin
   
   private Modifier mod;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlNamedElementVisibilityRoutine with input:");
     getLogger().debug("   jElem: " + this.jElem);
     getLogger().debug("   mod: " + this.mod);
@@ -57,12 +57,14 @@ public class ChangeUmlNamedElementVisibilityRoutine extends AbstractRepairRoutin
     	(org.eclipse.uml2.uml.NamedElement _element) -> true, // correspondence precondition checker
     	null);
     if (uElem == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uElem);
     // val updatedElement userExecution.getElement1(jElem, mod, uElem);
     userExecution.update0Element(jElem, mod, uElem);
     
     postprocessElements();
+    
+    return true;
   }
 }

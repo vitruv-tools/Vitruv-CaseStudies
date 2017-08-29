@@ -45,7 +45,7 @@ public class DeleteJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   private String expectedTag;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaPackageRoutine with input:");
     getLogger().debug("   sourceElementMappedToPackage: " + this.sourceElementMappedToPackage);
     getLogger().debug("   packageName: " + this.packageName);
@@ -57,11 +57,13 @@ public class DeleteJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(sourceElementMappedToPackage, packageName, expectedTag));
     if (javaPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaPackage);
     deleteObject(userExecution.getElement1(sourceElementMappedToPackage, packageName, expectedTag, javaPackage));
     
     postprocessElements();
+    
+    return true;
   }
 }

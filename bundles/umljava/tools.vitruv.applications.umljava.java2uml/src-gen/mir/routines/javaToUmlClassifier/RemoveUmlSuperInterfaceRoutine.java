@@ -50,7 +50,7 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
   
   private Classifier jSuperClassifier;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveUmlSuperInterfaceRoutine with input:");
     getLogger().debug("   jInterface: " + this.jInterface);
     getLogger().debug("   jSuperClassifier: " + this.jSuperClassifier);
@@ -61,12 +61,14 @@ public class RemoveUmlSuperInterfaceRoutine extends AbstractRepairRoutineRealiza
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (uInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uInterface);
     // val updatedElement userExecution.getElement1(jInterface, jSuperClassifier, uInterface);
     userExecution.update0Element(jInterface, jSuperClassifier, uInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

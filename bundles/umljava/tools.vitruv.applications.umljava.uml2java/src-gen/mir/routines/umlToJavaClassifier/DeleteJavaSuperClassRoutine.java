@@ -40,7 +40,7 @@ public class DeleteJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
   
   private org.eclipse.uml2.uml.Class uClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaSuperClassRoutine with input:");
     getLogger().debug("   uClass: " + this.uClass);
     
@@ -50,12 +50,14 @@ public class DeleteJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (jClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jClass);
     // val updatedElement userExecution.getElement1(uClass, jClass);
     userExecution.update0Element(uClass, jClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

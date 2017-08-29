@@ -69,7 +69,7 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
   
   private DataType umlDataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteDataTypeRoutine with input:");
     getLogger().debug("   umlDataType: " + this.umlDataType);
     
@@ -98,5 +98,7 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
     deleteObject(userExecution.getElement3(umlDataType, pcmCompositeType, pcmPrimitiveType, pcmCollectionType));
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -5,7 +5,6 @@ import mir.routines.pcm2java.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.InterfaceMethod;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Signature;
@@ -77,7 +76,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
   
   private ServiceEffectSpecification seff;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSEFFRoutine with input:");
     getLogger().debug("   seff: " + this.seff);
     
@@ -87,7 +86,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (componentClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(componentClass);
     org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
@@ -96,13 +95,13 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
     if (!userExecution.checkMatcherPrecondition1(seff, componentClass, interfaceMethod)) {
-    	return;
+    	return false;
     }
-    org.emftext.language.java.members.ClassMethod classMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
+    org.emftext.language.java.members.ClassMethod classMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createClassMethod();
     notifyObjectCreated(classMethod);
     userExecution.updateClassMethodElement(seff, componentClass, interfaceMethod, classMethod);
     
@@ -112,5 +111,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     userExecution.update0Element(seff, componentClass, interfaceMethod, classMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

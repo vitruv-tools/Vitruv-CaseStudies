@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Feature;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.modifiers.Static;
-import org.emftext.language.java.modifiers.impl.ModifiersFactoryImpl;
 import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -45,7 +44,7 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
   
   private Feature uFeat;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetStaticRoutine with input:");
     getLogger().debug("   uFeat: " + this.uFeat);
     
@@ -55,15 +54,17 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.modifiers.AnnotableAndModifiable _element) -> true, // correspondence precondition checker
     	null);
     if (jMod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jMod);
-    org.emftext.language.java.modifiers.Static staticMod = ModifiersFactoryImpl.eINSTANCE.createStatic();
+    org.emftext.language.java.modifiers.Static staticMod = org.emftext.language.java.modifiers.impl.ModifiersFactoryImpl.eINSTANCE.createStatic();
     notifyObjectCreated(staticMod);
     
     // val updatedElement userExecution.getElement1(uFeat, jMod, staticMod);
     userExecution.update0Element(uFeat, jMod, staticMod);
     
     postprocessElements();
+    
+    return true;
   }
 }

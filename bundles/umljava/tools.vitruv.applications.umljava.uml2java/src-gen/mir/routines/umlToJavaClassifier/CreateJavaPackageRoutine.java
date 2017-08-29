@@ -8,7 +8,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Namespace;
-import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
 import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -66,7 +65,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   private org.eclipse.uml2.uml.Package uSuperPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaPackageRoutine with input:");
     getLogger().debug("   uPackage: " + this.uPackage);
     getLogger().debug("   uSuperPackage: " + this.uSuperPackage);
@@ -77,12 +76,14 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(jSuperPackage);
-    org.emftext.language.java.containers.Package jPackage = ContainersFactoryImpl.eINSTANCE.createPackage();
+    org.emftext.language.java.containers.Package jPackage = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createPackage();
     notifyObjectCreated(jPackage);
     userExecution.updateJPackageElement(uPackage, uSuperPackage, jSuperPackage, jPackage);
     
     addCorrespondenceBetween(userExecution.getElement1(uPackage, uSuperPackage, jSuperPackage, jPackage), userExecution.getElement2(uPackage, uSuperPackage, jSuperPackage, jPackage), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

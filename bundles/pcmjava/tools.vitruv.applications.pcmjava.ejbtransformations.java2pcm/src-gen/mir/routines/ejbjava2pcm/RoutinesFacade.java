@@ -22,83 +22,83 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createRepositoryForFirstPackage(final org.emftext.language.java.containers.Package javaPackage) {
+  public boolean createRepositoryForFirstPackage(final org.emftext.language.java.containers.Package javaPackage) {
     mir.routines.ejbjava2pcm.CreateRepositoryForFirstPackageRoutine effect = new mir.routines.ejbjava2pcm.CreateRepositoryForFirstPackageRoutine(this.executionState, calledBy, javaPackage);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createBasicComponent(final Repository repo, final NamedElement namedElement) {
+  public boolean createBasicComponent(final Repository repo, final NamedElement namedElement) {
     mir.routines.ejbjava2pcm.CreateBasicComponentRoutine effect = new mir.routines.ejbjava2pcm.CreateBasicComponentRoutine(this.executionState, calledBy, repo, namedElement);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createOperationInterface(final Repository repo, final NamedElement namedElement) {
+  public boolean createOperationInterface(final Repository repo, final NamedElement namedElement) {
     mir.routines.ejbjava2pcm.CreateOperationInterfaceRoutine effect = new mir.routines.ejbjava2pcm.CreateOperationInterfaceRoutine(this.executionState, calledBy, repo, namedElement);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdAnnotationForField(final Field annotatedField) {
+  public boolean createdAnnotationForField(final Field annotatedField) {
     mir.routines.ejbjava2pcm.CreatedAnnotationForFieldRoutine effect = new mir.routines.ejbjava2pcm.CreatedAnnotationForFieldRoutine(this.executionState, calledBy, annotatedField);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdField(final Field field) {
+  public boolean createdField(final Field field) {
     mir.routines.ejbjava2pcm.CreatedFieldRoutine effect = new mir.routines.ejbjava2pcm.CreatedFieldRoutine(this.executionState, calledBy, field);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createOperationRequiredRole(final BasicComponent basicComponent, final OperationInterface opInterface, final Field field) {
+  public boolean createOperationRequiredRole(final BasicComponent basicComponent, final OperationInterface opInterface, final Field field) {
     mir.routines.ejbjava2pcm.CreateOperationRequiredRoleRoutine effect = new mir.routines.ejbjava2pcm.CreateOperationRequiredRoleRoutine(this.executionState, calledBy, basicComponent, opInterface, field);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdImplements(final org.emftext.language.java.classifiers.Class clazz, final TypeReference implementz) {
+  public boolean createdImplements(final org.emftext.language.java.classifiers.Class clazz, final TypeReference implementz) {
     mir.routines.ejbjava2pcm.CreatedImplementsRoutine effect = new mir.routines.ejbjava2pcm.CreatedImplementsRoutine(this.executionState, calledBy, clazz, implementz);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdInterfaceMethod(final Interface interf, final InterfaceMethod method) {
+  public boolean createdInterfaceMethod(final Interface interf, final InterfaceMethod method) {
     mir.routines.ejbjava2pcm.CreatedInterfaceMethodRoutine effect = new mir.routines.ejbjava2pcm.CreatedInterfaceMethodRoutine(this.executionState, calledBy, interf, method);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createOperationSignature(final InterfaceMethod interfaceMethod, final OperationInterface opInterface) {
+  public boolean createOperationSignature(final InterfaceMethod interfaceMethod, final OperationInterface opInterface) {
     mir.routines.ejbjava2pcm.CreateOperationSignatureRoutine effect = new mir.routines.ejbjava2pcm.CreateOperationSignatureRoutine(this.executionState, calledBy, interfaceMethod, opInterface);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdParameterInInterfaceMethod(final InterfaceMethod method, final Parameter parameter) {
+  public boolean createdParameterInInterfaceMethod(final InterfaceMethod method, final Parameter parameter) {
     mir.routines.ejbjava2pcm.CreatedParameterInInterfaceMethodRoutine effect = new mir.routines.ejbjava2pcm.CreatedParameterInInterfaceMethodRoutine(this.executionState, calledBy, method, parameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createPCMParameter(final Parameter jaMoPPParam, final OperationSignature opSignature) {
+  public boolean createPCMParameter(final Parameter jaMoPPParam, final OperationSignature opSignature) {
     mir.routines.ejbjava2pcm.CreatePCMParameterRoutine effect = new mir.routines.ejbjava2pcm.CreatePCMParameterRoutine(this.executionState, calledBy, jaMoPPParam, opSignature);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdReturnType(final InterfaceMethod method, final TypeReference type) {
+  public boolean createdReturnType(final InterfaceMethod method, final TypeReference type) {
     mir.routines.ejbjava2pcm.CreatedReturnTypeRoutine effect = new mir.routines.ejbjava2pcm.CreatedReturnTypeRoutine(this.executionState, calledBy, method, type);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createPCMReturnType(final TypeReference returnType, final OperationSignature opSignature, final Method javaMethod) {
+  public boolean createPCMReturnType(final TypeReference returnType, final OperationSignature opSignature, final Method javaMethod) {
     mir.routines.ejbjava2pcm.CreatePCMReturnTypeRoutine effect = new mir.routines.ejbjava2pcm.CreatePCMReturnTypeRoutine(this.executionState, calledBy, returnType, opSignature, javaMethod);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdFieldInDatatypeClass(final org.emftext.language.java.classifiers.Class clazz, final Field field) {
+  public boolean createdFieldInDatatypeClass(final org.emftext.language.java.classifiers.Class clazz, final Field field) {
     mir.routines.ejbjava2pcm.CreatedFieldInDatatypeClassRoutine effect = new mir.routines.ejbjava2pcm.CreatedFieldInDatatypeClassRoutine(this.executionState, calledBy, clazz, field);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdClassMethodInEjbClass(final org.emftext.language.java.classifiers.Class clazz, final ClassMethod classMethod) {
+  public boolean createdClassMethodInEjbClass(final org.emftext.language.java.classifiers.Class clazz, final ClassMethod classMethod) {
     mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine effect = new mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine(this.executionState, calledBy, clazz, classMethod);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createSEFFForClassMethod(final BasicComponent basicComponent, final OperationSignature opSignature, final ClassMethod classMethod) {
+  public boolean createSEFFForClassMethod(final BasicComponent basicComponent, final OperationSignature opSignature, final ClassMethod classMethod) {
     mir.routines.ejbjava2pcm.CreateSEFFForClassMethodRoutine effect = new mir.routines.ejbjava2pcm.CreateSEFFForClassMethodRoutine(this.executionState, calledBy, basicComponent, opSignature, classMethod);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
 }

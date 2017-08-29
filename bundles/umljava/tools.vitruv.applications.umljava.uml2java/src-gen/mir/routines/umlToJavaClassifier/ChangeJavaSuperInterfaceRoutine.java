@@ -52,7 +52,7 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
   
   private Interface uI;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaSuperInterfaceRoutine with input:");
     getLogger().debug("   superUMLInterface: " + this.superUMLInterface);
     getLogger().debug("   uI: " + this.uI);
@@ -63,7 +63,7 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (jI == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jI);
     org.emftext.language.java.classifiers.Interface superJavaInterface = getCorrespondingElement(
@@ -72,12 +72,14 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (superJavaInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(superJavaInterface);
     // val updatedElement userExecution.getElement1(superUMLInterface, uI, jI, superJavaInterface);
     userExecution.update0Element(superUMLInterface, uI, jI, superJavaInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

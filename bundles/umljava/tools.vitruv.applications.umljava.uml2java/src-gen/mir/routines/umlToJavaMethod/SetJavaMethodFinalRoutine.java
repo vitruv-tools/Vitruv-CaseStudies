@@ -45,7 +45,7 @@ public class SetJavaMethodFinalRoutine extends AbstractRepairRoutineRealization 
   
   private Boolean isFinal;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetJavaMethodFinalRoutine with input:");
     getLogger().debug("   uOperation: " + this.uOperation);
     getLogger().debug("   isFinal: " + this.isFinal);
@@ -56,12 +56,14 @@ public class SetJavaMethodFinalRoutine extends AbstractRepairRoutineRealization 
     	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
     	null);
     if (jMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jMethod);
     // val updatedElement userExecution.getElement1(uOperation, isFinal, jMethod);
     userExecution.update0Element(uOperation, isFinal, jMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

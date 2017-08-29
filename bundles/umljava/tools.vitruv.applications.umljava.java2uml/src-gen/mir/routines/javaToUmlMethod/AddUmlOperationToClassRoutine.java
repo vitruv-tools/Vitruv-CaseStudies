@@ -41,7 +41,7 @@ public class AddUmlOperationToClassRoutine extends AbstractRepairRoutineRealizat
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlOperationToClassRoutine with input:");
     getLogger().debug("   uClass: " + this.uClass);
     getLogger().debug("   uOperation: " + this.uOperation);
@@ -50,5 +50,7 @@ public class AddUmlOperationToClassRoutine extends AbstractRepairRoutineRealizat
     userExecution.update0Element(uClass, uOperation);
     
     postprocessElements();
+    
+    return true;
   }
 }

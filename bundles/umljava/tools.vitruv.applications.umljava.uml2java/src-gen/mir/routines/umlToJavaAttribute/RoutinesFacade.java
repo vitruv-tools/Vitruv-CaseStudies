@@ -14,43 +14,43 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createJavaAttribute(final Classifier uClassifier, final Property umlAttribute) {
+  public boolean createJavaAttribute(final Classifier uClassifier, final Property umlAttribute) {
     mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine(this.executionState, calledBy, uClassifier, umlAttribute);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteJavaAttribute(final Property umlAttr) {
+  public boolean deleteJavaAttribute(final Property umlAttr) {
     mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine(this.executionState, calledBy, umlAttr);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void setJavaAttributeFinal(final Property umlAttr) {
+  public boolean setJavaAttributeFinal(final Property umlAttr) {
     mir.routines.umlToJavaAttribute.SetJavaAttributeFinalRoutine effect = new mir.routines.umlToJavaAttribute.SetJavaAttributeFinalRoutine(this.executionState, calledBy, umlAttr);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeJavaAttributeType(final Property uAttr, final Type uType) {
+  public boolean changeJavaAttributeType(final Property uAttr, final Type uType) {
     mir.routines.umlToJavaAttribute.ChangeJavaAttributeTypeRoutine effect = new mir.routines.umlToJavaAttribute.ChangeJavaAttributeTypeRoutine(this.executionState, calledBy, uAttr, uType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void handleMultiplicityForJavaAttribute(final Property uAttribute) {
+  public boolean handleMultiplicityForJavaAttribute(final Property uAttribute) {
     mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine(this.executionState, calledBy, uAttribute);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createJavaGetter(final Field jAttribute) {
+  public boolean createJavaGetter(final Field jAttribute) {
     mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine(this.executionState, calledBy, jAttribute);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createJavaSetter(final Field jAttribute) {
+  public boolean createJavaSetter(final Field jAttribute) {
     mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine(this.executionState, calledBy, jAttribute);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameJavaAttribute(final String oldName, final String newName, final Property uAttribute) {
+  public boolean renameJavaAttribute(final String oldName, final String newName, final Property uAttribute) {
     mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine(this.executionState, calledBy, oldName, newName, uAttribute);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
 }

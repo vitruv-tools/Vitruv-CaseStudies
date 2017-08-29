@@ -5,7 +5,6 @@ import mir.routines.javaToUmlAttribute.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.members.Field;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -60,7 +59,7 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
   
   private Field jAttr;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlAttributeInEnumRoutine with input:");
     getLogger().debug("   jEnum: " + this.jEnum);
     getLogger().debug("   jAttr: " + this.jAttr);
@@ -71,10 +70,10 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
     	(org.eclipse.uml2.uml.Enumeration _element) -> true, // correspondence precondition checker
     	null);
     if (uEnum == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uEnum);
-    org.eclipse.uml2.uml.Property uAttr = UMLFactoryImpl.eINSTANCE.createProperty();
+    org.eclipse.uml2.uml.Property uAttr = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createProperty();
     notifyObjectCreated(uAttr);
     userExecution.updateUAttrElement(jEnum, jAttr, uEnum, uAttr);
     
@@ -84,5 +83,7 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
     userExecution.update0Element(jEnum, jAttr, uEnum, uAttr);
     
     postprocessElements();
+    
+    return true;
   }
 }

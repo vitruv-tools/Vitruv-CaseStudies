@@ -49,7 +49,7 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
   
   private DataType umlType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangePropertyTypeRoutine with input:");
     getLogger().debug("   umlProperty: " + this.umlProperty);
     getLogger().debug("   umlType: " + this.umlType);
@@ -60,12 +60,14 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
     	(org.palladiosimulator.pcm.repository.InnerDeclaration _element) -> true, // correspondence precondition checker
     	null);
     if (pcmDeclaration == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmDeclaration);
     // val updatedElement userExecution.getElement1(umlProperty, umlType, pcmDeclaration);
     userExecution.update0Element(umlProperty, umlType, pcmDeclaration);
     
     postprocessElements();
+    
+    return true;
   }
 }

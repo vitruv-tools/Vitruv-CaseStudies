@@ -74,7 +74,7 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
   
   private ComposedStructure pcmSystem;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddedProvidedDelegationConnectorRoutine with input:");
     getLogger().debug("   providedDelegationConnector: " + this.providedDelegationConnector);
     getLogger().debug("   pcmSystem: " + this.pcmSystem);
@@ -85,11 +85,13 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
     	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
     	null);
     if (configureMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(configureMethod);
     userExecution.callRoutine1(providedDelegationConnector, pcmSystem, configureMethod, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

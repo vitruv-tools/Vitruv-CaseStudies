@@ -74,7 +74,7 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
   
   private Repository repository;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenamePackageForRepositoryRoutine with input:");
     getLogger().debug("   repository: " + this.repository);
     
@@ -84,7 +84,7 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(repository));
     if (rootPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(rootPackage);
     // val updatedElement userExecution.getElement1(repository, rootPackage);
@@ -93,5 +93,7 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
     userExecution.callRoutine1(repository, rootPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

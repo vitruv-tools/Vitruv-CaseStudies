@@ -44,7 +44,7 @@ public class SetUmlMethodAbstractRoutine extends AbstractRepairRoutineRealizatio
   
   private Boolean isAbstract;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlMethodAbstractRoutine with input:");
     getLogger().debug("   jMeth: " + this.jMeth);
     getLogger().debug("   isAbstract: " + this.isAbstract);
@@ -55,12 +55,14 @@ public class SetUmlMethodAbstractRoutine extends AbstractRepairRoutineRealizatio
     	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (uOperation == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uOperation);
     // val updatedElement userExecution.getElement1(jMeth, isAbstract, uOperation);
     userExecution.update0Element(jMeth, isAbstract, uOperation);
     
     postprocessElements();
+    
+    return true;
   }
 }

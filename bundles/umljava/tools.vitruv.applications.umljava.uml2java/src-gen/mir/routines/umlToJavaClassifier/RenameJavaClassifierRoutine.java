@@ -59,7 +59,7 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
   
   private Classifier umlClassifier;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaClassifierRoutine with input:");
     getLogger().debug("   umlClassifier: " + this.umlClassifier);
     
@@ -69,7 +69,7 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
     if (javaClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClassifier);
     org.emftext.language.java.containers.CompilationUnit javaCompilationUnit = getCorrespondingElement(
@@ -78,7 +78,7 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
     	null);
     if (javaCompilationUnit == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaCompilationUnit);
     // val updatedElement userExecution.getElement1(umlClassifier, javaClassifier, javaCompilationUnit);
@@ -88,5 +88,7 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     userExecution.update1Element(umlClassifier, javaClassifier, javaCompilationUnit);
     
     postprocessElements();
+    
+    return true;
   }
 }

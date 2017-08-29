@@ -3,7 +3,6 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.containers.CompilationUnit;
@@ -58,12 +57,12 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
   
   private CompilationUnit jCompUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlEnumRoutine with input:");
     getLogger().debug("   jEnum: " + this.jEnum);
     getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
-    org.eclipse.uml2.uml.Enumeration uEnum = UMLFactoryImpl.eINSTANCE.createEnumeration();
+    org.eclipse.uml2.uml.Enumeration uEnum = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createEnumeration();
     notifyObjectCreated(uEnum);
     userExecution.updateUEnumElement(jEnum, jCompUnit, uEnum);
     
@@ -74,5 +73,7 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
     addCorrespondenceBetween(userExecution.getElement3(jEnum, jCompUnit, uEnum), userExecution.getElement4(jEnum, jCompUnit, uEnum), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

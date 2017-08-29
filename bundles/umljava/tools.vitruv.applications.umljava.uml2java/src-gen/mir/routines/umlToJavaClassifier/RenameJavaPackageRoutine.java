@@ -66,7 +66,7 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   private Namespace uNamespace;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaPackageRoutine with input:");
     getLogger().debug("   uPackage: " + this.uPackage);
     getLogger().debug("   uNamespace: " + this.uNamespace);
@@ -77,7 +77,7 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	null);
     if (jPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jPackage);
     // val updatedElement userExecution.getElement1(uPackage, uNamespace, jPackage);
@@ -86,5 +86,7 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(uPackage, uNamespace, jPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

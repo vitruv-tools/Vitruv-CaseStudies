@@ -46,7 +46,7 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
   
   private InnerDeclaration innerDeclaration;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInnerDeclarationRoutine with input:");
     getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
@@ -56,7 +56,7 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeType);
     org.eclipse.uml2.uml.DataType umlType = getCorrespondingElement(
@@ -68,5 +68,7 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     userExecution.callRoutine1(innerDeclaration, compositeType, umlType, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

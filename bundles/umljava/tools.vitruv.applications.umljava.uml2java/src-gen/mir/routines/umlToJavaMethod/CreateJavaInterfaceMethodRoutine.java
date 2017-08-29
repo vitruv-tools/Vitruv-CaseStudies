@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -70,7 +69,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaInterfaceMethodRoutine with input:");
     getLogger().debug("   uInterface: " + this.uInterface);
     getLogger().debug("   uOperation: " + this.uOperation);
@@ -81,7 +80,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (jInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jInterface);
     org.emftext.language.java.classifiers.Class customTypeClass = getCorrespondingElement(
@@ -90,7 +89,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(customTypeClass);
-    org.emftext.language.java.members.InterfaceMethod javaMethod = MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
+    org.emftext.language.java.members.InterfaceMethod javaMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
     notifyObjectCreated(javaMethod);
     userExecution.updateJavaMethodElement(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
     
@@ -100,5 +99,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     userExecution.update0Element(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

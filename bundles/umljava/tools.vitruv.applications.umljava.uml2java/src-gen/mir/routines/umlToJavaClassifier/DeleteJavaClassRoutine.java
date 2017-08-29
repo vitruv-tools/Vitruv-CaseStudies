@@ -47,7 +47,7 @@ public class DeleteJavaClassRoutine extends AbstractRepairRoutineRealization {
   
   private Classifier umlClassifer;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaClassRoutine with input:");
     getLogger().debug("   umlClassifer: " + this.umlClassifer);
     
@@ -57,7 +57,7 @@ public class DeleteJavaClassRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
     if (javaClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClassifier);
     org.emftext.language.java.containers.CompilationUnit javaCompilationUnit = getCorrespondingElement(
@@ -66,7 +66,7 @@ public class DeleteJavaClassRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
     	null);
     if (javaCompilationUnit == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaCompilationUnit);
     deleteObject(userExecution.getElement1(umlClassifer, javaClassifier, javaCompilationUnit));
@@ -74,5 +74,7 @@ public class DeleteJavaClassRoutine extends AbstractRepairRoutineRealization {
     deleteObject(userExecution.getElement2(umlClassifer, javaClassifier, javaCompilationUnit));
     
     postprocessElements();
+    
+    return true;
   }
 }

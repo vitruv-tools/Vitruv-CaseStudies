@@ -47,7 +47,7 @@ public class ClearCorrespondenceForCollectionTypesRoutine extends AbstractRepair
   
   private CollectionDataType pcmType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ClearCorrespondenceForCollectionTypesRoutine with input:");
     getLogger().debug("   pcmType: " + this.pcmType);
     
@@ -57,11 +57,13 @@ public class ClearCorrespondenceForCollectionTypesRoutine extends AbstractRepair
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(pcmType));
     if (oldInnerType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(oldInnerType);
     removeCorrespondenceBetween(userExecution.getElement1(pcmType, oldInnerType), userExecution.getElement2(pcmType, oldInnerType), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

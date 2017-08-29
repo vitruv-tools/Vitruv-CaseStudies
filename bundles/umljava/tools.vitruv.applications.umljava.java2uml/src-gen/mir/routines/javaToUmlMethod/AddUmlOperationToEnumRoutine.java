@@ -42,7 +42,7 @@ public class AddUmlOperationToEnumRoutine extends AbstractRepairRoutineRealizati
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlOperationToEnumRoutine with input:");
     getLogger().debug("   uEnum: " + this.uEnum);
     getLogger().debug("   uOperation: " + this.uOperation);
@@ -51,5 +51,7 @@ public class AddUmlOperationToEnumRoutine extends AbstractRepairRoutineRealizati
     userExecution.update0Element(uEnum, uOperation);
     
     postprocessElements();
+    
+    return true;
   }
 }

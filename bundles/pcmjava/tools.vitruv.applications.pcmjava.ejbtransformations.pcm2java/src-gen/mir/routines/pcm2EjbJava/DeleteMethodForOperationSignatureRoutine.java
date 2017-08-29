@@ -38,7 +38,7 @@ public class DeleteMethodForOperationSignatureRoutine extends AbstractRepairRout
   
   private OperationSignature operationSignature;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteMethodForOperationSignatureRoutine with input:");
     getLogger().debug("   operationSignature: " + this.operationSignature);
     
@@ -48,11 +48,13 @@ public class DeleteMethodForOperationSignatureRoutine extends AbstractRepairRout
     	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
     deleteObject(userExecution.getElement1(operationSignature, interfaceMethod));
     
     postprocessElements();
+    
+    return true;
   }
 }

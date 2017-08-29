@@ -41,7 +41,7 @@ public class RenameUmlNamedElementRoutine extends AbstractRepairRoutineRealizati
   
   private NamedElement jElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameUmlNamedElementRoutine with input:");
     getLogger().debug("   jElement: " + this.jElement);
     
@@ -51,12 +51,14 @@ public class RenameUmlNamedElementRoutine extends AbstractRepairRoutineRealizati
     	(org.eclipse.uml2.uml.NamedElement _element) -> true, // correspondence precondition checker
     	null);
     if (uElement == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uElement);
     // val updatedElement userExecution.getElement1(jElement, uElement);
     userExecution.update0Element(jElement, uElement);
     
     postprocessElements();
+    
+    return true;
   }
 }

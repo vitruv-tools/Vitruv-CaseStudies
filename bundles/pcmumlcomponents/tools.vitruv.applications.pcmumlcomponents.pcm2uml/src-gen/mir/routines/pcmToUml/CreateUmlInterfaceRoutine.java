@@ -6,7 +6,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -60,7 +59,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
   
   private Interface pcmInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlInterfaceRoutine with input:");
     getLogger().debug("   pcmInterface: " + this.pcmInterface);
     
@@ -70,10 +69,10 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlModel);
-    org.eclipse.uml2.uml.Interface umlInterface = UMLFactoryImpl.eINSTANCE.createInterface();
+    org.eclipse.uml2.uml.Interface umlInterface = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createInterface();
     notifyObjectCreated(umlInterface);
     userExecution.updateUmlInterfaceElement(pcmInterface, umlModel, umlInterface);
     
@@ -83,5 +82,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     addCorrespondenceBetween(userExecution.getElement2(pcmInterface, umlModel, umlInterface), userExecution.getElement3(pcmInterface, umlModel, umlInterface), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

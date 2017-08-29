@@ -59,7 +59,7 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
   
   private Classifier jSuperInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlSuperinterfacesRoutine with input:");
     getLogger().debug("   jInterface: " + this.jInterface);
     getLogger().debug("   jSuperInterface: " + this.jSuperInterface);
@@ -70,12 +70,14 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (uInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uInterface);
     // val updatedElement userExecution.getElement1(jInterface, jSuperInterface, uInterface);
     userExecution.update0Element(jInterface, jSuperInterface, uInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

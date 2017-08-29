@@ -52,7 +52,7 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
   
   private org.eclipse.uml2.uml.Class uClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaSuperClassRoutine with input:");
     getLogger().debug("   superUMLClass: " + this.superUMLClass);
     getLogger().debug("   uClass: " + this.uClass);
@@ -63,7 +63,7 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (jClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jClass);
     org.emftext.language.java.classifiers.Class superJavaClass = getCorrespondingElement(
@@ -72,11 +72,13 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (superJavaClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(superJavaClass);
     userExecution.callRoutine1(superUMLClass, uClass, jClass, superJavaClass, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

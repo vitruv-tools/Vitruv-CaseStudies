@@ -34,12 +34,14 @@ public class ReinitializeOperationRequiredRoleRoutine extends AbstractRepairRout
   
   private OperationRequiredRole requiredRole;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ReinitializeOperationRequiredRoleRoutine with input:");
     getLogger().debug("   requiredRole: " + this.requiredRole);
     
     userExecution.callRoutine1(requiredRole, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

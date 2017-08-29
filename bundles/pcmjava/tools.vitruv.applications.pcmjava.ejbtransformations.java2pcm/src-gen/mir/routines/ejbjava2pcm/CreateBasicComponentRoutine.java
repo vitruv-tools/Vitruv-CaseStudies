@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.commons.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -54,12 +53,12 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
   
   private NamedElement namedElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateBasicComponentRoutine with input:");
     getLogger().debug("   repo: " + this.repo);
     getLogger().debug("   namedElement: " + this.namedElement);
     
-    org.palladiosimulator.pcm.repository.BasicComponent basicComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
+    org.palladiosimulator.pcm.repository.BasicComponent basicComponent = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
     notifyObjectCreated(basicComponent);
     userExecution.updateBasicComponentElement(repo, namedElement, basicComponent);
     
@@ -69,5 +68,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     userExecution.update0Element(repo, namedElement, basicComponent);
     
     postprocessElements();
+    
+    return true;
   }
 }

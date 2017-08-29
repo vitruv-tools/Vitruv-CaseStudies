@@ -87,7 +87,7 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
   
   private CollectionDataType dataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCollectionDataTypeImplementationRoutine with input:");
     getLogger().debug("   dataType: " + this.dataType);
     
@@ -103,11 +103,13 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(dataType, innerTypeClass, _element), // correspondence precondition checker
     	null);
     if (datatypesPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(dataType, innerTypeClass, datatypesPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

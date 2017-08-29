@@ -43,7 +43,7 @@ public class RenameJavaNamedElementRoutine extends AbstractRepairRoutineRealizat
   
   private String name;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaNamedElementRoutine with input:");
     getLogger().debug("   uElem: " + this.uElem);
     getLogger().debug("   name: " + this.name);
@@ -54,12 +54,14 @@ public class RenameJavaNamedElementRoutine extends AbstractRepairRoutineRealizat
     	(org.emftext.language.java.commons.NamedElement _element) -> true, // correspondence precondition checker
     	null);
     if (jElem == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jElem);
     // val updatedElement userExecution.getElement1(uElem, name, jElem);
     userExecution.update0Element(uElem, name, jElem);
     
     postprocessElements();
+    
+    return true;
   }
 }

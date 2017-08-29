@@ -49,7 +49,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetJavaMethodReturnTypeRoutine with input:");
     getLogger().debug("   uOperation: " + this.uOperation);
     
@@ -59,7 +59,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
     	null);
     if (javaMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaMethod);
     org.emftext.language.java.classifiers.Class returnType = getCorrespondingElement(
@@ -72,5 +72,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     userExecution.update0Element(uOperation, javaMethod, returnType);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -8,7 +8,6 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Model;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -60,7 +59,7 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
   
   private Interface umlInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInterfaceRoutine with input:");
     getLogger().debug("   umlInterface: " + this.umlInterface);
     
@@ -70,10 +69,10 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	null);
     if (pcmRepository == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmRepository);
-    org.palladiosimulator.pcm.repository.OperationInterface pcmInterface = RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
+    org.palladiosimulator.pcm.repository.OperationInterface pcmInterface = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
     notifyObjectCreated(pcmInterface);
     userExecution.updatePcmInterfaceElement(umlInterface, pcmRepository, pcmInterface);
     
@@ -83,5 +82,7 @@ public class CreateInterfaceRoutine extends AbstractRepairRoutineRealization {
     addCorrespondenceBetween(userExecution.getElement2(umlInterface, pcmRepository, pcmInterface), userExecution.getElement3(umlInterface, pcmRepository, pcmInterface), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

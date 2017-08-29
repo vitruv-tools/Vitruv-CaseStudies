@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.Model;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -61,7 +60,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
   
   private Component umlComponent;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateBasicComponentRoutine with input:");
     getLogger().debug("   umlComponent: " + this.umlComponent);
     
@@ -71,10 +70,10 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	null);
     if (pcmRepository == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmRepository);
-    org.palladiosimulator.pcm.repository.BasicComponent pcmComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
+    org.palladiosimulator.pcm.repository.BasicComponent pcmComponent = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
     notifyObjectCreated(pcmComponent);
     userExecution.updatePcmComponentElement(umlComponent, pcmRepository, pcmComponent);
     
@@ -84,5 +83,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     addCorrespondenceBetween(userExecution.getElement2(umlComponent, pcmRepository, pcmComponent), userExecution.getElement3(umlComponent, pcmRepository, pcmComponent), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

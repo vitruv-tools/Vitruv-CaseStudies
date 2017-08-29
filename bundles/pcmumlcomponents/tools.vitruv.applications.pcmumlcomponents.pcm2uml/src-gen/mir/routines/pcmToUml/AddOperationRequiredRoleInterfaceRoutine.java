@@ -54,7 +54,7 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
   
   private OperationInterface pcmInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddOperationRequiredRoleInterfaceRoutine with input:");
     getLogger().debug("   pcmRole: " + this.pcmRole);
     getLogger().debug("   pcmInterface: " + this.pcmInterface);
@@ -65,7 +65,7 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
     	(org.eclipse.uml2.uml.Usage _element) -> true, // correspondence precondition checker
     	null);
     if (umlUsage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlUsage);
     org.eclipse.uml2.uml.Interface umlInterface = getCorrespondingElement(
@@ -74,12 +74,14 @@ public class AddOperationRequiredRoleInterfaceRoutine extends AbstractRepairRout
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (umlInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlInterface);
     // val updatedElement userExecution.getElement1(pcmRole, pcmInterface, umlUsage, umlInterface);
     userExecution.update0Element(pcmRole, pcmInterface, umlUsage, umlInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

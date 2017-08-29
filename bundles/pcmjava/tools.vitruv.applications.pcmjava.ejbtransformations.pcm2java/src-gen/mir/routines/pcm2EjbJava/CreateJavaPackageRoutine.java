@@ -5,7 +5,6 @@ import java.io.IOException;
 import mir.routines.pcm2EjbJava.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -26,6 +25,10 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
       return javaPackage;
     }
     
+    public EObject getCorrepondenceSource1(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
+      return sourceElementMappedToPackage;
+    }
+    
     public String getRetrieveTag1(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
       return newTag;
     }
@@ -36,10 +39,6 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     
     public String getTag1(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag, final org.emftext.language.java.containers.Package javaPackage) {
       return newTag;
-    }
-    
-    public EObject getCorrepondenceSourcenull(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
-      return sourceElementMappedToPackage;
     }
     
     public void updateJavaPackageElement(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag, final org.emftext.language.java.containers.Package javaPackage) {
@@ -71,7 +70,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   private String newTag;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaPackageRoutine with input:");
     getLogger().debug("   sourceElementMappedToPackage: " + this.sourceElementMappedToPackage);
     getLogger().debug("   parentPackage: " + this.parentPackage);
@@ -79,18 +78,20 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   newTag: " + this.newTag);
     
     if (getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcenull(sourceElementMappedToPackage, parentPackage, packageName, newTag), // correspondence source supplier
+    	userExecution.getCorrepondenceSource1(sourceElementMappedToPackage, parentPackage, packageName, newTag), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(sourceElementMappedToPackage, parentPackage, packageName, newTag)) != null) {
-    	return;
+    	return false;
     }
-    org.emftext.language.java.containers.Package javaPackage = ContainersFactoryImpl.eINSTANCE.createPackage();
+    org.emftext.language.java.containers.Package javaPackage = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createPackage();
     notifyObjectCreated(javaPackage);
     userExecution.updateJavaPackageElement(sourceElementMappedToPackage, parentPackage, packageName, newTag, javaPackage);
     
     addCorrespondenceBetween(userExecution.getElement1(sourceElementMappedToPackage, parentPackage, packageName, newTag, javaPackage), userExecution.getElement2(sourceElementMappedToPackage, parentPackage, packageName, newTag, javaPackage), userExecution.getTag1(sourceElementMappedToPackage, parentPackage, packageName, newTag, javaPackage));
     
     postprocessElements();
+    
+    return true;
   }
 }

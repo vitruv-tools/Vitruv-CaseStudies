@@ -42,7 +42,7 @@ public class ChangeParameterNameRoutine extends AbstractRepairRoutineRealization
   
   private Parameter umlParameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeParameterNameRoutine with input:");
     getLogger().debug("   umlParameter: " + this.umlParameter);
     
@@ -52,12 +52,14 @@ public class ChangeParameterNameRoutine extends AbstractRepairRoutineRealization
     	(org.palladiosimulator.pcm.repository.Parameter _element) -> true, // correspondence precondition checker
     	null);
     if (pcmParameter == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmParameter);
     // val updatedElement userExecution.getElement1(umlParameter, pcmParameter);
     userExecution.update0Element(umlParameter, pcmParameter);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -64,7 +64,7 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
   
   private Interface umlInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeProvidedInterfaceRoutine with input:");
     getLogger().debug("   interfaceRealization: " + this.interfaceRealization);
     getLogger().debug("   umlInterface: " + this.umlInterface);
@@ -75,7 +75,7 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
     	(org.palladiosimulator.pcm.repository.OperationProvidedRole _element) -> true, // correspondence precondition checker
     	null);
     if (pcmRole == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmRole);
     org.palladiosimulator.pcm.repository.OperationInterface pcmInterface = getCorrespondingElement(
@@ -84,12 +84,14 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (pcmInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmInterface);
     // val updatedElement userExecution.getElement1(interfaceRealization, umlInterface, pcmRole, pcmInterface);
     userExecution.update0Element(interfaceRealization, umlInterface, pcmRole, pcmInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

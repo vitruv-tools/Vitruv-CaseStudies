@@ -46,7 +46,7 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
   
   private Property uAttribute;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaAttributeRoutine with input:");
     getLogger().debug("   oldName: " + this.oldName);
     getLogger().debug("   newName: " + this.newName);
@@ -58,11 +58,13 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (jAttribute == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jAttribute);
     userExecution.callRoutine1(oldName, newName, uAttribute, jAttribute, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

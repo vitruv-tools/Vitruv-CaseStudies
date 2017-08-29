@@ -56,7 +56,7 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
   
   private EObject persistedObject;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlElementToPackageRoutine with input:");
     getLogger().debug("   uPackageable: " + this.uPackageable);
     getLogger().debug("   uPackage: " + this.uPackage);
@@ -68,5 +68,7 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
     userExecution.callRoutine1(uPackageable, uPackage, persistedObject, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

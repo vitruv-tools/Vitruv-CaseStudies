@@ -46,7 +46,7 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
   
   private TypeReference jType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlAttributeTypeRoutine with input:");
     getLogger().debug("   jAttr: " + this.jAttr);
     getLogger().debug("   jType: " + this.jType);
@@ -57,12 +57,14 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
     	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
     	null);
     if (uAttr == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uAttr);
     // val updatedElement userExecution.getElement1(jAttr, jType, uAttr);
     userExecution.update0Element(jAttr, jType, uAttr);
     
     postprocessElements();
+    
+    return true;
   }
 }

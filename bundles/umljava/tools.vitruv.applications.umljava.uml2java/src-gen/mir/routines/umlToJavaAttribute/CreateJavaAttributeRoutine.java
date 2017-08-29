@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.Property;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.Member;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -63,7 +62,7 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
   
   private Property umlAttribute;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaAttributeRoutine with input:");
     getLogger().debug("   uClassifier: " + this.uClassifier);
     getLogger().debug("   umlAttribute: " + this.umlAttribute);
@@ -74,10 +73,10 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
     if (jClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jClassifier);
-    org.emftext.language.java.members.Field javaAttribute = MembersFactoryImpl.eINSTANCE.createField();
+    org.emftext.language.java.members.Field javaAttribute = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createField();
     notifyObjectCreated(javaAttribute);
     userExecution.updateJavaAttributeElement(uClassifier, umlAttribute, jClassifier, javaAttribute);
     
@@ -87,5 +86,7 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     addCorrespondenceBetween(userExecution.getElement2(uClassifier, umlAttribute, jClassifier, javaAttribute), userExecution.getElement3(uClassifier, umlAttribute, jClassifier, javaAttribute), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

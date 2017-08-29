@@ -42,7 +42,7 @@ public class CreatedReturnTypeRoutine extends AbstractRepairRoutineRealization {
   
   private TypeReference type;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedReturnTypeRoutine with input:");
     getLogger().debug("   method: " + this.method);
     getLogger().debug("   type: " + this.type);
@@ -53,11 +53,13 @@ public class CreatedReturnTypeRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (opSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(opSignature);
     userExecution.callRoutine1(method, type, opSignature, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

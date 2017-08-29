@@ -43,7 +43,7 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
   
   private InnerDeclaration innerDeclaration;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInnerDeclarationImplementationRoutine with input:");
     getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
@@ -56,5 +56,7 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
     userExecution.callRoutine1(innerDeclaration, nonPrimitiveInnerDataTypeClass, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

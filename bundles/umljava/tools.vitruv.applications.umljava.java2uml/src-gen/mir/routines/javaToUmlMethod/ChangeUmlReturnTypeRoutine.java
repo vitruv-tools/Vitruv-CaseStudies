@@ -46,7 +46,7 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
   
   private TypeReference jType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlReturnTypeRoutine with input:");
     getLogger().debug("   jMeth: " + this.jMeth);
     getLogger().debug("   jType: " + this.jType);
@@ -57,12 +57,14 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (uOperation == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uOperation);
     // val updatedElement userExecution.getElement1(jMeth, jType, uOperation);
     userExecution.update0Element(jMeth, jType, uOperation);
     
     postprocessElements();
+    
+    return true;
   }
 }

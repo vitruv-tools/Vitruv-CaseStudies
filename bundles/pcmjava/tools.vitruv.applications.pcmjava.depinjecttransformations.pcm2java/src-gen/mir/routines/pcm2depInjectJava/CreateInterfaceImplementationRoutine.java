@@ -47,7 +47,7 @@ public class CreateInterfaceImplementationRoutine extends AbstractRepairRoutineR
   
   private Interface interf;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInterfaceImplementationRoutine with input:");
     getLogger().debug("   interf: " + this.interf);
     
@@ -57,11 +57,13 @@ public class CreateInterfaceImplementationRoutine extends AbstractRepairRoutineR
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionContractsPackage(interf, _element), // correspondence precondition checker
     	null);
     if (contractsPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(contractsPackage);
     userExecution.callRoutine1(interf, contractsPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

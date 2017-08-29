@@ -3,7 +3,6 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -53,11 +52,11 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
   
   private org.emftext.language.java.containers.Package jPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlPackageRoutine with input:");
     getLogger().debug("   jPackage: " + this.jPackage);
     
-    org.eclipse.uml2.uml.Package uPackage = UMLFactoryImpl.eINSTANCE.createPackage();
+    org.eclipse.uml2.uml.Package uPackage = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createPackage();
     notifyObjectCreated(uPackage);
     userExecution.updateUPackageElement(jPackage, uPackage);
     
@@ -66,5 +65,7 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(jPackage, uPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

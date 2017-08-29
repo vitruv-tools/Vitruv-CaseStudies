@@ -43,7 +43,7 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
   
   private InnerDeclaration innerDeclaration;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeTypeOfInnerDeclarationImplementationRoutine with input:");
     getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
@@ -56,5 +56,7 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
     userExecution.callRoutine1(innerDeclaration, newJavaDataType, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

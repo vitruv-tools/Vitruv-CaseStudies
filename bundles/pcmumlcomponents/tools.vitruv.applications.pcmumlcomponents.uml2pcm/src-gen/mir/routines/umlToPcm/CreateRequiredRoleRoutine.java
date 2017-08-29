@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.Usage;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.RequiredRole;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -62,7 +61,7 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
   
   private Usage umlUsage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRequiredRoleRoutine with input:");
     getLogger().debug("   umlComponent: " + this.umlComponent);
     getLogger().debug("   umlUsage: " + this.umlUsage);
@@ -73,10 +72,10 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (pcmComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmComponent);
-    org.palladiosimulator.pcm.repository.OperationRequiredRole pcmRole = RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
+    org.palladiosimulator.pcm.repository.OperationRequiredRole pcmRole = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
     notifyObjectCreated(pcmRole);
     userExecution.updatePcmRoleElement(umlComponent, umlUsage, pcmComponent, pcmRole);
     
@@ -86,5 +85,7 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     addCorrespondenceBetween(userExecution.getElement2(umlComponent, umlUsage, pcmComponent, pcmRole), userExecution.getElement3(umlComponent, umlUsage, pcmComponent, pcmRole), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

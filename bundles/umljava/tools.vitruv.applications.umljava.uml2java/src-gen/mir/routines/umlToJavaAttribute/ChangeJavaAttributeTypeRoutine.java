@@ -50,7 +50,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
   
   private Type uType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaAttributeTypeRoutine with input:");
     getLogger().debug("   uAttr: " + this.uAttr);
     getLogger().debug("   uType: " + this.uType);
@@ -61,7 +61,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (jAttr == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jAttr);
     org.emftext.language.java.classifiers.Class customType = getCorrespondingElement(
@@ -73,5 +73,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     userExecution.callRoutine1(uAttr, uType, jAttr, customType, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

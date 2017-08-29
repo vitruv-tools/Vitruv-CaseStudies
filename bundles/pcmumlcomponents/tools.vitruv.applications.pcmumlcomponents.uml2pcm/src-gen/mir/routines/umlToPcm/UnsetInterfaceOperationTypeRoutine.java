@@ -42,7 +42,7 @@ public class UnsetInterfaceOperationTypeRoutine extends AbstractRepairRoutineRea
   
   private Operation umlOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine UnsetInterfaceOperationTypeRoutine with input:");
     getLogger().debug("   umlOperation: " + this.umlOperation);
     
@@ -52,12 +52,14 @@ public class UnsetInterfaceOperationTypeRoutine extends AbstractRepairRoutineRea
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (pcmSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmSignature);
     // val updatedElement userExecution.getElement1(umlOperation, pcmSignature);
     userExecution.update0Element(umlOperation, pcmSignature);
     
     postprocessElements();
+    
+    return true;
   }
 }

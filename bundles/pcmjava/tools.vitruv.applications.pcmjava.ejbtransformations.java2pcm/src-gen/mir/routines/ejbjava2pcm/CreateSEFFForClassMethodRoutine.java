@@ -7,7 +7,6 @@ import org.emftext.language.java.members.ClassMethod;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
-import org.palladiosimulator.pcm.seff.impl.SeffFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -57,13 +56,13 @@ public class CreateSEFFForClassMethodRoutine extends AbstractRepairRoutineRealiz
   
   private ClassMethod classMethod;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSEFFForClassMethodRoutine with input:");
     getLogger().debug("   basicComponent: " + this.basicComponent);
     getLogger().debug("   opSignature: " + this.opSignature);
     getLogger().debug("   classMethod: " + this.classMethod);
     
-    org.palladiosimulator.pcm.seff.ResourceDemandingSEFF seff = SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
+    org.palladiosimulator.pcm.seff.ResourceDemandingSEFF seff = org.palladiosimulator.pcm.seff.impl.SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
     notifyObjectCreated(seff);
     userExecution.updateSeffElement(basicComponent, opSignature, classMethod, seff);
     
@@ -73,5 +72,7 @@ public class CreateSEFFForClassMethodRoutine extends AbstractRepairRoutineRealiz
     userExecution.update0Element(basicComponent, opSignature, classMethod, seff);
     
     postprocessElements();
+    
+    return true;
   }
 }

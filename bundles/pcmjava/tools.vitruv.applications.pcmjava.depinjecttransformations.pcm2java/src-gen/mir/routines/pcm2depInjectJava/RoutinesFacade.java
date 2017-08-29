@@ -39,263 +39,263 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createRepositorySubPackages(final Repository repository) {
+  public boolean createRepositorySubPackages(final Repository repository) {
     mir.routines.pcm2depInjectJava.CreateRepositorySubPackagesRoutine effect = new mir.routines.pcm2depInjectJava.CreateRepositorySubPackagesRoutine(this.executionState, calledBy, repository);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renamePackageForRepository(final Repository repository) {
+  public boolean renamePackageForRepository(final Repository repository) {
     mir.routines.pcm2depInjectJava.RenamePackageForRepositoryRoutine effect = new mir.routines.pcm2depInjectJava.RenamePackageForRepositoryRoutine(this.executionState, calledBy, repository);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createImplementationForSystem(final org.palladiosimulator.pcm.system.System system) {
+  public boolean createImplementationForSystem(final org.palladiosimulator.pcm.system.System system) {
     mir.routines.pcm2depInjectJava.CreateImplementationForSystemRoutine effect = new mir.routines.pcm2depInjectJava.CreateImplementationForSystemRoutine(this.executionState, calledBy, system);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeSystemImplementationName(final org.palladiosimulator.pcm.system.System system) {
+  public boolean changeSystemImplementationName(final org.palladiosimulator.pcm.system.System system) {
     mir.routines.pcm2depInjectJava.ChangeSystemImplementationNameRoutine effect = new mir.routines.pcm2depInjectJava.ChangeSystemImplementationNameRoutine(this.executionState, calledBy, system);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addAssemblyContextToComposedStructure(final ComposedStructure composedStructure, final AssemblyContext assemblyContext) {
+  public boolean addAssemblyContextToComposedStructure(final ComposedStructure composedStructure, final AssemblyContext assemblyContext) {
     mir.routines.pcm2depInjectJava.AddAssemblyContextToComposedStructureRoutine effect = new mir.routines.pcm2depInjectJava.AddAssemblyContextToComposedStructureRoutine(this.executionState, calledBy, composedStructure, assemblyContext);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addConnector(final AssemblyConnector assemblyConnector) {
+  public boolean addConnector(final AssemblyConnector assemblyConnector) {
     mir.routines.pcm2depInjectJava.AddConnectorRoutine effect = new mir.routines.pcm2depInjectJava.AddConnectorRoutine(this.executionState, calledBy, assemblyConnector);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addedProvidedDelegationConnector(final ProvidedDelegationConnector providedDelegationConnector, final ComposedStructure pcmSystem) {
+  public boolean addedProvidedDelegationConnector(final ProvidedDelegationConnector providedDelegationConnector, final ComposedStructure pcmSystem) {
     mir.routines.pcm2depInjectJava.AddedProvidedDelegationConnectorRoutine effect = new mir.routines.pcm2depInjectJava.AddedProvidedDelegationConnectorRoutine(this.executionState, calledBy, providedDelegationConnector, pcmSystem);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createComponentImplementation(final RepositoryComponent component) {
+  public boolean createComponentImplementation(final RepositoryComponent component) {
     mir.routines.pcm2depInjectJava.CreateComponentImplementationRoutine effect = new mir.routines.pcm2depInjectJava.CreateComponentImplementationRoutine(this.executionState, calledBy, component);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createImplementationForComponent(final RepositoryComponent component) {
+  public boolean createImplementationForComponent(final RepositoryComponent component) {
     mir.routines.pcm2depInjectJava.CreateImplementationForComponentRoutine effect = new mir.routines.pcm2depInjectJava.CreateImplementationForComponentRoutine(this.executionState, calledBy, component);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameComponentPackageAndClass(final RepositoryComponent component) {
+  public boolean renameComponentPackageAndClass(final RepositoryComponent component) {
     mir.routines.pcm2depInjectJava.RenameComponentPackageAndClassRoutine effect = new mir.routines.pcm2depInjectJava.RenameComponentPackageAndClassRoutine(this.executionState, calledBy, component);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameComponentClass(final RepositoryComponent component) {
+  public boolean renameComponentClass(final RepositoryComponent component) {
     mir.routines.pcm2depInjectJava.RenameComponentClassRoutine effect = new mir.routines.pcm2depInjectJava.RenameComponentClassRoutine(this.executionState, calledBy, component);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createInterfaceImplementation(final Interface interf) {
+  public boolean createInterfaceImplementation(final Interface interf) {
     mir.routines.pcm2depInjectJava.CreateInterfaceImplementationRoutine effect = new mir.routines.pcm2depInjectJava.CreateInterfaceImplementationRoutine(this.executionState, calledBy, interf);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameInterface(final OperationInterface interf) {
+  public boolean renameInterface(final OperationInterface interf) {
     mir.routines.pcm2depInjectJava.RenameInterfaceRoutine effect = new mir.routines.pcm2depInjectJava.RenameInterfaceRoutine(this.executionState, calledBy, interf);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createCompositeDataTypeImplementation(final CompositeDataType dataType) {
+  public boolean createCompositeDataTypeImplementation(final CompositeDataType dataType) {
     mir.routines.pcm2depInjectJava.CreateCompositeDataTypeImplementationRoutine effect = new mir.routines.pcm2depInjectJava.CreateCompositeDataTypeImplementationRoutine(this.executionState, calledBy, dataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameCompositeDataType(final CompositeDataType compositeDataType) {
+  public boolean renameCompositeDataType(final CompositeDataType compositeDataType) {
     mir.routines.pcm2depInjectJava.RenameCompositeDataTypeRoutine effect = new mir.routines.pcm2depInjectJava.RenameCompositeDataTypeRoutine(this.executionState, calledBy, compositeDataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createCollectionDataTypeImplementation(final CollectionDataType dataType) {
+  public boolean createCollectionDataTypeImplementation(final CollectionDataType dataType) {
     mir.routines.pcm2depInjectJava.CreateCollectionDataTypeImplementationRoutine effect = new mir.routines.pcm2depInjectJava.CreateCollectionDataTypeImplementationRoutine(this.executionState, calledBy, dataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addSuperTypeToDataType(final DataType dataType, final TypeReference innerTypeReference, final String superTypeQualifiedName) {
+  public boolean addSuperTypeToDataType(final DataType dataType, final TypeReference innerTypeReference, final String superTypeQualifiedName) {
     mir.routines.pcm2depInjectJava.AddSuperTypeToDataTypeRoutine effect = new mir.routines.pcm2depInjectJava.AddSuperTypeToDataTypeRoutine(this.executionState, calledBy, dataType, innerTypeReference, superTypeQualifiedName);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameCollectionDataType(final CollectionDataType collectionDataType) {
+  public boolean renameCollectionDataType(final CollectionDataType collectionDataType) {
     mir.routines.pcm2depInjectJava.RenameCollectionDataTypeRoutine effect = new mir.routines.pcm2depInjectJava.RenameCollectionDataTypeRoutine(this.executionState, calledBy, collectionDataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createInnerDeclarationImplementation(final InnerDeclaration innerDeclaration) {
+  public boolean createInnerDeclarationImplementation(final InnerDeclaration innerDeclaration) {
     mir.routines.pcm2depInjectJava.CreateInnerDeclarationImplementationRoutine effect = new mir.routines.pcm2depInjectJava.CreateInnerDeclarationImplementationRoutine(this.executionState, calledBy, innerDeclaration);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addInnerDeclarationToCompositeDataType(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final TypeReference dataTypeReference) {
+  public boolean addInnerDeclarationToCompositeDataType(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final TypeReference dataTypeReference) {
     mir.routines.pcm2depInjectJava.AddInnerDeclarationToCompositeDataTypeRoutine effect = new mir.routines.pcm2depInjectJava.AddInnerDeclarationToCompositeDataTypeRoutine(this.executionState, calledBy, dataType, innerDeclaration, dataTypeReference);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameInnerDeclarationImplementation(final InnerDeclaration innerDeclaration) {
+  public boolean renameInnerDeclarationImplementation(final InnerDeclaration innerDeclaration) {
     mir.routines.pcm2depInjectJava.RenameInnerDeclarationImplementationRoutine effect = new mir.routines.pcm2depInjectJava.RenameInnerDeclarationImplementationRoutine(this.executionState, calledBy, innerDeclaration);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeTypeOfInnerDeclarationImplementation(final InnerDeclaration innerDeclaration) {
+  public boolean changeTypeOfInnerDeclarationImplementation(final InnerDeclaration innerDeclaration) {
     mir.routines.pcm2depInjectJava.ChangeTypeOfInnerDeclarationImplementationRoutine effect = new mir.routines.pcm2depInjectJava.ChangeTypeOfInnerDeclarationImplementationRoutine(this.executionState, calledBy, innerDeclaration);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeInnerDeclarationType(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference) {
+  public boolean changeInnerDeclarationType(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference) {
     mir.routines.pcm2depInjectJava.ChangeInnerDeclarationTypeRoutine effect = new mir.routines.pcm2depInjectJava.ChangeInnerDeclarationTypeRoutine(this.executionState, calledBy, innerDeclaration, newTypeReference);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createJavaPackage(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
+  public boolean createJavaPackage(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
     mir.routines.pcm2depInjectJava.CreateJavaPackageRoutine effect = new mir.routines.pcm2depInjectJava.CreateJavaPackageRoutine(this.executionState, calledBy, sourceElementMappedToPackage, parentPackage, packageName, newTag);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameJavaPackage(final NamedElement sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String expectedTag) {
+  public boolean renameJavaPackage(final NamedElement sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String expectedTag) {
     mir.routines.pcm2depInjectJava.RenameJavaPackageRoutine effect = new mir.routines.pcm2depInjectJava.RenameJavaPackageRoutine(this.executionState, calledBy, sourceElementMappedToPackage, parentPackage, packageName, expectedTag);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteJavaPackage(final NamedElement sourceElementMappedToPackage, final String packageName, final String expectedTag) {
+  public boolean deleteJavaPackage(final NamedElement sourceElementMappedToPackage, final String packageName, final String expectedTag) {
     mir.routines.pcm2depInjectJava.DeleteJavaPackageRoutine effect = new mir.routines.pcm2depInjectJava.DeleteJavaPackageRoutine(this.executionState, calledBy, sourceElementMappedToPackage, packageName, expectedTag);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createJavaClass(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
+  public boolean createJavaClass(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
     mir.routines.pcm2depInjectJava.CreateJavaClassRoutine effect = new mir.routines.pcm2depInjectJava.CreateJavaClassRoutine(this.executionState, calledBy, sourceElementMappedToClass, containingPackage, className);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createJavaInterface(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
+  public boolean createJavaInterface(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
     mir.routines.pcm2depInjectJava.CreateJavaInterfaceRoutine effect = new mir.routines.pcm2depInjectJava.CreateJavaInterfaceRoutine(this.executionState, calledBy, sourceElementMappedToClass, containingPackage, className);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createCompilationUnit(final NamedElement sourceElementMappedToClass, final ConcreteClassifier classifier, final org.emftext.language.java.containers.Package containingPackage) {
+  public boolean createCompilationUnit(final NamedElement sourceElementMappedToClass, final ConcreteClassifier classifier, final org.emftext.language.java.containers.Package containingPackage) {
     mir.routines.pcm2depInjectJava.CreateCompilationUnitRoutine effect = new mir.routines.pcm2depInjectJava.CreateCompilationUnitRoutine(this.executionState, calledBy, sourceElementMappedToClass, classifier, containingPackage);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameJavaClassifier(final NamedElement classSourceElement, final org.emftext.language.java.containers.Package containingPackage, final String className) {
+  public boolean renameJavaClassifier(final NamedElement classSourceElement, final org.emftext.language.java.containers.Package containingPackage, final String className) {
     mir.routines.pcm2depInjectJava.RenameJavaClassifierRoutine effect = new mir.routines.pcm2depInjectJava.RenameJavaClassifierRoutine(this.executionState, calledBy, classSourceElement, containingPackage, className);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteJavaClassifier(final NamedElement sourceElement) {
+  public boolean deleteJavaClassifier(final NamedElement sourceElement) {
     mir.routines.pcm2depInjectJava.DeleteJavaClassifierRoutine effect = new mir.routines.pcm2depInjectJava.DeleteJavaClassifierRoutine(this.executionState, calledBy, sourceElement);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addProvidedRole(final OperationProvidedRole providedRole) {
+  public boolean addProvidedRole(final OperationProvidedRole providedRole) {
     mir.routines.pcm2depInjectJava.AddProvidedRoleRoutine effect = new mir.routines.pcm2depInjectJava.AddProvidedRoleRoutine(this.executionState, calledBy, providedRole);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void removeProvidedRole(final ProvidedRole providedRole) {
+  public boolean removeProvidedRole(final ProvidedRole providedRole) {
     mir.routines.pcm2depInjectJava.RemoveProvidedRoleRoutine effect = new mir.routines.pcm2depInjectJava.RemoveProvidedRoleRoutine(this.executionState, calledBy, providedRole);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addRequiredRole(final OperationRequiredRole requiredRole) {
+  public boolean addRequiredRole(final OperationRequiredRole requiredRole) {
     mir.routines.pcm2depInjectJava.AddRequiredRoleRoutine effect = new mir.routines.pcm2depInjectJava.AddRequiredRoleRoutine(this.executionState, calledBy, requiredRole);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addParameterAndAssignmentToConstructor(final NamedElement parameterCorrespondenceSource, final Constructor constructor, final NamespaceClassifierReference typeReference, final Field fieldToBeAssigned, final String parameterName) {
+  public boolean addParameterAndAssignmentToConstructor(final NamedElement parameterCorrespondenceSource, final Constructor constructor, final NamespaceClassifierReference typeReference, final Field fieldToBeAssigned, final String parameterName) {
     mir.routines.pcm2depInjectJava.AddParameterAndAssignmentToConstructorRoutine effect = new mir.routines.pcm2depInjectJava.AddParameterAndAssignmentToConstructorRoutine(this.executionState, calledBy, parameterCorrespondenceSource, constructor, typeReference, fieldToBeAssigned, parameterName);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void removeRequiredRole(final RequiredRole requiredRole, final InterfaceRequiringEntity requiringEntity) {
+  public boolean removeRequiredRole(final RequiredRole requiredRole, final InterfaceRequiringEntity requiringEntity) {
     mir.routines.pcm2depInjectJava.RemoveRequiredRoleRoutine effect = new mir.routines.pcm2depInjectJava.RemoveRequiredRoleRoutine(this.executionState, calledBy, requiredRole, requiringEntity);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void removeParameterToFieldAssignmentFromConstructor(final Constructor ctor, final String fieldName) {
+  public boolean removeParameterToFieldAssignmentFromConstructor(final Constructor ctor, final String fieldName) {
     mir.routines.pcm2depInjectJava.RemoveParameterToFieldAssignmentFromConstructorRoutine effect = new mir.routines.pcm2depInjectJava.RemoveParameterToFieldAssignmentFromConstructorRoutine(this.executionState, calledBy, ctor, fieldName);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void removeCorrespondingParameterFromConstructor(final Constructor ctor, final NamedElement correspondenceSource) {
+  public boolean removeCorrespondingParameterFromConstructor(final Constructor ctor, final NamedElement correspondenceSource) {
     mir.routines.pcm2depInjectJava.RemoveCorrespondingParameterFromConstructorRoutine effect = new mir.routines.pcm2depInjectJava.RemoveCorrespondingParameterFromConstructorRoutine(this.executionState, calledBy, ctor, correspondenceSource);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void reinitializeOperationRequiredRole(final OperationRequiredRole requiredRole) {
+  public boolean reinitializeOperationRequiredRole(final OperationRequiredRole requiredRole) {
     mir.routines.pcm2depInjectJava.ReinitializeOperationRequiredRoleRoutine effect = new mir.routines.pcm2depInjectJava.ReinitializeOperationRequiredRoleRoutine(this.executionState, calledBy, requiredRole);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createMethodForOperationSignature(final OperationSignature operationSignature) {
+  public boolean createMethodForOperationSignature(final OperationSignature operationSignature) {
     mir.routines.pcm2depInjectJava.CreateMethodForOperationSignatureRoutine effect = new mir.routines.pcm2depInjectJava.CreateMethodForOperationSignatureRoutine(this.executionState, calledBy, operationSignature);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameMethodForOperationSignature(final OperationSignature operationSignature) {
+  public boolean renameMethodForOperationSignature(final OperationSignature operationSignature) {
     mir.routines.pcm2depInjectJava.RenameMethodForOperationSignatureRoutine effect = new mir.routines.pcm2depInjectJava.RenameMethodForOperationSignatureRoutine(this.executionState, calledBy, operationSignature);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeReturnTypeOfMethodForOperationSignature(final OperationSignature operationSignature) {
+  public boolean changeReturnTypeOfMethodForOperationSignature(final OperationSignature operationSignature) {
     mir.routines.pcm2depInjectJava.ChangeReturnTypeOfMethodForOperationSignatureRoutine effect = new mir.routines.pcm2depInjectJava.ChangeReturnTypeOfMethodForOperationSignatureRoutine(this.executionState, calledBy, operationSignature);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeInterfaceMethodReturnType(final InterfaceMethod interfaceMethod, final DataType returnType) {
+  public boolean changeInterfaceMethodReturnType(final InterfaceMethod interfaceMethod, final DataType returnType) {
     mir.routines.pcm2depInjectJava.ChangeInterfaceMethodReturnTypeRoutine effect = new mir.routines.pcm2depInjectJava.ChangeInterfaceMethodReturnTypeRoutine(this.executionState, calledBy, interfaceMethod, returnType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteMethodForOperationSignature(final OperationSignature operationSignature) {
+  public boolean deleteMethodForOperationSignature(final OperationSignature operationSignature) {
     mir.routines.pcm2depInjectJava.DeleteMethodForOperationSignatureRoutine effect = new mir.routines.pcm2depInjectJava.DeleteMethodForOperationSignatureRoutine(this.executionState, calledBy, operationSignature);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createParameter(final Parameter parameter) {
+  public boolean createParameter(final Parameter parameter) {
     mir.routines.pcm2depInjectJava.CreateParameterRoutine effect = new mir.routines.pcm2depInjectJava.CreateParameterRoutine(this.executionState, calledBy, parameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameParameter(final Parameter parameter) {
+  public boolean renameParameter(final Parameter parameter) {
     mir.routines.pcm2depInjectJava.RenameParameterRoutine effect = new mir.routines.pcm2depInjectJava.RenameParameterRoutine(this.executionState, calledBy, parameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeParameterType(final Parameter parameter) {
+  public boolean changeParameterType(final Parameter parameter) {
     mir.routines.pcm2depInjectJava.ChangeParameterTypeRoutine effect = new mir.routines.pcm2depInjectJava.ChangeParameterTypeRoutine(this.executionState, calledBy, parameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteParameter(final OperationSignature signature, final Parameter parameter) {
+  public boolean deleteParameter(final OperationSignature signature, final Parameter parameter) {
     mir.routines.pcm2depInjectJava.DeleteParameterRoutine effect = new mir.routines.pcm2depInjectJava.DeleteParameterRoutine(this.executionState, calledBy, signature, parameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createSEFF(final ServiceEffectSpecification seff) {
+  public boolean createSEFF(final ServiceEffectSpecification seff) {
     mir.routines.pcm2depInjectJava.CreateSEFFRoutine effect = new mir.routines.pcm2depInjectJava.CreateSEFFRoutine(this.executionState, calledBy, seff);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeMethodForSeff(final ResourceDemandingSEFF seff) {
+  public boolean changeMethodForSeff(final ResourceDemandingSEFF seff) {
     mir.routines.pcm2depInjectJava.ChangeMethodForSeffRoutine effect = new mir.routines.pcm2depInjectJava.ChangeMethodForSeffRoutine(this.executionState, calledBy, seff);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void updateSEFFImplementingMethodName(final ServiceEffectSpecification seff) {
+  public boolean updateSEFFImplementingMethodName(final ServiceEffectSpecification seff) {
     mir.routines.pcm2depInjectJava.UpdateSEFFImplementingMethodNameRoutine effect = new mir.routines.pcm2depInjectJava.UpdateSEFFImplementingMethodNameRoutine(this.executionState, calledBy, seff);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteMethodForSeff(final ServiceEffectSpecification seff) {
+  public boolean deleteMethodForSeff(final ServiceEffectSpecification seff) {
     mir.routines.pcm2depInjectJava.DeleteMethodForSeffRoutine effect = new mir.routines.pcm2depInjectJava.DeleteMethodForSeffRoutine(this.executionState, calledBy, seff);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
 }

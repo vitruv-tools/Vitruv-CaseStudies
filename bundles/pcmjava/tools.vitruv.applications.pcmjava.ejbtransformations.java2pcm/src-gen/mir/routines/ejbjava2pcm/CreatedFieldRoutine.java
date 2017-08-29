@@ -49,7 +49,7 @@ public class CreatedFieldRoutine extends AbstractRepairRoutineRealization {
   
   private Field field;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedFieldRoutine with input:");
     getLogger().debug("   field: " + this.field);
     
@@ -59,11 +59,13 @@ public class CreatedFieldRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(basicComponent);
     userExecution.callRoutine1(field, basicComponent, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

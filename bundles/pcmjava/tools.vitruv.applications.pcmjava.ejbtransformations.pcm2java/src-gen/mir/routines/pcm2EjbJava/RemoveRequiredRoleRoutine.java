@@ -54,7 +54,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
   
   private InterfaceRequiringEntity requiringEntity;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveRequiredRoleRoutine with input:");
     getLogger().debug("   requiredRole: " + this.requiredRole);
     getLogger().debug("   requiringEntity: " + this.requiringEntity);
@@ -65,7 +65,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	(org.emftext.language.java.imports.ClassifierImport _element) -> true, // correspondence precondition checker
     	null);
     if (requiredInterfaceImport == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(requiredInterfaceImport);
     org.emftext.language.java.members.Field requiredInterfaceField = getCorrespondingElement(
@@ -74,7 +74,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (requiredInterfaceField == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(requiredInterfaceField);
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
@@ -83,7 +83,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (javaClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClass);
     deleteObject(userExecution.getElement1(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass));
@@ -91,5 +91,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     deleteObject(userExecution.getElement2(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass));
     
     postprocessElements();
+    
+    return true;
   }
 }

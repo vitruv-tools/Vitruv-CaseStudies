@@ -53,7 +53,7 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
   
   private DataType innerType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddCorrespondenceForCollectionTypesRoutine with input:");
     getLogger().debug("   pcmType: " + this.pcmType);
     getLogger().debug("   innerType: " + this.innerType);
@@ -67,5 +67,7 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
     addCorrespondenceBetween(userExecution.getElement1(pcmType, innerType, oldInnerType), userExecution.getElement2(pcmType, innerType, oldInnerType), userExecution.getTag1(pcmType, innerType, oldInnerType));
     
     postprocessElements();
+    
+    return true;
   }
 }

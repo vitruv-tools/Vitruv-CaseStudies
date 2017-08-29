@@ -59,7 +59,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
   
   private DataType pcmDataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInnerDeclarationTypeRoutine with input:");
     getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     getLogger().debug("   pcmDataType: " + this.pcmDataType);
@@ -70,7 +70,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
     	null);
     if (umlProperty == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlProperty);
     org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
@@ -79,12 +79,14 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlModel);
     // val updatedElement userExecution.getElement1(innerDeclaration, pcmDataType, umlProperty, umlModel);
     userExecution.update0Element(innerDeclaration, pcmDataType, umlProperty, umlModel);
     
     postprocessElements();
+    
+    return true;
   }
 }

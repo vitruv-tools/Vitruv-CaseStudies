@@ -6,7 +6,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Generalization;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -57,7 +56,7 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
   
   private CompositeDataType parent;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddCompositeDataTypeParentRoutine with input:");
     getLogger().debug("   dataType: " + this.dataType);
     getLogger().debug("   parent: " + this.parent);
@@ -68,7 +67,7 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeType);
     org.eclipse.uml2.uml.DataType parentType = getCorrespondingElement(
@@ -77,10 +76,10 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (parentType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(parentType);
-    org.eclipse.uml2.uml.Generalization generalization = UMLFactoryImpl.eINSTANCE.createGeneralization();
+    org.eclipse.uml2.uml.Generalization generalization = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createGeneralization();
     notifyObjectCreated(generalization);
     userExecution.updateGeneralizationElement(dataType, parent, compositeType, parentType, generalization);
     
@@ -88,5 +87,7 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
     userExecution.update0Element(dataType, parent, compositeType, parentType, generalization);
     
     postprocessElements();
+    
+    return true;
   }
 }

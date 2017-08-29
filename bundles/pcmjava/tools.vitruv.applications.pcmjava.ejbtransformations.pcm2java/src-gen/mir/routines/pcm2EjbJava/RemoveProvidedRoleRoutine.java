@@ -47,7 +47,7 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
   
   private ProvidedRole providedRole;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveProvidedRoleRoutine with input:");
     getLogger().debug("   providedRole: " + this.providedRole);
     
@@ -57,7 +57,7 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     	(org.emftext.language.java.imports.ClassifierImport _element) -> true, // correspondence precondition checker
     	null);
     if (requiredInterfaceImport == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(requiredInterfaceImport);
     org.emftext.language.java.types.NamespaceClassifierReference namespaceClassifierReference = getCorrespondingElement(
@@ -66,7 +66,7 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     	(org.emftext.language.java.types.NamespaceClassifierReference _element) -> true, // correspondence precondition checker
     	null);
     if (namespaceClassifierReference == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(namespaceClassifierReference);
     deleteObject(userExecution.getElement1(providedRole, requiredInterfaceImport, namespaceClassifierReference));
@@ -74,5 +74,7 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     deleteObject(userExecution.getElement2(providedRole, requiredInterfaceImport, namespaceClassifierReference));
     
     postprocessElements();
+    
+    return true;
   }
 }

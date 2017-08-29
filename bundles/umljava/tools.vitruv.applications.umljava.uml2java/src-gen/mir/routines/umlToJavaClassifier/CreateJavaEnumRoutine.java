@@ -5,7 +5,6 @@ import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -48,11 +47,11 @@ public class CreateJavaEnumRoutine extends AbstractRepairRoutineRealization {
   
   private Enumeration uEnum;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaEnumRoutine with input:");
     getLogger().debug("   uEnum: " + this.uEnum);
     
-    org.emftext.language.java.classifiers.Enumeration jEnum = ClassifiersFactoryImpl.eINSTANCE.createEnumeration();
+    org.emftext.language.java.classifiers.Enumeration jEnum = org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl.eINSTANCE.createEnumeration();
     notifyObjectCreated(jEnum);
     userExecution.updateJEnumElement(uEnum, jEnum);
     
@@ -61,5 +60,7 @@ public class CreateJavaEnumRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(uEnum, jEnum, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -107,7 +107,7 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
   
   private Property uAttribute;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine HandleMultiplicityForJavaAttributeRoutine with input:");
     getLogger().debug("   uAttribute: " + this.uAttribute);
     
@@ -117,7 +117,7 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (jAttribute == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jAttribute);
     org.emftext.language.java.classifiers.Class jType = getCorrespondingElement(
@@ -126,7 +126,7 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (jType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jType);
     // val updatedElement userExecution.getElement1(uAttribute, jAttribute, jType);
@@ -135,5 +135,7 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     userExecution.callRoutine1(uAttribute, jAttribute, jType, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -47,7 +47,7 @@ public class CreatePCMReturnTypeRoutine extends AbstractRepairRoutineRealization
   
   private Method javaMethod;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePCMReturnTypeRoutine with input:");
     getLogger().debug("   returnType: " + this.returnType);
     getLogger().debug("   opSignature: " + this.opSignature);
@@ -57,5 +57,7 @@ public class CreatePCMReturnTypeRoutine extends AbstractRepairRoutineRealization
     userExecution.update0Element(returnType, opSignature, javaMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

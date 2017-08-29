@@ -48,7 +48,7 @@ public class DeleteJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
   
   private org.eclipse.uml2.uml.Class uClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaImplementedInterfaceRoutine with input:");
     getLogger().debug("   uInterface: " + this.uInterface);
     getLogger().debug("   uClass: " + this.uClass);
@@ -59,7 +59,7 @@ public class DeleteJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (jClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jClass);
     org.emftext.language.java.classifiers.Interface jInterface = getCorrespondingElement(
@@ -68,12 +68,14 @@ public class DeleteJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (jInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jInterface);
     // val updatedElement userExecution.getElement1(uInterface, uClass, jClass, jInterface);
     userExecution.update0Element(uInterface, uClass, jClass, jInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

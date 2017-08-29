@@ -51,7 +51,7 @@ public class ChangePackageOfJavaCompilationUnitRoutine extends AbstractRepairRou
   
   private Namespace uNamespace;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangePackageOfJavaCompilationUnitRoutine with input:");
     getLogger().debug("   jPackage: " + this.jPackage);
     getLogger().debug("   jCompUnit: " + this.jCompUnit);
@@ -61,5 +61,7 @@ public class ChangePackageOfJavaCompilationUnitRoutine extends AbstractRepairRou
     userExecution.update0Element(jPackage, jCompUnit, uNamespace);
     
     postprocessElements();
+    
+    return true;
   }
 }

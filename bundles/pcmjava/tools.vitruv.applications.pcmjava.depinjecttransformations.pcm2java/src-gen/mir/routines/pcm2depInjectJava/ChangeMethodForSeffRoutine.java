@@ -43,7 +43,7 @@ public class ChangeMethodForSeffRoutine extends AbstractRepairRoutineRealization
   
   private ResourceDemandingSEFF seff;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeMethodForSeffRoutine with input:");
     getLogger().debug("   seff: " + this.seff);
     
@@ -58,5 +58,7 @@ public class ChangeMethodForSeffRoutine extends AbstractRepairRoutineRealization
     userExecution.callRoutine1(seff, oldClassMethod, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

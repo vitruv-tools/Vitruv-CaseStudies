@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.emftext.language.java.members.EnumConstant;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -60,7 +59,7 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
   
   private Enumeration uEnum;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaEnumConstantRoutine with input:");
     getLogger().debug("   uLiteral: " + this.uLiteral);
     getLogger().debug("   uEnum: " + this.uEnum);
@@ -71,10 +70,10 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     	(org.emftext.language.java.classifiers.Enumeration _element) -> true, // correspondence precondition checker
     	null);
     if (jEnum == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jEnum);
-    org.emftext.language.java.members.EnumConstant jConstant = MembersFactoryImpl.eINSTANCE.createEnumConstant();
+    org.emftext.language.java.members.EnumConstant jConstant = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createEnumConstant();
     notifyObjectCreated(jConstant);
     userExecution.updateJConstantElement(uLiteral, uEnum, jEnum, jConstant);
     
@@ -84,5 +83,7 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     userExecution.update0Element(uLiteral, uEnum, jEnum, jConstant);
     
     postprocessElements();
+    
+    return true;
   }
 }

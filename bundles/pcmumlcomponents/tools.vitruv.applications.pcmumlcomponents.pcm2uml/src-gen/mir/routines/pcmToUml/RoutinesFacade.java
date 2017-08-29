@@ -27,158 +27,158 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void renameUmlElement(final NamedElement pcmElement) {
+  public boolean renameUmlElement(final NamedElement pcmElement) {
     mir.routines.pcmToUml.RenameUmlElementRoutine effect = new mir.routines.pcmToUml.RenameUmlElementRoutine(this.executionState, calledBy, pcmElement);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteElement(final NamedElement pcmElement) {
+  public boolean deleteElement(final NamedElement pcmElement) {
     mir.routines.pcmToUml.DeleteElementRoutine effect = new mir.routines.pcmToUml.DeleteElementRoutine(this.executionState, calledBy, pcmElement);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createUmlModel(final Repository pcmRepository) {
+  public boolean createUmlModel(final Repository pcmRepository) {
     mir.routines.pcmToUml.CreateUmlModelRoutine effect = new mir.routines.pcmToUml.CreateUmlModelRoutine(this.executionState, calledBy, pcmRepository);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createPrimitiveDataType(final PrimitiveDataType dataType) {
+  public boolean createPrimitiveDataType(final PrimitiveDataType dataType) {
     mir.routines.pcmToUml.CreatePrimitiveDataTypeRoutine effect = new mir.routines.pcmToUml.CreatePrimitiveDataTypeRoutine(this.executionState, calledBy, dataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteDataType(final DataType dataType) {
+  public boolean deleteDataType(final DataType dataType) {
     mir.routines.pcmToUml.DeleteDataTypeRoutine effect = new mir.routines.pcmToUml.DeleteDataTypeRoutine(this.executionState, calledBy, dataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createCompositeDataType(final CompositeDataType dataType) {
+  public boolean createCompositeDataType(final CompositeDataType dataType) {
     mir.routines.pcmToUml.CreateCompositeDataTypeRoutine effect = new mir.routines.pcmToUml.CreateCompositeDataTypeRoutine(this.executionState, calledBy, dataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createInnerDeclaration(final InnerDeclaration innerDeclaration) {
+  public boolean createInnerDeclaration(final InnerDeclaration innerDeclaration) {
     mir.routines.pcmToUml.CreateInnerDeclarationRoutine effect = new mir.routines.pcmToUml.CreateInnerDeclarationRoutine(this.executionState, calledBy, innerDeclaration);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeInnerDeclarationType(final InnerDeclaration innerDeclaration, final DataType pcmDataType) {
+  public boolean changeInnerDeclarationType(final InnerDeclaration innerDeclaration, final DataType pcmDataType) {
     mir.routines.pcmToUml.ChangeInnerDeclarationTypeRoutine effect = new mir.routines.pcmToUml.ChangeInnerDeclarationTypeRoutine(this.executionState, calledBy, innerDeclaration, pcmDataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteInnerDeclaration(final CompositeDataType dataType, final InnerDeclaration innerDeclaration) {
+  public boolean deleteInnerDeclaration(final CompositeDataType dataType, final InnerDeclaration innerDeclaration) {
     mir.routines.pcmToUml.DeleteInnerDeclarationRoutine effect = new mir.routines.pcmToUml.DeleteInnerDeclarationRoutine(this.executionState, calledBy, dataType, innerDeclaration);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addCompositeDataTypeParent(final CompositeDataType dataType, final CompositeDataType parent) {
+  public boolean addCompositeDataTypeParent(final CompositeDataType dataType, final CompositeDataType parent) {
     mir.routines.pcmToUml.AddCompositeDataTypeParentRoutine effect = new mir.routines.pcmToUml.AddCompositeDataTypeParentRoutine(this.executionState, calledBy, dataType, parent);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void removeCompositeDataTypeParent(final CompositeDataType dataType, final CompositeDataType parent) {
+  public boolean removeCompositeDataTypeParent(final CompositeDataType dataType, final CompositeDataType parent) {
     mir.routines.pcmToUml.RemoveCompositeDataTypeParentRoutine effect = new mir.routines.pcmToUml.RemoveCompositeDataTypeParentRoutine(this.executionState, calledBy, dataType, parent);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeCollectionDataTypeInnerType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
+  public boolean changeCollectionDataTypeInnerType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
     mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine effect = new mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine(this.executionState, calledBy, pcmDataType, pcmInnerType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void clearCorrespondenceForCollectionTypes(final CollectionDataType pcmType) {
+  public boolean clearCorrespondenceForCollectionTypes(final CollectionDataType pcmType) {
     mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine effect = new mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine(this.executionState, calledBy, pcmType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addCorrespondenceForCollectionTypes(final CollectionDataType pcmType, final org.eclipse.uml2.uml.DataType innerType) {
+  public boolean addCorrespondenceForCollectionTypes(final CollectionDataType pcmType, final org.eclipse.uml2.uml.DataType innerType) {
     mir.routines.pcmToUml.AddCorrespondenceForCollectionTypesRoutine effect = new mir.routines.pcmToUml.AddCorrespondenceForCollectionTypesRoutine(this.executionState, calledBy, pcmType, innerType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createUmlPropertyForDatatype(final org.eclipse.uml2.uml.DataType type, final InnerDeclaration counterpart, final org.eclipse.uml2.uml.DataType owner) {
+  public boolean createUmlPropertyForDatatype(final org.eclipse.uml2.uml.DataType type, final InnerDeclaration counterpart, final org.eclipse.uml2.uml.DataType owner) {
     mir.routines.pcmToUml.CreateUmlPropertyForDatatypeRoutine effect = new mir.routines.pcmToUml.CreateUmlPropertyForDatatypeRoutine(this.executionState, calledBy, type, counterpart, owner);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createUmlInterface(final Interface pcmInterface) {
+  public boolean createUmlInterface(final Interface pcmInterface) {
     mir.routines.pcmToUml.CreateUmlInterfaceRoutine effect = new mir.routines.pcmToUml.CreateUmlInterfaceRoutine(this.executionState, calledBy, pcmInterface);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createOperationInterfaceSignature(final OperationSignature pcmSignature) {
+  public boolean createOperationInterfaceSignature(final OperationSignature pcmSignature) {
     mir.routines.pcmToUml.CreateOperationInterfaceSignatureRoutine effect = new mir.routines.pcmToUml.CreateOperationInterfaceSignatureRoutine(this.executionState, calledBy, pcmSignature);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeUmlOperationType(final OperationSignature pcmSignature) {
+  public boolean changeUmlOperationType(final OperationSignature pcmSignature) {
     mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine effect = new mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine(this.executionState, calledBy, pcmSignature);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void unsetUmlOperationType(final OperationSignature pcmSignature) {
+  public boolean unsetUmlOperationType(final OperationSignature pcmSignature) {
     mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine effect = new mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine(this.executionState, calledBy, pcmSignature);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createOperationSignatureParameter(final OperationSignature pcmSignature, final Parameter pcmParameter) {
+  public boolean createOperationSignatureParameter(final OperationSignature pcmSignature, final Parameter pcmParameter) {
     mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine effect = new mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine(this.executionState, calledBy, pcmSignature, pcmParameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void renameParameter(final Parameter pcmParameter) {
+  public boolean renameParameter(final Parameter pcmParameter) {
     mir.routines.pcmToUml.RenameParameterRoutine effect = new mir.routines.pcmToUml.RenameParameterRoutine(this.executionState, calledBy, pcmParameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeParameterDirection(final Parameter pcmParameter) {
+  public boolean changeParameterDirection(final Parameter pcmParameter) {
     mir.routines.pcmToUml.ChangeParameterDirectionRoutine effect = new mir.routines.pcmToUml.ChangeParameterDirectionRoutine(this.executionState, calledBy, pcmParameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeParameterType(final Parameter pcmParameter, final DataType pcmDataType) {
+  public boolean changeParameterType(final Parameter pcmParameter, final DataType pcmDataType) {
     mir.routines.pcmToUml.ChangeParameterTypeRoutine effect = new mir.routines.pcmToUml.ChangeParameterTypeRoutine(this.executionState, calledBy, pcmParameter, pcmDataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void removeOperationSignatureParameter(final Parameter pcmParameter) {
+  public boolean removeOperationSignatureParameter(final Parameter pcmParameter) {
     mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine effect = new mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine(this.executionState, calledBy, pcmParameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createUmlComponent(final RepositoryComponent pcmComponent, final String correspondenceTag) {
+  public boolean createUmlComponent(final RepositoryComponent pcmComponent, final String correspondenceTag) {
     mir.routines.pcmToUml.CreateUmlComponentRoutine effect = new mir.routines.pcmToUml.CreateUmlComponentRoutine(this.executionState, calledBy, pcmComponent, correspondenceTag);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createProvidedRole(final InterfaceProvidingEntity pcmComponent, final ProvidedRole pcmProvidedRole) {
+  public boolean createProvidedRole(final InterfaceProvidingEntity pcmComponent, final ProvidedRole pcmProvidedRole) {
     mir.routines.pcmToUml.CreateProvidedRoleRoutine effect = new mir.routines.pcmToUml.CreateProvidedRoleRoutine(this.executionState, calledBy, pcmComponent, pcmProvidedRole);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteProvidedRole(final ProvidedRole pcmProvidedRole) {
+  public boolean deleteProvidedRole(final ProvidedRole pcmProvidedRole) {
     mir.routines.pcmToUml.DeleteProvidedRoleRoutine effect = new mir.routines.pcmToUml.DeleteProvidedRoleRoutine(this.executionState, calledBy, pcmProvidedRole);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addOperationProvidedRoleInterface(final OperationProvidedRole pcmRole, final OperationInterface pcmInterface) {
+  public boolean addOperationProvidedRoleInterface(final OperationProvidedRole pcmRole, final OperationInterface pcmInterface) {
     mir.routines.pcmToUml.AddOperationProvidedRoleInterfaceRoutine effect = new mir.routines.pcmToUml.AddOperationProvidedRoleInterfaceRoutine(this.executionState, calledBy, pcmRole, pcmInterface);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createRequiredRole(final InterfaceRequiringEntity pcmComponent, final OperationRequiredRole requiredRole) {
+  public boolean createRequiredRole(final InterfaceRequiringEntity pcmComponent, final OperationRequiredRole requiredRole) {
     mir.routines.pcmToUml.CreateRequiredRoleRoutine effect = new mir.routines.pcmToUml.CreateRequiredRoleRoutine(this.executionState, calledBy, pcmComponent, requiredRole);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteRequiredRole(final OperationRequiredRole requiredRole) {
+  public boolean deleteRequiredRole(final OperationRequiredRole requiredRole) {
     mir.routines.pcmToUml.DeleteRequiredRoleRoutine effect = new mir.routines.pcmToUml.DeleteRequiredRoleRoutine(this.executionState, calledBy, requiredRole);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addOperationRequiredRoleInterface(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface) {
+  public boolean addOperationRequiredRoleInterface(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface) {
     mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine effect = new mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine(this.executionState, calledBy, pcmRole, pcmInterface);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
 }

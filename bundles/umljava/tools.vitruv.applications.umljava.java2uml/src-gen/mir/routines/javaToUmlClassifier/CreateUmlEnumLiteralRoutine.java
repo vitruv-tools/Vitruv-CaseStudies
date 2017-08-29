@@ -5,7 +5,6 @@ import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.EnumerationLiteral;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.members.EnumConstant;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -60,7 +59,7 @@ public class CreateUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
   
   private EnumConstant jConstant;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlEnumLiteralRoutine with input:");
     getLogger().debug("   jEnum: " + this.jEnum);
     getLogger().debug("   jConstant: " + this.jConstant);
@@ -71,10 +70,10 @@ public class CreateUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
     	(org.eclipse.uml2.uml.Enumeration _element) -> true, // correspondence precondition checker
     	null);
     if (uEnum == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uEnum);
-    org.eclipse.uml2.uml.EnumerationLiteral uLiteral = UMLFactoryImpl.eINSTANCE.createEnumerationLiteral();
+    org.eclipse.uml2.uml.EnumerationLiteral uLiteral = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createEnumerationLiteral();
     notifyObjectCreated(uLiteral);
     userExecution.updateULiteralElement(jEnum, jConstant, uEnum, uLiteral);
     
@@ -84,5 +83,7 @@ public class CreateUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
     userExecution.update0Element(jEnum, jConstant, uEnum, uLiteral);
     
     postprocessElements();
+    
+    return true;
   }
 }

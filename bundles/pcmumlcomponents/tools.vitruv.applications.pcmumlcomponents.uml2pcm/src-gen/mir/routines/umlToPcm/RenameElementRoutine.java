@@ -69,7 +69,7 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
   
   private NamedElement umlElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameElementRoutine with input:");
     getLogger().debug("   umlElement: " + this.umlElement);
     
@@ -92,5 +92,7 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     userExecution.update1Element(umlElement, pcmElement, pcmCollectionType);
     
     postprocessElements();
+    
+    return true;
   }
 }

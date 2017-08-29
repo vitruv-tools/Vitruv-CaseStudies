@@ -38,7 +38,7 @@ public class DeleteJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
   
   private EnumerationLiteral uLiteral;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaEnumConstantRoutine with input:");
     getLogger().debug("   uLiteral: " + this.uLiteral);
     
@@ -48,11 +48,13 @@ public class DeleteJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     	(org.emftext.language.java.members.EnumConstant _element) -> true, // correspondence precondition checker
     	null);
     if (jConst == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jConst);
     deleteObject(userExecution.getElement1(uLiteral, jConst));
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -36,7 +36,7 @@ public class DeleteUmlPackageRoutine extends AbstractRepairRoutineRealization {
   
   private org.emftext.language.java.containers.Package jPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteUmlPackageRoutine with input:");
     getLogger().debug("   jPackage: " + this.jPackage);
     
@@ -46,11 +46,13 @@ public class DeleteUmlPackageRoutine extends AbstractRepairRoutineRealization {
     	(org.eclipse.uml2.uml.Package _element) -> true, // correspondence precondition checker
     	null);
     if (uPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uPackage);
     deleteObject(userExecution.getElement1(jPackage, uPackage));
     
     postprocessElements();
+    
+    return true;
   }
 }

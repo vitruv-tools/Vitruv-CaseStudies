@@ -64,7 +64,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
   
   private OperationSignature pcmSignature;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlOperationTypeRoutine with input:");
     getLogger().debug("   pcmSignature: " + this.pcmSignature);
     
@@ -74,7 +74,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlModel);
     org.eclipse.uml2.uml.Operation umlOperation = getCorrespondingElement(
@@ -83,7 +83,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (umlOperation == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlOperation);
     org.eclipse.uml2.uml.DataType umlReturnType = getCorrespondingElement(
@@ -96,5 +96,7 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     userExecution.update0Element(pcmSignature, umlModel, umlOperation, umlReturnType);
     
     postprocessElements();
+    
+    return true;
   }
 }

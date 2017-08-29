@@ -61,7 +61,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
   
   private org.eclipse.uml2.uml.Class uClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaImplementedInterfaceRoutine with input:");
     getLogger().debug("   uInterface: " + this.uInterface);
     getLogger().debug("   oldInterface: " + this.oldInterface);
@@ -73,7 +73,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (jClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jClass);
     org.emftext.language.java.classifiers.Interface jInterface = getCorrespondingElement(
@@ -82,7 +82,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (jInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jInterface);
     userExecution.callRoutine1(uInterface, oldInterface, uClass, jClass, jInterface, actionsFacade);
@@ -91,5 +91,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     userExecution.update0Element(uInterface, oldInterface, uClass, jClass, jInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

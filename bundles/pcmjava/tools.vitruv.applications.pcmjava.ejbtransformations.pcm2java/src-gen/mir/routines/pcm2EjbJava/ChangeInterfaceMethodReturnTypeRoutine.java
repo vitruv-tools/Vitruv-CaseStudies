@@ -47,7 +47,7 @@ public class ChangeInterfaceMethodReturnTypeRoutine extends AbstractRepairRoutin
   
   private DataType returnType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInterfaceMethodReturnTypeRoutine with input:");
     getLogger().debug("   interfaceMethod: " + this.interfaceMethod);
     getLogger().debug("   returnType: " + this.returnType);
@@ -62,5 +62,7 @@ public class ChangeInterfaceMethodReturnTypeRoutine extends AbstractRepairRoutin
     userExecution.update0Element(interfaceMethod, returnType, returnTypeClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

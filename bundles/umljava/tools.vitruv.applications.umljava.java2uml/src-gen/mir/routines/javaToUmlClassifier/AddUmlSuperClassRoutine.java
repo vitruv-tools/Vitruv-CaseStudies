@@ -57,7 +57,7 @@ public class AddUmlSuperClassRoutine extends AbstractRepairRoutineRealization {
   
   private org.emftext.language.java.classifiers.Class jSuperClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlSuperClassRoutine with input:");
     getLogger().debug("   jClass: " + this.jClass);
     getLogger().debug("   jSuperClass: " + this.jSuperClass);
@@ -68,12 +68,14 @@ public class AddUmlSuperClassRoutine extends AbstractRepairRoutineRealization {
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
     	null);
     if (uClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uClass);
     // val updatedElement userExecution.getElement1(jClass, jSuperClass, uClass);
     userExecution.update0Element(jClass, jSuperClass, uClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

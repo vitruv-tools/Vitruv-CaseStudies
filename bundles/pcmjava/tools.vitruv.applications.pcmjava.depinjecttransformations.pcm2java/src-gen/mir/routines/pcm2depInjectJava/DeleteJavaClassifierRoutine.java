@@ -47,7 +47,7 @@ public class DeleteJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
   
   private NamedElement sourceElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaClassifierRoutine with input:");
     getLogger().debug("   sourceElement: " + this.sourceElement);
     
@@ -57,7 +57,7 @@ public class DeleteJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
     if (javaClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClassifier);
     org.emftext.language.java.containers.CompilationUnit compilationUnit = getCorrespondingElement(
@@ -66,7 +66,7 @@ public class DeleteJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
     	null);
     if (compilationUnit == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compilationUnit);
     deleteObject(userExecution.getElement1(sourceElement, javaClassifier, compilationUnit));
@@ -74,5 +74,7 @@ public class DeleteJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     deleteObject(userExecution.getElement2(sourceElement, javaClassifier, compilationUnit));
     
     postprocessElements();
+    
+    return true;
   }
 }

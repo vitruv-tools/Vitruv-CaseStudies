@@ -13,23 +13,23 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createUmlAttributeInEnum(final Enumeration jEnum, final Field jAttr) {
+  public boolean createUmlAttributeInEnum(final Enumeration jEnum, final Field jAttr) {
     mir.routines.javaToUmlAttribute.CreateUmlAttributeInEnumRoutine effect = new mir.routines.javaToUmlAttribute.CreateUmlAttributeInEnumRoutine(this.executionState, calledBy, jEnum, jAttr);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createUmlAttributeInClass(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr) {
+  public boolean createUmlAttributeInClass(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr) {
     mir.routines.javaToUmlAttribute.CreateUmlAttributeInClassRoutine effect = new mir.routines.javaToUmlAttribute.CreateUmlAttributeInClassRoutine(this.executionState, calledBy, jClass, jAttr);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeUmlAttributeType(final Field jAttr, final TypeReference jType) {
+  public boolean changeUmlAttributeType(final Field jAttr, final TypeReference jType) {
     mir.routines.javaToUmlAttribute.ChangeUmlAttributeTypeRoutine effect = new mir.routines.javaToUmlAttribute.ChangeUmlAttributeTypeRoutine(this.executionState, calledBy, jAttr, jType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void setUmlAttributeFinal(final Field jAttr, final Boolean isFinal) {
+  public boolean setUmlAttributeFinal(final Field jAttr, final Boolean isFinal) {
     mir.routines.javaToUmlAttribute.SetUmlAttributeFinalRoutine effect = new mir.routines.javaToUmlAttribute.SetUmlAttributeFinalRoutine(this.executionState, calledBy, jAttr, isFinal);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
 }

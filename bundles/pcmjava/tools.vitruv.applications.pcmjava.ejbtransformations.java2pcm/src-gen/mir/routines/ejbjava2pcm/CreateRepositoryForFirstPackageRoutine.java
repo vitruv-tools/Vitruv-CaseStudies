@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -53,19 +52,21 @@ public class CreateRepositoryForFirstPackageRoutine extends AbstractRepairRoutin
   
   private org.emftext.language.java.containers.Package javaPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRepositoryForFirstPackageRoutine with input:");
     getLogger().debug("   javaPackage: " + this.javaPackage);
     
     if (!userExecution.checkMatcherPrecondition1(javaPackage)) {
-    	return;
+    	return false;
     }
-    org.palladiosimulator.pcm.repository.Repository repository = RepositoryFactoryImpl.eINSTANCE.createRepository();
+    org.palladiosimulator.pcm.repository.Repository repository = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createRepository();
     notifyObjectCreated(repository);
     userExecution.updateRepositoryElement(javaPackage, repository);
     
     addCorrespondenceBetween(userExecution.getElement1(javaPackage, repository), userExecution.getElement2(javaPackage, repository), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

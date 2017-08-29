@@ -5,7 +5,6 @@ import mir.routines.ejbjava2pcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.parameters.Parameter;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -57,12 +56,12 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
   
   private OperationSignature opSignature;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePCMParameterRoutine with input:");
     getLogger().debug("   jaMoPPParam: " + this.jaMoPPParam);
     getLogger().debug("   opSignature: " + this.opSignature);
     
-    org.palladiosimulator.pcm.repository.Parameter pcmParameter = RepositoryFactoryImpl.eINSTANCE.createParameter();
+    org.palladiosimulator.pcm.repository.Parameter pcmParameter = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createParameter();
     notifyObjectCreated(pcmParameter);
     userExecution.updatePcmParameterElement(jaMoPPParam, opSignature, pcmParameter);
     
@@ -72,5 +71,7 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     addCorrespondenceBetween(userExecution.getElement2(jaMoPPParam, opSignature, pcmParameter), userExecution.getElement3(jaMoPPParam, opSignature, pcmParameter), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

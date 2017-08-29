@@ -11,7 +11,6 @@ import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -65,7 +64,7 @@ public class CreatedImplementsRoutine extends AbstractRepairRoutineRealization {
   
   private TypeReference implementz;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedImplementsRoutine with input:");
     getLogger().debug("   clazz: " + this.clazz);
     getLogger().debug("   implementz: " + this.implementz);
@@ -76,15 +75,17 @@ public class CreatedImplementsRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(basicComponent);
-    org.palladiosimulator.pcm.repository.OperationProvidedRole opr = RepositoryFactoryImpl.eINSTANCE.createOperationProvidedRole();
+    org.palladiosimulator.pcm.repository.OperationProvidedRole opr = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationProvidedRole();
     notifyObjectCreated(opr);
     
     // val updatedElement userExecution.getElement1(clazz, implementz, basicComponent, opr);
     userExecution.update0Element(clazz, implementz, basicComponent, opr);
     
     postprocessElements();
+    
+    return true;
   }
 }

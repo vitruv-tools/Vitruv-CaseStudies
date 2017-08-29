@@ -44,7 +44,7 @@ public class SetUmlAttributeFinalRoutine extends AbstractRepairRoutineRealizatio
   
   private Boolean isFinal;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlAttributeFinalRoutine with input:");
     getLogger().debug("   jAttr: " + this.jAttr);
     getLogger().debug("   isFinal: " + this.isFinal);
@@ -55,12 +55,14 @@ public class SetUmlAttributeFinalRoutine extends AbstractRepairRoutineRealizatio
     	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
     	null);
     if (uAttr == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uAttr);
     // val updatedElement userExecution.getElement1(jAttr, isFinal, uAttr);
     userExecution.update0Element(jAttr, isFinal, uAttr);
     
     postprocessElements();
+    
+    return true;
   }
 }

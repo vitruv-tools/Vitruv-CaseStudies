@@ -71,7 +71,7 @@ public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends Abst
   
   private String fieldName;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveParameterToFieldAssignmentFromConstructorRoutine with input:");
     getLogger().debug("   ctor: " + this.ctor);
     getLogger().debug("   fieldName: " + this.fieldName);
@@ -80,5 +80,7 @@ public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends Abst
     userExecution.update0Element(ctor, fieldName);
     
     postprocessElements();
+    
+    return true;
   }
 }

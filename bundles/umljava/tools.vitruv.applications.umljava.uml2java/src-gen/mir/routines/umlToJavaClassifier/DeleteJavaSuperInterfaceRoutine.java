@@ -48,7 +48,7 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
   
   private Interface uI;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaSuperInterfaceRoutine with input:");
     getLogger().debug("   superUMLInterface: " + this.superUMLInterface);
     getLogger().debug("   uI: " + this.uI);
@@ -59,7 +59,7 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (jI == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jI);
     org.emftext.language.java.classifiers.Interface javaSuperInterface = getCorrespondingElement(
@@ -68,12 +68,14 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (javaSuperInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaSuperInterface);
     // val updatedElement userExecution.getElement1(superUMLInterface, uI, jI, javaSuperInterface);
     userExecution.update0Element(superUMLInterface, uI, jI, javaSuperInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }
