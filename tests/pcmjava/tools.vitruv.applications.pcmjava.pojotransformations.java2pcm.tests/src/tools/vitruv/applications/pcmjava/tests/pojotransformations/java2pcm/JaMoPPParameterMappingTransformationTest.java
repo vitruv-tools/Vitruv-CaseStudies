@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.text.edits.ReplaceEdit;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -56,6 +57,7 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
                 Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
     }
 
+    @Ignore
     @Test
     public void testChangeParameterType() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
