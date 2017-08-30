@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius UML-Java Transformations Java -> Uml
 Bundle-SymbolicName: tools.vitruv.applications.umljava.java2uml
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.1.0.qualifier
 Eclipse-ExtensibleAPI: true
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
@@ -23,8 +23,8 @@ Require-Bundle: com.google.guava,
  tools.vitruv.domains.java.util,
  org.eclipse.uml2.uml,
  org.emftext.language.java,
- tools.vitruv.applications.umljava.util;bundle-version="1.0.0",
- tools.vitruv.applications.umljava.uml2java;bundle-version="1.0.0",
+ tools.vitruv.applications.umljava.util,
+ tools.vitruv.applications.umljava.uml2java,
  org.apache.commons.io;bundle-version="2.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: tools.vitruv.applications.umljava.java2uml
