@@ -1,10 +1,8 @@
 package tools.vitruv.applications.pcmjava.util.pcm2java
 
-import java.io.ByteArrayInputStream
 import java.util.ArrayList
 import java.util.Comparator
 import java.util.List
-import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.annotations.AnnotationsFactory
@@ -12,8 +10,6 @@ import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.containers.JavaRoot
 import org.emftext.language.java.expressions.ExpressionsFactory
 import org.emftext.language.java.imports.ClassifierImport
 import org.emftext.language.java.imports.Import
@@ -53,20 +49,20 @@ import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
-import tools.vitruv.domains.java.util.jamoppparser.JamoppParser
 import org.emftext.language.java.JavaClasspath
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 
-class Pcm2JavaHelper{
-	
-	def static addAnnotationToAnnotableAndModifiable(AnnotableAndModifiable annotableAndModifiable, String annotationName){
+class Pcm2JavaHelper {
+
+	def static addAnnotationToAnnotableAndModifiable(AnnotableAndModifiable annotableAndModifiable,
+		String annotationName) {
 		val newAnnotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance()
 		val jaMoPPClass = ClassifiersFactory.eINSTANCE.createClass
 		jaMoPPClass.setName(annotationName);
 		newAnnotation.setAnnotation(jaMoPPClass)
 		annotableAndModifiable.getAnnotationsAndModifiers().add(newAnnotation)
 	}
-	
+
 	public def static addImportToClassFromString(ConcreteClassifier jaMoPPClass, List<String> namespaceArray,
 		String entityToImport) {
 		for (Import import : jaMoPPClass.containingCompilationUnit.imports) {
@@ -81,14 +77,7 @@ class Pcm2JavaHelper{
 		guiceImport.namespaces.addAll(namespaceArray)
 		jaMoPPClass.containingCompilationUnit.imports.add(guiceImport)
 	}
-	 
-	public static def void initializeCompilationUnitAndJavaClassifier(CompilationUnit compilationUnit, ConcreteClassifier javaClassifier, String name) {
-		compilationUnit.name = name;
-		javaClassifier.name = name;
-		javaClassifier.addModifier(ModifiersFactory.eINSTANCE.createPublic());
-		compilationUnit.classifiers.add(javaClassifier);
-	}
-	
+
 	def static NamespaceClassifierReference createNamespaceClassifierReference(ConcreteClassifier concreteClassifier) {
 		val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
 		val classifierRef = TypesFactory.eINSTANCE.createClassifierReference
@@ -98,15 +87,16 @@ class Pcm2JavaHelper{
 		// namespaceClassifierReference.namespaces.addAll(concreteClassifier.containingCompilationUnit.namespaces)
 		return namespaceClassifierReference
 	}
-	
-	def static createNamespaceClassifierReference(NamespaceClassifierReference namespaceClassifierReference, ConcreteClassifier concreteClassifier) {
+
+	def static createNamespaceClassifierReference(NamespaceClassifierReference namespaceClassifierReference,
+		ConcreteClassifier concreteClassifier) {
 		val classifierRef = TypesFactory.eINSTANCE.createClassifierReference
 		classifierRef.target = concreteClassifier
 		namespaceClassifierReference.classifierReferences.add(classifierRef)
 
-		// namespaceClassifierReference.namespaces.addAll(concreteClassifier.containingCompilationUnit.namespaces)
+	// namespaceClassifierReference.namespaces.addAll(concreteClassifier.containingCompilationUnit.namespaces)
 	}
-	
+
 	def static createPrivateField(Field field, TypeReference reference, String name) {
 		field.typeReference = EcoreUtil.copy(reference)
 		field.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPrivate)
@@ -116,7 +106,7 @@ class Pcm2JavaHelper{
 		}
 		field.name = fieldName
 	}
-	
+
 	def dispatch static getNameFromJaMoPPType(ClassifierReference reference) {
 		return reference.target.name
 	}
@@ -164,21 +154,21 @@ class Pcm2JavaHelper{
 	def dispatch static getNameFromJaMoPPType(Void reference) {
 		return "void"
 	}
-	
-	def static Constructor getOrCreateConstructorToClass(Class javaClass) { 
+
+	def static Constructor getOrCreateConstructorToClass(Class javaClass) {
 		val constructors = javaClass.members.filter[it instanceof Constructor].map[it as Constructor]
-		if(constructors.nullOrEmpty){
+		if (constructors.nullOrEmpty) {
 			val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
 			return addConstructorToClass(constructor, javaClass)
 		}
 		return constructors.iterator.next
 	}
-	
+
 	def static addConstructorToClass(Class javaClass) {
 		val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
 		addConstructorToClass(constructor, javaClass)
 	}
-	
+
 	def static Statement createAssignmentFromParameterToField(Field field, Parameter parameter) {
 		val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
 		val assigmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
@@ -204,24 +194,12 @@ class Pcm2JavaHelper{
 		expressionStatement.expression = assigmentExpression
 		return expressionStatement
 	}
-	
+
 	def static addConstructorToClass(Constructor constructor, Class javaClass) {
 		constructor.name = javaClass.name
 		constructor.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
 		javaClass.members.add(constructor)
 		return constructor
-	}
-	
-	def static Parameter createOrdinaryParameter(TypeReference typeReference, String name) {
-		val parameter = ParametersFactory.eINSTANCE.createOrdinaryParameter
-		parameter.name = name
-		parameter.typeReference = typeReference
-		return parameter
-	}
-	
-	def static createClassifierImportInClassifier(ConcreteClassifier classifier, ConcreteClassifier classifierToImport) {
-		val classifierImport = ImportsFactory.eINSTANCE.createClassifierImport;
-		addImportToCompilationUnitOfClassifier(classifierImport, classifier, classifierToImport);
 	}
 
 	def static addImportToCompilationUnitOfClassifier(ClassifierImport classifierImport, Classifier classifier,
@@ -233,19 +211,19 @@ class Pcm2JavaHelper{
 			classifier.containingCompilationUnit.imports.add(classifierImport)
 		}
 		classifierImport.classifier = classifierToImport
-	}	
-	
-	def static createNewForFieldInConstructor(NewConstructorCall newConstructorCall, Constructor constructor, Field field) {
+	}
+
+	def static createNewForFieldInConstructor(NewConstructorCall newConstructorCall, Constructor constructor,
+		Field field) {
 		val classifier = field.containingConcreteClassifier
 		if (!(classifier instanceof Class)) {
 			return null
 		}
 		val jaMoPPClass = classifier as Class
 
-		addNewStatementToConstructor(newConstructorCall, constructor, field, jaMoPPClass.fields,
-				constructor.parameters)
+		addNewStatementToConstructor(newConstructorCall, constructor, field, jaMoPPClass.fields, constructor.parameters)
 	}
-	
+
 	def static addNewStatementToConstructor(NewConstructorCall newConstructorCall, Constructor constructor, Field field,
 		Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
 		val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
@@ -274,7 +252,7 @@ class Pcm2JavaHelper{
 		expressionStatement.expression = assigmentExpression
 		constructor.statements.add(expressionStatement)
 	}
-	
+
 	def static updateArgumentsOfConstructorCall(Field field, Field[] fieldsToUseAsArgument,
 		Parameter[] parametersToUseAsArgument, NewConstructorCall newConstructorCall) {
 		val List<TypeReference> typeListForConstructor = new ArrayList<TypeReference>
@@ -305,7 +283,7 @@ class Pcm2JavaHelper{
 			}
 		}
 	}
-	
+
 	def static ReferenceableElement findMatchingTypeInParametersOrFields(TypeReference typeReferenceToFind,
 		Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
 		for (parameter : parametersToUseAsArgument) {
@@ -320,7 +298,7 @@ class Pcm2JavaHelper{
 		}
 		return null
 	}
-	
+
 	static def createSetter(Field field, ClassMethod method) {
 		method.name = "set" + field.name.toFirstUpper
 		method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
@@ -332,19 +310,19 @@ class Pcm2JavaHelper{
 		val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
 		val assigmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
 
-		//this.
+		// this.
 		val selfReference = ReferencesFactory.eINSTANCE.createSelfReference
 		assigmentExpression.child = selfReference
 
-		//.fieldname
+		// .fieldname
 		val fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference
 		fieldReference.target = field
 		selfReference.next = fieldReference
 		selfReference.^self = LiteralsFactory.eINSTANCE.createThis();
-		//=
+		// =
 		assigmentExpression.assignmentOperator = OperatorsFactory.eINSTANCE.createAssignment
 
-		//name		
+		// name		
 		val identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference
 		identifierReference.target = parameter
 
@@ -359,7 +337,7 @@ class Pcm2JavaHelper{
 		method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
 		method.typeReference = EcoreUtil.copy(field.typeReference);
 
-		//this.fieldname
+		// this.fieldname
 		val identifierRef = ReferencesFactory.eINSTANCE.createIdentifierReference
 		identifierRef.target = field
 
@@ -369,7 +347,7 @@ class Pcm2JavaHelper{
 		method.statements.add(ret);
 		return method
 	}
-	
+
 	/**
 	 * sorts the member list to ensure that fields are printed before constructors and constructors before methods
 	 */
@@ -399,8 +377,7 @@ class Pcm2JavaHelper{
 
 		})
 	}
-	
-	
+
 	private static var ClaimableMap<PrimitiveTypeEnum, Type> primitveTypeMappingMap;
 
 	private def static initPrimitiveTypeMap() {
@@ -422,8 +399,9 @@ class Pcm2JavaHelper{
 		}
 		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
 	}
-	
-	public static def TypeReference createTypeReference(DataType originalDataType, Class correspondingJavaClassIfExisting) {
+
+	public static def TypeReference createTypeReference(DataType originalDataType,
+		Class correspondingJavaClassIfExisting) {
 		if (null === originalDataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
@@ -438,19 +416,22 @@ class Pcm2JavaHelper{
 				// This cannot be since the claimForPrimitiveType function does only return TypeReference or ConcreteClassifier
 			}
 		} else if (correspondingJavaClassIfExisting !== null) {
-			innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting);	
+			innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting);
 		} else {
-			throw new IllegalArgumentException("Either the dataType must be primitive or a correspondingJavaClass must be specified");
+			throw new IllegalArgumentException(
+				"Either the dataType must be primitive or a correspondingJavaClass must be specified");
 		}
 		return innerDataTypeReference;
 	}
-	
-	public static def void initializeClassMethod(ClassMethod classMethod, Method implementedMethod, boolean ensurePublic) {
-		initializeClassMethod(classMethod, implementedMethod.name, implementedMethod.typeReference, implementedMethod.modifiers, implementedMethod.parameters, ensurePublic)
+
+	public static def void initializeClassMethod(ClassMethod classMethod, Method implementedMethod,
+		boolean ensurePublic) {
+		initializeClassMethod(classMethod, implementedMethod.name, implementedMethod.typeReference,
+			implementedMethod.modifiers, implementedMethod.parameters, ensurePublic)
 	}
-	
-	public static def void initializeClassMethod(ClassMethod classMethod, String name, TypeReference typeReference, Modifier[] modifiers,
-		Parameter[] parameters, boolean ensurePublic) {
+
+	public static def void initializeClassMethod(ClassMethod classMethod, String name, TypeReference typeReference,
+		Modifier[] modifiers, Parameter[] parameters, boolean ensurePublic) {
 		classMethod.name = name
 		if (null !== typeReference) {
 			classMethod.typeReference = EcoreUtil.copy(typeReference)
@@ -468,7 +449,7 @@ class Pcm2JavaHelper{
 			classMethod.parameters.addAll(EcoreUtil.copyAll(parameters))
 		}
 	}
-	
+
 	public static def ClassMethod findMethodInClass(ConcreteClassifier concreteClassifier, ClassMethod method) {
 		for (Method currentMethod : concreteClassifier.methods) {
 			if (currentMethod instanceof ClassMethod && currentMethod.name.equals(method.name) &&
@@ -479,37 +460,14 @@ class Pcm2JavaHelper{
 		}
 		null
 	}
-	
+
 	def static ClassifierImport getJavaClassImport(String name) {
 		val classifier = tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.loadClassiferFromStdLib(name);
 		val classifierImport = ImportsFactory.eINSTANCE.createClassifierImport();
 		classifierImport.classifier = classifier;
 		return classifierImport
 	}
-	
-	def static ConcreteClassifier getJavaClass(String name) {
-		return tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.loadClassiferFromStdLib(name);
-	}
-	
-	def static CompilationUnit createCompilationUnit(String name, String content) {
-		return createJavaRoot(name, content) as CompilationUnit
-	}
 
-	def static Package createPackage(String namespace) {
-		val String content = '''package «namespace»;'''
-		return createJavaRoot("package-info", content) as Package
-	}
-
-	def static JavaRoot createJavaRoot(String name, String content) {
-		val JamoppParser jaMoPPParser = new JamoppParser
-		val inStream = new ByteArrayInputStream(content.bytes)
-		val javaRoot = jaMoPPParser.parseCompilationUnitFromInputStream(URI.createFileURI(name + ".java"),
-			inStream)
-		javaRoot.name = name + ".java"
-		EcoreUtil.remove(javaRoot)
-		return javaRoot
-	}
-	
 	/**
 	 * returns the class object for a primitive type, e.g, Integer for int
 	 */
@@ -549,14 +507,14 @@ class Pcm2JavaHelper{
 		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Short")
 	}
 
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(
-		Void type) {
+	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Void type) {
 		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Void")
 	}
-	
+
 	def static NamespaceClassifierReference createAndReturnNamespaceClassifierReferenceForName(String namespace,
 		String name) {
-		val classifier = tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.loadClassiferFromStdLib(namespace + "." + name)
+		val classifier = tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.
+			loadClassiferFromStdLib(namespace + "." + name)
 		val classifierReference = TypesFactory.eINSTANCE.createClassifierReference
 		classifierReference.setTarget(classifier)
 		val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
@@ -568,7 +526,7 @@ class Pcm2JavaHelper{
 		}
 		return namespaceClassifierReference
 	}
-	
+
 	def static ConcreteClassifier loadClassiferFromStdLib(String name) {
 		// This requires stlib to be registered (JavaClasspath.get().registerStdLib). Should be done by domain
 		var classifier = JavaClasspath.get().getClassifier(name) as ConcreteClassifier
@@ -576,4 +534,3 @@ class Pcm2JavaHelper{
 		classifier = EcoreUtil.resolve(classifier, resourceSet) as ConcreteClassifier
 	}
 }
-	
