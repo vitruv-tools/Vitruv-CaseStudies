@@ -28,12 +28,13 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.framework.correspondence.Correspondence
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.framework.util.command.ResourceAccess
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 import org.palladiosimulator.pcm.repository.Parameter
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import tools.vitruv.framework.tuid.TuidManager
 
 class PcmJavaUtils {
 	private static val Logger logger = Logger.getLogger(PcmJavaUtils.simpleName)
@@ -105,20 +106,20 @@ class PcmJavaUtils {
 		return target1 == target2 || target1.equals(target2)
 	}
 
-	def dispatch static addRootChangeToTransformationResult(Repository repo, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ChangePropagationResult transformationResult) {
+	def dispatch static handleRootChange(Repository repo, CorrespondenceModel correspondenceModel, VURI sourceModelVURI,
+		ResourceAccess resourceAccess) {
 		handlePCMRootEObject(repo, sourceModelVURI, correspondenceModel, PcmNamespace.REPOSITORY_FILE_EXTENSION,
-			transformationResult)
+			resourceAccess)
 	}
 
-	def dispatch static addRootChangeToTransformationResult(System system, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ChangePropagationResult transformationResult) {
+	def dispatch static handleRootChange(System system, CorrespondenceModel correspondenceModel, VURI sourceModelVURI,
+		ResourceAccess resourceAccess) {
 		handlePCMRootEObject(system, sourceModelVURI, correspondenceModel, PcmNamespace.SYSTEM_FILE_EXTENSION,
-			transformationResult)
+			resourceAccess)
 	}
 
-	def dispatch static addRootChangeToTransformationResult(JavaRoot newJavaRoot,
-		CorrespondenceModel correspondenceModel, VURI sourceModelVURI, ChangePropagationResult transformationResult) {
+	def dispatch static handleRootChange(JavaRoot newJavaRoot, CorrespondenceModel correspondenceModel,
+		VURI sourceModelVURI, ResourceAccess resourceAccess) {
 		// TODO: use configured src-folder path instead of hardcoded "src"
 		val String srcFolderPath = getFolderPathInProjectOfResource(sourceModelVURI, "src");
 		var String javaRootPath = newJavaRoot.getNamespacesAsString().replace(".", "/").replace("$", "/") +
@@ -127,7 +128,8 @@ class PcmJavaUtils {
 			javaRootPath = javaRootPath + "/package-info.java";
 		}
 		val VURI cuVURI = VURI.getInstance(srcFolderPath + javaRootPath);
-		transformationResult.registerForEstablishPersistence(newJavaRoot, cuVURI)
+		resourceAccess.persistAsRoot(newJavaRoot, cuVURI)
+		TuidManager.instance.flushRegisteredObjectsUnderModification
 	}
 
 	def static VURI getSourceModelVURI(EObject eObject) {
@@ -140,46 +142,43 @@ class PcmJavaUtils {
 	}
 
 	def private static void handlePCMRootEObject(NamedElement namedElement, VURI sourceModelVURI,
-		CorrespondenceModel correspondenceModel, String fileExt, ChangePropagationResult transformationResult) {
+		CorrespondenceModel correspondenceModel, String fileExt, ResourceAccess resourceAccess) {
 		var String folderName = getFolderPathInProjectOfResource(sourceModelVURI, "model");
 		val String fileName = namedElement.getEntityName() + "." + fileExt;
 		if (!folderName.endsWith("/")) {
 			folderName = folderName + "/";
 		}
 		val VURI vuri = VURI.getInstance(folderName + fileName);
-		transformationResult.registerForEstablishPersistence(namedElement, vuri)
+		resourceAccess.persistAsRoot(namedElement, vuri)
+		TuidManager.instance.flushRegisteredObjectsUnderModification
 	}
 
 	def dispatch static handleRootChanges(Iterable<EObject> eObjects, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, Tuid oldTuid) {
+		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete, Tuid oldTuid) {
 		eObjects.forEach [ eObject |
-			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, transformationResult, vuriToDelete,
-				oldTuid)
+			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete, oldTuid)
 		]
 	}
 
 	def dispatch static handleRootChanges(EObject[] eObjects, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, Tuid oldTuid) {
+		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete, Tuid oldTuid) {
 		eObjects.forEach [ eObject |
-			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, transformationResult, vuriToDelete,
-				oldTuid)
+			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete, oldTuid)
 		]
 	}
 
 	def dispatch static handleRootChanges(EObject eObject, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ChangePropagationResult transformationResult, VURI vuriToDelete, Tuid oldTuid) {
-		handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, transformationResult, vuriToDelete,
-			oldTuid)
+		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete, Tuid oldTuid) {
+		handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete, oldTuid)
 	}
 
 	def static handleSingleRootChange(EObject eObject, CorrespondenceModel correspondenceModel, VURI sourceModelVURI,
-		ChangePropagationResult transformationResult, VURI vuriToDelete, Tuid oldTuid) {
+		ResourceAccess resourceAccess, VURI vuriToDelete, Tuid oldTuid) {
+		TuidManager.instance.registerObjectUnderModification(eObject);
 		EcoreUtil.remove(eObject)
-		PcmJavaUtils.addRootChangeToTransformationResult(eObject, correspondenceModel, sourceModelVURI,
-			transformationResult)
-		oldTuid.updateTuid(eObject)
-		// Not necessary any more because VSUM does this
-		//transformationResult.addVuriToDeleteIfNotNull(vuriToDelete)
+		TuidManager.instance.updateTuidsOfRegisteredObjects;
+		TuidManager.instance.flushRegisteredObjectsUnderModification;
+		PcmJavaUtils.handleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess)
 	}
 
 	private static def String getFolderPathInProjectOfResource(VURI sourceModelVURI, String folderName) {
@@ -205,19 +204,19 @@ class PcmJavaUtils {
 	}
 
 	def public static deleteNonRootEObjectInList(EObject affectedEObject, EObject oldEObject,
-		CorrespondenceModel correspondenceModel) {
-		val transformationResult = new ChangePropagationResult
-		removeCorrespondenceAndAllObjects(oldEObject, affectedEObject, correspondenceModel, pcmJavaRootObjects)
-		return transformationResult
+		CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
+		removeCorrespondenceAndAllObjects(oldEObject, affectedEObject, correspondenceModel, pcmJavaRootObjects,
+			resourceAccess)
+		return resourceAccess
 	}
 
-	def static ChangePropagationResult removeCorrespondenceAndAllObjects(EObject object, EObject exRootObject,
-		CorrespondenceModel correspondenceModel) {
-		removeCorrespondenceAndAllObjects(object, exRootObject, correspondenceModel, pcmJavaRootObjects)
+	def static ResourceAccess removeCorrespondenceAndAllObjects(EObject object, EObject exRootObject,
+		CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
+		removeCorrespondenceAndAllObjects(object, exRootObject, correspondenceModel, pcmJavaRootObjects, resourceAccess)
 	}
 
-	def static ChangePropagationResult removeCorrespondenceAndAllObjects(EObject object, EObject exRootObject,
-		CorrespondenceModel correspondenceModel, Set<Class<?>> rootObjects) {
+	def static ResourceAccess removeCorrespondenceAndAllObjects(EObject object, EObject exRootObject,
+		CorrespondenceModel correspondenceModel, Set<Class<?>> rootObjects, ResourceAccess resourceAccess) {
 		var Set<Correspondence> correspondences = null
 		if (null !== exRootObject) {
 			val rootTuid = correspondenceModel.calculateTuidFromEObject(exRootObject)
@@ -229,16 +228,15 @@ class PcmJavaUtils {
 		} else {
 			correspondences = correspondenceModel.removeCorrespondencesThatInvolveAtLeastAndDependend(object.toSet)
 		}
-		val transformationResult = new ChangePropagationResult
 		for (correspondence : correspondences) {
-			resolveAndRemoveEObject(correspondence.getATuids, correspondenceModel, transformationResult, rootObjects)
-			resolveAndRemoveEObject(correspondence.getBTuids, correspondenceModel, transformationResult, rootObjects)
+			resolveAndRemoveEObject(correspondence.getATuids, correspondenceModel, resourceAccess, rootObjects)
+			resolveAndRemoveEObject(correspondence.getBTuids, correspondenceModel, resourceAccess, rootObjects)
 		}
-		return transformationResult
+		return resourceAccess
 	}
 
 	def private static resolveAndRemoveEObject(Iterable<Tuid> tuids, CorrespondenceModel correspondenceModel,
-		ChangePropagationResult transformationResult, Set<Class<?>> rootObjectClasses) {
+		ResourceAccess resourceAccess, Set<Class<?>> rootObjectClasses) {
 		for (tuid : tuids) {
 			try {
 				val eObject = correspondenceModel.resolveEObjectFromTuid(tuid)
@@ -246,8 +244,10 @@ class PcmJavaUtils {
 					EcoreUtil.delete(eObject)
 				}
 				if (eObject.isInstanceOfARootClass(rootObjectClasses)) {
-					//val vuri = tuid.getVURIFromTuid()
-					transformationResult.revokeRegistrationForPersistence(eObject)
+					TuidManager.instance.registerObjectUnderModification(eObject);
+					EcoreUtil.remove(eObject);
+					TuidManager.instance.updateTuidsOfRegisteredObjects
+					TuidManager.instance.flushRegisteredObjectsUnderModification
 				}
 			} catch (RuntimeException e) {
 				// ignore runtime exception during object deletion
@@ -264,57 +264,46 @@ class PcmJavaUtils {
 		return false
 	}
 
-	/**
-	 * returns the VURI of the second part of the Tuid (which should be the VURI String) 
-	 */
-//	def private static VURI getVURIFromTuid(Tuid tuid) {
-//		val segments = tuid.toString.split(VitruviusConstants.getTuidSegmentSeperator)
-//		if (2 <= segments.length) {
-//			val key = segments.get(1)
-//			return VURI.getInstance(key)
-//		}
-//		return null
-//	}
-	
 	def static updateNameAttribute(Set<EObject> correspondingEObjects, Object newValue,
-		EStructuralFeature affectedFeature,
-		ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap,
-		CorrespondenceModel correspondenceModel, boolean saveFilesOfChangedEObjects,
-		Set<Class<? extends EObject>> classesOfRootObjects) {
-			val EStructuralFeature eStructuralFeature = featureCorrespondenceMap.claimValueForKey(affectedFeature)
+			EStructuralFeature affectedFeature,
+			ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap,
+			CorrespondenceModel correspondenceModel, boolean saveFilesOfChangedEObjects,
+			Set<Class<? extends EObject>> classesOfRootObjects) {
+		val EStructuralFeature eStructuralFeature = featureCorrespondenceMap.claimValueForKey(affectedFeature)
 
-			val boolean rootAffected = correspondingEObjects.exists [ eObject |
-				eObjectInstanceOfRootEObject(eObject, classesOfRootObjects)
-			]
-			if (rootAffected) {
-				logger.error("The method updateNameattribut is not able to rename root objects")
-				return
-			}
-			for (EObject correspondingObject : correspondingEObjects) {
-				if (null === correspondingObject) {
-					logger.error("corresponding object is null")
-				} else {
-					val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingObject)
-					if (correspondingObject.eClass.EAllStructuralFeatures.contains(eStructuralFeature)) {
-						correspondingObject.eSet(eStructuralFeature, newValue)	
-					}
-					if (correspondingObject instanceof Parameter && eStructuralFeature.name == "entityName") {
-						setParameterName(correspondingObject as Parameter, newValue as String);
-					}
-					
-					oldTuid.updateTuid(correspondingObject)
-					if (saveFilesOfChangedEObjects) {
-						// nothing to do here?
-					}
+		val boolean rootAffected = correspondingEObjects.exists [ eObject |
+			eObjectInstanceOfRootEObject(eObject, classesOfRootObjects)
+		]
+		if (rootAffected) {
+			logger.error("The method updateNameattribut is not able to rename root objects")
+			return
+		}
+		for (EObject correspondingObject : correspondingEObjects) {
+			if (null === correspondingObject) {
+				logger.error("corresponding object is null")
+			} else {
+				val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingObject)
+				if (correspondingObject.eClass.EAllStructuralFeatures.contains(eStructuralFeature)) {
+					correspondingObject.eSet(eStructuralFeature, newValue)
+				}
+				if (correspondingObject instanceof Parameter && eStructuralFeature.name == "entityName") {
+					setParameterName(correspondingObject as Parameter, newValue as String);
+				}
+
+				oldTuid.updateTuid(correspondingObject)
+				if (saveFilesOfChangedEObjects) {
+					// nothing to do here?
 				}
 			}
 		}
-		
+	}
+
 	public static def void setParameterName(Parameter parameter, String newName) {
 		// Set entity name as well if existing
-		if (parameter.eClass.EAllAttributes.exists[name=="entityName"]) {
-			parameter.eSet(parameter.eClass.EAllAttributes.filter[name=="entityName"].claimOne, newName);
+		if (parameter.eClass.EAllAttributes.exists[name == "entityName"]) {
+			parameter.eSet(parameter.eClass.EAllAttributes.filter[name == "entityName"].claimOne, newName);
 		}
 		parameter.parameterName = newName;
 	}
 }
+	

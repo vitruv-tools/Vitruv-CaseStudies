@@ -12,9 +12,9 @@ import tools.vitruv.framework.change.description.ConcreteChange
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.change.description.TransactionalChange
 import tools.vitruv.framework.change.processing.impl.AbstractChangePropagationSpecification
-import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.pcm.PcmDomainProvider
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification {
 	new() {
@@ -63,7 +63,7 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
      * @param change
      *            the change that may contain the newly created package
      */	
-	override propagateChange(TransactionalChange change, CorrespondenceModel correspondenceModel) {
+	override propagateChange(TransactionalChange change, CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
 		if (doesHandleChange(change, correspondenceModel)) {
     		val eChange = change.getEChanges.get(0);
         	if (eChange instanceof InsertRootEObject<?>) {
@@ -72,8 +72,6 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
 	            prepareRenamePackageInfos(eChange, change.getURI());
         	} // TODO: package deletion
         }
-		
-		return new ChangePropagationResult();
 	}
 				
 }

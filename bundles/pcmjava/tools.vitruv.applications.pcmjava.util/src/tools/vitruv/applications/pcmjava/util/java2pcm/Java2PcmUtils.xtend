@@ -36,7 +36,7 @@ import org.palladiosimulator.pcm.system.System
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.framework.util.command.ResourceAccess
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
@@ -89,7 +89,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 
 	def static void updateNameAttributeForPCMRootObjects(Iterable<NamedElement> pcmRootElements,
 		EStructuralFeature affectedFeature, Object newValue, CorrespondenceModel correspondenceModel,
-		ChangePropagationResult transformationResult) {
+		ResourceAccess resourceAccess) {
 			for (pcmRoot : pcmRootElements) {
 				if (!(pcmRoot instanceof Repository) && !(pcmRoot instanceof System)) {
 					logger.warn("EObject " + pcmRoot + " is not an instance of a PCM Root object - element" + pcmRoot +
@@ -102,9 +102,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 				pcmRoot.entityName = newValue.toString;
 	
 				val VURI oldVURI = VURI.getInstance(pcmRoot.eResource.getURI)
-				PcmJavaUtils.handleRootChanges(pcmRoot, correspondenceModel, oldVURI, transformationResult, oldVURI, oldTuid)
-				// Not necessary any more because VSUM does this
-				//transformationResult.addVuriToDeleteIfNotNull(oldVURI)
+				PcmJavaUtils.handleRootChanges(pcmRoot, correspondenceModel, oldVURI, resourceAccess, oldVURI, oldTuid)
 			}
 		}
 	}
@@ -112,7 +110,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	def static void updateNameAsSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute,
 		Object oldValue, Object newValue,
 		ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap, CorrespondenceModel correspondenceModel, 
-		ChangePropagationResult transformationResult) {
+		ResourceAccess resourceAccess) {
 		val correspondingEObjects = PcmJavaUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel)
 		if (correspondingEObjects.nullOrEmpty) {
@@ -129,20 +127,20 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 			featureCorrespondenceMap, correspondenceModel, saveFilesOfChangedEObjects)
 		if (!rootPCMEObjects.nullOrEmpty) {
 			Java2PcmUtils.updateNameAttributeForPCMRootObjects(rootPCMEObjects, affectedAttribute, newValue,
-				correspondenceModel, transformationResult)
+				correspondenceModel, resourceAccess)
 		}
 		return
 	}
 	
 	def static createNewCorrespondingEObjects(EObject newEObject, EObject[] newCorrespondingEObjects,
-		CorrespondenceModel correspondenceModel, ChangePropagationResult transformationResult) {
+		CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
 		if (newCorrespondingEObjects.nullOrEmpty) {
 			return
 		}
 		for (pcmElement : newCorrespondingEObjects) {
 			if (pcmElement instanceof Repository || pcmElement instanceof System) {
-				PcmJavaUtils.addRootChangeToTransformationResult(pcmElement, correspondenceModel,
-					PcmJavaUtils.getSourceModelVURI(newEObject), transformationResult)
+				PcmJavaUtils.handleRootChange(pcmElement, correspondenceModel,
+					PcmJavaUtils.getSourceModelVURI(newEObject), resourceAccess)
 			} else {
 				// do nothing. save will be done later
 			}

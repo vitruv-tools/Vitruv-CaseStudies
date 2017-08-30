@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EAttribute
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.EStructuralFeature
+import tools.vitruv.framework.util.command.ResourceAccess
 
 /**
  * Base class for all Transformations
@@ -15,230 +16,206 @@ abstract class EmptyEObjectMappingTransformation extends EObjectMappingTransform
 
 	protected static val Logger logger = Logger.getLogger(EmptyEObjectMappingTransformation.simpleName)
 
-	override deleteRootEObject(EObject oldRootEObject, EObject[] oldCorrespondingEObjectsToDelete) {
+	override deleteRootEObject(EObject oldRootEObject, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
-	override createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects) {
+	override createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override deleteNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference, EObject oldValue,
-		EObject[] eObjectsToDelete) {
+		EObject[] eObjectsToDelete, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
-	override insertEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute, Object newValue, int index) {
+	override insertEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute, Object newValue, int index, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
-	override removeEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue, int index) {
+	override removeEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue, int index, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override insertNonContaimentEReference(EObject affectedEObject, EReference affectedReference, EObject newValue,
-		int index) {
+		int index, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override permuteContainmentEReferenceValues(EObject affectedEObject, EReference affectedReference,
-		EList<Integer> newIndexForElementAt) {
+		EList<Integer> newIndexForElementAt, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override permuteEAttributeValues(EObject affectedEObject, EAttribute affectedAttribute,
-		EList<Integer> newIndexForElementAt) {
+		EList<Integer> newIndexForElementAt, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null	
 	}
 
 	override permuteNonContainmentEReferenceValues(EObject affectedEObject, EReference affectedReference,
-		EList<Integer> newIndexForElementAt) {
+		EList<Integer> newIndexForElementAt, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override removeNonContainmentEReference(EObject affectedEObject, EReference affectedReference, EObject oldValue,
-		int index) {
+		int index, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override replaceNonRootEObjectSingle(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, EObject newValue) {
+		EReference affectedReference, EObject oldValue, EObject newValue, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override replaceEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue, int index) {
+		Object newValue, int index, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override replaceNonContainmentEReference(EObject affectedEObject, EReference affectedReference, EObject oldValue,
-		EObject newValue, int index) {
+		EObject newValue, int index, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override replaceNonRootEObjectInList(EObject affectedEObject, EReference affectedReference, EObject oldValue,
-		EObject newValue, int index, EObject[] oldCorrespondingEObjectsToDelete, EObject[] newCorrespondingEObjects) {
+		EObject newValue, int index, EObject[] oldCorrespondingEObjectsToDelete, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override updateSingleValuedNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
-		EObject oldValue, EObject newValue) {
+		EObject oldValue, EObject newValue, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
-	override unsetNonContainmentEReference(EObject affectedEObject, EReference affectedReference, EObject oldValue) {
+	override unsetNonContainmentEReference(EObject affectedEObject, EReference affectedReference, EObject oldValue, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override unsetContainmentEReference(EObject affectedEObject, EReference affectedReference, EObject oldValue,
-		EObject[] oldCorrespondingEObjectsToDelete) {
+		EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
-	override unsetEAttribute(EObject affectedEObject, EStructuralFeature affectedFeature, Object oldValue) {
+	override unsetEAttribute(EObject affectedEObject, EStructuralFeature affectedFeature, Object oldValue, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override replaceRoot(EObject oldRootEObject, EObject newRootEObject, EObject[] oldCorrespondingEObjectsToDelete,
-		EObject[] newCorrespondingEObjects) {
+		EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
+		return null;
 	}
 
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
+		return null;
 	}
 
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override createNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference, EObject newValue,
-		EObject[] newCorrespondingEObjects) {
+		EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
+		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
+		Object newValue, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 	override insertNonRootEObjectInContainmentList(EObject object, EObject object2, EReference reference,
-		EObject newValue) {
+		EObject newValue, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method " + new Object() {
 			}.getClass().getEnclosingMethod().getName() + " should not be called for " + this.class.simpleName +
 				"transformation")
-		return null
 	}
 
 }

@@ -15,6 +15,7 @@ import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.u
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class TypeReferenceMappingTransformation extends DefaultEObjectMappingTransformation {
 	private static val logger = Logger.getLogger(TypeReferenceMappingTransformation)
@@ -29,7 +30,7 @@ class TypeReferenceMappingTransformation extends DefaultEObjectMappingTransforma
 	 * the reference is in the implements of a class. If yes--> check whether the interface has a corresponding 
 	 * OperationInterface and the class has a corresponding component--> if yes: create an OperationProvidedRole
 	 */
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		if (implementsChanged(eObject)) {
 			logger.debug("Added interface implementation: " + eObject + " for " + eObject.eContainer);
 			val jaMoPPClass = eObject.eContainer as Class
@@ -63,7 +64,7 @@ class TypeReferenceMappingTransformation extends DefaultEObjectMappingTransforma
 	/**
 	 * if a implements reference has been removed remove the corresponding objects as well
 	 */
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 		return null
 	}
 

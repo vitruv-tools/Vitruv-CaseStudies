@@ -68,7 +68,7 @@ import org.emftext.language.java.modifiers.Public
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.framework.util.command.ResourceAccess
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
@@ -178,7 +178,7 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 
 	def public static void handleJavaRootNameChange(JavaRoot javaRoot, EStructuralFeature affectedFeature,
 		Object newValue, CorrespondenceModel correspondenceModel, boolean changeNamespanceIfCompilationUnit,
-		ChangePropagationResult transformationResult, EObject affectedEObject) {
+		ResourceAccess resourceAccess, EObject affectedEObject) {
 		val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(javaRoot)
 		var Tuid oldClassifierTuid = null
 		if (javaRoot instanceof CompilationUnit && !(javaRoot as CompilationUnit).classifiers.nullOrEmpty) {
@@ -204,7 +204,7 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 		}
 		javaRoot.name = newName;
 		tools.vitruv.applications.pcmjava.util.PcmJavaUtils.handleRootChanges(javaRoot, correspondenceModel, tools.vitruv.applications.pcmjava.util.PcmJavaUtils.getSourceModelVURI(affectedEObject),
-			transformationResult, vuriToDelete, oldTuid)
+			resourceAccess, vuriToDelete, oldTuid)
 //			if (javaRoot instanceof CompilationUnit && !(javaRoot as CompilationUnit).classifiers.nullOrEmpty ){
 //				
 //			}
@@ -492,17 +492,16 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 		return newEObjects
 	}
 
-	def static ChangePropagationResult updateNameAsSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute,
+	def static void updateNameAsSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute,
 		Object oldValue, Object newValue, ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap,
-		CorrespondenceModel correspondenceModel) {
-		val transformationResult = new ChangePropagationResult
+		CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
 		if (oldValue == newValue) {
-			return transformationResult
+			return
 		}
 		val affectedEObjects = Pcm2JavaUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
 			featureCorrespondenceMap, correspondenceModel)
 		if (affectedEObjects.nullOrEmpty) {
-			return transformationResult
+			return
 		}
 		val jaMoPPPackages = affectedEObjects.filter(typeof(Package))
 		if (!jaMoPPPackages.nullOrEmpty) {
@@ -512,15 +511,14 @@ abstract class Pcm2JavaUtils extends PcmJavaUtils {
 				!pack.name.equals("contracts") && !pack.name.equals("datatypes")
 			].get(0)
 			Pcm2JavaUtils.handleJavaRootNameChange(jaMoPPPackage, affectedAttribute, newValue, correspondenceModel, true,
-				transformationResult, eObject)
+				resourceAccess, eObject)
 		}
 		val cus = affectedEObjects.filter(typeof(CompilationUnit))
 		if (!cus.nullOrEmpty) {
 			val CompilationUnit cu = cus.get(0)
 			Pcm2JavaUtils.handleJavaRootNameChange(cu, affectedAttribute, newValue, correspondenceModel, true,
-				transformationResult, eObject)
+				resourceAccess, eObject)
 		}
-		return transformationResult
 	}
 
 	/**
