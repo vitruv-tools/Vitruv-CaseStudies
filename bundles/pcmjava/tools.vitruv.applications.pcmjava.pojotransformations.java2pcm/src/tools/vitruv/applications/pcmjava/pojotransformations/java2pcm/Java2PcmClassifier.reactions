@@ -47,7 +47,7 @@ routine createArchitecturalElement(java::Package javaPackage, String name, Strin
 					createBasicComponent(javaPackage, name, rootPackageName) 
 				case Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.selection: 
 					createCompositeComponent(javaPackage, name, rootPackageName)
-				case Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection: 
+				case Java2PcmUserSelection.SELECT_SYSTEM.selection: 
 					createSystem(javaPackage, name)
 			}
 		}
