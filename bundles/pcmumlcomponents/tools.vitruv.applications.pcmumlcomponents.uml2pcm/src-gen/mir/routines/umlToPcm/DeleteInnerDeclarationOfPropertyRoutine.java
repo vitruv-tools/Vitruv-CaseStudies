@@ -38,21 +38,23 @@ public class DeleteInnerDeclarationOfPropertyRoutine extends AbstractRepairRouti
   
   private Property umlProperty;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteInnerDeclarationOfPropertyRoutine with input:");
-    getLogger().debug("   Property: " + this.umlProperty);
+    getLogger().debug("   umlProperty: " + this.umlProperty);
     
-    InnerDeclaration innerDeclaration = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.InnerDeclaration innerDeclaration = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInnerDeclaration(umlProperty), // correspondence source supplier
-    	InnerDeclaration.class,
-    	(InnerDeclaration _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.InnerDeclaration.class,
+    	(org.palladiosimulator.pcm.repository.InnerDeclaration _element) -> true, // correspondence precondition checker
     	null);
     if (innerDeclaration == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(innerDeclaration);
     deleteObject(userExecution.getElement1(umlProperty, innerDeclaration));
     
     postprocessElements();
+    
+    return true;
   }
 }

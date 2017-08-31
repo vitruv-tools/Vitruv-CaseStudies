@@ -5,7 +5,6 @@ import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Property;
-import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil;
@@ -30,10 +29,8 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
     
     public void update0Element(final Property umlProperty, final DataType umlType, final InnerDeclaration pcmDeclaration) {
       final boolean unbounded = ((umlProperty.upperBound() != 1) || (umlProperty.lowerBound() != 1));
-      CompositeDataType _compositeDataType_InnerDeclaration = pcmDeclaration.getCompositeDataType_InnerDeclaration();
-      final Repository pcmRepository = _compositeDataType_InnerDeclaration.getRepository__DataType();
-      org.palladiosimulator.pcm.repository.DataType _retrieveCorrespondingPcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel);
-      pcmDeclaration.setDatatype_InnerDeclaration(_retrieveCorrespondingPcmType);
+      final Repository pcmRepository = pcmDeclaration.getCompositeDataType_InnerDeclaration().getRepository__DataType();
+      pcmDeclaration.setDatatype_InnerDeclaration(UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel));
     }
     
     public EObject getCorrepondenceSourcePcmDeclaration(final Property umlProperty, final DataType umlType) {
@@ -52,23 +49,25 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
   
   private DataType umlType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangePropertyTypeRoutine with input:");
-    getLogger().debug("   Property: " + this.umlProperty);
-    getLogger().debug("   DataType: " + this.umlType);
+    getLogger().debug("   umlProperty: " + this.umlProperty);
+    getLogger().debug("   umlType: " + this.umlType);
     
-    InnerDeclaration pcmDeclaration = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.InnerDeclaration pcmDeclaration = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmDeclaration(umlProperty, umlType), // correspondence source supplier
-    	InnerDeclaration.class,
-    	(InnerDeclaration _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.InnerDeclaration.class,
+    	(org.palladiosimulator.pcm.repository.InnerDeclaration _element) -> true, // correspondence precondition checker
     	null);
     if (pcmDeclaration == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmDeclaration);
     // val updatedElement userExecution.getElement1(umlProperty, umlType, pcmDeclaration);
     userExecution.update0Element(umlProperty, umlType, pcmDeclaration);
     
     postprocessElements();
+    
+    return true;
   }
 }

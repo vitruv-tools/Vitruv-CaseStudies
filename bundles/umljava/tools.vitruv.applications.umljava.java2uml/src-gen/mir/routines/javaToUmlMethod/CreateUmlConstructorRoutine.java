@@ -5,7 +5,6 @@ import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Constructor;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -37,8 +36,7 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updateUConstructorElement(final Constructor jConstructor, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uConstructor) {
-      String _name = jConstructor.getName();
-      uConstructor.setName(_name);
+      uConstructor.setName(jConstructor.getName());
     }
     
     public EObject getElement2(final Constructor jConstructor, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier, final Operation uConstructor) {
@@ -61,10 +59,10 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
   
   private ConcreteClassifier jClassifier;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlConstructorRoutine with input:");
-    getLogger().debug("   Constructor: " + this.jConstructor);
-    getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
+    getLogger().debug("   jConstructor: " + this.jConstructor);
+    getLogger().debug("   jClassifier: " + this.jClassifier);
     
     org.eclipse.uml2.uml.Class uClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClassifier(jConstructor, jClassifier), // correspondence source supplier
@@ -72,10 +70,10 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
     	null);
     if (uClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uClassifier);
-    Operation uConstructor = UMLFactoryImpl.eINSTANCE.createOperation();
+    org.eclipse.uml2.uml.Operation uConstructor = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createOperation();
     notifyObjectCreated(uConstructor);
     userExecution.updateUConstructorElement(jConstructor, jClassifier, uClassifier, uConstructor);
     
@@ -85,5 +83,7 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
     userExecution.update0Element(jConstructor, jClassifier, uClassifier, uConstructor);
     
     postprocessElements();
+    
+    return true;
   }
 }

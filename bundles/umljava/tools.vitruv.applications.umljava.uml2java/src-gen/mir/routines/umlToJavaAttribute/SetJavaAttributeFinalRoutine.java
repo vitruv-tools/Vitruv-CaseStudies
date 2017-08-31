@@ -26,8 +26,7 @@ public class SetJavaAttributeFinalRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Property umlAttr, final Field jAttr) {
-      boolean _isReadOnly = umlAttr.isReadOnly();
-      JavaModifierUtil.setFinal(jAttr, _isReadOnly);
+      JavaModifierUtil.setFinal(jAttr, umlAttr.isReadOnly());
     }
     
     public EObject getCorrepondenceSourceJAttr(final Property umlAttr) {
@@ -44,22 +43,24 @@ public class SetJavaAttributeFinalRoutine extends AbstractRepairRoutineRealizati
   
   private Property umlAttr;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetJavaAttributeFinalRoutine with input:");
-    getLogger().debug("   Property: " + this.umlAttr);
+    getLogger().debug("   umlAttr: " + this.umlAttr);
     
-    Field jAttr = getCorrespondingElement(
+    org.emftext.language.java.members.Field jAttr = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJAttr(umlAttr), // correspondence source supplier
-    	Field.class,
-    	(Field _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.Field.class,
+    	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (jAttr == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jAttr);
     // val updatedElement userExecution.getElement1(umlAttr, jAttr);
     userExecution.update0Element(umlAttr, jAttr);
     
     postprocessElements();
+    
+    return true;
   }
 }

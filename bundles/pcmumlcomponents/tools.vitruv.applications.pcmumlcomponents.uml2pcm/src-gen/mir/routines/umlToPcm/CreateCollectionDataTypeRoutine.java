@@ -8,7 +8,6 @@ import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -43,8 +42,7 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updatePcmTypeElement(final DataType umlType, final Repository pcmRepository, final CollectionDataType pcmType) {
-      String _name = umlType.getName();
-      pcmType.setEntityName(_name);
+      pcmType.setEntityName(umlType.getName());
     }
     
     public EObject getElement3(final DataType umlType, final Repository pcmRepository, final CollectionDataType pcmType) {
@@ -65,20 +63,20 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
   
   private DataType umlType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCollectionDataTypeRoutine with input:");
-    getLogger().debug("   DataType: " + this.umlType);
+    getLogger().debug("   umlType: " + this.umlType);
     
-    Repository pcmRepository = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.Repository pcmRepository = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmRepository(umlType), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.Repository.class,
+    	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	null);
     if (pcmRepository == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmRepository);
-    CollectionDataType pcmType = RepositoryFactoryImpl.eINSTANCE.createCollectionDataType();
+    org.palladiosimulator.pcm.repository.CollectionDataType pcmType = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createCollectionDataType();
     notifyObjectCreated(pcmType);
     userExecution.updatePcmTypeElement(umlType, pcmRepository, pcmType);
     
@@ -88,5 +86,7 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     addCorrespondenceBetween(userExecution.getElement2(umlType, pcmRepository, pcmType), userExecution.getElement3(umlType, pcmRepository, pcmType), userExecution.getTag1(umlType, pcmRepository, pcmType));
     
     postprocessElements();
+    
+    return true;
   }
 }

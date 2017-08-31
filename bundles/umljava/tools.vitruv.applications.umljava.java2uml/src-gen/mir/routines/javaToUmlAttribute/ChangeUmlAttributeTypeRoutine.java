@@ -3,9 +3,7 @@ package mir.routines.javaToUmlAttribute;
 import java.io.IOException;
 import mir.routines.javaToUmlAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -33,9 +31,7 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void update0Element(final Field jAttr, final TypeReference jType, final Property uAttr) {
-      Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
-      Type _umlType = JavaToUmlHelper.getUmlType(jType, _umlModel, this.correspondenceModel);
-      uAttr.setType(_umlType);
+      uAttr.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel));
     }
   }
   
@@ -50,23 +46,25 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
   
   private TypeReference jType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlAttributeTypeRoutine with input:");
-    getLogger().debug("   Field: " + this.jAttr);
-    getLogger().debug("   TypeReference: " + this.jType);
+    getLogger().debug("   jAttr: " + this.jAttr);
+    getLogger().debug("   jType: " + this.jType);
     
-    Property uAttr = getCorrespondingElement(
+    org.eclipse.uml2.uml.Property uAttr = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUAttr(jAttr, jType), // correspondence source supplier
-    	Property.class,
-    	(Property _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Property.class,
+    	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
     	null);
     if (uAttr == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uAttr);
     // val updatedElement userExecution.getElement1(jAttr, jType, uAttr);
     userExecution.update0Element(jAttr, jType, uAttr);
     
     postprocessElements();
+    
+    return true;
   }
 }

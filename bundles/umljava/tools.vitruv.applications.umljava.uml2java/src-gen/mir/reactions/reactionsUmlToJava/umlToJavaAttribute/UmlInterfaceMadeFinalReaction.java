@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<Interface, Boolean> typedChange = (ReplaceSingleValuedEAttribute<Interface, Boolean>)change;
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Interface, java.lang.Boolean> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Interface, java.lang.Boolean>)change;
+    org.eclipse.uml2.uml.Interface affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    Boolean oldValue = typedChange.getOldValue();
-    Boolean newValue = typedChange.getNewValue();
+    java.lang.Boolean oldValue = typedChange.getOldValue();
+    java.lang.Boolean newValue = typedChange.getNewValue();
     mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlInterfaceMadeFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlInterfaceMadeFinalReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<Interface, Boolean> relevantChange = (ReplaceSingleValuedEAttribute<Interface, Boolean>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Interface, java.lang.Boolean> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Interface, java.lang.Boolean>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Interface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("isFinalSpecialization")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof Boolean)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.Boolean)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof Boolean)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.Boolean)) {
     	return false;
     }
     return true;
@@ -55,11 +55,11 @@ class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    ReplaceSingleValuedEAttribute<Interface, Boolean> typedChange = (ReplaceSingleValuedEAttribute<Interface, Boolean>)change;
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Interface, java.lang.Boolean> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Interface, java.lang.Boolean>)change;
+    org.eclipse.uml2.uml.Interface affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    Boolean oldValue = typedChange.getOldValue();
-    Boolean newValue = typedChange.getNewValue();
+    java.lang.Boolean oldValue = typedChange.getOldValue();
+    java.lang.Boolean newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }

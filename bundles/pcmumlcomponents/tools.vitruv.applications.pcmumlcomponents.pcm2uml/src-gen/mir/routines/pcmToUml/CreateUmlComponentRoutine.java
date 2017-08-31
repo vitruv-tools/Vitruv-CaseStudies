@@ -66,7 +66,7 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
   
   private String correspondenceTag;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlComponentRoutine with input:");
     getLogger().debug("   pcmComponent: " + this.pcmComponent);
     getLogger().debug("   correspondenceTag: " + this.correspondenceTag);
@@ -77,7 +77,7 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlModel);
     org.eclipse.uml2.uml.Component umlComponent = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createComponent();
@@ -90,5 +90,7 @@ public class CreateUmlComponentRoutine extends AbstractRepairRoutineRealization 
     addCorrespondenceBetween(userExecution.getElement2(pcmComponent, correspondenceTag, umlModel, umlComponent), userExecution.getElement3(pcmComponent, correspondenceTag, umlModel, umlComponent), userExecution.getTag1(pcmComponent, correspondenceTag, umlModel, umlComponent));
     
     postprocessElements();
+    
+    return true;
   }
 }

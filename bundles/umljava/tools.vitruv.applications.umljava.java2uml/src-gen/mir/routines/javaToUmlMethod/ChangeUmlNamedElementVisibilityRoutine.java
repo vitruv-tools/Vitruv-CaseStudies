@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.VisibilityKind;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.modifiers.Modifier;
 import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
@@ -28,8 +27,7 @@ public class ChangeUmlNamedElementVisibilityRoutine extends AbstractRepairRoutin
     }
     
     public void update0Element(final AnnotableAndModifiable jElem, final Modifier mod, final NamedElement uElem) {
-      VisibilityKind _uMLVisibilityKindFromJavaModifier = JavaModifierUtil.getUMLVisibilityKindFromJavaModifier(mod);
-      uElem.setVisibility(_uMLVisibilityKindFromJavaModifier);
+      uElem.setVisibility(JavaModifierUtil.getUMLVisibilityKindFromJavaModifier(mod));
     }
     
     public EObject getCorrepondenceSourceUElem(final AnnotableAndModifiable jElem, final Modifier mod) {
@@ -48,23 +46,25 @@ public class ChangeUmlNamedElementVisibilityRoutine extends AbstractRepairRoutin
   
   private Modifier mod;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlNamedElementVisibilityRoutine with input:");
-    getLogger().debug("   AnnotableAndModifiable: " + this.jElem);
-    getLogger().debug("   Modifier: " + this.mod);
+    getLogger().debug("   jElem: " + this.jElem);
+    getLogger().debug("   mod: " + this.mod);
     
-    NamedElement uElem = getCorrespondingElement(
+    org.eclipse.uml2.uml.NamedElement uElem = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUElem(jElem, mod), // correspondence source supplier
-    	NamedElement.class,
-    	(NamedElement _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.NamedElement.class,
+    	(org.eclipse.uml2.uml.NamedElement _element) -> true, // correspondence precondition checker
     	null);
     if (uElem == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uElem);
     // val updatedElement userExecution.getElement1(jElem, mod, uElem);
     userExecution.update0Element(jElem, mod, uElem);
     
     postprocessElements();
+    
+    return true;
   }
 }

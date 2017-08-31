@@ -5,7 +5,6 @@ import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,10 +25,9 @@ public class CreatePcmRepositoryRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updatePcmRepositoryElement(final Model umlModel, final Repository pcmRepository) {
+      pcmRepository.setEntityName(umlModel.getName());
       String _name = umlModel.getName();
-      pcmRepository.setEntityName(_name);
-      String _name_1 = umlModel.getName();
-      String _plus = ("repository/" + _name_1);
+      String _plus = ("repository/" + _name);
       String _plus_1 = (_plus + ".repository");
       this.persistProjectRelative(umlModel, pcmRepository, _plus_1);
     }
@@ -48,16 +46,18 @@ public class CreatePcmRepositoryRoutine extends AbstractRepairRoutineRealization
   
   private Model umlModel;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePcmRepositoryRoutine with input:");
-    getLogger().debug("   Model: " + this.umlModel);
+    getLogger().debug("   umlModel: " + this.umlModel);
     
-    Repository pcmRepository = RepositoryFactoryImpl.eINSTANCE.createRepository();
+    org.palladiosimulator.pcm.repository.Repository pcmRepository = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createRepository();
     notifyObjectCreated(pcmRepository);
     userExecution.updatePcmRepositoryElement(umlModel, pcmRepository);
     
     addCorrespondenceBetween(userExecution.getElement1(umlModel, pcmRepository), userExecution.getElement2(umlModel, pcmRepository), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

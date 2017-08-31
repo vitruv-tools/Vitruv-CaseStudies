@@ -51,21 +51,23 @@ public class CreatedAnnotationForFieldRoutine extends AbstractRepairRoutineReali
   
   private Field annotatedField;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedAnnotationForFieldRoutine with input:");
-    getLogger().debug("   Field: " + this.annotatedField);
+    getLogger().debug("   annotatedField: " + this.annotatedField);
     
-    BasicComponent basicComponent = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.BasicComponent basicComponent = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceBasicComponent(annotatedField), // correspondence source supplier
-    	BasicComponent.class,
-    	(BasicComponent _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.BasicComponent.class,
+    	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(basicComponent);
     userExecution.callRoutine1(annotatedField, basicComponent, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

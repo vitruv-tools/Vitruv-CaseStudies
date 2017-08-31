@@ -37,7 +37,7 @@ public class DeleteElementRoutine extends AbstractRepairRoutineRealization {
   
   private NamedElement pcmElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteElementRoutine with input:");
     getLogger().debug("   pcmElement: " + this.pcmElement);
     
@@ -47,11 +47,13 @@ public class DeleteElementRoutine extends AbstractRepairRoutineRealization {
     	(org.eclipse.uml2.uml.NamedElement _element) -> true, // correspondence precondition checker
     	null);
     if (umlElement == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlElement);
     deleteObject(userExecution.getElement1(pcmElement, umlElement));
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -7,7 +7,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -39,10 +38,8 @@ public class CreateCompilationUnitRoutine extends AbstractRepairRoutineRealizati
       String _name_1 = classifier.getName();
       String _plus = (_name_1 + ".java");
       compilationUnit.setName(_plus);
-      EList<ConcreteClassifier> _classifiers = compilationUnit.getClassifiers();
-      _classifiers.add(classifier);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(compilationUnit);
-      this.persistProjectRelative(sourceElementMappedToClass, compilationUnit, _buildJavaFilePath);
+      compilationUnit.getClassifiers().add(classifier);
+      this.persistProjectRelative(sourceElementMappedToClass, compilationUnit, JavaPersistenceHelper.buildJavaFilePath(compilationUnit));
     }
     
     public EObject getElement2(final NamedElement sourceElementMappedToClass, final ConcreteClassifier classifier, final org.emftext.language.java.containers.Package containingPackage, final CompilationUnit compilationUnit) {
@@ -63,18 +60,20 @@ public class CreateCompilationUnitRoutine extends AbstractRepairRoutineRealizati
   
   private org.emftext.language.java.containers.Package containingPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompilationUnitRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.sourceElementMappedToClass);
-    getLogger().debug("   ConcreteClassifier: " + this.classifier);
-    getLogger().debug("   Package: " + this.containingPackage);
+    getLogger().debug("   sourceElementMappedToClass: " + this.sourceElementMappedToClass);
+    getLogger().debug("   classifier: " + this.classifier);
+    getLogger().debug("   containingPackage: " + this.containingPackage);
     
-    CompilationUnit compilationUnit = ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
+    org.emftext.language.java.containers.CompilationUnit compilationUnit = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
     notifyObjectCreated(compilationUnit);
     userExecution.updateCompilationUnitElement(sourceElementMappedToClass, classifier, containingPackage, compilationUnit);
     
     addCorrespondenceBetween(userExecution.getElement1(sourceElementMappedToClass, classifier, containingPackage, compilationUnit), userExecution.getElement2(sourceElementMappedToClass, classifier, containingPackage, compilationUnit), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

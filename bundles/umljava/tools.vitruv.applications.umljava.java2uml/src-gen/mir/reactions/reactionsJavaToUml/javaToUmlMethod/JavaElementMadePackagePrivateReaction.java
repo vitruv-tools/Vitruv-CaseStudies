@@ -18,10 +18,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Modifier> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Modifier>)change).getRemoveChange();
+    RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Modifier> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Modifier>)change).getRemoveChange();
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Modifier oldValue = typedChange.getOldValue();
+    org.emftext.language.java.modifiers.Modifier oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadePackagePrivateReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadePackagePrivateReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -32,14 +32,14 @@ class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization 
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Modifier> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Modifier>)change).getRemoveChange();
+    RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Modifier> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Modifier>)change).getRemoveChange();
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Modifier)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.modifiers.Modifier)) {
     	return false;
     }
     return true;
@@ -54,10 +54,10 @@ class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization 
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Modifier> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Modifier>)change).getRemoveChange();
+    RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Modifier> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Modifier>)change).getRemoveChange();
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Modifier oldValue = typedChange.getOldValue();
+    org.emftext.language.java.modifiers.Modifier oldValue = typedChange.getOldValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
     	return false;
     }

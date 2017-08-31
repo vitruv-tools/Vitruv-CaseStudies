@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class RemovedUsesRelationshipReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Component, Usage> typedChange = (RemoveEReference<Component, Usage>)change;
-    Component affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage>)change;
+    org.eclipse.uml2.uml.Component affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Usage oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.Usage oldValue = typedChange.getOldValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.RemovedUsesRelationshipReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.RemovedUsesRelationshipReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class RemovedUsesRelationshipReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Component, Usage> relevantChange = (RemoveEReference<Component, Usage>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Component)) {
+    RemoveEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage> relevantChange = (RemoveEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Component)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Usage)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.Usage)) {
     	return false;
     }
     return true;

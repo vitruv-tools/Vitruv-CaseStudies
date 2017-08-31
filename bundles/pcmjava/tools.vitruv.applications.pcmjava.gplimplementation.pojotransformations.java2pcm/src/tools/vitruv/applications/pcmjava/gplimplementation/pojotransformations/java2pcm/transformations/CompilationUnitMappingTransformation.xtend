@@ -10,9 +10,9 @@ import org.emftext.language.java.containers.CompilationUnit
 import org.palladiosimulator.pcm.system.System
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -27,16 +27,15 @@ class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransforma
 	 * After a creation of a compilation unit the creation method for a class or an interface is executed
 	 * @see ClassMappingTransformation We handle the creation of a classes or interfaces in the specific transformations.
 	 */
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		logger.trace("Compilation unit " + eObject + " created. Currently nothing is done for compilation unit")
 		return null
 	}
 
-	override createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects) {
+	override createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		logger.trace(
 			"Compilation unit " + newRootEObject +
 				" created as root EObject. Currently nothing is done for compilation unit")
-		return new ChangePropagationResult
 	}
 
 	/**
@@ -44,8 +43,7 @@ class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransforma
 	 * that has corresponding PCM objects (i.e. basic components)
 	 */
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
-		val transformationResult = new ChangePropagationResult
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		if (newValue instanceof Class || newValue instanceof Interface) {
 
 			// if it is a class that should correspond to a system and the system already has a container 
@@ -55,7 +53,7 @@ class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransforma
 				if (!systems.nullOrEmpty) {
 					for (system : systems) {
 						if (null === system.eResource) {
-							PcmJavaUtils.addRootChangeToTransformationResult(system, correspondenceModel, PcmJavaUtils.getSourceModelVURI(newAffectedEObject), transformationResult)
+							PcmJavaUtils.handleRootChange(system, correspondenceModel, PcmJavaUtils.getSourceModelVURI(newAffectedEObject), resourceAccess)
 						} else {
 							//do nothing, cause save is done later
 						}
@@ -65,18 +63,16 @@ class CompilationUnitMappingTransformation extends EmptyEObjectMappingTransforma
 			}
 			Java2PcmUtils.
 				createNewCorrespondingEObjects(newValue, newCorrespondingEObjects,
-					correspondenceModel, transformationResult)
+					correspondenceModel, resourceAccess)
 		}
-		transformationResult
 	}
 
 	override setCorrespondenceForFeatures() {
 	}
 	
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		PcmJavaUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel)
-		return new ChangePropagationResult 
+		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
+		PcmJavaUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel, resourceAccess)
 	}
 
 }

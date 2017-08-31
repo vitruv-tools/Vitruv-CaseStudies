@@ -30,13 +30,11 @@ public class ChangePackageOfJavaCompilationUnitRoutine extends AbstractRepairRou
     }
     
     public void update0Element(final org.emftext.language.java.containers.Package jPackage, final CompilationUnit jCompUnit, final Namespace uNamespace) {
+      jCompUnit.getNamespaces().clear();
       EList<String> _namespaces = jCompUnit.getNamespaces();
-      _namespaces.clear();
-      EList<String> _namespaces_1 = jCompUnit.getNamespaces();
       List<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage);
-      Iterables.<String>addAll(_namespaces_1, _javaPackageAsStringList);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(jCompUnit);
-      this.persistProjectRelative(uNamespace, jCompUnit, _buildJavaFilePath);
+      Iterables.<String>addAll(_namespaces, _javaPackageAsStringList);
+      this.persistProjectRelative(uNamespace, jCompUnit, JavaPersistenceHelper.buildJavaFilePath(jCompUnit));
     }
   }
   
@@ -53,15 +51,17 @@ public class ChangePackageOfJavaCompilationUnitRoutine extends AbstractRepairRou
   
   private Namespace uNamespace;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangePackageOfJavaCompilationUnitRoutine with input:");
-    getLogger().debug("   Package: " + this.jPackage);
-    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
-    getLogger().debug("   Namespace: " + this.uNamespace);
+    getLogger().debug("   jPackage: " + this.jPackage);
+    getLogger().debug("   jCompUnit: " + this.jCompUnit);
+    getLogger().debug("   uNamespace: " + this.uNamespace);
     
     // val updatedElement userExecution.getElement1(jPackage, jCompUnit, uNamespace);
     userExecution.update0Element(jPackage, jCompUnit, uNamespace);
     
     postprocessElements();
+    
+    return true;
   }
 }

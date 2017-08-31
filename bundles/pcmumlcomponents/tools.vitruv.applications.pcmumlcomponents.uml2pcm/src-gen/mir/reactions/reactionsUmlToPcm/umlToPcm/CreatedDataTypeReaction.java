@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedDataTypeReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Model, DataType> typedChange = ((CreateAndInsertNonRoot<Model, DataType>)change).getInsertChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType>)change).getInsertChange();
+    org.eclipse.uml2.uml.Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.DataType newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +31,14 @@ class CreatedDataTypeReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Model, DataType> relevantChange = ((CreateAndInsertNonRoot<Model, DataType>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    InsertEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Model)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof DataType)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.DataType)) {
     	return false;
     }
     return true;
@@ -53,10 +53,10 @@ class CreatedDataTypeReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<Model, DataType> typedChange = ((CreateAndInsertNonRoot<Model, DataType>)change).getInsertChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.DataType>)change).getInsertChange();
+    org.eclipse.uml2.uml.Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.DataType newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }

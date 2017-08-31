@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreateParameterInInterfaceMethodReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<InterfaceMethod, Parameter> typedChange = (InsertEReference<InterfaceMethod, Parameter>)change;
-    InterfaceMethod affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.members.InterfaceMethod, org.emftext.language.java.parameters.Parameter> typedChange = (InsertEReference<org.emftext.language.java.members.InterfaceMethod, org.emftext.language.java.parameters.Parameter>)change;
+    org.emftext.language.java.members.InterfaceMethod affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter newValue = typedChange.getNewValue();
+    org.emftext.language.java.parameters.Parameter newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateParameterInInterfaceMethodReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateParameterInInterfaceMethodReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class CreateParameterInInterfaceMethodReaction extends AbstractReactionRealizati
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<InterfaceMethod, Parameter> relevantChange = (InsertEReference<InterfaceMethod, Parameter>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof InterfaceMethod)) {
+    InsertEReference<org.emftext.language.java.members.InterfaceMethod, org.emftext.language.java.parameters.Parameter> relevantChange = (InsertEReference<org.emftext.language.java.members.InterfaceMethod, org.emftext.language.java.parameters.Parameter>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.members.InterfaceMethod)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parameters")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Parameter)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.parameters.Parameter)) {
     	return false;
     }
     return true;

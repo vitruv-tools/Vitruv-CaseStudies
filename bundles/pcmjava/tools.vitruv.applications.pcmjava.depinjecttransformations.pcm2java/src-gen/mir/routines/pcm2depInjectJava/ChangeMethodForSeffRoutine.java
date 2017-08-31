@@ -43,14 +43,14 @@ public class ChangeMethodForSeffRoutine extends AbstractRepairRoutineRealization
   
   private ResourceDemandingSEFF seff;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeMethodForSeffRoutine with input:");
-    getLogger().debug("   ResourceDemandingSEFF: " + this.seff);
+    getLogger().debug("   seff: " + this.seff);
     
-    ClassMethod oldClassMethod = getCorrespondingElement(
+    org.emftext.language.java.members.ClassMethod oldClassMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceOldClassMethod(seff), // correspondence source supplier
-    	ClassMethod.class,
-    	(ClassMethod _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.ClassMethod.class,
+    	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(oldClassMethod);
     deleteObject(userExecution.getElement1(seff, oldClassMethod));
@@ -58,5 +58,7 @@ public class ChangeMethodForSeffRoutine extends AbstractRepairRoutineRealization
     userExecution.callRoutine1(seff, oldClassMethod, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

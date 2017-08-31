@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.Model;
 import org.palladiosimulator.pcm.repository.CompositeComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -40,8 +39,7 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updatePcmComponentElement(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
-      String _name = umlComponent.getName();
-      pcmComponent.setEntityName(_name);
+      pcmComponent.setEntityName(umlComponent.getName());
     }
     
     public EObject getElement2(final Component umlComponent, final Repository pcmRepository, final CompositeComponent pcmComponent) {
@@ -62,20 +60,20 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
   
   private Component umlComponent;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeComponentRoutine with input:");
-    getLogger().debug("   Component: " + this.umlComponent);
+    getLogger().debug("   umlComponent: " + this.umlComponent);
     
-    Repository pcmRepository = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.Repository pcmRepository = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmRepository(umlComponent), // correspondence source supplier
-    	Repository.class,
-    	(Repository _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.Repository.class,
+    	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	null);
     if (pcmRepository == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmRepository);
-    CompositeComponent pcmComponent = RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
+    org.palladiosimulator.pcm.repository.CompositeComponent pcmComponent = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createCompositeComponent();
     notifyObjectCreated(pcmComponent);
     userExecution.updatePcmComponentElement(umlComponent, pcmRepository, pcmComponent);
     
@@ -85,5 +83,7 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     addCorrespondenceBetween(userExecution.getElement2(umlComponent, pcmRepository, pcmComponent), userExecution.getElement3(umlComponent, pcmRepository, pcmComponent), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -29,8 +29,7 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
     }
     
     public void callRoutine1(final InnerDeclaration innerDeclaration, final org.emftext.language.java.classifiers.Class newJavaDataType, @Extension final RoutinesFacade _routinesFacade) {
-      DataType _datatype_InnerDeclaration = innerDeclaration.getDatatype_InnerDeclaration();
-      final TypeReference newDataTypeReference = Pcm2JavaHelper.createTypeReference(_datatype_InnerDeclaration, newJavaDataType);
+      final TypeReference newDataTypeReference = Pcm2JavaHelper.createTypeReference(innerDeclaration.getDatatype_InnerDeclaration(), newJavaDataType);
       _routinesFacade.changeInnerDeclarationType(innerDeclaration, newDataTypeReference);
     }
   }
@@ -44,9 +43,9 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
   
   private InnerDeclaration innerDeclaration;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeTypeOfInnerDeclarationImplementationRoutine with input:");
-    getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
+    getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
     org.emftext.language.java.classifiers.Class newJavaDataType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceNewJavaDataType(innerDeclaration), // correspondence source supplier
@@ -57,5 +56,7 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
     userExecution.callRoutine1(innerDeclaration, newJavaDataType, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

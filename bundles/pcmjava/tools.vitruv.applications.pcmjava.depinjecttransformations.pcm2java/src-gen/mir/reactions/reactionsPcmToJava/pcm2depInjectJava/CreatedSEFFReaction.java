@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedSEFFReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<BasicComponent, ServiceEffectSpecification> typedChange = ((CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification>)change).getInsertChange();
-    BasicComponent affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> typedChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>)change).getInsertChange();
+    org.palladiosimulator.pcm.repository.BasicComponent affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ServiceEffectSpecification newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.seff.ServiceEffectSpecification newValue = typedChange.getNewValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSEFFReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSEFFReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class CreatedSEFFReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<BasicComponent, ServiceEffectSpecification> relevantChange = ((CreateAndInsertNonRoot<BasicComponent, ServiceEffectSpecification>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof BasicComponent)) {
+    InsertEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> relevantChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.BasicComponent)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof ServiceEffectSpecification)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.seff.ServiceEffectSpecification)) {
     	return false;
     }
     return true;

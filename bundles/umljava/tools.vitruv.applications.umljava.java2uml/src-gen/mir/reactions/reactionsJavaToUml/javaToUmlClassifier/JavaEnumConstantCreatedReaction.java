@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaEnumConstantCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Enumeration, EnumConstant> typedChange = ((CreateAndInsertNonRoot<Enumeration, EnumConstant>)change).getInsertChange();
-    Enumeration affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Enumeration affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    EnumConstant newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.EnumConstant newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaEnumConstantCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaEnumConstantCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaEnumConstantCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Enumeration, EnumConstant> relevantChange = ((CreateAndInsertNonRoot<Enumeration, EnumConstant>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Enumeration)) {
+    InsertEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Enumeration)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("constants")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof EnumConstant)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.EnumConstant)) {
     	return false;
     }
     return true;

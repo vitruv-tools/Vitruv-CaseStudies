@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class UmlPrimitiveTypeCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Model, PrimitiveType> typedChange = ((CreateAndInsertNonRoot<Model, PrimitiveType>)change).getInsertChange();
-    Model affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.PrimitiveType> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.PrimitiveType>)change).getInsertChange();
+    org.eclipse.uml2.uml.Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    PrimitiveType newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.PrimitiveType newValue = typedChange.getNewValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPrimitiveTypeCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPrimitiveTypeCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class UmlPrimitiveTypeCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Model, PrimitiveType> relevantChange = ((CreateAndInsertNonRoot<Model, PrimitiveType>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Model)) {
+    InsertEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.PrimitiveType> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.PrimitiveType>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Model)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof PrimitiveType)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.PrimitiveType)) {
     	return false;
     }
     return true;

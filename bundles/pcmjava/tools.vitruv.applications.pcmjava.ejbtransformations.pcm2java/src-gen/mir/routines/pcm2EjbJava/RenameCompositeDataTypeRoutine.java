@@ -47,9 +47,9 @@ public class RenameCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   private CompositeDataType compositeDataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameCompositeDataTypeRoutine with input:");
-    getLogger().debug("   CompositeDataType: " + this.compositeDataType);
+    getLogger().debug("   compositeDataType: " + this.compositeDataType);
     
     org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDatatypesPackage(compositeDataType), // correspondence source supplier
@@ -57,11 +57,13 @@ public class RenameCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(compositeDataType, _element), // correspondence precondition checker
     	null);
     if (datatypesPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(compositeDataType, datatypesPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

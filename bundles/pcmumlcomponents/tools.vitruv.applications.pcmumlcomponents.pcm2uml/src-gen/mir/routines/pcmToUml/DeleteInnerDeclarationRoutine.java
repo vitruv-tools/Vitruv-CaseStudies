@@ -47,7 +47,7 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
   
   private InnerDeclaration innerDeclaration;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteInnerDeclarationRoutine with input:");
     getLogger().debug("   dataType: " + this.dataType);
     getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
@@ -58,7 +58,7 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeType);
     org.eclipse.uml2.uml.Property umlProperty = getCorrespondingElement(
@@ -67,11 +67,13 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
     	null);
     if (umlProperty == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlProperty);
     userExecution.callRoutine1(dataType, innerDeclaration, compositeType, umlProperty, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -2,9 +2,7 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.containers.CompilationUnit;
@@ -25,16 +23,11 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
     }
     
     public void callRoutine1(final CompilationUnit jCompUnit, final Classifier uClassifier, @Extension final RoutinesFacade _routinesFacade) {
-      EList<String> _namespaces = jCompUnit.getNamespaces();
-      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(_namespaces);
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jCompUnit.getNamespaces());
       if (_isNullOrEmpty) {
-        Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
-        _routinesFacade.addUmlElementToPackage(uClassifier, _umlModel, jCompUnit);
+        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), jCompUnit);
       } else {
-        EList<String> _namespaces_1 = jCompUnit.getNamespaces();
-        String _last = IterableExtensions.<String>last(_namespaces_1);
-        org.eclipse.uml2.uml.Package _findUmlPackage = JavaToUmlHelper.findUmlPackage(this.correspondenceModel, _last);
-        _routinesFacade.addUmlElementToPackage(uClassifier, _findUmlPackage, jCompUnit);
+        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())), jCompUnit);
       }
     }
   }
@@ -50,13 +43,15 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
   
   private Classifier uClassifier;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlElementToModelOrPackageRoutine with input:");
-    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
-    getLogger().debug("   Classifier: " + this.uClassifier);
+    getLogger().debug("   jCompUnit: " + this.jCompUnit);
+    getLogger().debug("   uClassifier: " + this.uClassifier);
     
     userExecution.callRoutine1(jCompUnit, uClassifier, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

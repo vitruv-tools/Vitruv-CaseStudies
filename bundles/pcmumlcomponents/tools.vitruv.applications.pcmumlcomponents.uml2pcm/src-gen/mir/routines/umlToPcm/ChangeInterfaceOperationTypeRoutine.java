@@ -7,9 +7,7 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
 import org.palladiosimulator.pcm.repository.DataType;
-import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -35,10 +33,7 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
       if ((((resolvedType == null) && (umlParameter.getType() != null)) && (umlParameter.getType() instanceof org.eclipse.uml2.uml.DataType))) {
         final boolean unbounded = ((umlParameter.lowerBound() != 1) || (umlParameter.upperBound() != 1));
         Type _type = umlParameter.getType();
-        OperationInterface _interface__OperationSignature = pcmSignature.getInterface__OperationSignature();
-        Repository _repository__Interface = _interface__OperationSignature.getRepository__Interface();
-        DataType _retrieveCorrespondingPcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), _repository__Interface, Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel);
-        resolvedType = _retrieveCorrespondingPcmType;
+        resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmSignature.getInterface__OperationSignature().getRepository__Interface(), Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel);
       }
       pcmSignature.setReturnType__OperationSignature(resolvedType);
     }
@@ -59,23 +54,25 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
   
   private Parameter umlParameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInterfaceOperationTypeRoutine with input:");
-    getLogger().debug("   Operation: " + this.umlOperation);
-    getLogger().debug("   Parameter: " + this.umlParameter);
+    getLogger().debug("   umlOperation: " + this.umlOperation);
+    getLogger().debug("   umlParameter: " + this.umlParameter);
     
-    OperationSignature pcmSignature = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationSignature pcmSignature = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmSignature(umlOperation, umlParameter), // correspondence source supplier
-    	OperationSignature.class,
-    	(OperationSignature _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationSignature.class,
+    	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (pcmSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmSignature);
     // val updatedElement userExecution.getElement1(umlOperation, umlParameter, pcmSignature);
     userExecution.update0Element(umlOperation, umlParameter, pcmSignature);
     
     postprocessElements();
+    
+    return true;
   }
 }

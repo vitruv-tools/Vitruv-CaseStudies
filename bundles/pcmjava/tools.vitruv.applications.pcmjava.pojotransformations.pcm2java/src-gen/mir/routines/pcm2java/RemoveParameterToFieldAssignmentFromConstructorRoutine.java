@@ -71,14 +71,16 @@ public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends Abst
   
   private String fieldName;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveParameterToFieldAssignmentFromConstructorRoutine with input:");
-    getLogger().debug("   Constructor: " + this.ctor);
-    getLogger().debug("   String: " + this.fieldName);
+    getLogger().debug("   ctor: " + this.ctor);
+    getLogger().debug("   fieldName: " + this.fieldName);
     
     // val updatedElement userExecution.getElement1(ctor, fieldName);
     userExecution.update0Element(ctor, fieldName);
     
     postprocessElements();
+    
+    return true;
   }
 }

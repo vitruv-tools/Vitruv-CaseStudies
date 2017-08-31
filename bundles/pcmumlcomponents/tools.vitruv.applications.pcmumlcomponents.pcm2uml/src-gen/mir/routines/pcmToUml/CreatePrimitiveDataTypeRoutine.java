@@ -61,7 +61,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   private PrimitiveDataType dataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePrimitiveDataTypeRoutine with input:");
     getLogger().debug("   dataType: " + this.dataType);
     
@@ -71,7 +71,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlModel);
     org.eclipse.uml2.uml.PrimitiveType umlType = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createPrimitiveType();
@@ -84,5 +84,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     addCorrespondenceBetween(userExecution.getElement2(dataType, umlModel, umlType), userExecution.getElement3(dataType, umlModel, umlType), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

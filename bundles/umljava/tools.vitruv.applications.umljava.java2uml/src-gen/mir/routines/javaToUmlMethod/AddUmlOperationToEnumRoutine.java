@@ -42,14 +42,16 @@ public class AddUmlOperationToEnumRoutine extends AbstractRepairRoutineRealizati
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlOperationToEnumRoutine with input:");
-    getLogger().debug("   Enumeration: " + this.uEnum);
-    getLogger().debug("   Operation: " + this.uOperation);
+    getLogger().debug("   uEnum: " + this.uEnum);
+    getLogger().debug("   uOperation: " + this.uOperation);
     
     // val updatedElement userExecution.getElement1(uEnum, uOperation);
     userExecution.update0Element(uEnum, uOperation);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
 import org.emftext.language.java.modifiers.ModifiersFactory;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -53,13 +52,13 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
   
   private String className;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaClassRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.sourceElementMappedToClass);
-    getLogger().debug("   Package: " + this.containingPackage);
-    getLogger().debug("   String: " + this.className);
+    getLogger().debug("   sourceElementMappedToClass: " + this.sourceElementMappedToClass);
+    getLogger().debug("   containingPackage: " + this.containingPackage);
+    getLogger().debug("   className: " + this.className);
     
-    org.emftext.language.java.classifiers.Class javaClass = ClassifiersFactoryImpl.eINSTANCE.createClass();
+    org.emftext.language.java.classifiers.Class javaClass = org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl.eINSTANCE.createClass();
     notifyObjectCreated(javaClass);
     userExecution.updateJavaClassElement(sourceElementMappedToClass, containingPackage, className, javaClass);
     
@@ -68,5 +67,7 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(sourceElementMappedToClass, containingPackage, className, javaClass, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -46,9 +46,9 @@ public class RenameComponentPackageAndClassRoutine extends AbstractRepairRoutine
   
   private RepositoryComponent component;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameComponentPackageAndClassRoutine with input:");
-    getLogger().debug("   RepositoryComponent: " + this.component);
+    getLogger().debug("   component: " + this.component);
     
     org.emftext.language.java.containers.Package repositoryPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepositoryPackage(component), // correspondence source supplier
@@ -56,11 +56,13 @@ public class RenameComponentPackageAndClassRoutine extends AbstractRepairRoutine
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionRepositoryPackage(component, _element), // correspondence precondition checker
     	null);
     if (repositoryPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(repositoryPackage);
     userExecution.callRoutine1(component, repositoryPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

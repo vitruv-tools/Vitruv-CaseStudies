@@ -8,7 +8,6 @@ import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Property;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -47,8 +46,7 @@ public class CreateInnerDeclarationOffPropertyRoutine extends AbstractRepairRout
     }
     
     public void updateDeclarationElement(final Property property, final CompositeDataType pcmCompositeType, final InnerDeclaration declaration) {
-      String _name = property.getName();
-      declaration.setEntityName(_name);
+      declaration.setEntityName(property.getName());
     }
   }
   
@@ -61,20 +59,20 @@ public class CreateInnerDeclarationOffPropertyRoutine extends AbstractRepairRout
   
   private Property property;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInnerDeclarationOffPropertyRoutine with input:");
-    getLogger().debug("   Property: " + this.property);
+    getLogger().debug("   property: " + this.property);
     
-    CompositeDataType pcmCompositeType = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.CompositeDataType pcmCompositeType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmCompositeType(property), // correspondence source supplier
-    	CompositeDataType.class,
-    	(CompositeDataType _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.CompositeDataType.class,
+    	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
     	null);
     if (pcmCompositeType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmCompositeType);
-    InnerDeclaration declaration = RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
+    org.palladiosimulator.pcm.repository.InnerDeclaration declaration = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
     notifyObjectCreated(declaration);
     userExecution.updateDeclarationElement(property, pcmCompositeType, declaration);
     
@@ -84,5 +82,7 @@ public class CreateInnerDeclarationOffPropertyRoutine extends AbstractRepairRout
     addCorrespondenceBetween(userExecution.getElement2(property, pcmCompositeType, declaration), userExecution.getElement3(property, pcmCompositeType, declaration), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

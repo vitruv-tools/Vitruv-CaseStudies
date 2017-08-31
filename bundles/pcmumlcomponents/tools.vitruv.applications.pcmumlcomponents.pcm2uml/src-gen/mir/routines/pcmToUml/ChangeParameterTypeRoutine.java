@@ -58,7 +58,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
   
   private DataType pcmDataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeParameterTypeRoutine with input:");
     getLogger().debug("   pcmParameter: " + this.pcmParameter);
     getLogger().debug("   pcmDataType: " + this.pcmDataType);
@@ -69,7 +69,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	(org.eclipse.uml2.uml.Parameter _element) -> true, // correspondence precondition checker
     	null);
     if (umlParameter == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlParameter);
     org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
@@ -78,12 +78,14 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlModel);
     // val updatedElement userExecution.getElement1(pcmParameter, pcmDataType, umlParameter, umlModel);
     userExecution.update0Element(pcmParameter, pcmDataType, umlParameter, umlModel);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -59,7 +59,7 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
   
   private Parameter pcmParameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationSignatureParameterRoutine with input:");
     getLogger().debug("   pcmSignature: " + this.pcmSignature);
     getLogger().debug("   pcmParameter: " + this.pcmParameter);
@@ -70,7 +70,7 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (umlOperation == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlOperation);
     org.eclipse.uml2.uml.Parameter umlParameter = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createParameter();
@@ -83,5 +83,7 @@ public class CreateOperationSignatureParameterRoutine extends AbstractRepairRout
     addCorrespondenceBetween(userExecution.getElement2(pcmSignature, pcmParameter, umlOperation, umlParameter), userExecution.getElement3(pcmSignature, pcmParameter, umlOperation, umlParameter), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

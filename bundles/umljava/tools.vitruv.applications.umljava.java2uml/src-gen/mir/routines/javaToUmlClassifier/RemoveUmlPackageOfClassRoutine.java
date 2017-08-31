@@ -49,18 +49,18 @@ public class RemoveUmlPackageOfClassRoutine extends AbstractRepairRoutineRealiza
   
   private ConcreteClassifier jClassifier;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveUmlPackageOfClassRoutine with input:");
-    getLogger().debug("   Package: " + this.jPackage);
-    getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
+    getLogger().debug("   jPackage: " + this.jPackage);
+    getLogger().debug("   jClassifier: " + this.jClassifier);
     
-    Classifier uClassifier = getCorrespondingElement(
+    org.eclipse.uml2.uml.Classifier uClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClassifier(jPackage, jClassifier), // correspondence source supplier
-    	Classifier.class,
-    	(Classifier _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Classifier.class,
+    	(org.eclipse.uml2.uml.Classifier _element) -> true, // correspondence precondition checker
     	null);
     if (uClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uClassifier);
     org.eclipse.uml2.uml.Package uPackage = getCorrespondingElement(
@@ -69,12 +69,14 @@ public class RemoveUmlPackageOfClassRoutine extends AbstractRepairRoutineRealiza
     	(org.eclipse.uml2.uml.Package _element) -> true, // correspondence precondition checker
     	null);
     if (uPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uPackage);
     // val updatedElement userExecution.getElement1(jPackage, jClassifier, uClassifier, uPackage);
     userExecution.update0Element(jPackage, jClassifier, uClassifier, uPackage);
     
     postprocessElements();
+    
+    return true;
   }
 }

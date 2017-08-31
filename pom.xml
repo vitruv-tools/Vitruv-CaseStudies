@@ -49,6 +49,12 @@
 			<layout>p2</layout>
 			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/</url>
 		</repository>
+		<!-- TODO Remove after new Palladio release -->
+		<repository>
+			<id>Palladiosimulator Nightly</id>
+			<layout>p2</layout>
+			<url>https://sdqbuild.ipd.kit.edu/nexus/content/repositories/palladiosimulator-nightly/</url>
+		</repository>
 	</repositories>
 
 	<build>

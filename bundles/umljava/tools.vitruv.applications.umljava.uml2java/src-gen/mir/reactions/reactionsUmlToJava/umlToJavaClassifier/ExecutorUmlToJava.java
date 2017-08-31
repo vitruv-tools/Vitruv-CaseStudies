@@ -1,14 +1,12 @@
 package mir.reactions.reactionsUmlToJava.umlToJavaClassifier;
 
-import tools.vitruv.domains.java.JavaDomainProvider;
-import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 
 @SuppressWarnings("all")
 public class ExecutorUmlToJava extends AbstractReactionsExecutor {
   public ExecutorUmlToJava() {
-    super(new UmlDomainProvider().getDomain(), 
-    	new JavaDomainProvider().getDomain());
+    super(new tools.vitruv.domains.uml.UmlDomainProvider().getDomain(), 
+    	new tools.vitruv.domains.java.JavaDomainProvider().getDomain());
   }
   
   protected void setup() {

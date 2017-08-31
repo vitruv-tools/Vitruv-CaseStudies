@@ -19,10 +19,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Interface, AnnotationInstanceOrModifier> typedChange = (InsertEReference<Interface, AnnotationInstanceOrModifier>)change;
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier>)change;
+    org.emftext.language.java.classifiers.Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateInterfaceAnnotationReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateInterfaceAnnotationReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -33,14 +33,14 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Interface, AnnotationInstanceOrModifier> relevantChange = (InsertEReference<Interface, AnnotationInstanceOrModifier>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Interface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof AnnotationInstanceOrModifier)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.modifiers.AnnotationInstanceOrModifier)) {
     	return false;
     }
     return true;
@@ -55,10 +55,10 @@ class CreateInterfaceAnnotationReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<Interface, AnnotationInstanceOrModifier> typedChange = (InsertEReference<Interface, AnnotationInstanceOrModifier>)change;
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.modifiers.AnnotationInstanceOrModifier>)change;
+    org.emftext.language.java.classifiers.Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.AnnotationInstanceOrModifier newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }

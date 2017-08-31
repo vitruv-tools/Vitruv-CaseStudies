@@ -4,6 +4,7 @@ import org.eclipse.emf.ecore.EAttribute
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.emftext.language.java.members.Constructor
+import tools.vitruv.framework.util.command.ResourceAccess
 
 /**
  * The class is responsible for mapping a constructor. Since a constructor is only slightly different than a method we inherit from method.
@@ -18,17 +19,17 @@ class ConstructorMappingTransformation extends MethodMappingTransformation {
 		super.setCorrespondenceForFeatures
 	}
 
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		return null
 	}
 	
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 		return null
 	}
 
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
-		super.updateSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue)
+		Object newValue, ResourceAccess resourceAccess) {
+		super.updateSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue, resourceAccess)
 	}
 
 	/**
@@ -37,9 +38,9 @@ class ConstructorMappingTransformation extends MethodMappingTransformation {
      *  component an OperationRrovidedRole is added  
      */
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		super.createNonRootEObjectInList(newAffectedEObject, oldAffectedEObject, affectedReference, newValue,
-			index, newCorrespondingEObjects)
+			index, newCorrespondingEObjects, resourceAccess)
 	}
 
 	/**
@@ -47,9 +48,9 @@ class ConstructorMappingTransformation extends MethodMappingTransformation {
 	 * If the parameter had a correspondence to an OperationRequiredRole delete it as well
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
+		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 		super.deleteNonRootEObjectInList(newAffectedEObject, oldAffectedEObject, affectedReference, oldValue, index,
-			oldCorrespondingEObjectsToDelete)
+			oldCorrespondingEObjectsToDelete, resourceAccess)
 	}
 
 }

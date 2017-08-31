@@ -43,9 +43,9 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
   
   private InnerDeclaration innerDeclaration;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInnerDeclarationImplementationRoutine with input:");
-    getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
+    getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
     org.emftext.language.java.classifiers.Class nonPrimitiveInnerDataTypeClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceNonPrimitiveInnerDataTypeClass(innerDeclaration), // correspondence source supplier
@@ -56,5 +56,7 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
     userExecution.callRoutine1(innerDeclaration, nonPrimitiveInnerDataTypeClass, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

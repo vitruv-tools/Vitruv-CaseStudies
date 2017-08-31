@@ -3,7 +3,6 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
@@ -39,8 +38,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void updateUInterfaceElement(final Interface jInterface, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Interface uInterface) {
-      String _name = jInterface.getName();
-      uInterface.setName(_name);
+      uInterface.setName(jInterface.getName());
     }
     
     public void callRoutine1(final Interface jInterface, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Interface uInterface, @Extension final RoutinesFacade _routinesFacade) {
@@ -59,12 +57,12 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
   
   private CompilationUnit jCompUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.jInterface);
-    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
+    getLogger().debug("   jInterface: " + this.jInterface);
+    getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
-    org.eclipse.uml2.uml.Interface uInterface = UMLFactoryImpl.eINSTANCE.createInterface();
+    org.eclipse.uml2.uml.Interface uInterface = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createInterface();
     notifyObjectCreated(uInterface);
     userExecution.updateUInterfaceElement(jInterface, jCompUnit, uInterface);
     
@@ -75,5 +73,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     userExecution.callRoutine1(jInterface, jCompUnit, uInterface, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -41,9 +41,9 @@ public class UnsetParameterTypeRoutine extends AbstractRepairRoutineRealization 
   
   private Parameter umlParameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine UnsetParameterTypeRoutine with input:");
-    getLogger().debug("   Parameter: " + this.umlParameter);
+    getLogger().debug("   umlParameter: " + this.umlParameter);
     
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmParameter(umlParameter), // correspondence source supplier
@@ -51,12 +51,14 @@ public class UnsetParameterTypeRoutine extends AbstractRepairRoutineRealization 
     	(org.palladiosimulator.pcm.repository.Parameter _element) -> true, // correspondence precondition checker
     	null);
     if (pcmParameter == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmParameter);
     // val updatedElement userExecution.getElement1(umlParameter, pcmParameter);
     userExecution.update0Element(umlParameter, pcmParameter);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -103,7 +103,7 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
   
   private DataType pcmInnerType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeCollectionDataTypeInnerTypeRoutine with input:");
     getLogger().debug("   pcmDataType: " + this.pcmDataType);
     getLogger().debug("   pcmInnerType: " + this.pcmInnerType);
@@ -120,11 +120,13 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlModel);
     userExecution.callRoutine1(pcmDataType, pcmInnerType, umlInnerType, umlModel, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

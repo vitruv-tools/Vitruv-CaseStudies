@@ -56,7 +56,7 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
   
   private CompositeDataType parent;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddCompositeDataTypeParentRoutine with input:");
     getLogger().debug("   dataType: " + this.dataType);
     getLogger().debug("   parent: " + this.parent);
@@ -67,7 +67,7 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeType);
     org.eclipse.uml2.uml.DataType parentType = getCorrespondingElement(
@@ -76,7 +76,7 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (parentType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(parentType);
     org.eclipse.uml2.uml.Generalization generalization = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createGeneralization();
@@ -87,5 +87,7 @@ public class AddCompositeDataTypeParentRoutine extends AbstractRepairRoutineReal
     userExecution.update0Element(dataType, parent, compositeType, parentType, generalization);
     
     postprocessElements();
+    
+    return true;
   }
 }

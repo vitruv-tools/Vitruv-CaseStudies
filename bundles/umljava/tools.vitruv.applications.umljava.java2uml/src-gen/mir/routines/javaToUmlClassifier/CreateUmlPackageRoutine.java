@@ -2,10 +2,7 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -29,8 +26,7 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUPackageElement(final org.emftext.language.java.containers.Package jPackage, final org.eclipse.uml2.uml.Package uPackage) {
-      String _name = jPackage.getName();
-      uPackage.setName(_name);
+      uPackage.setName(jPackage.getName());
     }
     
     public EObject getElement2(final org.emftext.language.java.containers.Package jPackage, final org.eclipse.uml2.uml.Package uPackage) {
@@ -38,16 +34,11 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void callRoutine1(final org.emftext.language.java.containers.Package jPackage, final org.eclipse.uml2.uml.Package uPackage, @Extension final RoutinesFacade _routinesFacade) {
-      EList<String> _namespaces = jPackage.getNamespaces();
-      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(_namespaces);
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jPackage.getNamespaces());
       if (_isNullOrEmpty) {
-        Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
-        _routinesFacade.addUmlElementToPackage(uPackage, _umlModel, jPackage);
+        _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), jPackage);
       } else {
-        EList<String> _namespaces_1 = jPackage.getNamespaces();
-        String _last = IterableExtensions.<String>last(_namespaces_1);
-        org.eclipse.uml2.uml.Package _findUmlPackage = JavaToUmlHelper.findUmlPackage(this.correspondenceModel, _last);
-        _routinesFacade.addUmlElementToPackage(uPackage, _findUmlPackage, jPackage);
+        _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jPackage.getNamespaces())), jPackage);
       }
     }
   }
@@ -61,11 +52,11 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
   
   private org.emftext.language.java.containers.Package jPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.jPackage);
+    getLogger().debug("   jPackage: " + this.jPackage);
     
-    org.eclipse.uml2.uml.Package uPackage = UMLFactoryImpl.eINSTANCE.createPackage();
+    org.eclipse.uml2.uml.Package uPackage = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createPackage();
     notifyObjectCreated(uPackage);
     userExecution.updateUPackageElement(jPackage, uPackage);
     
@@ -74,5 +65,7 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(jPackage, uPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

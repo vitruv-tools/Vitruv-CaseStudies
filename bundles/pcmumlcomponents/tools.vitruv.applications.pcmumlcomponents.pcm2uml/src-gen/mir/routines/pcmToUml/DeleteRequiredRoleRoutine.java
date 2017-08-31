@@ -38,7 +38,7 @@ public class DeleteRequiredRoleRoutine extends AbstractRepairRoutineRealization 
   
   private OperationRequiredRole requiredRole;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteRequiredRoleRoutine with input:");
     getLogger().debug("   requiredRole: " + this.requiredRole);
     
@@ -48,11 +48,13 @@ public class DeleteRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	(org.eclipse.uml2.uml.Usage _element) -> true, // correspondence precondition checker
     	null);
     if (usage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(usage);
     deleteObject(userExecution.getElement1(requiredRole, usage));
     
     postprocessElements();
+    
+    return true;
   }
 }

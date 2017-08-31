@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class JavaClassMadeNonAbstractReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Abstract> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Abstract>)change).getRemoveChange();
+    RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Abstract> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Abstract>)change).getRemoveChange();
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Abstract oldValue = typedChange.getOldValue();
+    org.emftext.language.java.modifiers.Abstract oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeNonAbstractReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassMadeNonAbstractReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -29,14 +29,14 @@ class JavaClassMadeNonAbstractReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, Abstract> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, Abstract>)change).getRemoveChange();
+    RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Abstract> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Abstract>)change).getRemoveChange();
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Abstract)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.modifiers.Abstract)) {
     	return false;
     }
     return true;

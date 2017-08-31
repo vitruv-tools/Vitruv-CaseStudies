@@ -20,8 +20,7 @@ public class JavaToPcmChangePropagationSpecification extends CompositeChangeProp
 	
 	private final List<Supplier<? extends ChangePropagationSpecification>> executors = Arrays.asList(
 		// begin generated executor list
-		mir.reactions.reactionsJavaToPcm.java2PcmClassifier.ExecutorJavaToPcm::new,
-		mir.reactions.reactionsJavaToPcm.java2PcmMethod.ExecutorJavaToPcm::new
+		mir.reactions.reactionsJavaToPcm.java2pcm.ExecutorJavaToPcm::new
 		// end generated executor list
 	);
 	

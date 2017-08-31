@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class JavaClassifierDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<CompilationUnit, ConcreteClassifier> typedChange = ((RemoveAndDeleteNonRoot<CompilationUnit, ConcreteClassifier>)change).getRemoveChange();
-    CompilationUnit affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier>)change).getRemoveChange();
+    org.emftext.language.java.containers.CompilationUnit affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ConcreteClassifier oldValue = typedChange.getOldValue();
+    org.emftext.language.java.classifiers.ConcreteClassifier oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassifierDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassifierDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaClassifierDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<CompilationUnit, ConcreteClassifier> relevantChange = ((RemoveAndDeleteNonRoot<CompilationUnit, ConcreteClassifier>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof CompilationUnit)) {
+    RemoveEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("classifiers")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof ConcreteClassifier)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.classifiers.ConcreteClassifier)) {
     	return false;
     }
     return true;

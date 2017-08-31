@@ -42,10 +42,10 @@ public class SetUmlClassFinalRoutine extends AbstractRepairRoutineRealization {
   
   private Boolean isFinal;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlClassFinalRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Boolean: " + this.isFinal);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   isFinal: " + this.isFinal);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, isFinal), // correspondence source supplier
@@ -53,12 +53,14 @@ public class SetUmlClassFinalRoutine extends AbstractRepairRoutineRealization {
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
     	null);
     if (uClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uClass);
     // val updatedElement userExecution.getElement1(jClass, isFinal, uClass);
     userExecution.update0Element(jClass, isFinal, uClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

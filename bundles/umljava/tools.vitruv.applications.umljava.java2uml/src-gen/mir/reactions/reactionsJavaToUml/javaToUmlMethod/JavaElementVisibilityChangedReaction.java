@@ -19,10 +19,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaElementVisibilityChangedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<AnnotableAndModifiable, Modifier> typedChange = ((CreateAndInsertNonRoot<AnnotableAndModifiable, Modifier>)change).getInsertChange();
-    AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Modifier> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Modifier>)change).getInsertChange();
+    org.emftext.language.java.modifiers.AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Modifier newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.Modifier newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementVisibilityChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementVisibilityChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -33,14 +33,14 @@ class JavaElementVisibilityChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<AnnotableAndModifiable, Modifier> relevantChange = ((CreateAndInsertNonRoot<AnnotableAndModifiable, Modifier>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof AnnotableAndModifiable)) {
+    InsertEReference<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Modifier> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Modifier>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.modifiers.AnnotableAndModifiable)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Modifier)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.modifiers.Modifier)) {
     	return false;
     }
     return true;
@@ -55,10 +55,10 @@ class JavaElementVisibilityChangedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<AnnotableAndModifiable, Modifier> typedChange = ((CreateAndInsertNonRoot<AnnotableAndModifiable, Modifier>)change).getInsertChange();
-    AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Modifier> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Modifier>)change).getInsertChange();
+    org.emftext.language.java.modifiers.AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Modifier newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.Modifier newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }

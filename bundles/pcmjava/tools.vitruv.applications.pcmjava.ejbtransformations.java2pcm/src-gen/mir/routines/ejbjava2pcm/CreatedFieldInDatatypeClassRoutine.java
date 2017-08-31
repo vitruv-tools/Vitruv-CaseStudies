@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.Field;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -61,21 +60,21 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
   
   private Field field;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedFieldInDatatypeClassRoutine with input:");
-    getLogger().debug("   Class: " + this.clazz);
-    getLogger().debug("   Field: " + this.field);
+    getLogger().debug("   clazz: " + this.clazz);
+    getLogger().debug("   field: " + this.field);
     
-    CompositeDataType compositeDataType = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.CompositeDataType compositeDataType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeDataType(clazz, field), // correspondence source supplier
-    	CompositeDataType.class,
-    	(CompositeDataType _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.CompositeDataType.class,
+    	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeDataType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeDataType);
-    InnerDeclaration innerDec = RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
+    org.palladiosimulator.pcm.repository.InnerDeclaration innerDec = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
     notifyObjectCreated(innerDec);
     userExecution.updateInnerDecElement(clazz, field, compositeDataType, innerDec);
     
@@ -85,5 +84,7 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     userExecution.update0Element(clazz, field, compositeDataType, innerDec);
     
     postprocessElements();
+    
+    return true;
   }
 }

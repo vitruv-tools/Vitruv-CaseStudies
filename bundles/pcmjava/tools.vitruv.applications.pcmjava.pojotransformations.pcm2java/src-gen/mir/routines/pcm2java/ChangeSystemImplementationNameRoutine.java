@@ -40,9 +40,9 @@ public class ChangeSystemImplementationNameRoutine extends AbstractRepairRoutine
   
   private org.palladiosimulator.pcm.system.System system;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeSystemImplementationNameRoutine with input:");
-    getLogger().debug("   System: " + this.system);
+    getLogger().debug("   system: " + this.system);
     
     org.emftext.language.java.containers.Package systemPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceSystemPackage(system), // correspondence source supplier
@@ -50,11 +50,13 @@ public class ChangeSystemImplementationNameRoutine extends AbstractRepairRoutine
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	null);
     if (systemPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(systemPackage);
     userExecution.callRoutine1(system, systemPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

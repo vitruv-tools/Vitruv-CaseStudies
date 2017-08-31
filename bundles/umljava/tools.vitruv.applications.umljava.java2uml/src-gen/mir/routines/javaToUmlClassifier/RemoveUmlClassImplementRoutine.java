@@ -3,7 +3,6 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.Interface;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -32,8 +31,7 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface, final org.eclipse.uml2.uml.Class uClass) {
-      Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
-      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, _umlModel, this.correspondenceModel);
+      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel);
       if (((uInterface != null) && (uInterface instanceof org.eclipse.uml2.uml.Interface))) {
         UmlClassifierAndPackageUtil.removeUmlImplementedInterface(uClass, ((org.eclipse.uml2.uml.Interface) uInterface));
       }
@@ -51,10 +49,10 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
   
   private Interface jInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveUmlClassImplementRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Interface: " + this.jInterface);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   jInterface: " + this.jInterface);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, jInterface), // correspondence source supplier
@@ -62,12 +60,14 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
     	null);
     if (uClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uClass);
     // val updatedElement userExecution.getElement1(jClass, jInterface, uClass);
     userExecution.update0Element(jClass, jInterface, uClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

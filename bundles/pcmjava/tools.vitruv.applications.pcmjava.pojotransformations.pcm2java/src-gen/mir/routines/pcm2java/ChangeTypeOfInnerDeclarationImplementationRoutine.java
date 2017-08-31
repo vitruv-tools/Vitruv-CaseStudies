@@ -43,9 +43,9 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
   
   private InnerDeclaration innerDeclaration;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeTypeOfInnerDeclarationImplementationRoutine with input:");
-    getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
+    getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
     org.emftext.language.java.classifiers.Class newJavaDataType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceNewJavaDataType(innerDeclaration), // correspondence source supplier
@@ -56,5 +56,7 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
     userExecution.callRoutine1(innerDeclaration, newJavaDataType, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

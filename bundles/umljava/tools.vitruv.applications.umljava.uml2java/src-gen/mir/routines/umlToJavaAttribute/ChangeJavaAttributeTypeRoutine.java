@@ -6,9 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.Field;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -35,9 +33,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final Property uAttr, final Type uType, final Field jAttr, final org.emftext.language.java.classifiers.Class customType, @Extension final RoutinesFacade _routinesFacade) {
-      CompilationUnit _containingCompilationUnit = jAttr.getContainingCompilationUnit();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customType, _containingCompilationUnit, this.userInteracting);
-      jAttr.setTypeReference(_createTypeReferenceAndUpdateImport);
+      jAttr.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit(), this.userInteracting));
       JavaMemberAndParameterUtil.updateAttributeTypeInSetters(jAttr);
       JavaMemberAndParameterUtil.updateAttributeTypeInGetters(jAttr);
     }
@@ -54,18 +50,18 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
   
   private Type uType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaAttributeTypeRoutine with input:");
-    getLogger().debug("   Property: " + this.uAttr);
-    getLogger().debug("   Type: " + this.uType);
+    getLogger().debug("   uAttr: " + this.uAttr);
+    getLogger().debug("   uType: " + this.uType);
     
-    Field jAttr = getCorrespondingElement(
+    org.emftext.language.java.members.Field jAttr = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJAttr(uAttr, uType), // correspondence source supplier
-    	Field.class,
-    	(Field _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.Field.class,
+    	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (jAttr == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jAttr);
     org.emftext.language.java.classifiers.Class customType = getCorrespondingElement(
@@ -77,5 +73,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     userExecution.callRoutine1(uAttr, uType, jAttr, customType, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

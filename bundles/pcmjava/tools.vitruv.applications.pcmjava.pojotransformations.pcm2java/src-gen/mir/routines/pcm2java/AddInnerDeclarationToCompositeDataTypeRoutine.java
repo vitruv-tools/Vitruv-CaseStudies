@@ -8,7 +8,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.members.Member;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
 import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
@@ -104,11 +103,11 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
   
   private TypeReference dataTypeReference;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddInnerDeclarationToCompositeDataTypeRoutine with input:");
-    getLogger().debug("   CompositeDataType: " + this.dataType);
-    getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
-    getLogger().debug("   TypeReference: " + this.dataTypeReference);
+    getLogger().debug("   dataType: " + this.dataType);
+    getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
+    getLogger().debug("   dataTypeReference: " + this.dataTypeReference);
     
     org.emftext.language.java.classifiers.Class dataTypeClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDataTypeClass(dataType, innerDeclaration, dataTypeReference), // correspondence source supplier
@@ -116,22 +115,22 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (dataTypeClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(dataTypeClass);
-    Field innerDataTypeField = MembersFactoryImpl.eINSTANCE.createField();
+    org.emftext.language.java.members.Field innerDataTypeField = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createField();
     notifyObjectCreated(innerDataTypeField);
     userExecution.updateInnerDataTypeFieldElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField);
     
     addCorrespondenceBetween(userExecution.getElement1(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField), userExecution.getElement2(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField), "");
     
-    ClassMethod getterMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
+    org.emftext.language.java.members.ClassMethod getterMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createClassMethod();
     notifyObjectCreated(getterMethod);
     userExecution.updateGetterMethodElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod);
     
     addCorrespondenceBetween(userExecution.getElement3(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod), userExecution.getElement4(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod), userExecution.getTag1(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod));
     
-    ClassMethod setterMethod = MembersFactoryImpl.eINSTANCE.createClassMethod();
+    org.emftext.language.java.members.ClassMethod setterMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createClassMethod();
     notifyObjectCreated(setterMethod);
     userExecution.updateSetterMethodElement(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     
@@ -141,5 +140,7 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     userExecution.update0Element(dataType, innerDeclaration, dataTypeReference, dataTypeClass, innerDataTypeField, getterMethod, setterMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

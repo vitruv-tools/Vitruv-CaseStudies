@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.VisibilityKind;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -27,8 +26,7 @@ public class ChangeJavaElementVisibilityRoutine extends AbstractRepairRoutineRea
     }
     
     public void update0Element(final NamedElement uElem, final AnnotableAndModifiable jElem) {
-      VisibilityKind _visibility = uElem.getVisibility();
-      JavaModifierUtil.setJavaVisibility(jElem, _visibility);
+      JavaModifierUtil.setJavaVisibility(jElem, uElem.getVisibility());
     }
     
     public EObject getCorrepondenceSourceJElem(final NamedElement uElem) {
@@ -45,22 +43,24 @@ public class ChangeJavaElementVisibilityRoutine extends AbstractRepairRoutineRea
   
   private NamedElement uElem;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaElementVisibilityRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.uElem);
+    getLogger().debug("   uElem: " + this.uElem);
     
-    AnnotableAndModifiable jElem = getCorrespondingElement(
+    org.emftext.language.java.modifiers.AnnotableAndModifiable jElem = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJElem(uElem), // correspondence source supplier
-    	AnnotableAndModifiable.class,
-    	(AnnotableAndModifiable _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.modifiers.AnnotableAndModifiable.class,
+    	(org.emftext.language.java.modifiers.AnnotableAndModifiable _element) -> true, // correspondence precondition checker
     	null);
     if (jElem == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jElem);
     // val updatedElement userExecution.getElement1(uElem, jElem);
     userExecution.update0Element(uElem, jElem);
     
     postprocessElements();
+    
+    return true;
   }
 }

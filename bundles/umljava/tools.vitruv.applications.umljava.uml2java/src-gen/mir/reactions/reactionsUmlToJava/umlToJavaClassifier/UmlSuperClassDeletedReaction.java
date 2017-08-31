@@ -14,10 +14,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class UmlSuperClassDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.eclipse.uml2.uml.Class, Generalization> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Class, Generalization>)change;
+    RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Generalization> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Generalization>)change;
     org.eclipse.uml2.uml.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Generalization oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.Generalization oldValue = typedChange.getOldValue();
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlSuperClassDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlSuperClassDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -28,14 +28,14 @@ class UmlSuperClassDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.eclipse.uml2.uml.Class, Generalization> relevantChange = (RemoveEReference<org.eclipse.uml2.uml.Class, Generalization>)change;
+    RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Generalization> relevantChange = (RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Generalization>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("generalization")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Generalization)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.Generalization)) {
     	return false;
     }
     return true;

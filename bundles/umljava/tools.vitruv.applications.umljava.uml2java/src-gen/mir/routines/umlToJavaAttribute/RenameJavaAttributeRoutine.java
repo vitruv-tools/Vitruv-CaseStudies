@@ -27,8 +27,7 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void callRoutine1(final String oldName, final String newName, final Property uAttribute, final Field jAttribute, @Extension final RoutinesFacade _routinesFacade) {
-      String _name = uAttribute.getName();
-      jAttribute.setName(_name);
+      jAttribute.setName(uAttribute.getName());
       JavaMemberAndParameterUtil.renameGettersOfAttribute(jAttribute, oldName);
       JavaMemberAndParameterUtil.renameSettersOfAttribute(jAttribute, oldName);
     }
@@ -47,23 +46,25 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
   
   private Property uAttribute;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaAttributeRoutine with input:");
-    getLogger().debug("   String: " + this.oldName);
-    getLogger().debug("   String: " + this.newName);
-    getLogger().debug("   Property: " + this.uAttribute);
+    getLogger().debug("   oldName: " + this.oldName);
+    getLogger().debug("   newName: " + this.newName);
+    getLogger().debug("   uAttribute: " + this.uAttribute);
     
-    Field jAttribute = getCorrespondingElement(
+    org.emftext.language.java.members.Field jAttribute = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJAttribute(oldName, newName, uAttribute), // correspondence source supplier
-    	Field.class,
-    	(Field _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.Field.class,
+    	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (jAttribute == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jAttribute);
     userExecution.callRoutine1(oldName, newName, uAttribute, jAttribute, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

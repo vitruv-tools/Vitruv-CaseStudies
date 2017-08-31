@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class JavaClassImplementRemovedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, TypeReference> typedChange = (RemoveEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
+    RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference> typedChange = (RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    TypeReference oldValue = typedChange.getOldValue();
+    org.emftext.language.java.types.TypeReference oldValue = typedChange.getOldValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassImplementRemovedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassImplementRemovedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -31,14 +31,14 @@ class JavaClassImplementRemovedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Class, TypeReference> relevantChange = (RemoveEReference<org.emftext.language.java.classifiers.Class, TypeReference>)change;
+    RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference> relevantChange = (RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("implements")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof TypeReference)) {
+    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
     return true;

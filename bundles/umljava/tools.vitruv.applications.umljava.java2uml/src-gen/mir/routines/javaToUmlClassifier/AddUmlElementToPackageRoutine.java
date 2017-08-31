@@ -34,12 +34,10 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
     
     public void callRoutine1(final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage, final EObject persistedObject, @Extension final RoutinesFacade _routinesFacade) {
       if ((uPackage instanceof Model)) {
-        EList<PackageableElement> _packagedElements = ((Model)uPackage).getPackagedElements();
-        int _size = _packagedElements.size();
+        int _size = ((Model)uPackage).getPackagedElements().size();
         boolean _equals = (_size == 1);
         if (_equals) {
-          String _rootModelFile = JavaToUmlHelper.getRootModelFile();
-          this.persistProjectRelative(persistedObject, uPackage, _rootModelFile);
+          this.persistProjectRelative(persistedObject, uPackage, JavaToUmlHelper.getRootModelFile());
         }
       }
     }
@@ -58,11 +56,11 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
   
   private EObject persistedObject;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlElementToPackageRoutine with input:");
-    getLogger().debug("   PackageableElement: " + this.uPackageable);
-    getLogger().debug("   Package: " + this.uPackage);
-    getLogger().debug("   EObject: " + this.persistedObject);
+    getLogger().debug("   uPackageable: " + this.uPackageable);
+    getLogger().debug("   uPackage: " + this.uPackage);
+    getLogger().debug("   persistedObject: " + this.persistedObject);
     
     // val updatedElement userExecution.getElement1(uPackageable, uPackage, persistedObject);
     userExecution.update0Element(uPackageable, uPackage, persistedObject);
@@ -70,5 +68,7 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
     userExecution.callRoutine1(uPackageable, uPackage, persistedObject, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

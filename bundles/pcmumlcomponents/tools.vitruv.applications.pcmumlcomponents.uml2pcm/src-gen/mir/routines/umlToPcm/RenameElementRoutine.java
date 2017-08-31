@@ -27,8 +27,7 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     
     public void update0Element(final NamedElement umlElement, final org.palladiosimulator.pcm.core.entity.NamedElement pcmElement, final CollectionDataType pcmCollectionType) {
       if ((pcmElement != null)) {
-        String _name = umlElement.getName();
-        pcmElement.setEntityName(_name);
+        pcmElement.setEntityName(umlElement.getName());
       }
     }
     
@@ -70,9 +69,9 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
   
   private NamedElement umlElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameElementRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.umlElement);
+    getLogger().debug("   umlElement: " + this.umlElement);
     
     org.palladiosimulator.pcm.core.entity.NamedElement pcmElement = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmElement(umlElement), // correspondence source supplier
@@ -80,10 +79,10 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.core.entity.NamedElement _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(umlElement));
     registerObjectUnderModification(pcmElement);
-    CollectionDataType pcmCollectionType = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.CollectionDataType pcmCollectionType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmCollectionType(umlElement, pcmElement), // correspondence source supplier
-    	CollectionDataType.class,
-    	(CollectionDataType _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.CollectionDataType.class,
+    	(org.palladiosimulator.pcm.repository.CollectionDataType _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag2(umlElement, pcmElement));
     registerObjectUnderModification(pcmCollectionType);
     // val updatedElement userExecution.getElement1(umlElement, pcmElement, pcmCollectionType);
@@ -93,5 +92,7 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     userExecution.update1Element(umlElement, pcmElement, pcmCollectionType);
     
     postprocessElements();
+    
+    return true;
   }
 }

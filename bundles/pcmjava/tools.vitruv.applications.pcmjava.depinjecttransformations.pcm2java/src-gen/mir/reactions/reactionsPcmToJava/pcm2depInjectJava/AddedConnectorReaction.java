@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class AddedConnectorReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<ComposedStructure, AssemblyConnector> typedChange = ((CreateAndInsertNonRoot<ComposedStructure, AssemblyConnector>)change).getInsertChange();
-    ComposedStructure affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.core.composition.ComposedStructure, org.palladiosimulator.pcm.core.composition.AssemblyConnector> typedChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.core.composition.ComposedStructure, org.palladiosimulator.pcm.core.composition.AssemblyConnector>)change).getInsertChange();
+    org.palladiosimulator.pcm.core.composition.ComposedStructure affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    AssemblyConnector newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.core.composition.AssemblyConnector newValue = typedChange.getNewValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedConnectorReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedConnectorReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class AddedConnectorReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<ComposedStructure, AssemblyConnector> relevantChange = ((CreateAndInsertNonRoot<ComposedStructure, AssemblyConnector>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof ComposedStructure)) {
+    InsertEReference<org.palladiosimulator.pcm.core.composition.ComposedStructure, org.palladiosimulator.pcm.core.composition.AssemblyConnector> relevantChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.core.composition.ComposedStructure, org.palladiosimulator.pcm.core.composition.AssemblyConnector>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.core.composition.ComposedStructure)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("connectors__ComposedStructure")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof AssemblyConnector)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.core.composition.AssemblyConnector)) {
     	return false;
     }
     return true;

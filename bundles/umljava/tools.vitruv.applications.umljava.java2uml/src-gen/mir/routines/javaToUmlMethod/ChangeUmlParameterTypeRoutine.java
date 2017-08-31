@@ -3,9 +3,7 @@ package mir.routines.javaToUmlMethod;
 import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -33,9 +31,7 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void update0Element(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
-      Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
-      Type _umlType = JavaToUmlHelper.getUmlType(jType, _umlModel, this.correspondenceModel);
-      uParam.setType(_umlType);
+      uParam.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel));
     }
   }
   
@@ -50,23 +46,25 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
   
   private TypeReference jType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlParameterTypeRoutine with input:");
-    getLogger().debug("   OrdinaryParameter: " + this.jParam);
-    getLogger().debug("   TypeReference: " + this.jType);
+    getLogger().debug("   jParam: " + this.jParam);
+    getLogger().debug("   jType: " + this.jType);
     
-    Parameter uParam = getCorrespondingElement(
+    org.eclipse.uml2.uml.Parameter uParam = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUParam(jParam, jType), // correspondence source supplier
-    	Parameter.class,
-    	(Parameter _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Parameter.class,
+    	(org.eclipse.uml2.uml.Parameter _element) -> true, // correspondence precondition checker
     	null);
     if (uParam == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uParam);
     // val updatedElement userExecution.getElement1(jParam, jType, uParam);
     userExecution.update0Element(jParam, jType, uParam);
     
     postprocessElements();
+    
+    return true;
   }
 }

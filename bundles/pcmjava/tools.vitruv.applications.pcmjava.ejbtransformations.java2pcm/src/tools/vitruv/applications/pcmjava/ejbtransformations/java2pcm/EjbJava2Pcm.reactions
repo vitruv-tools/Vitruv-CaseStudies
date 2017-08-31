@@ -30,7 +30,7 @@ reaction CreatedFirstPackage {
 
 routine createRepositoryForFirstPackage(java::Package javaPackage) {
 	match {
-		check EjbJava2PcmHelper.findRepository(correspondenceModel) == null
+		check EjbJava2PcmHelper.findRepository(correspondenceModel) === null
 	}
 	action {
 		val repository = create pcm::Repository and initialize {
@@ -179,7 +179,7 @@ routine createdImplements(java::Class clazz, java::TypeReference implementz) {
 		update opr {
 	    	val opInterface = basicComponent.repository__RepositoryComponent.interfaces__Repository.filter(typeof(OperationInterface)).
 	    			findFirst[it.entityName.equals(getClassifier(implementz).name)]
-	    	if (null != opInterface){
+	    	if (null !== opInterface){
 				opr.providedInterface__OperationProvidedRole = opInterface
 				opr.providingEntity_ProvidedRole = basicComponent
 				opr.entityName = basicComponent.entityName + "_provides_" + opInterface.entityName

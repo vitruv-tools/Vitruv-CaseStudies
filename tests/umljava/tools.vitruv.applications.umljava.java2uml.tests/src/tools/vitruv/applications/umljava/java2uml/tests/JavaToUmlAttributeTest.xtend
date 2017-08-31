@@ -2,7 +2,6 @@ package tools.vitruv.applications.umljava.java2uml.tests
 
 import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import org.junit.Before
 import org.emftext.language.java.members.Field
 import org.junit.Test
 import static org.junit.Assert.*
@@ -16,7 +15,6 @@ import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.applications.umljava.util.java.JavaStandardType
-
 
 /**
  * Test class for testing the attribute reactions.
@@ -37,8 +35,8 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     /**
      * Initializes two java classes. One class contains an attribute.
      */
-    @Before
-    def void before() {
+    override void setup() {
+    	super.setup();
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_CLASS)
         jAttr = createJavaAttribute(ATTRIBUTE_NAME, createJavaPrimitiveType(JavaStandardType.INT), JavaVisibility.PRIVATE, false, false)

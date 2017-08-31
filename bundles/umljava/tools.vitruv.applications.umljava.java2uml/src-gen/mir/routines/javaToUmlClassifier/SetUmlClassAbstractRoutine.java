@@ -42,10 +42,10 @@ public class SetUmlClassAbstractRoutine extends AbstractRepairRoutineRealization
   
   private Boolean isAbstract;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlClassAbstractRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   Boolean: " + this.isAbstract);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   isAbstract: " + this.isAbstract);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClass(jClass, isAbstract), // correspondence source supplier
@@ -53,12 +53,14 @@ public class SetUmlClassAbstractRoutine extends AbstractRepairRoutineRealization
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
     	null);
     if (uClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uClass);
     // val updatedElement userExecution.getElement1(jClass, isAbstract, uClass);
     userExecution.update0Element(jClass, isAbstract, uClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -2,12 +2,10 @@ package mir.routines.javaToUmlMethod;
 
 import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
-import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.ClassMethod;
@@ -39,8 +37,7 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void updateUOperationElement(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final Classifier uClassifier, final Operation uOperation) {
-      String _name = jMeth.getName();
-      uOperation.setName(_name);
+      uOperation.setName(jMeth.getName());
     }
     
     public void callRoutine1(final ClassMethod jMeth, final ConcreteClassifier jClassifier, final Classifier uClassifier, final Operation uOperation, @Extension final RoutinesFacade _routinesFacade) {
@@ -50,8 +47,7 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
         if ((uClassifier instanceof Enumeration)) {
           _routinesFacade.addUmlOperationToEnum(((Enumeration)uClassifier), uOperation);
         } else {
-          Logger _logger = this.getLogger();
-          _logger.warn(("Can not add ClassMethod to " + uClassifier));
+          this.getLogger().warn(("Can not add ClassMethod to " + uClassifier));
         }
       }
     }
@@ -68,21 +64,21 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
   
   private ConcreteClassifier jClassifier;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlClassMethodRoutine with input:");
-    getLogger().debug("   ClassMethod: " + this.jMeth);
-    getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
+    getLogger().debug("   jMeth: " + this.jMeth);
+    getLogger().debug("   jClassifier: " + this.jClassifier);
     
-    Classifier uClassifier = getCorrespondingElement(
+    org.eclipse.uml2.uml.Classifier uClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClassifier(jMeth, jClassifier), // correspondence source supplier
-    	Classifier.class,
-    	(Classifier _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Classifier.class,
+    	(org.eclipse.uml2.uml.Classifier _element) -> true, // correspondence precondition checker
     	null);
     if (uClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uClassifier);
-    Operation uOperation = UMLFactoryImpl.eINSTANCE.createOperation();
+    org.eclipse.uml2.uml.Operation uOperation = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createOperation();
     notifyObjectCreated(uOperation);
     userExecution.updateUOperationElement(jMeth, jClassifier, uClassifier, uOperation);
     
@@ -91,5 +87,7 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     userExecution.callRoutine1(jMeth, jClassifier, uClassifier, uOperation, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

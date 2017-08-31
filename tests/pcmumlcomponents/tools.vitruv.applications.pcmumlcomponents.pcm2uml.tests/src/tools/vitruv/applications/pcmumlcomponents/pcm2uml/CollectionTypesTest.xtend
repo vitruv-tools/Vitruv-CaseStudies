@@ -139,7 +139,9 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 	/**
 	 * Change the inner type of a collection type - all occurrences should be adapted
 	 */
-	@Test @Ignore
+	// TODO Reeable, currently disabled because of indeterministic failure
+	@Ignore
+	@Test
 	def void changeInnerCollectionTypeTest() {
 		val innerType = RepositoryFactory.eINSTANCE.createCompositeDataType()
 		innerType.entityName = "innerType"

@@ -45,12 +45,14 @@ public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization 
   
   private Component umlComponent;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePcmComponentRoutine with input:");
-    getLogger().debug("   Component: " + this.umlComponent);
+    getLogger().debug("   umlComponent: " + this.umlComponent);
     
     userExecution.callRoutine1(umlComponent, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

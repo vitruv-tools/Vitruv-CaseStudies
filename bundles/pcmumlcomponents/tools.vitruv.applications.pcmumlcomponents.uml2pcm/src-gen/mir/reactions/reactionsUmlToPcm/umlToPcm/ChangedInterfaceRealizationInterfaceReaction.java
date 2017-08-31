@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class ChangedInterfaceRealizationInterfaceReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<InterfaceRealization, Interface> typedChange = (InsertEReference<InterfaceRealization, Interface>)change;
-    InterfaceRealization affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface> typedChange = (InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface>)change;
+    org.eclipse.uml2.uml.InterfaceRealization affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Interface newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Interface newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedInterfaceRealizationInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedInterfaceRealizationInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class ChangedInterfaceRealizationInterfaceReaction extends AbstractReactionReali
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<InterfaceRealization, Interface> relevantChange = (InsertEReference<InterfaceRealization, Interface>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof InterfaceRealization)) {
+    InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface> relevantChange = (InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("supplier")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Interface)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Interface)) {
     	return false;
     }
     return true;

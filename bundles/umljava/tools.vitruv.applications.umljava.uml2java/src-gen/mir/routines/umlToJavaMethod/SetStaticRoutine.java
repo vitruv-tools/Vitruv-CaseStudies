@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Feature;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.modifiers.Static;
-import org.emftext.language.java.modifiers.impl.ModifiersFactoryImpl;
 import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -32,8 +31,7 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final Feature uFeat, final AnnotableAndModifiable jMod, final Static staticMod) {
-      boolean _isStatic = uFeat.isStatic();
-      JavaModifierUtil.setStatic(jMod, _isStatic);
+      JavaModifierUtil.setStatic(jMod, uFeat.isStatic());
     }
   }
   
@@ -46,25 +44,27 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
   
   private Feature uFeat;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetStaticRoutine with input:");
-    getLogger().debug("   Feature: " + this.uFeat);
+    getLogger().debug("   uFeat: " + this.uFeat);
     
-    AnnotableAndModifiable jMod = getCorrespondingElement(
+    org.emftext.language.java.modifiers.AnnotableAndModifiable jMod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJMod(uFeat), // correspondence source supplier
-    	AnnotableAndModifiable.class,
-    	(AnnotableAndModifiable _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.modifiers.AnnotableAndModifiable.class,
+    	(org.emftext.language.java.modifiers.AnnotableAndModifiable _element) -> true, // correspondence precondition checker
     	null);
     if (jMod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jMod);
-    Static staticMod = ModifiersFactoryImpl.eINSTANCE.createStatic();
+    org.emftext.language.java.modifiers.Static staticMod = org.emftext.language.java.modifiers.impl.ModifiersFactoryImpl.eINSTANCE.createStatic();
     notifyObjectCreated(staticMod);
     
     // val updatedElement userExecution.getElement1(uFeat, jMod, staticMod);
     userExecution.update0Element(uFeat, jMod, staticMod);
     
     postprocessElements();
+    
+    return true;
   }
 }

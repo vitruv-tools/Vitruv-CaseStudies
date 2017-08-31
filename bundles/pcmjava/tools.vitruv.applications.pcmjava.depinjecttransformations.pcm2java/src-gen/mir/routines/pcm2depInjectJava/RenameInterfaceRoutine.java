@@ -34,8 +34,7 @@ public class RenameInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void callRoutine1(final OperationInterface interf, final org.emftext.language.java.containers.Package contractsPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = interf.getEntityName();
-      _routinesFacade.renameJavaClassifier(interf, contractsPackage, _entityName);
+      _routinesFacade.renameJavaClassifier(interf, contractsPackage, interf.getEntityName());
     }
   }
   
@@ -48,9 +47,9 @@ public class RenameInterfaceRoutine extends AbstractRepairRoutineRealization {
   
   private OperationInterface interf;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameInterfaceRoutine with input:");
-    getLogger().debug("   OperationInterface: " + this.interf);
+    getLogger().debug("   interf: " + this.interf);
     
     org.emftext.language.java.containers.Package contractsPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceContractsPackage(interf), // correspondence source supplier
@@ -58,11 +57,13 @@ public class RenameInterfaceRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionContractsPackage(interf, _element), // correspondence precondition checker
     	null);
     if (contractsPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(contractsPackage);
     userExecution.callRoutine1(interf, contractsPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

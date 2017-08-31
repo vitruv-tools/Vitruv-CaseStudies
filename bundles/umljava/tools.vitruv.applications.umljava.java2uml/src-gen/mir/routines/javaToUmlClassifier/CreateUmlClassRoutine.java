@@ -3,7 +3,6 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.containers.CompilationUnit;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -38,8 +37,7 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateUClassElement(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Class uClass) {
-      String _name = jClass.getName();
-      uClass.setName(_name);
+      uClass.setName(jClass.getName());
     }
     
     public void callRoutine1(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Class uClass, @Extension final RoutinesFacade _routinesFacade) {
@@ -58,12 +56,12 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
   
   private CompilationUnit jCompUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlClassRoutine with input:");
-    getLogger().debug("   Class: " + this.jClass);
-    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
+    getLogger().debug("   jClass: " + this.jClass);
+    getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
-    org.eclipse.uml2.uml.Class uClass = UMLFactoryImpl.eINSTANCE.createClass();
+    org.eclipse.uml2.uml.Class uClass = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createClass();
     notifyObjectCreated(uClass);
     userExecution.updateUClassElement(jClass, jCompUnit, uClass);
     
@@ -74,5 +72,7 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(jClass, jCompUnit, uClass, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

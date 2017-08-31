@@ -8,9 +8,9 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
-import tools.vitruv.framework.util.command.ChangePropagationResult
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -23,17 +23,15 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 	}
 
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
-		val transformationResult = new ChangePropagationResult
+		Object newValue, ResourceAccess resourceAccess) {
 		Java2PcmUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
-			featureCorrespondenceMap, correspondenceModel, transformationResult)
-		return transformationResult
+			featureCorrespondenceMap, correspondenceModel, resourceAccess)
 	}
 
 	/**
 	 * called when a parameter has been created
 	 */
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		var jaMoPPParam = eObject as Parameter
 		val pcmParameter = RepositoryFactory.eINSTANCE.createParameter
 		pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.
@@ -46,7 +44,7 @@ class ParameterMappingTransformation extends EmptyEObjectMappingTransformation {
 	/**
 	 * called when a parameter type has been changed
 	 */
-	 override removeEObject(EObject eObject){
+	 override removeEObject(EObject eObject, ResourceAccess resourceAccess){
 	 	return null 
 	 }
 }

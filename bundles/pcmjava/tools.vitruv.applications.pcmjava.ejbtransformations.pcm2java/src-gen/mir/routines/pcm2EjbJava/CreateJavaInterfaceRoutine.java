@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
-import org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl;
 import org.emftext.language.java.modifiers.ModifiersFactory;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
@@ -59,13 +58,13 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
   
   private String className;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaInterfaceRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.sourceElementMappedToClass);
-    getLogger().debug("   Package: " + this.containingPackage);
-    getLogger().debug("   String: " + this.className);
+    getLogger().debug("   sourceElementMappedToClass: " + this.sourceElementMappedToClass);
+    getLogger().debug("   containingPackage: " + this.containingPackage);
+    getLogger().debug("   className: " + this.className);
     
-    Interface javaInterface = ClassifiersFactoryImpl.eINSTANCE.createInterface();
+    org.emftext.language.java.classifiers.Interface javaInterface = org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl.eINSTANCE.createInterface();
     notifyObjectCreated(javaInterface);
     userExecution.updateJavaInterfaceElement(sourceElementMappedToClass, containingPackage, className, javaInterface);
     
@@ -74,5 +73,7 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     userExecution.callRoutine1(sourceElementMappedToClass, containingPackage, className, javaInterface, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

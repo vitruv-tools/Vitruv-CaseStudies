@@ -7,11 +7,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.Parametrizable;
-import org.emftext.language.java.parameters.impl.ParametersFactoryImpl;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -55,12 +52,8 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     }
     
     public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final org.emftext.language.java.classifiers.Class customTypeClass, final OrdinaryParameter javaParam) {
-      String _name = umlParam.getName();
-      javaParam.setName(_name);
-      Type _type = umlParam.getType();
-      CompilationUnit _containingCompilationUnit = javaMethod.getContainingCompilationUnit();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type, customTypeClass, _containingCompilationUnit, this.userInteracting);
-      javaParam.setTypeReference(_createTypeReferenceAndUpdateImport);
+      javaParam.setName(umlParam.getName());
+      javaParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(umlParam.getType(), customTypeClass, javaMethod.getContainingCompilationUnit(), this.userInteracting));
     }
   }
   
@@ -75,18 +68,18 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
   
   private Parameter umlParam;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaParameterRoutine with input:");
-    getLogger().debug("   Operation: " + this.uMeth);
-    getLogger().debug("   Parameter: " + this.umlParam);
+    getLogger().debug("   uMeth: " + this.uMeth);
+    getLogger().debug("   umlParam: " + this.umlParam);
     
-    Parametrizable javaMethod = getCorrespondingElement(
+    org.emftext.language.java.parameters.Parametrizable javaMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaMethod(uMeth, umlParam), // correspondence source supplier
-    	Parametrizable.class,
-    	(Parametrizable _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.parameters.Parametrizable.class,
+    	(org.emftext.language.java.parameters.Parametrizable _element) -> true, // correspondence precondition checker
     	null);
     if (javaMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaMethod);
     org.emftext.language.java.classifiers.Class customTypeClass = getCorrespondingElement(
@@ -95,7 +88,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(customTypeClass);
-    OrdinaryParameter javaParam = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
+    org.emftext.language.java.parameters.OrdinaryParameter javaParam = org.emftext.language.java.parameters.impl.ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
     notifyObjectCreated(javaParam);
     userExecution.updateJavaParamElement(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     
@@ -105,5 +98,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     userExecution.update0Element(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     
     postprocessElements();
+    
+    return true;
   }
 }

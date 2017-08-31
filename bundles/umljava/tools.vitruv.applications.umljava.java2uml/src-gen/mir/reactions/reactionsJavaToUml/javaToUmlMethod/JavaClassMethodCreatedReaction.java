@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<ConcreteClassifier, ClassMethod> typedChange = ((CreateAndInsertNonRoot<ConcreteClassifier, ClassMethod>)change).getInsertChange();
-    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.ClassMethod> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.ClassMethod>)change).getInsertChange();
+    org.emftext.language.java.classifiers.ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ClassMethod newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.ClassMethod newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +31,14 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<ConcreteClassifier, ClassMethod> relevantChange = ((CreateAndInsertNonRoot<ConcreteClassifier, ClassMethod>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof ConcreteClassifier)) {
+    InsertEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.ClassMethod> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.ClassMethod>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.ConcreteClassifier)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof ClassMethod)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.ClassMethod)) {
     	return false;
     }
     return true;
@@ -53,10 +53,10 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<ConcreteClassifier, ClassMethod> typedChange = ((CreateAndInsertNonRoot<ConcreteClassifier, ClassMethod>)change).getInsertChange();
-    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.ClassMethod> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.members.ClassMethod>)change).getInsertChange();
+    org.emftext.language.java.classifiers.ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ClassMethod newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.ClassMethod newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }

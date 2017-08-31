@@ -343,11 +343,11 @@ routine addInnerDeclarationToCompositeDataType(pcm::CompositeDataType dataType, 
 		val getterMethod  = create java::ClassMethod and initialize {
 			createGetter(innerDataTypeField, getterMethod);
 		}
-		add correspondence between getterMethod and innerDeclaration tag with "getter"
+		add correspondence between getterMethod and innerDeclaration tagged with "getter"
 		val setterMethod = create java::ClassMethod and initialize {
 			createSetter(innerDataTypeField, setterMethod);
 		}
-		add correspondence between setterMethod and innerDeclaration tag with "setter"
+		add correspondence between setterMethod and innerDeclaration tagged with "setter"
 		update dataTypeClass {
 			dataTypeClass.members += innerDataTypeField;
 			dataTypeClass.members += getterMethod;
@@ -432,7 +432,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 	} 
 	action { 
 		val javaPackage = create java::Package and initialize {
-			if (parentPackage != null) {
+			if (parentPackage !== null) {
 				javaPackage.namespaces += parentPackage.namespaces;
 				javaPackage.namespaces += parentPackage.name; 
 			}
@@ -440,7 +440,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
 		}
 		add correspondence between javaPackage and sourceElementMappedToPackage
-			tag with newTag
+			tagged with newTag
 	}
 }
 
@@ -452,7 +452,7 @@ routine renameJavaPackage(pcm::NamedElement sourceElementMappedToPackage, java::
 	action { 
 		update javaPackage {
 			javaPackage.namespaces.clear();
-			if (parentPackage != null) {
+			if (parentPackage !== null) {
 				javaPackage.namespaces += parentPackage.namespaces;
 				javaPackage.namespaces += parentPackage.name; 
 			}
@@ -941,7 +941,7 @@ routine createSEFF(pcm::ServiceEffectSpecification seff) {
 		// TODO HK This is not completely in the context of the component class, but in contained elements...
 		update componentClass {
 			var correspondingClassMethod = componentClass.findMethodInClass(classMethod)
-			if (null == correspondingClassMethod) {
+			if (null === correspondingClassMethod) {
 				componentClass.members.add(classMethod)
 				correspondingClassMethod = classMethod
 			} else {

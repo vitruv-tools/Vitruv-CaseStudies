@@ -58,7 +58,7 @@ public class CreateUmlPropertyForDatatypeRoutine extends AbstractRepairRoutineRe
   
   private DataType owner;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlPropertyForDatatypeRoutine with input:");
     getLogger().debug("   type: " + this.type);
     getLogger().debug("   counterpart: " + this.counterpart);
@@ -74,5 +74,7 @@ public class CreateUmlPropertyForDatatypeRoutine extends AbstractRepairRoutineRe
     addCorrespondenceBetween(userExecution.getElement2(type, counterpart, owner, property), userExecution.getElement3(type, counterpart, owner, property), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

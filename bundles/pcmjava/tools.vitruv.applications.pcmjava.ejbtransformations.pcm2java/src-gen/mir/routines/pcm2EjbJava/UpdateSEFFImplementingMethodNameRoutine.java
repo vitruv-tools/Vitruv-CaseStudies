@@ -42,22 +42,24 @@ public class UpdateSEFFImplementingMethodNameRoutine extends AbstractRepairRouti
   
   private ServiceEffectSpecification seff;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine UpdateSEFFImplementingMethodNameRoutine with input:");
-    getLogger().debug("   ServiceEffectSpecification: " + this.seff);
+    getLogger().debug("   seff: " + this.seff);
     
-    ClassMethod classMethod = getCorrespondingElement(
+    org.emftext.language.java.members.ClassMethod classMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassMethod(seff), // correspondence source supplier
-    	ClassMethod.class,
-    	(ClassMethod _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.ClassMethod.class,
+    	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
     	null);
     if (classMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classMethod);
     // val updatedElement userExecution.getElement1(seff, classMethod);
     userExecution.update0Element(seff, classMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -7,11 +7,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -29,12 +26,8 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     }
     
     public void updateJavaMethodElement(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final org.emftext.language.java.classifiers.Class customTypeClass, final InterfaceMethod javaMethod) {
-      String _name = uOperation.getName();
-      javaMethod.setName(_name);
-      Type _type = uOperation.getType();
-      CompilationUnit _containingCompilationUnit = jInterface.getContainingCompilationUnit();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(_type, customTypeClass, _containingCompilationUnit, this.userInteracting);
-      javaMethod.setTypeReference(_createTypeReferenceAndUpdateImport);
+      javaMethod.setName(uOperation.getName());
+      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jInterface.getContainingCompilationUnit(), this.userInteracting));
       javaMethod.makePublic();
     }
     
@@ -76,10 +69,10 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaInterfaceMethodRoutine with input:");
-    getLogger().debug("   Interface: " + this.uInterface);
-    getLogger().debug("   Operation: " + this.uOperation);
+    getLogger().debug("   uInterface: " + this.uInterface);
+    getLogger().debug("   uOperation: " + this.uOperation);
     
     org.emftext.language.java.classifiers.Interface jInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJInterface(uInterface, uOperation), // correspondence source supplier
@@ -87,7 +80,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (jInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jInterface);
     org.emftext.language.java.classifiers.Class customTypeClass = getCorrespondingElement(
@@ -96,7 +89,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(customTypeClass);
-    InterfaceMethod javaMethod = MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
+    org.emftext.language.java.members.InterfaceMethod javaMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
     notifyObjectCreated(javaMethod);
     userExecution.updateJavaMethodElement(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
     
@@ -106,5 +99,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     userExecution.update0Element(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

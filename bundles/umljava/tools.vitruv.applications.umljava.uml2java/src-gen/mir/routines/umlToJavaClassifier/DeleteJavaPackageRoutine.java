@@ -36,9 +36,9 @@ public class DeleteJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   private org.eclipse.uml2.uml.Package uPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.uPackage);
+    getLogger().debug("   uPackage: " + this.uPackage);
     
     org.emftext.language.java.containers.Package jPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJPackage(uPackage), // correspondence source supplier
@@ -46,11 +46,13 @@ public class DeleteJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	null);
     if (jPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jPackage);
     deleteObject(userExecution.getElement1(uPackage, jPackage));
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -52,7 +52,7 @@ class JavaStatementUtil {
         selfReference.self = LiteralsFactory.eINSTANCE.createThis
 
         val fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-        fieldReference.target = EcoreUtil.copy(jAttribute)
+        fieldReference.target = jAttribute
         selfReference.next = EcoreUtil.copy(fieldReference)
         return selfReference
     }
@@ -99,7 +99,7 @@ class JavaStatementUtil {
     
     def static IdentifierReference createIdentifierReference(ReferenceableElement elem) {
         val reference = ReferencesFactory.eINSTANCE.createIdentifierReference
-        reference.target = EcoreUtil.copy(elem)
+        reference.target = elem
         return reference
     }
     

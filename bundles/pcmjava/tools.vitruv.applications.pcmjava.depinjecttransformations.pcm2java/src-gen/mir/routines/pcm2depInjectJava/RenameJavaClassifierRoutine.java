@@ -42,16 +42,14 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     
     public void update1Element(final NamedElement classSourceElement, final org.emftext.language.java.containers.Package containingPackage, final String className, final CompilationUnit compilationUnit, final ConcreteClassifier javaClassifier) {
       compilationUnit.setName((className + ".java"));
+      compilationUnit.getNamespaces().clear();
       EList<String> _namespaces = compilationUnit.getNamespaces();
-      _namespaces.clear();
-      EList<String> _namespaces_1 = compilationUnit.getNamespaces();
-      EList<String> _namespaces_2 = containingPackage.getNamespaces();
-      Iterables.<String>addAll(_namespaces_1, _namespaces_2);
-      EList<String> _namespaces_3 = compilationUnit.getNamespaces();
+      EList<String> _namespaces_1 = containingPackage.getNamespaces();
+      Iterables.<String>addAll(_namespaces, _namespaces_1);
+      EList<String> _namespaces_2 = compilationUnit.getNamespaces();
       String _name = containingPackage.getName();
-      _namespaces_3.add(_name);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(compilationUnit);
-      this.persistProjectRelative(classSourceElement, compilationUnit, _buildJavaFilePath);
+      _namespaces_2.add(_name);
+      this.persistProjectRelative(classSourceElement, compilationUnit, JavaPersistenceHelper.buildJavaFilePath(compilationUnit));
     }
     
     public EObject getCorrepondenceSourceCompilationUnit(final NamedElement classSourceElement, final org.emftext.language.java.containers.Package containingPackage, final String className) {
@@ -72,28 +70,28 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
   
   private String className;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaClassifierRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.classSourceElement);
-    getLogger().debug("   Package: " + this.containingPackage);
-    getLogger().debug("   String: " + this.className);
+    getLogger().debug("   classSourceElement: " + this.classSourceElement);
+    getLogger().debug("   containingPackage: " + this.containingPackage);
+    getLogger().debug("   className: " + this.className);
     
-    CompilationUnit compilationUnit = getCorrespondingElement(
+    org.emftext.language.java.containers.CompilationUnit compilationUnit = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompilationUnit(classSourceElement, containingPackage, className), // correspondence source supplier
-    	CompilationUnit.class,
-    	(CompilationUnit _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.containers.CompilationUnit.class,
+    	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
     	null);
     if (compilationUnit == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compilationUnit);
-    ConcreteClassifier javaClassifier = getCorrespondingElement(
+    org.emftext.language.java.classifiers.ConcreteClassifier javaClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClassifier(classSourceElement, containingPackage, className, compilationUnit), // correspondence source supplier
-    	ConcreteClassifier.class,
-    	(ConcreteClassifier _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.classifiers.ConcreteClassifier.class,
+    	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     	null);
     if (javaClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClassifier);
     // val updatedElement userExecution.getElement1(classSourceElement, containingPackage, className, compilationUnit, javaClassifier);
@@ -103,5 +101,7 @@ public class RenameJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     userExecution.update1Element(classSourceElement, containingPackage, className, compilationUnit, javaClassifier);
     
     postprocessElements();
+    
+    return true;
   }
 }

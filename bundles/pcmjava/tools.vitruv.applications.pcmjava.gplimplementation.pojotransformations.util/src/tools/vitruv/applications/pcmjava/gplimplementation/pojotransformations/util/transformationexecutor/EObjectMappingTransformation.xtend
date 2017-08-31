@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.EStructuralFeature
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.framework.util.command.ResourceAccess
 
 abstract class EObjectMappingTransformation {
 
@@ -25,80 +25,80 @@ abstract class EObjectMappingTransformation {
 
 	def Class<?> getClassOfMappedEObject()
 
-	def EObject[] createEObject(EObject eObject)
+	def EObject[] createEObject(EObject eObject, ResourceAccess resourceAccess)
 
-	def EObject[] removeEObject(EObject eObject)
+	def EObject[] removeEObject(EObject eObject, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects)
+	def void createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult deleteRootEObject(EObject oldRootEObject, EObject[] oldCorrespondingEObjectsToDelete)
+	def void deleteRootEObject(EObject oldRootEObject, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult replaceRoot(EObject oldRootEObject, EObject newRootEObject,
-		EObject[] oldCorrespondingEObjectsToDelete, EObject[] newCorrespondingEObjects)
+	def void replaceRoot(EObject oldRootEObject, EObject newRootEObject,
+		EObject[] oldCorrespondingEObjectsToDelete, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects)
+	def void createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult deleteNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference,
-		EObject oldValue, EObject[] eObjectsToDelete)
+	def void deleteNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference,
+		EObject oldValue, EObject[] eObjectsToDelete, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult createNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference,
-		EObject newValue, EObject[] newCorrespondingEObjects)
+	def void createNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference,
+		EObject newValue, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult replaceNonRootEObjectInList(EObject affectedEObject, EReference affectedReference,
+	def void replaceNonRootEObjectInList(EObject affectedEObject, EReference affectedReference,
 		EObject oldValue, EObject newValue, int index, EObject[] oldCorrespondingEObjectsToDelete,
-		EObject[] newCorrespondingEObjects)
+		EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete)
+	def void deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
+		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult replaceNonRootEObjectSingle(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, EObject newValue)
+	def void replaceNonRootEObjectSingle(EObject newAffectedEObject, EObject oldAffectedEObject,
+		EReference affectedReference, EObject oldValue, EObject newValue, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult permuteContainmentEReferenceValues(EObject affectedEObject,
-		EReference affectedReference, EList<Integer> newIndexForElementAt)
+	def void permuteContainmentEReferenceValues(EObject affectedEObject,
+		EReference affectedReference, EList<Integer> newIndexForElementAt, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult insertNonContaimentEReference(EObject affectedEObject, EReference affectedReference,
-		EObject newValue, int index)
+	def void insertNonContaimentEReference(EObject affectedEObject, EReference affectedReference,
+		EObject newValue, int index, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult updateSingleValuedNonContainmentEReference(EObject affectedEObject,
-		EReference affectedReference, EObject oldValue, EObject newValue)
+	def void updateSingleValuedNonContainmentEReference(EObject affectedEObject,
+		EReference affectedReference, EObject oldValue, EObject newValue, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult permuteNonContainmentEReferenceValues(EObject affectedEObject,
-		EReference affectedReference, EList<Integer> newIndexForElementAt)
+	def void permuteNonContainmentEReferenceValues(EObject affectedEObject,
+		EReference affectedReference, EList<Integer> newIndexForElementAt, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult replaceNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
-		EObject oldValue, EObject newValue, int index)
+	def void replaceNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
+		EObject oldValue, EObject newValue, int index, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult removeNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
-		EObject oldValue, int index)
+	def void removeNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
+		EObject oldValue, int index, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute,
-		Object oldValue, Object newValue)
+	def void updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute,
+		Object oldValue, Object newValue, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult removeEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute,
-		Object oldValue, int index)
+	def void removeEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute,
+		Object oldValue, int index, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult insertEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute,
-		Object newValue, int index)
+	def void insertEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute,
+		Object newValue, int index, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult unsetEAttribute(EObject affectedEObject, EStructuralFeature affectedFeature,
-		Object oldValue)
+	def void unsetEAttribute(EObject affectedEObject, EStructuralFeature affectedFeature,
+		Object oldValue, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult unsetContainmentEReference(EObject affectedEObject, EReference affectedReference,
-		EObject oldValue, EObject[] oldCorrespondingEObjectsToDelete)
+	def void unsetContainmentEReference(EObject affectedEObject, EReference affectedReference,
+		EObject oldValue, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult unsetNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
-		EObject oldValue)
+	def void unsetNonContainmentEReference(EObject affectedEObject, EReference affectedReference,
+		EObject oldValue, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult replaceEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute,
-		Object oldValue, Object newValue, int index)
+	def void replaceEAttributeValue(EObject affectedEObject, EAttribute affectedAttribute,
+		Object oldValue, Object newValue, int index, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult permuteEAttributeValues(EObject affectedEObject, EAttribute affectedAttribute,
-		EList<Integer> newIndexForElementAt)
+	def void permuteEAttributeValues(EObject affectedEObject, EAttribute affectedAttribute,
+		EList<Integer> newIndexForElementAt, ResourceAccess resourceAccess)
 
-	def ChangePropagationResult insertNonRootEObjectInContainmentList(EObject oldAffectedEObject,
-		EObject newAffectedEObject, EReference reference, EObject newValue)
+	def void insertNonRootEObjectInContainmentList(EObject oldAffectedEObject,
+		EObject newAffectedEObject, EReference reference, EObject newValue, ResourceAccess resourceAccess)
 
 	def void setCorrespondenceForFeatures()
 

@@ -8,7 +8,6 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -25,8 +24,7 @@ public class CreateInterfaceOperationRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updatePcmOperationElement(final Operation umlOperation, final OperationInterface pcmInterface, final OperationSignature pcmOperation) {
-      String _name = umlOperation.getName();
-      pcmOperation.setEntityName(_name);
+      pcmOperation.setEntityName(umlOperation.getName());
     }
     
     public EObject getElement1(final Operation umlOperation, final OperationInterface pcmInterface, final OperationSignature pcmOperation) {
@@ -61,20 +59,20 @@ public class CreateInterfaceOperationRoutine extends AbstractRepairRoutineRealiz
   
   private Operation umlOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInterfaceOperationRoutine with input:");
-    getLogger().debug("   Operation: " + this.umlOperation);
+    getLogger().debug("   umlOperation: " + this.umlOperation);
     
-    OperationInterface pcmInterface = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationInterface pcmInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourcePcmInterface(umlOperation), // correspondence source supplier
-    	OperationInterface.class,
-    	(OperationInterface _element) -> true, // correspondence precondition checker
+    	org.palladiosimulator.pcm.repository.OperationInterface.class,
+    	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (pcmInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmInterface);
-    OperationSignature pcmOperation = RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
+    org.palladiosimulator.pcm.repository.OperationSignature pcmOperation = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
     notifyObjectCreated(pcmOperation);
     userExecution.updatePcmOperationElement(umlOperation, pcmInterface, pcmOperation);
     
@@ -84,5 +82,7 @@ public class CreateInterfaceOperationRoutine extends AbstractRepairRoutineRealiz
     addCorrespondenceBetween(userExecution.getElement2(umlOperation, pcmInterface, pcmOperation), userExecution.getElement3(umlOperation, pcmInterface, pcmOperation), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

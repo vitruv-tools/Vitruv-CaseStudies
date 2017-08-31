@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.impl.ParametersFactoryImpl;
 import org.emftext.language.java.statements.Statement;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
@@ -68,15 +67,15 @@ public class AddParameterAndAssignmentToConstructorRoutine extends AbstractRepai
   
   private String parameterName;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddParameterAndAssignmentToConstructorRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.parameterCorrespondenceSource);
-    getLogger().debug("   Constructor: " + this.constructor);
-    getLogger().debug("   NamespaceClassifierReference: " + this.typeReference);
-    getLogger().debug("   Field: " + this.fieldToBeAssigned);
-    getLogger().debug("   String: " + this.parameterName);
+    getLogger().debug("   parameterCorrespondenceSource: " + this.parameterCorrespondenceSource);
+    getLogger().debug("   constructor: " + this.constructor);
+    getLogger().debug("   typeReference: " + this.typeReference);
+    getLogger().debug("   fieldToBeAssigned: " + this.fieldToBeAssigned);
+    getLogger().debug("   parameterName: " + this.parameterName);
     
-    OrdinaryParameter newParameter = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
+    org.emftext.language.java.parameters.OrdinaryParameter newParameter = org.emftext.language.java.parameters.impl.ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
     notifyObjectCreated(newParameter);
     userExecution.updateNewParameterElement(parameterCorrespondenceSource, constructor, typeReference, fieldToBeAssigned, parameterName, newParameter);
     
@@ -86,5 +85,7 @@ public class AddParameterAndAssignmentToConstructorRoutine extends AbstractRepai
     userExecution.update0Element(parameterCorrespondenceSource, constructor, typeReference, fieldToBeAssigned, parameterName, newParameter);
     
     postprocessElements();
+    
+    return true;
   }
 }

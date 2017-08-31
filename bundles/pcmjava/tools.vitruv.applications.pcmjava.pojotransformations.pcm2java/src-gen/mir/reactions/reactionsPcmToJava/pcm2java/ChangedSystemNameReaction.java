@@ -13,11 +13,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangedSystemNameReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String>)change;
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, java.lang.String>)change;
     org.palladiosimulator.pcm.system.System affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    String oldValue = typedChange.getOldValue();
-    String newValue = typedChange.getNewValue();
+    java.lang.String oldValue = typedChange.getOldValue();
+    java.lang.String newValue = typedChange.getNewValue();
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.ChangedSystemNameReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.ChangedSystemNameReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -28,17 +28,17 @@ class ChangedSystemNameReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String> relevantChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, String>)change;
+    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, java.lang.String> relevantChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.system.System, java.lang.String>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.system.System)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("entityName")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof String)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.String)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof String)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.String)) {
     	return false;
     }
     return true;

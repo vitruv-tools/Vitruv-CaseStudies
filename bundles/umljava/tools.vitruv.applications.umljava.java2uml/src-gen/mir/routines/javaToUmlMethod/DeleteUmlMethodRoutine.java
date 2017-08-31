@@ -38,21 +38,23 @@ public class DeleteUmlMethodRoutine extends AbstractRepairRoutineRealization {
   
   private Member jMem;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteUmlMethodRoutine with input:");
-    getLogger().debug("   Member: " + this.jMem);
+    getLogger().debug("   jMem: " + this.jMem);
     
-    NamedElement uMem = getCorrespondingElement(
+    org.eclipse.uml2.uml.NamedElement uMem = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUMem(jMem), // correspondence source supplier
-    	NamedElement.class,
-    	(NamedElement _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.NamedElement.class,
+    	(org.eclipse.uml2.uml.NamedElement _element) -> true, // correspondence precondition checker
     	null);
     if (uMem == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uMem);
     deleteObject(userExecution.getElement1(jMem, uMem));
     
     postprocessElements();
+    
+    return true;
   }
 }

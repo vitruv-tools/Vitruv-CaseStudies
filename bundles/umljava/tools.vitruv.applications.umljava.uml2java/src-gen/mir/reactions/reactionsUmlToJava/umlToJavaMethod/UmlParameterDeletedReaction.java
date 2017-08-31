@@ -18,10 +18,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class UmlParameterDeletedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Operation, Parameter> typedChange = ((RemoveAndDeleteNonRoot<Operation, Parameter>)change).getRemoveChange();
-    Operation affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change).getRemoveChange();
+    org.eclipse.uml2.uml.Operation affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.Parameter oldValue = typedChange.getOldValue();
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -32,14 +32,14 @@ class UmlParameterDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Operation, Parameter> relevantChange = ((RemoveAndDeleteNonRoot<Operation, Parameter>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Operation)) {
+    RemoveEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> relevantChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Operation)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedParameter")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Parameter)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.Parameter)) {
     	return false;
     }
     return true;
@@ -54,10 +54,10 @@ class UmlParameterDeletedReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    RemoveEReference<Operation, Parameter> typedChange = ((RemoveAndDeleteNonRoot<Operation, Parameter>)change).getRemoveChange();
-    Operation affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> typedChange = ((RemoveAndDeleteNonRoot<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change).getRemoveChange();
+    org.eclipse.uml2.uml.Operation affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.Parameter oldValue = typedChange.getOldValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
     	return false;
     }

@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ReturnTypeCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> typedChange = (ReplaceSingleValuedEReference<InterfaceMethod, TypeReference>)change;
-    InterfaceMethod affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.emftext.language.java.members.InterfaceMethod, org.emftext.language.java.types.TypeReference> typedChange = (ReplaceSingleValuedEReference<org.emftext.language.java.members.InterfaceMethod, org.emftext.language.java.types.TypeReference>)change;
+    org.emftext.language.java.members.InterfaceMethod affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    TypeReference oldValue = typedChange.getOldValue();
-    TypeReference newValue = typedChange.getNewValue();
+    org.emftext.language.java.types.TypeReference oldValue = typedChange.getOldValue();
+    org.emftext.language.java.types.TypeReference newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.ejbjava2pcm.ReturnTypeCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.ReturnTypeCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ReturnTypeCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<InterfaceMethod, TypeReference> relevantChange = (ReplaceSingleValuedEReference<InterfaceMethod, TypeReference>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof InterfaceMethod)) {
+    ReplaceSingleValuedEReference<org.emftext.language.java.members.InterfaceMethod, org.emftext.language.java.types.TypeReference> relevantChange = (ReplaceSingleValuedEReference<org.emftext.language.java.members.InterfaceMethod, org.emftext.language.java.types.TypeReference>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.members.InterfaceMethod)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("typeReference")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof TypeReference)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof TypeReference)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.emftext.language.java.types.TypeReference)) {
     	return false;
     }
     return true;

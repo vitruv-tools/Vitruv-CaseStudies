@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaClassifierMadeStaticReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<ConcreteClassifier, Static> typedChange = ((CreateAndInsertNonRoot<ConcreteClassifier, Static>)change).getInsertChange();
-    ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.modifiers.Static> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.modifiers.Static>)change).getInsertChange();
+    org.emftext.language.java.classifiers.ConcreteClassifier affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Static newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.Static newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassifierMadeStaticReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassifierMadeStaticReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +31,14 @@ class JavaClassifierMadeStaticReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<ConcreteClassifier, Static> relevantChange = ((CreateAndInsertNonRoot<ConcreteClassifier, Static>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof ConcreteClassifier)) {
+    InsertEReference<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.modifiers.Static> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.ConcreteClassifier, org.emftext.language.java.modifiers.Static>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.ConcreteClassifier)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Static)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.modifiers.Static)) {
     	return false;
     }
     return true;

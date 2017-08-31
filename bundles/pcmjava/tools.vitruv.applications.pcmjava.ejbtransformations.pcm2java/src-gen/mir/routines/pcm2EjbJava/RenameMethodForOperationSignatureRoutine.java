@@ -82,17 +82,17 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
   
   private OperationSignature operationSignature;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameMethodForOperationSignatureRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.operationSignature);
+    getLogger().debug("   operationSignature: " + this.operationSignature);
     
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(operationSignature), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
     	null);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
     // val updatedElement userExecution.getElement1(operationSignature, interfaceMethod);
@@ -101,5 +101,7 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
     userExecution.callRoutine1(operationSignature, interfaceMethod, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

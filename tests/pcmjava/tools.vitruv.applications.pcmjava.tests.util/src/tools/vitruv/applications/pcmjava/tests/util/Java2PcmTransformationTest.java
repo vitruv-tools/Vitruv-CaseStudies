@@ -96,6 +96,7 @@ import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
 import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
 import tools.vitruv.framework.change.description.ConcreteChange;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory;
+import tools.vitruv.framework.change.preparation.ChangeDescription2EChangesTransformation;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
@@ -127,6 +128,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	private int expectedNumberOfSyncs = 0;
 
 	public Java2PcmTransformationTest() {
+		// TODO HK Why do we need to disable it?
+		ChangeDescription2EChangesTransformation.RECORD_DELETE_RECURSIVELY = false;
 		setTestProjectCreator(projectName -> TestUtil.createPlatformProject(projectName, true).getLocation().toFile());
 	}
 

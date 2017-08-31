@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedParameterReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<Operation, Parameter> typedChange = (RemoveEReference<Operation, Parameter>)change;
-    Operation affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change;
+    org.eclipse.uml2.uml.Operation affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.Parameter oldValue = typedChange.getOldValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedParameterReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -31,14 +31,14 @@ class DeletedParameterReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<Operation, Parameter> relevantChange = (RemoveEReference<Operation, Parameter>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof Operation)) {
+    RemoveEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> relevantChange = (RemoveEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Operation)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedParameter")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Parameter)) {
+    if (!(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.Parameter)) {
     	return false;
     }
     return true;

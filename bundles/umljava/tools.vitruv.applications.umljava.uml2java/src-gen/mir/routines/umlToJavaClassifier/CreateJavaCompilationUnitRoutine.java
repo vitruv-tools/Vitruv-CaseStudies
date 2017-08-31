@@ -11,7 +11,6 @@ import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.containers.impl.ContainersFactoryImpl;
 import tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -52,8 +51,7 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
       javaCompilationUnit.setName(_plus);
       EList<ConcreteClassifier> _classifiers = javaCompilationUnit.getClassifiers();
       _classifiers.add(jClassifier);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit);
-      this.persistProjectRelative(umlClassifier, javaCompilationUnit, _buildJavaFilePath);
+      this.persistProjectRelative(umlClassifier, javaCompilationUnit, JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit));
     }
     
     public void callRoutine1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit, @Extension final RoutinesFacade _routinesFacade) {
@@ -77,11 +75,11 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
   
   private Namespace uNamespace;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaCompilationUnitRoutine with input:");
-    getLogger().debug("   Classifier: " + this.umlClassifier);
-    getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
-    getLogger().debug("   Namespace: " + this.uNamespace);
+    getLogger().debug("   umlClassifier: " + this.umlClassifier);
+    getLogger().debug("   jClassifier: " + this.jClassifier);
+    getLogger().debug("   uNamespace: " + this.uNamespace);
     
     org.emftext.language.java.containers.Package jPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJPackage(umlClassifier, jClassifier, uNamespace), // correspondence source supplier
@@ -89,7 +87,7 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	null);
     registerObjectUnderModification(jPackage);
-    CompilationUnit javaCompilationUnit = ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
+    org.emftext.language.java.containers.CompilationUnit javaCompilationUnit = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
     notifyObjectCreated(javaCompilationUnit);
     userExecution.updateJavaCompilationUnitElement(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit);
     
@@ -98,5 +96,7 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     userExecution.callRoutine1(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

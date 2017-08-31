@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaAttributeCreatedInEnumReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Enumeration, Field> typedChange = ((CreateAndInsertNonRoot<Enumeration, Field>)change).getInsertChange();
-    Enumeration affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.Field> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.Field>)change).getInsertChange();
+    org.emftext.language.java.classifiers.Enumeration affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Field newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.Field newValue = typedChange.getNewValue();
     mir.routines.javaToUmlAttribute.RoutinesFacade routinesFacade = new mir.routines.javaToUmlAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeCreatedInEnumReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeCreatedInEnumReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaAttributeCreatedInEnumReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Enumeration, Field> relevantChange = ((CreateAndInsertNonRoot<Enumeration, Field>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Enumeration)) {
+    InsertEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.Field> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.Field>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Enumeration)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Field)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.Field)) {
     	return false;
     }
     return true;

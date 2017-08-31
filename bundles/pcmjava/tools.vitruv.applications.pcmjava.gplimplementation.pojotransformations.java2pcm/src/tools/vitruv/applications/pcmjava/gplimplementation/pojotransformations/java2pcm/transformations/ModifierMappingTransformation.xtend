@@ -5,6 +5,7 @@ import org.eclipse.emf.ecore.EAttribute
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.emftext.language.java.modifiers.Modifier
+import tools.vitruv.framework.util.command.ResourceAccess
 
 /**
  * Triggered when a CUD operation on a Modifier is detected.
@@ -20,26 +21,26 @@ class ModifierMappingTransformation extends EmptyEObjectMappingTransformation {
 	override setCorrespondenceForFeatures() {
 	}
 
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 	}
 
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 	}
 
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 	}
 
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject, EReference affectedReference, EObject oldValue,
-		int index, EObject[] oldCorrespondingEObjectsToDelete) {
+		int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 	}
 
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
+		Object newValue, ResourceAccess resourceAccess) {
 	}
 
 	override createNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference, EObject newValue,
-		EObject[] newCorrespondingEObjects) {
+		EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 	}
 
 }

@@ -39,12 +39,14 @@ public class CreateJavaSetterRoutine extends AbstractRepairRoutineRealization {
   
   private Field jAttribute;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaSetterRoutine with input:");
-    getLogger().debug("   Field: " + this.jAttribute);
+    getLogger().debug("   jAttribute: " + this.jAttribute);
     
     userExecution.callRoutine1(jAttribute, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

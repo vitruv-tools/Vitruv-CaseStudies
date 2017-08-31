@@ -5,7 +5,6 @@ import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -29,8 +28,7 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     
     public void update0Element(final Interface superUMLInterface, final Interface uI, final org.emftext.language.java.classifiers.Interface jI, final org.emftext.language.java.classifiers.Interface superJavaInterface) {
       EList<TypeReference> _extends = jI.getExtends();
-      CompilationUnit _containingCompilationUnit = jI.getContainingCompilationUnit();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, superJavaInterface, _containingCompilationUnit, this.userInteracting);
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, superJavaInterface, jI.getContainingCompilationUnit(), this.userInteracting);
       _extends.add(_createTypeReferenceAndUpdateImport);
     }
     
@@ -54,10 +52,10 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
   
   private Interface uI;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaSuperInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.superUMLInterface);
-    getLogger().debug("   Interface: " + this.uI);
+    getLogger().debug("   superUMLInterface: " + this.superUMLInterface);
+    getLogger().debug("   uI: " + this.uI);
     
     org.emftext.language.java.classifiers.Interface jI = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJI(superUMLInterface, uI), // correspondence source supplier
@@ -65,7 +63,7 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (jI == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jI);
     org.emftext.language.java.classifiers.Interface superJavaInterface = getCorrespondingElement(
@@ -74,12 +72,14 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (superJavaInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(superJavaInterface);
     // val updatedElement userExecution.getElement1(superUMLInterface, uI, jI, superJavaInterface);
     userExecution.update0Element(superUMLInterface, uI, jI, superJavaInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

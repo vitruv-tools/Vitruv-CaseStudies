@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaElementMadeStaticReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<AnnotableAndModifiable, Static> typedChange = ((CreateAndInsertNonRoot<AnnotableAndModifiable, Static>)change).getInsertChange();
-    AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Static> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Static>)change).getInsertChange();
+    org.emftext.language.java.modifiers.AnnotableAndModifiable affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Static newValue = typedChange.getNewValue();
+    org.emftext.language.java.modifiers.Static newValue = typedChange.getNewValue();
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadeStaticReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadeStaticReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaElementMadeStaticReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<AnnotableAndModifiable, Static> relevantChange = ((CreateAndInsertNonRoot<AnnotableAndModifiable, Static>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof AnnotableAndModifiable)) {
+    InsertEReference<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Static> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.modifiers.AnnotableAndModifiable, org.emftext.language.java.modifiers.Static>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.modifiers.AnnotableAndModifiable)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("annotationsAndModifiers")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Static)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.modifiers.Static)) {
     	return false;
     }
     return true;

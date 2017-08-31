@@ -6,7 +6,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -34,8 +33,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     
     public void update0Element(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface) {
       EList<TypeReference> _implements = jClass.getImplements();
-      CompilationUnit _containingCompilationUnit = jClass.getContainingCompilationUnit();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, _containingCompilationUnit, this.userInteracting);
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, jClass.getContainingCompilationUnit(), this.userInteracting);
       _implements.add(_createTypeReferenceAndUpdateImport);
     }
     
@@ -63,11 +61,11 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
   
   private org.eclipse.uml2.uml.Class uClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaImplementedInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.uInterface);
-    getLogger().debug("   Interface: " + this.oldInterface);
-    getLogger().debug("   Class: " + this.uClass);
+    getLogger().debug("   uInterface: " + this.uInterface);
+    getLogger().debug("   oldInterface: " + this.oldInterface);
+    getLogger().debug("   uClass: " + this.uClass);
     
     org.emftext.language.java.classifiers.Class jClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJClass(uInterface, oldInterface, uClass), // correspondence source supplier
@@ -75,7 +73,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (jClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jClass);
     org.emftext.language.java.classifiers.Interface jInterface = getCorrespondingElement(
@@ -84,7 +82,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (jInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jInterface);
     userExecution.callRoutine1(uInterface, oldInterface, uClass, jClass, jInterface, actionsFacade);
@@ -93,5 +91,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     userExecution.update0Element(uInterface, oldInterface, uClass, jClass, jInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

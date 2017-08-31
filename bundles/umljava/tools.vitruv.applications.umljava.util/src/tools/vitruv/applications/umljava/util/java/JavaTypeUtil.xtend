@@ -16,7 +16,6 @@ import org.emftext.language.java.types.TypedElement
 import org.emftext.language.java.types.TypesFactory
 import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import org.apache.log4j.Logger
-import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.types.ClassifierReference
 
 /**
@@ -58,7 +57,7 @@ class JavaTypeUtil {
         }
         val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
         var classifierRef = TypesFactory.eINSTANCE.createClassifierReference
-        classifierRef.target = EcoreUtil.copy(concreteClassifier)
+        classifierRef.target = concreteClassifier
         namespaceClassifierReference.classifierReferences.add(classifierRef)
         return namespaceClassifierReference
     }

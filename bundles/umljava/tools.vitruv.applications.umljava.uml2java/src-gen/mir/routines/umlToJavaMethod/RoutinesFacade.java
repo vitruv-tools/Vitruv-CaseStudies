@@ -18,93 +18,78 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createJavaMethod(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaMethodRoutine(this.executionState, calledBy,
-    	uClassifier, uOperation);
-    effect.applyRoutine();
+  public boolean createJavaMethod(final Classifier uClassifier, final Operation uOperation) {
+    mir.routines.umlToJavaMethod.CreateJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaMethodRoutine(this.executionState, calledBy, uClassifier, uOperation);
+    return effect.applyRoutine();
   }
   
-  public void createJavaClassMethod(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine(this.executionState, calledBy,
-    	uClassifier, uOperation);
-    effect.applyRoutine();
+  public boolean createJavaClassMethod(final Classifier uClassifier, final Operation uOperation) {
+    mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine(this.executionState, calledBy, uClassifier, uOperation);
+    return effect.applyRoutine();
   }
   
-  public void createJavaConstructor(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine(this.executionState, calledBy,
-    	uClassifier, uOperation);
-    effect.applyRoutine();
+  public boolean createJavaConstructor(final Classifier uClassifier, final Operation uOperation) {
+    mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine(this.executionState, calledBy, uClassifier, uOperation);
+    return effect.applyRoutine();
   }
   
-  public void deleteJavaMethod(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine(this.executionState, calledBy,
-    	uOperation);
-    effect.applyRoutine();
+  public boolean deleteJavaMethod(final Operation uOperation) {
+    mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine(this.executionState, calledBy, uOperation);
+    return effect.applyRoutine();
   }
   
-  public void setJavaMethodReturnType(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine(this.executionState, calledBy,
-    	uOperation);
-    effect.applyRoutine();
+  public boolean setJavaMethodReturnType(final Operation uOperation) {
+    mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine(this.executionState, calledBy, uOperation);
+    return effect.applyRoutine();
   }
   
-  public void setStatic(final Feature uFeat) {
-    mir.routines.umlToJavaMethod.SetStaticRoutine effect = new mir.routines.umlToJavaMethod.SetStaticRoutine(this.executionState, calledBy,
-    	uFeat);
-    effect.applyRoutine();
+  public boolean setStatic(final Feature uFeat) {
+    mir.routines.umlToJavaMethod.SetStaticRoutine effect = new mir.routines.umlToJavaMethod.SetStaticRoutine(this.executionState, calledBy, uFeat);
+    return effect.applyRoutine();
   }
   
-  public void setJavaMethodAbstract(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine(this.executionState, calledBy,
-    	uOperation);
-    effect.applyRoutine();
+  public boolean setJavaMethodAbstract(final Operation uOperation) {
+    mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine(this.executionState, calledBy, uOperation);
+    return effect.applyRoutine();
   }
   
-  public void createJavaInterfaceMethod(final Interface uInterface, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine(this.executionState, calledBy,
-    	uInterface, uOperation);
-    effect.applyRoutine();
+  public boolean createJavaInterfaceMethod(final Interface uInterface, final Operation uOperation) {
+    mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine(this.executionState, calledBy, uInterface, uOperation);
+    return effect.applyRoutine();
   }
   
-  public void setJavaMethodFinal(final Operation uOperation, final Boolean isFinal) {
-    mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine(this.executionState, calledBy,
-    	uOperation, isFinal);
-    effect.applyRoutine();
+  public boolean setJavaMethodFinal(final Operation uOperation, final Boolean isFinal) {
+    mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine(this.executionState, calledBy, uOperation, isFinal);
+    return effect.applyRoutine();
   }
   
-  public void changeJavaElementVisibility(final NamedElement uElem) {
-    mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine effect = new mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine(this.executionState, calledBy,
-    	uElem);
-    effect.applyRoutine();
+  public boolean changeJavaElementVisibility(final NamedElement uElem) {
+    mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine effect = new mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine(this.executionState, calledBy, uElem);
+    return effect.applyRoutine();
   }
   
-  public void renameJavaNamedElement(final NamedElement uElem, final String name) {
-    mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine effect = new mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine(this.executionState, calledBy,
-    	uElem, name);
-    effect.applyRoutine();
+  public boolean renameJavaNamedElement(final NamedElement uElem, final String name) {
+    mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine effect = new mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine(this.executionState, calledBy, uElem, name);
+    return effect.applyRoutine();
   }
   
-  public void createJavaParameter(final Operation uMeth, final Parameter umlParam) {
-    mir.routines.umlToJavaMethod.CreateJavaParameterRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaParameterRoutine(this.executionState, calledBy,
-    	uMeth, umlParam);
-    effect.applyRoutine();
+  public boolean createJavaParameter(final Operation uMeth, final Parameter umlParam) {
+    mir.routines.umlToJavaMethod.CreateJavaParameterRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaParameterRoutine(this.executionState, calledBy, uMeth, umlParam);
+    return effect.applyRoutine();
   }
   
-  public void deleteJavaParameter(final Parameter uParam) {
-    mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine effect = new mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine(this.executionState, calledBy,
-    	uParam);
-    effect.applyRoutine();
+  public boolean deleteJavaParameter(final Parameter uParam) {
+    mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine effect = new mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine(this.executionState, calledBy, uParam);
+    return effect.applyRoutine();
   }
   
-  public void changeJavaParameterType(final Parameter uParam, final Type uType) {
-    mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine effect = new mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine(this.executionState, calledBy,
-    	uParam, uType);
-    effect.applyRoutine();
+  public boolean changeJavaParameterType(final Parameter uParam, final Type uType) {
+    mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine effect = new mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine(this.executionState, calledBy, uParam, uType);
+    return effect.applyRoutine();
   }
   
-  public void adaptJavaParametertoDirectionChange(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
-    mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine effect = new mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine(this.executionState, calledBy,
-    	uOperation, uParam, oldDirection, newDirection);
-    effect.applyRoutine();
+  public boolean adaptJavaParametertoDirectionChange(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
+    mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine effect = new mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine(this.executionState, calledBy, uOperation, uParam, oldDirection, newDirection);
+    return effect.applyRoutine();
   }
 }

@@ -26,8 +26,7 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Operation uOperation, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod javaMethod) {
-      boolean _isAbstract = uOperation.isAbstract();
-      JavaModifierUtil.setAbstract(javaMethod, _isAbstract);
+      JavaModifierUtil.setAbstract(javaMethod, uOperation.isAbstract());
     }
     
     public EObject getCorrepondenceSourceJavaClass(final Operation uOperation) {
@@ -49,9 +48,9 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
   
   private Operation uOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetJavaMethodAbstractRoutine with input:");
-    getLogger().debug("   Operation: " + this.uOperation);
+    getLogger().debug("   uOperation: " + this.uOperation);
     
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClass(uOperation), // correspondence source supplier
@@ -59,21 +58,23 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (javaClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClass);
-    ClassMethod javaMethod = getCorrespondingElement(
+    org.emftext.language.java.members.ClassMethod javaMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaMethod(uOperation, javaClass), // correspondence source supplier
-    	ClassMethod.class,
-    	(ClassMethod _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.ClassMethod.class,
+    	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
     	null);
     if (javaMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaMethod);
     // val updatedElement userExecution.getElement1(uOperation, javaClass, javaMethod);
     userExecution.update0Element(uOperation, javaClass, javaMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

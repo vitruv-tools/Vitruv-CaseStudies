@@ -44,23 +44,25 @@ public class SetUmlFeatureStaticRoutine extends AbstractRepairRoutineRealization
   
   private Boolean isStatic;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine SetUmlFeatureStaticRoutine with input:");
-    getLogger().debug("   AnnotableAndModifiable: " + this.jElem);
-    getLogger().debug("   Boolean: " + this.isStatic);
+    getLogger().debug("   jElem: " + this.jElem);
+    getLogger().debug("   isStatic: " + this.isStatic);
     
-    Feature uFeature = getCorrespondingElement(
+    org.eclipse.uml2.uml.Feature uFeature = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUFeature(jElem, isStatic), // correspondence source supplier
-    	Feature.class,
-    	(Feature _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Feature.class,
+    	(org.eclipse.uml2.uml.Feature _element) -> true, // correspondence precondition checker
     	null);
     if (uFeature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uFeature);
     // val updatedElement userExecution.getElement1(jElem, isStatic, uFeature);
     userExecution.update0Element(jElem, isStatic, uFeature);
     
     postprocessElements();
+    
+    return true;
   }
 }

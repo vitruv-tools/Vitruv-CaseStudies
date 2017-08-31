@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreatedParameterReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<OperationSignature, Parameter> typedChange = ((CreateAndInsertNonRoot<OperationSignature, Parameter>)change).getInsertChange();
-    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter> typedChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter>)change).getInsertChange();
+    org.palladiosimulator.pcm.repository.OperationSignature affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.Parameter newValue = typedChange.getNewValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedParameterReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class CreatedParameterReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<OperationSignature, Parameter> relevantChange = ((CreateAndInsertNonRoot<OperationSignature, Parameter>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
+    InsertEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter> relevantChange = ((CreateAndInsertNonRoot<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.OperationSignature)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parameters__OperationSignature")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Parameter)) {
+    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.Parameter)) {
     	return false;
     }
     return true;

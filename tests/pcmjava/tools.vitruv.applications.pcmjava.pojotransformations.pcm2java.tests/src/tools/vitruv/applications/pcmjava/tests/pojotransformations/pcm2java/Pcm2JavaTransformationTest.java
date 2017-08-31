@@ -77,11 +77,6 @@ import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
 	
 	@Override
-	protected boolean unresolveChanges() {
-		return false;
-	}
-	
-	@Override
 	protected void setup() {
 		// This is necessary because otherwise Maven tests will fail as resources from previous
 		// tests are still in the classpath and accidentally resolved
@@ -90,8 +85,6 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
 	
 	@Override
 	protected void cleanup() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override

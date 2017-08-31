@@ -8,7 +8,6 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 import org.apache.log4j.Logger
-import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.types.Type
@@ -56,7 +55,7 @@ class DataTypeCorrespondenceHelper {
 		if (null === primitveTypeMappingMap) {
 			initPrimitiveTypeMap()
 		}
-		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
+		return primitveTypeMappingMap.claimValueForKey(pdt.type)
 	}
 
 	public static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,

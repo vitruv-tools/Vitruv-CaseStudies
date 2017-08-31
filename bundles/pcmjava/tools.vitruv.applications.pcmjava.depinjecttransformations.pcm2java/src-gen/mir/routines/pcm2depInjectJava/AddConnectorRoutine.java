@@ -1,6 +1,5 @@
 package mir.routines.pcm2depInjectJava;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -26,8 +25,8 @@ public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
     public void callRoutine1(final AssemblyConnector assemblyConnector, @Extension final RoutinesFacade _routinesFacade) {
       final AssemblyContext assemblyContext = assemblyConnector.getProvidingAssemblyContext_AssemblyConnector();
       RepositoryComponent _encapsulatedComponent__AssemblyContext = assemblyContext.getEncapsulatedComponent__AssemblyContext();
-      boolean _notEquals = (!Objects.equal(_encapsulatedComponent__AssemblyContext, null));
-      if (_notEquals) {
+      boolean _tripleNotEquals = (_encapsulatedComponent__AssemblyContext != null);
+      if (_tripleNotEquals) {
         PcmJamoppUtilsGuice.createBindCallForConnector(assemblyContext, assemblyConnector, this.correspondenceModel, this.userInteracting);
       } else {
       }
@@ -43,12 +42,14 @@ public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
   
   private AssemblyConnector assemblyConnector;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddConnectorRoutine with input:");
-    getLogger().debug("   AssemblyConnector: " + this.assemblyConnector);
+    getLogger().debug("   assemblyConnector: " + this.assemblyConnector);
     
     userExecution.callRoutine1(assemblyConnector, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

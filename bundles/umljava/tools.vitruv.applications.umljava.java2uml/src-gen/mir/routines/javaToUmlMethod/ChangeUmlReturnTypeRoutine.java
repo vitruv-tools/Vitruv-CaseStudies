@@ -3,9 +3,7 @@ package mir.routines.javaToUmlMethod;
 import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
@@ -29,9 +27,7 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Method jMeth, final TypeReference jType, final Operation uOperation) {
-      Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
-      Type _umlType = JavaToUmlHelper.getUmlType(jType, _umlModel, this.correspondenceModel);
-      uOperation.setType(_umlType);
+      uOperation.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel));
     }
     
     public EObject getCorrepondenceSourceUOperation(final Method jMeth, final TypeReference jType) {
@@ -50,23 +46,25 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
   
   private TypeReference jType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeUmlReturnTypeRoutine with input:");
-    getLogger().debug("   Method: " + this.jMeth);
-    getLogger().debug("   TypeReference: " + this.jType);
+    getLogger().debug("   jMeth: " + this.jMeth);
+    getLogger().debug("   jType: " + this.jType);
     
-    Operation uOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation uOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUOperation(jMeth, jType), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
     	null);
     if (uOperation == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uOperation);
     // val updatedElement userExecution.getElement1(jMeth, jType, uOperation);
     userExecution.update0Element(jMeth, jType, uOperation);
     
     postprocessElements();
+    
+    return true;
   }
 }

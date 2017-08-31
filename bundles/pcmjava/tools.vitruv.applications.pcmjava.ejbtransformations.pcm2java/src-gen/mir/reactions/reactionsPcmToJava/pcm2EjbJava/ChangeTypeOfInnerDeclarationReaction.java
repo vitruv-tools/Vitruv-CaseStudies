@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangeTypeOfInnerDeclarationReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<InnerDeclaration, DataType> typedChange = (ReplaceSingleValuedEReference<InnerDeclaration, DataType>)change;
-    InnerDeclaration affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.InnerDeclaration, org.palladiosimulator.pcm.repository.DataType> typedChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.InnerDeclaration, org.palladiosimulator.pcm.repository.DataType>)change;
+    org.palladiosimulator.pcm.repository.InnerDeclaration affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    DataType oldValue = typedChange.getOldValue();
-    DataType newValue = typedChange.getNewValue();
+    org.palladiosimulator.pcm.repository.DataType oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.DataType newValue = typedChange.getNewValue();
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.ChangeTypeOfInnerDeclarationReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.ChangeTypeOfInnerDeclarationReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ChangeTypeOfInnerDeclarationReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<InnerDeclaration, DataType> relevantChange = (ReplaceSingleValuedEReference<InnerDeclaration, DataType>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof InnerDeclaration)) {
+    ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.InnerDeclaration, org.palladiosimulator.pcm.repository.DataType> relevantChange = (ReplaceSingleValuedEReference<org.palladiosimulator.pcm.repository.InnerDeclaration, org.palladiosimulator.pcm.repository.DataType>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.InnerDeclaration)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("datatype_InnerDeclaration")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof DataType)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof DataType)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.DataType)) {
     	return false;
     }
     return true;

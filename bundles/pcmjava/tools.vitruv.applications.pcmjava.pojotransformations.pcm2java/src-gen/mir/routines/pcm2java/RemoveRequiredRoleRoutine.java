@@ -67,27 +67,27 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
   
   private InterfaceRequiringEntity requiringEntity;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveRequiredRoleRoutine with input:");
-    getLogger().debug("   RequiredRole: " + this.requiredRole);
-    getLogger().debug("   InterfaceRequiringEntity: " + this.requiringEntity);
+    getLogger().debug("   requiredRole: " + this.requiredRole);
+    getLogger().debug("   requiringEntity: " + this.requiringEntity);
     
-    ClassifierImport requiredInterfaceImport = getCorrespondingElement(
+    org.emftext.language.java.imports.ClassifierImport requiredInterfaceImport = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRequiredInterfaceImport(requiredRole, requiringEntity), // correspondence source supplier
-    	ClassifierImport.class,
-    	(ClassifierImport _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.imports.ClassifierImport.class,
+    	(org.emftext.language.java.imports.ClassifierImport _element) -> true, // correspondence precondition checker
     	null);
     if (requiredInterfaceImport == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(requiredInterfaceImport);
-    Field requiredInterfaceField = getCorrespondingElement(
+    org.emftext.language.java.members.Field requiredInterfaceField = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRequiredInterfaceField(requiredRole, requiringEntity, requiredInterfaceImport), // correspondence source supplier
-    	Field.class,
-    	(Field _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.members.Field.class,
+    	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null);
     if (requiredInterfaceField == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(requiredInterfaceField);
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
@@ -96,7 +96,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
     	null);
     if (javaClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClass);
     deleteObject(userExecution.getElement1(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass));
@@ -106,5 +106,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     userExecution.callRoutine1(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

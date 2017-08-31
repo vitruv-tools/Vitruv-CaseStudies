@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class JavaInterfaceCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<CompilationUnit, Interface> typedChange = ((CreateAndInsertNonRoot<CompilationUnit, Interface>)change).getInsertChange();
-    CompilationUnit affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface> typedChange = ((CreateAndInsertNonRoot<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface>)change).getInsertChange();
+    org.emftext.language.java.containers.CompilationUnit affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Interface newValue = typedChange.getNewValue();
+    org.emftext.language.java.classifiers.Interface newValue = typedChange.getNewValue();
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaInterfaceCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaInterfaceCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -30,14 +30,14 @@ class JavaInterfaceCreatedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<CompilationUnit, Interface> relevantChange = ((CreateAndInsertNonRoot<CompilationUnit, Interface>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof CompilationUnit)) {
+    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface> relevantChange = ((CreateAndInsertNonRoot<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("classifiers")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Interface)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.classifiers.Interface)) {
     	return false;
     }
     return true;

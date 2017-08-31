@@ -15,10 +15,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class CreateFieldInDatatypeClassReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Member> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Member>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Member> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Member>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Member newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.Member newValue = typedChange.getNewValue();
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateFieldInDatatypeClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateFieldInDatatypeClassReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -29,14 +29,14 @@ class CreateFieldInDatatypeClassReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Class, Member> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Member>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Member> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Member>)change;
     if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Class)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("members")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Member)) {
+    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.Member)) {
     	return false;
     }
     return true;
@@ -51,10 +51,10 @@ class CreateFieldInDatatypeClassReaction extends AbstractReactionRealization {
     	return false;
     }
     getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<org.emftext.language.java.classifiers.Class, Member> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, Member>)change;
+    InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Member> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.members.Member>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Member newValue = typedChange.getNewValue();
+    org.emftext.language.java.members.Member newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }

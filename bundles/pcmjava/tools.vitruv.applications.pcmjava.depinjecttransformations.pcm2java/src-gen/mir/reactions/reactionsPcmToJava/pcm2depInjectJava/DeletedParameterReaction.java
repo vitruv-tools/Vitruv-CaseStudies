@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedParameterReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<OperationSignature, Parameter> typedChange = ((RemoveAndDeleteNonRoot<OperationSignature, Parameter>)change).getRemoveChange();
-    OperationSignature affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter> typedChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter>)change).getRemoveChange();
+    org.palladiosimulator.pcm.repository.OperationSignature affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Parameter oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.repository.Parameter oldValue = typedChange.getOldValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedParameterReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedParameterReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class DeletedParameterReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<OperationSignature, Parameter> relevantChange = ((RemoveAndDeleteNonRoot<OperationSignature, Parameter>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof OperationSignature)) {
+    RemoveEReference<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter> relevantChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.OperationSignature, org.palladiosimulator.pcm.repository.Parameter>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.OperationSignature)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("parameters__OperationSignature")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof Parameter)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.Parameter)) {
     	return false;
     }
     return true;

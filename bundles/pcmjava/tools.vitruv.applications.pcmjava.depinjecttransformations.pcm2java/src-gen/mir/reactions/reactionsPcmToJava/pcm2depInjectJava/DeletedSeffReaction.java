@@ -16,10 +16,10 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 @SuppressWarnings("all")
 class DeletedSeffReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    RemoveEReference<BasicComponent, ServiceEffectSpecification> typedChange = ((RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification>)change).getRemoveChange();
-    BasicComponent affectedEObject = typedChange.getAffectedEObject();
+    RemoveEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> typedChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>)change).getRemoveChange();
+    org.palladiosimulator.pcm.repository.BasicComponent affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ServiceEffectSpecification oldValue = typedChange.getOldValue();
+    org.palladiosimulator.pcm.seff.ServiceEffectSpecification oldValue = typedChange.getOldValue();
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSeffReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
@@ -30,14 +30,14 @@ class DeletedSeffReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<BasicComponent, ServiceEffectSpecification> relevantChange = ((RemoveAndDeleteNonRoot<BasicComponent, ServiceEffectSpecification>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof BasicComponent)) {
+    RemoveEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> relevantChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>)change).getRemoveChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.BasicComponent)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
     	return false;
     }
-    if (!(relevantChange.getOldValue() instanceof ServiceEffectSpecification)) {
+    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.seff.ServiceEffectSpecification)) {
     	return false;
     }
     return true;

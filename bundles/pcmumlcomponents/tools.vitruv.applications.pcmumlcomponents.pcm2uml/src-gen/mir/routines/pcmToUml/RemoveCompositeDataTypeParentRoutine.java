@@ -51,7 +51,7 @@ public class RemoveCompositeDataTypeParentRoutine extends AbstractRepairRoutineR
   
   private CompositeDataType parent;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveCompositeDataTypeParentRoutine with input:");
     getLogger().debug("   dataType: " + this.dataType);
     getLogger().debug("   parent: " + this.parent);
@@ -62,7 +62,7 @@ public class RemoveCompositeDataTypeParentRoutine extends AbstractRepairRoutineR
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeType);
     org.eclipse.uml2.uml.DataType parentType = getCorrespondingElement(
@@ -71,12 +71,14 @@ public class RemoveCompositeDataTypeParentRoutine extends AbstractRepairRoutineR
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null);
     if (parentType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(parentType);
     // val updatedElement userExecution.getElement1(dataType, parent, compositeType, parentType);
     userExecution.update0Element(dataType, parent, compositeType, parentType);
     
     postprocessElements();
+    
+    return true;
   }
 }

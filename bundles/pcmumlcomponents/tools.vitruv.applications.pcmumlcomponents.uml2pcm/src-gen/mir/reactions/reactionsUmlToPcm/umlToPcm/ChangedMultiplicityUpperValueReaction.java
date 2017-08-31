@@ -15,11 +15,11 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangedMultiplicityUpperValueReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification> typedChange = (ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification>)change;
-    MultiplicityElement affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEReference<org.eclipse.uml2.uml.MultiplicityElement, org.eclipse.uml2.uml.ValueSpecification> typedChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.MultiplicityElement, org.eclipse.uml2.uml.ValueSpecification>)change;
+    org.eclipse.uml2.uml.MultiplicityElement affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    ValueSpecification oldValue = typedChange.getOldValue();
-    ValueSpecification newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.ValueSpecification oldValue = typedChange.getOldValue();
+    org.eclipse.uml2.uml.ValueSpecification newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperValueReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperValueReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -30,17 +30,17 @@ class ChangedMultiplicityUpperValueReaction extends AbstractReactionRealization 
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification> relevantChange = (ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof MultiplicityElement)) {
+    ReplaceSingleValuedEReference<org.eclipse.uml2.uml.MultiplicityElement, org.eclipse.uml2.uml.ValueSpecification> relevantChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.MultiplicityElement, org.eclipse.uml2.uml.ValueSpecification>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.MultiplicityElement)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("upperValue")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof ValueSpecification)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.ValueSpecification)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof ValueSpecification)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.ValueSpecification)) {
     	return false;
     }
     return true;

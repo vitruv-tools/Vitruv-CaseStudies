@@ -59,7 +59,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
   
   private Interface pcmInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlInterfaceRoutine with input:");
     getLogger().debug("   pcmInterface: " + this.pcmInterface);
     
@@ -69,7 +69,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
     	null);
     if (umlModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlModel);
     org.eclipse.uml2.uml.Interface umlInterface = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createInterface();
@@ -82,5 +82,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     addCorrespondenceBetween(userExecution.getElement2(pcmInterface, umlModel, umlInterface), userExecution.getElement3(pcmInterface, umlModel, umlInterface), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

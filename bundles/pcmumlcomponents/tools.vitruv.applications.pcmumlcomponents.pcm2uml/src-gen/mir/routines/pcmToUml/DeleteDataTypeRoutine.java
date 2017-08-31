@@ -38,7 +38,7 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
   
   private DataType dataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteDataTypeRoutine with input:");
     getLogger().debug("   dataType: " + this.dataType);
     
@@ -48,11 +48,13 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
     	(org.eclipse.uml2.uml.Type _element) -> true, // correspondence precondition checker
     	null);
     if (umlType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlType);
     deleteObject(userExecution.getElement1(dataType, umlType));
     
     postprocessElements();
+    
+    return true;
   }
 }

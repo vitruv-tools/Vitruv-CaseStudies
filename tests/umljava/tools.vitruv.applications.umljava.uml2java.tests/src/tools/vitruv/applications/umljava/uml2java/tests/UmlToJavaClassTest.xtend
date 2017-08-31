@@ -42,7 +42,6 @@ class UmlToJavaClassTest extends Uml2JavaTransformationTest {
 	    if (uClass !== null) {
 	        uClass.destroy;
 	    }
-        saveAndSynchronizeChanges(rootElement);
 	}
 
 	@Test

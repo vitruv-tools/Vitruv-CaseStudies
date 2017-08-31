@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
@@ -30,8 +29,7 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     }
     
     public void update0Element(final Interface jInterface, final Classifier jSuperInterface, final org.eclipse.uml2.uml.Interface uInterface) {
-      Model _umlModel = JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting);
-      final Type uSuperInterface = JavaToUmlHelper.getUmlType(jSuperInterface, _umlModel, this.correspondenceModel);
+      final Type uSuperInterface = JavaToUmlHelper.getUmlType(jSuperInterface, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel);
       if (((uSuperInterface != null) && (uSuperInterface instanceof org.eclipse.uml2.uml.Interface))) {
         UmlClassifierAndPackageUtil.addUmlSuperClassifier(uInterface, ((org.eclipse.uml2.uml.Interface) uSuperInterface));
       } else {
@@ -61,10 +59,10 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
   
   private Classifier jSuperInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddUmlSuperinterfacesRoutine with input:");
-    getLogger().debug("   Interface: " + this.jInterface);
-    getLogger().debug("   Classifier: " + this.jSuperInterface);
+    getLogger().debug("   jInterface: " + this.jInterface);
+    getLogger().debug("   jSuperInterface: " + this.jSuperInterface);
     
     org.eclipse.uml2.uml.Interface uInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUInterface(jInterface, jSuperInterface), // correspondence source supplier
@@ -72,12 +70,14 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null);
     if (uInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uInterface);
     // val updatedElement userExecution.getElement1(jInterface, jSuperInterface, uInterface);
     userExecution.update0Element(jInterface, jSuperInterface, uInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

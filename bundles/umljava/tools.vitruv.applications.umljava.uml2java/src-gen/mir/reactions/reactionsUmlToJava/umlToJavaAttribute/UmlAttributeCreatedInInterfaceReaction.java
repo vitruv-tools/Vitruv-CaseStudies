@@ -17,10 +17,10 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 @SuppressWarnings("all")
 class UmlAttributeCreatedInInterfaceReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    InsertEReference<Interface, Property> typedChange = ((CreateAndInsertNonRoot<Interface, Property>)change).getInsertChange();
-    Interface affectedEObject = typedChange.getAffectedEObject();
+    InsertEReference<org.eclipse.uml2.uml.Interface, org.eclipse.uml2.uml.Property> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Interface, org.eclipse.uml2.uml.Property>)change).getInsertChange();
+    org.eclipse.uml2.uml.Interface affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
-    Property newValue = typedChange.getNewValue();
+    org.eclipse.uml2.uml.Property newValue = typedChange.getNewValue();
     mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeCreatedInInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlAttributeCreatedInInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
@@ -31,14 +31,14 @@ class UmlAttributeCreatedInInterfaceReaction extends AbstractReactionRealization
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<Interface, Property> relevantChange = ((CreateAndInsertNonRoot<Interface, Property>)change).getInsertChange();
-    if (!(relevantChange.getAffectedEObject() instanceof Interface)) {
+    InsertEReference<org.eclipse.uml2.uml.Interface, org.eclipse.uml2.uml.Property> relevantChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Interface, org.eclipse.uml2.uml.Property>)change).getInsertChange();
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Interface)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("ownedAttribute")) {
     	return false;
     }
-    if (!(relevantChange.getNewValue() instanceof Property)) {
+    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Property)) {
     	return false;
     }
     return true;

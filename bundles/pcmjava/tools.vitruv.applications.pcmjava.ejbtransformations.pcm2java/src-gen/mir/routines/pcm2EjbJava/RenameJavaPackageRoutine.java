@@ -1,6 +1,5 @@
 package mir.routines.pcm2EjbJava;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.io.IOException;
 import mir.routines.pcm2EjbJava.RoutinesFacade;
@@ -29,8 +28,7 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     
     public void update0Element(final NamedElement sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String expectedTag, final org.emftext.language.java.containers.Package javaPackage) {
       javaPackage.getNamespaces().clear();
-      boolean _notEquals = (!Objects.equal(parentPackage, null));
-      if (_notEquals) {
+      if ((parentPackage != null)) {
         EList<String> _namespaces = javaPackage.getNamespaces();
         EList<String> _namespaces_1 = parentPackage.getNamespaces();
         Iterables.<String>addAll(_namespaces, _namespaces_1);
@@ -66,12 +64,12 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   private String expectedTag;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaPackageRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.sourceElementMappedToPackage);
-    getLogger().debug("   Package: " + this.parentPackage);
-    getLogger().debug("   String: " + this.packageName);
-    getLogger().debug("   String: " + this.expectedTag);
+    getLogger().debug("   sourceElementMappedToPackage: " + this.sourceElementMappedToPackage);
+    getLogger().debug("   parentPackage: " + this.parentPackage);
+    getLogger().debug("   packageName: " + this.packageName);
+    getLogger().debug("   expectedTag: " + this.expectedTag);
     
     org.emftext.language.java.containers.Package javaPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaPackage(sourceElementMappedToPackage, parentPackage, packageName, expectedTag), // correspondence source supplier
@@ -79,12 +77,14 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(sourceElementMappedToPackage, parentPackage, packageName, expectedTag));
     if (javaPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaPackage);
     // val updatedElement userExecution.getElement1(sourceElementMappedToPackage, parentPackage, packageName, expectedTag, javaPackage);
     userExecution.update0Element(sourceElementMappedToPackage, parentPackage, packageName, expectedTag, javaPackage);
     
     postprocessElements();
+    
+    return true;
   }
 }

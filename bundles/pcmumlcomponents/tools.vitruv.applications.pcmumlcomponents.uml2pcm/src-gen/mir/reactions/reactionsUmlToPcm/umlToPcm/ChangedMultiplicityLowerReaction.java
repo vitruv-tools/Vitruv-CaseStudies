@@ -14,11 +14,11 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 @SuppressWarnings("all")
 class ChangedMultiplicityLowerReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<MultiplicityElement, Integer> typedChange = (ReplaceSingleValuedEAttribute<MultiplicityElement, Integer>)change;
-    MultiplicityElement affectedEObject = typedChange.getAffectedEObject();
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.MultiplicityElement, java.lang.Integer> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.MultiplicityElement, java.lang.Integer>)change;
+    org.eclipse.uml2.uml.MultiplicityElement affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
-    Integer oldValue = typedChange.getOldValue();
-    Integer newValue = typedChange.getNewValue();
+    java.lang.Integer oldValue = typedChange.getOldValue();
+    java.lang.Integer newValue = typedChange.getNewValue();
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityLowerReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityLowerReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
@@ -29,17 +29,17 @@ class ChangedMultiplicityLowerReaction extends AbstractReactionRealization {
   }
   
   private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<MultiplicityElement, Integer> relevantChange = (ReplaceSingleValuedEAttribute<MultiplicityElement, Integer>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof MultiplicityElement)) {
+    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.MultiplicityElement, java.lang.Integer> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.MultiplicityElement, java.lang.Integer>)change;
+    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.MultiplicityElement)) {
     	return false;
     }
     if (!relevantChange.getAffectedFeature().getName().equals("lower")) {
     	return false;
     }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof Integer)) {
+    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof java.lang.Integer)) {
     	return false;
     }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof Integer)) {
+    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof java.lang.Integer)) {
     	return false;
     }
     return true;

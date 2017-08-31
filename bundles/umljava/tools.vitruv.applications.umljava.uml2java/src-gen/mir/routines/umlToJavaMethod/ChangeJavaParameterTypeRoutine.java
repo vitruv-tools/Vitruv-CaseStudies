@@ -5,9 +5,7 @@ import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
-import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -33,9 +31,7 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customClass) {
-      CompilationUnit _containingCompilationUnit = jParam.getContainingCompilationUnit();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customClass, _containingCompilationUnit, this.userInteracting);
-      jParam.setTypeReference(_createTypeReferenceAndUpdateImport);
+      jParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit(), this.userInteracting));
     }
     
     public EObject getCorrepondenceSourceCustomClass(final Parameter uParam, final Type uType, final OrdinaryParameter jParam) {
@@ -54,18 +50,18 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
   
   private Type uType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeJavaParameterTypeRoutine with input:");
-    getLogger().debug("   Parameter: " + this.uParam);
-    getLogger().debug("   Type: " + this.uType);
+    getLogger().debug("   uParam: " + this.uParam);
+    getLogger().debug("   uType: " + this.uType);
     
-    OrdinaryParameter jParam = getCorrespondingElement(
+    org.emftext.language.java.parameters.OrdinaryParameter jParam = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJParam(uParam, uType), // correspondence source supplier
-    	OrdinaryParameter.class,
-    	(OrdinaryParameter _element) -> true, // correspondence precondition checker
+    	org.emftext.language.java.parameters.OrdinaryParameter.class,
+    	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
     	null);
     if (jParam == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(jParam);
     org.emftext.language.java.classifiers.Class customClass = getCorrespondingElement(
@@ -78,5 +74,7 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     userExecution.update0Element(uParam, uType, jParam, customClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

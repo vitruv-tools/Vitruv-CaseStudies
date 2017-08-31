@@ -45,18 +45,18 @@ public class DeleteUmlClassifierRoutine extends AbstractRepairRoutineRealization
   
   private CompilationUnit jCompUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteUmlClassifierRoutine with input:");
-    getLogger().debug("   ConcreteClassifier: " + this.jClassifier);
-    getLogger().debug("   CompilationUnit: " + this.jCompUnit);
+    getLogger().debug("   jClassifier: " + this.jClassifier);
+    getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
-    Classifier uClassfier = getCorrespondingElement(
+    org.eclipse.uml2.uml.Classifier uClassfier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUClassfier(jClassifier, jCompUnit), // correspondence source supplier
-    	Classifier.class,
-    	(Classifier _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.Classifier.class,
+    	(org.eclipse.uml2.uml.Classifier _element) -> true, // correspondence precondition checker
     	null);
     if (uClassfier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(uClassfier);
     deleteObject(userExecution.getElement1(jClassifier, jCompUnit, uClassfier));
@@ -64,5 +64,7 @@ public class DeleteUmlClassifierRoutine extends AbstractRepairRoutineRealization
     deleteObject(userExecution.getElement2(jClassifier, jCompUnit, uClassfier));
     
     postprocessElements();
+    
+    return true;
   }
 }

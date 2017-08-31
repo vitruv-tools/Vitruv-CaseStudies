@@ -45,8 +45,6 @@
       <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
       <import plugin="tools.vitruv.extensions.dslsruntime.mapping"/>
       <import plugin="tools.vitruv.domains.java.util"/>
-      <import plugin="tools.vitruv.applications.umljava.util" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="tools.vitruv.applications.umljava.uml2java" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="tools.vitruv.domains.java.util.jamoppparser" version="0.2.0" match="greaterOrEqual"/>
       <import plugin="tools.vitruv.framework.tests.util" version="0.2.0" match="greaterOrEqual"/>
       <import plugin="tools.vitruv.framework.applications"/>

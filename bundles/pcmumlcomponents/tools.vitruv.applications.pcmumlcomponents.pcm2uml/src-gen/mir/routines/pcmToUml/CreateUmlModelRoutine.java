@@ -60,7 +60,7 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
   
   private Repository pcmRepository;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlModelRoutine with input:");
     getLogger().debug("   pcmRepository: " + this.pcmRepository);
     
@@ -75,5 +75,7 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
     addCorrespondenceBetween(userExecution.getElement1(pcmRepository, packageImport, umlModel), userExecution.getElement2(pcmRepository, packageImport, umlModel), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

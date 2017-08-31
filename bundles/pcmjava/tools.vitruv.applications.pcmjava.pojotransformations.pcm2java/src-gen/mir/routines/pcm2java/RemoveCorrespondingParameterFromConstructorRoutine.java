@@ -46,22 +46,24 @@ public class RemoveCorrespondingParameterFromConstructorRoutine extends Abstract
   
   private NamedElement correspondenceSource;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveCorrespondingParameterFromConstructorRoutine with input:");
-    getLogger().debug("   Constructor: " + this.ctor);
-    getLogger().debug("   NamedElement: " + this.correspondenceSource);
+    getLogger().debug("   ctor: " + this.ctor);
+    getLogger().debug("   correspondenceSource: " + this.correspondenceSource);
     
-    OrdinaryParameter param = getCorrespondingElement(
+    org.emftext.language.java.parameters.OrdinaryParameter param = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceParam(ctor, correspondenceSource), // correspondence source supplier
-    	OrdinaryParameter.class,
-    	(OrdinaryParameter _element) -> userExecution.getCorrespondingModelElementsPreconditionParam(ctor, correspondenceSource, _element), // correspondence precondition checker
+    	org.emftext.language.java.parameters.OrdinaryParameter.class,
+    	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> userExecution.getCorrespondingModelElementsPreconditionParam(ctor, correspondenceSource, _element), // correspondence precondition checker
     	null);
     if (param == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(param);
     deleteObject(userExecution.getElement1(ctor, correspondenceSource, param));
     
     postprocessElements();
+    
+    return true;
   }
 }
