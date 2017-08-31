@@ -24,78 +24,78 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void renameNamedElement(final NamedElement javaElement) {
+  public boolean renameNamedElement(final NamedElement javaElement) {
     mir.routines.java2PcmMethod.RenameNamedElementRoutine effect = new mir.routines.java2PcmMethod.RenameNamedElementRoutine(this.executionState, calledBy, javaElement);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createParameter(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod) {
+  public boolean createParameter(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod) {
     mir.routines.java2PcmMethod.CreateParameterRoutine effect = new mir.routines.java2PcmMethod.CreateParameterRoutine(this.executionState, calledBy, jaMoPPParam, javaMethod);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void deleteParameter(final OrdinaryParameter jParam) {
+  public boolean deleteParameter(final OrdinaryParameter jParam) {
     mir.routines.java2PcmMethod.DeleteParameterRoutine effect = new mir.routines.java2PcmMethod.DeleteParameterRoutine(this.executionState, calledBy, jParam);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeParameterName(final String newName, final Parameter parameter) {
+  public boolean changeParameterName(final String newName, final Parameter parameter) {
     mir.routines.java2PcmMethod.ChangeParameterNameRoutine effect = new mir.routines.java2PcmMethod.ChangeParameterNameRoutine(this.executionState, calledBy, newName, parameter);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createInnerDeclaration(final ConcreteClassifier classifier, final Field field) {
+  public boolean createInnerDeclaration(final ConcreteClassifier classifier, final Field field) {
     mir.routines.java2PcmMethod.CreateInnerDeclarationRoutine effect = new mir.routines.java2PcmMethod.CreateInnerDeclarationRoutine(this.executionState, calledBy, classifier, field);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createAssemblyContext(final ConcreteClassifier classifier, final Field field) {
+  public boolean createAssemblyContext(final ConcreteClassifier classifier, final Field field) {
     mir.routines.java2PcmMethod.CreateAssemblyContextRoutine effect = new mir.routines.java2PcmMethod.CreateAssemblyContextRoutine(this.executionState, calledBy, classifier, field);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void fieldCreatedCorrespondingToOperationInterface(final Classifier classifier, final Field field) {
+  public boolean fieldCreatedCorrespondingToOperationInterface(final Classifier classifier, final Field field) {
     mir.routines.java2PcmMethod.FieldCreatedCorrespondingToOperationInterfaceRoutine effect = new mir.routines.java2PcmMethod.FieldCreatedCorrespondingToOperationInterfaceRoutine(this.executionState, calledBy, classifier, field);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void fieldCreatedCorrespondingToRepositoryComponent(final Classifier classifier, final Field field) {
+  public boolean fieldCreatedCorrespondingToRepositoryComponent(final Classifier classifier, final Field field) {
     mir.routines.java2PcmMethod.FieldCreatedCorrespondingToRepositoryComponentRoutine effect = new mir.routines.java2PcmMethod.FieldCreatedCorrespondingToRepositoryComponentRoutine(this.executionState, calledBy, classifier, field);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createOperationRequiredRoleCorrespondingToField(final Field field, final OperationInterface operationInterface, final RepositoryComponent repoComponent) {
+  public boolean createOperationRequiredRoleCorrespondingToField(final Field field, final OperationInterface operationInterface, final RepositoryComponent repoComponent) {
     mir.routines.java2PcmMethod.CreateOperationRequiredRoleCorrespondingToFieldRoutine effect = new mir.routines.java2PcmMethod.CreateOperationRequiredRoleCorrespondingToFieldRoutine(this.executionState, calledBy, field, operationInterface, repoComponent);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeInnerDeclarationType(final TypeReference typeReference, final Field javaField) {
+  public boolean changeInnerDeclarationType(final TypeReference typeReference, final Field javaField) {
     mir.routines.java2PcmMethod.ChangeInnerDeclarationTypeRoutine effect = new mir.routines.java2PcmMethod.ChangeInnerDeclarationTypeRoutine(this.executionState, calledBy, typeReference, javaField);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createSeffFromImplementingInterfaces(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls) {
+  public boolean createSeffFromImplementingInterfaces(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls) {
     mir.routines.java2PcmMethod.CreateSeffFromImplementingInterfacesRoutine effect = new mir.routines.java2PcmMethod.CreateSeffFromImplementingInterfacesRoutine(this.executionState, calledBy, classMethod, cls);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createSeffFromImplementingInterface(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls, final Interface iface) {
+  public boolean createSeffFromImplementingInterface(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls, final Interface iface) {
     mir.routines.java2PcmMethod.CreateSeffFromImplementingInterfaceRoutine effect = new mir.routines.java2PcmMethod.CreateSeffFromImplementingInterfaceRoutine(this.executionState, calledBy, classMethod, cls, iface);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createSEFF(final Method method, final org.emftext.language.java.classifiers.Class cls, final ClassMethod classMethod) {
+  public boolean createSEFF(final Method method, final org.emftext.language.java.classifiers.Class cls, final ClassMethod classMethod) {
     mir.routines.java2PcmMethod.CreateSEFFRoutine effect = new mir.routines.java2PcmMethod.CreateSEFFRoutine(this.executionState, calledBy, method, cls, classMethod);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createPCMSignature(final InterfaceMethod method) {
+  public boolean createPCMSignature(final InterfaceMethod method) {
     mir.routines.java2PcmMethod.CreatePCMSignatureRoutine effect = new mir.routines.java2PcmMethod.CreatePCMSignatureRoutine(this.executionState, calledBy, method);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void changeReturnType(final Method jMeth, final TypeReference jType) {
+  public boolean changeReturnType(final Method jMeth, final TypeReference jType) {
     mir.routines.java2PcmMethod.ChangeReturnTypeRoutine effect = new mir.routines.java2PcmMethod.ChangeReturnTypeRoutine(this.executionState, calledBy, jMeth, jType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
 }

@@ -41,7 +41,7 @@ public class RenameNamedElementRoutine extends AbstractRepairRoutineRealization 
   
   private NamedElement javaElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameNamedElementRoutine with input:");
     getLogger().debug("   javaElement: " + this.javaElement);
     
@@ -51,12 +51,14 @@ public class RenameNamedElementRoutine extends AbstractRepairRoutineRealization 
     	(org.palladiosimulator.pcm.core.entity.NamedElement _element) -> true, // correspondence precondition checker
     	null);
     if (pcmElement == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(pcmElement);
     // val updatedElement userExecution.getElement1(javaElement, pcmElement);
     userExecution.update0Element(javaElement, pcmElement);
     
     postprocessElements();
+    
+    return true;
   }
 }

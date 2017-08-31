@@ -19,98 +19,98 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(reactionExecutionState, calledBy);
   }
   
-  public void createArchitecturalElement(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
+  public boolean createArchitecturalElement(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
     mir.routines.java2PcmClassifier.CreateArchitecturalElementRoutine effect = new mir.routines.java2PcmClassifier.CreateArchitecturalElementRoutine(this.executionState, calledBy, javaPackage, name, rootPackageName);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createRepository(final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
+  public boolean createRepository(final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
     mir.routines.java2PcmClassifier.CreateRepositoryRoutine effect = new mir.routines.java2PcmClassifier.CreateRepositoryRoutine(this.executionState, calledBy, sourceElementMappedToRepository, packageName, newTag);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createSystem(final org.emftext.language.java.containers.Package javaPackage, final String name) {
+  public boolean createSystem(final org.emftext.language.java.containers.Package javaPackage, final String name) {
     mir.routines.java2PcmClassifier.CreateSystemRoutine effect = new mir.routines.java2PcmClassifier.CreateSystemRoutine(this.executionState, calledBy, javaPackage, name);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createBasicComponent(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
+  public boolean createBasicComponent(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
     mir.routines.java2PcmClassifier.CreateBasicComponentRoutine effect = new mir.routines.java2PcmClassifier.CreateBasicComponentRoutine(this.executionState, calledBy, javaPackage, name, rootPackageName);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createCompositeComponent(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
+  public boolean createCompositeComponent(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
     mir.routines.java2PcmClassifier.CreateCompositeComponentRoutine effect = new mir.routines.java2PcmClassifier.CreateCompositeComponentRoutine(this.executionState, calledBy, javaPackage, name, rootPackageName);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addCorrespondanceAndUpdateRepository(final ImplementationComponentType pcmComponent, final Repository pcmRepository, final org.emftext.language.java.containers.Package javaPackage) {
+  public boolean addCorrespondanceAndUpdateRepository(final ImplementationComponentType pcmComponent, final Repository pcmRepository, final org.emftext.language.java.containers.Package javaPackage) {
     mir.routines.java2PcmClassifier.AddCorrespondanceAndUpdateRepositoryRoutine effect = new mir.routines.java2PcmClassifier.AddCorrespondanceAndUpdateRepositoryRoutine(this.executionState, calledBy, pcmComponent, pcmRepository, javaPackage);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createPCMInterface(final Interface javaInterface, final CompilationUnit compilationUnit) {
+  public boolean createPCMInterface(final Interface javaInterface, final CompilationUnit compilationUnit) {
     mir.routines.java2PcmClassifier.CreatePCMInterfaceRoutine effect = new mir.routines.java2PcmClassifier.CreatePCMInterfaceRoutine(this.executionState, calledBy, javaInterface, compilationUnit);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createdInterfaceNotInContracts(final Interface javaInterface, final OperationInterface pcmIface, final CompilationUnit compilationUnit) {
+  public boolean createdInterfaceNotInContracts(final Interface javaInterface, final OperationInterface pcmIface, final CompilationUnit compilationUnit) {
     mir.routines.java2PcmClassifier.CreatedInterfaceNotInContractsRoutine effect = new mir.routines.java2PcmClassifier.CreatedInterfaceNotInContractsRoutine(this.executionState, calledBy, javaInterface, pcmIface, compilationUnit);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addCorrespondanceToInterfaceAndUpdateRepository(final OperationInterface pcmInterface, final Repository pcmRepository, final Interface javaInterface, final CompilationUnit compilationUnit) {
+  public boolean addCorrespondanceToInterfaceAndUpdateRepository(final OperationInterface pcmInterface, final Repository pcmRepository, final Interface javaInterface, final CompilationUnit compilationUnit) {
     mir.routines.java2PcmClassifier.AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine effect = new mir.routines.java2PcmClassifier.AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine(this.executionState, calledBy, pcmInterface, pcmRepository, javaInterface, compilationUnit);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createDataType(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
+  public boolean createDataType(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
     mir.routines.java2PcmClassifier.CreateDataTypeRoutine effect = new mir.routines.java2PcmClassifier.CreateDataTypeRoutine(this.executionState, calledBy, cls, compilationUnit);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createElement(final Repository repository, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
+  public boolean createElement(final Repository repository, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
     mir.routines.java2PcmClassifier.CreateElementRoutine effect = new mir.routines.java2PcmClassifier.CreateElementRoutine(this.executionState, calledBy, repository, javaClass, compilationUnit);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void checkSystemAndComponent(final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass) {
+  public boolean checkSystemAndComponent(final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass) {
     mir.routines.java2PcmClassifier.CheckSystemAndComponentRoutine effect = new mir.routines.java2PcmClassifier.CheckSystemAndComponentRoutine(this.executionState, calledBy, javaPackage, javaClass);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createCompositeDataType(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
+  public boolean createCompositeDataType(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
     mir.routines.java2PcmClassifier.CreateCompositeDataTypeRoutine effect = new mir.routines.java2PcmClassifier.CreateCompositeDataTypeRoutine(this.executionState, calledBy, cls, compilationUnit);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createCollectionDataType(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
+  public boolean createCollectionDataType(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
     mir.routines.java2PcmClassifier.CreateCollectionDataTypeRoutine effect = new mir.routines.java2PcmClassifier.CreateCollectionDataTypeRoutine(this.executionState, calledBy, cls, compilationUnit);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void addDataTypeInRepository(final Repository pcmRepository, final DataType pcmDataType) {
+  public boolean addDataTypeInRepository(final Repository pcmRepository, final DataType pcmDataType) {
     mir.routines.java2PcmClassifier.AddDataTypeInRepositoryRoutine effect = new mir.routines.java2PcmClassifier.AddDataTypeInRepositoryRoutine(this.executionState, calledBy, pcmRepository, pcmDataType);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createOperationProvidedRole(final TypeReference typeReference) {
+  public boolean createOperationProvidedRole(final TypeReference typeReference) {
     mir.routines.java2PcmClassifier.CreateOperationProvidedRoleRoutine effect = new mir.routines.java2PcmClassifier.CreateOperationProvidedRoleRoutine(this.executionState, calledBy, typeReference);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createOperationProvidedRoleFromTypeReference(final Classifier classifier, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference) {
-    mir.routines.java2PcmClassifier.CreateOperationProvidedRoleFromTypeReferenceRoutine effect = new mir.routines.java2PcmClassifier.CreateOperationProvidedRoleFromTypeReferenceRoutine(this.executionState, calledBy, classifier, javaClass, reference);
-    effect.applyRoutine();
+  public boolean createOperationProvidedRoleFromTypeReference(final Classifier classifierInterface, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference) {
+    mir.routines.java2PcmClassifier.CreateOperationProvidedRoleFromTypeReferenceRoutine effect = new mir.routines.java2PcmClassifier.CreateOperationProvidedRoleFromTypeReferenceRoutine(this.executionState, calledBy, classifierInterface, javaClass, reference);
+    return effect.applyRoutine();
   }
   
-  public void createJavaSubPackages(final org.emftext.language.java.containers.Package javaPackage) {
+  public boolean createJavaSubPackages(final org.emftext.language.java.containers.Package javaPackage) {
     mir.routines.java2PcmClassifier.CreateJavaSubPackagesRoutine effect = new mir.routines.java2PcmClassifier.CreateJavaSubPackagesRoutine(this.executionState, calledBy, javaPackage);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
   
-  public void createJavaPackage(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
+  public boolean createJavaPackage(final EObject sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String newTag) {
     mir.routines.java2PcmClassifier.CreateJavaPackageRoutine effect = new mir.routines.java2PcmClassifier.CreateJavaPackageRoutine(this.executionState, calledBy, sourceElementMappedToPackage, parentPackage, packageName, newTag);
-    effect.applyRoutine();
+    return effect.applyRoutine();
   }
 }

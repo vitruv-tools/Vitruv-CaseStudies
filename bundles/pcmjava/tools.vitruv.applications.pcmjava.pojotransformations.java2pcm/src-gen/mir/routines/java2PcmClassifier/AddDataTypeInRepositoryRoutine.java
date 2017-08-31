@@ -50,7 +50,7 @@ public class AddDataTypeInRepositoryRoutine extends AbstractRepairRoutineRealiza
   
   private DataType pcmDataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddDataTypeInRepositoryRoutine with input:");
     getLogger().debug("   pcmRepository: " + this.pcmRepository);
     getLogger().debug("   pcmDataType: " + this.pcmDataType);
@@ -62,5 +62,7 @@ public class AddDataTypeInRepositoryRoutine extends AbstractRepairRoutineRealiza
     userExecution.update1Element(pcmRepository, pcmDataType);
     
     postprocessElements();
+    
+    return true;
   }
 }

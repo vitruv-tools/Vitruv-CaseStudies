@@ -57,7 +57,7 @@ public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutine
   
   private CompilationUnit compilationUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedInterfaceNotInContractsRoutine with input:");
     getLogger().debug("   javaInterface: " + this.javaInterface);
     getLogger().debug("   pcmIface: " + this.pcmIface);
@@ -66,5 +66,7 @@ public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutine
     userExecution.callRoutine1(javaInterface, pcmIface, compilationUnit, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

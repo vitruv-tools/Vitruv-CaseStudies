@@ -42,7 +42,7 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
   
   private String rootPackageName;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeComponentRoutine with input:");
     getLogger().debug("   javaPackage: " + this.javaPackage);
     getLogger().debug("   name: " + this.name);
@@ -55,5 +55,7 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     userExecution.callRoutine1(javaPackage, name, rootPackageName, pcmCompositeComponent, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

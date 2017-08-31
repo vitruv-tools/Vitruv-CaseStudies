@@ -49,7 +49,7 @@ public class FieldCreatedCorrespondingToOperationInterfaceRoutine extends Abstra
   
   private Field field;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine FieldCreatedCorrespondingToOperationInterfaceRoutine with input:");
     getLogger().debug("   classifier: " + this.classifier);
     getLogger().debug("   field: " + this.field);
@@ -60,7 +60,7 @@ public class FieldCreatedCorrespondingToOperationInterfaceRoutine extends Abstra
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (correspondingInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(correspondingInterface);
     org.palladiosimulator.pcm.repository.RepositoryComponent repoComponent = getCorrespondingElement(
@@ -69,11 +69,13 @@ public class FieldCreatedCorrespondingToOperationInterfaceRoutine extends Abstra
     	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
     	null);
     if (repoComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(repoComponent);
     userExecution.callRoutine1(classifier, field, correspondingInterface, repoComponent, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

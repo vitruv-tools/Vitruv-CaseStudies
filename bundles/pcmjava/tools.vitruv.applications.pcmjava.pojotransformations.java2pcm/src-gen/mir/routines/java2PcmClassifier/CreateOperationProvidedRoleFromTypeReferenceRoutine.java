@@ -23,15 +23,15 @@ public class CreateOperationProvidedRoleFromTypeReferenceRoutine extends Abstrac
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceBasicComponent(final Classifier classifier, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference, final OperationInterface opInterface) {
+    public EObject getCorrepondenceSourceBasicComponent(final Classifier classifierInterface, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference, final OperationInterface opInterface) {
       return javaClass;
     }
     
-    public EObject getElement1(final Classifier classifier, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference, final OperationInterface opInterface, final BasicComponent basicComponent, final OperationProvidedRole operationProvidedRole) {
+    public EObject getElement1(final Classifier classifierInterface, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference, final OperationInterface opInterface, final BasicComponent basicComponent, final OperationProvidedRole operationProvidedRole) {
       return operationProvidedRole;
     }
     
-    public void updateOperationProvidedRoleElement(final Classifier classifier, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference, final OperationInterface opInterface, final BasicComponent basicComponent, final OperationProvidedRole operationProvidedRole) {
+    public void updateOperationProvidedRoleElement(final Classifier classifierInterface, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference, final OperationInterface opInterface, final BasicComponent basicComponent, final OperationProvidedRole operationProvidedRole) {
       operationProvidedRole.setProvidedInterface__OperationProvidedRole(opInterface);
       operationProvidedRole.setProvidingEntity_ProvidedRole(basicComponent);
       String _entityName = basicComponent.getEntityName();
@@ -41,58 +41,60 @@ public class CreateOperationProvidedRoleFromTypeReferenceRoutine extends Abstrac
       operationProvidedRole.setEntityName(_plus_1);
     }
     
-    public EObject getElement2(final Classifier classifier, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference, final OperationInterface opInterface, final BasicComponent basicComponent, final OperationProvidedRole operationProvidedRole) {
+    public EObject getElement2(final Classifier classifierInterface, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference, final OperationInterface opInterface, final BasicComponent basicComponent, final OperationProvidedRole operationProvidedRole) {
       return reference;
     }
     
-    public EObject getCorrepondenceSourceOpInterface(final Classifier classifier, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference) {
-      return classifier;
+    public EObject getCorrepondenceSourceOpInterface(final Classifier classifierInterface, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference) {
+      return classifierInterface;
     }
   }
   
-  public CreateOperationProvidedRoleFromTypeReferenceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier classifier, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference) {
+  public CreateOperationProvidedRoleFromTypeReferenceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier classifierInterface, final org.emftext.language.java.classifiers.Class javaClass, final TypeReference reference) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateOperationProvidedRoleFromTypeReferenceRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
-    this.classifier = classifier;this.javaClass = javaClass;this.reference = reference;
+    this.classifierInterface = classifierInterface;this.javaClass = javaClass;this.reference = reference;
   }
   
-  private Classifier classifier;
+  private Classifier classifierInterface;
   
   private org.emftext.language.java.classifiers.Class javaClass;
   
   private TypeReference reference;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationProvidedRoleFromTypeReferenceRoutine with input:");
-    getLogger().debug("   classifier: " + this.classifier);
+    getLogger().debug("   classifierInterface: " + this.classifierInterface);
     getLogger().debug("   javaClass: " + this.javaClass);
     getLogger().debug("   reference: " + this.reference);
     
     org.palladiosimulator.pcm.repository.OperationInterface opInterface = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceOpInterface(classifier, javaClass, reference), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceOpInterface(classifierInterface, javaClass, reference), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationInterface.class,
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (opInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(opInterface);
     org.palladiosimulator.pcm.repository.BasicComponent basicComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceBasicComponent(classifier, javaClass, reference, opInterface), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceBasicComponent(classifierInterface, javaClass, reference, opInterface), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.BasicComponent.class,
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(basicComponent);
     org.palladiosimulator.pcm.repository.OperationProvidedRole operationProvidedRole = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationProvidedRole();
     notifyObjectCreated(operationProvidedRole);
-    userExecution.updateOperationProvidedRoleElement(classifier, javaClass, reference, opInterface, basicComponent, operationProvidedRole);
+    userExecution.updateOperationProvidedRoleElement(classifierInterface, javaClass, reference, opInterface, basicComponent, operationProvidedRole);
     
-    addCorrespondenceBetween(userExecution.getElement1(classifier, javaClass, reference, opInterface, basicComponent, operationProvidedRole), userExecution.getElement2(classifier, javaClass, reference, opInterface, basicComponent, operationProvidedRole), "");
+    addCorrespondenceBetween(userExecution.getElement1(classifierInterface, javaClass, reference, opInterface, basicComponent, operationProvidedRole), userExecution.getElement2(classifierInterface, javaClass, reference, opInterface, basicComponent, operationProvidedRole), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -55,7 +55,7 @@ public class CreateOperationRequiredRoleCorrespondingToFieldRoutine extends Abst
   
   private RepositoryComponent repoComponent;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationRequiredRoleCorrespondingToFieldRoutine with input:");
     getLogger().debug("   field: " + this.field);
     getLogger().debug("   operationInterface: " + this.operationInterface);
@@ -68,5 +68,7 @@ public class CreateOperationRequiredRoleCorrespondingToFieldRoutine extends Abst
     addCorrespondenceBetween(userExecution.getElement1(field, operationInterface, repoComponent, operationRequiredRole), userExecution.getElement2(field, operationInterface, repoComponent, operationRequiredRole), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

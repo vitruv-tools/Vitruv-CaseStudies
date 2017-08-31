@@ -69,7 +69,7 @@ public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineReal
   
   private String rootPackageName;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateArchitecturalElementRoutine with input:");
     getLogger().debug("   javaPackage: " + this.javaPackage);
     getLogger().debug("   name: " + this.name);
@@ -78,5 +78,7 @@ public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineReal
     userExecution.callRoutine1(javaPackage, name, rootPackageName, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -49,7 +49,7 @@ public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization 
   
   private CompilationUnit compilationUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePCMInterfaceRoutine with input:");
     getLogger().debug("   javaInterface: " + this.javaInterface);
     getLogger().debug("   compilationUnit: " + this.compilationUnit);
@@ -61,5 +61,7 @@ public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization 
     userExecution.callRoutine1(javaInterface, compilationUnit, pcmIface, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

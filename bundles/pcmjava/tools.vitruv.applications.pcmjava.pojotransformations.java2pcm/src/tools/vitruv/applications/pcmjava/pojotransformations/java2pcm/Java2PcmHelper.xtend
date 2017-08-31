@@ -24,7 +24,9 @@ import org.emftext.language.java.types.PrimitiveType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
-
+/**
+ * TODO JAVA DOC
+ */
 public class Java2PcmHelper {
 	private static val logger = Logger.getLogger(Java2PcmHelper)
 
@@ -35,7 +37,7 @@ public class Java2PcmHelper {
 			return null
 		}
 		if (1 != repos.size) {
-			logger.warn("found more than one repository. Retruning the first")
+			logger.warn("found more than one repository. Returning the first")
 		}
 		return repos.head
 	}

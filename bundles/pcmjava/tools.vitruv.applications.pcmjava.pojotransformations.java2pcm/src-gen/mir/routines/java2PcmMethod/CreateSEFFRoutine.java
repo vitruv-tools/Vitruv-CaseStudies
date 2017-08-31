@@ -69,7 +69,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
   
   private ClassMethod classMethod;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSEFFRoutine with input:");
     getLogger().debug("   method: " + this.method);
     getLogger().debug("   cls: " + this.cls);
@@ -81,7 +81,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (opSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(opSignature);
     org.palladiosimulator.pcm.repository.BasicComponent basicComponent = getCorrespondingElement(
@@ -90,7 +90,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
     	null);
     if (basicComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(basicComponent);
     org.palladiosimulator.pcm.seff.ResourceDemandingSEFF rdseff = org.palladiosimulator.pcm.seff.impl.SeffFactoryImpl.eINSTANCE.createResourceDemandingSEFF();
@@ -103,5 +103,7 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     userExecution.update0Element(method, cls, classMethod, opSignature, basicComponent, rdseff);
     
     postprocessElements();
+    
+    return true;
   }
 }

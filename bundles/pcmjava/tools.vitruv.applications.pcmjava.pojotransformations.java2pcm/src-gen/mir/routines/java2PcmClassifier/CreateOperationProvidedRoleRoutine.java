@@ -39,12 +39,14 @@ public class CreateOperationProvidedRoleRoutine extends AbstractRepairRoutineRea
   
   private TypeReference typeReference;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationProvidedRoleRoutine with input:");
     getLogger().debug("   typeReference: " + this.typeReference);
     
     userExecution.callRoutine1(typeReference, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

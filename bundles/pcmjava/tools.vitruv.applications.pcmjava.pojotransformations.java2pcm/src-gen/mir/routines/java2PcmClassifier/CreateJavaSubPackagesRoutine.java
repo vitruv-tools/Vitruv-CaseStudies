@@ -43,7 +43,7 @@ public class CreateJavaSubPackagesRoutine extends AbstractRepairRoutineRealizati
   
   private org.emftext.language.java.containers.Package javaPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateJavaSubPackagesRoutine with input:");
     getLogger().debug("   javaPackage: " + this.javaPackage);
     
@@ -53,11 +53,13 @@ public class CreateJavaSubPackagesRoutine extends AbstractRepairRoutineRealizati
     	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	null);
     if (repository == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(repository);
     userExecution.callRoutine1(javaPackage, repository, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

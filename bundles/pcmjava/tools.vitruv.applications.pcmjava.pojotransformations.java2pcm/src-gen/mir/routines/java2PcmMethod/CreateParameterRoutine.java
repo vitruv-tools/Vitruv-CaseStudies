@@ -68,7 +68,7 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
   
   private Parametrizable javaMethod;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateParameterRoutine with input:");
     getLogger().debug("   jaMoPPParam: " + this.jaMoPPParam);
     getLogger().debug("   javaMethod: " + this.javaMethod);
@@ -79,7 +79,7 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (operationSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(operationSignature);
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createParameter();
@@ -92,5 +92,7 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     userExecution.update0Element(jaMoPPParam, javaMethod, operationSignature, pcmParameter);
     
     postprocessElements();
+    
+    return true;
   }
 }

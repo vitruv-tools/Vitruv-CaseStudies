@@ -7,6 +7,7 @@ class Java2PcmChangePropagationSpecification extends JavaToPcmChangePropagationS
 	protected override setup() {
 		//TODO zeile raus
 		//addChangeMainprocessor(new Java2PcmChangeProcessor());
+		addChangePreprocessor(new TuidUpdatePreprocessor());
 		super.setup();
 		addChangePreprocessor(new Java2PcmPackagePreprocessor());
 	}

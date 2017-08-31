@@ -27,6 +27,10 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
       return pcmRepository;
     }
     
+    public EObject getCorrepondenceSource1(final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
+      return sourceElementMappedToRepository;
+    }
+    
     public String getRetrieveTag1(final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
       return newTag;
     }
@@ -46,10 +50,6 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
     public String getTag1(final EObject sourceElementMappedToRepository, final String packageName, final String newTag, final Repository pcmRepository) {
       return newTag;
     }
-    
-    public EObject getCorrepondenceSourcenull(final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
-      return sourceElementMappedToRepository;
-    }
   }
   
   public CreateRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final EObject sourceElementMappedToRepository, final String packageName, final String newTag) {
@@ -65,18 +65,18 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
   
   private String newTag;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRepositoryRoutine with input:");
     getLogger().debug("   sourceElementMappedToRepository: " + this.sourceElementMappedToRepository);
     getLogger().debug("   packageName: " + this.packageName);
     getLogger().debug("   newTag: " + this.newTag);
     
     if (getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcenull(sourceElementMappedToRepository, packageName, newTag), // correspondence source supplier
+    	userExecution.getCorrepondenceSource1(sourceElementMappedToRepository, packageName, newTag), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.Repository.class,
     	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(sourceElementMappedToRepository, packageName, newTag)) != null) {
-    	return;
+    	return false;
     }
     org.palladiosimulator.pcm.repository.Repository pcmRepository = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createRepository();
     notifyObjectCreated(pcmRepository);
@@ -85,5 +85,7 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
     addCorrespondenceBetween(userExecution.getElement1(sourceElementMappedToRepository, packageName, newTag, pcmRepository), userExecution.getElement2(sourceElementMappedToRepository, packageName, newTag, pcmRepository), userExecution.getTag1(sourceElementMappedToRepository, packageName, newTag, pcmRepository));
     
     postprocessElements();
+    
+    return true;
   }
 }

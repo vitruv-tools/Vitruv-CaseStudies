@@ -120,7 +120,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 
-	private static int MAXIMUM_SYNC_WAITING_TIME = 50000;
+	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
 
 	protected Package mainPackage;
 	protected Package secondPackage;

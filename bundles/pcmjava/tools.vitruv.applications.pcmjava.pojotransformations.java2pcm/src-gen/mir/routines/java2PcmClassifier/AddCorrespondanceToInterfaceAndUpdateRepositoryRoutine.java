@@ -68,7 +68,7 @@ public class AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine extends Abst
   
   private CompilationUnit compilationUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine with input:");
     getLogger().debug("   pcmInterface: " + this.pcmInterface);
     getLogger().debug("   pcmRepository: " + this.pcmRepository);
@@ -83,5 +83,7 @@ public class AddCorrespondanceToInterfaceAndUpdateRepositoryRoutine extends Abst
     userExecution.update0Element(pcmInterface, pcmRepository, javaInterface, compilationUnit);
     
     postprocessElements();
+    
+    return true;
   }
 }

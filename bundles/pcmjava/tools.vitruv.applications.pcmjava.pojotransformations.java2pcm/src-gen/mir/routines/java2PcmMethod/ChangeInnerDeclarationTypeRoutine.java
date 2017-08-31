@@ -47,7 +47,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
   
   private Field javaField;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInnerDeclarationTypeRoutine with input:");
     getLogger().debug("   typeReference: " + this.typeReference);
     getLogger().debug("   javaField: " + this.javaField);
@@ -58,12 +58,14 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	(org.palladiosimulator.pcm.repository.InnerDeclaration _element) -> true, // correspondence precondition checker
     	null);
     if (innerDeclaration == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(innerDeclaration);
     // val updatedElement userExecution.getElement1(typeReference, javaField, innerDeclaration);
     userExecution.update0Element(typeReference, javaField, innerDeclaration);
     
     postprocessElements();
+    
+    return true;
   }
 }

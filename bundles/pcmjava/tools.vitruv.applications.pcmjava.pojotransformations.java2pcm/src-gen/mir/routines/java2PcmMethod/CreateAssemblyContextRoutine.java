@@ -60,7 +60,7 @@ public class CreateAssemblyContextRoutine extends AbstractRepairRoutineRealizati
   
   private Field field;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateAssemblyContextRoutine with input:");
     getLogger().debug("   classifier: " + this.classifier);
     getLogger().debug("   field: " + this.field);
@@ -71,7 +71,7 @@ public class CreateAssemblyContextRoutine extends AbstractRepairRoutineRealizati
     	(org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity _element) -> true, // correspondence precondition checker
     	null);
     if (composedProvidingRequiringEntity == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(composedProvidingRequiringEntity);
     org.palladiosimulator.pcm.repository.RepositoryComponent repositoryComponent = getCorrespondingElement(
@@ -80,7 +80,7 @@ public class CreateAssemblyContextRoutine extends AbstractRepairRoutineRealizati
     	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
     	null);
     if (repositoryComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(repositoryComponent);
     org.palladiosimulator.pcm.core.composition.AssemblyContext assemblyContext = org.palladiosimulator.pcm.core.composition.impl.CompositionFactoryImpl.eINSTANCE.createAssemblyContext();
@@ -90,5 +90,7 @@ public class CreateAssemblyContextRoutine extends AbstractRepairRoutineRealizati
     addCorrespondenceBetween(userExecution.getElement1(classifier, field, composedProvidingRequiringEntity, repositoryComponent, assemblyContext), userExecution.getElement2(classifier, field, composedProvidingRequiringEntity, repositoryComponent, assemblyContext), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

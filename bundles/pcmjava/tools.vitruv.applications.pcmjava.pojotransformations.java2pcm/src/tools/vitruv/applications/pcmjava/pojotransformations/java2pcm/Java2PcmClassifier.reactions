@@ -17,6 +17,7 @@ execute actions in PCM
 ///Repository
 reaction PackageCreated {
 	after element java::Package inserted as root
+	//TODO comment
 	with !newValue.name.contains("contracts") && !newValue.name.contains("datatypes")
 		
 	call {
@@ -69,6 +70,7 @@ routine createRepository(EObject sourceElementMappedToRepository, String package
 		
 		add correspondence between pcmRepository and sourceElementMappedToRepository 
 			tagged with newTag
+		//add correspondence between pcmRepository and ContainersPackage.Literals.PACKAGE
 	}
 }
 
@@ -101,9 +103,10 @@ routine createCompositeComponent(java::Package javaPackage, String name, String 
 }
 
 /**
- * Adds correspondance between component and package and add component into repository.
+ * Adds correspondence between component and package and add component into repository.
  */
 routine addCorrespondanceAndUpdateRepository(pcm::ImplementationComponentType pcmComponent, pcm::Repository pcmRepository, java::Package javaPackage) {
+	//TODO retrive pcm::Repository from ContainersPackage.Literals.PACKAGE
 	action {
 		add correspondence between pcmComponent and javaPackage
 		
@@ -302,9 +305,9 @@ routine createOperationProvidedRole(java::TypeReference typeReference) {
 	}
 }
 
-routine createOperationProvidedRoleFromTypeReference(java::Classifier classifier, java::Class javaClass, java::TypeReference reference) {
+routine createOperationProvidedRoleFromTypeReference(java::Classifier classifierInterface, java::Class javaClass, java::TypeReference reference) {
 	match {
-		val opInterface = retrieve pcm::OperationInterface corresponding to classifier
+		val opInterface = retrieve pcm::OperationInterface corresponding to classifierInterface
 		val basicComponent = retrieve pcm::BasicComponent corresponding to javaClass
 	}
 	action {

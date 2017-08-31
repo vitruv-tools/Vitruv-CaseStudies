@@ -53,7 +53,7 @@ public class CreateElementRoutine extends AbstractRepairRoutineRealization {
   
   private CompilationUnit compilationUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateElementRoutine with input:");
     getLogger().debug("   repository: " + this.repository);
     getLogger().debug("   javaClass: " + this.javaClass);
@@ -65,11 +65,13 @@ public class CreateElementRoutine extends AbstractRepairRoutineRealization {
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag1(repository, javaClass, compilationUnit));
     if (javaPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaPackage);
     userExecution.callRoutine1(repository, javaClass, compilationUnit, javaPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

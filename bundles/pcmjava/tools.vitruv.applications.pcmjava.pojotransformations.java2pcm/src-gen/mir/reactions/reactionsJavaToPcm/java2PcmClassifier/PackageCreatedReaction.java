@@ -36,17 +36,17 @@ class PackageCreatedReaction extends AbstractReactionRealization {
     if (!(change instanceof InsertRootEObject)) {
     	return false;
     }
-    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
     InsertRootEObject<org.emftext.language.java.containers.Package> typedChange = (InsertRootEObject<org.emftext.language.java.containers.Package>)change;
     org.emftext.language.java.containers.Package newValue = typedChange.getNewValue();
     if (!checkUserDefinedPrecondition(newValue)) {
     	return false;
     }
-    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

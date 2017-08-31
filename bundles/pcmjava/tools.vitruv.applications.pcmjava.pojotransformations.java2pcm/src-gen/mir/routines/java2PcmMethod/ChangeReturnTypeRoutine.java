@@ -48,7 +48,7 @@ public class ChangeReturnTypeRoutine extends AbstractRepairRoutineRealization {
   
   private TypeReference jType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeReturnTypeRoutine with input:");
     getLogger().debug("   jMeth: " + this.jMeth);
     getLogger().debug("   jType: " + this.jType);
@@ -59,12 +59,14 @@ public class ChangeReturnTypeRoutine extends AbstractRepairRoutineRealization {
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
     	null);
     if (operationSignature == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(operationSignature);
     // val updatedElement userExecution.getElement1(jMeth, jType, operationSignature);
     userExecution.update0Element(jMeth, jType, operationSignature);
     
     postprocessElements();
+    
+    return true;
   }
 }

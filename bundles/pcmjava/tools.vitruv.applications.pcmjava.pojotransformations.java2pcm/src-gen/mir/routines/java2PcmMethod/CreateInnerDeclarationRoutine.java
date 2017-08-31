@@ -54,7 +54,7 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
   
   private Field field;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInnerDeclarationRoutine with input:");
     getLogger().debug("   classifier: " + this.classifier);
     getLogger().debug("   field: " + this.field);
@@ -65,7 +65,7 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
     	null);
     if (compositeDataType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeDataType);
     org.palladiosimulator.pcm.repository.InnerDeclaration innerDeclaration = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
@@ -75,5 +75,7 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     addCorrespondenceBetween(userExecution.getElement1(classifier, field, compositeDataType, innerDeclaration), userExecution.getElement2(classifier, field, compositeDataType, innerDeclaration), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

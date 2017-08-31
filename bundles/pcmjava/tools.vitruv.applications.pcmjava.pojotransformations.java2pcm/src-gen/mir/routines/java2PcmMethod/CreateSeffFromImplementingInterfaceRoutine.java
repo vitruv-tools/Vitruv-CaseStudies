@@ -54,7 +54,7 @@ public class CreateSeffFromImplementingInterfaceRoutine extends AbstractRepairRo
   
   private Interface iface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSeffFromImplementingInterfaceRoutine with input:");
     getLogger().debug("   classMethod: " + this.classMethod);
     getLogger().debug("   cls: " + this.cls);
@@ -66,11 +66,13 @@ public class CreateSeffFromImplementingInterfaceRoutine extends AbstractRepairRo
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
     	null);
     if (operationInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(operationInterface);
     userExecution.callRoutine1(classMethod, cls, iface, operationInterface, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

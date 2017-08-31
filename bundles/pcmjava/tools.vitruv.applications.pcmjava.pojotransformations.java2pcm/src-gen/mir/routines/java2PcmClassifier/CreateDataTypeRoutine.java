@@ -63,7 +63,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
   
   private CompilationUnit compilationUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateDataTypeRoutine with input:");
     getLogger().debug("   cls: " + this.cls);
     getLogger().debug("   compilationUnit: " + this.compilationUnit);
@@ -71,5 +71,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(cls, compilationUnit, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -41,7 +41,7 @@ public class CreateSeffFromImplementingInterfacesRoutine extends AbstractRepairR
   
   private org.emftext.language.java.classifiers.Class cls;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSeffFromImplementingInterfacesRoutine with input:");
     getLogger().debug("   classMethod: " + this.classMethod);
     getLogger().debug("   cls: " + this.cls);
@@ -49,5 +49,7 @@ public class CreateSeffFromImplementingInterfacesRoutine extends AbstractRepairR
     userExecution.callRoutine1(classMethod, cls, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

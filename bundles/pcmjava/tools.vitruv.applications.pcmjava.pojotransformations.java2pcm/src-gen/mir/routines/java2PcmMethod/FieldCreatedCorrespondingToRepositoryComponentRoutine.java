@@ -53,7 +53,7 @@ public class FieldCreatedCorrespondingToRepositoryComponentRoutine extends Abstr
   
   private Field field;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine FieldCreatedCorrespondingToRepositoryComponentRoutine with input:");
     getLogger().debug("   classifier: " + this.classifier);
     getLogger().debug("   field: " + this.field);
@@ -64,7 +64,7 @@ public class FieldCreatedCorrespondingToRepositoryComponentRoutine extends Abstr
     	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
     	null);
     if (repositoryComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(repositoryComponent);
     org.palladiosimulator.pcm.repository.RepositoryComponent repoComponent = getCorrespondingElement(
@@ -73,11 +73,13 @@ public class FieldCreatedCorrespondingToRepositoryComponentRoutine extends Abstr
     	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
     	null);
     if (repoComponent == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(repoComponent);
     userExecution.callRoutine1(classifier, field, repositoryComponent, repoComponent, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

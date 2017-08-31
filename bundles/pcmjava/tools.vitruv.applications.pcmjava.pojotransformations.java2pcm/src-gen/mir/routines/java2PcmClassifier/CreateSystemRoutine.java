@@ -46,7 +46,7 @@ public class CreateSystemRoutine extends AbstractRepairRoutineRealization {
   
   private String name;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSystemRoutine with input:");
     getLogger().debug("   javaPackage: " + this.javaPackage);
     getLogger().debug("   name: " + this.name);
@@ -58,5 +58,7 @@ public class CreateSystemRoutine extends AbstractRepairRoutineRealization {
     addCorrespondenceBetween(userExecution.getElement1(javaPackage, name, pcmSystem), userExecution.getElement2(javaPackage, name, pcmSystem), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -60,7 +60,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   private CompilationUnit compilationUnit;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeDataTypeRoutine with input:");
     getLogger().debug("   cls: " + this.cls);
     getLogger().debug("   compilationUnit: " + this.compilationUnit);
@@ -76,5 +76,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     userExecution.callRoutine1(cls, compilationUnit, pcmCompositeDataType, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

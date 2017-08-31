@@ -47,7 +47,7 @@ public class CheckSystemAndComponentRoutine extends AbstractRepairRoutineRealiza
   
   private org.emftext.language.java.classifiers.Class javaClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CheckSystemAndComponentRoutine with input:");
     getLogger().debug("   javaPackage: " + this.javaPackage);
     getLogger().debug("   javaClass: " + this.javaClass);
@@ -58,11 +58,13 @@ public class CheckSystemAndComponentRoutine extends AbstractRepairRoutineRealiza
     	(org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity _element) -> true, // correspondence precondition checker
     	null);
     if (componentOrSystem == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(componentOrSystem);
     addCorrespondenceBetween(userExecution.getElement1(javaPackage, javaClass, componentOrSystem), userExecution.getElement2(javaPackage, javaClass, componentOrSystem), "");
     
     postprocessElements();
+    
+    return true;
   }
 }
