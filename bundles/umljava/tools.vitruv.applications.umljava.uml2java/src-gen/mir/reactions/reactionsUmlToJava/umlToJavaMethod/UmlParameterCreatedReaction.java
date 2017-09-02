@@ -49,11 +49,11 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
     if (!(change instanceof CreateAndInsertNonRoot)) {
     	return false;
     }
-    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
     InsertEReference<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter> typedChange = ((CreateAndInsertNonRoot<org.eclipse.uml2.uml.Operation, org.eclipse.uml2.uml.Parameter>)change).getInsertChange();
     org.eclipse.uml2.uml.Operation affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
@@ -61,7 +61,7 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
     	return false;
     }
-    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

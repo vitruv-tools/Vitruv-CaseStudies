@@ -46,7 +46,9 @@ public class DeleteRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourceUsage(requiredRole), // correspondence source supplier
     	org.eclipse.uml2.uml.Usage.class,
     	(org.eclipse.uml2.uml.Usage _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (usage == null) {
     	return false;
     }

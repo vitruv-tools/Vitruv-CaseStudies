@@ -50,7 +50,9 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     	userExecution.getCorrepondenceSourcePcmRepository(umlType), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.Repository.class,
     	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmRepository == null) {
     	return false;
     }

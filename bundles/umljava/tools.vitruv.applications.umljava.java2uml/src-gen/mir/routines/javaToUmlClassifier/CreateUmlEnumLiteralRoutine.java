@@ -68,7 +68,9 @@ public class CreateUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
     	userExecution.getCorrepondenceSourceUEnum(jEnum, jConstant), // correspondence source supplier
     	org.eclipse.uml2.uml.Enumeration.class,
     	(org.eclipse.uml2.uml.Enumeration _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uEnum == null) {
     	return false;
     }

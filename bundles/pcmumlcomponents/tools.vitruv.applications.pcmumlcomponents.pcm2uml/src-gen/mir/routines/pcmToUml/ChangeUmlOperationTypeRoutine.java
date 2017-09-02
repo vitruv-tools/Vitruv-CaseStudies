@@ -1,6 +1,7 @@
 package mir.routines.pcmToUml;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
@@ -25,14 +26,18 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation, final DataType umlReturnType) {
+    public EObject getElement1(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation, final Optional<DataType> umlReturnType) {
       return umlOperation;
     }
     
-    public void update0Element(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation, final DataType umlReturnType) {
-      DataType returnType = umlReturnType;
-      if ((returnType == null)) {
+    public void update0Element(final OperationSignature pcmSignature, final Model umlModel, final Operation umlOperation, final Optional<DataType> umlReturnType) {
+      DataType returnType = null;
+      boolean _isPresent = umlReturnType.isPresent();
+      boolean _not = (!_isPresent);
+      if (_not) {
         returnType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmSignature.getReturnType__OperationSignature(), umlModel);
+      } else {
+        returnType = umlReturnType.get();
       }
       umlOperation.setType(returnType);
       PcmToUmlUtil.updateOperationReturnTypeMultiplicity(umlOperation, 
@@ -72,7 +77,9 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceUmlModel(pcmSignature), // correspondence source supplier
     	org.eclipse.uml2.uml.Model.class,
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlModel == null) {
     	return false;
     }
@@ -81,17 +88,22 @@ public class ChangeUmlOperationTypeRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceUmlOperation(pcmSignature, umlModel), // correspondence source supplier
     	org.eclipse.uml2.uml.Operation.class,
     	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlOperation == null) {
     	return false;
     }
     registerObjectUnderModification(umlOperation);
-    org.eclipse.uml2.uml.DataType umlReturnType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlReturnType(pcmSignature, umlModel, umlOperation), // correspondence source supplier
-    	org.eclipse.uml2.uml.DataType.class,
-    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(umlReturnType);
+    	Optional<org.eclipse.uml2.uml.DataType> umlReturnType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceUmlReturnType(pcmSignature, umlModel, umlOperation), // correspondence source supplier
+    		org.eclipse.uml2.uml.DataType.class,
+    		(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(umlReturnType.isPresent() ? umlReturnType.get() : null);
     // val updatedElement userExecution.getElement1(pcmSignature, umlModel, umlOperation, umlReturnType);
     userExecution.update0Element(pcmSignature, umlModel, umlOperation, umlReturnType);
     

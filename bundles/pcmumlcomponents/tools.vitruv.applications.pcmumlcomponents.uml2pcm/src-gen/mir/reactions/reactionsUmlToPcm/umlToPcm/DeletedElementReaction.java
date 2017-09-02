@@ -47,11 +47,11 @@ class DeletedElementReaction extends AbstractReactionRealization {
     if (!(change instanceof RemoveEReference)) {
     	return false;
     }
-    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
     RemoveEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.PackageableElement> typedChange = (RemoveEReference<org.eclipse.uml2.uml.Model, org.eclipse.uml2.uml.PackageableElement>)change;
     org.eclipse.uml2.uml.Model affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
@@ -59,7 +59,7 @@ class DeletedElementReaction extends AbstractReactionRealization {
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
     	return false;
     }
-    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

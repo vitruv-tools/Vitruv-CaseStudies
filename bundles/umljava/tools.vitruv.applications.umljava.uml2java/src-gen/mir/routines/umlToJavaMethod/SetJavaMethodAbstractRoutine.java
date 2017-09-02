@@ -56,7 +56,9 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     	userExecution.getCorrepondenceSourceJavaClass(uOperation), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaClass == null) {
     	return false;
     }
@@ -65,7 +67,9 @@ public class SetJavaMethodAbstractRoutine extends AbstractRepairRoutineRealizati
     	userExecution.getCorrepondenceSourceJavaMethod(uOperation, javaClass), // correspondence source supplier
     	org.emftext.language.java.members.ClassMethod.class,
     	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaMethod == null) {
     	return false;
     }

@@ -78,7 +78,9 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     	userExecution.getCorrepondenceSourceCompositeComponentJavaClass(composedStructure, assemblyContext), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (compositeComponentJavaClass == null) {
     	return false;
     }
@@ -87,7 +89,9 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     	userExecution.getCorrepondenceSourceEncapsulatedComponentJavaClass(composedStructure, assemblyContext, compositeComponentJavaClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (encapsulatedComponentJavaClass == null) {
     	return false;
     }

@@ -53,7 +53,9 @@ public class SetUmlAttributeFinalRoutine extends AbstractRepairRoutineRealizatio
     	userExecution.getCorrepondenceSourceUAttr(jAttr, isFinal), // correspondence source supplier
     	org.eclipse.uml2.uml.Property.class,
     	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uAttr == null) {
     	return false;
     }

@@ -51,7 +51,9 @@ public class ChangeJavaElementVisibilityRoutine extends AbstractRepairRoutineRea
     	userExecution.getCorrepondenceSourceJElem(uElem), // correspondence source supplier
     	org.emftext.language.java.modifiers.AnnotableAndModifiable.class,
     	(org.emftext.language.java.modifiers.AnnotableAndModifiable _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jElem == null) {
     	return false;
     }

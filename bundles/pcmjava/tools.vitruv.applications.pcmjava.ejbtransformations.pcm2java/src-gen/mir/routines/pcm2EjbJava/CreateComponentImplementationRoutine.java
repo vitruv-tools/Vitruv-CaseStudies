@@ -53,7 +53,9 @@ public class CreateComponentImplementationRoutine extends AbstractRepairRoutineR
     	userExecution.getCorrepondenceSourceRepositoryPackage(component), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(component));
+    	userExecution.getRetrieveTag1(component), 
+    	false // asserted
+    	);
     if (repositoryPackage == null) {
     	return false;
     }

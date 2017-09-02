@@ -49,11 +49,11 @@ class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization 
     if (!(change instanceof RemoveAndDeleteNonRoot)) {
     	return false;
     }
-    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
     RemoveEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Modifier> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Class, org.emftext.language.java.modifiers.Modifier>)change).getRemoveChange();
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
@@ -61,7 +61,7 @@ class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization 
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
     	return false;
     }
-    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

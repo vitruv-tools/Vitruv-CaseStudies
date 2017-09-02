@@ -68,7 +68,9 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	userExecution.getCorrepondenceSourceUmlProperty(innerDeclaration, pcmDataType), // correspondence source supplier
     	org.eclipse.uml2.uml.Property.class,
     	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlProperty == null) {
     	return false;
     }
@@ -77,7 +79,9 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	userExecution.getCorrepondenceSourceUmlModel(innerDeclaration, pcmDataType, umlProperty), // correspondence source supplier
     	org.eclipse.uml2.uml.Model.class,
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlModel == null) {
     	return false;
     }

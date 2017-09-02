@@ -68,7 +68,9 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     	userExecution.getCorrepondenceSourceUInterface(jInterface, jSuperInterface), // correspondence source supplier
     	org.eclipse.uml2.uml.Interface.class,
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uInterface == null) {
     	return false;
     }

@@ -52,7 +52,9 @@ public class RenameJavaNamedElementRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceJElem(uElem, name), // correspondence source supplier
     	org.emftext.language.java.commons.NamedElement.class,
     	(org.emftext.language.java.commons.NamedElement _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jElem == null) {
     	return false;
     }

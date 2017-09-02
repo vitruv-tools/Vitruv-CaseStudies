@@ -51,7 +51,9 @@ public class CreatedInterfaceMethodRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceOpInterface(interf, method), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationInterface.class,
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (opInterface == null) {
     	return false;
     }

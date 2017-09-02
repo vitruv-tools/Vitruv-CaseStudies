@@ -55,7 +55,9 @@ public class ClearCorrespondenceForCollectionTypesRoutine extends AbstractRepair
     	userExecution.getCorrepondenceSourceOldInnerType(pcmType), // correspondence source supplier
     	org.eclipse.uml2.uml.DataType.class,
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(pcmType));
+    	userExecution.getRetrieveTag1(pcmType), 
+    	false // asserted
+    	);
     if (oldInnerType == null) {
     	return false;
     }

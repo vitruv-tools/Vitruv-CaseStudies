@@ -69,7 +69,9 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     	userExecution.getCorrepondenceSourceCompositeDataType(clazz, field), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.CompositeDataType.class,
     	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (compositeDataType == null) {
     	return false;
     }

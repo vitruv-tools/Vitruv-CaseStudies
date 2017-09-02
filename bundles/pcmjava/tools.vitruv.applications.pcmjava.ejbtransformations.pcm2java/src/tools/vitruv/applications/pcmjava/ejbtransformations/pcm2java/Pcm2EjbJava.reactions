@@ -957,11 +957,8 @@ reaction ChangeOperationSignatureOfSeff {
 }
 
 routine changeMethodForSeff(pcm::ResourceDemandingSEFF seff) { 
-	match {
-		val oldClassMethod = retrieve optional java::ClassMethod corresponding to seff
-	} 
 	action { 
-		delete oldClassMethod
+		call deleteMethodForSeff(seff)
 		call createSEFF(seff)
 	}
 }

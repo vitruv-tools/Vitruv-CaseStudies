@@ -47,7 +47,9 @@ public class ChangeReturnTypeOfMethodForOperationSignatureRoutine extends Abstra
     	userExecution.getCorrepondenceSourceInterfaceMethod(operationSignature), // correspondence source supplier
     	org.emftext.language.java.members.InterfaceMethod.class,
     	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (interfaceMethod == null) {
     	return false;
     }

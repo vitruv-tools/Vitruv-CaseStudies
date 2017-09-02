@@ -60,7 +60,9 @@ public class RemoveCompositeDataTypeParentRoutine extends AbstractRepairRoutineR
     	userExecution.getCorrepondenceSourceCompositeType(dataType, parent), // correspondence source supplier
     	org.eclipse.uml2.uml.DataType.class,
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (compositeType == null) {
     	return false;
     }
@@ -69,7 +71,9 @@ public class RemoveCompositeDataTypeParentRoutine extends AbstractRepairRoutineR
     	userExecution.getCorrepondenceSourceParentType(dataType, parent, compositeType), // correspondence source supplier
     	org.eclipse.uml2.uml.DataType.class,
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (parentType == null) {
     	return false;
     }

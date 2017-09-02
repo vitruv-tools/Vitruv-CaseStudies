@@ -1,6 +1,7 @@
 package mir.routines.umlToJavaMethod;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
@@ -22,11 +23,11 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Operation uOperation, final Method javaMethod, final org.emftext.language.java.classifiers.Class returnType) {
+    public EObject getElement1(final Operation uOperation, final Method javaMethod, final Optional<org.emftext.language.java.classifiers.Class> returnType) {
       return javaMethod;
     }
     
-    public void update0Element(final Operation uOperation, final Method javaMethod, final org.emftext.language.java.classifiers.Class returnType) {
+    public void update0Element(final Operation uOperation, final Method javaMethod, final Optional<org.emftext.language.java.classifiers.Class> returnType) {
       javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), returnType, javaMethod.getContainingCompilationUnit(), this.userInteracting));
     }
     
@@ -57,17 +58,22 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     	userExecution.getCorrepondenceSourceJavaMethod(uOperation), // correspondence source supplier
     	org.emftext.language.java.members.Method.class,
     	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaMethod == null) {
     	return false;
     }
     registerObjectUnderModification(javaMethod);
-    org.emftext.language.java.classifiers.Class returnType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceReturnType(uOperation, javaMethod), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(returnType);
+    	Optional<org.emftext.language.java.classifiers.Class> returnType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceReturnType(uOperation, javaMethod), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(returnType.isPresent() ? returnType.get() : null);
     // val updatedElement userExecution.getElement1(uOperation, javaMethod, returnType);
     userExecution.update0Element(uOperation, javaMethod, returnType);
     

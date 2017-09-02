@@ -54,7 +54,9 @@ public class RenameComponentPackageAndClassRoutine extends AbstractRepairRoutine
     	userExecution.getCorrepondenceSourceRepositoryPackage(component), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionRepositoryPackage(component, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (repositoryPackage == null) {
     	return false;
     }

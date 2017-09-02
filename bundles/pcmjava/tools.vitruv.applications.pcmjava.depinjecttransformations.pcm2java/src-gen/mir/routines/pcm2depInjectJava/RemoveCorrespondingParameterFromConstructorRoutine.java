@@ -55,7 +55,9 @@ public class RemoveCorrespondingParameterFromConstructorRoutine extends Abstract
     	userExecution.getCorrepondenceSourceParam(ctor, correspondenceSource), // correspondence source supplier
     	org.emftext.language.java.parameters.OrdinaryParameter.class,
     	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> userExecution.getCorrespondingModelElementsPreconditionParam(ctor, correspondenceSource, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (param == null) {
     	return false;
     }

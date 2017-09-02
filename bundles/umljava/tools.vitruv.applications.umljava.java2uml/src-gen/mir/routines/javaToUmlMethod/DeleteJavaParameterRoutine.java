@@ -46,7 +46,9 @@ public class DeleteJavaParameterRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceUParam(jParam), // correspondence source supplier
     	org.eclipse.uml2.uml.Parameter.class,
     	(org.eclipse.uml2.uml.Parameter _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uParam == null) {
     	return false;
     }

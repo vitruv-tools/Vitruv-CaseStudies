@@ -55,7 +55,9 @@ public class CreateCompositeDataTypeImplementationRoutine extends AbstractRepair
     	userExecution.getCorrepondenceSourceDatatypesPackage(dataType), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(dataType, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (datatypesPackage == null) {
     	return false;
     }

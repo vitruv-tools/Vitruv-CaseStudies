@@ -51,6 +51,7 @@ import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
 import org.emftext.language.java.JavaClasspath
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import java.util.Optional
 
 class Pcm2JavaHelper {
 
@@ -401,7 +402,7 @@ class Pcm2JavaHelper {
 	}
 
 	public static def TypeReference createTypeReference(DataType originalDataType,
-		Class correspondingJavaClassIfExisting) {
+		Optional<Class> correspondingJavaClassIfExisting) {
 		if (null === originalDataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
@@ -415,8 +416,8 @@ class Pcm2JavaHelper {
 			} else {
 				// This cannot be since the claimForPrimitiveType function does only return TypeReference or ConcreteClassifier
 			}
-		} else if (correspondingJavaClassIfExisting !== null) {
-			innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting);
+		} else if (correspondingJavaClassIfExisting.present) {
+			innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting.get);
 		} else {
 			throw new IllegalArgumentException(
 				"Either the dataType must be primitive or a correspondingJavaClass must be specified");

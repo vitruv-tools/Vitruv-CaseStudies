@@ -57,7 +57,9 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     	userExecution.getCorrepondenceSourceJI(superUMLInterface, uI), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jI == null) {
     	return false;
     }
@@ -66,7 +68,9 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     	userExecution.getCorrepondenceSourceJavaSuperInterface(superUMLInterface, uI, jI), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaSuperInterface == null) {
     	return false;
     }

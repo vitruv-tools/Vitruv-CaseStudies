@@ -75,7 +75,9 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
     	userExecution.getCorrepondenceSourceRootPackage(repository), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(repository));
+    	userExecution.getRetrieveTag1(repository), 
+    	false // asserted
+    	);
     if (rootPackage == null) {
     	return false;
     }

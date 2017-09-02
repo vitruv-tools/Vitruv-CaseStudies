@@ -55,7 +55,9 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourceRequiredInterfaceImport(providedRole), // correspondence source supplier
     	org.emftext.language.java.imports.ClassifierImport.class,
     	(org.emftext.language.java.imports.ClassifierImport _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (requiredInterfaceImport == null) {
     	return false;
     }
@@ -64,7 +66,9 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourceNamespaceClassifierReference(providedRole, requiredInterfaceImport), // correspondence source supplier
     	org.emftext.language.java.types.NamespaceClassifierReference.class,
     	(org.emftext.language.java.types.NamespaceClassifierReference _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (namespaceClassifierReference == null) {
     	return false;
     }

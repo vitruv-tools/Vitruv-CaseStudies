@@ -43,8 +43,8 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
 	
 	action {
 		val javaCompilationUnit = create java::CompilationUnit and initialize {
-			if (jPackage !== null) {
-				javaCompilationUnit.namespaces += jPackage.javaPackageAsStringList
+			if (jPackage.present) {
+				javaCompilationUnit.namespaces += jPackage.get.javaPackageAsStringList
 			}
             javaCompilationUnit.name = jClassifier.name + ".java";
             javaCompilationUnit.classifiers += jClassifier;
@@ -52,8 +52,8 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
         }
         add correspondence between umlClassifier and javaCompilationUnit
         call {
-            if (jPackage !== null) {
-                jPackage.compilationUnits += javaCompilationUnit
+            if (jPackage.present) {
+                jPackage.get.compilationUnits += javaCompilationUnit
             }
         }
 	}

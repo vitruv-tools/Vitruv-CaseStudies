@@ -46,7 +46,9 @@ public class DeleteInnerDeclarationOfPropertyRoutine extends AbstractRepairRouti
     	userExecution.getCorrepondenceSourceInnerDeclaration(umlProperty), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.InnerDeclaration.class,
     	(org.palladiosimulator.pcm.repository.InnerDeclaration _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (innerDeclaration == null) {
     	return false;
     }

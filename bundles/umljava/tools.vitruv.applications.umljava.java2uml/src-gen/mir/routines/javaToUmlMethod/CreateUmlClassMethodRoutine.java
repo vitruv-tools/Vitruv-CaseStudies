@@ -73,7 +73,9 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     	userExecution.getCorrepondenceSourceUClassifier(jMeth, jClassifier), // correspondence source supplier
     	org.eclipse.uml2.uml.Classifier.class,
     	(org.eclipse.uml2.uml.Classifier _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uClassifier == null) {
     	return false;
     }

@@ -55,7 +55,9 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceInterfaceMethod(signature, parameter), // correspondence source supplier
     	org.emftext.language.java.members.InterfaceMethod.class,
     	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (interfaceMethod == null) {
     	return false;
     }
@@ -64,7 +66,9 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJavaParameter(signature, parameter, interfaceMethod), // correspondence source supplier
     	org.emftext.language.java.parameters.OrdinaryParameter.class,
     	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaParameter == null) {
     	return false;
     }

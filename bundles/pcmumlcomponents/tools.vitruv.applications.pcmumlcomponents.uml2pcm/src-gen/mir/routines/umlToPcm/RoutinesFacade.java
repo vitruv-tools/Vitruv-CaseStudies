@@ -28,6 +28,16 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return effect.applyRoutine();
   }
   
+  public boolean renameNamedElement(final NamedElement umlElement) {
+    mir.routines.umlToPcm.RenameNamedElementRoutine effect = new mir.routines.umlToPcm.RenameNamedElementRoutine(this.executionState, calledBy, umlElement);
+    return effect.applyRoutine();
+  }
+  
+  public boolean renameCollectionType(final NamedElement umlElement) {
+    mir.routines.umlToPcm.RenameCollectionTypeRoutine effect = new mir.routines.umlToPcm.RenameCollectionTypeRoutine(this.executionState, calledBy, umlElement);
+    return effect.applyRoutine();
+  }
+  
   public boolean deleteElement(final Element umlElement) {
     mir.routines.umlToPcm.DeleteElementRoutine effect = new mir.routines.umlToPcm.DeleteElementRoutine(this.executionState, calledBy, umlElement);
     return effect.applyRoutine();

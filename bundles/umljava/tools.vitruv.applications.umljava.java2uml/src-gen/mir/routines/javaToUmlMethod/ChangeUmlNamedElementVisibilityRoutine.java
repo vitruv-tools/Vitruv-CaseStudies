@@ -55,7 +55,9 @@ public class ChangeUmlNamedElementVisibilityRoutine extends AbstractRepairRoutin
     	userExecution.getCorrepondenceSourceUElem(jElem, mod), // correspondence source supplier
     	org.eclipse.uml2.uml.NamedElement.class,
     	(org.eclipse.uml2.uml.NamedElement _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uElem == null) {
     	return false;
     }

@@ -68,7 +68,9 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceJEnum(uLiteral, uEnum), // correspondence source supplier
     	org.emftext.language.java.classifiers.Enumeration.class,
     	(org.emftext.language.java.classifiers.Enumeration _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jEnum == null) {
     	return false;
     }

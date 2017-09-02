@@ -1,6 +1,7 @@
 package mir.routines.pcmToUml;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
@@ -21,7 +22,7 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final CollectionDataType pcmType, final DataType innerType, final DataType oldInnerType) {
+    public EObject getElement1(final CollectionDataType pcmType, final DataType innerType, final Optional<DataType> oldInnerType) {
       return pcmType;
     }
     
@@ -29,11 +30,11 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
       return PcmToUmlUtil.COLLECTION_TYPE_TAG;
     }
     
-    public EObject getElement2(final CollectionDataType pcmType, final DataType innerType, final DataType oldInnerType) {
+    public EObject getElement2(final CollectionDataType pcmType, final DataType innerType, final Optional<DataType> oldInnerType) {
       return innerType;
     }
     
-    public String getTag1(final CollectionDataType pcmType, final DataType innerType, final DataType oldInnerType) {
+    public String getTag1(final CollectionDataType pcmType, final DataType innerType, final Optional<DataType> oldInnerType) {
       return PcmToUmlUtil.COLLECTION_TYPE_TAG;
     }
     
@@ -58,12 +59,15 @@ public class AddCorrespondenceForCollectionTypesRoutine extends AbstractRepairRo
     getLogger().debug("   pcmType: " + this.pcmType);
     getLogger().debug("   innerType: " + this.innerType);
     
-    org.eclipse.uml2.uml.DataType oldInnerType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceOldInnerType(pcmType, innerType), // correspondence source supplier
-    	org.eclipse.uml2.uml.DataType.class,
-    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(pcmType, innerType));
-    registerObjectUnderModification(oldInnerType);
+    	Optional<org.eclipse.uml2.uml.DataType> oldInnerType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceOldInnerType(pcmType, innerType), // correspondence source supplier
+    		org.eclipse.uml2.uml.DataType.class,
+    		(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
+    		userExecution.getRetrieveTag1(pcmType, innerType), 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(oldInnerType.isPresent() ? oldInnerType.get() : null);
     addCorrespondenceBetween(userExecution.getElement1(pcmType, innerType, oldInnerType), userExecution.getElement2(pcmType, innerType, oldInnerType), userExecution.getTag1(pcmType, innerType, oldInnerType));
     
     postprocessElements();

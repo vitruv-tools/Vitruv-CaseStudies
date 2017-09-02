@@ -1,6 +1,7 @@
 package mir.routines.umlToJavaMethod;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -27,17 +28,17 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
       super(reactionExecutionState);
     }
     
-    public void updateJavaMethodElement(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
+    public void updateJavaMethodElement(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       javaMethod.setName(uOperation.getName());
       JavaModifierUtil.setJavaVisibility(javaMethod, uOperation.getVisibility());
       javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jClassifier.getContainingCompilationUnit(), this.userInteracting));
     }
     
-    public EObject getElement1(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
+    public EObject getElement1(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       return jClassifier;
     }
     
-    public void update0Element(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
+    public void update0Element(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       EList<Member> _members = jClassifier.getMembers();
       _members.add(javaMethod);
     }
@@ -51,11 +52,11 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
       return uClassifier;
     }
     
-    public EObject getElement2(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
+    public EObject getElement2(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       return uOperation;
     }
     
-    public EObject getElement3(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final org.emftext.language.java.classifiers.Class customTypeClass, final ClassMethod javaMethod) {
+    public EObject getElement3(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       return javaMethod;
     }
   }
@@ -80,17 +81,22 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
     	userExecution.getCorrepondenceSourceJClassifier(uClassifier, uOperation), // correspondence source supplier
     	org.emftext.language.java.classifiers.ConcreteClassifier.class,
     	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jClassifier == null) {
     	return false;
     }
     registerObjectUnderModification(jClassifier);
-    org.emftext.language.java.classifiers.Class customTypeClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomTypeClass(uClassifier, uOperation, jClassifier), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(customTypeClass);
+    	Optional<org.emftext.language.java.classifiers.Class> customTypeClass = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceCustomTypeClass(uClassifier, uOperation, jClassifier), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(customTypeClass.isPresent() ? customTypeClass.get() : null);
     org.emftext.language.java.members.ClassMethod javaMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createClassMethod();
     notifyObjectCreated(javaMethod);
     userExecution.updateJavaMethodElement(uClassifier, uOperation, jClassifier, customTypeClass, javaMethod);

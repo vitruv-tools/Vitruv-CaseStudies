@@ -1,6 +1,7 @@
 package mir.routines.umlToPcm;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.umlToPcm.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
@@ -23,11 +24,16 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final DataType umlDataType, final CompositeDataType pcmCompositeType, final PrimitiveDataType pcmPrimitiveType, final CollectionDataType pcmCollectionType) {
-      return pcmCompositeType;
+    public EObject getElement1(final DataType umlDataType, final Optional<CompositeDataType> pcmCompositeType, final Optional<PrimitiveDataType> pcmPrimitiveType, final Optional<CollectionDataType> pcmCollectionType) {
+      CompositeDataType _xifexpression = null;
+      boolean _isPresent = pcmCompositeType.isPresent();
+      if (_isPresent) {
+        _xifexpression = pcmCompositeType.get();
+      }
+      return _xifexpression;
     }
     
-    public EObject getCorrepondenceSourcePcmPrimitiveType(final DataType umlDataType, final CompositeDataType pcmCompositeType) {
+    public EObject getCorrepondenceSourcePcmPrimitiveType(final DataType umlDataType, final Optional<CompositeDataType> pcmCompositeType) {
       return umlDataType;
     }
     
@@ -39,23 +45,33 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
       return umlDataType;
     }
     
-    public String getRetrieveTag2(final DataType umlDataType, final CompositeDataType pcmCompositeType) {
+    public String getRetrieveTag2(final DataType umlDataType, final Optional<CompositeDataType> pcmCompositeType) {
       return "";
     }
     
-    public EObject getElement2(final DataType umlDataType, final CompositeDataType pcmCompositeType, final PrimitiveDataType pcmPrimitiveType, final CollectionDataType pcmCollectionType) {
-      return pcmPrimitiveType;
+    public EObject getElement2(final DataType umlDataType, final Optional<CompositeDataType> pcmCompositeType, final Optional<PrimitiveDataType> pcmPrimitiveType, final Optional<CollectionDataType> pcmCollectionType) {
+      PrimitiveDataType _xifexpression = null;
+      boolean _isPresent = pcmPrimitiveType.isPresent();
+      if (_isPresent) {
+        _xifexpression = pcmPrimitiveType.get();
+      }
+      return _xifexpression;
     }
     
-    public String getRetrieveTag3(final DataType umlDataType, final CompositeDataType pcmCompositeType, final PrimitiveDataType pcmPrimitiveType) {
+    public String getRetrieveTag3(final DataType umlDataType, final Optional<CompositeDataType> pcmCompositeType, final Optional<PrimitiveDataType> pcmPrimitiveType) {
       return UmlToPcmTypesUtil.COLLECTION_TYPE_TAG;
     }
     
-    public EObject getElement3(final DataType umlDataType, final CompositeDataType pcmCompositeType, final PrimitiveDataType pcmPrimitiveType, final CollectionDataType pcmCollectionType) {
-      return pcmCollectionType;
+    public EObject getElement3(final DataType umlDataType, final Optional<CompositeDataType> pcmCompositeType, final Optional<PrimitiveDataType> pcmPrimitiveType, final Optional<CollectionDataType> pcmCollectionType) {
+      CollectionDataType _xifexpression = null;
+      boolean _isPresent = pcmCollectionType.isPresent();
+      if (_isPresent) {
+        _xifexpression = pcmCollectionType.get();
+      }
+      return _xifexpression;
     }
     
-    public EObject getCorrepondenceSourcePcmCollectionType(final DataType umlDataType, final CompositeDataType pcmCompositeType, final PrimitiveDataType pcmPrimitiveType) {
+    public EObject getCorrepondenceSourcePcmCollectionType(final DataType umlDataType, final Optional<CompositeDataType> pcmCompositeType, final Optional<PrimitiveDataType> pcmPrimitiveType) {
       return umlDataType;
     }
   }
@@ -73,24 +89,33 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine DeleteDataTypeRoutine with input:");
     getLogger().debug("   umlDataType: " + this.umlDataType);
     
-    org.palladiosimulator.pcm.repository.CompositeDataType pcmCompositeType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmCompositeType(umlDataType), // correspondence source supplier
-    	org.palladiosimulator.pcm.repository.CompositeDataType.class,
-    	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(umlDataType));
-    registerObjectUnderModification(pcmCompositeType);
-    org.palladiosimulator.pcm.repository.PrimitiveDataType pcmPrimitiveType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmPrimitiveType(umlDataType, pcmCompositeType), // correspondence source supplier
-    	org.palladiosimulator.pcm.repository.PrimitiveDataType.class,
-    	(org.palladiosimulator.pcm.repository.PrimitiveDataType _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag2(umlDataType, pcmCompositeType));
-    registerObjectUnderModification(pcmPrimitiveType);
-    org.palladiosimulator.pcm.repository.CollectionDataType pcmCollectionType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmCollectionType(umlDataType, pcmCompositeType, pcmPrimitiveType), // correspondence source supplier
-    	org.palladiosimulator.pcm.repository.CollectionDataType.class,
-    	(org.palladiosimulator.pcm.repository.CollectionDataType _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag3(umlDataType, pcmCompositeType, pcmPrimitiveType));
-    registerObjectUnderModification(pcmCollectionType);
+    	Optional<org.palladiosimulator.pcm.repository.CompositeDataType> pcmCompositeType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourcePcmCompositeType(umlDataType), // correspondence source supplier
+    		org.palladiosimulator.pcm.repository.CompositeDataType.class,
+    		(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
+    		userExecution.getRetrieveTag1(umlDataType), 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(pcmCompositeType.isPresent() ? pcmCompositeType.get() : null);
+    	Optional<org.palladiosimulator.pcm.repository.PrimitiveDataType> pcmPrimitiveType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourcePcmPrimitiveType(umlDataType, pcmCompositeType), // correspondence source supplier
+    		org.palladiosimulator.pcm.repository.PrimitiveDataType.class,
+    		(org.palladiosimulator.pcm.repository.PrimitiveDataType _element) -> true, // correspondence precondition checker
+    		userExecution.getRetrieveTag2(umlDataType, pcmCompositeType), 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(pcmPrimitiveType.isPresent() ? pcmPrimitiveType.get() : null);
+    	Optional<org.palladiosimulator.pcm.repository.CollectionDataType> pcmCollectionType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourcePcmCollectionType(umlDataType, pcmCompositeType, pcmPrimitiveType), // correspondence source supplier
+    		org.palladiosimulator.pcm.repository.CollectionDataType.class,
+    		(org.palladiosimulator.pcm.repository.CollectionDataType _element) -> true, // correspondence precondition checker
+    		userExecution.getRetrieveTag3(umlDataType, pcmCompositeType, pcmPrimitiveType), 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(pcmCollectionType.isPresent() ? pcmCollectionType.get() : null);
     deleteObject(userExecution.getElement1(umlDataType, pcmCompositeType, pcmPrimitiveType, pcmCollectionType));
     
     deleteObject(userExecution.getElement2(umlDataType, pcmCompositeType, pcmPrimitiveType, pcmCollectionType));

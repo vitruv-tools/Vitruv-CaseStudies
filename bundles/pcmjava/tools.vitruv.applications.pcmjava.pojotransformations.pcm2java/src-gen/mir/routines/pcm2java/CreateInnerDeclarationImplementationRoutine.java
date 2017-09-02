@@ -1,6 +1,7 @@
 package mir.routines.pcm2java;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.pcm2java.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -28,7 +29,7 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
       return _datatype_InnerDeclaration;
     }
     
-    public void callRoutine1(final InnerDeclaration innerDeclaration, final org.emftext.language.java.classifiers.Class nonPrimitiveInnerDataTypeClass, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InnerDeclaration innerDeclaration, final Optional<org.emftext.language.java.classifiers.Class> nonPrimitiveInnerDataTypeClass, @Extension final RoutinesFacade _routinesFacade) {
       final TypeReference innerDataTypeReference = Pcm2JavaHelper.createTypeReference(innerDeclaration.getDatatype_InnerDeclaration(), nonPrimitiveInnerDataTypeClass);
       _routinesFacade.addInnerDeclarationToCompositeDataType(innerDeclaration.getCompositeDataType_InnerDeclaration(), innerDeclaration, innerDataTypeReference);
     }
@@ -47,12 +48,15 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
     getLogger().debug("Called routine CreateInnerDeclarationImplementationRoutine with input:");
     getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
-    org.emftext.language.java.classifiers.Class nonPrimitiveInnerDataTypeClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceNonPrimitiveInnerDataTypeClass(innerDeclaration), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(nonPrimitiveInnerDataTypeClass);
+    	Optional<org.emftext.language.java.classifiers.Class> nonPrimitiveInnerDataTypeClass = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceNonPrimitiveInnerDataTypeClass(innerDeclaration), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(nonPrimitiveInnerDataTypeClass.isPresent() ? nonPrimitiveInnerDataTypeClass.get() : null);
     userExecution.callRoutine1(innerDeclaration, nonPrimitiveInnerDataTypeClass, actionsFacade);
     
     postprocessElements();

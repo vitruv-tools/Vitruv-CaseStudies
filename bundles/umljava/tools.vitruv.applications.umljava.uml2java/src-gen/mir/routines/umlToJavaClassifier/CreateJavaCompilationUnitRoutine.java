@@ -3,6 +3,7 @@ package mir.routines.umlToJavaClassifier;
 import com.google.common.collect.Iterables;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -32,18 +33,19 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
       return uNamespace;
     }
     
-    public EObject getElement1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit) {
+    public EObject getElement1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final Optional<org.emftext.language.java.containers.Package> jPackage, final CompilationUnit javaCompilationUnit) {
       return umlClassifier;
     }
     
-    public EObject getElement2(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit) {
+    public EObject getElement2(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final Optional<org.emftext.language.java.containers.Package> jPackage, final CompilationUnit javaCompilationUnit) {
       return javaCompilationUnit;
     }
     
-    public void updateJavaCompilationUnitElement(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit) {
-      if ((jPackage != null)) {
+    public void updateJavaCompilationUnitElement(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final Optional<org.emftext.language.java.containers.Package> jPackage, final CompilationUnit javaCompilationUnit) {
+      boolean _isPresent = jPackage.isPresent();
+      if (_isPresent) {
         EList<String> _namespaces = javaCompilationUnit.getNamespaces();
-        List<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage);
+        List<String> _javaPackageAsStringList = JavaContainerAndClassifierUtil.getJavaPackageAsStringList(jPackage.get());
         Iterables.<String>addAll(_namespaces, _javaPackageAsStringList);
       }
       String _name = jClassifier.getName();
@@ -54,9 +56,10 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
       this.persistProjectRelative(umlClassifier, javaCompilationUnit, JavaPersistenceHelper.buildJavaFilePath(javaCompilationUnit));
     }
     
-    public void callRoutine1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit javaCompilationUnit, @Extension final RoutinesFacade _routinesFacade) {
-      if ((jPackage != null)) {
-        EList<CompilationUnit> _compilationUnits = jPackage.getCompilationUnits();
+    public void callRoutine1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final Optional<org.emftext.language.java.containers.Package> jPackage, final CompilationUnit javaCompilationUnit, @Extension final RoutinesFacade _routinesFacade) {
+      boolean _isPresent = jPackage.isPresent();
+      if (_isPresent) {
+        EList<CompilationUnit> _compilationUnits = jPackage.get().getCompilationUnits();
         _compilationUnits.add(javaCompilationUnit);
       }
     }
@@ -81,12 +84,15 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     getLogger().debug("   jClassifier: " + this.jClassifier);
     getLogger().debug("   uNamespace: " + this.uNamespace);
     
-    org.emftext.language.java.containers.Package jPackage = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJPackage(umlClassifier, jClassifier, uNamespace), // correspondence source supplier
-    	org.emftext.language.java.containers.Package.class,
-    	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(jPackage);
+    	Optional<org.emftext.language.java.containers.Package> jPackage = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceJPackage(umlClassifier, jClassifier, uNamespace), // correspondence source supplier
+    		org.emftext.language.java.containers.Package.class,
+    		(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(jPackage.isPresent() ? jPackage.get() : null);
     org.emftext.language.java.containers.CompilationUnit javaCompilationUnit = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
     notifyObjectCreated(javaCompilationUnit);
     userExecution.updateJavaCompilationUnitElement(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit);

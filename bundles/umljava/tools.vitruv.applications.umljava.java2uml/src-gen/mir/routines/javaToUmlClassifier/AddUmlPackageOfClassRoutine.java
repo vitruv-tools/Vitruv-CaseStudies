@@ -60,7 +60,9 @@ public class AddUmlPackageOfClassRoutine extends AbstractRepairRoutineRealizatio
     	userExecution.getCorrepondenceSourceUClassifier(jPackage, jClassifier), // correspondence source supplier
     	org.eclipse.uml2.uml.Classifier.class,
     	(org.eclipse.uml2.uml.Classifier _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uClassifier == null) {
     	return false;
     }
@@ -69,7 +71,9 @@ public class AddUmlPackageOfClassRoutine extends AbstractRepairRoutineRealizatio
     	userExecution.getCorrepondenceSourceUPackage(jPackage, jClassifier, uClassifier), // correspondence source supplier
     	org.eclipse.uml2.uml.Package.class,
     	(org.eclipse.uml2.uml.Package _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uPackage == null) {
     	return false;
     }

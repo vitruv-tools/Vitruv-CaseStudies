@@ -73,7 +73,9 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourceUmlComponent(pcmComponent, requiredRole), // correspondence source supplier
     	org.eclipse.uml2.uml.Component.class,
     	(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlComponent == null) {
     	return false;
     }

@@ -85,7 +85,9 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceOperationProvidingInterface(providedRole), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (operationProvidingInterface == null) {
     	return false;
     }
@@ -94,7 +96,9 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJavaClass(providedRole, operationProvidingInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaClass == null) {
     	return false;
     }

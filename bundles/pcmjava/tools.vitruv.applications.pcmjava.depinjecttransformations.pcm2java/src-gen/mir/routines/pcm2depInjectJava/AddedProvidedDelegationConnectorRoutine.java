@@ -83,7 +83,9 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
     	userExecution.getCorrepondenceSourceConfigureMethod(providedDelegationConnector, pcmSystem), // correspondence source supplier
     	org.emftext.language.java.members.ClassMethod.class,
     	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (configureMethod == null) {
     	return false;
     }

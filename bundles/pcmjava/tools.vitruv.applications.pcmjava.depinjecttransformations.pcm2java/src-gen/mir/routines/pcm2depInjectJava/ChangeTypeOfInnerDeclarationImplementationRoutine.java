@@ -1,6 +1,7 @@
 package mir.routines.pcm2depInjectJava;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -28,7 +29,7 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
       return _datatype_InnerDeclaration;
     }
     
-    public void callRoutine1(final InnerDeclaration innerDeclaration, final org.emftext.language.java.classifiers.Class newJavaDataType, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InnerDeclaration innerDeclaration, final Optional<org.emftext.language.java.classifiers.Class> newJavaDataType, @Extension final RoutinesFacade _routinesFacade) {
       final TypeReference newDataTypeReference = Pcm2JavaHelper.createTypeReference(innerDeclaration.getDatatype_InnerDeclaration(), newJavaDataType);
       _routinesFacade.changeInnerDeclarationType(innerDeclaration, newDataTypeReference);
     }
@@ -47,12 +48,15 @@ public class ChangeTypeOfInnerDeclarationImplementationRoutine extends AbstractR
     getLogger().debug("Called routine ChangeTypeOfInnerDeclarationImplementationRoutine with input:");
     getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
     
-    org.emftext.language.java.classifiers.Class newJavaDataType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceNewJavaDataType(innerDeclaration), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(newJavaDataType);
+    	Optional<org.emftext.language.java.classifiers.Class> newJavaDataType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceNewJavaDataType(innerDeclaration), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(newJavaDataType.isPresent() ? newJavaDataType.get() : null);
     userExecution.callRoutine1(innerDeclaration, newJavaDataType, actionsFacade);
     
     postprocessElements();

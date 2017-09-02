@@ -1,6 +1,7 @@
 package mir.routines.umlToJavaMethod;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
@@ -26,11 +27,11 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
       return uParam;
     }
     
-    public EObject getElement1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customClass) {
+    public EObject getElement1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<org.emftext.language.java.classifiers.Class> customClass) {
       return jParam;
     }
     
-    public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final org.emftext.language.java.classifiers.Class customClass) {
+    public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<org.emftext.language.java.classifiers.Class> customClass) {
       jParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit(), this.userInteracting));
     }
     
@@ -59,17 +60,22 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     	userExecution.getCorrepondenceSourceJParam(uParam, uType), // correspondence source supplier
     	org.emftext.language.java.parameters.OrdinaryParameter.class,
     	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jParam == null) {
     	return false;
     }
     registerObjectUnderModification(jParam);
-    org.emftext.language.java.classifiers.Class customClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomClass(uParam, uType, jParam), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(customClass);
+    	Optional<org.emftext.language.java.classifiers.Class> customClass = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceCustomClass(uParam, uType, jParam), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(customClass.isPresent() ? customClass.get() : null);
     // val updatedElement userExecution.getElement1(uParam, uType, jParam, customClass);
     userExecution.update0Element(uParam, uType, jParam, customClass);
     

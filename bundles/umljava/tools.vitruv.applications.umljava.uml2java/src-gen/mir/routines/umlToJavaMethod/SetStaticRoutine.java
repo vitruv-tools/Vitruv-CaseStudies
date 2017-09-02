@@ -52,7 +52,9 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJMod(uFeat), // correspondence source supplier
     	org.emftext.language.java.modifiers.AnnotableAndModifiable.class,
     	(org.emftext.language.java.modifiers.AnnotableAndModifiable _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jMod == null) {
     	return false;
     }
