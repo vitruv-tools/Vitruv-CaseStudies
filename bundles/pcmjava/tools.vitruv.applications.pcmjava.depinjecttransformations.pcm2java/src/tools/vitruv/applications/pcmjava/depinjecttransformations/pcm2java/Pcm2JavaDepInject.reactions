@@ -31,8 +31,8 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import static tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice.*
 import static tools.vitruv.applications.pcmjava.util.PcmJavaUtils.*
-import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
@@ -431,7 +431,7 @@ routine addSuperTypeToDataType(pcm::DataType dataType, java::TypeReference inner
 	} 
 	action { 
 		update dataTypeImplementationCU {
-			val collectionTypeClassImport = getJavaClassImport(superTypeQualifiedName);
+			val collectionTypeClassImport = createJavaClassImport(superTypeQualifiedName);
 			dataTypeImplementationCU.imports += collectionTypeClassImport;
 		}
 		val namespaceClassifier = create java::NamespaceClassifierReference and initialize {

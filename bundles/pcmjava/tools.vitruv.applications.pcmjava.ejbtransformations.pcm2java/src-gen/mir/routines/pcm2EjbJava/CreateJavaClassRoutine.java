@@ -9,7 +9,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.modifiers.ModifiersFactory;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -33,8 +33,8 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
       javaClass.setName(className);
       javaClass.addModifier(ModifiersFactory.eINSTANCE.createPublic());
       if ((sourceElementMappedToClass instanceof BasicComponent)) {
-        Pcm2JavaHelper.addImportToClassFromString(javaClass, Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("javax", "ejb")), "Stateless");
-        Pcm2JavaHelper.addAnnotationToAnnotableAndModifiable(javaClass, "Stateless");
+        JavaModificationUtil.addImportToClassFromString(javaClass, Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("javax", "ejb")), "Stateless");
+        JavaModificationUtil.addAnnotationToAnnotableAndModifiable(javaClass, "Stateless");
       }
     }
     

@@ -59,7 +59,6 @@ import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
@@ -67,6 +66,7 @@ import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.tests.VitruviusApplicationTest;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
+import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
 
 /**
  * super class for all repository and system tests. Contains helper methods
@@ -588,7 +588,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
                 fieldsFound++;
                 final Field field = (Field) eObject;
                 fieldName = field.getName();
-                fieldTypeName = Pcm2JavaUtils.getNameFromJaMoPPType(field.getTypeReference());
+                fieldTypeName = getNameFromJaMoPPType(field.getTypeReference());
                 assertTrue("field name unexpected",
                         field.getName().toLowerCase().contains(innerDec.getEntityName().toLowerCase()));
             } else if (eObject instanceof Method) {

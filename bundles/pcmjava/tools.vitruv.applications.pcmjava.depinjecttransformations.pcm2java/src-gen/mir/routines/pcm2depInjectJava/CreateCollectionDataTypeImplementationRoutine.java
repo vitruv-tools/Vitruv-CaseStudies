@@ -24,7 +24,7 @@ import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -61,7 +61,7 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
       final TypeReference innerTypeRef = Pcm2JavaHelper.createTypeReference(dataType.getInnerType_CollectionDataType(), innerTypeClass);
       TypeReference innerTypeClassOrWrapper = innerTypeRef;
       if ((innerTypeRef instanceof PrimitiveType)) {
-        innerTypeClassOrWrapper = Pcm2JavaUtils.getWrapperTypeReferenceForPrimitiveType(((PrimitiveType)innerTypeRef));
+        innerTypeClassOrWrapper = JavaModificationUtil.getWrapperTypeReferenceForPrimitiveType(innerTypeRef);
       }
       Set<Class<?>> collectionDataTypes = new HashSet<Class<?>>();
       Iterables.<Class<?>>addAll(collectionDataTypes, Collections.<Class<? extends AbstractCollection>>unmodifiableList(CollectionLiterals.<Class<? extends AbstractCollection>>newArrayList(ArrayList.class, LinkedList.class, Vector.class, Stack.class, HashSet.class)));

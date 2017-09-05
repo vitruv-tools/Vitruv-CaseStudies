@@ -20,7 +20,7 @@ import org.palladiosimulator.pcm.core.composition.ComposedStructure;
 import org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -49,7 +49,7 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
       ConcreteClassifier _containingConcreteClassifier = configureMethod.getContainingConcreteClassifier();
       final org.emftext.language.java.classifiers.Class systemClass = ((org.emftext.language.java.classifiers.Class) _containingConcreteClassifier);
       final Interface jaMoPPInterface = IterableUtil.<Set<Interface>, Interface>claimOne(CorrespondenceModelUtil.<Interface, Correspondence>getCorrespondingEObjectsByType(this.correspondenceModel, opInterface, Interface.class));
-      final NamespaceClassifierReference namespaceClassifierRef = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPInterface);
+      final NamespaceClassifierReference namespaceClassifierRef = JavaModificationUtil.createNamespaceClassifierReference(jaMoPPInterface);
       EList<TypeReference> _implements = systemClass.getImplements();
       for (final TypeReference impl : _implements) {
         boolean _hasSameTargetReference = PcmJavaUtils.hasSameTargetReference(namespaceClassifierRef, impl);
@@ -58,7 +58,7 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
         }
       }
       systemClass.getImplements().add(namespaceClassifierRef);
-      final Import classifierImport = Pcm2JavaUtils.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface);
+      final Import classifierImport = JavaModificationUtil.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface);
       this.correspondenceModel.createAndAddCorrespondence(CollectionBridge.<EObject>toList(pcmSystem), Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(namespaceClassifierRef, classifierImport)));
     }
   }

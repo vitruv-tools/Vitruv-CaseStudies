@@ -87,7 +87,6 @@ import org.palladiosimulator.pcm.system.System;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilder;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator;
@@ -108,6 +107,7 @@ import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationAbortCa
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationListener;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
+import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
 
 /**
  * Test class that contains utillity methods that can be used by JaMoPP2PCM
@@ -702,7 +702,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	}
 
 	protected void assertDataTypeName(final TypeReference typeReference, final DataType pcmDataType) {
-		final String jaMoPPTypeName = Pcm2JavaUtils.getNameFromJaMoPPType(typeReference);
+		final String jaMoPPTypeName = getNameFromJaMoPPType(typeReference);
 		final String pcmTypeName = this.getNameFromPCMDataType(pcmDataType);
 		assertEquals("The name of the PCM datatype does not equal the JaMoPP type name", jaMoPPTypeName, pcmTypeName);
 	}

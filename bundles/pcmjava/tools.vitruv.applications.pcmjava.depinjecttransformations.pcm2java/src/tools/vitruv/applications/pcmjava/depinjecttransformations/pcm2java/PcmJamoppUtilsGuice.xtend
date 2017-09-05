@@ -51,8 +51,8 @@ import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * 
@@ -178,7 +178,7 @@ public class PcmJamoppUtilsGuice {
 	def static addInjectToConstructor(Constructor constructor, ConcreteClassifier jaMoPPClass) {
 		// Add @Inject tag
 		val annotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance() as AnnotationInstance
-		val classifierReference = createAndReturnNamespaceClassifierReferenceForName("javax.inject", "Inject")
+		val classifierReference = createNamespaceClassifierReferenceForName("javax.inject", "Inject")
 		val Classifier classifier = classifierReference.classifierReferences.get(0).target
 		annotation.setAnnotation(classifier)
 		constructor.annotationsAndModifiers.add(0, annotation)
@@ -195,30 +195,13 @@ public class PcmJamoppUtilsGuice {
 		return false
 	}
 
-	// TODO: refactoring, the method is the same as in PCM2JaMoPPUtils except for first line of code
-	def static NamespaceClassifierReference createAndReturnNamespaceClassifierReferenceForName(String namespace,
-		String name) {
-		val classifier = ClassifiersFactory.eINSTANCE.createAnnotation
-		classifier.setName(name)
-		val classifierReference = TypesFactory.eINSTANCE.createClassifierReference
-		classifierReference.setTarget(classifier)
-		val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
-		namespaceClassifierReference.classifierReferences.add(classifierReference)
-		if (!namespace.nullOrEmpty) {
-			namespaceClassifierReference.namespaces.addAll(namespace.split("."))
-		} else {
-			namespaceClassifierReference.namespaces.add("")
-		}
-		return namespaceClassifierReference
-	}
-
 	def static addGuiceModuleInterfaceToClass(Class jaMoPPClass) {
 		addImportToClassFromString(jaMoPPClass, #["com", "google", "inject"], "Binder")
 		addImportToClassFromString(jaMoPPClass, #["com", "google", "inject"], "Module")
 	}
 
 	def static addConfigureMethodToModule(Class jaMoPPClass) {
-		val classifierReference = Pcm2JavaUtils.createAndReturnNamespaceClassifierReferenceForName("", "Binder")
+		val classifierReference = createNamespaceClassifierReferenceForName("", "Binder")
 		val classifier = classifierReference.classifierReferences.get(0)
 
 		// Check if configure method has already been added before
@@ -235,13 +218,13 @@ public class PcmJamoppUtilsGuice {
 		method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
 		method.typeReference = TypesFactory.eINSTANCE.createVoid
 
-		val Parameter parameter = Pcm2JavaUtils.createOrdinaryParameter(classifier, "binder")
+		val Parameter parameter = createOrdinaryParameter(classifier, "binder")
 		method.parameters.add(parameter)
 		jaMoPPClass.members.add(method)
 
 		val Interface jaMoPPInterface = ClassifiersFactory.eINSTANCE.createInterface
 		jaMoPPInterface.name = "Module"
-		val namespaceClassifierRef = Pcm2JavaUtils.createNamespaceClassifierReference(jaMoPPInterface)
+		val namespaceClassifierRef = createNamespaceClassifierReference(jaMoPPInterface)
 
 		// Check if "implements Module" has already been added before
 		if (checkIfClassImplementsInterface(jaMoPPClass, jaMoPPInterface)) {
@@ -508,8 +491,8 @@ public class PcmJamoppUtilsGuice {
 		// create "bind(Comp.class)."
 		val ClassMethod bindMethod = MembersFactory.eINSTANCE.createClassMethod
 		bindMethod.name = "bind"
-		val classTypeReference = Pcm2JavaUtils.createAndReturnNamespaceClassifierReferenceForName("", "Class")
-		bindMethod.parameters.add(Pcm2JavaUtils.createOrdinaryParameter(classTypeReference, interfaceName + ".class"))
+		val classTypeReference = createNamespaceClassifierReferenceForName("", "Class")
+		bindMethod.parameters.add(createOrdinaryParameter(classTypeReference, interfaceName + ".class"))
 		val MethodCall bindCall = ReferencesFactory.eINSTANCE.createMethodCall
 		bindCall.target = bindMethod
 
@@ -522,7 +505,7 @@ public class PcmJamoppUtilsGuice {
 		// create "to(CompImpl.class)"
 		val ClassMethod toMethod = MembersFactory.eINSTANCE.createClassMethod
 		toMethod.name = "to"
-		toMethod.parameters.add(Pcm2JavaUtils.createOrdinaryParameter(classTypeReference, implClassName + ".class"))
+		toMethod.parameters.add(createOrdinaryParameter(classTypeReference, implClassName + ".class"))
 		val MethodCall toCall = ReferencesFactory.eINSTANCE.createMethodCall
 		toCall.target = toMethod
 

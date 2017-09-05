@@ -17,6 +17,7 @@ import org.emftext.language.java.types.TypesFactory
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * Mapping transformation for primitive data types
@@ -67,7 +68,7 @@ class DataTypeCorrespondenceHelper {
 		if (type instanceof TypeReference) {
 			return type
 		} else if (type instanceof ConcreteClassifier) {
-			return Pcm2JavaUtils.createNamespaceClassifierReference(type as ConcreteClassifier)
+			return createNamespaceClassifierReference(type as ConcreteClassifier)
 		}
 		logger.warn(
 			"found type " + type +

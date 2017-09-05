@@ -20,6 +20,7 @@ import org.emftext.language.java.members.Field
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.emftext.language.java.containers.CompilationUnit
 import java.util.Optional
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * A helper class that contains util functions which depends on

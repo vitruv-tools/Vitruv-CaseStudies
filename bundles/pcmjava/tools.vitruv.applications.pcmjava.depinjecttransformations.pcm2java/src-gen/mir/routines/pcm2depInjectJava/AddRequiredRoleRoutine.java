@@ -17,8 +17,7 @@ import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java.PcmJamoppUtilsGuice;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -61,10 +60,10 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void callRoutine1(final OperationRequiredRole requiredRole, final Interface requiredInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport requiredInterfaceImport, final Field requiredInterfaceField, @Extension final RoutinesFacade _routinesFacade) {
-      final NamespaceClassifierReference typeRef = Pcm2JavaUtils.createNamespaceClassifierReference(requiredInterface);
-      Pcm2JavaHelper.addImportToCompilationUnitOfClassifier(requiredInterfaceImport, javaClass, requiredInterface);
+      final NamespaceClassifierReference typeRef = JavaModificationUtil.createNamespaceClassifierReference(requiredInterface);
+      JavaModificationUtil.addImportToCompilationUnitOfClassifier(requiredInterfaceImport, javaClass, requiredInterface);
       final String requiredRoleName = requiredRole.getEntityName();
-      Pcm2JavaHelper.createPrivateField(requiredInterfaceField, EcoreUtil.<NamespaceClassifierReference>copy(typeRef), requiredRoleName);
+      JavaModificationUtil.createPrivateField(requiredInterfaceField, EcoreUtil.<NamespaceClassifierReference>copy(typeRef), requiredRoleName);
       EList<Member> _members = javaClass.getMembers();
       _members.add(requiredInterfaceField);
       PcmJamoppUtilsGuice.ensureConstructorWithInjectAnnotation(javaClass);

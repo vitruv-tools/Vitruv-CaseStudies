@@ -14,6 +14,7 @@ import org.emftext.language.java.members.ClassMethod;
 import org.junit.Test;
 
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 
 /**
  * Test for the JaMoPPPCMUtil class - not a utility class. Tests the textual creation of a
@@ -32,7 +33,7 @@ public class JavaUtilsTest {
         final String content = "package " + "datatypes;" + "\n\n" + "import " + selectedClass.getPackage().getName()
                 + "." + selectedClass.getSimpleName() + ";\n\n" + "public class " + className + " extends "
                 + selectedClass.getSimpleName() + "<" + "String" + ">" + " {\n" + "\n\n" + "}";
-        final CompilationUnit cu = Pcm2JavaUtils.createCompilationUnit(className, content);
+        final CompilationUnit cu = JavaModificationUtil.createCompilationUnit(className, content);
 
         assertEquals("CompilationUnit name is wrong", cu.getName(), className + ".java");
         assertTrue("No classifier in compliation unit", cu.getClassifiers().size() == 1);
