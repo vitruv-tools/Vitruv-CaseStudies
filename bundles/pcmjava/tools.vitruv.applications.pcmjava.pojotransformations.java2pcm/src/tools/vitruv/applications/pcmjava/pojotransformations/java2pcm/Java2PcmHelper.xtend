@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
 
-import org.apache.log4j.Logger
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
 import org.palladiosimulator.pcm.repository.Repository
@@ -24,22 +23,14 @@ import org.emftext.language.java.types.PrimitiveType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
+
 /**
- * TODO JAVA DOC
+ * Helper class for java2pcm reactions and routines. 
+ * Some methods are copied from other util classes because only this implementation is using them.
+ * These methods are marked with a comment and can be removed from their util class in the future.
  */
 public class Java2PcmHelper {
-	private static val logger = Logger.getLogger(Java2PcmHelper)
 
-
-	def static boolean hasCorrespondance(EObject eObject, CorrespondenceModel correspondenceModel) {
-		return !correspondenceModel.getCorrespondingEObjects(eObject).isNullOrEmpty
-	}
-	
-	//TODO delete if not needed anymore
-	def static Set<EObject> getCorresponding(EObject object, CorrespondenceModel correspondenceModel) {
-		return correspondenceModel.getCorrespondingEObjects(object)
-	}
-	
 	def static Set<OperationInterface> getCorrespondingOperationInterface(EObject eObject, CorrespondenceModel correspondenceModel) {
 		return correspondenceModel.getCorrespondingEObjectsByType(eObject, OperationInterface)
 	}
@@ -80,15 +71,6 @@ public class Java2PcmHelper {
 		val target1 = getTargetClassifierFromTypeReference(reference1)
 		val target2 = getTargetClassifierFromTypeReference(reference2)
 		return target1 == target2 || target1.equals(target2)
-	}
-	
-	/**
-	 * Check if no Repository exists in correspondence model.
-	 * @param correspondenceModel the correspondenceModel in which the PCM-Repository should be searched
-	 * @return true if no exists, false otherwise.
-	 */
-	def static boolean noCorrespondenceRepository(CorrespondenceModel correspondenceModel) {
-		return correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository).isNullOrEmpty
 	}
 	
 	def static getPCMDataTypeForTypeReference(TypeReference typeReference, CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repository, Method newMethod) {
