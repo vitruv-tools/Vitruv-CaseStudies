@@ -8,19 +8,19 @@ import tools.vitruv.framework.change.echange.EChange
 import tools.vitruv.domains.java.echange.feature.JavaFeatureEChange
 import tools.vitruv.framework.tuid.TuidManager
 import org.eclipse.emf.ecore.EObject
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 	
 	new() {
 		super(new JavaDomainProvider().domain, new PcmDomainProvider().domain)
 	}
-	
+
 	override doesHandleChange(EChange change, CorrespondenceModel correspondenceModel) {
 		return change instanceof JavaFeatureEChange<?, ?>;
 	}
-	
-	override propagateChange(EChange change, CorrespondenceModel correspondenceModel) {
+
+	override propagateChange(EChange change, CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
 		if (change instanceof JavaFeatureEChange<?, ?>) {
 			val oldAffectedEObject = change.oldAffectedEObject as EObject // Cast necessary due to Xcore/Xtend problem
 			val newAffectedEObject = change.affectedEObject as EObject // Cast necessary due to Xcore/Xtend problem
@@ -28,7 +28,6 @@ class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject);
 			}
 		}
-		return new ChangePropagationResult();
 	}
 
 }

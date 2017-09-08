@@ -25,58 +25,62 @@ public class FieldCreatedCorrespondingToRepositoryComponentRoutine extends Abstr
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceRepoComponent(final Classifier classifier, final Field field, final RepositoryComponent repositoryComponent) {
-      ConcreteClassifier _containingConcreteClassifier = field.getContainingConcreteClassifier();
-      return _containingConcreteClassifier;
-    }
-    
-    public EObject getCorrepondenceSourceRepositoryComponent(final Classifier classifier, final Field field) {
+    public EObject getCorrepondenceSourceRepositoryComponent(final Classifier classifier, final Field javaField) {
       return classifier;
     }
     
-    public void callRoutine1(final Classifier classifier, final Field field, final RepositoryComponent repositoryComponent, final RepositoryComponent repoComponent, @Extension final RoutinesFacade _routinesFacade) {
+    public EObject getCorrepondenceSourceConcreteRepositoryComponent(final Classifier classifier, final Field javaField, final RepositoryComponent repositoryComponent) {
+      ConcreteClassifier _containingConcreteClassifier = javaField.getContainingConcreteClassifier();
+      return _containingConcreteClassifier;
+    }
+    
+    public void callRoutine1(final Classifier classifier, final Field javaField, final RepositoryComponent repositoryComponent, final RepositoryComponent concreteRepositoryComponent, @Extension final RoutinesFacade _routinesFacade) {
       Iterable<OperationProvidedRole> operationProvidedRoles = Iterables.<OperationProvidedRole>filter(repositoryComponent.getProvidedRoles_InterfaceProvidingEntity(), OperationProvidedRole.class);
       for (final OperationProvidedRole providedRole : operationProvidedRoles) {
-        _routinesFacade.createOperationRequiredRoleCorrespondingToField(field, providedRole.getProvidedInterface__OperationProvidedRole(), repoComponent);
+        _routinesFacade.createOperationRequiredRoleCorrespondingToField(javaField, providedRole.getProvidedInterface__OperationProvidedRole(), concreteRepositoryComponent);
       }
     }
   }
   
-  public FieldCreatedCorrespondingToRepositoryComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier classifier, final Field field) {
+  public FieldCreatedCorrespondingToRepositoryComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier classifier, final Field javaField) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.FieldCreatedCorrespondingToRepositoryComponentRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.classifier = classifier;this.field = field;
+    this.classifier = classifier;this.javaField = javaField;
   }
   
   private Classifier classifier;
   
-  private Field field;
+  private Field javaField;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine FieldCreatedCorrespondingToRepositoryComponentRoutine with input:");
     getLogger().debug("   classifier: " + this.classifier);
-    getLogger().debug("   field: " + this.field);
+    getLogger().debug("   javaField: " + this.javaField);
     
     org.palladiosimulator.pcm.repository.RepositoryComponent repositoryComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceRepositoryComponent(classifier, field), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceRepositoryComponent(classifier, javaField), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.RepositoryComponent.class,
     	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (repositoryComponent == null) {
     	return false;
     }
     registerObjectUnderModification(repositoryComponent);
-    org.palladiosimulator.pcm.repository.RepositoryComponent repoComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceRepoComponent(classifier, field, repositoryComponent), // correspondence source supplier
+    org.palladiosimulator.pcm.repository.RepositoryComponent concreteRepositoryComponent = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceConcreteRepositoryComponent(classifier, javaField, repositoryComponent), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.RepositoryComponent.class,
     	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
-    	null);
-    if (repoComponent == null) {
+    	null, 
+    	false // asserted
+    	);
+    if (concreteRepositoryComponent == null) {
     	return false;
     }
-    registerObjectUnderModification(repoComponent);
-    userExecution.callRoutine1(classifier, field, repositoryComponent, repoComponent, actionsFacade);
+    registerObjectUnderModification(concreteRepositoryComponent);
+    userExecution.callRoutine1(classifier, javaField, repositoryComponent, concreteRepositoryComponent, actionsFacade);
     
     postprocessElements();
     

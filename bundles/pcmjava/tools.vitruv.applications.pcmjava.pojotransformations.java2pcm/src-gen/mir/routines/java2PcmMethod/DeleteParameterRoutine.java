@@ -20,38 +20,40 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final OrdinaryParameter jParam, final Parameter pcmParam) {
-      return pcmParam;
+    public EObject getElement1(final OrdinaryParameter javaParameter, final Parameter pcmParameter) {
+      return pcmParameter;
     }
     
-    public EObject getCorrepondenceSourcePcmParam(final OrdinaryParameter jParam) {
-      return jParam;
+    public EObject getCorrepondenceSourcePcmParameter(final OrdinaryParameter javaParameter) {
+      return javaParameter;
     }
   }
   
-  public DeleteParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OrdinaryParameter jParam) {
+  public DeleteParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OrdinaryParameter javaParameter) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.DeleteParameterRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.jParam = jParam;
+    this.javaParameter = javaParameter;
   }
   
-  private OrdinaryParameter jParam;
+  private OrdinaryParameter javaParameter;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteParameterRoutine with input:");
-    getLogger().debug("   jParam: " + this.jParam);
+    getLogger().debug("   javaParameter: " + this.javaParameter);
     
-    org.palladiosimulator.pcm.repository.Parameter pcmParam = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmParam(jParam), // correspondence source supplier
+    org.palladiosimulator.pcm.repository.Parameter pcmParameter = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourcePcmParameter(javaParameter), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.Parameter.class,
     	(org.palladiosimulator.pcm.repository.Parameter _element) -> true, // correspondence precondition checker
-    	null);
-    if (pcmParam == null) {
+    	null, 
+    	false // asserted
+    	);
+    if (pcmParameter == null) {
     	return false;
     }
-    registerObjectUnderModification(pcmParam);
-    deleteObject(userExecution.getElement1(jParam, pcmParam));
+    registerObjectUnderModification(pcmParameter);
+    deleteObject(userExecution.getElement1(javaParameter, pcmParameter));
     
     postprocessElements();
     

@@ -73,7 +73,9 @@ public class CreateOperationProvidedRoleFromTypeReferenceRoutine extends Abstrac
     	userExecution.getCorrepondenceSourceOpInterface(classifierInterface, javaClass, reference), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationInterface.class,
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (opInterface == null) {
     	return false;
     }
@@ -82,7 +84,9 @@ public class CreateOperationProvidedRoleFromTypeReferenceRoutine extends Abstrac
     	userExecution.getCorrepondenceSourceBasicComponent(classifierInterface, javaClass, reference, opInterface), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.BasicComponent.class,
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (basicComponent == null) {
     	return false;
     }

@@ -26,70 +26,72 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
-      return jaMoPPParam;
+    public EObject getElement1(final OrdinaryParameter javaParameter, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
+      return javaParameter;
     }
     
-    public void update0Element(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
+    public void update0Element(final OrdinaryParameter javaParameter, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
       EList<Parameter> _parameters__OperationSignature = operationSignature.getParameters__OperationSignature();
       _parameters__OperationSignature.add(pcmParameter);
     }
     
-    public EObject getElement2(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
+    public EObject getElement2(final OrdinaryParameter javaParameter, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
       return pcmParameter;
     }
     
-    public EObject getElement3(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
+    public EObject getElement3(final OrdinaryParameter javaParameter, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
       return operationSignature;
     }
     
-    public EObject getCorrepondenceSourceOperationSignature(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod) {
+    public EObject getCorrepondenceSourceOperationSignature(final OrdinaryParameter javaParameter, final Parametrizable javaMethod) {
       return javaMethod;
     }
     
-    public void updatePcmParameterElement(final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
+    public void updatePcmParameterElement(final OrdinaryParameter javaParameter, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
       pcmParameter.setOperationSignature__Parameter(operationSignature);
-      pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(jaMoPPParam.getTypeReference(), this.correspondenceModel, 
+      pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(javaParameter.getTypeReference(), this.correspondenceModel, 
         this.userInteracting, null));
       DataType _dataType__Parameter = pcmParameter.getDataType__Parameter();
       _dataType__Parameter.setRepository__DataType(operationSignature.getInterface__OperationSignature().getRepository__Interface());
-      ParameterUtil.setName(pcmParameter, jaMoPPParam.getName());
+      ParameterUtil.setName(pcmParameter, javaParameter.getName());
     }
   }
   
-  public CreateParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OrdinaryParameter jaMoPPParam, final Parametrizable javaMethod) {
+  public CreateParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OrdinaryParameter javaParameter, final Parametrizable javaMethod) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateParameterRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.jaMoPPParam = jaMoPPParam;this.javaMethod = javaMethod;
+    this.javaParameter = javaParameter;this.javaMethod = javaMethod;
   }
   
-  private OrdinaryParameter jaMoPPParam;
+  private OrdinaryParameter javaParameter;
   
   private Parametrizable javaMethod;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateParameterRoutine with input:");
-    getLogger().debug("   jaMoPPParam: " + this.jaMoPPParam);
+    getLogger().debug("   javaParameter: " + this.javaParameter);
     getLogger().debug("   javaMethod: " + this.javaMethod);
     
     org.palladiosimulator.pcm.repository.OperationSignature operationSignature = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceOperationSignature(jaMoPPParam, javaMethod), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceOperationSignature(javaParameter, javaMethod), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationSignature.class,
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (operationSignature == null) {
     	return false;
     }
     registerObjectUnderModification(operationSignature);
     org.palladiosimulator.pcm.repository.Parameter pcmParameter = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createParameter();
     notifyObjectCreated(pcmParameter);
-    userExecution.updatePcmParameterElement(jaMoPPParam, javaMethod, operationSignature, pcmParameter);
+    userExecution.updatePcmParameterElement(javaParameter, javaMethod, operationSignature, pcmParameter);
     
-    addCorrespondenceBetween(userExecution.getElement1(jaMoPPParam, javaMethod, operationSignature, pcmParameter), userExecution.getElement2(jaMoPPParam, javaMethod, operationSignature, pcmParameter), "");
+    addCorrespondenceBetween(userExecution.getElement1(javaParameter, javaMethod, operationSignature, pcmParameter), userExecution.getElement2(javaParameter, javaMethod, operationSignature, pcmParameter), "");
     
-    // val updatedElement userExecution.getElement3(jaMoPPParam, javaMethod, operationSignature, pcmParameter);
-    userExecution.update0Element(jaMoPPParam, javaMethod, operationSignature, pcmParameter);
+    // val updatedElement userExecution.getElement3(javaParameter, javaMethod, operationSignature, pcmParameter);
+    userExecution.update0Element(javaParameter, javaMethod, operationSignature, pcmParameter);
     
     postprocessElements();
     

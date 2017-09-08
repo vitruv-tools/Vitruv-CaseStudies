@@ -51,7 +51,9 @@ public class CreateJavaSubPackagesRoutine extends AbstractRepairRoutineRealizati
     	userExecution.getCorrepondenceSourceRepository(javaPackage), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.Repository.class,
     	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (repository == null) {
     	return false;
     }

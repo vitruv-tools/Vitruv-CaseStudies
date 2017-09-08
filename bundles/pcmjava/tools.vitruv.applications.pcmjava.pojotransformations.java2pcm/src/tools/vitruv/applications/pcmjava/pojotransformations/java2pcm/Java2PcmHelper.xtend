@@ -30,17 +30,6 @@ import org.palladiosimulator.pcm.repository.CompositeDataType
 public class Java2PcmHelper {
 	private static val logger = Logger.getLogger(Java2PcmHelper)
 
-	//Copied from Java2PCMUtils (getRepository)
-	def static Repository findPcmRepository(CorrespondenceModel correspondenceModel) {
-		val Set<Repository> repos = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)
-		if (repos.nullOrEmpty) {
-			return null
-		}
-		if (1 != repos.size) {
-			logger.warn("found more than one repository. Returning the first")
-		}
-		return repos.head
-	}
 
 	def static boolean hasCorrespondance(EObject eObject, CorrespondenceModel correspondenceModel) {
 		return !correspondenceModel.getCorrespondingEObjects(eObject).isNullOrEmpty

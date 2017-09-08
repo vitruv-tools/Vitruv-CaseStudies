@@ -3,9 +3,7 @@ package mir.reactions.reactionsJavaToPcm.java2PcmClassifier;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.containers.CompilationUnit;
-import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -14,10 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
-/**
- * *nCreates Datatype if class was in datatypes package created or checks if there can be a correspondance and if nnot create a new pcm element.
- *  
- */
 @SuppressWarnings("all")
 class ClassCreatedReaction extends AbstractReactionRealization {
   public void executeReaction(final EChange change) {
@@ -67,20 +61,9 @@ class ClassCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final org.emftext.language.java.classifiers.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final org.emftext.language.java.containers.Package jaMoPPPackage = Java2PcmHelper.getContainingPackageFromCorrespondenceModel(newValue, 
+      final org.emftext.language.java.containers.Package javaPackage = Java2PcmHelper.getContainingPackageFromCorrespondenceModel(newValue, 
         this.correspondenceModel);
-      boolean _equals = IterableExtensions.<String>last(affectedEObject.getNamespaces()).equals("datatypes");
-      if (_equals) {
-        _routinesFacade.createDataType(newValue, affectedEObject);
-      } else {
-        _routinesFacade.checkSystemAndComponent(jaMoPPPackage, newValue);
-        boolean _hasCorrespondance = Java2PcmHelper.hasCorrespondance(newValue, this.correspondenceModel);
-        boolean _not = (!_hasCorrespondance);
-        if (_not) {
-          final Repository repository = Java2PcmHelper.findPcmRepository(this.correspondenceModel);
-          _routinesFacade.createElement(repository, newValue, affectedEObject);
-        }
-      }
+      _routinesFacade.classMapping(newValue, affectedEObject, javaPackage);
     }
   }
 }

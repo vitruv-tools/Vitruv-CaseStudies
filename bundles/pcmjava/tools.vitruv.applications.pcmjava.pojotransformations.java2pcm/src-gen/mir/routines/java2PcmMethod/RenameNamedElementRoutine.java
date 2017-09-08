@@ -49,7 +49,9 @@ public class RenameNamedElementRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourcePcmElement(javaElement), // correspondence source supplier
     	org.palladiosimulator.pcm.core.entity.NamedElement.class,
     	(org.palladiosimulator.pcm.core.entity.NamedElement _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmElement == null) {
     	return false;
     }

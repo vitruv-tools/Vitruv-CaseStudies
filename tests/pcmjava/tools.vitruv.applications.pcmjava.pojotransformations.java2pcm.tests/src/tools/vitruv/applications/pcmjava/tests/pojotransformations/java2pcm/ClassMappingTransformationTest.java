@@ -136,6 +136,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
         this.addRepoContractsAndDatatypesPackage();
         try {
             this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
+            this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
             final EObject eObject = super.addClassInPackage(this.getDatatypesPackage(), EObject.class);
             fail("The class should not have any datatype correspondences, but it has a correspondence to eObject: "
                     + eObject);

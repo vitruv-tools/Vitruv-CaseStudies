@@ -60,7 +60,6 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
                 Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
     }
 
-    @Ignore
     @Test
     public void testChangeParameterType() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();

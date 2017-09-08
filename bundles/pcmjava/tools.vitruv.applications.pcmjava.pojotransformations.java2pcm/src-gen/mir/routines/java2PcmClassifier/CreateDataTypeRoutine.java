@@ -26,8 +26,8 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, @Extension final RoutinesFacade _routinesFacade) {
-      String _name = cls.getName();
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit, @Extension final RoutinesFacade _routinesFacade) {
+      String _name = javaClass.getName();
       String _plus = ("Class " + _name);
       final String userMsg = (_plus + 
         "has been created in the datatypes pacakage. Please decide which kind of data type should be created.");
@@ -40,35 +40,35 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
       int _selection = Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getSelection();
       if (Objects.equal(selected, _selection)) {
         _matched=true;
-        _routinesFacade.createCompositeDataType(cls, compilationUnit);
+        _routinesFacade.createCompositeDataType(javaClass, compilationUnit);
       }
       if (!_matched) {
         int _selection_1 = Java2PcmUserSelection.SELECT_COLLECTION_DATA_TYPE.getSelection();
         if (Objects.equal(selected, _selection_1)) {
           _matched=true;
-          _routinesFacade.createCollectionDataType(cls, compilationUnit);
+          _routinesFacade.createCollectionDataType(javaClass, compilationUnit);
         }
       }
     }
   }
   
-  public CreateDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
+  public CreateDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateDataTypeRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
-    this.cls = cls;this.compilationUnit = compilationUnit;
+    this.javaClass = javaClass;this.compilationUnit = compilationUnit;
   }
   
-  private org.emftext.language.java.classifiers.Class cls;
+  private org.emftext.language.java.classifiers.Class javaClass;
   
   private CompilationUnit compilationUnit;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateDataTypeRoutine with input:");
-    getLogger().debug("   cls: " + this.cls);
+    getLogger().debug("   javaClass: " + this.javaClass);
     getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
-    userExecution.callRoutine1(cls, compilationUnit, actionsFacade);
+    userExecution.callRoutine1(javaClass, compilationUnit, actionsFacade);
     
     postprocessElements();
     

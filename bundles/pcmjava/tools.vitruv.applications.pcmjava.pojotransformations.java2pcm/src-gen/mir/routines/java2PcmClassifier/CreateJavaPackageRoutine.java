@@ -81,11 +81,12 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   packageName: " + this.packageName);
     getLogger().debug("   newTag: " + this.newTag);
     
-    if (getCorrespondingElement(
+    if (!getCorrespondingElements(
     	userExecution.getCorrepondenceSource1(sourceElementMappedToPackage, parentPackage, packageName, newTag), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(sourceElementMappedToPackage, parentPackage, packageName, newTag)) != null) {
+    	userExecution.getRetrieveTag1(sourceElementMappedToPackage, parentPackage, packageName, newTag)
+    ).isEmpty()) {
     	return false;
     }
     org.emftext.language.java.containers.Package javaPackage = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createPackage();

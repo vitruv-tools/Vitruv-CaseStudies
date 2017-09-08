@@ -22,15 +22,15 @@ public class CreateOperationRequiredRoleCorrespondingToFieldRoutine extends Abst
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Field field, final OperationInterface operationInterface, final RepositoryComponent repoComponent, final OperationRequiredRole operationRequiredRole) {
+    public EObject getElement1(final Field javaField, final OperationInterface operationInterface, final RepositoryComponent repoComponent, final OperationRequiredRole operationRequiredRole) {
       return operationRequiredRole;
     }
     
-    public EObject getElement2(final Field field, final OperationInterface operationInterface, final RepositoryComponent repoComponent, final OperationRequiredRole operationRequiredRole) {
-      return field;
+    public EObject getElement2(final Field javaField, final OperationInterface operationInterface, final RepositoryComponent repoComponent, final OperationRequiredRole operationRequiredRole) {
+      return javaField;
     }
     
-    public void updateOperationRequiredRoleElement(final Field field, final OperationInterface operationInterface, final RepositoryComponent repoComponent, final OperationRequiredRole operationRequiredRole) {
+    public void updateOperationRequiredRoleElement(final Field javaField, final OperationInterface operationInterface, final RepositoryComponent repoComponent, final OperationRequiredRole operationRequiredRole) {
       operationRequiredRole.setRequiredInterface__OperationRequiredRole(operationInterface);
       operationRequiredRole.setRequiringEntity_RequiredRole(repoComponent);
       String _entityName = repoComponent.getEntityName();
@@ -42,14 +42,14 @@ public class CreateOperationRequiredRoleCorrespondingToFieldRoutine extends Abst
     }
   }
   
-  public CreateOperationRequiredRoleCorrespondingToFieldRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Field field, final OperationInterface operationInterface, final RepositoryComponent repoComponent) {
+  public CreateOperationRequiredRoleCorrespondingToFieldRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Field javaField, final OperationInterface operationInterface, final RepositoryComponent repoComponent) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateOperationRequiredRoleCorrespondingToFieldRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.field = field;this.operationInterface = operationInterface;this.repoComponent = repoComponent;
+    this.javaField = javaField;this.operationInterface = operationInterface;this.repoComponent = repoComponent;
   }
   
-  private Field field;
+  private Field javaField;
   
   private OperationInterface operationInterface;
   
@@ -57,15 +57,15 @@ public class CreateOperationRequiredRoleCorrespondingToFieldRoutine extends Abst
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationRequiredRoleCorrespondingToFieldRoutine with input:");
-    getLogger().debug("   field: " + this.field);
+    getLogger().debug("   javaField: " + this.javaField);
     getLogger().debug("   operationInterface: " + this.operationInterface);
     getLogger().debug("   repoComponent: " + this.repoComponent);
     
     org.palladiosimulator.pcm.repository.OperationRequiredRole operationRequiredRole = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationRequiredRole();
     notifyObjectCreated(operationRequiredRole);
-    userExecution.updateOperationRequiredRoleElement(field, operationInterface, repoComponent, operationRequiredRole);
+    userExecution.updateOperationRequiredRoleElement(javaField, operationInterface, repoComponent, operationRequiredRole);
     
-    addCorrespondenceBetween(userExecution.getElement1(field, operationInterface, repoComponent, operationRequiredRole), userExecution.getElement2(field, operationInterface, repoComponent, operationRequiredRole), "");
+    addCorrespondenceBetween(userExecution.getElement1(javaField, operationInterface, repoComponent, operationRequiredRole), userExecution.getElement2(javaField, operationInterface, repoComponent, operationRequiredRole), "");
     
     postprocessElements();
     

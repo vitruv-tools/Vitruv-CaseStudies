@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.BasicComponent;
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -25,7 +24,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void callRoutine1(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, final BasicComponent pcmBasicComponent, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addCorrespondanceAndUpdateRepository(pcmBasicComponent, Java2PcmHelper.findPcmRepository(this.correspondenceModel), javaPackage);
+      _routinesFacade.addcorrespondenceAndUpdateRepository(pcmBasicComponent, javaPackage);
     }
   }
   

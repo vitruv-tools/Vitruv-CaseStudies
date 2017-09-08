@@ -6,8 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
-import org.palladiosimulator.pcm.repository.Repository;
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -23,57 +21,56 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
+    public EObject getElement1(final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
       return pcmCompositeDataType;
     }
     
-    public EObject getElement4(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
-      return cls;
+    public EObject getElement4(final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
+      return javaClass;
     }
     
-    public void updatePcmCompositeDataTypeElement(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
-      pcmCompositeDataType.setEntityName(cls.getName());
+    public void updatePcmCompositeDataTypeElement(final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
+      pcmCompositeDataType.setEntityName(javaClass.getName());
     }
     
-    public EObject getElement2(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
-      return cls;
+    public EObject getElement2(final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
+      return javaClass;
     }
     
-    public EObject getElement3(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
+    public EObject getElement3(final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType) {
       return compilationUnit;
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType, @Extension final RoutinesFacade _routinesFacade) {
-      final Repository repo = Java2PcmHelper.findPcmRepository(this.correspondenceModel);
-      _routinesFacade.addDataTypeInRepository(repo, pcmCompositeDataType);
+    public void callRoutine1(final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit, final CompositeDataType pcmCompositeDataType, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.addDataTypeInRepository(pcmCompositeDataType);
     }
   }
   
-  public CreateCompositeDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class cls, final CompilationUnit compilationUnit) {
+  public CreateCompositeDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateCompositeDataTypeRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
-    this.cls = cls;this.compilationUnit = compilationUnit;
+    this.javaClass = javaClass;this.compilationUnit = compilationUnit;
   }
   
-  private org.emftext.language.java.classifiers.Class cls;
+  private org.emftext.language.java.classifiers.Class javaClass;
   
   private CompilationUnit compilationUnit;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeDataTypeRoutine with input:");
-    getLogger().debug("   cls: " + this.cls);
+    getLogger().debug("   javaClass: " + this.javaClass);
     getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
     org.palladiosimulator.pcm.repository.CompositeDataType pcmCompositeDataType = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createCompositeDataType();
     notifyObjectCreated(pcmCompositeDataType);
-    userExecution.updatePcmCompositeDataTypeElement(cls, compilationUnit, pcmCompositeDataType);
+    userExecution.updatePcmCompositeDataTypeElement(javaClass, compilationUnit, pcmCompositeDataType);
     
-    addCorrespondenceBetween(userExecution.getElement1(cls, compilationUnit, pcmCompositeDataType), userExecution.getElement2(cls, compilationUnit, pcmCompositeDataType), "");
+    addCorrespondenceBetween(userExecution.getElement1(javaClass, compilationUnit, pcmCompositeDataType), userExecution.getElement2(javaClass, compilationUnit, pcmCompositeDataType), "");
     
-    addCorrespondenceBetween(userExecution.getElement3(cls, compilationUnit, pcmCompositeDataType), userExecution.getElement4(cls, compilationUnit, pcmCompositeDataType), "");
+    addCorrespondenceBetween(userExecution.getElement3(javaClass, compilationUnit, pcmCompositeDataType), userExecution.getElement4(javaClass, compilationUnit, pcmCompositeDataType), "");
     
-    userExecution.callRoutine1(cls, compilationUnit, pcmCompositeDataType, actionsFacade);
+    userExecution.callRoutine1(javaClass, compilationUnit, pcmCompositeDataType, actionsFacade);
     
     postprocessElements();
     

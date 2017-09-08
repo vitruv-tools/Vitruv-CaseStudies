@@ -25,69 +25,73 @@ public class CreateAssemblyContextRoutine extends AbstractRepairRoutineRealizati
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final ConcreteClassifier classifier, final Field field, final ComposedProvidingRequiringEntity composedProvidingRequiringEntity, final RepositoryComponent repositoryComponent, final AssemblyContext assemblyContext) {
+    public EObject getElement1(final ConcreteClassifier classifier, final Field javaField, final ComposedProvidingRequiringEntity composedProvidingRequiringEntity, final RepositoryComponent repositoryComponent, final AssemblyContext assemblyContext) {
       return assemblyContext;
     }
     
-    public EObject getElement2(final ConcreteClassifier classifier, final Field field, final ComposedProvidingRequiringEntity composedProvidingRequiringEntity, final RepositoryComponent repositoryComponent, final AssemblyContext assemblyContext) {
-      return field;
+    public EObject getElement2(final ConcreteClassifier classifier, final Field javaField, final ComposedProvidingRequiringEntity composedProvidingRequiringEntity, final RepositoryComponent repositoryComponent, final AssemblyContext assemblyContext) {
+      return javaField;
     }
     
-    public EObject getCorrepondenceSourceComposedProvidingRequiringEntity(final ConcreteClassifier classifier, final Field field) {
+    public EObject getCorrepondenceSourceComposedProvidingRequiringEntity(final ConcreteClassifier classifier, final Field javaField) {
       return classifier;
     }
     
-    public void updateAssemblyContextElement(final ConcreteClassifier classifier, final Field field, final ComposedProvidingRequiringEntity composedProvidingRequiringEntity, final RepositoryComponent repositoryComponent, final AssemblyContext assemblyContext) {
-      assemblyContext.setEntityName(field.getName());
+    public void updateAssemblyContextElement(final ConcreteClassifier classifier, final Field javaField, final ComposedProvidingRequiringEntity composedProvidingRequiringEntity, final RepositoryComponent repositoryComponent, final AssemblyContext assemblyContext) {
+      assemblyContext.setEntityName(javaField.getName());
       assemblyContext.setEncapsulatedComponent__AssemblyContext(repositoryComponent);
       assemblyContext.setParentStructure__AssemblyContext(composedProvidingRequiringEntity);
     }
     
-    public EObject getCorrepondenceSourceRepositoryComponent(final ConcreteClassifier classifier, final Field field, final ComposedProvidingRequiringEntity composedProvidingRequiringEntity) {
-      Classifier _targetClassifierFromTypeReference = Java2PcmHelper.getTargetClassifierFromTypeReference(field.getTypeReference());
+    public EObject getCorrepondenceSourceRepositoryComponent(final ConcreteClassifier classifier, final Field javaField, final ComposedProvidingRequiringEntity composedProvidingRequiringEntity) {
+      Classifier _targetClassifierFromTypeReference = Java2PcmHelper.getTargetClassifierFromTypeReference(javaField.getTypeReference());
       return _targetClassifierFromTypeReference;
     }
   }
   
-  public CreateAssemblyContextRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ConcreteClassifier classifier, final Field field) {
+  public CreateAssemblyContextRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ConcreteClassifier classifier, final Field javaField) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateAssemblyContextRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.classifier = classifier;this.field = field;
+    this.classifier = classifier;this.javaField = javaField;
   }
   
   private ConcreteClassifier classifier;
   
-  private Field field;
+  private Field javaField;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateAssemblyContextRoutine with input:");
     getLogger().debug("   classifier: " + this.classifier);
-    getLogger().debug("   field: " + this.field);
+    getLogger().debug("   javaField: " + this.javaField);
     
     org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity composedProvidingRequiringEntity = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceComposedProvidingRequiringEntity(classifier, field), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceComposedProvidingRequiringEntity(classifier, javaField), // correspondence source supplier
     	org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity.class,
     	(org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (composedProvidingRequiringEntity == null) {
     	return false;
     }
     registerObjectUnderModification(composedProvidingRequiringEntity);
     org.palladiosimulator.pcm.repository.RepositoryComponent repositoryComponent = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceRepositoryComponent(classifier, field, composedProvidingRequiringEntity), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceRepositoryComponent(classifier, javaField, composedProvidingRequiringEntity), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.RepositoryComponent.class,
     	(org.palladiosimulator.pcm.repository.RepositoryComponent _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (repositoryComponent == null) {
     	return false;
     }
     registerObjectUnderModification(repositoryComponent);
     org.palladiosimulator.pcm.core.composition.AssemblyContext assemblyContext = org.palladiosimulator.pcm.core.composition.impl.CompositionFactoryImpl.eINSTANCE.createAssemblyContext();
     notifyObjectCreated(assemblyContext);
-    userExecution.updateAssemblyContextElement(classifier, field, composedProvidingRequiringEntity, repositoryComponent, assemblyContext);
+    userExecution.updateAssemblyContextElement(classifier, javaField, composedProvidingRequiringEntity, repositoryComponent, assemblyContext);
     
-    addCorrespondenceBetween(userExecution.getElement1(classifier, field, composedProvidingRequiringEntity, repositoryComponent, assemblyContext), userExecution.getElement2(classifier, field, composedProvidingRequiringEntity, repositoryComponent, assemblyContext), "");
+    addCorrespondenceBetween(userExecution.getElement1(classifier, javaField, composedProvidingRequiringEntity, repositoryComponent, assemblyContext), userExecution.getElement2(classifier, javaField, composedProvidingRequiringEntity, repositoryComponent, assemblyContext), "");
     
     postprocessElements();
     

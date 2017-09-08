@@ -4,6 +4,7 @@ import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.emftext.language.java.containers.ContainersPackage;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -21,45 +22,57 @@ public class AddDataTypeInRepositoryRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Repository pcmRepository, final DataType pcmDataType) {
+    public EObject getElement1(final DataType pcmDataType, final Repository pcmRepository) {
       return pcmDataType;
     }
     
-    public void update0Element(final Repository pcmRepository, final DataType pcmDataType) {
+    public EObject getCorrepondenceSourcePcmRepository(final DataType pcmDataType) {
+      return ContainersPackage.Literals.PACKAGE;
+    }
+    
+    public void update0Element(final DataType pcmDataType, final Repository pcmRepository) {
       pcmDataType.setRepository__DataType(pcmRepository);
     }
     
-    public EObject getElement2(final Repository pcmRepository, final DataType pcmDataType) {
+    public EObject getElement2(final DataType pcmDataType, final Repository pcmRepository) {
       return pcmRepository;
     }
     
-    public void update1Element(final Repository pcmRepository, final DataType pcmDataType) {
+    public void update1Element(final DataType pcmDataType, final Repository pcmRepository) {
       EList<DataType> _dataTypes__Repository = pcmRepository.getDataTypes__Repository();
       _dataTypes__Repository.add(pcmDataType);
     }
   }
   
-  public AddDataTypeInRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Repository pcmRepository, final DataType pcmDataType) {
+  public AddDataTypeInRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final DataType pcmDataType) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.AddDataTypeInRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
-    this.pcmRepository = pcmRepository;this.pcmDataType = pcmDataType;
+    this.pcmDataType = pcmDataType;
   }
-  
-  private Repository pcmRepository;
   
   private DataType pcmDataType;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddDataTypeInRepositoryRoutine with input:");
-    getLogger().debug("   pcmRepository: " + this.pcmRepository);
     getLogger().debug("   pcmDataType: " + this.pcmDataType);
     
-    // val updatedElement userExecution.getElement1(pcmRepository, pcmDataType);
-    userExecution.update0Element(pcmRepository, pcmDataType);
+    org.palladiosimulator.pcm.repository.Repository pcmRepository = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourcePcmRepository(pcmDataType), // correspondence source supplier
+    	org.palladiosimulator.pcm.repository.Repository.class,
+    	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
+    if (pcmRepository == null) {
+    	return false;
+    }
+    registerObjectUnderModification(pcmRepository);
+    // val updatedElement userExecution.getElement1(pcmDataType, pcmRepository);
+    userExecution.update0Element(pcmDataType, pcmRepository);
     
-    // val updatedElement userExecution.getElement2(pcmRepository, pcmDataType);
-    userExecution.update1Element(pcmRepository, pcmDataType);
+    // val updatedElement userExecution.getElement2(pcmDataType, pcmRepository);
+    userExecution.update1Element(pcmDataType, pcmRepository);
     
     postprocessElements();
     

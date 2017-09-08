@@ -26,50 +26,52 @@ public class CreateSeffFromImplementingInterfaceRoutine extends AbstractRepairRo
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceOperationInterface(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls, final Interface iface) {
-      return iface;
+    public EObject getCorrepondenceSourceOperationInterface(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass, final Interface javaInterface) {
+      return javaInterface;
     }
     
-    public void callRoutine1(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls, final Interface iface, final OperationInterface operationInterface, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass, final Interface javaInterface, final OperationInterface operationInterface, @Extension final RoutinesFacade _routinesFacade) {
       final Function1<Method, Boolean> _function = (Method it) -> {
         return Boolean.valueOf(Java2PcmHelper.sameSignature(it, classMethod));
       };
-      final Iterable<Method> methods = IterableExtensions.<Method>filter(iface.getMethods(), _function);
+      final Iterable<Method> methods = IterableExtensions.<Method>filter(javaInterface.getMethods(), _function);
       for (final Method method : methods) {
-        _routinesFacade.createSEFF(method, cls, classMethod);
+        _routinesFacade.createSEFF(method, javaClass, classMethod);
       }
     }
   }
   
-  public CreateSeffFromImplementingInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls, final Interface iface) {
+  public CreateSeffFromImplementingInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass, final Interface javaInterface) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateSeffFromImplementingInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.classMethod = classMethod;this.cls = cls;this.iface = iface;
+    this.classMethod = classMethod;this.javaClass = javaClass;this.javaInterface = javaInterface;
   }
   
   private ClassMethod classMethod;
   
-  private org.emftext.language.java.classifiers.Class cls;
+  private org.emftext.language.java.classifiers.Class javaClass;
   
-  private Interface iface;
+  private Interface javaInterface;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSeffFromImplementingInterfaceRoutine with input:");
     getLogger().debug("   classMethod: " + this.classMethod);
-    getLogger().debug("   cls: " + this.cls);
-    getLogger().debug("   iface: " + this.iface);
+    getLogger().debug("   javaClass: " + this.javaClass);
+    getLogger().debug("   javaInterface: " + this.javaInterface);
     
     org.palladiosimulator.pcm.repository.OperationInterface operationInterface = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceOperationInterface(classMethod, cls, iface), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceOperationInterface(classMethod, javaClass, javaInterface), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationInterface.class,
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (operationInterface == null) {
     	return false;
     }
     registerObjectUnderModification(operationInterface);
-    userExecution.callRoutine1(classMethod, cls, iface, operationInterface, actionsFacade);
+    userExecution.callRoutine1(classMethod, javaClass, javaInterface, operationInterface, actionsFacade);
     
     postprocessElements();
     

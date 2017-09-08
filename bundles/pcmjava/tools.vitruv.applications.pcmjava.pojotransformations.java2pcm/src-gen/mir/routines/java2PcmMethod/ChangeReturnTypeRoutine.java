@@ -23,47 +23,49 @@ public class ChangeReturnTypeRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Method jMeth, final TypeReference jType, final OperationSignature operationSignature) {
+    public EObject getElement1(final Method javaMethod, final TypeReference typeReference, final OperationSignature operationSignature) {
       return operationSignature;
     }
     
-    public void update0Element(final Method jMeth, final TypeReference jType, final OperationSignature operationSignature) {
+    public void update0Element(final Method javaMethod, final TypeReference typeReference, final OperationSignature operationSignature) {
       final Repository repository = operationSignature.getInterface__OperationSignature().getRepository__Interface();
-      operationSignature.setReturnType__OperationSignature(Java2PcmHelper.getPCMDataTypeForTypeReference(jType, this.correspondenceModel, this.userInteracting, repository, jMeth));
+      operationSignature.setReturnType__OperationSignature(Java2PcmHelper.getPCMDataTypeForTypeReference(typeReference, this.correspondenceModel, this.userInteracting, repository, javaMethod));
     }
     
-    public EObject getCorrepondenceSourceOperationSignature(final Method jMeth, final TypeReference jType) {
-      return jMeth;
+    public EObject getCorrepondenceSourceOperationSignature(final Method javaMethod, final TypeReference typeReference) {
+      return javaMethod;
     }
   }
   
-  public ChangeReturnTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method jMeth, final TypeReference jType) {
+  public ChangeReturnTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method javaMethod, final TypeReference typeReference) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.ChangeReturnTypeRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.jMeth = jMeth;this.jType = jType;
+    this.javaMethod = javaMethod;this.typeReference = typeReference;
   }
   
-  private Method jMeth;
+  private Method javaMethod;
   
-  private TypeReference jType;
+  private TypeReference typeReference;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeReturnTypeRoutine with input:");
-    getLogger().debug("   jMeth: " + this.jMeth);
-    getLogger().debug("   jType: " + this.jType);
+    getLogger().debug("   javaMethod: " + this.javaMethod);
+    getLogger().debug("   typeReference: " + this.typeReference);
     
     org.palladiosimulator.pcm.repository.OperationSignature operationSignature = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceOperationSignature(jMeth, jType), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceOperationSignature(javaMethod, typeReference), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationSignature.class,
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (operationSignature == null) {
     	return false;
     }
     registerObjectUnderModification(operationSignature);
-    // val updatedElement userExecution.getElement1(jMeth, jType, operationSignature);
-    userExecution.update0Element(jMeth, jType, operationSignature);
+    // val updatedElement userExecution.getElement1(javaMethod, typeReference, operationSignature);
+    userExecution.update0Element(javaMethod, typeReference, operationSignature);
     
     postprocessElements();
     

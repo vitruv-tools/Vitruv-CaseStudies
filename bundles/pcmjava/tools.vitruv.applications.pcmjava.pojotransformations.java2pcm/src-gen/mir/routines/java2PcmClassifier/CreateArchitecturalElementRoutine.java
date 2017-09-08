@@ -3,7 +3,9 @@ package mir.routines.java2PcmClassifier;
 import com.google.common.base.Objects;
 import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.containers.ContainersPackage;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -23,6 +25,10 @@ public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineReal
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
       super(reactionExecutionState);
+    }
+    
+    public EObject getCorrepondenceSource1(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
+      return ContainersPackage.Literals.PACKAGE;
     }
     
     public void callRoutine1(final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName, @Extension final RoutinesFacade _routinesFacade) {
@@ -75,6 +81,15 @@ public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineReal
     getLogger().debug("   name: " + this.name);
     getLogger().debug("   rootPackageName: " + this.rootPackageName);
     
+    if (getCorrespondingElement(
+    	userExecution.getCorrepondenceSource1(javaPackage, name, rootPackageName), // correspondence source supplier
+    	org.palladiosimulator.pcm.repository.Repository.class,
+    	(org.palladiosimulator.pcm.repository.Repository _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	) == null) {
+    					return false;
+    				}
     userExecution.callRoutine1(javaPackage, name, rootPackageName, actionsFacade);
     
     postprocessElements();

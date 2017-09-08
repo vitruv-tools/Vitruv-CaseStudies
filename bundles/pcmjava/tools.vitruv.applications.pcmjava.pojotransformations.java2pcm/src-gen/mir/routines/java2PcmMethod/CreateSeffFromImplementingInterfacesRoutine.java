@@ -22,31 +22,31 @@ public class CreateSeffFromImplementingInterfacesRoutine extends AbstractRepairR
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls, @Extension final RoutinesFacade _routinesFacade) {
-      final ArrayList<Interface> implementingInterfaces = Java2PcmHelper.findImplementingInterfacesFromTypeRefs(cls.getImplements());
+    public void callRoutine1(final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass, @Extension final RoutinesFacade _routinesFacade) {
+      final ArrayList<Interface> implementingInterfaces = Java2PcmHelper.findImplementingInterfacesFromTypeRefs(javaClass.getImplements());
       for (final Interface implementingInterface : implementingInterfaces) {
-        _routinesFacade.createSeffFromImplementingInterface(classMethod, cls, implementingInterface);
+        _routinesFacade.createSeffFromImplementingInterface(classMethod, javaClass, implementingInterface);
       }
     }
   }
   
-  public CreateSeffFromImplementingInterfacesRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class cls) {
+  public CreateSeffFromImplementingInterfacesRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateSeffFromImplementingInterfacesRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.classMethod = classMethod;this.cls = cls;
+    this.classMethod = classMethod;this.javaClass = javaClass;
   }
   
   private ClassMethod classMethod;
   
-  private org.emftext.language.java.classifiers.Class cls;
+  private org.emftext.language.java.classifiers.Class javaClass;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateSeffFromImplementingInterfacesRoutine with input:");
     getLogger().debug("   classMethod: " + this.classMethod);
-    getLogger().debug("   cls: " + this.cls);
+    getLogger().debug("   javaClass: " + this.javaClass);
     
-    userExecution.callRoutine1(classMethod, cls, actionsFacade);
+    userExecution.callRoutine1(classMethod, javaClass, actionsFacade);
     
     postprocessElements();
     

@@ -23,64 +23,66 @@ public class CreatePCMSignatureRoutine extends AbstractRepairRoutineRealization 
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final InterfaceMethod method, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
+    public EObject getElement1(final InterfaceMethod interfaceMethod, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
       return pcmInterface;
     }
     
-    public void updateOperationSignatureElement(final InterfaceMethod method, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
-      operationSignature.setEntityName(method.getName());
+    public void updateOperationSignatureElement(final InterfaceMethod interfaceMethod, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
+      operationSignature.setEntityName(interfaceMethod.getName());
       operationSignature.setInterface__OperationSignature(pcmInterface);
     }
     
-    public void update0Element(final InterfaceMethod method, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
+    public void update0Element(final InterfaceMethod interfaceMethod, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
       EList<OperationSignature> _signatures__OperationInterface = pcmInterface.getSignatures__OperationInterface();
       _signatures__OperationInterface.add(operationSignature);
     }
     
-    public EObject getCorrepondenceSourcePcmInterface(final InterfaceMethod method) {
-      ConcreteClassifier _containingConcreteClassifier = method.getContainingConcreteClassifier();
+    public EObject getCorrepondenceSourcePcmInterface(final InterfaceMethod interfaceMethod) {
+      ConcreteClassifier _containingConcreteClassifier = interfaceMethod.getContainingConcreteClassifier();
       return _containingConcreteClassifier;
     }
     
-    public EObject getElement2(final InterfaceMethod method, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
+    public EObject getElement2(final InterfaceMethod interfaceMethod, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
       return operationSignature;
     }
     
-    public EObject getElement3(final InterfaceMethod method, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
-      return method;
+    public EObject getElement3(final InterfaceMethod interfaceMethod, final OperationInterface pcmInterface, final OperationSignature operationSignature) {
+      return interfaceMethod;
     }
   }
   
-  public CreatePCMSignatureRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InterfaceMethod method) {
+  public CreatePCMSignatureRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InterfaceMethod interfaceMethod) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreatePCMSignatureRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.method = method;
+    this.interfaceMethod = interfaceMethod;
   }
   
-  private InterfaceMethod method;
+  private InterfaceMethod interfaceMethod;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePCMSignatureRoutine with input:");
-    getLogger().debug("   method: " + this.method);
+    getLogger().debug("   interfaceMethod: " + this.interfaceMethod);
     
     org.palladiosimulator.pcm.repository.OperationInterface pcmInterface = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePcmInterface(method), // correspondence source supplier
+    	userExecution.getCorrepondenceSourcePcmInterface(interfaceMethod), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationInterface.class,
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmInterface == null) {
     	return false;
     }
     registerObjectUnderModification(pcmInterface);
     org.palladiosimulator.pcm.repository.OperationSignature operationSignature = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationSignature();
     notifyObjectCreated(operationSignature);
-    userExecution.updateOperationSignatureElement(method, pcmInterface, operationSignature);
+    userExecution.updateOperationSignatureElement(interfaceMethod, pcmInterface, operationSignature);
     
-    // val updatedElement userExecution.getElement1(method, pcmInterface, operationSignature);
-    userExecution.update0Element(method, pcmInterface, operationSignature);
+    // val updatedElement userExecution.getElement1(interfaceMethod, pcmInterface, operationSignature);
+    userExecution.update0Element(interfaceMethod, pcmInterface, operationSignature);
     
-    addCorrespondenceBetween(userExecution.getElement2(method, pcmInterface, operationSignature), userExecution.getElement3(method, pcmInterface, operationSignature), "");
+    addCorrespondenceBetween(userExecution.getElement2(interfaceMethod, pcmInterface, operationSignature), userExecution.getElement3(interfaceMethod, pcmInterface, operationSignature), "");
     
     postprocessElements();
     

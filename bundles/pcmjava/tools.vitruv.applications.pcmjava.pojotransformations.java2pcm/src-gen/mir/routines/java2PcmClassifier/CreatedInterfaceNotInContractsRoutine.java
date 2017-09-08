@@ -6,7 +6,6 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.palladiosimulator.pcm.repository.OperationInterface;
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -28,7 +27,7 @@ public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutine
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Interface javaInterface, final OperationInterface pcmIface, final CompilationUnit compilationUnit, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final Interface javaInterface, final OperationInterface pcmInterface, final CompilationUnit compilationUnit, @Extension final RoutinesFacade _routinesFacade) {
       String _name = javaInterface.getName();
       String _plus = ("The created interface is not in the contracts packages. Should an architectural interface be created for the interface " + _name);
       final String userMsg = (_plus + " ?");
@@ -39,31 +38,31 @@ public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutine
       int _selection = Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection();
       boolean _equals = (selected == _selection);
       if (_equals) {
-        _routinesFacade.addCorrespondanceToInterfaceAndUpdateRepository(pcmIface, Java2PcmHelper.findPcmRepository(this.correspondenceModel), javaInterface, compilationUnit);
+        _routinesFacade.addcorrespondenceToInterfaceAndUpdateRepository(pcmInterface, javaInterface, compilationUnit);
       }
     }
   }
   
-  public CreatedInterfaceNotInContractsRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface javaInterface, final OperationInterface pcmIface, final CompilationUnit compilationUnit) {
+  public CreatedInterfaceNotInContractsRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface javaInterface, final OperationInterface pcmInterface, final CompilationUnit compilationUnit) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreatedInterfaceNotInContractsRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
-    this.javaInterface = javaInterface;this.pcmIface = pcmIface;this.compilationUnit = compilationUnit;
+    this.javaInterface = javaInterface;this.pcmInterface = pcmInterface;this.compilationUnit = compilationUnit;
   }
   
   private Interface javaInterface;
   
-  private OperationInterface pcmIface;
+  private OperationInterface pcmInterface;
   
   private CompilationUnit compilationUnit;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedInterfaceNotInContractsRoutine with input:");
     getLogger().debug("   javaInterface: " + this.javaInterface);
-    getLogger().debug("   pcmIface: " + this.pcmIface);
+    getLogger().debug("   pcmInterface: " + this.pcmInterface);
     getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
-    userExecution.callRoutine1(javaInterface, pcmIface, compilationUnit, actionsFacade);
+    userExecution.callRoutine1(javaInterface, pcmInterface, compilationUnit, actionsFacade);
     
     postprocessElements();
     

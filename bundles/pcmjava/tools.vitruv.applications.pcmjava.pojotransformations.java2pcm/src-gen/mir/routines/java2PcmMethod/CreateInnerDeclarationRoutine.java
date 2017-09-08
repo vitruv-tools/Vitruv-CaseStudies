@@ -23,56 +23,58 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final ConcreteClassifier classifier, final Field field, final CompositeDataType compositeDataType, final InnerDeclaration innerDeclaration) {
+    public EObject getElement1(final ConcreteClassifier classifier, final Field javaField, final CompositeDataType compositeDataType, final InnerDeclaration innerDeclaration) {
       return innerDeclaration;
     }
     
-    public EObject getCorrepondenceSourceCompositeDataType(final ConcreteClassifier classifier, final Field field) {
+    public EObject getCorrepondenceSourceCompositeDataType(final ConcreteClassifier classifier, final Field javaField) {
       return classifier;
     }
     
-    public EObject getElement2(final ConcreteClassifier classifier, final Field field, final CompositeDataType compositeDataType, final InnerDeclaration innerDeclaration) {
-      return field;
+    public EObject getElement2(final ConcreteClassifier classifier, final Field javaField, final CompositeDataType compositeDataType, final InnerDeclaration innerDeclaration) {
+      return javaField;
     }
     
-    public void updateInnerDeclarationElement(final ConcreteClassifier classifier, final Field field, final CompositeDataType compositeDataType, final InnerDeclaration innerDeclaration) {
-      innerDeclaration.setEntityName(field.getName());
-      innerDeclaration.setDatatype_InnerDeclaration(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(field.getTypeReference(), this.correspondenceModel, 
+    public void updateInnerDeclarationElement(final ConcreteClassifier classifier, final Field javaField, final CompositeDataType compositeDataType, final InnerDeclaration innerDeclaration) {
+      innerDeclaration.setEntityName(javaField.getName());
+      innerDeclaration.setDatatype_InnerDeclaration(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(javaField.getTypeReference(), this.correspondenceModel, 
         this.userInteracting, null));
       innerDeclaration.setCompositeDataType_InnerDeclaration(compositeDataType);
     }
   }
   
-  public CreateInnerDeclarationRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ConcreteClassifier classifier, final Field field) {
+  public CreateInnerDeclarationRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ConcreteClassifier classifier, final Field javaField) {
     super(reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateInnerDeclarationRoutine.ActionUserExecution(getExecutionState(), this);
     this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
-    this.classifier = classifier;this.field = field;
+    this.classifier = classifier;this.javaField = javaField;
   }
   
   private ConcreteClassifier classifier;
   
-  private Field field;
+  private Field javaField;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateInnerDeclarationRoutine with input:");
     getLogger().debug("   classifier: " + this.classifier);
-    getLogger().debug("   field: " + this.field);
+    getLogger().debug("   javaField: " + this.javaField);
     
     org.palladiosimulator.pcm.repository.CompositeDataType compositeDataType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompositeDataType(classifier, field), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceCompositeDataType(classifier, javaField), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.CompositeDataType.class,
     	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (compositeDataType == null) {
     	return false;
     }
     registerObjectUnderModification(compositeDataType);
     org.palladiosimulator.pcm.repository.InnerDeclaration innerDeclaration = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
     notifyObjectCreated(innerDeclaration);
-    userExecution.updateInnerDeclarationElement(classifier, field, compositeDataType, innerDeclaration);
+    userExecution.updateInnerDeclarationElement(classifier, javaField, compositeDataType, innerDeclaration);
     
-    addCorrespondenceBetween(userExecution.getElement1(classifier, field, compositeDataType, innerDeclaration), userExecution.getElement2(classifier, field, compositeDataType, innerDeclaration), "");
+    addCorrespondenceBetween(userExecution.getElement1(classifier, javaField, compositeDataType, innerDeclaration), userExecution.getElement2(classifier, javaField, compositeDataType, innerDeclaration), "");
     
     postprocessElements();
     

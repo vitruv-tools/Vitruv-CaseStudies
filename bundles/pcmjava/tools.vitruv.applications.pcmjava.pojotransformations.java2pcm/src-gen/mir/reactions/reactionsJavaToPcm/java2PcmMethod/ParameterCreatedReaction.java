@@ -1,13 +1,10 @@
 package mir.reactions.reactionsJavaToPcm.java2PcmMethod;
 
-import java.util.Set;
 import mir.routines.java2PcmMethod.RoutinesFacade;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.parameters.Parametrizable;
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -64,7 +61,6 @@ class ParameterCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final Parametrizable affectedEObject, final EReference affectedFeature, final OrdinaryParameter newValue, @Extension final RoutinesFacade _routinesFacade) {
-      final Set<EObject> a = Java2PcmHelper.getCorresponding(affectedEObject, this.correspondenceModel);
       _routinesFacade.createParameter(newValue, affectedEObject);
     }
   }
