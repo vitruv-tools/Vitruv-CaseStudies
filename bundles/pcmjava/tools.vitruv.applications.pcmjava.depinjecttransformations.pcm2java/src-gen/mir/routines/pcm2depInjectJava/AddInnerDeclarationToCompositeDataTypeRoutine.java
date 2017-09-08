@@ -12,6 +12,7 @@ import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -82,7 +83,7 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     }
     
     public void updateInnerDataTypeFieldElement(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final TypeReference dataTypeReference, final org.emftext.language.java.classifiers.Class dataTypeClass, final Field innerDataTypeField) {
-      Pcm2JavaHelper.createPrivateField(innerDataTypeField, EcoreUtil.<TypeReference>copy(dataTypeReference), innerDeclaration.getEntityName());
+      JavaModificationUtil.createPrivateField(innerDataTypeField, EcoreUtil.<TypeReference>copy(dataTypeReference), innerDeclaration.getEntityName());
     }
     
     public void updateGetterMethodElement(final CompositeDataType dataType, final InnerDeclaration innerDeclaration, final TypeReference dataTypeReference, final org.emftext.language.java.classifiers.Class dataTypeClass, final Field innerDataTypeField, final ClassMethod getterMethod) {
@@ -113,7 +114,9 @@ public class AddInnerDeclarationToCompositeDataTypeRoutine extends AbstractRepai
     	userExecution.getCorrepondenceSourceDataTypeClass(dataType, innerDeclaration, dataTypeReference), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (dataTypeClass == null) {
     	return false;
     }

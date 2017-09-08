@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
@@ -23,7 +24,7 @@ import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -45,22 +46,22 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
       return _innerType_CollectionDataType;
     }
     
-    public boolean getCorrespondingModelElementsPreconditionDatatypesPackage(final CollectionDataType dataType, final org.emftext.language.java.classifiers.Class innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage) {
+    public boolean getCorrespondingModelElementsPreconditionDatatypesPackage(final CollectionDataType dataType, final Optional<org.emftext.language.java.classifiers.Class> innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage) {
       String _name = datatypesPackage.getName();
       boolean _equals = Objects.equal(_name, "datatypes");
       return _equals;
     }
     
-    public EObject getCorrepondenceSourceDatatypesPackage(final CollectionDataType dataType, final org.emftext.language.java.classifiers.Class innerTypeClass) {
+    public EObject getCorrepondenceSourceDatatypesPackage(final CollectionDataType dataType, final Optional<org.emftext.language.java.classifiers.Class> innerTypeClass) {
       Repository _repository__DataType = dataType.getRepository__DataType();
       return _repository__DataType;
     }
     
-    public void callRoutine1(final CollectionDataType dataType, final org.emftext.language.java.classifiers.Class innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final CollectionDataType dataType, final Optional<org.emftext.language.java.classifiers.Class> innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
       final TypeReference innerTypeRef = Pcm2JavaHelper.createTypeReference(dataType.getInnerType_CollectionDataType(), innerTypeClass);
       TypeReference innerTypeClassOrWrapper = innerTypeRef;
       if ((innerTypeRef instanceof PrimitiveType)) {
-        innerTypeClassOrWrapper = Pcm2JavaUtils.getWrapperTypeReferenceForPrimitiveType(((PrimitiveType)innerTypeRef));
+        innerTypeClassOrWrapper = JavaModificationUtil.getWrapperTypeReferenceForPrimitiveType(innerTypeRef);
       }
       Set<Class<?>> collectionDataTypes = new HashSet<Class<?>>();
       Iterables.<Class<?>>addAll(collectionDataTypes, Collections.<Class<? extends AbstractCollection>>unmodifiableList(CollectionLiterals.<Class<? extends AbstractCollection>>newArrayList(ArrayList.class, LinkedList.class, Vector.class, Stack.class, HashSet.class)));
@@ -91,17 +92,22 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     getLogger().debug("Called routine CreateCollectionDataTypeImplementationRoutine with input:");
     getLogger().debug("   dataType: " + this.dataType);
     
-    org.emftext.language.java.classifiers.Class innerTypeClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceInnerTypeClass(dataType), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(innerTypeClass);
+    	Optional<org.emftext.language.java.classifiers.Class> innerTypeClass = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceInnerTypeClass(dataType), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(innerTypeClass.isPresent() ? innerTypeClass.get() : null);
     org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDatatypesPackage(dataType, innerTypeClass), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(dataType, innerTypeClass, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (datatypesPackage == null) {
     	return false;
     }

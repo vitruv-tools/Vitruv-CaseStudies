@@ -55,7 +55,9 @@ public class DeleteJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJavaPackage(sourceElementMappedToPackage, packageName, expectedTag), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(sourceElementMappedToPackage, packageName, expectedTag));
+    	userExecution.getRetrieveTag1(sourceElementMappedToPackage, packageName, expectedTag), 
+    	false // asserted
+    	);
     if (javaPackage == null) {
     	return false;
     }

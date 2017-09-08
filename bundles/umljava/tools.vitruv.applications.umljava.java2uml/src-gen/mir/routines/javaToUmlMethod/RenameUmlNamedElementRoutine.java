@@ -49,7 +49,9 @@ public class RenameUmlNamedElementRoutine extends AbstractRepairRoutineRealizati
     	userExecution.getCorrepondenceSourceUElement(jElement), // correspondence source supplier
     	org.eclipse.uml2.uml.NamedElement.class,
     	(org.eclipse.uml2.uml.NamedElement _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uElement == null) {
     	return false;
     }

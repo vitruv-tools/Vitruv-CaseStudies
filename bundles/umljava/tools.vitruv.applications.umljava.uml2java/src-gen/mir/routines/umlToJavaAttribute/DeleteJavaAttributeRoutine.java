@@ -53,7 +53,9 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceJAttr(umlAttr), // correspondence source supplier
     	org.emftext.language.java.members.Field.class,
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jAttr == null) {
     	return false;
     }

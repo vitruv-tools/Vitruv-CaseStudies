@@ -14,9 +14,9 @@ import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypedElement
 import org.emftext.language.java.types.TypesFactory
-import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import org.apache.log4j.Logger
 import org.emftext.language.java.types.ClassifierReference
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * Class for type and typereference util function

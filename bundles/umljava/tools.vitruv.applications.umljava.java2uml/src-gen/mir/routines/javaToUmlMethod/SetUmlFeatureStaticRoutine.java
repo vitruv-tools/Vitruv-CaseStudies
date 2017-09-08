@@ -53,7 +53,9 @@ public class SetUmlFeatureStaticRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceUFeature(jElem, isStatic), // correspondence source supplier
     	org.eclipse.uml2.uml.Feature.class,
     	(org.eclipse.uml2.uml.Feature _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uFeature == null) {
     	return false;
     }

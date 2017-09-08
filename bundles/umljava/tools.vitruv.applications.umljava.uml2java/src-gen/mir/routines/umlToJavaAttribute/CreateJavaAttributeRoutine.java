@@ -71,7 +71,9 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceJClassifier(uClassifier, umlAttribute), // correspondence source supplier
     	org.emftext.language.java.classifiers.ConcreteClassifier.class,
     	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jClassifier == null) {
     	return false;
     }

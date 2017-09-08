@@ -46,7 +46,9 @@ public class DeleteUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
     	userExecution.getCorrepondenceSourceULiteral(jConstant), // correspondence source supplier
     	org.eclipse.uml2.uml.EnumerationLiteral.class,
     	(org.eclipse.uml2.uml.EnumerationLiteral _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uLiteral == null) {
     	return false;
     }

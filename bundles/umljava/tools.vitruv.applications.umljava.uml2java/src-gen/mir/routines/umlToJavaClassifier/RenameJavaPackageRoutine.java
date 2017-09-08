@@ -75,7 +75,9 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJPackage(uPackage, uNamespace), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jPackage == null) {
     	return false;
     }

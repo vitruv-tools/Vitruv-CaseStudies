@@ -46,7 +46,9 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceUmlType(dataType), // correspondence source supplier
     	org.eclipse.uml2.uml.Type.class,
     	(org.eclipse.uml2.uml.Type _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlType == null) {
     	return false;
     }

@@ -58,7 +58,9 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourcePcmDeclaration(umlProperty, umlType), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.InnerDeclaration.class,
     	(org.palladiosimulator.pcm.repository.InnerDeclaration _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmDeclaration == null) {
     	return false;
     }

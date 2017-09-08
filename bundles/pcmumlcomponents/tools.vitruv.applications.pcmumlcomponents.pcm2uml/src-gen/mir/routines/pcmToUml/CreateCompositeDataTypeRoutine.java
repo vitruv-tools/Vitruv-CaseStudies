@@ -68,7 +68,9 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     	userExecution.getCorrepondenceSourceUmlModel(dataType), // correspondence source supplier
     	org.eclipse.uml2.uml.Model.class,
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlModel == null) {
     	return false;
     }

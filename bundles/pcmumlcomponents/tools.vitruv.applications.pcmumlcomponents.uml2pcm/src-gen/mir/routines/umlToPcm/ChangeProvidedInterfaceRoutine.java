@@ -73,7 +73,9 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
     	userExecution.getCorrepondenceSourcePcmRole(interfaceRealization, umlInterface), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationProvidedRole.class,
     	(org.palladiosimulator.pcm.repository.OperationProvidedRole _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmRole == null) {
     	return false;
     }
@@ -82,7 +84,9 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
     	userExecution.getCorrepondenceSourcePcmInterface(interfaceRealization, umlInterface, pcmRole), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationInterface.class,
     	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmInterface == null) {
     	return false;
     }

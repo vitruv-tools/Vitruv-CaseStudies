@@ -51,7 +51,9 @@ public class CreatedReturnTypeRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceOpSignature(method, type), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.OperationSignature.class,
     	(org.palladiosimulator.pcm.repository.OperationSignature _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (opSignature == null) {
     	return false;
     }

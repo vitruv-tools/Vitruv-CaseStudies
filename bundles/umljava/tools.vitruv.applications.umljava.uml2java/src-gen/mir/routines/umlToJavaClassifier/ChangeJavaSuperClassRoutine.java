@@ -61,7 +61,9 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     	userExecution.getCorrepondenceSourceJClass(superUMLClass, uClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jClass == null) {
     	return false;
     }
@@ -70,7 +72,9 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     	userExecution.getCorrepondenceSourceSuperJavaClass(superUMLClass, uClass, jClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (superJavaClass == null) {
     	return false;
     }

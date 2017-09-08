@@ -15,7 +15,7 @@ import org.emftext.language.java.imports.Import;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.DataType;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -36,7 +36,7 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void update0Element(final DataType dataType, final TypeReference innerTypeReference, final String superTypeQualifiedName, final org.emftext.language.java.classifiers.Class dataTypeImplementation, final CompilationUnit dataTypeImplementationCU) {
-      final ClassifierImport collectionTypeClassImport = Pcm2JavaHelper.getJavaClassImport(superTypeQualifiedName);
+      final ClassifierImport collectionTypeClassImport = JavaModificationUtil.createJavaClassImport(superTypeQualifiedName);
       EList<Import> _imports = dataTypeImplementationCU.getImports();
       _imports.add(collectionTypeClassImport);
     }
@@ -46,7 +46,7 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void updateNamespaceClassifierElement(final DataType dataType, final TypeReference innerTypeReference, final String superTypeQualifiedName, final org.emftext.language.java.classifiers.Class dataTypeImplementation, final CompilationUnit dataTypeImplementationCU, final NamespaceClassifierReference namespaceClassifier) {
-      Pcm2JavaHelper.createNamespaceClassifierReference(namespaceClassifier, IterableExtensions.<ClassifierImport>last(Iterables.<ClassifierImport>filter(dataTypeImplementationCU.getImports(), ClassifierImport.class)).getClassifier());
+      JavaModificationUtil.createNamespaceClassifierReference(namespaceClassifier, IterableExtensions.<ClassifierImport>last(Iterables.<ClassifierImport>filter(dataTypeImplementationCU.getImports(), ClassifierImport.class)).getClassifier());
       final QualifiedTypeArgument qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
       qualifiedTypeArgument.setTypeReference(innerTypeReference);
       EList<TypeArgument> _typeArguments = namespaceClassifier.getClassifierReferences().get(0).getTypeArguments();
@@ -97,7 +97,9 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceDataTypeImplementation(dataType, innerTypeReference, superTypeQualifiedName), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (dataTypeImplementation == null) {
     	return false;
     }
@@ -106,7 +108,9 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceDataTypeImplementationCU(dataType, innerTypeReference, superTypeQualifiedName, dataTypeImplementation), // correspondence source supplier
     	org.emftext.language.java.containers.CompilationUnit.class,
     	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (dataTypeImplementationCU == null) {
     	return false;
     }

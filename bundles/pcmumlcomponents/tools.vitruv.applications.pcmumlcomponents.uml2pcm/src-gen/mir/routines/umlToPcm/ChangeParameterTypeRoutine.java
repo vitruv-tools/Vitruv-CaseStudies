@@ -60,7 +60,9 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourcePcmParameter(umlParameter), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.Parameter.class,
     	(org.palladiosimulator.pcm.repository.Parameter _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmParameter == null) {
     	return false;
     }

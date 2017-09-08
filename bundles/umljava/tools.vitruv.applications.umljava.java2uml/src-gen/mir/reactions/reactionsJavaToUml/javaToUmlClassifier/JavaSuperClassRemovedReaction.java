@@ -49,11 +49,11 @@ class JavaSuperClassRemovedReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
-    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
     ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference> typedChange = (ReplaceSingleValuedEReference<org.emftext.language.java.classifiers.Class, org.emftext.language.java.types.TypeReference>)change;
     org.emftext.language.java.classifiers.Class affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
@@ -62,7 +62,7 @@ class JavaSuperClassRemovedReaction extends AbstractReactionRealization {
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }
-    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

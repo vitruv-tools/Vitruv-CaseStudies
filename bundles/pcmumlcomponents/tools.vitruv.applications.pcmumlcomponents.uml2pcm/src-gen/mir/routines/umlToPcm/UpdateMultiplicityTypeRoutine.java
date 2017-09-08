@@ -71,7 +71,9 @@ public class UpdateMultiplicityTypeRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourcePcmElement(umlElement), // correspondence source supplier
     	org.eclipse.emf.ecore.EObject.class,
     	(org.eclipse.emf.ecore.EObject _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmElement == null) {
     	return false;
     }

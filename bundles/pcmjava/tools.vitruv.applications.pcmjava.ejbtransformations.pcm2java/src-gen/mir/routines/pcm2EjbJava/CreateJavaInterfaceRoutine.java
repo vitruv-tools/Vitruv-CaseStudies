@@ -9,7 +9,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.modifiers.ModifiersFactory;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -32,8 +32,8 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     public void updateJavaInterfaceElement(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className, final Interface javaInterface) {
       javaInterface.setName(className);
       javaInterface.addModifier(ModifiersFactory.eINSTANCE.createPublic());
-      Pcm2JavaHelper.addAnnotationToAnnotableAndModifiable(javaInterface, "Remote");
-      Pcm2JavaHelper.addImportToClassFromString(javaInterface, Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("javax", "ejb")), "Remote");
+      JavaModificationUtil.addAnnotationToAnnotableAndModifiable(javaInterface, "Remote");
+      JavaModificationUtil.addImportToClassFromString(javaInterface, Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("javax", "ejb")), "Remote");
     }
     
     public EObject getElement2(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className, final Interface javaInterface) {

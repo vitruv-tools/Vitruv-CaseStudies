@@ -46,7 +46,9 @@ public class DeleteJavaParameterRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceJParam(uParam), // correspondence source supplier
     	org.emftext.language.java.parameters.OrdinaryParameter.class,
     	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jParam == null) {
     	return false;
     }

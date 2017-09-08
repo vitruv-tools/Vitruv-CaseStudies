@@ -67,7 +67,9 @@ public class CreateOperationInterfaceSignatureRoutine extends AbstractRepairRout
     	userExecution.getCorrepondenceSourceUmlInterface(pcmSignature), // correspondence source supplier
     	org.eclipse.uml2.uml.Interface.class,
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlInterface == null) {
     	return false;
     }

@@ -13,7 +13,7 @@ import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.ComposedStructure;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -41,8 +41,8 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     public void update0Element(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, final ClassifierImport contextClassImport, final Constructor constructor) {
       EList<Member> _members = compositeComponentJavaClass.getMembers();
       _members.add(assemblyContextField);
-      Pcm2JavaHelper.addConstructorToClass(constructor, compositeComponentJavaClass);
-      Pcm2JavaHelper.addImportToCompilationUnitOfClassifier(contextClassImport, compositeComponentJavaClass, encapsulatedComponentJavaClass);
+      JavaModificationUtil.addConstructorToClass(constructor, compositeComponentJavaClass);
+      JavaModificationUtil.addImportToCompilationUnitOfClassifier(contextClassImport, compositeComponentJavaClass, encapsulatedComponentJavaClass);
     }
     
     public EObject getElement8(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, final ClassifierImport contextClassImport, final Constructor constructor) {
@@ -62,7 +62,7 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     }
     
     public void update1Element(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, final ClassifierImport contextClassImport, final Constructor constructor) {
-      Pcm2JavaHelper.createNewForFieldInConstructor(newConstructorCall, constructor, assemblyContextField);
+      JavaModificationUtil.createNewForFieldInConstructor(newConstructorCall, constructor, assemblyContextField);
     }
     
     public EObject getElement1(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, final ClassifierImport contextClassImport, final Constructor constructor) {
@@ -86,8 +86,8 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     }
     
     public void updateAssemblyContextFieldElement(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField) {
-      final TypeReference typeRef = Pcm2JavaHelper.createNamespaceClassifierReference(encapsulatedComponentJavaClass);
-      Pcm2JavaHelper.createPrivateField(assemblyContextField, typeRef, assemblyContext.getEntityName());
+      final TypeReference typeRef = JavaModificationUtil.createNamespaceClassifierReference(encapsulatedComponentJavaClass);
+      JavaModificationUtil.createPrivateField(assemblyContextField, typeRef, assemblyContext.getEntityName());
     }
     
     public EObject getElement3(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, final ClassifierImport contextClassImport, final Constructor constructor) {
@@ -115,7 +115,9 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     	userExecution.getCorrepondenceSourceCompositeComponentJavaClass(composedStructure, assemblyContext), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (compositeComponentJavaClass == null) {
     	return false;
     }
@@ -124,7 +126,9 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     	userExecution.getCorrepondenceSourceEncapsulatedComponentJavaClass(composedStructure, assemblyContext, compositeComponentJavaClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (encapsulatedComponentJavaClass == null) {
     	return false;
     }

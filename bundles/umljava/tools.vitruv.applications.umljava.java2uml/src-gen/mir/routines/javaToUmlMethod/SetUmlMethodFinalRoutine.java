@@ -53,7 +53,9 @@ public class SetUmlMethodFinalRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceUOperation(jMethod, isFinal), // correspondence source supplier
     	org.eclipse.uml2.uml.Operation.class,
     	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uOperation == null) {
     	return false;
     }

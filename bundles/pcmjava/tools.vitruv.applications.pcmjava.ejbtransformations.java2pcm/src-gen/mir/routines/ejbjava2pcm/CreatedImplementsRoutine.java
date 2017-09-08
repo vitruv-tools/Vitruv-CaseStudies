@@ -73,7 +73,9 @@ public class CreatedImplementsRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceBasicComponent(clazz, implementz), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.BasicComponent.class,
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (basicComponent == null) {
     	return false;
     }

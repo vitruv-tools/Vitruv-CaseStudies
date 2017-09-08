@@ -55,7 +55,9 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceUOperation(jMeth, jType), // correspondence source supplier
     	org.eclipse.uml2.uml.Operation.class,
     	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uOperation == null) {
     	return false;
     }

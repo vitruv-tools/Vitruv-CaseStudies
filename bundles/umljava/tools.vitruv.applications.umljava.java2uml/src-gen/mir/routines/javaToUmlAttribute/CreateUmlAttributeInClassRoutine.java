@@ -67,7 +67,9 @@ public class CreateUmlAttributeInClassRoutine extends AbstractRepairRoutineReali
     	userExecution.getCorrepondenceSourceUClass(jClass, jAttr), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uClass == null) {
     	return false;
     }

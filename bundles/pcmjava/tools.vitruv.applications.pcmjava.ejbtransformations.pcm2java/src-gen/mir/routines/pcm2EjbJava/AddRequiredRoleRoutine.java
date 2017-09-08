@@ -16,7 +16,7 @@ import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -59,18 +59,18 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateRequiredInterfaceFieldElement(final OperationRequiredRole requiredRole, final Interface requiredInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport requiredInterfaceImport, final Field requiredInterfaceField) {
-      final NamespaceClassifierReference typeRef = Pcm2JavaHelper.createNamespaceClassifierReference(requiredInterface);
+      final NamespaceClassifierReference typeRef = JavaModificationUtil.createNamespaceClassifierReference(requiredInterface);
       final String requiredRoleName = requiredRole.getEntityName();
-      Pcm2JavaHelper.createPrivateField(requiredInterfaceField, EcoreUtil.<NamespaceClassifierReference>copy(typeRef), requiredRoleName);
+      JavaModificationUtil.createPrivateField(requiredInterfaceField, EcoreUtil.<NamespaceClassifierReference>copy(typeRef), requiredRoleName);
     }
     
     public void updateRequiredInterfaceImportElement(final OperationRequiredRole requiredRole, final Interface requiredInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport requiredInterfaceImport) {
-      Pcm2JavaHelper.addImportToCompilationUnitOfClassifier(requiredInterfaceImport, javaClass, requiredInterface);
+      JavaModificationUtil.addImportToCompilationUnitOfClassifier(requiredInterfaceImport, javaClass, requiredInterface);
     }
     
     public void callRoutine1(final OperationRequiredRole requiredRole, final Interface requiredInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport requiredInterfaceImport, final Field requiredInterfaceField, @Extension final RoutinesFacade _routinesFacade) {
-      Pcm2JavaHelper.addImportToClassFromString(javaClass, Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("javax", "ejb")), "EJB");
-      Pcm2JavaHelper.addAnnotationToAnnotableAndModifiable(requiredInterfaceField, "EJB");
+      JavaModificationUtil.addImportToClassFromString(javaClass, Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("javax", "ejb")), "EJB");
+      JavaModificationUtil.addAnnotationToAnnotableAndModifiable(requiredInterfaceField, "EJB");
       EList<Member> _members = javaClass.getMembers();
       _members.add(requiredInterfaceField);
     }
@@ -93,7 +93,9 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceRequiredInterface(requiredRole), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (requiredInterface == null) {
     	return false;
     }
@@ -102,7 +104,9 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJavaClass(requiredRole, requiredInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaClass == null) {
     	return false;
     }

@@ -27,20 +27,32 @@ reaction RenamedElement {
 
 // TODO this might break for further tagged elements which can in fact be renamed here but aren't collection types
 routine renameElement(uml::NamedElement umlElement) {
+	action {
+		call {
+			renameNamedElement(umlElement);
+			renameCollectionType(umlElement);
+		}
+	}
+}
+
+routine renameNamedElement(uml::NamedElement umlElement) {
 	match {
-		val pcmElement = retrieve optional pcm::NamedElement corresponding to umlElement tagged with ""
-		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlElement tagged with UmlToPcmTypesUtil.COLLECTION_TYPE_TAG
+		val pcmElement = retrieve pcm::NamedElement corresponding to umlElement tagged with ""
 	}
 	action {
 		update pcmElement {
-			if (pcmElement !== null) {
-				pcmElement.entityName = umlElement.name
-			}
+			pcmElement.entityName = umlElement.name
 		}
+	}
+}
+
+routine renameCollectionType(uml::NamedElement umlElement) {
+	match {
+		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlElement tagged with UmlToPcmTypesUtil.COLLECTION_TYPE_TAG
+	}
+	action {
 		update pcmCollectionType {
-			if (pcmCollectionType !== null) {
-				pcmCollectionType.entityName = umlElement.name + UmlToPcmTypesUtil.COLLECTION_TYPE_SUFFIX
-			}
+			pcmCollectionType.entityName = umlElement.name + UmlToPcmTypesUtil.COLLECTION_TYPE_SUFFIX
 		}
 	}
 }
@@ -241,9 +253,9 @@ routine deleteDataType(uml::DataType umlDataType) {
 		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlDataType tagged with UmlToPcmTypesUtil.COLLECTION_TYPE_TAG
 	}
 	action {
-		delete pcmCompositeType
-		delete pcmPrimitiveType
-		delete pcmCollectionType
+		delete if (pcmCompositeType.present) pcmCompositeType.get
+		delete if (pcmPrimitiveType.present) pcmPrimitiveType.get
+		delete if (pcmCollectionType.present) pcmCollectionType.get
 	}
 }
 

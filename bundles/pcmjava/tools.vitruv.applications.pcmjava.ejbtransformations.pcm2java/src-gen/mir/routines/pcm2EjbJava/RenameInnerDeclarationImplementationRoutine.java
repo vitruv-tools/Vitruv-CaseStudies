@@ -95,7 +95,9 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     	userExecution.getCorrepondenceSourceCompositeTypeField(innerDeclaration), // correspondence source supplier
     	org.emftext.language.java.members.Field.class,
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (compositeTypeField == null) {
     	return false;
     }
@@ -104,7 +106,9 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     	userExecution.getCorrepondenceSourceCompositeTypeGetterMethod(innerDeclaration, compositeTypeField), // correspondence source supplier
     	org.emftext.language.java.members.ClassMethod.class,
     	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(innerDeclaration, compositeTypeField));
+    	userExecution.getRetrieveTag1(innerDeclaration, compositeTypeField), 
+    	false // asserted
+    	);
     if (compositeTypeGetterMethod == null) {
     	return false;
     }
@@ -113,7 +117,9 @@ public class RenameInnerDeclarationImplementationRoutine extends AbstractRepairR
     	userExecution.getCorrepondenceSourceCompositeTypeSetterMethod(innerDeclaration, compositeTypeField, compositeTypeGetterMethod), // correspondence source supplier
     	org.emftext.language.java.members.ClassMethod.class,
     	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag2(innerDeclaration, compositeTypeField, compositeTypeGetterMethod));
+    	userExecution.getRetrieveTag2(innerDeclaration, compositeTypeField, compositeTypeGetterMethod), 
+    	false // asserted
+    	);
     if (compositeTypeSetterMethod == null) {
     	return false;
     }

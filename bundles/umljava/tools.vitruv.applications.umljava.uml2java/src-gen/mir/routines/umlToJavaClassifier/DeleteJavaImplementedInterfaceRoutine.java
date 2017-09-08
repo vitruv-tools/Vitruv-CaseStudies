@@ -57,7 +57,9 @@ public class DeleteJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	userExecution.getCorrepondenceSourceJClass(uInterface, uClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jClass == null) {
     	return false;
     }
@@ -66,7 +68,9 @@ public class DeleteJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	userExecution.getCorrepondenceSourceJInterface(uInterface, uClass, jClass), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jInterface == null) {
     	return false;
     }

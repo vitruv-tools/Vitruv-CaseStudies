@@ -67,7 +67,9 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceUmlParameter(pcmParameter, pcmDataType), // correspondence source supplier
     	org.eclipse.uml2.uml.Parameter.class,
     	(org.eclipse.uml2.uml.Parameter _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlParameter == null) {
     	return false;
     }
@@ -76,7 +78,9 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceUmlModel(pcmParameter, pcmDataType, umlParameter), // correspondence source supplier
     	org.eclipse.uml2.uml.Model.class,
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlModel == null) {
     	return false;
     }

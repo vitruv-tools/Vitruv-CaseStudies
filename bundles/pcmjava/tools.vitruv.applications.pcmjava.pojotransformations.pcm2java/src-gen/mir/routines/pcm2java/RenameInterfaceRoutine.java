@@ -55,7 +55,9 @@ public class RenameInterfaceRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceContractsPackage(interf), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionContractsPackage(interf, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (contractsPackage == null) {
     	return false;
     }

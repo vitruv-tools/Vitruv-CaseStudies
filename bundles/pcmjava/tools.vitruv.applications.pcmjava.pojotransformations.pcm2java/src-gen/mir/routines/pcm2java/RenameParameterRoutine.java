@@ -50,7 +50,9 @@ public class RenameParameterRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJavaParameter(parameter), // correspondence source supplier
     	org.emftext.language.java.parameters.OrdinaryParameter.class,
     	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaParameter == null) {
     	return false;
     }

@@ -329,8 +329,8 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
             }
         }
         call {
-            if (newDirection == ParameterDirectionKind.RETURN_LITERAL && jParam !== null) {
-                EcoreUtil.remove(jParam)
+            if (newDirection == ParameterDirectionKind.RETURN_LITERAL && jParam.present) {
+                EcoreUtil.remove(jParam.get)
             } else if (newDirection == ParameterDirectionKind.IN_LITERAL && jParam === null) {
                 createJavaParameter(uOperation, uParam)
             }

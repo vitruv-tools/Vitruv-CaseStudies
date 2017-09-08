@@ -74,7 +74,9 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
     	userExecution.getCorrepondenceSourcePcmSignature(umlOperation, umlParameter), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.Signature.class,
     	(org.palladiosimulator.pcm.repository.Signature _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmSignature == null) {
     	return false;
     }

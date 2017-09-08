@@ -70,7 +70,9 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourcePcmComponent(umlComponent, umlUsage), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.BasicComponent.class,
     	(org.palladiosimulator.pcm.repository.BasicComponent _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmComponent == null) {
     	return false;
     }

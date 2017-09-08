@@ -1,47 +1,29 @@
 package tools.vitruv.applications.pcmjava.util.pcm2java
 
-import java.util.ArrayList
 import java.util.Comparator
-import java.util.List
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.annotations.AnnotationsFactory
 import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.expressions.ExpressionsFactory
-import org.emftext.language.java.imports.ClassifierImport
-import org.emftext.language.java.imports.Import
-import org.emftext.language.java.imports.ImportsFactory
-import org.emftext.language.java.instantiations.NewConstructorCall
 import org.emftext.language.java.literals.LiteralsFactory
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.members.Method
-import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.Modifier
 import org.emftext.language.java.modifiers.ModifiersFactory
 import org.emftext.language.java.modifiers.Public
 import org.emftext.language.java.operators.OperatorsFactory
 import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.parameters.ParametersFactory
-import org.emftext.language.java.references.IdentifierReference
-import org.emftext.language.java.references.ReferenceableElement
 import org.emftext.language.java.references.ReferencesFactory
-import org.emftext.language.java.statements.Statement
 import org.emftext.language.java.statements.StatementsFactory
-import org.emftext.language.java.types.Char
-import org.emftext.language.java.types.ClassifierReference
-import org.emftext.language.java.types.Int
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
-import org.emftext.language.java.types.Void
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
@@ -49,112 +31,12 @@ import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
-import org.emftext.language.java.JavaClasspath
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import java.util.Optional
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 class Pcm2JavaHelper {
 
-	def static addAnnotationToAnnotableAndModifiable(AnnotableAndModifiable annotableAndModifiable,
-		String annotationName) {
-		val newAnnotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance()
-		val jaMoPPClass = ClassifiersFactory.eINSTANCE.createClass
-		jaMoPPClass.setName(annotationName);
-		newAnnotation.setAnnotation(jaMoPPClass)
-		annotableAndModifiable.getAnnotationsAndModifiers().add(newAnnotation)
-	}
-
-	public def static addImportToClassFromString(ConcreteClassifier jaMoPPClass, List<String> namespaceArray,
-		String entityToImport) {
-		for (Import import : jaMoPPClass.containingCompilationUnit.imports) {
-			if ((import as ClassifierImport).classifier.name == entityToImport) {
-				return // Import has already been added (in the case of inject.Inject could be from javax.inject package)
-			}
-		}
-		val guiceImport = ImportsFactory.eINSTANCE.createClassifierImport
-		val ConcreteClassifier cl = ClassifiersFactory.eINSTANCE.createClass
-		cl.name = entityToImport
-		guiceImport.classifier = cl
-		guiceImport.namespaces.addAll(namespaceArray)
-		jaMoPPClass.containingCompilationUnit.imports.add(guiceImport)
-	}
-
-	def static NamespaceClassifierReference createNamespaceClassifierReference(ConcreteClassifier concreteClassifier) {
-		val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
-		val classifierRef = TypesFactory.eINSTANCE.createClassifierReference
-		classifierRef.target = concreteClassifier
-		namespaceClassifierReference.classifierReferences.add(classifierRef)
-
-		// namespaceClassifierReference.namespaces.addAll(concreteClassifier.containingCompilationUnit.namespaces)
-		return namespaceClassifierReference
-	}
-
-	def static createNamespaceClassifierReference(NamespaceClassifierReference namespaceClassifierReference,
-		ConcreteClassifier concreteClassifier) {
-		val classifierRef = TypesFactory.eINSTANCE.createClassifierReference
-		classifierRef.target = concreteClassifier
-		namespaceClassifierReference.classifierReferences.add(classifierRef)
-
-	// namespaceClassifierReference.namespaces.addAll(concreteClassifier.containingCompilationUnit.namespaces)
-	}
-
-	def static createPrivateField(Field field, TypeReference reference, String name) {
-		field.typeReference = EcoreUtil.copy(reference)
-		field.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPrivate)
-		var String fieldName = name
-		if (fieldName.nullOrEmpty) {
-			fieldName = "field_" + getNameFromJaMoPPType(reference)
-		}
-		field.name = fieldName
-	}
-
-	def dispatch static getNameFromJaMoPPType(ClassifierReference reference) {
-		return reference.target.name
-	}
-
-	def dispatch static getNameFromJaMoPPType(NamespaceClassifierReference reference) {
-		val classRef = reference.pureClassifierReference
-		return classRef.target.name
-
-	// is currently not possible: see: https://bugs.eclipse.org/bugs/show_bug.cgi?id=404817
-	// return getNameFromJaMoPPType(classRef)
-	}
-
-	def dispatch static getNameFromJaMoPPType(Boolean reference) {
-		return "boolean"
-	}
-
-	def dispatch static getNameFromJaMoPPType(Byte reference) {
-		return "byte"
-	}
-
-	def dispatch static getNameFromJaMoPPType(Char reference) {
-		return "char"
-	}
-
-	def dispatch static getNameFromJaMoPPType(Double reference) {
-		return "double"
-	}
-
-	def dispatch static getNameFromJaMoPPType(Float reference) {
-		return "float"
-	}
-
-	def dispatch static getNameFromJaMoPPType(Int reference) {
-		return "int"
-	}
-
-	def dispatch static getNameFromJaMoPPType(Long reference) {
-		return "long"
-	}
-
-	def dispatch static getNameFromJaMoPPType(Short reference) {
-		return "short"
-	}
-
-	def dispatch static getNameFromJaMoPPType(Void reference) {
-		return "void"
-	}
-
+	
 	def static Constructor getOrCreateConstructorToClass(Class javaClass) {
 		val constructors = javaClass.members.filter[it instanceof Constructor].map[it as Constructor]
 		if (constructors.nullOrEmpty) {
@@ -164,141 +46,7 @@ class Pcm2JavaHelper {
 		return constructors.iterator.next
 	}
 
-	def static addConstructorToClass(Class javaClass) {
-		val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
-		addConstructorToClass(constructor, javaClass)
-	}
-
-	def static Statement createAssignmentFromParameterToField(Field field, Parameter parameter) {
-		val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
-		val assigmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
-
-		// this.
-		val selfReference = ReferencesFactory.eINSTANCE.createSelfReference
-		selfReference.self = LiteralsFactory.eINSTANCE.createThis
-		assigmentExpression.child = selfReference
-
-		// .fieldname
-		val fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-		fieldReference.target = field
-		selfReference.next = fieldReference
-
-		// =
-		assigmentExpression.assignmentOperator = OperatorsFactory.eINSTANCE.createAssignment
-
-		// name		
-		val identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-		identifierReference.target = parameter
-
-		assigmentExpression.value = identifierReference
-		expressionStatement.expression = assigmentExpression
-		return expressionStatement
-	}
-
-	def static addConstructorToClass(Constructor constructor, Class javaClass) {
-		constructor.name = javaClass.name
-		constructor.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
-		javaClass.members.add(constructor)
-		return constructor
-	}
-
-	def static addImportToCompilationUnitOfClassifier(ClassifierImport classifierImport, Classifier classifier,
-		ConcreteClassifier classifierToImport) {
-		if (null !== classifierToImport.containingCompilationUnit) {
-			if (null !== classifierToImport.containingCompilationUnit.namespaces) {
-				classifierImport.namespaces.addAll(classifierToImport.containingCompilationUnit.namespaces)
-			}
-			classifier.containingCompilationUnit.imports.add(classifierImport)
-		}
-		classifierImport.classifier = classifierToImport
-	}
-
-	def static createNewForFieldInConstructor(NewConstructorCall newConstructorCall, Constructor constructor,
-		Field field) {
-		val classifier = field.containingConcreteClassifier
-		if (!(classifier instanceof Class)) {
-			return null
-		}
-		val jaMoPPClass = classifier as Class
-
-		addNewStatementToConstructor(newConstructorCall, constructor, field, jaMoPPClass.fields, constructor.parameters)
-	}
-
-	def static addNewStatementToConstructor(NewConstructorCall newConstructorCall, Constructor constructor, Field field,
-		Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
-		val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
-		val assigmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
-
-		// this.
-		val selfReference = ReferencesFactory.eINSTANCE.createSelfReference
-		selfReference.self = LiteralsFactory.eINSTANCE.createThis
-		assigmentExpression.child = selfReference
-
-		// .fieldname
-		val fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-		fieldReference.target = field
-		selfReference.next = EcoreUtil.copy(fieldReference)
-
-		// =
-		assigmentExpression.assignmentOperator = OperatorsFactory.eINSTANCE.createAssignment
-
-		// new fieldType
-		newConstructorCall.typeReference = EcoreUtil.copy(field.typeReference)
-
-		// get order of type references of the constructor
-		updateArgumentsOfConstructorCall(field, fieldsToUseAsArgument, parametersToUseAsArgument, newConstructorCall)
-
-		assigmentExpression.value = newConstructorCall
-		expressionStatement.expression = assigmentExpression
-		constructor.statements.add(expressionStatement)
-	}
-
-	def static updateArgumentsOfConstructorCall(Field field, Field[] fieldsToUseAsArgument,
-		Parameter[] parametersToUseAsArgument, NewConstructorCall newConstructorCall) {
-		val List<TypeReference> typeListForConstructor = new ArrayList<TypeReference>
-		if (null !== field.typeReference && null !== field.typeReference.pureClassifierReference &&
-			null !== field.typeReference.pureClassifierReference.target) {
-			val classifier = field.typeReference.pureClassifierReference.target
-			if (classifier instanceof Class) {
-				val jaMoPPClass = classifier as Class
-				val constructorsForClass = jaMoPPClass.members.filter(typeof(Constructor))
-				if (!constructorsForClass.nullOrEmpty) {
-					val constructorForClass = constructorsForClass.get(0)
-					for (parameter : constructorForClass.parameters) {
-						typeListForConstructor.add(parameter.typeReference)
-					}
-				}
-			}
-		}
-
-		// find type with same name in fields or parameters (start with parameter)
-		for (typeRef : typeListForConstructor) {
-			val refElement = typeRef.findMatchingTypeInParametersOrFields(fieldsToUseAsArgument,
-				parametersToUseAsArgument)
-			if (refElement !== null) {
-				val IdentifierReference identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference
-				identifierReference.target = refElement
-			} else {
-				newConstructorCall.arguments.add(LiteralsFactory.eINSTANCE.createNullLiteral)
-			}
-		}
-	}
-
-	def static ReferenceableElement findMatchingTypeInParametersOrFields(TypeReference typeReferenceToFind,
-		Field[] fieldsToUseAsArgument, Parameter[] parametersToUseAsArgument) {
-		for (parameter : parametersToUseAsArgument) {
-			if (parameter.typeReference.target == typeReferenceToFind.target) {
-				return parameter
-			}
-		}
-		for (field : fieldsToUseAsArgument) {
-			if (field.typeReference.target == typeReferenceToFind.target) {
-				return field
-			}
-		}
-		return null
-	}
-
+	
 	static def createSetter(Field field, ClassMethod method) {
 		method.name = "set" + field.name.toFirstUpper
 		method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
@@ -401,7 +149,7 @@ class Pcm2JavaHelper {
 	}
 
 	public static def TypeReference createTypeReference(DataType originalDataType,
-		Class correspondingJavaClassIfExisting) {
+		Optional<Class> correspondingJavaClassIfExisting) {
 		if (null === originalDataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
@@ -415,8 +163,8 @@ class Pcm2JavaHelper {
 			} else {
 				// This cannot be since the claimForPrimitiveType function does only return TypeReference or ConcreteClassifier
 			}
-		} else if (correspondingJavaClassIfExisting !== null) {
-			innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting);
+		} else if (correspondingJavaClassIfExisting.present) {
+			innerDataTypeReference = createNamespaceClassifierReference(correspondingJavaClassIfExisting.get);
 		} else {
 			throw new IllegalArgumentException(
 				"Either the dataType must be primitive or a correspondingJavaClass must be specified");
@@ -461,76 +209,5 @@ class Pcm2JavaHelper {
 		null
 	}
 
-	def static ClassifierImport getJavaClassImport(String name) {
-		val classifier = tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.loadClassiferFromStdLib(name);
-		val classifierImport = ImportsFactory.eINSTANCE.createClassifierImport();
-		classifierImport.classifier = classifier;
-		return classifierImport
-	}
 
-	/**
-	 * returns the class object for a primitive type, e.g, Integer for int
-	 */
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(PrimitiveType type) {
-		return null
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Boolean type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Boolean")
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Byte type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Byte")
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Char type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Character")
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Double type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Double")
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Float type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Float")
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Int type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Integer")
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Long type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Long")
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Short type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Short")
-	}
-
-	def dispatch static TypeReference getWrapperTypeReferenceForPrimitiveType(Void type) {
-		createAndReturnNamespaceClassifierReferenceForName("java.lang", "Void")
-	}
-
-	def static NamespaceClassifierReference createAndReturnNamespaceClassifierReferenceForName(String namespace,
-		String name) {
-		val classifier = tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.
-			loadClassiferFromStdLib(namespace + "." + name)
-		val classifierReference = TypesFactory.eINSTANCE.createClassifierReference
-		classifierReference.setTarget(classifier)
-		val namespaceClassifierReference = TypesFactory.eINSTANCE.createNamespaceClassifierReference
-		namespaceClassifierReference.classifierReferences.add(classifierReference)
-		if (!namespace.nullOrEmpty) {
-			namespaceClassifierReference.namespaces.addAll(namespace.split("."))
-		} else {
-			namespaceClassifierReference.namespaces.add("")
-		}
-		return namespaceClassifierReference
-	}
-
-	def static ConcreteClassifier loadClassiferFromStdLib(String name) {
-		// This requires stlib to be registered (JavaClasspath.get().registerStdLib). Should be done by domain
-		var classifier = JavaClasspath.get().getClassifier(name) as ConcreteClassifier
-		val resourceSet = new ResourceSetImpl();
-		classifier = EcoreUtil.resolve(classifier, resourceSet) as ConcreteClassifier
-	}
 }

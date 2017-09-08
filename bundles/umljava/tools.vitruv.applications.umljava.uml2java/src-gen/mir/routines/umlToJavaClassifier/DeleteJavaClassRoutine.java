@@ -55,7 +55,9 @@ public class DeleteJavaClassRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJavaClassifier(umlClassifer), // correspondence source supplier
     	org.emftext.language.java.classifiers.ConcreteClassifier.class,
     	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaClassifier == null) {
     	return false;
     }
@@ -64,7 +66,9 @@ public class DeleteJavaClassRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJavaCompilationUnit(umlClassifer, javaClassifier), // correspondence source supplier
     	org.emftext.language.java.containers.CompilationUnit.class,
     	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaCompilationUnit == null) {
     	return false;
     }

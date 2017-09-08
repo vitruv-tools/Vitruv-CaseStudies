@@ -54,7 +54,9 @@ public class DeleteUmlClassifierRoutine extends AbstractRepairRoutineRealization
     	userExecution.getCorrepondenceSourceUClassfier(jClassifier, jCompUnit), // correspondence source supplier
     	org.eclipse.uml2.uml.Classifier.class,
     	(org.eclipse.uml2.uml.Classifier _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (uClassfier == null) {
     	return false;
     }

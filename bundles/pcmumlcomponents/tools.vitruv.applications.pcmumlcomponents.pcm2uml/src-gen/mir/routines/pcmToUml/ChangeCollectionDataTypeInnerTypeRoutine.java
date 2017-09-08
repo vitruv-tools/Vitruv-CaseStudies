@@ -3,6 +3,7 @@ package mir.routines.pcmToUml;
 import com.google.common.base.Objects;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Optional;
 import mir.routines.pcmToUml.RoutinesFacade;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
@@ -37,19 +38,23 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
       return pcmInnerType;
     }
     
-    public EObject getCorrepondenceSourceUmlModel(final CollectionDataType pcmDataType, final DataType pcmInnerType, final org.eclipse.uml2.uml.DataType umlInnerType) {
+    public EObject getCorrepondenceSourceUmlModel(final CollectionDataType pcmDataType, final DataType pcmInnerType, final Optional<org.eclipse.uml2.uml.DataType> umlInnerType) {
       Repository _repository__DataType = pcmDataType.getRepository__DataType();
       return _repository__DataType;
     }
     
-    public void callRoutine1(final CollectionDataType pcmDataType, final DataType pcmInnerType, final org.eclipse.uml2.uml.DataType umlInnerType, final Model umlModel, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final CollectionDataType pcmDataType, final DataType pcmInnerType, final Optional<org.eclipse.uml2.uml.DataType> umlInnerType, final Model umlModel, @Extension final RoutinesFacade _routinesFacade) {
       if ((pcmInnerType instanceof CollectionDataType)) {
         this.userInteracting.showMessage(UserInteractionType.MODAL, 
           "Nested collection types are not transformed to UML. Consider using a composite type.");
       }
-      org.eclipse.uml2.uml.DataType innerType = umlInnerType;
-      if ((innerType == null)) {
+      org.eclipse.uml2.uml.DataType innerType = null;
+      boolean _isPresent = umlInnerType.isPresent();
+      boolean _not = (!_isPresent);
+      if (_not) {
         innerType = PcmToUmlUtil.retrieveUmlType(this.correspondenceModel, pcmInnerType, umlModel);
+      } else {
+        innerType = umlInnerType.get();
       }
       if (((innerType != null) && (!(pcmInnerType instanceof CollectionDataType)))) {
         Logger _logger = this.getLogger();
@@ -108,17 +113,22 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
     getLogger().debug("   pcmDataType: " + this.pcmDataType);
     getLogger().debug("   pcmInnerType: " + this.pcmInnerType);
     
-    org.eclipse.uml2.uml.DataType umlInnerType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUmlInnerType(pcmDataType, pcmInnerType), // correspondence source supplier
-    	org.eclipse.uml2.uml.DataType.class,
-    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(umlInnerType);
+    	Optional<org.eclipse.uml2.uml.DataType> umlInnerType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceUmlInnerType(pcmDataType, pcmInnerType), // correspondence source supplier
+    		org.eclipse.uml2.uml.DataType.class,
+    		(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(umlInnerType.isPresent() ? umlInnerType.get() : null);
     org.eclipse.uml2.uml.Model umlModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlModel(pcmDataType, pcmInnerType, umlInnerType), // correspondence source supplier
     	org.eclipse.uml2.uml.Model.class,
     	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlModel == null) {
     	return false;
     }

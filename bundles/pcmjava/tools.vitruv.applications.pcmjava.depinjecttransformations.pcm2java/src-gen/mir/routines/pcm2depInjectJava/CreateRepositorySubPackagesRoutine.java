@@ -47,7 +47,9 @@ public class CreateRepositorySubPackagesRoutine extends AbstractRepairRoutineRea
     	userExecution.getCorrepondenceSourceRepositoryPackage(repository), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (repositoryPackage == null) {
     	return false;
     }

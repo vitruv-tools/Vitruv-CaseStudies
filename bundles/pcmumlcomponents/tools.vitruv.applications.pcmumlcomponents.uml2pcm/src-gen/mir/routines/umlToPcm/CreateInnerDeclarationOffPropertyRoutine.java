@@ -67,7 +67,9 @@ public class CreateInnerDeclarationOffPropertyRoutine extends AbstractRepairRout
     	userExecution.getCorrepondenceSourcePcmCompositeType(property), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.CompositeDataType.class,
     	(org.palladiosimulator.pcm.repository.CompositeDataType _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (pcmCompositeType == null) {
     	return false;
     }

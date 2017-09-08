@@ -1,25 +1,19 @@
 package tools.vitruv.applications.umljava.util.java
 
-import java.io.ByteArrayInputStream
 import java.util.Collections
 import java.util.Iterator
 import java.util.List
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.classifiers.Interface
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.ContainersFactory
-import org.emftext.language.java.containers.JavaRoot
 import org.emftext.language.java.containers.Package
-import org.emftext.language.java.imports.ClassifierImport
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
-import tools.vitruv.domains.java.util.jamoppparser.JamoppParser
 import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import org.emftext.language.java.members.EnumConstant
@@ -140,33 +134,6 @@ class JavaContainerAndClassifierUtil {
         return compUnit
     }
     
-    /**
-     * Creates a Java-ClassifierImport from a qualified name
-     */
-    def static ClassifierImport createJavaClassImport(String qualifiedName) {
-        val content = "package dummyPackage;\n " +
-                "import " + qualifiedName + ";\n" +
-                "public class DummyClass {}";
-        val dummyCU = createJavaRoot("DummyClass", content) as CompilationUnit;
-        val classifierImport = (dummyCU.getImports().get(0) as ClassifierImport)
-        return classifierImport;
-        
-    }
-    
-    /**
-     * Creates a JavaRoot Object with the given content
-     * 
-     */
-    def static JavaRoot createJavaRoot(String name, String content) {
-        val JamoppParser jaMoPPParser = new JamoppParser
-        val inStream = new ByteArrayInputStream(content.bytes)
-        val javaRoot = jaMoPPParser.parseCompilationUnitFromInputStream(URI.createFileURI(name + ".java"),
-            inStream)
-        javaRoot.name = name + ".java"
-        EcoreUtil.remove(javaRoot)
-        return javaRoot
-    }
-        
     /**
      * Removes all classifiers of the iterator which has the same name as the given classifier classif
      * 

@@ -55,7 +55,9 @@ public class RenameCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     	userExecution.getCorrepondenceSourceDatatypesPackage(compositeDataType), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(compositeDataType, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (datatypesPackage == null) {
     	return false;
     }

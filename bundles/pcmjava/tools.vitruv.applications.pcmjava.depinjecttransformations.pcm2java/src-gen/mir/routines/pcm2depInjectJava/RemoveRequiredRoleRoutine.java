@@ -76,7 +76,9 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourceRequiredInterfaceImport(requiredRole, requiringEntity), // correspondence source supplier
     	org.emftext.language.java.imports.ClassifierImport.class,
     	(org.emftext.language.java.imports.ClassifierImport _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (requiredInterfaceImport == null) {
     	return false;
     }
@@ -85,7 +87,9 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourceRequiredInterfaceField(requiredRole, requiringEntity, requiredInterfaceImport), // correspondence source supplier
     	org.emftext.language.java.members.Field.class,
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (requiredInterfaceField == null) {
     	return false;
     }
@@ -94,7 +98,9 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	userExecution.getCorrepondenceSourceJavaClass(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaClass == null) {
     	return false;
     }

@@ -45,7 +45,9 @@ public class RemoveOperationSignatureParameterRoutine extends AbstractRepairRout
     	userExecution.getCorrepondenceSourceUmlParameter(pcmParameter), // correspondence source supplier
     	org.eclipse.uml2.uml.Parameter.class,
     	(org.eclipse.uml2.uml.Parameter _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlParameter == null) {
     	return false;
     }

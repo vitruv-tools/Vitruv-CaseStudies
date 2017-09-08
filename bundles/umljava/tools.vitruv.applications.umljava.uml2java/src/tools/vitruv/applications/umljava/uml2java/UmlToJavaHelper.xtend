@@ -19,7 +19,8 @@ import tools.vitruv.framework.userinteraction.UserInteractionType
 import org.emftext.language.java.members.Field
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.emftext.language.java.containers.CompilationUnit
-
+import java.util.Optional
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * A helper class that contains util functions which depends on
@@ -32,6 +33,10 @@ class UmlToJavaHelper {
 	private new() {
 	}
     
+    
+    def static TypeReference createTypeReferenceAndUpdateImport(Type dType, ConcreteClassifier cType, CompilationUnit compUnit, UserInteracting userInteracting) {
+    	createTypeReferenceAndUpdateImport(dType, Optional.of(cType), compUnit, userInteracting)
+    }
     
     /**
  	 * Creates a Java-NamespaceClssifierReference if cType != null and adds a
@@ -49,15 +54,15 @@ class UmlToJavaHelper {
      * @param userInteracting needed to show info messages for the user
      * @return the java type reference that fits dType or cType
      */
-	def static TypeReference createTypeReferenceAndUpdateImport(Type dType, ConcreteClassifier cType, CompilationUnit compUnit, UserInteracting userInteracting) {
-		if (dType === null && cType === null) {
+	def static TypeReference createTypeReferenceAndUpdateImport(Type dType, Optional<? extends ConcreteClassifier> cType, CompilationUnit compUnit, UserInteracting userInteracting) {
+		if (dType === null && !cType.present) {
 		    return TypesFactory.eINSTANCE.createVoid();
-		} else if (cType !== null) {
-		    val namespaceOftype = cType.javaNamespace.join
+		} else if (cType.present) {
+		    val namespaceOftype = cType.get.javaNamespace.join
 		    if (!namespaceOftype.equals(compUnit.javaNamespace.join)) {
 		        compUnit.imports += createJavaClassImport(namespaceOftype)
 		    }
-	        return createNamespaceReferenceFromClassifier(cType);
+	        return createNamespaceReferenceFromClassifier(cType.get);
 	    } else if (dType instanceof PrimitiveType) {
 	        return mapToJavaPrimitiveType(dType);
 	    } else {// dType is not null and not primitive, but a unknown Classifier.

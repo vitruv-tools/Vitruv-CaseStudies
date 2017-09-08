@@ -56,7 +56,9 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceCompositeType(dataType, innerDeclaration), // correspondence source supplier
     	org.eclipse.uml2.uml.DataType.class,
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (compositeType == null) {
     	return false;
     }
@@ -65,7 +67,9 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceUmlProperty(dataType, innerDeclaration, compositeType), // correspondence source supplier
     	org.eclipse.uml2.uml.Property.class,
     	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlProperty == null) {
     	return false;
     }

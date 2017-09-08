@@ -55,7 +55,9 @@ public class RenameCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     	userExecution.getCorrepondenceSourceDatatypesPackage(collectionDataType), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(collectionDataType, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (datatypesPackage == null) {
     	return false;
     }

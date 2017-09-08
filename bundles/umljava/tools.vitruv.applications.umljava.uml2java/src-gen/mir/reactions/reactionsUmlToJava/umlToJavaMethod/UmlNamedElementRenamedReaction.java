@@ -51,11 +51,11 @@ class UmlNamedElementRenamedReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEAttribute)) {
     	return false;
     }
-    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
     ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.NamedElement, java.lang.String> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.NamedElement, java.lang.String>)change;
     org.eclipse.uml2.uml.NamedElement affectedEObject = typedChange.getAffectedEObject();
     EAttribute affectedFeature = typedChange.getAffectedFeature();
@@ -64,7 +64,7 @@ class UmlNamedElementRenamedReaction extends AbstractReactionRealization {
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }
-    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

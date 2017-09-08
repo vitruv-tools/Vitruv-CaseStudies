@@ -95,7 +95,9 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	userExecution.getCorrepondenceSourceCompositeTypeField(innerDeclaration, newTypeReference), // correspondence source supplier
     	org.emftext.language.java.members.Field.class,
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (compositeTypeField == null) {
     	return false;
     }
@@ -104,7 +106,9 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	userExecution.getCorrepondenceSourceCompositeTypeGetterMethod(innerDeclaration, newTypeReference, compositeTypeField), // correspondence source supplier
     	org.emftext.language.java.members.Method.class,
     	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(innerDeclaration, newTypeReference, compositeTypeField));
+    	userExecution.getRetrieveTag1(innerDeclaration, newTypeReference, compositeTypeField), 
+    	false // asserted
+    	);
     if (compositeTypeGetterMethod == null) {
     	return false;
     }
@@ -113,7 +117,9 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     	userExecution.getCorrepondenceSourceCompositeTypeSetterMethod(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod), // correspondence source supplier
     	org.emftext.language.java.members.Method.class,
     	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag2(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod));
+    	userExecution.getRetrieveTag2(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod), 
+    	false // asserted
+    	);
     if (compositeTypeSetterMethod == null) {
     	return false;
     }

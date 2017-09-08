@@ -70,7 +70,9 @@ public class AddOperationProvidedRoleInterfaceRoutine extends AbstractRepairRout
     	userExecution.getCorrepondenceSourceInterfaceRealization(pcmRole, pcmInterface), // correspondence source supplier
     	org.eclipse.uml2.uml.InterfaceRealization.class,
     	(org.eclipse.uml2.uml.InterfaceRealization _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (interfaceRealization == null) {
     	return false;
     }
@@ -79,7 +81,9 @@ public class AddOperationProvidedRoleInterfaceRoutine extends AbstractRepairRout
     	userExecution.getCorrepondenceSourceUmlInterface(pcmRole, pcmInterface, interfaceRealization), // correspondence source supplier
     	org.eclipse.uml2.uml.Interface.class,
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlInterface == null) {
     	return false;
     }
@@ -88,7 +92,9 @@ public class AddOperationProvidedRoleInterfaceRoutine extends AbstractRepairRout
     	userExecution.getCorrepondenceSourceUmlComponent(pcmRole, pcmInterface, interfaceRealization, umlInterface), // correspondence source supplier
     	org.eclipse.uml2.uml.Component.class,
     	(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlComponent == null) {
     	return false;
     }

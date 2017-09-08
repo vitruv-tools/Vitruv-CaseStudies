@@ -1,6 +1,7 @@
 package mir.routines.umlToJavaAttribute;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.umlToJavaAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
@@ -32,7 +33,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
       return uAttr;
     }
     
-    public void callRoutine1(final Property uAttr, final Type uType, final Field jAttr, final org.emftext.language.java.classifiers.Class customType, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final Property uAttr, final Type uType, final Field jAttr, final Optional<org.emftext.language.java.classifiers.Class> customType, @Extension final RoutinesFacade _routinesFacade) {
       jAttr.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit(), this.userInteracting));
       JavaMemberAndParameterUtil.updateAttributeTypeInSetters(jAttr);
       JavaMemberAndParameterUtil.updateAttributeTypeInGetters(jAttr);
@@ -59,17 +60,22 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     	userExecution.getCorrepondenceSourceJAttr(uAttr, uType), // correspondence source supplier
     	org.emftext.language.java.members.Field.class,
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jAttr == null) {
     	return false;
     }
     registerObjectUnderModification(jAttr);
-    org.emftext.language.java.classifiers.Class customType = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCustomType(uAttr, uType, jAttr), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(customType);
+    	Optional<org.emftext.language.java.classifiers.Class> customType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceCustomType(uAttr, uType, jAttr), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(customType.isPresent() ? customType.get() : null);
     userExecution.callRoutine1(uAttr, uType, jAttr, customType, actionsFacade);
     
     postprocessElements();

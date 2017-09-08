@@ -84,7 +84,9 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceComponentClass(seff), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (componentClass == null) {
     	return false;
     }
@@ -93,7 +95,9 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceInterfaceMethod(seff, componentClass), // correspondence source supplier
     	org.emftext.language.java.members.InterfaceMethod.class,
     	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (interfaceMethod == null) {
     	return false;
     }

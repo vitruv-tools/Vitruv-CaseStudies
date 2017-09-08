@@ -9,7 +9,7 @@ import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -55,7 +55,7 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateNamespaceClassifierReferenceElement(final OperationProvidedRole providedRole, final Interface operationProvidingInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport interfaceImport, final NamespaceClassifierReference namespaceClassifierReference) {
-      Pcm2JavaHelper.createNamespaceClassifierReference(namespaceClassifierReference, operationProvidingInterface);
+      JavaModificationUtil.createNamespaceClassifierReference(namespaceClassifierReference, operationProvidingInterface);
     }
     
     public EObject getCorrepondenceSourceOperationProvidingInterface(final OperationProvidedRole providedRole) {
@@ -64,7 +64,7 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateInterfaceImportElement(final OperationProvidedRole providedRole, final Interface operationProvidingInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport interfaceImport) {
-      Pcm2JavaHelper.addImportToCompilationUnitOfClassifier(interfaceImport, javaClass, operationProvidingInterface);
+      JavaModificationUtil.addImportToCompilationUnitOfClassifier(interfaceImport, javaClass, operationProvidingInterface);
     }
   }
   
@@ -85,7 +85,9 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceOperationProvidingInterface(providedRole), // correspondence source supplier
     	org.emftext.language.java.classifiers.Interface.class,
     	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (operationProvidingInterface == null) {
     	return false;
     }
@@ -94,7 +96,9 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJavaClass(providedRole, operationProvidingInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaClass == null) {
     	return false;
     }

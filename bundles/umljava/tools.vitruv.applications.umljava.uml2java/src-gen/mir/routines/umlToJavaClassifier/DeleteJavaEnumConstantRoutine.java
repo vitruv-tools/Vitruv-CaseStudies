@@ -46,7 +46,9 @@ public class DeleteJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     	userExecution.getCorrepondenceSourceJConst(uLiteral), // correspondence source supplier
     	org.emftext.language.java.members.EnumConstant.class,
     	(org.emftext.language.java.members.EnumConstant _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jConst == null) {
     	return false;
     }

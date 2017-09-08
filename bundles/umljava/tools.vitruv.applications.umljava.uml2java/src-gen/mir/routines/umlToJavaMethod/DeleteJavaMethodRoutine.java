@@ -46,7 +46,9 @@ public class DeleteJavaMethodRoutine extends AbstractRepairRoutineRealization {
     	userExecution.getCorrepondenceSourceJMeth(uOperation), // correspondence source supplier
     	org.emftext.language.java.members.Method.class,
     	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jMeth == null) {
     	return false;
     }

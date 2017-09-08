@@ -115,7 +115,9 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     	userExecution.getCorrepondenceSourceJAttribute(uAttribute), // correspondence source supplier
     	org.emftext.language.java.members.Field.class,
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jAttribute == null) {
     	return false;
     }
@@ -124,7 +126,9 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     	userExecution.getCorrepondenceSourceJType(uAttribute, jAttribute), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (jType == null) {
     	return false;
     }

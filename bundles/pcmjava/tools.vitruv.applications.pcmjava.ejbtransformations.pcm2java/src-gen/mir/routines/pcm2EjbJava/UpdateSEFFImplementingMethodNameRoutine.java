@@ -50,7 +50,9 @@ public class UpdateSEFFImplementingMethodNameRoutine extends AbstractRepairRouti
     	userExecution.getCorrepondenceSourceClassMethod(seff), // correspondence source supplier
     	org.emftext.language.java.members.ClassMethod.class,
     	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (classMethod == null) {
     	return false;
     }

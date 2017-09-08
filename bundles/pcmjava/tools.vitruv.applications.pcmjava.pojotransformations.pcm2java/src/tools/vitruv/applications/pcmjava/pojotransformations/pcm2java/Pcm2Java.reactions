@@ -28,6 +28,7 @@ import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.members.Field
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.emftext.language.java.imports.ClassifierImport
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -363,7 +364,7 @@ routine addSuperTypeToDataType(pcm::DataType dataType, java::TypeReference inner
 	} 
 	action { 
 		update dataTypeImplementationCU {
-			val collectionTypeClassImport = getJavaClassImport(superTypeQualifiedName);
+			val collectionTypeClassImport = createJavaClassImport(superTypeQualifiedName);
 			dataTypeImplementationCU.imports += collectionTypeClassImport;
 		}
 		val namespaceClassifier = create java::NamespaceClassifierReference and initialize {
@@ -1116,11 +1117,8 @@ reaction ChangeOperationSignatureOfSeff {
 }
 
 routine changeMethodForSeff(pcm::ResourceDemandingSEFF seff) { 
-	match {
-		val oldClassMethod = retrieve optional java::ClassMethod corresponding to seff
-	} 
 	action { 
-		delete oldClassMethod
+		call deleteMethodForSeff(seff)
 		call createSEFF(seff)
 	}
 }

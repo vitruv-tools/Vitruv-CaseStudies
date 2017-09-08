@@ -52,11 +52,11 @@ class UmlParameterTypeChangedReaction extends AbstractReactionRealization {
     if (!(change instanceof ReplaceSingleValuedEReference)) {
     	return false;
     }
-    getLogger().debug("Passed change type check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
     if (!checkChangeProperties(change)) {
     	return false;
     }
-    getLogger().debug("Passed change properties check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
     ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.Type> typedChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.Type>)change;
     org.eclipse.uml2.uml.Parameter affectedEObject = typedChange.getAffectedEObject();
     EReference affectedFeature = typedChange.getAffectedFeature();
@@ -65,7 +65,7 @@ class UmlParameterTypeChangedReaction extends AbstractReactionRealization {
     if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
     	return false;
     }
-    getLogger().debug("Passed complete precondition check of reaction " + this.getClass().getName());
+    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
     return true;
   }
   

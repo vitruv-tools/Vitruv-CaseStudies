@@ -25,6 +25,7 @@ Require-Bundle: com.google.guava,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.domains.java;visibility:=reexport,
  tools.vitruv.domains.java.echange,
+ tools.vitruv.domains.java.util;visibility:=reexport,
  tools.vitruv.domains.java.util.jamoppparser,
  org.palladiosimulator.pcm.resources
 Comment: Do not remove org.palladiosimulator.pcm.resources dependency. It is needed because the PCM primitive types repo is provided by this plugin, which is loaded using the URI string and, thus, does not induce a statically checked dependency
