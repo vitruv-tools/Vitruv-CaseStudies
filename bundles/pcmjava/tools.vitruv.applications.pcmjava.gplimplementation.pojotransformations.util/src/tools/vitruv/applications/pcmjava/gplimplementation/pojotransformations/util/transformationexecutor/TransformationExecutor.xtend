@@ -25,7 +25,6 @@ import tools.vitruv.framework.change.echange.feature.attribute.InsertEAttributeV
 import tools.vitruv.framework.change.echange.feature.attribute.RemoveEAttributeValue
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.tuid.TuidManager
-import tools.vitruv.framework.change.echange.compound.CompoundEChange
 import tools.vitruv.framework.util.command.ResourceAccess
 
 public class TransformationExecutor {
@@ -53,12 +52,6 @@ public class TransformationExecutor {
 	}
 
 	def public void executeTransformationForChange(EChange change, ResourceAccess resourceAccess) {
-		if (change instanceof CompoundEChange) {
-			for (atomicChange : change.atomicChanges) {
-				executeTransformation(atomicChange, resourceAccess)
-				updateTuidOfAffectedEObjectInEChange(atomicChange)
-			}
-		}
 		executeTransformation(change, resourceAccess)
 		updateTuidOfAffectedEObjectInEChange(change)
 	}

@@ -14,49 +14,66 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 
 @SuppressWarnings("all")
 class ChangedParameterDirectionReaction extends AbstractReactionRealization {
+  private ReplaceSingleValuedEAttribute<Parameter, ParameterModifier> replaceChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.ParameterModifier> typedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.ParameterModifier>)change;
-    org.palladiosimulator.pcm.repository.Parameter affectedEObject = typedChange.getAffectedEObject();
-    EAttribute affectedFeature = typedChange.getAffectedFeature();
-    org.palladiosimulator.pcm.repository.ParameterModifier oldValue = typedChange.getOldValue();
-    org.palladiosimulator.pcm.repository.ParameterModifier newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.palladiosimulator.pcm.repository.Parameter affectedEObject = replaceChange.getAffectedEObject();
+    EAttribute affectedFeature = replaceChange.getAffectedFeature();
+    org.palladiosimulator.pcm.repository.ParameterModifier oldValue = replaceChange.getOldValue();
+    org.palladiosimulator.pcm.repository.ParameterModifier newValue = replaceChange.getNewValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.ChangedParameterDirectionReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.ChangedParameterDirectionReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return ReplaceSingleValuedEAttribute.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.ParameterModifier> relevantChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.ParameterModifier>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Parameter)) {
-    	return false;
-    }
-    if (!relevantChange.getAffectedFeature().getName().equals("modifier__Parameter")) {
-    	return false;
-    }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.ParameterModifier)) {
-    	return false;
-    }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.ParameterModifier)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    replaceChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEAttribute)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchReplaceChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchReplaceChange(final EChange change) {
+    if (change instanceof ReplaceSingleValuedEAttribute<?, ?>) {
+    	ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.ParameterModifier> _localTypedChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.ParameterModifier>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Parameter)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("modifier__Parameter")) {
+    		return false;
+    	}
+    	if (_localTypedChange.isFromNonDefaultValue() && !(_localTypedChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.ParameterModifier)) {
+    		return false;
+    	}
+    	if (_localTypedChange.isToNonDefaultValue() && !(_localTypedChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.ParameterModifier)) {
+    		return false;
+    	}
+    	this.replaceChange = (ReplaceSingleValuedEAttribute<org.palladiosimulator.pcm.repository.Parameter, org.palladiosimulator.pcm.repository.ParameterModifier>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

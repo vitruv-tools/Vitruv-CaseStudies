@@ -10,49 +10,92 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteNonRoot;
+import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
 class JavaEnumConstantDeletedReaction extends AbstractReactionRealization {
+  private RemoveEReference<Enumeration, EnumConstant> removeChange;
+  
+  private DeleteEObject<EnumConstant> deleteChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant> typedChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant>)change).getRemoveChange();
-    org.emftext.language.java.classifiers.Enumeration affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.emftext.language.java.members.EnumConstant oldValue = typedChange.getOldValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.emftext.language.java.classifiers.Enumeration affectedEObject = removeChange.getAffectedEObject();
+    EReference affectedFeature = removeChange.getAffectedFeature();
+    org.emftext.language.java.members.EnumConstant oldValue = removeChange.getOldValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaEnumConstantDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaEnumConstantDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return RemoveAndDeleteNonRoot.class;
+  private boolean matchDeleteChange(final EChange change) {
+    if (change instanceof DeleteEObject<?>) {
+    	DeleteEObject<org.emftext.language.java.members.EnumConstant> _localTypedChange = (DeleteEObject<org.emftext.language.java.members.EnumConstant>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.members.EnumConstant)) {
+    		return false;
+    	}
+    	this.deleteChange = (DeleteEObject<org.emftext.language.java.members.EnumConstant>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
-  private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant> relevantChange = ((RemoveAndDeleteNonRoot<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Enumeration)) {
-    	return false;
+  private void resetChanges() {
+    removeChange = null;
+    deleteChange = null;
+    currentlyMatchedChange = 0;
+  }
+  
+  private boolean matchRemoveChange(final EChange change) {
+    if (change instanceof RemoveEReference<?, ?>) {
+    	RemoveEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant> _localTypedChange = (RemoveEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Enumeration)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("constants")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getOldValue() instanceof org.emftext.language.java.members.EnumConstant)) {
+    		return false;
+    	}
+    	this.removeChange = (RemoveEReference<org.emftext.language.java.classifiers.Enumeration, org.emftext.language.java.members.EnumConstant>) change;
+    	return true;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("constants")) {
-    	return false;
-    }
-    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.members.EnumConstant)) {
-    	return false;
-    }
-    return true;
+    
+    return false;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof RemoveAndDeleteNonRoot)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchRemoveChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
+    	return false; // Only proceed on the last of the expected changes
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
+    if (currentlyMatchedChange == 1) {
+    	if (!matchDeleteChange(change)) {
+    		resetChanges();
+    		checkPrecondition(change); // Reexecute to potentially register this as first change
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
   }
   
