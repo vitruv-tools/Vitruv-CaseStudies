@@ -279,7 +279,7 @@ reaction JavaReturnTypeChanged {
     after element java::TypeReference replaced at java::Method[typeReference]
     call changeReturnType(affectedEObject, newValue)
 }
-//TODO namen
+
 routine changeReturnType(java::Method javaMethod, java::TypeReference typeReference) {
     match {
         val operationSignature = retrieve pcm::OperationSignature corresponding to javaMethod

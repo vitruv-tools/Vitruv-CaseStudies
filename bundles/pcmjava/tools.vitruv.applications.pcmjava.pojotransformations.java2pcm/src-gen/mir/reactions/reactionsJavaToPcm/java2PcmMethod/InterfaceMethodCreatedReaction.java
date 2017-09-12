@@ -14,45 +14,62 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
 class InterfaceMethodCreatedReaction extends AbstractReactionRealization {
+  private InsertEReference<Interface, InterfaceMethod> insertChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod> typedChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod>)change;
-    org.emftext.language.java.classifiers.Interface affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.emftext.language.java.members.InterfaceMethod newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.emftext.language.java.classifiers.Interface affectedEObject = insertChange.getAffectedEObject();
+    EReference affectedFeature = insertChange.getAffectedFeature();
+    org.emftext.language.java.members.InterfaceMethod newValue = insertChange.getNewValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod> relevantChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Interface)) {
-    	return false;
-    }
-    if (!relevantChange.getAffectedFeature().getName().equals("members")) {
-    	return false;
-    }
-    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.members.InterfaceMethod)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    insertChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchInsertChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchInsertChange(final EChange change) {
+    if (change instanceof InsertEReference<?, ?>) {
+    	InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod> _localTypedChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.classifiers.Interface)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("members")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getNewValue() instanceof org.emftext.language.java.members.InterfaceMethod)) {
+    		return false;
+    	}
+    	this.insertChange = (InsertEReference<org.emftext.language.java.classifiers.Interface, org.emftext.language.java.members.InterfaceMethod>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

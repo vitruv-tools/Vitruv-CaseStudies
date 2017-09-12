@@ -12,42 +12,59 @@ import tools.vitruv.framework.change.echange.root.InsertRootEObject;
 
 @SuppressWarnings("all")
 class PackageCreatedReaction extends AbstractReactionRealization {
+  private InsertRootEObject<org.emftext.language.java.containers.Package> insertChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    InsertRootEObject<org.emftext.language.java.containers.Package> typedChange = (InsertRootEObject<org.emftext.language.java.containers.Package>)change;
-    org.emftext.language.java.containers.Package newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.emftext.language.java.containers.Package newValue = insertChange.getNewValue();
+    				
+    getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
+    if (!checkUserDefinedPrecondition(newValue)) {
+    	resetChanges();
+    	return;
+    }
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertRootEObject.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    InsertRootEObject<org.emftext.language.java.containers.Package> relevantChange = (InsertRootEObject<org.emftext.language.java.containers.Package>)change;
-    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.containers.Package)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    insertChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertRootEObject)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchInsertChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    InsertRootEObject<org.emftext.language.java.containers.Package> typedChange = (InsertRootEObject<org.emftext.language.java.containers.Package>)change;
-    org.emftext.language.java.containers.Package newValue = typedChange.getNewValue();
-    if (!checkUserDefinedPrecondition(newValue)) {
-    	return false;
-    }
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchInsertChange(final EChange change) {
+    if (change instanceof InsertRootEObject<?>) {
+    	InsertRootEObject<org.emftext.language.java.containers.Package> _localTypedChange = (InsertRootEObject<org.emftext.language.java.containers.Package>) change;
+    	if (!(_localTypedChange.getNewValue() instanceof org.emftext.language.java.containers.Package)) {
+    		return false;
+    	}
+    	this.insertChange = (InsertRootEObject<org.emftext.language.java.containers.Package>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private boolean checkUserDefinedPrecondition(final org.emftext.language.java.containers.Package newValue) {

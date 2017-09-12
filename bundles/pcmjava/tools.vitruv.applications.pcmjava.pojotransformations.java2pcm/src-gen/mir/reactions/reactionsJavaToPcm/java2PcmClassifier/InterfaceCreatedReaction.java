@@ -14,45 +14,62 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
 class InterfaceCreatedReaction extends AbstractReactionRealization {
+  private InsertEReference<CompilationUnit, Interface> insertChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface> typedChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface>)change;
-    org.emftext.language.java.containers.CompilationUnit affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.emftext.language.java.classifiers.Interface newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.emftext.language.java.containers.CompilationUnit affectedEObject = insertChange.getAffectedEObject();
+    EReference affectedFeature = insertChange.getAffectedFeature();
+    org.emftext.language.java.classifiers.Interface newValue = insertChange.getNewValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmClassifier.InterfaceCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.InterfaceCreatedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface> relevantChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
-    	return false;
-    }
-    if (!relevantChange.getAffectedFeature().getName().equals("classifiers")) {
-    	return false;
-    }
-    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.classifiers.Interface)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    insertChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchInsertChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchInsertChange(final EChange change) {
+    if (change instanceof InsertEReference<?, ?>) {
+    	InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface> _localTypedChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("classifiers")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getNewValue() instanceof org.emftext.language.java.classifiers.Interface)) {
+    		return false;
+    	}
+    	this.insertChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.Interface>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

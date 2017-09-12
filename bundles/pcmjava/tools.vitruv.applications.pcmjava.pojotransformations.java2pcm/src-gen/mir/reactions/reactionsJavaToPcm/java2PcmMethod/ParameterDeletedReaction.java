@@ -14,44 +14,61 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
 class ParameterDeletedReaction extends AbstractReactionRealization {
+  private RemoveEReference<Parametrizable, OrdinaryParameter> removeChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter> typedChange = (RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>)change;
-    org.emftext.language.java.parameters.Parametrizable affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.emftext.language.java.parameters.OrdinaryParameter oldValue = typedChange.getOldValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.emftext.language.java.parameters.Parametrizable affectedEObject = removeChange.getAffectedEObject();
+    EReference affectedFeature = removeChange.getAffectedFeature();
+    org.emftext.language.java.parameters.OrdinaryParameter oldValue = removeChange.getOldValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return RemoveEReference.class;
+  private void resetChanges() {
+    removeChange = null;
+    currentlyMatchedChange = 0;
   }
   
-  private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter> relevantChange = (RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.parameters.Parametrizable)) {
-    	return false;
+  private boolean matchRemoveChange(final EChange change) {
+    if (change instanceof RemoveEReference<?, ?>) {
+    	RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter> _localTypedChange = (RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.parameters.Parametrizable)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("parameters")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getOldValue() instanceof org.emftext.language.java.parameters.OrdinaryParameter)) {
+    		return false;
+    	}
+    	this.removeChange = (RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>) change;
+    	return true;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("parameters")) {
-    	return false;
-    }
-    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.parameters.OrdinaryParameter)) {
-    	return false;
-    }
-    return true;
+    
+    return false;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof RemoveEReference)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchRemoveChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
   }
   

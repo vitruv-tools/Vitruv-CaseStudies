@@ -10,14 +10,14 @@ public class ExecutorJavaToPcm extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction());
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterCreatedReaction());
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction());
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterNameChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterNameChangedReaction());
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction());
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldTypeChangeReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldTypeChangeReaction());
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.ClassMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ClassMethodCreatedReaction());
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction());
-    this.addReaction(mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction.getExpectedChangeType(), new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaNamedElementRenamedReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterCreatedReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterNameChangedReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldTypeChangeReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ClassMethodCreatedReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToPcm.java2PcmMethod.JavaReturnTypeChangedReaction());
   }
 }
