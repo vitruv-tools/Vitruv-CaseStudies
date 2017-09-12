@@ -14,45 +14,62 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
 class ChangedInterfaceRealizationInterfaceReaction extends AbstractReactionRealization {
+  private InsertEReference<InterfaceRealization, Interface> insertChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface> typedChange = (InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface>)change;
-    org.eclipse.uml2.uml.InterfaceRealization affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.eclipse.uml2.uml.Interface newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.eclipse.uml2.uml.InterfaceRealization affectedEObject = insertChange.getAffectedEObject();
+    EReference affectedFeature = insertChange.getAffectedFeature();
+    org.eclipse.uml2.uml.Interface newValue = insertChange.getNewValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedInterfaceRealizationInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedInterfaceRealizationInterfaceReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface> relevantChange = (InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
-    	return false;
-    }
-    if (!relevantChange.getAffectedFeature().getName().equals("supplier")) {
-    	return false;
-    }
-    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Interface)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    insertChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchInsertChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchInsertChange(final EChange change) {
+    if (change instanceof InsertEReference<?, ?>) {
+    	InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface> _localTypedChange = (InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("supplier")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getNewValue() instanceof org.eclipse.uml2.uml.Interface)) {
+    		return false;
+    	}
+    	this.insertChange = (InsertEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

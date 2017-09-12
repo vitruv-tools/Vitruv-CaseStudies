@@ -17,52 +17,67 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
 class CreatedClassReaction extends AbstractReactionRealization {
+  private InsertEReference<CompilationUnit, ConcreteClassifier> insertChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier> typedChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier>)change;
-    org.emftext.language.java.containers.CompilationUnit affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.emftext.language.java.classifiers.ConcreteClassifier newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.emftext.language.java.containers.CompilationUnit affectedEObject = insertChange.getAffectedEObject();
+    EReference affectedFeature = insertChange.getAffectedFeature();
+    org.emftext.language.java.classifiers.ConcreteClassifier newValue = insertChange.getNewValue();
+    				
+    getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
+    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    	resetChanges();
+    	return;
+    }
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreatedClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreatedClassReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier> relevantChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
-    	return false;
-    }
-    if (!relevantChange.getAffectedFeature().getName().equals("classifiers")) {
-    	return false;
-    }
-    if (!(relevantChange.getNewValue() instanceof org.emftext.language.java.classifiers.ConcreteClassifier)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    insertChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchInsertChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier> typedChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier>)change;
-    org.emftext.language.java.containers.CompilationUnit affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.emftext.language.java.classifiers.ConcreteClassifier newValue = typedChange.getNewValue();
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
-    	return false;
-    }
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchInsertChange(final EChange change) {
+    if (change instanceof InsertEReference<?, ?>) {
+    	InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier> _localTypedChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("classifiers")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getNewValue() instanceof org.emftext.language.java.classifiers.ConcreteClassifier)) {
+    		return false;
+    	}
+    	this.insertChange = (InsertEReference<org.emftext.language.java.containers.CompilationUnit, org.emftext.language.java.classifiers.ConcreteClassifier>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private boolean checkUserDefinedPrecondition(final CompilationUnit affectedEObject, final EReference affectedFeature, final ConcreteClassifier newValue) {

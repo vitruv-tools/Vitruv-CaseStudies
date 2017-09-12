@@ -17,49 +17,66 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
 
 @SuppressWarnings("all")
 class ChangedParameterDirectionReaction extends AbstractReactionRealization {
+  private ReplaceSingleValuedEAttribute<Parameter, ParameterDirectionKind> replaceChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind> typedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind>)change;
-    org.eclipse.uml2.uml.Parameter affectedEObject = typedChange.getAffectedEObject();
-    EAttribute affectedFeature = typedChange.getAffectedFeature();
-    org.eclipse.uml2.uml.ParameterDirectionKind oldValue = typedChange.getOldValue();
-    org.eclipse.uml2.uml.ParameterDirectionKind newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.eclipse.uml2.uml.Parameter affectedEObject = replaceChange.getAffectedEObject();
+    EAttribute affectedFeature = replaceChange.getAffectedFeature();
+    org.eclipse.uml2.uml.ParameterDirectionKind oldValue = replaceChange.getOldValue();
+    org.eclipse.uml2.uml.ParameterDirectionKind newValue = replaceChange.getNewValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedParameterDirectionReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedParameterDirectionReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return ReplaceSingleValuedEAttribute.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind> relevantChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Parameter)) {
-    	return false;
-    }
-    if (!relevantChange.getAffectedFeature().getName().equals("direction")) {
-    	return false;
-    }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.ParameterDirectionKind)) {
-    	return false;
-    }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.ParameterDirectionKind)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    replaceChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEAttribute)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchReplaceChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchReplaceChange(final EChange change) {
+    if (change instanceof ReplaceSingleValuedEAttribute<?, ?>) {
+    	ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind> _localTypedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Parameter)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("direction")) {
+    		return false;
+    	}
+    	if (_localTypedChange.isFromNonDefaultValue() && !(_localTypedChange.getOldValue() instanceof org.eclipse.uml2.uml.ParameterDirectionKind)) {
+    		return false;
+    	}
+    	if (_localTypedChange.isToNonDefaultValue() && !(_localTypedChange.getNewValue() instanceof org.eclipse.uml2.uml.ParameterDirectionKind)) {
+    		return false;
+    	}
+    	this.replaceChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.ParameterDirectionKind>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

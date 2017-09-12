@@ -7,41 +7,84 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteRoot;
+import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.root.RemoveRootEObject;
 
 @SuppressWarnings("all")
 class DeletedSystemReaction extends AbstractReactionRealization {
+  private RemoveRootEObject<org.palladiosimulator.pcm.system.System> removeChange;
+  
+  private DeleteEObject<org.palladiosimulator.pcm.system.System> deleteChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    RemoveRootEObject<org.palladiosimulator.pcm.system.System> typedChange = ((RemoveAndDeleteRoot<org.palladiosimulator.pcm.system.System>)change).getRemoveChange();
-    org.palladiosimulator.pcm.system.System oldValue = typedChange.getOldValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.palladiosimulator.pcm.system.System oldValue = removeChange.getOldValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSystemReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSystemReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(oldValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return RemoveAndDeleteRoot.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    RemoveRootEObject<org.palladiosimulator.pcm.system.System> relevantChange = ((RemoveAndDeleteRoot<org.palladiosimulator.pcm.system.System>)change).getRemoveChange();
-    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.system.System)) {
-    	return false;
+  private boolean matchDeleteChange(final EChange change) {
+    if (change instanceof DeleteEObject<?>) {
+    	DeleteEObject<org.palladiosimulator.pcm.system.System> _localTypedChange = (DeleteEObject<org.palladiosimulator.pcm.system.System>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.system.System)) {
+    		return false;
+    	}
+    	this.deleteChange = (DeleteEObject<org.palladiosimulator.pcm.system.System>) change;
+    	return true;
     }
-    return true;
+    
+    return false;
+  }
+  
+  private void resetChanges() {
+    removeChange = null;
+    deleteChange = null;
+    currentlyMatchedChange = 0;
+  }
+  
+  private boolean matchRemoveChange(final EChange change) {
+    if (change instanceof RemoveRootEObject<?>) {
+    	RemoveRootEObject<org.palladiosimulator.pcm.system.System> _localTypedChange = (RemoveRootEObject<org.palladiosimulator.pcm.system.System>) change;
+    	if (!(_localTypedChange.getOldValue() instanceof org.palladiosimulator.pcm.system.System)) {
+    		return false;
+    	}
+    	this.removeChange = (RemoveRootEObject<org.palladiosimulator.pcm.system.System>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof RemoveAndDeleteRoot)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchRemoveChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
+    	return false; // Only proceed on the last of the expected changes
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
+    if (currentlyMatchedChange == 1) {
+    	if (!matchDeleteChange(change)) {
+    		resetChanges();
+    		checkPrecondition(change); // Reexecute to potentially register this as first change
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
   }
   

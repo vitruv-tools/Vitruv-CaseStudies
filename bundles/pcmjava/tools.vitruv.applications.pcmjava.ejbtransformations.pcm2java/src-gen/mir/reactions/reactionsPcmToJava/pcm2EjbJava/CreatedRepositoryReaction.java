@@ -8,42 +8,85 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.compound.CreateAndInsertRoot;
+import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.root.InsertRootEObject;
 
 @SuppressWarnings("all")
 class CreatedRepositoryReaction extends AbstractReactionRealization {
+  private CreateEObject<Repository> createChange;
+  
+  private InsertRootEObject<Repository> insertChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    InsertRootEObject<org.palladiosimulator.pcm.repository.Repository> typedChange = ((CreateAndInsertRoot<org.palladiosimulator.pcm.repository.Repository>)change).getInsertChange();
-    org.palladiosimulator.pcm.repository.Repository newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.palladiosimulator.pcm.repository.Repository newValue = insertChange.getNewValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.CreatedRepositoryReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.CreatedRepositoryReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return CreateAndInsertRoot.class;
+  private void resetChanges() {
+    createChange = null;
+    insertChange = null;
+    currentlyMatchedChange = 0;
   }
   
-  private boolean checkChangeProperties(final EChange change) {
-    InsertRootEObject<org.palladiosimulator.pcm.repository.Repository> relevantChange = ((CreateAndInsertRoot<org.palladiosimulator.pcm.repository.Repository>)change).getInsertChange();
-    if (!(relevantChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.Repository)) {
-    	return false;
+  private boolean matchCreateChange(final EChange change) {
+    if (change instanceof CreateEObject<?>) {
+    	CreateEObject<org.palladiosimulator.pcm.repository.Repository> _localTypedChange = (CreateEObject<org.palladiosimulator.pcm.repository.Repository>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Repository)) {
+    		return false;
+    	}
+    	this.createChange = (CreateEObject<org.palladiosimulator.pcm.repository.Repository>) change;
+    	return true;
     }
-    return true;
+    
+    return false;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof CreateAndInsertRoot)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchCreateChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
+    	return false; // Only proceed on the last of the expected changes
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
+    if (currentlyMatchedChange == 1) {
+    	if (!matchInsertChange(change)) {
+    		resetChanges();
+    		checkPrecondition(change); // Reexecute to potentially register this as first change
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchInsertChange(final EChange change) {
+    if (change instanceof InsertRootEObject<?>) {
+    	InsertRootEObject<org.palladiosimulator.pcm.repository.Repository> _localTypedChange = (InsertRootEObject<org.palladiosimulator.pcm.repository.Repository>) change;
+    	if (!(_localTypedChange.getNewValue() instanceof org.palladiosimulator.pcm.repository.Repository)) {
+    		return false;
+    	}
+    	this.insertChange = (InsertRootEObject<org.palladiosimulator.pcm.repository.Repository>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

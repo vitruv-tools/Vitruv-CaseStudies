@@ -14,45 +14,62 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
 class AddedUsesRelationshipReaction extends AbstractReactionRealization {
+  private InsertEReference<Component, Usage> insertChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage> typedChange = (InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage>)change;
-    org.eclipse.uml2.uml.Component affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.eclipse.uml2.uml.Usage newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.eclipse.uml2.uml.Component affectedEObject = insertChange.getAffectedEObject();
+    EReference affectedFeature = insertChange.getAffectedFeature();
+    org.eclipse.uml2.uml.Usage newValue = insertChange.getNewValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.AddedUsesRelationshipReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.AddedUsesRelationshipReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return InsertEReference.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage> relevantChange = (InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Component)) {
-    	return false;
-    }
-    if (!relevantChange.getAffectedFeature().getName().equals("packagedElement")) {
-    	return false;
-    }
-    if (!(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Usage)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    insertChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof InsertEReference)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchInsertChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchInsertChange(final EChange change) {
+    if (change instanceof InsertEReference<?, ?>) {
+    	InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage> _localTypedChange = (InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Component)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("packagedElement")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getNewValue() instanceof org.eclipse.uml2.uml.Usage)) {
+    		return false;
+    	}
+    	this.insertChange = (InsertEReference<org.eclipse.uml2.uml.Component, org.eclipse.uml2.uml.Usage>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

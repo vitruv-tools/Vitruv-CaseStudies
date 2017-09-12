@@ -10,49 +10,92 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteNonRoot;
+import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
 class DeletedCompositeDataTypeReaction extends AbstractReactionRealization {
+  private RemoveEReference<Repository, CompositeDataType> removeChange;
+  
+  private DeleteEObject<CompositeDataType> deleteChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeDataType> typedChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeDataType>)change).getRemoveChange();
-    org.palladiosimulator.pcm.repository.Repository affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.palladiosimulator.pcm.repository.CompositeDataType oldValue = typedChange.getOldValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.palladiosimulator.pcm.repository.Repository affectedEObject = removeChange.getAffectedEObject();
+    EReference affectedFeature = removeChange.getAffectedFeature();
+    org.palladiosimulator.pcm.repository.CompositeDataType oldValue = removeChange.getOldValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.DeletedCompositeDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.DeletedCompositeDataTypeReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return RemoveAndDeleteNonRoot.class;
+  private boolean matchDeleteChange(final EChange change) {
+    if (change instanceof DeleteEObject<?>) {
+    	DeleteEObject<org.palladiosimulator.pcm.repository.CompositeDataType> _localTypedChange = (DeleteEObject<org.palladiosimulator.pcm.repository.CompositeDataType>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
+    		return false;
+    	}
+    	this.deleteChange = (DeleteEObject<org.palladiosimulator.pcm.repository.CompositeDataType>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
-  private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeDataType> relevantChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeDataType>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Repository)) {
-    	return false;
+  private void resetChanges() {
+    removeChange = null;
+    deleteChange = null;
+    currentlyMatchedChange = 0;
+  }
+  
+  private boolean matchRemoveChange(final EChange change) {
+    if (change instanceof RemoveEReference<?, ?>) {
+    	RemoveEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeDataType> _localTypedChange = (RemoveEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeDataType>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.Repository)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("dataTypes__Repository")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
+    		return false;
+    	}
+    	this.removeChange = (RemoveEReference<org.palladiosimulator.pcm.repository.Repository, org.palladiosimulator.pcm.repository.CompositeDataType>) change;
+    	return true;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("dataTypes__Repository")) {
-    	return false;
-    }
-    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.repository.CompositeDataType)) {
-    	return false;
-    }
-    return true;
+    
+    return false;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof RemoveAndDeleteNonRoot)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchRemoveChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
+    	return false; // Only proceed on the last of the expected changes
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
+    if (currentlyMatchedChange == 1) {
+    	if (!matchDeleteChange(change)) {
+    		resetChanges();
+    		checkPrecondition(change); // Reexecute to potentially register this as first change
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
   }
   

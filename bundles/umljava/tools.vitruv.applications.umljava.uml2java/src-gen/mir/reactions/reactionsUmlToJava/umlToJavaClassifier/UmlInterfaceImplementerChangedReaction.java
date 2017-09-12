@@ -16,49 +16,66 @@ import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValu
 
 @SuppressWarnings("all")
 class UmlInterfaceImplementerChangedReaction extends AbstractReactionRealization {
+  private ReplaceSingleValuedEReference<InterfaceRealization, org.eclipse.uml2.uml.Class> replaceChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class> typedChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class>)change;
-    org.eclipse.uml2.uml.InterfaceRealization affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.eclipse.uml2.uml.Class oldValue = typedChange.getOldValue();
-    org.eclipse.uml2.uml.Class newValue = typedChange.getNewValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.eclipse.uml2.uml.InterfaceRealization affectedEObject = replaceChange.getAffectedEObject();
+    EReference affectedFeature = replaceChange.getAffectedFeature();
+    org.eclipse.uml2.uml.Class oldValue = replaceChange.getOldValue();
+    org.eclipse.uml2.uml.Class newValue = replaceChange.getNewValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlInterfaceImplementerChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlInterfaceImplementerChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return ReplaceSingleValuedEReference.class;
-  }
-  
-  private boolean checkChangeProperties(final EChange change) {
-    ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class> relevantChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class>)change;
-    if (!(relevantChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
-    	return false;
-    }
-    if (!relevantChange.getAffectedFeature().getName().equals("implementingClassifier")) {
-    	return false;
-    }
-    if (relevantChange.isFromNonDefaultValue() && !(relevantChange.getOldValue() instanceof org.eclipse.uml2.uml.Class)) {
-    	return false;
-    }
-    if (relevantChange.isToNonDefaultValue() && !(relevantChange.getNewValue() instanceof org.eclipse.uml2.uml.Class)) {
-    	return false;
-    }
-    return true;
+  private void resetChanges() {
+    replaceChange = null;
+    currentlyMatchedChange = 0;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof ReplaceSingleValuedEReference)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchReplaceChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
+  }
+  
+  private boolean matchReplaceChange(final EChange change) {
+    if (change instanceof ReplaceSingleValuedEReference<?, ?>) {
+    	ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class> _localTypedChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("implementingClassifier")) {
+    		return false;
+    	}
+    	if (_localTypedChange.isFromNonDefaultValue() && !(_localTypedChange.getOldValue() instanceof org.eclipse.uml2.uml.Class)) {
+    		return false;
+    	}
+    	if (_localTypedChange.isToNonDefaultValue() && !(_localTypedChange.getNewValue() instanceof org.eclipse.uml2.uml.Class)) {
+    		return false;
+    	}
+    	this.replaceChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Class>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

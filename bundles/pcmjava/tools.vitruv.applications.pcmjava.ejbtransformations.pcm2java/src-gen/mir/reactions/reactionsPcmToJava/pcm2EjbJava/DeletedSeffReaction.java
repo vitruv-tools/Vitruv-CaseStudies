@@ -10,49 +10,92 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.compound.RemoveAndDeleteNonRoot;
+import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
 class DeletedSeffReaction extends AbstractReactionRealization {
+  private RemoveEReference<BasicComponent, ServiceEffectSpecification> removeChange;
+  
+  private DeleteEObject<ServiceEffectSpecification> deleteChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    RemoveEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> typedChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>)change).getRemoveChange();
-    org.palladiosimulator.pcm.repository.BasicComponent affectedEObject = typedChange.getAffectedEObject();
-    EReference affectedFeature = typedChange.getAffectedFeature();
-    org.palladiosimulator.pcm.seff.ServiceEffectSpecification oldValue = typedChange.getOldValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.palladiosimulator.pcm.repository.BasicComponent affectedEObject = removeChange.getAffectedEObject();
+    EReference affectedFeature = removeChange.getAffectedFeature();
+    org.palladiosimulator.pcm.seff.ServiceEffectSpecification oldValue = removeChange.getOldValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.DeletedSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.DeletedSeffReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return RemoveAndDeleteNonRoot.class;
+  private boolean matchDeleteChange(final EChange change) {
+    if (change instanceof DeleteEObject<?>) {
+    	DeleteEObject<org.palladiosimulator.pcm.seff.ServiceEffectSpecification> _localTypedChange = (DeleteEObject<org.palladiosimulator.pcm.seff.ServiceEffectSpecification>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.seff.ServiceEffectSpecification)) {
+    		return false;
+    	}
+    	this.deleteChange = (DeleteEObject<org.palladiosimulator.pcm.seff.ServiceEffectSpecification>) change;
+    	return true;
+    }
+    
+    return false;
   }
   
-  private boolean checkChangeProperties(final EChange change) {
-    RemoveEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> relevantChange = ((RemoveAndDeleteNonRoot<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>)change).getRemoveChange();
-    if (!(relevantChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.BasicComponent)) {
-    	return false;
+  private void resetChanges() {
+    removeChange = null;
+    deleteChange = null;
+    currentlyMatchedChange = 0;
+  }
+  
+  private boolean matchRemoveChange(final EChange change) {
+    if (change instanceof RemoveEReference<?, ?>) {
+    	RemoveEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification> _localTypedChange = (RemoveEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.palladiosimulator.pcm.repository.BasicComponent)) {
+    		return false;
+    	}
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
+    		return false;
+    	}
+    	if (!(_localTypedChange.getOldValue() instanceof org.palladiosimulator.pcm.seff.ServiceEffectSpecification)) {
+    		return false;
+    	}
+    	this.removeChange = (RemoveEReference<org.palladiosimulator.pcm.repository.BasicComponent, org.palladiosimulator.pcm.seff.ServiceEffectSpecification>) change;
+    	return true;
     }
-    if (!relevantChange.getAffectedFeature().getName().equals("serviceEffectSpecifications__BasicComponent")) {
-    	return false;
-    }
-    if (!(relevantChange.getOldValue() instanceof org.palladiosimulator.pcm.seff.ServiceEffectSpecification)) {
-    	return false;
-    }
-    return true;
+    
+    return false;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof RemoveAndDeleteNonRoot)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchRemoveChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
+    	return false; // Only proceed on the last of the expected changes
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
+    if (currentlyMatchedChange == 1) {
+    	if (!matchDeleteChange(change)) {
+    		resetChanges();
+    		checkPrecondition(change); // Reexecute to potentially register this as first change
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
   }
   

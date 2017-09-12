@@ -14,36 +14,53 @@ import tools.vitruv.framework.change.echange.root.RemoveRootEObject;
 
 @SuppressWarnings("all")
 class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
+  private RemoveRootEObject<CompilationUnit> removeChange;
+  
+  private int currentlyMatchedChange;
+  
   public void executeReaction(final EChange change) {
-    RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit> typedChange = (RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit>)change;
-    org.emftext.language.java.containers.CompilationUnit oldValue = typedChange.getOldValue();
+    if (!checkPrecondition(change)) {
+    	return;
+    }
+    org.emftext.language.java.containers.CompilationUnit oldValue = removeChange.getOldValue();
+    				
+    getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
+    				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompUnitDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompUnitDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(oldValue, routinesFacade);
+    
+    resetChanges();
   }
   
-  public static Class<? extends EChange> getExpectedChangeType() {
-    return RemoveRootEObject.class;
+  private void resetChanges() {
+    removeChange = null;
+    currentlyMatchedChange = 0;
   }
   
-  private boolean checkChangeProperties(final EChange change) {
-    RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit> relevantChange = (RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit>)change;
-    if (!(relevantChange.getOldValue() instanceof org.emftext.language.java.containers.CompilationUnit)) {
-    	return false;
+  private boolean matchRemoveChange(final EChange change) {
+    if (change instanceof RemoveRootEObject<?>) {
+    	RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit> _localTypedChange = (RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit>) change;
+    	if (!(_localTypedChange.getOldValue() instanceof org.emftext.language.java.containers.CompilationUnit)) {
+    		return false;
+    	}
+    	this.removeChange = (RemoveRootEObject<org.emftext.language.java.containers.CompilationUnit>) change;
+    	return true;
     }
-    return true;
+    
+    return false;
   }
   
   public boolean checkPrecondition(final EChange change) {
-    if (!(change instanceof RemoveRootEObject)) {
-    	return false;
+    if (currentlyMatchedChange == 0) {
+    	if (!matchRemoveChange(change)) {
+    		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
     }
-    getLogger().trace("Passed change type check of reaction " + this.getClass().getName());
-    if (!checkChangeProperties(change)) {
-    	return false;
-    }
-    getLogger().trace("Passed change properties check of reaction " + this.getClass().getName());
-    getLogger().trace("Passed complete precondition check of reaction " + this.getClass().getName());
+    
     return true;
   }
   
