@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.UMLFactory
 import tools.vitruv.applications.umlclassumlcomponents.comp2class.UmlComp2UmlClassChangePropagation
 import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.framework.domains.VitruvDomain
 import tools.vitruv.framework.tests.VitruviusApplicationTest
 
 import static org.junit.Assert.*
@@ -34,8 +33,7 @@ abstract class AbstractComp2ClassTest extends VitruviusApplicationTest {
 	
 	//Hack for handling of one singular UML model instead of two
 	override protected getCorrespondenceModel() {
-		val VitruvDomain umlDomain = this.getVitruvDomains().iterator().next
-		return this.getVirtualModel().getCorrespondenceModel(umlDomain.getURI(), umlDomain.getURI()) 
+		return this.getVirtualModel().getCorrespondenceModel() 
 	}
 		
 	//SaveAndSynchronize & commit all pending userInteractions
