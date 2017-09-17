@@ -14,7 +14,9 @@
 	<name>Bundle Modules</name>
 
 	<modules>
+		<module>umljava</module>
 		<module>pcmjava</module>
+		<module>pcmumlcomponents</module>
 	</modules>
 
 </project>

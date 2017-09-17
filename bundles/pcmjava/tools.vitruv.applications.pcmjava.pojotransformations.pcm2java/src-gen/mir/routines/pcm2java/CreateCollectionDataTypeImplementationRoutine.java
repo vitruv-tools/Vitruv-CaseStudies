@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
@@ -23,6 +24,7 @@ import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -44,41 +46,36 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
       return _innerType_CollectionDataType;
     }
     
-    public boolean getCorrespondingModelElementsPreconditionDatatypesPackage(final CollectionDataType dataType, final org.emftext.language.java.classifiers.Class innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage) {
+    public boolean getCorrespondingModelElementsPreconditionDatatypesPackage(final CollectionDataType dataType, final Optional<org.emftext.language.java.classifiers.Class> innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage) {
       String _name = datatypesPackage.getName();
       boolean _equals = Objects.equal(_name, "datatypes");
       return _equals;
     }
     
-    public EObject getCorrepondenceSourceDatatypesPackage(final CollectionDataType dataType, final org.emftext.language.java.classifiers.Class innerTypeClass) {
+    public EObject getCorrepondenceSourceDatatypesPackage(final CollectionDataType dataType, final Optional<org.emftext.language.java.classifiers.Class> innerTypeClass) {
       Repository _repository__DataType = dataType.getRepository__DataType();
       return _repository__DataType;
     }
     
-    public void callRoutine1(final CollectionDataType dataType, final org.emftext.language.java.classifiers.Class innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
-      DataType _innerType_CollectionDataType = dataType.getInnerType_CollectionDataType();
-      final TypeReference innerTypeRef = Pcm2JavaHelper.createTypeReference(_innerType_CollectionDataType, innerTypeClass);
+    public void callRoutine1(final CollectionDataType dataType, final Optional<org.emftext.language.java.classifiers.Class> innerTypeClass, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
+      final TypeReference innerTypeRef = Pcm2JavaHelper.createTypeReference(dataType.getInnerType_CollectionDataType(), innerTypeClass);
       TypeReference innerTypeClassOrWrapper = innerTypeRef;
       if ((innerTypeRef instanceof PrimitiveType)) {
-        TypeReference _wrapperTypeReferenceForPrimitiveType = Pcm2JavaHelper.getWrapperTypeReferenceForPrimitiveType(innerTypeRef);
-        innerTypeClassOrWrapper = _wrapperTypeReferenceForPrimitiveType;
+        innerTypeClassOrWrapper = JavaModificationUtil.getWrapperTypeReferenceForPrimitiveType(innerTypeRef);
       }
       Set<Class<?>> collectionDataTypes = new HashSet<Class<?>>();
       Iterables.<Class<?>>addAll(collectionDataTypes, Collections.<Class<? extends AbstractCollection>>unmodifiableList(CollectionLiterals.<Class<? extends AbstractCollection>>newArrayList(ArrayList.class, LinkedList.class, Vector.class, Stack.class, HashSet.class)));
       int _size = collectionDataTypes.size();
       final List<String> collectionDataTypeNames = new ArrayList<String>(_size);
       for (final Class<?> collectionDataType : collectionDataTypes) {
-        String _name = collectionDataType.getName();
-        collectionDataTypeNames.add(_name);
+        collectionDataTypeNames.add(collectionDataType.getName());
       }
       final String selectTypeMsg = "Please select type (or interface) that should be used for the type";
       final int selectedType = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, selectTypeMsg, ((String[])Conversions.unwrapArray(collectionDataTypeNames, String.class)));
       final Set<Class<?>> _converted_collectionDataTypes = (Set<Class<?>>)collectionDataTypes;
       final Class<?> selectedClass = ((Class<?>[])Conversions.unwrapArray(_converted_collectionDataTypes, Class.class))[selectedType];
-      String _entityName = dataType.getEntityName();
-      _routinesFacade.createJavaClass(dataType, datatypesPackage, _entityName);
-      String _name_1 = selectedClass.getName();
-      _routinesFacade.addSuperTypeToDataType(dataType, innerTypeClassOrWrapper, _name_1);
+      _routinesFacade.createJavaClass(dataType, datatypesPackage, dataType.getEntityName());
+      _routinesFacade.addSuperTypeToDataType(dataType, innerTypeClassOrWrapper, selectedClass.getName());
     }
   }
   
@@ -91,27 +88,34 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
   
   private CollectionDataType dataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCollectionDataTypeImplementationRoutine with input:");
-    getLogger().debug("   CollectionDataType: " + this.dataType);
+    getLogger().debug("   dataType: " + this.dataType);
     
-    org.emftext.language.java.classifiers.Class innerTypeClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceInnerTypeClass(dataType), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(innerTypeClass);
+    	Optional<org.emftext.language.java.classifiers.Class> innerTypeClass = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceInnerTypeClass(dataType), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(innerTypeClass.isPresent() ? innerTypeClass.get() : null);
     org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDatatypesPackage(dataType, innerTypeClass), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(dataType, innerTypeClass, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (datatypesPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(dataType, innerTypeClass, datatypesPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

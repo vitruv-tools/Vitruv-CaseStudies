@@ -1,12 +1,12 @@
 package mir.routines.pcm2depInjectJava;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.impl.ParametersFactoryImpl;
 import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -27,11 +27,11 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Parameter parameter, final InterfaceMethod interfaceMethod, final org.emftext.language.java.classifiers.Class javaParameterTypeClass, final OrdinaryParameter javaParameter) {
+    public EObject getElement1(final Parameter parameter, final InterfaceMethod interfaceMethod, final Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass, final OrdinaryParameter javaParameter) {
       return javaParameter;
     }
     
-    public void update0Element(final Parameter parameter, final InterfaceMethod interfaceMethod, final org.emftext.language.java.classifiers.Class javaParameterTypeClass, final OrdinaryParameter javaParameter) {
+    public void update0Element(final Parameter parameter, final InterfaceMethod interfaceMethod, final Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass, final OrdinaryParameter javaParameter) {
       EList<org.emftext.language.java.parameters.Parameter> _parameters = interfaceMethod.getParameters();
       _parameters.add(javaParameter);
     }
@@ -41,19 +41,17 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
       return _operationSignature__Parameter;
     }
     
-    public EObject getElement2(final Parameter parameter, final InterfaceMethod interfaceMethod, final org.emftext.language.java.classifiers.Class javaParameterTypeClass, final OrdinaryParameter javaParameter) {
+    public EObject getElement2(final Parameter parameter, final InterfaceMethod interfaceMethod, final Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass, final OrdinaryParameter javaParameter) {
       return parameter;
     }
     
-    public EObject getElement3(final Parameter parameter, final InterfaceMethod interfaceMethod, final org.emftext.language.java.classifiers.Class javaParameterTypeClass, final OrdinaryParameter javaParameter) {
+    public EObject getElement3(final Parameter parameter, final InterfaceMethod interfaceMethod, final Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass, final OrdinaryParameter javaParameter) {
       return interfaceMethod;
     }
     
-    public void updateJavaParameterElement(final Parameter parameter, final InterfaceMethod interfaceMethod, final org.emftext.language.java.classifiers.Class javaParameterTypeClass, final OrdinaryParameter javaParameter) {
-      String _parameterName = parameter.getParameterName();
-      javaParameter.setName(_parameterName);
-      DataType _dataType__Parameter = parameter.getDataType__Parameter();
-      final TypeReference parameterTypeReference = Pcm2JavaHelper.createTypeReference(_dataType__Parameter, javaParameterTypeClass);
+    public void updateJavaParameterElement(final Parameter parameter, final InterfaceMethod interfaceMethod, final Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass, final OrdinaryParameter javaParameter) {
+      javaParameter.setName(parameter.getParameterName());
+      final TypeReference parameterTypeReference = Pcm2JavaHelper.createTypeReference(parameter.getDataType__Parameter(), javaParameterTypeClass);
       javaParameter.setTypeReference(parameterTypeReference);
     }
     
@@ -72,26 +70,32 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
   
   private Parameter parameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateParameterRoutine with input:");
-    getLogger().debug("   Parameter: " + this.parameter);
+    getLogger().debug("   parameter: " + this.parameter);
     
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(parameter), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
-    org.emftext.language.java.classifiers.Class javaParameterTypeClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJavaParameterTypeClass(parameter, interfaceMethod), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(javaParameterTypeClass);
-    OrdinaryParameter javaParameter = ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
+    	Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceJavaParameterTypeClass(parameter, interfaceMethod), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(javaParameterTypeClass.isPresent() ? javaParameterTypeClass.get() : null);
+    org.emftext.language.java.parameters.OrdinaryParameter javaParameter = org.emftext.language.java.parameters.impl.ParametersFactoryImpl.eINSTANCE.createOrdinaryParameter();
+    notifyObjectCreated(javaParameter);
     userExecution.updateJavaParameterElement(parameter, interfaceMethod, javaParameterTypeClass, javaParameter);
     
     addCorrespondenceBetween(userExecution.getElement1(parameter, interfaceMethod, javaParameterTypeClass, javaParameter), userExecution.getElement2(parameter, interfaceMethod, javaParameterTypeClass, javaParameter), "");
@@ -100,5 +104,7 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     userExecution.update0Element(parameter, interfaceMethod, javaParameterTypeClass, javaParameter);
     
     postprocessElements();
+    
+    return true;
   }
 }

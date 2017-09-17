@@ -23,11 +23,11 @@ import org.palladiosimulator.pcm.system.SystemFactory
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.domains.java.JavaNamespace
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 /**
  * Maps a JaMoPP class to a PCM Components or System. 
@@ -56,7 +56,7 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * sets the name correspondece for JaMoPP-class names and PCM-entityName Attribut
 	 */
 	override setCorrespondenceForFeatures() {
-		JaMoPP2PCMUtils.addName2EntityNameCorrespondence(this.featureCorrespondenceMap)
+		Java2PcmUtils.addName2EntityNameCorrespondence(this.featureCorrespondenceMap)
 	}
 
 	/**
@@ -74,17 +74,17 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * The class represents a datatype, if
 	 *      vi) it is in the datatypes package
 	 */
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		val jaMoPPClass = eObject as Class
 
 		if (!classIsPublic(jaMoPPClass)) {
 			return null;
 		}
 		// ii) + iv)
-		val jaMoPPPackage = PCM2JaMoPPUtils.getContainingPackageFromCorrespondenceModel(jaMoPPClass,
+		val jaMoPPPackage = Pcm2JavaUtils.getContainingPackageFromCorrespondenceModel(jaMoPPClass,
 			correspondenceModel)
 		var InterfaceProvidingRequiringEntity pcmComponentOrSystem = null
-		if (null != jaMoPPPackage) {
+		if (null !== jaMoPPPackage) {
 			if (jaMoPPPackage.name.equals("datatypes")) {
 
 				// vi) class is in the datatypes packge --> create a new datatype
@@ -104,9 +104,9 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 
 		}
 
-		if (null == pcmComponentOrSystem) {
+		if (null === pcmComponentOrSystem) {
 			pcmComponentOrSystem = askUserWhetherToCreateComponentOrSystem(jaMoPPClass)
-			if (null == pcmComponentOrSystem) {
+			if (null === pcmComponentOrSystem) {
 				return null
 			} else {
 				return pcmComponentOrSystem.toList
@@ -155,11 +155,9 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * Creates the correspondences and returns the TransformationChangeResult object containing the PCM element that should be saved
 	 */
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
-		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.createNewCorrespondingEObjects(newValue, newCorrespondingEObjects, correspondenceModel,
-			transformationResult)
-		return transformationResult
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
+		Java2PcmUtils.createNewCorrespondingEObjects(newValue, newCorrespondingEObjects, correspondenceModel,
+			resourceAccess)
 	}
 
 	/**
@@ -170,11 +168,11 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * If the class is not the only class in the package ask the user whether to remove the component
 	 * and package and all classes 
 	 */
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 		val jaMoPPClass = eObject as Class
 		val correspondences = correspondenceModel.getCorrespondences(jaMoPPClass.toList);
 		var eObjectsToDelete = new ArrayList<EObject>()
-		if (null != correspondences && 0 < correspondences.size) {
+		if (null !== correspondences && 0 < correspondences.size) {
 			val classifiersInSamePackage = jaMoPPClass.containingCompilationUnit.classifiersInSamePackage
 			if (!classifiersInSamePackage.nullOrEmpty) {
 
@@ -196,8 +194,7 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * Called when a method, a modifier or field has been removed
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		val transformationResult = new ChangePropagationResult
+		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 		val components = correspondenceModel.getCorrespondingEObjectsByType(oldAffectedEObject,
 			RepositoryComponent)
 		var EObject eObjectToSave = null
@@ -223,30 +220,26 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 		} else if (!components.nullOrEmpty &&
 			JavaNamespace.JAMOPP_MEMBERS_REFERENCE.equals(affectedReference.name) &&
 			oldValue instanceof Field) {
-			PCMJaMoPPUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel)
+			PcmJavaUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel, resourceAccess)
 
 		}   
 		else {
-			PCMJaMoPPUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel)
+			PcmJavaUtils.removeCorrespondenceAndAllObjects(oldValue, oldAffectedEObject, correspondenceModel, resourceAccess)
  		}
-		return transformationResult
 	}
 
 				/**
 				 * if the class is renamed rename the corresponding objects on PCM side 
 				 */
 				override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute,
-					Object oldValue, Object newValue) {
-					val transformationResult = new ChangePropagationResult
-					JaMoPP2PCMUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue,
-						newValue, featureCorrespondenceMap, correspondenceModel, transformationResult)
-					return transformationResult
+					Object oldValue, Object newValue, ResourceAccess resourceAccess) {
+					Java2PcmUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue,
+						newValue, featureCorrespondenceMap, correspondenceModel, resourceAccess)
 				}
 
 				override createNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference,
-					EObject newValue, EObject[] newCorrespondingEObjects) {
+					EObject newValue, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 					logger.warn("method should not be called for ClassMappingTransformation transformation")
-					return new ChangePropagationResult
 				}
 
 				def private createDatatype(Classifier jaMoPPClass) {
@@ -254,14 +247,14 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 						"has been created in the datatypes pacakage. Please decide which kind of data type should be created."
 					switch (super.modalTextUserinteracting(msg, #["Create CompositeDataType", "CreateCollectionDataType", "Do not create a data type (not recommended)"])) {
 						case SELECT_CREATE_COMPOSITE_DATA_TYPE: {
-							val repo = JaMoPP2PCMUtils.getRepository(correspondenceModel)
+							val repo = Java2PcmUtils.getRepository(correspondenceModel)
 							val compositeDataType = RepositoryFactory.eINSTANCE.createCompositeDataType
 							compositeDataType.entityName = jaMoPPClass.name
 							compositeDataType.setRepository__DataType(repo)
 							return compositeDataType.toList
 						}
 						case SELECT_CREATE_COLLECTION_DATA_TYPE: {
-							val repo = JaMoPP2PCMUtils.getRepository(correspondenceModel)
+							val repo = Java2PcmUtils.getRepository(correspondenceModel)
 							val collectionDataType = RepositoryFactory.eINSTANCE.createCollectionDataType
 							collectionDataType.entityName = jaMoPPClass.name
 							collectionDataType.setRepository__DataType(repo)
@@ -295,7 +288,7 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 						"Do not create a Component or System correspondence for the class")
 						switch (selection) {
 							case SELECT_CREATE_BASIC_COMPONENT: {
-								val repo = JaMoPP2PCMUtils.getRepository(correspondenceModel)
+								val repo = Java2PcmUtils.getRepository(correspondenceModel)
 								val basicComponent = RepositoryFactory.eINSTANCE.createBasicComponent
 								basicComponent.entityName = jaMoPPClass.name
 								basicComponent.repository__RepositoryComponent = repo
@@ -307,7 +300,7 @@ class ClassMappingTransformation extends EmptyEObjectMappingTransformation {
 								return pcmSystem
 							}
 							case SELECT_CREATE_COMPOSITE_COMPONENT: {
-								val repo = JaMoPP2PCMUtils.getRepository(correspondenceModel)
+								val repo = Java2PcmUtils.getRepository(correspondenceModel)
 								val compositeComponent = RepositoryFactory.eINSTANCE.createCompositeComponent
 								compositeComponent.entityName = jaMoPPClass.name
 								compositeComponent.repository__RepositoryComponent = repo

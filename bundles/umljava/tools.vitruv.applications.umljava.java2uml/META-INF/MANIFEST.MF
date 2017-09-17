@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Vitruvius UML-Java Transformations Java -> Uml
+Bundle-SymbolicName: tools.vitruv.applications.umljava.java2uml
+Bundle-Version: 0.1.0.qualifier
+Eclipse-ExtensibleAPI: true
+Require-Bundle: com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ tools.vitruv.domains.uml,
+ tools.vitruv.domains.java,
+ org.apache.log4j,
+ org.eclipse.emf.ecore,
+ org.eclipse.core.resources,
+ tools.vitruv.framework.util,
+ tools.vitruv.framework.change,
+ tools.vitruv.framework.change.processing,
+ tools.vitruv.framework.correspondence,
+ tools.vitruv.framework.userinteraction,
+ tools.vitruv.extensions.dslsruntime.reactions,
+ tools.vitruv.extensions.dslsruntime.mapping,
+ tools.vitruv.domains.java.util,
+ org.eclipse.uml2.uml,
+ org.emftext.language.java,
+ tools.vitruv.applications.umljava.util,
+ tools.vitruv.applications.umljava.uml2java,
+ org.apache.commons.io;bundle-version="2.2.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: tools.vitruv.applications.umljava.java2uml
+

@@ -25,8 +25,7 @@ import tools.vitruv.framework.change.echange.feature.attribute.InsertEAttributeV
 import tools.vitruv.framework.change.echange.feature.attribute.RemoveEAttributeValue
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.tuid.TuidManager
-import tools.vitruv.framework.util.command.ChangePropagationResult
-import tools.vitruv.framework.change.echange.compound.CompoundEChange
+import tools.vitruv.framework.util.command.ResourceAccess
 
 public class TransformationExecutor {
 
@@ -52,50 +51,40 @@ public class TransformationExecutor {
 		}
 	}
 
-	def public ChangePropagationResult executeTransformationForChange(EChange change) {
-		val transformationResult = new ChangePropagationResult();
-		if (change instanceof CompoundEChange) {
-			for (atomicChange : change.atomicChanges) {
-				transformationResult.integrateResult(executeTransformation(atomicChange))
-				updateTUIDOfAffectedEObjectInEChange(atomicChange)
-			}
-		}
-		transformationResult.integrateResult(executeTransformation(change))
-		updateTUIDOfAffectedEObjectInEChange(change)	
-		
-		return transformationResult
+	def public void executeTransformationForChange(EChange change, ResourceAccess resourceAccess) {
+		executeTransformation(change, resourceAccess)
+		updateTuidOfAffectedEObjectInEChange(change)
 	}
 
-	def protected updateTUIDOfAffectedEObjectInEChange(EChange change) {
+	def protected updateTuidOfAffectedEObjectInEChange(EChange change) {
 		if (change instanceof JavaFeatureEChange<?,?>) {
 			val JavaFeatureEChange<?,?> eFeatureChange = change as JavaFeatureEChange<?,?>
 			val EObject oldAffectedEObject = eFeatureChange.oldAffectedEObject
 			val EObject newAffectedEObject = eFeatureChange.affectedEObject
-			if (null != oldAffectedEObject && null != newAffectedEObject) {
+			if (null !== oldAffectedEObject && null !== newAffectedEObject) {
 				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject)
 			}
 		}
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(EChange change) {
+	def private dispatch void executeTransformation(EChange change, ResourceAccess resourceAccess) {
 		logger.error("No executeTransformation method found for change " + change + ". Change not synchronized")
-		return null
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(InsertRootEObject<? extends EObject> createRootEObject) {
+	def private dispatch void executeTransformation(InsertRootEObject<? extends EObject> createRootEObject, ResourceAccess resourceAccess) {
 		val EObject[] createdObjects = mappingTransformations.
 			claimForMappedClassOrImplementingInterface(createRootEObject.newValue.class).createEObject(
-				createRootEObject.newValue)
+				createRootEObject.newValue, resourceAccess)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(createRootEObject.newValue.class).
-			createRootEObject(createRootEObject.newValue, createdObjects)
+			createRootEObject(createRootEObject.newValue, createdObjects, resourceAccess)
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(RemoveRootEObject<? extends EObject> deleteRootEObject) {
+	def private dispatch void executeTransformation(RemoveRootEObject<? extends EObject> deleteRootEObject, ResourceAccess resourceAccess) {
 		val EObject[] removedEObjects = mappingTransformations.
 			claimForMappedClassOrImplementingInterface(deleteRootEObject.oldValue.class).removeEObject(
-				deleteRootEObject.oldValue)
+				deleteRootEObject.oldValue, resourceAccess)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(deleteRootEObject.oldValue.class).
-			deleteRootEObject(deleteRootEObject.oldValue, removedEObjects)
+			deleteRootEObject(deleteRootEObject.oldValue, removedEObjects, resourceAccess)
 	}
 
 //	def private dispatch TransformationResult executeTransformation(ReplaceRootEObject<?> replaceRootEObject) {
@@ -109,7 +98,7 @@ public class TransformationExecutor {
 //			replaceRoot(replaceRootEObject.oldValue, replaceRootEObject.newValue, removedEObjects, createdObjects)
 //	}
 
-	def private dispatch ChangePropagationResult executeTransformation(InsertEReference<? extends EObject,? extends EObject> insertEReference) {
+	def private dispatch void executeTransformation(InsertEReference<? extends EObject,? extends EObject> insertEReference, ResourceAccess resourceAccess) {
 		val EObject oldAffectedEObject = if (insertEReference instanceof JavaInsertEReference<?,?>) {
 			insertEReference.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
@@ -120,22 +109,22 @@ public class TransformationExecutor {
 
 		val EObject[] createdEObjects = mappingTransformations.
 			claimForMappedClassOrImplementingInterface(insertEReference.newValue.class).
-			createEObject(insertEReference.newValue)
+			createEObject(insertEReference.newValue, resourceAccess)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			insertEReference.affectedEObject.class).createNonRootEObjectInList(
 			insertEReference.affectedEObject, oldAffectedEObject,
 			insertEReference.affectedFeature, insertEReference.newValue,
-			insertEReference.index, createdEObjects)
+			insertEReference.index, createdEObjects, resourceAccess)
 		} else {
 			mappingTransformations.claimForMappedClassOrImplementingInterface(
 			insertEReference.class).
 			insertNonContaimentEReference(oldAffectedEObject,
 				insertEReference.affectedFeature, insertEReference.newValue,
-				insertEReference.index)
+				insertEReference.index, resourceAccess)
 		}
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(RemoveEReference<? extends EObject,? extends EObject> removeEReference) {
+	def private dispatch void executeTransformation(RemoveEReference<? extends EObject,? extends EObject> removeEReference, ResourceAccess resourceAccess) {
 		val oldAffectedEObject = if (removeEReference instanceof JavaRemoveEReference<?,?>) {
 			removeEReference.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
@@ -148,18 +137,18 @@ public class TransformationExecutor {
 
 		val EObject[] eObjectsToDelete = mappingTransformations.
 			claimForMappedClassOrImplementingInterface(removeEReference.oldValue.class).
-			removeEObject(removeEReference.oldValue)
+			removeEObject(removeEReference.oldValue, resourceAccess)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class).deleteNonRootEObjectInList(
 			removeEReference.affectedEObject, oldAffectedEObject,
 			removeEReference.affectedFeature, removeEReference.oldValue,
-			removeEReference.index, eObjectsToDelete)
+			removeEReference.index, eObjectsToDelete, resourceAccess)
 		} else {
 			mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class).
 			removeNonContainmentEReference(oldAffectedEObject,
 				removeEReference.affectedFeature, removeEReference.oldValue,
-				removeEReference.index)
+				removeEReference.index, resourceAccess)
 		}
 	}
 
@@ -183,37 +172,37 @@ public class TransformationExecutor {
 //			replaceNonRootEObjectInList.index, eObjectsToDelete, createdEObjects)
 //	}
 
-	def private dispatch ChangePropagationResult executeTransformation(ReplaceSingleValuedEReference<? extends EObject,? extends EObject> replaceSingleValuedEReference) {
+	def private dispatch void executeTransformation(ReplaceSingleValuedEReference<? extends EObject,? extends EObject> replaceSingleValuedEReference, ResourceAccess resourceAccess) {
 		val oldAffectedEObject = if (replaceSingleValuedEReference instanceof JavaReplaceSingleValuedEReference<?,?>) {
 			replaceSingleValuedEReference.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
 			replaceSingleValuedEReference.affectedEObject;
 		}
 		if (replaceSingleValuedEReference.isContainment) {
-		if (replaceSingleValuedEReference.oldValue == null && replaceSingleValuedEReference.newValue != null) {
+		if (replaceSingleValuedEReference.oldValue === null && replaceSingleValuedEReference.newValue !== null) {
 		mappingTransformations.claimForMappedClassOrImplementingInterface(replaceSingleValuedEReference.newValue.class)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class)
 
 		val EObject[] createdEObjects = mappingTransformations.
 			claimForMappedClassOrImplementingInterface(replaceSingleValuedEReference.newValue.class).
-			createEObject(replaceSingleValuedEReference.newValue)
+			createEObject(replaceSingleValuedEReference.newValue, resourceAccess)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			replaceSingleValuedEReference.affectedEObject.class).createNonRootEObjectSingle(
 			oldAffectedEObject, replaceSingleValuedEReference.affectedFeature,
-			replaceSingleValuedEReference.newValue, createdEObjects)
-		} else if (replaceSingleValuedEReference.oldValue != null && replaceSingleValuedEReference.newValue == null) {
+			replaceSingleValuedEReference.newValue, createdEObjects, resourceAccess)
+		} else if (replaceSingleValuedEReference.oldValue !== null && replaceSingleValuedEReference.newValue === null) {
 			mappingTransformations.claimForMappedClassOrImplementingInterface(replaceSingleValuedEReference.oldValue.class)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class)
 
 		val EObject[] eObjectsToDelete = mappingTransformations.
 			claimForMappedClassOrImplementingInterface(replaceSingleValuedEReference.oldValue.class).
-			removeEObject(replaceSingleValuedEReference.oldValue)
+			removeEObject(replaceSingleValuedEReference.oldValue, resourceAccess)
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class).deleteNonRootEObjectSingle(
 			oldAffectedEObject, replaceSingleValuedEReference.affectedFeature,
-			replaceSingleValuedEReference.oldValue, eObjectsToDelete)
+			replaceSingleValuedEReference.oldValue, eObjectsToDelete, resourceAccess)
 		} else {
 			mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class)
@@ -222,14 +211,14 @@ public class TransformationExecutor {
 			oldAffectedEObject.class).replaceNonRootEObjectSingle(
 			replaceSingleValuedEReference.affectedEObject, oldAffectedEObject,
 			replaceSingleValuedEReference.affectedFeature, replaceSingleValuedEReference.oldValue,
-			replaceSingleValuedEReference.newValue)
+			replaceSingleValuedEReference.newValue, resourceAccess)
 		}
 		} else {
 			mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class).
 			updateSingleValuedNonContainmentEReference(oldAffectedEObject,
 				replaceSingleValuedEReference.affectedFeature,
-				replaceSingleValuedEReference.oldValue, replaceSingleValuedEReference.newValue)
+				replaceSingleValuedEReference.oldValue, replaceSingleValuedEReference.newValue, resourceAccess)
 		}
 	}
 
@@ -260,8 +249,8 @@ public class TransformationExecutor {
 //				permuteNonContainmentEReferenceValues.newIndexForElementAt)
 //	}
 
-	def private dispatch ChangePropagationResult executeTransformation(
-		ReplaceSingleValuedEAttribute<? extends EObject,? extends Object> replaceSingleValuedEAttribute) {
+	def private dispatch void executeTransformation(
+		ReplaceSingleValuedEAttribute<? extends EObject,? extends Object> replaceSingleValuedEAttribute, ResourceAccess resourceAccess) {
 		val oldAffectedEObject = if (replaceSingleValuedEAttribute instanceof JavaReplaceSingleValuedEAttribute<?,?>) {
 			replaceSingleValuedEAttribute.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
@@ -270,10 +259,10 @@ public class TransformationExecutor {
 		mappingTransformations.claimForMappedClassOrImplementingInterface(
 			oldAffectedEObject.class).updateSingleValuedEAttribute(
 			oldAffectedEObject, replaceSingleValuedEAttribute.affectedFeature,
-			replaceSingleValuedEAttribute.oldValue, replaceSingleValuedEAttribute.newValue)
+			replaceSingleValuedEAttribute.oldValue, replaceSingleValuedEAttribute.newValue, resourceAccess)
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(InsertEAttributeValue<? extends EObject,? extends Object> insertEAttributeValue) {
+	def private dispatch void executeTransformation(InsertEAttributeValue<? extends EObject,? extends Object> insertEAttributeValue, ResourceAccess resourceAccess) {
 		val oldAffectedEObject = if (insertEAttributeValue instanceof JavaInsertEAttributeValue<?,?>) {
 			insertEAttributeValue.oldAffectedEObject as EObject  // Cast is only necessary due to Xcore/Xtend problem
 		} else {
@@ -281,10 +270,10 @@ public class TransformationExecutor {
 		}
 		mappingTransformations.claimForMappedClassOrImplementingInterface(oldAffectedEObject.class).
 			insertEAttributeValue(oldAffectedEObject, insertEAttributeValue.affectedFeature,
-				insertEAttributeValue.newValue, insertEAttributeValue.index)
+				insertEAttributeValue.newValue, insertEAttributeValue.index, resourceAccess)
 	}
 
-	def private dispatch ChangePropagationResult executeTransformation(RemoveEAttributeValue<? extends EObject,? extends Object> removeEAttributeValue) {
+	def private dispatch void executeTransformation(RemoveEAttributeValue<? extends EObject,? extends Object> removeEAttributeValue, ResourceAccess resourceAccess) {
 		val oldAffectedEObject = if (removeEAttributeValue instanceof JavaRemoveEAttributeValue<?,?>) {
 			removeEAttributeValue.oldAffectedEObject as EObject // Cast is only necessary due to Xcore/Xtend problem
 		} else {
@@ -292,7 +281,7 @@ public class TransformationExecutor {
 		}
 		mappingTransformations.claimForMappedClassOrImplementingInterface(oldAffectedEObject.class).
 			removeEAttributeValue(oldAffectedEObject, removeEAttributeValue.affectedFeature,
-				removeEAttributeValue.oldValue, removeEAttributeValue.index)
+				removeEAttributeValue.oldValue, removeEAttributeValue.index, resourceAccess)
 	}
 
 //	def private dispatch TransformationResult executeTransformation(ReplaceEAttributeValue<?> replaceEAttributeValue) {
@@ -353,7 +342,7 @@ public class TransformationExecutor {
 //	}
 
 	def public addMapping(EObjectMappingTransformation transformation) {
-		if (null != correspondenceModel) {
+		if (null !== correspondenceModel) {
 			transformation.setCorrespondenceModel(correspondenceModel)
 		}
 		mappingTransformations.putClaimingNullOrSameMapped(transformation.classOfMappedEObject, transformation)

@@ -1,6 +1,7 @@
 package mir.routines.pcm2java;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.pcm2java.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.InterfaceMethod;
@@ -25,13 +26,12 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Parameter parameter, final InterfaceMethod interfaceMethod, final OrdinaryParameter javaParameter, final org.emftext.language.java.classifiers.Class javaParameterTypeClass) {
+    public EObject getElement1(final Parameter parameter, final InterfaceMethod interfaceMethod, final OrdinaryParameter javaParameter, final Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass) {
       return parameter;
     }
     
-    public void update0Element(final Parameter parameter, final InterfaceMethod interfaceMethod, final OrdinaryParameter javaParameter, final org.emftext.language.java.classifiers.Class javaParameterTypeClass) {
-      DataType _dataType__Parameter = parameter.getDataType__Parameter();
-      final TypeReference parameterTypeReference = Pcm2JavaHelper.createTypeReference(_dataType__Parameter, javaParameterTypeClass);
+    public void update0Element(final Parameter parameter, final InterfaceMethod interfaceMethod, final OrdinaryParameter javaParameter, final Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass) {
+      final TypeReference parameterTypeReference = Pcm2JavaHelper.createTypeReference(parameter.getDataType__Parameter(), javaParameterTypeClass);
       javaParameter.setTypeReference(parameterTypeReference);
     }
     
@@ -59,37 +59,46 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
   
   private Parameter parameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeParameterTypeRoutine with input:");
-    getLogger().debug("   Parameter: " + this.parameter);
+    getLogger().debug("   parameter: " + this.parameter);
     
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(parameter), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
-    OrdinaryParameter javaParameter = getCorrespondingElement(
+    org.emftext.language.java.parameters.OrdinaryParameter javaParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaParameter(parameter, interfaceMethod), // correspondence source supplier
-    	OrdinaryParameter.class,
-    	(OrdinaryParameter _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.parameters.OrdinaryParameter.class,
+    	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (javaParameter == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaParameter);
-    org.emftext.language.java.classifiers.Class javaParameterTypeClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJavaParameterTypeClass(parameter, interfaceMethod, javaParameter), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(javaParameterTypeClass);
+    	Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceJavaParameterTypeClass(parameter, interfaceMethod, javaParameter), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(javaParameterTypeClass.isPresent() ? javaParameterTypeClass.get() : null);
     // val updatedElement userExecution.getElement1(parameter, interfaceMethod, javaParameter, javaParameterTypeClass);
     userExecution.update0Element(parameter, interfaceMethod, javaParameter, javaParameterTypeClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

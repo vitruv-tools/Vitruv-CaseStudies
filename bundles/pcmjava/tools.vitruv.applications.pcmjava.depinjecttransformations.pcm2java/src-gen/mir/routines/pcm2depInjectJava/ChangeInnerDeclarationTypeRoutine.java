@@ -2,7 +2,6 @@ package mir.routines.pcm2depInjectJava;
 
 import java.io.IOException;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -31,8 +30,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     }
     
     public void update0Element(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference, final Field compositeTypeField, final Method compositeTypeGetterMethod, final Method compositeTypeSetterMethod) {
-      TypeReference _copy = EcoreUtil.<TypeReference>copy(newTypeReference);
-      compositeTypeField.setTypeReference(_copy);
+      compositeTypeField.setTypeReference(EcoreUtil.<TypeReference>copy(newTypeReference));
     }
     
     public String getRetrieveTag1(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference, final Field compositeTypeField) {
@@ -64,20 +62,16 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     }
     
     public void update2Element(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference, final Field compositeTypeField, final Method compositeTypeGetterMethod, final Method compositeTypeSetterMethod) {
-      EList<Parameter> _parameters = compositeTypeSetterMethod.getParameters();
-      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(_parameters);
+      boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(compositeTypeSetterMethod.getParameters());
       boolean _not = (!_isNullOrEmpty);
       if (_not) {
-        EList<Parameter> _parameters_1 = compositeTypeSetterMethod.getParameters();
-        final Parameter parameter = _parameters_1.get(0);
-        TypeReference _copy = EcoreUtil.<TypeReference>copy(newTypeReference);
-        parameter.setTypeReference(_copy);
+        final Parameter parameter = compositeTypeSetterMethod.getParameters().get(0);
+        parameter.setTypeReference(EcoreUtil.<TypeReference>copy(newTypeReference));
       }
     }
     
     public void update1Element(final InnerDeclaration innerDeclaration, final TypeReference newTypeReference, final Field compositeTypeField, final Method compositeTypeGetterMethod, final Method compositeTypeSetterMethod) {
-      TypeReference _copy = EcoreUtil.<TypeReference>copy(newTypeReference);
-      compositeTypeGetterMethod.setTypeReference(_copy);
+      compositeTypeGetterMethod.setTypeReference(EcoreUtil.<TypeReference>copy(newTypeReference));
     }
   }
   
@@ -92,36 +86,42 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
   
   private TypeReference newTypeReference;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInnerDeclarationTypeRoutine with input:");
-    getLogger().debug("   InnerDeclaration: " + this.innerDeclaration);
-    getLogger().debug("   TypeReference: " + this.newTypeReference);
+    getLogger().debug("   innerDeclaration: " + this.innerDeclaration);
+    getLogger().debug("   newTypeReference: " + this.newTypeReference);
     
-    Field compositeTypeField = getCorrespondingElement(
+    org.emftext.language.java.members.Field compositeTypeField = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeTypeField(innerDeclaration, newTypeReference), // correspondence source supplier
-    	Field.class,
-    	(Field _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.members.Field.class,
+    	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compositeTypeField == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeTypeField);
-    Method compositeTypeGetterMethod = getCorrespondingElement(
+    org.emftext.language.java.members.Method compositeTypeGetterMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeTypeGetterMethod(innerDeclaration, newTypeReference, compositeTypeField), // correspondence source supplier
-    	Method.class,
-    	(Method _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(innerDeclaration, newTypeReference, compositeTypeField));
+    	org.emftext.language.java.members.Method.class,
+    	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
+    	userExecution.getRetrieveTag1(innerDeclaration, newTypeReference, compositeTypeField), 
+    	false // asserted
+    	);
     if (compositeTypeGetterMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeTypeGetterMethod);
-    Method compositeTypeSetterMethod = getCorrespondingElement(
+    org.emftext.language.java.members.Method compositeTypeSetterMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompositeTypeSetterMethod(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod), // correspondence source supplier
-    	Method.class,
-    	(Method _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag2(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod));
+    	org.emftext.language.java.members.Method.class,
+    	(org.emftext.language.java.members.Method _element) -> true, // correspondence precondition checker
+    	userExecution.getRetrieveTag2(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod), 
+    	false // asserted
+    	);
     if (compositeTypeSetterMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compositeTypeSetterMethod);
     // val updatedElement userExecution.getElement1(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
@@ -134,5 +134,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     userExecution.update2Element(innerDeclaration, newTypeReference, compositeTypeField, compositeTypeGetterMethod, compositeTypeSetterMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

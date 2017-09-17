@@ -2,13 +2,10 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.commons.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.RepositoryComponent;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -29,13 +26,11 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final Repository repo, final NamedElement namedElement, final BasicComponent basicComponent) {
-      EList<RepositoryComponent> _components__Repository = repo.getComponents__Repository();
-      _components__Repository.add(basicComponent);
+      repo.getComponents__Repository().add(basicComponent);
     }
     
     public void updateBasicComponentElement(final Repository repo, final NamedElement namedElement, final BasicComponent basicComponent) {
-      String _name = namedElement.getName();
-      basicComponent.setEntityName(_name);
+      basicComponent.setEntityName(namedElement.getName());
     }
     
     public EObject getElement2(final Repository repo, final NamedElement namedElement, final BasicComponent basicComponent) {
@@ -58,12 +53,13 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
   
   private NamedElement namedElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateBasicComponentRoutine with input:");
-    getLogger().debug("   Repository: " + this.repo);
-    getLogger().debug("   NamedElement: " + this.namedElement);
+    getLogger().debug("   repo: " + this.repo);
+    getLogger().debug("   namedElement: " + this.namedElement);
     
-    BasicComponent basicComponent = RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
+    org.palladiosimulator.pcm.repository.BasicComponent basicComponent = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createBasicComponent();
+    notifyObjectCreated(basicComponent);
     userExecution.updateBasicComponentElement(repo, namedElement, basicComponent);
     
     addCorrespondenceBetween(userExecution.getElement1(repo, namedElement, basicComponent), userExecution.getElement2(repo, namedElement, basicComponent), "");
@@ -72,5 +68,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     userExecution.update0Element(repo, namedElement, basicComponent);
     
     postprocessElements();
+    
+    return true;
   }
 }

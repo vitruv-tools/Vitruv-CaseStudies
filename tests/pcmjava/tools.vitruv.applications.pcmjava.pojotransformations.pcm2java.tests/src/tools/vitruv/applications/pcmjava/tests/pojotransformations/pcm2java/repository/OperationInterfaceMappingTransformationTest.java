@@ -7,25 +7,25 @@ import org.junit.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class OperationInterfaceMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class OperationInterfaceMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testAddInterface() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
-                PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.INTERFACE_NAME);
 
         this.assertOperationInterfaceCorrespondences(opInterface);
     }
 
     @Test
     public void testRenameInterface() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
-        OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo, PCM2JaMoPPTestUtils.INTERFACE_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+        OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo, Pcm2JavaTestUtils.INTERFACE_NAME);
 
         opInterface = this.renameInterfaceAndSync(opInterface);
 

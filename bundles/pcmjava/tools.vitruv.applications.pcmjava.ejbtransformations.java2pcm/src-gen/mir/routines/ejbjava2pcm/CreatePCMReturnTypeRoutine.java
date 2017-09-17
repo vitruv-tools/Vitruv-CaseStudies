@@ -6,9 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypeReference;
 import org.palladiosimulator.pcm.repository.DataType;
-import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -30,10 +28,8 @@ public class CreatePCMReturnTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final TypeReference returnType, final OperationSignature opSignature, final Method javaMethod) {
-      OperationInterface _interface__OperationSignature = opSignature.getInterface__OperationSignature();
-      Repository _repository__Interface = _interface__OperationSignature.getRepository__Interface();
-      long _arrayDimension = javaMethod.getArrayDimension();
-      final DataType pcmDataType = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(returnType, this.correspondenceModel, this.userInteracting, _repository__Interface, _arrayDimension);
+      final DataType pcmDataType = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(returnType, this.correspondenceModel, this.userInteracting, 
+        opSignature.getInterface__OperationSignature().getRepository__Interface(), javaMethod.getArrayDimension());
       opSignature.setReturnType__OperationSignature(pcmDataType);
     }
   }
@@ -51,15 +47,17 @@ public class CreatePCMReturnTypeRoutine extends AbstractRepairRoutineRealization
   
   private Method javaMethod;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePCMReturnTypeRoutine with input:");
-    getLogger().debug("   TypeReference: " + this.returnType);
-    getLogger().debug("   OperationSignature: " + this.opSignature);
-    getLogger().debug("   Method: " + this.javaMethod);
+    getLogger().debug("   returnType: " + this.returnType);
+    getLogger().debug("   opSignature: " + this.opSignature);
+    getLogger().debug("   javaMethod: " + this.javaMethod);
     
     // val updatedElement userExecution.getElement1(returnType, opSignature, javaMethod);
     userExecution.update0Element(returnType, opSignature, javaMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

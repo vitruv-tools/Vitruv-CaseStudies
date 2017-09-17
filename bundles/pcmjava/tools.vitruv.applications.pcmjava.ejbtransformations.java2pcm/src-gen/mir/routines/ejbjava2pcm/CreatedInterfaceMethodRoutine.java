@@ -42,22 +42,26 @@ public class CreatedInterfaceMethodRoutine extends AbstractRepairRoutineRealizat
   
   private InterfaceMethod method;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedInterfaceMethodRoutine with input:");
-    getLogger().debug("   Interface: " + this.interf);
-    getLogger().debug("   InterfaceMethod: " + this.method);
+    getLogger().debug("   interf: " + this.interf);
+    getLogger().debug("   method: " + this.method);
     
-    OperationInterface opInterface = getCorrespondingElement(
+    org.palladiosimulator.pcm.repository.OperationInterface opInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceOpInterface(interf, method), // correspondence source supplier
-    	OperationInterface.class,
-    	(OperationInterface _element) -> true, // correspondence precondition checker
-    	null);
+    	org.palladiosimulator.pcm.repository.OperationInterface.class,
+    	(org.palladiosimulator.pcm.repository.OperationInterface _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (opInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(opInterface);
     userExecution.callRoutine1(interf, method, opInterface, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

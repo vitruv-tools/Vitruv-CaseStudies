@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.function.Consumer;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -18,8 +17,6 @@ import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 import org.palladiosimulator.pcm.repository.OperationSignature;
-import org.palladiosimulator.pcm.repository.ProvidedRole;
-import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -42,8 +39,7 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
     }
     
     public void update0Element(final OperationSignature operationSignature, final InterfaceMethod interfaceMethod) {
-      String _entityName = operationSignature.getEntityName();
-      interfaceMethod.setName(_entityName);
+      interfaceMethod.setName(operationSignature.getEntityName());
     }
     
     public EObject getCorrepondenceSourceInterfaceMethod(final OperationSignature operationSignature) {
@@ -53,32 +49,25 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
     public void callRoutine1(final OperationSignature operationSignature, final InterfaceMethod interfaceMethod, @Extension final RoutinesFacade _routinesFacade) {
       final OperationInterface operationInterface = operationSignature.getInterface__OperationSignature();
       final HashSet<InterfaceProvidingEntity> implementingComponents = Sets.<InterfaceProvidingEntity>newHashSet();
-      Repository _repository__Interface = operationInterface.getRepository__Interface();
-      EList<RepositoryComponent> _components__Repository = _repository__Interface.getComponents__Repository();
       final Consumer<RepositoryComponent> _function = (RepositoryComponent comp) -> {
-        EList<ProvidedRole> _providedRoles_InterfaceProvidingEntity = comp.getProvidedRoles_InterfaceProvidingEntity();
-        final Iterable<OperationProvidedRole> opProvRoles = Iterables.<OperationProvidedRole>filter(_providedRoles_InterfaceProvidingEntity, OperationProvidedRole.class);
+        final Iterable<OperationProvidedRole> opProvRoles = Iterables.<OperationProvidedRole>filter(comp.getProvidedRoles_InterfaceProvidingEntity(), OperationProvidedRole.class);
         final Function1<OperationProvidedRole, Boolean> _function_1 = (OperationProvidedRole it) -> {
-          OperationInterface _providedInterface__OperationProvidedRole = it.getProvidedInterface__OperationProvidedRole();
-          String _id = _providedInterface__OperationProvidedRole.getId();
+          String _id = it.getProvidedInterface__OperationProvidedRole().getId();
           String _id_1 = operationInterface.getId();
           return Boolean.valueOf(Objects.equal(_id, _id_1));
         };
-        Iterable<OperationProvidedRole> _filter = IterableExtensions.<OperationProvidedRole>filter(opProvRoles, _function_1);
         final Consumer<OperationProvidedRole> _function_2 = (OperationProvidedRole opProRole) -> {
-          InterfaceProvidingEntity _providingEntity_ProvidedRole = opProRole.getProvidingEntity_ProvidedRole();
-          implementingComponents.add(_providingEntity_ProvidedRole);
+          implementingComponents.add(opProRole.getProvidingEntity_ProvidedRole());
         };
-        _filter.forEach(_function_2);
+        IterableExtensions.<OperationProvidedRole>filter(opProvRoles, _function_1).forEach(_function_2);
       };
-      _components__Repository.forEach(_function);
+      operationInterface.getRepository__Interface().getComponents__Repository().forEach(_function);
       final Iterable<BasicComponent> basicComponents = Iterables.<BasicComponent>filter(implementingComponents, BasicComponent.class);
       final Consumer<BasicComponent> _function_1 = (BasicComponent it) -> {
-        EList<ServiceEffectSpecification> _serviceEffectSpecifications__BasicComponent = it.getServiceEffectSpecifications__BasicComponent();
         final Consumer<ServiceEffectSpecification> _function_2 = (ServiceEffectSpecification it_1) -> {
           _routinesFacade.updateSEFFImplementingMethodName(it_1);
         };
-        _serviceEffectSpecifications__BasicComponent.forEach(_function_2);
+        it.getServiceEffectSpecifications__BasicComponent().forEach(_function_2);
       };
       basicComponents.forEach(_function_1);
     }
@@ -93,17 +82,19 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
   
   private OperationSignature operationSignature;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameMethodForOperationSignatureRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.operationSignature);
+    getLogger().debug("   operationSignature: " + this.operationSignature);
     
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(operationSignature), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
     // val updatedElement userExecution.getElement1(operationSignature, interfaceMethod);
@@ -112,5 +103,7 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
     userExecution.callRoutine1(operationSignature, interfaceMethod, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

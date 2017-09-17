@@ -38,21 +38,25 @@ public class DeleteMethodForSeffRoutine extends AbstractRepairRoutineRealization
   
   private ServiceEffectSpecification seff;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteMethodForSeffRoutine with input:");
-    getLogger().debug("   ServiceEffectSpecification: " + this.seff);
+    getLogger().debug("   seff: " + this.seff);
     
-    ClassMethod classMethod = getCorrespondingElement(
+    org.emftext.language.java.members.ClassMethod classMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassMethod(seff), // correspondence source supplier
-    	ClassMethod.class,
-    	(ClassMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.members.ClassMethod.class,
+    	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classMethod);
     deleteObject(userExecution.getElement1(seff, classMethod));
     
     postprocessElements();
+    
+    return true;
   }
 }

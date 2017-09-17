@@ -1,8 +1,8 @@
 package mir.routines.pcm2depInjectJava;
 
+import edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
@@ -19,9 +19,8 @@ import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.ComposedStructure;
 import org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector;
 import org.palladiosimulator.pcm.repository.OperationInterface;
-import org.palladiosimulator.pcm.repository.OperationProvidedRole;
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils;
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils;
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -46,25 +45,21 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
     }
     
     public void callRoutine1(final ProvidedDelegationConnector providedDelegationConnector, final ComposedStructure pcmSystem, final ClassMethod configureMethod, @Extension final RoutinesFacade _routinesFacade) {
-      OperationProvidedRole _innerProvidedRole_ProvidedDelegationConnector = providedDelegationConnector.getInnerProvidedRole_ProvidedDelegationConnector();
-      final OperationInterface opInterface = _innerProvidedRole_ProvidedDelegationConnector.getProvidedInterface__OperationProvidedRole();
+      final OperationInterface opInterface = providedDelegationConnector.getInnerProvidedRole_ProvidedDelegationConnector().getProvidedInterface__OperationProvidedRole();
       ConcreteClassifier _containingConcreteClassifier = configureMethod.getContainingConcreteClassifier();
       final org.emftext.language.java.classifiers.Class systemClass = ((org.emftext.language.java.classifiers.Class) _containingConcreteClassifier);
-      Set<Interface> _correspondingEObjectsByType = CorrespondenceModelUtil.<Interface, Correspondence>getCorrespondingEObjectsByType(this.correspondenceModel, opInterface, Interface.class);
-      final Interface jaMoPPInterface = CollectionBridge.<Interface>claimOne(_correspondingEObjectsByType);
-      final NamespaceClassifierReference namespaceClassifierRef = PCM2JaMoPPUtils.createNamespaceClassifierReference(jaMoPPInterface);
+      final Interface jaMoPPInterface = IterableUtil.<Set<Interface>, Interface>claimOne(CorrespondenceModelUtil.<Interface, Correspondence>getCorrespondingEObjectsByType(this.correspondenceModel, opInterface, Interface.class));
+      final NamespaceClassifierReference namespaceClassifierRef = JavaModificationUtil.createNamespaceClassifierReference(jaMoPPInterface);
       EList<TypeReference> _implements = systemClass.getImplements();
       for (final TypeReference impl : _implements) {
-        boolean _hasSameTargetReference = PCMJaMoPPUtils.hasSameTargetReference(namespaceClassifierRef, impl);
+        boolean _hasSameTargetReference = PcmJavaUtils.hasSameTargetReference(namespaceClassifierRef, impl);
         if (_hasSameTargetReference) {
           return;
         }
       }
-      EList<TypeReference> _implements_1 = systemClass.getImplements();
-      _implements_1.add(namespaceClassifierRef);
-      final Import classifierImport = PCM2JaMoPPUtils.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface);
-      List<EObject> _list = CollectionBridge.<EObject>toList(pcmSystem);
-      this.correspondenceModel.createAndAddCorrespondence(_list, Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(namespaceClassifierRef, classifierImport)));
+      systemClass.getImplements().add(namespaceClassifierRef);
+      final Import classifierImport = JavaModificationUtil.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface);
+      this.correspondenceModel.createAndAddCorrespondence(CollectionBridge.<EObject>toList(pcmSystem), Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(namespaceClassifierRef, classifierImport)));
     }
   }
   
@@ -79,22 +74,26 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
   
   private ComposedStructure pcmSystem;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddedProvidedDelegationConnectorRoutine with input:");
-    getLogger().debug("   ProvidedDelegationConnector: " + this.providedDelegationConnector);
-    getLogger().debug("   ComposedStructure: " + this.pcmSystem);
+    getLogger().debug("   providedDelegationConnector: " + this.providedDelegationConnector);
+    getLogger().debug("   pcmSystem: " + this.pcmSystem);
     
-    ClassMethod configureMethod = getCorrespondingElement(
+    org.emftext.language.java.members.ClassMethod configureMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceConfigureMethod(providedDelegationConnector, pcmSystem), // correspondence source supplier
-    	ClassMethod.class,
-    	(ClassMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.members.ClassMethod.class,
+    	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (configureMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(configureMethod);
     userExecution.callRoutine1(providedDelegationConnector, pcmSystem, configureMethod, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

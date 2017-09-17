@@ -20,9 +20,9 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF
 import org.palladiosimulator.pcm.seff.SeffFactory
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class ClassMethodMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -38,12 +38,12 @@ class ClassMethodMappingTransformation extends EmptyEObjectMappingTransformation
 	 * if the class maps to a basic component and implements an interface and the new method matches to the interface method
 	 * we create an emtpy SEFF for the method
 	 */
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		val classMethod = eObject as ClassMethod
 		classMethod.createSEFFIfImplementsInterfaceMethod()
 	}
 	
-	override removeEObject(EObject eObject){
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess){
 		return null
 	}
 	
@@ -52,11 +52,10 @@ class ClassMethodMappingTransformation extends EmptyEObjectMappingTransformation
 	 * Check if the class method implements an interface an update/generate a new seff if necessary
 	 */
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
+		Object newValue, ResourceAccess resourceAccess) {
 		val oldAffectedEObject = EcoreUtil.copy(affectedEObject) as ClassMethod
 		oldAffectedEObject.eSet(affectedAttribute, oldValue)
-		checkAndUpdateCorrespondence(affectedEObject, oldAffectedEObject)
-		return new ChangePropagationResult
+		checkAndUpdateCorrespondence(affectedEObject, oldAffectedEObject, resourceAccess)
 	}
 	
 	
@@ -65,9 +64,8 @@ class ClassMethodMappingTransformation extends EmptyEObjectMappingTransformation
      *  Check if the class method implements an interface an update/generate a new seff if necessray  
      */
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
-		checkAndUpdateCorrespondence(newAffectedEObject, oldAffectedEObject)
-		return new ChangePropagationResult
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
+		checkAndUpdateCorrespondence(newAffectedEObject, oldAffectedEObject, resourceAccess)
 	}
 	
 
@@ -76,16 +74,15 @@ class ClassMethodMappingTransformation extends EmptyEObjectMappingTransformation
 	 * Check if the class method implements an interface an update/generate a new seff if necessray
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
-		checkAndUpdateCorrespondence(newAffectedEObject, oldAffectedEObject)
-		return new ChangePropagationResult
+		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
+		checkAndUpdateCorrespondence(newAffectedEObject, oldAffectedEObject, resourceAccess)
 	}
 
 
-	def private checkAndUpdateCorrespondence(EObject newAffectedEObject, EObject oldAffectedEObject) {
+	def private checkAndUpdateCorrespondence(EObject newAffectedEObject, EObject oldAffectedEObject, ResourceAccess resourceAccess) {
 		val rdSEFFs = correspondenceModel.getCorrespondingEObjectsByType(oldAffectedEObject, ResourceDemandingSEFF)
 		if(!rdSEFFs.nullOrEmpty){
-			removeEObject(oldAffectedEObject)
+			removeEObject(oldAffectedEObject, resourceAccess)
 		}
 		val newClassMethod = newAffectedEObject as ClassMethod
 		val newSEFFs = newClassMethod.createSEFFIfImplementsInterfaceMethod
@@ -140,13 +137,13 @@ class ClassMethodMappingTransformation extends EmptyEObjectMappingTransformation
 	}
 	
 	def private sameSignature(Method interfaceMethod, ClassMethod classMethod) {
-		PCMJaMoPPUtils.hasSameSignature(interfaceMethod, classMethod)
+		PcmJavaUtils.hasSameSignature(interfaceMethod, classMethod)
 	}
 	
 	def private findImplementingInterfacesFromTypeRefs(EList<TypeReference> typeReferences) {
 		val implementingInterfaces = new ArrayList<Interface>
 		for(typeRef : typeReferences){
-			val classifier = JaMoPP2PCMUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeRef)
+			val classifier = Java2PcmUtils.getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeRef)
 			if(classifier instanceof Interface){
 				implementingInterfaces.add(classifier)
 			}

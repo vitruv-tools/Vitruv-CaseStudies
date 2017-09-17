@@ -2,11 +2,9 @@ package mir.routines.pcm2depInjectJava;
 
 import java.io.IOException;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.emftext.language.java.parameters.Parameter;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -28,8 +26,7 @@ public class RemoveCorrespondingParameterFromConstructorRoutine extends Abstract
     }
     
     public boolean getCorrespondingModelElementsPreconditionParam(final Constructor ctor, final NamedElement correspondenceSource, final OrdinaryParameter param) {
-      EList<Parameter> _parameters = ctor.getParameters();
-      boolean _contains = _parameters.contains(param);
+      boolean _contains = ctor.getParameters().contains(param);
       return _contains;
     }
     
@@ -49,22 +46,26 @@ public class RemoveCorrespondingParameterFromConstructorRoutine extends Abstract
   
   private NamedElement correspondenceSource;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveCorrespondingParameterFromConstructorRoutine with input:");
-    getLogger().debug("   Constructor: " + this.ctor);
-    getLogger().debug("   NamedElement: " + this.correspondenceSource);
+    getLogger().debug("   ctor: " + this.ctor);
+    getLogger().debug("   correspondenceSource: " + this.correspondenceSource);
     
-    OrdinaryParameter param = getCorrespondingElement(
+    org.emftext.language.java.parameters.OrdinaryParameter param = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceParam(ctor, correspondenceSource), // correspondence source supplier
-    	OrdinaryParameter.class,
-    	(OrdinaryParameter _element) -> userExecution.getCorrespondingModelElementsPreconditionParam(ctor, correspondenceSource, _element), // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.parameters.OrdinaryParameter.class,
+    	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> userExecution.getCorrespondingModelElementsPreconditionParam(ctor, correspondenceSource, _element), // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (param == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(param);
     deleteObject(userExecution.getElement1(ctor, correspondenceSource, param));
     
     postprocessElements();
+    
+    return true;
   }
 }

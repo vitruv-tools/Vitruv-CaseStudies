@@ -3,33 +3,33 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm;
 import org.junit.Test;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 
-import tools.vitruv.applications.pcmjava.tests.util.JaMoPP2PCMTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
+import tools.vitruv.applications.pcmjava.tests.util.Java2PcmTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class ClassMethodMappingTransformationTest extends Java2PCMPackageMappingTransformationTest {
+public class ClassMethodMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
     @Test
     public void testAddClassMethodWithCorrespondence() throws Throwable {
         // create repo
         super.addRepoContractsAndDatatypesPackage();
-        this.testUserInteractor.addNextSelections(JaMoPP2PCMTransformationTest.SELECT_NOTHING_DECIDE_LATER);
+        this.getUserInteractor().addNextSelections(Java2PcmTransformationTest.SELECT_NOTHING_DECIDE_LATER);
         // create component implementing class
-        super.addPackageAndImplementingClass(PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME);
+        super.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
         // create interface
-        super.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts", PCM2JaMoPPTestUtils.INTERFACE_NAME);
+        super.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts", Pcm2JavaTestUtils.INTERFACE_NAME);
         // create interface method
-        super.addMethodToInterfaceWithCorrespondence(PCM2JaMoPPTestUtils.INTERFACE_NAME,
-                PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME);
+        super.addMethodToInterfaceWithCorrespondence(Pcm2JavaTestUtils.INTERFACE_NAME,
+                Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
         // add implements/provided role
         super.addImplementsCorrespondingToOperationProvidedRoleToClass(
-                PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Impl", PCM2JaMoPPTestUtils.INTERFACE_NAME);
+                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME);
 
         // actual test: add class method to implementing class that overrides the interface
         final ResourceDemandingSEFF correspondingSeff = super.addClassMethodToClassThatOverridesInterfaceMethod(
-                PCM2JaMoPPTestUtils.BASIC_COMPONENT_NAME + "Impl", PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME);
+                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Impl", Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
 
         // assert the correspondingSEFF
-        assertCorrespondingSEFF(correspondingSeff,  PCM2JaMoPPTestUtils.OPERATION_SIGNATURE_1_NAME);
+        assertCorrespondingSEFF(correspondingSeff,  Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
     }
 
 }

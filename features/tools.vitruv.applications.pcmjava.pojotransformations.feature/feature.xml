@@ -23,15 +23,30 @@
          id="tools.vitruv.applications.pcmjava.feature"
          version="0.1.0.qualifier"/>
 
-   <plugin
-         id="tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+   <requires>
+      <import plugin="com.google.guava"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.eclipse.xtext.xbase.lib"/>
+      <import plugin="org.eclipse.xtend.lib" version="2.12.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtend.lib.macro"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.emftext.language.java"/>
+      <import plugin="org.apache.log4j" version="1.2.15" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.emf.ecore.xmi" version="2.9.1" match="greaterOrEqual"/>
+      <import plugin="org.emftext.language.java.resource"/>
+      <import plugin="org.emftext.language.java.resource.java"/>
+      <import plugin="org.emftext.commons.antlr3_4_0" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.emftext.language.java.resource.bcel"/>
+      <import feature="tools.vitruv.framework.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0.qualifier"/>
+      <import feature="tools.vitruv.domains.java.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="0.2.0"/>
+      <import feature="edu.kit.ipd.sdq.commons.util.emf.feature" version="1.1.0"/>
+   </requires>
 
    <plugin
-         id="tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.pcm2java"
+         id="tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm"
          download-size="0"
          install-size="0"
          version="0.0.0"

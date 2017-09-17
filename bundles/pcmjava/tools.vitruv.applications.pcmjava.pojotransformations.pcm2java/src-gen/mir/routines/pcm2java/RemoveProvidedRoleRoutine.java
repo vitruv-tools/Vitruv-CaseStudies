@@ -47,26 +47,30 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
   
   private ProvidedRole providedRole;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveProvidedRoleRoutine with input:");
-    getLogger().debug("   ProvidedRole: " + this.providedRole);
+    getLogger().debug("   providedRole: " + this.providedRole);
     
-    ClassifierImport requiredInterfaceImport = getCorrespondingElement(
+    org.emftext.language.java.imports.ClassifierImport requiredInterfaceImport = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRequiredInterfaceImport(providedRole), // correspondence source supplier
-    	ClassifierImport.class,
-    	(ClassifierImport _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.imports.ClassifierImport.class,
+    	(org.emftext.language.java.imports.ClassifierImport _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (requiredInterfaceImport == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(requiredInterfaceImport);
-    NamespaceClassifierReference namespaceClassifierReference = getCorrespondingElement(
+    org.emftext.language.java.types.NamespaceClassifierReference namespaceClassifierReference = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceNamespaceClassifierReference(providedRole, requiredInterfaceImport), // correspondence source supplier
-    	NamespaceClassifierReference.class,
-    	(NamespaceClassifierReference _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.types.NamespaceClassifierReference.class,
+    	(org.emftext.language.java.types.NamespaceClassifierReference _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (namespaceClassifierReference == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(namespaceClassifierReference);
     deleteObject(userExecution.getElement1(providedRole, requiredInterfaceImport, namespaceClassifierReference));
@@ -74,5 +78,7 @@ public class RemoveProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     deleteObject(userExecution.getElement2(providedRole, requiredInterfaceImport, namespaceClassifierReference));
     
     postprocessElements();
+    
+    return true;
   }
 }

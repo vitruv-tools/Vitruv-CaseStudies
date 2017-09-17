@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.ClassMethod;
-import org.palladiosimulator.pcm.repository.Signature;
 import org.palladiosimulator.pcm.seff.ServiceEffectSpecification;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -26,9 +25,7 @@ public class UpdateSEFFImplementingMethodNameRoutine extends AbstractRepairRouti
     }
     
     public void update0Element(final ServiceEffectSpecification seff, final ClassMethod classMethod) {
-      Signature _describedService__SEFF = seff.getDescribedService__SEFF();
-      String _entityName = _describedService__SEFF.getEntityName();
-      classMethod.setName(_entityName);
+      classMethod.setName(seff.getDescribedService__SEFF().getEntityName());
     }
     
     public EObject getCorrepondenceSourceClassMethod(final ServiceEffectSpecification seff) {
@@ -45,22 +42,26 @@ public class UpdateSEFFImplementingMethodNameRoutine extends AbstractRepairRouti
   
   private ServiceEffectSpecification seff;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine UpdateSEFFImplementingMethodNameRoutine with input:");
-    getLogger().debug("   ServiceEffectSpecification: " + this.seff);
+    getLogger().debug("   seff: " + this.seff);
     
-    ClassMethod classMethod = getCorrespondingElement(
+    org.emftext.language.java.members.ClassMethod classMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassMethod(seff), // correspondence source supplier
-    	ClassMethod.class,
-    	(ClassMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.members.ClassMethod.class,
+    	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classMethod);
     // val updatedElement userExecution.getElement1(seff, classMethod);
     userExecution.update0Element(seff, classMethod);
     
     postprocessElements();
+    
+    return true;
   }
 }

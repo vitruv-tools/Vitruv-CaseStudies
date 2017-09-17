@@ -8,8 +8,6 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
-import org.emftext.language.java.members.impl.MembersFactoryImpl;
-import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -41,10 +39,8 @@ public class CreateMethodForOperationSignatureRoutine extends AbstractRepairRout
     }
     
     public void callRoutine1(final OperationSignature operationSignature, final Interface javaInterface, final InterfaceMethod interfaceMethod, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = operationSignature.getEntityName();
-      interfaceMethod.setName(_entityName);
-      DataType _returnType__OperationSignature = operationSignature.getReturnType__OperationSignature();
-      _routinesFacade.changeInterfaceMethodReturnType(interfaceMethod, _returnType__OperationSignature);
+      interfaceMethod.setName(operationSignature.getEntityName());
+      _routinesFacade.changeInterfaceMethodReturnType(interfaceMethod, operationSignature.getReturnType__OperationSignature());
       EList<Member> _members = javaInterface.getMembers();
       _members.add(interfaceMethod);
     }
@@ -59,25 +55,30 @@ public class CreateMethodForOperationSignatureRoutine extends AbstractRepairRout
   
   private OperationSignature operationSignature;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateMethodForOperationSignatureRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.operationSignature);
+    getLogger().debug("   operationSignature: " + this.operationSignature);
     
-    Interface javaInterface = getCorrespondingElement(
+    org.emftext.language.java.classifiers.Interface javaInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaInterface(operationSignature), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.classifiers.Interface.class,
+    	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (javaInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaInterface);
-    InterfaceMethod interfaceMethod = MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
+    notifyObjectCreated(interfaceMethod);
     
     addCorrespondenceBetween(userExecution.getElement1(operationSignature, javaInterface, interfaceMethod), userExecution.getElement2(operationSignature, javaInterface, interfaceMethod), "");
     
     userExecution.callRoutine1(operationSignature, javaInterface, interfaceMethod, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -18,11 +18,11 @@ import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.domains.java.JavaNamespace
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -31,7 +31,7 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 	}
 
 	override setCorrespondenceForFeatures() {
-		JaMoPP2PCMUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap)
+		Java2PcmUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap)
 	}
 
 	/**
@@ -47,8 +47,7 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * iv) AssemblyContext: If the field is in a class that represents a ComposedProvidingRequiringEntity
 	 * 	   (a CompositeComponent or a System) it can either correspond to an assemblyContext or an OperationRequiredRole
 	 */
-	@Override
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		val field = eObject as Field
 
 		val fieldContainingClassifierCorrespondences = correspondenceModel.getCorrespondingEObjects(
@@ -70,15 +69,15 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 		}
 
 		val correspondingOperationRequiredRoles = field.checkAndAddOperationRequiredRolesCorrepondencesToField()
-		if (null != correspondingOperationRequiredRoles) {
+		if (null !== correspondingOperationRequiredRoles) {
 			newCorrespondingEObjects.addAll(correspondingOperationRequiredRoles)
 		}
 		val correspondingComposedProvidingRequiringEntitys = fieldContainingClassifierCorrespondences.filter(
 			typeof(ComposedProvidingRequiringEntity))
 		if (!correspondingComposedProvidingRequiringEntitys.nullOrEmpty &&
-			null != JaMoPP2PCMUtils.getTargetClassifierFromTypeReference(field.typeReference)) {
+			null !== Java2PcmUtils.getTargetClassifierFromTypeReference(field.typeReference)) {
 			// new field is in a ComposedProvidingRequiringEntity
-			val classifierOfField = JaMoPP2PCMUtils.getTargetClassifierFromTypeReference(field.typeReference)
+			val classifierOfField = Java2PcmUtils.getTargetClassifierFromTypeReference(field.typeReference)
 			val correspondingComponents = correspondenceModel.getCorrespondingEObjectsByType(classifierOfField,
 				RepositoryComponent)
 			if (!correspondingComponents.nullOrEmpty) {
@@ -93,7 +92,7 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 		return newCorrespondingEObjects
 	}
 
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 		return null
 	}
 
@@ -101,11 +100,9 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * if the field is renamed rename the corresponding objects on PCM side 
 	 */
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
-		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
-			featureCorrespondenceMap, correspondenceModel, transformationResult)
-		return transformationResult
+		Object newValue, ResourceAccess resourceAccess) {
+		Java2PcmUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
+			featureCorrespondenceMap, correspondenceModel, resourceAccess)
 	}
 
 	/**
@@ -117,8 +114,7 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * even remove the AssemblyContext if the new TypeReference does not correspond to a component 
 	 */
 	override replaceNonRootEObjectSingle(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, EObject newValue) {
-		val transformationResult = new ChangePropagationResult
+		EReference affectedReference, EObject oldValue, EObject newValue, ResourceAccess resourceAccess) {
 		if (affectedReference.name.equals(JavaNamespace.JAMOPP_REFERENCE_TYPE_REFERENCE) &&
 			newValue instanceof TypeReference) {
 			val newTypeReference = newValue as TypeReference
@@ -127,11 +123,11 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 			val innerDecs = correspondenceModel.getCorrespondingEObjectsByType(oldAffectedEObject, InnerDeclaration)
 			if (!innerDecs.nullOrEmpty) {
 				for (innerDec : innerDecs) {
-					val oldTUID = correspondenceModel.calculateTUIDFromEObject(innerDec)
+					val oldTuid = correspondenceModel.calculateTuidFromEObject(innerDec)
 					innerDec.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
 						getCorrespondingPCMDataTypeForTypeReference(newTypeReference, correspondenceModel,
 							userInteracting, null, (newAffectedEObject as Field).arrayDimension )
-					oldTUID.updateTuid(innerDec)
+					oldTuid.updateTuid(innerDec)
 				}
 			}
 
@@ -139,13 +135,13 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 			val operationRequiredRoles = correspondenceModel.getCorrespondingEObjectsByType(oldAffectedEObject,
 				OperationRequiredRole)
 			for (operationRequiredRole : operationRequiredRoles) {
-				PCMJaMoPPUtils.removeCorrespondenceAndAllObjects(operationRequiredRole, null, correspondenceModel)
+				PcmJavaUtils.removeCorrespondenceAndAllObjects(operationRequiredRole, null, correspondenceModel, resourceAccess)
 			}
 
 			// add new OperationRequiredRoles that correspond to the field now
 			if (newValue instanceof TypeReference) {
-				val classifier = JaMoPP2PCMUtils.getTargetClassifierFromTypeReference(newValue as TypeReference)
-				if (null != classifier) {
+				val classifier = Java2PcmUtils.getTargetClassifierFromTypeReference(newValue as TypeReference)
+				if (null !== classifier) {
 					val newField = newAffectedEObject as Field
 					val newCorrespondingEObjects = newField.checkAndAddOperationRequiredRolesCorrepondencesToField()
 					if (!newCorrespondingEObjects.nullOrEmpty) {
@@ -156,11 +152,10 @@ class FieldMappingTransformation extends EmptyEObjectMappingTransformation {
 				}
 			}
 		}
-		return transformationResult
 	}
 
 	def private EObject[] checkAndAddOperationRequiredRolesCorrepondencesToField(Field field) {
-		return JaMoPP2PCMUtils.checkAndAddOperationRequiredRole(field, correspondenceModel, userInteracting)
+		return Java2PcmUtils.checkAndAddOperationRequiredRole(field, correspondenceModel, userInteracting)
 	}
 
 }

@@ -46,31 +46,37 @@ public class DeleteParameterRoutine extends AbstractRepairRoutineRealization {
   
   private Parameter parameter;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteParameterRoutine with input:");
-    getLogger().debug("   OperationSignature: " + this.signature);
-    getLogger().debug("   Parameter: " + this.parameter);
+    getLogger().debug("   signature: " + this.signature);
+    getLogger().debug("   parameter: " + this.parameter);
     
-    InterfaceMethod interfaceMethod = getCorrespondingElement(
+    org.emftext.language.java.members.InterfaceMethod interfaceMethod = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceInterfaceMethod(signature, parameter), // correspondence source supplier
-    	InterfaceMethod.class,
-    	(InterfaceMethod _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (interfaceMethod == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(interfaceMethod);
-    OrdinaryParameter javaParameter = getCorrespondingElement(
+    org.emftext.language.java.parameters.OrdinaryParameter javaParameter = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaParameter(signature, parameter, interfaceMethod), // correspondence source supplier
-    	OrdinaryParameter.class,
-    	(OrdinaryParameter _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.parameters.OrdinaryParameter.class,
+    	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (javaParameter == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaParameter);
     deleteObject(userExecution.getElement1(signature, parameter, interfaceMethod, javaParameter));
     
     postprocessElements();
+    
+    return true;
   }
 }

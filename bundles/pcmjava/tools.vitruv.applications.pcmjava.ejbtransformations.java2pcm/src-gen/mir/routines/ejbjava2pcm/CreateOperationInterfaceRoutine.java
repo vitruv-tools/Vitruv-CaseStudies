@@ -2,13 +2,10 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.commons.NamedElement;
-import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -29,8 +26,7 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final Repository repo, final NamedElement namedElement, final OperationInterface operationInterface) {
-      EList<Interface> _interfaces__Repository = repo.getInterfaces__Repository();
-      _interfaces__Repository.add(operationInterface);
+      repo.getInterfaces__Repository().add(operationInterface);
     }
     
     public EObject getElement2(final Repository repo, final NamedElement namedElement, final OperationInterface operationInterface) {
@@ -42,8 +38,7 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void updateOperationInterfaceElement(final Repository repo, final NamedElement namedElement, final OperationInterface operationInterface) {
-      String _name = namedElement.getName();
-      operationInterface.setEntityName(_name);
+      operationInterface.setEntityName(namedElement.getName());
     }
   }
   
@@ -58,12 +53,13 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
   
   private NamedElement namedElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateOperationInterfaceRoutine with input:");
-    getLogger().debug("   Repository: " + this.repo);
-    getLogger().debug("   NamedElement: " + this.namedElement);
+    getLogger().debug("   repo: " + this.repo);
+    getLogger().debug("   namedElement: " + this.namedElement);
     
-    OperationInterface operationInterface = RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
+    org.palladiosimulator.pcm.repository.OperationInterface operationInterface = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createOperationInterface();
+    notifyObjectCreated(operationInterface);
     userExecution.updateOperationInterfaceElement(repo, namedElement, operationInterface);
     
     addCorrespondenceBetween(userExecution.getElement1(repo, namedElement, operationInterface), userExecution.getElement2(repo, namedElement, operationInterface), "");
@@ -72,5 +68,7 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
     userExecution.update0Element(repo, namedElement, operationInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

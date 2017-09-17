@@ -47,26 +47,30 @@ public class DeleteJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
   
   private NamedElement sourceElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaClassifierRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.sourceElement);
+    getLogger().debug("   sourceElement: " + this.sourceElement);
     
-    ConcreteClassifier javaClassifier = getCorrespondingElement(
+    org.emftext.language.java.classifiers.ConcreteClassifier javaClassifier = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClassifier(sourceElement), // correspondence source supplier
-    	ConcreteClassifier.class,
-    	(ConcreteClassifier _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.classifiers.ConcreteClassifier.class,
+    	(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (javaClassifier == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClassifier);
-    CompilationUnit compilationUnit = getCorrespondingElement(
+    org.emftext.language.java.containers.CompilationUnit compilationUnit = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompilationUnit(sourceElement, javaClassifier), // correspondence source supplier
-    	CompilationUnit.class,
-    	(CompilationUnit _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.containers.CompilationUnit.class,
+    	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compilationUnit == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compilationUnit);
     deleteObject(userExecution.getElement1(sourceElement, javaClassifier, compilationUnit));
@@ -74,5 +78,7 @@ public class DeleteJavaClassifierRoutine extends AbstractRepairRoutineRealizatio
     deleteObject(userExecution.getElement2(sourceElement, javaClassifier, compilationUnit));
     
     postprocessElements();
+    
+    return true;
   }
 }

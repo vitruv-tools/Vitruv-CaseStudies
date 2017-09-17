@@ -1,6 +1,7 @@
 package mir.routines.pcm2depInjectJava;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.InterfaceMethod;
@@ -22,11 +23,11 @@ public class ChangeInterfaceMethodReturnTypeRoutine extends AbstractRepairRoutin
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final InterfaceMethod interfaceMethod, final DataType returnType, final org.emftext.language.java.classifiers.Class returnTypeClass) {
+    public EObject getElement1(final InterfaceMethod interfaceMethod, final DataType returnType, final Optional<org.emftext.language.java.classifiers.Class> returnTypeClass) {
       return interfaceMethod;
     }
     
-    public void update0Element(final InterfaceMethod interfaceMethod, final DataType returnType, final org.emftext.language.java.classifiers.Class returnTypeClass) {
+    public void update0Element(final InterfaceMethod interfaceMethod, final DataType returnType, final Optional<org.emftext.language.java.classifiers.Class> returnTypeClass) {
       final TypeReference returnTypeReference = Pcm2JavaHelper.createTypeReference(returnType, returnTypeClass);
       interfaceMethod.setTypeReference(returnTypeReference);
     }
@@ -47,20 +48,25 @@ public class ChangeInterfaceMethodReturnTypeRoutine extends AbstractRepairRoutin
   
   private DataType returnType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeInterfaceMethodReturnTypeRoutine with input:");
-    getLogger().debug("   InterfaceMethod: " + this.interfaceMethod);
-    getLogger().debug("   DataType: " + this.returnType);
+    getLogger().debug("   interfaceMethod: " + this.interfaceMethod);
+    getLogger().debug("   returnType: " + this.returnType);
     
-    org.emftext.language.java.classifiers.Class returnTypeClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceReturnTypeClass(interfaceMethod, returnType), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(returnTypeClass);
+    	Optional<org.emftext.language.java.classifiers.Class> returnTypeClass = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceReturnTypeClass(interfaceMethod, returnType), // correspondence source supplier
+    		org.emftext.language.java.classifiers.Class.class,
+    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(returnTypeClass.isPresent() ? returnTypeClass.get() : null);
     // val updatedElement userExecution.getElement1(interfaceMethod, returnType, returnTypeClass);
     userExecution.update0Element(interfaceMethod, returnType, returnTypeClass);
     
     postprocessElements();
+    
+    return true;
   }
 }

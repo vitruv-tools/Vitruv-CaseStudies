@@ -1,6 +1,5 @@
 package mir.routines.pcm2java;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.io.IOException;
 import mir.routines.pcm2java.RoutinesFacade;
@@ -28,20 +27,17 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final NamedElement sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String expectedTag, final org.emftext.language.java.containers.Package javaPackage) {
-      EList<String> _namespaces = javaPackage.getNamespaces();
-      _namespaces.clear();
-      boolean _notEquals = (!Objects.equal(parentPackage, null));
-      if (_notEquals) {
-        EList<String> _namespaces_1 = javaPackage.getNamespaces();
-        EList<String> _namespaces_2 = parentPackage.getNamespaces();
-        Iterables.<String>addAll(_namespaces_1, _namespaces_2);
-        EList<String> _namespaces_3 = javaPackage.getNamespaces();
+      javaPackage.getNamespaces().clear();
+      if ((parentPackage != null)) {
+        EList<String> _namespaces = javaPackage.getNamespaces();
+        EList<String> _namespaces_1 = parentPackage.getNamespaces();
+        Iterables.<String>addAll(_namespaces, _namespaces_1);
+        EList<String> _namespaces_2 = javaPackage.getNamespaces();
         String _name = parentPackage.getName();
-        _namespaces_3.add(_name);
+        _namespaces_2.add(_name);
       }
       javaPackage.setName(packageName);
-      String _buildJavaFilePath = JavaPersistenceHelper.buildJavaFilePath(javaPackage);
-      this.persistProjectRelative(sourceElementMappedToPackage, javaPackage, _buildJavaFilePath);
+      this.persistProjectRelative(sourceElementMappedToPackage, javaPackage, JavaPersistenceHelper.buildJavaFilePath(javaPackage));
     }
     
     public String getRetrieveTag1(final NamedElement sourceElementMappedToPackage, final org.emftext.language.java.containers.Package parentPackage, final String packageName, final String expectedTag) {
@@ -68,25 +64,29 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
   
   private String expectedTag;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaPackageRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.sourceElementMappedToPackage);
-    getLogger().debug("   Package: " + this.parentPackage);
-    getLogger().debug("   String: " + this.packageName);
-    getLogger().debug("   String: " + this.expectedTag);
+    getLogger().debug("   sourceElementMappedToPackage: " + this.sourceElementMappedToPackage);
+    getLogger().debug("   parentPackage: " + this.parentPackage);
+    getLogger().debug("   packageName: " + this.packageName);
+    getLogger().debug("   expectedTag: " + this.expectedTag);
     
     org.emftext.language.java.containers.Package javaPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaPackage(sourceElementMappedToPackage, parentPackage, packageName, expectedTag), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(sourceElementMappedToPackage, parentPackage, packageName, expectedTag));
+    	userExecution.getRetrieveTag1(sourceElementMappedToPackage, parentPackage, packageName, expectedTag), 
+    	false // asserted
+    	);
     if (javaPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaPackage);
     // val updatedElement userExecution.getElement1(sourceElementMappedToPackage, parentPackage, packageName, expectedTag, javaPackage);
     userExecution.update0Element(sourceElementMappedToPackage, parentPackage, packageName, expectedTag, javaPackage);
     
     postprocessElements();
+    
+    return true;
   }
 }

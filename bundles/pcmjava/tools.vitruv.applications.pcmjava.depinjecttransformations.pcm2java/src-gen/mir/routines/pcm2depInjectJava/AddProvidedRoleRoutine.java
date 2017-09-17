@@ -2,18 +2,14 @@ package mir.routines.pcm2depInjectJava;
 
 import java.io.IOException;
 import mir.routines.pcm2depInjectJava.RoutinesFacade;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.imports.ClassifierImport;
-import org.emftext.language.java.imports.impl.ImportsFactoryImpl;
 import org.emftext.language.java.types.NamespaceClassifierReference;
-import org.emftext.language.java.types.TypeReference;
-import org.emftext.language.java.types.impl.TypesFactoryImpl;
 import org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper;
+import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -34,8 +30,7 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final OperationProvidedRole providedRole, final Interface operationProvidingInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport interfaceImport, final NamespaceClassifierReference namespaceClassifierReference) {
-      EList<TypeReference> _implements = javaClass.getImplements();
-      _implements.add(namespaceClassifierReference);
+      javaClass.getImplements().add(namespaceClassifierReference);
     }
     
     public EObject getCorrepondenceSourceJavaClass(final OperationProvidedRole providedRole, final Interface operationProvidingInterface) {
@@ -60,7 +55,7 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateNamespaceClassifierReferenceElement(final OperationProvidedRole providedRole, final Interface operationProvidingInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport interfaceImport, final NamespaceClassifierReference namespaceClassifierReference) {
-      Pcm2JavaHelper.createNamespaceClassifierReference(namespaceClassifierReference, operationProvidingInterface);
+      JavaModificationUtil.createNamespaceClassifierReference(namespaceClassifierReference, operationProvidingInterface);
     }
     
     public EObject getCorrepondenceSourceOperationProvidingInterface(final OperationProvidedRole providedRole) {
@@ -69,7 +64,7 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void updateInterfaceImportElement(final OperationProvidedRole providedRole, final Interface operationProvidingInterface, final org.emftext.language.java.classifiers.Class javaClass, final ClassifierImport interfaceImport) {
-      Pcm2JavaHelper.addImportToCompilationUnitOfClassifier(interfaceImport, javaClass, operationProvidingInterface);
+      JavaModificationUtil.addImportToCompilationUnitOfClassifier(interfaceImport, javaClass, operationProvidingInterface);
     }
   }
   
@@ -82,34 +77,40 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
   
   private OperationProvidedRole providedRole;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddProvidedRoleRoutine with input:");
-    getLogger().debug("   OperationProvidedRole: " + this.providedRole);
+    getLogger().debug("   providedRole: " + this.providedRole);
     
-    Interface operationProvidingInterface = getCorrespondingElement(
+    org.emftext.language.java.classifiers.Interface operationProvidingInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceOperationProvidingInterface(providedRole), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	org.emftext.language.java.classifiers.Interface.class,
+    	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (operationProvidingInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(operationProvidingInterface);
     org.emftext.language.java.classifiers.Class javaClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceJavaClass(providedRole, operationProvidingInterface), // correspondence source supplier
     	org.emftext.language.java.classifiers.Class.class,
     	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (javaClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(javaClass);
-    ClassifierImport interfaceImport = ImportsFactoryImpl.eINSTANCE.createClassifierImport();
+    org.emftext.language.java.imports.ClassifierImport interfaceImport = org.emftext.language.java.imports.impl.ImportsFactoryImpl.eINSTANCE.createClassifierImport();
+    notifyObjectCreated(interfaceImport);
     userExecution.updateInterfaceImportElement(providedRole, operationProvidingInterface, javaClass, interfaceImport);
     
     addCorrespondenceBetween(userExecution.getElement1(providedRole, operationProvidingInterface, javaClass, interfaceImport), userExecution.getElement2(providedRole, operationProvidingInterface, javaClass, interfaceImport), "");
     
-    NamespaceClassifierReference namespaceClassifierReference = TypesFactoryImpl.eINSTANCE.createNamespaceClassifierReference();
+    org.emftext.language.java.types.NamespaceClassifierReference namespaceClassifierReference = org.emftext.language.java.types.impl.TypesFactoryImpl.eINSTANCE.createNamespaceClassifierReference();
+    notifyObjectCreated(namespaceClassifierReference);
     userExecution.updateNamespaceClassifierReferenceElement(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference);
     
     addCorrespondenceBetween(userExecution.getElement3(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference), userExecution.getElement4(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference), "");
@@ -118,5 +119,7 @@ public class AddProvidedRoleRoutine extends AbstractRepairRoutineRealization {
     userExecution.update0Element(providedRole, operationProvidingInterface, javaClass, interfaceImport, namespaceClassifierReference);
     
     postprocessElements();
+    
+    return true;
   }
 }

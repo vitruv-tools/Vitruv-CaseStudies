@@ -8,16 +8,16 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 import org.apache.log4j.Logger
-import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * Mapping transformation for primitive data types
@@ -53,22 +53,22 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	public synchronized def static Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType pdt) {
-		if (null == primitveTypeMappingMap) {
+		if (null === primitveTypeMappingMap) {
 			initPrimitiveTypeMap()
 		}
-		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
+		return primitveTypeMappingMap.claimValueForKey(pdt.type)
 	}
 
 	public static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,
 		CorrespondenceModel ci) {
-		if (null == dataType) {
+		if (null === dataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
 		val Type type = claimUniqueCorrespondingType(dataType, ci)
 		if (type instanceof TypeReference) {
 			return type
 		} else if (type instanceof ConcreteClassifier) {
-			return PCM2JaMoPPUtils.createNamespaceClassifierReference(type as ConcreteClassifier)
+			return createNamespaceClassifierReference(type as ConcreteClassifier)
 		}
 		logger.warn(
 			"found type " + type +
@@ -77,7 +77,7 @@ class DataTypeCorrespondenceHelper {
 	}
 
 	public static def Type claimUniqueCorrespondingJaMoPPDataType(DataType dataType, CorrespondenceModel ci) {
-		if (null == dataType) {
+		if (null === dataType) {
 			return TypesFactory.eINSTANCE.createVoid
 		}
 		return claimUniqueCorrespondingType(dataType, ci)

@@ -15,9 +15,9 @@ import org.palladiosimulator.pcm.system.SystemFactory
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -45,7 +45,7 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 
 	def boolean checkCorrespondenceRepository() {
 		val repositorys = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)
-		if (null == repositorys || 0 == repositorys.size) {
+		if (null === repositorys || 0 == repositorys.size) {
 			correspondenceRepositoryAlreadyExists = false
 		} else {
 			if (1 != repositorys.size) {
@@ -72,7 +72,7 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * To figure out which case should be realized ask the user directly
 	 * 
 	 */
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		val Package jaMoPPPackage = eObject as Package
 
 		//if the package already has already a correspondence 
@@ -136,21 +136,19 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 		}
 	}
 
-	override createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects) {
-		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.
+	override createRootEObject(EObject newRootEObject, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
+		Java2PcmUtils.
 			createNewCorrespondingEObjects(newRootEObject, newCorrespondingEObjects,
-				correspondenceModel, transformationResult)
-		return transformationResult
+				correspondenceModel, resourceAccess)
 	}
 
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
-		createRootEObject(newValue, newCorrespondingEObjects)
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
+		createRootEObject(newValue, newCorrespondingEObjects, resourceAccess)
 	}
 
 	
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 		return null
 	}
 
@@ -159,12 +157,12 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * Hence, we remove all corresponding objects (which theoretically could be the whole repository if the main
 	 * package is removed.
 	 */
-	override deleteRootEObject(EObject oldRootEObject, EObject[] oldCorrespondingEObjectsToDelete) {
+	override deleteRootEObject(EObject oldRootEObject, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 			//TODO
 	}
 
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject, EReference affectedReference, EObject oldValue,
-		int index, EObject[] oldCorrespondingEObjectsToDelete) {
+		int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 	}
 
 	/**
@@ -174,7 +172,7 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * 
 	 */
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
+		Object newValue, ResourceAccess resourceAccess) {
 		var Object newVarValue = newValue
 		if (newValue instanceof String) {
 			var String newStringValue = newValue as String
@@ -183,18 +181,16 @@ class PackageMappingTransformation extends EmptyEObjectMappingTransformation {
 				newVarValue = newStringValue.toString()
 			}
 		}
-		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newVarValue,
-			featureCorrespondenceMap, correspondenceModel, transformationResult)
-		return transformationResult
+		Java2PcmUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newVarValue,
+			featureCorrespondenceMap, correspondenceModel, resourceAccess)
 	}
 
 	override setCorrespondenceForFeatures() {
-		JaMoPP2PCMUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap);
+		Java2PcmUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap);
 	}
 
 	override createNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference, EObject newValue,
-		EObject[] newCorrespondingEObjects) {
+		EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 

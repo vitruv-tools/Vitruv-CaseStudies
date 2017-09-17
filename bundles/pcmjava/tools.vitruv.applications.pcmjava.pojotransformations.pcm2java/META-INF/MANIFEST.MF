@@ -27,5 +27,7 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.framework.change.echange,
  tools.vitruv.framework.change.processing,
  tools.vitruv.domains.java.util.jamoppparser,
- tools.vitruv.domains.java.util
+ tools.vitruv.domains.java.util,
+ tools.vitruv.domains.java,
+ tools.vitruv.domains.pcm
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

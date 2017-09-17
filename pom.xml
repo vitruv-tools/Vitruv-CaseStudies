@@ -21,28 +21,24 @@
 		<java.version>1.8</java.version>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
-		<xtext.version>2.10.0</xtext.version>
-		<tycho.version>0.26.0</tycho.version>
+		<xtext.version>2.12.0</xtext.version>
+		<tycho.version>1.0.0</tycho.version>
 		<surefire.version>2.19.1</surefire.version>
 	</properties>
 
 	<repositories>
 		<!-- If you adjust a repository here, please also adjust the repository in the b3 aggregator. -->
 		<repository>
-			<id>Eclipse Neon</id>
+			<id>Eclipse Oxygen</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/neon</url>
+			<!--<url>http://download.eclipse.org/releases/oxygen</url>-->
+			<url>https://sdqbuild.ipd.kit.edu/nexus/content/groups/eclipse-oxygen-complete/</url>
 		</repository>
-		<repository>
-			<id>Eclipse Neon Updates</id>
+		<!--<repository>
+			<id>Eclipse Oxygen Updates</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/4.6</url>
-		</repository>
-		<repository>
-			<id>Xtext</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.11.0</url>
-		</repository>
+			<url>http://download.eclipse.org/eclipse/updates/4.7</url>
+		</repository>-->
 		<repository>
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
@@ -53,36 +49,12 @@
 			<layout>p2</layout>
 			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/</url>
 		</repository>
+		<!-- TODO Remove after new Palladio release -->
 		<repository>
-			<id>EMFText</id>
+			<id>Palladiosimulator Nightly</id>
 			<layout>p2</layout>
-			<url>http://update.emftext.org/release</url>
+			<url>https://sdqbuild.ipd.kit.edu/nexus/content/repositories/palladiosimulator-nightly/</url>
 		</repository>
-		<repository>
-			<id>JaMoPP (P2 Wrapper)</id>
-			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/nightly/jamopp-p2/</url>
-		</repository>
-<!--		<repository>
-			<id>ASEM</id>
-			<layout>p2</layout>
-			<url>https://kit-sdq.github.io/updatesite/nightly/asem/</url>
-		</repository>
-		<repository>
-			<id>Palladiosimulator</id>
-			<layout>p2</layout>
-			<url>https://sdqweb.ipd.kit.edu/eclipse/palladiosimulator/nightly/</url>
-		</repository>
-		<repository>
-			<id>Papyrus</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/neon</url>
-		</repository>
-		<repository>
-			<id>Papyrus SysML</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/modeling/mdt/papyrus/components/sysml14/</url>
-		</repository>-->
 	</repositories>
 
 	<build>
@@ -108,23 +80,24 @@
 				</dependencies>
 			</plugin>
 			
+			<!-- Compiles Xtend code -->
 			<plugin>
-				<groupId>org.eclipse.xtend</groupId>
-				<artifactId>xtend-maven-plugin</artifactId>
-				<version>${xtext.version}</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>xtend-gen</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
+			  <groupId>org.eclipse.xtend</groupId>
+			  <artifactId>xtend-maven-plugin</artifactId>
+			  <version>${xtext.version}</version>
+			  <executions>
+				  <execution>
+					  <phase>generate-sources</phase>
+					  <goals>
+						  <goal>compile</goal>
+					  </goals>
+					  <configuration>
+						  <outputDirectory>xtend-gen</outputDirectory>
+					  </configuration>
+				  </execution>
+			  </executions>
 			</plugin>
-			
+			<!-- Cleans the xtend-gen folder -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -146,7 +119,51 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<!-- Creates source versions of bundles -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Creates source versions of features -->
+			<plugin>
+				<groupId>org.eclipse.tycho.extras</groupId>
+				<artifactId>tycho-source-feature-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>source-feature</id>
+						<phase>package</phase>
+						<goals>
+							<goal>source-feature</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Correctly handles source features on p2 update site -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>attached-p2-metadata</id>
+						<phase>package</phase>
+						<goals>
+							<goal>p2-metadata</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>

@@ -13,10 +13,10 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.applications.pcmjava.util.pcm2java.PCM2JaMoPPUtils
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 /**
  * Maps a JaMoPP interface to a PCM interface 
@@ -37,13 +37,13 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * i) checking whether it is in the contracts package
 	 * ii) asking the developer (not yet implemented)
 	 */
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		val Interface jaMoPPInterface = eObject as Interface
 		try {
-			val Package jaMoPPPackage = PCM2JaMoPPUtils.
+			val Package jaMoPPPackage = Pcm2JavaUtils.
 				getContainingPackageFromCorrespondenceModel(jaMoPPInterface, correspondenceModel)
 			var boolean createInterface = false
-			if (null != jaMoPPPackage && jaMoPPPackage.name.equals("contracts")) {
+			if (null !== jaMoPPPackage && jaMoPPPackage.name.equals("contracts")) {
 
 				//i)
 				createInterface = true
@@ -58,7 +58,7 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 				logger.debug("Created interface: " + eObject);
 				var OperationInterface opInterface = RepositoryFactory.eINSTANCE.createOperationInterface
 				opInterface.setEntityName(jaMoPPInterface.name)
-				val Repository repo = JaMoPP2PCMUtils.getRepository(correspondenceModel)
+				val Repository repo = Java2PcmUtils.getRepository(correspondenceModel)
 				opInterface.setRepository__Interface(repo)
 				return opInterface.toList
 			}
@@ -74,19 +74,17 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * 
 	 */
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject, EReference affectedReference, EObject newValue,
-		int index, EObject[] newCorrespondingEObjects) {
-		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.
+		int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
+		Java2PcmUtils.
 			createNewCorrespondingEObjects(newValue, newCorrespondingEObjects,
-				correspondenceModel, transformationResult)
-		return transformationResult
+				correspondenceModel, resourceAccess)
 	}
 
 	/**
 	 * Called when a Java-interface was removed. Also removes the corresponding PCM Interface (if there is one)
 	 * Does not ask the developer whether the PCM interface should be removed also.
 	 */
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 		return null
 	}
 
@@ -96,16 +94,14 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * We just return an empty TransformationChangeResult 
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject, EReference affectedReference, EObject oldValue,
-		int index, EObject[] oldCorrespondingEObjectsToDelete) {
-			PCMJaMoPPUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel)
+		int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
+			PcmJavaUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel, resourceAccess)
 	}
 
 	override updateSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
-		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
-			featureCorrespondenceMap, correspondenceModel, transformationResult)
-		return transformationResult
+		Object newValue, ResourceAccess resourceAccess) {
+		Java2PcmUtils.updateNameAsSingleValuedEAttribute(eObject, affectedAttribute, oldValue, newValue,
+			featureCorrespondenceMap, correspondenceModel, resourceAccess)
 	}
 
 	override setCorrespondenceForFeatures() {
@@ -117,11 +113,10 @@ class InterfaceMappingTransformation extends EmptyEObjectMappingTransformation {
 	}
 
 	override createNonRootEObjectSingle(EObject affectedEObject, EReference affectedReference, EObject newValue,
-		EObject[] newCorrespondingEObjects) {
+		EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		logger.warn(
 			"method createNonRootEObjectSingle should not be called for " + InterfaceMappingTransformation.simpleName +
 				" transformation")
-		return new ChangePropagationResult
 	}
 
 }

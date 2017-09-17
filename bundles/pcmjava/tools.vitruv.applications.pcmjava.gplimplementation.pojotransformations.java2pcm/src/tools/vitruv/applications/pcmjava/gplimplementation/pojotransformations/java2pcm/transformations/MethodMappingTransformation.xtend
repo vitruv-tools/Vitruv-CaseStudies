@@ -17,11 +17,11 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.applications.pcmjava.util.java2pcm.JaMoPP2PCMUtils
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
-import tools.vitruv.applications.pcmjava.util.PCMJaMoPPUtils
 import tools.vitruv.domains.java.JavaNamespace
-import tools.vitruv.framework.util.command.ChangePropagationResult
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import tools.vitruv.framework.util.command.ResourceAccess
 
 class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 
@@ -30,7 +30,7 @@ class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 	}
 
 	override setCorrespondenceForFeatures() {
-		JaMoPP2PCMUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap)
+		Java2PcmUtils.addName2EntityNameCorrespondence(featureCorrespondenceMap)
 	}
 
 	/**
@@ -38,7 +38,7 @@ class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * creates a corresponding OperationInterface if the method is in an interface and 
 	 * the interface has corresponding OperationInterface(s)
 	 */
-	override createEObject(EObject eObject) {
+	override createEObject(EObject eObject, ResourceAccess resourceAccess) {
 		val interfaceMethod = eObject as Method
 		val interfaceClassifier = interfaceMethod.containingConcreteClassifier
 		val operationInterfaces = correspondenceModel.getCorrespondingEObjectsByType(interfaceClassifier,
@@ -57,46 +57,42 @@ class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 		return null
 	}
 
-	override removeEObject(EObject eObject) {
+	override removeEObject(EObject eObject, ResourceAccess resourceAccess) {
 		val correspondingObjects = correspondenceModel.getCorrespondingEObjects(eObject)
 		return correspondingObjects
 	}
 
 	override updateSingleValuedEAttribute(EObject affectedEObject, EAttribute affectedAttribute, Object oldValue,
-		Object newValue) {
-		val transformationResult = new ChangePropagationResult
-		JaMoPP2PCMUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
-			featureCorrespondenceMap, correspondenceModel, transformationResult)
-		return transformationResult
+		Object newValue, ResourceAccess resourceAccess) {
+		Java2PcmUtils.updateNameAsSingleValuedEAttribute(affectedEObject, affectedAttribute, oldValue, newValue,
+			featureCorrespondenceMap, correspondenceModel, resourceAccess)
 	}
 
 	/**
 	 * called when the return type has been changed
 	 */
 	override replaceNonRootEObjectSingle(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, EObject newValue) {
-		val transformationResult = new ChangePropagationResult
+		EReference affectedReference, EObject oldValue, EObject newValue, ResourceAccess resourceAccess) {
 		if (oldAffectedEObject instanceof Method &&
 			affectedReference.name.equals(JavaNamespace.JAMOPP_REFERENCE_TYPE_REFERENCE) &&
 			newValue instanceof TypeReference) {
 			val correspondingPCMSignatures = correspondenceModel.
 				getCorrespondingEObjectsByType(oldAffectedEObject, OperationSignature)
 			if (correspondingPCMSignatures.nullOrEmpty) {
-				return transformationResult
+				return 
 			}
 			for (correspondingSignature : correspondingPCMSignatures) {
 				val Repository repo = correspondingSignature.interface__OperationSignature.repository__Interface
-				val oldTUID = correspondenceModel.calculateTUIDFromEObject(correspondingSignature)
+				val oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingSignature)
 				val DataType newReturnValue = TypeReferenceCorrespondenceHelper.
 					getCorrespondingPCMDataTypeForTypeReference(newValue as TypeReference,
 						correspondenceModel, userInteracting, repo, (newAffectedEObject as Method).arrayDimension)
 				correspondingSignature.returnType__OperationSignature = newReturnValue
 
 				// guess this is not necessary since the id stay the same
-				oldTUID.updateTuid(correspondingSignature)
+				oldTuid.updateTuid(correspondingSignature)
 			}
 		}
-		transformationResult
 	}
 
 	/**
@@ -105,8 +101,7 @@ class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 	 *  component an OperationRrovidedRole is added 
 	 */
 	override createNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects) {
-		val transformationResult = new ChangePropagationResult
+		EReference affectedReference, EObject newValue, int index, EObject[] newCorrespondingEObjects, ResourceAccess resourceAccess) {
 		if (!newCorrespondingEObjects.nullOrEmpty) {
 			var operationSignatues = correspondenceModel.getCorrespondingEObjectsByType(oldAffectedEObject, OperationSignature)
 			if(operationSignatues.nullOrEmpty){
@@ -116,7 +111,7 @@ class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 			if (!operationSignatues.nullOrEmpty) {
 				for (opSig : operationSignatues) {
 					for (pcmParameter : pcmParameters) {
-						if (null == pcmParameter.dataType__Parameter.repository__DataType) {
+						if (null === pcmParameter.dataType__Parameter.repository__DataType) {
 							pcmParameter.dataType__Parameter.repository__DataType = opSig.interface__OperationSignature.
 								repository__Interface
 						}
@@ -126,14 +121,13 @@ class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 			}
 		}
 
-		JaMoPP2PCMUtils.createNewCorrespondingEObjects(newValue, newCorrespondingEObjects, correspondenceModel, transformationResult)
+		Java2PcmUtils.createNewCorrespondingEObjects(newValue, newCorrespondingEObjects, correspondenceModel, resourceAccess)
 		if (newValue instanceof TypedElement) {
-			val newCorrespondingOperationProvidedRoles = JaMoPP2PCMUtils.
+			val newCorrespondingOperationProvidedRoles = Java2PcmUtils.
 				checkAndAddOperationRequiredRole(newValue as TypedElement, correspondenceModel,
 					userInteracting)
-			JaMoPP2PCMUtils.createNewCorrespondingEObjects(newValue, newCorrespondingOperationProvidedRoles, correspondenceModel, transformationResult)
+			Java2PcmUtils.createNewCorrespondingEObjects(newValue, newCorrespondingOperationProvidedRoles, correspondenceModel, resourceAccess)
 		}
-		return transformationResult
 	}
 
 	/**
@@ -141,13 +135,12 @@ class MethodMappingTransformation extends EmptyEObjectMappingTransformation {
 	 * If the parameter had a correspondence to an OperationRequiredRole delete it as well
 	 */
 	override deleteNonRootEObjectInList(EObject newAffectedEObject, EObject oldAffectedEObject,
-		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete) {
+		EReference affectedReference, EObject oldValue, int index, EObject[] oldCorrespondingEObjectsToDelete, ResourceAccess resourceAccess) {
 		if(affectedReference.name != JavaNamespace.JAMOPP_STATEMENTS_REFERENCE){
-			val oldTUID = correspondenceModel.calculateTUIDFromEObject(oldAffectedEObject)
-			PCMJaMoPPUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel)
-			oldTUID.updateTuid(oldAffectedEObject)
+			val oldTuid = correspondenceModel.calculateTuidFromEObject(oldAffectedEObject)
+			PcmJavaUtils.deleteNonRootEObjectInList(oldAffectedEObject, oldValue, correspondenceModel, resourceAccess)
+			oldTuid.updateTuid(oldAffectedEObject)
 		}
-		return new ChangePropagationResult
 	}
 
 }

@@ -8,15 +8,14 @@ import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
-import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.PCM2JaMoPPTransformationTest;
-import tools.vitruv.applications.pcmjava.tests.util.PCM2JaMoPPTestUtils;
-import tools.vitruv.framework.util.datatypes.VURI;
+import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
-public class CompositeDataTypeMappingTransformationTest extends PCM2JaMoPPTransformationTest {
+public class CompositeDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 
     @Test
     public void testAddCompositeDataType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
 
@@ -25,23 +24,23 @@ public class CompositeDataTypeMappingTransformationTest extends PCM2JaMoPPTransf
 
     @Test
     public void testRenameCompositeDataType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
 
-        cdt.setEntityName(PCM2JaMoPPTestUtils.COMPOSITE_DATA_TYPE_NAME + PCM2JaMoPPTestUtils.RENAME);
-        super.triggerSynchronization(VURI.getInstance(cdt.eResource()));
+        cdt.setEntityName(Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME + Pcm2JavaTestUtils.RENAME);
+        super.saveAndSynchronizeChanges(cdt);
 
         this.assertDataTypeCorrespondence(cdt);
     }
 
     @Test
     public void testAddCompositeDataTypeWithInnerTypes() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
-        final CompositeDataType cdt = this.createCompositeDataType(repo, PCM2JaMoPPTestUtils.COMPOSITE_DATA_TYPE_NAME);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+        final CompositeDataType cdt = this.createCompositeDataType(repo, Pcm2JavaTestUtils.COMPOSITE_DATA_TYPE_NAME);
+        super.saveAndSynchronizeChanges(repo);
 
         final InnerDeclaration innerDec = this.addInnerDeclaration(cdt, repo);
-        super.triggerSynchronization(VURI.getInstance(repo.eResource()));
+        super.saveAndSynchronizeChanges(repo);
 
         this.getVirtualModel().executeCommand(new Callable<Void>() {
 
@@ -67,7 +66,7 @@ public class CompositeDataTypeMappingTransformationTest extends PCM2JaMoPPTransf
 
     @Test
     public void testAddCompositeDataTypeToCompositeDataType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(this.resourceSet, PCM2JaMoPPTestUtils.REPOSITORY_NAME);
+        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
         final CompositeDataType cdt = this.createAndSyncCompositeDataType(repo);
         final CompositeDataType cdt2 = this.createAndSyncCompositeDataType(repo, "InnerCompositeDataTypeTest");
 
@@ -75,7 +74,7 @@ public class CompositeDataTypeMappingTransformationTest extends PCM2JaMoPPTransf
         innerDec.setDatatype_InnerDeclaration(cdt2);
         innerDec.setCompositeDataType_InnerDeclaration(cdt);
         cdt.getInnerDeclaration_CompositeDataType().add(innerDec);
-        super.triggerSynchronization(VURI.getInstance(cdt.eResource()));
+        super.saveAndSynchronizeChanges(cdt);
 
         this.assertDataTypeCorrespondence(cdt);
     }

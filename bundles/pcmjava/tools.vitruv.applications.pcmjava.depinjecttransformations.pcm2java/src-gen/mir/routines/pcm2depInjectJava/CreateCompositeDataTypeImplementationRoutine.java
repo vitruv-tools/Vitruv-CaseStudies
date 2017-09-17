@@ -34,8 +34,7 @@ public class CreateCompositeDataTypeImplementationRoutine extends AbstractRepair
     }
     
     public void callRoutine1(final CompositeDataType dataType, final org.emftext.language.java.containers.Package datatypesPackage, @Extension final RoutinesFacade _routinesFacade) {
-      String _entityName = dataType.getEntityName();
-      _routinesFacade.createJavaClass(dataType, datatypesPackage, _entityName);
+      _routinesFacade.createJavaClass(dataType, datatypesPackage, dataType.getEntityName());
     }
   }
   
@@ -48,21 +47,25 @@ public class CreateCompositeDataTypeImplementationRoutine extends AbstractRepair
   
   private CompositeDataType dataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateCompositeDataTypeImplementationRoutine with input:");
-    getLogger().debug("   CompositeDataType: " + this.dataType);
+    getLogger().debug("   dataType: " + this.dataType);
     
     org.emftext.language.java.containers.Package datatypesPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDatatypesPackage(dataType), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> userExecution.getCorrespondingModelElementsPreconditionDatatypesPackage(dataType, _element), // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (datatypesPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(datatypesPackage);
     userExecution.callRoutine1(dataType, datatypesPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -39,21 +39,25 @@ public class CreateRepositorySubPackagesRoutine extends AbstractRepairRoutineRea
   
   private Repository repository;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRepositorySubPackagesRoutine with input:");
-    getLogger().debug("   Repository: " + this.repository);
+    getLogger().debug("   repository: " + this.repository);
     
     org.emftext.language.java.containers.Package repositoryPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceRepositoryPackage(repository), // correspondence source supplier
     	org.emftext.language.java.containers.Package.class,
     	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (repositoryPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(repositoryPackage);
     userExecution.callRoutine1(repository, repositoryPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

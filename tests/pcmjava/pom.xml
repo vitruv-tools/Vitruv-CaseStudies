@@ -14,10 +14,12 @@
 	<name>PCM-Java Application Tests</name>
 
 	<modules>
+		<!-- The following tests do currently not succeed on Travis, so we do not execute them -->
 		<!--<module>tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests</module>-->
 		<!--<module>tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.tests</module>-->
 		<!--<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests</module>-->
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests</module>
+		<!--The following plugin is only for running a complete test suite within Eclipse, but not necessary here -->
 		<!--<module>tools.vitruv.applications.pcmjava.tests</module>-->
 		<module>tools.vitruv.applications.pcmjava.tests.util</module>
 	</modules>
@@ -33,7 +35,9 @@
 					<failIfNoTests>false</failIfNoTests>
 					<!-- Test suites explicitly defined as they are sumsuming each other and would lead to redundant test execution -->
 					<includes>
-						<include>**/PCM2JavaTestSuite.class</include>
+						<include>**/Pcm2JavaTestSuite.class</include>
+						<include>**/Java2PcmTestSuite.class</include>
+						<include>**/EjbJava2PcmTransformationsTestSuite.class</include>
 					</includes>
 				</configuration>
 			</plugin>

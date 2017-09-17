@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>tools.vitruv</groupId>
+		<artifactId>tests</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+	<artifactId>pcmumlcomponents-tests</artifactId>
+	<packaging>pom</packaging>
+	<name>PCM-UML Components Application Tests</name>
+
+	<modules>
+		<module>tools.vitruv.applications.pcmumlcomponents.pcm2uml.tests</module>
+		<module>tools.vitruv.applications.pcmumlcomponents.uml2pcm.tests</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+					<failIfNoTests>true</failIfNoTests>
+					<!-- Test suites explicitly defined as they are sumsuming each other and would lead to redundant test execution -->
+					<includes>
+						<include>**/Pcm2UmlTestSuite.class</include>
+						<include>**/Uml2PcmTestSuite.class</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>
