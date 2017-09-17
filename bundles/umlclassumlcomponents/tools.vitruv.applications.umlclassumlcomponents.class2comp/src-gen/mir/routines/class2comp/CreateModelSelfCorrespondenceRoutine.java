@@ -37,12 +37,14 @@ public class CreateModelSelfCorrespondenceRoutine extends AbstractRepairRoutineR
   
   private Model umlCompModel;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateModelSelfCorrespondenceRoutine with input:");
-    getLogger().debug("   Model: " + this.umlCompModel);
+    getLogger().debug("   umlCompModel: " + this.umlCompModel);
     
     addCorrespondenceBetween(userExecution.getElement1(umlCompModel), userExecution.getElement2(umlCompModel), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

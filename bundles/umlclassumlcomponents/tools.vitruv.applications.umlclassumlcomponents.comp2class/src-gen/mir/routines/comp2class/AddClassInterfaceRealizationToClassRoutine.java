@@ -55,33 +55,39 @@ public class AddClassInterfaceRealizationToClassRoutine extends AbstractRepairRo
   
   private Component umlComp;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddClassInterfaceRealizationToClassRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.iFRealizationOrUsage);
-    getLogger().debug("   Interface: " + this.compInterface);
-    getLogger().debug("   Component: " + this.umlComp);
+    getLogger().debug("   iFRealizationOrUsage: " + this.iFRealizationOrUsage);
+    getLogger().debug("   compInterface: " + this.compInterface);
+    getLogger().debug("   umlComp: " + this.umlComp);
     
-    InterfaceRealization classIFRealization = getCorrespondingElement(
+    org.eclipse.uml2.uml.InterfaceRealization classIFRealization = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassIFRealization(iFRealizationOrUsage, compInterface, umlComp), // correspondence source supplier
-    	InterfaceRealization.class,
-    	(InterfaceRealization _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.InterfaceRealization.class,
+    	(org.eclipse.uml2.uml.InterfaceRealization _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classIFRealization == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classIFRealization);
-    Interface classInterface = getCorrespondingElement(
+    org.eclipse.uml2.uml.Interface classInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassInterface(iFRealizationOrUsage, compInterface, umlComp, classIFRealization), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classInterface);
     // val updatedElement userExecution.getElement1(iFRealizationOrUsage, compInterface, umlComp, classIFRealization, classInterface);
     userExecution.update0Element(iFRealizationOrUsage, compInterface, umlComp, classIFRealization, classInterface);
     
     postprocessElements();
+    
+    return true;
   }
 }

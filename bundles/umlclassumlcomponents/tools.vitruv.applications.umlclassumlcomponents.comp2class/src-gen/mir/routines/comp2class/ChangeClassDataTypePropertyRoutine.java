@@ -46,22 +46,26 @@ public class ChangeClassDataTypePropertyRoutine extends AbstractRepairRoutineRea
   
   private Property compProperty;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeClassDataTypePropertyRoutine with input:");
-    getLogger().debug("   Property: " + this.compProperty);
+    getLogger().debug("   compProperty: " + this.compProperty);
     
-    Property classProperty = getCorrespondingElement(
+    org.eclipse.uml2.uml.Property classProperty = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassProperty(compProperty), // correspondence source supplier
-    	Property.class,
-    	(Property _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(compProperty));
+    	org.eclipse.uml2.uml.Property.class,
+    	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
+    	userExecution.getRetrieveTag1(compProperty), 
+    	false // asserted
+    	);
     if (classProperty == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classProperty);
     // val updatedElement userExecution.getElement1(compProperty, classProperty);
     userExecution.update0Element(compProperty, classProperty);
     
     postprocessElements();
+    
+    return true;
   }
 }

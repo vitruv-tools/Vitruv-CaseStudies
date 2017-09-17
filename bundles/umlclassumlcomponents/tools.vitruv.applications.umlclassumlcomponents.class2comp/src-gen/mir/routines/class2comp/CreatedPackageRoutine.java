@@ -71,24 +71,28 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
   
   private org.eclipse.uml2.uml.Package classPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatedPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.classPackage);
+    getLogger().debug("   classPackage: " + this.classPackage);
     
-    Model compModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model compModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompModel(classPackage), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compModel);
     if (!userExecution.checkMatcherPrecondition1(classPackage, compModel)) {
-    	return;
+    	return false;
     }
     userExecution.callRoutine1(classPackage, compModel, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

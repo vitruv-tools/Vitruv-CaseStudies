@@ -40,12 +40,14 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
   
   private NamedElement compElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameElementRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.compElement);
+    getLogger().debug("   compElement: " + this.compElement);
     
     userExecution.callRoutine1(compElement, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

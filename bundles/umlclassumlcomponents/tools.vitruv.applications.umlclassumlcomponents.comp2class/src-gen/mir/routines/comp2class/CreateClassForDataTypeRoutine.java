@@ -7,7 +7,6 @@ import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -63,24 +62,29 @@ public class CreateClassForDataTypeRoutine extends AbstractRepairRoutineRealizat
   
   private DataType compType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateClassForDataTypeRoutine with input:");
-    getLogger().debug("   DataType: " + this.compType);
+    getLogger().debug("   compType: " + this.compType);
     
-    Model classModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model classModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassModel(compType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classModel);
-    org.eclipse.uml2.uml.Class dataTypeClass = UMLFactoryImpl.eINSTANCE.createClass();
+    org.eclipse.uml2.uml.Class dataTypeClass = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createClass();
+    notifyObjectCreated(dataTypeClass);
     userExecution.updateDataTypeClassElement(compType, classModel, dataTypeClass);
     
     addCorrespondenceBetween(userExecution.getElement1(compType, classModel, dataTypeClass), userExecution.getElement2(compType, classModel, dataTypeClass), userExecution.getTag1(compType, classModel, dataTypeClass));
     
     postprocessElements();
+    
+    return true;
   }
 }

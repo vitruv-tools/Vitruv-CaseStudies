@@ -6,7 +6,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.PrimitiveType;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -54,11 +53,12 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
   
   private PrimitiveType classType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePrimitiveDataTypeRoutine with input:");
-    getLogger().debug("   PrimitiveType: " + this.classType);
+    getLogger().debug("   classType: " + this.classType);
     
-    PrimitiveType compType = UMLFactoryImpl.eINSTANCE.createPrimitiveType();
+    org.eclipse.uml2.uml.PrimitiveType compType = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createPrimitiveType();
+    notifyObjectCreated(compType);
     userExecution.updateCompTypeElement(classType, compType);
     
     // val updatedElement userExecution.getElement1(classType, compType);
@@ -67,5 +67,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     addCorrespondenceBetween(userExecution.getElement2(classType, compType), userExecution.getElement3(classType, compType), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

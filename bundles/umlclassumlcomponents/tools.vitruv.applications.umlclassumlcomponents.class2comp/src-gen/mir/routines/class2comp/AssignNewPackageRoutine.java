@@ -59,13 +59,15 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
   
   private Component umlComponent;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AssignNewPackageRoutine with input:");
-    getLogger().debug("   Package: " + this.newPackage);
-    getLogger().debug("   Component: " + this.umlComponent);
+    getLogger().debug("   newPackage: " + this.newPackage);
+    getLogger().debug("   umlComponent: " + this.umlComponent);
     
     userExecution.callRoutine1(newPackage, umlComponent, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

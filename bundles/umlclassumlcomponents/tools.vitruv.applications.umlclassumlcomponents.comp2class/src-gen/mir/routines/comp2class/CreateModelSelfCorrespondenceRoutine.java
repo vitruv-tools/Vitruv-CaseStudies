@@ -37,12 +37,14 @@ public class CreateModelSelfCorrespondenceRoutine extends AbstractRepairRoutineR
   
   private Model compModel;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateModelSelfCorrespondenceRoutine with input:");
-    getLogger().debug("   Model: " + this.compModel);
+    getLogger().debug("   compModel: " + this.compModel);
     
     addCorrespondenceBetween(userExecution.getElement1(compModel), userExecution.getElement2(compModel), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

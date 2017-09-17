@@ -1,6 +1,7 @@
 package mir.routines.class2comp;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
@@ -21,11 +22,11 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourcePackageNewComp(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Component packageOldComp) {
+    public EObject getCorrepondenceSourcePackageNewComp(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Optional<Component> packageOldComp) {
       return newPackage;
     }
     
-    public EObject getCorrepondenceSourceCompLinked(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Component packageOldComp, final Component packageNewComp) {
+    public EObject getCorrepondenceSourceCompLinked(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Optional<Component> packageOldComp, final Optional<Component> packageNewComp) {
       return umlClass;
     }
     
@@ -33,9 +34,11 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
       return oldPackage;
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Component packageOldComp, final Component packageNewComp, final Component compLinked, @Extension final RoutinesFacade _routinesFacade) {
-      if ((packageOldComp != null)) {
-        _routinesFacade.removeCorrespondence(((Classifier) umlClass), ((Classifier) packageOldComp));
+    public void callRoutine1(final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage, final Optional<Component> packageOldComp, final Optional<Component> packageNewComp, final Optional<Component> compLinked, @Extension final RoutinesFacade _routinesFacade) {
+      boolean _isPresent = packageOldComp.isPresent();
+      if (_isPresent) {
+        Component _get = packageOldComp.get();
+        _routinesFacade.removeCorrespondence(((Classifier) umlClass), ((Classifier) _get));
       }
     }
   }
@@ -53,32 +56,43 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
   
   private org.eclipse.uml2.uml.Package newPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine MovedClassToDifferentPackageRoutine with input:");
-    getLogger().debug("   Class: " + this.umlClass);
-    getLogger().debug("   Package: " + this.oldPackage);
-    getLogger().debug("   Package: " + this.newPackage);
+    getLogger().debug("   umlClass: " + this.umlClass);
+    getLogger().debug("   oldPackage: " + this.oldPackage);
+    getLogger().debug("   newPackage: " + this.newPackage);
     
-    Component packageOldComp = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePackageOldComp(umlClass, oldPackage, newPackage), // correspondence source supplier
-    	Component.class,
-    	(Component _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(packageOldComp);
-    Component packageNewComp = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcePackageNewComp(umlClass, oldPackage, newPackage, packageOldComp), // correspondence source supplier
-    	Component.class,
-    	(Component _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(packageNewComp);
-    Component compLinked = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceCompLinked(umlClass, oldPackage, newPackage, packageOldComp, packageNewComp), // correspondence source supplier
-    	Component.class,
-    	(Component _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(compLinked);
+    	Optional<org.eclipse.uml2.uml.Component> packageOldComp = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourcePackageOldComp(umlClass, oldPackage, newPackage), // correspondence source supplier
+    		org.eclipse.uml2.uml.Component.class,
+    		(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(packageOldComp.isPresent() ? packageOldComp.get() : null);
+    	Optional<org.eclipse.uml2.uml.Component> packageNewComp = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourcePackageNewComp(umlClass, oldPackage, newPackage, packageOldComp), // correspondence source supplier
+    		org.eclipse.uml2.uml.Component.class,
+    		(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(packageNewComp.isPresent() ? packageNewComp.get() : null);
+    	Optional<org.eclipse.uml2.uml.Component> compLinked = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceCompLinked(umlClass, oldPackage, newPackage, packageOldComp, packageNewComp), // correspondence source supplier
+    		org.eclipse.uml2.uml.Component.class,
+    		(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(compLinked.isPresent() ? compLinked.get() : null);
     userExecution.callRoutine1(umlClass, oldPackage, newPackage, packageOldComp, packageNewComp, compLinked, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

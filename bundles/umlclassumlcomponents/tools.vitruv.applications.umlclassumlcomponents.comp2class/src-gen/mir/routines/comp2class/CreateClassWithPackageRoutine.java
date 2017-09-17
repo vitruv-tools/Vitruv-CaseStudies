@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -84,23 +83,27 @@ public class CreateClassWithPackageRoutine extends AbstractRepairRoutineRealizat
   
   private Component umlComp;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateClassWithPackageRoutine with input:");
-    getLogger().debug("   Component: " + this.umlComp);
+    getLogger().debug("   umlComp: " + this.umlComp);
     
-    Model classModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model classModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassModel(umlComp), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classModel);
-    org.eclipse.uml2.uml.Package classPackage = UMLFactoryImpl.eINSTANCE.createPackage();
+    org.eclipse.uml2.uml.Package classPackage = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createPackage();
+    notifyObjectCreated(classPackage);
     userExecution.updateClassPackageElement(umlComp, classModel, classPackage);
     
-    org.eclipse.uml2.uml.Class umlClass = UMLFactoryImpl.eINSTANCE.createClass();
+    org.eclipse.uml2.uml.Class umlClass = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createClass();
+    notifyObjectCreated(umlClass);
     userExecution.updateUmlClassElement(umlComp, classModel, classPackage, umlClass);
     
     // val updatedElement userExecution.getElement1(umlComp, classModel, classPackage, umlClass);
@@ -114,5 +117,7 @@ public class CreateClassWithPackageRoutine extends AbstractRepairRoutineRealizat
     addCorrespondenceBetween(userExecution.getElement5(umlComp, classModel, classPackage, umlClass), userExecution.getElement6(umlComp, classModel, classPackage, umlClass), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

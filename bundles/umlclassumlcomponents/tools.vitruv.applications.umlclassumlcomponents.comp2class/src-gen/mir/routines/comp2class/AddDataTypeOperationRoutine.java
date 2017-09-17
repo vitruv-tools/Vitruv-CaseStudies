@@ -6,7 +6,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -70,21 +69,24 @@ public class AddDataTypeOperationRoutine extends AbstractRepairRoutineRealizatio
   
   private DataType compDataType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine AddDataTypeOperationRoutine with input:");
-    getLogger().debug("   Operation: " + this.compOperation);
-    getLogger().debug("   DataType: " + this.compDataType);
+    getLogger().debug("   compOperation: " + this.compOperation);
+    getLogger().debug("   compDataType: " + this.compDataType);
     
     org.eclipse.uml2.uml.Class dataTypeClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceDataTypeClass(compOperation, compDataType), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(compOperation, compDataType));
+    	userExecution.getRetrieveTag1(compOperation, compDataType), 
+    	false // asserted
+    	);
     if (dataTypeClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(dataTypeClass);
-    Operation classOperation = UMLFactoryImpl.eINSTANCE.createOperation();
+    org.eclipse.uml2.uml.Operation classOperation = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createOperation();
+    notifyObjectCreated(classOperation);
     userExecution.updateClassOperationElement(compOperation, compDataType, dataTypeClass, classOperation);
     
     // val updatedElement userExecution.getElement1(compOperation, compDataType, dataTypeClass, classOperation);
@@ -93,5 +95,7 @@ public class AddDataTypeOperationRoutine extends AbstractRepairRoutineRealizatio
     addCorrespondenceBetween(userExecution.getElement2(compOperation, compDataType, dataTypeClass, classOperation), userExecution.getElement3(compOperation, compDataType, dataTypeClass, classOperation), userExecution.getTag1(compOperation, compDataType, dataTypeClass, classOperation));
     
     postprocessElements();
+    
+    return true;
   }
 }

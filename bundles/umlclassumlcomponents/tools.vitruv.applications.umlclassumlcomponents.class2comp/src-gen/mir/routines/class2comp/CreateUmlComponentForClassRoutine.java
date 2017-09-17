@@ -8,7 +8,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -67,20 +66,23 @@ public class CreateUmlComponentForClassRoutine extends AbstractRepairRoutineReal
   
   private org.eclipse.uml2.uml.Class umlClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUmlComponentForClassRoutine with input:");
-    getLogger().debug("   Class: " + this.umlClass);
+    getLogger().debug("   umlClass: " + this.umlClass);
     
-    Model compModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model compModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompModel(umlClass), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compModel);
-    Component umlComp = UMLFactoryImpl.eINSTANCE.createComponent();
+    org.eclipse.uml2.uml.Component umlComp = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createComponent();
+    notifyObjectCreated(umlComp);
     userExecution.updateUmlCompElement(umlClass, compModel, umlComp);
     
     // val updatedElement userExecution.getElement1(umlClass, compModel, umlComp);
@@ -91,5 +93,7 @@ public class CreateUmlComponentForClassRoutine extends AbstractRepairRoutineReal
     userExecution.callRoutine1(umlClass, compModel, umlComp, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

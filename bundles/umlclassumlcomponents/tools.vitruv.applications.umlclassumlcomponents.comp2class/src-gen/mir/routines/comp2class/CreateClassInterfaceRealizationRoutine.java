@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -75,21 +74,24 @@ public class CreateClassInterfaceRealizationRoutine extends AbstractRepairRoutin
   
   private Component umlComp;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateClassInterfaceRealizationRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.iFRealizationOrUsage);
-    getLogger().debug("   Component: " + this.umlComp);
+    getLogger().debug("   iFRealizationOrUsage: " + this.iFRealizationOrUsage);
+    getLogger().debug("   umlComp: " + this.umlComp);
     
     org.eclipse.uml2.uml.Class umlClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlClass(iFRealizationOrUsage, umlComp), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlClass);
-    InterfaceRealization classIFRealization = UMLFactoryImpl.eINSTANCE.createInterfaceRealization();
+    org.eclipse.uml2.uml.InterfaceRealization classIFRealization = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createInterfaceRealization();
+    notifyObjectCreated(classIFRealization);
     userExecution.updateClassIFRealizationElement(iFRealizationOrUsage, umlComp, umlClass, classIFRealization);
     
     // val updatedElement userExecution.getElement1(iFRealizationOrUsage, umlComp, umlClass, classIFRealization);
@@ -101,5 +103,7 @@ public class CreateClassInterfaceRealizationRoutine extends AbstractRepairRoutin
     addCorrespondenceBetween(userExecution.getElement3(iFRealizationOrUsage, umlComp, umlClass, classIFRealization), userExecution.getElement4(iFRealizationOrUsage, umlComp, umlClass, classIFRealization), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

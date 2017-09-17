@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -59,20 +58,23 @@ public class CreateDataTypeForDataTypeRoutine extends AbstractRepairRoutineReali
   
   private DataType compType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateDataTypeForDataTypeRoutine with input:");
-    getLogger().debug("   DataType: " + this.compType);
+    getLogger().debug("   compType: " + this.compType);
     
-    Model classModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model classModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassModel(compType), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classModel);
-    DataType classType = UMLFactoryImpl.eINSTANCE.createDataType();
+    org.eclipse.uml2.uml.DataType classType = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createDataType();
+    notifyObjectCreated(classType);
     userExecution.updateClassTypeElement(compType, classModel, classType);
     
     // val updatedElement userExecution.getElement1(compType, classModel, classType);
@@ -81,5 +83,7 @@ public class CreateDataTypeForDataTypeRoutine extends AbstractRepairRoutineReali
     addCorrespondenceBetween(userExecution.getElement2(compType, classModel, classType), userExecution.getElement3(compType, classModel, classType), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

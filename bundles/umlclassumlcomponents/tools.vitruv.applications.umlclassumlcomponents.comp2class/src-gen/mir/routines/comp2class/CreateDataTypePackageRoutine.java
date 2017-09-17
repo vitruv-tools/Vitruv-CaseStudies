@@ -6,7 +6,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -50,25 +49,30 @@ public class CreateDataTypePackageRoutine extends AbstractRepairRoutineRealizati
   
   private Model compModel;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateDataTypePackageRoutine with input:");
-    getLogger().debug("   Model: " + this.compModel);
+    getLogger().debug("   compModel: " + this.compModel);
     
-    Model classModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model classModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassModel(compModel), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classModel);
-    org.eclipse.uml2.uml.Package dataTypePackage = UMLFactoryImpl.eINSTANCE.createPackage();
+    org.eclipse.uml2.uml.Package dataTypePackage = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createPackage();
+    notifyObjectCreated(dataTypePackage);
     userExecution.updateDataTypePackageElement(compModel, classModel, dataTypePackage);
     
     // val updatedElement userExecution.getElement1(compModel, classModel, dataTypePackage);
     userExecution.update0Element(compModel, classModel, dataTypePackage);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -158,7 +158,7 @@ routine createDataTypeForClass(umlclass::Class umlClass) {
 		update compModel
 			compModel.packagedElements += compDataType
 		
-		add correspondence between umlClass and compDataType tag with DATA_TYPE_REPRESENTATION_TAG
+		add correspondence between umlClass and compDataType tagged with DATA_TYPE_REPRESENTATION_TAG
 	}	
 }
 
@@ -450,8 +450,8 @@ routine movedClassToDifferentPackage(umlclass::Class umlClass, umlclass::Package
 	}
 	action {
 		call {
-			if (packageOldComp !== null)
-				removeCorrespondence(umlClass as Classifier, packageOldComp as Classifier) //shouldn't happen, TODO check this
+			if (packageOldComp.present)
+				removeCorrespondence(umlClass as Classifier, packageOldComp.get as Classifier) //shouldn't happen, TODO check this
 		}			
 		//add correspondence between umlClass and packageNewComp
 		

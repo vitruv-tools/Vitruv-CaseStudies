@@ -50,23 +50,27 @@ public class DeleteCompDataTypeOperationRoutine extends AbstractRepairRoutineRea
   
   private Operation classOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteCompDataTypeOperationRoutine with input:");
-    getLogger().debug("   Operation: " + this.classOperation);
+    getLogger().debug("   classOperation: " + this.classOperation);
     
-    Operation compOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation compOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompOperation(classOperation), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(classOperation));
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
+    	userExecution.getRetrieveTag1(classOperation), 
+    	false // asserted
+    	);
     if (compOperation == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compOperation);
     deleteObject(userExecution.getElement1(classOperation, compOperation));
     
-    removeCorrespondenceBetween(userExecution.getElement2(classOperation, compOperation), userExecution.getElement3(classOperation, compOperation));
+    removeCorrespondenceBetween(userExecution.getElement2(classOperation, compOperation), userExecution.getElement3(classOperation, compOperation), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

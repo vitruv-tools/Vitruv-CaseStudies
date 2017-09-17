@@ -67,26 +67,30 @@ public class DeleteClassRoutine extends AbstractRepairRoutineRealization {
   
   private Component umlComp;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteClassRoutine with input:");
-    getLogger().debug("   Component: " + this.umlComp);
+    getLogger().debug("   umlComp: " + this.umlComp);
     
     org.eclipse.uml2.uml.Class umlClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlClass(umlComp), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlClass);
     org.eclipse.uml2.uml.Package classPackage = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassPackage(umlComp, umlClass), // correspondence source supplier
     	org.eclipse.uml2.uml.Package.class,
     	(org.eclipse.uml2.uml.Package _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (classPackage == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classPackage);
     deleteObject(userExecution.getElement1(umlComp, umlClass, classPackage));
@@ -94,5 +98,7 @@ public class DeleteClassRoutine extends AbstractRepairRoutineRealization {
     userExecution.callRoutine1(umlComp, umlClass, classPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -55,13 +55,15 @@ public class RoutinePackageDeletedRoutine extends AbstractRepairRoutineRealizati
   
   private Model classModel;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RoutinePackageDeletedRoutine with input:");
-    getLogger().debug("   Package: " + this.classPackage);
-    getLogger().debug("   Model: " + this.classModel);
+    getLogger().debug("   classPackage: " + this.classPackage);
+    getLogger().debug("   classModel: " + this.classModel);
     
     userExecution.callRoutine1(classPackage, classModel, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

@@ -37,12 +37,14 @@ public class CreateDataTypeSelfCorrespondenceRoutine extends AbstractRepairRouti
   
   private DataType classType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateDataTypeSelfCorrespondenceRoutine with input:");
-    getLogger().debug("   DataType: " + this.classType);
+    getLogger().debug("   classType: " + this.classType);
     
     addCorrespondenceBetween(userExecution.getElement1(classType), userExecution.getElement2(classType), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

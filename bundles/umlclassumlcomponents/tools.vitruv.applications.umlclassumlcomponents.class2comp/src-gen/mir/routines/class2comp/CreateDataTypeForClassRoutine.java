@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -64,20 +63,23 @@ public class CreateDataTypeForClassRoutine extends AbstractRepairRoutineRealizat
   
   private org.eclipse.uml2.uml.Class umlClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateDataTypeForClassRoutine with input:");
-    getLogger().debug("   Class: " + this.umlClass);
+    getLogger().debug("   umlClass: " + this.umlClass);
     
-    Model compModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model compModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompModel(umlClass), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compModel);
-    DataType compDataType = UMLFactoryImpl.eINSTANCE.createDataType();
+    org.eclipse.uml2.uml.DataType compDataType = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createDataType();
+    notifyObjectCreated(compDataType);
     userExecution.updateCompDataTypeElement(umlClass, compModel, compDataType);
     
     // val updatedElement userExecution.getElement1(umlClass, compModel, compDataType);
@@ -86,5 +88,7 @@ public class CreateDataTypeForClassRoutine extends AbstractRepairRoutineRealizat
     addCorrespondenceBetween(userExecution.getElement2(umlClass, compModel, compDataType), userExecution.getElement3(umlClass, compModel, compDataType), userExecution.getTag1(umlClass, compModel, compDataType));
     
     postprocessElements();
+    
+    return true;
   }
 }

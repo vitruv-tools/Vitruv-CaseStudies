@@ -169,8 +169,8 @@ routine renameClassAndPackage(umlcomp::Component umlComp, String newName) {
 			umlClass.name = newName
 		}
 		call {
-			if (classPackage !== null) {
-				classPackage.name = newName + PACKAGE_SUFFIX 
+			if (classPackage.present) {
+				classPackage.get.name = newName + PACKAGE_SUFFIX 
 			}
 		}
 	}
@@ -259,7 +259,7 @@ routine createClassForDataType(umlcomp::DataType compType){
 			dataTypeClass.name = compType.name
 			dataTypeClass.package = classModel.packagedElements.filter(Package).filter[name==CLASS_DATATYPES_PACKAGE_NAME].get(0)
 		}
-		add correspondence between compType and dataTypeClass tag with DATA_TYPE_REPRESENTATION_TAG
+		add correspondence between compType and dataTypeClass tagged with DATA_TYPE_REPRESENTATION_TAG
 	}	
 }
 
@@ -282,7 +282,7 @@ routine addClassDataTypeProperty(umlcomp::Property compProperty, umlcomp::DataTy
 		update dataTypeClass {
 			dataTypeClass.ownedAttributes += classProperty
 		}
-		add correspondence between classProperty and compProperty tag with DATA_TYPE_PROPERTY
+		add correspondence between classProperty and compProperty tagged with DATA_TYPE_PROPERTY
 	}
 }
 
@@ -323,7 +323,7 @@ routine addDataTypeOperation(umlcomp::Operation compOperation, umlcomp::DataType
 		update dataTypeClass {
 			dataTypeClass.ownedOperations += classOperation
 		}
-		add correspondence between classOperation and compOperation tag with DATA_TYPE_OPERATION_TAG
+		add correspondence between classOperation and compOperation tagged with DATA_TYPE_OPERATION_TAG
 	}
 }
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -42,15 +41,18 @@ public class CreateClassModelRoutine extends AbstractRepairRoutineRealization {
   
   private Model compModel;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateClassModelRoutine with input:");
-    getLogger().debug("   Model: " + this.compModel);
+    getLogger().debug("   compModel: " + this.compModel);
     
-    Model umlClassModel = UMLFactoryImpl.eINSTANCE.createModel();
+    org.eclipse.uml2.uml.Model umlClassModel = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createModel();
+    notifyObjectCreated(umlClassModel);
     userExecution.updateUmlClassModelElement(compModel, umlClassModel);
     
     addCorrespondenceBetween(userExecution.getElement1(compModel, umlClassModel), userExecution.getElement2(compModel, umlClassModel), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

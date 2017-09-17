@@ -41,22 +41,26 @@ public class RenameComponentModelForClassModelRoutine extends AbstractRepairRout
   
   private Model umlClassModel;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameComponentModelForClassModelRoutine with input:");
-    getLogger().debug("   Model: " + this.umlClassModel);
+    getLogger().debug("   umlClassModel: " + this.umlClassModel);
     
-    Model compModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model compModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompModel(umlClassModel), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compModel);
     // val updatedElement userExecution.getElement1(umlClassModel, compModel);
     userExecution.update0Element(umlClassModel, compModel);
     
     postprocessElements();
+    
+    return true;
   }
 }

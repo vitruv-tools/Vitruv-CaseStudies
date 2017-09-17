@@ -37,21 +37,25 @@ public class DeleteComponentRoutine extends AbstractRepairRoutineRealization {
   
   private org.eclipse.uml2.uml.Class umlClass;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteComponentRoutine with input:");
-    getLogger().debug("   Class: " + this.umlClass);
+    getLogger().debug("   umlClass: " + this.umlClass);
     
-    Component umlComp = getCorrespondingElement(
+    org.eclipse.uml2.uml.Component umlComp = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlComp(umlClass), // correspondence source supplier
-    	Component.class,
-    	(Component _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Component.class,
+    	(org.eclipse.uml2.uml.Component _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (umlComp == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlComp);
     deleteObject(userExecution.getElement1(umlClass, umlComp));
     
     postprocessElements();
+    
+    return true;
   }
 }

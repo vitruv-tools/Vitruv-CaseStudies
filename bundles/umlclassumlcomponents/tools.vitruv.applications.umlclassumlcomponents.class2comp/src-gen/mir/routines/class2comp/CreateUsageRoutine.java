@@ -10,7 +10,6 @@ import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.Usage;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -68,13 +67,14 @@ public class CreateUsageRoutine extends AbstractRepairRoutineRealization {
   
   private Interface compInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateUsageRoutine with input:");
-    getLogger().debug("   InterfaceRealization: " + this.classIFRealization);
-    getLogger().debug("   Component: " + this.umlComp);
-    getLogger().debug("   Interface: " + this.compInterface);
+    getLogger().debug("   classIFRealization: " + this.classIFRealization);
+    getLogger().debug("   umlComp: " + this.umlComp);
+    getLogger().debug("   compInterface: " + this.compInterface);
     
-    Usage usage = UMLFactoryImpl.eINSTANCE.createUsage();
+    org.eclipse.uml2.uml.Usage usage = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createUsage();
+    notifyObjectCreated(usage);
     userExecution.updateUsageElement(classIFRealization, umlComp, compInterface, usage);
     
     // val updatedElement userExecution.getElement1(classIFRealization, umlComp, compInterface, usage);
@@ -83,5 +83,7 @@ public class CreateUsageRoutine extends AbstractRepairRoutineRealization {
     addCorrespondenceBetween(userExecution.getElement2(classIFRealization, umlComp, compInterface, usage), userExecution.getElement3(classIFRealization, umlComp, compInterface, usage), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

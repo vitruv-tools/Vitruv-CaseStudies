@@ -38,21 +38,25 @@ public class RemoveInterfaceRealizationForUsageRoutine extends AbstractRepairRou
   
   private Usage compUsage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveInterfaceRealizationForUsageRoutine with input:");
-    getLogger().debug("   Usage: " + this.compUsage);
+    getLogger().debug("   compUsage: " + this.compUsage);
     
-    InterfaceRealization classIFRealization = getCorrespondingElement(
+    org.eclipse.uml2.uml.InterfaceRealization classIFRealization = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassIFRealization(compUsage), // correspondence source supplier
-    	InterfaceRealization.class,
-    	(InterfaceRealization _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.InterfaceRealization.class,
+    	(org.eclipse.uml2.uml.InterfaceRealization _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (classIFRealization == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classIFRealization);
     deleteObject(userExecution.getElement1(compUsage, classIFRealization));
     
     postprocessElements();
+    
+    return true;
   }
 }

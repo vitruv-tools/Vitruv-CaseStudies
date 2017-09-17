@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl;
 import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -40,6 +39,10 @@ public class CreateClassInterfaceRoutine extends AbstractRepairRoutineRealizatio
       _packagedElements.add(classInterface);
     }
     
+    public EObject getCorrepondenceSource1(final Interface compInterface, final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
+      return compInterface;
+    }
+    
     public EObject getElement2(final Interface compInterface, final Component umlComp, final org.eclipse.uml2.uml.Class umlClass, final Interface classInterface) {
       return compInterface;
     }
@@ -50,10 +53,6 @@ public class CreateClassInterfaceRoutine extends AbstractRepairRoutineRealizatio
     
     public EObject getCorrepondenceSourceUmlClass(final Interface compInterface, final Component umlComp) {
       return umlComp;
-    }
-    
-    public EObject getCorrepondenceSourcenull(final Interface compInterface, final Component umlComp, final org.eclipse.uml2.uml.Class umlClass) {
-      return compInterface;
     }
   }
   
@@ -68,28 +67,32 @@ public class CreateClassInterfaceRoutine extends AbstractRepairRoutineRealizatio
   
   private Component umlComp;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateClassInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.compInterface);
-    getLogger().debug("   Component: " + this.umlComp);
+    getLogger().debug("   compInterface: " + this.compInterface);
+    getLogger().debug("   umlComp: " + this.umlComp);
     
     org.eclipse.uml2.uml.Class umlClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlClass(compInterface, umlComp), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	null);
+    	null, 
+    	false // asserted
+    	);
     if (umlClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlClass);
-    if (getCorrespondingElement(
-    	userExecution.getCorrepondenceSourcenull(compInterface, umlComp, umlClass), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
-    	null) != null) {
-    	return;
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(compInterface, umlComp, umlClass), // correspondence source supplier
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
     }
-    Interface classInterface = UMLFactoryImpl.eINSTANCE.createInterface();
+    org.eclipse.uml2.uml.Interface classInterface = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createInterface();
+    notifyObjectCreated(classInterface);
     userExecution.updateClassInterfaceElement(compInterface, umlComp, umlClass, classInterface);
     
     // val updatedElement userExecution.getElement1(compInterface, umlComp, umlClass, classInterface);
@@ -98,5 +101,7 @@ public class CreateClassInterfaceRoutine extends AbstractRepairRoutineRealizatio
     addCorrespondenceBetween(userExecution.getElement2(compInterface, umlComp, umlClass, classInterface), userExecution.getElement3(compInterface, umlComp, umlClass, classInterface), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

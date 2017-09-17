@@ -50,23 +50,27 @@ public class DeleteCompDataTypePropertyRoutine extends AbstractRepairRoutineReal
   
   private Property classProperty;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteCompDataTypePropertyRoutine with input:");
-    getLogger().debug("   Property: " + this.classProperty);
+    getLogger().debug("   classProperty: " + this.classProperty);
     
-    Property compProperty = getCorrespondingElement(
+    org.eclipse.uml2.uml.Property compProperty = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompProperty(classProperty), // correspondence source supplier
-    	Property.class,
-    	(Property _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(classProperty));
+    	org.eclipse.uml2.uml.Property.class,
+    	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
+    	userExecution.getRetrieveTag1(classProperty), 
+    	false // asserted
+    	);
     if (compProperty == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compProperty);
     deleteObject(userExecution.getElement1(classProperty, compProperty));
     
-    removeCorrespondenceBetween(userExecution.getElement2(classProperty, compProperty), userExecution.getElement3(classProperty, compProperty));
+    removeCorrespondenceBetween(userExecution.getElement2(classProperty, compProperty), userExecution.getElement3(classProperty, compProperty), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

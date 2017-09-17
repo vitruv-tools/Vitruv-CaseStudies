@@ -46,22 +46,26 @@ public class ChangeClassDataTypeOperationRoutine extends AbstractRepairRoutineRe
   
   private Operation compOperation;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeClassDataTypeOperationRoutine with input:");
-    getLogger().debug("   Operation: " + this.compOperation);
+    getLogger().debug("   compOperation: " + this.compOperation);
     
-    Operation classOperation = getCorrespondingElement(
+    org.eclipse.uml2.uml.Operation classOperation = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceClassOperation(compOperation), // correspondence source supplier
-    	Operation.class,
-    	(Operation _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(compOperation));
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
+    	userExecution.getRetrieveTag1(compOperation), 
+    	false // asserted
+    	);
     if (classOperation == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(classOperation);
     // val updatedElement userExecution.getElement1(compOperation, classOperation);
     userExecution.update0Element(compOperation, classOperation);
     
     postprocessElements();
+    
+    return true;
   }
 }

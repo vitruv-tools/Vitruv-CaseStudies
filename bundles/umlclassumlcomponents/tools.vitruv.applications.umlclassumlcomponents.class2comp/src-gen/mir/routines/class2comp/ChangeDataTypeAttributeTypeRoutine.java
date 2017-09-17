@@ -53,32 +53,38 @@ public class ChangeDataTypeAttributeTypeRoutine extends AbstractRepairRoutineRea
   
   private DataType classType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeDataTypeAttributeTypeRoutine with input:");
-    getLogger().debug("   Property: " + this.classProperty);
-    getLogger().debug("   DataType: " + this.classType);
+    getLogger().debug("   classProperty: " + this.classProperty);
+    getLogger().debug("   classType: " + this.classType);
     
-    Property compAttribute = getCorrespondingElement(
+    org.eclipse.uml2.uml.Property compAttribute = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompAttribute(classProperty, classType), // correspondence source supplier
-    	Property.class,
-    	(Property _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(classProperty, classType));
+    	org.eclipse.uml2.uml.Property.class,
+    	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
+    	userExecution.getRetrieveTag1(classProperty, classType), 
+    	false // asserted
+    	);
     if (compAttribute == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compAttribute);
-    DataType compType = getCorrespondingElement(
+    org.eclipse.uml2.uml.DataType compType = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompType(classProperty, classType, compAttribute), // correspondence source supplier
-    	DataType.class,
-    	(DataType _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.DataType.class,
+    	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compType == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compType);
     // val updatedElement userExecution.getElement1(classProperty, classType, compAttribute, compType);
     userExecution.update0Element(classProperty, classType, compAttribute, compType);
     
     postprocessElements();
+    
+    return true;
   }
 }

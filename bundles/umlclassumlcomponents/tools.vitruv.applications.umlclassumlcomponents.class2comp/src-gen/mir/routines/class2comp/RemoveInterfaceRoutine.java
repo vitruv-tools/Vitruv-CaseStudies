@@ -65,17 +65,19 @@ public class RemoveInterfaceRoutine extends AbstractRepairRoutineRealization {
   
   private Interface classInterface;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveInterfaceRoutine with input:");
-    getLogger().debug("   Interface: " + this.classInterface);
+    getLogger().debug("   classInterface: " + this.classInterface);
     
-    Interface compInterface = getCorrespondingElement(
+    org.eclipse.uml2.uml.Interface compInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompInterface(classInterface), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compInterface);
     userExecution.callRoutine1(classInterface, compInterface, actionsFacade);
@@ -83,5 +85,7 @@ public class RemoveInterfaceRoutine extends AbstractRepairRoutineRealization {
     deleteObject(userExecution.getElement1(classInterface, compInterface));
     
     postprocessElements();
+    
+    return true;
   }
 }

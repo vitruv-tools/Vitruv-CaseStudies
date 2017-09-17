@@ -37,12 +37,14 @@ public class CreatePrimitiveDataTypeSelfCorrespondenceRoutine extends AbstractRe
   
   private PrimitiveType classType;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreatePrimitiveDataTypeSelfCorrespondenceRoutine with input:");
-    getLogger().debug("   PrimitiveType: " + this.classType);
+    getLogger().debug("   classType: " + this.classType);
     
     addCorrespondenceBetween(userExecution.getElement1(classType), userExecution.getElement2(classType), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

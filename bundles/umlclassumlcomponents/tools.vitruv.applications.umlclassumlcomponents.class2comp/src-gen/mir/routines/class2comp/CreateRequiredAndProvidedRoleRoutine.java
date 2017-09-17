@@ -71,15 +71,17 @@ public class CreateRequiredAndProvidedRoleRoutine extends AbstractRepairRoutineR
   
   private org.eclipse.uml2.uml.Package classPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateRequiredAndProvidedRoleRoutine with input:");
-    getLogger().debug("   Interface: " + this.classInterface);
-    getLogger().debug("   InterfaceRealization: " + this.classIFRealizationReq);
-    getLogger().debug("   Package: " + this.interfacePackage);
-    getLogger().debug("   Package: " + this.classPackage);
+    getLogger().debug("   classInterface: " + this.classInterface);
+    getLogger().debug("   classIFRealizationReq: " + this.classIFRealizationReq);
+    getLogger().debug("   interfacePackage: " + this.interfacePackage);
+    getLogger().debug("   classPackage: " + this.classPackage);
     
     userExecution.callRoutine1(classInterface, classIFRealizationReq, interfacePackage, classPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

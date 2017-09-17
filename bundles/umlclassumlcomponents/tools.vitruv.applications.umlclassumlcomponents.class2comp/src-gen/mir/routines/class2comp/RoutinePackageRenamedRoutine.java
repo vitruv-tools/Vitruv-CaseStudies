@@ -74,14 +74,16 @@ public class RoutinePackageRenamedRoutine extends AbstractRepairRoutineRealizati
   
   private String oldName;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RoutinePackageRenamedRoutine with input:");
-    getLogger().debug("   Package: " + this.classPackage);
-    getLogger().debug("   String: " + this.newName);
-    getLogger().debug("   String: " + this.oldName);
+    getLogger().debug("   classPackage: " + this.classPackage);
+    getLogger().debug("   newName: " + this.newName);
+    getLogger().debug("   oldName: " + this.oldName);
     
     userExecution.callRoutine1(classPackage, newName, oldName, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

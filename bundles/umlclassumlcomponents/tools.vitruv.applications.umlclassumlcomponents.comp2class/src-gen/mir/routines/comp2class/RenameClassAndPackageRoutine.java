@@ -1,6 +1,7 @@
 package mir.routines.comp2class;
 
 import java.io.IOException;
+import java.util.Optional;
 import mir.routines.comp2class.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
@@ -21,11 +22,11 @@ public class RenameClassAndPackageRoutine extends AbstractRepairRoutineRealizati
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Component umlComp, final String newName, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage) {
+    public EObject getElement1(final Component umlComp, final String newName, final org.eclipse.uml2.uml.Class umlClass, final Optional<org.eclipse.uml2.uml.Package> classPackage) {
       return umlClass;
     }
     
-    public void update0Element(final Component umlComp, final String newName, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage) {
+    public void update0Element(final Component umlComp, final String newName, final org.eclipse.uml2.uml.Class umlClass, final Optional<org.eclipse.uml2.uml.Package> classPackage) {
       umlClass.setName(newName);
     }
     
@@ -41,9 +42,11 @@ public class RenameClassAndPackageRoutine extends AbstractRepairRoutineRealizati
       return umlComp;
     }
     
-    public void callRoutine1(final Component umlComp, final String newName, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage, @Extension final RoutinesFacade _routinesFacade) {
-      if ((classPackage != null)) {
-        classPackage.setName((newName + SharedUtil.PACKAGE_SUFFIX));
+    public void callRoutine1(final Component umlComp, final String newName, final org.eclipse.uml2.uml.Class umlClass, final Optional<org.eclipse.uml2.uml.Package> classPackage, @Extension final RoutinesFacade _routinesFacade) {
+      boolean _isPresent = classPackage.isPresent();
+      if (_isPresent) {
+        org.eclipse.uml2.uml.Package _get = classPackage.get();
+        _get.setName((newName + SharedUtil.PACKAGE_SUFFIX));
       }
     }
   }
@@ -59,31 +62,38 @@ public class RenameClassAndPackageRoutine extends AbstractRepairRoutineRealizati
   
   private String newName;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameClassAndPackageRoutine with input:");
-    getLogger().debug("   Component: " + this.umlComp);
-    getLogger().debug("   String: " + this.newName);
+    getLogger().debug("   umlComp: " + this.umlComp);
+    getLogger().debug("   newName: " + this.newName);
     
     org.eclipse.uml2.uml.Class umlClass = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceUmlClass(umlComp, newName), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag1(umlComp, newName));
+    	userExecution.getRetrieveTag1(umlComp, newName), 
+    	false // asserted
+    	);
     if (umlClass == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(umlClass);
-    org.eclipse.uml2.uml.Package classPackage = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceClassPackage(umlComp, newName, umlClass), // correspondence source supplier
-    	org.eclipse.uml2.uml.Package.class,
-    	(org.eclipse.uml2.uml.Package _element) -> true, // correspondence precondition checker
-    	null);
-    registerObjectUnderModification(classPackage);
+    	Optional<org.eclipse.uml2.uml.Package> classPackage = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceClassPackage(umlComp, newName, umlClass), // correspondence source supplier
+    		org.eclipse.uml2.uml.Package.class,
+    		(org.eclipse.uml2.uml.Package _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(classPackage.isPresent() ? classPackage.get() : null);
     // val updatedElement userExecution.getElement1(umlComp, newName, umlClass, classPackage);
     userExecution.update0Element(umlComp, newName, umlClass, classPackage);
     
     userExecution.callRoutine1(umlComp, newName, umlClass, classPackage, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

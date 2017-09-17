@@ -75,22 +75,26 @@ public class RoutineCreatedUmlClassRoutine extends AbstractRepairRoutineRealizat
   
   private org.eclipse.uml2.uml.Package classPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RoutineCreatedUmlClassRoutine with input:");
-    getLogger().debug("   Class: " + this.umlClass);
-    getLogger().debug("   Package: " + this.classPackage);
+    getLogger().debug("   umlClass: " + this.umlClass);
+    getLogger().debug("   classPackage: " + this.classPackage);
     
-    Model compModel = getCorrespondingElement(
+    org.eclipse.uml2.uml.Model compModel = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompModel(umlClass, classPackage), // correspondence source supplier
-    	Model.class,
-    	(Model _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compModel == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compModel);
     userExecution.callRoutine1(umlClass, classPackage, compModel, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

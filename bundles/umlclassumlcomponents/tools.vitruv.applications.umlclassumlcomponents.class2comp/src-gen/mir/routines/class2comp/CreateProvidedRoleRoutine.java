@@ -61,23 +61,27 @@ public class CreateProvidedRoleRoutine extends AbstractRepairRoutineRealization 
   
   private org.eclipse.uml2.uml.Package affectedPackage;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine CreateProvidedRoleRoutine with input:");
-    getLogger().debug("   InterfaceRealization: " + this.classIFRealization);
-    getLogger().debug("   Interface: " + this.classInterface);
-    getLogger().debug("   Package: " + this.affectedPackage);
+    getLogger().debug("   classIFRealization: " + this.classIFRealization);
+    getLogger().debug("   classInterface: " + this.classInterface);
+    getLogger().debug("   affectedPackage: " + this.affectedPackage);
     
-    Interface compInterface = getCorrespondingElement(
+    org.eclipse.uml2.uml.Interface compInterface = getCorrespondingElement(
     	userExecution.getCorrepondenceSourceCompInterface(classIFRealization, classInterface, affectedPackage), // correspondence source supplier
-    	Interface.class,
-    	(Interface _element) -> true, // correspondence precondition checker
-    	null);
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
     if (compInterface == null) {
-    	return;
+    	return false;
     }
     registerObjectUnderModification(compInterface);
     userExecution.callRoutine1(classIFRealization, classInterface, affectedPackage, compInterface, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }

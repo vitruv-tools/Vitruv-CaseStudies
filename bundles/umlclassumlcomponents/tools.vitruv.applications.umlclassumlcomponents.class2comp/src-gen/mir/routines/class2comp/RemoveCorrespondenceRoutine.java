@@ -39,13 +39,15 @@ public class RemoveCorrespondenceRoutine extends AbstractRepairRoutineRealizatio
   
   private Classifier compObject;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveCorrespondenceRoutine with input:");
-    getLogger().debug("   Classifier: " + this.classObject);
-    getLogger().debug("   Classifier: " + this.compObject);
+    getLogger().debug("   classObject: " + this.classObject);
+    getLogger().debug("   compObject: " + this.compObject);
     
-    removeCorrespondenceBetween(userExecution.getElement1(classObject, compObject), userExecution.getElement2(classObject, compObject));
+    removeCorrespondenceBetween(userExecution.getElement1(classObject, compObject), userExecution.getElement2(classObject, compObject), "");
     
     postprocessElements();
+    
+    return true;
   }
 }

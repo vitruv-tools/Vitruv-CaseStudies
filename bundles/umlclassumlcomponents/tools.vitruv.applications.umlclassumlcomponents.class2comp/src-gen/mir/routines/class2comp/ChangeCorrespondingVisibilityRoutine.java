@@ -40,12 +40,14 @@ public class ChangeCorrespondingVisibilityRoutine extends AbstractRepairRoutineR
   
   private NamedElement classElement;
   
-  protected void executeRoutine() throws IOException {
+  protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine ChangeCorrespondingVisibilityRoutine with input:");
-    getLogger().debug("   NamedElement: " + this.classElement);
+    getLogger().debug("   classElement: " + this.classElement);
     
     userExecution.callRoutine1(classElement, actionsFacade);
     
     postprocessElements();
+    
+    return true;
   }
 }
