@@ -834,15 +834,6 @@ reaction RenameOperationRequiredRole {
 	call reinitializeOperationRequiredRole(affectedEObject)
 }
 
-reaction ChangeOperationRequiredRoleEntity { 
-	after element replaced at pcm::OperationRequiredRole[requiringEntity_RequiredRole]
-	call {
-		val requiredRole = affectedEObject;
-		removeRequiredRole(requiredRole, oldValue);
-		addRequiredRole(requiredRole);
-	}
-}
-
 reaction ChangeOperationRequiredRoleInterface { 
 	after element replaced at pcm::OperationRequiredRole[requiredInterface__OperationRequiredRole]
 	call reinitializeOperationRequiredRole(affectedEObject)
@@ -960,6 +951,7 @@ reaction CreatedParameter {
 routine createParameter(pcm::Parameter parameter) { 
 	match {
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to parameter.operationSignature__Parameter
+		require absence of java::OrdinaryParameter corresponding to parameter
 		val javaParameterTypeClass = retrieve optional java::Class corresponding to parameter.dataType__Parameter
 	} 
 	action { 
