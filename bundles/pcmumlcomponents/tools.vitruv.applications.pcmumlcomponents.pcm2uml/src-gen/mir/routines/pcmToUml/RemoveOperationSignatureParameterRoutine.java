@@ -46,7 +46,7 @@ public class RemoveOperationSignatureParameterRoutine extends AbstractRepairRout
     	org.eclipse.uml2.uml.Parameter.class,
     	(org.eclipse.uml2.uml.Parameter _element) -> true, // correspondence precondition checker
     	null, 
-    	false // asserted
+    	true // asserted
     	);
     if (umlParameter == null) {
     	return false;
