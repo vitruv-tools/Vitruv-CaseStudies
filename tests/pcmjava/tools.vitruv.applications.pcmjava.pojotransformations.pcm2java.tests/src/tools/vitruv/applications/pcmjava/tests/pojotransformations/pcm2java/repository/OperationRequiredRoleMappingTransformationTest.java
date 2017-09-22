@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import java.util.concurrent.Callable;
-
 import org.junit.Test;
 
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -66,17 +64,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
         opr.setRequiringEntity_RequiredRole(newBasicComponent);
         super.saveAndSynchronizeChanges(repo);
 
-        this.getVirtualModel().executeCommand(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                try {
-                	assertOperationRequiredRole(opr);
-                } catch (final Throwable e) {
-                    throw new RuntimeException(e);
-                }
-                return null;
-            }
-        });
+       	assertOperationRequiredRole(opr);
     }
 
     @Test
