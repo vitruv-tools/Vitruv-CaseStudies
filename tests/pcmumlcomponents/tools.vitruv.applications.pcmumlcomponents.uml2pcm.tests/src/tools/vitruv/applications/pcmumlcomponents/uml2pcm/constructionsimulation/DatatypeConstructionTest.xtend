@@ -9,7 +9,7 @@ class DatatypeConstructionTest extends ModelConstructionTest {
 	def void dataTypeTest() {
 		val Resource resource = loadModel("model/datatype.uml")
 		userInteractor.addNextSelections(1)
-		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.rootElement)
+		createAndSynchronizeModel("model/" + TARGET_MODEL_NAME, resource.rootElement)
 	}
 	
 }
