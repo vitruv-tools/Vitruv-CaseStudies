@@ -41,6 +41,10 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
       return _operationSignature__Parameter;
     }
     
+    public EObject getCorrepondenceSource1(final Parameter parameter, final InterfaceMethod interfaceMethod) {
+      return parameter;
+    }
+    
     public EObject getElement2(final Parameter parameter, final InterfaceMethod interfaceMethod, final Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass, final OrdinaryParameter javaParameter) {
       return parameter;
     }
@@ -85,6 +89,14 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     	return false;
     }
     registerObjectUnderModification(interfaceMethod);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(parameter, interfaceMethod), // correspondence source supplier
+    	org.emftext.language.java.parameters.OrdinaryParameter.class,
+    	(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     	Optional<org.emftext.language.java.classifiers.Class> javaParameterTypeClass = Optional.ofNullable(getCorrespondingElement(
     		userExecution.getCorrepondenceSourceJavaParameterTypeClass(parameter, interfaceMethod), // correspondence source supplier
     		org.emftext.language.java.classifiers.Class.class,

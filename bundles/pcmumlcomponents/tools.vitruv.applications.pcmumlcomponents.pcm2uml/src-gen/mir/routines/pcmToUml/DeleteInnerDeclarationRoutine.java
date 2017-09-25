@@ -57,7 +57,7 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	org.eclipse.uml2.uml.DataType.class,
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null, 
-    	false // asserted
+    	true // asserted
     	);
     if (compositeType == null) {
     	return false;
@@ -68,7 +68,7 @@ public class DeleteInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     	org.eclipse.uml2.uml.Property.class,
     	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
     	null, 
-    	false // asserted
+    	true // asserted
     	);
     if (umlProperty == null) {
     	return false;

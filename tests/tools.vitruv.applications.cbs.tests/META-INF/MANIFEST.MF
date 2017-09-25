@@ -8,4 +8,3 @@ Require-Bundle: org.junit,
  tools.vitruv.applications.pcmjava.tests,
  tools.vitruv.applications.umljava.tests,
  tools.vitruv.applications.pcmumlcomponents.tests
-Import-Package: tools.vitruv.applications.umljava.tests
