@@ -2,10 +2,7 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
-import org.junit.Before;
 import org.junit.Test;
 
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -16,11 +13,6 @@ import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUs
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
 public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
-
-	@Before
-	public void logger() {
-		Logger.getRootLogger().setLevel(Level.ALL);
-	}
     /**
      * interface in contracts package --> should automatically be mapped to operation interface
      *

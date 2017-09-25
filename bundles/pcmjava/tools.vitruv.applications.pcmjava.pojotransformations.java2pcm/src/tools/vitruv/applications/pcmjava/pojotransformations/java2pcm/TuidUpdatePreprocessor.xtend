@@ -10,6 +10,7 @@ import tools.vitruv.framework.tuid.TuidManager
 import org.eclipse.emf.ecore.EObject
 import tools.vitruv.framework.util.command.ResourceAccess
 
+// This is a copy from tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm 
 class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 	
 	new() {
