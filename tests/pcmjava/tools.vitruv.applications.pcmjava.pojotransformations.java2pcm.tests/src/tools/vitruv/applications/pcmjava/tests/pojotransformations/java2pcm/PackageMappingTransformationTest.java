@@ -14,6 +14,7 @@ import org.palladiosimulator.pcm.repository.CompositeComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
 
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
@@ -53,6 +54,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
     public void testAddSecondPackage() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
 
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
         this.assertRepositoryAndPCMName(repo, bc, Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
@@ -63,6 +65,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
     public void testCreateCompositeComponent() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
 
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
         final CompositeComponent cc = super.addSecondPackageCorrespondsToCompositeComponent();
 
         this.assertRepositoryAndPCMName(repo, cc, Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
@@ -73,6 +76,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
     public void testCreateSystem() throws Throwable {
         final Repository repository = super.addRepoContractsAndDatatypesPackage();
 
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
         final System system = super.addSecondPackageCorrespondsToSystem();
 
         this.assertPCMNamedElement(system, Pcm2JavaTestUtils.SYSTEM_NAME);

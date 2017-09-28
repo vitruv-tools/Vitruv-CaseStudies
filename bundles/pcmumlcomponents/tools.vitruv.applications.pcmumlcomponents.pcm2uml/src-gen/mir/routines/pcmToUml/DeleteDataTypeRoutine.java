@@ -47,7 +47,7 @@ public class DeleteDataTypeRoutine extends AbstractRepairRoutineRealization {
     	org.eclipse.uml2.uml.Type.class,
     	(org.eclipse.uml2.uml.Type _element) -> true, // correspondence precondition checker
     	null, 
-    	false // asserted
+    	true // asserted
     	);
     if (umlType == null) {
     	return false;

@@ -38,7 +38,6 @@ public class ExecutorPcmToJava extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2java.CreatedRequiredRoleReaction());
     this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2java.DeletedRequiredRoleReaction());
     this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2java.RenameOperationRequiredRoleReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2java.ChangeOperationRequiredRoleEntityReaction());
     this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2java.ChangeOperationRequiredRoleInterfaceReaction());
     this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2java.CreatedOperationSignatureReaction());
     this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2java.RenameOperationSignatureReaction());

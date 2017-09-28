@@ -1,0 +1,293 @@
+import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
+
+import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*
+import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
+import org.palladiosimulator.pcm.repository.OperationProvidedRole
+
+import "http://www.emftext.org/java" as java 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: Java2PcmMethod
+in reaction to changes in Java
+execute actions in PCM
+
+//Rename
+reaction JavaNamedElementRenamed {
+    after attribute replaced at java::NamedElement[name]
+    call {
+    	renameNamedElement(affectedEObject)
+    }
+}
+
+routine renameNamedElement(java::NamedElement javaElement) {
+    match {
+        val pcmElement = retrieve pcm::NamedElement corresponding to javaElement
+    }
+    action {
+        update pcmElement {
+            pcmElement.entityName = javaElement.name;
+        }
+    }
+}
+
+//Parameter
+reaction ParameterCreated {
+	after element java::OrdinaryParameter inserted in java::Parametrizable[parameters]
+	call {
+		createParameter(newValue, affectedEObject)
+	}
+}
+
+routine createParameter(java::OrdinaryParameter javaParameter, java::Parametrizable javaMethod) {
+	match {
+		val operationSignature = retrieve pcm::OperationSignature corresponding to javaMethod
+	}
+	action {
+		val pcmParameter = create pcm::Parameter and initialize {
+			pcmParameter.operationSignature__Parameter = operationSignature
+			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.
+				getDataTypeFromTypeReference(javaParameter.typeReference, correspondenceModel,
+				userInteracting, null)
+			pcmParameter.dataType__Parameter.repository__DataType = operationSignature.interface__OperationSignature.repository__Interface
+			pcmParameter.name = javaParameter.name
+		}
+		add correspondence between javaParameter and pcmParameter
+			
+		update operationSignature {
+			operationSignature.parameters__OperationSignature += pcmParameter
+		}
+	}
+}
+
+//TODO changed Parameter doesn't work yet
+reaction ParameterDeleted {
+    after element java::OrdinaryParameter removed from java::Parametrizable[parameters]
+    call {
+    	//oldValue has no correspondence element, but it should
+    	//this seems to be a bug. If fixed it should have a correspondence and work.
+    	deleteParameter(oldValue)
+    }
+}
+
+routine deleteParameter(java::OrdinaryParameter javaParameter) {
+    match {
+    	val pcmParameter = retrieve pcm::Parameter corresponding to javaParameter
+    }
+    action{
+    	delete pcmParameter         
+    }
+}
+
+/**
+ * Need a special reaction, because Parameter is not a NamedElement.
+ */
+reaction ParameterNameChanged {
+	after attribute replaced at java::Parameter[name]
+	call changeParameterName(newValue, affectedEObject)
+}
+
+routine changeParameterName(String newName, java::Parameter javaParameter) {
+	match {
+		val pcmParameter = retrieve pcm::Parameter corresponding to javaParameter
+	}
+	action {
+		update pcmParameter {
+			pcmParameter.name = newName
+		}
+	}
+}
+
+//Field
+/**
+ * Check if Field has correspondence to CompositeDataType, ComposedProvidingRequiringEntity, 
+ * OperationInterface or RepositoryComponent and react accordingly.
+ */
+reaction FieldCreated {
+	after element java::Field inserted in java::Class[members]
+	call {
+		createInnerDeclaration(newValue.containingConcreteClassifier, newValue)
+		val type = getTargetClassifierFromImplementsReferenceAndNormalizeURI(newValue.typeReference)
+		fieldCreatedCorrespondingToOperationInterface(type, newValue)
+		fieldCreatedCorrespondingToRepositoryComponent(type, newValue)
+		createAssemblyContext(newValue.containingConcreteClassifier, newValue)
+	}
+}
+
+routine createInnerDeclaration(java::ConcreteClassifier classifier, java::Field javaField) {
+	match {
+		val compositeDataType = retrieve pcm::CompositeDataType corresponding to classifier
+	}
+	action {
+		val innerDeclaration = create pcm::InnerDeclaration and initialize {
+			innerDeclaration.entityName = javaField.name
+			innerDeclaration.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
+				getDataTypeFromTypeReference(javaField.typeReference, correspondenceModel,
+					userInteracting, null)
+			innerDeclaration.compositeDataType_InnerDeclaration = compositeDataType
+		}
+		add correspondence between innerDeclaration and javaField
+			
+	}
+}
+
+routine createAssemblyContext(java::ConcreteClassifier classifier, java::Field javaField) {
+	match {
+		val composedProvidingRequiringEntity = retrieve pcm::ComposedProvidingRequiringEntity corresponding to classifier
+		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to getTargetClassifierFromTypeReference(javaField.typeReference)
+	}
+	action {
+		val assemblyContext = create pcm::AssemblyContext and initialize {
+			assemblyContext.entityName = javaField.name
+			assemblyContext.encapsulatedComponent__AssemblyContext = repositoryComponent
+			assemblyContext.parentStructure__AssemblyContext = composedProvidingRequiringEntity	
+		}
+		add correspondence between assemblyContext and javaField
+			
+	}
+}
+
+routine fieldCreatedCorrespondingToOperationInterface(java::Classifier classifier, java::Field javaField) {
+	match {
+		val correspondingInterface = retrieve pcm::OperationInterface corresponding to classifier
+		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to javaField.containingConcreteClassifier
+	}
+	action {
+		call {
+			createOperationRequiredRoleCorrespondingToField(javaField, correspondingInterface, repositoryComponent)
+		}
+	}
+}
+routine fieldCreatedCorrespondingToRepositoryComponent(java::Classifier classifier, java::Field javaField) {
+	match {
+		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to classifier
+		val concreteRepositoryComponent = retrieve pcm::RepositoryComponent corresponding to javaField.containingConcreteClassifier
+	}
+	action {
+		call {
+			var operationProvidedRoles = repositoryComponent.providedRoles_InterfaceProvidingEntity.filter(OperationProvidedRole)
+			for (providedRole : operationProvidedRoles) {
+				createOperationRequiredRoleCorrespondingToField(javaField, providedRole.providedInterface__OperationProvidedRole, concreteRepositoryComponent)
+			}
+		}
+			
+	}
+}
+
+routine createOperationRequiredRoleCorrespondingToField(java::Field javaField, pcm::OperationInterface operationInterface, pcm::RepositoryComponent repoComponent) {
+	action {
+		val operationRequiredRole = create pcm::OperationRequiredRole and initialize {
+			operationRequiredRole.requiredInterface__OperationRequiredRole = operationInterface
+			operationRequiredRole.requiringEntity_RequiredRole = repoComponent
+			operationRequiredRole.entityName = "Component_" + repoComponent.entityName + "_requires_" +
+				operationInterface.entityName
+		}
+		add correspondence between operationRequiredRole and javaField
+	}
+}
+
+reaction FieldTypeChange {
+	after element replaced at java::Field[typeReference]
+	call changeInnerDeclarationType(newValue, affectedEObject)
+}
+
+routine changeInnerDeclarationType(java::TypeReference typeReference, java::Field javaField) {
+	match {
+		val innerDeclaration = retrieve pcm::InnerDeclaration corresponding to javaField
+	}
+	action {
+		update innerDeclaration {
+			innerDeclaration.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
+						getDataTypeFromTypeReference(typeReference, correspondenceModel,
+							userInteracting, null)
+		}
+	}
+}
+//Class Method
+reaction ClassMethodCreated {
+	after element java::ClassMethod inserted in java::Class[members]
+	call createSeffFromImplementingInterfaces(newValue, affectedEObject)
+}
+
+routine createSeffFromImplementingInterfaces(java::ClassMethod classMethod, java::Class javaClass) {
+	action {
+		call {
+			val implementingInterfaces = findImplementingInterfacesFromTypeRefs(javaClass.implements)
+			for (implementingInterface : implementingInterfaces) {
+				createSeffFromImplementingInterface(classMethod, javaClass, implementingInterface)
+			}
+		}
+	}
+}
+
+routine createSeffFromImplementingInterface(java::ClassMethod classMethod, java::Class javaClass, java::Interface javaInterface) {
+	match {
+		val operationInterface = retrieve pcm::OperationInterface corresponding to javaInterface
+	} 
+	action {
+		call {
+			val methods = javaInterface.methods.filter[sameSignature(classMethod)]
+			for (method : methods) {
+				createSEFF(method, javaClass, classMethod)
+			}
+		}
+	}
+}
+
+routine createSEFF(java::Method javaMethod, java::Class javaClass, java::ClassMethod classMethod) {
+	match {
+		val operationSignature = retrieve pcm::OperationSignature corresponding to javaMethod
+		val basicComponent = retrieve pcm::BasicComponent corresponding to javaClass
+	}
+	action {
+		val rdseff = create pcm::ResourceDemandingSEFF and initialize {
+			rdseff.describedService__SEFF = operationSignature
+			rdseff.basicComponent_ServiceEffectSpecification = basicComponent
+		}
+		add correspondence between classMethod and rdseff
+		
+		update basicComponent {
+			basicComponent.serviceEffectSpecifications__BasicComponent += rdseff
+		}
+	}
+}
+
+//Interface Method
+reaction InterfaceMethodCreated {
+	after element java::InterfaceMethod inserted in java::Interface[members] 
+	call createPCMSignature(newValue)
+}
+
+routine createPCMSignature(java::InterfaceMethod interfaceMethod) {
+	match {
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to interfaceMethod.containingConcreteClassifier
+	}
+	action {
+		val operationSignature = create pcm::OperationSignature and initialize {
+			operationSignature.entityName = interfaceMethod.name
+			operationSignature.interface__OperationSignature = pcmInterface
+		}
+		
+		update pcmInterface {
+			pcmInterface.signatures__OperationInterface += operationSignature
+		}
+		
+		add correspondence between operationSignature and interfaceMethod
+	}
+}
+
+reaction JavaReturnTypeChanged {
+    after element java::TypeReference replaced at java::Method[typeReference]
+    call changeReturnType(affectedEObject, newValue)
+}
+
+routine changeReturnType(java::Method javaMethod, java::TypeReference typeReference) {
+    match {
+        val operationSignature = retrieve pcm::OperationSignature corresponding to javaMethod
+    }
+     action {
+         update operationSignature {
+         	val repository = operationSignature.interface__OperationSignature.repository__Interface
+            operationSignature.returnType__OperationSignature = getPCMDataTypeForTypeReference(typeReference, correspondenceModel, userInteracting, repository, javaMethod)
+         }
+     }
+}

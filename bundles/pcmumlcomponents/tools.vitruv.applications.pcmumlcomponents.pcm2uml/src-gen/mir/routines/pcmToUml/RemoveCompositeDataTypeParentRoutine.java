@@ -61,7 +61,7 @@ public class RemoveCompositeDataTypeParentRoutine extends AbstractRepairRoutineR
     	org.eclipse.uml2.uml.DataType.class,
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null, 
-    	false // asserted
+    	true // asserted
     	);
     if (compositeType == null) {
     	return false;
@@ -72,7 +72,7 @@ public class RemoveCompositeDataTypeParentRoutine extends AbstractRepairRoutineR
     	org.eclipse.uml2.uml.DataType.class,
     	(org.eclipse.uml2.uml.DataType _element) -> true, // correspondence precondition checker
     	null, 
-    	false // asserted
+    	true // asserted
     	);
     if (parentType == null) {
     	return false;

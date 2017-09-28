@@ -46,7 +46,7 @@ public class DeleteElementRoutine extends AbstractRepairRoutineRealization {
     	org.eclipse.uml2.uml.NamedElement.class,
     	(org.eclipse.uml2.uml.NamedElement _element) -> true, // correspondence precondition checker
     	null, 
-    	false // asserted
+    	true // asserted
     	);
     if (umlElement == null) {
     	return false;

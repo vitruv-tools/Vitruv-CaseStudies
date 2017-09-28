@@ -31,7 +31,7 @@ class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected static val UML_TYPE_STRING = "String"	
 	
 	private def String getProjectModelPath(String modelName) {
-		"repository/" + modelName + "." + MODEL_FILE_EXTENSION;
+		"model/" + modelName + "." + MODEL_FILE_EXTENSION;
 	}
 	
 	protected def Model getRootElement() {
