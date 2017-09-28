@@ -28,5 +28,6 @@ Require-Bundle: org.junit,
  tools.vitruv.domains.java.echange,
  tools.vitruv.domains.java.monitorededitor,
  tools.vitruv.applications.pcmjava.util,
- tools.vitruv.domains.java.builder
+ tools.vitruv.domains.java.builder,
+ tools.vitruv.applications.pcmjava.pojotransformations.java2pcm;bundle-version="0.1.0"
 Export-Package: tools.vitruv.applications.pcmjava.tests.util

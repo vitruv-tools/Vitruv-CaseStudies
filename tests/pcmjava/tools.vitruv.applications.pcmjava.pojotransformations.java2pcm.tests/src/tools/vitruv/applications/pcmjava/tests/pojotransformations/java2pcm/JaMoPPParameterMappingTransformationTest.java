@@ -3,6 +3,9 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
@@ -18,6 +21,7 @@ import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper;
 import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHelper;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
@@ -30,7 +34,6 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
         super.addRepoContractsAndDatatypesPackage();
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
         final OperationSignature opSig = super.addMethodToInterfaceWithCorrespondence(opInterface.getEntityName());
-
         final Parameter parameter = super.addParameterToSignature(opInterface.getEntityName(), opSig.getEntityName(),
                 "String", Pcm2JavaTestUtils.PARAMETER_NAME, null);
 
@@ -57,7 +60,6 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
                 Pcm2JavaTestUtils.PARAMETER_NAME + Pcm2JavaTestUtils.RENAME);
     }
 
-    @Ignore
     @Test
     public void testChangeParameterType() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
@@ -103,8 +105,9 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
         editCompilationUnit(icu, replaceEdit);
         final org.emftext.language.java.parameters.Parameter newJaMoPPParameter = super.findJaMoPPParameterInICU(icu,
                 interfaceName, methodName, paramName);
-        return claimOne(CorrespondenceModelUtil
-                .getCorrespondingEObjectsByType(this.getCorrespondenceModel(), newJaMoPPParameter, Parameter.class));
+        Set<Parameter> correspondingEObjectsByType = CorrespondenceModelUtil
+                .getCorrespondingEObjectsByType(this.getCorrespondenceModel(), newJaMoPPParameter, Parameter.class);
+		return claimOne(correspondingEObjectsByType);
     }
 
     private ILocalVariable findParameterInIMethod(final IMethod iMethod, final String parameterName)
@@ -119,8 +122,9 @@ public class JaMoPPParameterMappingTransformationTest extends Java2PcmPackageMap
 
     private void assertParameter(final OperationSignature opSig, final Parameter parameter,
             final String expectedTypeName, final String expectedName) throws Throwable {
-        assertEquals("The parameter is not contained in the expected operation signature", opSig.getId(),
-                parameter.getOperationSignature__Parameter().getId());
+        OperationSignature operationSignature__Parameter = parameter.getOperationSignature__Parameter();
+		assertEquals("The parameter is not contained in the expected operation signature", opSig.getId(),
+                operationSignature__Parameter.getId());
         this.assertPcmParameter(parameter, expectedName);
         if (parameter.getDataType__Parameter() instanceof CollectionDataType
                 || parameter.getDataType__Parameter() instanceof CompositeDataType) {

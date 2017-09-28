@@ -1,8 +1,5 @@
 package tools.vitruv.applications.pcmjava.util.java2pcm
 
-import tools.vitruv.framework.userinteraction.UserInteracting
-import tools.vitruv.framework.util.datatypes.ClaimableHashMap
-import tools.vitruv.framework.util.datatypes.ClaimableMap
 import java.util.HashMap
 import java.util.Map
 import java.util.Set
@@ -41,10 +38,13 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
+import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
+import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.framework.userinteraction.UserInteracting
+import tools.vitruv.framework.util.datatypes.ClaimableHashMap
+import tools.vitruv.framework.util.datatypes.ClaimableMap
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 
 /**
  * Helper to map type References to PCM data types
@@ -107,22 +107,15 @@ class TypeReferenceCorrespondenceHelper {
 	public def static DataType getCorrespondingPCMDataTypeForTypeReference(TypeReference typeReference,
 		CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo,
 		long arrayDimension) {
-			var DataType pcmDataType = null
-			if (typeReference instanceof PrimitiveType) {
-				pcmDataType = claimPCMDataTypeForJaMoPPPrimitiveType(typeReference as PrimitiveType)
-			}
-			else if (typeReference instanceof ClassifierReference) {
-				pcmDataType  = getPCMDataTypeForClassifierReference(typeReference as ClassifierReference,
-					correspondenceModel, userInteracting, repo)
-			}
-			else if (typeReference instanceof NamespaceClassifierReference) {
-				pcmDataType = getPCMDataTypeForNamespaceClassifierReference(typeReference as NamespaceClassifierReference,
-					correspondenceModel, userInteracting, repo)
-			}
+			var DataType pcmDataType = getDataTypeFromTypeReference(typeReference, correspondenceModel, userInteracting,
+				repo)
+
 			if (arrayDimension > 0 && null !== pcmDataType && null !== repo) {
 				// find CollectionDatatype list for innerValue or create new one
 				val typeName = "List_" + Pcm2JavaUtils.getNameFromPCMDataType(pcmDataType)
-				var collectionDataType = repo.dataTypes__Repository.filter(CollectionDataType).findFirst[it.entityName.equals(typeName)]
+				var collectionDataType = repo.dataTypes__Repository.filter(CollectionDataType).findFirst [
+					it.entityName.equals(typeName)
+				]
 				if (null === collectionDataType) {
 					collectionDataType = RepositoryFactory.eINSTANCE.createCollectionDataType
 					collectionDataType.innerType_CollectionDataType = pcmDataType
@@ -130,7 +123,7 @@ class TypeReferenceCorrespondenceHelper {
 					repo.dataTypes__Repository.add(collectionDataType)
 					if (!(pcmDataType instanceof PrimitiveDataType)) {
 						// create a correspondence from the collection to the non collection DataType.
-					     // reason: as long as the inner type exists the collection resectievly an array can be used easily
+						// reason: as long as the inner type exists the collection resectievly an array can be used easily
 						correspondenceModel.createAndAddCorrespondence(collectionDataType, pcmDataType)
 					}
 				}
@@ -140,6 +133,20 @@ class TypeReferenceCorrespondenceHelper {
 				logger.error("Could not find a PCM data type for type reference " + typeReference)
 			}
 			return pcmDataType
+		}
+
+		def static DataType getDataTypeFromTypeReference(TypeReference typeReference,
+			CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo) {
+			if (typeReference instanceof PrimitiveType) {
+				return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference as PrimitiveType)
+			} else if (typeReference instanceof ClassifierReference) {
+				return getPCMDataTypeForClassifierReference(typeReference as ClassifierReference, correspondenceModel,
+					userInteracting, repo)
+			} else if (typeReference instanceof NamespaceClassifierReference) {
+				return getPCMDataTypeForNamespaceClassifierReference(typeReference as NamespaceClassifierReference,
+					correspondenceModel, userInteracting, repo)
+			}
+			return null
 		}
 
 		def private static DataType getPCMDataTypeForNamespaceClassifierReference(
@@ -189,8 +196,8 @@ class TypeReferenceCorrespondenceHelper {
 				}
 
 				// no data type found -->create one from the class
-				val DataType newDataType = createDataTypeForClassifier(classifier, correspondenceModel,
-					userInteracting, repo)
+				val DataType newDataType = createDataTypeForClassifier(classifier, correspondenceModel, userInteracting,
+					repo)
 				return newDataType
 			}
 			return null
@@ -202,8 +209,7 @@ class TypeReferenceCorrespondenceHelper {
 				logger.warn("Classifier is null! Can not create a data type for the classifier")
 				return null
 			}
-			val correspondingPCMEObjects = correspondenceModel.
-				getCorrespondingEObjectsByType(classifier, NamedElement)
+			val correspondingPCMEObjects = correspondenceModel.getCorrespondingEObjectsByType(classifier, NamedElement)
 			var String correspondingWarning = ""
 			if (!correspondingPCMEObjects.nullOrEmpty) {
 				correspondingWarning = System.getProperty("line.seperator") + "Warning: the classifier " +
@@ -218,71 +224,69 @@ class TypeReferenceCorrespondenceHelper {
 			val CompositeDataType cdt = RepositoryFactory.eINSTANCE.createCompositeDataType
 			cdt.entityName = classifier.name
 			cdt.repository__DataType = repo
-			correspondenceModel.
-				createAndAddCorrespondence(cdt,
-					classifier)
-		
-		/*val String message = "Automatically created the corresponding composite data type " + cdt.entityName +
-			" for classifier " + classifier.name + correspondingWarning
-		userInteracting.showMessage(UserInteractionType.MODELESS, message)*/
-		return cdt
+			correspondenceModel.createAndAddCorrespondence(cdt, classifier)
+
+			/*val String message = "Automatically created the corresponding composite data type " + cdt.entityName +
+			 * 	" for classifier " + classifier.name + correspondingWarning
+			 userInteracting.showMessage(UserInteractionType.MODELESS, message)*/
+			return cdt
+		}
+
+		/**
+		 * loads the primitive PCM types from standard primitive types URI
+		 * (partially) copied from DefaultResourceEnvironment from SoMoX
+		 */
+		private static class PrimitiveTypeCorrespondenceHelper {
+			private new() {
 			}
 
+			val private static String PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository";
+
+			var private static Repository primitiveTypesRepository;
+			var private static Map<String, PrimitiveDataType> primitives = new HashMap<String, PrimitiveDataType>()
+
 			/**
-			 * loads the primitive PCM types from standard primitive types URI
-			 * (partially) copied from DefaultResourceEnvironment from SoMoX
+			 * Retrieves a map of {@link PrimitiveDataType}s as defined in the
+			 * standard PCM resource repository.
+			 * 
+			 * @return A cached map of primitive data types.
 			 */
-			private static class PrimitiveTypeCorrespondenceHelper {
-				private new() {
-				}
-
-				val private static String PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository";
-
-				var private static Repository primitiveTypesRepository;
-				var private static Map<String, PrimitiveDataType> primitives = new HashMap<String, PrimitiveDataType>()
-
-				/**
-				 * Retrieves a map of {@link PrimitiveDataType}s as defined in the
-				 * standard PCM resource repository.
-				 * 
-				 * @return A cached map of primitive data types.
-				 */
-				def public static Map<String, PrimitiveDataType> getPrimitiveDataTypes() {
-					if (primitiveTypesRepository === null) {
-						primitiveTypesRepository = getPrimitiveTypesRepository();
-						for (DataType d : primitiveTypesRepository.getDataTypes__Repository()) {
-							if (d instanceof PrimitiveDataType) {
-								val PrimitiveDataType pdt = d as PrimitiveDataType;
-								primitives.put(pdt.getType().getName(), pdt);
-							}
+			def public static Map<String, PrimitiveDataType> getPrimitiveDataTypes() {
+				if (primitiveTypesRepository === null) {
+					primitiveTypesRepository = getPrimitiveTypesRepository();
+					for (DataType d : primitiveTypesRepository.getDataTypes__Repository()) {
+						if (d instanceof PrimitiveDataType) {
+							val PrimitiveDataType pdt = d as PrimitiveDataType;
+							primitives.put(pdt.getType().getName(), pdt);
 						}
 					}
-					return primitives;
 				}
+				return primitives;
+			}
 
-				def private static Repository getPrimitiveTypesRepository() {
-					if (primitiveTypesRepository !== null) {
-						return primitiveTypesRepository;
-					}
-
-					val Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-					val Map<String, Object> m = reg.getExtensionToFactoryMap();
-					m.put("repository", new XMIResourceFactoryImpl());
-
-					val URI uri = URI.createURI(PRIMITIVETYPES_URI);
-
-					val ResourceSet resSet = new ResourceSetImpl();
-					val Resource resource = resSet.getResource(uri, true);
-
-					primitiveTypesRepository = resource.getContents().get(0) as Repository;
+			def private static Repository getPrimitiveTypesRepository() {
+				if (primitiveTypesRepository !== null) {
 					return primitiveTypesRepository;
 				}
 
-				def static getPrimitiveDataTypeString() {
-					return getPrimitiveDataTypes().get("STRING")
-				}
+				val Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+				val Map<String, Object> m = reg.getExtensionToFactoryMap();
+				m.put("repository", new XMIResourceFactoryImpl());
 
+				val URI uri = URI.createURI(PRIMITIVETYPES_URI);
+
+				val ResourceSet resSet = new ResourceSetImpl();
+				val Resource resource = resSet.getResource(uri, true);
+
+				primitiveTypesRepository = resource.getContents().get(0) as Repository;
+				return primitiveTypesRepository;
+			}
+
+			def static getPrimitiveDataTypeString() {
+				return getPrimitiveDataTypes().get("STRING")
 			}
 
 		}
-		
+
+	}
+	

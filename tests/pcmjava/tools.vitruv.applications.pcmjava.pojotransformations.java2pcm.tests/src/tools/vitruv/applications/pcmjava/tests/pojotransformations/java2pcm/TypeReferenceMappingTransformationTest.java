@@ -8,6 +8,7 @@ import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 
 import tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.java2pcm.transformations.ClassMappingTransformation;
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
 public class TypeReferenceMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
@@ -18,7 +19,7 @@ public class TypeReferenceMappingTransformationTest extends Java2PcmPackageMappi
         this.addRepoContractsAndDatatypesPackage();
         // create class
         this.addSecondPackageCorrespondsWithoutCorrespondences();
-        this.getUserInteractor().addNextSelections(ClassMappingTransformation.SELECT_CREATE_BASIC_COMPONENT);
+        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final BasicComponent basicComponent = this.addClassInSecondPackage(BasicComponent.class);
         // create interface
         final OperationInterface opInterface = this.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts",

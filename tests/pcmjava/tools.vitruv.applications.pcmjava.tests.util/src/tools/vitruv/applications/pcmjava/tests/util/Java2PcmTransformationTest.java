@@ -86,6 +86,7 @@ import org.palladiosimulator.pcm.system.System;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilder;
@@ -120,10 +121,6 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
 
-	protected static final int SELECT_BASIC_COMPONENT = 0;
-	private static final int SELECT_COMPOSITE_COMPONENT = 1;
-	private static final int SELECT_SYSTEM = 2;
-	protected static final int SELECT_NOTHING_DECIDE_LATER = 3;
 	private static int MAXIMUM_SYNC_WAITING_TIME = 10000;
 
 	protected Package mainPackage;
@@ -242,7 +239,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	}
 
 	protected BasicComponent addSecondPackageCorrespondsToBasicComponent() throws Throwable {
-		this.getUserInteractor().addNextSelections(SELECT_BASIC_COMPONENT);
+		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		return this.createSecondPackage(BasicComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
@@ -475,18 +472,18 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	// }
 
 	protected CompositeComponent addSecondPackageCorrespondsToCompositeComponent() throws Throwable {
-		this.getUserInteractor().addNextSelections(SELECT_COMPOSITE_COMPONENT);
+		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
 		return this.createSecondPackage(CompositeComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
 	}
 
 	protected org.palladiosimulator.pcm.system.System addSecondPackageCorrespondsToSystem() throws Throwable {
-		this.getUserInteractor().addNextSelections(SELECT_SYSTEM);
+		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
 		return this.createSecondPackage(System.class, Pcm2JavaTestUtils.SYSTEM_NAME);
 	}
 
 	protected void addSecondPackageCorrespondsWithoutCorrespondences() throws Throwable {
-		this.getUserInteractor().addNextSelections(SELECT_NOTHING_DECIDE_LATER);
+		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
 		this.createSecondPackageWithoutCorrespondence(Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
@@ -627,12 +624,12 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected OperationInterface addInterfaceInSecondPackageWithCorrespondence(final String packageName)
 			throws Throwable {
-		this.getUserInteractor().addNextSelections(0);
+		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		return this.createInterfaceInPackage(packageName);
 	}
 
 	protected EObject addInterfaceInPackageWithoutCorrespondence(final String packageName) throws Throwable {
-		this.getUserInteractor().addNextSelections(1);
+		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
 		Package jaMoPPPackage = this.getPackageWithNameFromCorrespondenceModel(packageName);
 		return this.createInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(),
 				"I" + packageName, false);
@@ -841,10 +838,10 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected String addPackageAndImplementingClass(final String componentName)
 			throws CoreException, IOException, InterruptedException {
-		this.getUserInteractor().addNextSelections(SELECT_BASIC_COMPONENT);
+		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		final Package mediaStorePackage = this.createPackageWithPackageInfo(Pcm2JavaTestUtils.REPOSITORY_NAME,
 				componentName);
-		this.getUserInteractor().addNextSelections(0);
+		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 
 		final String implementingClassName = componentName + "Impl";
 		this.addClassInPackage(mediaStorePackage, BasicComponent.class, implementingClassName);
@@ -865,10 +862,10 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		// ADDITION: Using Maven, changes run properly without the sleep, so it
 		// is removed by now.
 		// In Eclipse, it does not work without the sleep.
-		// try {
-		// Thread.sleep(5000);
-		// } catch (InterruptedException e) {
-		// }
+		/*try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+		}*/
 		final ICompilationUnit classCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(className, this.getCurrentTestProject());
 		this.importCompilationUnitWithName(implementingInterfaceName, classCompilationUnit);
