@@ -5,6 +5,7 @@ import org.junit.Test
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.junit.Ignore
 
 class PackageTest extends AbstractClass2CompTest{
 	
@@ -49,7 +50,8 @@ class PackageTest extends AbstractClass2CompTest{
 		assertFalse(classPackage.name == CLASS_DATATYPES_PACKAGE_NAME)
 		assertTrue(dataTypePackage.name == CLASS_DATATYPES_PACKAGE_NAME)
 	}
-			
+	
+	@Ignore		
 	@Test
 	public def void testPackageIllegalRename3() {
 		//Create Package with legal DataType-Package name, then try to rename it:

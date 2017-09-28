@@ -10,6 +10,7 @@ import org.junit.Test
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.junit.Ignore
 
 class DataTypeTest extends AbstractComp2ClassTest{
 	
@@ -42,6 +43,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 		assertTypeAndName(classProperty, Property, PROPERTY_NAME)				
 	}
 	
+	@Ignore
 	@Test
     public def void testRenameDataTypeProperty() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
@@ -79,7 +81,8 @@ class DataTypeTest extends AbstractComp2ClassTest{
 		val classOperation = umlClass.ownedOperations.get(0)
 		assertTypeAndName(classOperation, Operation, OPERATION_NAME)			
 	}
-		
+	
+	@Ignore	
 	@Test
     public def void testRenameDataTypeOperation() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
