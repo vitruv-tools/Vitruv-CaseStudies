@@ -5,19 +5,18 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
-import org.eclipse.uml2.uml.internal.impl.ClassImpl
-import org.eclipse.uml2.uml.internal.impl.ComponentImpl
-import org.eclipse.uml2.uml.internal.impl.DataTypeImpl
-import org.eclipse.uml2.uml.internal.impl.InterfaceImpl
-import org.eclipse.uml2.uml.internal.impl.InterfaceRealizationImpl
-import org.eclipse.uml2.uml.internal.impl.OperationImpl
-import org.eclipse.uml2.uml.internal.impl.PackageImpl
-import org.eclipse.uml2.uml.internal.impl.PropertyImpl
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.Property
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.Interface
 import org.junit.Test
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedIntegrationTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
+import org.eclipse.uml2.uml.Component
 
 class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	
@@ -47,11 +46,11 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		
 		//Validate expected contents:
 		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
-		assertCountOfTypeInList(modelElements, ComponentImpl, 2) //There should be 2 original Components
-		assertCountOfTypeInList(modelElements, PackageImpl, 3) //There should be 3 new Packages
-		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 0) //Class DataTypes Package should have no Class
-		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 1 should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 2, ClassImpl, 1) //Class Package 2 should have 1 Class
+		assertCountOfTypeInList(modelElements, Component, 2) //There should be 2 original Components
+		assertCountOfTypeInList(modelElements, Package, 3) //There should be 3 new Packages
+		assertCountOfTypeInPackage(modelElements, 0, Class, 0) //Class DataTypes Package should have no Class
+		assertCountOfTypeInPackage(modelElements, 1, Class, 1) //Class Package 1 should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 2, Class, 1) //Class Package 2 should have 1 Class
 	}
 	
 	@Test
@@ -65,11 +64,11 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		
 		//Validate expected contents:
 		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
-		assertCountOfTypeInList(modelElements, ComponentImpl, 1) //There should be 1 original Component
-		assertCountOfTypeInList(modelElements, DataTypeImpl, 2) //There should be 2 original DataTypes
-		assertCountOfTypeInList(modelElements, PackageImpl, 2) //There should be 2 new Packages
-		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 2) //Class DataTypes Package should have 2 Classes
-		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 1 should have 1 Class
+		assertCountOfTypeInList(modelElements, Component, 1) //There should be 1 original Component
+		assertCountOfTypeInList(modelElements, DataType, 2) //There should be 2 original DataTypes
+		assertCountOfTypeInList(modelElements, Package, 2) //There should be 2 new Packages
+		assertCountOfTypeInPackage(modelElements, 0, Class, 2) //Class DataTypes Package should have 2 Classes
+		assertCountOfTypeInPackage(modelElements, 1, Class, 1) //Class Package 1 should have 1 Class
 	}
 	
 	@Test
@@ -83,11 +82,11 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		
 		//Validate expected contents:
 		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
-		assertCountOfTypeInList(modelElements, ComponentImpl, 1) //There should be 1 original Components
-		assertCountOfTypeInList(modelElements, DataTypeImpl, 2) //There should be 2 original DataTypes
-		assertCountOfTypeInList(modelElements, PackageImpl, 2) //There should be 2 new Packages
-		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 1) //Class DataTypes Package should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 1 should have 1 Class
+		assertCountOfTypeInList(modelElements, Component, 1) //There should be 1 original Components
+		assertCountOfTypeInList(modelElements, DataType, 2) //There should be 2 original DataTypes
+		assertCountOfTypeInList(modelElements, Package, 2) //There should be 2 new Packages
+		assertCountOfTypeInPackage(modelElements, 0, Class, 1) //Class DataTypes Package should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 1, Class, 1) //Class Package 1 should have 1 Class
 	}
 	
 	@Test
@@ -99,16 +98,16 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		
 		//Validate expected contents:
 		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
-		assertCountOfTypeInList(modelElements, DataTypeImpl, 1) //There should be 1 original DataType
-		assertCountOfTypeInList(modelElements, PackageImpl, 1) //There should be 1 new Package
-		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 1) //Class DataTypes Package should have 1 Class
+		assertCountOfTypeInList(modelElements, DataType, 1) //There should be 1 original DataType
+		assertCountOfTypeInList(modelElements, Package, 1) //There should be 1 new Package
+		assertCountOfTypeInPackage(modelElements, 0, Class, 1) //Class DataTypes Package should have 1 Class
 		
 		//Check new Class for Property & Operation:
-		val dataTypeClass = modelElements.filter(PackageImpl).get(0).packagedElements.filter(ClassImpl).get(0)
+		val dataTypeClass = modelElements.filter(Package).get(0).packagedElements.filter(Class).get(0)
 		val ownedAttributes = dataTypeClass.ownedAttributes.map[e | e as NamedElement]
-		assertCountOfTypeInList(ownedAttributes, PropertyImpl, 1) //There should be 1 Property
+		assertCountOfTypeInList(ownedAttributes, Property, 1) //There should be 1 Property
 		val ownedOperations = dataTypeClass.operations.map[e | e as NamedElement]
-		assertCountOfTypeInList(ownedOperations, OperationImpl, 1) //There should be 1 Operation
+		assertCountOfTypeInList(ownedOperations, Operation, 1) //There should be 1 Operation
 	}
 	
 	@Test
@@ -117,20 +116,20 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		
 		//Validate expected contents:
 		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
-		assertCountOfTypeInList(modelElements, ComponentImpl, 2) //There should be 2 original Components
-		assertCountOfTypeInList(modelElements, PackageImpl, 3) //There should be 3 new Packages
-		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 0) //Class DataTypes Package should have no Class
-		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 1 should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 2, ClassImpl, 1) //Class Package 2 should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 1, InterfaceImpl, 1) //Class Package 1 should have 1 Interface
-		assertCountOfTypeInPackage(modelElements, 2, InterfaceImpl, 0) //Class Package 2 should have no Interfaces
+		assertCountOfTypeInList(modelElements, Component, 2) //There should be 2 original Components
+		assertCountOfTypeInList(modelElements, Package, 3) //There should be 3 new Packages
+		assertCountOfTypeInPackage(modelElements, 0, Class, 0) //Class DataTypes Package should have no Class
+		assertCountOfTypeInPackage(modelElements, 1, Class, 1) //Class Package 1 should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 2, Class, 1) //Class Package 2 should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 1, Interface, 1) //Class Package 1 should have 1 Interface
+		assertCountOfTypeInPackage(modelElements, 2, Interface, 0) //Class Package 2 should have no Interfaces
 		
 		//Check new Class for InterfaceRealization and inspect if it's setup correctly:
-		val umlClass = modelElements.filter(PackageImpl).get(1).packagedElements.filter(ClassImpl).get(0)
+		val umlClass = modelElements.filter(Package).get(1).packagedElements.filter(Class).get(0)
 		val iFRealizations = umlClass.interfaceRealizations.map[e | e as NamedElement]
-		assertCountOfTypeInList(iFRealizations, InterfaceRealizationImpl, 1) //There should be 1 InterfaceRealization
+		assertCountOfTypeInList(iFRealizations, InterfaceRealization, 1) //There should be 1 InterfaceRealization
 		val iFRealization = iFRealizations.get(0) as InterfaceRealization
-		val classInterface = modelElements.filter(PackageImpl).get(1).packagedElements.filter(InterfaceImpl).get(0)
+		val classInterface = modelElements.filter(Package).get(1).packagedElements.filter(Interface).get(0)
 		assertTrue(iFRealization.clients.contains(umlClass))
 		assertTrue(iFRealization.contract == classInterface)
 		assertTrue(iFRealization.suppliers.contains(classInterface))
@@ -143,29 +142,29 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		
 		//Validate expected contents:
 		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
-		assertCountOfTypeInList(modelElements, ComponentImpl, 2) //There should be 2 original Components
-		assertCountOfTypeInList(modelElements, PackageImpl, 3) //There should be 3 new Packages
-		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 0) //Class DataTypes Package should have no Class
-		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 1 should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 2, ClassImpl, 1) //Class Package 2 should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 1, InterfaceImpl, 1) //Class Package 1 should have 1 Interface
-		assertCountOfTypeInPackage(modelElements, 2, InterfaceImpl, 0) //Class Package 2 should have no Interfaces
+		assertCountOfTypeInList(modelElements, Component, 2) //There should be 2 original Components
+		assertCountOfTypeInList(modelElements, org.eclipse.uml2.uml.Package, 3) //There should be 3 new Packages
+		assertCountOfTypeInPackage(modelElements, 0, org.eclipse.uml2.uml.Class, 0) //Class DataTypes Package should have no Class
+		assertCountOfTypeInPackage(modelElements, 1, Class, 1) //Class Package 1 should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 2, org.eclipse.uml2.uml.Class, 1) //Class Package 2 should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 1, Interface, 1) //Class Package 1 should have 1 Interface
+		assertCountOfTypeInPackage(modelElements, 2, Interface, 0) //Class Package 2 should have no Interfaces
 		
 		//Check Class 1 for InterfaceRealization and inspect if it's setup correctly:
-		val umlClass1 = modelElements.filter(PackageImpl).get(1).packagedElements.filter(ClassImpl).get(0)
+		val umlClass1 = modelElements.filter(Package).get(1).packagedElements.filter(Class).get(0)
 		val iFRealizations1 = umlClass1.interfaceRealizations.map[e | e as NamedElement]
-		assertCountOfTypeInList(iFRealizations1, InterfaceRealizationImpl, 1) //There should be 1 InterfaceRealization
+		assertCountOfTypeInList(iFRealizations1, InterfaceRealization, 1) //There should be 1 InterfaceRealization
 		val iFRealization1 = iFRealizations1.get(0) as InterfaceRealization
-		val classInterface = modelElements.filter(PackageImpl).get(1).packagedElements.filter(InterfaceImpl).get(0)
+		val classInterface = modelElements.filter(Package).get(1).packagedElements.filter(Interface).get(0)
 		assertTrue(iFRealization1.clients.contains(umlClass1))
 		assertTrue(iFRealization1.contract == classInterface)
 		assertTrue(iFRealization1.suppliers.contains(classInterface))
 		assertTrue(umlClass1.interfaceRealizations.contains(iFRealization1))	
 		
 		//Check Class 2 for InterfaceRealization and inspect if it's setup correctly:
-		val umlClass2 = modelElements.filter(PackageImpl).get(1).packagedElements.filter(ClassImpl).get(0)
+		val umlClass2 = modelElements.filter(Package).get(1).packagedElements.filter(Class).get(0)
 		val iFRealizations2 = umlClass2.interfaceRealizations.map[e | e as NamedElement]
-		assertCountOfTypeInList(iFRealizations2, InterfaceRealizationImpl, 1) //There should be 1 InterfaceRealization
+		assertCountOfTypeInList(iFRealizations2, InterfaceRealization, 1) //There should be 1 InterfaceRealization
 		val iFRealization2 = iFRealizations2.get(0) as InterfaceRealization
 		assertTrue(iFRealization2.clients.contains(umlClass2))
 		assertTrue(iFRealization2.contract == classInterface)
@@ -184,30 +183,30 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		
 		//Validate expected contents:
 		val modelElements = umlModel.packagedElements.map[e | e as NamedElement]
-		assertCountOfTypeInList(modelElements, ComponentImpl, 2) //There should be 2 original Components
-		assertCountOfTypeInList(modelElements, PackageImpl, 3) //There should be 3 new Packages
-		assertCountOfTypeInPackage(modelElements, 0, ClassImpl, 1) //Class DataTypes Package should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 1, ClassImpl, 1) //Class Package 1 should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 2, ClassImpl, 1) //Class Package 2 should have 1 Class
-		assertCountOfTypeInPackage(modelElements, 1, InterfaceImpl, 1) //Class Package 1 should have 1 Interface
-		assertCountOfTypeInPackage(modelElements, 2, InterfaceImpl, 0) //Class Package 2 should have no Interfaces
+		assertCountOfTypeInList(modelElements, Component, 2) //There should be 2 original Components
+		assertCountOfTypeInList(modelElements, Package, 3) //There should be 3 new Packages
+		assertCountOfTypeInPackage(modelElements, 0, Class, 1) //Class DataTypes Package should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 1, Class, 1) //Class Package 1 should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 2, Class, 1) //Class Package 2 should have 1 Class
+		assertCountOfTypeInPackage(modelElements, 1, Interface, 1) //Class Package 1 should have 1 Interface
+		assertCountOfTypeInPackage(modelElements, 2, Interface, 0) //Class Package 2 should have no Interfaces
 		
 				
 		//Check Class 1 for InterfaceRealization and inspect if it's setup correctly:
-		val umlClass = modelElements.filter(PackageImpl).get(1).packagedElements.filter(ClassImpl).get(0)
+		val umlClass = modelElements.filter(Package).get(1).packagedElements.filter(Class).get(0)
 		val iFRealizations = umlClass.interfaceRealizations.map[e | e as NamedElement]
-		assertCountOfTypeInList(iFRealizations, InterfaceRealizationImpl, 1) //There should be 1 InterfaceRealization
+		assertCountOfTypeInList(iFRealizations, InterfaceRealization, 1) //There should be 1 InterfaceRealization
 		val iFRealization = iFRealizations.get(0) as InterfaceRealization
-		val classInterface = modelElements.filter(PackageImpl).get(1).packagedElements.filter(InterfaceImpl).get(0)
+		val classInterface = modelElements.filter(Package).get(1).packagedElements.filter(Interface).get(0)
 		assertTrue(iFRealization.clients.contains(umlClass))
 		assertTrue(iFRealization.contract == classInterface)
 		assertTrue(iFRealization.suppliers.contains(classInterface))
 		assertTrue(umlClass.interfaceRealizations.contains(iFRealization))
 		
 		//Check Class 2 for InterfaceRealization and inspect if it's setup correctly:
-		val umlClass2 = modelElements.filter(PackageImpl).get(1).packagedElements.filter(ClassImpl).get(0)
+		val umlClass2 = modelElements.filter(Package).get(1).packagedElements.filter(Class).get(0)
 		val iFRealizations2 = umlClass2.interfaceRealizations.map[e | e as NamedElement]
-		assertCountOfTypeInList(iFRealizations2, InterfaceRealizationImpl, 1) //There should be 1 InterfaceRealization
+		assertCountOfTypeInList(iFRealizations2, InterfaceRealization, 1) //There should be 1 InterfaceRealization
 		val iFRealization2 = iFRealizations2.get(0) as InterfaceRealization
 		assertTrue(iFRealization2.clients.contains(umlClass2))
 		assertTrue(iFRealization2.contract == classInterface)
@@ -216,11 +215,11 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		
 				
 		//Check DataType Class for Property & Operation:
-		val dataTypeClass = modelElements.filter(PackageImpl).get(0).packagedElements.filter(ClassImpl).get(0)
+		val dataTypeClass = modelElements.filter(Package).get(0).packagedElements.filter(Class).get(0)
 		val ownedAttributes = dataTypeClass.ownedAttributes.map[e | e as NamedElement]
-		assertCountOfTypeInList(ownedAttributes, PropertyImpl, 1) //There should be 1 Property
+		assertCountOfTypeInList(ownedAttributes, Property, 1) //There should be 1 Property
 		val ownedOperations = dataTypeClass.operations.map[e | e as NamedElement]
-		assertCountOfTypeInList(ownedOperations, OperationImpl, 1) //There should be 1 Operation
+		assertCountOfTypeInList(ownedOperations, Operation, 1) //There should be 1 Operation
 	}
 	
 	@Test
