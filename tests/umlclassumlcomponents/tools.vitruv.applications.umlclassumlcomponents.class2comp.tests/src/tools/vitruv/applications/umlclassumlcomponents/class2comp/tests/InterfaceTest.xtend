@@ -11,6 +11,7 @@ import org.junit.Test
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.junit.Ignore
 
 class InterfaceTest extends AbstractClass2CompTest {
 		
@@ -101,6 +102,7 @@ class InterfaceTest extends AbstractClass2CompTest {
 		assertEquals(0, correspondingElements3.size)
 	}
     
+    @Ignore
 	@Test
 	public def void testInterfaceRemoved() {
 		//***First create a realized and used Interface***

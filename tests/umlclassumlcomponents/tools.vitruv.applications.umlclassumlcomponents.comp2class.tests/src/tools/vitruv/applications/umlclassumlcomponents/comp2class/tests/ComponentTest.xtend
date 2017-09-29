@@ -7,6 +7,7 @@ import org.junit.Test
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
+import org.junit.Ignore
 
 class ComponentTest extends AbstractComp2ClassTest{
 	
@@ -35,6 +36,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 		assertClassAndPackage(umlComp, "New")
     }
     
+    @Ignore
 	@Test
     public def void testDeleteComponentWithPackage() {
     	val umlComp = createComponent(COMP_NAME)	 
@@ -88,6 +90,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 		assertTrue(classPackage.packagedElements.contains(umlClass2))		
     }
     
+    @Ignore
 	@Test
     public def void testDeleteComponentWithPackageAndContents() {
     	val umlComp = createComponent(COMP_NAME)    	
