@@ -15,10 +15,9 @@
 
 	<modules>
 		<!-- The following tests do currently not succeed on Travis, so we do not execute them -->
-		<!--<module>tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests</module>-->
-		<!--<module>tools.vitruv.applications.pcmjava.gplimplementation.pojotransformations.tests</module>-->
-		<!--<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests</module>-->
+		<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests</module>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests</module>
+		<!--<module>tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests</module>-->
 		<!--The following plugin is only for running a complete test suite within Eclipse, but not necessary here -->
 		<!--<module>tools.vitruv.applications.pcmjava.tests</module>-->
 		<module>tools.vitruv.applications.pcmjava.tests.util</module>
