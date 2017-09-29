@@ -5,19 +5,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>tools.vitruv</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>bundles</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	<artifactId>bundles</artifactId>
+	<artifactId>umlclasscomponent</artifactId>
 	<packaging>pom</packaging>
-	<name>Bundle Modules</name>
+	<name>UML class-UML component Application</name>
 
 	<modules>
-		<module>umljava</module>
-		<module>umlclassumlcomponents</module>
-		<module>pcmjava</module>
-		<module>pcmumlcomponents</module>
+		<module>tools.vitruv.applications.umlclassumlcomponents.sharedutil</module>
+		<module>tools.vitruv.applications.umlclassumlcomponents.comp2class</module>
+		<module>tools.vitruv.applications.umlclassumlcomponents.class2comp</module>
 	</modules>
 
 </project>

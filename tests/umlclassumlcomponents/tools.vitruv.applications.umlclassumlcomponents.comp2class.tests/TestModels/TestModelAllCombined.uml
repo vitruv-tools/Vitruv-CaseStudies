@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_aOxssBKDEeeRM-mACfMeBg" name="RootElement">
+  <packagedElement xmi:type="uml:Component" xmi:id="_jDGGoB43Eeezno0W-Wdtew" name="Component 1">
+    <interfaceRealization xmi:id="_vpLkwDQtEeeb67niq0DAdw" name="InterfaceRealization" client="_jDGGoB43Eeezno0W-Wdtew" supplier="_-AK4cDQtEeeb67niq0DAdw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_KPp60B46EeepMOns3Tlm-Q" name="Component 2">
+    <packagedElement xmi:type="uml:Usage" xmi:id="_JIJBsDRKEeeGsusAEn0FBw" name="Usage" client="_KPp60B46EeepMOns3Tlm-Q" supplier="_-AK4cDQtEeeb67niq0DAdw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_-AK4cDQtEeeb67niq0DAdw" name="Interface"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_S45I4DQwEeeb67niq0DAdw" name="DataType">
+    <ownedAttribute xmi:id="_T1ZNYDQwEeeb67niq0DAdw" name="DataType Property" isID="true"/>
+    <ownedOperation xmi:id="_VHCbcDQwEeeb67niq0DAdw" name="DataType Operation"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_o0rqwDQwEeeb67niq0DAdw" name="DataType 2"/>
+</uml:Model>

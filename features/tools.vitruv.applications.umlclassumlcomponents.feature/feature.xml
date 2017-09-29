@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="tools.vitruv.applications.umlclassumlcomponents.feature"
+      label="%featureName"
+      version="0.1.0.qualifier"
+      provider-name="%providerName"
+      license-feature="tools.vitruv.license.feature"
+      license-feature-version="1.0.0">
+
+   <description>
+      %description
+   </description>
+
+   <copyright url="%copyrightURL">
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <requires>
+      <import plugin="com.google.guava"/>
+      <import plugin="org.eclipse.xtext.xbase.lib"/>
+      <import plugin="org.eclipse.xtend.lib"/>
+      <import plugin="org.eclipse.xtend.lib.macro"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.uml2.uml"/>
+      <import plugin="org.emftext.language.java"/>
+      <import plugin="org.apache.commons.io" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="org.junit" version="4.12.0" match="greaterOrEqual"/>
+      <import feature="tools.vitruv.framework.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.java.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.domains.uml.feature" version="0.2.0"/>
+      <import plugin="tools.vitruv.domains.uml"/>
+      <import plugin="tools.vitruv.framework.applications"/>
+   </requires>
+
+   <plugin
+         id="tools.vitruv.applications.umlclassumlcomponents.class2comp"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="tools.vitruv.applications.umlclassumlcomponents.comp2class"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="tools.vitruv.applications.umlclassumlcomponents.sharedutil"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

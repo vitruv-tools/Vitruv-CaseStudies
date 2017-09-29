@@ -9,6 +9,9 @@
    <feature url="features/tools.vitruv.applications.umljava.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.umljava.feature" version="0.1.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
+   <feature url="features/tools.vitruv.applications.umlclassumlcomponents.feature_0.1.0.qualifier.jar" id="tools.vitruv.applications.umlclassumlcomponents.feature" version="0.1.0.qualifier">
+      <category name="Vitruv Applications for Component-based Systems"/>
+   </feature>
    <feature id="tools.vitruv.applications.umljava.feature.source" version="0.1.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
