@@ -7,4 +7,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit,
  tools.vitruv.applications.pcmjava.tests,
  tools.vitruv.applications.umljava.tests,
+ tools.vitruv.applications.umlclassumlcomponents.tests,
  tools.vitruv.applications.pcmumlcomponents.tests

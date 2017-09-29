@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_rvKvYDckEeesdJ5LMdzGGQ" name="defaultRepository">
+  <packageImport xmi:id="_rvLWcDckEeesdJ5LMdzGGQ">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Component" xmi:id="_rvLWcTckEeesdJ5LMdzGGQ" name="WebShop">
+    <interfaceRealization xmi:id="_rvLWcjckEeesdJ5LMdzGGQ" name="Provided_ISell_WebShop" client="_rvLWcTckEeesdJ5LMdzGGQ" supplier="_rvLWdjckEeesdJ5LMdzGGQ"/>
+    <interfaceRealization xmi:id="_rvLWczckEeesdJ5LMdzGGQ" name="Provided_IBuy_WebShop" client="_rvLWcTckEeesdJ5LMdzGGQ" supplier="_rvLWfjckEeesdJ5LMdzGGQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_rvLWdDckEeesdJ5LMdzGGQ" name="OfflineShop">
+    <interfaceRealization xmi:id="_rvLWdTckEeesdJ5LMdzGGQ" name="Provided_ISell_OfflineShop" client="_rvLWdDckEeesdJ5LMdzGGQ" supplier="_rvLWdjckEeesdJ5LMdzGGQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_rvLWdjckEeesdJ5LMdzGGQ" name="ISell">
+    <ownedOperation xmi:id="_rvLWdzckEeesdJ5LMdzGGQ" name="sell"/>
+    <ownedOperation xmi:id="_rvLWeDckEeesdJ5LMdzGGQ" name="moreSell">
+      <ownedParameter xmi:id="_rvLWeTckEeesdJ5LMdzGGQ" name="item">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_rvLWejckEeesdJ5LMdzGGQ" name="price">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_rvLWezckEeesdJ5LMdzGGQ" name="sellerList" direction="out">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rvLWfDckEeesdJ5LMdzGGQ"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rvLWfTckEeesdJ5LMdzGGQ" value="*"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_rvLWfjckEeesdJ5LMdzGGQ" name="IBuy">
+    <ownedOperation xmi:id="_rvLWfzckEeesdJ5LMdzGGQ" name="buy"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_rvLWgDckEeesdJ5LMdzGGQ" name="A"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_rvLWgTckEeesdJ5LMdzGGQ" name="BName">
+    <generalization xmi:id="_rvLWgjckEeesdJ5LMdzGGQ" general="_rvLWgDckEeesdJ5LMdzGGQ"/>
+    <generalization xmi:id="_rvLWgzckEeesdJ5LMdzGGQ" general="_rvLWhzckEeesdJ5LMdzGGQ"/>
+    <ownedAttribute xmi:id="_rvLWhDckEeesdJ5LMdzGGQ" name="InnerByte"/>
+    <ownedAttribute xmi:id="_rvLWhTckEeesdJ5LMdzGGQ" name="aName" type="_rvLWgDckEeesdJ5LMdzGGQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_rvLWhjckEeesdJ5LMdzGGQ" name="Integer"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_rvLWhzckEeesdJ5LMdzGGQ" name="C"/>
+</uml:Model>

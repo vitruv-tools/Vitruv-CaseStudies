@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_aOxssBKDEeeRM-mACfMeBg" name="RootElement">
+  <packagedElement xmi:type="uml:Package" xmi:id="_3Um7UDKsEeeX2foC8oNHBg" name="Class DataTypes Package">
+    <packagedElement xmi:type="uml:Class" xmi:id="_3U-HsDKsEeeX2foC8oNHBg" name="Test DataType">
+      <ownedAttribute xmi:id="_3l0NoDT9EeekEqyZPUjRdQ" name="Test DataType Property"/>
+      <ownedOperation xmi:id="_6bokMDT9EeekEqyZPUjRdQ" name="Test DataType Operation"/>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>

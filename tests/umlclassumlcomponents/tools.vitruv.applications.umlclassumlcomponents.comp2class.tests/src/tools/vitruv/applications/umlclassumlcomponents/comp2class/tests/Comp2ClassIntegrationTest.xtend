@@ -17,6 +17,7 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedIntegrationTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
 import org.eclipse.uml2.uml.Component
+import org.junit.Ignore
 
 class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	
@@ -171,7 +172,8 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		assertTrue(iFRealization2.suppliers.contains(classInterface))
 		assertTrue(umlClass2.interfaceRealizations.contains(iFRealization2))	
 	}
-		
+	
+	@Ignore
 	@Test
 	def void integrationTestAllCombined() {
 		//Decide to create a Class for the first DataType:
