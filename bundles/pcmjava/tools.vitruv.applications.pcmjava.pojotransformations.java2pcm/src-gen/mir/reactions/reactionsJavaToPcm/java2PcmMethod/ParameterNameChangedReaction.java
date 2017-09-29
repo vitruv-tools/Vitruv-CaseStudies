@@ -12,7 +12,8 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
 
 /**
- * *nNeed a special reaction, because Parameter is not a NamedElement.
+ * *
+ * nNeed a special reaction, because Parameter is not a NamedElement.
  *  
  */
 @SuppressWarnings("all")

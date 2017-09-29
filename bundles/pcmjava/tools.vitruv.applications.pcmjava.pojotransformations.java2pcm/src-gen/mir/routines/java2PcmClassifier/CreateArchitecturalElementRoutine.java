@@ -13,7 +13,8 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 /**
- * *nUser can select if he wants to create BasicComponent, CompositeComponent, System or do nothing.
+ * *
+ * nUser can select if he wants to create BasicComponent, CompositeComponent, System or do nothing.
  *  
  */
 @SuppressWarnings("all")
