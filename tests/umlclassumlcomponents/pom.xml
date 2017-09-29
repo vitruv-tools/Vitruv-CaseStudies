@@ -5,19 +5,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>tools.vitruv</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>tests</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	<artifactId>tests</artifactId>
+	<artifactId>umlclasscomponents-tests</artifactId>
 	<packaging>pom</packaging>
-	<name>Test Modules</name>
+	<name>UML class-UML components Application Tests</name>
 
 	<modules>
-		<module>umljava</module>
-		<module>umlclassumlcomponents</module>
-		<module>pcmumlcomponents</module>
-		<module>pcmjava</module>
+		<module>tools.vitruv.applications.umlclassumlcomponents.class2comp.tests</module>
+		<module>tools.vitruv.applications.umlclassumlcomponents.comp2class.tests</module>
 	</modules>
 
 	<build>
@@ -28,13 +26,12 @@
 				<version>${tycho.version}</version>
 				<configuration>
 					<useUIHarness>true</useUIHarness>
-					<failIfNoTests>false</failIfNoTests>
+					<failIfNoTests>true</failIfNoTests>
+					<!-- Test suites explicitly defined as they are sumsuming each other and would lead to redundant test execution -->
 					<includes>
-						<include>**/*Test*.class</include>
+						<include>**/UmlClassToUmlComponentTestSuite.class</include>
+						<include>**/UmlComponentToUmlClassTestSuite.class</include>
 					</includes>
-					<excludes>
-						<exclude>**/Abstract*</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>
