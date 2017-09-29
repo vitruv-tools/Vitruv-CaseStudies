@@ -26,3 +26,4 @@ Require-Bundle: com.google.guava,
  tools.vitruv.framework.vsum,
  tools.vitruv.applications.umlclassumlcomponents.class2comp,
  tools.vitruv.applications.umlclassumlcomponents.sharedutil
+Export-Package: tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
