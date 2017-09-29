@@ -5,7 +5,7 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.uml2.uml.NamedElement
-import org.eclipse.uml2.uml.internal.impl.PackageImpl
+import org.eclipse.uml2.uml.Package
 
 import static org.junit.Assert.*
 
@@ -27,7 +27,7 @@ class SharedIntegrationTestUtil {
 	}
 	
 	public static def assertCountOfTypeInPackage(List<NamedElement> elementsList, int packageNumber, Class<? extends NamedElement> umlType, int count) {
-		val packages = elementsList.filter(PackageImpl)
+		val packages = elementsList.filter(Package)
 		val packagedElements = packages.get(packageNumber).packagedElements
 		assertCountOfTypeInList(packagedElements.map[e | e as NamedElement], umlType, count)
 	}
