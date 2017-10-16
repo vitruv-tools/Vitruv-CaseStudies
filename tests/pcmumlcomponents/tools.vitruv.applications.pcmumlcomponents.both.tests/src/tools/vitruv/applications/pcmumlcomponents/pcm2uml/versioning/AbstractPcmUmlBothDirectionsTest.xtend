@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize
 import static org.junit.Assert.assertThat
 import tools.vitruv.framework.versioning.ConflictDetector
-import tools.vitruv.framework.versioning.emfstore.InternalTestLocalRepository
-import tools.vitruv.framework.versioning.emfstore.RemoteRepository
+import tools.vitruv.framework.versioning.mococo.InternalTestLocalRepository
+import tools.vitruv.framework.versioning.mococo.RemoteRepository
 import tools.vitruv.framework.vsum.VersioningVirtualModel
 import tools.vitruv.framework.versioning.author.Author
-import tools.vitruv.framework.versioning.emfstore.impl.RemoteRepositoryImpl
-import tools.vitruv.framework.versioning.emfstore.impl.LocalRepositoryImpl
+import tools.vitruv.framework.versioning.mococo.impl.RemoteRepositoryImpl
+import tools.vitruv.framework.versioning.mococo.impl.LocalRepositoryImpl
 import tools.vitruv.framework.tests.util.TestUtil
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmComponentsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlComponentsChangePropagationSpecification

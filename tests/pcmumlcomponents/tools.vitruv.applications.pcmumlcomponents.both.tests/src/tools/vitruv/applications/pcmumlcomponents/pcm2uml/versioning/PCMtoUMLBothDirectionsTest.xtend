@@ -3,6 +3,7 @@ package tools.vitruv.applications.pcmumlcomponents.pcm2uml.versioning
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
+
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Model
 
@@ -12,23 +13,13 @@ import org.palladiosimulator.pcm.repository.BasicComponent
 
 import tools.vitruv.applications.pcmumlcomponents.both.tests.AbstractPcmToUmlBothDirectionsTest
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute
-import tools.vitruv.framework.util.datatypes.VURI
-import tools.vitruv.framework.versioning.author.Author
-import tools.vitruv.framework.versioning.emfstore.InternalTestLocalRepository
-import tools.vitruv.framework.versioning.emfstore.RemoteRepository
-import tools.vitruv.framework.versioning.emfstore.impl.LocalRepositoryImpl
-import tools.vitruv.framework.versioning.emfstore.impl.RemoteRepositoryImpl
-import tools.vitruv.framework.versioning.extensions.URIRemapper
 
 import static org.hamcrest.CoreMatchers.equalTo
 import static org.hamcrest.CoreMatchers.instanceOf
-import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.not
-
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize
 import static org.hamcrest.collection.IsEmptyCollection.empty
 import static org.hamcrest.collection.IsIterableWithSize.iterableWithSize
-
 import static org.junit.Assert.assertThat
 
 class PCMtoUMLBothDirectionsTest extends AbstractPcmToUmlBothDirectionsTest {

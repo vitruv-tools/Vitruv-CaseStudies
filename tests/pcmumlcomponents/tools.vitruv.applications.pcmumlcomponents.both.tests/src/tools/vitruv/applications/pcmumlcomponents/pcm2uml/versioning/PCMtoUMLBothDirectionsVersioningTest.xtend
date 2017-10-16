@@ -13,7 +13,7 @@ import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.Repository
 
 import tools.vitruv.framework.util.datatypes.VURI
-import tools.vitruv.framework.versioning.emfstore.PushState
+import tools.vitruv.framework.versioning.mococo.PushState
 
 import static org.hamcrest.CoreMatchers.equalTo
 import static org.hamcrest.CoreMatchers.is
