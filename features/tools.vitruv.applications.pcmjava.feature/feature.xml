@@ -30,19 +30,9 @@
       <import plugin="org.eclipse.core.resources" version="3.8.100" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.9.0" match="greaterOrEqual"/>
       <import plugin="org.emftext.language.java"/>
-      <import plugin="org.palladiosimulator.pcm"/>
-      <import plugin="tools.vitruv.framework.util"/>
-      <import plugin="tools.vitruv.framework.userinteraction"/>
-      <import plugin="tools.vitruv.framework.tuid"/>
-      <import plugin="tools.vitruv.framework.change"/>
-      <import plugin="tools.vitruv.framework.change.processing"/>
-      <import plugin="tools.vitruv.framework.correspondence"/>
-      <import plugin="tools.vitruv.framework.metamodel"/>
-      <import plugin="tools.vitruv.domains.pcm"/>
-      <import plugin="tools.vitruv.domains.java"/>
-      <import plugin="tools.vitruv.domains.java.echange"/>
-      <import plugin="tools.vitruv.domains.java.util.jamoppparser"/>
-      <import plugin="org.palladiosimulator.pcm.resources"/>
+      <import feature="tools.vitruv.framework.feature" version="0.2.0.qualifier"/>
+      <import feature="tools.vitruv.domains.java.feature" version="0.2.0.qualifier"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="0.2.0.qualifier"/>
    </requires>
 
    <plugin

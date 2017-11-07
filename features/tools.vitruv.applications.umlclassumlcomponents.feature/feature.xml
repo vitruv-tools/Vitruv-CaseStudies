@@ -35,8 +35,6 @@
       <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0"/>
       <import feature="tools.vitruv.domains.java.feature" version="0.2.0"/>
       <import feature="tools.vitruv.domains.uml.feature" version="0.2.0"/>
-      <import plugin="tools.vitruv.domains.uml"/>
-      <import plugin="tools.vitruv.framework.applications"/>
    </requires>
 
    <plugin

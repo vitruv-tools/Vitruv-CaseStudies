@@ -32,19 +32,6 @@
       <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0"/>
       <import feature="tools.vitruv.domains.pcm.feature" version="0.2.0"/>
       <import feature="tools.vitruv.domains.uml.feature" version="0.2.0"/>
-      <import plugin="tools.vitruv.domains.uml"/>
-      <import plugin="tools.vitruv.domains.pcm"/>
-      <import plugin="tools.vitruv.framework.util"/>
-      <import plugin="tools.vitruv.framework.change"/>
-      <import plugin="tools.vitruv.framework.change.processing"/>
-      <import plugin="tools.vitruv.framework.correspondence"/>
-      <import plugin="tools.vitruv.framework.userinteraction"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.reactions"/>
-      <import plugin="tools.vitruv.extensions.dslsruntime.mapping"/>
-      <import plugin="tools.vitruv.domains.pcm.util"/>
-      <import plugin="org.palladiosimulator.pcm"/>
-      <import plugin="org.palladiosimulator.pcm.resources" version="4.0.0" match="greaterOrEqual"/>
-      <import plugin="tools.vitruv.framework.applications"/>
    </requires>
 
    <plugin
