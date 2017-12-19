@@ -1,50 +1,51 @@
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.palladiosimulator.pcm.repository.OperationInterface
-import org.emftext.language.java.modifiers.ModifiersFactory
 import com.google.common.collect.Sets
-import org.emftext.language.java.statements.ExpressionStatement
-import org.emftext.language.java.expressions.AssignmentExpression
-import org.emftext.language.java.references.SelfReference
-import org.emftext.language.java.references.IdentifierReference
-import java.util.Set
-import java.util.HashSet
 import java.util.ArrayList
+import java.util.HashSet
 import java.util.LinkedList
-import java.util.Vector
+import java.util.List
+import java.util.Set
 import java.util.Stack
-import java.util.List 
-import tools.vitruv.framework.userinteraction.UserInteractionType
+import java.util.Vector
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.generics.GenericsFactory
-import static extension  tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import org.palladiosimulator.pcm.repository.BasicComponent
-import org.palladiosimulator.pcm.repository.CompositeDataType
-import org.emftext.language.java.types.TypeReference
-import org.palladiosimulator.pcm.repository.RepositoryComponent
-import org.palladiosimulator.pcm.repository.OperationProvidedRole
-import org.emftext.language.java.members.Constructor
-import org.palladiosimulator.pcm.repository.CollectionDataType
-import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.members.Field
-import org.palladiosimulator.pcm.repository.OperationSignature
 import org.emftext.language.java.imports.ClassifierImport
+import org.emftext.language.java.members.Constructor
+import org.emftext.language.java.members.Field
+import org.emftext.language.java.modifiers.ModifiersFactory
+import org.emftext.language.java.references.IdentifierReference
+import org.emftext.language.java.references.SelfReference
+import org.emftext.language.java.statements.ExpressionStatement
+import org.emftext.language.java.types.PrimitiveType
+import org.emftext.language.java.types.TypeReference
+import org.palladiosimulator.pcm.repository.BasicComponent
+import org.palladiosimulator.pcm.repository.CollectionDataType
+import org.palladiosimulator.pcm.repository.CompositeDataType
+import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.repository.OperationProvidedRole
+import org.palladiosimulator.pcm.repository.OperationSignature
+import org.palladiosimulator.pcm.repository.RepositoryComponent
+import tools.vitruv.framework.userinteraction.UserInteractionType
+
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+
+import static extension tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 reactions: pcm2java
-in reaction to changes in PCM 
+in reaction to changes in PCM
 execute actions in Java
 
 // ###################################################
 // ################ PACKAGE REACTIONS ################
 
-
 reaction CreatedRepository {
-	after element pcm::Repository created and inserted as root 
+	after element pcm::Repository created and inserted as root
 	call {
-		val repository = newValue
+		val repository = newValue;
 		createJavaPackage(repository, null, repository.entityName, "repository_root");
 		createRepositorySubPackages(repository);
 	}
@@ -60,8 +61,7 @@ routine createRepositorySubPackages(pcm::Repository repository) {
 			createJavaPackage(repository, repositoryPackage, "contracts", "contracts");
 		}
 	}
-}	
-	
+}
 
 reaction RenamedRepository {
 	after attribute replaced at pcm::Repository[entityName]
@@ -73,13 +73,13 @@ routine renamePackageForRepository(pcm::Repository repository) {
 		val rootPackage = retrieve java::Package corresponding to repository
 			tagged with "repository_root"
 	}
-	action { 
+	action {
 		update rootPackage {
 			rootPackage.name = repository.entityName;
 		}
 		call {
 			renameJavaPackage(repository, rootPackage, "contracts", "contracts");
-			renameJavaPackage(repository, rootPackage, "datatypes", "datatypes");	
+			renameJavaPackage(repository, rootPackage, "datatypes", "datatypes");
 			for (component : repository.components__Repository.filter(BasicComponent)) {
 				renameComponentPackageAndClass(component);
 			}
@@ -97,7 +97,6 @@ routine renamePackageForRepository(pcm::Repository repository) {
 	}
 }
 
-
 // ################################################################################
 // ############################# COMPOSED STRUCTURES ##############################
 
@@ -110,17 +109,17 @@ reaction CreatedSystem {
 	}
 }
 
-routine createImplementationForSystem(pcm::System system) { 
+routine createImplementationForSystem(pcm::System system) {
 	match {
 		val systemPackage = retrieve java::Package corresponding to system
-	} 
-	action { 
+	}
+	action {
 		call createJavaClass(system, systemPackage, system.entityName + "Impl")
 	}
 }
-	
+
 reaction DeletedSystem {
-	after element pcm::System deleted and removed as root 
+	after element pcm::System deleted and removed as root
 	call {
 		val system = oldValue;
 		deleteJavaPackage(system, system.entityName, "root_system");
@@ -132,12 +131,12 @@ reaction ChangedSystemName {
 	after attribute replaced at pcm::System[entityName]
 	call changeSystemImplementationName(affectedEObject)
 }
-	
+
 routine changeSystemImplementationName(pcm::System system) {
 	match {
 		val systemPackage = retrieve java::Package corresponding to system
 	}
-	action { 
+	action {
 		call {
 			renameJavaPackage(system, null, system.entityName, null);
 			renameJavaClassifier(system, systemPackage, system.entityName + "Impl");
@@ -145,7 +144,7 @@ routine changeSystemImplementationName(pcm::System system) {
 	}
 }
 
-reaction AddedAssemblyContextToComposedStructure { 
+reaction AddedAssemblyContextToComposedStructure {
 	after element pcm::AssemblyContext created and inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
 	call addAssemblyContextToComposedStructure(affectedEObject, newValue)
 }
@@ -155,7 +154,8 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 	match {
 		val compositeComponentJavaClass = retrieve java::Class corresponding to composedStructure
 		val encapsulatedComponentJavaClass = retrieve java::Class corresponding to assemblyContext.encapsulatedComponent__AssemblyContext
-	} action {
+	}
+	action {
 		val assemblyContextField = create java::Field and initialize {
 			val TypeReference typeRef = createNamespaceClassifierReference(encapsulatedComponentJavaClass);
 			createPrivateField(assemblyContextField, typeRef, assemblyContext.entityName);	
@@ -165,8 +165,8 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 		val constructor = create java::Constructor
 		update compositeComponentJavaClass {
 			compositeComponentJavaClass.members += assemblyContextField;
-			addConstructorToClass(constructor, compositeComponentJavaClass)
-			addImportToCompilationUnitOfClassifier(contextClassImport, compositeComponentJavaClass, encapsulatedComponentJavaClass)
+			addConstructorToClass(constructor, compositeComponentJavaClass);
+			addImportToCompilationUnitOfClassifier(contextClassImport, compositeComponentJavaClass, encapsulatedComponentJavaClass);
 		}
 		update constructor {
 			createNewForFieldInConstructor(newConstructorCall, constructor, assemblyContextField);
@@ -181,7 +181,7 @@ routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStr
 // #####################################################
 // ################ COMPONENT REACTIONS ################
 
-reaction CreatedComponent { 
+reaction CreatedComponent {
 	after element pcm::RepositoryComponent created and inserted in pcm::Repository[components__Repository]
 	call createComponentImplementation(newValue)
 }
@@ -191,7 +191,7 @@ routine createComponentImplementation(pcm::RepositoryComponent component) {
 		val repositoryPackage = retrieve java::Package corresponding to component.repository__RepositoryComponent
 			tagged with "repository_root"
 	}
-	action { 
+	action {
 		call {
 			createJavaPackage(component, repositoryPackage, component.entityName, null);
 			createImplementationForComponent(component);
@@ -203,7 +203,7 @@ routine createImplementationForComponent(pcm::RepositoryComponent component) {
 	match {
 		val componentPackage = retrieve java::Package corresponding to component
 	}
-	action { 
+	action {
 		call createJavaClass(component, componentPackage, component.entityName + "Impl")
 	}
 }
@@ -216,12 +216,12 @@ reaction RenameComponent {
 	}
 }
 
-routine renameComponentPackageAndClass(pcm::RepositoryComponent component) { 
+routine renameComponentPackageAndClass(pcm::RepositoryComponent component) {
 	match {
 		val repositoryPackage = retrieve java::Package corresponding to component.repository__RepositoryComponent
 			with repositoryPackage.name.equals(component.repository__RepositoryComponent.entityName)
 	}
-	action { 
+	action {
 		call {
 			renameJavaPackage(component, repositoryPackage, component.entityName, null);
 			renameComponentClass(component);
@@ -233,7 +233,7 @@ routine renameComponentClass(pcm::RepositoryComponent component) {
 	match {
 		val componentPackage = retrieve java::Package corresponding to component
 	}
-	action { 
+	action {
 		call renameJavaClassifier(component, componentPackage, component.entityName + "Impl")
 	}
 }
@@ -241,42 +241,42 @@ routine renameComponentClass(pcm::RepositoryComponent component) {
 reaction DeletedComponent {
 	after element pcm::RepositoryComponent deleted and removed from pcm::Repository[components__Repository]
 	call {
-		deleteJavaClassifier(oldValue)
-		deleteJavaPackage(oldValue, oldValue.entityName, "")
+		deleteJavaClassifier(oldValue);
+		deleteJavaPackage(oldValue, oldValue.entityName, "");
 	}
 }
 
 // #####################################################
 // ################ INTERFACE REACTIONS ################
 
-reaction CreatedInterface { 
+reaction CreatedInterface {
 	after element created and inserted in pcm::Repository[interfaces__Repository]
 	call createInterfaceImplementation(newValue)
 }
 
-routine createInterfaceImplementation(pcm::Interface interf) { 
+routine createInterfaceImplementation(pcm::Interface interf) {
 	match {
 		val contractsPackage = retrieve java::Package corresponding to interf.repository__Interface
 			with contractsPackage.name == "contracts"
-	} 
-	action { 
+	}
+	action {
 		call {
 			createJavaInterface(interf, contractsPackage, interf.entityName);
 		}
 	}
 }
 
-reaction RenamedInterface { 
+reaction RenamedInterface {
 	after attribute replaced at pcm::OperationInterface[entityName]
 	call renameInterface(affectedEObject)
 }
 
-routine renameInterface(pcm::OperationInterface interf) { 
+routine renameInterface(pcm::OperationInterface interf) {
 	match {
 		val contractsPackage = retrieve java::Package corresponding to interf.repository__Interface
 			with contractsPackage.name == "contracts"
-	} 
-	action { 
+	}
+	action {
 		call renameJavaClassifier(interf, contractsPackage, interf.entityName)
 	}
 }
@@ -284,33 +284,33 @@ routine renameInterface(pcm::OperationInterface interf) {
 // ######################################################
 // ################ DATA TYPES REACTIONS ################
 
-reaction CreatedCompositeDataType { 
+reaction CreatedCompositeDataType {
 	after element pcm::CompositeDataType created and inserted in pcm::Repository[dataTypes__Repository]
 	call createCompositeDataTypeImplementation(newValue)
 }
 
-routine createCompositeDataTypeImplementation(pcm::CompositeDataType dataType) { 
+routine createCompositeDataTypeImplementation(pcm::CompositeDataType compositeDataType) {
 	match {
-		val datatypesPackage = retrieve java::Package corresponding to dataType.repository__DataType 
+		val datatypesPackage = retrieve java::Package corresponding to compositeDataType.repository__DataType
 			with datatypesPackage.name == "datatypes"
-	} 
+	}
 	action {
 		call {
-			createJavaClass(dataType, datatypesPackage, dataType.entityName);
+			createJavaClass(compositeDataType, datatypesPackage, compositeDataType.entityName);
 		}
 	}
 }
 
-reaction RenamedCompositeDataType { 
+reaction RenamedCompositeDataType {
 	after attribute replaced at pcm::CompositeDataType[entityName]
 	call renameCompositeDataType(affectedEObject)
 }
 
-routine renameCompositeDataType(pcm::CompositeDataType compositeDataType) { 
+routine renameCompositeDataType(pcm::CompositeDataType compositeDataType) {
 	match {
 		val datatypesPackage = retrieve java::Package corresponding to compositeDataType.repository__DataType with datatypesPackage.name == "datatypes"
-	} 
-	action { 
+	}
+	action {
 		call renameJavaClassifier(compositeDataType, datatypesPackage, compositeDataType.entityName)
 	}
 }
@@ -320,16 +320,16 @@ reaction DeletedCompositeDataType {
 	call deleteJavaClassifier(oldValue)
 }
 
-reaction CreatedCollectionDataType { 
+reaction CreatedCollectionDataType {
 	after element pcm::CollectionDataType created and inserted in pcm::Repository[dataTypes__Repository]
 	call createCollectionDataTypeImplementation(newValue)
 }
 
-routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType) { 
+routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType) {
 	match {
 		val innerTypeClass = retrieve optional java::Class corresponding to dataType.innerType_CollectionDataType
 		val datatypesPackage = retrieve java::Package corresponding to dataType.repository__DataType with datatypesPackage.name == "datatypes"
-	} 
+	}
 	action {
 		call {
 			// create correct (and in case of primitive types wrapped) type reference for the inner type
@@ -338,19 +338,19 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 			if (innerTypeRef instanceof PrimitiveType) {
 				innerTypeClassOrWrapper = getWrapperTypeReferenceForPrimitiveType(innerTypeRef);
 			}
-			
+
 			// Let user select the class to map the collection type to
-			var Set<Class<?>> collectionDataTypes = new HashSet
-			collectionDataTypes += #[ArrayList, LinkedList, Vector, Stack, HashSet]
-			val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size)
+			var Set<Class<?>> collectionDataTypes = new HashSet;
+			collectionDataTypes += #[ArrayList, LinkedList, Vector, Stack, HashSet];
+			val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size);
 			for (collectionDataType : collectionDataTypes) {
-				collectionDataTypeNames.add(collectionDataType.name)
+				collectionDataTypeNames.add(collectionDataType.name);
 			}
-			val String selectTypeMsg = "Please select type (or interface) that should be used for the type"
+			val String selectTypeMsg = "Please select type (or interface) that should be used for the type";
 			val int selectedType = userInteracting.selectFromMessage(UserInteractionType.MODAL, selectTypeMsg,
-				collectionDataTypeNames)
-			val Class<?> selectedClass = collectionDataTypes.get(selectedType)
-	
+				collectionDataTypeNames);
+			val Class<?> selectedClass = collectionDataTypes.get(selectedType);
+
 			createJavaClass(dataType, datatypesPackage, dataType.entityName);
 			addSuperTypeToDataType(dataType, innerTypeClassOrWrapper, selectedClass.name);
 		}
@@ -361,8 +361,8 @@ routine addSuperTypeToDataType(pcm::DataType dataType, java::TypeReference inner
 	match {
 		val dataTypeImplementation = retrieve java::Class corresponding to dataType
 		val dataTypeImplementationCU = retrieve java::CompilationUnit corresponding to dataType
-	} 
-	action { 
+	}
+	action {
 		update dataTypeImplementationCU {
 			val collectionTypeClassImport = createJavaClassImport(superTypeQualifiedName);
 			dataTypeImplementationCU.imports += collectionTypeClassImport;
@@ -385,31 +385,32 @@ reaction RenamedCollectionDataType {
 	call renameCollectionDataType(affectedEObject)
 }
 
-routine renameCollectionDataType(pcm::CollectionDataType collectionDataType) { 
+routine renameCollectionDataType(pcm::CollectionDataType collectionDataType) {
 	match {
 		val datatypesPackage = retrieve java::Package corresponding to collectionDataType.repository__DataType with datatypesPackage.name == "datatypes"
-	} 
-	action { 
+	}
+	action {
 		call renameJavaClassifier(collectionDataType, datatypesPackage, collectionDataType.entityName)
 	}
 }
 
-reaction DeletedCollectionDataType { 
+reaction DeletedCollectionDataType {
 	after element pcm::CollectionDataType deleted and removed from pcm::Repository[dataTypes__Repository]
 	call deleteJavaClassifier(oldValue)
 }
 
 // ################ DATA TYPES - INNER DECLARATION REACTIONS ################
 
-reaction CreatedInnerDeclaration { 
+reaction CreatedInnerDeclaration {
 	after element pcm::InnerDeclaration created and inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
 	call createInnerDeclarationImplementation(newValue)
 }
 
-routine createInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) { 
+routine createInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) {
 	match {
 		val nonPrimitiveInnerDataTypeClass = retrieve optional java::Class corresponding to innerDeclaration.datatype_InnerDeclaration
-	} action { 
+	}
+	action {
 		call {
 			val innerDataTypeReference = createTypeReference(innerDeclaration.datatype_InnerDeclaration, nonPrimitiveInnerDataTypeClass);
 			addInnerDeclarationToCompositeDataType(innerDeclaration.compositeDataType_InnerDeclaration, innerDeclaration, innerDataTypeReference);
@@ -417,16 +418,16 @@ routine createInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclarat
 	}
 }
 
-routine addInnerDeclarationToCompositeDataType(pcm::CompositeDataType dataType, pcm::InnerDeclaration innerDeclaration, java::TypeReference dataTypeReference) { 
+routine addInnerDeclarationToCompositeDataType(pcm::CompositeDataType dataType, pcm::InnerDeclaration innerDeclaration, java::TypeReference dataTypeReference) {
 	match {
 		val dataTypeClass = retrieve java::Class corresponding to dataType
-	} 
-	action { 
+	}
+	action {
 		val innerDataTypeField = create java::Field and initialize {
 			createPrivateField(innerDataTypeField, EcoreUtil.copy(dataTypeReference), innerDeclaration.entityName);	
 		}
 		add correspondence between innerDataTypeField and innerDeclaration
-		val getterMethod  = create java::ClassMethod and initialize {
+		val getterMethod = create java::ClassMethod and initialize {
 			createGetter(innerDataTypeField, getterMethod);
 		}
 		add correspondence between getterMethod and innerDeclaration tagged with "getter"
@@ -443,17 +444,17 @@ routine addInnerDeclarationToCompositeDataType(pcm::CompositeDataType dataType, 
 	}
 }
 
-reaction RenameInnerDeclaration { 
+reaction RenameInnerDeclaration {
 	after attribute replaced at pcm::InnerDeclaration[entityName]
 	call renameInnerDeclarationImplementation(affectedEObject)
 }
 
-routine renameInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) { 
+routine renameInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) {
 	match {
 		val compositeTypeField = retrieve java::Field corresponding to innerDeclaration
 		val compositeTypeGetterMethod = retrieve java::ClassMethod corresponding to innerDeclaration tagged with "getter"
 		val compositeTypeSetterMethod = retrieve java::ClassMethod corresponding to innerDeclaration tagged with "setter"
-	} 
+	}
 	action {
 		update compositeTypeField {
 			compositeTypeField.name = innerDeclaration.entityName;
@@ -463,23 +464,23 @@ routine renameInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclarat
 		}
 		update compositeTypeSetterMethod {
 			if (!compositeTypeSetterMethod.parameters.nullOrEmpty) {
-				val parameter = compositeTypeSetterMethod.parameters.get(0)
+				val parameter = compositeTypeSetterMethod.parameters.get(0);
 				parameter.name = "set" + innerDeclaration.entityName.toFirstUpper;
 			}
 		}
 	}
 }
-	
-reaction ChangeTypeOfInnerDeclaration { 
+
+reaction ChangeTypeOfInnerDeclaration {
 	after element pcm::DataType replaced at pcm::InnerDeclaration[datatype_InnerDeclaration]
 	call changeTypeOfInnerDeclarationImplementation(affectedEObject)
 }
 
-routine changeTypeOfInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) { 
+routine changeTypeOfInnerDeclarationImplementation(pcm::InnerDeclaration innerDeclaration) {
 	match {
 		val newJavaDataType = retrieve optional java::Class corresponding to innerDeclaration.datatype_InnerDeclaration
-	} 
-	action { 
+	}
+	action {
 		call {
 			val newDataTypeReference = createTypeReference(innerDeclaration.datatype_InnerDeclaration, newJavaDataType);
 			changeInnerDeclarationType(innerDeclaration, newDataTypeReference);
@@ -487,12 +488,12 @@ routine changeTypeOfInnerDeclarationImplementation(pcm::InnerDeclaration innerDe
 	}
 }
 
-routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, java::TypeReference newTypeReference) { 
+routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, java::TypeReference newTypeReference) {
 	match {
 		val compositeTypeField = retrieve java::Field corresponding to innerDeclaration
 		val compositeTypeGetterMethod = retrieve java::Method corresponding to innerDeclaration tagged with "getter"
 		val compositeTypeSetterMethod = retrieve java::Method corresponding to innerDeclaration tagged with "setter"
-	} 
+	}
 	action {
 		update compositeTypeField {
 			compositeTypeField.typeReference = EcoreUtil.copy(newTypeReference);
@@ -502,26 +503,25 @@ routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, java:
 		}
 		update compositeTypeSetterMethod {
 			if (!compositeTypeSetterMethod.parameters.nullOrEmpty) {
-				val parameter = compositeTypeSetterMethod.parameters.get(0)
-				parameter.typeReference = EcoreUtil.copy(newTypeReference)
+				val parameter = compositeTypeSetterMethod.parameters.get(0);
+				parameter.typeReference = EcoreUtil.copy(newTypeReference);
 			}
-		} 
+		}
 	}
 }
-
 
 // ######################################################
 // ################ JAVA PACKAGE ROUTINES ################
 
-routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag)	 { 
+routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag) {
 	match {
 		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
-	} 
-	action { 
+	}
+	action {
 		val javaPackage = create java::Package and initialize {
 			if (parentPackage !== null) {
 				javaPackage.namespaces += parentPackage.namespaces;
-				javaPackage.namespaces += parentPackage.name; 
+				javaPackage.namespaces += parentPackage.name;
 			}
 			javaPackage.name = packageName;
 			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
@@ -535,13 +535,13 @@ routine renameJavaPackage(pcm::NamedElement sourceElementMappedToPackage, java::
 	match {
 		val javaPackage = retrieve java::Package corresponding to sourceElementMappedToPackage
 			tagged with expectedTag	//move containing model to project-relative location: buildJavaFilePath(javaPackage)
-	} 
-	action { 
+	}
+	action {
 		update javaPackage {
 			javaPackage.namespaces.clear();
 			if (parentPackage !== null) {
 				javaPackage.namespaces += parentPackage.namespaces;
-				javaPackage.namespaces += parentPackage.name; 
+				javaPackage.namespaces += parentPackage.name;
 			}
 			javaPackage.name = packageName;
 			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
@@ -549,20 +549,20 @@ routine renameJavaPackage(pcm::NamedElement sourceElementMappedToPackage, java::
 	}
 }
 
-routine deleteJavaPackage(pcm::NamedElement sourceElementMappedToPackage, String packageName, String expectedTag) { 
+routine deleteJavaPackage(pcm::NamedElement sourceElementMappedToPackage, String packageName, String expectedTag) {
 	match {
 		val javaPackage = retrieve java::Package corresponding to sourceElementMappedToPackage tagged with expectedTag
-	} 
-	action { 
+	}
+	action {
 		delete javaPackage
 	}
 }
-	
+
 // ######################################################
 // ################ JAVA CLASS ROUTINES ##################
 
 routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Package containingPackage, String className) {
-	action { 
+	action {
 		val javaClass = create java::Class and initialize {
 			javaClass.name = className;
 			javaClass.addModifier(ModifiersFactory.eINSTANCE.createPublic());
@@ -573,7 +573,7 @@ routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Pack
 }
 
 routine createJavaInterface(pcm::NamedElement sourceElementMappedToClass, java::Package containingPackage, String className) {
-	action { 
+	action {
 		val javaInterface = create java::Interface and initialize {
 			javaInterface.name = className;
 			javaInterface.addModifier(ModifiersFactory.eINSTANCE.createPublic());
@@ -584,7 +584,7 @@ routine createJavaInterface(pcm::NamedElement sourceElementMappedToClass, java::
 }
 
 routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java::ConcreteClassifier classifier, java::Package containingPackage) {
-	action { 
+	action {
 		val compilationUnit = create java::CompilationUnit and initialize {
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
@@ -596,13 +596,13 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 	}
 }
 
-routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package containingPackage, String className) { 
+routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package containingPackage, String className) {
 	match {
 		val compilationUnit = retrieve java::CompilationUnit corresponding to classSourceElement
 		// move containing model to project-relative location: buildJavaFilePath(compilationUnit)
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to classSourceElement
-	} 
-	action { 
+	}
+	action {
 		update javaClassifier {
 			javaClassifier.name = className;
 		}
@@ -616,31 +616,30 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 	}
 }
 
-routine deleteJavaClassifier(pcm::NamedElement sourceElement) { 
+routine deleteJavaClassifier(pcm::NamedElement sourceElement) {
 	match {
 		val javaClassifier = retrieve java::ConcreteClassifier corresponding to sourceElement
 		val compilationUnit = retrieve java::CompilationUnit corresponding to sourceElement
 	}
-	action { 
+	action {
 		delete javaClassifier
 		delete compilationUnit
 	}
 }
 
-
 // ####################################################
 // ################ PROVIDED ROLES ####################
 
-reaction CreatedProvidedRole { 
+reaction CreatedProvidedRole {
 	after element pcm::OperationProvidedRole created and inserted in pcm::InterfaceProvidingEntity[providedRoles_InterfaceProvidingEntity]
 	call addProvidedRole(newValue)
 }
 
-routine addProvidedRole(pcm::OperationProvidedRole providedRole) { 
+routine addProvidedRole(pcm::OperationProvidedRole providedRole) {
 	match {
 		val operationProvidingInterface = retrieve java::Interface corresponding to providedRole.providedInterface__OperationProvidedRole
 		val javaClass = retrieve java::Class corresponding to providedRole.providingEntity_ProvidedRole
-	} 
+	}
 	action {
 		// TODO HK This should be partly in the context of the compilation unit
 		val interfaceImport = create java::ClassifierImport and initialize {
@@ -652,12 +651,12 @@ routine addProvidedRole(pcm::OperationProvidedRole providedRole) {
 		}
 		add correspondence between namespaceClassifierReference and providedRole
 		update javaClass {
-			javaClass.implements.add(namespaceClassifierReference)
+			javaClass.implements.add(namespaceClassifierReference);
 		}
 	}
 }
 
-reaction ChangedProvidedInterfaceOfProvidedRole { 
+reaction ChangedProvidedInterfaceOfProvidedRole {
 	after element replaced at pcm::OperationProvidedRole[providedInterface__OperationProvidedRole]
 	call {
 		val operationProvidedRole = affectedEObject;
@@ -666,7 +665,7 @@ reaction ChangedProvidedInterfaceOfProvidedRole {
 	}
 }
 
-reaction ChangedProvidingEntityOfProvidedRole { 
+reaction ChangedProvidingEntityOfProvidedRole {
 	after element replaced at pcm::OperationProvidedRole[providingEntity_ProvidedRole]
 	call {
 		val operationProvidedRole = affectedEObject;	
@@ -675,45 +674,45 @@ reaction ChangedProvidingEntityOfProvidedRole {
 	}
 }
 
-reaction DeletedProvidedRoleFromSystem { 
+reaction DeletedProvidedRoleFromSystem {
 	after element pcm::ProvidedRole deleted and removed from pcm::System[providedRoles_InterfaceProvidingEntity]
 	call removeProvidedRole(oldValue)
 }
 
-reaction DeletedProvidedRoleFromComponent { 
+reaction DeletedProvidedRoleFromComponent {
 	after element pcm::ProvidedRole deleted and removed from pcm::RepositoryComponent[providedRoles_InterfaceProvidingEntity]
 	call removeProvidedRole(oldValue)
 }
 
-routine removeProvidedRole(pcm::ProvidedRole providedRole) { 
+routine removeProvidedRole(pcm::ProvidedRole providedRole) {
 	match {
 		val requiredInterfaceImport = retrieve java::ClassifierImport corresponding to providedRole
 		val namespaceClassifierReference = retrieve java::NamespaceClassifierReference corresponding to providedRole
-	} 
-	action { 
+	}
+	action {
 		delete requiredInterfaceImport
 		delete namespaceClassifierReference
 	}
 }
-
 
 // ####################################################
 // ################ REQUIRED ROLES ####################
 
 // TODO HK implement ctor statement as correspondence (dynamic in explicit action for each ctor) to remove them easily
 // Use as example for reactions best practices chapter
-// TODO HK Implement rename correctly after having all four correspondences correctly 
-reaction CreatedRequiredRole { 
+// TODO HK Implement rename correctly after having all four correspondences correctly
+reaction CreatedRequiredRole {
 	after element pcm::OperationRequiredRole inserted in pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
 	call addRequiredRole(newValue)
 }
 
 // TODO HK This routine is hard to read, isn't it?
-routine addRequiredRole(pcm::OperationRequiredRole requiredRole) { 
+routine addRequiredRole(pcm::OperationRequiredRole requiredRole) {
 	match {
 		val requiredInterface = retrieve java::Interface corresponding to requiredRole.requiredInterface__OperationRequiredRole
 		val javaClass = retrieve java::Class corresponding to requiredRole.requiringEntity_RequiredRole
-	} action {
+	}
+	action {
 		// TODO HK this should be partly in the context of the compilation unit
 		val requiredInterfaceImport = create java::ClassifierImport and initialize {
 			addImportToCompilationUnitOfClassifier(requiredInterfaceImport, javaClass, requiredInterface);
@@ -728,7 +727,7 @@ routine addRequiredRole(pcm::OperationRequiredRole requiredRole) {
 		update javaClass {
 			javaClass.members += requiredInterfaceField;
 			if (javaClass.members.filter(typeof(Constructor)).nullOrEmpty) {
-				addConstructorToClass(javaClass)
+				addConstructorToClass(javaClass);
 			}
 		}
 		call {
@@ -743,39 +742,39 @@ routine addRequiredRole(pcm::OperationRequiredRole requiredRole) {
 
 routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorrespondenceSource, java::Constructor constructor, 
 		java::NamespaceClassifierReference typeReference, java::Field fieldToBeAssigned, String parameterName) {
-	action { 
+	action {
 		val newParameter = create java::OrdinaryParameter and initialize {
 			newParameter.name = parameterName;
 			newParameter.typeReference = EcoreUtil.copy(typeReference);
 		}
 		add correspondence between newParameter and parameterCorrespondenceSource
 		update constructor {
-			constructor.parameters.add(newParameter)
+			constructor.parameters.add(newParameter);
 			val asssignment = createAssignmentFromParameterToField(fieldToBeAssigned, newParameter);
-			constructor.statements.add(asssignment)
+			constructor.statements.add(asssignment);
 		}
 	}
 }
 
-reaction DeletedRequiredRole { 
+reaction DeletedRequiredRole {
 	after element pcm::OperationRequiredRole removed from pcm::InterfaceRequiringEntity[requiredRoles_InterfaceRequiringEntity]
 	call {
 		removeRequiredRole(oldValue, affectedEObject as RepositoryComponent);
 	}
 }
 
-routine removeRequiredRole(pcm::RequiredRole requiredRole, pcm::InterfaceRequiringEntity requiringEntity) { 
+routine removeRequiredRole(pcm::RequiredRole requiredRole, pcm::InterfaceRequiringEntity requiringEntity) {
 	match {
 		val requiredInterfaceImport = retrieve java::ClassifierImport corresponding to requiredRole
 		val requiredInterfaceField = retrieve java::Field corresponding to requiredRole
 		val javaClass = retrieve java::Class corresponding to requiringEntity
-	} 
-	action { 
+	}
+	action {
 		delete requiredInterfaceImport
 		delete requiredInterfaceField
 		call {
 			for (ctor : javaClass.members.filter(typeof(Constructor))) {
-				removeParameterToFieldAssignmentFromConstructor(ctor, requiredRole.entityName)
+				removeParameterToFieldAssignmentFromConstructor(ctor, requiredRole.entityName);
 				removeCorrespondingParameterFromConstructor(ctor, requiredRole);
 			}
 		}
@@ -787,7 +786,7 @@ routine removeParameterToFieldAssignmentFromConstructor(java::Constructor ctor, 
 		update ctor {
 			for (statement : ctor.statements) {
 				if (statement instanceof ExpressionStatement) {
-					val assignmentExpression = statement.expression
+					val assignmentExpression = statement.expression;
 					if (assignmentExpression instanceof AssignmentExpression) {
 						val selfReference = assignmentExpression.child;
 						if (selfReference instanceof SelfReference) {
@@ -801,7 +800,6 @@ routine removeParameterToFieldAssignmentFromConstructor(java::Constructor ctor, 
 									}
 								}
 							}
-							
 						}
 					}
 				}
@@ -810,18 +808,18 @@ routine removeParameterToFieldAssignmentFromConstructor(java::Constructor ctor, 
 	}
 }
 
-routine removeCorrespondingParameterFromConstructor(java::Constructor ctor, pcm::NamedElement correspondenceSource) { 
+routine removeCorrespondingParameterFromConstructor(java::Constructor ctor, pcm::NamedElement correspondenceSource) {
 	match {
 		val param = retrieve java::OrdinaryParameter corresponding to correspondenceSource
 			with ctor.parameters.contains(param)
-	} 
-	action { 
+	}
+	action {
 		delete param
 	}
 }
 
 routine reinitializeOperationRequiredRole(pcm::OperationRequiredRole requiredRole) {
-	action { 
+	action {
 		call {
 			removeRequiredRole(requiredRole, requiredRole.requiringEntity_RequiredRole);
 			addRequiredRole(requiredRole);
@@ -829,32 +827,31 @@ routine reinitializeOperationRequiredRole(pcm::OperationRequiredRole requiredRol
 	}
 }
 
-reaction RenameOperationRequiredRole { 
+reaction RenameOperationRequiredRole {
 	after attribute replaced at pcm::OperationRequiredRole[entityName]
 	call reinitializeOperationRequiredRole(affectedEObject)
 }
 
-reaction ChangeOperationRequiredRoleInterface { 
+reaction ChangeOperationRequiredRoleInterface {
 	after element replaced at pcm::OperationRequiredRole[requiredInterface__OperationRequiredRole]
 	call reinitializeOperationRequiredRole(affectedEObject)
 }
-
 
 // ##########################################################
 // ################ OPERATION SIGNATURES ####################
 
 // TODO HK Implement changing the signature interface. All components with their SEFFs have to be updated.
 // Use more reasonable correspondences than Michael
-reaction CreatedOperationSignature { 
+reaction CreatedOperationSignature {
 	after element pcm::OperationSignature created and inserted in pcm::OperationInterface[signatures__OperationInterface]
 	call createMethodForOperationSignature(newValue)
 }
 
-routine createMethodForOperationSignature(pcm::OperationSignature operationSignature) { 
+routine createMethodForOperationSignature(pcm::OperationSignature operationSignature) {
 	match {
 		val javaInterface = retrieve java::Interface corresponding to operationSignature.interface__OperationSignature
 	}
-	action { 
+	action {
 		val interfaceMethod = create java::InterfaceMethod
 		add correspondence between interfaceMethod and operationSignature
 		call {
@@ -865,58 +862,58 @@ routine createMethodForOperationSignature(pcm::OperationSignature operationSigna
 	}
 }
 
-reaction RenameOperationSignature { 
+reaction RenameOperationSignature {
 	after attribute replaced at pcm::OperationSignature[entityName]
 	call renameMethodForOperationSignature(affectedEObject)
 }
 
-routine renameMethodForOperationSignature(pcm::OperationSignature operationSignature) { 
+routine renameMethodForOperationSignature(pcm::OperationSignature operationSignature) {
 	match {
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to operationSignature
-	} 
-	action { 
+	}
+	action {
 		update interfaceMethod {
 			interfaceMethod.name = operationSignature.entityName;
 		}
 		call {
 			val operationInterface = operationSignature.interface__OperationSignature;
 			// get implementing components
-			val implementingComponents = Sets.newHashSet
+			val implementingComponents = Sets.newHashSet;
 			operationInterface.repository__Interface.components__Repository.forEach [ comp |
-				val opProvRoles = comp.providedRoles_InterfaceProvidingEntity.filter(OperationProvidedRole)
+				val opProvRoles = comp.providedRoles_InterfaceProvidingEntity.filter(OperationProvidedRole);
 				opProvRoles.filter[it.providedInterface__OperationProvidedRole.id == operationInterface.id].forEach [ opProRole |
-					implementingComponents.add(opProRole.providingEntity_ProvidedRole)
+					implementingComponents.add(opProRole.providingEntity_ProvidedRole);
 				]
 			]
-			val basicComponents = implementingComponents.filter(BasicComponent)
+			val basicComponents = implementingComponents.filter(BasicComponent);
 			basicComponents.forEach[
 				it.serviceEffectSpecifications__BasicComponent.forEach[
-					updateSEFFImplementingMethodName(it)
+					updateSEFFImplementingMethodName(it);
 				]
 			]
 		}
 	}
 }
 
-reaction ChangeOperationSignatureReturnType { 
+reaction ChangeOperationSignatureReturnType {
 	after element pcm::DataType replaced at pcm::OperationSignature[returnType__OperationSignature]
 	call changeReturnTypeOfMethodForOperationSignature(affectedEObject)
 }
 
-routine changeReturnTypeOfMethodForOperationSignature(pcm::OperationSignature operationSignature) { 
-	match { 
+routine changeReturnTypeOfMethodForOperationSignature(pcm::OperationSignature operationSignature) {
+	match {
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to operationSignature
-	} 
-	action { 
+	}
+	action {
 		call changeInterfaceMethodReturnType(interfaceMethod, operationSignature.returnType__OperationSignature)
 	}
 }
 
-routine changeInterfaceMethodReturnType(java::InterfaceMethod interfaceMethod, pcm::DataType returnType) { 
-	match { 
+routine changeInterfaceMethodReturnType(java::InterfaceMethod interfaceMethod, pcm::DataType returnType) {
+	match {
 		val returnTypeClass = retrieve optional java::Class corresponding to returnType
-	} 
-	action { 
+	}
+	action {
 		update interfaceMethod {
 			val returnTypeReference = createTypeReference(returnType, returnTypeClass);
 			interfaceMethod.typeReference = returnTypeReference;
@@ -924,37 +921,36 @@ routine changeInterfaceMethodReturnType(java::InterfaceMethod interfaceMethod, p
 	}
 }
 
-reaction DeletedOperationSignature { 
+reaction DeletedOperationSignature {
 	after element pcm::OperationSignature deleted and removed from pcm::OperationInterface[signatures__OperationInterface]
 	call deleteMethodForOperationSignature(oldValue)
 }
 
-routine deleteMethodForOperationSignature(pcm::OperationSignature operationSignature) { 
+routine deleteMethodForOperationSignature(pcm::OperationSignature operationSignature) {
 	match {
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to operationSignature
-	} 
-	action { 
+	}
+	action {
 		delete interfaceMethod
 	}
 }
- 
 
 // ################################################################################
 // ################################## PARAMETERS ##################################
 
-reaction CreatedParameter { 
+reaction CreatedParameter {
 	after element pcm::Parameter created and inserted in pcm::OperationSignature[parameters__OperationSignature]
 	call createParameter(newValue)
 }
 
 // TODO HK Consolidate with ChangeParameterType!
-routine createParameter(pcm::Parameter parameter) { 
+routine createParameter(pcm::Parameter parameter) {
 	match {
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to parameter.operationSignature__Parameter
 		require absence of java::OrdinaryParameter corresponding to parameter
 		val javaParameterTypeClass = retrieve optional java::Class corresponding to parameter.dataType__Parameter
-	} 
-	action { 
+	}
+	action {
 		val javaParameter = create java::OrdinaryParameter and initialize {
 			javaParameter.name = parameter.parameterName;
 			val parameterTypeReference = createTypeReference(parameter.dataType__Parameter, javaParameterTypeClass);
@@ -967,35 +963,35 @@ routine createParameter(pcm::Parameter parameter) {
 	}
 }
 
-reaction RenamedParameter { 
+reaction RenamedParameter {
 	after attribute replaced at pcm::Parameter[parameterName]
 	call renameParameter(affectedEObject)
 }
 
-routine renameParameter(pcm::Parameter parameter) { 
+routine renameParameter(pcm::Parameter parameter) {
 	match {
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
-	} 
-	action { 
+	}
+	action {
 		update javaParameter {
 			javaParameter.name = parameter.parameterName;
 		}
 	}
 }
 
-reaction ChangedParameterType { 
+reaction ChangedParameterType {
 	after element replaced at pcm::Parameter[dataType__Parameter]
 	call changeParameterType(affectedEObject)
 }
 
-routine changeParameterType(pcm::Parameter parameter) { 
+routine changeParameterType(pcm::Parameter parameter) {
 	match {
 		// retrieve the interface method to update the Tuid according to the new parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to parameter.operationSignature__Parameter
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
 		val javaParameterTypeClass = retrieve optional java::Class corresponding to parameter.dataType__Parameter
-	} 
-	action { 
+	}
+	action {
 		update parameter {
 			val parameterTypeReference = createTypeReference(parameter.dataType__Parameter, javaParameterTypeClass);
 			javaParameter.typeReference = parameterTypeReference;
@@ -1003,18 +999,18 @@ routine changeParameterType(pcm::Parameter parameter) {
 	}
 }
 
-reaction DeletedParameter { 
+reaction DeletedParameter {
 	after element pcm::Parameter deleted and removed from pcm::OperationSignature[parameters__OperationSignature]
 	call deleteParameter(affectedEObject, oldValue)
 }
 
-routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parameter) { 
+routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parameter) {
 	match {
 		// retrieve the interface method to update the Tuid according to the removed parameter type
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to signature
 		val javaParameter = retrieve java::OrdinaryParameter corresponding to parameter
-	} 
-	action { 
+	}
+	action {
 		delete javaParameter
 	}
 }
@@ -1022,16 +1018,16 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 // ################################################################################
 // ##################### RESOURCE DEMANDING INTERNAL BEHAVIOR #####################
 
-//reaction CreatedResourceDemandingInternalBehavior { 
+//reaction CreatedResourceDemandingInternalBehavior {
 //	after element pcm::ResourceDemandingInternalBehaviour created and inserted in pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
 //	call createMethodForResourceDemandingBehavior(newValue)
 //}
 //
-//routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
+//routine createMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
 //	match {
 //		val componentClass = retrieve java::Class corresponding to behavior.basicComponent_ResourceDemandingInternalBehaviour
-//	} 
-//	action { 
+//	}
+//	action {
 //		val javaMethod = create java::ClassMethod and initialize {
 //			javaMethod.name = behavior.entityName;
 //			javaMethod.typeReference = TypesFactory.eINSTANCE.createVoid;
@@ -1042,23 +1038,23 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 //	}
 //}
 //
-//reaction RenameResourceDemandingInternalBehavior { 
+//reaction RenameResourceDemandingInternalBehavior {
 //	after attribute replaced at pcm::ResourceDemandingInternalBehaviour[entityName]
 //	call renameMethodForResourceDemandingBehavior(affectedEObject)
 //}
 //
-//routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) { 
+//routine renameMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
 //	match {
 //		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-//	} 
-//	action { 
+//	}
+//	action {
 //		update javaMethod {
 //			javaMethod.name = behavior.entityName;
 //		}
 //	}
 //}
 //
-//reaction DeletedDemandingInternalBehavior { 
+//reaction DeletedDemandingInternalBehavior {
 //	after element pcm::ResourceDemandingInternalBehaviour deleted and removed from pcm::BasicComponent[resourceDemandingInternalBehaviours__BasicComponent]
 //	call deleteMethodForResourceDemandingBehavior(oldValue)
 //}
@@ -1066,7 +1062,8 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 //routine deleteMethodForResourceDemandingBehavior(pcm::ResourceDemandingInternalBehaviour behavior) {
 //	match {
 //		val javaMethod = retrieve java::ClassMethod corresponding to behavior
-//	} action { 
+//	}
+//	action {
 //		delete javaMethod
 //	}
 //}
@@ -1074,71 +1071,68 @@ routine deleteParameter(pcm::OperationSignature signature, pcm::Parameter parame
 // ################################################################################
 // #################################### SEFFS #####################################
 
-reaction CreatedSEFF { 
+reaction CreatedSEFF {
 	after element pcm::ServiceEffectSpecification created and inserted in pcm::BasicComponent[serviceEffectSpecifications__BasicComponent]
 	call createSEFF(newValue)
 }
 
-routine createSEFF(pcm::ServiceEffectSpecification seff) { 
+routine createSEFF(pcm::ServiceEffectSpecification seff) {
 	match {
 		val componentClass = retrieve java::Class corresponding to seff.basicComponent_ServiceEffectSpecification
 		val interfaceMethod = retrieve java::InterfaceMethod corresponding to seff.describedService__SEFF
 		check seff.describedService__SEFF instanceof OperationSignature
-	} 
-	action { 
-		val classMethod = create java::ClassMethod and initialize  {
+	}
+	action {
+		val classMethod = create java::ClassMethod and initialize {
 			initializeClassMethod(classMethod, interfaceMethod, true);
 		}
 		add correspondence between classMethod and seff
 		// TODO HK This is not completely in the context of the component class, but in contained elements...
 		update componentClass {
-			var correspondingClassMethod = componentClass.findMethodInClass(classMethod)
+			var correspondingClassMethod = componentClass.findMethodInClass(classMethod);
 			if (null === correspondingClassMethod) {
-				componentClass.members.add(classMethod)
-				correspondingClassMethod = classMethod
+				componentClass.members.add(classMethod);
+				correspondingClassMethod = classMethod;
 			} else {
-				correspondingClassMethod.name = interfaceMethod.name
+				correspondingClassMethod.name = interfaceMethod.name;
 			}
 		}
 	}
 }
 
-reaction ChangeOperationSignatureOfSeff { 
+reaction ChangeOperationSignatureOfSeff {
 	after element pcm::OperationSignature replaced at pcm::ResourceDemandingSEFF[describedService__SEFF]
 	call changeMethodForSeff(affectedEObject)
 }
 
-routine changeMethodForSeff(pcm::ResourceDemandingSEFF seff) { 
-	action { 
+routine changeMethodForSeff(pcm::ResourceDemandingSEFF seff) {
+	action {
 		call deleteMethodForSeff(seff)
 		call createSEFF(seff)
 	}
 }
 
-routine updateSEFFImplementingMethodName(pcm::ServiceEffectSpecification seff) { 
+routine updateSEFFImplementingMethodName(pcm::ServiceEffectSpecification seff) {
 	match {
 		val classMethod = retrieve java::ClassMethod corresponding to seff
-	} 
-	action { 
+	}
+	action {
 		update classMethod {
 			classMethod.name = seff.describedService__SEFF.entityName;
 		}
 	}
 }
 
-reaction DeletedSeff { 
+reaction DeletedSeff {
 	after element pcm::ServiceEffectSpecification deleted and removed from pcm::BasicComponent[serviceEffectSpecifications__BasicComponent]
 	call deleteMethodForSeff(oldValue)
 }
 
-routine deleteMethodForSeff(pcm::ServiceEffectSpecification seff) { 
+routine deleteMethodForSeff(pcm::ServiceEffectSpecification seff) {
 	match {
 		val classMethod = retrieve java::ClassMethod corresponding to seff
-	} 
-	action { 
+	}
+	action {
 		delete classMethod
 	}
 }
-
-
-
