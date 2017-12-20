@@ -16,7 +16,6 @@ Require-Bundle: org.junit,
  tools.vitruv.framework.util,
  tools.vitruv.framework.tests.util,
  tools.vitruv.framework.change.processing,
- tools.vitruv.framework.modelsynchronization,
  tools.vitruv.framework.metamodel,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm
