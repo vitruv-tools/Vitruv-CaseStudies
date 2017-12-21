@@ -25,12 +25,13 @@ class CreateParameterInInterfaceMethodReaction extends AbstractReactionRealizati
     org.emftext.language.java.members.InterfaceMethod affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.parameters.Parameter newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.ejbjava2pcm.RoutinesFacade routinesFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateParameterInInterfaceMethodReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.ejbjava2pcm.CreateParameterInInterfaceMethodReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -77,7 +78,7 @@ class CreateParameterInInterfaceMethodReaction extends AbstractReactionRealizati
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final InterfaceMethod affectedEObject, final EReference affectedFeature, final Parameter newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final InterfaceMethod affectedEObject, final EReference affectedFeature, final Parameter newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createdParameterInInterfaceMethod(affectedEObject, newValue);
     }
   }

@@ -29,7 +29,7 @@ class MoveClassToDifferentPackageReaction extends AbstractReactionRealization {
     				
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.MoveClassToDifferentPackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.MoveClassToDifferentPackageReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -79,7 +79,7 @@ class MoveClassToDifferentPackageReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package oldValue, final org.eclipse.uml2.uml.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package oldValue, final org.eclipse.uml2.uml.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.movedClassToDifferentPackage(affectedEObject, oldValue, newValue);
     }
   }

@@ -26,12 +26,13 @@ class UmlClassCreatedReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Package affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.eclipse.uml2.uml.Class newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlClassCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlClassCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -102,7 +103,7 @@ class UmlClassCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createJavaClass(newValue);
     }
   }

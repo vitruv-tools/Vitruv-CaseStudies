@@ -31,7 +31,7 @@ class AddedOperationProvidedRoleInterfaceReaction extends AbstractReactionRealiz
     				
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.AddedOperationProvidedRoleInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.AddedOperationProvidedRoleInterfaceReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -81,7 +81,7 @@ class AddedOperationProvidedRoleInterfaceReaction extends AbstractReactionRealiz
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationProvidedRole affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final OperationInterface newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final OperationProvidedRole affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final OperationInterface newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.addOperationProvidedRoleInterface(affectedEObject, newValue);
     }
   }

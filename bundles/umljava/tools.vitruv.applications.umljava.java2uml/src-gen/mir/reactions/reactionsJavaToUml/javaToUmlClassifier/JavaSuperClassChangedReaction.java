@@ -29,7 +29,7 @@ class JavaSuperClassChangedReaction extends AbstractReactionRealization {
     org.emftext.language.java.types.TypeReference newValue = replaceChange.getNewValue();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
     	resetChanges();
     	return;
     }
@@ -37,7 +37,7 @@ class JavaSuperClassChangedReaction extends AbstractReactionRealization {
     				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperClassChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperClassChangedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -82,7 +82,7 @@ class JavaSuperClassChangedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue) {
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue) {
     return (newValue != null);
   }
   
@@ -91,7 +91,7 @@ class JavaSuperClassChangedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
       Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(newValue);
       _routinesFacade.addUmlSuperClass(affectedEObject, ((org.emftext.language.java.classifiers.Class) _classifierFromTypeReference));
     }

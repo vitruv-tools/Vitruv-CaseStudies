@@ -35,12 +35,13 @@ class CreatedDatatypeReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Model affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.eclipse.uml2.uml.DataType newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.comp2class.CreatedDatatypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.CreatedDatatypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -111,7 +112,7 @@ class CreatedDatatypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Model affectedEObject, final EReference affectedFeature, final DataType newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       String _name = newValue.getName();
       String _plus = ("Is \'" + _name);
       final String question = (_plus + "\' a generic/library DataType? If not a class representation will be created.");

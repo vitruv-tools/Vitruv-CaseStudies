@@ -28,7 +28,7 @@ class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
     java.lang.Boolean newValue = replaceChange.getNewValue();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
     	resetChanges();
     	return;
     }
@@ -36,7 +36,7 @@ class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
     				
     mir.routines.umlToJavaAttribute.RoutinesFacade routinesFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlInterfaceMadeFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaAttribute.UmlInterfaceMadeFinalReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -81,7 +81,7 @@ class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final Interface affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue) {
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final Interface affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue) {
     return ((newValue).booleanValue() == true);
   }
   
@@ -90,7 +90,7 @@ class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Interface affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Interface affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue, @Extension final RoutinesFacade _routinesFacade) {
       UmlToJavaHelper.showMessage(this.userInteracting, (("We do not support making final interfaces. Please change " + affectedEObject) + " to non-final. "));
     }
   }

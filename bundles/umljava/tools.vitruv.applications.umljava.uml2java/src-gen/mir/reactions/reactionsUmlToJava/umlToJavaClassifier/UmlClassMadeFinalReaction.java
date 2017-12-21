@@ -29,7 +29,7 @@ class UmlClassMadeFinalReaction extends AbstractReactionRealization {
     				
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlClassMadeFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlClassMadeFinalReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -79,7 +79,7 @@ class UmlClassMadeFinalReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Class affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final org.eclipse.uml2.uml.Class affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.setJavaClassFinal(affectedEObject);
     }
   }

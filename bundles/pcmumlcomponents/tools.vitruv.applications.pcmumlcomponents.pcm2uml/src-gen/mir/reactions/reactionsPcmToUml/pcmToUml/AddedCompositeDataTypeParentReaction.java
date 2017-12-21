@@ -24,12 +24,13 @@ class AddedCompositeDataTypeParentReaction extends AbstractReactionRealization {
     org.palladiosimulator.pcm.repository.CompositeDataType affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.CompositeDataType newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.AddedCompositeDataTypeParentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.AddedCompositeDataTypeParentReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -76,7 +77,7 @@ class AddedCompositeDataTypeParentReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CompositeDataType affectedEObject, final EReference affectedFeature, final CompositeDataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final CompositeDataType affectedEObject, final EReference affectedFeature, final CompositeDataType newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.addCompositeDataTypeParent(affectedEObject, newValue);
     }
   }

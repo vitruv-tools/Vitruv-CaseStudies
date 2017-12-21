@@ -28,12 +28,13 @@ class DeletedSeffReaction extends AbstractReactionRealization {
     org.palladiosimulator.pcm.repository.BasicComponent affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.palladiosimulator.pcm.seff.ServiceEffectSpecification oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSeffReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -104,7 +105,7 @@ class DeletedSeffReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final BasicComponent affectedEObject, final EReference affectedFeature, final ServiceEffectSpecification oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final BasicComponent affectedEObject, final EReference affectedFeature, final ServiceEffectSpecification oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteMethodForSeff(oldValue);
     }
   }

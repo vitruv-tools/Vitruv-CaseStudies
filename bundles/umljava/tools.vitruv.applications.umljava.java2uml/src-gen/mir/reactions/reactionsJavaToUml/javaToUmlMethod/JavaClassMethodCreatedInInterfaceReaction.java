@@ -29,12 +29,13 @@ class JavaClassMethodCreatedInInterfaceReaction extends AbstractReactionRealizat
     org.emftext.language.java.classifiers.Interface affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.members.ClassMethod newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedInInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedInInterfaceReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -105,7 +106,7 @@ class JavaClassMethodCreatedInInterfaceReaction extends AbstractReactionRealizat
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final ClassMethod newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Interface affectedEObject, final EReference affectedFeature, final ClassMethod newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       JavaToUmlHelper.showMessage(this.userInteracting, ("ClassMethods are currently not supported in Interfaces. Please delete " + newValue));
     }
   }

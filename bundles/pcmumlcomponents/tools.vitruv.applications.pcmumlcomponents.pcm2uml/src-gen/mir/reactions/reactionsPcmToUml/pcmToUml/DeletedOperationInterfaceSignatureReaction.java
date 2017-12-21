@@ -25,12 +25,13 @@ class DeletedOperationInterfaceSignatureReaction extends AbstractReactionRealiza
     org.palladiosimulator.pcm.repository.OperationInterface affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.OperationSignature oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.DeletedOperationInterfaceSignatureReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.DeletedOperationInterfaceSignatureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -77,7 +78,7 @@ class DeletedOperationInterfaceSignatureReaction extends AbstractReactionRealiza
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteElement(oldValue);
     }
   }

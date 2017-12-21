@@ -29,7 +29,7 @@ class UmlParameterDirectionKindChangedInvalidReaction extends AbstractReactionRe
     org.eclipse.uml2.uml.ParameterDirectionKind newValue = replaceChange.getNewValue();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
     	resetChanges();
     	return;
     }
@@ -37,7 +37,7 @@ class UmlParameterDirectionKindChangedInvalidReaction extends AbstractReactionRe
     				
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionKindChangedInvalidReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionKindChangedInvalidReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -82,7 +82,7 @@ class UmlParameterDirectionKindChangedInvalidReaction extends AbstractReactionRe
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue) {
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue) {
     return ((newValue != ParameterDirectionKind.RETURN_LITERAL) && (newValue != ParameterDirectionKind.IN_LITERAL));
   }
   
@@ -91,7 +91,7 @@ class UmlParameterDirectionKindChangedInvalidReaction extends AbstractReactionRe
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
       UmlToJavaHelper.showMessage(this.userInteracting, (("The ParameterDirectionKind " + newValue) + " is not supported"));
     }
   }

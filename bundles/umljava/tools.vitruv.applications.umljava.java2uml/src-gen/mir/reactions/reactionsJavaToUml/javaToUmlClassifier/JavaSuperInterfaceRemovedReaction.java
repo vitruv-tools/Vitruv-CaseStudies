@@ -26,12 +26,13 @@ class JavaSuperInterfaceRemovedReaction extends AbstractReactionRealization {
     org.emftext.language.java.classifiers.Interface affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.emftext.language.java.types.TypeReference oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperInterfaceRemovedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaSuperInterfaceRemovedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -78,7 +79,7 @@ class JavaSuperInterfaceRemovedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final TypeReference oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Interface affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.removeUmlSuperInterface(affectedEObject, JavaTypeUtil.getClassifierFromTypeReference(oldValue));
     }
   }

@@ -24,12 +24,13 @@ class CreatedRepositoryReaction extends AbstractReactionRealization {
     	return;
     }
     org.palladiosimulator.pcm.repository.Repository newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.CreatedRepositoryReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.CreatedRepositoryReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -94,7 +95,7 @@ class CreatedRepositoryReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Repository newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertRootEObject insertChange, final Repository newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       final Repository repository = newValue;
       _routinesFacade.createJavaPackage(repository, null, repository.getEntityName(), "repository_root");
       _routinesFacade.createRepositorySubPackages(repository);

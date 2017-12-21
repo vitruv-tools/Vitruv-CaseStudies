@@ -28,12 +28,13 @@ class UmlEnumLiteralDeletedReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Enumeration affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.eclipse.uml2.uml.EnumerationLiteral oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumLiteralDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlEnumLiteralDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -104,7 +105,7 @@ class UmlEnumLiteralDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Enumeration affectedEObject, final EReference affectedFeature, final EnumerationLiteral oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Enumeration affectedEObject, final EReference affectedFeature, final EnumerationLiteral oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteJavaEnumConstant(oldValue);
     }
   }

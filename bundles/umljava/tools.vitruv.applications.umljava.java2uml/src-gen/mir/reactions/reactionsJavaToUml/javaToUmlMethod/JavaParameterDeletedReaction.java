@@ -28,12 +28,13 @@ class JavaParameterDeletedReaction extends AbstractReactionRealization {
     org.emftext.language.java.members.Method affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.emftext.language.java.parameters.OrdinaryParameter oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -104,7 +105,7 @@ class JavaParameterDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Method affectedEObject, final EReference affectedFeature, final OrdinaryParameter oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Method affectedEObject, final EReference affectedFeature, final OrdinaryParameter oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteJavaParameter(oldValue);
     }
   }

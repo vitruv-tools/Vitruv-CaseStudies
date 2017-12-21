@@ -29,7 +29,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.ParameterDirectionKind newValue = replaceChange.getNewValue();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
     	resetChanges();
     	return;
     }
@@ -37,7 +37,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     				
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDirectionChangedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -82,7 +82,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue) {
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue) {
     return (Objects.equal(newValue, ParameterDirectionKind.RETURN_LITERAL) || Objects.equal(newValue, ParameterDirectionKind.IN_LITERAL));
   }
   
@@ -91,7 +91,7 @@ class UmlParameterDirectionChangedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.adaptJavaParametertoDirectionChange(affectedEObject.getOperation(), affectedEObject, oldValue, newValue);
     }
   }

@@ -29,12 +29,13 @@ class CreatedCompModelReaction extends AbstractReactionRealization {
     	return;
     }
     org.eclipse.uml2.uml.Model newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.comp2class.CreatedCompModelReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.CreatedCompModelReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -99,7 +100,7 @@ class CreatedCompModelReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertRootEObject insertChange, final Model newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createModelSelfCorrespondence(newValue);
       _routinesFacade.createDataTypePackage(newValue);
     }

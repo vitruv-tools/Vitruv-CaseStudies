@@ -29,12 +29,13 @@ class JavaClassifierMadeStaticReaction extends AbstractReactionRealization {
     org.emftext.language.java.classifiers.ConcreteClassifier affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.modifiers.Static newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassifierMadeStaticReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaClassifierMadeStaticReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -105,7 +106,7 @@ class JavaClassifierMadeStaticReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ConcreteClassifier affectedEObject, final EReference affectedFeature, final Static newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final ConcreteClassifier affectedEObject, final EReference affectedFeature, final Static newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       JavaToUmlHelper.showMessage(this.userInteracting, ("Static classifiers are not supported. Please undo the change at " + affectedEObject));
     }
   }

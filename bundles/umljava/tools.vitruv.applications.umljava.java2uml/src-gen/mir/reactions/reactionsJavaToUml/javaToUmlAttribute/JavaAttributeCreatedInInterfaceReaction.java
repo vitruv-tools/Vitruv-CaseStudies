@@ -29,12 +29,13 @@ class JavaAttributeCreatedInInterfaceReaction extends AbstractReactionRealizatio
     org.emftext.language.java.classifiers.Interface affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.members.Field newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlAttribute.RoutinesFacade routinesFacade = new mir.routines.javaToUmlAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeCreatedInInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeCreatedInInterfaceReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -105,7 +106,7 @@ class JavaAttributeCreatedInInterfaceReaction extends AbstractReactionRealizatio
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final Field newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Interface affectedEObject, final EReference affectedFeature, final Field newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       String _simpleName = affectedEObject.getClass().getSimpleName();
       String _plus = ("Adding fields to " + _simpleName);
       String _plus_1 = (_plus + " is not supported. Please remove ");

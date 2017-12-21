@@ -23,12 +23,13 @@ class CreatedSystemReaction extends AbstractReactionRealization {
     	return;
     }
     org.palladiosimulator.pcm.system.System newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSystemReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSystemReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -93,7 +94,7 @@ class CreatedSystemReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.palladiosimulator.pcm.system.System newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertRootEObject insertChange, final org.palladiosimulator.pcm.system.System newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       final org.palladiosimulator.pcm.system.System system = newValue;
       _routinesFacade.createJavaPackage(system, null, system.getEntityName(), "root_system");
       _routinesFacade.createImplementationForSystem(system);

@@ -29,9 +29,10 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
     org.emftext.language.java.classifiers.ConcreteClassifier affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.members.ClassMethod newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    if (!checkUserDefinedPrecondition(insertChange, affectedEObject, affectedFeature, newValue, index)) {
     	resetChanges();
     	return;
     }
@@ -39,7 +40,7 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
     				
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -105,7 +106,7 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final ConcreteClassifier affectedEObject, final EReference affectedFeature, final ClassMethod newValue) {
+  private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final ConcreteClassifier affectedEObject, final EReference affectedFeature, final ClassMethod newValue, final int index) {
     return ((affectedEObject instanceof org.emftext.language.java.classifiers.Class) || (affectedEObject instanceof Enumeration));
   }
   
@@ -114,7 +115,7 @@ class JavaClassMethodCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ConcreteClassifier affectedEObject, final EReference affectedFeature, final ClassMethod newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final ConcreteClassifier affectedEObject, final EReference affectedFeature, final ClassMethod newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createUmlClassMethod(newValue, affectedEObject);
     }
   }

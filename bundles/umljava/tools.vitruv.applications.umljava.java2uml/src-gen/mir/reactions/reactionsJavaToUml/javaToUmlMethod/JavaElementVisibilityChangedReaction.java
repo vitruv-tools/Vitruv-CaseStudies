@@ -31,9 +31,10 @@ class JavaElementVisibilityChangedReaction extends AbstractReactionRealization {
     org.emftext.language.java.modifiers.AnnotableAndModifiable affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.modifiers.Modifier newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    if (!checkUserDefinedPrecondition(insertChange, affectedEObject, affectedFeature, newValue, index)) {
     	resetChanges();
     	return;
     }
@@ -41,7 +42,7 @@ class JavaElementVisibilityChangedReaction extends AbstractReactionRealization {
     				
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementVisibilityChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementVisibilityChangedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -107,7 +108,7 @@ class JavaElementVisibilityChangedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final AnnotableAndModifiable affectedEObject, final EReference affectedFeature, final Modifier newValue) {
+  private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final AnnotableAndModifiable affectedEObject, final EReference affectedFeature, final Modifier newValue, final int index) {
     return (((newValue instanceof Public) || (newValue instanceof Private)) || (newValue instanceof Protected));
   }
   
@@ -116,7 +117,7 @@ class JavaElementVisibilityChangedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final AnnotableAndModifiable affectedEObject, final EReference affectedFeature, final Modifier newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final AnnotableAndModifiable affectedEObject, final EReference affectedFeature, final Modifier newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changeUmlNamedElementVisibility(affectedEObject, newValue);
     }
   }

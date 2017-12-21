@@ -28,12 +28,13 @@ class JavaConstructorCreatedReaction extends AbstractReactionRealization {
     org.emftext.language.java.classifiers.ConcreteClassifier affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.members.Constructor newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -104,7 +105,7 @@ class JavaConstructorCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ConcreteClassifier affectedEObject, final EReference affectedFeature, final Constructor newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final ConcreteClassifier affectedEObject, final EReference affectedFeature, final Constructor newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createUmlConstructor(newValue, affectedEObject);
     }
   }

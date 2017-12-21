@@ -25,12 +25,13 @@ class DeletedProvidedRoleReaction extends AbstractReactionRealization {
     org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.ProvidedRole oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.DeletedProvidedRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.DeletedProvidedRoleReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -77,7 +78,7 @@ class DeletedProvidedRoleReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final InterfaceProvidingEntity affectedEObject, final EReference affectedFeature, final ProvidedRole oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final InterfaceProvidingEntity affectedEObject, final EReference affectedFeature, final ProvidedRole oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteProvidedRole(oldValue);
     }
   }

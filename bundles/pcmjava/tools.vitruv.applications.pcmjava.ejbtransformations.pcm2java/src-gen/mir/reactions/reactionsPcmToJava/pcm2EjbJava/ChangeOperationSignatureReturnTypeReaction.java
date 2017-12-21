@@ -31,7 +31,7 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
     				
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -81,7 +81,7 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationSignature affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final OperationSignature affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changeReturnTypeOfMethodForOperationSignature(affectedEObject);
     }
   }

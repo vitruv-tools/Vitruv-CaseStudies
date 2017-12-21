@@ -23,12 +23,13 @@ class JavaPackageDeletedReaction extends AbstractReactionRealization {
     	return;
     }
     org.emftext.language.java.containers.Package oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaPackageDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaPackageDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -93,7 +94,7 @@ class JavaPackageDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.containers.Package oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveRootEObject removeChange, final org.emftext.language.java.containers.Package oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteUmlPackage(oldValue);
     }
   }

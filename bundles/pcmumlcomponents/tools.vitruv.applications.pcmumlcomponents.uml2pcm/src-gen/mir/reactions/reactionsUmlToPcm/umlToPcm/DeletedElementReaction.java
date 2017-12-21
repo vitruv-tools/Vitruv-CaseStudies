@@ -26,9 +26,10 @@ class DeletedElementReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Model affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.eclipse.uml2.uml.PackageableElement oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
+    if (!checkUserDefinedPrecondition(removeChange, affectedEObject, affectedFeature, oldValue, index)) {
     	resetChanges();
     	return;
     }
@@ -36,7 +37,7 @@ class DeletedElementReaction extends AbstractReactionRealization {
     				
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedElementReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedElementReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -78,7 +79,7 @@ class DeletedElementReaction extends AbstractReactionRealization {
     return true;
   }
   
-  private boolean checkUserDefinedPrecondition(final Model affectedEObject, final EReference affectedFeature, final PackageableElement oldValue) {
+  private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final Model affectedEObject, final EReference affectedFeature, final PackageableElement oldValue, final int index) {
     return (!(oldValue instanceof DataType));
   }
   
@@ -87,7 +88,7 @@ class DeletedElementReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final PackageableElement oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Model affectedEObject, final EReference affectedFeature, final PackageableElement oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteElement(oldValue);
     }
   }

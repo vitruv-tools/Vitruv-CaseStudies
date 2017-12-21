@@ -31,7 +31,7 @@ class ChangedParameterDirectionReaction extends AbstractReactionRealization {
     				
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.ChangedParameterDirectionReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.ChangedParameterDirectionReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -81,7 +81,7 @@ class ChangedParameterDirectionReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterModifier oldValue, final ParameterModifier newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterModifier oldValue, final ParameterModifier newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changeParameterDirection(affectedEObject);
     }
   }

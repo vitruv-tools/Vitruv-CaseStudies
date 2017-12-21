@@ -27,7 +27,7 @@ class UmlPackageRenamedReaction extends AbstractReactionRealization {
     java.lang.String newValue = replaceChange.getNewValue();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
     	resetChanges();
     	return;
     }
@@ -35,7 +35,7 @@ class UmlPackageRenamedReaction extends AbstractReactionRealization {
     				
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPackageRenamedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPackageRenamedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -80,7 +80,7 @@ class UmlPackageRenamedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final org.eclipse.uml2.uml.Package affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final org.eclipse.uml2.uml.Package affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
     return (!(affectedEObject instanceof Model));
   }
   
@@ -89,7 +89,7 @@ class UmlPackageRenamedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.eclipse.uml2.uml.Package affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final org.eclipse.uml2.uml.Package affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.renameJavaPackage(affectedEObject, affectedEObject.getNamespace());
     }
   }

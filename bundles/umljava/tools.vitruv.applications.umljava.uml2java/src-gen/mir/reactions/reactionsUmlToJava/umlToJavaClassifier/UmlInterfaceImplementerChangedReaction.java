@@ -33,7 +33,7 @@ class UmlInterfaceImplementerChangedReaction extends AbstractReactionRealization
     				
     mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlInterfaceImplementerChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlInterfaceImplementerChangedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -83,7 +83,7 @@ class UmlInterfaceImplementerChangedReaction extends AbstractReactionRealization
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final InterfaceRealization affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, final org.eclipse.uml2.uml.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final InterfaceRealization affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, final org.eclipse.uml2.uml.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
       NamedElement _head = IterableExtensions.<NamedElement>head(affectedEObject.getSuppliers());
       _routinesFacade.deleteJavaImplementedInterface(((Interface) _head), oldValue);
       NamedElement _head_1 = IterableExtensions.<NamedElement>head(affectedEObject.getSuppliers());

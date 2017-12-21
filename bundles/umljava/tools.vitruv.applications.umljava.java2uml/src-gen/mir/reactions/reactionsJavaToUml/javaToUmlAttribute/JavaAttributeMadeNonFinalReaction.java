@@ -28,12 +28,13 @@ class JavaAttributeMadeNonFinalReaction extends AbstractReactionRealization {
     org.emftext.language.java.members.Field affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.emftext.language.java.modifiers.Final oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlAttribute.RoutinesFacade routinesFacade = new mir.routines.javaToUmlAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -104,7 +105,7 @@ class JavaAttributeMadeNonFinalReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Field affectedEObject, final EReference affectedFeature, final Final oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Field affectedEObject, final EReference affectedFeature, final Final oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.setUmlAttributeFinal(affectedEObject, Boolean.valueOf(false));
     }
   }

@@ -23,12 +23,13 @@ class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
     	return;
     }
     org.emftext.language.java.containers.CompilationUnit oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompUnitDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompUnitDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -69,7 +70,7 @@ class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CompilationUnit oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveRootEObject removeChange, final CompilationUnit oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteUmlClassifier(IterableExtensions.<ConcreteClassifier>head(oldValue.getClassifiers()), oldValue);
     }
   }

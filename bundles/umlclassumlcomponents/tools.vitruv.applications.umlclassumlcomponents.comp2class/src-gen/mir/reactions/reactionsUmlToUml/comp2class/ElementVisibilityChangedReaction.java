@@ -31,7 +31,7 @@ class ElementVisibilityChangedReaction extends AbstractReactionRealization {
     				
     mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.comp2class.ElementVisibilityChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.ElementVisibilityChangedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -81,7 +81,7 @@ class ElementVisibilityChangedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final NamedElement affectedEObject, final EAttribute affectedFeature, final VisibilityKind oldValue, final VisibilityKind newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final NamedElement affectedEObject, final EAttribute affectedFeature, final VisibilityKind oldValue, final VisibilityKind newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changeCorrespondingVisibility(affectedEObject);
     }
   }

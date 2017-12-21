@@ -25,12 +25,13 @@ class ClassCreatedReaction extends AbstractReactionRealization {
     org.emftext.language.java.containers.CompilationUnit affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.classifiers.Class newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmClassifier.ClassCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.ClassCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -77,7 +78,7 @@ class ClassCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CompilationUnit affectedEObject, final EReference affectedFeature, final org.emftext.language.java.classifiers.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final CompilationUnit affectedEObject, final EReference affectedFeature, final org.emftext.language.java.classifiers.Class newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       final org.emftext.language.java.containers.Package javaPackage = Java2PcmHelper.getContainingPackageFromCorrespondenceModel(newValue, 
         this.correspondenceModel);
       _routinesFacade.classMapping(newValue, affectedEObject, javaPackage);

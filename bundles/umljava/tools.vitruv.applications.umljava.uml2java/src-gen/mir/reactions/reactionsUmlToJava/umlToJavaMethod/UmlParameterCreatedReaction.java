@@ -30,9 +30,10 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Operation affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.eclipse.uml2.uml.Parameter newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    if (!checkUserDefinedPrecondition(insertChange, affectedEObject, affectedFeature, newValue, index)) {
     	resetChanges();
     	return;
     }
@@ -40,7 +41,7 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
     				
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -106,7 +107,7 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final Operation affectedEObject, final EReference affectedFeature, final Parameter newValue) {
+  private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final Operation affectedEObject, final EReference affectedFeature, final Parameter newValue, final int index) {
     return (Objects.equal(newValue.getDirection(), ParameterDirectionKind.IN_LITERAL) && (newValue.getName() != null));
   }
   
@@ -115,7 +116,7 @@ class UmlParameterCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Operation affectedEObject, final EReference affectedFeature, final Parameter newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Operation affectedEObject, final EReference affectedFeature, final Parameter newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createJavaParameter(affectedEObject, newValue);
     }
   }

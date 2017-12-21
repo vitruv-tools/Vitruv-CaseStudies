@@ -25,12 +25,13 @@ class ParameterDeletedReaction extends AbstractReactionRealization {
     org.emftext.language.java.parameters.Parametrizable affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.emftext.language.java.parameters.OrdinaryParameter oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.ParameterDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -77,7 +78,7 @@ class ParameterDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parametrizable affectedEObject, final EReference affectedFeature, final OrdinaryParameter oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Parametrizable affectedEObject, final EReference affectedFeature, final OrdinaryParameter oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteParameter(oldValue);
     }
   }

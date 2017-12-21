@@ -25,12 +25,13 @@ class DeletedPropertyFromDataTypeReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.DataType affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.eclipse.uml2.uml.Property oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedPropertyFromDataTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.DeletedPropertyFromDataTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -77,7 +78,7 @@ class DeletedPropertyFromDataTypeReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final DataType affectedEObject, final EReference affectedFeature, final Property oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final DataType affectedEObject, final EReference affectedFeature, final Property oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteInnerDeclarationOfProperty(oldValue);
     }
   }

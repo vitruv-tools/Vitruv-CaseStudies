@@ -29,7 +29,7 @@ class UmlNamedElementRenamedReaction extends AbstractReactionRealization {
     java.lang.String newValue = replaceChange.getNewValue();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
     	resetChanges();
     	return;
     }
@@ -37,7 +37,7 @@ class UmlNamedElementRenamedReaction extends AbstractReactionRealization {
     				
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlNamedElementRenamedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlNamedElementRenamedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -82,7 +82,7 @@ class UmlNamedElementRenamedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
     return (((!(affectedEObject instanceof Classifier)) && (!(affectedEObject instanceof Property))) && (!(affectedEObject instanceof org.eclipse.uml2.uml.Package)));
   }
   
@@ -91,7 +91,7 @@ class UmlNamedElementRenamedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.renameJavaNamedElement(affectedEObject, newValue);
     }
   }

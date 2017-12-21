@@ -25,12 +25,13 @@ class InterfaceMethodCreatedReaction extends AbstractReactionRealization {
     org.emftext.language.java.classifiers.Interface affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.members.InterfaceMethod newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.InterfaceMethodCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -77,7 +78,7 @@ class InterfaceMethodCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Interface affectedEObject, final EReference affectedFeature, final InterfaceMethod newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Interface affectedEObject, final EReference affectedFeature, final InterfaceMethod newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createPCMSignature(newValue);
     }
   }

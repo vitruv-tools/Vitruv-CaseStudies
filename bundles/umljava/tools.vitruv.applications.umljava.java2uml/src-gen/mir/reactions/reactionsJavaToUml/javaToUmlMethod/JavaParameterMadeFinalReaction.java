@@ -29,12 +29,13 @@ class JavaParameterMadeFinalReaction extends AbstractReactionRealization {
     org.emftext.language.java.parameters.Parameter affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.modifiers.Final newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterMadeFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterMadeFinalReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -105,7 +106,7 @@ class JavaParameterMadeFinalReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parameter affectedEObject, final EReference affectedFeature, final Final newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Parameter affectedEObject, final EReference affectedFeature, final Final newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       JavaToUmlHelper.showMessage(this.userInteracting, ("Final parameters are not supported. Please remove the modifier from " + affectedEObject));
     }
   }

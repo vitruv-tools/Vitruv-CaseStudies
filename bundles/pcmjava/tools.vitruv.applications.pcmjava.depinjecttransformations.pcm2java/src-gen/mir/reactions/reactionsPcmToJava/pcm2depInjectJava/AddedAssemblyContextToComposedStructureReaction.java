@@ -32,9 +32,10 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
     org.palladiosimulator.pcm.core.composition.ComposedStructure affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.palladiosimulator.pcm.core.composition.AssemblyContext newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    if (!checkUserDefinedPrecondition(insertChange, affectedEObject, affectedFeature, newValue, index)) {
     	resetChanges();
     	return;
     }
@@ -42,7 +43,7 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
     				
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -108,7 +109,7 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final ComposedStructure affectedEObject, final EReference affectedFeature, final AssemblyContext newValue) {
+  private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final ComposedStructure affectedEObject, final EReference affectedFeature, final AssemblyContext newValue, final int index) {
     final EList<AssemblyContext> assemblyContexts = newValue.getParentStructure__AssemblyContext().getAssemblyContexts__ComposedStructure();
     final RepositoryComponent component = newValue.getEncapsulatedComponent__AssemblyContext();
     for (final AssemblyContext ac : assemblyContexts) {
@@ -129,7 +130,7 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ComposedStructure affectedEObject, final EReference affectedFeature, final AssemblyContext newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final ComposedStructure affectedEObject, final EReference affectedFeature, final AssemblyContext newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.addAssemblyContextToComposedStructure(affectedEObject, newValue);
     }
   }

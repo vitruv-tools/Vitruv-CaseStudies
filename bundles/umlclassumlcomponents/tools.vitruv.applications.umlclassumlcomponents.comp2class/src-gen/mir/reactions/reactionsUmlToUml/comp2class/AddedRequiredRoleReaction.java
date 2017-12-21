@@ -32,12 +32,13 @@ class AddedRequiredRoleReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Usage affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.eclipse.uml2.uml.Interface newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.comp2class.AddedRequiredRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.AddedRequiredRoleReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -84,7 +85,7 @@ class AddedRequiredRoleReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Usage affectedEObject, final EReference affectedFeature, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Usage affectedEObject, final EReference affectedFeature, final Interface newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       final Usage compUsage = affectedEObject;
       final Iterable<Component> clients = Iterables.<Component>filter(compUsage.getClients(), Component.class);
       boolean _isEmpty = IterableExtensions.isEmpty(clients);

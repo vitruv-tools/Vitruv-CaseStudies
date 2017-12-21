@@ -21,9 +21,10 @@ class PackageCreatedReaction extends AbstractReactionRealization {
     	return;
     }
     org.emftext.language.java.containers.Package newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(newValue)) {
+    if (!checkUserDefinedPrecondition(insertChange, newValue, index)) {
     	resetChanges();
     	return;
     }
@@ -31,7 +32,7 @@ class PackageCreatedReaction extends AbstractReactionRealization {
     				
     mir.routines.java2PcmClassifier.RoutinesFacade routinesFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmClassifier.PackageCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -67,7 +68,7 @@ class PackageCreatedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final org.emftext.language.java.containers.Package newValue) {
+  private boolean checkUserDefinedPrecondition(final InsertRootEObject insertChange, final org.emftext.language.java.containers.Package newValue, final int index) {
     return ((!newValue.getName().contains("contracts")) && (!newValue.getName().contains("datatypes")));
   }
   
@@ -76,7 +77,7 @@ class PackageCreatedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.containers.Package newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertRootEObject insertChange, final org.emftext.language.java.containers.Package newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createArchitecturalElement(newValue, Java2PcmHelper.getLastPackageName(newValue.getName()), Java2PcmHelper.getRootPackageName(newValue.getName()));
       _routinesFacade.createRepository(newValue, newValue.getName(), "package_root");
     }

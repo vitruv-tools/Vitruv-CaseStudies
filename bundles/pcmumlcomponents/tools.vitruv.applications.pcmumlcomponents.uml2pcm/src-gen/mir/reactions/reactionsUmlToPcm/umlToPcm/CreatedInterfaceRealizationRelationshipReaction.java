@@ -25,12 +25,13 @@ class CreatedInterfaceRealizationRelationshipReaction extends AbstractReactionRe
     org.eclipse.uml2.uml.Component affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.eclipse.uml2.uml.InterfaceRealization newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedInterfaceRealizationRelationshipReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.CreatedInterfaceRealizationRelationshipReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -77,7 +78,7 @@ class CreatedInterfaceRealizationRelationshipReaction extends AbstractReactionRe
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Component affectedEObject, final EReference affectedFeature, final InterfaceRealization newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Component affectedEObject, final EReference affectedFeature, final InterfaceRealization newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createProvidedRole(affectedEObject, newValue);
     }
   }

@@ -31,7 +31,7 @@ class ChangeOperationRequiredRoleEntityReaction extends AbstractReactionRealizat
     				
     mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.ChangeOperationRequiredRoleEntityReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.ChangeOperationRequiredRoleEntityReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -81,7 +81,7 @@ class ChangeOperationRequiredRoleEntityReaction extends AbstractReactionRealizat
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationRequiredRole affectedEObject, final EReference affectedFeature, final InterfaceRequiringEntity oldValue, final InterfaceRequiringEntity newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final OperationRequiredRole affectedEObject, final EReference affectedFeature, final InterfaceRequiringEntity oldValue, final InterfaceRequiringEntity newValue, @Extension final RoutinesFacade _routinesFacade) {
       final OperationRequiredRole requiredRole = affectedEObject;
       _routinesFacade.removeRequiredRole(requiredRole, oldValue);
       _routinesFacade.addRequiredRole(requiredRole);

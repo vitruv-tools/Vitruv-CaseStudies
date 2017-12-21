@@ -27,12 +27,13 @@ class PackageDeletedReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Model affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.eclipse.uml2.uml.Package oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.PackageDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.PackageDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -103,7 +104,7 @@ class PackageDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Model affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.routinePackageDeleted(oldValue, affectedEObject);
     }
   }

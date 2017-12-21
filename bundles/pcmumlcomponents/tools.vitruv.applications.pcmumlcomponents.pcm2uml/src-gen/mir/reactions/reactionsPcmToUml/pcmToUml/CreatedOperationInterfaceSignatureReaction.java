@@ -29,12 +29,13 @@ class CreatedOperationInterfaceSignatureReaction extends AbstractReactionRealiza
     org.palladiosimulator.pcm.repository.OperationInterface affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.OperationSignature newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.CreatedOperationInterfaceSignatureReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedOperationInterfaceSignatureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -105,7 +106,7 @@ class CreatedOperationInterfaceSignatureReaction extends AbstractReactionRealiza
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createOperationInterfaceSignature(newValue);
     }
   }

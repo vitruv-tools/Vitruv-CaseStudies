@@ -30,7 +30,7 @@ class RenameOperationSignatureReaction extends AbstractReactionRealization {
     				
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.RenameOperationSignatureReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.RenameOperationSignatureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -80,7 +80,7 @@ class RenameOperationSignatureReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationSignature affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final OperationSignature affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.renameMethodForOperationSignature(affectedEObject);
     }
   }

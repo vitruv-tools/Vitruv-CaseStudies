@@ -34,9 +34,10 @@ class CreatePackageReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Model affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.eclipse.uml2.uml.PackageableElement newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, newValue)) {
+    if (!checkUserDefinedPrecondition(insertChange, affectedEObject, affectedFeature, newValue, index)) {
     	resetChanges();
     	return;
     }
@@ -44,7 +45,7 @@ class CreatePackageReaction extends AbstractReactionRealization {
     				
     mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.CreatePackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.CreatePackageReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -110,7 +111,7 @@ class CreatePackageReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final Model affectedEObject, final EReference affectedFeature, final PackageableElement newValue) {
+  private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final Model affectedEObject, final EReference affectedFeature, final PackageableElement newValue, final int index) {
     return (newValue instanceof org.eclipse.uml2.uml.Package);
   }
   
@@ -119,7 +120,7 @@ class CreatePackageReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Model affectedEObject, final EReference affectedFeature, final PackageableElement newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final Model affectedEObject, final EReference affectedFeature, final PackageableElement newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createdPackage(((org.eclipse.uml2.uml.Package) newValue));
     }
   }

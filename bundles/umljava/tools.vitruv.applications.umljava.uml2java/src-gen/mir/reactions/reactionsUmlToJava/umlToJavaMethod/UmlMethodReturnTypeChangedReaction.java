@@ -30,7 +30,7 @@ class UmlMethodReturnTypeChangedReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Type newValue = replaceChange.getNewValue();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue, newValue)) {
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
     	resetChanges();
     	return;
     }
@@ -38,7 +38,7 @@ class UmlMethodReturnTypeChangedReaction extends AbstractReactionRealization {
     				
     mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodReturnTypeChangedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlMethodReturnTypeChangedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -83,7 +83,7 @@ class UmlMethodReturnTypeChangedReaction extends AbstractReactionRealization {
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue) {
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue) {
     ParameterDirectionKind _direction = affectedEObject.getDirection();
     boolean _equals = Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL);
     return _equals;
@@ -94,7 +94,7 @@ class UmlMethodReturnTypeChangedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.setJavaMethodReturnType(affectedEObject.getOperation());
     }
   }
