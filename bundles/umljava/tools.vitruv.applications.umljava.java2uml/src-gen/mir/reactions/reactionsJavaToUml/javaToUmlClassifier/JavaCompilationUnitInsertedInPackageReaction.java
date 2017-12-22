@@ -26,12 +26,13 @@ class JavaCompilationUnitInsertedInPackageReaction extends AbstractReactionReali
     org.emftext.language.java.containers.Package affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.emftext.language.java.containers.CompilationUnit newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompilationUnitInsertedInPackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompilationUnitInsertedInPackageReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -78,7 +79,7 @@ class JavaCompilationUnitInsertedInPackageReaction extends AbstractReactionReali
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.containers.Package affectedEObject, final EReference affectedFeature, final CompilationUnit newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final org.emftext.language.java.containers.Package affectedEObject, final EReference affectedFeature, final CompilationUnit newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.addUmlPackageOfClass(affectedEObject, IterableExtensions.<ConcreteClassifier>head(newValue.getClassifiers()));
     }
   }

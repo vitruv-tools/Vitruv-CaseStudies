@@ -28,12 +28,13 @@ class RemovedUsageReaction extends AbstractReactionRealization {
     org.eclipse.uml2.uml.Component affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.eclipse.uml2.uml.Usage oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.comp2class.RemovedUsageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.RemovedUsageReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -104,7 +105,7 @@ class RemovedUsageReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Component affectedEObject, final EReference affectedFeature, final Usage oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Component affectedEObject, final EReference affectedFeature, final Usage oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.removeInterfaceRealizationForUsage(oldValue);
     }
   }

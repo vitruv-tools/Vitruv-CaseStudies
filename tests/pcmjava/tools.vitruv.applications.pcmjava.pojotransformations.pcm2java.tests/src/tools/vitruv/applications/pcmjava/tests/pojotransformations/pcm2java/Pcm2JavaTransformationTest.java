@@ -63,8 +63,9 @@ import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.domains.VitruvDomain;
-import tools.vitruv.framework.tests.VitruviusApplicationTest;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
+import tools.vitruv.testutils.VitruviusApplicationTest;
+
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
 

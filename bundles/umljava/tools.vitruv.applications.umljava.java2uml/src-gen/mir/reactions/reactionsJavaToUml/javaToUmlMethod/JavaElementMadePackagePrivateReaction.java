@@ -30,9 +30,10 @@ class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization 
     org.emftext.language.java.classifiers.Class affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.emftext.language.java.modifiers.Modifier oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(affectedEObject, affectedFeature, oldValue)) {
+    if (!checkUserDefinedPrecondition(removeChange, affectedEObject, affectedFeature, oldValue, index)) {
     	resetChanges();
     	return;
     }
@@ -40,7 +41,7 @@ class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization 
     				
     mir.routines.javaToUmlMethod.RoutinesFacade routinesFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadePackagePrivateReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadePackagePrivateReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -106,7 +107,7 @@ class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization 
     return true;
   }
   
-  private boolean checkUserDefinedPrecondition(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Modifier oldValue) {
+  private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Modifier oldValue, final int index) {
     return (((oldValue instanceof Private) || (oldValue instanceof Public)) || (oldValue instanceof Protected));
   }
   
@@ -115,7 +116,7 @@ class JavaElementMadePackagePrivateReaction extends AbstractReactionRealization 
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Modifier oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final Modifier oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changeUmlNamedElementVisibility(affectedEObject, null);
     }
   }

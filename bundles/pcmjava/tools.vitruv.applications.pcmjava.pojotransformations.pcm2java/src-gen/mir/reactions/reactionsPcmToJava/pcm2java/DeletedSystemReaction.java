@@ -23,12 +23,13 @@ class DeletedSystemReaction extends AbstractReactionRealization {
     	return;
     }
     org.palladiosimulator.pcm.system.System oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.DeletedSystemReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.DeletedSystemReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -93,7 +94,7 @@ class DeletedSystemReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.palladiosimulator.pcm.system.System oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveRootEObject removeChange, final org.palladiosimulator.pcm.system.System oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       final org.palladiosimulator.pcm.system.System system = oldValue;
       _routinesFacade.deleteJavaPackage(system, system.getEntityName(), "root_system");
       _routinesFacade.deleteJavaClassifier(system);

@@ -28,12 +28,13 @@ class AddedProvidedDelegationConnectorReaction extends AbstractReactionRealizati
     org.palladiosimulator.pcm.core.composition.ComposedStructure affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.palladiosimulator.pcm.core.composition.ProvidedDelegationConnector newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedProvidedDelegationConnectorReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedProvidedDelegationConnectorReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -104,7 +105,7 @@ class AddedProvidedDelegationConnectorReaction extends AbstractReactionRealizati
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ComposedStructure affectedEObject, final EReference affectedFeature, final ProvidedDelegationConnector newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final ComposedStructure affectedEObject, final EReference affectedFeature, final ProvidedDelegationConnector newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.addedProvidedDelegationConnector(newValue, affectedEObject);
     }
   }

@@ -13,7 +13,7 @@ import org.eclipse.uml2.uml.resource.UMLResource
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.framework.tests.VitruviusApplicationTest
+import tools.vitruv.testutils.VitruviusApplicationTest
 import org.eclipse.emf.common.util.BasicEList
 
 class AbstractUmlPcmTest extends VitruviusApplicationTest {

@@ -3,7 +3,7 @@ package tools.vitruv.applications.umljava.testutil
 import org.eclipse.emf.ecore.EObject
 import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.framework.tests.VitruviusApplicationTest
+import tools.vitruv.testutils.VitruviusApplicationTest
 import org.apache.log4j.Logger
 
 /**

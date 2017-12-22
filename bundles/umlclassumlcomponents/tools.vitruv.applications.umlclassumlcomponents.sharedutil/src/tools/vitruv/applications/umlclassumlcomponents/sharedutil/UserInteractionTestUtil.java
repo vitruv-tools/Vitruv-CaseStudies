@@ -3,7 +3,7 @@ package tools.vitruv.applications.umlclassumlcomponents.sharedutil;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import tools.vitruv.framework.tests.TestUserInteractor;
+import tools.vitruv.testutils.TestUserInteractor;
 
 public class UserInteractionTestUtil {
 	

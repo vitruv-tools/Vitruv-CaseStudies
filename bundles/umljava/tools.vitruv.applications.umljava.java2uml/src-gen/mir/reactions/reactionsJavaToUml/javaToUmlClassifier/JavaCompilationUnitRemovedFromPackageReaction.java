@@ -26,12 +26,13 @@ class JavaCompilationUnitRemovedFromPackageReaction extends AbstractReactionReal
     org.emftext.language.java.containers.Package affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.emftext.language.java.containers.CompilationUnit oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompilationUnitRemovedFromPackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaCompilationUnitRemovedFromPackageReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
     
     resetChanges();
   }
@@ -78,7 +79,7 @@ class JavaCompilationUnitRemovedFromPackageReaction extends AbstractReactionReal
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final org.emftext.language.java.containers.Package affectedEObject, final EReference affectedFeature, final CompilationUnit oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final org.emftext.language.java.containers.Package affectedEObject, final EReference affectedFeature, final CompilationUnit oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.removeUmlPackageOfClass(affectedEObject, IterableExtensions.<ConcreteClassifier>head(oldValue.getClassifiers()));
     }
   }

@@ -31,7 +31,7 @@ class ChangedProvidingEntityOfProvidedRoleReaction extends AbstractReactionReali
     				
     mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedProvidingEntityOfProvidedRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedProvidingEntityOfProvidedRoleReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
     
     resetChanges();
   }
@@ -81,7 +81,7 @@ class ChangedProvidingEntityOfProvidedRoleReaction extends AbstractReactionReali
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationProvidedRole affectedEObject, final EReference affectedFeature, final InterfaceProvidingEntity oldValue, final InterfaceProvidingEntity newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final OperationProvidedRole affectedEObject, final EReference affectedFeature, final InterfaceProvidingEntity oldValue, final InterfaceProvidingEntity newValue, @Extension final RoutinesFacade _routinesFacade) {
       final OperationProvidedRole operationProvidedRole = affectedEObject;
       _routinesFacade.removeProvidedRole(operationProvidedRole);
       _routinesFacade.addProvidedRole(operationProvidedRole);
