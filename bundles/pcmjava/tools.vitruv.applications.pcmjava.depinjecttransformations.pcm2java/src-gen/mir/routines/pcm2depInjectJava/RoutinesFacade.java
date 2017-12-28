@@ -104,8 +104,8 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return effect.applyRoutine();
   }
   
-  public boolean createCompositeDataTypeImplementation(final CompositeDataType dataType) {
-    mir.routines.pcm2depInjectJava.CreateCompositeDataTypeImplementationRoutine effect = new mir.routines.pcm2depInjectJava.CreateCompositeDataTypeImplementationRoutine(this.executionState, calledBy, dataType);
+  public boolean createCompositeDataTypeImplementation(final CompositeDataType compositeDataType) {
+    mir.routines.pcm2depInjectJava.CreateCompositeDataTypeImplementationRoutine effect = new mir.routines.pcm2depInjectJava.CreateCompositeDataTypeImplementationRoutine(this.executionState, calledBy, compositeDataType);
     return effect.applyRoutine();
   }
   
