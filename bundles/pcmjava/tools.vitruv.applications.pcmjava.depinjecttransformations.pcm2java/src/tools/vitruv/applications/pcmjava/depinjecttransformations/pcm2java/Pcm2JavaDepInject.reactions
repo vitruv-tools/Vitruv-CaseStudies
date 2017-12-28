@@ -304,8 +304,8 @@ routine renameComponentClass(pcm::RepositoryComponent component) {
 reaction DeletedComponent {
 	after element pcm::RepositoryComponent deleted and removed from pcm::Repository[components__Repository]
 	call {
-		deleteJavaPackage(oldValue, oldValue.entityName, "");
 		deleteJavaClassifier(oldValue);
+		deleteJavaPackage(oldValue, oldValue.entityName, "");
 	}
 }
 

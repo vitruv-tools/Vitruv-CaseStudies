@@ -26,6 +26,14 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
       super(reactionExecutionState);
     }
     
+    public EObject getElement1(final Repository repository, final org.emftext.language.java.containers.Package rootPackage) {
+      return rootPackage;
+    }
+    
+    public void update0Element(final Repository repository, final org.emftext.language.java.containers.Package rootPackage) {
+      rootPackage.setName(repository.getEntityName());
+    }
+    
     public String getRetrieveTag1(final Repository repository) {
       return "repository_root";
     }
@@ -35,7 +43,6 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
     }
     
     public void callRoutine1(final Repository repository, final org.emftext.language.java.containers.Package rootPackage, @Extension final RoutinesFacade _routinesFacade) {
-      rootPackage.setName(repository.getEntityName());
       _routinesFacade.renameJavaPackage(repository, rootPackage, "contracts", "contracts");
       _routinesFacade.renameJavaPackage(repository, rootPackage, "datatypes", "datatypes");
       Iterable<BasicComponent> _filter = Iterables.<BasicComponent>filter(repository.getComponents__Repository(), BasicComponent.class);
@@ -82,6 +89,9 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
     	return false;
     }
     registerObjectUnderModification(rootPackage);
+    // val updatedElement userExecution.getElement1(repository, rootPackage);
+    userExecution.update0Element(repository, rootPackage);
+    
     userExecution.callRoutine1(repository, rootPackage, actionsFacade);
     
     postprocessElements();
