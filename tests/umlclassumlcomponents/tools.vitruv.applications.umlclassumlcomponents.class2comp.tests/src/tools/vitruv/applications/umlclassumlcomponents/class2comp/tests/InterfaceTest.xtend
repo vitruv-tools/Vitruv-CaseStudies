@@ -11,7 +11,6 @@ import org.junit.Test
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
-import org.junit.Ignore
 
 class InterfaceTest extends AbstractClass2CompTest {
 		
