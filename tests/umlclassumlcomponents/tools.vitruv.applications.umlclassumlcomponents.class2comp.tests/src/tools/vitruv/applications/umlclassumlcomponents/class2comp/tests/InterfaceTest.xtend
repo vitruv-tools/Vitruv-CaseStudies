@@ -102,7 +102,6 @@ class InterfaceTest extends AbstractClass2CompTest {
 		assertEquals(0, correspondingElements3.size)
 	}
     
-    @Ignore
 	@Test
 	public def void testInterfaceRemoved() {
 		//***First create a realized and used Interface***

@@ -36,7 +36,6 @@ class ComponentTest extends AbstractComp2ClassTest{
 		assertClassAndPackage(umlComp, "New")
     }
     
-    @Ignore
 	@Test
     public def void testDeleteComponentWithPackage() {
     	val umlComp = createComponent(COMP_NAME)	 
@@ -90,7 +89,6 @@ class ComponentTest extends AbstractComp2ClassTest{
 		assertTrue(classPackage.packagedElements.contains(umlClass2))		
     }
     
-    @Ignore
 	@Test
     public def void testDeleteComponentWithPackageAndContents() {
     	val umlComp = createComponent(COMP_NAME)    	

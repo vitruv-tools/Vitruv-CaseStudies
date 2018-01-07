@@ -198,7 +198,6 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 	 *   contract, because the change description lost the information as the supplier removal
 	 *   removed the contract as well
 	 */
-	@Ignore
 	@Test
 	def testAddClassImplement() {
 		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME);
@@ -223,7 +222,6 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 	 *   contract, because the change description lost the information as the supplier removal
 	 *   removed the contract as well
 	 */
-	@Ignore
 	@Test
 	def testRemoveClassImplement() {
 		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
