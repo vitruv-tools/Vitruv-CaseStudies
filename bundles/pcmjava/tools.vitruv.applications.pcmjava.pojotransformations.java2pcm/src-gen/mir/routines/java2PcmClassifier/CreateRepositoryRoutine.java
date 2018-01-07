@@ -1,9 +1,13 @@
 package mir.routines.java2PcmClassifier;
 
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.Functions.Function2;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.containers.ContainersPackage;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -26,8 +30,21 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag, final Repository pcmRepository) {
-      return pcmRepository;
+    public EObject getElement1(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag) {
+      return javaPackage;
+    }
+    
+    public void update0Element(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag) {
+      final URI packageUri = javaPackage.eResource().getURI();
+      boolean _existsResourceAtUri = URIUtil.existsResourceAtUri(packageUri);
+      boolean _not = (!_existsResourceAtUri);
+      if (_not) {
+        final Function2<String, String, String> _function = (String a, String b) -> {
+          return ((a + "/") + b);
+        };
+        final String projectRelativeResourcePath = IterableExtensions.<String, String>fold(IterableExtensions.<String>tail(packageUri.segmentsList()), "", _function);
+        this.persistProjectRelative(javaPackage, javaPackage, projectRelativeResourcePath);
+      }
     }
     
     public EObject getCorrepondenceSource1(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag) {
@@ -39,7 +56,7 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
     }
     
     public EObject getElement4(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag, final Repository pcmRepository) {
-      return ContainersPackage.Literals.PACKAGE;
+      return pcmRepository;
     }
     
     public String getRetrieveTag1(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag) {
@@ -54,12 +71,16 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
       this.persistProjectRelative(javaPackage, pcmRepository, _plus_1);
     }
     
+    public EObject getElement5(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag, final Repository pcmRepository) {
+      return ContainersPackage.Literals.PACKAGE;
+    }
+    
     public EObject getElement2(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag, final Repository pcmRepository) {
-      return javaPackage;
+      return pcmRepository;
     }
     
     public EObject getElement3(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag, final Repository pcmRepository) {
-      return pcmRepository;
+      return javaPackage;
     }
     
     public String getTag1(final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag, final Repository pcmRepository) {
@@ -106,15 +127,18 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
     ).isEmpty()) {
     	return false;
     }
+    // val updatedElement userExecution.getElement1(javaPackage, packageName, newTag);
+    userExecution.update0Element(javaPackage, packageName, newTag);
+    
     org.palladiosimulator.pcm.repository.Repository pcmRepository = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createRepository();
     notifyObjectCreated(pcmRepository);
     userExecution.updatePcmRepositoryElement(javaPackage, packageName, newTag, pcmRepository);
     
-    addCorrespondenceBetween(userExecution.getElement1(javaPackage, packageName, newTag, pcmRepository), userExecution.getElement2(javaPackage, packageName, newTag, pcmRepository), userExecution.getTag1(javaPackage, packageName, newTag, pcmRepository));
+    addCorrespondenceBetween(userExecution.getElement2(javaPackage, packageName, newTag, pcmRepository), userExecution.getElement3(javaPackage, packageName, newTag, pcmRepository), userExecution.getTag1(javaPackage, packageName, newTag, pcmRepository));
     
     userExecution.callRoutine1(javaPackage, packageName, newTag, pcmRepository, actionsFacade);
     
-    addCorrespondenceBetween(userExecution.getElement3(javaPackage, packageName, newTag, pcmRepository), userExecution.getElement4(javaPackage, packageName, newTag, pcmRepository), "");
+    addCorrespondenceBetween(userExecution.getElement4(javaPackage, packageName, newTag, pcmRepository), userExecution.getElement5(javaPackage, packageName, newTag, pcmRepository), "");
     
     postprocessElements();
     
