@@ -3,8 +3,8 @@ package mir.reactions.reactionsJavaToUml.javaToUmlMethod;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.Parametrizable;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -15,7 +15,7 @@ import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
 class JavaParameterDeletedReaction extends AbstractReactionRealization {
-  private RemoveEReference<Method, OrdinaryParameter> removeChange;
+  private RemoveEReference<Parametrizable, OrdinaryParameter> removeChange;
   
   private DeleteEObject<OrdinaryParameter> deleteChange;
   
@@ -25,7 +25,7 @@ class JavaParameterDeletedReaction extends AbstractReactionRealization {
     if (!checkPrecondition(change)) {
     	return;
     }
-    org.emftext.language.java.members.Method affectedEObject = removeChange.getAffectedEObject();
+    org.emftext.language.java.parameters.Parametrizable affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.emftext.language.java.parameters.OrdinaryParameter oldValue = removeChange.getOldValue();
     int index = removeChange.getIndex();
@@ -60,8 +60,8 @@ class JavaParameterDeletedReaction extends AbstractReactionRealization {
   
   private boolean matchRemoveChange(final EChange change) {
     if (change instanceof RemoveEReference<?, ?>) {
-    	RemoveEReference<org.emftext.language.java.members.Method, org.emftext.language.java.parameters.OrdinaryParameter> _localTypedChange = (RemoveEReference<org.emftext.language.java.members.Method, org.emftext.language.java.parameters.OrdinaryParameter>) change;
-    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.members.Method)) {
+    	RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter> _localTypedChange = (RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.parameters.Parametrizable)) {
     		return false;
     	}
     	if (!_localTypedChange.getAffectedFeature().getName().equals("parameters")) {
@@ -70,7 +70,7 @@ class JavaParameterDeletedReaction extends AbstractReactionRealization {
     	if (!(_localTypedChange.getOldValue() instanceof org.emftext.language.java.parameters.OrdinaryParameter)) {
     		return false;
     	}
-    	this.removeChange = (RemoveEReference<org.emftext.language.java.members.Method, org.emftext.language.java.parameters.OrdinaryParameter>) change;
+    	this.removeChange = (RemoveEReference<org.emftext.language.java.parameters.Parametrizable, org.emftext.language.java.parameters.OrdinaryParameter>) change;
     	return true;
     }
     
@@ -105,7 +105,7 @@ class JavaParameterDeletedReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final RemoveEReference removeChange, final Method affectedEObject, final EReference affectedFeature, final OrdinaryParameter oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Parametrizable affectedEObject, final EReference affectedFeature, final OrdinaryParameter oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteJavaParameter(oldValue);
     }
   }
