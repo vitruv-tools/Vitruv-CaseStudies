@@ -28,6 +28,6 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.domains.java.util,
- tools.vitruv.domains.pcm,
- tools.vitruv.domains.java
+ tools.vitruv.domains.pcm;visibility:=reexport,
+ tools.vitruv.domains.java;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
