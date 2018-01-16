@@ -204,7 +204,7 @@ routine createUmlParameter(java::Parametrizable jMeth, java::OrdinaryParameter j
 }
 
 reaction JavaParameterDeleted {
-    after element java::OrdinaryParameter deleted and removed from java::Method[parameters]
+    after element java::OrdinaryParameter deleted and removed from java::Parametrizable[parameters]
     call deleteJavaParameter(oldValue)
 }
 
