@@ -22,6 +22,6 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.extensions.dslsruntime.mappings,
  tools.vitruv.domains.java.echange,
  tools.vitruv.applications.pcmjava.util,
- tools.vitruv.domains.java,
- tools.vitruv.domains.pcm
+ tools.vitruv.domains.java;visibility:=reexport,
+ tools.vitruv.domains.pcm;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
