@@ -23,7 +23,7 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.domains.java,
  tools.vitruv.domains.pcm,
- tools.vitruv.domains.java.util;bundle-version="0.2.0",
- tools.vitruv.domains.pcm.util;bundle-version="0.2.0"
+ tools.vitruv.domains.java.util;visibility:=reexport,
+ tools.vitruv.domains.pcm.util;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: tools.vitruv.applications.pcmjava.pojotransformations.java2pcm

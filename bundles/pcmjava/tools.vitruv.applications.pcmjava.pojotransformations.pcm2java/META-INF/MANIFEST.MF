@@ -28,6 +28,6 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.framework.change.processing,
  tools.vitruv.domains.java.util.jamoppparser,
  tools.vitruv.domains.java.util,
- tools.vitruv.domains.java,
- tools.vitruv.domains.pcm
+ tools.vitruv.domains.java;visibility:=reexport,
+ tools.vitruv.domains.pcm;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
