@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateMethodForOperationSignatureRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateMethodForOperationSignatureRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -46,10 +44,9 @@ public class CreateMethodForOperationSignatureRoutine extends AbstractRepairRout
     }
   }
   
-  public CreateMethodForOperationSignatureRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationSignature operationSignature) {
-    super(reactionExecutionState, calledBy);
+  public CreateMethodForOperationSignatureRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationSignature operationSignature) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.CreateMethodForOperationSignatureRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.operationSignature = operationSignature;
   }
   
@@ -75,7 +72,7 @@ public class CreateMethodForOperationSignatureRoutine extends AbstractRepairRout
     
     addCorrespondenceBetween(userExecution.getElement1(operationSignature, javaInterface, interfaceMethod), userExecution.getElement2(operationSignature, javaInterface, interfaceMethod), "");
     
-    userExecution.callRoutine1(operationSignature, javaInterface, interfaceMethod, actionsFacade);
+    userExecution.callRoutine1(operationSignature, javaInterface, interfaceMethod, this.getRoutinesFacade());
     
     postprocessElements();
     

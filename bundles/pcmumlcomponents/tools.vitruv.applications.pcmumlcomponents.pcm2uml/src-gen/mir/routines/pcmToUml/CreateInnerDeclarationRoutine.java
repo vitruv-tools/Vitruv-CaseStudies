@@ -14,8 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateInnerDeclarationRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -45,10 +43,9 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     }
   }
   
-  public CreateInnerDeclarationRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InnerDeclaration innerDeclaration) {
-    super(reactionExecutionState, calledBy);
+  public CreateInnerDeclarationRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InnerDeclaration innerDeclaration) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcmToUml.CreateInnerDeclarationRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.innerDeclaration = innerDeclaration;
   }
   
@@ -78,7 +75,7 @@ public class CreateInnerDeclarationRoutine extends AbstractRepairRoutineRealizat
     		)
     );
     registerObjectUnderModification(umlType.isPresent() ? umlType.get() : null);
-    userExecution.callRoutine1(innerDeclaration, compositeType, umlType, actionsFacade);
+    userExecution.callRoutine1(innerDeclaration, compositeType, umlType, this.getRoutinesFacade());
     
     postprocessElements();
     

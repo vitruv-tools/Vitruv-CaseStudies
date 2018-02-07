@@ -17,12 +17,16 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
  * *******
  */
 @SuppressWarnings("all")
-class CreatedUmlClassReaction extends AbstractReactionRealization {
+public class CreatedUmlClassReaction extends AbstractReactionRealization {
   private CreateEObject<org.eclipse.uml2.uml.Class> createChange;
   
   private InsertEReference<org.eclipse.uml2.uml.Package, org.eclipse.uml2.uml.Class> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public CreatedUmlClassReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -35,9 +39,8 @@ class CreatedUmlClassReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.CreatedUmlClassReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.CreatedUmlClassReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

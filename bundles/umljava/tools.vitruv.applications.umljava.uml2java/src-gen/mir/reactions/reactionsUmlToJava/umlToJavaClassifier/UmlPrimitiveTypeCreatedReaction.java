@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class UmlPrimitiveTypeCreatedReaction extends AbstractReactionRealization {
+public class UmlPrimitiveTypeCreatedReaction extends AbstractReactionRealization {
   private CreateEObject<PrimitiveType> createChange;
   
   private InsertEReference<Model, PrimitiveType> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public UmlPrimitiveTypeCreatedReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -32,9 +36,8 @@ class UmlPrimitiveTypeCreatedReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPrimitiveTypeCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlPrimitiveTypeCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

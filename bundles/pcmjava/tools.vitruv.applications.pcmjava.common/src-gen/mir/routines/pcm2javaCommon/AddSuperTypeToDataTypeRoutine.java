@@ -22,8 +22,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddSuperTypeToDataTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -74,10 +72,9 @@ public class AddSuperTypeToDataTypeRoutine extends AbstractRepairRoutineRealizat
     }
   }
   
-  public AddSuperTypeToDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final DataType dataType, final TypeReference innerTypeReference, final String superTypeQualifiedName) {
-    super(reactionExecutionState, calledBy);
+  public AddSuperTypeToDataTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final DataType dataType, final TypeReference innerTypeReference, final String superTypeQualifiedName) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.AddSuperTypeToDataTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.dataType = dataType;this.innerTypeReference = innerTypeReference;this.superTypeQualifiedName = superTypeQualifiedName;
   }
   

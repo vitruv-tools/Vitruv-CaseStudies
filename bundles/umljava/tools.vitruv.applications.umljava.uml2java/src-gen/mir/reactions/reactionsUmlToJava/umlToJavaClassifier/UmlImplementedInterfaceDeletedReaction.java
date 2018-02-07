@@ -15,10 +15,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class UmlImplementedInterfaceDeletedReaction extends AbstractReactionRealization {
+public class UmlImplementedInterfaceDeletedReaction extends AbstractReactionRealization {
   private RemoveEReference<org.eclipse.uml2.uml.Class, InterfaceRealization> removeChange;
   
   private int currentlyMatchedChange;
+  
+  public UmlImplementedInterfaceDeletedReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -31,9 +35,8 @@ class UmlImplementedInterfaceDeletedReaction extends AbstractReactionRealization
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.umlToJavaClassifier.RoutinesFacade routinesFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlImplementedInterfaceDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaClassifier.UmlImplementedInterfaceDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

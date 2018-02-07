@@ -18,8 +18,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
  */
 @SuppressWarnings("all")
 public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateDataTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -53,10 +51,9 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public CreateDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
-    super(reactionExecutionState, calledBy);
+  public CreateDataTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateDataTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaClass = javaClass;this.compilationUnit = compilationUnit;
   }
   
@@ -69,7 +66,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   javaClass: " + this.javaClass);
     getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
-    userExecution.callRoutine1(javaClass, compilationUnit, actionsFacade);
+    userExecution.callRoutine1(javaClass, compilationUnit, this.getRoutinesFacade());
     
     postprocessElements();
     

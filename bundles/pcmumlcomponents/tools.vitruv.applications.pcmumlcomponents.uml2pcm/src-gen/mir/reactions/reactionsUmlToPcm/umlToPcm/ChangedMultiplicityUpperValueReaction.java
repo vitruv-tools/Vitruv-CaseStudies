@@ -13,10 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-class ChangedMultiplicityUpperValueReaction extends AbstractReactionRealization {
+public class ChangedMultiplicityUpperValueReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEReference<MultiplicityElement, ValueSpecification> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public ChangedMultiplicityUpperValueReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -29,9 +33,8 @@ class ChangedMultiplicityUpperValueReaction extends AbstractReactionRealization 
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperValueReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.ChangedMultiplicityUpperValueReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }

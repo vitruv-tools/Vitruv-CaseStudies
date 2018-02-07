@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RenameCompositeDataTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RenameCompositeDataTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -38,10 +36,9 @@ public class RenameCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
   }
   
-  public RenameCompositeDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CompositeDataType compositeDataType) {
-    super(reactionExecutionState, calledBy);
+  public RenameCompositeDataTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CompositeDataType compositeDataType) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.RenameCompositeDataTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.compositeDataType = compositeDataType;
   }
   
@@ -62,7 +59,7 @@ public class RenameCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     	return false;
     }
     registerObjectUnderModification(datatypesPackage);
-    userExecution.callRoutine1(compositeDataType, datatypesPackage, actionsFacade);
+    userExecution.callRoutine1(compositeDataType, datatypesPackage, this.getRoutinesFacade());
     
     postprocessElements();
     

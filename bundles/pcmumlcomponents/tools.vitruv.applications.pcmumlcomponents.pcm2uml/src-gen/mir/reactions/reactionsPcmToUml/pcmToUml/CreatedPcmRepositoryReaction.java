@@ -12,12 +12,16 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.root.InsertRootEObject;
 
 @SuppressWarnings("all")
-class CreatedPcmRepositoryReaction extends AbstractReactionRealization {
+public class CreatedPcmRepositoryReaction extends AbstractReactionRealization {
   private CreateEObject<Repository> createChange;
   
   private InsertRootEObject<Repository> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public CreatedPcmRepositoryReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -28,9 +32,8 @@ class CreatedPcmRepositoryReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcmToUml.RoutinesFacade routinesFacade = new mir.routines.pcmToUml.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmRepositoryReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToUml.pcmToUml.CreatedPcmRepositoryReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

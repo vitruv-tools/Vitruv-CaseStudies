@@ -11,8 +11,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RenameComponentClassRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RenameComponentClassRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -31,10 +29,9 @@ public class RenameComponentClassRoutine extends AbstractRepairRoutineRealizatio
     }
   }
   
-  public RenameComponentClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final RepositoryComponent component) {
-    super(reactionExecutionState, calledBy);
+  public RenameComponentClassRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final RepositoryComponent component) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.RenameComponentClassRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.component = component;
   }
   
@@ -55,7 +52,7 @@ public class RenameComponentClassRoutine extends AbstractRepairRoutineRealizatio
     	return false;
     }
     registerObjectUnderModification(componentPackage);
-    userExecution.callRoutine1(component, componentPackage, actionsFacade);
+    userExecution.callRoutine1(component, componentPackage, this.getRoutinesFacade());
     
     postprocessElements();
     

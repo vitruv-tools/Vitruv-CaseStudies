@@ -14,8 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeJavaImplementedInterfaceRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -48,10 +46,9 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     }
   }
   
-  public ChangeJavaImplementedInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
-    super(reactionExecutionState, calledBy);
+  public ChangeJavaImplementedInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.ChangeJavaImplementedInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
     this.uInterface = uInterface;this.oldInterface = oldInterface;this.uClass = uClass;
   }
   
@@ -89,7 +86,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     	return false;
     }
     registerObjectUnderModification(jInterface);
-    userExecution.callRoutine1(uInterface, oldInterface, uClass, jClass, jInterface, actionsFacade);
+    userExecution.callRoutine1(uInterface, oldInterface, uClass, jClass, jInterface, this.getRoutinesFacade());
     
     // val updatedElement userExecution.getElement1(uInterface, oldInterface, uClass, jClass, jInterface);
     userExecution.update0Element(uInterface, oldInterface, uClass, jClass, jInterface);

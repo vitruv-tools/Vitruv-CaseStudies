@@ -12,10 +12,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
 
 @SuppressWarnings("all")
-class RenamedRepositoryReaction extends AbstractReactionRealization {
+public class RenamedRepositoryReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEAttribute<Repository, String> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public RenamedRepositoryReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -28,9 +32,8 @@ class RenamedRepositoryReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.RenamedRepositoryReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.RenamedRepositoryReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -80,7 +83,7 @@ class RenamedRepositoryReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Repository affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Repository affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.renamePackageForRepository(affectedEObject);
     }
   }

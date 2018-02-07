@@ -10,8 +10,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateDataTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -24,10 +22,9 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public CreateDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final DataType umlType) {
-    super(reactionExecutionState, calledBy);
+  public CreateDataTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final DataType umlType) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToPcm.CreateDataTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToPcm.RoutinesFacade(getExecutionState(), this);
     this.umlType = umlType;
   }
   
@@ -37,7 +34,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreateDataTypeRoutine with input:");
     getLogger().debug("   umlType: " + this.umlType);
     
-    userExecution.callRoutine1(umlType, actionsFacade);
+    userExecution.callRoutine1(umlType, this.getRoutinesFacade());
     
     postprocessElements();
     

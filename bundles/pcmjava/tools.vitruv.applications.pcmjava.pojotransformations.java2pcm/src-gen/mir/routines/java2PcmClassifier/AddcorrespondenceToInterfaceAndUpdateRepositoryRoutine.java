@@ -20,8 +20,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
  */
 @SuppressWarnings("all")
 public class AddcorrespondenceToInterfaceAndUpdateRepositoryRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddcorrespondenceToInterfaceAndUpdateRepositoryRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -59,10 +57,9 @@ public class AddcorrespondenceToInterfaceAndUpdateRepositoryRoutine extends Abst
     }
   }
   
-  public AddcorrespondenceToInterfaceAndUpdateRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationInterface pcmInterface, final Interface javaInterface, final CompilationUnit compilationUnit) {
-    super(reactionExecutionState, calledBy);
+  public AddcorrespondenceToInterfaceAndUpdateRepositoryRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationInterface pcmInterface, final Interface javaInterface, final CompilationUnit compilationUnit) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.AddcorrespondenceToInterfaceAndUpdateRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.pcmInterface = pcmInterface;this.javaInterface = javaInterface;this.compilationUnit = compilationUnit;
   }
   

@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RemoveCorrespondingParameterFromConstructorRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RemoveCorrespondingParameterFromConstructorRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -35,10 +33,9 @@ public class RemoveCorrespondingParameterFromConstructorRoutine extends Abstract
     }
   }
   
-  public RemoveCorrespondingParameterFromConstructorRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Constructor ctor, final NamedElement correspondenceSource) {
-    super(reactionExecutionState, calledBy);
+  public RemoveCorrespondingParameterFromConstructorRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Constructor ctor, final NamedElement correspondenceSource) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2java.RemoveCorrespondingParameterFromConstructorRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2java.RoutinesFacade(getExecutionState(), this);
     this.ctor = ctor;this.correspondenceSource = correspondenceSource;
   }
   

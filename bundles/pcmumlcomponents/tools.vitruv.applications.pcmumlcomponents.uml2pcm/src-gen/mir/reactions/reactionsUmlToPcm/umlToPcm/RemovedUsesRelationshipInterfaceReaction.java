@@ -13,10 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class RemovedUsesRelationshipInterfaceReaction extends AbstractReactionRealization {
+public class RemovedUsesRelationshipInterfaceReaction extends AbstractReactionRealization {
   private RemoveEReference<Usage, Interface> removeChange;
   
   private int currentlyMatchedChange;
+  
+  public RemovedUsesRelationshipInterfaceReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -29,9 +33,8 @@ class RemovedUsesRelationshipInterfaceReaction extends AbstractReactionRealizati
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.umlToPcm.RoutinesFacade routinesFacade = new mir.routines.umlToPcm.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToPcm.umlToPcm.RemovedUsesRelationshipInterfaceReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToPcm.umlToPcm.RemovedUsesRelationshipInterfaceReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

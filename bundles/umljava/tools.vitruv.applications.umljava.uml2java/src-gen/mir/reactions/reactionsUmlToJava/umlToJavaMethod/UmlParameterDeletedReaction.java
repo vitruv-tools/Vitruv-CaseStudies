@@ -16,12 +16,16 @@ import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class UmlParameterDeletedReaction extends AbstractReactionRealization {
+public class UmlParameterDeletedReaction extends AbstractReactionRealization {
   private RemoveEReference<Operation, Parameter> removeChange;
   
   private DeleteEObject<Parameter> deleteChange;
   
   private int currentlyMatchedChange;
+  
+  public UmlParameterDeletedReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -39,9 +43,8 @@ class UmlParameterDeletedReaction extends AbstractReactionRealization {
     }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.umlToJavaMethod.RoutinesFacade routinesFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToJava.umlToJavaMethod.UmlParameterDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

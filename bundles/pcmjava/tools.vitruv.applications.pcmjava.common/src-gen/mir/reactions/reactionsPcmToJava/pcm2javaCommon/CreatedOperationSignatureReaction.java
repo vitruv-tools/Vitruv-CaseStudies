@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreatedOperationSignatureReaction extends AbstractReactionRealization {
+public class CreatedOperationSignatureReaction extends AbstractReactionRealization {
   private CreateEObject<OperationSignature> createChange;
   
   private InsertEReference<OperationInterface, OperationSignature> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public CreatedOperationSignatureReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -28,12 +32,12 @@ class CreatedOperationSignatureReaction extends AbstractReactionRealization {
     org.palladiosimulator.pcm.repository.OperationInterface affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.OperationSignature newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.CreatedOperationSignatureReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.CreatedOperationSignatureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -104,7 +108,7 @@ class CreatedOperationSignatureReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createMethodForOperationSignature(newValue);
     }
   }

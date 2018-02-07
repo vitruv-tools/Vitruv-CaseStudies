@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class JavaAttributeMadeNonFinalReaction extends AbstractReactionRealization {
+public class JavaAttributeMadeNonFinalReaction extends AbstractReactionRealization {
   private RemoveEReference<Field, Final> removeChange;
   
   private DeleteEObject<Final> deleteChange;
   
   private int currentlyMatchedChange;
+  
+  public JavaAttributeMadeNonFinalReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -32,9 +36,8 @@ class JavaAttributeMadeNonFinalReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.javaToUmlAttribute.RoutinesFacade routinesFacade = new mir.routines.javaToUmlAttribute.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

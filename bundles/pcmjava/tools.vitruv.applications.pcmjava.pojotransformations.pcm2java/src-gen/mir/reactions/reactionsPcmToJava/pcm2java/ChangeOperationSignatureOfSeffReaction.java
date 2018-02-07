@@ -13,10 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization {
+public class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public ChangeOperationSignatureOfSeffReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -29,9 +33,8 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.ChangeOperationSignatureOfSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.ChangeOperationSignatureOfSeffReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }

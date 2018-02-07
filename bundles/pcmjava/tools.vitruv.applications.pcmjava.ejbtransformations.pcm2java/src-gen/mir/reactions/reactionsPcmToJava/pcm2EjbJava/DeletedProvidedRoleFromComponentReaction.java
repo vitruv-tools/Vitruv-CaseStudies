@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealization {
+public class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealization {
   private RemoveEReference<RepositoryComponent, ProvidedRole> removeChange;
   
   private DeleteEObject<ProvidedRole> deleteChange;
   
   private int currentlyMatchedChange;
+  
+  public DeletedProvidedRoleFromComponentReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -32,9 +36,8 @@ class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealizati
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2EjbJava.RoutinesFacade routinesFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2EjbJava.DeletedProvidedRoleFromComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2EjbJava.DeletedProvidedRoleFromComponentReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

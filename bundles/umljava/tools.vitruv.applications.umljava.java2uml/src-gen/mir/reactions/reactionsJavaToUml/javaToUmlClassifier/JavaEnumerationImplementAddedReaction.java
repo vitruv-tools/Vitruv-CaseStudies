@@ -15,12 +15,16 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class JavaEnumerationImplementAddedReaction extends AbstractReactionRealization {
+public class JavaEnumerationImplementAddedReaction extends AbstractReactionRealization {
   private CreateEObject<TypeReference> createChange;
   
   private InsertEReference<Enumeration, TypeReference> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public JavaEnumerationImplementAddedReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -33,9 +37,8 @@ class JavaEnumerationImplementAddedReaction extends AbstractReactionRealization 
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaEnumerationImplementAddedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaEnumerationImplementAddedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

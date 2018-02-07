@@ -13,10 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-class ChangeOperationRequiredRoleEntityReaction extends AbstractReactionRealization {
+public class ChangeOperationRequiredRoleEntityReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEReference<OperationRequiredRole, InterfaceRequiringEntity> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public ChangeOperationRequiredRoleEntityReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -29,9 +33,8 @@ class ChangeOperationRequiredRoleEntityReaction extends AbstractReactionRealizat
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationRequiredRoleEntityReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationRequiredRoleEntityReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }

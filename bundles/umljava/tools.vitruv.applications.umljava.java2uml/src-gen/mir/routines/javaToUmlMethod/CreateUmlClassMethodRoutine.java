@@ -15,8 +15,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateUmlClassMethodRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -53,10 +51,9 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     }
   }
   
-  public CreateUmlClassMethodRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod jMeth, final ConcreteClassifier jClassifier) {
-    super(reactionExecutionState, calledBy);
+  public CreateUmlClassMethodRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod jMeth, final ConcreteClassifier jClassifier) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlMethod.CreateUmlClassMethodRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(getExecutionState(), this);
     this.jMeth = jMeth;this.jClassifier = jClassifier;
   }
   
@@ -86,7 +83,7 @@ public class CreateUmlClassMethodRoutine extends AbstractRepairRoutineRealizatio
     
     addCorrespondenceBetween(userExecution.getElement1(jMeth, jClassifier, uClassifier, uOperation), userExecution.getElement2(jMeth, jClassifier, uClassifier, uOperation), "");
     
-    userExecution.callRoutine1(jMeth, jClassifier, uClassifier, uOperation, actionsFacade);
+    userExecution.callRoutine1(jMeth, jClassifier, uClassifier, uOperation, this.getRoutinesFacade());
     
     postprocessElements();
     

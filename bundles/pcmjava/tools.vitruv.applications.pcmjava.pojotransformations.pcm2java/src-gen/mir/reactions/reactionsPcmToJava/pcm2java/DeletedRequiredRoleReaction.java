@@ -14,10 +14,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class DeletedRequiredRoleReaction extends AbstractReactionRealization {
+public class DeletedRequiredRoleReaction extends AbstractReactionRealization {
   private RemoveEReference<InterfaceRequiringEntity, OperationRequiredRole> removeChange;
   
   private int currentlyMatchedChange;
+  
+  public DeletedRequiredRoleReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -30,9 +34,8 @@ class DeletedRequiredRoleReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.DeletedRequiredRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.DeletedRequiredRoleReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

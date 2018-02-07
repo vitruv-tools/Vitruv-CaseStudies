@@ -11,12 +11,16 @@ import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.root.RemoveRootEObject;
 
 @SuppressWarnings("all")
-class JavaPackageDeletedReaction extends AbstractReactionRealization {
+public class JavaPackageDeletedReaction extends AbstractReactionRealization {
   private RemoveRootEObject<org.emftext.language.java.containers.Package> removeChange;
   
   private DeleteEObject<org.emftext.language.java.containers.Package> deleteChange;
   
   private int currentlyMatchedChange;
+  
+  public JavaPackageDeletedReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -27,9 +31,8 @@ class JavaPackageDeletedReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.javaToUmlClassifier.RoutinesFacade routinesFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaPackageDeletedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToUml.javaToUmlClassifier.JavaPackageDeletedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(removeChange, oldValue, index, routinesFacade);
+    userExecution.callRoutine1(removeChange, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

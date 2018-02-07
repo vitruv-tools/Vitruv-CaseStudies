@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeReturnTypeOfMethodForOperationSignatureRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeReturnTypeOfMethodForOperationSignatureRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -30,10 +28,9 @@ public class ChangeReturnTypeOfMethodForOperationSignatureRoutine extends Abstra
     }
   }
   
-  public ChangeReturnTypeOfMethodForOperationSignatureRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationSignature operationSignature) {
-    super(reactionExecutionState, calledBy);
+  public ChangeReturnTypeOfMethodForOperationSignatureRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationSignature operationSignature) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.ChangeReturnTypeOfMethodForOperationSignatureRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.operationSignature = operationSignature;
   }
   
@@ -54,7 +51,7 @@ public class ChangeReturnTypeOfMethodForOperationSignatureRoutine extends Abstra
     	return false;
     }
     registerObjectUnderModification(interfaceMethod);
-    userExecution.callRoutine1(operationSignature, interfaceMethod, actionsFacade);
+    userExecution.callRoutine1(operationSignature, interfaceMethod, this.getRoutinesFacade());
     
     postprocessElements();
     

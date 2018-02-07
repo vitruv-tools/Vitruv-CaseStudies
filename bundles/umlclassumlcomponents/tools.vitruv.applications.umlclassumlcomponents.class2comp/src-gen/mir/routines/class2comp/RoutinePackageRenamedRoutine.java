@@ -19,8 +19,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RoutinePackageRenamedRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RoutinePackageRenamedRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -61,10 +59,9 @@ public class RoutinePackageRenamedRoutine extends AbstractRepairRoutineRealizati
     }
   }
   
-  public RoutinePackageRenamedRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package classPackage, final String newName, final String oldName) {
-    super(reactionExecutionState, calledBy);
+  public RoutinePackageRenamedRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package classPackage, final String newName, final String oldName) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.RoutinePackageRenamedRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.classPackage = classPackage;this.newName = newName;this.oldName = oldName;
   }
   
@@ -80,7 +77,7 @@ public class RoutinePackageRenamedRoutine extends AbstractRepairRoutineRealizati
     getLogger().debug("   newName: " + this.newName);
     getLogger().debug("   oldName: " + this.oldName);
     
-    userExecution.callRoutine1(classPackage, newName, oldName, actionsFacade);
+    userExecution.callRoutine1(classPackage, newName, oldName, this.getRoutinesFacade());
     
     postprocessElements();
     

@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealization {
+public class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealization {
   private RemoveEReference<RepositoryComponent, ProvidedRole> removeChange;
   
   private DeleteEObject<ProvidedRole> deleteChange;
   
   private int currentlyMatchedChange;
+  
+  public DeletedProvidedRoleFromComponentReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -28,12 +32,12 @@ class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealizati
     org.palladiosimulator.pcm.repository.RepositoryComponent affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.ProvidedRole oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.DeletedProvidedRoleFromComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.DeletedProvidedRoleFromComponentReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -104,7 +108,7 @@ class DeletedProvidedRoleFromComponentReaction extends AbstractReactionRealizati
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final RepositoryComponent affectedEObject, final EReference affectedFeature, final ProvidedRole oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final RepositoryComponent affectedEObject, final EReference affectedFeature, final ProvidedRole oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.removeProvidedRole(oldValue);
     }
   }

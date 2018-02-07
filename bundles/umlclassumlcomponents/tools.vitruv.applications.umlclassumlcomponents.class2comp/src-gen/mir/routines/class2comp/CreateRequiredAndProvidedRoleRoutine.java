@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateRequiredAndProvidedRoleRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateRequiredAndProvidedRoleRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -56,10 +54,9 @@ public class CreateRequiredAndProvidedRoleRoutine extends AbstractRepairRoutineR
     }
   }
   
-  public CreateRequiredAndProvidedRoleRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface classInterface, final InterfaceRealization classIFRealizationReq, final org.eclipse.uml2.uml.Package interfacePackage, final org.eclipse.uml2.uml.Package classPackage) {
-    super(reactionExecutionState, calledBy);
+  public CreateRequiredAndProvidedRoleRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface classInterface, final InterfaceRealization classIFRealizationReq, final org.eclipse.uml2.uml.Package interfacePackage, final org.eclipse.uml2.uml.Package classPackage) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.CreateRequiredAndProvidedRoleRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.classInterface = classInterface;this.classIFRealizationReq = classIFRealizationReq;this.interfacePackage = interfacePackage;this.classPackage = classPackage;
   }
   
@@ -78,7 +75,7 @@ public class CreateRequiredAndProvidedRoleRoutine extends AbstractRepairRoutineR
     getLogger().debug("   interfacePackage: " + this.interfacePackage);
     getLogger().debug("   classPackage: " + this.classPackage);
     
-    userExecution.callRoutine1(classInterface, classIFRealizationReq, interfacePackage, classPackage, actionsFacade);
+    userExecution.callRoutine1(classInterface, classIFRealizationReq, interfacePackage, classPackage, this.getRoutinesFacade());
     
     postprocessElements();
     

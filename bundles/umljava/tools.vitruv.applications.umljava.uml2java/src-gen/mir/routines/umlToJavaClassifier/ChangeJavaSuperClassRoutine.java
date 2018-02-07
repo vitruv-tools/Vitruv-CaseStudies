@@ -12,8 +12,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeJavaSuperClassRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -41,10 +39,9 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     }
   }
   
-  public ChangeJavaSuperClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass) {
-    super(reactionExecutionState, calledBy);
+  public ChangeJavaSuperClassRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.ChangeJavaSuperClassRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
     this.superUMLClass = superUMLClass;this.uClass = uClass;
   }
   
@@ -79,7 +76,7 @@ public class ChangeJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
     	return false;
     }
     registerObjectUnderModification(superJavaClass);
-    userExecution.callRoutine1(superUMLClass, uClass, jClass, superJavaClass, actionsFacade);
+    userExecution.callRoutine1(superUMLClass, uClass, jClass, superJavaClass, this.getRoutinesFacade());
     
     postprocessElements();
     

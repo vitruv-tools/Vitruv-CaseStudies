@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreatePCMInterfaceRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -53,10 +51,9 @@ public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
   }
   
-  public CreatePCMInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface javaInterface, final CompilationUnit compilationUnit) {
-    super(reactionExecutionState, calledBy);
+  public CreatePCMInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface javaInterface, final CompilationUnit compilationUnit) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreatePCMInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaInterface = javaInterface;this.compilationUnit = compilationUnit;
   }
   
@@ -95,7 +92,7 @@ public class CreatePCMInterfaceRoutine extends AbstractRepairRoutineRealization 
     notifyObjectCreated(pcmIface);
     userExecution.updatePcmIfaceElement(javaInterface, compilationUnit, pcmRepository, contractsPackage, pcmIface);
     
-    userExecution.callRoutine1(javaInterface, compilationUnit, pcmRepository, contractsPackage, pcmIface, actionsFacade);
+    userExecution.callRoutine1(javaInterface, compilationUnit, pcmRepository, contractsPackage, pcmIface, this.getRoutinesFacade());
     
     postprocessElements();
     

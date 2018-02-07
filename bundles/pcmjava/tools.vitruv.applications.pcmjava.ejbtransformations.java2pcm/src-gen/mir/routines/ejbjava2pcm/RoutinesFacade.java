@@ -13,92 +13,141 @@ import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
-import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
 
 @SuppressWarnings("all")
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
-  public RoutinesFacade(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
-    super(reactionExecutionState, calledBy);
+  public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
+    super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
   public boolean createRepositoryForFirstPackage(final org.emftext.language.java.containers.Package javaPackage) {
-    mir.routines.ejbjava2pcm.CreateRepositoryForFirstPackageRoutine effect = new mir.routines.ejbjava2pcm.CreateRepositoryForFirstPackageRoutine(this.executionState, calledBy, javaPackage);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreateRepositoryForFirstPackageRoutine routine = new mir.routines.ejbjava2pcm.CreateRepositoryForFirstPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, javaPackage);
+    return routine.applyRoutine();
   }
   
   public boolean createBasicComponent(final Repository repo, final NamedElement namedElement) {
-    mir.routines.ejbjava2pcm.CreateBasicComponentRoutine effect = new mir.routines.ejbjava2pcm.CreateBasicComponentRoutine(this.executionState, calledBy, repo, namedElement);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreateBasicComponentRoutine routine = new mir.routines.ejbjava2pcm.CreateBasicComponentRoutine(_routinesFacade, _reactionExecutionState, _caller, repo, namedElement);
+    return routine.applyRoutine();
   }
   
   public boolean createOperationInterface(final Repository repo, final NamedElement namedElement) {
-    mir.routines.ejbjava2pcm.CreateOperationInterfaceRoutine effect = new mir.routines.ejbjava2pcm.CreateOperationInterfaceRoutine(this.executionState, calledBy, repo, namedElement);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreateOperationInterfaceRoutine routine = new mir.routines.ejbjava2pcm.CreateOperationInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, repo, namedElement);
+    return routine.applyRoutine();
   }
   
   public boolean createdAnnotationForField(final Field annotatedField) {
-    mir.routines.ejbjava2pcm.CreatedAnnotationForFieldRoutine effect = new mir.routines.ejbjava2pcm.CreatedAnnotationForFieldRoutine(this.executionState, calledBy, annotatedField);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatedAnnotationForFieldRoutine routine = new mir.routines.ejbjava2pcm.CreatedAnnotationForFieldRoutine(_routinesFacade, _reactionExecutionState, _caller, annotatedField);
+    return routine.applyRoutine();
   }
   
   public boolean createdField(final Field field) {
-    mir.routines.ejbjava2pcm.CreatedFieldRoutine effect = new mir.routines.ejbjava2pcm.CreatedFieldRoutine(this.executionState, calledBy, field);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatedFieldRoutine routine = new mir.routines.ejbjava2pcm.CreatedFieldRoutine(_routinesFacade, _reactionExecutionState, _caller, field);
+    return routine.applyRoutine();
   }
   
   public boolean createOperationRequiredRole(final BasicComponent basicComponent, final OperationInterface opInterface, final Field field) {
-    mir.routines.ejbjava2pcm.CreateOperationRequiredRoleRoutine effect = new mir.routines.ejbjava2pcm.CreateOperationRequiredRoleRoutine(this.executionState, calledBy, basicComponent, opInterface, field);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreateOperationRequiredRoleRoutine routine = new mir.routines.ejbjava2pcm.CreateOperationRequiredRoleRoutine(_routinesFacade, _reactionExecutionState, _caller, basicComponent, opInterface, field);
+    return routine.applyRoutine();
   }
   
   public boolean createdImplements(final org.emftext.language.java.classifiers.Class clazz, final TypeReference implementz) {
-    mir.routines.ejbjava2pcm.CreatedImplementsRoutine effect = new mir.routines.ejbjava2pcm.CreatedImplementsRoutine(this.executionState, calledBy, clazz, implementz);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatedImplementsRoutine routine = new mir.routines.ejbjava2pcm.CreatedImplementsRoutine(_routinesFacade, _reactionExecutionState, _caller, clazz, implementz);
+    return routine.applyRoutine();
   }
   
   public boolean createdInterfaceMethod(final Interface interf, final InterfaceMethod method) {
-    mir.routines.ejbjava2pcm.CreatedInterfaceMethodRoutine effect = new mir.routines.ejbjava2pcm.CreatedInterfaceMethodRoutine(this.executionState, calledBy, interf, method);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatedInterfaceMethodRoutine routine = new mir.routines.ejbjava2pcm.CreatedInterfaceMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, interf, method);
+    return routine.applyRoutine();
   }
   
   public boolean createOperationSignature(final InterfaceMethod interfaceMethod, final OperationInterface opInterface) {
-    mir.routines.ejbjava2pcm.CreateOperationSignatureRoutine effect = new mir.routines.ejbjava2pcm.CreateOperationSignatureRoutine(this.executionState, calledBy, interfaceMethod, opInterface);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreateOperationSignatureRoutine routine = new mir.routines.ejbjava2pcm.CreateOperationSignatureRoutine(_routinesFacade, _reactionExecutionState, _caller, interfaceMethod, opInterface);
+    return routine.applyRoutine();
   }
   
   public boolean createdParameterInInterfaceMethod(final InterfaceMethod method, final Parameter parameter) {
-    mir.routines.ejbjava2pcm.CreatedParameterInInterfaceMethodRoutine effect = new mir.routines.ejbjava2pcm.CreatedParameterInInterfaceMethodRoutine(this.executionState, calledBy, method, parameter);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatedParameterInInterfaceMethodRoutine routine = new mir.routines.ejbjava2pcm.CreatedParameterInInterfaceMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, method, parameter);
+    return routine.applyRoutine();
   }
   
   public boolean createPCMParameter(final Parameter jaMoPPParam, final OperationSignature opSignature) {
-    mir.routines.ejbjava2pcm.CreatePCMParameterRoutine effect = new mir.routines.ejbjava2pcm.CreatePCMParameterRoutine(this.executionState, calledBy, jaMoPPParam, opSignature);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatePCMParameterRoutine routine = new mir.routines.ejbjava2pcm.CreatePCMParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, jaMoPPParam, opSignature);
+    return routine.applyRoutine();
   }
   
   public boolean createdReturnType(final InterfaceMethod method, final TypeReference type) {
-    mir.routines.ejbjava2pcm.CreatedReturnTypeRoutine effect = new mir.routines.ejbjava2pcm.CreatedReturnTypeRoutine(this.executionState, calledBy, method, type);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatedReturnTypeRoutine routine = new mir.routines.ejbjava2pcm.CreatedReturnTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, method, type);
+    return routine.applyRoutine();
   }
   
   public boolean createPCMReturnType(final TypeReference returnType, final OperationSignature opSignature, final Method javaMethod) {
-    mir.routines.ejbjava2pcm.CreatePCMReturnTypeRoutine effect = new mir.routines.ejbjava2pcm.CreatePCMReturnTypeRoutine(this.executionState, calledBy, returnType, opSignature, javaMethod);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatePCMReturnTypeRoutine routine = new mir.routines.ejbjava2pcm.CreatePCMReturnTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, returnType, opSignature, javaMethod);
+    return routine.applyRoutine();
   }
   
   public boolean createdFieldInDatatypeClass(final org.emftext.language.java.classifiers.Class clazz, final Field field) {
-    mir.routines.ejbjava2pcm.CreatedFieldInDatatypeClassRoutine effect = new mir.routines.ejbjava2pcm.CreatedFieldInDatatypeClassRoutine(this.executionState, calledBy, clazz, field);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatedFieldInDatatypeClassRoutine routine = new mir.routines.ejbjava2pcm.CreatedFieldInDatatypeClassRoutine(_routinesFacade, _reactionExecutionState, _caller, clazz, field);
+    return routine.applyRoutine();
   }
   
   public boolean createdClassMethodInEjbClass(final org.emftext.language.java.classifiers.Class clazz, final ClassMethod classMethod) {
-    mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine effect = new mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine(this.executionState, calledBy, clazz, classMethod);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine routine = new mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine(_routinesFacade, _reactionExecutionState, _caller, clazz, classMethod);
+    return routine.applyRoutine();
   }
   
   public boolean createSEFFForClassMethod(final BasicComponent basicComponent, final OperationSignature opSignature, final ClassMethod classMethod) {
-    mir.routines.ejbjava2pcm.CreateSEFFForClassMethodRoutine effect = new mir.routines.ejbjava2pcm.CreateSEFFForClassMethodRoutine(this.executionState, calledBy, basicComponent, opSignature, classMethod);
-    return effect.applyRoutine();
+    mir.routines.ejbjava2pcm.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("ejbjava2pcm"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.ejbjava2pcm.CreateSEFFForClassMethodRoutine routine = new mir.routines.ejbjava2pcm.CreateSEFFForClassMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, basicComponent, opSignature, classMethod);
+    return routine.applyRoutine();
   }
 }

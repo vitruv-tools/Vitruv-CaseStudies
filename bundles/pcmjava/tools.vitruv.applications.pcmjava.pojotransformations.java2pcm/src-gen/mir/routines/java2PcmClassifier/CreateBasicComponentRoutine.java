@@ -10,8 +10,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateBasicComponentRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -28,10 +26,9 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     }
   }
   
-  public CreateBasicComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
-    super(reactionExecutionState, calledBy);
+  public CreateBasicComponentRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateBasicComponentRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaPackage = javaPackage;this.name = name;this.rootPackageName = rootPackageName;
   }
   
@@ -51,7 +48,7 @@ public class CreateBasicComponentRoutine extends AbstractRepairRoutineRealizatio
     notifyObjectCreated(pcmBasicComponent);
     userExecution.updatePcmBasicComponentElement(javaPackage, name, rootPackageName, pcmBasicComponent);
     
-    userExecution.callRoutine1(javaPackage, name, rootPackageName, pcmBasicComponent, actionsFacade);
+    userExecution.callRoutine1(javaPackage, name, rootPackageName, pcmBasicComponent, this.getRoutinesFacade());
     
     postprocessElements();
     

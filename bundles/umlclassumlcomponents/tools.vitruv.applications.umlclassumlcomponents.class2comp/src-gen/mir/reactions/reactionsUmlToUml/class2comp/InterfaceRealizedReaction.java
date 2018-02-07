@@ -22,10 +22,14 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
  * ************
  */
 @SuppressWarnings("all")
-class InterfaceRealizedReaction extends AbstractReactionRealization {
+public class InterfaceRealizedReaction extends AbstractReactionRealization {
   private InsertEReference<InterfaceRealization, Interface> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public InterfaceRealizedReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -38,9 +42,8 @@ class InterfaceRealizedReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.InterfaceRealizedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.InterfaceRealizedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

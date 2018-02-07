@@ -13,8 +13,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -31,10 +29,9 @@ public class CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine extends Abstract
     }
   }
   
-  public CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final PrimitiveType uPrimType) {
-    super(reactionExecutionState, calledBy);
+  public CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final PrimitiveType uPrimType) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
     this.uPrimType = uPrimType;
   }
   
@@ -44,7 +41,7 @@ public class CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine extends Abstract
     getLogger().debug("Called routine CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine with input:");
     getLogger().debug("   uPrimType: " + this.uPrimType);
     
-    userExecution.callRoutine1(uPrimType, actionsFacade);
+    userExecution.callRoutine1(uPrimType, this.getRoutinesFacade());
     
     postprocessElements();
     

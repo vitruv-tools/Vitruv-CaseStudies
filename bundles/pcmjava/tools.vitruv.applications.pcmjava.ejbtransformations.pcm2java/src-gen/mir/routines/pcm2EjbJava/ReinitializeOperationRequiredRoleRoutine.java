@@ -10,8 +10,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ReinitializeOperationRequiredRoleRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ReinitializeOperationRequiredRoleRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -25,10 +23,9 @@ public class ReinitializeOperationRequiredRoleRoutine extends AbstractRepairRout
     }
   }
   
-  public ReinitializeOperationRequiredRoleRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationRequiredRole requiredRole) {
-    super(reactionExecutionState, calledBy);
+  public ReinitializeOperationRequiredRoleRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationRequiredRole requiredRole) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2EjbJava.ReinitializeOperationRequiredRoleRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2EjbJava.RoutinesFacade(getExecutionState(), this);
     this.requiredRole = requiredRole;
   }
   
@@ -38,7 +35,7 @@ public class ReinitializeOperationRequiredRoleRoutine extends AbstractRepairRout
     getLogger().debug("Called routine ReinitializeOperationRequiredRoleRoutine with input:");
     getLogger().debug("   requiredRole: " + this.requiredRole);
     
-    userExecution.callRoutine1(requiredRole, actionsFacade);
+    userExecution.callRoutine1(requiredRole, this.getRoutinesFacade());
     
     postprocessElements();
     

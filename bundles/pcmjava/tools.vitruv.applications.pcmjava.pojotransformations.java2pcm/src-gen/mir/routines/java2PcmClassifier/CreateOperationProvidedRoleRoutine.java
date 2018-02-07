@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateOperationProvidedRoleRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateOperationProvidedRoleRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -30,10 +28,9 @@ public class CreateOperationProvidedRoleRoutine extends AbstractRepairRoutineRea
     }
   }
   
-  public CreateOperationProvidedRoleRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final TypeReference typeReference) {
-    super(reactionExecutionState, calledBy);
+  public CreateOperationProvidedRoleRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final TypeReference typeReference) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateOperationProvidedRoleRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.typeReference = typeReference;
   }
   
@@ -43,7 +40,7 @@ public class CreateOperationProvidedRoleRoutine extends AbstractRepairRoutineRea
     getLogger().debug("Called routine CreateOperationProvidedRoleRoutine with input:");
     getLogger().debug("   typeReference: " + this.typeReference);
     
-    userExecution.callRoutine1(typeReference, actionsFacade);
+    userExecution.callRoutine1(typeReference, this.getRoutinesFacade());
     
     postprocessElements();
     

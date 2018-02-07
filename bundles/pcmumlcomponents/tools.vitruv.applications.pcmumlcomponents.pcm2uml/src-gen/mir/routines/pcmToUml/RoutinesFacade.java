@@ -18,167 +18,261 @@ import org.palladiosimulator.pcm.repository.ProvidedRole;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
-import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
 
 @SuppressWarnings("all")
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
-  public RoutinesFacade(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
-    super(reactionExecutionState, calledBy);
+  public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
+    super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
   public boolean renameUmlElement(final NamedElement pcmElement) {
-    mir.routines.pcmToUml.RenameUmlElementRoutine effect = new mir.routines.pcmToUml.RenameUmlElementRoutine(this.executionState, calledBy, pcmElement);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.RenameUmlElementRoutine routine = new mir.routines.pcmToUml.RenameUmlElementRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmElement);
+    return routine.applyRoutine();
   }
   
   public boolean deleteElement(final NamedElement pcmElement) {
-    mir.routines.pcmToUml.DeleteElementRoutine effect = new mir.routines.pcmToUml.DeleteElementRoutine(this.executionState, calledBy, pcmElement);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.DeleteElementRoutine routine = new mir.routines.pcmToUml.DeleteElementRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmElement);
+    return routine.applyRoutine();
   }
   
   public boolean createUmlModel(final Repository pcmRepository) {
-    mir.routines.pcmToUml.CreateUmlModelRoutine effect = new mir.routines.pcmToUml.CreateUmlModelRoutine(this.executionState, calledBy, pcmRepository);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateUmlModelRoutine routine = new mir.routines.pcmToUml.CreateUmlModelRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepository);
+    return routine.applyRoutine();
   }
   
   public boolean createPrimitiveDataType(final PrimitiveDataType dataType) {
-    mir.routines.pcmToUml.CreatePrimitiveDataTypeRoutine effect = new mir.routines.pcmToUml.CreatePrimitiveDataTypeRoutine(this.executionState, calledBy, dataType);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreatePrimitiveDataTypeRoutine routine = new mir.routines.pcmToUml.CreatePrimitiveDataTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, dataType);
+    return routine.applyRoutine();
   }
   
   public boolean deleteDataType(final DataType dataType) {
-    mir.routines.pcmToUml.DeleteDataTypeRoutine effect = new mir.routines.pcmToUml.DeleteDataTypeRoutine(this.executionState, calledBy, dataType);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.DeleteDataTypeRoutine routine = new mir.routines.pcmToUml.DeleteDataTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, dataType);
+    return routine.applyRoutine();
   }
   
   public boolean createCompositeDataType(final CompositeDataType dataType) {
-    mir.routines.pcmToUml.CreateCompositeDataTypeRoutine effect = new mir.routines.pcmToUml.CreateCompositeDataTypeRoutine(this.executionState, calledBy, dataType);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateCompositeDataTypeRoutine routine = new mir.routines.pcmToUml.CreateCompositeDataTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, dataType);
+    return routine.applyRoutine();
   }
   
   public boolean createInnerDeclaration(final InnerDeclaration innerDeclaration) {
-    mir.routines.pcmToUml.CreateInnerDeclarationRoutine effect = new mir.routines.pcmToUml.CreateInnerDeclarationRoutine(this.executionState, calledBy, innerDeclaration);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateInnerDeclarationRoutine routine = new mir.routines.pcmToUml.CreateInnerDeclarationRoutine(_routinesFacade, _reactionExecutionState, _caller, innerDeclaration);
+    return routine.applyRoutine();
   }
   
   public boolean changeInnerDeclarationType(final InnerDeclaration innerDeclaration, final DataType pcmDataType) {
-    mir.routines.pcmToUml.ChangeInnerDeclarationTypeRoutine effect = new mir.routines.pcmToUml.ChangeInnerDeclarationTypeRoutine(this.executionState, calledBy, innerDeclaration, pcmDataType);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.ChangeInnerDeclarationTypeRoutine routine = new mir.routines.pcmToUml.ChangeInnerDeclarationTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, innerDeclaration, pcmDataType);
+    return routine.applyRoutine();
   }
   
   public boolean deleteInnerDeclaration(final CompositeDataType dataType, final InnerDeclaration innerDeclaration) {
-    mir.routines.pcmToUml.DeleteInnerDeclarationRoutine effect = new mir.routines.pcmToUml.DeleteInnerDeclarationRoutine(this.executionState, calledBy, dataType, innerDeclaration);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.DeleteInnerDeclarationRoutine routine = new mir.routines.pcmToUml.DeleteInnerDeclarationRoutine(_routinesFacade, _reactionExecutionState, _caller, dataType, innerDeclaration);
+    return routine.applyRoutine();
   }
   
   public boolean addCompositeDataTypeParent(final CompositeDataType dataType, final CompositeDataType parent) {
-    mir.routines.pcmToUml.AddCompositeDataTypeParentRoutine effect = new mir.routines.pcmToUml.AddCompositeDataTypeParentRoutine(this.executionState, calledBy, dataType, parent);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.AddCompositeDataTypeParentRoutine routine = new mir.routines.pcmToUml.AddCompositeDataTypeParentRoutine(_routinesFacade, _reactionExecutionState, _caller, dataType, parent);
+    return routine.applyRoutine();
   }
   
   public boolean removeCompositeDataTypeParent(final CompositeDataType dataType, final CompositeDataType parent) {
-    mir.routines.pcmToUml.RemoveCompositeDataTypeParentRoutine effect = new mir.routines.pcmToUml.RemoveCompositeDataTypeParentRoutine(this.executionState, calledBy, dataType, parent);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.RemoveCompositeDataTypeParentRoutine routine = new mir.routines.pcmToUml.RemoveCompositeDataTypeParentRoutine(_routinesFacade, _reactionExecutionState, _caller, dataType, parent);
+    return routine.applyRoutine();
   }
   
   public boolean changeCollectionDataTypeInnerType(final CollectionDataType pcmDataType, final DataType pcmInnerType) {
-    mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine effect = new mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine(this.executionState, calledBy, pcmDataType, pcmInnerType);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine routine = new mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmDataType, pcmInnerType);
+    return routine.applyRoutine();
   }
   
   public boolean clearCorrespondenceForCollectionTypes(final CollectionDataType pcmType) {
-    mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine effect = new mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine(this.executionState, calledBy, pcmType);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine routine = new mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType);
+    return routine.applyRoutine();
   }
   
   public boolean addCorrespondenceForCollectionTypes(final CollectionDataType pcmType, final org.eclipse.uml2.uml.DataType innerType) {
-    mir.routines.pcmToUml.AddCorrespondenceForCollectionTypesRoutine effect = new mir.routines.pcmToUml.AddCorrespondenceForCollectionTypesRoutine(this.executionState, calledBy, pcmType, innerType);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.AddCorrespondenceForCollectionTypesRoutine routine = new mir.routines.pcmToUml.AddCorrespondenceForCollectionTypesRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType, innerType);
+    return routine.applyRoutine();
   }
   
   public boolean createUmlPropertyForDatatype(final org.eclipse.uml2.uml.DataType type, final InnerDeclaration counterpart, final org.eclipse.uml2.uml.DataType owner) {
-    mir.routines.pcmToUml.CreateUmlPropertyForDatatypeRoutine effect = new mir.routines.pcmToUml.CreateUmlPropertyForDatatypeRoutine(this.executionState, calledBy, type, counterpart, owner);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateUmlPropertyForDatatypeRoutine routine = new mir.routines.pcmToUml.CreateUmlPropertyForDatatypeRoutine(_routinesFacade, _reactionExecutionState, _caller, type, counterpart, owner);
+    return routine.applyRoutine();
   }
   
   public boolean createUmlInterface(final Interface pcmInterface) {
-    mir.routines.pcmToUml.CreateUmlInterfaceRoutine effect = new mir.routines.pcmToUml.CreateUmlInterfaceRoutine(this.executionState, calledBy, pcmInterface);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateUmlInterfaceRoutine routine = new mir.routines.pcmToUml.CreateUmlInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmInterface);
+    return routine.applyRoutine();
   }
   
   public boolean createOperationInterfaceSignature(final OperationSignature pcmSignature) {
-    mir.routines.pcmToUml.CreateOperationInterfaceSignatureRoutine effect = new mir.routines.pcmToUml.CreateOperationInterfaceSignatureRoutine(this.executionState, calledBy, pcmSignature);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateOperationInterfaceSignatureRoutine routine = new mir.routines.pcmToUml.CreateOperationInterfaceSignatureRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmSignature);
+    return routine.applyRoutine();
   }
   
   public boolean changeUmlOperationType(final OperationSignature pcmSignature) {
-    mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine effect = new mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine(this.executionState, calledBy, pcmSignature);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine routine = new mir.routines.pcmToUml.ChangeUmlOperationTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmSignature);
+    return routine.applyRoutine();
   }
   
   public boolean unsetUmlOperationType(final OperationSignature pcmSignature) {
-    mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine effect = new mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine(this.executionState, calledBy, pcmSignature);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine routine = new mir.routines.pcmToUml.UnsetUmlOperationTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmSignature);
+    return routine.applyRoutine();
   }
   
   public boolean createOperationSignatureParameter(final OperationSignature pcmSignature, final Parameter pcmParameter) {
-    mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine effect = new mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine(this.executionState, calledBy, pcmSignature, pcmParameter);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine routine = new mir.routines.pcmToUml.CreateOperationSignatureParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmSignature, pcmParameter);
+    return routine.applyRoutine();
   }
   
   public boolean renameParameter(final Parameter pcmParameter) {
-    mir.routines.pcmToUml.RenameParameterRoutine effect = new mir.routines.pcmToUml.RenameParameterRoutine(this.executionState, calledBy, pcmParameter);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.RenameParameterRoutine routine = new mir.routines.pcmToUml.RenameParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmParameter);
+    return routine.applyRoutine();
   }
   
   public boolean changeParameterDirection(final Parameter pcmParameter) {
-    mir.routines.pcmToUml.ChangeParameterDirectionRoutine effect = new mir.routines.pcmToUml.ChangeParameterDirectionRoutine(this.executionState, calledBy, pcmParameter);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.ChangeParameterDirectionRoutine routine = new mir.routines.pcmToUml.ChangeParameterDirectionRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmParameter);
+    return routine.applyRoutine();
   }
   
   public boolean changeParameterType(final Parameter pcmParameter, final DataType pcmDataType) {
-    mir.routines.pcmToUml.ChangeParameterTypeRoutine effect = new mir.routines.pcmToUml.ChangeParameterTypeRoutine(this.executionState, calledBy, pcmParameter, pcmDataType);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.ChangeParameterTypeRoutine routine = new mir.routines.pcmToUml.ChangeParameterTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmParameter, pcmDataType);
+    return routine.applyRoutine();
   }
   
   public boolean removeOperationSignatureParameter(final Parameter pcmParameter) {
-    mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine effect = new mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine(this.executionState, calledBy, pcmParameter);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine routine = new mir.routines.pcmToUml.RemoveOperationSignatureParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmParameter);
+    return routine.applyRoutine();
   }
   
   public boolean createUmlComponent(final RepositoryComponent pcmComponent, final String correspondenceTag) {
-    mir.routines.pcmToUml.CreateUmlComponentRoutine effect = new mir.routines.pcmToUml.CreateUmlComponentRoutine(this.executionState, calledBy, pcmComponent, correspondenceTag);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateUmlComponentRoutine routine = new mir.routines.pcmToUml.CreateUmlComponentRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmComponent, correspondenceTag);
+    return routine.applyRoutine();
   }
   
   public boolean createProvidedRole(final InterfaceProvidingEntity pcmComponent, final ProvidedRole pcmProvidedRole) {
-    mir.routines.pcmToUml.CreateProvidedRoleRoutine effect = new mir.routines.pcmToUml.CreateProvidedRoleRoutine(this.executionState, calledBy, pcmComponent, pcmProvidedRole);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateProvidedRoleRoutine routine = new mir.routines.pcmToUml.CreateProvidedRoleRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmComponent, pcmProvidedRole);
+    return routine.applyRoutine();
   }
   
   public boolean deleteProvidedRole(final ProvidedRole pcmProvidedRole) {
-    mir.routines.pcmToUml.DeleteProvidedRoleRoutine effect = new mir.routines.pcmToUml.DeleteProvidedRoleRoutine(this.executionState, calledBy, pcmProvidedRole);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.DeleteProvidedRoleRoutine routine = new mir.routines.pcmToUml.DeleteProvidedRoleRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvidedRole);
+    return routine.applyRoutine();
   }
   
   public boolean addOperationProvidedRoleInterface(final OperationProvidedRole pcmRole, final OperationInterface pcmInterface) {
-    mir.routines.pcmToUml.AddOperationProvidedRoleInterfaceRoutine effect = new mir.routines.pcmToUml.AddOperationProvidedRoleInterfaceRoutine(this.executionState, calledBy, pcmRole, pcmInterface);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.AddOperationProvidedRoleInterfaceRoutine routine = new mir.routines.pcmToUml.AddOperationProvidedRoleInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRole, pcmInterface);
+    return routine.applyRoutine();
   }
   
   public boolean createRequiredRole(final InterfaceRequiringEntity pcmComponent, final OperationRequiredRole requiredRole) {
-    mir.routines.pcmToUml.CreateRequiredRoleRoutine effect = new mir.routines.pcmToUml.CreateRequiredRoleRoutine(this.executionState, calledBy, pcmComponent, requiredRole);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.CreateRequiredRoleRoutine routine = new mir.routines.pcmToUml.CreateRequiredRoleRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmComponent, requiredRole);
+    return routine.applyRoutine();
   }
   
   public boolean deleteRequiredRole(final OperationRequiredRole requiredRole) {
-    mir.routines.pcmToUml.DeleteRequiredRoleRoutine effect = new mir.routines.pcmToUml.DeleteRequiredRoleRoutine(this.executionState, calledBy, requiredRole);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.DeleteRequiredRoleRoutine routine = new mir.routines.pcmToUml.DeleteRequiredRoleRoutine(_routinesFacade, _reactionExecutionState, _caller, requiredRole);
+    return routine.applyRoutine();
   }
   
   public boolean addOperationRequiredRoleInterface(final OperationRequiredRole pcmRole, final OperationInterface pcmInterface) {
-    mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine effect = new mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine(this.executionState, calledBy, pcmRole, pcmInterface);
-    return effect.applyRoutine();
+    mir.routines.pcmToUml.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("PcmToUml"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine routine = new mir.routines.pcmToUml.AddOperationRequiredRoleInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRole, pcmInterface);
+    return routine.applyRoutine();
   }
 }

@@ -1,6 +1,7 @@
 package mir.reactions.reactionsJavaToUml.javaToUmlMethod;
 
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
 
 @SuppressWarnings("all")
 public class ExecutorJavaToUml extends AbstractReactionsExecutor {
@@ -9,25 +10,29 @@ public class ExecutorJavaToUml extends AbstractReactionsExecutor {
     	new tools.vitruv.domains.uml.UmlDomainProvider().getDomain());
   }
   
+  protected RoutinesFacadesProvider createRoutinesFacadesProvider() {
+    return new mir.routines.javaToUmlMethod.RoutinesFacadesProvider();
+  }
+  
   protected void setup() {
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaInterfaceMethodCreatedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMemberDeletedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeAbstractReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonAbstractReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeFinalReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonFinalReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadeStaticReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonStaticReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterCreatedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterDeletedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterTypeChangedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaReturnTypeChangedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementVisibilityChangedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadePackagePrivateReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaNamedElementRenamedReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedInInterfaceReaction());
-    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterMadeFinalReaction());
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaInterfaceMethodCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaConstructorCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMemberDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeAbstractReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonAbstractReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadeStaticReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaMethodMadeNonStaticReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterTypeChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaReturnTypeChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementVisibilityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaElementMadePackagePrivateReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaNamedElementRenamedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaClassMethodCreatedInInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
+    this.addReaction(new mir.reactions.reactionsJavaToUml.javaToUmlMethod.JavaParameterMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlMethod"))));
   }
 }

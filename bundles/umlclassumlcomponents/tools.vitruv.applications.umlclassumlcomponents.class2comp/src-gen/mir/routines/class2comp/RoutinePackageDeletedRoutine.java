@@ -19,8 +19,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RoutinePackageDeletedRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RoutinePackageDeletedRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -44,10 +42,9 @@ public class RoutinePackageDeletedRoutine extends AbstractRepairRoutineRealizati
     }
   }
   
-  public RoutinePackageDeletedRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package classPackage, final Model classModel) {
-    super(reactionExecutionState, calledBy);
+  public RoutinePackageDeletedRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package classPackage, final Model classModel) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.RoutinePackageDeletedRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.classPackage = classPackage;this.classModel = classModel;
   }
   
@@ -60,7 +57,7 @@ public class RoutinePackageDeletedRoutine extends AbstractRepairRoutineRealizati
     getLogger().debug("   classPackage: " + this.classPackage);
     getLogger().debug("   classModel: " + this.classModel);
     
-    userExecution.callRoutine1(classPackage, classModel, actionsFacade);
+    userExecution.callRoutine1(classPackage, classModel, this.getRoutinesFacade());
     
     postprocessElements();
     

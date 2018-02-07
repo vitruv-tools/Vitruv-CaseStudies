@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class AddedProvidedDelegationConnectorReaction extends AbstractReactionRealization {
+public class AddedProvidedDelegationConnectorReaction extends AbstractReactionRealization {
   private CreateEObject<ProvidedDelegationConnector> createChange;
   
   private InsertEReference<ComposedStructure, ProvidedDelegationConnector> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public AddedProvidedDelegationConnectorReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -32,9 +36,8 @@ class AddedProvidedDelegationConnectorReaction extends AbstractReactionRealizati
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedProvidedDelegationConnectorReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedProvidedDelegationConnectorReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

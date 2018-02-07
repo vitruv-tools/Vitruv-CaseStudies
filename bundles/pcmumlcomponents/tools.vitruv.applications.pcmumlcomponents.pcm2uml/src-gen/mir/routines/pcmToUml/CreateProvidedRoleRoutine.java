@@ -15,8 +15,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateProvidedRoleRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateProvidedRoleRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -52,10 +50,9 @@ public class CreateProvidedRoleRoutine extends AbstractRepairRoutineRealization 
     }
   }
   
-  public CreateProvidedRoleRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InterfaceProvidingEntity pcmComponent, final ProvidedRole pcmProvidedRole) {
-    super(reactionExecutionState, calledBy);
+  public CreateProvidedRoleRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InterfaceProvidingEntity pcmComponent, final ProvidedRole pcmProvidedRole) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcmToUml.CreateProvidedRoleRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.pcmComponent = pcmComponent;this.pcmProvidedRole = pcmProvidedRole;
   }
   

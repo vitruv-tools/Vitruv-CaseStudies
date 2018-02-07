@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
+public class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
   private CreateEObject<InnerDeclaration> createChange;
   
   private InsertEReference<CompositeDataType, InnerDeclaration> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public CreatedInnerDeclarationReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -28,12 +32,12 @@ class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
     org.palladiosimulator.pcm.repository.CompositeDataType affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.InnerDeclaration newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.CreatedInnerDeclarationReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.CreatedInnerDeclarationReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -104,7 +108,7 @@ class CreatedInnerDeclarationReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CompositeDataType affectedEObject, final EReference affectedFeature, final InnerDeclaration newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final CompositeDataType affectedEObject, final EReference affectedFeature, final InnerDeclaration newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createInnerDeclarationImplementation(newValue);
     }
   }

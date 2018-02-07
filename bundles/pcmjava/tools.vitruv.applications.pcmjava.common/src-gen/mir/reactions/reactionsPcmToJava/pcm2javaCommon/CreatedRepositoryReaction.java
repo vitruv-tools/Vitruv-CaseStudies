@@ -12,24 +12,28 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.root.InsertRootEObject;
 
 @SuppressWarnings("all")
-class CreatedRepositoryReaction extends AbstractReactionRealization {
+public class CreatedRepositoryReaction extends AbstractReactionRealization {
   private CreateEObject<Repository> createChange;
   
   private InsertRootEObject<Repository> insertChange;
   
   private int currentlyMatchedChange;
   
+  public CreatedRepositoryReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
+  
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
     	return;
     }
     org.palladiosimulator.pcm.repository.Repository newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.CreatedRepositoryReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.CreatedRepositoryReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -94,7 +98,7 @@ class CreatedRepositoryReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Repository newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertRootEObject insertChange, final Repository newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       final Repository repository = newValue;
       _routinesFacade.createJavaPackage(repository, null, repository.getEntityName(), "repository_root");
       _routinesFacade.createRepositorySubPackages(repository);

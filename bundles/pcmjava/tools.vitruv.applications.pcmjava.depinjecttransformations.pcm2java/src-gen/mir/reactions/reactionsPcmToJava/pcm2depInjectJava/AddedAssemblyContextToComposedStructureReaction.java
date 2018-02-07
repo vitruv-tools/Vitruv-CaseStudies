@@ -18,12 +18,16 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
-class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRealization {
+public class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRealization {
   private CreateEObject<AssemblyContext> createChange;
   
   private InsertEReference<ComposedStructure, AssemblyContext> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public AddedAssemblyContextToComposedStructureReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -41,9 +45,8 @@ class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRe
     }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2depInjectJava.RoutinesFacade routinesFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

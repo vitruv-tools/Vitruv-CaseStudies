@@ -20,10 +20,14 @@ import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
  *  
  */
 @SuppressWarnings("all")
-class FieldCreatedReaction extends AbstractReactionRealization {
+public class FieldCreatedReaction extends AbstractReactionRealization {
   private InsertEReference<org.emftext.language.java.classifiers.Class, Field> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public FieldCreatedReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -36,9 +40,8 @@ class FieldCreatedReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.java2PcmMethod.RoutinesFacade routinesFacade = new mir.routines.java2PcmMethod.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.ActionUserExecution userExecution = new mir.reactions.reactionsJavaToPcm.java2PcmMethod.FieldCreatedReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

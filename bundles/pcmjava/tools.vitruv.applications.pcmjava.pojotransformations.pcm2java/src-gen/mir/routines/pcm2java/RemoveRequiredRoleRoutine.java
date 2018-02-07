@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RemoveRequiredRoleRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -56,10 +54,9 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
   }
   
-  public RemoveRequiredRoleRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final RequiredRole requiredRole, final InterfaceRequiringEntity requiringEntity) {
-    super(reactionExecutionState, calledBy);
+  public RemoveRequiredRoleRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final RequiredRole requiredRole, final InterfaceRequiringEntity requiringEntity) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2java.RemoveRequiredRoleRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2java.RoutinesFacade(getExecutionState(), this);
     this.requiredRole = requiredRole;this.requiringEntity = requiringEntity;
   }
   
@@ -109,7 +106,7 @@ public class RemoveRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     
     deleteObject(userExecution.getElement2(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass));
     
-    userExecution.callRoutine1(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass, actionsFacade);
+    userExecution.callRoutine1(requiredRole, requiringEntity, requiredInterfaceImport, requiredInterfaceField, javaClass, this.getRoutinesFacade());
     
     postprocessElements();
     

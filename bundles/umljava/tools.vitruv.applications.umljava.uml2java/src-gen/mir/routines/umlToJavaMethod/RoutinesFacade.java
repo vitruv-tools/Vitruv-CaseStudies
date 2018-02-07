@@ -9,87 +9,133 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
-import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
 
 @SuppressWarnings("all")
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
-  public RoutinesFacade(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
-    super(reactionExecutionState, calledBy);
+  public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
+    super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
   public boolean createJavaMethod(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaMethodRoutine(this.executionState, calledBy, uClassifier, uOperation);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.CreateJavaMethodRoutine routine = new mir.routines.umlToJavaMethod.CreateJavaMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, uClassifier, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaClassMethod(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine(this.executionState, calledBy, uClassifier, uOperation);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine routine = new mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, uClassifier, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaConstructor(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine(this.executionState, calledBy, uClassifier, uOperation);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine routine = new mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine(_routinesFacade, _reactionExecutionState, _caller, uClassifier, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean deleteJavaMethod(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine(this.executionState, calledBy, uOperation);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine routine = new mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean setJavaMethodReturnType(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine(this.executionState, calledBy, uOperation);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine routine = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean setStatic(final Feature uFeat) {
-    mir.routines.umlToJavaMethod.SetStaticRoutine effect = new mir.routines.umlToJavaMethod.SetStaticRoutine(this.executionState, calledBy, uFeat);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.SetStaticRoutine routine = new mir.routines.umlToJavaMethod.SetStaticRoutine(_routinesFacade, _reactionExecutionState, _caller, uFeat);
+    return routine.applyRoutine();
   }
   
   public boolean setJavaMethodAbstract(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine(this.executionState, calledBy, uOperation);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine routine = new mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaInterfaceMethod(final Interface uInterface, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine(this.executionState, calledBy, uInterface, uOperation);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine routine = new mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, uInterface, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean setJavaMethodFinal(final Operation uOperation, final Boolean isFinal) {
-    mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine(this.executionState, calledBy, uOperation, isFinal);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine routine = new mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, isFinal);
+    return routine.applyRoutine();
   }
   
   public boolean changeJavaElementVisibility(final NamedElement uElem) {
-    mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine effect = new mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine(this.executionState, calledBy, uElem);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine routine = new mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine(_routinesFacade, _reactionExecutionState, _caller, uElem);
+    return routine.applyRoutine();
   }
   
   public boolean renameJavaNamedElement(final NamedElement uElem, final String name) {
-    mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine effect = new mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine(this.executionState, calledBy, uElem, name);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine routine = new mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine(_routinesFacade, _reactionExecutionState, _caller, uElem, name);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaParameter(final Operation uMeth, final Parameter umlParam) {
-    mir.routines.umlToJavaMethod.CreateJavaParameterRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaParameterRoutine(this.executionState, calledBy, uMeth, umlParam);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.CreateJavaParameterRoutine routine = new mir.routines.umlToJavaMethod.CreateJavaParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, uMeth, umlParam);
+    return routine.applyRoutine();
   }
   
   public boolean deleteJavaParameter(final Parameter uParam) {
-    mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine effect = new mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine(this.executionState, calledBy, uParam);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine routine = new mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, uParam);
+    return routine.applyRoutine();
   }
   
   public boolean changeJavaParameterType(final Parameter uParam, final Type uType) {
-    mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine effect = new mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine(this.executionState, calledBy, uParam, uType);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine routine = new mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uParam, uType);
+    return routine.applyRoutine();
   }
   
   public boolean adaptJavaParametertoDirectionChange(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
-    mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine effect = new mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine(this.executionState, calledBy, uOperation, uParam, oldDirection, newDirection);
-    return effect.applyRoutine();
+    mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaMethod"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine routine = new mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, uParam, oldDirection, newDirection);
+    return routine.applyRoutine();
   }
 }

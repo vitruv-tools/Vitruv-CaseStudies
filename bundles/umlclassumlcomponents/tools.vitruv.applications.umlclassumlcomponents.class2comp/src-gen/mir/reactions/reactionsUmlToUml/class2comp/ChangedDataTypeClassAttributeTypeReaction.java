@@ -14,10 +14,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-class ChangedDataTypeClassAttributeTypeReaction extends AbstractReactionRealization {
+public class ChangedDataTypeClassAttributeTypeReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEReference<Property, Type> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public ChangedDataTypeClassAttributeTypeReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -35,9 +39,8 @@ class ChangedDataTypeClassAttributeTypeReaction extends AbstractReactionRealizat
     }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.ChangedDataTypeClassAttributeTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.ChangedDataTypeClassAttributeTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }

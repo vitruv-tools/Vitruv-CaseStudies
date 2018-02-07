@@ -11,12 +11,16 @@ import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.root.RemoveRootEObject;
 
 @SuppressWarnings("all")
-class DeletedSystemReaction extends AbstractReactionRealization {
+public class DeletedSystemReaction extends AbstractReactionRealization {
   private RemoveRootEObject<org.palladiosimulator.pcm.system.System> removeChange;
   
   private DeleteEObject<org.palladiosimulator.pcm.system.System> deleteChange;
   
   private int currentlyMatchedChange;
+  
+  public DeletedSystemReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -27,9 +31,8 @@ class DeletedSystemReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2java.RoutinesFacade routinesFacade = new mir.routines.pcm2java.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2java.DeletedSystemReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2java.DeletedSystemReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(removeChange, oldValue, index, routinesFacade);
+    userExecution.callRoutine1(removeChange, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

@@ -13,10 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-class ChangedProvidedInterfaceOfProvidedRoleReaction extends AbstractReactionRealization {
+public class ChangedProvidedInterfaceOfProvidedRoleReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEReference<OperationProvidedRole, OperationInterface> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public ChangedProvidedInterfaceOfProvidedRoleReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -29,9 +33,8 @@ class ChangedProvidedInterfaceOfProvidedRoleReaction extends AbstractReactionRea
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.ChangedProvidedInterfaceOfProvidedRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.ChangedProvidedInterfaceOfProvidedRoleReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -81,7 +84,7 @@ class ChangedProvidedInterfaceOfProvidedRoleReaction extends AbstractReactionRea
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationProvidedRole affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final OperationInterface newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final OperationProvidedRole affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final OperationInterface newValue, @Extension final RoutinesFacade _routinesFacade) {
       final OperationProvidedRole operationProvidedRole = affectedEObject;
       _routinesFacade.removeProvidedRole(operationProvidedRole);
       _routinesFacade.addProvidedRole(operationProvidedRole);

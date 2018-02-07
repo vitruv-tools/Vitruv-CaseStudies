@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateJavaClassRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -39,10 +37,9 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public CreateJavaClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
-    super(reactionExecutionState, calledBy);
+  public CreateJavaClassRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2java.CreateJavaClassRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2java.RoutinesFacade(getExecutionState(), this);
     this.sourceElementMappedToClass = sourceElementMappedToClass;this.containingPackage = containingPackage;this.className = className;
   }
   
@@ -64,7 +61,7 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     
     addCorrespondenceBetween(userExecution.getElement1(sourceElementMappedToClass, containingPackage, className, javaClass), userExecution.getElement2(sourceElementMappedToClass, containingPackage, className, javaClass), "");
     
-    userExecution.callRoutine1(sourceElementMappedToClass, containingPackage, className, javaClass, actionsFacade);
+    userExecution.callRoutine1(sourceElementMappedToClass, containingPackage, className, javaClass, this.getRoutinesFacade());
     
     postprocessElements();
     

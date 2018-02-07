@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeJavaAttributeTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -40,10 +38,9 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     }
   }
   
-  public ChangeJavaAttributeTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property uAttr, final Type uType) {
-    super(reactionExecutionState, calledBy);
+  public ChangeJavaAttributeTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property uAttr, final Type uType) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaAttribute.ChangeJavaAttributeTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(getExecutionState(), this);
     this.uAttr = uAttr;this.uType = uType;
   }
   
@@ -76,7 +73,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     		)
     );
     registerObjectUnderModification(customType.isPresent() ? customType.get() : null);
-    userExecution.callRoutine1(uAttr, uType, jAttr, customType, actionsFacade);
+    userExecution.callRoutine1(uAttr, uType, jAttr, customType, this.getRoutinesFacade());
     
     postprocessElements();
     

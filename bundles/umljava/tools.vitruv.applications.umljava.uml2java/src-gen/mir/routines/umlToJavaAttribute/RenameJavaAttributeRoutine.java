@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RenameJavaAttributeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -33,10 +31,9 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
   }
   
-  public RenameJavaAttributeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final String oldName, final String newName, final Property uAttribute) {
-    super(reactionExecutionState, calledBy);
+  public RenameJavaAttributeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final String oldName, final String newName, final Property uAttribute) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(getExecutionState(), this);
     this.oldName = oldName;this.newName = newName;this.uAttribute = uAttribute;
   }
   
@@ -63,7 +60,7 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
     	return false;
     }
     registerObjectUnderModification(jAttribute);
-    userExecution.callRoutine1(oldName, newName, uAttribute, jAttribute, actionsFacade);
+    userExecution.callRoutine1(oldName, newName, uAttribute, jAttribute, this.getRoutinesFacade());
     
     postprocessElements();
     

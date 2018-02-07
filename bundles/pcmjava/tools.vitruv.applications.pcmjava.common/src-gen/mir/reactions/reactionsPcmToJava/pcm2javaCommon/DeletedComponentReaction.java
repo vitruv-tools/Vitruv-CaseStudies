@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class DeletedComponentReaction extends AbstractReactionRealization {
+public class DeletedComponentReaction extends AbstractReactionRealization {
   private RemoveEReference<Repository, RepositoryComponent> removeChange;
   
   private DeleteEObject<RepositoryComponent> deleteChange;
   
   private int currentlyMatchedChange;
+  
+  public DeletedComponentReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -28,12 +32,12 @@ class DeletedComponentReaction extends AbstractReactionRealization {
     org.palladiosimulator.pcm.repository.Repository affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.RepositoryComponent oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.DeletedComponentReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.DeletedComponentReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -104,7 +108,7 @@ class DeletedComponentReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final Repository affectedEObject, final EReference affectedFeature, final RepositoryComponent oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final Repository affectedEObject, final EReference affectedFeature, final RepositoryComponent oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteJavaClassifier(oldValue);
       _routinesFacade.deleteJavaPackage(oldValue, oldValue.getEntityName(), "");
     }

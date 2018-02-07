@@ -11,8 +11,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateRepositorySubPackagesRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateRepositorySubPackagesRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -30,10 +28,9 @@ public class CreateRepositorySubPackagesRoutine extends AbstractRepairRoutineRea
     }
   }
   
-  public CreateRepositorySubPackagesRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Repository repository) {
-    super(reactionExecutionState, calledBy);
+  public CreateRepositorySubPackagesRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Repository repository) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.CreateRepositorySubPackagesRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.repository = repository;
   }
   
@@ -54,7 +51,7 @@ public class CreateRepositorySubPackagesRoutine extends AbstractRepairRoutineRea
     	return false;
     }
     registerObjectUnderModification(repositoryPackage);
-    userExecution.callRoutine1(repository, repositoryPackage, actionsFacade);
+    userExecution.callRoutine1(repository, repositoryPackage, this.getRoutinesFacade());
     
     postprocessElements();
     

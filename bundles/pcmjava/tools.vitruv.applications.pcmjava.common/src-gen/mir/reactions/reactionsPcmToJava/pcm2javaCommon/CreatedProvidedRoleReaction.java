@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class CreatedProvidedRoleReaction extends AbstractReactionRealization {
+public class CreatedProvidedRoleReaction extends AbstractReactionRealization {
   private CreateEObject<OperationProvidedRole> createChange;
   
   private InsertEReference<InterfaceProvidingEntity, OperationProvidedRole> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public CreatedProvidedRoleReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -28,12 +32,12 @@ class CreatedProvidedRoleReaction extends AbstractReactionRealization {
     org.palladiosimulator.pcm.core.entity.InterfaceProvidingEntity affectedEObject = insertChange.getAffectedEObject();
     EReference affectedFeature = insertChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.OperationProvidedRole newValue = insertChange.getNewValue();
+    int index = insertChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.CreatedProvidedRoleReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.CreatedProvidedRoleReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, newValue, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -104,7 +108,7 @@ class CreatedProvidedRoleReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final InterfaceProvidingEntity affectedEObject, final EReference affectedFeature, final OperationProvidedRole newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final InsertEReference insertChange, final InterfaceProvidingEntity affectedEObject, final EReference affectedFeature, final OperationProvidedRole newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.addProvidedRole(newValue);
     }
   }

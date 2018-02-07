@@ -32,8 +32,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateCollectionDataTypeImplementationRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -79,10 +77,9 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     }
   }
   
-  public CreateCollectionDataTypeImplementationRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CollectionDataType dataType) {
-    super(reactionExecutionState, calledBy);
+  public CreateCollectionDataTypeImplementationRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CollectionDataType dataType) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2java.CreateCollectionDataTypeImplementationRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2java.RoutinesFacade(getExecutionState(), this);
     this.dataType = dataType;
   }
   
@@ -112,7 +109,7 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
     	return false;
     }
     registerObjectUnderModification(datatypesPackage);
-    userExecution.callRoutine1(dataType, innerTypeClass, datatypesPackage, actionsFacade);
+    userExecution.callRoutine1(dataType, innerTypeClass, datatypesPackage, this.getRoutinesFacade());
     
     postprocessElements();
     

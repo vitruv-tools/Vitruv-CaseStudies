@@ -13,10 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization {
+public class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEReference<ResourceDemandingSEFF, OperationSignature> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public ChangeOperationSignatureOfSeffReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -29,9 +33,8 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.ChangeOperationSignatureOfSeffReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.ChangeOperationSignatureOfSeffReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -81,7 +84,7 @@ class ChangeOperationSignatureOfSeffReaction extends AbstractReactionRealization
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ResourceDemandingSEFF affectedEObject, final EReference affectedFeature, final OperationSignature oldValue, final OperationSignature newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final ResourceDemandingSEFF affectedEObject, final EReference affectedFeature, final OperationSignature oldValue, final OperationSignature newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changeMethodForSeff(affectedEObject);
     }
   }

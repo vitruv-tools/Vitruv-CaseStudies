@@ -11,10 +11,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-class MoveClassToDifferentPackageReaction extends AbstractReactionRealization {
+public class MoveClassToDifferentPackageReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Package> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public MoveClassToDifferentPackageReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -27,9 +31,8 @@ class MoveClassToDifferentPackageReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.MoveClassToDifferentPackageReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.MoveClassToDifferentPackageReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }

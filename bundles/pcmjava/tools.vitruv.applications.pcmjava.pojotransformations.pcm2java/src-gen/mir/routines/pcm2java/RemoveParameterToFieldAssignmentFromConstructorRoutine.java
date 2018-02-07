@@ -21,8 +21,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RemoveParameterToFieldAssignmentFromConstructorRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -60,10 +58,9 @@ public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends Abst
     }
   }
   
-  public RemoveParameterToFieldAssignmentFromConstructorRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Constructor ctor, final String fieldName) {
-    super(reactionExecutionState, calledBy);
+  public RemoveParameterToFieldAssignmentFromConstructorRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Constructor ctor, final String fieldName) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2java.RemoveParameterToFieldAssignmentFromConstructorRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2java.RoutinesFacade(getExecutionState(), this);
     this.ctor = ctor;this.fieldName = fieldName;
   }
   

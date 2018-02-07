@@ -24,8 +24,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddRequiredRoleRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -92,10 +90,9 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public AddRequiredRoleRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationRequiredRole requiredRole) {
-    super(reactionExecutionState, calledBy);
+  public AddRequiredRoleRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationRequiredRole requiredRole) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2java.AddRequiredRoleRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2java.RoutinesFacade(getExecutionState(), this);
     this.requiredRole = requiredRole;
   }
   
@@ -142,7 +139,7 @@ public class AddRequiredRoleRoutine extends AbstractRepairRoutineRealization {
     // val updatedElement userExecution.getElement5(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField);
     userExecution.update0Element(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField);
     
-    userExecution.callRoutine1(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField, actionsFacade);
+    userExecution.callRoutine1(requiredRole, requiredInterface, javaClass, requiredInterfaceImport, requiredInterfaceField, this.getRoutinesFacade());
     
     postprocessElements();
     

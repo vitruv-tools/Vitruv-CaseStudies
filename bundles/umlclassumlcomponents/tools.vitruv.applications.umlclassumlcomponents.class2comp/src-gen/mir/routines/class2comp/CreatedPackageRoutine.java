@@ -20,8 +20,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreatedPackageRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -62,10 +60,9 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public CreatedPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package classPackage) {
-    super(reactionExecutionState, calledBy);
+  public CreatedPackageRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package classPackage) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.CreatedPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.classPackage = classPackage;
   }
   
@@ -89,7 +86,7 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
     if (!userExecution.checkMatcherPrecondition1(classPackage, compModel)) {
     	return false;
     }
-    userExecution.callRoutine1(classPackage, compModel, actionsFacade);
+    userExecution.callRoutine1(classPackage, compModel, this.getRoutinesFacade());
     
     postprocessElements();
     

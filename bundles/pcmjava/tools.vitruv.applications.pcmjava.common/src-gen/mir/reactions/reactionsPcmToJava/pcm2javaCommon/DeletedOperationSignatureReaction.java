@@ -14,12 +14,16 @@ import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-class DeletedOperationSignatureReaction extends AbstractReactionRealization {
+public class DeletedOperationSignatureReaction extends AbstractReactionRealization {
   private RemoveEReference<OperationInterface, OperationSignature> removeChange;
   
   private DeleteEObject<OperationSignature> deleteChange;
   
   private int currentlyMatchedChange;
+  
+  public DeletedOperationSignatureReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -28,12 +32,12 @@ class DeletedOperationSignatureReaction extends AbstractReactionRealization {
     org.palladiosimulator.pcm.repository.OperationInterface affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
     org.palladiosimulator.pcm.repository.OperationSignature oldValue = removeChange.getOldValue();
+    int index = removeChange.getIndex();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.DeletedOperationSignatureReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.DeletedOperationSignatureReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, routinesFacade);
+    userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -104,7 +108,7 @@ class DeletedOperationSignatureReaction extends AbstractReactionRealization {
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature oldValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final OperationInterface affectedEObject, final EReference affectedFeature, final OperationSignature oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteMethodForOperationSignature(oldValue);
     }
   }

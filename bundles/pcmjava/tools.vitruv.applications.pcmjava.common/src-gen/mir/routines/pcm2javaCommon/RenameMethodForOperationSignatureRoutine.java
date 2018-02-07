@@ -25,8 +25,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RenameMethodForOperationSignatureRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -73,10 +71,9 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
     }
   }
   
-  public RenameMethodForOperationSignatureRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationSignature operationSignature) {
-    super(reactionExecutionState, calledBy);
+  public RenameMethodForOperationSignatureRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationSignature operationSignature) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.RenameMethodForOperationSignatureRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.operationSignature = operationSignature;
   }
   
@@ -100,7 +97,7 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
     // val updatedElement userExecution.getElement1(operationSignature, interfaceMethod);
     userExecution.update0Element(operationSignature, interfaceMethod);
     
-    userExecution.callRoutine1(operationSignature, interfaceMethod, actionsFacade);
+    userExecution.callRoutine1(operationSignature, interfaceMethod, this.getRoutinesFacade());
     
     postprocessElements();
     

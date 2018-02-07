@@ -20,8 +20,6 @@ import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 
 @SuppressWarnings("all")
 public class CreatedClassMethodInEjbClassRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreatedClassMethodInEjbClassRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -46,10 +44,9 @@ public class CreatedClassMethodInEjbClassRoutine extends AbstractRepairRoutineRe
     }
   }
   
-  public CreatedClassMethodInEjbClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class clazz, final ClassMethod classMethod) {
-    super(reactionExecutionState, calledBy);
+  public CreatedClassMethodInEjbClassRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class clazz, final ClassMethod classMethod) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.ejbjava2pcm.CreatedClassMethodInEjbClassRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(getExecutionState(), this);
     this.clazz = clazz;this.classMethod = classMethod;
   }
   
@@ -73,7 +70,7 @@ public class CreatedClassMethodInEjbClassRoutine extends AbstractRepairRoutineRe
     	return false;
     }
     registerObjectUnderModification(basicComponent);
-    userExecution.callRoutine1(clazz, classMethod, basicComponent, actionsFacade);
+    userExecution.callRoutine1(clazz, classMethod, basicComponent, this.getRoutinesFacade());
     
     postprocessElements();
     

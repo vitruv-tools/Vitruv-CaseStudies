@@ -17,8 +17,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddAssemblyContextToComposedStructureRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -58,10 +56,9 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     }
   }
   
-  public AddAssemblyContextToComposedStructureRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ComposedStructure composedStructure, final AssemblyContext assemblyContext) {
-    super(reactionExecutionState, calledBy);
+  public AddAssemblyContextToComposedStructureRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ComposedStructure composedStructure, final AssemblyContext assemblyContext) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2depInjectJava.AddAssemblyContextToComposedStructureRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(getExecutionState(), this);
     this.composedStructure = composedStructure;this.assemblyContext = assemblyContext;
   }
   
@@ -106,7 +103,7 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     
     addCorrespondenceBetween(userExecution.getElement3(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall), userExecution.getElement4(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall), "");
     
-    userExecution.callRoutine1(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall, actionsFacade);
+    userExecution.callRoutine1(composedStructure, assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass, assemblyContextField, newConstructorCall, this.getRoutinesFacade());
     
     postprocessElements();
     

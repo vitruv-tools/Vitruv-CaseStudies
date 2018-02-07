@@ -21,8 +21,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AdaptJavaParametertoDirectionChangeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -70,10 +68,9 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     }
   }
   
-  public AdaptJavaParametertoDirectionChangeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
-    super(reactionExecutionState, calledBy);
+  public AdaptJavaParametertoDirectionChangeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(getExecutionState(), this);
     this.uOperation = uOperation;this.uParam = uParam;this.oldDirection = oldDirection;this.newDirection = newDirection;
   }
   
@@ -124,7 +121,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     // val updatedElement userExecution.getElement1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, customTypeClass);
     userExecution.update0Element(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, customTypeClass);
     
-    userExecution.callRoutine1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, customTypeClass, actionsFacade);
+    userExecution.callRoutine1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, customTypeClass, this.getRoutinesFacade());
     
     postprocessElements();
     

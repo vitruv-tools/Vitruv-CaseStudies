@@ -10,117 +10,181 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Usage;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
-import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
-import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
 
 @SuppressWarnings("all")
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
-  public RoutinesFacade(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
-    super(reactionExecutionState, calledBy);
+  public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
+    super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
   public boolean createModelSelfCorrespondence(final Model compModel) {
-    mir.routines.comp2class.CreateModelSelfCorrespondenceRoutine effect = new mir.routines.comp2class.CreateModelSelfCorrespondenceRoutine(this.executionState, calledBy, compModel);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateModelSelfCorrespondenceRoutine routine = new mir.routines.comp2class.CreateModelSelfCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, compModel);
+    return routine.applyRoutine();
   }
   
   public boolean createClassModel(final Model compModel) {
-    mir.routines.comp2class.CreateClassModelRoutine effect = new mir.routines.comp2class.CreateClassModelRoutine(this.executionState, calledBy, compModel);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateClassModelRoutine routine = new mir.routines.comp2class.CreateClassModelRoutine(_routinesFacade, _reactionExecutionState, _caller, compModel);
+    return routine.applyRoutine();
   }
   
   public boolean createDataTypePackage(final Model compModel) {
-    mir.routines.comp2class.CreateDataTypePackageRoutine effect = new mir.routines.comp2class.CreateDataTypePackageRoutine(this.executionState, calledBy, compModel);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateDataTypePackageRoutine routine = new mir.routines.comp2class.CreateDataTypePackageRoutine(_routinesFacade, _reactionExecutionState, _caller, compModel);
+    return routine.applyRoutine();
   }
   
   public boolean renameClassModelForComponentModel(final Model compModel) {
-    mir.routines.comp2class.RenameClassModelForComponentModelRoutine effect = new mir.routines.comp2class.RenameClassModelForComponentModelRoutine(this.executionState, calledBy, compModel);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.RenameClassModelForComponentModelRoutine routine = new mir.routines.comp2class.RenameClassModelForComponentModelRoutine(_routinesFacade, _reactionExecutionState, _caller, compModel);
+    return routine.applyRoutine();
   }
   
   public boolean renameElement(final NamedElement compElement) {
-    mir.routines.comp2class.RenameElementRoutine effect = new mir.routines.comp2class.RenameElementRoutine(this.executionState, calledBy, compElement);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.RenameElementRoutine routine = new mir.routines.comp2class.RenameElementRoutine(_routinesFacade, _reactionExecutionState, _caller, compElement);
+    return routine.applyRoutine();
   }
   
   public boolean changeCorrespondingVisibility(final NamedElement compElement) {
-    mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine effect = new mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine(this.executionState, calledBy, compElement);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine routine = new mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine(_routinesFacade, _reactionExecutionState, _caller, compElement);
+    return routine.applyRoutine();
   }
   
   public boolean createClassWithPackage(final Component umlComp) {
-    mir.routines.comp2class.CreateClassWithPackageRoutine effect = new mir.routines.comp2class.CreateClassWithPackageRoutine(this.executionState, calledBy, umlComp);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateClassWithPackageRoutine routine = new mir.routines.comp2class.CreateClassWithPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, umlComp);
+    return routine.applyRoutine();
   }
   
   public boolean renameClassAndPackage(final Component umlComp, final String newName) {
-    mir.routines.comp2class.RenameClassAndPackageRoutine effect = new mir.routines.comp2class.RenameClassAndPackageRoutine(this.executionState, calledBy, umlComp, newName);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.RenameClassAndPackageRoutine routine = new mir.routines.comp2class.RenameClassAndPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, umlComp, newName);
+    return routine.applyRoutine();
   }
   
   public boolean deleteClass(final Component umlComp) {
-    mir.routines.comp2class.DeleteClassRoutine effect = new mir.routines.comp2class.DeleteClassRoutine(this.executionState, calledBy, umlComp);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.DeleteClassRoutine routine = new mir.routines.comp2class.DeleteClassRoutine(_routinesFacade, _reactionExecutionState, _caller, umlComp);
+    return routine.applyRoutine();
   }
   
   public boolean createDataTypeForDataType(final DataType compType) {
-    mir.routines.comp2class.CreateDataTypeForDataTypeRoutine effect = new mir.routines.comp2class.CreateDataTypeForDataTypeRoutine(this.executionState, calledBy, compType);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateDataTypeForDataTypeRoutine routine = new mir.routines.comp2class.CreateDataTypeForDataTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, compType);
+    return routine.applyRoutine();
   }
   
   public boolean createDataTypeSelfCorrespondence(final DataType compType) {
-    mir.routines.comp2class.CreateDataTypeSelfCorrespondenceRoutine effect = new mir.routines.comp2class.CreateDataTypeSelfCorrespondenceRoutine(this.executionState, calledBy, compType);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateDataTypeSelfCorrespondenceRoutine routine = new mir.routines.comp2class.CreateDataTypeSelfCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, compType);
+    return routine.applyRoutine();
   }
   
   public boolean createClassForDataType(final DataType compType) {
-    mir.routines.comp2class.CreateClassForDataTypeRoutine effect = new mir.routines.comp2class.CreateClassForDataTypeRoutine(this.executionState, calledBy, compType);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateClassForDataTypeRoutine routine = new mir.routines.comp2class.CreateClassForDataTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, compType);
+    return routine.applyRoutine();
   }
   
   public boolean addClassDataTypeProperty(final Property compProperty, final DataType compDataType) {
-    mir.routines.comp2class.AddClassDataTypePropertyRoutine effect = new mir.routines.comp2class.AddClassDataTypePropertyRoutine(this.executionState, calledBy, compProperty, compDataType);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.AddClassDataTypePropertyRoutine routine = new mir.routines.comp2class.AddClassDataTypePropertyRoutine(_routinesFacade, _reactionExecutionState, _caller, compProperty, compDataType);
+    return routine.applyRoutine();
   }
   
   public boolean changeClassDataTypeProperty(final Property compProperty) {
-    mir.routines.comp2class.ChangeClassDataTypePropertyRoutine effect = new mir.routines.comp2class.ChangeClassDataTypePropertyRoutine(this.executionState, calledBy, compProperty);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.ChangeClassDataTypePropertyRoutine routine = new mir.routines.comp2class.ChangeClassDataTypePropertyRoutine(_routinesFacade, _reactionExecutionState, _caller, compProperty);
+    return routine.applyRoutine();
   }
   
   public boolean addDataTypeOperation(final Operation compOperation, final DataType compDataType) {
-    mir.routines.comp2class.AddDataTypeOperationRoutine effect = new mir.routines.comp2class.AddDataTypeOperationRoutine(this.executionState, calledBy, compOperation, compDataType);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.AddDataTypeOperationRoutine routine = new mir.routines.comp2class.AddDataTypeOperationRoutine(_routinesFacade, _reactionExecutionState, _caller, compOperation, compDataType);
+    return routine.applyRoutine();
   }
   
   public boolean changeClassDataTypeOperation(final Operation compOperation) {
-    mir.routines.comp2class.ChangeClassDataTypeOperationRoutine effect = new mir.routines.comp2class.ChangeClassDataTypeOperationRoutine(this.executionState, calledBy, compOperation);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.ChangeClassDataTypeOperationRoutine routine = new mir.routines.comp2class.ChangeClassDataTypeOperationRoutine(_routinesFacade, _reactionExecutionState, _caller, compOperation);
+    return routine.applyRoutine();
   }
   
   public boolean createClassInterface(final Interface compInterface, final Component umlComp) {
-    mir.routines.comp2class.CreateClassInterfaceRoutine effect = new mir.routines.comp2class.CreateClassInterfaceRoutine(this.executionState, calledBy, compInterface, umlComp);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateClassInterfaceRoutine routine = new mir.routines.comp2class.CreateClassInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, compInterface, umlComp);
+    return routine.applyRoutine();
   }
   
   public boolean createClassInterfaceRealization(final NamedElement iFRealizationOrUsage, final Component umlComp) {
-    mir.routines.comp2class.CreateClassInterfaceRealizationRoutine effect = new mir.routines.comp2class.CreateClassInterfaceRealizationRoutine(this.executionState, calledBy, iFRealizationOrUsage, umlComp);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.CreateClassInterfaceRealizationRoutine routine = new mir.routines.comp2class.CreateClassInterfaceRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, iFRealizationOrUsage, umlComp);
+    return routine.applyRoutine();
   }
   
   public boolean addClassInterfaceRealizationToClass(final NamedElement iFRealizationOrUsage, final Interface compInterface, final Component umlComp) {
-    mir.routines.comp2class.AddClassInterfaceRealizationToClassRoutine effect = new mir.routines.comp2class.AddClassInterfaceRealizationToClassRoutine(this.executionState, calledBy, iFRealizationOrUsage, compInterface, umlComp);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.AddClassInterfaceRealizationToClassRoutine routine = new mir.routines.comp2class.AddClassInterfaceRealizationToClassRoutine(_routinesFacade, _reactionExecutionState, _caller, iFRealizationOrUsage, compInterface, umlComp);
+    return routine.applyRoutine();
   }
   
   public boolean removeInterfaceRealizationForInterfaceRealization(final InterfaceRealization compIFRealization) {
-    mir.routines.comp2class.RemoveInterfaceRealizationForInterfaceRealizationRoutine effect = new mir.routines.comp2class.RemoveInterfaceRealizationForInterfaceRealizationRoutine(this.executionState, calledBy, compIFRealization);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.RemoveInterfaceRealizationForInterfaceRealizationRoutine routine = new mir.routines.comp2class.RemoveInterfaceRealizationForInterfaceRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, compIFRealization);
+    return routine.applyRoutine();
   }
   
   public boolean removeInterfaceRealizationForUsage(final Usage compUsage) {
-    mir.routines.comp2class.RemoveInterfaceRealizationForUsageRoutine effect = new mir.routines.comp2class.RemoveInterfaceRealizationForUsageRoutine(this.executionState, calledBy, compUsage);
-    return effect.applyRoutine();
+    mir.routines.comp2class.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"));
+    tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    mir.routines.comp2class.RemoveInterfaceRealizationForUsageRoutine routine = new mir.routines.comp2class.RemoveInterfaceRealizationForUsageRoutine(_routinesFacade, _reactionExecutionState, _caller, compUsage);
+    return routine.applyRoutine();
   }
 }

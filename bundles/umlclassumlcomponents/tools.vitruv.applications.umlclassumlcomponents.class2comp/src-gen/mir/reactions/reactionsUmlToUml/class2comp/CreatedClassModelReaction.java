@@ -17,12 +17,16 @@ import tools.vitruv.framework.change.echange.root.InsertRootEObject;
  * *******
  */
 @SuppressWarnings("all")
-class CreatedClassModelReaction extends AbstractReactionRealization {
+public class CreatedClassModelReaction extends AbstractReactionRealization {
   private CreateEObject<Model> createChange;
   
   private InsertRootEObject<Model> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public CreatedClassModelReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -33,9 +37,8 @@ class CreatedClassModelReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.CreatedClassModelReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.CreatedClassModelReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

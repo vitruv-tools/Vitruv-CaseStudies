@@ -13,12 +13,16 @@ import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 @SuppressWarnings("all")
-class AddedDataClassTypePropertyReaction extends AbstractReactionRealization {
+public class AddedDataClassTypePropertyReaction extends AbstractReactionRealization {
   private CreateEObject<Property> createChange;
   
   private InsertEReference<org.eclipse.uml2.uml.Class, Property> insertChange;
   
   private int currentlyMatchedChange;
+  
+  public AddedDataClassTypePropertyReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -31,9 +35,8 @@ class AddedDataClassTypePropertyReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.class2comp.RoutinesFacade routinesFacade = new mir.routines.class2comp.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.class2comp.AddedDataClassTypePropertyReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.class2comp.AddedDataClassTypePropertyReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, routinesFacade);
+    userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();
   }

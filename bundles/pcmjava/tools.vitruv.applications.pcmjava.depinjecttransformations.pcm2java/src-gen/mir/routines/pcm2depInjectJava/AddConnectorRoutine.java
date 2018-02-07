@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddConnectorRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -33,10 +31,9 @@ public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public AddConnectorRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final AssemblyConnector assemblyConnector) {
-    super(reactionExecutionState, calledBy);
+  public AddConnectorRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final AssemblyConnector assemblyConnector) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2depInjectJava.AddConnectorRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(getExecutionState(), this);
     this.assemblyConnector = assemblyConnector;
   }
   
@@ -46,7 +43,7 @@ public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine AddConnectorRoutine with input:");
     getLogger().debug("   assemblyConnector: " + this.assemblyConnector);
     
-    userExecution.callRoutine1(assemblyConnector, actionsFacade);
+    userExecution.callRoutine1(assemblyConnector, this.getRoutinesFacade());
     
     postprocessElements();
     

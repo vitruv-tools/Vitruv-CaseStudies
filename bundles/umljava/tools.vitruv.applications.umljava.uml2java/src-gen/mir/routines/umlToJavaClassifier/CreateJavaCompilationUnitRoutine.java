@@ -20,8 +20,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateJavaCompilationUnitRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -65,10 +63,9 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     }
   }
   
-  public CreateJavaCompilationUnitRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace) {
-    super(reactionExecutionState, calledBy);
+  public CreateJavaCompilationUnitRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.CreateJavaCompilationUnitRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
     this.umlClassifier = umlClassifier;this.jClassifier = jClassifier;this.uNamespace = uNamespace;
   }
   
@@ -99,7 +96,7 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     
     addCorrespondenceBetween(userExecution.getElement1(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit), userExecution.getElement2(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit), "");
     
-    userExecution.callRoutine1(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit, actionsFacade);
+    userExecution.callRoutine1(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit, this.getRoutinesFacade());
     
     postprocessElements();
     

@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateUmlInterfaceRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -46,10 +44,9 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
   }
   
-  public CreateUmlInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface jInterface, final CompilationUnit jCompUnit) {
-    super(reactionExecutionState, calledBy);
+  public CreateUmlInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface jInterface, final CompilationUnit jCompUnit) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.CreateUmlInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
     this.jInterface = jInterface;this.jCompUnit = jCompUnit;
   }
   
@@ -70,7 +67,7 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     
     addCorrespondenceBetween(userExecution.getElement3(jInterface, jCompUnit, uInterface), userExecution.getElement4(jInterface, jCompUnit, uInterface), "");
     
-    userExecution.callRoutine1(jInterface, jCompUnit, uInterface, actionsFacade);
+    userExecution.callRoutine1(jInterface, jCompUnit, uInterface, this.getRoutinesFacade());
     
     postprocessElements();
     

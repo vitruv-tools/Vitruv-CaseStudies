@@ -18,10 +18,14 @@ import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValu
  * *********
  */
 @SuppressWarnings("all")
-class RenamedElementReaction extends AbstractReactionRealization {
+public class RenamedElementReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEAttribute<NamedElement, String> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public RenamedElementReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -39,9 +43,8 @@ class RenamedElementReaction extends AbstractReactionRealization {
     }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.comp2class.RoutinesFacade routinesFacade = new mir.routines.comp2class.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsUmlToUml.comp2class.RenamedElementReaction.ActionUserExecution userExecution = new mir.reactions.reactionsUmlToUml.comp2class.RenamedElementReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }

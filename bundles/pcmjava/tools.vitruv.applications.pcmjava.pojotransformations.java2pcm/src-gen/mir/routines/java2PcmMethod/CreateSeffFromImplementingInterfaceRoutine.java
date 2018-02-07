@@ -17,8 +17,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateSeffFromImplementingInterfaceRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateSeffFromImplementingInterfaceRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -41,10 +39,9 @@ public class CreateSeffFromImplementingInterfaceRoutine extends AbstractRepairRo
     }
   }
   
-  public CreateSeffFromImplementingInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass, final Interface javaInterface) {
-    super(reactionExecutionState, calledBy);
+  public CreateSeffFromImplementingInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass, final Interface javaInterface) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateSeffFromImplementingInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
     this.classMethod = classMethod;this.javaClass = javaClass;this.javaInterface = javaInterface;
   }
   
@@ -71,7 +68,7 @@ public class CreateSeffFromImplementingInterfaceRoutine extends AbstractRepairRo
     	return false;
     }
     registerObjectUnderModification(operationInterface);
-    userExecution.callRoutine1(classMethod, javaClass, javaInterface, operationInterface, actionsFacade);
+    userExecution.callRoutine1(classMethod, javaClass, javaInterface, operationInterface, this.getRoutinesFacade());
     
     postprocessElements();
     

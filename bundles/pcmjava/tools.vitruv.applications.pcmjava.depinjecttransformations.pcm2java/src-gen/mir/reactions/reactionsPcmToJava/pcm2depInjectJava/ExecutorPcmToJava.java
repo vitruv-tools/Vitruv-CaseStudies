@@ -1,6 +1,7 @@
 package mir.reactions.reactionsPcmToJava.pcm2depInjectJava;
 
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
 
 @SuppressWarnings("all")
 public class ExecutorPcmToJava extends AbstractReactionsExecutor {
@@ -9,49 +10,53 @@ public class ExecutorPcmToJava extends AbstractReactionsExecutor {
     	new tools.vitruv.domains.java.JavaDomainProvider().getDomain());
   }
   
+  protected RoutinesFacadesProvider createRoutinesFacadesProvider() {
+    return new mir.routines.pcm2depInjectJava.RoutinesFacadesProvider();
+  }
+  
   protected void setup() {
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedRepositoryReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedRepositoryReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSystemReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSystemReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedSystemNameReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedAssemblyContextToComposedStructureReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedConnectorReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedProvidedDelegationConnectorReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedComponentReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameComponentReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedComponentReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedInterfaceReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedInterfaceReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedCompositeDataTypeReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedCompositeDataTypeReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedCompositeDataTypeReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedCollectionDataTypeReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedCollectionDataTypeReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedCollectionDataTypeReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedInnerDeclarationReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameInnerDeclarationReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeTypeOfInnerDeclarationReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedProvidedRoleReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedProvidedInterfaceOfProvidedRoleReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedProvidingEntityOfProvidedRoleReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedProvidedRoleFromSystemReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedProvidedRoleFromComponentReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedRequiredRoleReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedRequiredRoleReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameOperationRequiredRoleReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationRequiredRoleEntityReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationRequiredRoleInterfaceReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedOperationSignatureReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameOperationSignatureReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationSignatureReturnTypeReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedOperationSignatureReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedParameterReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedParameterReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedParameterTypeReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedParameterReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSEFFReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationSignatureOfSeffReaction());
-    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSeffReaction());
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedRepositoryReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedRepositoryReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedSystemNameReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedAssemblyContextToComposedStructureReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedConnectorReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.AddedProvidedDelegationConnectorReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedCompositeDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedCompositeDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedCompositeDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedCollectionDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedCollectionDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedCollectionDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedInnerDeclarationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameInnerDeclarationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeTypeOfInnerDeclarationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedProvidedRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedProvidedInterfaceOfProvidedRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedProvidingEntityOfProvidedRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedProvidedRoleFromSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedProvidedRoleFromComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedRequiredRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedRequiredRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameOperationRequiredRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationRequiredRoleEntityReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationRequiredRoleInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedOperationSignatureReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenameOperationSignatureReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationSignatureReturnTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedOperationSignatureReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedParameterReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.RenamedParameterReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangedParameterTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedParameterReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.CreatedSEFFReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.ChangeOperationSignatureOfSeffReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
+    this.addReaction(new mir.reactions.reactionsPcmToJava.pcm2depInjectJava.DeletedSeffReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("pcm2depInjectJava"))));
   }
 }

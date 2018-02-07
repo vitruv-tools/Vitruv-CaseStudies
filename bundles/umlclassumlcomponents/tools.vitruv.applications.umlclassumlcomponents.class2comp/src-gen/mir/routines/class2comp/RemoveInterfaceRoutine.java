@@ -18,8 +18,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RemoveInterfaceRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RemoveInterfaceRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -56,10 +54,9 @@ public class RemoveInterfaceRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public RemoveInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface classInterface) {
-    super(reactionExecutionState, calledBy);
+  public RemoveInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface classInterface) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.RemoveInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.classInterface = classInterface;
   }
   
@@ -80,7 +77,7 @@ public class RemoveInterfaceRoutine extends AbstractRepairRoutineRealization {
     	return false;
     }
     registerObjectUnderModification(compInterface);
-    userExecution.callRoutine1(classInterface, compInterface, actionsFacade);
+    userExecution.callRoutine1(classInterface, compInterface, this.getRoutinesFacade());
     
     deleteObject(userExecution.getElement1(classInterface, compInterface));
     

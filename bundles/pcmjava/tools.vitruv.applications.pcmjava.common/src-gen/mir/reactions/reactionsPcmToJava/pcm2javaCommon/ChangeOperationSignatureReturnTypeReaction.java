@@ -13,10 +13,14 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealization {
+public class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealization {
   private ReplaceSingleValuedEReference<OperationSignature, DataType> replaceChange;
   
   private int currentlyMatchedChange;
+  
+  public ChangeOperationSignatureReturnTypeReaction(final RoutinesFacade routinesFacade) {
+    super(routinesFacade);
+  }
   
   public void executeReaction(final EChange change) {
     if (!checkPrecondition(change)) {
@@ -29,9 +33,8 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.routines.pcm2javaCommon.RoutinesFacade routinesFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(this.executionState, this);
     mir.reactions.reactionsPcmToJava.pcm2javaCommon.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution userExecution = new mir.reactions.reactionsPcmToJava.pcm2javaCommon.ChangeOperationSignatureReturnTypeReaction.ActionUserExecution(this.executionState, this);
-    userExecution.callRoutine1(affectedEObject, affectedFeature, oldValue, newValue, routinesFacade);
+    userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
   }
@@ -81,7 +84,7 @@ class ChangeOperationSignatureReturnTypeReaction extends AbstractReactionRealiza
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final OperationSignature affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final OperationSignature affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changeReturnTypeOfMethodForOperationSignature(affectedEObject);
     }
   }

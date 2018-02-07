@@ -15,8 +15,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateInnerDeclarationImplementationRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -35,10 +33,9 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
     }
   }
   
-  public CreateInnerDeclarationImplementationRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InnerDeclaration innerDeclaration) {
-    super(reactionExecutionState, calledBy);
+  public CreateInnerDeclarationImplementationRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InnerDeclaration innerDeclaration) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.CreateInnerDeclarationImplementationRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.innerDeclaration = innerDeclaration;
   }
   
@@ -57,7 +54,7 @@ public class CreateInnerDeclarationImplementationRoutine extends AbstractRepairR
     		)
     );
     registerObjectUnderModification(nonPrimitiveInnerDataTypeClass.isPresent() ? nonPrimitiveInnerDataTypeClass.get() : null);
-    userExecution.callRoutine1(innerDeclaration, nonPrimitiveInnerDataTypeClass, actionsFacade);
+    userExecution.callRoutine1(innerDeclaration, nonPrimitiveInnerDataTypeClass, this.getRoutinesFacade());
     
     postprocessElements();
     

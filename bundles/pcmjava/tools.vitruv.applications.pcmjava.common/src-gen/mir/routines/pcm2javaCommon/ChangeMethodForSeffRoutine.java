@@ -10,8 +10,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeMethodForSeffRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeMethodForSeffRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -28,10 +26,9 @@ public class ChangeMethodForSeffRoutine extends AbstractRepairRoutineRealization
     }
   }
   
-  public ChangeMethodForSeffRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ResourceDemandingSEFF seff) {
-    super(reactionExecutionState, calledBy);
+  public ChangeMethodForSeffRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ResourceDemandingSEFF seff) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2javaCommon.ChangeMethodForSeffRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2javaCommon.RoutinesFacade(getExecutionState(), this);
     this.seff = seff;
   }
   
@@ -41,9 +38,9 @@ public class ChangeMethodForSeffRoutine extends AbstractRepairRoutineRealization
     getLogger().debug("Called routine ChangeMethodForSeffRoutine with input:");
     getLogger().debug("   seff: " + this.seff);
     
-    userExecution.callRoutine1(seff, actionsFacade);
+    userExecution.callRoutine1(seff, this.getRoutinesFacade());
     
-    userExecution.callRoutine2(seff, actionsFacade);
+    userExecution.callRoutine2(seff, this.getRoutinesFacade());
     
     postprocessElements();
     

@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class FieldCreatedCorrespondingToRepositoryComponentRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private FieldCreatedCorrespondingToRepositoryComponentRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -42,10 +40,9 @@ public class FieldCreatedCorrespondingToRepositoryComponentRoutine extends Abstr
     }
   }
   
-  public FieldCreatedCorrespondingToRepositoryComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier classifier, final Field javaField) {
-    super(reactionExecutionState, calledBy);
+  public FieldCreatedCorrespondingToRepositoryComponentRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier classifier, final Field javaField) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.FieldCreatedCorrespondingToRepositoryComponentRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
     this.classifier = classifier;this.javaField = javaField;
   }
   
@@ -80,7 +77,7 @@ public class FieldCreatedCorrespondingToRepositoryComponentRoutine extends Abstr
     	return false;
     }
     registerObjectUnderModification(concreteRepositoryComponent);
-    userExecution.callRoutine1(classifier, javaField, repositoryComponent, concreteRepositoryComponent, actionsFacade);
+    userExecution.callRoutine1(classifier, javaField, repositoryComponent, concreteRepositoryComponent, this.getRoutinesFacade());
     
     postprocessElements();
     

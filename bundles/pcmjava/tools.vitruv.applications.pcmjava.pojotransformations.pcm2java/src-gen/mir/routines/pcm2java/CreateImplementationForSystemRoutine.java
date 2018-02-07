@@ -10,8 +10,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateImplementationForSystemRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateImplementationForSystemRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -30,10 +28,9 @@ public class CreateImplementationForSystemRoutine extends AbstractRepairRoutineR
     }
   }
   
-  public CreateImplementationForSystemRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.palladiosimulator.pcm.system.System system) {
-    super(reactionExecutionState, calledBy);
+  public CreateImplementationForSystemRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.palladiosimulator.pcm.system.System system) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2java.CreateImplementationForSystemRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2java.RoutinesFacade(getExecutionState(), this);
     this.system = system;
   }
   
@@ -54,7 +51,7 @@ public class CreateImplementationForSystemRoutine extends AbstractRepairRoutineR
     	return false;
     }
     registerObjectUnderModification(systemPackage);
-    userExecution.callRoutine1(system, systemPackage, actionsFacade);
+    userExecution.callRoutine1(system, systemPackage, this.getRoutinesFacade());
     
     postprocessElements();
     
