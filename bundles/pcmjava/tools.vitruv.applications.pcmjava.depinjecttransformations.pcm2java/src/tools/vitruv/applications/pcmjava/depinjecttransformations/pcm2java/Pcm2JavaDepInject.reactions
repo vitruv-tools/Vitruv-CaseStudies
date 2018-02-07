@@ -156,11 +156,11 @@ reaction AddedAssemblyContextToComposedStructure {
 		with {
 			// do not allow multiple assembly contexts for the same basic component
 			val assemblyContexts = newValue.parentStructure__AssemblyContext.assemblyContexts__ComposedStructure
-			
+
 			val component = newValue.encapsulatedComponent__AssemblyContext
 			for (AssemblyContext ac : assemblyContexts) {
 				// TODO: sometimes assembly context seems to be in the list before calling its createEObject??
-				if (ac != newValue && ac.encapsulatedComponent__AssemblyContext.equals(component)) 
+				if (ac != newValue && ac.encapsulatedComponent__AssemblyContext.equals(component))
 					//&& correspondenceModel.hasCorrespondences(ac)) {
 				{
 					//until correspondenceModel is available, we assume that each ac has a corresponding element
@@ -487,7 +487,7 @@ routine addInnerDeclarationToCompositeDataType(pcm::CompositeDataType dataType, 
 	}
 	action {
 		val innerDataTypeField = create java::Field and initialize {
-			createPrivateField(innerDataTypeField, EcoreUtil.copy(dataTypeReference), innerDeclaration.entityName);	
+			createPrivateField(innerDataTypeField, EcoreUtil.copy(dataTypeReference), innerDeclaration.entityName);
 		}
 		add correspondence between innerDataTypeField and innerDeclaration
 		val getterMethod = create java::ClassMethod and initialize {
@@ -741,7 +741,7 @@ reaction ChangedProvidedInterfaceOfProvidedRole {
 reaction ChangedProvidingEntityOfProvidedRole {
 	after element replaced at pcm::OperationProvidedRole[providingEntity_ProvidedRole]
 	call {
-		val operationProvidedRole = affectedEObject;	
+		val operationProvidedRole = affectedEObject;
 		removeProvidedRole(operationProvidedRole);
 		addProvidedRole(operationProvidedRole);
 	}
@@ -785,8 +785,8 @@ routine addRequiredRole(pcm::OperationRequiredRole requiredRole) {
 		val javaClass = retrieve java::Class corresponding to requiredRole.requiringEntity_RequiredRole
 	}
 	action {
-		val requiredInterfaceImport = create java::ClassifierImport	
-		val requiredInterfaceField = create java::Field 
+		val requiredInterfaceImport = create java::ClassifierImport
+		val requiredInterfaceField = create java::Field
 		call {
 			val typeRef = createNamespaceClassifierReference(requiredInterface);
 			addImportToCompilationUnitOfClassifier(requiredInterfaceImport, javaClass, requiredInterface);
@@ -803,7 +803,7 @@ routine addRequiredRole(pcm::OperationRequiredRole requiredRole) {
 	}
 }
 
-routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorrespondenceSource, java::Constructor constructor, 
+routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorrespondenceSource, java::Constructor constructor,
 		java::NamespaceClassifierReference typeReference, java::Field fieldToBeAssigned, String parameterName) {
 	action {
 		val newParameter = create java::OrdinaryParameter and initialize {
