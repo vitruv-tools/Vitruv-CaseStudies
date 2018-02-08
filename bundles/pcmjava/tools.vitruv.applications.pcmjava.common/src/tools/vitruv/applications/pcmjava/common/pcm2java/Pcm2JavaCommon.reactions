@@ -158,7 +158,7 @@ routine renamePackageForRepository(pcm::Repository repository) {
 //	action {
 //		val assemblyContextField = create java::Field and initialize {
 //			val TypeReference typeRef = createNamespaceClassifierReference(encapsulatedComponentJavaClass);
-//			createPrivateField(assemblyContextField, typeRef, assemblyContext.entityName);	
+//			createPrivateField(assemblyContextField, typeRef, assemblyContext.entityName);
 //		}
 //		val newConstructorCall = create java::NewConstructorCall
 //		val contextClassImport = create java::ClassifierImport
@@ -424,7 +424,7 @@ routine addInnerDeclarationToCompositeDataType(pcm::CompositeDataType dataType, 
 	}
 	action {
 		val innerDataTypeField = create java::Field and initialize {
-			createPrivateField(innerDataTypeField, EcoreUtil.copy(dataTypeReference), innerDeclaration.entityName);	
+			createPrivateField(innerDataTypeField, EcoreUtil.copy(dataTypeReference), innerDeclaration.entityName);
 		}
 		add correspondence between innerDataTypeField and innerDeclaration
 		val getterMethod = create java::ClassMethod and initialize {
@@ -668,7 +668,7 @@ reaction ChangedProvidedInterfaceOfProvidedRole {
 reaction ChangedProvidingEntityOfProvidedRole {
 	after element replaced at pcm::OperationProvidedRole[providingEntity_ProvidedRole]
 	call {
-		val operationProvidedRole = affectedEObject;	
+		val operationProvidedRole = affectedEObject;
 		removeProvidedRole(operationProvidedRole);
 		addProvidedRole(operationProvidedRole);
 	}
@@ -740,7 +740,7 @@ routine removeProvidedRole(pcm::ProvidedRole providedRole) {
 //	}
 //}
 //
-//routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorrespondenceSource, java::Constructor constructor, 
+//routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorrespondenceSource, java::Constructor constructor,
 //		java::NamespaceClassifierReference typeReference, java::Field fieldToBeAssigned, String parameterName) {
 //	action {
 //		val newParameter = create java::OrdinaryParameter and initialize {
