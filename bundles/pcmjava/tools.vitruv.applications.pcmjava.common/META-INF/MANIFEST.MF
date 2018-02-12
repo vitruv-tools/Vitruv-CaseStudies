@@ -4,7 +4,9 @@ Bundle-Name: Vitruvius Application PCM-Java Common Reactions
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.common
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: tools.vitruv.applications.pcmjava.common.pcm2java
+Export-Package: tools.vitruv.applications.pcmjava.common.pcm2java,
+ mir.reactions.reactionsPcmToJava.pcm2javaCommon,
+ mir.routines.pcm2javaCommon
 Require-Bundle: org.eclipse.emf.ecore,
  com.google.guava,
  org.apache.log4j,
