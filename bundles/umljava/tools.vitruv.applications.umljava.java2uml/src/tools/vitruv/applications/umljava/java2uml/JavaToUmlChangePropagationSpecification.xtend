@@ -1,5 +1,7 @@
 package tools.vitruv.applications.umljava.java2uml
 
-class JavaToUmlChangePropagationSpecification extends mir.reactions.JavaToUmlChangePropagationSpecification {
+import mir.reactions.reactionsJavaToUml.javaToUml.ChangePropagationSpecificationJavaToUml
+
+class JavaToUmlChangePropagationSpecification extends ChangePropagationSpecificationJavaToUml {
 	
 }

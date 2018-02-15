@@ -16,7 +16,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean createJavaAttribute(final Classifier uClassifier, final Property umlAttribute) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute"));
+    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine routine = new mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, uClassifier, umlAttribute);
@@ -24,7 +24,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean deleteJavaAttribute(final Property umlAttr) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute"));
+    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine routine = new mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, umlAttr);
@@ -32,7 +32,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean setJavaAttributeFinal(final Property umlAttr) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute"));
+    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.umlToJavaAttribute.SetJavaAttributeFinalRoutine routine = new mir.routines.umlToJavaAttribute.SetJavaAttributeFinalRoutine(_routinesFacade, _reactionExecutionState, _caller, umlAttr);
@@ -40,7 +40,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean changeJavaAttributeType(final Property uAttr, final Type uType) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute"));
+    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.umlToJavaAttribute.ChangeJavaAttributeTypeRoutine routine = new mir.routines.umlToJavaAttribute.ChangeJavaAttributeTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uAttr, uType);
@@ -48,7 +48,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean handleMultiplicityForJavaAttribute(final Property uAttribute) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute"));
+    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine routine = new mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, uAttribute);
@@ -56,7 +56,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean createJavaGetter(final Field jAttribute) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute"));
+    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine routine = new mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine(_routinesFacade, _reactionExecutionState, _caller, jAttribute);
@@ -64,7 +64,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean createJavaSetter(final Field jAttribute) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute"));
+    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine routine = new mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine(_routinesFacade, _reactionExecutionState, _caller, jAttribute);
@@ -72,7 +72,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean renameJavaAttribute(final String oldName, final String newName, final Property uAttribute) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute"));
+    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("UmlToJavaAttribute").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine routine = new mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, oldName, newName, uAttribute);

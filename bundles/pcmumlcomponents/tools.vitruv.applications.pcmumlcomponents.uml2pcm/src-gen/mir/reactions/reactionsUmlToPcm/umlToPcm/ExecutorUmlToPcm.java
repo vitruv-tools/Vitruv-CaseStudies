@@ -4,7 +4,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
 
 @SuppressWarnings("all")
-public class ExecutorUmlToPcm extends AbstractReactionsExecutor {
+class ExecutorUmlToPcm extends AbstractReactionsExecutor {
   public ExecutorUmlToPcm() {
     super(new tools.vitruv.domains.uml.UmlDomainProvider().getDomain(), 
     	new tools.vitruv.domains.pcm.PcmDomainProvider().getDomain());

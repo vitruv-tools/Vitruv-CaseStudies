@@ -20,7 +20,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean createUmlClass(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.CreateUmlClassRoutine routine = new mir.routines.javaToUmlClassifier.CreateUmlClassRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jCompUnit);
@@ -28,7 +28,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean addUmlElementToPackage(final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage, final EObject persistedObject) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine routine = new mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, uPackageable, uPackage, persistedObject);
@@ -36,7 +36,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean deleteUmlClassifier(final ConcreteClassifier jClassifier, final CompilationUnit jCompUnit) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.DeleteUmlClassifierRoutine routine = new mir.routines.javaToUmlClassifier.DeleteUmlClassifierRoutine(_routinesFacade, _reactionExecutionState, _caller, jClassifier, jCompUnit);
@@ -44,7 +44,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean setUmlClassAbstract(final org.emftext.language.java.classifiers.Class jClass, final Boolean isAbstract) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.SetUmlClassAbstractRoutine routine = new mir.routines.javaToUmlClassifier.SetUmlClassAbstractRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, isAbstract);
@@ -52,7 +52,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean setUmlClassFinal(final org.emftext.language.java.classifiers.Class jClass, final Boolean isFinal) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.SetUmlClassFinalRoutine routine = new mir.routines.javaToUmlClassifier.SetUmlClassFinalRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, isFinal);
@@ -60,7 +60,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean addUmlSuperClass(final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class jSuperClass) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.AddUmlSuperClassRoutine routine = new mir.routines.javaToUmlClassifier.AddUmlSuperClassRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jSuperClass);
@@ -68,7 +68,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean clearUmlSuperClassifiers(final org.emftext.language.java.classifiers.Class jClass) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.ClearUmlSuperClassifiersRoutine routine = new mir.routines.javaToUmlClassifier.ClearUmlSuperClassifiersRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass);
@@ -76,7 +76,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean addUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final Classifier jInterface) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.AddUmlClassImplementRoutine routine = new mir.routines.javaToUmlClassifier.AddUmlClassImplementRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jInterface);
@@ -84,7 +84,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean removeUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.RemoveUmlClassImplementRoutine routine = new mir.routines.javaToUmlClassifier.RemoveUmlClassImplementRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jInterface);
@@ -92,7 +92,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean createUmlInterface(final Interface jInterface, final CompilationUnit jCompUnit) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.CreateUmlInterfaceRoutine routine = new mir.routines.javaToUmlClassifier.CreateUmlInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, jInterface, jCompUnit);
@@ -100,7 +100,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean addUmlSuperinterfaces(final Interface jInterface, final Classifier jSuperInterface) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.AddUmlSuperinterfacesRoutine routine = new mir.routines.javaToUmlClassifier.AddUmlSuperinterfacesRoutine(_routinesFacade, _reactionExecutionState, _caller, jInterface, jSuperInterface);
@@ -108,7 +108,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean removeUmlSuperInterface(final Interface jInterface, final Classifier jSuperClassifier) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.RemoveUmlSuperInterfaceRoutine routine = new mir.routines.javaToUmlClassifier.RemoveUmlSuperInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, jInterface, jSuperClassifier);
@@ -116,7 +116,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean createUmlPackage(final org.emftext.language.java.containers.Package jPackage) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.CreateUmlPackageRoutine routine = new mir.routines.javaToUmlClassifier.CreateUmlPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, jPackage);
@@ -124,7 +124,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean deleteUmlPackage(final org.emftext.language.java.containers.Package jPackage) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.DeleteUmlPackageRoutine routine = new mir.routines.javaToUmlClassifier.DeleteUmlPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, jPackage);
@@ -132,7 +132,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean addUmlPackageOfClass(final org.emftext.language.java.containers.Package jPackage, final ConcreteClassifier jClassifier) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.AddUmlPackageOfClassRoutine routine = new mir.routines.javaToUmlClassifier.AddUmlPackageOfClassRoutine(_routinesFacade, _reactionExecutionState, _caller, jPackage, jClassifier);
@@ -140,7 +140,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean removeUmlPackageOfClass(final org.emftext.language.java.containers.Package jPackage, final ConcreteClassifier jClassifier) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.RemoveUmlPackageOfClassRoutine routine = new mir.routines.javaToUmlClassifier.RemoveUmlPackageOfClassRoutine(_routinesFacade, _reactionExecutionState, _caller, jPackage, jClassifier);
@@ -148,7 +148,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean addUmlElementToModelOrPackage(final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Classifier uClassifier) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.AddUmlElementToModelOrPackageRoutine routine = new mir.routines.javaToUmlClassifier.AddUmlElementToModelOrPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, jCompUnit, uClassifier);
@@ -156,7 +156,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean createUmlEnum(final Enumeration jEnum, final CompilationUnit jCompUnit) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine routine = new mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine(_routinesFacade, _reactionExecutionState, _caller, jEnum, jCompUnit);
@@ -164,7 +164,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean createUmlEnumLiteral(final Enumeration jEnum, final EnumConstant jConstant) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.CreateUmlEnumLiteralRoutine routine = new mir.routines.javaToUmlClassifier.CreateUmlEnumLiteralRoutine(_routinesFacade, _reactionExecutionState, _caller, jEnum, jConstant);
@@ -172,7 +172,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   }
   
   public boolean deleteUmlEnumLiteral(final EnumConstant jConstant) {
-    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier"));
+    mir.routines.javaToUmlClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlClassifier").prepend(this._getParentImportPath()));
     tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     mir.routines.javaToUmlClassifier.DeleteUmlEnumLiteralRoutine routine = new mir.routines.javaToUmlClassifier.DeleteUmlEnumLiteralRoutine(_routinesFacade, _reactionExecutionState, _caller, jConstant);
