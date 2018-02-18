@@ -1,8 +1,6 @@
 package tools.vitruv.applications.umlclassumlcomponents.comp2class
 
-import mir.reactions.reactionsUmlToUml.comp2class.ChangePropagationSpecificationUmlToUml
-
-public class UmlComp2UmlClassChangePropagation extends ChangePropagationSpecificationUmlToUml {
+public class UmlComp2UmlClassChangePropagation extends mir.reactions.comp2class.Comp2classChangePropagationSpecification {
 	
 	override protected setup() {
 		super.setup()

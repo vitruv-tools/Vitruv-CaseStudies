@@ -1,8 +1,6 @@
 package tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
 
-import mir.reactions.reactionsPcmToJava.pcm2java.ChangePropagationSpecificationPcmToJava
-
-class Pcm2JavaChangePropagationSpecification extends ChangePropagationSpecificationPcmToJava {
+class Pcm2JavaChangePropagationSpecification extends mir.reactions.pcm2java.Pcm2javaChangePropagationSpecification {
 	
 	override protected setup() {
 		super.setup()
