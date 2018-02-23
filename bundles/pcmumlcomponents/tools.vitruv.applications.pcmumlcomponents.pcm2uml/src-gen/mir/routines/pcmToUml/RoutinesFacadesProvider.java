@@ -10,10 +10,10 @@ public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
   public AbstractRepairRoutinesFacade createRoutinesFacade(final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState sharedExecutionState) {
     switch(reactionsImportPath.getPathString()) {
     	case "PcmToUml": {
-    		return new mir.routines.pcmToUml.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.pcmToUml.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {
-    		return null;
+    		throw new IllegalArgumentException("Unexpected import path: " + reactionsImportPath.getPathString());
     	}
     }
   }

@@ -10,19 +10,19 @@ public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
   public AbstractRepairRoutinesFacade createRoutinesFacade(final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState sharedExecutionState) {
     switch(reactionsImportPath.getPathString()) {
     	case "javaToUml": {
-    		return new mir.routines.javaToUml.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.javaToUml.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	case "javaToUml.JavaToUmlAttribute": {
-    		return new mir.routines.javaToUmlAttribute.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.javaToUmlAttribute.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	case "javaToUml.JavaToUmlClassifier": {
-    		return new mir.routines.javaToUmlClassifier.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.javaToUmlClassifier.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	case "javaToUml.JavaToUmlMethod": {
-    		return new mir.routines.javaToUmlMethod.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.javaToUmlMethod.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {
-    		return null;
+    		throw new IllegalArgumentException("Unexpected import path: " + reactionsImportPath.getPathString());
     	}
     }
   }

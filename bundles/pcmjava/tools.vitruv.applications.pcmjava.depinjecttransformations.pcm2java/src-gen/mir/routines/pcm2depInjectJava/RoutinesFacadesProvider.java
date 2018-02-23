@@ -10,13 +10,13 @@ public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
   public AbstractRepairRoutinesFacade createRoutinesFacade(final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState sharedExecutionState) {
     switch(reactionsImportPath.getPathString()) {
     	case "pcm2depInjectJava": {
-    		return new mir.routines.pcm2depInjectJava.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.pcm2depInjectJava.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	case "pcm2depInjectJava.pcm2javaCommon": {
-    		return new mir.routines.pcm2depInjectJava.pcm2javaCommon.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.pcm2depInjectJava.pcm2javaCommon.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {
-    		return null;
+    		throw new IllegalArgumentException("Unexpected import path: " + reactionsImportPath.getPathString());
     	}
     }
   }

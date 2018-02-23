@@ -10,16 +10,16 @@ public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
   public AbstractRepairRoutinesFacade createRoutinesFacade(final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState sharedExecutionState) {
     switch(reactionsImportPath.getPathString()) {
     	case "java2Pcm": {
-    		return new mir.routines.java2Pcm.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.java2Pcm.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	case "java2Pcm.Java2PcmClassifier": {
-    		return new mir.routines.java2PcmClassifier.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.java2PcmClassifier.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	case "java2Pcm.Java2PcmMethod": {
-    		return new mir.routines.java2PcmMethod.RoutinesFacade(this, reactionsImportPath.getParent(), sharedExecutionState);
+    		return new mir.routines.java2PcmMethod.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {
-    		return null;
+    		throw new IllegalArgumentException("Unexpected import path: " + reactionsImportPath.getPathString());
     	}
     }
   }
