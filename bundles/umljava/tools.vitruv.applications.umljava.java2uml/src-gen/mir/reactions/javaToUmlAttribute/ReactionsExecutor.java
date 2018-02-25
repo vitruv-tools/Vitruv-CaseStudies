@@ -2,6 +2,7 @@ package mir.reactions.javaToUmlAttribute;
 
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
 
 @SuppressWarnings("all")
 class ReactionsExecutor extends AbstractReactionsExecutor {
@@ -15,11 +16,11 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeCreatedInClassReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
-    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeCreatedInEnumReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
-    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeTypeChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
-    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
-    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
-    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeCreatedInInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
+    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeCreatedInClassReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
+    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeCreatedInEnumReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
+    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeTypeChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
+    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
+    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
+    this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeCreatedInInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("JavaToUmlAttribute"))));
   }
 }

@@ -2,6 +2,7 @@ package mir.reactions.comp2class;
 
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionsExecutor;
 import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
 
 @SuppressWarnings("all")
 class ReactionsExecutor extends AbstractReactionsExecutor {
@@ -15,21 +16,21 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    this.addReaction(new mir.reactions.comp2class.CreatedCompModelReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.RenamedComponentModelReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.RenamedElementReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.ElementVisibilityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.CreatedUmlComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.RenameComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.DeletedCompReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.CreatedDatatypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.AddedDataTypePropertyReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.ChangedDataTypePropertyReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.AddedDataTypeOperationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.ChangedDataTypeOperationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.AddedProvidedRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.AddedRequiredRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.RemovedInterfaceRealizationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
-    this.addReaction(new mir.reactions.comp2class.RemovedUsageReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.CreatedCompModelReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.RenamedComponentModelReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.RenamedElementReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.ElementVisibilityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.CreatedUmlComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.RenameComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.DeletedCompReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.CreatedDatatypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.AddedDataTypePropertyReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.ChangedDataTypePropertyReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.AddedDataTypeOperationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.ChangedDataTypeOperationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.AddedProvidedRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.AddedRequiredRoleReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.RemovedInterfaceRealizationReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
+    this.addReaction(new mir.reactions.comp2class.RemovedUsageReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("comp2class"))));
   }
 }
