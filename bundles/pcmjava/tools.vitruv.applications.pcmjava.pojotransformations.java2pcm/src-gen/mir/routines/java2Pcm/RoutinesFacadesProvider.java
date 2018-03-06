@@ -12,10 +12,10 @@ public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
     	case "java2Pcm": {
     		return new mir.routines.java2Pcm.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
-    	case "java2Pcm.Java2PcmClassifier": {
+    	case "java2Pcm.java2PcmClassifier": {
     		return new mir.routines.java2PcmClassifier.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
-    	case "java2Pcm.Java2PcmMethod": {
+    	case "java2Pcm.java2PcmMethod": {
     		return new mir.routines.java2PcmMethod.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {

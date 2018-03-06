@@ -9,7 +9,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPa
 public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
   public AbstractRepairRoutinesFacade createRoutinesFacade(final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState sharedExecutionState) {
     switch(reactionsImportPath.getPathString()) {
-    	case "UmlToJavaMethod": {
+    	case "umlToJavaMethod": {
     		return new mir.routines.umlToJavaMethod.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {

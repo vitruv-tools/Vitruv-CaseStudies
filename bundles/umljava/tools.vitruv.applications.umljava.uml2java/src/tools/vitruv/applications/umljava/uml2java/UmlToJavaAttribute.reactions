@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
 
-reactions: UmlToJavaAttribute
+reactions: umlToJavaAttribute
 in reaction to changes in UML
 execute actions in Java
 

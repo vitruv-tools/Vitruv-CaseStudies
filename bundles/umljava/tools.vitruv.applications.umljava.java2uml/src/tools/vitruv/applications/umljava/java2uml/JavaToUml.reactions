@@ -5,6 +5,6 @@ reactions: javaToUml
 in reaction to changes in Java
 execute actions in UML
 
-import JavaToUmlAttribute
-import JavaToUmlClassifier
-import JavaToUmlMethod
+import javaToUmlAttribute
+import javaToUmlClassifier
+import javaToUmlMethod

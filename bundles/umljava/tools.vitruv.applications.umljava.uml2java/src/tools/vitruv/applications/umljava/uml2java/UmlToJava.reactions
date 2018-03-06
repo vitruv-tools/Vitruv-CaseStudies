@@ -5,6 +5,6 @@ reactions: umlToJava
 in reaction to changes in UML
 execute actions in Java
 
-import UmlToJavaAttribute
-import UmlToJavaClassifier
-import UmlToJavaMethod
+import umlToJavaAttribute
+import umlToJavaClassifier
+import umlToJavaMethod
