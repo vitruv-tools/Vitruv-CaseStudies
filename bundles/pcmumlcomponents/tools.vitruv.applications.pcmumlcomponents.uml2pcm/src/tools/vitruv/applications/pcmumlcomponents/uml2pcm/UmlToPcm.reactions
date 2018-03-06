@@ -12,7 +12,7 @@ import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.r
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
-reactions: UmlToPcm
+reactions: umlToPcm
 in reaction to changes in UML
 execute actions in PCM
 

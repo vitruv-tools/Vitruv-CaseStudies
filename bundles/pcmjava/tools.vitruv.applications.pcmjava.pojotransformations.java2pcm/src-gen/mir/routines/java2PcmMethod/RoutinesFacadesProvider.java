@@ -9,7 +9,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPa
 public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
   public AbstractRepairRoutinesFacade createRoutinesFacade(final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState sharedExecutionState) {
     switch(reactionsImportPath.getPathString()) {
-    	case "Java2PcmMethod": {
+    	case "java2PcmMethod": {
     		return new mir.routines.java2PcmMethod.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {

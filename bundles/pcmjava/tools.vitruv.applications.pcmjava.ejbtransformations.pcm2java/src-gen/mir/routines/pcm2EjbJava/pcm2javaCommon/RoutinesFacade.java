@@ -23,7 +23,7 @@ public class RoutinesFacade extends mir.routines.pcm2javaCommon.RoutinesFacade {
   }
   
   public boolean createJavaClass(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
-    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("Pcm2EjbJava"));
+    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("pcm2EjbJava"));
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     CreateJavaClassRoutine routine = new CreateJavaClassRoutine(_routinesFacade, _reactionExecutionState, _caller, sourceElementMappedToClass, containingPackage, className);
@@ -31,7 +31,7 @@ public class RoutinesFacade extends mir.routines.pcm2javaCommon.RoutinesFacade {
   }
   
   public boolean createJavaInterface(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
-    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("Pcm2EjbJava"));
+    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("pcm2EjbJava"));
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     CreateJavaInterfaceRoutine routine = new CreateJavaInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, sourceElementMappedToClass, containingPackage, className);
@@ -39,7 +39,7 @@ public class RoutinesFacade extends mir.routines.pcm2javaCommon.RoutinesFacade {
   }
   
   public boolean addRequiredRole(final OperationRequiredRole requiredRole) {
-    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("Pcm2EjbJava"));
+    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("pcm2EjbJava"));
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     AddRequiredRoleRoutine routine = new AddRequiredRoleRoutine(_routinesFacade, _reactionExecutionState, _caller, requiredRole);
@@ -47,7 +47,7 @@ public class RoutinesFacade extends mir.routines.pcm2javaCommon.RoutinesFacade {
   }
   
   public boolean removeRequiredRole(final RequiredRole requiredRole, final InterfaceRequiringEntity requiringEntity) {
-    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("Pcm2EjbJava"));
+    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("pcm2EjbJava"));
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     RemoveRequiredRoleRoutine routine = new RemoveRequiredRoleRoutine(_routinesFacade, _reactionExecutionState, _caller, requiredRole, requiringEntity);
@@ -55,7 +55,7 @@ public class RoutinesFacade extends mir.routines.pcm2javaCommon.RoutinesFacade {
   }
   
   public boolean createParameter(final Parameter parameter) {
-    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("Pcm2EjbJava"));
+    mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("pcm2EjbJava"));
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     CreateParameterRoutine routine = new CreateParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, parameter);

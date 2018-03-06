@@ -16,9 +16,9 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    this.addReaction(new mir.reactions.java2PcmClassifier.PackageCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("Java2PcmClassifier"))));
-    this.addReaction(new mir.reactions.java2PcmClassifier.InterfaceCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("Java2PcmClassifier"))));
-    this.addReaction(new mir.reactions.java2PcmClassifier.ClassCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("Java2PcmClassifier"))));
-    this.addReaction(new mir.reactions.java2PcmClassifier.TypeReferenceCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("Java2PcmClassifier"))));
+    this.addReaction(new mir.reactions.java2PcmClassifier.PackageCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("java2PcmClassifier"))));
+    this.addReaction(new mir.reactions.java2PcmClassifier.InterfaceCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("java2PcmClassifier"))));
+    this.addReaction(new mir.reactions.java2PcmClassifier.ClassCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("java2PcmClassifier"))));
+    this.addReaction(new mir.reactions.java2PcmClassifier.TypeReferenceCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("java2PcmClassifier"))));
   }
 }

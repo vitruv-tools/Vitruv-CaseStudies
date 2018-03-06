@@ -16,16 +16,16 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeCreatedInClassReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeCreatedInDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeDeletedFromClassReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeDeletedFromDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeTypeChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlLowerMultiplicityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlUpperMultiplicityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeRenamedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeCreatedInInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
-    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlInterfaceMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("UmlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeCreatedInClassReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeCreatedInDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeDeletedFromClassReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeDeletedFromDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeTypeChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlLowerMultiplicityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlUpperMultiplicityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeRenamedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlAttributeCreatedInInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
+    this.addReaction(new mir.reactions.umlToJavaAttribute.UmlInterfaceMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaAttribute"))));
   }
 }

@@ -12,13 +12,13 @@ public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
     	case "umlToJava": {
     		return new mir.routines.umlToJava.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
-    	case "umlToJava.UmlToJavaAttribute": {
+    	case "umlToJava.umlToJavaAttribute": {
     		return new mir.routines.umlToJavaAttribute.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
-    	case "umlToJava.UmlToJavaClassifier": {
+    	case "umlToJava.umlToJavaClassifier": {
     		return new mir.routines.umlToJavaClassifier.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
-    	case "umlToJava.UmlToJavaMethod": {
+    	case "umlToJava.umlToJavaMethod": {
     		return new mir.routines.umlToJavaMethod.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {
