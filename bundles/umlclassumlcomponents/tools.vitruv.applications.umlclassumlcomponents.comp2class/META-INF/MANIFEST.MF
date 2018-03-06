@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.uml2.uml,
  tools.vitruv.framework.change.processing,
  tools.vitruv.framework.correspondence,
  tools.vitruv.framework.userinteraction,
- tools.vitruv.extensions.dslsruntime.reactions,
+ tools.vitruv.extensions.dslsruntime.reactions;visibility:=reexport,
  tools.vitruv.extensions.dslsruntime.mappings,
  tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.applications.umlclassumlcomponents.sharedutil
