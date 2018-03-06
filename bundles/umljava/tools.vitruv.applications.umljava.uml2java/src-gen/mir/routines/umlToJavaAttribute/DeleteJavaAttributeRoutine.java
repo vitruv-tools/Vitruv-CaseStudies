@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private DeleteJavaAttributeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -36,10 +34,9 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
   }
   
-  public DeleteJavaAttributeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property umlAttr) {
-    super(reactionExecutionState, calledBy);
+  public DeleteJavaAttributeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property umlAttr) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(getExecutionState(), this);
     this.umlAttr = umlAttr;
   }
   
@@ -60,7 +57,7 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
     	return false;
     }
     registerObjectUnderModification(jAttr);
-    userExecution.callRoutine1(umlAttr, jAttr, actionsFacade);
+    userExecution.callRoutine1(umlAttr, jAttr, this.getRoutinesFacade());
     
     deleteObject(userExecution.getElement1(umlAttr, jAttr));
     

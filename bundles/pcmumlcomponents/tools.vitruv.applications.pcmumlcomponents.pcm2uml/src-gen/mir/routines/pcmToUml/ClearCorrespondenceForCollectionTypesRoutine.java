@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ClearCorrespondenceForCollectionTypesRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ClearCorrespondenceForCollectionTypesRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -38,10 +36,9 @@ public class ClearCorrespondenceForCollectionTypesRoutine extends AbstractRepair
     }
   }
   
-  public ClearCorrespondenceForCollectionTypesRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CollectionDataType pcmType) {
-    super(reactionExecutionState, calledBy);
+  public ClearCorrespondenceForCollectionTypesRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CollectionDataType pcmType) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcmToUml.ClearCorrespondenceForCollectionTypesRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.pcmType = pcmType;
   }
   

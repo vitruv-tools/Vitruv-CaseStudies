@@ -14,8 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeReturnTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeReturnTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -37,10 +35,9 @@ public class ChangeReturnTypeRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public ChangeReturnTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method javaMethod, final TypeReference typeReference) {
-    super(reactionExecutionState, calledBy);
+  public ChangeReturnTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method javaMethod, final TypeReference typeReference) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.ChangeReturnTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
     this.javaMethod = javaMethod;this.typeReference = typeReference;
   }
   

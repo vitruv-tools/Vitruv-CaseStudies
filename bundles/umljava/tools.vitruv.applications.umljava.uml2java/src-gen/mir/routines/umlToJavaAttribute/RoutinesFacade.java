@@ -1,56 +1,91 @@
 package mir.routines.umlToJavaAttribute;
 
+import mir.routines.umlToJavaAttribute.ChangeJavaAttributeTypeRoutine;
+import mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine;
+import mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine;
+import mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine;
+import mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine;
+import mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine;
+import mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine;
+import mir.routines.umlToJavaAttribute.SetJavaAttributeFinalRoutine;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Field;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
 
 @SuppressWarnings("all")
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
-  public RoutinesFacade(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
-    super(reactionExecutionState, calledBy);
+  public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
+    super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
   public boolean createJavaAttribute(final Classifier uClassifier, final Property umlAttribute) {
-    mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine(this.executionState, calledBy, uClassifier, umlAttribute);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaAttributeRoutine routine = new CreateJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, uClassifier, umlAttribute);
+    return routine.applyRoutine();
   }
   
   public boolean deleteJavaAttribute(final Property umlAttr) {
-    mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine(this.executionState, calledBy, umlAttr);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    DeleteJavaAttributeRoutine routine = new DeleteJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, umlAttr);
+    return routine.applyRoutine();
   }
   
   public boolean setJavaAttributeFinal(final Property umlAttr) {
-    mir.routines.umlToJavaAttribute.SetJavaAttributeFinalRoutine effect = new mir.routines.umlToJavaAttribute.SetJavaAttributeFinalRoutine(this.executionState, calledBy, umlAttr);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    SetJavaAttributeFinalRoutine routine = new SetJavaAttributeFinalRoutine(_routinesFacade, _reactionExecutionState, _caller, umlAttr);
+    return routine.applyRoutine();
   }
   
   public boolean changeJavaAttributeType(final Property uAttr, final Type uType) {
-    mir.routines.umlToJavaAttribute.ChangeJavaAttributeTypeRoutine effect = new mir.routines.umlToJavaAttribute.ChangeJavaAttributeTypeRoutine(this.executionState, calledBy, uAttr, uType);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    ChangeJavaAttributeTypeRoutine routine = new ChangeJavaAttributeTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uAttr, uType);
+    return routine.applyRoutine();
   }
   
   public boolean handleMultiplicityForJavaAttribute(final Property uAttribute) {
-    mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine(this.executionState, calledBy, uAttribute);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    HandleMultiplicityForJavaAttributeRoutine routine = new HandleMultiplicityForJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, uAttribute);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaGetter(final Field jAttribute) {
-    mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine(this.executionState, calledBy, jAttribute);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaGetterRoutine routine = new CreateJavaGetterRoutine(_routinesFacade, _reactionExecutionState, _caller, jAttribute);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaSetter(final Field jAttribute) {
-    mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine effect = new mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine(this.executionState, calledBy, jAttribute);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaSetterRoutine routine = new CreateJavaSetterRoutine(_routinesFacade, _reactionExecutionState, _caller, jAttribute);
+    return routine.applyRoutine();
   }
   
   public boolean renameJavaAttribute(final String oldName, final String newName, final Property uAttribute) {
-    mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine effect = new mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine(this.executionState, calledBy, oldName, newName, uAttribute);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    RenameJavaAttributeRoutine routine = new RenameJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, oldName, newName, uAttribute);
+    return routine.applyRoutine();
   }
 }

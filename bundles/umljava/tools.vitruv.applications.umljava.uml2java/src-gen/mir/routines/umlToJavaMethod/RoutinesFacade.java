@@ -1,5 +1,20 @@
 package mir.routines.umlToJavaMethod;
 
+import mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine;
+import mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine;
+import mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine;
+import mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine;
+import mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine;
+import mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine;
+import mir.routines.umlToJavaMethod.CreateJavaMethodRoutine;
+import mir.routines.umlToJavaMethod.CreateJavaParameterRoutine;
+import mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine;
+import mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine;
+import mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine;
+import mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine;
+import mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine;
+import mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine;
+import mir.routines.umlToJavaMethod.SetStaticRoutine;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Feature;
 import org.eclipse.uml2.uml.Interface;
@@ -10,86 +25,134 @@ import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
 
 @SuppressWarnings("all")
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
-  public RoutinesFacade(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
-    super(reactionExecutionState, calledBy);
+  public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
+    super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
   public boolean createJavaMethod(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaMethodRoutine(this.executionState, calledBy, uClassifier, uOperation);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaMethodRoutine routine = new CreateJavaMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, uClassifier, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaClassMethod(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine(this.executionState, calledBy, uClassifier, uOperation);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaClassMethodRoutine routine = new CreateJavaClassMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, uClassifier, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaConstructor(final Classifier uClassifier, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine(this.executionState, calledBy, uClassifier, uOperation);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaConstructorRoutine routine = new CreateJavaConstructorRoutine(_routinesFacade, _reactionExecutionState, _caller, uClassifier, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean deleteJavaMethod(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine effect = new mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine(this.executionState, calledBy, uOperation);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    DeleteJavaMethodRoutine routine = new DeleteJavaMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean setJavaMethodReturnType(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine(this.executionState, calledBy, uOperation);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    SetJavaMethodReturnTypeRoutine routine = new SetJavaMethodReturnTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean setStatic(final Feature uFeat) {
-    mir.routines.umlToJavaMethod.SetStaticRoutine effect = new mir.routines.umlToJavaMethod.SetStaticRoutine(this.executionState, calledBy, uFeat);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    SetStaticRoutine routine = new SetStaticRoutine(_routinesFacade, _reactionExecutionState, _caller, uFeat);
+    return routine.applyRoutine();
   }
   
   public boolean setJavaMethodAbstract(final Operation uOperation) {
-    mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodAbstractRoutine(this.executionState, calledBy, uOperation);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    SetJavaMethodAbstractRoutine routine = new SetJavaMethodAbstractRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaInterfaceMethod(final Interface uInterface, final Operation uOperation) {
-    mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine(this.executionState, calledBy, uInterface, uOperation);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaInterfaceMethodRoutine routine = new CreateJavaInterfaceMethodRoutine(_routinesFacade, _reactionExecutionState, _caller, uInterface, uOperation);
+    return routine.applyRoutine();
   }
   
   public boolean setJavaMethodFinal(final Operation uOperation, final Boolean isFinal) {
-    mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine effect = new mir.routines.umlToJavaMethod.SetJavaMethodFinalRoutine(this.executionState, calledBy, uOperation, isFinal);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    SetJavaMethodFinalRoutine routine = new SetJavaMethodFinalRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, isFinal);
+    return routine.applyRoutine();
   }
   
   public boolean changeJavaElementVisibility(final NamedElement uElem) {
-    mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine effect = new mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine(this.executionState, calledBy, uElem);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    ChangeJavaElementVisibilityRoutine routine = new ChangeJavaElementVisibilityRoutine(_routinesFacade, _reactionExecutionState, _caller, uElem);
+    return routine.applyRoutine();
   }
   
   public boolean renameJavaNamedElement(final NamedElement uElem, final String name) {
-    mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine effect = new mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine(this.executionState, calledBy, uElem, name);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    RenameJavaNamedElementRoutine routine = new RenameJavaNamedElementRoutine(_routinesFacade, _reactionExecutionState, _caller, uElem, name);
+    return routine.applyRoutine();
   }
   
   public boolean createJavaParameter(final Operation uMeth, final Parameter umlParam) {
-    mir.routines.umlToJavaMethod.CreateJavaParameterRoutine effect = new mir.routines.umlToJavaMethod.CreateJavaParameterRoutine(this.executionState, calledBy, uMeth, umlParam);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaParameterRoutine routine = new CreateJavaParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, uMeth, umlParam);
+    return routine.applyRoutine();
   }
   
   public boolean deleteJavaParameter(final Parameter uParam) {
-    mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine effect = new mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine(this.executionState, calledBy, uParam);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    DeleteJavaParameterRoutine routine = new DeleteJavaParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, uParam);
+    return routine.applyRoutine();
   }
   
   public boolean changeJavaParameterType(final Parameter uParam, final Type uType) {
-    mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine effect = new mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine(this.executionState, calledBy, uParam, uType);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    ChangeJavaParameterTypeRoutine routine = new ChangeJavaParameterTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uParam, uType);
+    return routine.applyRoutine();
   }
   
   public boolean adaptJavaParametertoDirectionChange(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
-    mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine effect = new mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine(this.executionState, calledBy, uOperation, uParam, oldDirection, newDirection);
-    return effect.applyRoutine();
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AdaptJavaParametertoDirectionChangeRoutine routine = new AdaptJavaParametertoDirectionChangeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, uParam, oldDirection, newDirection);
+    return routine.applyRoutine();
   }
 }

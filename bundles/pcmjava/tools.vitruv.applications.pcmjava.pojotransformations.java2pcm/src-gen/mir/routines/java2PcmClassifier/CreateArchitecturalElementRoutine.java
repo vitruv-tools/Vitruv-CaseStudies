@@ -19,8 +19,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
  */
 @SuppressWarnings("all")
 public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateArchitecturalElementRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -63,10 +61,9 @@ public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineReal
     }
   }
   
-  public CreateArchitecturalElementRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
-    super(reactionExecutionState, calledBy);
+  public CreateArchitecturalElementRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateArchitecturalElementRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaPackage = javaPackage;this.name = name;this.rootPackageName = rootPackageName;
   }
   
@@ -91,7 +88,7 @@ public class CreateArchitecturalElementRoutine extends AbstractRepairRoutineReal
     	) == null) {
     					return false;
     				}
-    userExecution.callRoutine1(javaPackage, name, rootPackageName, actionsFacade);
+    userExecution.callRoutine1(javaPackage, name, rootPackageName, this.getRoutinesFacade());
     
     postprocessElements();
     

@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class SetStaticRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private SetStaticRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -35,10 +33,9 @@ public class SetStaticRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public SetStaticRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Feature uFeat) {
-    super(reactionExecutionState, calledBy);
+  public SetStaticRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Feature uFeat) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaMethod.SetStaticRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(getExecutionState(), this);
     this.uFeat = uFeat;
   }
   

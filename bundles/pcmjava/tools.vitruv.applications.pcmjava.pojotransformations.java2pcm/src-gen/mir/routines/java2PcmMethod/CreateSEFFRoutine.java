@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateSEFFRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -56,10 +54,9 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public CreateSEFFRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method javaMethod, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod classMethod) {
-    super(reactionExecutionState, calledBy);
+  public CreateSEFFRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Method javaMethod, final org.emftext.language.java.classifiers.Class javaClass, final ClassMethod classMethod) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateSEFFRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
     this.javaMethod = javaMethod;this.javaClass = javaClass;this.classMethod = classMethod;
   }
   

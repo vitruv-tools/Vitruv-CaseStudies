@@ -11,8 +11,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class DeleteRequiredRoleRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private DeleteRequiredRoleRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -29,10 +27,9 @@ public class DeleteRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
   }
   
-  public DeleteRequiredRoleRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationRequiredRole requiredRole) {
-    super(reactionExecutionState, calledBy);
+  public DeleteRequiredRoleRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationRequiredRole requiredRole) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcmToUml.DeleteRequiredRoleRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.requiredRole = requiredRole;
   }
   

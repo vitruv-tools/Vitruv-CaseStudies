@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
  */
 @SuppressWarnings("all")
 public class CheckSystemAndComponentRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CheckSystemAndComponentRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -38,10 +36,9 @@ public class CheckSystemAndComponentRoutine extends AbstractRepairRoutineRealiza
     }
   }
   
-  public CheckSystemAndComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass) {
-    super(reactionExecutionState, calledBy);
+  public CheckSystemAndComponentRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final org.emftext.language.java.classifiers.Class javaClass) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CheckSystemAndComponentRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaPackage = javaPackage;this.javaClass = javaClass;
   }
   

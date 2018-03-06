@@ -18,8 +18,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateRequiredRoleRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -48,10 +46,9 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     }
   }
   
-  public CreateRequiredRoleRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InterfaceRealization classIFRealization, final Interface classInterface, final org.eclipse.uml2.uml.Package affectedPackage) {
-    super(reactionExecutionState, calledBy);
+  public CreateRequiredRoleRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InterfaceRealization classIFRealization, final Interface classInterface, final org.eclipse.uml2.uml.Package affectedPackage) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.CreateRequiredRoleRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.classIFRealization = classIFRealization;this.classInterface = classInterface;this.affectedPackage = affectedPackage;
   }
   
@@ -78,7 +75,7 @@ public class CreateRequiredRoleRoutine extends AbstractRepairRoutineRealization 
     	return false;
     }
     registerObjectUnderModification(compInterface);
-    userExecution.callRoutine1(classIFRealization, classInterface, affectedPackage, compInterface, actionsFacade);
+    userExecution.callRoutine1(classIFRealization, classInterface, affectedPackage, compInterface, this.getRoutinesFacade());
     
     postprocessElements();
     

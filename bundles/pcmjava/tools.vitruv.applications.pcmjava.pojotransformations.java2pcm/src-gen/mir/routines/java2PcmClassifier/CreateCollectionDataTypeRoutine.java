@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateCollectionDataTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -46,10 +44,9 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     }
   }
   
-  public CreateCollectionDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
-    super(reactionExecutionState, calledBy);
+  public CreateCollectionDataTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateCollectionDataTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaClass = javaClass;this.compilationUnit = compilationUnit;
   }
   
@@ -70,7 +67,7 @@ public class CreateCollectionDataTypeRoutine extends AbstractRepairRoutineRealiz
     
     addCorrespondenceBetween(userExecution.getElement3(javaClass, compilationUnit, pcmCollectionDataType), userExecution.getElement4(javaClass, compilationUnit, pcmCollectionDataType), "");
     
-    userExecution.callRoutine1(javaClass, compilationUnit, pcmCollectionDataType, actionsFacade);
+    userExecution.callRoutine1(javaClass, compilationUnit, pcmCollectionDataType, this.getRoutinesFacade());
     
     postprocessElements();
     

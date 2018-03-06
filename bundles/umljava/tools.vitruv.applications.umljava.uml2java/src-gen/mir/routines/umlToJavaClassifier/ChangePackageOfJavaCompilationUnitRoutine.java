@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangePackageOfJavaCompilationUnitRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangePackageOfJavaCompilationUnitRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -38,10 +36,9 @@ public class ChangePackageOfJavaCompilationUnitRoutine extends AbstractRepairRou
     }
   }
   
-  public ChangePackageOfJavaCompilationUnitRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit jCompUnit, final Namespace uNamespace) {
-    super(reactionExecutionState, calledBy);
+  public ChangePackageOfJavaCompilationUnitRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package jPackage, final CompilationUnit jCompUnit, final Namespace uNamespace) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
     this.jPackage = jPackage;this.jCompUnit = jCompUnit;this.uNamespace = uNamespace;
   }
   

@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeJavaSuperInterfaceRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -41,10 +39,9 @@ public class ChangeJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
     }
   }
   
-  public ChangeJavaSuperInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface superUMLInterface, final Interface uI) {
-    super(reactionExecutionState, calledBy);
+  public ChangeJavaSuperInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface superUMLInterface, final Interface uI) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.ChangeJavaSuperInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
     this.superUMLInterface = superUMLInterface;this.uI = uI;
   }
   

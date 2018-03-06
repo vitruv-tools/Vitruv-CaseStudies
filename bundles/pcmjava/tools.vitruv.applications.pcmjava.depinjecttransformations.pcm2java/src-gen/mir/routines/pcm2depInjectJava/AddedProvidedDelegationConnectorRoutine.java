@@ -30,8 +30,6 @@ import tools.vitruv.framework.util.bridges.CollectionBridge;
 
 @SuppressWarnings("all")
 public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddedProvidedDelegationConnectorRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -63,10 +61,9 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
     }
   }
   
-  public AddedProvidedDelegationConnectorRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ProvidedDelegationConnector providedDelegationConnector, final ComposedStructure pcmSystem) {
-    super(reactionExecutionState, calledBy);
+  public AddedProvidedDelegationConnectorRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ProvidedDelegationConnector providedDelegationConnector, final ComposedStructure pcmSystem) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcm2depInjectJava.AddedProvidedDelegationConnectorRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcm2depInjectJava.RoutinesFacade(getExecutionState(), this);
     this.providedDelegationConnector = providedDelegationConnector;this.pcmSystem = pcmSystem;
   }
   
@@ -90,7 +87,7 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
     	return false;
     }
     registerObjectUnderModification(configureMethod);
-    userExecution.callRoutine1(providedDelegationConnector, pcmSystem, configureMethod, actionsFacade);
+    userExecution.callRoutine1(providedDelegationConnector, pcmSystem, configureMethod, this.getRoutinesFacade());
     
     postprocessElements();
     

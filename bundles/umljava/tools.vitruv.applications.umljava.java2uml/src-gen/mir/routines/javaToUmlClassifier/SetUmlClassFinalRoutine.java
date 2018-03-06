@@ -9,8 +9,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class SetUmlClassFinalRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private SetUmlClassFinalRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -31,10 +29,9 @@ public class SetUmlClassFinalRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public SetUmlClassFinalRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass, final Boolean isFinal) {
-    super(reactionExecutionState, calledBy);
+  public SetUmlClassFinalRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass, final Boolean isFinal) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.SetUmlClassFinalRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
     this.jClass = jClass;this.isFinal = isFinal;
   }
   

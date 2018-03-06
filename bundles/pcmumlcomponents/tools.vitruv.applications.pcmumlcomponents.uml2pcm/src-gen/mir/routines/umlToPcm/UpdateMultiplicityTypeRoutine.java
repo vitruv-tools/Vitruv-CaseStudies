@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class UpdateMultiplicityTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private UpdateMultiplicityTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -54,10 +52,9 @@ public class UpdateMultiplicityTypeRoutine extends AbstractRepairRoutineRealizat
     }
   }
   
-  public UpdateMultiplicityTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final MultiplicityElement umlElement) {
-    super(reactionExecutionState, calledBy);
+  public UpdateMultiplicityTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final MultiplicityElement umlElement) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToPcm.UpdateMultiplicityTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToPcm.RoutinesFacade(getExecutionState(), this);
     this.umlElement = umlElement;
   }
   
@@ -78,7 +75,7 @@ public class UpdateMultiplicityTypeRoutine extends AbstractRepairRoutineRealizat
     	return false;
     }
     registerObjectUnderModification(pcmElement);
-    userExecution.callRoutine1(umlElement, pcmElement, actionsFacade);
+    userExecution.callRoutine1(umlElement, pcmElement, this.getRoutinesFacade());
     
     postprocessElements();
     

@@ -15,8 +15,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreatePcmComponentRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -36,10 +34,9 @@ public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization 
     }
   }
   
-  public CreatePcmComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Component umlComponent) {
-    super(reactionExecutionState, calledBy);
+  public CreatePcmComponentRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Component umlComponent) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToPcm.CreatePcmComponentRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToPcm.RoutinesFacade(getExecutionState(), this);
     this.umlComponent = umlComponent;
   }
   
@@ -49,7 +46,7 @@ public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("Called routine CreatePcmComponentRoutine with input:");
     getLogger().debug("   umlComponent: " + this.umlComponent);
     
-    userExecution.callRoutine1(umlComponent, actionsFacade);
+    userExecution.callRoutine1(umlComponent, this.getRoutinesFacade());
     
     postprocessElements();
     

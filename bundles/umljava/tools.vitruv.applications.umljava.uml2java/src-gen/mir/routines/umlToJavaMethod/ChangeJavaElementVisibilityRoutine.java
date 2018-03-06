@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeJavaElementVisibilityRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeJavaElementVisibilityRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -34,10 +32,9 @@ public class ChangeJavaElementVisibilityRoutine extends AbstractRepairRoutineRea
     }
   }
   
-  public ChangeJavaElementVisibilityRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement uElem) {
-    super(reactionExecutionState, calledBy);
+  public ChangeJavaElementVisibilityRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement uElem) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaMethod.RoutinesFacade(getExecutionState(), this);
     this.uElem = uElem;
   }
   

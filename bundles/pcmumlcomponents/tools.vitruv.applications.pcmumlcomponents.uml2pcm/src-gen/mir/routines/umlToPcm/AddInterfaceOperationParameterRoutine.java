@@ -14,8 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddInterfaceOperationParameterRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -49,10 +47,9 @@ public class AddInterfaceOperationParameterRoutine extends AbstractRepairRoutine
     }
   }
   
-  public AddInterfaceOperationParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation umlOperation, final Parameter umlParameter) {
-    super(reactionExecutionState, calledBy);
+  public AddInterfaceOperationParameterRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation umlOperation, final Parameter umlParameter) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToPcm.AddInterfaceOperationParameterRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToPcm.RoutinesFacade(getExecutionState(), this);
     this.umlOperation = umlOperation;this.umlParameter = umlParameter;
   }
   

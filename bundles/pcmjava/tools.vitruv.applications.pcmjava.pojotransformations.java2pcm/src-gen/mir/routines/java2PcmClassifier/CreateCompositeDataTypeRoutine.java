@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateCompositeDataTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -46,10 +44,9 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
   }
   
-  public CreateCompositeDataTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
-    super(reactionExecutionState, calledBy);
+  public CreateCompositeDataTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class javaClass, final CompilationUnit compilationUnit) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateCompositeDataTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaClass = javaClass;this.compilationUnit = compilationUnit;
   }
   
@@ -70,7 +67,7 @@ public class CreateCompositeDataTypeRoutine extends AbstractRepairRoutineRealiza
     
     addCorrespondenceBetween(userExecution.getElement3(javaClass, compilationUnit, pcmCompositeDataType), userExecution.getElement4(javaClass, compilationUnit, pcmCompositeDataType), "");
     
-    userExecution.callRoutine1(javaClass, compilationUnit, pcmCompositeDataType, actionsFacade);
+    userExecution.callRoutine1(javaClass, compilationUnit, pcmCompositeDataType, this.getRoutinesFacade());
     
     postprocessElements();
     

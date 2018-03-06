@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddUmlElementToModelOrPackageRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -32,10 +30,9 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
     }
   }
   
-  public AddUmlElementToModelOrPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CompilationUnit jCompUnit, final Classifier uClassifier) {
-    super(reactionExecutionState, calledBy);
+  public AddUmlElementToModelOrPackageRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CompilationUnit jCompUnit, final Classifier uClassifier) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.AddUmlElementToModelOrPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
     this.jCompUnit = jCompUnit;this.uClassifier = uClassifier;
   }
   
@@ -48,7 +45,7 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
     getLogger().debug("   jCompUnit: " + this.jCompUnit);
     getLogger().debug("   uClassifier: " + this.uClassifier);
     
-    userExecution.callRoutine1(jCompUnit, uClassifier, actionsFacade);
+    userExecution.callRoutine1(jCompUnit, uClassifier, this.getRoutinesFacade());
     
     postprocessElements();
     

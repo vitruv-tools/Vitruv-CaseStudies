@@ -11,8 +11,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class DeleteJavaEnumConstantRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private DeleteJavaEnumConstantRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -29,10 +27,9 @@ public class DeleteJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     }
   }
   
-  public DeleteJavaEnumConstantRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final EnumerationLiteral uLiteral) {
-    super(reactionExecutionState, calledBy);
+  public DeleteJavaEnumConstantRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final EnumerationLiteral uLiteral) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.DeleteJavaEnumConstantRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
     this.uLiteral = uLiteral;
   }
   

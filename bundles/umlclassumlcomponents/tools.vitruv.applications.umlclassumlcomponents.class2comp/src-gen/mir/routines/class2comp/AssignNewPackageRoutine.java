@@ -17,8 +17,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AssignNewPackageRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -48,10 +46,9 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public AssignNewPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package newPackage, final Component umlComponent) {
-    super(reactionExecutionState, calledBy);
+  public AssignNewPackageRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package newPackage, final Component umlComponent) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.AssignNewPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.newPackage = newPackage;this.umlComponent = umlComponent;
   }
   
@@ -64,7 +61,7 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   newPackage: " + this.newPackage);
     getLogger().debug("   umlComponent: " + this.umlComponent);
     
-    userExecution.callRoutine1(newPackage, umlComponent, actionsFacade);
+    userExecution.callRoutine1(newPackage, umlComponent, this.getRoutinesFacade());
     
     postprocessElements();
     

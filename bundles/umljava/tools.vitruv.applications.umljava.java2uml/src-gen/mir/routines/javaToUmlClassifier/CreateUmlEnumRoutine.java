@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateUmlEnumRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -46,10 +44,9 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public CreateUmlEnumRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Enumeration jEnum, final CompilationUnit jCompUnit) {
-    super(reactionExecutionState, calledBy);
+  public CreateUmlEnumRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Enumeration jEnum, final CompilationUnit jCompUnit) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
     this.jEnum = jEnum;this.jCompUnit = jCompUnit;
   }
   
@@ -66,7 +63,7 @@ public class CreateUmlEnumRoutine extends AbstractRepairRoutineRealization {
     notifyObjectCreated(uEnum);
     userExecution.updateUEnumElement(jEnum, jCompUnit, uEnum);
     
-    userExecution.callRoutine1(jEnum, jCompUnit, uEnum, actionsFacade);
+    userExecution.callRoutine1(jEnum, jCompUnit, uEnum, this.getRoutinesFacade());
     
     addCorrespondenceBetween(userExecution.getElement1(jEnum, jCompUnit, uEnum), userExecution.getElement2(jEnum, jCompUnit, uEnum), "");
     

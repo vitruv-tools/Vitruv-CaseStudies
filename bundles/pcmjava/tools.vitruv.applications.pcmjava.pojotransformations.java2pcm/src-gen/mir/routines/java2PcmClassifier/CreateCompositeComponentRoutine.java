@@ -10,8 +10,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateCompositeComponentRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -28,10 +26,9 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     }
   }
   
-  public CreateCompositeComponentRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
-    super(reactionExecutionState, calledBy);
+  public CreateCompositeComponentRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String name, final String rootPackageName) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateCompositeComponentRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaPackage = javaPackage;this.name = name;this.rootPackageName = rootPackageName;
   }
   
@@ -51,7 +48,7 @@ public class CreateCompositeComponentRoutine extends AbstractRepairRoutineRealiz
     notifyObjectCreated(pcmCompositeComponent);
     userExecution.updatePcmCompositeComponentElement(javaPackage, name, rootPackageName, pcmCompositeComponent);
     
-    userExecution.callRoutine1(javaPackage, name, rootPackageName, pcmCompositeComponent, actionsFacade);
+    userExecution.callRoutine1(javaPackage, name, rootPackageName, pcmCompositeComponent, this.getRoutinesFacade());
     
     postprocessElements();
     

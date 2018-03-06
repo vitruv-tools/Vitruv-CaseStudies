@@ -15,8 +15,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeProvidedInterfaceRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -53,10 +51,9 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
     }
   }
   
-  public ChangeProvidedInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InterfaceRealization interfaceRealization, final Interface umlInterface) {
-    super(reactionExecutionState, calledBy);
+  public ChangeProvidedInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final InterfaceRealization interfaceRealization, final Interface umlInterface) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToPcm.ChangeProvidedInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToPcm.RoutinesFacade(getExecutionState(), this);
     this.interfaceRealization = interfaceRealization;this.umlInterface = umlInterface;
   }
   

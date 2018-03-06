@@ -11,8 +11,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeClassDataTypeOperationRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeClassDataTypeOperationRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -37,10 +35,9 @@ public class ChangeClassDataTypeOperationRoutine extends AbstractRepairRoutineRe
     }
   }
   
-  public ChangeClassDataTypeOperationRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation compOperation) {
-    super(reactionExecutionState, calledBy);
+  public ChangeClassDataTypeOperationRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation compOperation) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.comp2class.ChangeClassDataTypeOperationRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.comp2class.RoutinesFacade(getExecutionState(), this);
     this.compOperation = compOperation;
   }
   

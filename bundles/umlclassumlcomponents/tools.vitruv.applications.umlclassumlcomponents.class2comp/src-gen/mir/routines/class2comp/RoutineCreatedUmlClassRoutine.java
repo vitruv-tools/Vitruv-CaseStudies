@@ -19,8 +19,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RoutineCreatedUmlClassRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RoutineCreatedUmlClassRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -64,10 +62,9 @@ public class RoutineCreatedUmlClassRoutine extends AbstractRepairRoutineRealizat
     }
   }
   
-  public RoutineCreatedUmlClassRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage) {
-    super(reactionExecutionState, calledBy);
+  public RoutineCreatedUmlClassRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package classPackage) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.RoutineCreatedUmlClassRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.umlClass = umlClass;this.classPackage = classPackage;
   }
   
@@ -91,7 +88,7 @@ public class RoutineCreatedUmlClassRoutine extends AbstractRepairRoutineRealizat
     	return false;
     }
     registerObjectUnderModification(compModel);
-    userExecution.callRoutine1(umlClass, classPackage, compModel, actionsFacade);
+    userExecution.callRoutine1(umlClass, classPackage, compModel, this.getRoutinesFacade());
     
     postprocessElements();
     

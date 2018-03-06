@@ -15,8 +15,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeParameterTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -47,10 +45,9 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
     }
   }
   
-  public ChangeParameterTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parameter pcmParameter, final DataType pcmDataType) {
-    super(reactionExecutionState, calledBy);
+  public ChangeParameterTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Parameter pcmParameter, final DataType pcmDataType) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcmToUml.ChangeParameterTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.pcmParameter = pcmParameter;this.pcmDataType = pcmDataType;
   }
   

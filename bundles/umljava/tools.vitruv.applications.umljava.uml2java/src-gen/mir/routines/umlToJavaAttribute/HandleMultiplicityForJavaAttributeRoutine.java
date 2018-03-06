@@ -16,8 +16,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private HandleMultiplicityForJavaAttributeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -98,10 +96,9 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     }
   }
   
-  public HandleMultiplicityForJavaAttributeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property uAttribute) {
-    super(reactionExecutionState, calledBy);
+  public HandleMultiplicityForJavaAttributeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property uAttribute) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaAttribute.RoutinesFacade(getExecutionState(), this);
     this.uAttribute = uAttribute;
   }
   
@@ -136,7 +133,7 @@ public class HandleMultiplicityForJavaAttributeRoutine extends AbstractRepairRou
     // val updatedElement userExecution.getElement1(uAttribute, jAttribute, jType);
     userExecution.update0Element(uAttribute, jAttribute, jType);
     
-    userExecution.callRoutine1(uAttribute, jAttribute, jType, actionsFacade);
+    userExecution.callRoutine1(uAttribute, jAttribute, jType, this.getRoutinesFacade());
     
     postprocessElements();
     

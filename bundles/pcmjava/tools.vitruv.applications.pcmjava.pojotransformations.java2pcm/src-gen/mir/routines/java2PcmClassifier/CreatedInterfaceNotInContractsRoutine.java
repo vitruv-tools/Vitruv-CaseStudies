@@ -19,8 +19,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
  */
 @SuppressWarnings("all")
 public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreatedInterfaceNotInContractsRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -44,10 +42,9 @@ public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutine
     }
   }
   
-  public CreatedInterfaceNotInContractsRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface javaInterface, final OperationInterface pcmInterface, final CompilationUnit compilationUnit) {
-    super(reactionExecutionState, calledBy);
+  public CreatedInterfaceNotInContractsRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface javaInterface, final OperationInterface pcmInterface, final CompilationUnit compilationUnit) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreatedInterfaceNotInContractsRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaInterface = javaInterface;this.pcmInterface = pcmInterface;this.compilationUnit = compilationUnit;
   }
   
@@ -63,7 +60,7 @@ public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutine
     getLogger().debug("   pcmInterface: " + this.pcmInterface);
     getLogger().debug("   compilationUnit: " + this.compilationUnit);
     
-    userExecution.callRoutine1(javaInterface, pcmInterface, compilationUnit, actionsFacade);
+    userExecution.callRoutine1(javaInterface, pcmInterface, compilationUnit, this.getRoutinesFacade());
     
     postprocessElements();
     

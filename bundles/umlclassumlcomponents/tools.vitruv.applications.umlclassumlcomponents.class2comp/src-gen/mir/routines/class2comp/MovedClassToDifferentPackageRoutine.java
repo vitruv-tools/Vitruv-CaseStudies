@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private MovedClassToDifferentPackageRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -43,10 +41,9 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
     }
   }
   
-  public MovedClassToDifferentPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage) {
-    super(reactionExecutionState, calledBy);
+  public MovedClassToDifferentPackageRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class umlClass, final org.eclipse.uml2.uml.Package oldPackage, final org.eclipse.uml2.uml.Package newPackage) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.MovedClassToDifferentPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.umlClass = umlClass;this.oldPackage = oldPackage;this.newPackage = newPackage;
   }
   
@@ -89,7 +86,7 @@ public class MovedClassToDifferentPackageRoutine extends AbstractRepairRoutineRe
     		)
     );
     registerObjectUnderModification(compLinked.isPresent() ? compLinked.get() : null);
-    userExecution.callRoutine1(umlClass, oldPackage, newPackage, packageOldComp, packageNewComp, compLinked, actionsFacade);
+    userExecution.callRoutine1(umlClass, oldPackage, newPackage, packageOldComp, packageNewComp, compLinked, this.getRoutinesFacade());
     
     postprocessElements();
     

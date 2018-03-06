@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AddUmlOperationToEnumRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddUmlOperationToEnumRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -31,10 +29,9 @@ public class AddUmlOperationToEnumRoutine extends AbstractRepairRoutineRealizati
     }
   }
   
-  public AddUmlOperationToEnumRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Enumeration uEnum, final Operation uOperation) {
-    super(reactionExecutionState, calledBy);
+  public AddUmlOperationToEnumRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Enumeration uEnum, final Operation uOperation) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlMethod.AddUmlOperationToEnumRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.javaToUmlMethod.RoutinesFacade(getExecutionState(), this);
     this.uEnum = uEnum;this.uOperation = uOperation;
   }
   

@@ -21,8 +21,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
  */
 @SuppressWarnings("all")
 public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateRepositoryRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -92,10 +90,9 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public CreateRepositoryRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag) {
-    super(reactionExecutionState, calledBy);
+  public CreateRepositoryRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package javaPackage, final String packageName, final String newTag) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmClassifier.CreateRepositoryRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmClassifier.RoutinesFacade(getExecutionState(), this);
     this.javaPackage = javaPackage;this.packageName = packageName;this.newTag = newTag;
   }
   
@@ -136,7 +133,7 @@ public class CreateRepositoryRoutine extends AbstractRepairRoutineRealization {
     
     addCorrespondenceBetween(userExecution.getElement2(javaPackage, packageName, newTag, pcmRepository), userExecution.getElement3(javaPackage, packageName, newTag, pcmRepository), userExecution.getTag1(javaPackage, packageName, newTag, pcmRepository));
     
-    userExecution.callRoutine1(javaPackage, packageName, newTag, pcmRepository, actionsFacade);
+    userExecution.callRoutine1(javaPackage, packageName, newTag, pcmRepository, this.getRoutinesFacade());
     
     addCorrespondenceBetween(userExecution.getElement4(javaPackage, packageName, newTag, pcmRepository), userExecution.getElement5(javaPackage, packageName, newTag, pcmRepository), "");
     

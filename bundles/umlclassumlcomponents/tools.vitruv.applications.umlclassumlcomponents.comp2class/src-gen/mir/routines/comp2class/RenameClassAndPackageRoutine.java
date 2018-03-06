@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RenameClassAndPackageRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RenameClassAndPackageRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -51,10 +49,9 @@ public class RenameClassAndPackageRoutine extends AbstractRepairRoutineRealizati
     }
   }
   
-  public RenameClassAndPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Component umlComp, final String newName) {
-    super(reactionExecutionState, calledBy);
+  public RenameClassAndPackageRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Component umlComp, final String newName) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.comp2class.RenameClassAndPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.comp2class.RoutinesFacade(getExecutionState(), this);
     this.umlComp = umlComp;this.newName = newName;
   }
   
@@ -90,7 +87,7 @@ public class RenameClassAndPackageRoutine extends AbstractRepairRoutineRealizati
     // val updatedElement userExecution.getElement1(umlComp, newName, umlClass, classPackage);
     userExecution.update0Element(umlComp, newName, umlClass, classPackage);
     
-    userExecution.callRoutine1(umlComp, newName, umlClass, classPackage, actionsFacade);
+    userExecution.callRoutine1(umlComp, newName, umlClass, classPackage, this.getRoutinesFacade());
     
     postprocessElements();
     

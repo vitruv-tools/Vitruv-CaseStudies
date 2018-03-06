@@ -12,8 +12,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateUmlPackageRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -43,10 +41,9 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public CreateUmlPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package jPackage) {
-    super(reactionExecutionState, calledBy);
+  public CreateUmlPackageRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.containers.Package jPackage) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.CreateUmlPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
     this.jPackage = jPackage;
   }
   
@@ -62,7 +59,7 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
     
     addCorrespondenceBetween(userExecution.getElement1(jPackage, uPackage), userExecution.getElement2(jPackage, uPackage), "");
     
-    userExecution.callRoutine1(jPackage, uPackage, actionsFacade);
+    userExecution.callRoutine1(jPackage, uPackage, this.getRoutinesFacade());
     
     postprocessElements();
     

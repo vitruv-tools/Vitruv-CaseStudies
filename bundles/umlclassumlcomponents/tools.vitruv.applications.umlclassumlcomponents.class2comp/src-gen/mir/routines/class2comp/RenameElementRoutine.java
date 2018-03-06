@@ -14,8 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RenameElementRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RenameElementRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -31,10 +29,9 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public RenameElementRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement classElement) {
-    super(reactionExecutionState, calledBy);
+  public RenameElementRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement classElement) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.class2comp.RenameElementRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.class2comp.RoutinesFacade(getExecutionState(), this);
     this.classElement = classElement;
   }
   
@@ -44,7 +41,7 @@ public class RenameElementRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine RenameElementRoutine with input:");
     getLogger().debug("   classElement: " + this.classElement);
     
-    userExecution.callRoutine1(classElement, actionsFacade);
+    userExecution.callRoutine1(classElement, this.getRoutinesFacade());
     
     postprocessElements();
     

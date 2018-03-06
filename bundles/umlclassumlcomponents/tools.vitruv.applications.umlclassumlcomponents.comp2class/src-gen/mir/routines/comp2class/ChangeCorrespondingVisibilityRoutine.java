@@ -14,8 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class ChangeCorrespondingVisibilityRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeCorrespondingVisibilityRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -31,10 +29,9 @@ public class ChangeCorrespondingVisibilityRoutine extends AbstractRepairRoutineR
     }
   }
   
-  public ChangeCorrespondingVisibilityRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement compElement) {
-    super(reactionExecutionState, calledBy);
+  public ChangeCorrespondingVisibilityRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final NamedElement compElement) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.comp2class.ChangeCorrespondingVisibilityRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.comp2class.RoutinesFacade(getExecutionState(), this);
     this.compElement = compElement;
   }
   
@@ -44,7 +41,7 @@ public class ChangeCorrespondingVisibilityRoutine extends AbstractRepairRoutineR
     getLogger().debug("Called routine ChangeCorrespondingVisibilityRoutine with input:");
     getLogger().debug("   compElement: " + this.compElement);
     
-    userExecution.callRoutine1(compElement, actionsFacade);
+    userExecution.callRoutine1(compElement, this.getRoutinesFacade());
     
     postprocessElements();
     

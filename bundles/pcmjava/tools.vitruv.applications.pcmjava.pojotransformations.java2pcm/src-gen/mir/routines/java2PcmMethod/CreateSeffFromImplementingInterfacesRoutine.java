@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateSeffFromImplementingInterfacesRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateSeffFromImplementingInterfacesRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -30,10 +28,9 @@ public class CreateSeffFromImplementingInterfacesRoutine extends AbstractRepairR
     }
   }
   
-  public CreateSeffFromImplementingInterfacesRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass) {
-    super(reactionExecutionState, calledBy);
+  public CreateSeffFromImplementingInterfacesRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final ClassMethod classMethod, final org.emftext.language.java.classifiers.Class javaClass) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateSeffFromImplementingInterfacesRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
     this.classMethod = classMethod;this.javaClass = javaClass;
   }
   
@@ -46,7 +43,7 @@ public class CreateSeffFromImplementingInterfacesRoutine extends AbstractRepairR
     getLogger().debug("   classMethod: " + this.classMethod);
     getLogger().debug("   javaClass: " + this.javaClass);
     
-    userExecution.callRoutine1(classMethod, javaClass, actionsFacade);
+    userExecution.callRoutine1(classMethod, javaClass, this.getRoutinesFacade());
     
     postprocessElements();
     

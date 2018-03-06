@@ -14,8 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddUmlElementToPackageRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -43,10 +41,9 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
     }
   }
   
-  public AddUmlElementToPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage, final EObject persistedObject) {
-    super(reactionExecutionState, calledBy);
+  public AddUmlElementToPackageRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage, final EObject persistedObject) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.javaToUmlClassifier.RoutinesFacade(getExecutionState(), this);
     this.uPackageable = uPackageable;this.uPackage = uPackage;this.persistedObject = persistedObject;
   }
   
@@ -65,7 +62,7 @@ public class AddUmlElementToPackageRoutine extends AbstractRepairRoutineRealizat
     // val updatedElement userExecution.getElement1(uPackageable, uPackage, persistedObject);
     userExecution.update0Element(uPackageable, uPackage, persistedObject);
     
-    userExecution.callRoutine1(uPackageable, uPackage, persistedObject, actionsFacade);
+    userExecution.callRoutine1(uPackageable, uPackage, persistedObject, this.getRoutinesFacade());
     
     postprocessElements();
     

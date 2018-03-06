@@ -17,8 +17,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private RenameJavaPackageRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -55,10 +53,9 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     }
   }
   
-  public RenameJavaPackageRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace) {
-    super(reactionExecutionState, calledBy);
+  public RenameJavaPackageRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Package uPackage, final Namespace uNamespace) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToJavaClassifier.RoutinesFacade(getExecutionState(), this);
     this.uPackage = uPackage;this.uNamespace = uNamespace;
   }
   
@@ -85,7 +82,7 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
     // val updatedElement userExecution.getElement1(uPackage, uNamespace, jPackage);
     userExecution.update0Element(uPackage, uNamespace, jPackage);
     
-    userExecution.callRoutine1(uPackage, uNamespace, jPackage, actionsFacade);
+    userExecution.callRoutine1(uPackage, uNamespace, jPackage, this.getRoutinesFacade());
     
     postprocessElements();
     

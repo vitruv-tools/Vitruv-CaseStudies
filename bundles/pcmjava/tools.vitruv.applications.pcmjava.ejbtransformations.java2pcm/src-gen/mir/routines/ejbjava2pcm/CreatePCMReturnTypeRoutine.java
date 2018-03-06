@@ -14,8 +14,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreatePCMReturnTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreatePCMReturnTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -34,10 +32,9 @@ public class CreatePCMReturnTypeRoutine extends AbstractRepairRoutineRealization
     }
   }
   
-  public CreatePCMReturnTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final TypeReference returnType, final OperationSignature opSignature, final Method javaMethod) {
-    super(reactionExecutionState, calledBy);
+  public CreatePCMReturnTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final TypeReference returnType, final OperationSignature opSignature, final Method javaMethod) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.ejbjava2pcm.CreatePCMReturnTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.ejbjava2pcm.RoutinesFacade(getExecutionState(), this);
     this.returnType = returnType;this.opSignature = opSignature;this.javaMethod = javaMethod;
   }
   

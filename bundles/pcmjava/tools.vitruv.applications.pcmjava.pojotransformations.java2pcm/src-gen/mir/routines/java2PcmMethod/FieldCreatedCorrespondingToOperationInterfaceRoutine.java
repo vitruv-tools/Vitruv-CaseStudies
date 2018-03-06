@@ -15,8 +15,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class FieldCreatedCorrespondingToOperationInterfaceRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private FieldCreatedCorrespondingToOperationInterfaceRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -38,10 +36,9 @@ public class FieldCreatedCorrespondingToOperationInterfaceRoutine extends Abstra
     }
   }
   
-  public FieldCreatedCorrespondingToOperationInterfaceRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier classifier, final Field javaField) {
-    super(reactionExecutionState, calledBy);
+  public FieldCreatedCorrespondingToOperationInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Classifier classifier, final Field javaField) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.FieldCreatedCorrespondingToOperationInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
     this.classifier = classifier;this.javaField = javaField;
   }
   
@@ -76,7 +73,7 @@ public class FieldCreatedCorrespondingToOperationInterfaceRoutine extends Abstra
     	return false;
     }
     registerObjectUnderModification(repositoryComponent);
-    userExecution.callRoutine1(classifier, javaField, correspondingInterface, repositoryComponent, actionsFacade);
+    userExecution.callRoutine1(classifier, javaField, correspondingInterface, repositoryComponent, this.getRoutinesFacade());
     
     postprocessElements();
     

@@ -19,8 +19,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class AddOperationParameterRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private AddOperationParameterRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -54,10 +52,9 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
     }
   }
   
-  public AddOperationParameterRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation umlOperation, final Parameter umlParameter) {
-    super(reactionExecutionState, calledBy);
+  public AddOperationParameterRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation umlOperation, final Parameter umlParameter) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToPcm.AddOperationParameterRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.umlToPcm.RoutinesFacade(getExecutionState(), this);
     this.umlOperation = umlOperation;this.umlParameter = umlParameter;
   }
   
@@ -81,7 +78,7 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
     	return false;
     }
     registerObjectUnderModification(pcmSignature);
-    userExecution.callRoutine1(umlOperation, umlParameter, pcmSignature, actionsFacade);
+    userExecution.callRoutine1(umlOperation, umlParameter, pcmSignature, this.getRoutinesFacade());
     
     postprocessElements();
     

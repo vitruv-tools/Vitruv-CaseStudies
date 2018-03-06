@@ -13,8 +13,6 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 
 @SuppressWarnings("all")
 public class CreateOperationRequiredRoleCorrespondingToFieldRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private CreateOperationRequiredRoleCorrespondingToFieldRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -42,10 +40,9 @@ public class CreateOperationRequiredRoleCorrespondingToFieldRoutine extends Abst
     }
   }
   
-  public CreateOperationRequiredRoleCorrespondingToFieldRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Field javaField, final OperationInterface operationInterface, final RepositoryComponent repoComponent) {
-    super(reactionExecutionState, calledBy);
+  public CreateOperationRequiredRoleCorrespondingToFieldRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Field javaField, final OperationInterface operationInterface, final RepositoryComponent repoComponent) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.java2PcmMethod.CreateOperationRequiredRoleCorrespondingToFieldRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.java2PcmMethod.RoutinesFacade(getExecutionState(), this);
     this.javaField = javaField;this.operationInterface = operationInterface;this.repoComponent = repoComponent;
   }
   

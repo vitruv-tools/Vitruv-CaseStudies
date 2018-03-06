@@ -25,8 +25,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionType;
 
 @SuppressWarnings("all")
 public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRoutineRealization {
-  private RoutinesFacade actionsFacade;
-  
   private ChangeCollectionDataTypeInnerTypeRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -97,10 +95,9 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
     }
   }
   
-  public ChangeCollectionDataTypeInnerTypeRoutine(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CollectionDataType pcmDataType, final DataType pcmInnerType) {
-    super(reactionExecutionState, calledBy);
+  public ChangeCollectionDataTypeInnerTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final CollectionDataType pcmDataType, final DataType pcmInnerType) {
+    super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.pcmToUml.ChangeCollectionDataTypeInnerTypeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.actionsFacade = new mir.routines.pcmToUml.RoutinesFacade(getExecutionState(), this);
     this.pcmDataType = pcmDataType;this.pcmInnerType = pcmInnerType;
   }
   
@@ -133,7 +130,7 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
     	return false;
     }
     registerObjectUnderModification(umlModel);
-    userExecution.callRoutine1(pcmDataType, pcmInnerType, umlInnerType, umlModel, actionsFacade);
+    userExecution.callRoutine1(pcmDataType, pcmInnerType, umlInnerType, umlModel, this.getRoutinesFacade());
     
     postprocessElements();
     
