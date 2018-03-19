@@ -4,6 +4,8 @@ import static extension tools.vitruv.applications.umljava.util.java.JavaContaine
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractionType
+import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.NotificationType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -145,7 +147,8 @@ routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
             if (uClass.generals.size == 1) {
                 jClass.extends = createTypeReferenceAndUpdateImport(null, superJavaClass, jClass.containingCompilationUnit, userInteracting);
             } else {
-                userInteracting.showMessage(UserInteractionType.MODAL, "Warning: Can not synchronize multiple inheritance for " + uClass)
+                userInteracting.showNotification("Warning", "Can not synchronize multiple inheritance for " + uClass,
+                    NotificationType.WARNING, WindowModality.MODAL)
                 logger.warn("Routine not executed: Tried to set multiple inheritance for " + uClass)
             }
         }
@@ -439,7 +442,9 @@ routine checkIfCorrespondingJavaPrimitiveTypeExists(uml::PrimitiveType uPrimType
     action {
         call {
             if (mapToJavaPrimitiveType(uPrimType) === null) {
-                userInteracting.showMessage(UserInteractionType.MODAL, "There is no corresponding Java-PrimitiveType for " + uPrimType + " (case sensitive)")
+                userInteracting.showNotification("Warning",
+                    "There is no corresponding Java-PrimitiveType for " + uPrimType + " (case sensitive)",
+                    NotificationType.WARNING, WindowModality.MODAL)
             }
         }
     }
