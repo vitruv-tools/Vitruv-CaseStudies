@@ -18,9 +18,6 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
   protected void setup() {
     this.addReaction(new mir.reactions.pcm2javaCommon.CreatedRepositoryReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2javaCommon.RenamedRepositoryReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
-    this.addReaction(new mir.reactions.pcm2javaCommon.DeletedSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
-    this.addReaction(new mir.reactions.pcm2javaCommon.ChangedSystemNameReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
-    this.addReaction(new mir.reactions.pcm2javaCommon.AddedAssemblyContextToComposedStructureReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2javaCommon.RenameComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2javaCommon.DeletedComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2javaCommon.CreatedInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
@@ -50,9 +47,9 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.pcm2javaCommon.ChangeOperationSignatureOfSeffReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2javaCommon.DeletedSeffReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava.pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2EjbJava.pcm2javaCommon.CreatedSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
-    this.addReaction(new mir.reactions.pcm2EjbJava.DeletedSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
-    this.addReaction(new mir.reactions.pcm2EjbJava.ChangedSystemNameReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
-    this.addReaction(new mir.reactions.pcm2EjbJava.AddedAssemblyContextToComposedStructureReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
+    this.addReaction(new mir.reactions.pcm2EjbJava.pcm2javaCommon.DeletedSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
+    this.addReaction(new mir.reactions.pcm2EjbJava.pcm2javaCommon.ChangedSystemNameReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
+    this.addReaction(new mir.reactions.pcm2EjbJava.pcm2javaCommon.AddedAssemblyContextToComposedStructureReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
     this.addReaction(new mir.reactions.pcm2EjbJava.pcm2javaCommon.CreatedComponentReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
     this.addReaction(new mir.reactions.pcm2EjbJava.pcm2javaCommon.RenamedInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));
     this.addReaction(new mir.reactions.pcm2EjbJava.pcm2javaCommon.DeletedProvidedRoleFromSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2EjbJava"))));

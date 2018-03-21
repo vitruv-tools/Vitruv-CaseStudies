@@ -1,4 +1,4 @@
-package mir.reactions.pcm2EjbJava;
+package mir.reactions.pcm2EjbJava.pcm2javaCommon;
 
 import mir.routines.pcm2EjbJava.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -31,7 +31,7 @@ public class DeletedSystemReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.reactions.pcm2EjbJava.DeletedSystemReaction.ActionUserExecution userExecution = new mir.reactions.pcm2EjbJava.DeletedSystemReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.pcm2EjbJava.pcm2javaCommon.DeletedSystemReaction.ActionUserExecution userExecution = new mir.reactions.pcm2EjbJava.pcm2javaCommon.DeletedSystemReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(removeChange, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();

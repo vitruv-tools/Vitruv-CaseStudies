@@ -1,4 +1,4 @@
-package mir.reactions.pcm2EjbJava;
+package mir.reactions.pcm2EjbJava.pcm2javaCommon;
 
 import mir.routines.pcm2EjbJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
@@ -31,7 +31,7 @@ public class ChangedSystemNameReaction extends AbstractReactionRealization {
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.reactions.pcm2EjbJava.ChangedSystemNameReaction.ActionUserExecution userExecution = new mir.reactions.pcm2EjbJava.ChangedSystemNameReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.pcm2EjbJava.pcm2javaCommon.ChangedSystemNameReaction.ActionUserExecution userExecution = new mir.reactions.pcm2EjbJava.pcm2javaCommon.ChangedSystemNameReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();

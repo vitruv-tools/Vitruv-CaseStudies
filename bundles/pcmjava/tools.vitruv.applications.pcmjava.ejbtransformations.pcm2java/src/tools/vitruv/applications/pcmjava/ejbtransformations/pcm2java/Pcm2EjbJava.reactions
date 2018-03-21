@@ -30,21 +30,21 @@ reaction pcm2javaCommon::CreatedSystem {
 }
 
 // ejb: cleared
-reaction DeletedSystem {
+reaction pcm2javaCommon::DeletedSystem {
 	after element pcm::System deleted and removed as root
 	call {
 	}
 }
 
 // ejb: cleared
-reaction ChangedSystemName {
+reaction pcm2javaCommon::ChangedSystemName {
 	after attribute replaced at pcm::System[entityName]
 	call {
 	}
 }
 
 // ejb: cleared
-reaction AddedAssemblyContextToComposedStructure {
+reaction pcm2javaCommon::AddedAssemblyContextToComposedStructure {
 	after element pcm::AssemblyContext created and inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
 	call {
 	}
