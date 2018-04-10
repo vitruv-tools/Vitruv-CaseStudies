@@ -9,9 +9,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 /**
- * *
- * nCheck if package has a correspondence with a component or system. 
- * nIf there is one create correspondence between component or system and the given class.
+ * *nCheck if package has a correspondence with a component or system. nIf there is one create correspondence between component or system and the given class.
  *  
  */
 @SuppressWarnings("all")

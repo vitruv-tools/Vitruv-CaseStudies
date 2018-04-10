@@ -1,4 +1,4 @@
-import tools.vitruv.framework.userinteraction.UserInteractionType
+import tools.vitruv.framework.userinteraction.WindowModality
 
 import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
@@ -44,7 +44,8 @@ routine createArchitecturalElement(java::Package javaPackage, String name, Strin
 				Java2PcmUserSelection.SELECT_SYSTEM.message,
 				Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.message
 			]
-			val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
+			val selected = userInteracting.singleSelectionDialogBuilder.message(userMsg).choices(selections)
+			   .windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
 			switch(selected) {
 				case Java2PcmUserSelection.SELECT_BASIC_COMPONENT.selection: 
 					createBasicComponent(javaPackage, name, rootPackageName) 
@@ -171,7 +172,8 @@ routine createdInterfaceNotInContracts(java::Interface javaInterface, pcm::Opera
 			val String[] selections = #[Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.message,
 				Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.message
 			]
-			val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
+			val selected = userInteracting.singleSelectionDialogBuilder.message(userMsg).choices(selections)
+			    .windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
 			if (selected == Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.selection) {
 				addcorrespondenceToInterfaceAndUpdateRepository(pcmInterface, javaInterface, compilationUnit)
 			}
@@ -241,7 +243,8 @@ routine createDataType(java::Class javaClass, java::CompilationUnit compilationU
 				Java2PcmUserSelection.SELECT_COLLECTION_DATA_TYPE.message,
 				Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.message
 			]
-			val selected = userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections)
+			val selected = userInteracting.singleSelectionDialogBuilder.message(userMsg).choices(selections)
+			    .windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
 			switch(selected) {
 				case Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection: 
 					createCompositeDataType(javaClass, compilationUnit)

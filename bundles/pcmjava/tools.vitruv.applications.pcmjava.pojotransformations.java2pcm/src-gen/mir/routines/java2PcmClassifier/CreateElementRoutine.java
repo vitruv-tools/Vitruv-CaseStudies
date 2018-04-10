@@ -13,8 +13,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 /**
- * *
- * nCreates a new architectural element and add correspondence.
+ * *nCreates a new architectural element and add correspondence.
  *  
  */
 @SuppressWarnings("all")

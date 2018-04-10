@@ -43,7 +43,6 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import tools.vitruv.framework.tuid.TuidManager
 import tools.vitruv.framework.userinteraction.UserInteracting
-import tools.vitruv.framework.userinteraction.UserInteractionType
 import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
@@ -53,6 +52,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import tools.vitruv.framework.userinteraction.WindowModality
 
 /**
  * 
@@ -77,7 +77,7 @@ public class PcmJamoppUtilsGuice {
 		} catch (RuntimeException e) {
 			val String msg = "Can not create field for component " + component.entityName +
 				" because the component does not have a corresponding class yet."
-			userInteracting.showMessage(UserInteractionType.MODELESS, msg)
+			userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
 			throw e
 		}
 
@@ -404,8 +404,8 @@ public class PcmJamoppUtilsGuice {
 		UserInteracting ui) {
 		val msg = "Interface " + interfaceName + " is already mapped to basic component " + className +
 			" . Adding another binding for the same interface will lead to a runtime exception by Guice."
-		val choice = ui.selectFromMessage(UserInteractionType.MODAL, msg, "Keep old binding",
-			"Replace with new binding")
+		val choice = ui.singleSelectionDialogBuilder.message(msg)
+		    .choices(#["Keep old binding", "Replace with new binding"]).windowModality(WindowModality.MODAL)
 		switch choice {
 			case SELECT_KEEP_OLD_BINDING: {
 				return false
@@ -602,7 +602,7 @@ public class PcmJamoppUtilsGuice {
 			val String msg = "Can not create assembly connector providing interface " + opInterface.entityName +
 				" because no operation requiring role for interface " + opInterface.entityName +
 				" was found in the system. Only assembly context for " + component.entityName + " was created."
-			userInteracting.showMessage(UserInteractionType.MODELESS, msg)
+			userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
 			return null
 		}
 	}

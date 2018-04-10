@@ -10,8 +10,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 /**
- * *
- * nCreates datatypes and contracts package into given javaPackage after it was created.
+ * *nCreates datatypes and contracts package into given javaPackage after it was created.
  *  
  */
 @SuppressWarnings("all")

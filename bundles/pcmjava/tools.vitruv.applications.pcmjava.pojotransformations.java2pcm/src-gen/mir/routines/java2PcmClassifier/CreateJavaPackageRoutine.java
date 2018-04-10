@@ -11,8 +11,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 /**
- * *
- * nCreate java package and tag it.
+ * *nCreate java package and tag it.
  *  
  */
 @SuppressWarnings("all")

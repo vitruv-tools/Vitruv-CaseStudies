@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmjava.util.java2pcm
 
 import com.google.common.collect.Sets
-import tools.vitruv.framework.userinteraction.UserInteractionType
 import tools.vitruv.framework.util.datatypes.VURI
 import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.tuid.Tuid
@@ -40,6 +39,7 @@ import tools.vitruv.framework.util.command.ResourceAccess
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.framework.userinteraction.WindowModality
 
 abstract class Java2PcmUtils extends PcmJavaUtils {
 	private new() {
@@ -206,7 +206,8 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 		val List<String> selections = new ArrayList<String>
 		repo.components__Repository.forEach[comp|selections.add(comp.entityName)]
 		selections.add("Class is not in any component")
-		val int selection = userInteracting.selectFromMessage(UserInteractionType.MODAL, msg, selections)
+		val int selection = userInteracting.singleSelectionDialogBuilder.message(msg).choices(selections)
+		    .windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
 		if (selection == selections.size) {
 			return null
 		}
@@ -239,10 +240,10 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 				operationRequiredRole.entityName = "Component_" + repoComponent.entityName + "_requires_" +
 					correspondingInterface.entityName
 				newCorrespondingEObjects.add(operationRequiredRole)
-				userInteracting.showMessage(UserInteractionType.MODELESS,
-					"An OperationRequiredRole (from component " + repoComponent.entityName + " to interface " +
-						correspondingInterface.entityName + ") for the element: " + typedElement +
-						" has been created.")
+				userInteracting.notificationDialogBuilder.message("An OperationRequiredRole (from component "
+				    + repoComponent.entityName + " to interface " + correspondingInterface.entityName
+				    + ") for the element: " + typedElement + " has been created.")
+				    .windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
 					}
 				}
 	
@@ -267,10 +268,11 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 							operationRequiredRole.requiringEntity_RequiredRole = repoComponent
 							operationRequiredRole.entityName = "Component_" + repoComponent.entityName +
 								"_requires_" + operationInterface.entityName
-							userInteracting.showMessage(UserInteractionType.MODELESS,
-								"An OperationRequiredRole (from component " + repoComponent.entityName +
-									" to interface " + operationInterface.entityName + ") for the element: " +
-									typedElement + " has been created.")
+							userInteracting.notificationDialogBuilder.message("An OperationRequiredRole (from component "
+							    + repoComponent.entityName + " to interface " + operationInterface.entityName
+							    + ") for the element: " + typedElement + " has been created.")
+							    .windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
+								
 							newCorrespondingEObjects.add(operationRequiredRole)
 						}
 					}

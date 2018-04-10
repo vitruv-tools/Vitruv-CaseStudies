@@ -10,11 +10,10 @@ import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUs
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
+import tools.vitruv.framework.userinteraction.WindowModality;
 
 /**
- * *
- * nUser selects if interface should be created if interface was not created into contract package.
+ * *nUser selects if interface should be created if interface was not created into contract package.
  *  
  */
 @SuppressWarnings("all")
@@ -33,9 +32,9 @@ public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutine
       String _message = Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getMessage();
       String _message_1 = Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getMessage();
       final String[] selections = new String[] { _message, _message_1 };
-      final int selected = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, userMsg, selections);
+      final Integer selected = this.userInteracting.getSingleSelectionDialogBuilder().message(userMsg).choices(selections).windowModality(WindowModality.MODAL).showDialogAndGetUserInput();
       int _selection = Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection();
-      boolean _equals = (selected == _selection);
+      boolean _equals = ((selected).intValue() == _selection);
       if (_equals) {
         _routinesFacade.addcorrespondenceToInterfaceAndUpdateRepository(pcmInterface, javaInterface, compilationUnit);
       }

@@ -14,8 +14,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 /**
- * *
- * nAdd correspondence between OperationInterface and JavaInterface and CompilationUnit. Also adds OperationInterface into Repository.
+ * *nAdd correspondence between OperationInterface and JavaInterface and CompilationUnit. Also adds OperationInterface into Repository.
  *  
  */
 @SuppressWarnings("all")
