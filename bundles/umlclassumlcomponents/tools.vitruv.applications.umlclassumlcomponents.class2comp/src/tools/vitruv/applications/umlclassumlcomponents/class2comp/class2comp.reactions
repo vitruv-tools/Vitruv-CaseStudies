@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.PrimitiveType
-import tools.vitruv.framework.userinteraction.UserInteractionType
+import tools.vitruv.framework.userinteraction.WindowModality
 
 import static extension tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
 import org.eclipse.uml2.uml.Usage
@@ -413,7 +413,8 @@ routine createdPackage(umlclass::Package classPackage) {
 				val umlComp = componentsList.get(selection)
 				assignNewPackage(classPackage, umlComp)
 			} else {
-				userInteracting.showMessage(UserInteractionType.MODELESS, "No available Component found")
+				userInteracting.notificationDialogBuilder.message("No available Component found")
+				    .windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
 			}
 		}
 					
@@ -430,7 +431,8 @@ routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlCo
 				correspondenceModel.createAndAddCorrespondence(#[umlComponent], #[newPackage])
 			} else {
 				val String errorMsg = "Chosen Component is already linked to existing Package '" + oldPackage.name + "'."
-				userInteracting.showMessage(UserInteractionType.MODELESS, errorMsg)
+				userInteracting.notificationDialogBuilder.message(errorMsg).windowModality(WindowModality.MODELESS)
+				    .showDialogAndGetUserInput()
 			}
 		}
 	} 

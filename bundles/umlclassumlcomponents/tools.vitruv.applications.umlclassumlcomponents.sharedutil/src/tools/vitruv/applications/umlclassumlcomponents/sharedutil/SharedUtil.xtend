@@ -1,12 +1,13 @@
 package tools.vitruv.applications.umlclassumlcomponents.sharedutil
 
 import tools.vitruv.framework.userinteraction.UserInteracting
-import tools.vitruv.framework.userinteraction.UserInteractionType
+import tools.vitruv.framework.userinteraction.WindowModality
 
 class SharedUtil {
 		
 	public static def int modalTextUserinteracting(UserInteracting userInteracting, String msg, String... selections) {
-		return userInteracting.selectFromMessage(UserInteractionType.MODAL, msg, selections)
+		return userInteracting.singleSelectionDialogBuilder.message(msg).choices(selections)
+		    .windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
 	}
 
 	public static def boolean modalTextYesNoUserInteracting(UserInteracting userInteracting, String msg) {
