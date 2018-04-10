@@ -1,26 +1,28 @@
 package tools.vitruv.applications.umljava.uml2java
 
+import java.util.ArrayList
+import java.util.HashSet
+import java.util.LinkedList
+import java.util.List
+import java.util.Optional
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.containers.CompilationUnit
+import org.emftext.language.java.members.Field
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
-import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import java.util.HashSet
-import java.util.ArrayList
-import java.util.LinkedList
-import java.util.List
-import tools.vitruv.framework.userinteraction.UserInteracting
-import tools.vitruv.framework.userinteraction.UserInteractionType
-import org.emftext.language.java.members.Field
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.emftext.language.java.containers.CompilationUnit
-import java.util.Optional
+import tools.vitruv.framework.userinteraction.UserInteracting
+import tools.vitruv.framework.userinteraction.WindowModality
+
+import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+
+import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 
 /**
  * A helper class that contains util functions which depends on
@@ -78,7 +80,7 @@ class UmlToJavaHelper {
 	 * (Case-sensitive)
 	 * Returns null if no corresponding Java-PrimitiveType could be found.
 	 */
-	def static org.emftext.language.java.types.TypeReference mapToJavaPrimitiveType(PrimitiveType pType) {
+	def static TypeReference mapToJavaPrimitiveType(PrimitiveType pType) {
 	    try {
 	        createJavaPrimitiveType(pType.name)
 	    } catch (IllegalArgumentException i){
@@ -93,16 +95,16 @@ class UmlToJavaHelper {
 	 * @return the selected name of the collection datatype by the user
 	 */
     def static letUserSelectCollectionTypeName(UserInteracting userInteracting) {
-        var List<java.lang.Class<?>> collectionDataTypes = new ArrayList
+        var List<Class<?>> collectionDataTypes = new ArrayList
         collectionDataTypes += #[ArrayList, LinkedList, HashSet]
         val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size)
         for (collectionDataType : collectionDataTypes) {
             collectionDataTypeNames.add(collectionDataType.name)
         }
         val String selectTypeMsg = "Select a Collectiontype for the association end"
-        val int selectedType = userInteracting.selectFromMessage(UserInteractionType.MODAL, selectTypeMsg,
-            collectionDataTypeNames)
-        val java.lang.Class<?> selectedClass = collectionDataTypes.get(selectedType)
+        val int selectedType = userInteracting.singleSelectionDialogBuilder.message(selectTypeMsg)
+            .choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
+        val Class<?> selectedClass = collectionDataTypes.get(selectedType)
         return selectedClass.name
     }
     
@@ -134,7 +136,8 @@ class UmlToJavaHelper {
      * @param message the message to display
      */
     def static void showMessage(UserInteracting userInteracting, String message) {
-        userInteracting.showMessage(UserInteractionType.MODAL, message)
+        userInteracting.notificationDialogBuilder.message(message).windowModality(WindowModality.MODAL)
+            .showDialogAndGetUserInput()
     }
 	
 }

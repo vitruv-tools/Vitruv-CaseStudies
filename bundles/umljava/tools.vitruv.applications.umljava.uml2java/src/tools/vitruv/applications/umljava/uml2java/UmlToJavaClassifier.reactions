@@ -3,7 +3,6 @@ import static extension tools.vitruv.applications.umljava.util.java.JavaModifier
 import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import tools.vitruv.framework.userinteraction.UserInteractionType
 import tools.vitruv.framework.userinteraction.WindowModality
 import tools.vitruv.framework.userinteraction.NotificationType
 
@@ -147,8 +146,9 @@ routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
             if (uClass.generals.size == 1) {
                 jClass.extends = createTypeReferenceAndUpdateImport(null, superJavaClass, jClass.containingCompilationUnit, userInteracting);
             } else {
-                userInteracting.showNotification("Warning", "Can not synchronize multiple inheritance for " + uClass,
-                    NotificationType.WARNING, WindowModality.MODAL)
+                userInteracting.notificationDialogBuilder.message("Can not synchronize multiple inheritance for " + uClass)
+                    .title("Warning").notificationType(NotificationType.WARNING).windowModality(WindowModality.MODAL)
+                    .showDialogAndGetUserInput()
                 logger.warn("Routine not executed: Tried to set multiple inheritance for " + uClass)
             }
         }
@@ -442,9 +442,9 @@ routine checkIfCorrespondingJavaPrimitiveTypeExists(uml::PrimitiveType uPrimType
     action {
         call {
             if (mapToJavaPrimitiveType(uPrimType) === null) {
-                userInteracting.showNotification("Warning",
-                    "There is no corresponding Java-PrimitiveType for " + uPrimType + " (case sensitive)",
-                    NotificationType.WARNING, WindowModality.MODAL)
+                userInteracting.notificationDialogBuilder.message("There is no corresponding Java-PrimitiveType for "
+                    + uPrimType + " (case sensitive)").title("Warning").notificationType(NotificationType.WARNING)
+                    .windowModality(WindowModality.MODAL)
             }
         }
     }
