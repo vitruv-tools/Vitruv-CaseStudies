@@ -11,7 +11,7 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
+import tools.vitruv.framework.userinteraction.WindowModality;
 
 @SuppressWarnings("all")
 public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealization {
@@ -37,7 +37,7 @@ public class ChangeProvidedInterfaceRoutine extends AbstractRepairRoutineRealiza
         if (_equals_1) {
           pcmRole.setProvidedInterface__OperationProvidedRole(pcmInterface);
         } else {
-          this.userInteracting.showMessage(UserInteractionType.MODAL, "Further interfaces will not be provided in the PCM");
+          this.userInteracting.getNotificationDialogBuilder().message("Further interfaces will not be provided in the PCM").windowModality(WindowModality.MODAL).startInteraction();
         }
       }
     }

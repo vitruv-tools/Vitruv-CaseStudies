@@ -11,7 +11,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
+import tools.vitruv.framework.userinteraction.WindowModality;
 
 @SuppressWarnings("all")
 public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization {
@@ -25,8 +25,8 @@ public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization 
     public void callRoutine1(final Component umlComponent, @Extension final RoutinesFacade _routinesFacade) {
       final String userPromptMsg = "Please select whether this component can have subcomponents.";
       final List<String> options = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("Yes", "No"));
-      final int choice = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, userPromptMsg, ((String[])Conversions.unwrapArray(options, String.class)));
-      if ((choice == 0)) {
+      final Integer choice = this.userInteracting.getSingleSelectionDialogBuilder().message(userPromptMsg).choices(((String[])Conversions.unwrapArray(options, String.class))).windowModality(WindowModality.MODAL).startInteraction();
+      if (((choice).intValue() == 0)) {
         _routinesFacade.createCompositeComponent(umlComponent);
       } else {
         _routinesFacade.createBasicComponent(umlComponent);

@@ -5,9 +5,9 @@ import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.PrimitiveType
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
-import tools.vitruv.framework.userinteraction.UserInteractionType
 import org.eclipse.uml2.uml.Property
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
+import tools.vitruv.framework.userinteraction.WindowModality
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -315,7 +315,9 @@ routine addOperationParameter(uml::Operation umlOperation, uml::Parameter umlPar
 			if (umlParameter.direction == ParameterDirectionKind.RETURN_LITERAL) {
 				val returnParameters = umlOperation.ownedParameters.filter[p | p.direction == ParameterDirectionKind.RETURN_LITERAL]
 				if (returnParameters.length > 0) {
-					userInteracting.showMessage(UserInteractionType.MODAL, "A second return type cannot be applied in the PCM model.")
+				    userInteracting.notificationDialogBuilder
+				        .message("A second return type cannot be applied in the PCM model.")
+				        .windowModality(WindowModality.MODAL).startInteraction()
 				} else {
 					changeInterfaceOperationType(umlOperation, umlParameter)
 				}
@@ -489,7 +491,8 @@ routine createPcmComponent(uml::Component umlComponent) {
 		call {
 			val userPromptMsg = "Please select whether this component can have subcomponents."
 			val options = #["Yes", "No"]
-			val choice = userInteracting.selectFromMessage(UserInteractionType.MODAL, userPromptMsg, options)
+			val choice = userInteracting.singleSelectionDialogBuilder.message(userPromptMsg).choices(options)
+			    .windowModality(WindowModality.MODAL).startInteraction()
 			if (choice == 0)
 				createCompositeComponent(umlComponent)
 			else
@@ -561,7 +564,9 @@ routine changeRequiredInterface(uml::Usage umlUsage, uml::Interface umlInterface
 				pcmRole.requiredInterface__OperationRequiredRole = pcmInterface
 			else
 				// TODO consider adding further roles instead
-				userInteracting.showMessage(UserInteractionType.MODAL, "Further interfaces will not be required in the PCM")
+				userInteracting.notificationDialogBuilder
+                        .message("Further interfaces will not be required in the PCM")
+                        .windowModality(WindowModality.MODAL).startInteraction()
 		}
 	}
 }
@@ -608,7 +613,9 @@ routine changeProvidedInterface(uml::InterfaceRealization interfaceRealization, 
 			else if (interfaceRealization.suppliers.length == 1)
 				pcmRole.providedInterface__OperationProvidedRole = pcmInterface
 			else
-				userInteracting.showMessage(UserInteractionType.MODAL, "Further interfaces will not be provided in the PCM")
+			    userInteracting.notificationDialogBuilder
+                    .message("Further interfaces will not be provided in the PCM")
+                    .windowModality(WindowModality.MODAL).startInteraction()
 		}
 	}
 }

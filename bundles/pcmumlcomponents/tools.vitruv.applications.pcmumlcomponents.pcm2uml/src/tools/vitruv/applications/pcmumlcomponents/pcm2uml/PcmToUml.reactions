@@ -8,8 +8,8 @@ import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.Parameter
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil
-import tools.vitruv.framework.userinteraction.UserInteractionType
 import org.eclipse.uml2.uml.DataType
+import tools.vitruv.framework.userinteraction.WindowModality
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -235,8 +235,9 @@ routine changeCollectionDataTypeInnerType(pcm::CollectionDataType pcmDataType, p
 	action {
 		call {
 			if (pcmInnerType instanceof CollectionDataType) {
-				userInteracting.showMessage(UserInteractionType.MODAL,
-					"Nested collection types are not transformed to UML. Consider using a composite type.")
+			    userInteracting.notificationDialogBuilder
+			        .message("Nested collection types are not transformed to UML. Consider using a composite type.")
+			        .windowModality(WindowModality.MODAL).startInteraction()
 			}
 			var DataType innerType = null
 			if (!umlInnerType.present) {
