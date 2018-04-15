@@ -108,8 +108,8 @@ class JavaToUmlHelper {
         val Set<Model> models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
         if (models.nullOrEmpty) {
 			val model = UMLFactory.eINSTANCE.createModel();
-			val userModelName = userInteracting.textInputDialogBuilder.message(MODELNAME_INPUTMESSAGE).showDialogAndGetUserInput()
-			val userModelPath = userInteracting.textInputDialogBuilder.message(MODELPATH_INPUTMESSAGE).showDialogAndGetUserInput()
+			val userModelName = userInteracting.textInputDialogBuilder.message(MODELNAME_INPUTMESSAGE).startInteraction()
+			val userModelPath = userInteracting.textInputDialogBuilder.message(MODELPATH_INPUTMESSAGE).startInteraction()
 			if (userModelName.nullOrEmpty) {
 				model.name = MODELNAME;
 			} else {

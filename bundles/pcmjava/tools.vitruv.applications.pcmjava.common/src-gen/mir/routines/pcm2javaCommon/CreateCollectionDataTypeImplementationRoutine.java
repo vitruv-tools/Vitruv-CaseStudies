@@ -69,7 +69,7 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
         collectionDataTypeNames.add(collectionDataType.getName());
       }
       final String selectTypeMsg = "Please select type (or interface) that should be used for the type";
-      final int selectedType = (this.userInteracting.getSingleSelectionDialogBuilder().message(selectTypeMsg).choices(((String[])Conversions.unwrapArray(collectionDataTypeNames, String.class))).windowModality(WindowModality.MODAL).showDialogAndGetUserInput()).intValue();
+      final int selectedType = (this.userInteracting.getSingleSelectionDialogBuilder().message(selectTypeMsg).choices(((String[])Conversions.unwrapArray(collectionDataTypeNames, String.class))).windowModality(WindowModality.MODAL).startInteraction()).intValue();
       final Set<Class<?>> _converted_collectionDataTypes = (Set<Class<?>>)collectionDataTypes;
       final Class<?> selectedClass = ((Class<?>[])Conversions.unwrapArray(_converted_collectionDataTypes, Class.class))[selectedType];
       _routinesFacade.createJavaClass(dataType, datatypesPackage, dataType.getEntityName());

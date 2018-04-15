@@ -207,7 +207,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 		repo.components__Repository.forEach[comp|selections.add(comp.entityName)]
 		selections.add("Class is not in any component")
 		val int selection = userInteracting.singleSelectionDialogBuilder.message(msg).choices(selections)
-		    .windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
+		    .windowModality(WindowModality.MODAL).startInteraction()
 		if (selection == selections.size) {
 			return null
 		}
@@ -243,7 +243,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 				userInteracting.notificationDialogBuilder.message("An OperationRequiredRole (from component "
 				    + repoComponent.entityName + " to interface " + correspondingInterface.entityName
 				    + ") for the element: " + typedElement + " has been created.")
-				    .windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
+				    .windowModality(WindowModality.MODELESS).startInteraction()
 					}
 				}
 	
@@ -271,7 +271,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 							userInteracting.notificationDialogBuilder.message("An OperationRequiredRole (from component "
 							    + repoComponent.entityName + " to interface " + operationInterface.entityName
 							    + ") for the element: " + typedElement + " has been created.")
-							    .windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
+							    .windowModality(WindowModality.MODELESS).startInteraction()
 								
 							newCorrespondingEObjects.add(operationRequiredRole)
 						}

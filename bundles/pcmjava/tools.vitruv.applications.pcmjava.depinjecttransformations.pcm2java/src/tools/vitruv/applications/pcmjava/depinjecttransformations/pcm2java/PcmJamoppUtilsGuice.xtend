@@ -77,7 +77,7 @@ public class PcmJamoppUtilsGuice {
 		} catch (RuntimeException e) {
 			val String msg = "Can not create field for component " + component.entityName +
 				" because the component does not have a corresponding class yet."
-			userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
+			userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).startInteraction()
 			throw e
 		}
 
@@ -602,7 +602,7 @@ public class PcmJamoppUtilsGuice {
 			val String msg = "Can not create assembly connector providing interface " + opInterface.entityName +
 				" because no operation requiring role for interface " + opInterface.entityName +
 				" was found in the system. Only assembly context for " + component.entityName + " was created."
-			userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
+			userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).startInteraction()
 			return null
 		}
 	}

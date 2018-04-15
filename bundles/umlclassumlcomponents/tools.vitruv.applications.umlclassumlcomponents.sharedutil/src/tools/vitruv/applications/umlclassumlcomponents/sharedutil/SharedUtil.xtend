@@ -7,7 +7,7 @@ class SharedUtil {
 		
 	public static def int modalTextUserinteracting(UserInteracting userInteracting, String msg, String... selections) {
 		return userInteracting.singleSelectionDialogBuilder.message(msg).choices(selections)
-		    .windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
+		    .windowModality(WindowModality.MODAL).startInteraction()
 	}
 
 	public static def boolean modalTextYesNoUserInteracting(UserInteracting userInteracting, String msg) {

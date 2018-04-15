@@ -348,7 +348,7 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 			}
 			val String selectTypeMsg = "Please select type (or interface) that should be used for the type";
 			val int selectedType = userInteracting.singleSelectionDialogBuilder.message(selectTypeMsg)
-			    .choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).showDialogAndGetUserInput();
+			    .choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction();
 			val Class<?> selectedClass = collectionDataTypes.get(selectedType);
 
 			createJavaClass(dataType, datatypesPackage, dataType.entityName);

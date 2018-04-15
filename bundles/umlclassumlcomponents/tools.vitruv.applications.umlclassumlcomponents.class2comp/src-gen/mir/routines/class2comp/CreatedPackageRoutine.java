@@ -55,7 +55,7 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
         final Component umlComp = componentsList.get(selection);
         _routinesFacade.assignNewPackage(classPackage, umlComp);
       } else {
-        this.userInteracting.getNotificationDialogBuilder().message("No available Component found").windowModality(WindowModality.MODELESS).showDialogAndGetUserInput();
+        this.userInteracting.getNotificationDialogBuilder().message("No available Component found").windowModality(WindowModality.MODELESS).startInteraction();
       }
     }
   }

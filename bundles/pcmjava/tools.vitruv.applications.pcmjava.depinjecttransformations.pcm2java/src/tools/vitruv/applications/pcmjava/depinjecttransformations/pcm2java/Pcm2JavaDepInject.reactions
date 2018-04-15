@@ -47,7 +47,7 @@ reaction pcm2javaCommon::AddedAssemblyContextToComposedStructure {
 					val msg = "Assembly context for " + component.entityName +
 					"already exists. Only one assembly context per basic component is allowed."
 					userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODAL)
-					   .showDialogAndGetUserInput();
+					   .startInteraction();
 					return false
 				}
 			}

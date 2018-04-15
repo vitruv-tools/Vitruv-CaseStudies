@@ -103,7 +103,7 @@ class UmlToJavaHelper {
         }
         val String selectTypeMsg = "Select a Collectiontype for the association end"
         val int selectedType = userInteracting.singleSelectionDialogBuilder.message(selectTypeMsg)
-            .choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).showDialogAndGetUserInput()
+            .choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction()
         val Class<?> selectedClass = collectionDataTypes.get(selectedType)
         return selectedClass.name
     }
@@ -137,7 +137,7 @@ class UmlToJavaHelper {
      */
     def static void showMessage(UserInteracting userInteracting, String message) {
         userInteracting.notificationDialogBuilder.message(message).windowModality(WindowModality.MODAL)
-            .showDialogAndGetUserInput()
+            .startInteraction()
     }
 	
 }

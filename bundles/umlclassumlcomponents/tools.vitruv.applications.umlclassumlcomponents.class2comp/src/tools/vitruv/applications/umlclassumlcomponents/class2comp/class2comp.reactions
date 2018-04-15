@@ -414,7 +414,7 @@ routine createdPackage(umlclass::Package classPackage) {
 				assignNewPackage(classPackage, umlComp)
 			} else {
 				userInteracting.notificationDialogBuilder.message("No available Component found")
-				    .windowModality(WindowModality.MODELESS).showDialogAndGetUserInput()
+				    .windowModality(WindowModality.MODELESS).startInteraction()
 			}
 		}
 					
@@ -432,7 +432,7 @@ routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlCo
 			} else {
 				val String errorMsg = "Chosen Component is already linked to existing Package '" + oldPackage.name + "'."
 				userInteracting.notificationDialogBuilder.message(errorMsg).windowModality(WindowModality.MODELESS)
-				    .showDialogAndGetUserInput()
+				    .startInteraction()
 			}
 		}
 	} 
