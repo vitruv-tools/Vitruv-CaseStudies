@@ -1,0 +1,424 @@
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
+import tools.vitruv.framework.userinteraction.UserInteractionType
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: umlPackageReactions
+in reaction to changes in UML
+execute actions in PCM
+
+reaction PackageInsertedIntoPackageOrModel {
+	after element uml::Package inserted in uml::Package[packagedElement]
+	call matchPossiblyExistingPackageCorrespondences(newValue, affectedEObject)
+}
+
+routine matchPossiblyExistingPackageCorrespondences(uml::Package newPkg, uml::Package parentPkg){
+	match{
+		val selfIsRepositoryPkg = retrieve optional pcm::Repository corresponding to newPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val selfIsContractsPkg = retrieve optional pcm::Repository corresponding to newPkg tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+		val selfIsDatatypesPkg = retrieve optional pcm::Repository corresponding to newPkg tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+		val parentIsRepositoryPkg = retrieve optional pcm::Repository corresponding to parentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		
+		val selfIsSystemPkg = retrieve optional pcm::System corresponding to newPkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
+		
+		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to newPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+	}
+	action{
+		call{
+			if (selfIsRepositoryPkg.isPresent) 
+				matchRepositoryPackageToInsertionContext(newPkg, parentPkg)
+			else if (selfIsContractsPkg.isPresent || selfIsDatatypesPkg.isPresent){
+				if(!parentIsRepositoryPkg.isPresent)
+					logger.warn("A repository contracts package has been moved to an invalid nesting package!")
+//				else return // nothing to do since they are generated via round-trip
+			}
+			else if (selfIsSystemPkg.isPresent) 
+				matchSystemPackageToInsertionContext(newPkg, parentPkg)
+			else if (selfIsComponentPkg.isPresent) 
+				matchRepositoryComponentPackageToInsertionContext(newPkg, parentPkg)
+			else //no concept exists so far
+				contextDisambiguateNewPackageConcept(newPkg, parentPkg)
+		}
+	}
+}
+
+routine matchRepositoryPackageToInsertionContext(uml::Package repositoryPkg, uml::Package parentPkg){
+	action{
+		call{
+			if(PcmUmlClassHelper.isContainedInRepositoryHierarchy(repositoryPkg, correspondenceModel)){
+				// this is not a valid insertion context for a repository package
+				deleteRepositoryPackageCorrespondence(repositoryPkg)
+				contextDisambiguateNewPackageConcept(repositoryPkg, parentPkg)
+			}
+			else{
+//				moveRepositoryPackage(repositoryPkg, parentPkg) // unnecessary since pcm::Repository is a root element
+			}
+		}
+	}
+}
+
+routine matchSystemPackageToInsertionContext(uml::Package systemPkg, uml::Package parentPkg){
+	action{
+		call{
+			if(PcmUmlClassHelper.isContainedInRepositoryHierarchy(systemPkg, correspondenceModel)){
+				// this is not a valid insertion context for a system package
+				deleteSystemPackageCorrespondence(systemPkg)
+				contextDisambiguateNewPackageConcept(systemPkg, parentPkg)
+			}
+			else{
+//				moveSystemPackage(systemPkg, parentPkg) // unnecessary since pcm::Repository is a root element
+			}
+		}
+	}
+}
+
+routine matchRepositoryComponentPackageToInsertionContext(uml::Package componentPkg, uml::Package parentPkg){
+	match{
+		val pcmRepository = retrieve optional pcm::Repository corresponding to parentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	}
+	action{
+		call{
+			if(!pcmRepository.isPresent){
+				// this is not a valid insertion context for a repository package
+				deleteRepositoryComponentPackageCorrespondence(componentPkg)
+				contextDisambiguateNewPackageConcept(componentPkg, parentPkg)
+			}
+			else{
+				moveRepositoryComponentPackage(componentPkg, parentPkg)
+			}
+		}
+	}
+}
+
+routine contextDisambiguateNewPackageConcept(uml::Package newPkg, uml::Package parentPkg){
+	action{
+		execute{
+			if (PcmUmlClassHelper.isRepositoryPackage(parentPkg, correspondenceModel)){
+				checkForRepositoryComponentCandidate(newPkg, parentPkg)
+			}
+			else if (!PcmUmlClassHelper.isContainedInRepositoryHierarchy(parentPkg, correspondenceModel)){
+				checkForRepositoryOrSystemCandidate(newPkg, parentPkg)
+			}
+		}
+	}
+}
+
+routine checkForRepositoryOrSystemCandidate(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		// TODO add implementation
+		call userDisambiguateRepositoryOrSystemCreation(umlPkg, umlParentPkg)
+	}
+}
+
+routine checkForRepositoryComponentCandidate(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		// TODO add implementation
+		call userDisambiguateComponentTypeCreation(umlPkg, umlParentPkg)
+	}
+}
+
+routine userDisambiguateRepositoryOrSystemCreation(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		execute{
+			val pcmElementType = userInteracting.selectFromMessage(UserInteractionType.MODAL, 
+												DefaultLiterals.INPUT_REQUEST_DISAMBIGUATE_REPOSITORY_SYSTEM_TYPE, 
+												#["Repository", "System", "No Correspondence"]);
+			switch (pcmElementType){
+				case 0: createRepositoryPackageConcept(umlPkg, umlParentPkg)
+				case 1: createSystemPackageConcept(umlPkg, umlParentPkg)
+				default: return //do nothing
+			}
+		}
+	}
+}
+routine userDisambiguateComponentTypeCreation(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		execute{
+			val componentType = userInteracting.selectFromMessage(UserInteractionType.MODAL, 
+												DefaultLiterals.INPUT_REQUEST_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE, 
+												#["BasicComponent", "CompositeComponent", "SubSystem", "No Correspondence"]);
+			switch (componentType){
+				case 0: createBasicComponentPackageConcept(umlPkg, umlParentPkg)
+				case 1: createCompositeComponentPackageConcept(umlPkg, umlParentPkg)
+				case 2: createSubSystemPackageConcept(umlPkg, umlParentPkg)
+				default: return //do nothing
+			}
+		}
+	}
+}
+
+routine createRepositoryPackageConcept(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		val pcmRepository = create pcm::Repository and initialize {
+			pcmRepository.entityName = umlPkg.name?.toFirstUpper
+		}
+		add correspondence between pcmRepository and umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		execute{
+			val fileExtension = DefaultLiterals.PCM_REPOSITORY_EXTENSION
+			var relativeModelPath = userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH)
+			if (relativeModelPath.nullOrEmpty){
+				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME;
+			}
+			
+			//check if a model at the specified path already exists; if so, append a number
+			//remove extension for now, so that it is easier to add a suffix if necessary
+			if (relativeModelPath.endsWith(fileExtension)){
+				relativeModelPath.substring(0, relativeModelPath.length - fileExtension.length)
+			}
+			var uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + fileExtension) 
+			while(URIUtil.existsResourceAtUri(uri)){
+				uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + "-2" + fileExtension) 		
+			}
+			//append file extension now
+			if (!relativeModelPath.endsWith(fileExtension)){
+				relativeModelPath += fileExtension
+			}
+			
+			persistProjectRelative(umlPkg, pcmRepository, relativeModelPath);
+		}
+//		call moveRepositoryPackage(umlPkg, umlParentPkg) // unnecessary since pcm::Repository is a root element
+	}
+}
+
+routine createSystemPackageConcept(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		val pcmSystem = create pcm::System and initialize {
+			pcmSystem.entityName = umlPkg.name?.toFirstUpper
+		}
+		add correspondence between pcmSystem and umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		execute{
+			val fileExtension = DefaultLiterals.PCM_SYSTEM_EXTENSION
+			var relativeModelPath = userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH)
+			if (relativeModelPath.nullOrEmpty){
+				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_SYSTEM_FILE_NAME;
+			}
+			
+			//check if a model at the specified path already exists; if so, append a number
+			//remove extension for now, so that it is easier to add a suffix if necessary
+			if (relativeModelPath.endsWith(fileExtension)){
+				relativeModelPath.substring(0, relativeModelPath.length - fileExtension.length)
+			}
+			var uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + fileExtension) 
+			while(URIUtil.existsResourceAtUri(uri)){
+				uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + "-2" + fileExtension) 		
+			}
+			//append file extension now
+			if (!relativeModelPath.endsWith(fileExtension)){
+				relativeModelPath += fileExtension
+			}
+			
+			persistProjectRelative(umlPkg, pcmSystem, relativeModelPath);
+		}
+//		call moveSystemPackage(umlPkg, umlParentPkg) // unnecessary since pcm::System is a root element
+	}
+}
+
+routine createBasicComponentPackageConcept(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		val pcmComponent = create pcm::BasicComponent and initialize {
+			pcmComponent.entityName = umlPkg.name?.toFirstUpper
+		}
+		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		call moveRepositoryComponentPackage(umlPkg, umlParentPkg)
+	}
+}
+
+routine createCompositeComponentPackageConcept(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		val pcmComponent = create pcm::CompositeComponent and initialize {
+			pcmComponent.entityName = umlPkg.name?.toFirstUpper
+		}
+		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		call moveRepositoryComponentPackage(umlPkg, umlParentPkg)
+	}
+}
+
+routine createSubSystemPackageConcept(uml::Package umlPkg, uml::Package umlParentPkg){
+	action{
+		val pcmComponent = create pcm::SubSystem and initialize {
+			pcmComponent.entityName = umlPkg.name?.toFirstUpper
+		}
+		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		call moveRepositoryComponentPackage(umlPkg, umlParentPkg)
+	}
+}
+
+routine moveRepositoryComponentPackage(uml::Package umlPkg, uml::Package umlParentPkg){
+	match {
+		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val pcmComponent = retrieve asserted pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+	}
+	action{
+		update pcmRepository {
+			pcmRepository.components__Repository += pcmComponent
+		}
+	}
+}
+
+reaction PackageRenamed {
+	after attribute replaced at uml::Package[name]
+	with {affectedEObject.name == newValue}
+	call renamePackageCorrespondences(affectedEObject, newValue)
+}
+
+routine renamePackageCorrespondences(uml::Package umlPkg, String newName){
+	match{
+		val selfIsRepositoryPkg = retrieve optional pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val selfIsSystemPkg = retrieve optional pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
+		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+	}
+	action{
+		call{
+			if (selfIsRepositoryPkg.isPresent) renameRepositoryPackageCorrespondence(umlPkg, newName)
+			if (selfIsSystemPkg.isPresent) renameSystemPackageCorrespondence(umlPkg, newName)
+			if (selfIsComponentPkg.isPresent) renameRepositoryComponentPackageCorrespondence(umlPkg, newName)
+		}
+	}
+}
+
+routine renameRepositoryPackageCorrespondence(uml::Package umlPkg, String newName){
+	match {
+		val pcmElement = retrieve asserted pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	}
+	action {
+		update pcmElement {
+			pcmElement.entityName = newName?.toFirstUpper
+		}
+	}
+}
+
+routine renameSystemPackageCorrespondence(uml::Package umlPkg, String newName){
+	match {
+		val pcmElement = retrieve asserted pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
+	}
+	action {
+		update pcmElement {
+			pcmElement.entityName = newName?.toFirstUpper
+		}
+	}
+}
+
+routine renameRepositoryComponentPackageCorrespondence(uml::Package umlPkg, String newName){
+	match {
+		val pcmElement = retrieve asserted pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+	}
+	action {
+		update pcmElement {
+			pcmElement.entityName = newName?.toFirstUpper
+		}
+	}
+}
+
+
+reaction PackageRemovedFromPackageOrModel {
+	after element uml::Package removed from uml::Package[nestedPackage]
+	//TODO what sort of validity check would make sence here? if the packge is already reinserted somwhere else, we can't use current hierarchy
+	call removePackageCorrespondencesWithoutDeletion(affectedEObject, oldValue)
+}
+
+routine removePackageCorrespondencesWithoutDeletion(uml::Package parentPkg, uml::Package removedPkg){
+	match{
+		val selfIsRepositoryPkg = retrieve optional pcm::Repository corresponding to removedPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val selfIsSystemPkg = retrieve optional pcm::System corresponding to removedPkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
+		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to removedPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		
+		val selfIsContractsPkg = retrieve optional pcm::Repository corresponding to removedPkg tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+		val selfIsDatatypesPkg = retrieve optional pcm::Repository corresponding to removedPkg tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+	}
+	action{
+		call {
+//			if (selfIsRepositoryPkg.isPresent || selfIsSystemPkg.isPresent) return;// do nothing since they are root elements 
+			if (selfIsComponentPkg.isPresent) removeRepositoryComponentPackage(parentPkg, removedPkg)
+			if ((selfIsContractsPkg.isPresent || selfIsDatatypesPkg.isPresent))
+				logger.warn("A repository contracts package should not be removed from its repository package!")
+		}
+	}
+}
+
+routine removeRepositoryComponentPackage(uml::Package umlRepositoryPkg, uml::Package umlComponentPkg){
+	match{
+		val pcmRepository = retrieve pcm::Repository corresponding to umlRepositoryPkg
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlComponentPkg
+	}
+	action{
+		execute{pcmRepository.components__Repository -= pcmComponent}
+	}
+}
+
+
+reaction PackageDeleted {
+	after element uml::Package deleted
+	call deleteOldPackageCorrespondences(affectedEObject)
+}
+
+
+routine deleteOldPackageCorrespondences(uml::Package pkg){
+	match{
+		val selfIsRepositoryPkg = retrieve optional pcm::Repository corresponding to pkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val selfIsSystemPkg = retrieve optional pcm::System corresponding to pkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
+		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to pkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+	}
+	action{
+		call{
+			if (selfIsRepositoryPkg.isPresent) deleteRepositoryPackageCorrespondence(pkg)
+			if (selfIsSystemPkg.isPresent) deleteSystemPackageCorrespondence(pkg)
+			if (selfIsComponentPkg.isPresent) deleteRepositoryComponentPackageCorrespondence(pkg)
+		}
+	}
+}
+
+routine deleteRepositoryPackageCorrespondence(uml::Package umlRepositoryPkg){
+	match{
+		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlRepositoryPkg
+	}
+	action{
+		remove correspondence between pcmRepository and umlRepositoryPkg
+		delete pcmRepository 
+		//TODO recurse package hierarchy and delete correspondences; necessary? or done via round-trip
+	}
+}
+
+routine deleteSystemPackageCorrespondence(uml::Package umlSystemPkg){
+	match{
+		val pcmSystem = retrieve asserted pcm::System corresponding to umlSystemPkg
+	}
+	action{
+		remove correspondence between pcmSystem and umlSystemPkg
+		delete pcmSystem 
+		//no other elements in this package should be able to participate in a correspondence
+		// -> hierarchy doesn't have to be traversed and cleaned
+	}
+}
+
+routine deleteRepositoryComponentPackageCorrespondence(uml::Package umlComponentPkg){
+	match{
+		val pcmComponent = retrieve asserted pcm::RepositoryComponent corresponding to umlComponentPkg
+	}
+	action{
+		remove correspondence between pcmComponent and umlComponentPkg
+		delete pcmComponent // should delete componentImpl via round-trip
+		//no other elements in this package should be able to participate in a correspondence
+		// -> hierarchy doesn't have to be traversed and cleaned
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

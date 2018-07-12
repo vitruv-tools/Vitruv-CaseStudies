@@ -1,0 +1,486 @@
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.palladiosimulator.pcm.repository.CollectionDataType
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: umlParameterReactions
+in reaction to changes in UML
+execute actions in PCM
+
+//possible correspondeces that need to be differentiated and synchronized by these reactions
+//	1) pcm::Parameter 			~ uml::Parameter 	| regular in/out-parameter in a synchronized OperationSignature ~ Operation correspondence instance
+//	2) pcm::OperationSignature ~ uml::Parameter 	| return parameter of a synchronized OperationSignature ~ Operation correspondence instance
+//	3) pcm::RequiredRole 		~ uml::Parameter	| in-parameter in the constructor of a pcm::RepositoryComponent, representing the required interface type 
+//	4) pcm::CollectionDatatype ~ uml::Parameter	| corresponding to the type and multiplicity of the parameter
+//												| changes (based on) how the parameter attributes need to be propagated
+//	A uml::Parameter can participate in none or one correspondence of {1), 2), 3)}
+//	and can participate in correspondence 4) (mostly independent of 1)-2)).
+//	However, 3) and 4) can not exist together as RequiredRole always expects a simple synchronized pcm::Interface type.
+//		Assumption: the user knows about this convention and does not break it.
+//	A change to the parameter type coming from 1) or 2) can trigger the creation or deletion of 4)
+// 		and changes along 4) need to be propagated along to 1) or 2).
+
+
+////////////////// Parameter insert disambiguation routines
+
+reaction ParameterInsertedInOperation {
+	after element uml::Parameter inserted in uml::Operation[ownedParameter]
+	with {newValue.operation === affectedEObject} // validity check
+	call disambiguatePreexistingCorrespondences(newValue, affectedEObject)
+}
+
+routine disambiguatePreexistingCorrespondences(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
+		val pcmRequiredRole = retrieve optional pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	}
+	action {
+		call {
+			if (pcmParam.isPresent) {
+				matchRegularParamToInsertionContext(umlParam, umlOperation)
+			} 
+			else if (pcmSignature.isPresent){ 
+				// this is the return parameter of a pcm::Signature and was generated via round-trip
+				// -> nothing to do
+			} 
+			else if (pcmRequiredRole.isPresent) {
+				matchRequiredRoleParamToInsertionContext(umlParam, umlOperation)
+			}
+			else{
+				disambiguateParamConceptFromInsertionContext(umlParam, umlOperation)				
+			}
+		}
+	}
+}
+
+routine matchRequiredRoleParamToInsertionContext(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val inComponentConstructor = retrieve optional pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+	}
+	action {
+		call {
+			if (inComponentConstructor.isPresent){
+				moveRequiredRoleParamCorrespondence(umlParam, umlOperation)
+			} 
+			else {
+				deleteRequiredRoleParamCorrespondence(umlParam)
+				disambiguateParamConceptFromInsertionContext(umlParam, umlOperation)
+			}
+		}
+	}
+}
+
+routine matchRegularParamToInsertionContext(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val inInterfaceOperation = retrieve optional pcm::OperationInterface corresponding to umlOperation.interface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+	}
+	action {
+		call {
+			if (inInterfaceOperation.isPresent) {
+				moveRegularParamCorrespondence(umlParam, umlOperation)
+			} 
+			else {
+				deleteRegularParamCorrespondence(umlParam)
+				disambiguateParamConceptFromInsertionContext(umlParam, umlOperation)
+			}
+		}
+	}
+}
+
+routine disambiguateParamConceptFromInsertionContext(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val inInterfaceOperation = retrieve optional pcm::OperationInterface corresponding to umlOperation.interface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		
+		val inComponentConstructor = retrieve optional pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val isSynchronizedInterface = retrieve optional pcm::OperationInterface corresponding to umlParam.type tagged with TagLiterals.INTERFACE_TO_INTERFACE
+	}
+	action {
+		call {
+			if (inComponentConstructor.isPresent && isSynchronizedInterface.isPresent){
+				checkIfRequiredRoleCandidateExists(umlParam, umlOperation)
+			}
+			else if (inInterfaceOperation.isPresent && umlParam.direction !== ParameterDirectionKind.RETURN_LITERAL){
+				checkIfRegularParamCandidateExists(umlParam, umlOperation)
+			}
+			// else -> no matching concept -> do nothing
+		}
+	}
+}
+
+///////////// Name change Reaction
+
+reaction ParameterNameChanged {
+	after attribute replaced at uml::Parameter[name]
+	with{affectedEObject.name == newValue}
+	call renameRegularParamCorrespondence(affectedEObject, newValue)
+}
+
+reaction ParameterRemoved {
+	after element uml::Parameter removed from uml::Operation[ownedParameter]
+	with{!affectedEObject.ownedParameters.contains(oldValue)}
+	call propagateParameterRemoval(oldValue, affectedEObject)
+}
+
+routine propagateParameterRemoval(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
+		val pcmRequiredRole = retrieve optional pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	}
+	action {
+		call {
+			if (pcmParam.isPresent) {
+				removeRegularParamCorrespondence(umlParam, umlOperation)
+			} 
+			else if (pcmSignature.isPresent){ 
+				// this is the return parameter of a pcm::Signature and was generated via round-trip
+				// -> remove-change should have also been initiated via round-trip and is resolved
+			} 
+			else if (pcmRequiredRole.isPresent) {
+				removeRequiredRoleParamCorrespondence(umlParam, umlOperation)
+			}
+		}
+	}
+}
+
+reaction ParameterDeleted {
+	after element uml::Parameter deleted
+	call propagateParameterDeletion(affectedEObject)
+}
+
+routine propagateParameterDeletion(uml::Parameter umlParam){
+	match {
+		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
+		val pcmRequiredRole = retrieve optional pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	}
+	action {
+		call {
+			if (pcmParam.isPresent) {
+				deleteRegularParamCorrespondence(umlParam)
+			} 
+			else if (pcmSignature.isPresent){ 
+				// this is the return parameter of a pcm::Signature and was generated via round-trip
+				// -> delete-change should have also been initiated via round-trip and is resolved
+			} 
+			else if (pcmRequiredRole.isPresent) {
+				deleteRequiredRoleParamCorrespondence(umlParam)
+			}
+		}
+	}
+}
+
+///////////// Required Role correspondence routines
+
+routine checkIfRequiredRoleCandidateExists(uml::Parameter umlParam, uml::Operation umlOperation){
+	action {
+		//TODO implementation
+		call createRequiredRoleCorrespondence(umlParam, umlOperation)
+	}
+}
+
+routine createRequiredRoleCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val pcmComponent = retrieve asserted pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val pcmInterface = retrieve asserted pcm::OperationInterface corresponding to umlParam.type tagged with TagLiterals.INTERFACE_TO_INTERFACE
+	}
+	action {
+		val pcmRequiredRole = create pcm::OperationRequiredRole and initialize {
+			pcmRequiredRole.requiringEntity_RequiredRole = pcmComponent
+			pcmRequiredRole.requiredInterface__OperationRequiredRole = pcmInterface
+		}
+		add correspondence between pcmRequiredRole and umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+		call moveRequiredRoleParamCorrespondence(umlParam, umlOperation)
+	}
+}
+
+routine moveRequiredRoleParamCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val pcmRequiredRole = retrieve pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	}
+	action {
+		update pcmComponent {
+			pcmComponent.requiredRoles_InterfaceRequiringEntity += pcmRequiredRole
+		}
+	}
+}
+
+routine removeRequiredRoleParamCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val pcmRequiredRole = retrieve pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	}
+	action {
+		update pcmComponent {
+			pcmComponent.requiredRoles_InterfaceRequiringEntity -= pcmRequiredRole
+		}
+	}
+}
+
+routine deleteRequiredRoleParamCorrespondence(uml::Parameter umlParam){
+	match {
+		val pcmRequiredRole = retrieve pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	}
+	action {
+		remove correspondence between pcmRequiredRole and umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+		delete pcmRequiredRole
+	}
+}
+
+routine changeTypeOfRequiredRoleParamCorrespondence(uml::Parameter umlParam, uml::Type umlType){
+	match {
+		val pcmRequiredRole = retrieve pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlType tagged with TagLiterals.INTERFACE_TO_INTERFACE
+	}
+	action {
+		update pcmRequiredRole {
+			pcmRequiredRole.requiredInterface__OperationRequiredRole = pcmInterface
+		}
+	}
+}
+
+////////////////////////// Regular Parameter in Interface Operation routines
+
+routine checkIfRegularParamCandidateExists(uml::Parameter umlParam, uml::Operation umlOperation){
+	action {
+		//TODO implementation
+		call createRegularParamCorrespondence(umlParam, umlOperation)
+	}
+}
+
+routine createRegularParamCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.SIGNATURE__OPERATION
+	}
+	action {
+		val pcmParam = create pcm::Parameter and initialize {
+			pcmParam.parameterName = umlParam.name
+		}
+		add correspondence between pcmParam and umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		call typeChangedRegularParamCorrespondence(umlParam, umlParam.type) // sets the pcmParam's type
+		call moveRegularParamCorrespondence(umlParam, umlOperation)
+	}
+}
+
+routine moveRegularParamCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.SIGNATURE__OPERATION
+	}
+	action {
+		update pcmSignature {
+			pcmSignature.parameters__OperationSignature += pcmParam
+		}
+	}
+}
+
+routine removeRegularParamCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
+	match {
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.SIGNATURE__OPERATION
+	}
+	action {
+		update pcmSignature {
+			pcmSignature.parameters__OperationSignature -= pcmParam
+		}
+	}
+}
+
+routine deleteRegularParamCorrespondence(uml::Parameter umlParam){
+	match {
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		remove correspondence between pcmParam and umlParam
+		delete pcmParam
+	}
+}
+
+routine renameRegularParamCorrespondence(uml::Parameter umlParam, String umlNewName){
+	match {
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		update pcmParam {
+			pcmParam.parameterName = umlNewName
+		}
+	}
+}
+
+routine typeChangedRegularParamCorrespondence(uml::Parameter umlParam, uml::Type umlNewType){
+	match {
+		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmDataType = retrieve pcm::DataType corresponding to umlNewType tagged with TagLiterals.DATATYPE__TYPE
+		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+	action {
+		update pcmParam {
+			if(pcmCollectionType.isPresent) pcmParam.dataType__Parameter = pcmCollectionType.get
+			else pcmParam.dataType__Parameter = pcmDataType
+		}
+	}
+}
+
+////////////////////////// Return Parameter in Interface Operation routines
+// The return parameter is created via round-trip by the pcm->uml transformation.
+// It should not be re-/moved or deleted on its own. 
+// As a result, the correspondence graph stays the same and only attribute changes need to be propagated.  
+
+routine typeChangedReturnParamCorrespondence(uml::Parameter umlParam, uml::Type umlNewType){
+	match {
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
+		val pcmDataType = retrieve pcm::DataType corresponding to umlNewType tagged with TagLiterals.DATATYPE__TYPE
+		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+	action {
+		update pcmSignature {
+			if(pcmCollectionType.isPresent) pcmSignature.returnType__OperationSignature = pcmCollectionType.get
+			else pcmSignature.returnType__OperationSignature = pcmDataType
+		}
+	}
+}
+
+
+///////////// CollectionDatatype ~ Parameter correspondence disambiguation routines
+
+reaction ParameterTypeChanged{
+	after element replaced at uml::Parameter[type]
+	with {affectedEObject.type === newValue}
+	call contextDisambiguateParameterTypeChange(affectedEObject, newValue)
+}
+
+routine contextDisambiguateParameterTypeChange(uml::Parameter umlParam, uml::Type umlNewType){
+	match{
+		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+		val pcmDataType = retrieve optional pcm::DataType corresponding to umlNewType tagged with TagLiterals.DATATYPE__TYPE
+		val pcmInterface = retrieve optional pcm::OperationInterface corresponding to umlNewType tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		
+		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
+		val pcmRequiredRole = retrieve optional pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+	}
+	action{
+		execute {
+//				logger.warn("An unsynchronized uml::Type has been set on a synchronized Parameter. This action can not be resolved and should be fixed.")
+			if (pcmDataType.isPresent){
+				if (!pcmCollectionType.isPresent) {
+					propagateDataTypeChange(umlParam, umlNewType)
+				}
+				else if(pcmCollectionType.isPresent && pcmCollectionType.get.innerType_CollectionDataType !== pcmDataType.get){
+//					remove old correspondence between pcmCollectionType and umlParam first
+					deleteCollection2ParameterCorrespondence(umlParam)
+					userDisambiguateNewCollectionCorrespondence(umlParam, umlNewType)
+				}
+			} 
+			
+			else if (pcmRequiredRole.isPresent){
+				if(!pcmInterface.isPresent){
+					logger.warn("A non-architectural interface or type has been set as required interface on RequiredRole: " + pcmRequiredRole.get)
+				}
+				else changeTypeOfRequiredRoleParamCorrespondence(umlParam, umlNewType)				
+			}
+		}
+	}
+}
+
+routine propagateDataTypeChange(uml::Parameter umlParam, uml::Type umlNewType){
+	match{
+		val pcmParam = retrieve optional pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
+	}
+	action{
+		call {
+			if (pcmParam.isPresent) typeChangedRegularParamCorrespondence(umlParam, umlNewType)
+			if (pcmSignature.isPresent) typeChangedRegularParamCorrespondence(umlParam, umlNewType)
+		}
+	}
+}
+
+routine userDisambiguateNewCollectionCorrespondence(uml::Parameter umlParam, uml::Type umlNewType){
+	match{
+		require absence of pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+		val pcmDataType = retrieve asserted pcm::DataType corresponding to umlNewType tagged with TagLiterals.DATATYPE__TYPE
+	}
+	action{
+		execute {
+			val collectionCandidates = pcmDataType.repository__DataType.dataTypes__Repository
+				.filter(CollectionDataType).filter[collection | collection.innerType_CollectionDataType === pcmDataType]
+//			TODO implement and test user disambiguation. for now, use first match, or generate default
+//			val userSelectionIndex = userInteracting.selectFromMessage(
+//					UserInteractionType.MODAL, 
+//					"Please select an appropriate collectionType for <Parameter>", 
+//					collectionCandidates.map[toString()])
+//			...
+			if(collectionCandidates.head !== null){
+				createCollection2ParameterCorrespondence(collectionCandidates.head, umlParam)
+			}
+			else {
+				createCorrespondingDefaultCollectionDataType(umlParam, umlNewType)
+			}
+			propagateDataTypeChange(umlParam, umlNewType)
+		}
+	}
+}
+
+routine createCollection2ParameterCorrespondence(pcm::CollectionDataType pcmCollectionType, uml::Parameter umlParam){
+	action{
+		add correspondence between pcmCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+}
+
+routine deleteCollection2ParameterCorrespondence(uml::Parameter umlParam){
+	match{
+		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+	action{
+		remove correspondence between pcmCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+}
+
+routine createCorrespondingDefaultCollectionDataType(uml::Parameter umlParam, uml::Type umlNewType){
+	match{
+		require absence of pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+		val pcmDataType = retrieve asserted pcm::DataType corresponding to umlNewType tagged with TagLiterals.DATATYPE__TYPE
+	}
+	action{
+		val pcmCollectionType = create pcm::CollectionDataType and initialize {
+			pcmCollectionType.entityName = umlNewType.name + "Collection"
+			pcmCollectionType.innerType_CollectionDataType = pcmDataType
+		} 
+		add correspondence between pcmCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+		call propagateDataTypeChange(umlParam, umlNewType)
+	}
+}
+
+//reaction ParameterMultiplicityLowerChanged{
+//	TODO
+//	call contextDisambiguateTypeChangeFromMultiplicityChange(umlParam, ...)
+//}
+//reaction ParameterMultiplicityUpperChanged{
+//	TODO
+//	call contextDisambiguateTypeChangeFromMultiplicityChange(umlParam, ...)
+//}
+
+routine contextDisambiguateTypeChangeFromMultiplicityChange(uml::Parameter umlParam){
+	match{
+		val pcmDataType = retrieve asserted pcm::DataType corresponding to umlParam.type tagged with TagLiterals.DATATYPE__TYPE
+		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+	action{
+		call {
+			if (pcmCollectionType.isPresent && umlParam.lower == 1 && umlParam.upper == 1){
+				deleteCollection2ParameterCorrespondence(umlParam)
+				propagateDataTypeChange(umlParam, umlParam.type)
+			}
+			else if (!pcmCollectionType.isPresent && umlParam.lower == 0 && umlParam.upper == LiteralUnlimitedNatural.UNLIMITED){
+				userDisambiguateNewCollectionCorrespondence(umlParam, umlParam.type)
+			}
+		}
+	}
+}
+

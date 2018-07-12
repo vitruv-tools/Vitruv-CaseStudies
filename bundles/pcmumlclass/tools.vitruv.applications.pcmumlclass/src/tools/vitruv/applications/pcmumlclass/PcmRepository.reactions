@@ -1,0 +1,193 @@
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.UMLFactory
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
+import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: pcmRepositoryReactions
+in reaction to changes in PCM
+execute actions in UML
+
+reaction RepositoryCreated {
+	after element pcm::Repository inserted as root
+	call initializePcmRepositoryUmlPackagesCorrespondence(newValue)
+}
+
+routine initializePcmRepositoryUmlPackagesCorrespondence(pcm::Repository pcmRepo){
+	match {
+		val umlRepositoryPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+		val umlDatatypesPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+	}
+	action {
+		call{
+			if(!umlRepositoryPkg.present) createUmlRepositoryPackage(pcmRepo)
+			if(!umlContractsPkg.present) createUmlContractsPackage(pcmRepo)
+			if(!umlDatatypesPkg.present) createUmlDatatypesPackage(pcmRepo)
+			bootstrapPrimitiveDatatypes(pcmRepo)
+		}
+	}
+}
+
+routine createUmlRepositoryPackage(pcm::Repository pcmRepo){
+	match {
+		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		// if the main package doesn't exist, then there should be no subpackages
+		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+	}
+	action {
+		val umlRepositoryPkg = create uml::Package and initialize{
+			umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower;
+		}
+		call {
+			// TODO flexible Model-path through Userinteracting
+			var relativeModelPath = "" //userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_MODEL_PATH)
+			if (relativeModelPath.nullOrEmpty){
+				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION;
+			}
+			if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)){
+				relativeModelPath += DefaultLiterals.UML_EXTENSION
+			}
+			
+			//check if a model at the specified path already exists; create one if necessary
+			var Model umlRootModel = null
+			val uri = PersistenceHelper.getURIFromSourceProjectFolder(pcmRepo, relativeModelPath) 
+			if(URIUtil.existsResourceAtUri(uri)){
+				val resource = pcmRepo.eResource.resourceSet.getResource(uri,true)
+				umlRootModel = resource.contents.filter(Model).head				
+			}
+			if(umlRootModel === null){ //the resource didn't exist, or did not contain a uml::Model object
+				umlRootModel = UMLFactory.eINSTANCE.createModel
+				umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
+				
+				persistProjectRelative(pcmRepo, umlRootModel, relativeModelPath);
+			}
+			
+			umlRootModel.nestedPackages += umlRepositoryPkg
+		}
+		add correspondence between pcmRepo and umlRepositoryPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	}
+}
+
+routine createUmlContractsPackage(pcm::Repository pcmRepo){
+	match {
+		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+	}
+	action {
+		call{
+			//look for candidate before creating a new Package
+			var umlContractsPkg = umlRepositoryPkg.nestedPackages.findFirst[pkg | pkg.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
+			if (umlContractsPkg !== null){
+				//TODO recurse existing datatypes?
+				//TODO disambiguate existing candidates
+			} 
+			else {
+				umlContractsPkg = umlRepositoryPkg.createNestedPackage(DefaultLiterals.CONTRACTS_PACKAGE_NAME)
+			}
+			ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
+		}
+	}
+}
+routine createUmlDatatypesPackage(pcm::Repository pcmRepo){
+	match {
+		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+	}
+	action {
+		call{
+			//look for candidate before creating a new Package
+			var umlContractsPkg = umlRepositoryPkg.nestedPackages.findFirst[pkg | pkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
+			if (umlContractsPkg !== null){
+				//TODO recurse existing datatypes?
+				//TODO disambiguate existing candidates
+			} 
+			else {
+				umlContractsPkg = umlRepositoryPkg.createNestedPackage(DefaultLiterals.DATATYPES_PACKAGE_NAME)
+			}
+			ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
+		}
+	}
+}
+
+reaction RepositoryNameChanged {
+	after attribute replaced at pcm::Repository[entityName] 
+//	with {!newValue.nullOrEmpty && affectedEObject.entityName == newValue}
+	call changeUmlRepositoryName(affectedEObject)
+}
+
+routine changeUmlRepositoryName(pcm::Repository pcmRepo){
+	match {
+		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	}
+	action {
+		update umlRepositoryPkg {
+			if (umlRepositoryPkg.name != pcmRepo.entityName.toFirstLower)
+				umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower
+		}
+	}
+}
+
+reaction RepositoryDeleted {
+	after element pcm::Repository removed as root
+	call deleteRepository(oldValue)
+}
+
+routine deleteRepository(pcm::Repository pcmRepo){
+	match {
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		check {
+			//TODO check if this is the right way to call the api, and what to do for testing
+			val deleteCorrespondingUmlRepository = 0
+//			val deleteCorrespondingUmlRepository = userInteracting.selectFromMessage(
+//													UserInteractionType.MODAL, 
+//													DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL, 
+//													#["yes", "no"]);
+			return (deleteCorrespondingUmlRepository == 0);
+		}
+	}
+	action {
+		//check answered with 'yes' 
+		delete umlRepositoryPackage
+	}
+}
+
+//Primitive Datatypes are bootstraped in
+routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo){
+	match {
+		val umlDatatypesPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE	
+	}
+	action{
+		call {
+			// generate corresponding uml::PrimitiveType instances and add them to the correspondance Model
+			for (pcmType : PcmUmlClassHelper.getPcmPrimitiveTypes(pcmRepo)){
+				bootstrapPrimitiveDatatype(pcmType, umlDatatypesPkg)
+			}
+		}
+	}
+}
+
+routine bootstrapPrimitiveDatatype(pcm::PrimitiveDataType pcmType, uml::Package umlDataTypePkg){
+	match{
+		require absence of uml::PrimitiveType corresponding to pcmType
+	}
+	action {
+		call{
+			//look for candidate before creating a new PrimitiveType
+			var umlType = umlDataTypePkg.ownedElements.filter(PrimitiveType)
+				.findFirst[candidate | pcmType.type.getName == candidate.name]
+			if (umlType === null){
+				umlType = umlDataTypePkg.createOwnedPrimitiveType(pcmType.type.getName())
+			}
+			ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, pcmType, umlType, "")
+		}
+	}
+}

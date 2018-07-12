@@ -1,0 +1,114 @@
+import org.eclipse.uml2.uml.ParameterDirectionKind
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: umlOperationReactions
+in reaction to changes in UML
+execute actions in PCM
+
+
+
+
+reaction OperationInsertedInInterface {
+	after element uml::Operation inserted in uml::Interface[ownedOperation]
+	with {newValue.interface === affectedEObject} // validity check
+	call disambiguateOperationContextChange(newValue, affectedEObject)
+}
+
+routine disambiguateOperationContextChange(uml::Operation umlOperation, uml::Interface umlInterface) {
+	match {
+		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlOperation
+		val pcmInterface = retrieve optional pcm::OperationInterface corresponding to umlInterface
+	}
+	action {
+		call {
+			if (pcmSignature.isPresent && pcmInterface.isPresent){
+				moveInterfaceOperationCorrespondence(umlOperation, umlInterface)
+			}
+			else if (pcmSignature.isPresent && !pcmInterface.isPresent){
+				deleteInterfaceOperationCorrespondence(umlOperation)
+			}
+			else if (!pcmSignature.isPresent && pcmInterface.isPresent){
+				createInterfaceOperationCorrespondence(umlOperation, umlInterface)
+			}
+		}
+	}
+}
+
+routine createInterfaceOperationCorrespondence(uml::Operation umlOperation, uml::Interface umlInterface) {
+	match {
+		val pcmInterface = retrieve asserted pcm::OperationInterface corresponding to umlInterface
+	}
+	action {
+		val pcmSignature = create pcm::OperationSignature and initialize {
+			pcmSignature.entityName = umlOperation.name
+		}
+		add correspondence between pcmSignature and umlOperation 
+		call moveInterfaceOperationCorrespondence(umlOperation, umlInterface)
+	}
+}
+
+routine moveInterfaceOperationCorrespondence(uml::Operation umlOperation, uml::Interface umlInterface) {
+	match {
+		val pcmSignature = retrieve asserted pcm::OperationSignature corresponding to umlOperation
+		val pcmInterface = retrieve asserted pcm::OperationInterface corresponding to umlInterface
+	}
+	action {
+		update pcmInterface {
+			pcmInterface.signatures__OperationInterface += pcmSignature
+		}
+	}
+}
+
+reaction InterfaceOperationRemovedFromInterface {
+	after element uml::Operation removed from uml::Interface[ownedOperation]
+	with {oldValue.interface !== affectedEObject}
+	call removeInterfaceOperationCorrespondence(oldValue, affectedEObject)
+}
+
+routine removeInterfaceOperationCorrespondence(uml::Operation umlOperation, uml::Interface umlInterface) {
+	match {
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface
+	}
+	action {
+		update pcmInterface {
+			pcmInterface.signatures__OperationInterface -= pcmSignature
+		}
+	}
+}
+
+reaction InterfaceOperationDeleted {
+	after element uml::Operation deleted
+	call deleteInterfaceOperationCorrespondence(affectedEObject)
+}
+
+routine deleteInterfaceOperationCorrespondence(uml::Operation umlOperation) {
+	match {
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation
+	}
+	action {
+		remove correspondence between pcmSignature and umlOperation
+		delete pcmSignature
+	}
+}
+
+////////////////////////////
+
+reaction InterfaceOperationRenamed {
+	after attribute replaced at uml::Operation[name]
+	with {affectedEObject.name == newValue}
+	call renameInterfaceOperationCorrespondence(affectedEObject, newValue)
+}
+
+routine renameInterfaceOperationCorrespondence(uml::Operation umlOperation, String newName) {
+	match {
+		val pcmSignature = retrieve pcm::OperationSignature corresponding to umlOperation
+	}
+	action {
+		update pcmSignature {
+			pcmSignature.entityName = umlOperation.name
+		}
+	}
+}
