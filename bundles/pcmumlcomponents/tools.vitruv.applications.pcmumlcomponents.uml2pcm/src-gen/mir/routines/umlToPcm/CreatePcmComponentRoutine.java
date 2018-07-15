@@ -25,7 +25,7 @@ public class CreatePcmComponentRoutine extends AbstractRepairRoutineRealization 
     public void callRoutine1(final Component umlComponent, @Extension final RoutinesFacade _routinesFacade) {
       final String userPromptMsg = "Please select whether this component can have subcomponents.";
       final List<String> options = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("Yes", "No"));
-      final Integer choice = this.userInteracting.getSingleSelectionDialogBuilder().message(userPromptMsg).choices(((String[])Conversions.unwrapArray(options, String.class))).windowModality(WindowModality.MODAL).startInteraction();
+      final Integer choice = this.userInteractor.getSingleSelectionDialogBuilder().message(userPromptMsg).choices(((String[])Conversions.unwrapArray(options, String.class))).windowModality(WindowModality.MODAL).startInteraction();
       if (((choice).intValue() == 0)) {
         _routinesFacade.createCompositeComponent(umlComponent);
       } else {

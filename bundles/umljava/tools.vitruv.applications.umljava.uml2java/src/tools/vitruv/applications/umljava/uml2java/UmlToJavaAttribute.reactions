@@ -95,7 +95,7 @@ routine changeJavaAttributeType(uml::Property uAttr, uml::Type uType) {
     }
     action {
         call {
-            jAttr.typeReference = createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit, userInteracting)
+            jAttr.typeReference = createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit, userInteractor)
             updateAttributeTypeInSetters(jAttr)
             updateAttributeTypeInGetters(jAttr)
         }
@@ -124,20 +124,20 @@ routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
         update jAttribute {
             if (uAttribute.lower == 0) {
                 if (uAttribute.upper == 1) {
-                    jAttribute.typeReference = createTypeReferenceAndUpdateImport(uAttribute.type, jType, jAttribute.getContainingCompilationUnit, userInteracting)
+                    jAttribute.typeReference = createTypeReferenceAndUpdateImport(uAttribute.type, jType, jAttribute.getContainingCompilationUnit, userInteractor)
                 } else if (uAttribute.upper == LiteralUnlimitedNatural.UNLIMITED) {
-                    jAttribute.typeReference = createCollectiontypeReference(letUserSelectCollectionTypeName(userInteracting), jType)
+                    jAttribute.typeReference = createCollectiontypeReference(letUserSelectCollectionTypeName(userInteractor), jType)
                 } else {
-                    showMessage(userInteracting, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
+                    showMessage(userInteractor, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
                 }
             } else if (uAttribute.lower == 1) {
                 if (uAttribute.upper == 1) {
-                    jAttribute.typeReference = createTypeReferenceAndUpdateImport(uAttribute.type, jType, jAttribute.getContainingCompilationUnit, userInteracting)
+                    jAttribute.typeReference = createTypeReferenceAndUpdateImport(uAttribute.type, jType, jAttribute.getContainingCompilationUnit, userInteractor)
                 } else {
-                    showMessage(userInteracting, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
+                    showMessage(userInteractor, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
                 }
             } else {
-                showMessage(userInteracting, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
+                showMessage(userInteractor, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
             }
         }
         call {
@@ -189,12 +189,12 @@ routine renameJavaAttribute(String oldName, String newName, uml::Property uAttri
 
 reaction UmlAttributeCreatedInInterface {
     after element uml::Property created and inserted in uml::Interface[ownedAttribute]
-    call showMessage(userInteracting, "We do not support adding attributes to interfaces. Please delete " + newValue + " from " + affectedEObject)
+    call showMessage(userInteractor, "We do not support adding attributes to interfaces. Please delete " + newValue + " from " + affectedEObject)
 }
 
 reaction UmlInterfaceMadeFinal {
     after attribute replaced at uml::Interface[isFinalSpecialization]
     with newValue == true
-    call showMessage(userInteracting, "We do not support making final interfaces. Please change " + affectedEObject + " to non-final. ")
+    call showMessage(userInteractor, "We do not support making final interfaces. Please change " + affectedEObject + " to non-final. ")
 }
 

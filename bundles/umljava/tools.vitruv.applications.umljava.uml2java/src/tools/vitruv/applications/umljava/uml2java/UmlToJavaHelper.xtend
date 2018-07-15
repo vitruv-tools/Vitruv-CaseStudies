@@ -14,7 +14,6 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.userinteraction.WindowModality
 
 import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
@@ -23,6 +22,7 @@ import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
+import tools.vitruv.framework.userinteraction.UserInteractor
 
 /**
  * A helper class that contains util functions which depends on
@@ -36,8 +36,8 @@ class UmlToJavaHelper {
 	}
     
     
-    def static TypeReference createTypeReferenceAndUpdateImport(Type dType, ConcreteClassifier cType, CompilationUnit compUnit, UserInteracting userInteracting) {
-    	createTypeReferenceAndUpdateImport(dType, Optional.of(cType), compUnit, userInteracting)
+    def static TypeReference createTypeReferenceAndUpdateImport(Type dType, ConcreteClassifier cType, CompilationUnit compUnit, UserInteractor userInteractor) {
+    	createTypeReferenceAndUpdateImport(dType, Optional.of(cType), compUnit, userInteractor)
     }
     
     /**
@@ -53,10 +53,10 @@ class UmlToJavaHelper {
      * @param dType uml-DataType
      * @param cType java-ConcreteClassifier
      * @param compUnit the compilation unit of the class in which this type reference is created
-     * @param userInteracting needed to show info messages for the user
+     * @param userInteractor needed to show info messages for the user
      * @return the java type reference that fits dType or cType
      */
-	def static TypeReference createTypeReferenceAndUpdateImport(Type dType, Optional<? extends ConcreteClassifier> cType, CompilationUnit compUnit, UserInteracting userInteracting) {
+	def static TypeReference createTypeReferenceAndUpdateImport(Type dType, Optional<? extends ConcreteClassifier> cType, CompilationUnit compUnit, UserInteractor userInteractor) {
 		if (dType === null && !cType.present) {
 		    return TypesFactory.eINSTANCE.createVoid();
 		} else if (cType.present) {
@@ -70,7 +70,7 @@ class UmlToJavaHelper {
 	    } else {// dType is not null and not primitive, but a unknown Classifier.
 	        val dClass = ClassifiersFactory.eINSTANCE.createClass;
 	        dClass.name = dType.name;
-	        userInteracting.showMessage("Added unknown Type " + dType + " in " +  compUnit.name + ". Please check the validity of imports.")
+	        userInteractor.showMessage("Added unknown Type " + dType + " in " +  compUnit.name + ". Please check the validity of imports.")
 	        return createNamespaceReferenceFromClassifier(dClass)
 		}
 	} 
@@ -91,10 +91,10 @@ class UmlToJavaHelper {
 	/**
 	 * Prompts a message to the user that allows him to choose a collection datatype.
 	 * 
-	 * @param userInteracting the userInteracting to prompt the message
+	 * @param userInteractor the userInteractor to prompt the message
 	 * @return the selected name of the collection datatype by the user
 	 */
-    def static letUserSelectCollectionTypeName(UserInteracting userInteracting) {
+    def static letUserSelectCollectionTypeName(UserInteractor userInteractor) {
         var List<Class<?>> collectionDataTypes = new ArrayList
         collectionDataTypes += #[ArrayList, LinkedList, HashSet]
         val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size)
@@ -102,7 +102,7 @@ class UmlToJavaHelper {
             collectionDataTypeNames.add(collectionDataType.name)
         }
         val String selectTypeMsg = "Select a Collectiontype for the association end"
-        val int selectedType = userInteracting.singleSelectionDialogBuilder.message(selectTypeMsg)
+        val int selectedType = userInteractor.singleSelectionDialogBuilder.message(selectTypeMsg)
             .choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction()
         val Class<?> selectedClass = collectionDataTypes.get(selectedType)
         return selectedClass.name
@@ -130,13 +130,13 @@ class UmlToJavaHelper {
     
     
     /**
-     * Displays the given message with the userInteracting.
+     * Displays the given message with the userInteractor.
      * 
-     * @param userInteracting the userInteracting to display the message.
+     * @param userInteractor the userInteractor to display the message.
      * @param message the message to display
      */
-    def static void showMessage(UserInteracting userInteracting, String message) {
-        userInteracting.notificationDialogBuilder.message(message).windowModality(WindowModality.MODAL)
+    def static void showMessage(UserInteractor userInteractor, String message) {
+        userInteractor.notificationDialogBuilder.message(message).windowModality(WindowModality.MODAL)
             .startInteraction()
     }
 	

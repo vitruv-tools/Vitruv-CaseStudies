@@ -235,7 +235,7 @@ routine changeCollectionDataTypeInnerType(pcm::CollectionDataType pcmDataType, p
 	action {
 		call {
 			if (pcmInnerType instanceof CollectionDataType) {
-			    userInteracting.notificationDialogBuilder
+			    userInteractor.notificationDialogBuilder
 			        .message("Nested collection types are not transformed to UML. Consider using a composite type.")
 			        .windowModality(WindowModality.MODAL).startInteraction()
 			}

@@ -43,7 +43,7 @@ public class ChangeCollectionDataTypeInnerTypeRoutine extends AbstractRepairRout
     
     public void callRoutine1(final CollectionDataType pcmDataType, final DataType pcmInnerType, final Optional<org.eclipse.uml2.uml.DataType> umlInnerType, final Model umlModel, @Extension final RoutinesFacade _routinesFacade) {
       if ((pcmInnerType instanceof CollectionDataType)) {
-        this.userInteracting.getNotificationDialogBuilder().message("Nested collection types are not transformed to UML. Consider using a composite type.").windowModality(WindowModality.MODAL).startInteraction();
+        this.userInteractor.getNotificationDialogBuilder().message("Nested collection types are not transformed to UML. Consider using a composite type.").windowModality(WindowModality.MODAL).startInteraction();
       }
       org.eclipse.uml2.uml.DataType innerType = null;
       boolean _isPresent = umlInnerType.isPresent();

@@ -42,8 +42,6 @@ import org.palladiosimulator.pcm.system.System
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import tools.vitruv.framework.tuid.TuidManager
-import tools.vitruv.framework.userinteraction.UserInteracting
-import tools.vitruv.framework.userinteraction.impl.UserInteractor
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 
 
@@ -53,6 +51,7 @@ import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractor
 
 /**
  * 
@@ -66,7 +65,7 @@ public class PcmJamoppUtilsGuice {
 	public static final int SELECT_REPLACE_WITH_NEW_BINDING = 1;
 
 	def public static createConfigureMethodForAssemblyContext(AssemblyContext assemblyContext,
-		RepositoryComponent component, CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
+		RepositoryComponent component, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
 		var Class jaMoPPClass = null
 		var Class jaMoPPCompositeClass = null
 		try {
@@ -77,7 +76,7 @@ public class PcmJamoppUtilsGuice {
 		} catch (RuntimeException e) {
 			val String msg = "Can not create field for component " + component.entityName +
 				" because the component does not have a corresponding class yet."
-			userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).startInteraction()
+			userInteractor.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).startInteraction()
 			throw e
 		}
 
@@ -87,7 +86,7 @@ public class PcmJamoppUtilsGuice {
 	}
 
 	public def static EObject[] createBindCall(AssemblyContext assemblyContext, RepositoryComponent component,
-		ClassMethod configureMethod, CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
+		ClassMethod configureMethod, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
 
 		if (configureMethod.parameters.nullOrEmpty) {
 			return null
@@ -123,7 +122,7 @@ public class PcmJamoppUtilsGuice {
 						// The user must decide whether to only keep the old binding, or replace it with the new one	
 							if (PcmJamoppUtilsGuice.
 								checkIfUserWantsToReplaceInterfaceBinding(interfaceClass.name, implClass.name,
-									userInteracting)) {
+									userInteractor)) {
 								// Remove old binding from statements
 								configureMethod.statements.remove(expr)
 								// Remove old assembly connector
@@ -144,7 +143,7 @@ public class PcmJamoppUtilsGuice {
 
 				// create assembly connector
 				if (PcmJamoppUtilsGuice.createAssemblyConnector(opInterface, component, assemblyContext, providedRole,
-					system, userInteracting) !== null) {
+					system, userInteractor) !== null) {
 					updateSystem = true
 				}
 
@@ -245,7 +244,7 @@ public class PcmJamoppUtilsGuice {
 	}
 
 	def static updateConfigure(ConcreteClassifier affectedClass, ClassMethod oldMethod, ClassMethod newMethod,
-		CorrespondenceModel ci, UserInteractor userInteracting) {
+		CorrespondenceModel ci, UserInteractor userInteractor) {
 		// logger.info("Update statements in configure method")
 		var saveSystemResource = false
 		var saveClassResource = false
@@ -344,13 +343,13 @@ public class PcmJamoppUtilsGuice {
 									// change providing assembly context of connector
 									updateProvidedRoleOfAssemblyConnector(acToUpdate,
 										findOperationInterfaceByName(interfaceName, ci),
-										findBasicComponentByName(className, ci), system, userInteracting)
+										findBasicComponentByName(className, ci), system, userInteractor)
 								}
 							} else {
 								// Another statement mapping the same interface exists and a new one has been added
 								// logger.info("mapping for interface already exists")
 								if (checkIfUserWantsToReplaceInterfaceBinding(interfaceName, className,
-									userInteracting)) {
+									userInteractor)) {
 									// Remove old binding and keep newly added one
 									// logger.info("remove old binding and keep newly added one")
 									removeStatementForInterfaceAndClassName(newMethod.statements, interfaceName,
@@ -359,7 +358,7 @@ public class PcmJamoppUtilsGuice {
 									// change providing assembly context of connector
 									updateProvidedRoleOfAssemblyConnector(acToUpdate,
 										findOperationInterfaceByName(interfaceName, ci),
-										findBasicComponentByName(className, ci), system, userInteracting)
+										findBasicComponentByName(className, ci), system, userInteractor)
 								} else {
 									// Remove newly added binding and keep old one
 									// logger.info("remove newly added binding and keep old one")
@@ -379,7 +378,7 @@ public class PcmJamoppUtilsGuice {
 								null,
 								null,
 								system,
-								userInteracting
+								userInteractor
 							)
 							saveSystemResource = true
 						}
@@ -401,7 +400,7 @@ public class PcmJamoppUtilsGuice {
 	}
 
 	def public static checkIfUserWantsToReplaceInterfaceBinding(String interfaceName, String className,
-		UserInteracting ui) {
+		UserInteractor ui) {
 		val msg = "Interface " + interfaceName + " is already mapped to basic component " + className +
 			" . Adding another binding for the same interface will lead to a runtime exception by Guice."
 		val choice = ui.singleSelectionDialogBuilder.message(msg)
@@ -562,7 +561,7 @@ public class PcmJamoppUtilsGuice {
 		AssemblyContext assemblyContext,
 		OperationProvidedRole providedRole,
 		ComposedStructure system,
-		UserInteracting userInteracting
+		UserInteractor userInteractor
 	) {
 
 		var ac = assemblyContext
@@ -602,14 +601,14 @@ public class PcmJamoppUtilsGuice {
 			val String msg = "Can not create assembly connector providing interface " + opInterface.entityName +
 				" because no operation requiring role for interface " + opInterface.entityName +
 				" was found in the system. Only assembly context for " + component.entityName + " was created."
-			userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).startInteraction()
+			userInteractor.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).startInteraction()
 			return null
 		}
 	}
 
 	private def static updateProvidedRoleOfAssemblyConnector(AssemblyConnector assemblyConnector,
 		OperationInterface opInterface, RepositoryComponent component, ComposedStructure system,
-		UserInteracting userInteracting) {
+		UserInteractor userInteractor) {
 
 			var ac = findAssemblyContextForBasicComponent(component, system)
 			if (ac === null) {
@@ -722,7 +721,7 @@ public class PcmJamoppUtilsGuice {
 
 		public def static EObject[] createBindCallForConnector(AssemblyContext assemblyContext,
 			AssemblyConnector assemblyConnector, CorrespondenceModel correspondenceModel,
-			UserInteracting userInteracting) {
+			UserInteractor userInteractor) {
 				val configureMethod = correspondenceModel.
 					getCorrespondingEObjectsByType(assemblyContext, ClassMethod).claimOne
 				configureMethod.statements.removeAll(configureMethod.statements)
@@ -754,7 +753,7 @@ public class PcmJamoppUtilsGuice {
 									encapsulatedComponent__AssemblyContext)) {
 							if (PcmJamoppUtilsGuice.
 								checkIfUserWantsToReplaceInterfaceBinding(interfaceClass.name, implClass.name,
-									userInteracting)) {
+									userInteractor)) {
 								// Old binding won't be readded to the list of statements
 								removeOldBinding = true
 								// Remove old assembly connector

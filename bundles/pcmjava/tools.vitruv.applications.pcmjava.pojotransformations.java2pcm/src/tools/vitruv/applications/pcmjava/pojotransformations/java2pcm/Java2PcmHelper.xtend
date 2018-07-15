@@ -5,7 +5,6 @@ import org.emftext.language.java.types.TypeReference
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.userinteraction.UserInteracting
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import org.eclipse.emf.common.util.EList
@@ -23,6 +22,7 @@ import org.emftext.language.java.types.PrimitiveType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
+import tools.vitruv.framework.userinteraction.UserInteractor
 
 /**
  * Helper class for java2pcm reactions and routines. 
@@ -73,10 +73,10 @@ public class Java2PcmHelper {
 		return target1 == target2 || target1.equals(target2)
 	}
 	
-	def static getPCMDataTypeForTypeReference(TypeReference typeReference, CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repository, Method newMethod) {
+	def static getPCMDataTypeForTypeReference(TypeReference typeReference, CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repository, Method newMethod) {
 		return TypeReferenceCorrespondenceHelper.
 					getCorrespondingPCMDataTypeForTypeReference(typeReference,
-						correspondenceModel, userInteracting, repository, newMethod.arrayDimension)
+						correspondenceModel, userInteractor, repository, newMethod.arrayDimension)
 	}
 	
 	def static String getRootPackageName(String packageName) {

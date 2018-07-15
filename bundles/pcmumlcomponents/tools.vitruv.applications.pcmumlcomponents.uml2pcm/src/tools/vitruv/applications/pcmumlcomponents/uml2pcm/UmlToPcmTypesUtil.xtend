@@ -14,8 +14,8 @@ import tools.vitruv.domains.pcm.util.RepositoryModelLoader
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsFactory
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractor
 
 class UmlToPcmTypesUtil {
 
@@ -51,7 +51,7 @@ class UmlToPcmTypesUtil {
 		DataType umlType,
 		Repository pcmRepository,
 		Boolean isCollection,
-		UserInteracting userInteracting,
+		UserInteractor userInteractor,
 		CorrespondenceModel correspondenceModel
 	) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlType]).flatten
@@ -75,7 +75,7 @@ class UmlToPcmTypesUtil {
 				val promptMsg = "For this data type no mapping to a PCM primitive type is available. Select an applicable type from the provided options"
 				var options = new ArrayList<String>(PrimitiveTypeEnum.values.map[pt | pt.getName])
 				options.add("Create a composite Type")
-				val userSelection = userInteracting.singleSelectionDialogBuilder.message(promptMsg).choices(options)
+				val userSelection = userInteractor.singleSelectionDialogBuilder.message(promptMsg).choices(options)
 				    .windowModality(WindowModality.MODAL).startInteraction()
 				val selectedType = PrimitiveTypeEnum.get(userSelection)
 				if (userSelection >= PrimitiveTypeEnum.VALUES.length) {

@@ -42,7 +42,7 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
         int _length = ((Object[])Conversions.unwrapArray(returnParameters, Object.class)).length;
         boolean _greaterThan = (_length > 0);
         if (_greaterThan) {
-          this.userInteracting.getNotificationDialogBuilder().message("A second return type cannot be applied in the PCM model.").windowModality(WindowModality.MODAL).startInteraction();
+          this.userInteractor.getNotificationDialogBuilder().message("A second return type cannot be applied in the PCM model.").windowModality(WindowModality.MODAL).startInteraction();
         } else {
           _routinesFacade.changeInterfaceOperationType(umlOperation, umlParameter);
         }

@@ -228,7 +228,7 @@ routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReferen
     }
     action {
         update uParam {
-            uParam.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
+            uParam.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteractor), correspondenceModel)
         }
     }
 }
@@ -244,7 +244,7 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
     }
      action {
          update uOperation {
-             uOperation.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
+             uOperation.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteractor), correspondenceModel)
          }
      }
 }
@@ -301,10 +301,10 @@ routine renameUmlNamedElement(java::NamedElement jElement) {
 //An interface can theoretically have static, non-abstract methods
 reaction JavaClassMethodCreatedInInterface {
     after element java::ClassMethod created and inserted in java::Interface[members]
-    call showMessage(userInteracting, "ClassMethods are currently not supported in Interfaces. Please delete " + newValue)
+    call showMessage(userInteractor, "ClassMethods are currently not supported in Interfaces. Please delete " + newValue)
 }
 
 reaction JavaParameterMadeFinal {
     after element java::Final created and inserted in java::Parameter[annotationsAndModifiers]
-    call showMessage(userInteracting, "Final parameters are not supported. Please remove the modifier from " + affectedEObject)
+    call showMessage(userInteractor, "Final parameters are not supported. Please remove the modifier from " + affectedEObject)
 }

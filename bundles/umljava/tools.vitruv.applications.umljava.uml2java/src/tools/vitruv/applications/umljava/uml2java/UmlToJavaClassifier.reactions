@@ -144,9 +144,9 @@ routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
     action {
         call {
             if (uClass.generals.size == 1) {
-                jClass.extends = createTypeReferenceAndUpdateImport(null, superJavaClass, jClass.containingCompilationUnit, userInteracting);
+                jClass.extends = createTypeReferenceAndUpdateImport(null, superJavaClass, jClass.containingCompilationUnit, userInteractor);
             } else {
-                userInteracting.notificationDialogBuilder.message("Can not synchronize multiple inheritance for " + uClass)
+                userInteractor.notificationDialogBuilder.message("Can not synchronize multiple inheritance for " + uClass)
                     .title("Warning").notificationType(NotificationType.WARNING).windowModality(WindowModality.MODAL)
                     .startInteraction()
                 logger.warn("Routine not executed: Tried to set multiple inheritance for " + uClass)
@@ -197,7 +197,7 @@ routine changeJavaImplementedInterface(uml::Interface uInterface, uml::Interface
         	}
         }
         update jClass {
-            jClass.implements += createTypeReferenceAndUpdateImport(null, jInterface, jClass.containingCompilationUnit, userInteracting)
+            jClass.implements += createTypeReferenceAndUpdateImport(null, jInterface, jClass.containingCompilationUnit, userInteractor)
         }
     }
 }
@@ -260,7 +260,7 @@ routine changeJavaSuperInterface(uml::Interface superUMLInterface, uml::Interfac
     }
     action {
         update jI {
-            jI.extends += createTypeReferenceAndUpdateImport(null, superJavaInterface, jI.containingCompilationUnit, userInteracting)
+            jI.extends += createTypeReferenceAndUpdateImport(null, superJavaInterface, jI.containingCompilationUnit, userInteractor)
         }
     }
 }
@@ -442,7 +442,7 @@ routine checkIfCorrespondingJavaPrimitiveTypeExists(uml::PrimitiveType uPrimType
     action {
         call {
             if (mapToJavaPrimitiveType(uPrimType) === null) {
-                userInteracting.notificationDialogBuilder.message("There is no corresponding Java-PrimitiveType for "
+                userInteractor.notificationDialogBuilder.message("There is no corresponding Java-PrimitiveType for "
                     + uPrimType + " (case sensitive)").title("Warning").notificationType(NotificationType.WARNING)
                     .windowModality(WindowModality.MODAL)
             }

@@ -33,7 +33,7 @@ public class CreateDataTypeRoutine extends AbstractRepairRoutineRealization {
       String _message_1 = Java2PcmUserSelection.SELECT_COLLECTION_DATA_TYPE.getMessage();
       String _message_2 = Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getMessage();
       final String[] selections = new String[] { _message, _message_1, _message_2 };
-      final Integer selected = this.userInteracting.getSingleSelectionDialogBuilder().message(userMsg).choices(selections).windowModality(WindowModality.MODAL).startInteraction();
+      final Integer selected = this.userInteractor.getSingleSelectionDialogBuilder().message(userMsg).choices(selections).windowModality(WindowModality.MODAL).startInteraction();
       boolean _matched = false;
       int _selection = Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getSelection();
       if (Objects.equal(selected, _selection)) {

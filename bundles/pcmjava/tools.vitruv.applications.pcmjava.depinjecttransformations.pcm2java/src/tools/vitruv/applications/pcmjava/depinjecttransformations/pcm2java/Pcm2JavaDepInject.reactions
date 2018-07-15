@@ -46,7 +46,7 @@ reaction pcm2javaCommon::AddedAssemblyContextToComposedStructure {
 					//until correspondenceModel is available, we assume that each ac has a corresponding element
 					val msg = "Assembly context for " + component.entityName +
 					"already exists. Only one assembly context per basic component is allowed."
-					userInteracting.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODAL)
+					userInteractor.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODAL)
 					   .startInteraction();
 					return false
 				}
@@ -70,8 +70,8 @@ routine pcm2javaCommon::addAssemblyContextToComposedStructure(pcm::ComposedStruc
 		add correspondence between newConstructorCall and assemblyContext
 		call {
 			val component = assemblyContext.encapsulatedComponent__AssemblyContext;
-			val configureMethod = createConfigureMethodForAssemblyContext(assemblyContext, component, correspondenceModel, userInteracting);
-			createBindCall(assemblyContext, component, configureMethod, correspondenceModel, userInteracting);
+			val configureMethod = createConfigureMethodForAssemblyContext(assemblyContext, component, correspondenceModel, userInteractor);
+			createBindCall(assemblyContext, component, configureMethod, correspondenceModel, userInteractor);
 		}
 		// depInject: end
 	}
@@ -89,7 +89,7 @@ routine addConnector(pcm::AssemblyConnector assemblyConnector) {
 		call {
 			val assemblyContext = assemblyConnector.providingAssemblyContext_AssemblyConnector;
 			if (assemblyContext.encapsulatedComponent__AssemblyContext !== null) {
-				createBindCallForConnector(assemblyContext, assemblyConnector, correspondenceModel, userInteracting);
+				createBindCallForConnector(assemblyContext, assemblyConnector, correspondenceModel, userInteractor);
 			} else {
 				//logger.warn("Repository component for assembly context " + assemblyContext.entityName + " is missing.");
 			}

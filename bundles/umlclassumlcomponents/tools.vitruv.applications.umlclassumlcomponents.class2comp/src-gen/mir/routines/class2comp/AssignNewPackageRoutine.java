@@ -41,7 +41,7 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
         String _name = oldPackage.getName();
         String _plus = ("Chosen Component is already linked to existing Package \'" + _name);
         final String errorMsg = (_plus + "\'.");
-        this.userInteracting.getNotificationDialogBuilder().message(errorMsg).windowModality(WindowModality.MODELESS).startInteraction();
+        this.userInteractor.getNotificationDialogBuilder().message(errorMsg).windowModality(WindowModality.MODELESS).startInteraction();
       }
     }
   }

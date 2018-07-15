@@ -37,7 +37,7 @@ public class ChangeRequiredInterfaceRoutine extends AbstractRepairRoutineRealiza
         if (_equals_1) {
           pcmRole.setRequiredInterface__OperationRequiredRole(pcmInterface);
         } else {
-          this.userInteracting.getNotificationDialogBuilder().message("Further interfaces will not be required in the PCM").windowModality(WindowModality.MODAL).startInteraction();
+          this.userInteractor.getNotificationDialogBuilder().message("Further interfaces will not be required in the PCM").windowModality(WindowModality.MODAL).startInteraction();
         }
       }
     }

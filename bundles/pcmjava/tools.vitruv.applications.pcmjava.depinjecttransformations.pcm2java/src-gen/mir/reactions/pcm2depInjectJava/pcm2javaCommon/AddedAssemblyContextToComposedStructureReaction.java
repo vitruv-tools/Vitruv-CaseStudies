@@ -121,7 +121,7 @@ public class AddedAssemblyContextToComposedStructureReaction extends AbstractRea
         String _plus = ("Assembly context for " + _entityName);
         final String msg = (_plus + 
           "already exists. Only one assembly context per basic component is allowed.");
-        this.userInteracting.getNotificationDialogBuilder().message(msg).windowModality(WindowModality.MODAL).startInteraction();
+        this.userInteractor.getNotificationDialogBuilder().message(msg).windowModality(WindowModality.MODAL).startInteraction();
         return false;
       }
     }

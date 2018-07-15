@@ -140,7 +140,7 @@ routine createPrimitiveDataType(uml::PrimitiveType umlType) {
 		val pcmRepository = retrieve pcm::Repository corresponding to umlType.model 
 	}
 	action {
-		call UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, userInteracting, correspondenceModel)
+		call UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, userInteractor, correspondenceModel)
 	}
 }
 
@@ -235,7 +235,7 @@ routine changePropertyType(uml::Property umlProperty, uml::DataType umlType) {
 		update pcmDeclaration {
 			val unbounded = umlProperty.upperBound != 1 || umlProperty.lowerBound != 1
 			val pcmRepository = pcmDeclaration.compositeDataType_InnerDeclaration.repository__DataType
-			pcmDeclaration.datatype_InnerDeclaration = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, unbounded, userInteracting, correspondenceModel)
+			pcmDeclaration.datatype_InnerDeclaration = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, unbounded, userInteractor, correspondenceModel)
 		}
 	}
 }
@@ -315,7 +315,7 @@ routine addOperationParameter(uml::Operation umlOperation, uml::Parameter umlPar
 			if (umlParameter.direction == ParameterDirectionKind.RETURN_LITERAL) {
 				val returnParameters = umlOperation.ownedParameters.filter[p | p.direction == ParameterDirectionKind.RETURN_LITERAL]
 				if (returnParameters.length > 0) {
-				    userInteracting.notificationDialogBuilder
+				    userInteractor.notificationDialogBuilder
 				        .message("A second return type cannot be applied in the PCM model.")
 				        .windowModality(WindowModality.MODAL).startInteraction()
 				} else {
@@ -366,7 +366,7 @@ routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Parameter
 			var org.palladiosimulator.pcm.repository.DataType resolvedType = null
 			if (resolvedType === null && umlParameter.type !== null && umlParameter.type instanceof DataType) {
 				val unbounded = umlParameter.lowerBound != 1 || umlParameter.upperBound != 1
-				resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlParameter.type as DataType, pcmSignature.interface__OperationSignature.repository__Interface, unbounded, userInteracting, correspondenceModel)
+				resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlParameter.type as DataType, pcmSignature.interface__OperationSignature.repository__Interface, unbounded, userInteractor, correspondenceModel)
 			}
 			pcmSignature.returnType__OperationSignature = resolvedType
 		}
@@ -401,7 +401,7 @@ routine changeParameterType(uml::Parameter umlParameter) {
 			if (resolvedType === null && umlParameter.type !== null && umlParameter.type instanceof DataType) {
 				val unbounded = umlParameter.lowerBound != 1 || umlParameter.upperBound != 1
 				val pcmRepository = pcmParameter.operationSignature__Parameter.interface__OperationSignature.repository__Interface
-				resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlParameter.type as DataType, pcmRepository, unbounded, userInteracting, correspondenceModel)
+				resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlParameter.type as DataType, pcmRepository, unbounded, userInteractor, correspondenceModel)
 			}
 			pcmParameter.dataType__Parameter = resolvedType
 		}
@@ -491,7 +491,7 @@ routine createPcmComponent(uml::Component umlComponent) {
 		call {
 			val userPromptMsg = "Please select whether this component can have subcomponents."
 			val options = #["Yes", "No"]
-			val choice = userInteracting.singleSelectionDialogBuilder.message(userPromptMsg).choices(options)
+			val choice = userInteractor.singleSelectionDialogBuilder.message(userPromptMsg).choices(options)
 			    .windowModality(WindowModality.MODAL).startInteraction()
 			if (choice == 0)
 				createCompositeComponent(umlComponent)
@@ -564,7 +564,7 @@ routine changeRequiredInterface(uml::Usage umlUsage, uml::Interface umlInterface
 				pcmRole.requiredInterface__OperationRequiredRole = pcmInterface
 			else
 				// TODO consider adding further roles instead
-				userInteracting.notificationDialogBuilder
+				userInteractor.notificationDialogBuilder
                         .message("Further interfaces will not be required in the PCM")
                         .windowModality(WindowModality.MODAL).startInteraction()
 		}
@@ -613,7 +613,7 @@ routine changeProvidedInterface(uml::InterfaceRealization interfaceRealization, 
 			else if (interfaceRealization.suppliers.length == 1)
 				pcmRole.providedInterface__OperationProvidedRole = pcmInterface
 			else
-			    userInteracting.notificationDialogBuilder
+			    userInteractor.notificationDialogBuilder
                     .message("Further interfaces will not be provided in the PCM")
                     .windowModality(WindowModality.MODAL).startInteraction()
 		}

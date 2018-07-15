@@ -2,7 +2,6 @@ package tools.vitruv.applications.pcmjava.util.java2pcm
 
 import com.google.common.collect.Sets
 import tools.vitruv.framework.util.datatypes.VURI
-import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.tuid.Tuid
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 import java.util.ArrayList
@@ -40,6 +39,7 @@ import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractor
 
 abstract class Java2PcmUtils extends PcmJavaUtils {
 	private new() {
@@ -176,7 +176,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	 * @param classifier the classifier
 	 */
 	def static RepositoryComponent getComponentOfConcreteClassifier(ConcreteClassifier classifier,
-		CorrespondenceModel ci, UserInteracting userInteracting) {
+		CorrespondenceModel ci, UserInteractor userInteractor) {
 	
 		// a)
 		var correspondingComponents = ci.getCorrespondingEObjectsByType(classifier, RepositoryComponent)
@@ -206,7 +206,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 		val List<String> selections = new ArrayList<String>
 		repo.components__Repository.forEach[comp|selections.add(comp.entityName)]
 		selections.add("Class is not in any component")
-		val int selection = userInteracting.singleSelectionDialogBuilder.message(msg).choices(selections)
+		val int selection = userInteractor.singleSelectionDialogBuilder.message(msg).choices(selections)
 		    .windowModality(WindowModality.MODAL).startInteraction()
 		if (selection == selections.size) {
 			return null
@@ -215,7 +215,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	}
 	
 	def public static EObject[] checkAndAddOperationRequiredRole(TypedElement typedElement,
-		CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
+		CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
 		val Type type = getTargetClassifierFromImplementsReferenceAndNormalizeURI(typedElement.typeReference)
 		if (null === type) {
 			return null
@@ -229,7 +229,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 	
 				// ii)a)
 				repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
-					typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
+					typedElement.containingConcreteClassifier, correspondenceModel, userInteractor)
 				if (null === repoComponent) {
 					return null
 				}
@@ -240,7 +240,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 				operationRequiredRole.entityName = "Component_" + repoComponent.entityName + "_requires_" +
 					correspondingInterface.entityName
 				newCorrespondingEObjects.add(operationRequiredRole)
-				userInteracting.notificationDialogBuilder.message("An OperationRequiredRole (from component "
+				userInteractor.notificationDialogBuilder.message("An OperationRequiredRole (from component "
 				    + repoComponent.entityName + " to interface " + correspondingInterface.entityName
 				    + ") for the element: " + typedElement + " has been created.")
 				    .windowModality(WindowModality.MODELESS).startInteraction()
@@ -251,7 +251,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 				if (!correspondingComponents.nullOrEmpty) {
 					if (null === repoComponent) {
 						repoComponent = Java2PcmUtils.getComponentOfConcreteClassifier(
-							typedElement.containingConcreteClassifier, correspondenceModel, userInteracting)
+							typedElement.containingConcreteClassifier, correspondenceModel, userInteractor)
 					}
 					if (null === repoComponent) {
 						return null
@@ -268,7 +268,7 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 							operationRequiredRole.requiringEntity_RequiredRole = repoComponent
 							operationRequiredRole.entityName = "Component_" + repoComponent.entityName +
 								"_requires_" + operationInterface.entityName
-							userInteracting.notificationDialogBuilder.message("An OperationRequiredRole (from component "
+							userInteractor.notificationDialogBuilder.message("An OperationRequiredRole (from component "
 							    + repoComponent.entityName + " to interface " + operationInterface.entityName
 							    + ") for the element: " + typedElement + " has been created.")
 							    .windowModality(WindowModality.MODELESS).startInteraction()
