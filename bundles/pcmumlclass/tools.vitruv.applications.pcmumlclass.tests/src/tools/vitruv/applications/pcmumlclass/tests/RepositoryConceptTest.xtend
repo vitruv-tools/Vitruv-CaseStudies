@@ -31,20 +31,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	
 	override protected setup() {
 	}
-	
-	def protected EObject reloadResourceAndReturnRoot(EObject modelElement){
-		// TODO this is a hack for testing: 
-		//	- load tools.vitruv.testutils into workspace
-		// 	- change VitruviusApplicationTest.changeRecorder to protected, in order to make it accessible here
-		changeRecorder.removeFromRecording(modelElement.eResource) 
-		val resourceURI = modelElement.eResource.URI
-		modelElement.eResource.unload
-		val rootElement = resourceSet.getResource(resourceURI,true).contents.head
-		if(rootElement !== null){
-			startRecordingChanges(rootElement) // calls changeRecorder.addToRecording -> calls registerContentsAtUuidResolver
-		}
-		return rootElement 
-	} 
+	 
 	
 	def protected static checkRepositoryConcept(
 			CorrespondenceModel cm, 
@@ -90,7 +77,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	}
 
 	@Test
-	def testCreateRepositoryConcept_UML() {
+	def void testCreateRepositoryConcept_UML() {
 		userInteractor.addNextSelections(PKG_INSERT_CORR_TO_REPOSITORY)
 		userInteractor.addNextSelections(PCM_MODEL_FILE)
 		
@@ -109,7 +96,6 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(mUmlRepositoryPkg.name == "testCbsRepository")
 		
 		checkUmlRepositoryPackage(mUmlRepositoryPkg)
-		return
 	}
 	
 	@Test
@@ -220,6 +206,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		assertModelNotExists(PCM_MODEL_FILE)
 		assertModelExists(UML_MODEL_FILE)
 //		mPcmRepository = reloadResourceAndReturnRoot(mPcmRepository) as Repository// can't reload, because it doesn't exist
+		assertFalse(mUmlModel?.packagedElements.empty) //before the reload, the mUmlModel instance will be out of synch with the vsum 
 		mUmlModel = reloadResourceAndReturnRoot(mUmlModel) as Model
 		assertTrue(mUmlModel?.packagedElements.empty)
 	}

@@ -28,7 +28,7 @@ execute actions in PCM
 
 reaction ParameterInsertedInOperation {
 	after element uml::Parameter inserted in uml::Operation[ownedParameter]
-	with {newValue.operation === affectedEObject} // validity check
+	with {affectedEObject.ownedParameters.contains(newValue)} // validity check
 	call disambiguatePreexistingCorrespondences(newValue, affectedEObject)
 }
 
@@ -315,13 +315,17 @@ routine renameRegularParamCorrespondence(uml::Parameter umlParam, String umlNewN
 routine typeChangedRegularParamCorrespondence(uml::Parameter umlParam, uml::Type umlNewType){
 	match {
 		val pcmParam = retrieve pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-		val pcmDataType = retrieve pcm::DataType corresponding to umlNewType tagged with TagLiterals.DATATYPE__TYPE
+		val pcmDataType = retrieve optional pcm::DataType corresponding to umlNewType tagged with TagLiterals.DATATYPE__TYPE
 		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
 	action {
 		update pcmParam {
-			if(pcmCollectionType.isPresent) pcmParam.dataType__Parameter = pcmCollectionType.get
-			else pcmParam.dataType__Parameter = pcmDataType
+			if(pcmCollectionType.isPresent) {
+				pcmParam.dataType__Parameter = pcmCollectionType.get
+			}
+			else {
+				pcmParam.dataType__Parameter = pcmDataType.orElse(null)
+			}
 		}
 	}
 }

@@ -6,8 +6,8 @@ in reaction to changes in UML
 execute actions in PCM
 
 import umlPackageReactions
-//import umlInterfaceReactions
-//import umlOperationReactions
-//import umlParameterReactions
-//import umlClassReactions
-//import umlPropertyReactions
+import umlInterfaceReactions
+import umlOperationReactions 
+import umlParameterReactions
+import umlClassReactions
+import umlPropertyReactions

@@ -33,7 +33,49 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		//not used so that test-projects can be checked manually for easier debugging
 	}
 	
-	//TODO Documentation
+	/**
+	 * Reloads the Resource of the passed element and returns the root element.
+	 * <br><br>
+	 * Changes to a resource that are resolved by the change propagation framework, may not reflect in local instances.
+	 * <br>
+	 * TODO better describe why that is: 
+	 * As I understand it, the VSUM lives in its own ResourceSet and works on its own copies of the instances. 
+	 * When an instance in the VSUM is changed by the change propagation, the instance in the local ResourceSet of the Test can become desynchronized, 
+	 * if those changes diverge from the manual changes performed by the developer (e.g. round-trip changes to the transformation's source).
+	 * <br><br>
+	 * WARNING: This invalidates all {@link EObject} instances in the {@link Resource} of the passed element (they turn into proxy elements).
+	 * To do anything with them, best re-retrieve them from the reloaded resource by traversing the references of the returned root element, 
+	 * or via the element's URI, however, the proxy's URI will not work, if the element was desynchronized before the reload.
+	 * 
+	 * @param modelElement
+	 * 		any eObject in the Resource you want to reload  
+	 * @return the root element in the reloaded Resource, or null if none is present
+	 */
+	def protected EObject reloadResourceAndReturnRoot(EObject modelElement){
+		// TODO this is a hack for testing: 
+		//	- load tools.vitruv.testutils into workspace
+		// 	- change VitruviusApplicationTest.changeRecorder to protected, in order to make it accessible here
+		changeRecorder.removeFromRecording(modelElement.eResource) 
+		val resourceURI = modelElement.eResource.URI
+		modelElement.eResource.unload
+		val rootElement = resourceSet.getResource(resourceURI,true).contents.head
+		if(rootElement !== null){
+			startRecordingChanges(rootElement) // calls changeRecorder.addToRecording -> calls registerContentsAtUuidResolver
+		}
+		return rootElement
+	}
+	
+	/**
+	 * Fetches the given {@link EObject} from the {@link ResourceSet} of the running test.
+	 * <br>
+	 * Elements retrieved via correspondence model are read-only (except in the Transactions performed by the framework),
+	 * and live in a different resourceSet. If corresponding elements need to be changed or compared, they should be retrieved via this method, 
+	 * or the getModifiableCorr(...) methods.
+	 * 
+	 * @param original
+	 * 		the {@link EObject} instance living in some ResourceSet
+	 * @return the object instance in the ResourceSet of this test
+	 */
 	def protected <T extends EObject> getModifiableInstance(T original){
 		val originalURI = EcoreUtil.getURI(original)
 		return resourceSet.getEObject(originalURI, true) as T
@@ -52,6 +94,8 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	}
 	
 	def protected <T extends EObject> T getModifiableCorr(EObject source, Class<T> typeFilter, String tag){
+		val correspondence = getCorr(source, typeFilter,tag)
+		if(correspondence === null) return null
 		return getModifiableInstance(getCorr(source, typeFilter,tag))
 	}
 	

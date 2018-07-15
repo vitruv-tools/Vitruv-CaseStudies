@@ -18,6 +18,8 @@ public class DefaultLiterals {
 	public static final String CONTRACTS_PACKAGE_NAME = "contracts";
 	public static final String DATATYPES_PACKAGE_NAME = "datatypes";
 	
+	public static final String RETURN_PARAM_NAME = "returnParam";
+	
 	public static final String INPUT_REQUEST_MODEL_PATH = "Please enter where to save the corresponding Uml-Model, e.g. \"model/repository.uml\"";
 	
 	public static final String INPUT_REQUEST_NEW_MODEL_PATH = "Please enter where to save the new corresponding model, e.g. \"model/<file-name>\"";

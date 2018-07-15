@@ -1,0 +1,225 @@
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.palladiosimulator.pcm.repository.CollectionDataType
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: pcmParameterReactions
+in reaction to changes in PCM
+execute actions in UML
+
+reaction ParameterInsertedInSignature {
+	after element pcm::Parameter inserted in pcm::OperationSignature[parameters__OperationSignature]
+	with{affectedEObject.parameters__OperationSignature.contains(newValue)}
+	call insertCorrespondingRegularParameter(newValue, affectedEObject)
+}
+
+routine insertCorrespondingRegularParameter(pcm::Parameter pcmParameter, pcm::OperationSignature pcmSignature){
+	action{
+		call detectOrCreateRegularParameterCandidate(pcmParameter, pcmSignature)
+		call moveCorrespondingRegularParameter(pcmParameter, pcmSignature)
+		
+	}
+}
+
+routine detectOrCreateRegularParameterCandidate(pcm::Parameter pcmParam, pcm::OperationSignature pcmSignature){
+	match {
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__OPERATION
+		val umlParam = retrieve optional uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		call {
+			if(!umlParam.isPresent){
+				val umlParamCandidate = umlOperation.ownedParameters.findFirst[it.name == pcmParam.parameterName]
+				if (umlParamCandidate !== null){
+					addCorrespondenceForExistingRegularParameter(pcmParam, umlParamCandidate)
+				}
+				else{
+					createCorrespondingRegularParameter(pcmParam, pcmSignature)
+				}
+			}
+		}
+	}
+}
+
+routine addCorrespondenceForExistingRegularParameter(pcm::Parameter pcmParam, uml::Parameter umlParam){
+	match {
+		require absence of uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		require absence of pcm::Parameter corresponding to umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		add correspondence between pcmParam and umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+}
+
+routine createCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::OperationSignature pcmSignature){
+	match {
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__OPERATION
+		require absence of uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		val umlParam = create uml::Parameter and initialize{
+			umlParam.name = pcmParam.parameterName
+		}
+		add correspondence between pcmParam and umlParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		call changeDirectionOfCorrespondingRegularParameter(pcmParam)
+		call changeTypeOfCorrespondingRegularParameter(pcmParam, pcmParam.dataType__Parameter)
+	}
+}
+
+routine moveCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::OperationSignature pcmSignature){
+	match {
+		val umlOperation = retrieve asserted uml::Operation corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__OPERATION
+		val umlParameter = retrieve asserted uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		update umlOperation {
+			umlOperation.ownedParameters += umlParameter
+		}
+	}
+}
+
+reaction ParameterRemovedFromSignature{
+	after element pcm::Parameter removed from pcm::OperationSignature[parameters__OperationSignature]
+	with {!affectedEObject.parameters__OperationSignature.contains(oldValue)}
+	call removeCorrespondingRegularParameter(oldValue, affectedEObject)
+}
+
+routine removeCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::OperationSignature pcmSignature){
+	match {
+		val umlOperation = retrieve uml::Operation corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__OPERATION
+		val umlParameter = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		update umlOperation {
+			umlOperation.ownedParameters -= umlParameter
+		}
+	}
+}
+
+reaction ParameterDeletedFromSignature{
+	after element pcm::Parameter deleted
+	call deleteCorrespondingRegularParameter(affectedEObject)
+}
+
+routine deleteCorrespondingRegularParameter(pcm::Parameter pcmParam){
+	match {
+		val umlParameter = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		remove correspondence between pcmParam and umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+}
+
+reaction ParameterRenamed{
+	after attribute replaced at pcm::Parameter[parameterName]
+	with {affectedEObject.parameterName == newValue}
+	call renameCorrespondingRegularParameter(affectedEObject, newValue)
+}
+
+routine renameCorrespondingRegularParameter(pcm::Parameter pcmParam, String newName){
+	match {
+		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		update umlParam {
+			umlParam.name = newName
+		}
+	}
+}
+
+reaction ParameterModifierChanged{
+	after attribute replaced at pcm::Parameter[modifier__Parameter]
+	with {affectedEObject.modifier__Parameter === newValue}
+	call changeDirectionOfCorrespondingRegularParameter(affectedEObject)
+}
+
+// pcm::ParameterModifier pcmModifier, cann't be resolved for some reason -> retreive from element
+routine changeDirectionOfCorrespondingRegularParameter(pcm::Parameter pcmParam){
+	match {
+		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+	}
+	action {
+		update umlParam {
+			umlParam.direction = PcmUmlClassHelper.getMatchingParameterDirection(pcmParam.modifier__Parameter)
+		}
+	}
+}
+
+reaction ParameterTypeChanged{
+	after element pcm::DataType replaced at pcm::Parameter[dataType__Parameter]
+	with {affectedEObject.dataType__Parameter === newValue}
+	call changeTypeOfCorrespondingRegularParameter(affectedEObject, newValue)
+}
+
+routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmDataType){
+	match {
+		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+	action {
+		execute {
+			//TODO implement Signature.returnType propagation; maybe solve this in CollectionDataTypeReactions?
+//			logger.warn("pcm::Parameter[dataType__Parameter] propagation is not implemented yet!")
+			
+			if (previousTypeWasCollectionType.isPresent){
+				removeCollectionTypeCorrespondenceFromRegularParameter(pcmParam)
+			}
+			if (pcmDataType instanceof CollectionDataType){
+				addCollectionTypeCorrespondenceToRegularParameter(pcmParam, pcmDataType)
+			}
+			else {
+				replaceSimpleDataTypeAtCorrespondingRegularParameter(pcmParam, pcmDataType)
+			}
+		}
+	}
+}
+
+routine removeCollectionTypeCorrespondenceFromRegularParameter(pcm::Parameter pcmParam){
+	match {
+		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val pcmPreviousCollectionType = retrieve asserted pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+	action {
+		update umlParam {
+			umlParam.type = null
+			umlParam.lower = 1
+			umlParam.upper = 1
+		}
+		remove correspondence between pcmPreviousCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+}
+
+routine addCollectionTypeCorrespondenceToRegularParameter(pcm::Parameter pcmParam, pcm::CollectionDataType pcmCollectionType){
+	match {
+		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val umlInnerType = retrieve optional uml::Type corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
+	}
+	action {
+		update umlParam {
+			umlParam.type = umlInnerType.orElse(null)
+			umlParam.lower = 0
+			umlParam.upper = LiteralUnlimitedNatural.UNLIMITED
+		}
+		add correspondence between pcmCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+	}
+}
+
+routine replaceSimpleDataTypeAtCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmSimpleType){
+	match {
+		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		val umlType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
+	}
+	action {
+		update umlParam {
+			umlParam.type = umlType.orElse(null)
+			umlParam.lower = 1
+			umlParam.upper = 1
+		}
+	}
+}
+
+
+
