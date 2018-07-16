@@ -33,9 +33,6 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 	static val TEST_INTERFACE = "TestInterface"
 	static val TEST_SIGNATURE = "testSignature"
 	static val TEST_PARAMETER = "testParameter"
-	
-	override protected setup() {
-	}
 	 
 	def private static boolean checkParameterModifiers(ParameterModifier pcmModifier, ParameterDirectionKind umlDirection){
 		return switch(pcmModifier){

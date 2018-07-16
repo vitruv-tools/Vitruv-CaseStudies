@@ -24,9 +24,9 @@ routine matchPossiblyExistingPackageCorrespondences(uml::Package newPkg, uml::Pa
 		val selfIsDatatypesPkg = retrieve optional pcm::Repository corresponding to newPkg tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 		val parentIsRepositoryPkg = retrieve optional pcm::Repository corresponding to parentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		
-		val selfIsSystemPkg = retrieve optional pcm::System corresponding to newPkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
+		val selfIsSystemPkg = retrieve optional pcm::System corresponding to newPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
 		
-		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to newPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to newPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	action{
 		call{
@@ -223,7 +223,7 @@ routine createBasicComponentPackageConcept(uml::Package umlPkg, uml::Package uml
 		val pcmComponent = create pcm::BasicComponent and initialize {
 			pcmComponent.entityName = umlPkg.name?.toFirstUpper
 		}
-		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 		call moveRepositoryComponentPackage(umlPkg, umlParentPkg)
 	}
 }
@@ -233,7 +233,7 @@ routine createCompositeComponentPackageConcept(uml::Package umlPkg, uml::Package
 		val pcmComponent = create pcm::CompositeComponent and initialize {
 			pcmComponent.entityName = umlPkg.name?.toFirstUpper
 		}
-		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 		call moveRepositoryComponentPackage(umlPkg, umlParentPkg)
 	}
 }
@@ -243,7 +243,7 @@ routine createSubSystemPackageConcept(uml::Package umlPkg, uml::Package umlParen
 		val pcmComponent = create pcm::SubSystem and initialize {
 			pcmComponent.entityName = umlPkg.name?.toFirstUpper
 		}
-		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		add correspondence between pcmComponent and umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 		call moveRepositoryComponentPackage(umlPkg, umlParentPkg)
 	}
 }
@@ -251,7 +251,7 @@ routine createSubSystemPackageConcept(uml::Package umlPkg, uml::Package umlParen
 routine moveRepositoryComponentPackage(uml::Package umlPkg, uml::Package umlParentPkg){
 	match {
 		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val pcmComponent = retrieve asserted pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		val pcmComponent = retrieve asserted pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	action{
 		update pcmRepository {
@@ -269,8 +269,8 @@ reaction PackageRenamed {
 routine renamePackageCorrespondences(uml::Package umlPkg, String newName){
 	match{
 		val selfIsRepositoryPkg = retrieve optional pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val selfIsSystemPkg = retrieve optional pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
-		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		val selfIsSystemPkg = retrieve optional pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	action{
 		call{
@@ -294,7 +294,7 @@ routine renameRepositoryPackageCorrespondence(uml::Package umlPkg, String newNam
 
 routine renameSystemPackageCorrespondence(uml::Package umlPkg, String newName){
 	match {
-		val pcmElement = retrieve asserted pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
+		val pcmElement = retrieve asserted pcm::System corresponding to umlPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
 	}
 	action {
 		update pcmElement {
@@ -305,7 +305,7 @@ routine renameSystemPackageCorrespondence(uml::Package umlPkg, String newName){
 
 routine renameRepositoryComponentPackageCorrespondence(uml::Package umlPkg, String newName){
 	match {
-		val pcmElement = retrieve asserted pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		val pcmElement = retrieve asserted pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	action {
 		update pcmElement {
@@ -324,8 +324,8 @@ reaction PackageRemovedFromPackageOrModel {
 routine removePackageCorrespondencesWithoutDeletion(uml::Package parentPkg, uml::Package removedPkg){
 	match{
 		val selfIsRepositoryPkg = retrieve optional pcm::Repository corresponding to removedPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val selfIsSystemPkg = retrieve optional pcm::System corresponding to removedPkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
-		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to removedPkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		val selfIsSystemPkg = retrieve optional pcm::System corresponding to removedPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to removedPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 		
 		val selfIsContractsPkg = retrieve optional pcm::Repository corresponding to removedPkg tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
 		val selfIsDatatypesPkg = retrieve optional pcm::Repository corresponding to removedPkg tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
@@ -360,8 +360,8 @@ reaction PackageDeleted {
 routine deleteOldPackageCorrespondences(uml::Package pkg){
 	match{
 		val selfIsRepositoryPkg = retrieve optional pcm::Repository corresponding to pkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val selfIsSystemPkg = retrieve optional pcm::System corresponding to pkg tagged with TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE
-		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to pkg tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		val selfIsSystemPkg = retrieve optional pcm::System corresponding to pkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val selfIsComponentPkg = retrieve optional pcm::RepositoryComponent corresponding to pkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	action{
 		call{

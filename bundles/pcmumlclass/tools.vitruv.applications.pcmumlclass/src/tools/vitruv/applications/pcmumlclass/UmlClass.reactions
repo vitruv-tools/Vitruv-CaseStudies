@@ -1,10 +1,6 @@
-import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
-import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
-import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
-import tools.vitruv.framework.userinteraction.UserInteractionType
+import org.eclipse.uml2.uml.Class
 import org.palladiosimulator.pcm.repository.CompositeDataType
+import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -34,7 +30,7 @@ reaction ClassInsertedInPkg{
 routine matchExistingClassConcepts(uml::Class umlClass, uml::Package umlPackage){
 	match{
 		val pcmCompositeType = retrieve optional pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CLASS
+		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
 		call {
@@ -53,14 +49,13 @@ routine matchExistingClassConcepts(uml::Class umlClass, uml::Package umlPackage)
 
 routine matchComponentClass2InsertionContext(uml::Class umlClass, uml::Package umlPackage){
 	match{
-		val pcmRepositoryComponent_1 = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CLASS
-		val pcmRepositoryComponent_2 = retrieve optional pcm::RepositoryComponent corresponding to umlPackage tagged with TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE
+		val pcmRepositoryComponent_1 = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val pcmRepositoryComponent_2 = retrieve optional pcm::RepositoryComponent corresponding to umlPackage tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	action{
 		call{
 			if (pcmRepositoryComponent_1.isPresent && pcmRepositoryComponent_2.isPresent 
-				&& pcmRepositoryComponent_1.get === pcmRepositoryComponent_2.get
-			){
+				&& pcmRepositoryComponent_1.get === pcmRepositoryComponent_2.get){
 //				Component implementation has been added to the correct package -> do nothing
 			}
 			else{
@@ -81,7 +76,7 @@ routine matchCompositeTypeClass2InsertionContext(uml::Class umlClass, uml::Packa
 			}
 			else{
 				deleteCompositeTypeClassCorrespondence(umlClass)
-//				normal we would now try to search for other possible concepts, but there can't be
+//				normal we would now try to search for other possible concepts, but there can't be any
 			}
 		}
 	}
@@ -96,6 +91,7 @@ routine contextDisambiguateClassConcepts(uml::Class umlClass, uml::Package umlPa
 			if (pcmRepository.isPresent){
 				detectCompositeTypeClassCorrespondenceCandidates(umlClass, umlPackage)
 			}
+			//TODO what about component
 		}
 	}
 }
@@ -162,7 +158,7 @@ reaction ClassRemovedFromPkg {
 routine disambiguateRemovedClassConcept(uml::Class umlClass, uml::Package umlPackage){
 	match{
 		val pcmCompositeType = retrieve optional pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CLASS
+		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
 		call {
@@ -196,7 +192,7 @@ reaction ClassDeleted {
 routine disambiguateDeletedClassConcept(uml::Class umlClass){
 	match{
 		val pcmCompositeType = retrieve optional pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CLASS
+		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
 		call {
@@ -222,7 +218,7 @@ routine deleteCompositeTypeClassCorrespondence(uml::Class umlClass){
 
 routine deleteRepositoryComponentImplCorrespondence(uml::Class umlClass){
 	match{
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CLASS
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
 		remove correspondence between pcmComponent and umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
@@ -240,7 +236,7 @@ reaction ClassRenamed {
 routine disambiguateRenamedClassConcept(uml::Class umlClass, String newName){
 	match{
 		val pcmCompositeType = retrieve optional pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CLASS
+		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
 		call {
@@ -276,15 +272,15 @@ routine renameRepositoryComponentImplCorrespondence(uml::Class umlClass, String 
 	}
 }
 
-//TODO generalization reaction and routine
+//TODO generalization reaction and routine, need to add correspondence handling for RequiredRole--Generalization
 
 reaction ClassGeneralizationAdded {
 	after element uml::Generalization inserted in uml::Class[generalization]
 	with {affectedEObject.generalizations.contains(newValue)} //validity check
-	call addParentCollectionDatatype(affectedEObject, newValue.general)
+	call addParentCompositeDatatype(affectedEObject, newValue.general)
 }
 
-routine addParentCollectionDatatype(uml::Class umlClass, uml::Classifier umlNewParent){
+routine addParentCompositeDatatype(uml::Class umlClass, uml::Classifier umlNewParent){
 	match {
 		val pcmComposite = retrieve pcm::CompositeDataType corresponding to umlClass
 		val pcmParentComposite = retrieve pcm::CompositeDataType corresponding to umlNewParent
@@ -301,10 +297,10 @@ routine addParentCollectionDatatype(uml::Class umlClass, uml::Classifier umlNewP
 reaction ClassGeneralizationRemoved {
 	after element uml::Generalization removed from uml::Class[generalization]
 	with {!affectedEObject.generalizations.contains(oldValue)} //validity check
-	call removeParentCollectionDatatype(affectedEObject, oldValue.general)
+	call removeParentCompositeDatatype(affectedEObject, oldValue.general)
 }
 
-routine removeParentCollectionDatatype(uml::Class umlClass, uml::Classifier umlOldParent){
+routine removeParentCompositeDatatype(uml::Class umlClass, uml::Classifier umlOldParent){
 	match {
 		val pcmComposite = retrieve pcm::CompositeDataType corresponding to umlClass
 		val pcmParentComposite = retrieve pcm::CompositeDataType corresponding to umlOldParent
@@ -318,9 +314,9 @@ routine removeParentCollectionDatatype(uml::Class umlClass, uml::Classifier umlO
 	}
 }
 
-reaction ParentCollectionDatatypeReplaced {
+reaction ParentCompositeDatatypeReplaced {
 	after element replaced at uml::Generalization[general]
-	with {affectedEObject.specific instanceof org.eclipse.uml2.uml.Class}
+	with {affectedEObject.specific instanceof Class}
 //	with {affectedEObject.general === newValue} // delay validity check to ensure that the old parent interface is removed
 	call replaceParentCollectionDatatype(affectedEObject, newValue, oldValue)
 }
@@ -334,10 +330,10 @@ routine replaceParentCollectionDatatype(uml::Generalization gen, uml::Classifier
 	action {
 		call {
 			if(pcmOldParent.isPresent){
-				removeParentCollectionDatatype(gen.specific as org.eclipse.uml2.uml.Class, umlOldParent)
+				removeParentCompositeDatatype(gen.specific as Class, umlOldParent)
 			}
 			if (pcmNewParent.isPresent && gen.general === umlNewParent){ // delayed validity check
-				addParentCollectionDatatype(gen.specific as org.eclipse.uml2.uml.Class, umlNewParent)
+				addParentCompositeDatatype(gen.specific as Class, umlNewParent)
 			}
 		}
 	}

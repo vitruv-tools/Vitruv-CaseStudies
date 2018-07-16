@@ -1,0 +1,138 @@
+import org.eclipse.uml2.uml.Generalization
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: pcmProvidedRoleReactions
+in reaction to changes in PCM
+execute actions in UML
+
+reaction ProvidedRoleInserted{
+	after element pcm::OperationProvidedRole inserted in pcm::InterfaceProvidingRequiringEntity[providedRoles_InterfaceProvidingEntity]
+	with {affectedEObject.providedRoles_InterfaceProvidingEntity.contains(newValue)}
+	call insertCorrespondingProvidedGeneralization(newValue, affectedEObject)
+}
+
+routine insertCorrespondingProvidedGeneralization(pcm::OperationProvidedRole pcmProvided, pcm::InterfaceProvidingRequiringEntity pcmIPRE){
+	action {
+		call detectOrCreateCorrespondingProvidedGeneralization(pcmProvided, pcmIPRE)
+		call moveCorrespondingProvidedGeneralization(pcmProvided, pcmIPRE)
+	}
+}
+
+routine detectOrCreateCorrespondingProvidedGeneralization(pcm::OperationProvidedRole pcmProvided, pcm::InterfaceProvidingRequiringEntity pcmIPRE){
+	match {
+		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlGeneralization = retrieve optional uml::Generalization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION
+		val umlInterface = retrieve optional uml::Interface corresponding to pcmProvided.providedInterface__OperationProvidedRole tagged with TagLiterals.INTERFACE_TO_INTERFACE 
+	}
+	action {
+		call {
+			if (!umlGeneralization.isPresent){
+				var Generalization umlGeneralizationCandidate = null
+				if(umlInterface.isPresent) 
+					umlGeneralizationCandidate = umlComponentImpl.generalizations.findFirst[it.general === umlInterface.get]
+				if (umlGeneralizationCandidate !== null){
+					addCorrespondenceForExistingGeneralization(pcmProvided, umlGeneralizationCandidate)
+				}
+				createCorrespondingProvidedGeneralization(pcmProvided, pcmIPRE)
+			}
+		}
+	}
+}
+
+routine addCorrespondenceForExistingGeneralization(pcm::OperationProvidedRole pcmProvided, uml::Generalization umlGeneralization){
+	match {
+		require absence of uml::Generalization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION
+		require absence of pcm::OperationProvidedRole corresponding to umlGeneralization tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION 
+	}
+	action {
+		add correspondence between pcmProvided and umlGeneralization tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION
+	}
+}
+
+routine createCorrespondingProvidedGeneralization(pcm::OperationProvidedRole pcmProvided, pcm::InterfaceProvidingRequiringEntity pcmIPRE){
+	match {
+		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
+		require absence of uml::Generalization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION
+		val umlInterface = retrieve optional uml::Interface 
+			corresponding to pcmProvided.providedInterface__OperationProvidedRole tagged with TagLiterals.INTERFACE_TO_INTERFACE 
+	}
+	action {
+		val umlGeneralization = create uml::Generalization and initialize {
+			umlGeneralization.specific = umlComponentImpl
+			umlGeneralization.general = umlInterface.orElse(null)
+		}
+		add correspondence between pcmProvided and umlGeneralization tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION
+	}
+}
+
+routine moveCorrespondingProvidedGeneralization(pcm::OperationProvidedRole pcmProvided, pcm::InterfaceProvidingRequiringEntity pcmIPRE){
+	match {
+		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlGeneralization = retrieve uml::Generalization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION 
+	}
+	action {
+		update umlComponentImpl {
+			umlComponentImpl.generalizations += umlGeneralization
+		}
+	}
+}
+
+reaction ProvidedRoleRemoved{
+	after element pcm::OperationProvidedRole removed from pcm::InterfaceProvidingRequiringEntity[providedRoles_InterfaceProvidingEntity]
+	with {!affectedEObject.providedRoles_InterfaceProvidingEntity.contains(oldValue)}
+	call removeCorrespondingProvidedGeneralization(oldValue, affectedEObject)
+}
+
+routine removeCorrespondingProvidedGeneralization(pcm::OperationProvidedRole pcmProvided, pcm::InterfaceProvidingRequiringEntity pcmIPRE){
+	match {
+		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlGeneralization = retrieve uml::Generalization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION 
+	}
+	action {
+		update umlComponentImpl {
+			umlComponentImpl.generalizations -= umlGeneralization
+		}
+	}
+}
+
+reaction ProvidedRoleDeleted{
+	after element pcm::OperationProvidedRole deleted
+	call deleteCorrespondingProvidedGeneralization(affectedEObject)
+}
+
+routine deleteCorrespondingProvidedGeneralization(pcm::OperationProvidedRole pcmProvided){
+	match {
+		val umlGeneralization = retrieve uml::Generalization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION 
+	}
+	action {
+		remove correspondence between pcmProvided and umlGeneralization tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION
+		delete umlGeneralization
+	}
+}
+
+reaction ProvidedRoleInterfaceChanged{
+	after element pcm::OperationInterface replaced at pcm::OperationProvidedRole[providedInterface__OperationProvidedRole]
+	with {affectedEObject.providedInterface__OperationProvidedRole == newValue}
+	call changeInterfaceOfCorrespondingProvidedGeneralization(affectedEObject, newValue)
+}
+
+routine changeInterfaceOfCorrespondingProvidedGeneralization(pcm::OperationProvidedRole pcmProvided, pcm::OperationInterface pcmInterface){
+	match {
+		val umlGeneralization = retrieve uml::Generalization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION 
+		val umlInterface = retrieve optional uml::Interface 
+			corresponding to pcmInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE 
+	}
+	action {
+		update umlGeneralization {
+			umlGeneralization.general = umlInterface.orElse(null)
+		}
+	}
+}
+
+
+
+
+

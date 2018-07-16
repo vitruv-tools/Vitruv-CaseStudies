@@ -1,0 +1,205 @@
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+import org.palladiosimulator.pcm.repository.CollectionDataType
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: pcmInnerDeclarationReactions
+in reaction to changes in PCM
+execute actions in UML
+
+
+reaction InnerDeclarationInsertedToCompositeDataType{
+	after element pcm::InnerDeclaration inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
+	with {affectedEObject.innerDeclaration_CompositeDataType.contains(newValue)}
+	call insertCorrespondingAttribute(newValue, affectedEObject)
+}
+
+routine insertCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CompositeDataType pcmComposite){
+	action {
+		call detectOrCreateCorrespondingAttribute(pcmAttribute, pcmComposite)
+		call moveCorrespondingAttribute(pcmAttribute, pcmComposite)
+	}
+}
+
+routine detectOrCreateCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CompositeDataType pcmComposite){
+	match{
+		val umlComposite = retrieve uml::Class corresponding to pcmComposite tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+		val umlAttribute = retrieve optional uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+	}
+	action {
+		call {
+			if (!umlAttribute.isPresent) {
+				val umlAttributeCandidate = umlComposite.ownedAttributes.findFirst[it.name == pcmAttribute.entityName]
+				if (umlAttributeCandidate !== null){
+					addCorrespondenceForExistingAttribute(pcmAttribute, umlAttributeCandidate)
+				}
+				else {
+					createCorrespondingAttribute(pcmAttribute, pcmComposite)
+				}
+			}
+		}
+	}
+}
+
+routine addCorrespondenceForExistingAttribute(pcm::InnerDeclaration pcmAttribute, uml::Property umlAttribute){
+	match{
+		require absence of uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		require absence of pcm::InnerDeclaration corresponding to umlAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+	}
+	action {
+		add correspondence between pcmAttribute and umlAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+	}
+}
+
+routine createCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CompositeDataType pcmComposite){
+	match{
+		val umlComposite = retrieve uml::Class corresponding to pcmComposite tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+		require absence of uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+	}
+	action {
+		val umlAttribute = create uml::Property and initialize {
+			umlAttribute.name = pcmAttribute.entityName
+		}
+		add correspondence between pcmAttribute and umlAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		call changeTypeOfCorrespondingAttribute(pcmAttribute, pcmComposite)
+	}
+}
+
+routine moveCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CompositeDataType pcmComposite){
+	match{
+		val umlComposite = retrieve uml::Class corresponding to pcmComposite tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+	}
+	action {
+		update umlComposite {
+			umlComposite.ownedAttributes += umlAttribute
+		}
+	}
+}
+
+reaction InnerDeclarationRemovedFromCompositeDataType {
+	after element pcm::InnerDeclaration removed from pcm::CompositeDataType[innerDeclaration_CompositeDataType]
+	with {!affectedEObject.innerDeclaration_CompositeDataType.contains(oldValue)}
+	call removeCorrespondingAttribute(oldValue, affectedEObject)
+}
+
+routine removeCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CompositeDataType pcmComposite){
+	match{
+		val umlComposite = retrieve uml::Class corresponding to pcmComposite tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+	}
+	action {
+		update umlComposite {
+			umlComposite.ownedAttributes -= umlAttribute
+		}
+	}
+}
+
+reaction InnerDeclarationDeleted {
+	after element pcm::InnerDeclaration deleted
+	call deleteCorrespondingAttribute(affectedEObject)
+}
+
+routine deleteCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute){
+	match{
+		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+	}
+	action {
+		remove correspondence between pcmAttribute and umlAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		delete umlAttribute
+	}
+}
+
+reaction InnerDeclarationNameChanged {
+	after attribute replaced at pcm::InnerDeclaration[entityName]
+	with {affectedEObject.entityName == newValue}
+	call changeNameOfCorrespondingAttribute(affectedEObject, newValue)
+}
+
+routine changeNameOfCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, String newName){
+	match{
+		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+	}
+	action {
+		update umlAttribute {
+			umlAttribute.name = newName
+		}
+	}
+}
+
+// TODO following reactions are very similar to to PcmSignatureReactions, so some refactoring? 
+reaction InnerDeclarationTypeChanged {
+	after element pcm::DataType replaced at pcm::InnerDeclaration[datatype_InnerDeclaration]
+	with {affectedEObject.datatype_InnerDeclaration === newValue}
+	call changeTypeOfCorrespondingAttribute(affectedEObject, newValue)
+}
+
+routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::DataType pcmDataType){
+	match {
+		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+	}
+	action {
+		execute {			
+			if (previousTypeWasCollectionType.isPresent){
+				removeCollectionTypeCorrespondenceFromAttribute(pcmAttribute)
+			}
+			if (pcmDataType instanceof CollectionDataType){
+				addCollectionTypeCorrespondenceToAttribute(pcmAttribute, pcmDataType)
+			}
+			else {
+				replaceSimpleDataTypeAtCorrespondingAttribute(pcmAttribute, pcmDataType)
+			}
+		}
+	}
+}
+
+routine removeCollectionTypeCorrespondenceFromAttribute(pcm::InnerDeclaration pcmAttribute){
+	match {
+		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val pcmPreviousCollectionType = retrieve asserted pcm::CollectionDataType corresponding to umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+	}
+	action {
+		update umlAttribute {
+			umlAttribute.type = null
+			umlAttribute.lower = 1
+			umlAttribute.upper = 1
+		}
+		remove correspondence between pcmPreviousCollectionType and umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+	}
+}
+
+routine addCollectionTypeCorrespondenceToAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CollectionDataType pcmCollectionType){
+	match {
+		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val umlInnerType = retrieve optional uml::Type corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
+	}
+	action {
+		update umlAttribute {
+			umlAttribute.type = umlInnerType.orElse(null)
+			umlAttribute.lower = 0
+			umlAttribute.upper = LiteralUnlimitedNatural.UNLIMITED
+		}
+		add correspondence between pcmCollectionType and umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+	}
+}
+
+routine replaceSimpleDataTypeAtCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::DataType pcmSimpleType){
+	match {
+		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val umlType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
+	}
+	action {
+		update umlAttribute {
+			umlAttribute.type = umlType.orElse(null)
+			umlAttribute.lower = 1
+			umlAttribute.upper = 1
+		}
+	}
+}
+
+
+
+

@@ -59,7 +59,7 @@ routine disambiguatePreexistingCorrespondences(uml::Parameter umlParam, uml::Ope
 
 routine matchRequiredRoleParamToInsertionContext(uml::Parameter umlParam, uml::Operation umlOperation){
 	match {
-		val inComponentConstructor = retrieve optional pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val inComponentConstructor = retrieve optional pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.IPRE__CONSTRUCTOR
 	}
 	action {
 		call {
@@ -95,7 +95,7 @@ routine disambiguateParamConceptFromInsertionContext(uml::Parameter umlParam, um
 	match {
 		val inInterfaceOperation = retrieve optional pcm::OperationInterface corresponding to umlOperation.interface tagged with TagLiterals.INTERFACE_TO_INTERFACE
 		
-		val inComponentConstructor = retrieve optional pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val inComponentConstructor = retrieve optional pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.IPRE__CONSTRUCTOR
 		val isSynchronizedInterface = retrieve optional pcm::OperationInterface corresponding to umlParam.type tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
 	action {
@@ -185,7 +185,7 @@ routine checkIfRequiredRoleCandidateExists(uml::Parameter umlParam, uml::Operati
 
 routine createRequiredRoleCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
 	match {
-		val pcmComponent = retrieve asserted pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val pcmComponent = retrieve asserted pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.IPRE__CONSTRUCTOR
 		val pcmInterface = retrieve asserted pcm::OperationInterface corresponding to umlParam.type tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
 	action {
@@ -200,7 +200,7 @@ routine createRequiredRoleCorrespondence(uml::Parameter umlParam, uml::Operation
 
 routine moveRequiredRoleParamCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
 	match {
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.IPRE__CONSTRUCTOR
 		val pcmRequiredRole = retrieve pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
 	}
 	action {
@@ -212,7 +212,7 @@ routine moveRequiredRoleParamCorrespondence(uml::Parameter umlParam, uml::Operat
 
 routine removeRequiredRoleParamCorrespondence(uml::Parameter umlParam, uml::Operation umlOperation){
 	match {
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlOperation tagged with TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR
+		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlOperation tagged with TagLiterals.IPRE__CONSTRUCTOR
 		val pcmRequiredRole = retrieve pcm::OperationRequiredRole corresponding to umlParam tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
 	}
 	action {

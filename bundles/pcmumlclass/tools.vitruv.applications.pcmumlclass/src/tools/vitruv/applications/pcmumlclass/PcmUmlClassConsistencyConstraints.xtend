@@ -163,9 +163,9 @@ class PcmUmlClassConsistencyConstraints {
 			org.eclipse.uml2.uml.Operation umlComponentConstructor
 	){
 		val correspondenceConstraint = 
-			corresponds(cm, pcmComponent, umlComponentPkg, TagLiterals.REPOSITORY_COMPONENT_TO_PACKAGE)
-			&& corresponds(cm, pcmComponent, umlComponentImpl, TagLiterals.REPOSITORY_COMPONENT_TO_CLASS)
-			&& corresponds(cm, pcmComponent, umlComponentConstructor, TagLiterals.REPOSITORY_COMPONENT_TO_CONSTRUCTOR)
+			corresponds(cm, pcmComponent, umlComponentPkg, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
+			&& corresponds(cm, pcmComponent, umlComponentImpl, TagLiterals.IPRE__IMPLEMENTATION)
+			&& corresponds(cm, pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR)
 		val attributeConstraint = 
 			pcmComponent.entityName.toFirstLower == umlComponentPkg.name 
 			&& pcmComponent.entityName == umlComponentPkg.name.toFirstUpper
@@ -195,8 +195,8 @@ class PcmUmlClassConsistencyConstraints {
 			corresponds(cm, pcmRequired.requiredInterface__OperationRequiredRole, umlRequiredInstance.type)
 			&& corresponds(cm, pcmRequired.requiredInterface__OperationRequiredRole, umlRequiredParameter.type)
 			// the owning component and component implementation have to correspond
-			&& corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredInstance.class_, TagLiterals.REPOSITORY_COMPONENT_TO_CLASS)
-			&& corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredParameter.operation?.class_, TagLiterals.REPOSITORY_COMPONENT_TO_CLASS)
+			&& corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredInstance.class_, TagLiterals.IPRE__IMPLEMENTATION)
+			&& corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredParameter.operation?.class_, TagLiterals.IPRE__IMPLEMENTATION)
 		return correspondenceConstraint && containmentConstraint
 	}
 	
@@ -210,7 +210,7 @@ class PcmUmlClassConsistencyConstraints {
 			//the respective type references have to correspond
 			corresponds(cm, pcmProvided.providedInterface__OperationProvidedRole, umlImplementedInterface.general)
 			// the owning component and component implementation have to correspond
-			&& corresponds(cm, pcmProvided.providingEntity_ProvidedRole, umlImplementedInterface.specific, TagLiterals.REPOSITORY_COMPONENT_TO_CLASS)
+			&& corresponds(cm, pcmProvided.providingEntity_ProvidedRole, umlImplementedInterface.specific, TagLiterals.IPRE__IMPLEMENTATION)
 		return correspondenceConstraint && containmentConstraint
 	}
 	
@@ -235,8 +235,8 @@ class PcmUmlClassConsistencyConstraints {
 			org.eclipse.uml2.uml.Class umlSystemImpl
 	){
 		val correspondenceConstraint = 
-			corresponds(cm, pcmSystem, umlSystemPkg, TagLiterals.SYSTEM_TO_SYSTEM_PACKAGE)
-			&& corresponds(cm, pcmSystem, umlSystemImpl, TagLiterals.SYSTEM_TO_SYSTEM_CLASS)
+			corresponds(cm, pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
+			&& corresponds(cm, pcmSystem, umlSystemImpl, TagLiterals.IPRE__IMPLEMENTATION)
 		val attributeConstraint = 
 			pcmSystem.entityName.toFirstLower == umlSystemPkg.name 
 			&& pcmSystem.entityName == umlSystemPkg.name.toFirstUpper

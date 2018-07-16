@@ -11,13 +11,18 @@ import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorresponde
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import java.util.Set
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.eclipse.uml2.uml.PrimitiveType
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import org.eclipse.emf.common.util.URI
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	override protected createChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification, 
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
-		]; 
+		];  
 	}
 	
 	private def patchDomains() {
@@ -29,9 +34,41 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain];
 	}
 	
+	protected var PrimitiveDataType PCM_BOOL
+	protected var PrimitiveDataType PCM_INT
+	protected var PrimitiveDataType PCM_DOUBLE
+	protected var PrimitiveDataType PCM_STRING
+	protected var PrimitiveDataType PCM_CHAR
+	protected var PrimitiveDataType PCM_BYTE
+	
+	protected var PrimitiveType UML_BOOL
+	protected var PrimitiveType UML_INT
+	protected var PrimitiveType UML_REAL
+	protected var PrimitiveType UML_STRING
+	protected var PrimitiveType UML_UNLIMITED_NATURAL
+	
+	override protected setup() {
+		val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(resourceSet)	
+		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
+		PCM_INT = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.INT]
+		PCM_DOUBLE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.DOUBLE]
+		PCM_STRING = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.STRING]
+		PCM_CHAR = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.CHAR]
+		PCM_BYTE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BYTE]
+		
+		val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(resourceSet)
+		UML_BOOL =  umlPrimitiveTypes.findFirst[it.name == "Boolean"]
+		UML_INT =  umlPrimitiveTypes.findFirst[it.name == "Integer"]
+		UML_REAL =  umlPrimitiveTypes.findFirst[it.name == "Real"]
+		UML_STRING =  umlPrimitiveTypes.findFirst[it.name == "String"]
+		UML_UNLIMITED_NATURAL =  umlPrimitiveTypes.findFirst[it.name == "UnlimitedNatural"]
+	}
+	
 	override protected cleanup() {
 		//not used so that test-projects can be checked manually for easier debugging
 	}
+	
+	
 	
 	/**
 	 * Reloads the Resource of the passed element and returns the root element.

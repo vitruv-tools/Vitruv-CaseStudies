@@ -1,32 +1,61 @@
 package tools.vitruv.applications.pcmumlclass
 
-import java.util.Optional
-import org.eclipse.emf.ecore.EObject
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.repository.Repository
+import java.util.List
 import org.eclipse.emf.common.util.URI
-import org.palladiosimulator.pcm.repository.ParameterModifier
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.PrimitiveType
+import org.palladiosimulator.pcm.repository.ParameterModifier
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import java.util.HashMap
-import tools.vitruv.framework.correspondence.CorrespondenceModel
+import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
+import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 class PcmUmlClassHelper {
 	private new(){}
 	
 	def public static getPcmPrimitiveTypes(EObject alreadyPersistedObject){
-		var Iterable<PrimitiveDataType> pcmPrimitiveTypes = #[]
-		var Repository primitiveTypesRepository = null 
+		return getPcmPrimitiveTypes(alreadyPersistedObject.eResource.resourceSet)
+	}
+	
+	def public static getUmlPrimitiveTypes(EObject alreadyPersistedObject){
+		return getUmlPrimitiveTypes(alreadyPersistedObject.eResource.resourceSet)
+	}
+	
+	def public static getPcmPrimitiveTypes(ResourceSet resourceSet){
+		var List<PrimitiveDataType> pcmPrimitiveTypes = #[]
 		val uri = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository")
 		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
-			val resource = alreadyPersistedObject.eResource.resourceSet.getResource(uri,true)
-			primitiveTypesRepository = resource.contents.filter(Repository).head				
-		}
-		if (primitiveTypesRepository !== null){
-			pcmPrimitiveTypes = primitiveTypesRepository.dataTypes__Repository.filter(PrimitiveDataType)
+			val resource = resourceSet.getResource(uri,true)
+			pcmPrimitiveTypes = resource.allContents.filter(PrimitiveDataType).toList				
 		}
 		return pcmPrimitiveTypes
+	}
+	
+	def public static getUmlPrimitiveTypes(ResourceSet resourceSet){
+		var List<PrimitiveType> umlPrimitiveTypes = #[]
+		val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
+		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
+			val resource = resourceSet.getResource(uri,true)
+			umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList		
+		}
+		return umlPrimitiveTypes
+	}
+	
+	def public static PrimitiveType mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType, Iterable<PrimitiveType> umlPredifinedPrimitiveTypes){
+		return switch (pcmPredefinedPrimitiveType.type){
+			case PrimitiveTypeEnum.BOOL: umlPredifinedPrimitiveTypes.findFirst[it.name == "Boolean"]
+			case PrimitiveTypeEnum.INT: umlPredifinedPrimitiveTypes.findFirst[it.name == "Integer"]
+			case PrimitiveTypeEnum.DOUBLE: umlPredifinedPrimitiveTypes.findFirst[it.name == "Real"]
+			case PrimitiveTypeEnum.STRING: umlPredifinedPrimitiveTypes.findFirst[it.name == "String"]
+			case PrimitiveTypeEnum.CHAR,
+			case PrimitiveTypeEnum.BYTE,
+			default : null
+			// TODO decide how to map Char, Byte, UnlimitedNatural
+		}
 	}
 	
 	def public static getMatchingParameterDirection(ParameterModifier pcmModifier){
@@ -38,7 +67,7 @@ class PcmUmlClassHelper {
 				default: ParameterDirectionKind.INOUT_LITERAL}
 	}
 	
-	def public static boolean isContainedInRepositoryHierarchy(org.eclipse.uml2.uml.Package pkg, CorrespondenceModel corrModel){
+	def public static boolean isContainedInRepositoryHierarchy(Package pkg, CorrespondenceModel corrModel){
 		var parentPkg = pkg.nestingPackage
 		var repositoryFound = false
 		while (parentPkg !== null && !repositoryFound){
@@ -48,7 +77,7 @@ class PcmUmlClassHelper {
 		return repositoryFound
 	}
 	
-	def public static boolean isRepositoryPackage(org.eclipse.uml2.uml.Package pkg, CorrespondenceModel corrModel){
+	def public static boolean isRepositoryPackage(Package pkg, CorrespondenceModel corrModel){
 		return !ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, pkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE, Repository).nullOrEmpty
 	}
 	

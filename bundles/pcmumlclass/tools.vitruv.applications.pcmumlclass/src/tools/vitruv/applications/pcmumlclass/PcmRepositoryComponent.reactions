@@ -1,0 +1,233 @@
+import org.eclipse.uml2.uml.Class
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: pcmRepositoryComponentReactions
+in reaction to changes in PCM
+execute actions in UML
+
+reaction RepositoryComponentInsertedInRepository{
+	after element pcm::RepositoryComponent inserted in pcm::Repository[components__Repository]
+	with {affectedEObject.components__Repository.contains(newValue)}
+	call insertCorrespondingComponentPackage(newValue, affectedEObject)
+}
+
+routine insertCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository){
+	action {
+		call detectOrCreateCorrespondingComponentPackage(pcmComponent, pcmRepository)
+		call detectOrCreateCorrespondingComponentImplementation(pcmComponent)
+		call detectOrCreateCorrespondingComponentConstructor(pcmComponent)
+		call moveCorrespondingComponentPackage(pcmComponent, pcmRepository)
+	}
+}
+
+routine detectOrCreateCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository){
+	match {
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val umlComponentPackage = retrieve optional uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	}
+	action {
+		call {
+			if (!umlComponentPackage.isPresent){
+				val umlComponentPackageCandidate = umlRepositoryPackage.nestedPackages.findFirst[it.name == pcmComponent.entityName.toFirstLower]
+				if (umlComponentPackageCandidate !== null){
+					addCorrespondenceForExistingComponentPackage(pcmComponent, umlComponentPackageCandidate)
+				}
+				else{
+					createCorrespondingComponentPackage(pcmComponent, pcmRepository)
+				}
+			}
+		}
+	}
+}
+
+routine addCorrespondenceForExistingComponentPackage(pcm::RepositoryComponent pcmComponent, uml::Package umlComponentPackage){
+	match {
+		require absence of uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		require absence of pcm::RepositoryComponent corresponding to umlComponentPackage tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	}
+	action {
+		add correspondence between pcmComponent and umlComponentPackage tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	}
+}
+
+routine createCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository){
+	match {
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		require absence of uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	}
+	action {
+		val umlComponentPackage = create uml::Package and initialize {
+			umlComponentPackage.name = pcmComponent.entityName.toFirstLower
+			umlRepositoryPackage.packagedElements += umlComponentPackage
+		}
+		add correspondence between pcmComponent and umlComponentPackage tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	}
+}
+
+
+routine detectOrCreateCorrespondingComponentImplementation(pcm::RepositoryComponent pcmComponent){
+	match {
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		val umlComponentImplementation = retrieve optional uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+	action {
+		call {
+			if (!umlComponentImplementation.isPresent){
+				val umlComponentImplementationCandidate = umlComponentPackage.packagedElements
+						.filter(Class).findFirst[it.name == pcmComponent.entityName + DefaultLiterals.COMPONENT_IMPL_SUFFIX]
+				if (umlComponentImplementationCandidate !== null){
+					addCorrespondenceForExistingComponentImplementation(pcmComponent, umlComponentImplementationCandidate)
+				}
+				else{
+					createCorrespondingComponentImplementation(pcmComponent)
+				}
+			}
+		}
+	}
+}
+
+routine addCorrespondenceForExistingComponentImplementation(pcm::RepositoryComponent pcmComponent, uml::Class umlComponentImplementation){
+	match {
+		require absence of uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+		require absence of pcm::RepositoryComponent corresponding to umlComponentImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+	action {
+		add correspondence between pcmComponent and umlComponentImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+}
+
+routine createCorrespondingComponentImplementation(pcm::RepositoryComponent pcmComponent){
+	match {
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		require absence of uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+	action {
+		val umlComponentImplementation = create uml::Class and initialize {
+			umlComponentImplementation.name = pcmComponent.entityName + DefaultLiterals.COMPONENT_IMPL_SUFFIX
+			umlComponentImplementation.isFinalSpecialization = true
+			umlComponentPackage.packagedElements += umlComponentImplementation
+		} 
+		add correspondence between pcmComponent and umlComponentImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+}
+
+routine detectOrCreateCorrespondingComponentConstructor(pcm::RepositoryComponent pcmComponent){
+	match {
+		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlComponentConstructor = retrieve optional uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		call {
+			if (!umlComponentConstructor.isPresent){
+				val umlComponentConstructorCandidate = umlComponentImplementation.ownedOperations
+						.findFirst[it.name == pcmComponent.entityName + DefaultLiterals.COMPONENT_IMPL_SUFFIX]
+				if (umlComponentConstructorCandidate !== null){
+					addCorrespondenceForExistingComponentConstructor(pcmComponent, umlComponentConstructorCandidate)
+				}
+				else{
+					createCorrespondingComponentConstructor(pcmComponent)
+				}
+			}
+		}
+	}
+}
+
+routine addCorrespondenceForExistingComponentConstructor(pcm::RepositoryComponent pcmComponent, uml::Operation umlComponentConstructor){
+	match {
+		require absence of uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
+		require absence of pcm::RepositoryComponent corresponding to umlComponentConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		add correspondence between pcmComponent and umlComponentConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+}
+
+routine createCorrespondingComponentConstructor(pcm::RepositoryComponent pcmComponent){
+	match {
+		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+		require absence of uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		val umlComponentConstructor = create uml::Operation and initialize {
+			umlComponentConstructor.name = pcmComponent.entityName + DefaultLiterals.COMPONENT_IMPL_SUFFIX
+			umlComponentImplementation.ownedOperations += umlComponentConstructor
+		}
+		add correspondence between pcmComponent and umlComponentConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+}
+
+routine moveCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository){
+	match {
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	}
+	action {
+		update umlRepositoryPackage {
+			umlRepositoryPackage.packagedElements += umlComponentPackage
+		}
+	}
+}
+
+reaction RepositoryComponentRemovedFromRepository {
+	after element pcm::RepositoryComponent removed from pcm::Repository[components__Repository]
+	with {!affectedEObject.components__Repository.contains(oldValue)}
+	call removeCorrespondingComponentPackage(oldValue, affectedEObject)
+}
+
+routine removeCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository){
+	match {
+		val umlRepositoryPackage = retrieve uml::Package corresponding to pcmRepository tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	}
+	action {
+		update umlRepositoryPackage {
+			umlRepositoryPackage.packagedElements -= umlComponentPackage
+		}
+	}
+}
+
+reaction RepositoryComponentDeleted {
+	after element pcm::RepositoryComponent deleted
+	call deleteCorrespondingComponentPackage(affectedEObject)
+}
+
+routine deleteCorrespondingComponentPackage(pcm::RepositoryComponent pcmComponent){
+	match {
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlComponentConstructor = retrieve uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		remove correspondence between pcmComponent and umlComponentPackage tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		remove correspondence between pcmComponent and umlComponentImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
+		remove correspondence between pcmComponent and umlComponentConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+		delete umlComponentPackage
+	}
+}
+
+reaction RepositoryComponentNameChanged {
+	after attribute replaced at pcm::RepositoryComponent[entityName]
+	with {affectedEObject.entityName == newValue}
+	call changeNameOfComponentCorrespondences(affectedEObject, newValue)
+}
+
+routine changeNameOfComponentCorrespondences(pcm::RepositoryComponent pcmComponent, String newName){
+	match {
+		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlComponentConstructor = retrieve uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		execute{
+			umlComponentPackage.name = pcmComponent.entityName.toFirstLower
+			umlComponentImplementation.name = newName + DefaultLiterals.COMPONENT_IMPL_SUFFIX
+			umlComponentConstructor.name = newName + DefaultLiterals.COMPONENT_IMPL_SUFFIX
+		}
+	}
+}
+
+

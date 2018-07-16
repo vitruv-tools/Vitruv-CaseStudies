@@ -32,10 +32,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 			DefaultLiterals.UML_EXTENSION
 	
 	static val TEST_INTERFACE = "TestInterface"
-	
-	override protected setup() {
-	}
-	 
+	static val TEST_SIGNATURE = "testSignature"	 
 	
 	def public static void checkSignatureConcept(
 			CorrespondenceModel cm, 
@@ -97,7 +94,10 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		var mUmlInterface = getUmlTestInterface(mPcmRepository)
 		startRecordingChanges(mUmlInterface)
 		
-		var mUmlOperation = mUmlInterface.createOwnedOperation("testSignature", null, null)
+		var mUmlOperation = mUmlInterface.createOwnedOperation(TEST_SIGNATURE, null, null)
+		var mUmlParam = mUmlOperation.createOwnedParameter("someParameter", UML_INT)
+		mUmlParam.direction = ParameterDirectionKind.INOUT_LITERAL
+		mUmlParam.type = UML_INT
 		saveAndSynchronizeChanges(mUmlInterface)
 		
 		reloadResourceAndReturnRoot(mUmlInterface)
@@ -106,8 +106,14 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		
 		mUmlOperation = mUmlInterface.ownedOperations.head
 		assertNotNull(mUmlOperation)
-		assertTrue(mUmlOperation.name == "testSignature")
+		assertTrue(mUmlOperation.name == TEST_SIGNATURE)
 		checkSignatureConcept(mUmlOperation)
+		
+		//Type propagation
+		val mPcmParameter = getPcmTestInterface(mPcmRepository).signatures__OperationInterface.findFirst[it.entityName == TEST_SIGNATURE]
+				.parameters__OperationSignature.findFirst[it.parameterName == "someParameter"]
+		assertNotNull(mPcmParameter)
+		assertTrue(mPcmParameter.dataType__Parameter == PCM_INT)
 	}
 	
 	@Test
@@ -116,7 +122,8 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		var mPcmInterface = getPcmTestInterface(mPcmRepository)
 		
 		var mPcmSignature = RepositoryFactory.eINSTANCE.createOperationSignature
-		mPcmSignature.entityName = "testSignature"
+		mPcmSignature.entityName = TEST_SIGNATURE
+		mPcmSignature.returnType__OperationSignature = PCM_INT
 		mPcmInterface.signatures__OperationInterface += mPcmSignature
 		saveAndSynchronizeChanges(mPcmSignature)
 		
@@ -126,8 +133,13 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		
 		mPcmSignature = mPcmInterface.signatures__OperationInterface.head
 		assertNotNull(mPcmSignature)
-		assertTrue(mPcmSignature.entityName == "testSignature")
+		assertTrue(mPcmSignature.entityName == TEST_SIGNATURE)
 		checkSignatureConcept(mPcmSignature)
+
+		//Type propagation
+		val mUmlTestOperation = getUmlTestInterface(mPcmRepository).operations.findFirst[it.name == TEST_SIGNATURE]
+		assertNotNull(mUmlTestOperation)
+		assertTrue(mUmlTestOperation.type == UML_INT)
 	}
 	
 	

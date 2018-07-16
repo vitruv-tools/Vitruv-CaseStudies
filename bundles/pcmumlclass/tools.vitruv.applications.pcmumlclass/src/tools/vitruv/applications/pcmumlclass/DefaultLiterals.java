@@ -17,6 +17,7 @@ public class DefaultLiterals {
 	public static final String MAIN_PACKAGE_NAME = "main";
 	public static final String CONTRACTS_PACKAGE_NAME = "contracts";
 	public static final String DATATYPES_PACKAGE_NAME = "datatypes";
+	public static final String COMPONENT_IMPL_SUFFIX = "Impl";
 	
 	public static final String RETURN_PARAM_NAME = "returnParam";
 	

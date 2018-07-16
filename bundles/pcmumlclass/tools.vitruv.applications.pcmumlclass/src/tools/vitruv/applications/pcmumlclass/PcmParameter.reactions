@@ -148,6 +148,7 @@ routine changeDirectionOfCorrespondingRegularParameter(pcm::Parameter pcmParam){
 	}
 }
 
+// TODO following reactions are very similar to to PcmSignatureReactions and InnerDeclaration, so some refactoring? 
 reaction ParameterTypeChanged{
 	after element pcm::DataType replaced at pcm::Parameter[dataType__Parameter]
 	with {affectedEObject.dataType__Parameter === newValue}
