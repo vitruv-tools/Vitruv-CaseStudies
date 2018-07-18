@@ -60,10 +60,13 @@ routine createCorrespondingAssemblyContextField(pcm::AssemblyContext pcmAssembly
 	match {
 		val umlCompositeImplementation = retrieve uml::Class corresponding to pcmComposite tagged with TagLiterals.IPRE__IMPLEMENTATION
 		require absence of uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
+		val umlInnerComponent = retrieve optional uml::Class 
+				corresponding to pcmAssembly.encapsulatedComponent__AssemblyContext tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
 		val umlField = create uml::Property and initialize {
 			umlField.name = pcmAssembly.entityName
+//			umlField.type = umlInnerComponent.orElse(null)
 		}
 		add correspondence between pcmAssembly and umlField tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 		call changeTypeOfCorrespondingAssemblyContextField(pcmAssembly, pcmAssembly.encapsulatedComponent__AssemblyContext)

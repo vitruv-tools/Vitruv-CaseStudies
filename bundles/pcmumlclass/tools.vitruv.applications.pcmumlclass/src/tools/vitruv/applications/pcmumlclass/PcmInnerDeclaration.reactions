@@ -63,7 +63,7 @@ routine createCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::Co
 			umlAttribute.name = pcmAttribute.entityName
 		}
 		add correspondence between pcmAttribute and umlAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		call changeTypeOfCorrespondingAttribute(pcmAttribute, pcmComposite)
+		call changeTypeOfCorrespondingAttribute(pcmAttribute, pcmAttribute.datatype_InnerDeclaration)
 	}
 }
 
@@ -132,55 +132,67 @@ routine changeNameOfCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, S
 // TODO following reactions are very similar to to PcmSignatureReactions, so some refactoring? 
 reaction InnerDeclarationTypeChanged {
 	after element pcm::DataType replaced at pcm::InnerDeclaration[datatype_InnerDeclaration]
-	with {affectedEObject.datatype_InnerDeclaration === newValue}
+	with {affectedEObject.datatype_InnerDeclaration === newValue && newValue != oldValue}
 	call changeTypeOfCorrespondingAttribute(affectedEObject, newValue)
 }
 
-routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::DataType pcmDataType){
+routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmInnerDeclaration, pcm::DataType pcmDataType){
 	match {
-		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		val umlProperty = retrieve uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
 	}
 	action {
 		execute {			
 			if (previousTypeWasCollectionType.isPresent){
-				removeCollectionTypeCorrespondenceFromAttribute(pcmAttribute)
+				removeCollectionTypeCorrespondenceFromAttribute(pcmInnerDeclaration)
 			}
 			if (pcmDataType instanceof CollectionDataType){
-				addCollectionTypeCorrespondenceToAttribute(pcmAttribute, pcmDataType)
+				addCollectionTypeCorrespondenceToAttribute(pcmInnerDeclaration, pcmDataType)
 			}
 			else {
-				replaceSimpleDataTypeAtCorrespondingAttribute(pcmAttribute, pcmDataType)
+				replaceSimpleDataTypeAtCorrespondingAttribute(pcmInnerDeclaration, pcmDataType)
 			}
 		}
 	}
 }
 
-routine removeCollectionTypeCorrespondenceFromAttribute(pcm::InnerDeclaration pcmAttribute){
+routine removeCollectionTypeCorrespondenceFromAttribute(pcm::InnerDeclaration pcmInnerDeclaration){
 	match {
-		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		val pcmPreviousCollectionType = retrieve asserted pcm::CollectionDataType corresponding to umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		val umlProperty = retrieve uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		val pcmPreviousCollectionType = retrieve asserted pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
 	}
 	action {
-		update umlAttribute {
-			umlAttribute.type = null
-			umlAttribute.lower = 1
-			umlAttribute.upper = 1
+		update umlProperty {
+			umlProperty.type = null
+			umlProperty.lower = 1
+			umlProperty.upper = 1
 		}
-		remove correspondence between pcmPreviousCollectionType and umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		remove correspondence between pcmPreviousCollectionType and umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
 	}
 }
 
 routine addCollectionTypeCorrespondenceToAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CollectionDataType pcmCollectionType){
 	match {
 		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		val umlInnerType = retrieve optional uml::Type corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
+//		val umlInnerType = retrieve optional uml::Type corresponding to pcmCollectionType.innerType_CollectionDataType //tagged with TagLiterals.DATATYPE__TYPE
+		val umlPrimitiveType = retrieve optional uml::Type 
+				corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
+		val umlCompositeType = retrieve optional uml::Type 
+				corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
 		update umlAttribute {
-			umlAttribute.type = umlInnerType.orElse(null)
 			umlAttribute.lower = 0
 			umlAttribute.upper = LiteralUnlimitedNatural.UNLIMITED
+			if (umlPrimitiveType.isPresent){
+				umlAttribute.type = umlPrimitiveType.get
+			}
+			else if (umlCompositeType.isPresent){
+				umlAttribute.type = umlCompositeType.get
+			}
+			else {
+				umlAttribute.type = null
+			}
 		}
 		add correspondence between pcmCollectionType and umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
 	}
@@ -189,13 +201,22 @@ routine addCollectionTypeCorrespondenceToAttribute(pcm::InnerDeclaration pcmAttr
 routine replaceSimpleDataTypeAtCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::DataType pcmSimpleType){
 	match {
 		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		val umlType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
+		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
+		val umlCompositeType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
 		update umlAttribute {
-			umlAttribute.type = umlType.orElse(null)
 			umlAttribute.lower = 1
 			umlAttribute.upper = 1
+			if (umlPrimitiveType.isPresent){
+				umlAttribute.type = umlPrimitiveType.get
+			}
+			else if (umlCompositeType.isPresent){
+				umlAttribute.type = umlCompositeType.get
+			}
+			else {
+				umlAttribute.type = null
+			}
 		}
 	}
 }

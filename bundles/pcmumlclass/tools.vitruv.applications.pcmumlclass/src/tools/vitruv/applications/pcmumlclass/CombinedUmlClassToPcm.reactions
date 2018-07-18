@@ -14,7 +14,9 @@ import umlParameterReactions
 
 import umlClassReactions
 import umlCompositeDataTypeGeneralizationReactions
+import umlInnerDeclarationPropertyReactions
 
 import umlProvidedRoleGeneralizationReactions
 import umlRequiredRolePropertyReactions
 import umlRequiredRoleParameterReactions // TODO handled in ParameterReactions, for now at least
+import umlAssemblyContextPropertyReactions

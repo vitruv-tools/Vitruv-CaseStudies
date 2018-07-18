@@ -160,7 +160,7 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		var umlInterface = getUmlInterface(pcmRepository)
 		startRecordingChanges(umlComponentImpl)
 		
-		// write-access fails but, read/iterate seams to be fine 
+		// write-access fails but, read/iterate seems to be fine 
 		var umlRequiredInstanceField = umlComponentImpl.createOwnedAttribute(PROPERTY_NAME, umlInterface)
 //		var umlRequiredInstanceField = UMLFactory.eINSTANCE.createProperty
 //		umlRequiredInstanceField.name = PROPERTY_NAME
