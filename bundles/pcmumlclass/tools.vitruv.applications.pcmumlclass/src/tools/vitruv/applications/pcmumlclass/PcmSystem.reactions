@@ -1,0 +1,213 @@
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.UMLFactory
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: pcmSystemReactions
+in reaction to changes in PCM
+execute actions in UML
+
+reaction SystemCreated {
+	after element pcm::System inserted as root
+	call detectOrCreateSystemCorrespondences(newValue)
+}
+
+routine detectOrCreateSystemCorrespondences(pcm::System pcmSystem){
+	match {
+		val umlSystemPackage = retrieve optional uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val umlSystemImplementation= retrieve optional uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlSystemConstructor = retrieve optional uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		call{
+			if(!umlSystemPackage.isPresent) createCorrespondingSystemPackage(pcmSystem)
+			if(!umlSystemImplementation.isPresent) detectOrCreateCorrespondingSystemImplementation(pcmSystem)
+			if(!umlSystemConstructor.isPresent) detectOrCreateCorrespondingSystemConstructor(pcmSystem)
+		}
+	}
+}
+
+routine createCorrespondingSystemPackage(pcm::System pcmSystem){
+	match {
+		require absence of uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+	}
+	action {
+		val umlSystemPackage = create uml::Package and initialize{
+			umlSystemPackage.name = pcmSystem.entityName.toFirstLower;
+		}
+		call {
+			// flexible Model-path through Userinteracting
+			var relativeModelPath = userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_MODEL_PATH)
+			if (relativeModelPath.nullOrEmpty){
+				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION;
+			}
+			if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)){
+				relativeModelPath += DefaultLiterals.UML_EXTENSION
+			}
+			
+			//check if a model at the specified path already exists; create one if necessary
+			var Model umlRootModel = null
+			val uri = PersistenceHelper.getURIFromSourceProjectFolder(pcmSystem, relativeModelPath) 
+			if(URIUtil.existsResourceAtUri(uri)){
+				val resource = pcmSystem.eResource.resourceSet.getResource(uri,true)
+				umlRootModel = resource.contents.filter(Model).head				
+			}
+			if(umlRootModel === null){ //the resource didn't exist, or did not contain a uml::Model object
+				umlRootModel = UMLFactory.eINSTANCE.createModel
+				umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
+				
+				persistProjectRelative(pcmSystem, umlRootModel, relativeModelPath);
+			}
+			
+			umlRootModel.nestedPackages += umlSystemPackage
+		}
+		add correspondence between pcmSystem and umlSystemPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+	}
+}
+
+
+routine detectOrCreateCorrespondingSystemImplementation(pcm::System pcmSystem){
+	match {
+		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val umlSystemImplementation = retrieve optional uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+	action {
+		call {
+			if (!umlSystemImplementation.isPresent){
+				val umlSystemImplementationCandidate = umlSystemPackage.packagedElements
+						.filter(Class).findFirst[it.name == pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
+				if (umlSystemImplementationCandidate !== null){
+					addCorrespondenceForExistingSystemImplementation(pcmSystem, umlSystemImplementationCandidate)
+				}
+				else{
+					createCorrespondingSystemImplementation(pcmSystem)
+				}
+			}
+		}
+	}
+}
+
+routine addCorrespondenceForExistingSystemImplementation(pcm::System pcmSystem, uml::Class umlSystemImplementation){
+	match {
+		require absence of uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+		require absence of pcm::System corresponding to umlSystemImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+	action {
+		add correspondence between pcmSystem and umlSystemImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+}
+
+routine createCorrespondingSystemImplementation(pcm::System pcmSystem){
+	match {
+		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		require absence of uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+	action {
+		val umlSystemImplementation = create uml::Class and initialize {
+			umlSystemImplementation.name = pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			umlSystemImplementation.isFinalSpecialization = true
+			umlSystemPackage.packagedElements += umlSystemImplementation
+		} 
+		add correspondence between pcmSystem and umlSystemImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+}
+
+routine detectOrCreateCorrespondingSystemConstructor(pcm::System pcmSystem){
+	match {
+		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlSystemConstructor = retrieve optional uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		call {
+			if (!umlSystemConstructor.isPresent){
+				val umlSystemConstructorCandidate = umlSystemImplementation.ownedOperations
+						.findFirst[it.name == pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
+				if (umlSystemConstructorCandidate !== null){
+					addCorrespondenceForExistingSystemConstructor(pcmSystem, umlSystemConstructorCandidate)
+				}
+				else{
+					createCorrespondingSystemConstructor(pcmSystem)
+				}
+			}
+		}
+	}
+}
+
+routine addCorrespondenceForExistingSystemConstructor(pcm::System pcmSystem, uml::Operation umlSystemConstructor){
+	match {
+		require absence of uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
+		require absence of pcm::System corresponding to umlSystemConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		add correspondence between pcmSystem and umlSystemConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+}
+
+routine createCorrespondingSystemConstructor(pcm::System pcmSystem){
+	match {
+		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+		require absence of uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		val umlSystemConstructor = create uml::Operation and initialize {
+			umlSystemConstructor.name = pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			umlSystemImplementation.ownedOperations += umlSystemConstructor
+		}
+		add correspondence between pcmSystem and umlSystemConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+}
+
+reaction SystemDeleted {
+	after element pcm::System deleted
+	call deleteCorrespondingSystemPackage(affectedEObject)
+}
+
+routine deleteCorrespondingSystemPackage(pcm::System pcmSystem){
+	match {
+		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlSystemConstructor = retrieve uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		remove correspondence between pcmSystem and umlSystemPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		remove correspondence between pcmSystem and umlSystemImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
+		remove correspondence between pcmSystem and umlSystemConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
+		delete umlSystemPackage
+	}
+}
+
+reaction SystemNameChanged {
+	after attribute replaced at pcm::System[entityName]
+	with {affectedEObject.entityName == newValue}
+	call changeNameOfSystemCorrespondences(affectedEObject, newValue)
+}
+
+routine changeNameOfSystemCorrespondences(pcm::System pcmSystem, String newName){
+	match {
+		val umlSystemPackage = retrieve uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		val umlSystemImplementation = retrieve uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlSystemConstructor = retrieve uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
+	}
+	action {
+		execute{
+			umlSystemPackage.name = pcmSystem.entityName.toFirstLower
+			umlSystemImplementation.name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			umlSystemConstructor.name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+		}
+	}
+}
+
+
+
+
+
+
+
+
+

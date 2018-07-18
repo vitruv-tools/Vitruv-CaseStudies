@@ -1,6 +1,7 @@
 import org.eclipse.uml2.uml.Class
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -20,6 +21,10 @@ execute actions in PCM
  * 	Because of that we can assume that the insertion or removal of a class participating in these correspondence type do not have to be handled here,
  * 		only attribute changes and deletion.
  */
+ 
+// generalization reactions and routines are handled by:
+// 	- UmlCompositeDataTypeGeneralization.reactions
+//	- UmlProvidedRoleGeneralization.reactions
 
 reaction ClassInsertedInPkg{
 	after element uml::Class inserted in uml::Package[packagedElement]
@@ -263,85 +268,16 @@ routine renameCompositeTypeClassCorrespondence(uml::Class umlClass, String newNa
 
 routine renameRepositoryComponentImplCorrespondence(uml::Class umlClass, String newName){
 	match{
-		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
-		update pcmCompositeType {
-			pcmCompositeType.entityName = newName
-		}
-	}
-}
-
-//TODO generalization reaction and routine, need to add correspondence handling for RequiredRole--Generalization
-
-reaction ClassGeneralizationAdded {
-	after element uml::Generalization inserted in uml::Class[generalization]
-	with {affectedEObject.generalizations.contains(newValue)} //validity check
-	call addParentCompositeDatatype(affectedEObject, newValue.general)
-}
-
-routine addParentCompositeDatatype(uml::Class umlClass, uml::Classifier umlNewParent){
-	match {
-		val pcmComposite = retrieve pcm::CompositeDataType corresponding to umlClass
-		val pcmParentComposite = retrieve pcm::CompositeDataType corresponding to umlNewParent
-	}
-	action {
-		execute {
-			if (!pcmComposite.parentType_CompositeDataType.contains(pcmParentComposite)){
-				pcmComposite.parentType_CompositeDataType += pcmParentComposite
+		update pcmComponent {
+			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)){
+				pcmComponent.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
+			}
+			else {
+				pcmComponent.entityName = newName
 			}
 		}
 	}
 }
-
-reaction ClassGeneralizationRemoved {
-	after element uml::Generalization removed from uml::Class[generalization]
-	with {!affectedEObject.generalizations.contains(oldValue)} //validity check
-	call removeParentCompositeDatatype(affectedEObject, oldValue.general)
-}
-
-routine removeParentCompositeDatatype(uml::Class umlClass, uml::Classifier umlOldParent){
-	match {
-		val pcmComposite = retrieve pcm::CompositeDataType corresponding to umlClass
-		val pcmParentComposite = retrieve pcm::CompositeDataType corresponding to umlOldParent
-	}
-	action {
-		execute {
-			if (pcmComposite.parentType_CompositeDataType.contains(pcmParentComposite)){
-				pcmComposite.parentType_CompositeDataType -= pcmParentComposite
-			}
-		}
-	}
-}
-
-reaction ParentCompositeDatatypeReplaced {
-	after element replaced at uml::Generalization[general]
-	with {affectedEObject.specific instanceof Class}
-//	with {affectedEObject.general === newValue} // delay validity check to ensure that the old parent interface is removed
-	call replaceParentCollectionDatatype(affectedEObject, newValue, oldValue)
-}
-
-routine replaceParentCollectionDatatype(uml::Generalization gen, uml::Classifier umlNewParent, uml::Classifier umlOldParent){
-	match {
-		val pcmComposite = retrieve pcm::CompositeDataType corresponding to gen.specific tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmOldParent = retrieve optional pcm::CompositeDataType corresponding to umlOldParent tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmNewParent = retrieve optional pcm::CompositeDataType corresponding to umlNewParent tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-	}
-	action {
-		call {
-			if(pcmOldParent.isPresent){
-				removeParentCompositeDatatype(gen.specific as Class, umlOldParent)
-			}
-			if (pcmNewParent.isPresent && gen.general === umlNewParent){ // delayed validity check
-				addParentCompositeDatatype(gen.specific as Class, umlNewParent)
-			}
-		}
-	}
-}
-
-
-
-
-
-
-

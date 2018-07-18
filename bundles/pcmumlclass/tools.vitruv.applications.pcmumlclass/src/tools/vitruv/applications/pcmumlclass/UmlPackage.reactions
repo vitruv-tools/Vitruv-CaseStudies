@@ -140,12 +140,15 @@ routine userDisambiguateComponentTypeCreation(uml::Package umlPkg, uml::Package 
 	action{
 		execute{
 			val componentType = userInteracting.selectFromMessage(UserInteractionType.MODAL, 
-												DefaultLiterals.INPUT_REQUEST_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE, 
-												#["BasicComponent", "CompositeComponent", "SubSystem", "No Correspondence"]);
+												DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__REQUEST,
+												DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__OPTIONS );
 			switch (componentType){
-				case 0: createBasicComponentPackageConcept(umlPkg, umlParentPkg)
-				case 1: createCompositeComponentPackageConcept(umlPkg, umlParentPkg)
-				case 2: createSubSystemPackageConcept(umlPkg, umlParentPkg)
+				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT: 
+					createBasicComponentPackageConcept(umlPkg, umlParentPkg)
+				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT:
+					createCompositeComponentPackageConcept(umlPkg, umlParentPkg)
+				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__SUB_SYSTEM:
+					createSubSystemPackageConcept(umlPkg, umlParentPkg)
 				default: return //do nothing
 			}
 		}
@@ -332,7 +335,7 @@ routine removePackageCorrespondencesWithoutDeletion(uml::Package parentPkg, uml:
 	}
 	action{
 		call {
-//			if (selfIsRepositoryPkg.isPresent || selfIsSystemPkg.isPresent) return;// do nothing since they are root elements 
+//			TODO if (selfIsRepositoryPkg.isPresent || selfIsSystemPkg.isPresent) return;// do nothing since they are root elements 
 			if (selfIsComponentPkg.isPresent) removeRepositoryComponentPackage(parentPkg, removedPkg)
 			if ((selfIsContractsPkg.isPresent || selfIsDatatypesPkg.isPresent))
 				logger.warn("A repository contracts package should not be removed from its repository package!")

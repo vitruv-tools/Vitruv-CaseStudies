@@ -13,6 +13,13 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import org.eclipse.uml2.uml.Model
+import tools.vitruv.framework.userinteraction.UserInteracting
+import org.eclipse.uml2.uml.UMLFactory
+import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization.UserExecution
+import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization
 
 class PcmUmlClassHelper {
 	private new(){}
@@ -80,5 +87,8 @@ class PcmUmlClassHelper {
 	def public static boolean isRepositoryPackage(Package pkg, CorrespondenceModel corrModel){
 		return !ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, pkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE, Repository).nullOrEmpty
 	}
+	
+	
+	
 	
 }

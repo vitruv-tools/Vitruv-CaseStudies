@@ -1,4 +1,3 @@
-import org.eclipse.uml2.uml.ParameterDirectionKind
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 

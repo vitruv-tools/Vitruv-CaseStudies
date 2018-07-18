@@ -4,6 +4,8 @@ public class TagLiterals {
 	private TagLiterals() {}
 
 
+	public static final String ASSEMBLY_CONTEXT__PROPERTY = "assembly-context-field";
+
 	public static final String COLLECTION_DATATYPE__PARAMETER = "collection-typed-parameter";
 	public static final String COLLECTION_DATATYPE__PROPERTY = "collection-typed-property";
 	

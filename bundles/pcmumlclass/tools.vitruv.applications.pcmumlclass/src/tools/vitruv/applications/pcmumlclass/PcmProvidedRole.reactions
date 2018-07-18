@@ -63,6 +63,7 @@ routine createCorrespondingProvidedGeneralization(pcm::OperationProvidedRole pcm
 		val umlGeneralization = create uml::Generalization and initialize {
 			umlGeneralization.specific = umlComponentImpl
 			umlGeneralization.general = umlInterface.orElse(null)
+			umlComponentImpl.generalizations += umlGeneralization
 		}
 		add correspondence between pcmProvided and umlGeneralization tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION
 	}

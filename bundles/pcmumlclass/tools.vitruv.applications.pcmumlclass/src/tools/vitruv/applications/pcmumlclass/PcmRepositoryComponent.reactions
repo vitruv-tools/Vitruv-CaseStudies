@@ -78,7 +78,7 @@ routine detectOrCreateCorrespondingComponentImplementation(pcm::RepositoryCompon
 		call {
 			if (!umlComponentImplementation.isPresent){
 				val umlComponentImplementationCandidate = umlComponentPackage.packagedElements
-						.filter(Class).findFirst[it.name == pcmComponent.entityName + DefaultLiterals.COMPONENT_IMPL_SUFFIX]
+						.filter(Class).findFirst[it.name == pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
 				if (umlComponentImplementationCandidate !== null){
 					addCorrespondenceForExistingComponentImplementation(pcmComponent, umlComponentImplementationCandidate)
 				}
@@ -107,7 +107,7 @@ routine createCorrespondingComponentImplementation(pcm::RepositoryComponent pcmC
 	}
 	action {
 		val umlComponentImplementation = create uml::Class and initialize {
-			umlComponentImplementation.name = pcmComponent.entityName + DefaultLiterals.COMPONENT_IMPL_SUFFIX
+			umlComponentImplementation.name = pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
 			umlComponentImplementation.isFinalSpecialization = true
 			umlComponentPackage.packagedElements += umlComponentImplementation
 		} 
@@ -124,7 +124,7 @@ routine detectOrCreateCorrespondingComponentConstructor(pcm::RepositoryComponent
 		call {
 			if (!umlComponentConstructor.isPresent){
 				val umlComponentConstructorCandidate = umlComponentImplementation.ownedOperations
-						.findFirst[it.name == pcmComponent.entityName + DefaultLiterals.COMPONENT_IMPL_SUFFIX]
+						.findFirst[it.name == pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
 				if (umlComponentConstructorCandidate !== null){
 					addCorrespondenceForExistingComponentConstructor(pcmComponent, umlComponentConstructorCandidate)
 				}
@@ -153,7 +153,7 @@ routine createCorrespondingComponentConstructor(pcm::RepositoryComponent pcmComp
 	}
 	action {
 		val umlComponentConstructor = create uml::Operation and initialize {
-			umlComponentConstructor.name = pcmComponent.entityName + DefaultLiterals.COMPONENT_IMPL_SUFFIX
+			umlComponentConstructor.name = pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
 			umlComponentImplementation.ownedOperations += umlComponentConstructor
 		}
 		add correspondence between pcmComponent and umlComponentConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
@@ -217,15 +217,15 @@ reaction RepositoryComponentNameChanged {
 
 routine changeNameOfComponentCorrespondences(pcm::RepositoryComponent pcmComponent, String newName){
 	match {
-		val umlComponentPackage = retrieve uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
-		val umlComponentImplementation = retrieve uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
-		val umlComponentConstructor = retrieve uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
+		val umlComponentPackage = retrieve optional uml::Package corresponding to pcmComponent tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		val umlComponentImplementation = retrieve optional uml::Class corresponding to pcmComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlComponentConstructor = retrieve optional uml::Operation corresponding to pcmComponent tagged with TagLiterals.IPRE__CONSTRUCTOR
 	}
 	action {
 		execute{
-			umlComponentPackage.name = pcmComponent.entityName.toFirstLower
-			umlComponentImplementation.name = newName + DefaultLiterals.COMPONENT_IMPL_SUFFIX
-			umlComponentConstructor.name = newName + DefaultLiterals.COMPONENT_IMPL_SUFFIX
+			if (umlComponentPackage.isPresent) umlComponentPackage.get.name = pcmComponent.entityName.toFirstLower
+			if (umlComponentImplementation.isPresent) umlComponentImplementation.get.name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			if (umlComponentConstructor.isPresent) umlComponentConstructor.get.name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX
 		}
 	}
 }

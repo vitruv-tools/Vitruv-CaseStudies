@@ -6,8 +6,15 @@ in reaction to changes in UML
 execute actions in PCM
 
 import umlPackageReactions
+
 import umlInterfaceReactions
+import umlArchitecturalInterfaceGeneralizationReactions
 import umlOperationReactions 
 import umlParameterReactions
+
 import umlClassReactions
-import umlPropertyReactions
+import umlCompositeDataTypeGeneralizationReactions
+
+import umlProvidedRoleGeneralizationReactions
+import umlRequiredRolePropertyReactions
+import umlRequiredRoleParameterReactions // TODO handled in ParameterReactions, for now at least

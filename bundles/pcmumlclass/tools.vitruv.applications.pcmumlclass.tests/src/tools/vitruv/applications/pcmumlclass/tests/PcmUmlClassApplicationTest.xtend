@@ -1,21 +1,23 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
+import java.util.Set
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.PrimitiveType
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.testutils.VitruviusApplicationTest
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import org.eclipse.emf.ecore.EObject
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import java.util.Set
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.eclipse.uml2.uml.PrimitiveType
-import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
-import org.eclipse.emf.common.util.URI
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
+import tools.vitruv.testutils.VitruviusApplicationTest
+
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 
 abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	override protected createChangePropagationSpecifications() {

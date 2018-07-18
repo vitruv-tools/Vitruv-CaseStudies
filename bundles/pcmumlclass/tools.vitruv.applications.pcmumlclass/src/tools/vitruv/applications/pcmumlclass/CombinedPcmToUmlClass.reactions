@@ -6,6 +6,7 @@ in reaction to changes in PCM
 execute actions in UML
 
 import pcmRepositoryReactions
+
 import pcmInterfaceReactions
 import pcmSignatureReactions
 import pcmParameterReactions 
@@ -19,3 +20,7 @@ import pcmInnerDeclarationReactions
 
 import pcmRepositoryComponentReactions
 import pcmRequiredRoleReactions
+import pcmProvidedRoleReactions
+import pcmAssemblyContextReactions
+
+import pcmSystemReactions
