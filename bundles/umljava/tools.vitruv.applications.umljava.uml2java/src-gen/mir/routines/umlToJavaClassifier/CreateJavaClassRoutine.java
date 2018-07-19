@@ -52,9 +52,9 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     notifyObjectCreated(javaClassifier);
     userExecution.updateJavaClassifierElement(umlClassifier, javaClassifier);
     
-    addCorrespondenceBetween(userExecution.getElement1(umlClassifier, javaClassifier), userExecution.getElement2(umlClassifier, javaClassifier), "");
-    
     userExecution.callRoutine1(umlClassifier, javaClassifier, this.getRoutinesFacade());
+    
+    addCorrespondenceBetween(userExecution.getElement1(umlClassifier, javaClassifier), userExecution.getElement2(umlClassifier, javaClassifier), "");
     
     postprocessElements();
     

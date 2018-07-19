@@ -31,7 +31,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     }
     
     public EObject getElement1(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final InterfaceMethod javaMethod) {
-      return uOperation;
+      return jInterface;
     }
     
     public void update0Element(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final InterfaceMethod javaMethod) {
@@ -45,11 +45,11 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     }
     
     public EObject getElement2(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final InterfaceMethod javaMethod) {
-      return javaMethod;
+      return uOperation;
     }
     
     public EObject getElement3(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final InterfaceMethod javaMethod) {
-      return jInterface;
+      return javaMethod;
     }
     
     public EObject getCorrepondenceSourceJInterface(final Interface uInterface, final Operation uOperation) {
@@ -96,10 +96,10 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     notifyObjectCreated(javaMethod);
     userExecution.updateJavaMethodElement(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
     
-    addCorrespondenceBetween(userExecution.getElement1(uInterface, uOperation, jInterface, customTypeClass, javaMethod), userExecution.getElement2(uInterface, uOperation, jInterface, customTypeClass, javaMethod), "");
-    
-    // val updatedElement userExecution.getElement3(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
+    // val updatedElement userExecution.getElement1(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
     userExecution.update0Element(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
+    
+    addCorrespondenceBetween(userExecution.getElement2(uInterface, uOperation, jInterface, customTypeClass, javaMethod), userExecution.getElement3(uInterface, uOperation, jInterface, customTypeClass, javaMethod), "");
     
     postprocessElements();
     

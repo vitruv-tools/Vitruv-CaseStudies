@@ -176,10 +176,10 @@ routine createJavaInterfaceMethod(uml::Interface uInterface, uml::Operation uOpe
             javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jInterface.getContainingCompilationUnit, userInteracting)
             javaMethod.makePublic
         }
-        add correspondence between uOperation and javaMethod
         update jInterface {
             jInterface.members += javaMethod;
         }
+        add correspondence between uOperation and javaMethod
     }
 }
 
@@ -266,10 +266,10 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
             javaParam.name = umlParam.name;
             javaParam.typeReference = createTypeReferenceAndUpdateImport(umlParam.type, customTypeClass, javaMethod.getContainingCompilationUnit, userInteracting)
         }
-        add correspondence between javaParam and umlParam
         update javaMethod {
             javaMethod.parameters += javaParam;
         }
+        add correspondence between javaParam and umlParam
     }
 }
 
