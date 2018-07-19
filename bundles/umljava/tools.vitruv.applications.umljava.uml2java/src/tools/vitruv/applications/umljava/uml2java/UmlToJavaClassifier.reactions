@@ -29,10 +29,10 @@ routine createJavaClass(uml::Classifier umlClassifier) {
         	javaClassifier.name = umlClassifier.name;
         	javaClassifier.makePublic
         }
-        add correspondence between umlClassifier and javaClassifier
         call { 
         	createJavaCompilationUnit (umlClassifier, javaClassifier, umlClassifier.namespace)
         }
+        add correspondence between umlClassifier and javaClassifier
     }
 }
 
@@ -50,12 +50,12 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
             javaCompilationUnit.classifiers += jClassifier;
             persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
         }
-        add correspondence between umlClassifier and javaCompilationUnit
         call {
             if (jPackage.present) {
                 jPackage.get.compilationUnits += javaCompilationUnit
             }
         }
+        add correspondence between umlClassifier and javaCompilationUnit
 	}
 }
 
@@ -238,10 +238,10 @@ routine createJavaInterface(uml::Interface umlInterface) {
             javaInterface.name = umlInterface.name;
             javaInterface.makePublic
         }
-        add correspondence between umlInterface and javaInterface
         call {
 			createJavaCompilationUnit(umlInterface, javaInterface, umlInterface.namespace)
 		}
+		add correspondence between umlInterface and javaInterface
     }
 }
  
@@ -295,10 +295,10 @@ routine createJavaEnum(uml::Enumeration uEnum) {
 			jEnum.name = uEnum.name
 			jEnum.makePublic
 		}
-		add correspondence between uEnum and jEnum
 		call {
 			createJavaCompilationUnit(uEnum, jEnum, uEnum.namespace)
 		}
+		add correspondence between uEnum and jEnum
 	}
 }
 
@@ -315,10 +315,10 @@ routine createJavaEnumConstant(uml::EnumerationLiteral uLiteral, uml::Enumeratio
 		val jConstant = create java::EnumConstant and initialize {
 			jConstant.name = uLiteral.name
 		}
-		add correspondence between jConstant and uLiteral
 		update jEnum {
 			jEnum.constants += jConstant
 		}
+		add correspondence between jConstant and uLiteral
 	}
 }
 

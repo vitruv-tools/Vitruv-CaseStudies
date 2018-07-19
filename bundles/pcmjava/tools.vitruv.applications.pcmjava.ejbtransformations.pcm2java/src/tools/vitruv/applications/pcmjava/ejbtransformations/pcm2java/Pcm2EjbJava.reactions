@@ -25,7 +25,7 @@ import pcm2javaCommon
 // ejb: cleared
 reaction pcm2javaCommon::CreatedSystem {
 	after element pcm::System created and inserted as root
-	call {
+	call { 
 	}
 }
 
