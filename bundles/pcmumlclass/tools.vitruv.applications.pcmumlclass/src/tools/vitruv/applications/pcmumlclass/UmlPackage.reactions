@@ -126,11 +126,13 @@ routine userDisambiguateRepositoryOrSystemCreation(uml::Package umlPkg, uml::Pac
 	action{
 		execute{
 			val pcmElementType = userInteracting.selectFromMessage(UserInteractionType.MODAL, 
-												DefaultLiterals.INPUT_REQUEST_DISAMBIGUATE_REPOSITORY_SYSTEM_TYPE, 
-												#["Repository", "System", "No Correspondence"]);
+												DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REQUEST, 
+												DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__OPTIONS);
 			switch (pcmElementType){
-				case 0: createRepositoryPackageConcept(umlPkg, umlParentPkg)
-				case 1: createSystemPackageConcept(umlPkg, umlParentPkg)
+				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY: 
+						createRepositoryPackageConcept(umlPkg, umlParentPkg)
+				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM:
+						createSystemPackageConcept(umlPkg, umlParentPkg)
 				default: return //do nothing
 			}
 		}
@@ -193,7 +195,7 @@ routine createSystemPackageConcept(uml::Package umlPkg, uml::Package umlParentPk
 		val pcmSystem = create pcm::System and initialize {
 			pcmSystem.entityName = umlPkg.name?.toFirstUpper
 		}
-		add correspondence between pcmSystem and umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		add correspondence between pcmSystem and umlPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
 		execute{
 			val fileExtension = DefaultLiterals.PCM_SYSTEM_EXTENSION
 			var relativeModelPath = userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH)
@@ -320,7 +322,7 @@ routine renameRepositoryComponentPackageCorrespondence(uml::Package umlPkg, Stri
 
 reaction PackageRemovedFromPackageOrModel {
 	after element uml::Package removed from uml::Package[nestedPackage]
-	//TODO what sort of validity check would make sence here? if the packge is already reinserted somwhere else, we can't use current hierarchy
+	with {!affectedEObject.nestedPackages.contains(oldValue)}
 	call removePackageCorrespondencesWithoutDeletion(affectedEObject, oldValue)
 }
 

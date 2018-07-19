@@ -241,12 +241,13 @@ reaction ClassRenamed {
 routine disambiguateRenamedClassConcept(uml::Class umlClass, String newName){
 	match{
 		val pcmCompositeType = retrieve optional pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val pcmIPRE = retrieve optional pcm::InterfaceProvidingRequiringEntity corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val pcmSystemImpl = retrieve optional pcm::System corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
 		call {
-			if (pcmRepositoryComponent.isPresent){
-				renameRepositoryComponentImplCorrespondence(umlClass, newName)
+			if (pcmIPRE.isPresent){
+				renameIpreImplCorresondenceCorrespondence(umlClass, newName)
 			}
 			else if (pcmCompositeType.isPresent){
 				renameCompositeTypeClassCorrespondence(umlClass, newName)
@@ -266,18 +267,19 @@ routine renameCompositeTypeClassCorrespondence(uml::Class umlClass, String newNa
 	}
 }
 
-routine renameRepositoryComponentImplCorrespondence(uml::Class umlClass, String newName){
+routine renameIpreImplCorresondenceCorrespondence(uml::Class umlClass, String newName){
 	match{
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
-		update pcmComponent {
+		update pcmIPRE {
 			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)){
-				pcmComponent.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
+				pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
 			}
 			else {
-				pcmComponent.entityName = newName
+				pcmIPRE.entityName = newName
 			}
 		}
 	}
 }
+
