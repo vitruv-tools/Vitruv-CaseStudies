@@ -30,7 +30,7 @@ public class ChangeInnerDeclarationTypeRoutine extends AbstractRepairRoutineReal
     
     public void update0Element(final TypeReference typeReference, final Field javaField, final InnerDeclaration innerDeclaration) {
       innerDeclaration.setDatatype_InnerDeclaration(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(typeReference, this.correspondenceModel, 
-        this.userInteracting, null));
+        this.userInteractor, null));
     }
   }
   

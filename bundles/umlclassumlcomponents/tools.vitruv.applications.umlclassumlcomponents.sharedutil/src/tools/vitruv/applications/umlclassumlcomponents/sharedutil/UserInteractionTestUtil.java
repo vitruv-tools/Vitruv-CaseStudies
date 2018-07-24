@@ -16,7 +16,10 @@ public class UserInteractionTestUtil {
 	
 	//Commit currently pending UserInteractions
 	public static void sendCollectedUserInteractionSelections(TestUserInteractor userInteractor) {
-	        userInteractor.addNextSelections(concurrentIntLinkedQueue.toArray(new Integer[0]));
-	        concurrentIntLinkedQueue.clear();
+		int[] selectionIndices = concurrentIntLinkedQueue.stream().mapToInt(i -> i).toArray();
+		for (int selection : selectionIndices) {
+			userInteractor.addNextSingleSelection(selection);
+		}
+        concurrentIntLinkedQueue.clear();
 	}
 }

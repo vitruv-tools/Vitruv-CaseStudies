@@ -52,7 +52,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     
     public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final OrdinaryParameter javaParam) {
       javaParam.setName(umlParam.getName());
-      javaParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(umlParam.getType(), customTypeClass, javaMethod.getContainingCompilationUnit(), this.userInteracting));
+      javaParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(umlParam.getType(), customTypeClass, javaMethod.getContainingCompilationUnit(), this.userInteractor));
     }
   }
   

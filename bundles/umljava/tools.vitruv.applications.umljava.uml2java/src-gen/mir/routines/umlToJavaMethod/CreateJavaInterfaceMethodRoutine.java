@@ -26,7 +26,7 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     
     public void updateJavaMethodElement(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final InterfaceMethod javaMethod) {
       javaMethod.setName(uOperation.getName());
-      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jInterface.getContainingCompilationUnit(), this.userInteracting));
+      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jInterface.getContainingCompilationUnit(), this.userInteractor));
       javaMethod.makePublic();
     }
     

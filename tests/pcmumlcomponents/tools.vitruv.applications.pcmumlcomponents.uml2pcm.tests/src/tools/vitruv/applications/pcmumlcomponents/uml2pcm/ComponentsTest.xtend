@@ -21,7 +21,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		umlComponent.name = name
 		rootElement.packagedElements += umlComponent
 		val componentMode = if (isComposable) 0 else 1
-		userInteractor.addNextSelections(componentMode)
+		userInteractor.addNextSingleSelection(componentMode)
 		saveAndSynchronizeChanges(rootElement)
 		return umlComponent
 	}

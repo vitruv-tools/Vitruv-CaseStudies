@@ -40,7 +40,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		val umlTypeName = "MyPrimitive"
 		val umlType = UMLFactory.eINSTANCE.createPrimitiveType()
 		umlType.name = umlTypeName
-		userInteractor.addNextSelections(PrimitiveTypeEnum.BYTE_VALUE)
+		userInteractor.addNextSingleSelection(PrimitiveTypeEnum.BYTE_VALUE)
 		rootElement.packagedElements += umlType
 		saveAndSynchronizeChanges(rootElement)
 		val pcmRepository = rootElement.correspondingElements.head as Repository
@@ -54,7 +54,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		val umlTypeName = "MyPrimitive"
 		val umlType = UMLFactory.eINSTANCE.createPrimitiveType()
 		umlType.name = umlTypeName
-		userInteractor.addNextSelections(PrimitiveTypeEnum.values.length)
+		userInteractor.addNextSingleSelection(PrimitiveTypeEnum.values.length)
 		rootElement.packagedElements += umlType
 		saveAndSynchronizeChanges(rootElement)
 		val pcmType = umlType.correspondingElements.head

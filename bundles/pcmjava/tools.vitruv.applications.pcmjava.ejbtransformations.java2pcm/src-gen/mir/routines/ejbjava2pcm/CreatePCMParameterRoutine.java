@@ -39,7 +39,7 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     public void updatePcmParameterElement(final Parameter jaMoPPParam, final OperationSignature opSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
       PcmJavaUtils.setParameterName(pcmParameter, jaMoPPParam.getName());
       pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.getTypeReference(), 
-        this.correspondenceModel, this.userInteracting, opSignature.getInterface__OperationSignature().getRepository__Interface(), jaMoPPParam.getArrayDimension()));
+        this.correspondenceModel, this.userInteractor, opSignature.getInterface__OperationSignature().getRepository__Interface(), jaMoPPParam.getArrayDimension()));
     }
   }
   

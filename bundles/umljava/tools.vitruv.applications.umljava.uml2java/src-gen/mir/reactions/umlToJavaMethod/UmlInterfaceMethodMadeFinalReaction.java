@@ -96,7 +96,7 @@ public class UmlInterfaceMethodMadeFinalReaction extends AbstractReactionRealiza
     }
     
     public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Operation affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue, @Extension final RoutinesFacade _routinesFacade) {
-      UmlToJavaHelper.showMessage(this.userInteracting, ("Final Operations in Interfaces are not supported. Please undo it: " + affectedEObject));
+      UmlToJavaHelper.showMessage(this.userInteractor, ("Final Operations in Interfaces are not supported. Please undo it: " + affectedEObject));
     }
   }
 }

@@ -9,7 +9,8 @@ import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
+import tools.vitruv.framework.userinteraction.NotificationType;
+import tools.vitruv.framework.userinteraction.WindowModality;
 
 @SuppressWarnings("all")
 public class CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine extends AbstractRepairRoutineRealization {
@@ -24,7 +25,8 @@ public class CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine extends Abstract
       TypeReference _mapToJavaPrimitiveType = UmlToJavaHelper.mapToJavaPrimitiveType(uPrimType);
       boolean _tripleEquals = (_mapToJavaPrimitiveType == null);
       if (_tripleEquals) {
-        this.userInteracting.showMessage(UserInteractionType.MODAL, (("There is no corresponding Java-PrimitiveType for " + uPrimType) + " (case sensitive)"));
+        this.userInteractor.getNotificationDialogBuilder().message(
+          (("There is no corresponding Java-PrimitiveType for " + uPrimType) + " (case sensitive)")).title("Warning").notificationType(NotificationType.WARNING).windowModality(WindowModality.MODAL);
       }
     }
   }

@@ -29,7 +29,7 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void update0Element(final Field jAttr, final TypeReference jType, final Property uAttr) {
-      uAttr.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel));
+      uAttr.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel));
     }
   }
   

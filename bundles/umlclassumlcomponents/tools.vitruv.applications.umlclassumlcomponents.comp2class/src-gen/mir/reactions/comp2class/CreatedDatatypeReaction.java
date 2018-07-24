@@ -119,7 +119,7 @@ public class CreatedDatatypeReaction extends AbstractReactionRealization {
       String _name = newValue.getName();
       String _plus = ("Is \'" + _name);
       final String question = (_plus + "\' a generic/library DataType? If not a class representation will be created.");
-      if (((newValue instanceof PrimitiveType) || SharedUtil.modalTextYesNoUserInteracting(this.userInteracting, question))) {
+      if (((newValue instanceof PrimitiveType) || SharedUtil.modalTextYesNoUserInteractor(this.userInteractor, question))) {
         _routinesFacade.createDataTypeSelfCorrespondence(newValue);
       } else {
         _routinesFacade.createClassForDataType(newValue);

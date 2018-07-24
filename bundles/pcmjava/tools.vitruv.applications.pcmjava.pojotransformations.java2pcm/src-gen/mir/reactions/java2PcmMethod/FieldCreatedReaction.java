@@ -14,9 +14,7 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
 
 /**
- * *
- * nCheck if Field has correspondence to CompositeDataType, ComposedProvidingRequiringEntity, 
- * nOperationInterface or RepositoryComponent and react accordingly.
+ * *nCheck if Field has correspondence to CompositeDataType, ComposedProvidingRequiringEntity, nOperationInterface or RepositoryComponent and react accordingly.
  *  
  */
 @SuppressWarnings("all")

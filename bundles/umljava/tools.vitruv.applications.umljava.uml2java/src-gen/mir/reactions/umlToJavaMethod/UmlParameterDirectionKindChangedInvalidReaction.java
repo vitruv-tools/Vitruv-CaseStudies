@@ -95,7 +95,7 @@ public class UmlParameterDirectionKindChangedInvalidReaction extends AbstractRea
     }
     
     public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue, @Extension final RoutinesFacade _routinesFacade) {
-      UmlToJavaHelper.showMessage(this.userInteracting, (("The ParameterDirectionKind " + newValue) + " is not supported"));
+      UmlToJavaHelper.showMessage(this.userInteractor, (("The ParameterDirectionKind " + newValue) + " is not supported"));
     }
   }
 }
