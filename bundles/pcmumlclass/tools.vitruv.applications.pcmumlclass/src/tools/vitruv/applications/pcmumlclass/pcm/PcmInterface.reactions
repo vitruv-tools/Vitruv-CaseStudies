@@ -39,7 +39,6 @@ routine detectOrCreateInterfaceCandidate(pcm::OperationInterface pcmInterface, p
 		call{
 			if (!umlInterface.isPresent){
 				val umlInterfaceCandidate = umlContractsPackage.packagedElements.filter(Interface).findFirst[it.name == pcmInterface.entityName]
-				//TODO check ParentInterfaces
 				if (umlInterfaceCandidate !== null){
 					attemptAddingCorrespondenceForExistingInterfaceCandidate(pcmInterface, pcmRepository, umlInterfaceCandidate)
 				}

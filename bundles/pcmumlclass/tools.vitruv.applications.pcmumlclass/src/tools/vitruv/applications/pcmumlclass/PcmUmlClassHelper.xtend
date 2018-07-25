@@ -13,13 +13,6 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import org.eclipse.uml2.uml.Model
-import tools.vitruv.framework.userinteraction.UserInteracting
-import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
-import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
-import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization.UserExecution
-import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization
 
 class PcmUmlClassHelper {
 	private new(){}
@@ -74,11 +67,21 @@ class PcmUmlClassHelper {
 				default: ParameterDirectionKind.INOUT_LITERAL}
 	}
 	
-	def public static boolean isContainedInRepositoryHierarchy(Package pkg, CorrespondenceModel corrModel){
+	/**
+	 * Test if the passed package is contained directly or indirectly in a package, that corresponds to a pcm::Repository.
+	 * 
+	 * @param pkg 
+	 * 		the package for which the parent hierarchy will be searched
+	 * @param correspondenceModel
+	 * 		the CorrespondenceModel that is actively being used
+	 * @return 
+	 * 		true, if any nesting package of pkg correspond to a pcm::Repository according to the correspondenceModel
+	 */
+	def public static boolean isContainedInRepositoryHierarchy(Package pkg, CorrespondenceModel correspondenceModel){
 		var parentPkg = pkg.nestingPackage
 		var repositoryFound = false
 		while (parentPkg !== null && !repositoryFound){
-			repositoryFound = repositoryFound || isRepositoryPackage(parentPkg, corrModel)
+			repositoryFound = repositoryFound || isRepositoryPackage(parentPkg, correspondenceModel)
 			parentPkg = parentPkg.nestingPackage
 		}
 		return repositoryFound

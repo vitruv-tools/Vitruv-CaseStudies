@@ -6,6 +6,7 @@ in reaction to changes in PCM
 execute actions in UML
 
 import pcmRepositoryReactions
+import pcmSystemReactions
 
 import pcmInterfaceReactions
 import pcmSignatureReactions
@@ -14,7 +15,6 @@ import pcmParameterReactions
 // - PrimitiveDataTypes are mapped in the repository reactions, because they are bootstrapped in
 // - CollectionDataTypes correspond to the combination of multiplicity and type of the uml element that is supposed to have a corresponding type.
 // 	 	Because of that, the Reactions for CollectionDatatypes are spread to wherever a type can be changed (Signature, Parameter, InnerDeclaration)
-//		(TODO refactor CollectionDataType-reactions to central file?)
 import pcmCompositeDataTypeReactions
 import pcmInnerDeclarationReactions
 import pcmCollectionDataTypeReactions
@@ -23,5 +23,3 @@ import pcmRepositoryComponentReactions
 import pcmRequiredRoleReactions
 import pcmProvidedRoleReactions
 import pcmAssemblyContextReactions
-
-import pcmSystemReactions
