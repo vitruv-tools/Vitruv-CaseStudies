@@ -20,7 +20,7 @@ public class TagLiterals {
 	
 	public static final String INTERFACE_TO_INTERFACE = "interface";
 	
-	public static final String PARAMETER__REGULAR_PARAMETER = "constructor-parameter";
+	public static final String PARAMETER__REGULAR_PARAMETER = "interface-operation-parameter";
 	
 	public static final String REPOSITORY_TO_CONTRACTS_PACKAGE = "contracts-package";
 	public static final String REPOSITORY_TO_DATATYPES_PACKAGE = "datatypes-package";

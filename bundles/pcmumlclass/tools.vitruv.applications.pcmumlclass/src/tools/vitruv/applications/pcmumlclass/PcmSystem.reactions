@@ -9,6 +9,16 @@ import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
+//	The following reactions and routines synchronize a pcm::Repository
+//	with its corresponding uml::Packages (main package for components, contracts package for interfaces, and datatypes package),
+//	or a pcm::System with its corresponding uml::Package.
+//
+//	Related files:
+//		UmlRepositoryAndSystemPackage.reactions,
+// 		UmlIPREClass.reactions,
+// 		UmlIPREConstructorOperation.reactions,
+//		RepositoryConceptTest
+
 reactions: pcmSystemReactions
 in reaction to changes in PCM
 execute actions in UML

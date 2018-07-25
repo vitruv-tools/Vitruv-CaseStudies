@@ -1,28 +1,27 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import org.apache.log4j.Logger
-import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Generalization
 import org.eclipse.uml2.uml.Interface
-import org.eclipse.uml2.uml.Package
 import org.junit.Test
+import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
 import static org.junit.Assert.*
-import org.junit.Ignore
-import org.palladiosimulator.pcm.repository.CompositeComponent
-import org.palladiosimulator.pcm.repository.OperationProvidedRole
 
-// A small 'm' prefix will signal that the eObject is loaded from the resourceSet an therefore modifiable.
-// Working only on modifiable instances would theoretically allow for the comparison via identity.
-// This would be cleaner for checking composition constraints, as equality [equals(target.container, source)] does not ensure the correct containment relation.
-// For now stick with equality.
-
+/**
+ * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationProvidedRole 
+ * in an pcm::InterfaceProvidingRequiringEntity (IPRE) with an uml::Generalization in the uml::Class (implementation) corresponding to the IPRE.
+ * <br><br>
+ * Related files: PcmProvidedRole.reactions, UmlProvidedRoleGeneralization.reactions
+ */
 class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(ProvidedRoleTest).simpleName);
@@ -39,7 +38,7 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 	def public static void checkProvidedRoleConcept(
 			CorrespondenceModel cm,
 			OperationProvidedRole pcmProvided,
-			org.eclipse.uml2.uml.Generalization umlGeneralization
+			Generalization umlGeneralization
 	){
 		assertNotNull(pcmProvided)
 		assertNotNull(umlGeneralization)
@@ -51,11 +50,11 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 	}
 	
 	def protected checkProvidedRoleConcept(OperationProvidedRole pcmProvided){
-		val umlGeneralization = getModifiableCorr(pcmProvided, org.eclipse.uml2.uml.Generalization, TagLiterals.PROVIDED_ROLE__GENERALIZATION)
+		val umlGeneralization = getModifiableCorr(pcmProvided, Generalization, TagLiterals.PROVIDED_ROLE__GENERALIZATION)
 		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlGeneralization)
 	}
 	
-	def protected checkProvidedRoleConcept(org.eclipse.uml2.uml.Generalization umlGeneralization){
+	def protected checkProvidedRoleConcept(Generalization umlGeneralization){
 		val pcmProvided = getModifiableCorr(umlGeneralization, OperationProvidedRole, TagLiterals.PROVIDED_ROLE__GENERALIZATION)
 		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlGeneralization)
 	}
@@ -87,7 +86,7 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 	}
 	
 	def private getUmlComponentImpl(Repository pcmRepository){
-		return getModifiableCorr(getPcmComponent(pcmRepository), org.eclipse.uml2.uml.Class, TagLiterals.IPRE__IMPLEMENTATION)
+		return getModifiableCorr(getPcmComponent(pcmRepository), Class, TagLiterals.IPRE__IMPLEMENTATION)
 	}
 
 	def private getPcmInterface(Repository pcmRepository){
@@ -95,7 +94,7 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 	}
 	
 	def private getUmlInterface(Repository pcmRepository){
-		return getModifiableCorr(getPcmInterface(pcmRepository), org.eclipse.uml2.uml.Interface, TagLiterals.INTERFACE_TO_INTERFACE)
+		return getModifiableCorr(getPcmInterface(pcmRepository), Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 	}
 
 	@Test

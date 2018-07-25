@@ -16,12 +16,15 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import org.palladiosimulator.pcm.repository.CompositeDataType
 
-// A small 'm' prefix will signal that the eObject is loaded from the resourceSet an therefore modifiable.
-// Working only on modifiable instances would theoretically allow for the comparison via identity.
-// This would be cleaner for checking composition constraints, as equality [equals(target.container, source)] does not ensure the correct containment relation.
-// For now stick with equality.
 
+/**
+ * This test class tests the reactions and routines that are supposed to synchronize a pcm::Parameter 
+ * in an pcm::OperationSignature (regular Parameter) with an uml::Parameter in an uml::Operation corresponding to the signature.
+ * <br><br>
+ * Related files: PcmParameter.reactions, UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
+ */
 class ParameterConceptTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(ParameterConceptTest).simpleName);
@@ -30,20 +33,12 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
 			DefaultLiterals.UML_EXTENSION
 	
-	static val TEST_INTERFACE = "TestInterface"
-	static val TEST_SIGNATURE = "testSignature"
-	static val TEST_PARAMETER = "testParameter"
+	private static val TEST_INTERFACE = "TestInterface"
+	private static val TEST_SIGNATURE = "testSignature"
+	private static val TEST_PARAMETER = "testParameter"
+	private static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
 	 
 	def private static boolean checkParameterModifiers(ParameterModifier pcmModifier, ParameterDirectionKind umlDirection){
-		return switch(pcmModifier){
-			case IN: umlDirection == ParameterDirectionKind.IN_LITERAL
-			case OUT: umlDirection == ParameterDirectionKind.OUT_LITERAL
-//				case INOUT,
-//				case NONE,
-			default: umlDirection == ParameterDirectionKind.INOUT_LITERAL
-		}
-	}
-	def private static boolean checkParameterModifiers2(ParameterModifier pcmModifier, ParameterDirectionKind umlDirection){
 		return umlDirection == PcmUmlClassHelper.getMatchingParameterDirection(pcmModifier)
 	}
 	
@@ -55,94 +50,106 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(umlParam)
 		assertTrue(corresponds(cm, pcmParam, umlParam, TagLiterals.PARAMETER__REGULAR_PARAMETER))
 		assertTrue(pcmParam.parameterName == umlParam.name) 
-		assertTrue(checkParameterModifiers2(pcmParam.modifier__Parameter, umlParam.direction))
+		assertTrue(checkParameterModifiers(pcmParam.modifier__Parameter, umlParam.direction))
+		assertTrue(isCorrect_DataType_Parameter_Correspondence(cm, pcmParam.dataType__Parameter, umlParam))
 		assertTrue(corresponds(cm, pcmParam.operationSignature__Parameter, umlParam.operation, TagLiterals.SIGNATURE__OPERATION))
 	}
 	
-	def protected checkParameterConcept(Parameter mPcmParam ){
-		val mUmlParam = getModifiableCorr(mPcmParam , org.eclipse.uml2.uml.Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		checkParameterConcept(correspondenceModel, mPcmParam , mUmlParam)
+	def protected checkParameterConcept(Parameter pcmParam ){
+		val mUmlParam = getModifiableCorr(pcmParam , org.eclipse.uml2.uml.Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
+		checkParameterConcept(correspondenceModel, pcmParam , mUmlParam)
 	}
 	
-	def protected checkParameterConcept(org.eclipse.uml2.uml.Parameter mUmlParam){
-		val mPcmParam = getModifiableCorr(mUmlParam, Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
-		checkParameterConcept(correspondenceModel, mPcmParam , mUmlParam)
+	def protected checkParameterConcept(org.eclipse.uml2.uml.Parameter umlParam){
+		val mPcmParam = getModifiableCorr(umlParam, Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
+		checkParameterConcept(correspondenceModel, mPcmParam , umlParam)
 	}
 
 	def private Repository createRepositoryWithSignature(){
 		userInteractor.addNextSelections(UML_MODEL_FILE)
-		val mPcmRepository = RepositoryFactory.eINSTANCE.createRepository()
-		mPcmRepository.entityName = "testCbsRepository"
+		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
+		pcmRepository.entityName = "testCbsRepository"
 		
-		val mPcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
-		mPcmInterface.entityName = TEST_INTERFACE
-		mPcmRepository.interfaces__Repository += mPcmInterface
+		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
+		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
+		pcmRepository.dataTypes__Repository += pcmCompositeType
 		
-		val mPcmSignature = RepositoryFactory.eINSTANCE.createOperationSignature
-		mPcmSignature.entityName = TEST_SIGNATURE
-		mPcmInterface.signatures__OperationInterface += mPcmSignature
+		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
+		pcmInterface.entityName = TEST_INTERFACE
+		pcmRepository.interfaces__Repository += pcmInterface
 		
-		createAndSynchronizeModel(PCM_MODEL_FILE, mPcmRepository)
+		val pcmSignature = RepositoryFactory.eINSTANCE.createOperationSignature
+		pcmSignature.entityName = TEST_SIGNATURE
+		pcmInterface.signatures__OperationInterface += pcmSignature
+		
+		createAndSynchronizeModel(PCM_MODEL_FILE, pcmRepository)
 		
 		assertModelExists(PCM_MODEL_FILE)
 		assertModelExists(UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(mPcmRepository) as Repository 
+		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
 	}
 	
-	def private OperationSignature getPcmTestSignature(Repository mPcmRepository){
-		val mPcmInterface = mPcmRepository.interfaces__Repository.findFirst[it.entityName == TEST_INTERFACE] as OperationInterface
-		val mPcmSignature = mPcmInterface.signatures__OperationInterface.findFirst[it.entityName == TEST_SIGNATURE]
-		return mPcmSignature
+	def private CompositeDataType getPcmCompositeDatatype(Repository pcmRepository){
+		return pcmRepository.dataTypes__Repository.filter(CompositeDataType)
+			.findFirst[it.entityName == TEST_COMPOSITE_DATATYPE] as CompositeDataType
 	}
 	
-	def private Operation getUmlTestOperation(Repository mPcmRepository){
-		return getModifiableCorr(getPcmTestSignature(mPcmRepository), Operation, TagLiterals.SIGNATURE__OPERATION)
+	def private org.eclipse.uml2.uml.Class getUmlCompositeDatatypeClass(Repository pcmRepository){
+		return getModifiableCorr(getPcmCompositeDatatype(pcmRepository), org.eclipse.uml2.uml.Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+	}
+	
+	def private OperationSignature getPcmTestSignature(Repository pcmRepository){
+		val pcmInterface = pcmRepository.interfaces__Repository.findFirst[it.entityName == TEST_INTERFACE] as OperationInterface
+		val pcmSignature = pcmInterface.signatures__OperationInterface.findFirst[it.entityName == TEST_SIGNATURE]
+		return pcmSignature
+	}
+	
+	def private Operation getUmlTestOperation(Repository pcmRepository){
+		return getModifiableCorr(getPcmTestSignature(pcmRepository), Operation, TagLiterals.SIGNATURE__OPERATION)
 	}
 	
 
 	@Test
 	def void testCreateParameterConcept_UML() {
-		var mPcmRepository = createRepositoryWithSignature
-		var mUmlOperation = getUmlTestOperation(mPcmRepository)
-		startRecordingChanges(mUmlOperation)
+		var pcmRepository = createRepositoryWithSignature
+		var umlOperation = getUmlTestOperation(pcmRepository)
+		startRecordingChanges(umlOperation)
 		
-		// Careful! If there is any unnamed parameter already inserted and synchronized, 
+		// If there is any unnamed parameter already inserted and synchronized, 
 		// the correspondence model might not be able to differentiate the new from he old parameter and return false correspondences,
 		// because the name change for the new Parameter is applied later. Until then, the new Parameter has the same unnamed-TUID as the already existing one.
-		var mUmlParameter = mUmlOperation.createOwnedParameter(TEST_PARAMETER, null) 
-		mUmlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
-		//TODO set type corresponding to some DataType
-		saveAndSynchronizeChanges(mUmlParameter)
+		var umlParameter = umlOperation.createOwnedParameter(TEST_PARAMETER, null) 
+		umlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
+		umlParameter.type = getUmlCompositeDatatypeClass(pcmRepository)
+		saveAndSynchronizeChanges(umlParameter)
 		
-		reloadResourceAndReturnRoot(mUmlParameter)
-		mPcmRepository = reloadResourceAndReturnRoot(mPcmRepository) as Repository
-		mUmlOperation = getUmlTestOperation(mPcmRepository)
+		reloadResourceAndReturnRoot(umlParameter)
+		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlOperation = getUmlTestOperation(pcmRepository)
 		
-		mUmlParameter = mUmlOperation.ownedParameters.findFirst[it.name == TEST_PARAMETER]
-		assertNotNull(mUmlParameter)
-		checkParameterConcept(mUmlParameter)
+		umlParameter = umlOperation.ownedParameters.findFirst[it.name == TEST_PARAMETER]
+		assertNotNull(umlParameter)
+		checkParameterConcept(umlParameter)
 	}
 	
 	@Test
 	def void testCreateParameterConcept_PCM() {
-		var mPcmRepository = createRepositoryWithSignature
-		var mPcmSignature = getPcmTestSignature(mPcmRepository)
-//		startRecordingChanges(mUmlOperation)
+		var pcmRepository = createRepositoryWithSignature
+		var pcmSignature = getPcmTestSignature(pcmRepository)
 		
-		var mPcmParameter = RepositoryFactory.eINSTANCE.createParameter
-		mPcmParameter.parameterName = TEST_PARAMETER
-		mPcmParameter.dataType__Parameter = null // TODO set type corresponding to some DataType
-		mPcmSignature.parameters__OperationSignature += mPcmParameter
-		saveAndSynchronizeChanges(mPcmParameter)
+		var pcmParameter = RepositoryFactory.eINSTANCE.createParameter
+		pcmParameter.parameterName = TEST_PARAMETER
+		pcmParameter.dataType__Parameter = getPcmCompositeDatatype(pcmRepository)
+		pcmSignature.parameters__OperationSignature += pcmParameter
+		saveAndSynchronizeChanges(pcmParameter)
 		
-//		reloadResourceAndReturnRoot(mUmlParameter)
-		mPcmRepository = reloadResourceAndReturnRoot(mPcmRepository) as Repository
-		mPcmSignature = getPcmTestSignature(mPcmRepository)
+		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		pcmSignature = getPcmTestSignature(pcmRepository)
 		
-		mPcmParameter = mPcmSignature.parameters__OperationSignature.findFirst[it.parameterName == TEST_PARAMETER]
-		assertNotNull(mPcmParameter)
-		checkParameterConcept(mPcmParameter)
+		pcmParameter = pcmSignature.parameters__OperationSignature.findFirst[it.parameterName == TEST_PARAMETER]
+		assertNotNull(pcmParameter)
+		checkParameterConcept(pcmParameter)
 	}
 	
 	

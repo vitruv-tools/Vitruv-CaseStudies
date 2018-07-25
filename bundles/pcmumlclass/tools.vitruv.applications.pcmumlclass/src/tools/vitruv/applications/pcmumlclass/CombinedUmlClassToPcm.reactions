@@ -5,18 +5,25 @@ reactions: combinedUmlClassToPcmReactions
 in reaction to changes in UML
 execute actions in PCM
 
-import umlPackageReactions
+//import umlPackageReactions
+import umlRepositoryAndSystemPackageReactions
 
 import umlInterfaceReactions
-import umlArchitecturalInterfaceGeneralizationReactions
-import umlOperationReactions 
-import umlParameterReactions
+import umlInterfaceGeneralizationReactions
+import umlSignatureOperationReactions 
+//import umlParameterReactions
+import umlRegularParameterReactions // replaces umlParameterReactions
+import umlReturnAndRegularParameterTypeReactions // replaces umlParameterReactions
 
-import umlClassReactions
+//import umlClassReactions
+import umlCompositeDataTypeClassReactions // replaces umlClassReactions
 import umlCompositeDataTypeGeneralizationReactions
 import umlInnerDeclarationPropertyReactions
 
+import umlRepositoryComponentPackageReactions
+import umlIPREClassReactions // replaces umlClassReactions
+import umlIPREConstructorOperationReactions
 import umlProvidedRoleGeneralizationReactions
 import umlRequiredRolePropertyReactions
-import umlRequiredRoleParameterReactions // TODO handled in ParameterReactions, for now at least
+import umlRequiredRoleParameterReactions // replaces umlParameterReactions
 import umlAssemblyContextPropertyReactions

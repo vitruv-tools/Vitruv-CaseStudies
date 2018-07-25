@@ -15,11 +15,12 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
 
-// A small 'm' prefix will signal that the eObject is loaded from the resourceSet an therefore modifiable.
-// Working only on modifiable instances would theoretically allow for the comparison via identity.
-// This would be cleaner for checking composition constraints, as equality [equals(target.container, source)] does not ensure the correct containment relation.
-// For now stick with equality.
-
+/**
+ * This test class tests the reactions and routines that are supposed to synchronize a pcm::AssemblyContext 
+ * in a pcm::ComposedProvidingRequiringEntity (CPRE) with a uml::Property in an uml::Class (the implementation class to the CPRE). 
+ * <br><br>
+ * Related files: PcmAssemblyContext.reactions, UmlAssemblyContextProperty.reactions
+ */
 class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(AssemblyContextConceptTest).simpleName);
@@ -57,7 +58,10 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		checkAssemblyContextConcept(correspondenceModel, pcmAssemblyContext, umlAssemblyContextProperty)
 	}
 
-	def private Repository createRepository_Component_Interface(){
+	/**
+	 * Initialize a pcm::Repository with two CompositeComponents and synchronize them with their uml-counterparts.
+	 */
+	def private Repository createRepository_2Components(){
 		userInteractor.addNextSelections(UML_MODEL_FILE)
 		
 		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
@@ -96,11 +100,11 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateAssemblyContextConcept_PCM() {
-		var pcmRepository = createRepository_Component_Interface()
+		var pcmRepository = createRepository_2Components()
 		var pcmComponent = getPcmComponent(pcmRepository)
 		
 		var pcmAssemblyContext = CompositionFactory.eINSTANCE.createAssemblyContext
-		pcmAssemblyContext.encapsulatedComponent__AssemblyContext = getPcmComponent_2(pcmRepository) // same component doesn't trigger change event
+		pcmAssemblyContext.encapsulatedComponent__AssemblyContext = getPcmComponent_2(pcmRepository) // TODO same component doesn't trigger change event
 		pcmComponent.assemblyContexts__ComposedStructure += pcmAssemblyContext
 		
 		saveAndSynchronizeChanges(pcmAssemblyContext)
@@ -113,7 +117,7 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 	
 	@Test
 	def void testCreateAssemblyContextConcept_UML() {
-		var pcmRepository = createRepository_Component_Interface()
+		var pcmRepository = createRepository_2Components()
 		var umlComponent = getUmlComponentImpl(pcmRepository)
 		startRecordingChanges(umlComponent)
 		

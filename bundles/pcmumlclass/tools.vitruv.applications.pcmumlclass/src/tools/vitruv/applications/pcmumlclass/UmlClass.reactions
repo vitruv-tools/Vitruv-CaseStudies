@@ -96,7 +96,7 @@ routine contextDisambiguateClassConcepts(uml::Class umlClass, uml::Package umlPa
 			if (pcmRepository.isPresent){
 				detectCompositeTypeClassCorrespondenceCandidates(umlClass, umlPackage)
 			}
-			//TODO what about component
+			//RepositoryComponentImpl and SystemImpl classes are generated via round-trip and don't need to be handled here
 		}
 	}
 }
@@ -128,8 +128,6 @@ routine createCompositeTypeClassCorrespondence(uml::Class umlClass, uml::Package
 	action{
 		val pcmCompositeType = create pcm::CompositeDataType and initialize {
 			pcmCompositeType.entityName = umlClass.name
-			//TODO recurse generalizations for parent CompositeDataTypes
-			//TODO recurse ownedProperties for inner declarations (DataTypes)
 		}
 		add correspondence between pcmCompositeType and umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 		call moveCompositeTypeClassCorrespondence(umlClass, umlPackage)

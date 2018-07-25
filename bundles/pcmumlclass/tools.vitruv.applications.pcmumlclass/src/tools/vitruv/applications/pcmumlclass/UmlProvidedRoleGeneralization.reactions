@@ -4,6 +4,18 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
+//	The following reactions and routines synchronize a pcm::OperationProvidedRole in an pcm::InterfaceProvidingRequiringEntity (IPRE)
+//	with an uml::Generalization in the uml::Class (implementation) corresponding to the IPRE.
+//
+//	Because a pcm::OperationProvidedRole defines which Interface are provided/implemented by the IPRE, 
+//	only architecturally relevant uml::Interface (uml::Interfaces that are defined in the contracts package of a pcm::Repository)
+//	should be set for uml::Generalization[general] of the IPRE implementation class.
+//
+//	Related files: 
+//		PcmProvidedRole.reactions, 
+//		UmlProvidedRoleGeneralization.reactions,
+//		ProvidedRoleTest
+
 reactions: umlProvidedRoleGeneralizationReactions
 in reaction to changes in UML
 execute actions in PCM

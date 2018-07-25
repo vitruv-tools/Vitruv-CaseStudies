@@ -16,14 +16,19 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
 
-// A small 'm' prefix will signal that the eObject is loaded from the resourceSet an therefore modifiable.
-// Working only on modifiable instances would theoretically allow for the comparison via identity.
-// This would be cleaner for checking composition constraints, as equality [equals(target.container, source)] does not ensure the correct containment relation.
-// For now stick with equality.
+/**
+ * This test class tests the reactions and routines that are supposed to synchronize synchronize a pcm::RepositoryComponent with 
+ * its corresponding uml::Package, uml::Class (implementation), and uml::Operation (constructor).
+ * <br><br>
+ * Related files: 
+ * 		PcmRepositoryComponent.reactions,
+ * 		UmlRepositoryComponentPackage.reactions,
+ * 		UmlIPREClassReactions.reactions,
+ * 		UmlIPREConstructorOperation.reactions
+ */
+class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 
-class RepositoryComponentTest extends PcmUmlClassApplicationTest {
-
-    protected static val final Logger logger = Logger.getLogger(typeof(RepositoryComponentTest).simpleName);
+    protected static val final Logger logger = Logger.getLogger(typeof(RepositoryComponentConceptTest).simpleName);
 
 	private static val PCM_MODEL_FILE = "model/Repository.repository"
 	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
@@ -74,6 +79,9 @@ class RepositoryComponentTest extends PcmUmlClassApplicationTest {
 		checkRepositoryComponentConcept(correspondenceModel, pcmComponent, umlComponentPkg, umlComponentImpl, umlComponentConstructor)
 	}
 
+	/**
+	 * Initialize a pcm::Repository and its corresponding uml-counterparts.
+	 */
 	def private Repository createRepository(){
 		userInteractor.addNextSelections(UML_MODEL_FILE)
 		

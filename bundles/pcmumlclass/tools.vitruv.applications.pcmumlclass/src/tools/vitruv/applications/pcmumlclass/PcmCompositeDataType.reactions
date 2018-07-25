@@ -4,6 +4,17 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
+//	The following reactions and routines synchronize a pcm::CompositeDataType in a pcm::Repository
+//	with an uml::Class in an uml::Package (the datatypes package corresponding to the repository).
+//
+// 	The correspondence is instantiated from this side when the pcm::CompositeDataType is inserted.
+//	The correspondence is deleted when the pcm::CompositeDataType is deleted.
+//
+//	Related files: 
+//		UmlCompositeDataTypeClass.reactions
+//		UmlCompositeDataTypeGeneralization.reactions
+//		CompositeDataTypeConceptTest
+
 reactions: pcmCompositeDataTypeReactions
 in reaction to changes in PCM
 execute actions in UML

@@ -6,6 +6,14 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
+//	The following reactions and routines synchronize a pcm::Parameter in an pcm::OperationSignature (regular Parameter)
+//	with an uml::Parameter in an uml::Operation corresponding to the signature.
+//
+//	Related files: 
+//		PcmParameter.reactions
+//		UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
+//		ParameterConceptTest
+
 reactions: pcmParameterReactions
 in reaction to changes in PCM
 execute actions in UML
@@ -136,7 +144,7 @@ reaction ParameterModifierChanged{
 	call changeDirectionOfCorrespondingRegularParameter(affectedEObject)
 }
 
-// pcm::ParameterModifier pcmModifier, cann't be resolved for some reason -> retreive from element
+// pcm::ParameterModifier import can't be resolved for some reason -> retrieve from element
 routine changeDirectionOfCorrespondingRegularParameter(pcm::Parameter pcmParam){
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
@@ -148,7 +156,8 @@ routine changeDirectionOfCorrespondingRegularParameter(pcm::Parameter pcmParam){
 	}
 }
 
-// TODO following reactions are very similar to to PcmSignatureReactions and InnerDeclaration, so some refactoring? 
+// Following reactions are very similar to to PcmSignature.reactions and PcmInnerDeclaration.reactions.
+// See PcmCollectionDataType.reactions for more explanation.
 reaction ParameterTypeChanged{
 	after element pcm::DataType replaced at pcm::Parameter[dataType__Parameter]
 	with {affectedEObject.dataType__Parameter === newValue}
@@ -162,9 +171,6 @@ routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::
 	}
 	action {
 		execute {
-			//TODO implement Signature.returnType propagation; maybe solve this in CollectionDataTypeReactions?
-//			logger.warn("pcm::Parameter[dataType__Parameter] propagation is not implemented yet!")
-			
 			if (previousTypeWasCollectionType.isPresent){
 				removeCollectionTypeCorrespondenceFromRegularParameter(pcmParam)
 			}
@@ -172,7 +178,7 @@ routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::
 				addCollectionTypeCorrespondenceToRegularParameter(pcmParam, pcmDataType)
 			}
 			else {
-				replaceSimpleDataTypeAtCorrespondingRegularParameter(pcmParam, pcmDataType)
+				replaceTypeOfCorrespondingRegularParameter(pcmParam, pcmDataType)
 			}
 		}
 	}
@@ -196,28 +202,26 @@ routine removeCollectionTypeCorrespondenceFromRegularParameter(pcm::Parameter pc
 routine addCollectionTypeCorrespondenceToRegularParameter(pcm::Parameter pcmParam, pcm::CollectionDataType pcmCollectionType){
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-		val umlInnerType = retrieve optional uml::Type corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
 	}
 	action {
 		update umlParam {
-			umlParam.type = umlInnerType.orElse(null)
 			umlParam.lower = 0
 			umlParam.upper = LiteralUnlimitedNatural.UNLIMITED
 		}
 		add correspondence between pcmCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+		call replaceTypeOfCorrespondingRegularParameter(pcmParam, pcmCollectionType.innerType_CollectionDataType)
 	}
 }
 
-routine replaceSimpleDataTypeAtCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmSimpleType){
+routine replaceTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmSimpleType){
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-		val umlType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
+		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
+		val umlCompositeType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
 		update umlParam {
-			umlParam.type = umlType.orElse(null)
-			umlParam.lower = 1
-			umlParam.upper = 1
+			umlParam.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
 		}
 	}
 }

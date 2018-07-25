@@ -7,6 +7,14 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
+//	The following reactions and routines synchronize a pcm::OperationSignature with its corresponding uml::Operation
+//	and the return type of the signature with an uml::Parameter (return parameter) in the uml::Operation.
+//
+//	Related files: 
+//		PcmSignature.reactions,
+//		UmlSignatureOperation.reactions, UmlReturnAndRegularParameterType.reactions,
+//		SignatureConceptTest
+
 reactions: pcmSignatureReactions
 in reaction to changes in PCM
 execute actions in UML
@@ -130,9 +138,9 @@ routine createCorrespondingReturnParameter(pcm::OperationSignature pcmSignature)
 			umlReturnParam.direction = ParameterDirectionKind.RETURN_LITERAL
 			umlReturnParam.name = DefaultLiterals.RETURN_PARAM_NAME // the name needs to be set, so that its TUID is distinct and the object is not confused with new instances
 			umlOperation.ownedParameters += umlReturnParam
-			//TODO synchronize return type
 		}
 		add correspondence between pcmSignature and umlReturnParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
+		call changeTypeOfCorrespondingReturnParameter(pcmSignature, pcmSignature.returnType__OperationSignature)
 	}
 }
 
@@ -200,7 +208,8 @@ routine renameCorrespondingOperation(pcm::OperationSignature pcmSignature, Strin
 	}
 }
 
-// TODO following reactions are very similar to to PcmParameterReactions, so some refactoring? 
+// Following reactions are very similar to to PcmParameter.reactions and PcmInnerDeclaration.reactions.
+// See PcmCollectionDataType.reactions for more explanation.
 reaction SignatureReturnTypeChanged{
 	after element pcm::DataType replaced at pcm::OperationSignature[returnType__OperationSignature]
 	with {affectedEObject.returnType__OperationSignature === newValue}
@@ -213,10 +222,7 @@ routine changeTypeOfCorrespondingReturnParameter(pcm::OperationSignature pcmSign
 		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
 	action {
-		execute {
-			//TODO implement Signature.returnType propagation; maybe solve this in CollectionDataTypeReactions?
-//			logger.warn("pcm::Parameter[dataType__Parameter] propagation is not implemented yet!")
-			
+		execute {			
 			if (previousTypeWasCollectionType.isPresent){
 				removeCollectionTypeCorrespondenceFromReturnParameter(pcmSignature)
 			}
@@ -224,7 +230,7 @@ routine changeTypeOfCorrespondingReturnParameter(pcm::OperationSignature pcmSign
 				addCollectionTypeCorrespondenceToReturnParameter(pcmSignature, pcmDataType)
 			}
 			else {
-				replaceSimpleDataTypeAtCorrespondingReturnParameter(pcmSignature, pcmDataType)
+				replaceTypeOfCorrespondingReturnParameter(pcmSignature, pcmDataType)
 			}
 		}
 	}
@@ -252,24 +258,23 @@ routine addCollectionTypeCorrespondenceToReturnParameter(pcm::OperationSignature
 	}
 	action {
 		update umlParam {
-			umlParam.type = umlInnerType.orElse(null)
 			umlParam.lower = 0
 			umlParam.upper = LiteralUnlimitedNatural.UNLIMITED
 		}
 		add correspondence between pcmCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+		call replaceTypeOfCorrespondingReturnParameter(pcmSignature, pcmCollectionType.innerType_CollectionDataType)
 	}
 }
 
-routine replaceSimpleDataTypeAtCorrespondingReturnParameter(pcm::OperationSignature pcmSignature, pcm::DataType pcmSimpleType){
+routine replaceTypeOfCorrespondingReturnParameter(pcm::OperationSignature pcmSignature, pcm::DataType pcmSimpleType){
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
-		val umlType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
+		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
+		val umlCompositeType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
 		update umlParam {
-			umlParam.type = umlType.orElse(null)
-			umlParam.lower = 1
-			umlParam.upper = 1
+			umlParam.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
 		}
 	}
 }

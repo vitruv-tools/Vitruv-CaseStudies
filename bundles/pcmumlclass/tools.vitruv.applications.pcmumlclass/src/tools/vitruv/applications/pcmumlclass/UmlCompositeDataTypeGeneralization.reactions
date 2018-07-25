@@ -4,6 +4,14 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
+//	The following reactions and routines synchronize the parent-references of a pcm::CompositeDataType 
+//	with the uml::Generalizations of the uml::Class that corresponds to the pcm::CompositeDataType.
+//
+//	Related files: 
+//		PcmCompositeDataType.reactions
+//		UmlCompositeDataTypeClass.reactions
+//		CompositeDataTypeConceptTest
+
 reactions: umlCompositeDataTypeGeneralizationReactions
 in reaction to changes in UML
 execute actions in PCM
@@ -48,7 +56,7 @@ routine removeCompositeDatatypeParent(uml::Class umlClass, uml::Classifier umlOl
 	}
 }
 
-reaction CompositeDatatypeParentReplaced {
+reaction CompositeDataTypeGeneralizationTypeChanged {
 	after element replaced at uml::Generalization[general]
 	with {affectedEObject.specific instanceof Class}
 //	with {affectedEObject.general === newValue} // delay validity check to ensure that the old parent interface is removed

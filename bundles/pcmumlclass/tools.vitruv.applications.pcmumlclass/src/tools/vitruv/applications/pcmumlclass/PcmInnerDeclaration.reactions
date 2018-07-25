@@ -5,12 +5,18 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
+//	The following reactions and routines synchronize a pcm::InnerDeclaration with its corresponding uml::Property.
+//
+//	Related files: 
+//		UmlReturnAndRegularParameterType.reactions,
+//		AttributeConceptTest
+
 reactions: pcmInnerDeclarationReactions
 in reaction to changes in PCM
 execute actions in UML
 
 
-reaction InnerDeclarationInsertedToCompositeDataType{
+reaction InnerDeclarationInserted{
 	after element pcm::InnerDeclaration inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
 	with {affectedEObject.innerDeclaration_CompositeDataType.contains(newValue)}
 	call insertCorrespondingAttribute(newValue, affectedEObject)
@@ -79,7 +85,7 @@ routine moveCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::Comp
 	}
 }
 
-reaction InnerDeclarationRemovedFromCompositeDataType {
+reaction InnerDeclarationRemoved {
 	after element pcm::InnerDeclaration removed from pcm::CompositeDataType[innerDeclaration_CompositeDataType]
 	with {!affectedEObject.innerDeclaration_CompositeDataType.contains(oldValue)}
 	call removeCorrespondingAttribute(oldValue, affectedEObject)
@@ -129,7 +135,8 @@ routine changeNameOfCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, S
 	}
 }
 
-// TODO following reactions are very similar to to PcmSignatureReactions, so some refactoring? 
+// Following reactions are very similar to to PcmSignature.reactions and PcmParameter.reactions.
+// See PcmCollectionDataType.reactions for more explanation.
 reaction InnerDeclarationTypeChanged {
 	after element pcm::DataType replaced at pcm::InnerDeclaration[datatype_InnerDeclaration]
 	with {affectedEObject.datatype_InnerDeclaration === newValue && newValue != oldValue}
@@ -150,7 +157,7 @@ routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmInnerDeclara
 				addCollectionTypeCorrespondenceToAttribute(pcmInnerDeclaration, pcmDataType)
 			}
 			else {
-				replaceSimpleDataTypeAtCorrespondingAttribute(pcmInnerDeclaration, pcmDataType)
+				replaceTypeOfCorrespondingAttribute(pcmInnerDeclaration, pcmDataType)
 			}
 		}
 	}
@@ -174,31 +181,18 @@ routine removeCollectionTypeCorrespondenceFromAttribute(pcm::InnerDeclaration pc
 routine addCollectionTypeCorrespondenceToAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CollectionDataType pcmCollectionType){
 	match {
 		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-//		val umlInnerType = retrieve optional uml::Type corresponding to pcmCollectionType.innerType_CollectionDataType //tagged with TagLiterals.DATATYPE__TYPE
-		val umlPrimitiveType = retrieve optional uml::Type 
-				corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
-		val umlCompositeType = retrieve optional uml::Type 
-				corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
 		update umlAttribute {
 			umlAttribute.lower = 0
 			umlAttribute.upper = LiteralUnlimitedNatural.UNLIMITED
-			if (umlPrimitiveType.isPresent){
-				umlAttribute.type = umlPrimitiveType.get
-			}
-			else if (umlCompositeType.isPresent){
-				umlAttribute.type = umlCompositeType.get
-			}
-			else {
-				umlAttribute.type = null
-			}
 		}
 		add correspondence between pcmCollectionType and umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		call replaceTypeOfCorrespondingAttribute(pcmAttribute, pcmCollectionType.innerType_CollectionDataType)
 	}
 }
 
-routine replaceSimpleDataTypeAtCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::DataType pcmSimpleType){
+routine replaceTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::DataType pcmSimpleType){
 	match {
 		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
 		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
@@ -206,17 +200,7 @@ routine replaceSimpleDataTypeAtCorrespondingAttribute(pcm::InnerDeclaration pcmA
 	}
 	action {
 		update umlAttribute {
-			umlAttribute.lower = 1
-			umlAttribute.upper = 1
-			if (umlPrimitiveType.isPresent){
-				umlAttribute.type = umlPrimitiveType.get
-			}
-			else if (umlCompositeType.isPresent){
-				umlAttribute.type = umlCompositeType.get
-			}
-			else {
-				umlAttribute.type = null
-			}
+			umlAttribute.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
 		}
 	}
 }

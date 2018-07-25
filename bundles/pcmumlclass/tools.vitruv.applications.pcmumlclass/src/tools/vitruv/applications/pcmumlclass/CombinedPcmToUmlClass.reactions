@@ -17,6 +17,7 @@ import pcmParameterReactions
 //		(TODO refactor CollectionDataType-reactions to central file?)
 import pcmCompositeDataTypeReactions
 import pcmInnerDeclarationReactions
+import pcmCollectionDataTypeReactions
 
 import pcmRepositoryComponentReactions
 import pcmRequiredRoleReactions

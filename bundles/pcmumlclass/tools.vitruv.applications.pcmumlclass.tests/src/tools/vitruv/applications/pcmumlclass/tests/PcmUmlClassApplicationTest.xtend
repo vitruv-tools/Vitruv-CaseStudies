@@ -5,12 +5,17 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.Property
+import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
@@ -144,5 +149,33 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	
 	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b, String tag){
 		return EcoreUtil.equals(b, ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, a, tag, b.class).head)
+	}
+	
+	def protected static isCorrect_DataType_Property_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Property umlProperty){
+		if (pcmDatatype === null || umlProperty.type === null){
+			return pcmDatatype === null && umlProperty.type === null
+		}
+		else {
+			val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlProperty.type, TagLiterals.DATATYPE__TYPE)
+			val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlProperty.type, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+			val correspondingCollectionType = 
+				corresponds(correspondenceModel, pcmDatatype, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
+				&& umlProperty.lower == 0 && umlProperty.upper == LiteralUnlimitedNatural.UNLIMITED
+			return (correspondingPrimitiveType || correspondingCompositeType || correspondingCollectionType)
+		}
+	}
+	
+	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Parameter umlParam){
+		if (pcmDatatype === null || umlParam.type === null){
+			return pcmDatatype === null && umlParam.type === null
+		}
+		else {
+			val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlParam.type, TagLiterals.DATATYPE__TYPE)
+			val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlParam.type, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+			val correspondingCollectionType = 
+				corresponds(correspondenceModel, pcmDatatype, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
+				&& umlParam.lower == 0 && umlParam.upper == LiteralUnlimitedNatural.UNLIMITED
+			return (correspondingPrimitiveType || correspondingCompositeType || correspondingCollectionType)
+		}
 	}
 }

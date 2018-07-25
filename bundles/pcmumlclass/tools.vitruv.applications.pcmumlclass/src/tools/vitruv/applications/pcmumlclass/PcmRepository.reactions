@@ -1,17 +1,23 @@
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import org.eclipse.uml2.uml.Model
-import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.UMLFactory
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.userinteraction.UserInteractionType
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+//	The following reactions and routines synchronize a pcm::Repository
+//	with its corresponding uml::Packages (main package for components, contracts package for interfaces, and datatypes package).
+//
+//	Related files: 
+//		UmlRepositoryAndSystemPackage.reactions
+//		RepositoryConceptTest
 
 reactions: pcmRepositoryReactions
 in reaction to changes in PCM
@@ -88,11 +94,7 @@ routine createUmlContractsPackage(pcm::Repository pcmRepo){
 		call{
 			//look for candidate before creating a new Package
 			var umlContractsPkg = umlRepositoryPkg.nestedPackages.findFirst[pkg | pkg.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
-			if (umlContractsPkg !== null){
-				//TODO recurse existing datatypes?
-				//TODO disambiguate existing candidates
-			} 
-			else {
+			if (umlContractsPkg === null){
 				umlContractsPkg = umlRepositoryPkg.createNestedPackage(DefaultLiterals.CONTRACTS_PACKAGE_NAME)
 			}
 			ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
@@ -108,11 +110,7 @@ routine createUmlDatatypesPackage(pcm::Repository pcmRepo){
 		call{
 			//look for candidate before creating a new Package
 			var umlDatatypesPkg = umlRepositoryPkg.nestedPackages.findFirst[pkg | pkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
-			if (umlDatatypesPkg !== null){
-				//TODO recurse existing interfaces?
-				//TODO disambiguate existing candidates
-			} 
-			else {
+			if (umlDatatypesPkg === null){
 				umlDatatypesPkg = umlRepositoryPkg.createNestedPackage(DefaultLiterals.DATATYPES_PACKAGE_NAME)
 			}
 			ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, pcmRepo, umlDatatypesPkg, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
@@ -123,10 +121,10 @@ routine createUmlDatatypesPackage(pcm::Repository pcmRepo){
 reaction RepositoryNameChanged {
 	after attribute replaced at pcm::Repository[entityName] 
 	with {affectedEObject.entityName == newValue}
-	call changeUmlRepositoryName(affectedEObject)
+	call changeNameOfCorrespondingRepositoryPackage(affectedEObject)
 }
 
-routine changeUmlRepositoryName(pcm::Repository pcmRepo){
+routine changeNameOfCorrespondingRepositoryPackage(pcm::Repository pcmRepo){
 	match {
 		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
@@ -140,10 +138,10 @@ routine changeUmlRepositoryName(pcm::Repository pcmRepo){
 
 reaction RepositoryDeleted {
 	after element pcm::Repository removed as root 
-	call deleteRepository(oldValue)
+	call deleteCorrespondingRepositoryPackages(oldValue)
 }
 
-routine deleteRepository(pcm::Repository pcmRepo){
+routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo){
 	match {
 		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE

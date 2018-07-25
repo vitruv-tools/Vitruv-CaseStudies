@@ -1,29 +1,30 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import org.apache.log4j.Logger
-import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Interface
-import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.Property
 import org.junit.Test
+import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
 import static org.junit.Assert.*
-import org.junit.Ignore
-import org.palladiosimulator.pcm.repository.CompositeComponent
-import org.palladiosimulator.pcm.repository.OperationRequiredRole
-import org.eclipse.uml2.uml.UMLFactory
 
-// A small 'm' prefix will signal that the eObject is loaded from the resourceSet an therefore modifiable.
-// Working only on modifiable instances would theoretically allow for the comparison via identity.
-// This would be cleaner for checking composition constraints, as equality [equals(target.container, source)] does not ensure the correct containment relation.
-// For now stick with equality.
-
+/**
+ * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationRequiredRole 
+ * of a pcm::InterfaceProvidingRequiringEntity (IPRE) with its corresponding uml::Parameter (constructor parameter 
+ * of the IPRE implementation class) and uml::Property (field in the IPRE implementation class used to store the 
+ * Component passed to the constructor).
+ * <br><br>
+ * Related files: PcmRequiredRole.reactions, UmlRequiredRoleParameter.reactions, UmlRequiredRoleProperty.reactions
+ */
 class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(RequiredRoleConceptTest).simpleName);
@@ -43,8 +44,8 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 	def public static void checkRequiredRoleConcept(
 			CorrespondenceModel cm,
 			OperationRequiredRole pcmRequired,
-			org.eclipse.uml2.uml.Property umlRequiredInstance,
-			org.eclipse.uml2.uml.Parameter umlRequiredParameter
+			Property umlRequiredInstance,
+			Parameter umlRequiredParameter
 	){
 		assertNotNull(pcmRequired)
 		assertNotNull(umlRequiredInstance)
@@ -60,22 +61,22 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 	}
 	
 	def protected checkRequiredRoleConcept(OperationRequiredRole pcmRequired){
-		val umlRequiredInstance = getModifiableCorr(pcmRequired, org.eclipse.uml2.uml.Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
-		val umlRequiredParameter = getModifiableCorr(pcmRequired, org.eclipse.uml2.uml.Parameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
+		val umlRequiredInstance = getModifiableCorr(pcmRequired, Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
+		val umlRequiredParameter = getModifiableCorr(pcmRequired, Parameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
 		checkRequiredRoleConcept(correspondenceModel, pcmRequired, umlRequiredInstance, umlRequiredParameter)
 	}
 	
-	def protected checkRequiredRoleConcept(org.eclipse.uml2.uml.Property umlRequiredInstance){
+	def protected checkRequiredRoleConcept(Property umlRequiredInstance){
 		val pcmRequired = getModifiableCorr(umlRequiredInstance, OperationRequiredRole, TagLiterals.REQUIRED_ROLE__PROPERTY)
 		assertNotNull(pcmRequired)
-		val umlRequiredParameter = getModifiableCorr(pcmRequired, org.eclipse.uml2.uml.Parameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
+		val umlRequiredParameter = getModifiableCorr(pcmRequired, Parameter, TagLiterals.REQUIRED_ROLE__PARAMETER)
 		checkRequiredRoleConcept(correspondenceModel, pcmRequired, umlRequiredInstance, umlRequiredParameter)
 	}
 	
-	def protected checkRequiredRoleConcept(org.eclipse.uml2.uml.Parameter umlRequiredParameter){
+	def protected checkRequiredRoleConcept(Parameter umlRequiredParameter){
 		val pcmRequired = getModifiableCorr(umlRequiredParameter, OperationRequiredRole, TagLiterals.REQUIRED_ROLE__PARAMETER)
 		assertNotNull(pcmRequired)
-		val umlRequiredInstance = getModifiableCorr(pcmRequired, org.eclipse.uml2.uml.Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
+		val umlRequiredInstance = getModifiableCorr(pcmRequired, Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
 		checkRequiredRoleConcept(correspondenceModel, pcmRequired, umlRequiredInstance, umlRequiredParameter)
 	}
 
@@ -106,7 +107,7 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 	}
 	
 	def private getUmlComponentImpl(Repository pcmRepository){
-		return getModifiableCorr(getPcmComponent(pcmRepository), org.eclipse.uml2.uml.Class, TagLiterals.IPRE__IMPLEMENTATION)
+		return getModifiableCorr(getPcmComponent(pcmRepository), Class, TagLiterals.IPRE__IMPLEMENTATION)
 	}
 
 	def private getPcmInterface(Repository pcmRepository){
@@ -114,7 +115,7 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 	}
 	
 	def private getUmlInterface(Repository pcmRepository){
-		return getModifiableCorr(getPcmInterface(pcmRepository), org.eclipse.uml2.uml.Interface, TagLiterals.INTERFACE_TO_INTERFACE)
+		return getModifiableCorr(getPcmInterface(pcmRepository), Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 	}
 
 	@Test

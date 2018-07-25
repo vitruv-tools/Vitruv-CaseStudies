@@ -15,11 +15,15 @@ import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
 import static org.junit.Assert.*
 
-// A small 'm' prefix will signal that the eObject is loaded from the resourceSet an therefore modifiable.
-// Working only on modifiable instances would theoretically allow for the comparison via identity.
-// This would be cleaner for checking composition constraints, as equality [equals(target.container, source)] does not ensure the correct containment relation.
-// For now stick with equality.
-
+/**
+ * This test class tests the reactions and routines that are supposed to synchronize a pcm::CompositeDataType in a pcm::Repository
+ * with its corresponding uml::Class (implementation) in an uml::Package (the datatypes package corresponding to the repository).
+ * <br><br>
+ * Related files: 
+ * 		PcmCompositeDataType.reactions,
+ * 		UmlCompositeDataTypeClass.reactions, 
+ * 		UmlCompositeDataTypeGeneralization.reactions
+ */
 class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(CompositeDataTypeConceptTest).simpleName);
@@ -58,104 +62,106 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
 
+	/**
+	 * Initialize a pcm::Repository and its corresponding uml-counterparts.
+	 */
 	def private Repository createRepositoryConcept(){
 		userInteractor.addNextSelections(UML_MODEL_FILE)
 		
-		var mPcmRepository = RepositoryFactory.eINSTANCE.createRepository()
-		mPcmRepository.entityName = "testCbsRepository"
-		createAndSynchronizeModel(PCM_MODEL_FILE, mPcmRepository)
+		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
+		pcmRepository.entityName = "testCbsRepository"
+		createAndSynchronizeModel(PCM_MODEL_FILE, pcmRepository)
 		
 		assertModelExists(PCM_MODEL_FILE)
 		assertModelExists(UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(mPcmRepository) as Repository 
+		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
 	}
 	
-	def private Package getDatatypesPackage(Repository mPcmRepository){
-		return getModifiableCorr(mPcmRepository, Package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
+	def private Package getDatatypesPackage(Repository pcmRepository){
+		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
 	}
 
 	@Test
 //	@Ignore
 	def void testCreateCompositeDataTypeConcept_UML() {
-		var mPcmRepository = createRepositoryConcept()
-		var mUmlDatatypesPkg = getDatatypesPackage(mPcmRepository)
-		startRecordingChanges(mUmlDatatypesPkg)
+		var pcmRepository = createRepositoryConcept()
+		var umlDatatypesPkg = getDatatypesPackage(pcmRepository)
+		startRecordingChanges(umlDatatypesPkg)
 		
-		var mUmlCompositeTypeClass = mUmlDatatypesPkg.createOwnedClass(tools.vitruv.applications.pcmumlclass.tests.CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
-		saveAndSynchronizeChanges(mUmlDatatypesPkg)
+		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(tools.vitruv.applications.pcmumlclass.tests.CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
+		saveAndSynchronizeChanges(umlDatatypesPkg)
 		
-		reloadResourceAndReturnRoot(mUmlDatatypesPkg)
-		mPcmRepository = reloadResourceAndReturnRoot(mPcmRepository) as Repository
-		mUmlDatatypesPkg = getDatatypesPackage(mPcmRepository)
+		reloadResourceAndReturnRoot(umlDatatypesPkg)
+		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg = getDatatypesPackage(pcmRepository)
 		
-		mUmlCompositeTypeClass = mUmlDatatypesPkg.packagedElements.findFirst[it.name == tools.vitruv.applications.pcmumlclass.tests.CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE] as Class
-		assertNotNull(mUmlCompositeTypeClass)
-		checkCompositeDataTypeConcept(mUmlCompositeTypeClass)
+		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == tools.vitruv.applications.pcmumlclass.tests.CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE] as Class
+		assertNotNull(umlCompositeTypeClass)
+		checkCompositeDataTypeConcept(umlCompositeTypeClass)
 	}
 	
 	@Test
 	def void testCreateCompositeDataTypeConcept_PCM() {
-		var mPcmRepository = createRepositoryConcept()
-		var mUmlDatatypesPkg = getDatatypesPackage(mPcmRepository)
-//		startRecordingChanges(mUmlDatatypesPkg)
+		var pcmRepository = createRepositoryConcept()
+		var umlDatatypesPkg = getDatatypesPackage(pcmRepository)
 
-		var mPcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
-		mPcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
-		mPcmRepository.dataTypes__Repository += mPcmCompositeType
-		saveAndSynchronizeChanges(mPcmCompositeType)
+		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
+		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
+		pcmRepository.dataTypes__Repository += pcmCompositeType
+		saveAndSynchronizeChanges(pcmCompositeType)
 		
-		reloadResourceAndReturnRoot(mUmlDatatypesPkg)
-		mPcmRepository = reloadResourceAndReturnRoot(mPcmRepository) as Repository
-		mUmlDatatypesPkg = getDatatypesPackage(mPcmRepository)
+		reloadResourceAndReturnRoot(umlDatatypesPkg)
+		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg = getDatatypesPackage(pcmRepository)
 		
-		mPcmCompositeType = mPcmRepository.dataTypes__Repository.head as CompositeDataType
-		assertNotNull(mPcmCompositeType)
-		checkCompositeDataTypeConcept(mPcmCompositeType)
+		pcmCompositeType = pcmRepository.dataTypes__Repository.head as CompositeDataType
+		assertNotNull(pcmCompositeType)
+		checkCompositeDataTypeConcept(pcmCompositeType)
 	}
 	
 	@Test
 	def void testCreateCompositeDataType_withParent_UML() {
-		var mPcmRepository = createRepositoryConcept()
-		var mUmlDatatypesPkg = getDatatypesPackage(mPcmRepository)
-		startRecordingChanges(mUmlDatatypesPkg)
+		var pcmRepository = createRepositoryConcept()
+		var umlDatatypesPkg = getDatatypesPackage(pcmRepository)
+		startRecordingChanges(umlDatatypesPkg)
 		
-		var mUmlCompositeTypeClass = mUmlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
-		var mUmlCompositeTypeParentClass = mUmlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE_PARENT, false)
-		mUmlCompositeTypeClass.createGeneralization(mUmlCompositeTypeParentClass)
-		saveAndSynchronizeChanges(mUmlDatatypesPkg)
+		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
+		var umlCompositeTypeParentClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE_PARENT, false)
+		umlCompositeTypeClass.createGeneralization(umlCompositeTypeParentClass)
+		saveAndSynchronizeChanges(umlDatatypesPkg)
 		
-		reloadResourceAndReturnRoot(mUmlDatatypesPkg)
-		mPcmRepository = reloadResourceAndReturnRoot(mPcmRepository) as Repository
-		mUmlDatatypesPkg = getDatatypesPackage(mPcmRepository)
+		reloadResourceAndReturnRoot(umlDatatypesPkg)
+		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg = getDatatypesPackage(pcmRepository)
 		
-		mUmlCompositeTypeClass = mUmlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class	
-		assertNotNull(mUmlCompositeTypeClass)
-		checkCompositeDataTypeConcept(mUmlCompositeTypeClass)
-		mUmlCompositeTypeParentClass = mUmlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE_PARENT] as Class
-		assertNotNull(mUmlCompositeTypeParentClass)
-		checkCompositeDataTypeConcept(mUmlCompositeTypeParentClass)
+		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class	
+		assertNotNull(umlCompositeTypeClass)
+		checkCompositeDataTypeConcept(umlCompositeTypeClass)
+		umlCompositeTypeParentClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE_PARENT] as Class
+		assertNotNull(umlCompositeTypeParentClass)
+		checkCompositeDataTypeConcept(umlCompositeTypeParentClass)
 	}
 	
 	@Test
 	def void testCreateCompositeDataType_withParent_PCM() {
-		var mPcmRepository = createRepositoryConcept()
+		var pcmRepository = createRepositoryConcept()
 
-		var mPcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
-		mPcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
-		mPcmRepository.dataTypes__Repository += mPcmCompositeType
+		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
+		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
+		pcmRepository.dataTypes__Repository += pcmCompositeType
 		var mPcmCompositeTypeParent = RepositoryFactory.eINSTANCE.createCompositeDataType
 		mPcmCompositeTypeParent.entityName = TEST_COMPOSITE_DATATYPE_PARENT
-		mPcmRepository.dataTypes__Repository += mPcmCompositeTypeParent
-		mPcmCompositeType.parentType_CompositeDataType += mPcmCompositeTypeParent
-		saveAndSynchronizeChanges(mPcmCompositeType)
+		pcmRepository.dataTypes__Repository += mPcmCompositeTypeParent
+		pcmCompositeType.parentType_CompositeDataType += mPcmCompositeTypeParent
+		saveAndSynchronizeChanges(pcmCompositeType)
 		
-		mPcmRepository = reloadResourceAndReturnRoot(mPcmRepository) as Repository
+		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
-		mPcmCompositeType = mPcmRepository.dataTypes__Repository.filter(CompositeDataType)
+		pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType)
 			.findFirst[it.entityName == TEST_COMPOSITE_DATATYPE] as CompositeDataType
-		assertNotNull(mPcmCompositeType)
-		checkCompositeDataTypeConcept(mPcmCompositeType)
+		assertNotNull(pcmCompositeType)
+		checkCompositeDataTypeConcept(pcmCompositeType)
 	}
 	
 	

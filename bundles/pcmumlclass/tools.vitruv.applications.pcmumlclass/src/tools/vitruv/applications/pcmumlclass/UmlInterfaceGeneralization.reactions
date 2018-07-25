@@ -4,7 +4,16 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
-reactions: umlArchitecturalInterfaceGeneralizationReactions
+//	The following reactions and routines synchronize the parent interface reference of pcm::OperationInterface
+//	with the generalizations of its corresponding uml::Interface (in the contracts uml::Package corresponding to a pcm::Repository).
+//
+//	Related files: 
+//		PcmInterface.reactions
+//		UmlInterface.reactions
+//		UmlInterfaceGeneralization.reactions
+//		InterfaceConceptTest
+
+reactions: umlInterfaceGeneralizationReactions
 in reaction to changes in UML
 execute actions in PCM
 

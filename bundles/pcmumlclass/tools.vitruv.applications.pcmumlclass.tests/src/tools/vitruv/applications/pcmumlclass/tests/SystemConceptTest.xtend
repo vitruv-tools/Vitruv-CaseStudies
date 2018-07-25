@@ -2,8 +2,10 @@ package tools.vitruv.applications.pcmumlclass.tests
 
 import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Test
 import org.palladiosimulator.pcm.system.System
@@ -13,15 +15,17 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import org.eclipse.uml2.uml.UMLFactory
-import org.eclipse.uml2.uml.Model
-import org.junit.Ignore
 
-// A small 'm' prefix will signal that the eObject is loaded from the resourceSet an therefore modifiable.
-// Working only on modifiable instances would theoretically allow for the comparison via identity.
-// This would be cleaner for checking composition constraints, as equality [equals(target.container, source)] does not ensure the correct containment relation.
-// For now stick with equality.
-
+/**
+ * This test class tests the reactions and routines that are supposed to synchronize a pcm::System
+ * with its corresponding uml::Package and uml::Class (implementation).
+ * <br><br>
+ * Related files: 
+ * 		PcmSystem.reactions, 
+ * 		UmlRepositoryAndSystemPackage.reactions,
+ * 		UmlIPREClass.reactions,
+ * 		UmlIPREConstructorOperation.reactions
+ */
 class SystemConceptTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(SystemConceptTest).simpleName);
@@ -29,8 +33,7 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 	private static val PCM_MODEL_FILE = "model/System.system"
 	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
 			DefaultLiterals.UML_EXTENSION
-	private static val PKG_INSERT_CORR_TO_REPOSITORY = 0 // TODO better solution?
-	
+			
 	private val MODEL_NAME = "testRootModel"
 	private val SYSTEM_NAME = "TestSystem"
 	
@@ -73,7 +76,6 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 	}
 
 	@Test
-//	@Ignore
 	def void testCreateSystemConcept_PCM() {
 		userInteractor.addNextSelections(UML_MODEL_FILE)
 		

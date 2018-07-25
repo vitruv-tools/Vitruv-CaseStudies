@@ -4,9 +4,22 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
+//	The following reactions and routines synchronize a pcm::AssemblyContext in a pcm::ComposedProvidingRequiringEntity (CPRE)
+//	with a uml::Property in an uml::Class (the implementation class to the CPRE).
+//
+// 	The correspondence is instantiated from this side, when the uml::Property[type] is set to a uml::Class
+//	that corresponds to a pcm::InterfaceProvidingRequiringEntity (IPRE). 
+//	The correspondence is deleted when the uml::Property[type] is set to any type that does not correspond 
+//	to an IPRE, or when the property is moved to an uml::Class that does not correspond to CPRE.
+//
+//	Related files: 
+//		PcmAssemblyContext.reactions
+//		AssemblyContextConceptTest
+
 reactions: umlAssemblyContextPropertyReactions
 in reaction to changes in UML
 execute actions in PCM
+
 
 reaction AssemblyContextPropertyInserted{
 	after element uml::Property inserted in uml::Class[ownedAttribute]
@@ -18,12 +31,11 @@ routine insertCorrespondingAssemblyContext(uml::Property umlProperty, uml::Class
 	match {
 		val pcmCompositeComponent = retrieve optional pcm::ComposedProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val pcmInnerComponent = retrieve optional pcm::RepositoryComponent corresponding to umlProperty.type tagged with TagLiterals.IPRE__IMPLEMENTATION 
-//		val pcmAssemblyContext = retrieve optional pcm::AssemblyContext corresponding to umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 	}
 	action {
 		call {
 			if (pcmCompositeComponent.isPresent 
-				&& (pcmInnerComponent.isPresent || umlProperty.type === null) // allow 'null' for uninitialized Generalizations
+				&& (pcmInnerComponent.isPresent || umlProperty.type === null) // allow 'null' for uninitialized references
 			){
 				detectOrCreateCorrespondingAssemblyContext(umlProperty, umlComponent)
 				moveCorrespondingAssemblyContext(umlProperty, umlComponent)
