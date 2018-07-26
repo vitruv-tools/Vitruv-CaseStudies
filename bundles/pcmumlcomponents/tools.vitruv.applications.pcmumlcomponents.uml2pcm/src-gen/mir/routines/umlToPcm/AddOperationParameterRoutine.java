@@ -15,7 +15,7 @@ import org.palladiosimulator.pcm.repository.Signature;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.WindowModality;
+import tools.vitruv.framework.userinteraction.UserInteractionOptions;
 
 @SuppressWarnings("all")
 public class AddOperationParameterRoutine extends AbstractRepairRoutineRealization {
@@ -42,7 +42,7 @@ public class AddOperationParameterRoutine extends AbstractRepairRoutineRealizati
         int _length = ((Object[])Conversions.unwrapArray(returnParameters, Object.class)).length;
         boolean _greaterThan = (_length > 0);
         if (_greaterThan) {
-          this.userInteractor.getNotificationDialogBuilder().message("A second return type cannot be applied in the PCM model.").windowModality(WindowModality.MODAL).startInteraction();
+          this.userInteractor.getNotificationDialogBuilder().message("A second return type cannot be applied in the PCM model.").windowModality(UserInteractionOptions.WindowModality.MODAL).startInteraction();
         } else {
           _routinesFacade.changeInterfaceOperationType(umlOperation, umlParameter);
         }

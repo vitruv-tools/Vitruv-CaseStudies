@@ -1,6 +1,6 @@
 package tools.vitruv.applications.umlclassumlcomponents.sharedutil
 
-import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 class SharedUtil {

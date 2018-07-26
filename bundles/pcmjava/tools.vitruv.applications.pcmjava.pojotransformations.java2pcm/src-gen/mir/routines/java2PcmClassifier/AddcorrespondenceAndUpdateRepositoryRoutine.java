@@ -13,7 +13,8 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 /**
- * *nAdds correspondence between component and package and add component into repository.
+ * *
+ * nAdds correspondence between component and package and add component into repository.
  *  
  */
 @SuppressWarnings("all")

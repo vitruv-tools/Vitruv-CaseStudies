@@ -50,7 +50,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
-import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 /**

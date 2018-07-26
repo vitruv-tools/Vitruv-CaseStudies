@@ -1,4 +1,4 @@
-package mir.reactions.pcm2EjbJava;
+package mir.reactions.pcm2EjbJava.pcm2javaCommon;
 
 import mir.routines.pcm2EjbJava.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
@@ -36,7 +36,7 @@ public class AddedAssemblyContextToComposedStructureReaction extends AbstractRea
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.reactions.pcm2EjbJava.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution userExecution = new mir.reactions.pcm2EjbJava.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.pcm2EjbJava.pcm2javaCommon.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution userExecution = new mir.reactions.pcm2EjbJava.pcm2javaCommon.AddedAssemblyContextToComposedStructureReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(insertChange, affectedEObject, affectedFeature, newValue, index, this.getRoutinesFacade());
     
     resetChanges();

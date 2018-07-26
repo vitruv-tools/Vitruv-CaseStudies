@@ -9,7 +9,7 @@ import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.Parameter
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil
 import org.eclipse.uml2.uml.DataType
-import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm

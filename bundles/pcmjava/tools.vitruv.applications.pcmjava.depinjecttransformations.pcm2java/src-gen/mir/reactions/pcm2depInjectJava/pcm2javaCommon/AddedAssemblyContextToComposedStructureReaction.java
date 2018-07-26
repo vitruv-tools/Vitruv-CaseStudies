@@ -15,7 +15,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHavi
 import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.eobject.CreateEObject;
 import tools.vitruv.framework.change.echange.feature.reference.InsertEReference;
-import tools.vitruv.framework.userinteraction.WindowModality;
+import tools.vitruv.framework.userinteraction.UserInteractionOptions;
 
 @SuppressWarnings("all")
 public class AddedAssemblyContextToComposedStructureReaction extends AbstractReactionRealization {
@@ -121,7 +121,7 @@ public class AddedAssemblyContextToComposedStructureReaction extends AbstractRea
         String _plus = ("Assembly context for " + _entityName);
         final String msg = (_plus + 
           "already exists. Only one assembly context per basic component is allowed.");
-        this.userInteractor.getNotificationDialogBuilder().message(msg).windowModality(WindowModality.MODAL).startInteraction();
+        this.userInteractor.getNotificationDialogBuilder().message(msg).windowModality(UserInteractionOptions.WindowModality.MODAL).startInteraction();
         return false;
       }
     }

@@ -14,7 +14,7 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*

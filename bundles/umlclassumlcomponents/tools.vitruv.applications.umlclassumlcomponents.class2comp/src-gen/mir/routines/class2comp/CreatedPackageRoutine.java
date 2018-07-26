@@ -16,7 +16,7 @@ import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.WindowModality;
+import tools.vitruv.framework.userinteraction.UserInteractionOptions;
 
 @SuppressWarnings("all")
 public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
@@ -55,7 +55,7 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
         final Component umlComp = componentsList.get(selection);
         _routinesFacade.assignNewPackage(classPackage, umlComp);
       } else {
-        this.userInteractor.getNotificationDialogBuilder().message("No available Component found").windowModality(WindowModality.MODELESS).startInteraction();
+        this.userInteractor.getNotificationDialogBuilder().message("No available Component found").windowModality(UserInteractionOptions.WindowModality.MODELESS).startInteraction();
       }
     }
   }

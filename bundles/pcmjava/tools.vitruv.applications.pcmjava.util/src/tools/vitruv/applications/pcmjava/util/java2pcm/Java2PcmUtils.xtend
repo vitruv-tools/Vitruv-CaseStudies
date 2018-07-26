@@ -38,7 +38,7 @@ import tools.vitruv.framework.util.command.ResourceAccess
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.domains.java.JavaNamespace
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
-import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 abstract class Java2PcmUtils extends PcmJavaUtils {

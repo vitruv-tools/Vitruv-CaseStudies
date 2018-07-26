@@ -1,4 +1,4 @@
-import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*

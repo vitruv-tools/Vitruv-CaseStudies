@@ -3,8 +3,8 @@ import static extension tools.vitruv.applications.umljava.util.java.JavaModifier
 import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import tools.vitruv.framework.userinteraction.WindowModality
-import tools.vitruv.framework.userinteraction.NotificationType
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java

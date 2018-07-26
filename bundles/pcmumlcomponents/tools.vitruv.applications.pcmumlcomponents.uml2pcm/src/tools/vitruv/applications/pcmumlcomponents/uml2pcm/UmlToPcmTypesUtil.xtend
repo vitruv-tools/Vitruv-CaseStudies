@@ -14,7 +14,7 @@ import tools.vitruv.domains.pcm.util.RepositoryModelLoader
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsFactory
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.userinteraction.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 class UmlToPcmTypesUtil {

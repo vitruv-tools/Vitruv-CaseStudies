@@ -2,6 +2,7 @@ package mir.routines.java2PcmClassifier;
 
 import java.io.IOException;
 import mir.routines.java2PcmClassifier.RoutinesFacade;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
@@ -10,10 +11,11 @@ import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUs
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.WindowModality;
+import tools.vitruv.framework.userinteraction.UserInteractionOptions;
 
 /**
- * *nUser selects if interface should be created if interface was not created into contract package.
+ * *
+ * nUser selects if interface should be created if interface was not created into contract package.
  *  
  */
 @SuppressWarnings("all")
@@ -32,7 +34,7 @@ public class CreatedInterfaceNotInContractsRoutine extends AbstractRepairRoutine
       String _message = Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getMessage();
       String _message_1 = Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getMessage();
       final String[] selections = new String[] { _message, _message_1 };
-      final Integer selected = this.userInteractor.getSingleSelectionDialogBuilder().message(userMsg).choices(selections).windowModality(WindowModality.MODAL).startInteraction();
+      final Integer selected = this.userInteractor.getSingleSelectionDialogBuilder().message(userMsg).choices(((Iterable<String>)Conversions.doWrapArray(selections))).windowModality(UserInteractionOptions.WindowModality.MODAL).startInteraction();
       int _selection = Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection();
       boolean _equals = ((selected).intValue() == _selection);
       if (_equals) {
