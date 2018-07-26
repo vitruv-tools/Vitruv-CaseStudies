@@ -18,7 +18,6 @@ execute actions in UML
 reaction JavaClassCreated {
     after element java::Class created and inserted in java::CompilationUnit[classifiers]
     call createUmlClass(newValue, affectedEObject)
-
 }
 
 routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
