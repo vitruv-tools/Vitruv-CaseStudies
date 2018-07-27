@@ -25,7 +25,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     }
     
     public EObject getElement1(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final OrdinaryParameter javaParam) {
-      return javaMethod;
+      return javaParam;
     }
     
     public void update0Element(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final OrdinaryParameter javaParam) {
@@ -39,11 +39,11 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     }
     
     public EObject getElement2(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final OrdinaryParameter javaParam) {
-      return javaParam;
+      return umlParam;
     }
     
     public EObject getElement3(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final OrdinaryParameter javaParam) {
-      return umlParam;
+      return javaMethod;
     }
     
     public EObject getCorrepondenceSourceJavaMethod(final Operation uMeth, final Parameter umlParam) {
@@ -52,7 +52,7 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     
     public void updateJavaParamElement(final Operation uMeth, final Parameter umlParam, final Parametrizable javaMethod, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final OrdinaryParameter javaParam) {
       javaParam.setName(umlParam.getName());
-      javaParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(umlParam.getType(), customTypeClass, javaMethod.getContainingCompilationUnit(), this.userInteracting));
+      javaParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(umlParam.getType(), customTypeClass, javaMethod.getContainingCompilationUnit(), this.userInteractor));
     }
   }
   
@@ -95,9 +95,10 @@ public class CreateJavaParameterRoutine extends AbstractRepairRoutineRealization
     notifyObjectCreated(javaParam);
     userExecution.updateJavaParamElement(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     
-    // val updatedElement userExecution.getElement1(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
+    addCorrespondenceBetween(userExecution.getElement1(uMeth, umlParam, javaMethod, customTypeClass, javaParam), userExecution.getElement2(uMeth, umlParam, javaMethod, customTypeClass, javaParam), "");
+    
+    // val updatedElement userExecution.getElement3(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
     userExecution.update0Element(uMeth, umlParam, javaMethod, customTypeClass, javaParam);
-    addCorrespondenceBetween(userExecution.getElement2(uMeth, umlParam, javaMethod, customTypeClass, javaParam), userExecution.getElement3(uMeth, umlParam, javaMethod, customTypeClass, javaParam), "");
     
     postprocessElements();
     

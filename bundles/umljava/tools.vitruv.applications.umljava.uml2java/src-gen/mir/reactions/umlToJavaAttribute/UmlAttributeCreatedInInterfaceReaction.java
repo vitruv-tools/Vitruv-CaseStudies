@@ -110,7 +110,7 @@ public class UmlAttributeCreatedInInterfaceReaction extends AbstractReactionReal
     }
     
     public void callRoutine1(final InsertEReference insertChange, final Interface affectedEObject, final EReference affectedFeature, final Property newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      UmlToJavaHelper.showMessage(this.userInteracting, ((("We do not support adding attributes to interfaces. Please delete " + newValue) + " from ") + affectedEObject));
+      UmlToJavaHelper.showMessage(this.userInteractor, ((("We do not support adding attributes to interfaces. Please delete " + newValue) + " from ") + affectedEObject));
     }
   }
 }

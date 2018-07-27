@@ -111,7 +111,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 		
     private def DataType createDataType(String name, int createClass) {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
-		this.userInteractor.addNextSelections(createClass) //Decide to create corresponding Class
+		this.userInteractor.addNextSingleSelection(createClass) //Decide to create corresponding Class
 		dataType.name = name
 		rootElement.packagedElements += dataType
 		return dataType

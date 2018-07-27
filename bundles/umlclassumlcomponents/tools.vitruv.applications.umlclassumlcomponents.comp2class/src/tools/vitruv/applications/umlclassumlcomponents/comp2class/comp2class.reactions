@@ -196,7 +196,7 @@ routine deleteClass(umlcomp::Component umlComp) {
 			} else {
 				//Ask if Package and all contents should be deleted 
 				val question = "Delete the corresponding Package '" + classPackage.name + "' and all its contained elements?"
-				if (userInteracting.modalTextYesNoUserInteracting(question)) {
+				if (userInteractor.modalTextYesNoUserInteractor(question)) {
 					for (val Iterator<PackageableElement> iter = classPackage.packagedElements.iterator; iter.hasNext; ) {						
 						val classElement = iter.next
 						iter.remove
@@ -218,7 +218,7 @@ reaction CreatedDatatype {
 	after element umlcomp::DataType created and inserted in umlcomp::Model[packagedElement]
 	call {
 		val question = "Is '" + newValue.name + "' a generic/library DataType? If not a class representation will be created."
-		if ((newValue instanceof PrimitiveType) || userInteracting.modalTextYesNoUserInteracting(question))
+		if ((newValue instanceof PrimitiveType) || userInteractor.modalTextYesNoUserInteractor(question))
 			//createDataTypeForDataType(newValue) //TODO This is currently not needed, as we are using one singular meta model
 			createDataTypeSelfCorrespondence(newValue) 
 		else 

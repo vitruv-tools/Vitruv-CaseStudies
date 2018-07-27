@@ -110,7 +110,7 @@ public class JavaEnumerationImplementAddedReaction extends AbstractReactionReali
     }
     
     public void callRoutine1(final InsertEReference insertChange, final Enumeration affectedEObject, final EReference affectedFeature, final TypeReference newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      JavaToUmlHelper.showMessage(this.userInteracting, ("Implement relations from enums are not supported. Please remove it from " + affectedEObject));
+      JavaToUmlHelper.showMessage(this.userInteractor, ("Implement relations from enums are not supported. Please remove it from " + affectedEObject));
     }
   }
 }

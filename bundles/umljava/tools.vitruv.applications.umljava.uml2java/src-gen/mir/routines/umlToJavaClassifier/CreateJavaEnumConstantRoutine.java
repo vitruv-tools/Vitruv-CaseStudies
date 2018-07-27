@@ -21,7 +21,7 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     }
     
     public EObject getElement1(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
-      return jEnum;
+      return jConstant;
     }
     
     public void update0Element(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
@@ -30,11 +30,11 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     }
     
     public EObject getElement2(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
-      return jConstant;
+      return uLiteral;
     }
     
     public EObject getElement3(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
-      return uLiteral;
+      return jEnum;
     }
     
     public void updateJConstantElement(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
@@ -76,10 +76,10 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     notifyObjectCreated(jConstant);
     userExecution.updateJConstantElement(uLiteral, uEnum, jEnum, jConstant);
     
-    // val updatedElement userExecution.getElement1(uLiteral, uEnum, jEnum, jConstant);
-    userExecution.update0Element(uLiteral, uEnum, jEnum, jConstant);
+    addCorrespondenceBetween(userExecution.getElement1(uLiteral, uEnum, jEnum, jConstant), userExecution.getElement2(uLiteral, uEnum, jEnum, jConstant), "");
     
-    addCorrespondenceBetween(userExecution.getElement2(uLiteral, uEnum, jEnum, jConstant), userExecution.getElement3(uLiteral, uEnum, jEnum, jConstant), "");
+    // val updatedElement userExecution.getElement3(uLiteral, uEnum, jEnum, jConstant);
+    userExecution.update0Element(uLiteral, uEnum, jEnum, jConstant);
     
     postprocessElements();
     

@@ -11,7 +11,7 @@ import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
+import tools.vitruv.framework.userinteraction.UserInteractionOptions;
 
 @SuppressWarnings("all")
 public class ChangeRequiredInterfaceRoutine extends AbstractRepairRoutineRealization {
@@ -37,7 +37,7 @@ public class ChangeRequiredInterfaceRoutine extends AbstractRepairRoutineRealiza
         if (_equals_1) {
           pcmRole.setRequiredInterface__OperationRequiredRole(pcmInterface);
         } else {
-          this.userInteracting.showMessage(UserInteractionType.MODAL, "Further interfaces will not be required in the PCM");
+          this.userInteractor.getNotificationDialogBuilder().message("Further interfaces will not be required in the PCM").windowModality(UserInteractionOptions.WindowModality.MODAL).startInteraction();
         }
       }
     }

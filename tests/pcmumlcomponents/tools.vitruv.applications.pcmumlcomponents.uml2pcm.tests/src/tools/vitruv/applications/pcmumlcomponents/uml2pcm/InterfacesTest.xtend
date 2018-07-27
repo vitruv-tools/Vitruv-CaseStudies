@@ -39,12 +39,12 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	@Test
 	public def void createIntefaceOperationTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		userInteractor.addNextSelections(10)
+		userInteractor.addNextSingleSelection(10)
 		val p1Type = UMLFactory.eINSTANCE.createPrimitiveType()
 		p1Type.name = "dataType1";
 		rootElement.packagedElements += p1Type
 		
-		userInteractor.addNextSelections(2)
+		userInteractor.addNextSingleSelection(2)
 		val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
 		returnType.name = UML_TYPE_BOOL
 		rootElement.packagedElements += returnType
@@ -69,7 +69,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	protected def Operation createInterfaceOperation(Interface umlInterface, String operationName, String operationType) {
-		userInteractor.addNextSelections(getDataTypeUserSelection(operationType))
+		userInteractor.addNextSingleSelection(getDataTypeUserSelection(operationType))
 		val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
 		returnType.name = operationType
 		rootElement.packagedElements += returnType

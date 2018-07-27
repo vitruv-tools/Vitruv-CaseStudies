@@ -27,7 +27,7 @@ public class CreatePrimitiveDataTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final PrimitiveType umlType, final Repository pcmRepository, @Extension final RoutinesFacade _routinesFacade) {
-      UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, Boolean.valueOf(false), this.userInteracting, this.correspondenceModel);
+      UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, Boolean.valueOf(false), this.userInteractor, this.correspondenceModel);
     }
   }
   

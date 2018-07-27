@@ -29,7 +29,7 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
     public void updateJavaMethodElement(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       javaMethod.setName(uOperation.getName());
       JavaModifierUtil.setJavaVisibility(javaMethod, uOperation.getVisibility());
-      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jClassifier.getContainingCompilationUnit(), this.userInteracting));
+      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jClassifier.getContainingCompilationUnit(), this.userInteractor));
     }
     
     public EObject getElement1(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {

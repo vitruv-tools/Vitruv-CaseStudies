@@ -18,7 +18,7 @@ public class Java2PcmPackageMappingTransformationTest extends Java2PcmTransforma
 	}
 
 	protected CompositeDataType addClassThatCorrespondsToCompositeDatatype() throws Throwable {
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.getSelection());
 		final CompositeDataType cdt = this.addClassInPackage(this.getDatatypesPackage(), CompositeDataType.class);
 		return cdt;
 	}

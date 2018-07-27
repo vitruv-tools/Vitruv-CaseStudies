@@ -52,8 +52,8 @@ public class RoutineCreatedUmlClassRoutine extends AbstractRepairRoutineRealizat
             String _name_1 = umlClass.getName();
             String _plus = ("Should \'" + _name_1);
             final String question = (_plus + "\' be represented by a Component?");
-            boolean _modalTextYesNoUserInteracting = SharedUtil.modalTextYesNoUserInteracting(this.userInteracting, question);
-            if (_modalTextYesNoUserInteracting) {
+            boolean _modalTextYesNoUserInteractor = SharedUtil.modalTextYesNoUserInteractor(this.userInteractor, question);
+            if (_modalTextYesNoUserInteractor) {
               _routinesFacade.createUmlComponentForClass(umlClass);
             }
           }

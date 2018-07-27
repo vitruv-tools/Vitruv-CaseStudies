@@ -28,7 +28,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		val umlType = umlTypes.getOwnedMember(UMLTYPE_BOOL) as DataType
 		val pcmRepository = rootElement.correspondingElements.head as Repository
 		saveAndSynchronizeChanges(rootElement)
-		val pcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, userInteractor, correspondenceModel)
+		val pcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, null, correspondenceModel)
 		assertNotNull(pcmType)
 		assertTrue(pcmType instanceof PrimitiveDataType)
 		assertEquals(PrimitiveTypeEnum.BOOL, (pcmType as PrimitiveDataType).type)
@@ -40,11 +40,11 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		val umlTypeName = "MyPrimitive"
 		val umlType = UMLFactory.eINSTANCE.createPrimitiveType()
 		umlType.name = umlTypeName
-		userInteractor.addNextSelections(PrimitiveTypeEnum.BYTE_VALUE)
+		userInteractor.addNextSingleSelection(PrimitiveTypeEnum.BYTE_VALUE)
 		rootElement.packagedElements += umlType
 		saveAndSynchronizeChanges(rootElement)
 		val pcmRepository = rootElement.correspondingElements.head as Repository
-		val pcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, userInteractor, correspondenceModel) as PrimitiveDataType
+		val pcmType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, false, null, correspondenceModel) as PrimitiveDataType
 		assertEquals(PrimitiveTypeEnum.BYTE, pcmType.type)
 	}
 	
@@ -54,7 +54,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 		val umlTypeName = "MyPrimitive"
 		val umlType = UMLFactory.eINSTANCE.createPrimitiveType()
 		umlType.name = umlTypeName
-		userInteractor.addNextSelections(PrimitiveTypeEnum.values.length)
+		userInteractor.addNextSingleSelection(PrimitiveTypeEnum.values.length)
 		rootElement.packagedElements += umlType
 		saveAndSynchronizeChanges(rootElement)
 		val pcmType = umlType.correspondingElements.head

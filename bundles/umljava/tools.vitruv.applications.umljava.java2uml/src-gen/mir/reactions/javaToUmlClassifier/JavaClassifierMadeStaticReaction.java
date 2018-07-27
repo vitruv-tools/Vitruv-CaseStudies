@@ -110,7 +110,7 @@ public class JavaClassifierMadeStaticReaction extends AbstractReactionRealizatio
     }
     
     public void callRoutine1(final InsertEReference insertChange, final ConcreteClassifier affectedEObject, final EReference affectedFeature, final Static newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      JavaToUmlHelper.showMessage(this.userInteracting, ("Static classifiers are not supported. Please undo the change at " + affectedEObject));
+      JavaToUmlHelper.showMessage(this.userInteractor, ("Static classifiers are not supported. Please undo the change at " + affectedEObject));
     }
   }
 }

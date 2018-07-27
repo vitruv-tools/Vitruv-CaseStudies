@@ -97,7 +97,7 @@ public class UmlInterfaceMethodVisibilityChangedReaction extends AbstractReactio
     }
     
     public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Operation affectedEObject, final EAttribute affectedFeature, final VisibilityKind oldValue, final VisibilityKind newValue, @Extension final RoutinesFacade _routinesFacade) {
-      UmlToJavaHelper.showMessage(this.userInteracting, (("Non-public operations in interface are not valid. Please set " + affectedEObject) + " to public"));
+      UmlToJavaHelper.showMessage(this.userInteractor, (("Non-public operations in interface are not valid. Please set " + affectedEObject) + " to public"));
     }
   }
 }

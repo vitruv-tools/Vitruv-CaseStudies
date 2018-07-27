@@ -32,7 +32,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final Property uAttr, final Type uType, final Field jAttr, final Optional<org.emftext.language.java.classifiers.Class> customType, @Extension final RoutinesFacade _routinesFacade) {
-      jAttr.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit(), this.userInteracting));
+      jAttr.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit(), this.userInteractor));
       JavaMemberAndParameterUtil.updateAttributeTypeInSetters(jAttr);
       JavaMemberAndParameterUtil.updateAttributeTypeInGetters(jAttr);
     }

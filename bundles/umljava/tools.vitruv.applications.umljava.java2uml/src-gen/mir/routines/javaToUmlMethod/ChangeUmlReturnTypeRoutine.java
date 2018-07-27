@@ -25,7 +25,7 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final Method jMeth, final TypeReference jType, final Operation uOperation) {
-      uOperation.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel));
+      uOperation.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel));
     }
     
     public EObject getCorrepondenceSourceUOperation(final Method jMeth, final TypeReference jType) {

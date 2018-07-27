@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.PrimitiveType
-import tools.vitruv.framework.userinteraction.UserInteractionType
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static extension tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
 import org.eclipse.uml2.uml.Usage
@@ -105,7 +105,8 @@ routine routineCreatedUmlClass(umlclass::Class umlClass, umlclass::Package class
 		val compModel = retrieve umlcomp::Model corresponding to umlClass.model	
 	}
 	action{
-		call {	
+		call {
+		    
 			//Component and DataType creation for Class in Model forbidden:
     		if (!(classPackage instanceof Model)) {
 	    		//If the class is created in the DataType Package, consider it as a DataType
@@ -118,7 +119,7 @@ routine routineCreatedUmlClass(umlclass::Class umlClass, umlclass::Package class
 					var Component matchedPackageComponent = if(!comps.isEmpty) comps.get(0) else null				        		
 		    		if (matchedPackageComponent === null) {    
 		    			val question = "Should '" + umlClass.name + "' be represented by a Component?"
-						if (userInteracting.modalTextYesNoUserInteracting(question))
+						if (userInteractor.modalTextYesNoUserInteractor(question))
 		    				createUmlComponentForClass(umlClass)
 		        	} 
 	        	}
@@ -398,7 +399,7 @@ routine createdPackage(umlclass::Package classPackage) {
 		val compModel = retrieve umlcomp::Model corresponding to classPackage.model
 		check {
 			val question = "Do you want to link this Package '" + classPackage.name + "' to an existing Component?"
-			return userInteracting.modalTextYesNoUserInteracting(question)
+			return userInteractor.modalTextYesNoUserInteractor(question)
 		}
 	}
 	action {
@@ -408,12 +409,13 @@ routine createdPackage(umlclass::Package classPackage) {
 			val componentsList = compModel.packagedElements.filter(Component).toList
 			if (!componentsList.isEmpty) { 
 				val options = componentsList.map[e | e.name] 			
-				val selection = userInteracting.modalTextUserinteracting(question, options)		
+				val selection = userInteractor.modalTextUserinteracting(question, options)		
 				//Use selection to assign new package
 				val umlComp = componentsList.get(selection)
 				assignNewPackage(classPackage, umlComp)
 			} else {
-				userInteracting.showMessage(UserInteractionType.MODELESS, "No available Component found")
+				userInteractor.notificationDialogBuilder.message("No available Component found")
+				    .windowModality(WindowModality.MODELESS).startInteraction()
 			}
 		}
 					
@@ -430,7 +432,8 @@ routine assignNewPackage(umlclass::Package newPackage, umlclass::Component umlCo
 				correspondenceModel.createAndAddCorrespondence(#[umlComponent], #[newPackage])
 			} else {
 				val String errorMsg = "Chosen Component is already linked to existing Package '" + oldPackage.name + "'."
-				userInteracting.showMessage(UserInteractionType.MODELESS, errorMsg)
+				userInteractor.notificationDialogBuilder.message(errorMsg).windowModality(WindowModality.MODELESS)
+				    .startInteraction()
 			}
 		}
 	} 

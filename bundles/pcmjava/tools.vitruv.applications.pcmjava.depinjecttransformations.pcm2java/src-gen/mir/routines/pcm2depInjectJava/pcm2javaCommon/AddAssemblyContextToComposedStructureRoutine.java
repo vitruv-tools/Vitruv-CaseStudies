@@ -51,8 +51,8 @@ public class AddAssemblyContextToComposedStructureRoutine extends AbstractRepair
     
     public void callRoutine1(final ComposedStructure composedStructure, final AssemblyContext assemblyContext, final org.emftext.language.java.classifiers.Class compositeComponentJavaClass, final org.emftext.language.java.classifiers.Class encapsulatedComponentJavaClass, final Field assemblyContextField, final NewConstructorCall newConstructorCall, @Extension final RoutinesFacade _routinesFacade) {
       final RepositoryComponent component = assemblyContext.getEncapsulatedComponent__AssemblyContext();
-      final ClassMethod configureMethod = PcmJamoppUtilsGuice.createConfigureMethodForAssemblyContext(assemblyContext, component, this.correspondenceModel, this.userInteracting);
-      PcmJamoppUtilsGuice.createBindCall(assemblyContext, component, configureMethod, this.correspondenceModel, this.userInteracting);
+      final ClassMethod configureMethod = PcmJamoppUtilsGuice.createConfigureMethodForAssemblyContext(assemblyContext, component, this.correspondenceModel, this.userInteractor);
+      PcmJamoppUtilsGuice.createBindCall(assemblyContext, component, configureMethod, this.correspondenceModel, this.userInteractor);
     }
   }
   

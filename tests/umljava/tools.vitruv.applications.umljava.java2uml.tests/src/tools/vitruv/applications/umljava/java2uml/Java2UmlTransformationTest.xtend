@@ -30,7 +30,8 @@ abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     }
     
     override protected setup() {
-        userInteractor.addNextSelections(UMLMODELNAME, UMLMODELPATH)
+        userInteractor.addNextTextInput(UMLMODELNAME)
+        userInteractor.addNextTextInput(UMLMODELPATH)
     }
 	
 	override protected createChangePropagationSpecifications() {

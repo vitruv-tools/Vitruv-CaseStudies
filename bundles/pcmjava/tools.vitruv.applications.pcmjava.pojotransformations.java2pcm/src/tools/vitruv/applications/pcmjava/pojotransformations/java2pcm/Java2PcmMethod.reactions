@@ -47,7 +47,7 @@ routine createParameter(java::OrdinaryParameter javaParameter, java::Parametriza
 			pcmParameter.operationSignature__Parameter = operationSignature
 			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.
 				getDataTypeFromTypeReference(javaParameter.typeReference, correspondenceModel,
-				userInteracting, null)
+				userInteractor, null)
 			pcmParameter.dataType__Parameter.repository__DataType = operationSignature.interface__OperationSignature.repository__Interface
 			pcmParameter.name = javaParameter.name
 		}
@@ -122,7 +122,7 @@ routine createInnerDeclaration(java::ConcreteClassifier classifier, java::Field 
 			innerDeclaration.entityName = javaField.name
 			innerDeclaration.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
 				getDataTypeFromTypeReference(javaField.typeReference, correspondenceModel,
-					userInteracting, null)
+					userInteractor, null)
 			innerDeclaration.compositeDataType_InnerDeclaration = compositeDataType
 		}
 		add correspondence between innerDeclaration and javaField
@@ -198,7 +198,7 @@ routine changeInnerDeclarationType(java::TypeReference typeReference, java::Fiel
 		update innerDeclaration {
 			innerDeclaration.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
 						getDataTypeFromTypeReference(typeReference, correspondenceModel,
-							userInteracting, null)
+							userInteractor, null)
 		}
 	}
 }
@@ -287,7 +287,7 @@ routine changeReturnType(java::Method javaMethod, java::TypeReference typeRefere
      action {
          update operationSignature {
          	val repository = operationSignature.interface__OperationSignature.repository__Interface
-            operationSignature.returnType__OperationSignature = getPCMDataTypeForTypeReference(typeReference, correspondenceModel, userInteracting, repository, javaMethod)
+            operationSignature.returnType__OperationSignature = getPCMDataTypeForTypeReference(typeReference, correspondenceModel, userInteractor, repository, javaMethod)
          }
      }
 }

@@ -35,10 +35,10 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testAddArchitecturalInterfaceInNonRepositoryPackage() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
-        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
+        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
         final OperationInterface opInterface = super.addInterfaceInSecondPackageWithCorrespondence(bc.getEntityName());
 
         this.assertOperationInterface(repo, opInterface, Pcm2JavaTestUtils.INTERFACE_NAME);
@@ -52,10 +52,10 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testAddTechnicalInterfaceInNonRepositoryPackage() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
-        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
+        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
         final EObject eObject = super.addInterfaceInPackageWithoutCorrespondence(bc.getEntityName());
 
         assertTrue("Corresponding object for interface that is created in non main package is not null: " + eObject,
@@ -65,7 +65,7 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testRenameInterfaceWithCorrespondence() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         super.addSecondPackageCorrespondsToBasicComponent();
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
 

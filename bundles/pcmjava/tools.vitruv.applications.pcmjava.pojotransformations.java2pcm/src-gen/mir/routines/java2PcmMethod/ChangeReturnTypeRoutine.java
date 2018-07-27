@@ -27,7 +27,7 @@ public class ChangeReturnTypeRoutine extends AbstractRepairRoutineRealization {
     
     public void update0Element(final Method javaMethod, final TypeReference typeReference, final OperationSignature operationSignature) {
       final Repository repository = operationSignature.getInterface__OperationSignature().getRepository__Interface();
-      operationSignature.setReturnType__OperationSignature(Java2PcmHelper.getPCMDataTypeForTypeReference(typeReference, this.correspondenceModel, this.userInteracting, repository, javaMethod));
+      operationSignature.setReturnType__OperationSignature(Java2PcmHelper.getPCMDataTypeForTypeReference(typeReference, this.correspondenceModel, this.userInteractor, repository, javaMethod));
     }
     
     public EObject getCorrepondenceSourceOperationSignature(final Method javaMethod, final TypeReference typeReference) {

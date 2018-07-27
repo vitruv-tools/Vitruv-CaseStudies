@@ -110,7 +110,7 @@ public class JavaParameterMadeFinalReaction extends AbstractReactionRealization 
     }
     
     public void callRoutine1(final InsertEReference insertChange, final Parameter affectedEObject, final EReference affectedFeature, final Final newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      JavaToUmlHelper.showMessage(this.userInteracting, ("Final parameters are not supported. Please remove the modifier from " + affectedEObject));
+      JavaToUmlHelper.showMessage(this.userInteractor, ("Final parameters are not supported. Please remove the modifier from " + affectedEObject));
     }
   }
 }
