@@ -52,7 +52,6 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testAddTechnicalInterfaceInNonRepositoryPackage() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
         this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
@@ -65,7 +64,6 @@ public class InterfaceMappingTransformationTest extends Java2PcmPackageMappingTr
     @Test
     public void testRenameInterfaceWithCorrespondence() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         super.addSecondPackageCorrespondsToBasicComponent();
         final OperationInterface opInterface = super.addInterfaceInContractsPackage();
 
