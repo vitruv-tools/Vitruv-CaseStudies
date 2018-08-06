@@ -52,9 +52,9 @@ public class CreateJavaEnumRoutine extends AbstractRepairRoutineRealization {
     notifyObjectCreated(jEnum);
     userExecution.updateJEnumElement(uEnum, jEnum);
     
-    addCorrespondenceBetween(userExecution.getElement1(uEnum, jEnum), userExecution.getElement2(uEnum, jEnum), "");
-    
     userExecution.callRoutine1(uEnum, jEnum, this.getRoutinesFacade());
+    
+    addCorrespondenceBetween(userExecution.getElement1(uEnum, jEnum), userExecution.getElement2(uEnum, jEnum), "");
     
     postprocessElements();
     

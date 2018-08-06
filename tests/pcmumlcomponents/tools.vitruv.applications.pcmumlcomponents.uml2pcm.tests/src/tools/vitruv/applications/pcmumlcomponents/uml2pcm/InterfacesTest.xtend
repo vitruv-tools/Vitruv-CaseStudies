@@ -31,8 +31,8 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val umlInterface = createUmlInterface(interfaceName)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten;
 		assertEquals(1, correspondingElements.length);
+		assertTrue(correspondingElements.get(0) instanceof OperationInterface)
 		val pcmInterface = (correspondingElements.get(0) as OperationInterface)
-		assertTrue(pcmInterface instanceof OperationInterface)
 		assertEquals(interfaceName, pcmInterface.entityName)
 	}
 	
@@ -58,8 +58,8 @@ class InterfacesTest extends AbstractUmlPcmTest {
 
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten;
 		assertEquals(1, correspondingElements.length);
+		assertTrue(correspondingElements.get(0) instanceof OperationSignature)
 		val pcmOperation = (correspondingElements.get(0) as OperationSignature)
-		assertTrue(pcmOperation instanceof OperationSignature)
 		assertEquals(umlOperation.name, pcmOperation.entityName)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(umlOperation.type.name),
 			(pcmOperation.returnType__OperationSignature as PrimitiveDataType).type)

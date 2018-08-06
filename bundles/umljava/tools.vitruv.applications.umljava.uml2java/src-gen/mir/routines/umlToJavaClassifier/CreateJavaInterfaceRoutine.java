@@ -52,9 +52,9 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     notifyObjectCreated(javaInterface);
     userExecution.updateJavaInterfaceElement(umlInterface, javaInterface);
     
-    addCorrespondenceBetween(userExecution.getElement1(umlInterface, javaInterface), userExecution.getElement2(umlInterface, javaInterface), "");
-    
     userExecution.callRoutine1(umlInterface, javaInterface, this.getRoutinesFacade());
+    
+    addCorrespondenceBetween(userExecution.getElement1(umlInterface, javaInterface), userExecution.getElement2(umlInterface, javaInterface), "");
     
     postprocessElements();
     
