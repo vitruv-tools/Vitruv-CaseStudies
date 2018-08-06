@@ -25,7 +25,6 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     @Test
     public void testAddComponentClassInPackageWithCorrespondingComponent() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final BasicComponent bc = super.addSecondPackageCorrespondsToBasicComponent();
 
         this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
@@ -37,7 +36,6 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     @Test
     public void testAddCompositeComponentClassInPackageWithCorrespondingCompositeComponent() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
         final CompositeComponent cc = super.addSecondPackageCorrespondsToCompositeComponent();
 
         this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
@@ -49,7 +47,6 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     @Test
     public void testAddSystemClassInPackageWithCorrespondingSystem() throws Throwable {
         super.addRepoContractsAndDatatypesPackage();
-        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
         final System pcmSystem = super.addSecondPackageCorrespondsToSystem();
 
         this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
@@ -114,7 +111,6 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     public void testAddCompsiteDatatypeClassInDatatypePackage() throws Throwable {
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
 
-        this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
         final CompositeDataType cdt = this.addClassThatCorrespondsToCompositeDatatype();
 
         this.assertRepositoryAndPCMNameForDatatype(repo, cdt, Pcm2JavaTestUtils.IMPLEMENTING_CLASS_NAME);
@@ -135,7 +131,6 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     public void testAddClassInDatatypePackage() throws Throwable {
         this.addRepoContractsAndDatatypesPackage();
         try {
-            this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
             this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
             final EObject eObject = super.addClassInPackage(this.getDatatypesPackage(), EObject.class);
             fail("The class should not have any datatype correspondences, but it has a correspondence to eObject: "

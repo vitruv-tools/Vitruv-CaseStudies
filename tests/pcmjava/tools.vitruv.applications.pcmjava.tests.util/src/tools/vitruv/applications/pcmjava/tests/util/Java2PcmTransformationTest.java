@@ -621,12 +621,12 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected OperationInterface addInterfaceInSecondPackageWithCorrespondence(final String packageName)
 			throws Throwable {
-		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
 		return this.createInterfaceInPackage(packageName);
 	}
 
 	protected EObject addInterfaceInPackageWithoutCorrespondence(final String packageName) throws Throwable {
-		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
 		Package jaMoPPPackage = this.getPackageWithNameFromCorrespondenceModel(packageName);
 		return this.createInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(),
 				"I" + packageName, false);
