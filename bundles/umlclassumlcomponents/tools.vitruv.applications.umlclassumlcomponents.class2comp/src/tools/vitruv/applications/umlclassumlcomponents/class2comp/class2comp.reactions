@@ -684,6 +684,7 @@ routine removeInterface(umlclass::Interface classInterface) {
 	}
 	action {		
 		call {
+			// Retrieve and destroy interface usages (i.e. required roles)
 			//Retrieve all Components that use this Interface
 			val compModel = compInterface.model
 			val compsWithUsage = compModel.packagedElements.filter(Component).filter[e | !e.packagedElements.filter(Usage).isEmpty]
@@ -693,6 +694,14 @@ routine removeInterface(umlclass::Interface classInterface) {
 			val matchingUsages = compsWithMatchingUsage.map[e | e.packagedElements.filter(Usage).get(0)]
 			for (Usage compUsage : matchingUsages) {
 				compUsage.destroy
+			}
+			
+			// Also retrieve and destroy interface realizations (i.e. provided roles)
+			val interfaceRealizations = compModel.packagedElements.filter(Component).map[it.interfaceRealizations.filter[suppliers.contains(compInterface)]].flatten;
+			val fixMappedRealizations = newArrayList;
+			fixMappedRealizations += interfaceRealizations
+			for (realization : fixMappedRealizations) {
+				realization.destroy
 			}
 		}
 		delete compInterface
