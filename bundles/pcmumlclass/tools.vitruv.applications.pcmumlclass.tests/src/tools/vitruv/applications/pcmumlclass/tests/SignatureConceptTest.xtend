@@ -34,8 +34,8 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
 			DefaultLiterals.UML_EXTENSION
 	
-	static val TEST_INTERFACE = "TestInterface"
-	static val TEST_SIGNATURE = "testSignature"	 
+	private static val TEST_INTERFACE = "TestInterface"
+	private static val TEST_SIGNATURE = "testSignature"	 
 	private static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
 	private static val TEST_COMPOSITE_DATATYPE_2 = "TestCompositeType_2"
 	private static val TEST_COLLECTION_DATATYPE = "TestCollectionType"
@@ -242,8 +242,8 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		var pcmRepository = createRepositoryWithInterface()
 		var umlInterface = getUmlTestInterface(pcmRepository)
 		startRecordingChanges(umlInterface) 
-		// fails here with "IllegalState: InterfaceImpl has no UUID" if the Test-class runs alone,
-		// but works in the CompositeTypeTest, or when run together with other test classes
+		// TODO fails here with "IllegalState: InterfaceImpl has no UUID" if the Test-class runs alone,
+		// but works in testCreateSignatureConcept_UML_withCompositeType, or when run together with other test classes
 		
 		var umlOperation = umlInterface.createOwnedOperation(TEST_SIGNATURE, null, null)
 		var umlParam = umlOperation.createOwnedParameter("someParameter", null)

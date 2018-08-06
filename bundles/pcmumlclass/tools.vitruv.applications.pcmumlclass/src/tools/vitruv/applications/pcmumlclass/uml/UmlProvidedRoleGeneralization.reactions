@@ -8,7 +8,7 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	with an uml::Generalization in the uml::Class (implementation) corresponding to the IPRE.
 //
 //	Because a pcm::OperationProvidedRole defines which Interface are provided/implemented by the IPRE, 
-//	only architecturally relevant uml::Interface (uml::Interfaces that are defined in the contracts package of a pcm::Repository)
+//	only architecturally relevant uml::Interfaces (uml::Interfaces that are defined in the contracts package of a pcm::Repository)
 //	should be set for uml::Generalization[general] of the IPRE implementation class.
 //
 //	Related files: 
@@ -37,13 +37,34 @@ routine insertCorrespondingProvidedRole(uml::Generalization umlGeneralization, u
 			if (pcmComponent.isPresent 
 				&& (pcmInterface.isPresent || umlGeneralization.general === null) // allow 'null' for uninitialized Generalizations
 			){
-				detectOrCreateCorrespondingProvidedRole(umlGeneralization, umlComponent)
+				debugging_detectOrCreateCorrespondingProvidedRole(umlGeneralization, umlComponent)
 				moveCorrespondingProvidedRole(umlGeneralization, umlComponent)
 			}
 			else {
 				// not a matching context -> delete correspondence, if it exists
 				deleteCorrespondingProvidedRole(umlGeneralization)
 			}
+		}
+	}
+}
+
+//TODO remove debugging code
+routine debugging_detectOrCreateCorrespondingProvidedRole(uml::Generalization umlGeneralization, uml::Class umlComponent){
+	match{
+		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlGeneralization.general tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		val pcmProvided = retrieve many pcm::OperationProvidedRole corresponding to umlGeneralization tagged with TagLiterals.PROVIDED_ROLE__GENERALIZATION
+	}
+	action {
+		call {
+			if (pcmProvided.size > 1){
+				logger.warn("Multiple corresponding pcm::OperationProvidedRoles for one uml::Generalization:"
+					+ pcmProvided.map[it.entityName]
+				)
+			}
+			else{
+				detectOrCreateCorrespondingProvidedRole(umlGeneralization, umlComponent)	
+			}	
 		}
 	}
 }

@@ -39,7 +39,7 @@ routine initializePcmRepositoryUmlPackagesCorrespondence(pcm::Repository pcmRepo
 			if(!umlRepositoryPkg.present) createUmlRepositoryPackage(pcmRepo)
 			if(!umlContractsPkg.present) createUmlContractsPackage(pcmRepo)
 			if(!umlDatatypesPkg.present) createUmlDatatypesPackage(pcmRepo)
-			bootstrapPrimitiveDatatypes(pcmRepo)
+//			bootstrapPrimitiveDatatypes(pcmRepo) // TODO enable PrimitiveDataType-bootstrapping when "can't save UMLPrimitiveTypes" is fixed
 		}
 	}
 }
@@ -143,7 +143,7 @@ reaction RepositoryDeleted {
 
 routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo){
 	match {
-		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE //TODO remove asserted
 		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
 		val umlDatatypesPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 	}
@@ -195,6 +195,7 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo){
 					case PrimitiveTypeEnum.BYTE,
 					default : null
 					// TODO decide how to map Char, Byte, UnlimitedNatural
+					// TODO warning
 				}
 				if (umlType !== null)
 					ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, pcmType, umlType, TagLiterals.DATATYPE__TYPE)

@@ -14,6 +14,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
 //		ParameterConceptTest
 
+//TODO fix Reaction names 
+
 reactions: pcmParameterReactions
 in reaction to changes in PCM
 execute actions in UML
@@ -118,6 +120,7 @@ routine deleteCorrespondingRegularParameter(pcm::Parameter pcmParam){
 	}
 	action {
 		remove correspondence between pcmParam and umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+		delete umlParameter
 	}
 }
 

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM <-> UML Class Transformations
-Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass
+Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -16,6 +16,7 @@ Require-Bundle: com.google.guava,
   org.apache.log4j,
   org.eclipse.emf.ecore,
   org.eclipse.core.resources,
+  tools.vitruv.framework.applications,
   tools.vitruv.framework.util,
   tools.vitruv.framework.change,
   tools.vitruv.framework.change.processing,

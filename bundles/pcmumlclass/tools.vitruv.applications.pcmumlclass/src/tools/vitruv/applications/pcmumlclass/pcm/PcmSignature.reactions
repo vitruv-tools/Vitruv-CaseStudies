@@ -210,6 +210,8 @@ routine renameCorrespondingOperation(pcm::OperationSignature pcmSignature, Strin
 
 // Following reactions are very similar to to PcmParameter.reactions and PcmInnerDeclaration.reactions.
 // See PcmCollectionDataType.reactions for more explanation.
+
+// TODO zusammenlegen und routinen mit uml elementen als eingabe
 reaction SignatureReturnTypeChanged{
 	after element pcm::DataType replaced at pcm::OperationSignature[returnType__OperationSignature]
 	with {affectedEObject.returnType__OperationSignature === newValue}
