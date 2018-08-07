@@ -3,12 +3,10 @@ package tools.vitruv.applications.pcmumlclass.tests
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Package
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
@@ -27,10 +25,6 @@ import static org.junit.Assert.*
 class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(CompositeDataTypeConceptTest).simpleName);
-
-	private static val PCM_MODEL_FILE = "model/Repository.repository"
-	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
-			DefaultLiterals.UML_EXTENSION
 	
 	private static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
 	private static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
@@ -54,11 +48,11 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		)
 	}
 	def protected checkCompositeDataTypeConcept(CompositeDataType pcmCompositeType){
-		val umlClass = getModifiableCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+		val umlClass = helper.getModifiableCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
 	def protected checkCompositeDataTypeConcept(Class umlClass){
-		val pcmCompositeType = getModifiableCorr(umlClass, CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+		val pcmCompositeType = helper.getModifiableCorr(umlClass, CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
 
@@ -66,37 +60,31 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 	 * Initialize a pcm::Repository and its corresponding uml-counterparts.
 	 */
 	def private Repository createRepositoryConcept(){
-		userInteractor.addNextSelections(UML_MODEL_FILE)
+		val pcmRepository = helper.createRepository
 		
-		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
-		pcmRepository.entityName = "testCbsRepository"
-		createAndSynchronizeModel(PCM_MODEL_FILE, pcmRepository)
-		
-		assertModelExists(PCM_MODEL_FILE)
-		assertModelExists(UML_MODEL_FILE)
+		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
-	}
-	
-	def private Package getDatatypesPackage(Repository pcmRepository){
-		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
 	}
 
 	@Test
 //	@Ignore
 	def void testCreateCompositeDataTypeConcept_UML() {
 		var pcmRepository = createRepositoryConcept()
-		var umlDatatypesPkg = getDatatypesPackage(pcmRepository)
+		var umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		startRecordingChanges(umlDatatypesPkg)
 		
-		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(tools.vitruv.applications.pcmumlclass.tests.CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
+		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
 		saveAndSynchronizeChanges(umlDatatypesPkg)
 		
 		reloadResourceAndReturnRoot(umlDatatypesPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		umlDatatypesPkg = getDatatypesPackage(pcmRepository)
+		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
-		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == tools.vitruv.applications.pcmumlclass.tests.CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE] as Class
+		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE] as Class
 		assertNotNull(umlCompositeTypeClass)
 		checkCompositeDataTypeConcept(umlCompositeTypeClass)
 	}
@@ -104,7 +92,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateCompositeDataTypeConcept_PCM() {
 		var pcmRepository = createRepositoryConcept()
-		var umlDatatypesPkg = getDatatypesPackage(pcmRepository)
+		var umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 
 		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
 		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
@@ -113,7 +101,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		
 		reloadResourceAndReturnRoot(umlDatatypesPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		umlDatatypesPkg = getDatatypesPackage(pcmRepository)
+		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
 		pcmCompositeType = pcmRepository.dataTypes__Repository.head as CompositeDataType
 		assertNotNull(pcmCompositeType)
@@ -123,7 +111,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateCompositeDataType_withParent_UML() {
 		var pcmRepository = createRepositoryConcept()
-		var umlDatatypesPkg = getDatatypesPackage(pcmRepository)
+		var umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		startRecordingChanges(umlDatatypesPkg)
 		
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
@@ -133,7 +121,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		
 		reloadResourceAndReturnRoot(umlDatatypesPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		umlDatatypesPkg = getDatatypesPackage(pcmRepository)
+		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
 		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class	
 		assertNotNull(umlCompositeTypeClass)
@@ -150,10 +138,11 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
 		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
 		pcmRepository.dataTypes__Repository += pcmCompositeType
-		var mPcmCompositeTypeParent = RepositoryFactory.eINSTANCE.createCompositeDataType
-		mPcmCompositeTypeParent.entityName = TEST_COMPOSITE_DATATYPE_PARENT
-		pcmRepository.dataTypes__Repository += mPcmCompositeTypeParent
-		pcmCompositeType.parentType_CompositeDataType += mPcmCompositeTypeParent
+		
+		var pcmCompositeTypeParent = RepositoryFactory.eINSTANCE.createCompositeDataType
+		pcmCompositeTypeParent.entityName = TEST_COMPOSITE_DATATYPE_PARENT
+		pcmRepository.dataTypes__Repository += pcmCompositeTypeParent
+		pcmCompositeType.parentType_CompositeDataType += pcmCompositeTypeParent
 		saveAndSynchronizeChanges(pcmCompositeType)
 		
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository

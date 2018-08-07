@@ -29,15 +29,9 @@ import static org.junit.Assert.*
 class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(RepositoryComponentConceptTest).simpleName);
-
-	private static val PCM_MODEL_FILE = "model/Repository.repository"
-	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
-			DefaultLiterals.UML_EXTENSION
-	
-	private val REPOSITORY_NAME = "testCbsRepository"
+    
 	private val COMPONENT_NAME = "testComponent"
 	 
-	
 	def public static void checkRepositoryComponentConcept(
 			CorrespondenceModel cm, 
 			RepositoryComponent pcmComponent, 
@@ -65,38 +59,30 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 	}
 	
 	def protected checkRepositoryComponentConcept(RepositoryComponent pcmComponent){
-		val  umlComponentPkg = getModifiableCorr(pcmComponent, Package, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
-		val  umlComponentImpl = getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
-		val  umlComponentConstructor = getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
+		val  umlComponentPkg = helper.getModifiableCorr(pcmComponent, Package, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
+		val  umlComponentImpl = helper.getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
+		val  umlComponentConstructor = helper.getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
 		checkRepositoryComponentConcept(correspondenceModel, pcmComponent, umlComponentPkg, umlComponentImpl, umlComponentConstructor)
 	}
 	
 	def protected checkRepositoryComponentConcept(Package umlComponentPkg){
-		val  pcmComponent = getModifiableCorr(umlComponentPkg, RepositoryComponent, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
+		val  pcmComponent = helper.getModifiableCorr(umlComponentPkg, RepositoryComponent, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 		assertNotNull(pcmComponent)
-		val  umlComponentImpl = getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
-		val  umlComponentConstructor = getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
-		checkRepositoryComponentConcept(correspondenceModel, pcmComponent, umlComponentPkg, umlComponentImpl, umlComponentConstructor)
+		checkRepositoryComponentConcept(pcmComponent)
 	}
 
 	/**
 	 * Initialize a pcm::Repository and its corresponding uml-counterparts.
 	 */
 	def private Repository createRepository(){
-		userInteractor.addNextSelections(UML_MODEL_FILE)
+		var pcmRepository = helper.createRepository()
 		
-		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
-		pcmRepository.entityName = REPOSITORY_NAME
-		createAndSynchronizeModel(PCM_MODEL_FILE, pcmRepository)
-		
-		assertModelExists(PCM_MODEL_FILE)
-		assertModelExists(UML_MODEL_FILE)
+		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
-	}
-	
-	def private Package getRepositoryPackage(Repository pcmRepository){
-		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
 	}
 
 	@Test
@@ -118,7 +104,7 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testRepositoryComponentConcept_UML() {
 		var pcmRepository = createRepository
-		var umlRepositoryPkg = getRepositoryPackage(pcmRepository)
+		var umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
 		startRecordingChanges(umlRepositoryPkg)
 		
 		userInteractor.addNextSelections(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
@@ -127,7 +113,8 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 		saveAndSynchronizeChanges(umlComponentPkg)
 		reloadResourceAndReturnRoot(umlComponentPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		umlRepositoryPkg = getRepositoryPackage(pcmRepository)
+		umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
+		
 		umlComponentPkg = umlRepositoryPkg.nestedPackages.findFirst[it.name == COMPONENT_NAME]
 		
 		checkRepositoryComponentConcept(umlComponentPkg)

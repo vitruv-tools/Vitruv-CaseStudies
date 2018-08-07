@@ -3,12 +3,10 @@ package tools.vitruv.applications.pcmumlclass.tests
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Interface
-import org.eclipse.uml2.uml.Package
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
@@ -24,10 +22,8 @@ import static org.junit.Assert.*
 class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
     protected static val final Logger logger = Logger.getLogger(typeof(InterfaceConceptTest).simpleName);
-
-	private static val PCM_MODEL_FILE = "model/Repository.repository"
-	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
-			DefaultLiterals.UML_EXTENSION 
+	
+	private static val TEST_INTERFACE_NAME = "TestInterface"
 	
 	def public static checkInterfaceConcept(CorrespondenceModel cm, 
 			OperationInterface pcmInterface, 
@@ -50,43 +46,38 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 		)
 	}
 	def protected checkInterfaceConcept(OperationInterface pcmInterface){
-		val umlInterface = getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
+		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
 	}
 	def protected checkInterfaceConcept(Interface umlInterface){
-		val pcmInterface = getModifiableCorr(umlInterface, OperationInterface, TagLiterals.INTERFACE_TO_INTERFACE)
+		val pcmInterface = helper.getModifiableCorr(umlInterface, OperationInterface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
 	}
 
 	def private Repository createRepositoryConcept(){
-		userInteractor.addNextSelections(UML_MODEL_FILE)
+		var pcmRepository = helper.createRepository
 		
-		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
-		pcmRepository.entityName = "testCbsRepository"
-		createAndSynchronizeModel(PCM_MODEL_FILE, pcmRepository)
+		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		
-		assertModelExists(PCM_MODEL_FILE)
-		assertModelExists(UML_MODEL_FILE)
+		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
-	}
-	
-	def private Package getContractsPackage(Repository pcmRepository){
-		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
 	}
 
 	@Test
 	def void testCreateInterfaceConcept_UML() {
 		var pcmRepository = createRepositoryConcept()
-		var umlContractsPkg = getContractsPackage(pcmRepository)
+		var umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
 		startRecordingChanges(umlContractsPkg)
 		
-		var mUmlInterface = umlContractsPkg.createOwnedInterface("TestInterface")
+		var mUmlInterface = umlContractsPkg.createOwnedInterface(TEST_INTERFACE_NAME)
 		saveAndSynchronizeChanges(umlContractsPkg)
 		
 		reloadResourceAndReturnRoot(umlContractsPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		umlContractsPkg = getContractsPackage(pcmRepository)
+		umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
 		
 		mUmlInterface = umlContractsPkg.packagedElements.head as Interface
 		assertNotNull(mUmlInterface)
@@ -96,17 +87,17 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateInterfaceConcept_PCM() {
 		var pcmRepository = createRepositoryConcept()
-		var umlContractsPkg = getContractsPackage(pcmRepository)
+		var umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
 		startRecordingChanges(umlContractsPkg)
 		
 		var mPcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
-		mPcmInterface.entityName = "TestInterface"
+		mPcmInterface.entityName = TEST_INTERFACE_NAME
 		pcmRepository.interfaces__Repository += mPcmInterface
 		saveAndSynchronizeChanges(mPcmInterface)
 		
 		reloadResourceAndReturnRoot(umlContractsPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		umlContractsPkg = getContractsPackage(pcmRepository)
+		umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
 		
 		mPcmInterface = pcmRepository.interfaces__Repository.head as OperationInterface
 		assertNotNull(mPcmInterface)

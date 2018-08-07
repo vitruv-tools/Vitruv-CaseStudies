@@ -60,63 +60,48 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 	
 	def protected checkSystemConcept(Package umlSystemPkg){
 		assertNotNull(umlSystemPkg)
-		val pcmSystem = getModifiableCorr(umlSystemPkg, System, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
+		val pcmSystem = helper.getModifiableCorr(umlSystemPkg, System, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
 		assertNotNull(pcmSystem)
-		val umlSystemImpl = getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)
-		val umlSystemConstructor = getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
-		checkSystemConcept(correspondenceModel, pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
+		checkSystemConcept(pcmSystem)
 	}
 	
 	def protected checkSystemConcept(System pcmSystem){
 		assertNotNull(pcmSystem)
-		val umlSystemPkg = getModifiableCorr(pcmSystem, Package, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
-		val umlSystemImpl = getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)
-		val umlSystemConstructor = getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
+		val umlSystemPkg = helper.getModifiableCorr(pcmSystem, Package, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
+		val umlSystemImpl = helper.getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)
+		val umlSystemConstructor = helper.getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
 		checkSystemConcept(correspondenceModel, pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
 	}
 
 	@Test
 	def void testCreateSystemConcept_PCM() {
-		userInteractor.addNextSelections(UML_MODEL_FILE)
-		
 		var pcmSystem = SystemFactory.eINSTANCE.createSystem
-		createAndSynchronizeModel(PCM_MODEL_FILE, pcmSystem)
-		
-		pcmSystem = reloadResourceAndReturnRoot(pcmSystem) as System
-		
 		pcmSystem.entityName = SYSTEM_NAME
-		saveAndSynchronizeChanges(pcmSystem)
 		
+		userInteractor.addNextSelections(UML_MODEL_FILE)
+		createAndSynchronizeModel(PCM_MODEL_FILE, pcmSystem)
 		pcmSystem = reloadResourceAndReturnRoot(pcmSystem) as System
 		
-		assertTrue(pcmSystem.entityName == SYSTEM_NAME)
 		checkSystemConcept(pcmSystem)
+		assertTrue(pcmSystem.entityName == SYSTEM_NAME)
 	}
 	
 	@Test
 	def void testCreateSystemConcept_UML() {
-		userInteractor.addNextSelections(PCM_MODEL_FILE)
 		var umlModel = UMLFactory.eINSTANCE.createModel
 		umlModel.name = MODEL_NAME
+		
+		userInteractor.addNextSelections(PCM_MODEL_FILE)
 		createAndSynchronizeModel(UML_MODEL_FILE, umlModel)
 		
-		userInteractor.addNextSelections(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
 		var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
 		
+		userInteractor.addNextSelections(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
 		saveAndSynchronizeChanges(umlSystemPkg)
 		umlModel = reloadResourceAndReturnRoot(umlModel) as Model
+
 		umlSystemPkg = umlModel.nestedPackages.findFirst[it.name == SYSTEM_NAME.toFirstLower]
 		assertNotNull(umlSystemPkg)
-		checkSystemConcept(umlSystemPkg)
-		
-		var umlSystemImpl = umlSystemPkg.packagedElements.filter(Class).findFirst[it.name == SYSTEM_NAME + DefaultLiterals.IMPLEMENTATION_SUFFIX]
-		umlSystemImpl.name = SYSTEM_NAME + "_2_" + DefaultLiterals.IMPLEMENTATION_SUFFIX	
-		saveAndSynchronizeChanges(umlSystemImpl)
-		umlModel = reloadResourceAndReturnRoot(umlModel) as Model
-		umlSystemPkg = umlModel.nestedPackages.findFirst[it.name == SYSTEM_NAME.toFirstLower + "_2_"]
-		assertNotNull(umlSystemPkg)
-		// need to reload pcm model too
-		reloadResourceAndReturnRoot(getModifiableCorrSet(umlSystemPkg, System).head)
 		checkSystemConcept(umlSystemPkg)
 	}
 	

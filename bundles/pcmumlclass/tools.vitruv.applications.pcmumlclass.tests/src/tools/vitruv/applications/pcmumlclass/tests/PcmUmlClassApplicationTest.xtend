@@ -1,28 +1,22 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Parameter
-import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Property
+import org.eclipse.uml2.uml.Type
+import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.DataType
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
-import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.testutils.VitruviusApplicationTest
-
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 
 abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	override protected createChangePropagationSpecifications() {
@@ -41,34 +35,10 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain];
 	}
 	
-	protected var PrimitiveDataType PCM_BOOL
-	protected var PrimitiveDataType PCM_INT
-	protected var PrimitiveDataType PCM_DOUBLE
-	protected var PrimitiveDataType PCM_STRING
-	protected var PrimitiveDataType PCM_CHAR
-	protected var PrimitiveDataType PCM_BYTE
-	
-	protected var PrimitiveType UML_BOOL
-	protected var PrimitiveType UML_INT
-	protected var PrimitiveType UML_REAL
-	protected var PrimitiveType UML_STRING
-	protected var PrimitiveType UML_UNLIMITED_NATURAL
+	protected var PcmUmlClassApplicationTestHelper helper
 	
 	override protected setup() {
-		val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(resourceSet)	
-		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
-		PCM_INT = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.INT]
-		PCM_DOUBLE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.DOUBLE]
-		PCM_STRING = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.STRING]
-		PCM_CHAR = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.CHAR]
-		PCM_BYTE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BYTE]
-		
-		val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(resourceSet)
-		UML_BOOL =  umlPrimitiveTypes.findFirst[it.name == "Boolean"]
-		UML_INT =  umlPrimitiveTypes.findFirst[it.name == "Integer"]
-		UML_REAL =  umlPrimitiveTypes.findFirst[it.name == "Real"]
-		UML_STRING =  umlPrimitiveTypes.findFirst[it.name == "String"]
-		UML_UNLIMITED_NATURAL =  umlPrimitiveTypes.findFirst[it.name == "UnlimitedNatural"]
+		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, resourceSet)
 	}
 	
 	override protected cleanup() {
@@ -95,7 +65,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * 		any eObject in the Resource you want to reload  
 	 * @return the root element in the reloaded Resource, or null if none is present
 	 */
-	def protected EObject reloadResourceAndReturnRoot(EObject modelElement){
+	protected def EObject reloadResourceAndReturnRoot(EObject modelElement){
 		// TODO this is a hack for testing: 
 		//	- load tools.vitruv.testutils into workspace
 		// 	- change VitruviusApplicationTest.changeRecorder to protected, in order to make it accessible here
@@ -109,40 +79,6 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return rootElement
 	}
 	
-	/**
-	 * Fetches the given {@link EObject} from the {@link ResourceSet} of the running test.
-	 * <br>
-	 * Elements retrieved via correspondence model are read-only (except in the Transactions performed by the framework),
-	 * and live in a different resourceSet. If corresponding elements need to be changed or compared, they should be retrieved via this method, 
-	 * or the getModifiableCorr(...) methods.
-	 * 
-	 * @param original
-	 * 		the {@link EObject} instance living in some ResourceSet
-	 * @return the object instance in the ResourceSet of this test
-	 */
-	def protected <T extends EObject> getModifiableInstance(T original){
-		val originalURI = EcoreUtil.getURI(original)
-		return resourceSet.getEObject(originalURI, true) as T
-	}
-	
-	def protected <T extends EObject> Set<T> getCorrSet(EObject source, Class<T> typeFilter){
-		return correspondenceModel.getCorrespondingEObjectsByType(source, typeFilter) as Set<T>
-	}
-	
-	def protected <T extends EObject> T getCorr(EObject source, Class<T> typeFilter, String tag){
-		return ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(correspondenceModel, source, tag, typeFilter).head
-	}
-	
-	def protected <T extends EObject> Set<T> getModifiableCorrSet(EObject source, Class<T> typeFilter){
-		return getCorrSet(source, typeFilter).map[getModifiableInstance(it)].filter[it !== null].toSet
-	}
-	
-	def protected <T extends EObject> T getModifiableCorr(EObject source, Class<T> typeFilter, String tag){
-		val correspondence = getCorr(source, typeFilter,tag)
-		if(correspondence === null) return null
-		return getModifiableInstance(getCorr(source, typeFilter,tag))
-	}
-	
 	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b){
 		return cm.getCorrespondingEObjects(#[a]).exists( corrSet | EcoreUtil.equals(corrSet.head, b))
 	}
@@ -151,31 +87,42 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return EcoreUtil.equals(b, ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, a, tag, b.class).head)
 	}
 	
+	
+	//DataType consistency constraints; defined here because it is used in multiple tests
+	
+	private static def boolean isCorrectSimpleTypeCorrespondence(CorrespondenceModel correspondenceModel, 
+		DataType pcmDatatype, Type umlType, int lower, int upper
+	){
+		val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlType, TagLiterals.DATATYPE__TYPE)
+		val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+		return (correspondingPrimitiveType || correspondingCompositeType) // inner collection types are not supported
+			&& lower == 1 && upper == 1
+	}
+	
+	private static def boolean isCorrectCollectionTypeCorrespondence(CorrespondenceModel correspondenceModel, 
+		CollectionDataType pcmCollection, Type umlType, int lower, int upper
+	){
+		return lower == 0 
+			&& upper == LiteralUnlimitedNatural.UNLIMITED
+			&& isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmCollection.innerType_CollectionDataType, umlType, 1, 1)
+	}
+	
 	def protected static isCorrect_DataType_Property_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Property umlProperty){
 		if (pcmDatatype === null || umlProperty.type === null){
 			return pcmDatatype === null && umlProperty.type === null
 		}
-		else {
-			val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlProperty.type, TagLiterals.DATATYPE__TYPE)
-			val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlProperty.type, TagLiterals.COMPOSITE_DATATYPE__CLASS)
-			val correspondingCollectionType = 
-				corresponds(correspondenceModel, pcmDatatype, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
-				&& umlProperty.lower == 0 && umlProperty.upper == LiteralUnlimitedNatural.UNLIMITED
-			return (correspondingPrimitiveType || correspondingCompositeType || correspondingCollectionType)
-		}
+		return isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlProperty.type, umlProperty.lower, umlProperty.upper)
+			|| (corresponds(correspondenceModel, pcmDatatype, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
+				&& isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlProperty.type, umlProperty.lower, umlProperty.upper))
 	}
 	
 	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Parameter umlParam){
 		if (pcmDatatype === null || umlParam.type === null){
 			return pcmDatatype === null && umlParam.type === null
 		}
-		else {
-			val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlParam.type, TagLiterals.DATATYPE__TYPE)
-			val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlParam.type, TagLiterals.COMPOSITE_DATATYPE__CLASS)
-			val correspondingCollectionType = 
-				corresponds(correspondenceModel, pcmDatatype, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-				&& umlParam.lower == 0 && umlParam.upper == LiteralUnlimitedNatural.UNLIMITED
-			return (correspondingPrimitiveType || correspondingCompositeType || correspondingCollectionType)
-		}
+		return isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower, umlParam.upper)
+			|| (corresponds(correspondenceModel, pcmDatatype, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
+				&& isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlParam.type, umlParam.lower, umlParam.upper))
 	}
+	
 }
