@@ -7,7 +7,6 @@ import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -56,8 +55,8 @@ routine createUmlRepositoryPackage(pcm::Repository pcmRepo){
 			umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower;
 		}
 		call {
-			// flexible Model-path through Userinteracting
-			var relativeModelPath = userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_MODEL_PATH)
+			var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).startInteraction
+			
 			if (relativeModelPath.nullOrEmpty){
 				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION;
 			}
@@ -143,7 +142,7 @@ reaction RepositoryDeleted {
 
 routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo){
 	match {
-		val umlRepositoryPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE //TODO remove asserted
+		val umlRepositoryPkg = retrieve uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
 		val umlDatatypesPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 	}
@@ -161,12 +160,10 @@ routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo){
 					correspondenceModel, pcmRepo, umlDatatypesPkg.get, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
 			}
 			// ask if the corresponding model should also be deleted
-			val deleteCorrespondingUmlRepository = userInteracting.selectFromMessage(
-													UserInteractionType.MODAL, 
-													DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL, 
-													#["yes", "no"]);
+			val deleteCorrespondingUmlRepository = userInteractor.confirmationDialogBuilder
+					.message(DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL).startInteraction
 													
-			if (deleteCorrespondingUmlRepository == DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES){
+			if (deleteCorrespondingUmlRepository){// DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
 				umlRepositoryPkg.destroy
 				if(umlContractsPkg.present) umlContractsPkg.get.destroy
 				if(umlDatatypesPkg.present) umlDatatypesPkg.get.destroy
@@ -194,8 +191,7 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo){
 					case PrimitiveTypeEnum.CHAR,
 					case PrimitiveTypeEnum.BYTE,
 					default : null
-					// TODO decide how to map Char, Byte, UnlimitedNatural
-					// TODO warning
+					// TODO warning where used: pcm::Char, pcm::Byte, uml::UnlimitedNatural have no mapping
 				}
 				if (umlType !== null)
 					ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, pcmType, umlType, TagLiterals.DATATYPE__TYPE)

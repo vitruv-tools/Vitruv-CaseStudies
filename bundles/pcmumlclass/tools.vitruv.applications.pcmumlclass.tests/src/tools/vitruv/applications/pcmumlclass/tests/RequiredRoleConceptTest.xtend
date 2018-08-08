@@ -43,7 +43,6 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		// the owning component and component implementation have to correspond
 		assertTrue(corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredInstance.class_, TagLiterals.IPRE__IMPLEMENTATION))
 		assertTrue(corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredParameter.operation?.class_, TagLiterals.IPRE__IMPLEMENTATION))
-		// TODO assert same name
 		assertTrue(pcmRequired.entityName == umlRequiredInstance.name)
 		assertTrue(pcmRequired.entityName == umlRequiredParameter.name)
 	}
@@ -71,7 +70,7 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		helper.createComponent(pcmRepository)
 		helper.createOperationInterface(pcmRepository)
 		
-		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 

@@ -73,8 +73,8 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		
 		var umlRepositoryPkg = umlModel.createNestedPackage("testCbsRepository")
 		
-		userInteractor.addNextSelections(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
+		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		saveAndSynchronizeChanges(umlModel)
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		
@@ -89,7 +89,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	def void testCreateRepositoryConcept_PCM() {
 		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 		
-		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
@@ -103,7 +103,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	def void testRenameRepositoryConcept_PCM() {
 		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 		
-		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		
 		pcmRepository.entityName = "Pcm2UmlNameChange"
@@ -124,7 +124,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 		pcmRepository.entityName = "testCbsRepository" //has to be capitalized via round-trip
 		
-		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
@@ -136,7 +136,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		var umlRepositoryPackage = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
 		var umlModel = umlRepositoryPackage.nestingPackage
 		
-		userInteractor.addNextSelections(DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES)
+		userInteractor.addNextConfirmationInput(true)// DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
 		deleteAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		
 		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)

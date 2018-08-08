@@ -52,8 +52,8 @@ routine createCorrespondingSystemPackage(pcm::System pcmSystem){
 			umlSystemPackage.name = pcmSystem.entityName.toFirstLower;
 		}
 		call {
-			// flexible Model-path through Userinteracting
-			var relativeModelPath = userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_MODEL_PATH)
+			var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).startInteraction
+			
 			if (relativeModelPath.nullOrEmpty){
 				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION;
 			}

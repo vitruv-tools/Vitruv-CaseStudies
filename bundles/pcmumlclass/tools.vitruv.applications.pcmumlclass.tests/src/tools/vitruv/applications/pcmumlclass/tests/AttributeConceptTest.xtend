@@ -58,7 +58,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		val pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
 		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 		
-		userInteractor.addNextSelections(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)

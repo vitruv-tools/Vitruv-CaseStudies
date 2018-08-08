@@ -66,10 +66,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * @return the root element in the reloaded Resource, or null if none is present
 	 */
 	protected def EObject reloadResourceAndReturnRoot(EObject modelElement){
-		// TODO this is a hack for testing: 
-		//	- load tools.vitruv.testutils into workspace
-		// 	- change VitruviusApplicationTest.changeRecorder to protected, in order to make it accessible here
-		changeRecorder.removeFromRecording(modelElement.eResource) 
+		stopRecordingChanges(modelElement) 
 		val resourceURI = modelElement.eResource.URI
 		modelElement.eResource.unload
 		val rootElement = resourceSet.getResource(resourceURI,true).contents.head

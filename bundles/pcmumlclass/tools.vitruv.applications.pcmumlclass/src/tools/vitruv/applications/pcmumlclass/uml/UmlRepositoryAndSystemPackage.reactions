@@ -3,7 +3,6 @@ import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
-import tools.vitruv.framework.userinteraction.UserInteractionType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -54,9 +53,10 @@ routine insertCorrespondingRepositoryOrSystem(uml::Package umlPackage, uml::Pack
 routine userDisambiguateRepositoryOrSystemCreation(uml::Package umlPkg, uml::Package umlParentPkg){
 	action{
 		execute{
-			val pcmElementType = userInteracting.selectFromMessage(UserInteractionType.MODAL, 
-												DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REQUEST, 
-												DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__OPTIONS);
+			val pcmElementType = userInteractor.singleSelectionDialogBuilder
+					.message(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REQUEST)
+					.choices(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__OPTIONS)
+					.startInteraction
 			switch (pcmElementType){
 				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY: 
 						createCorrespondingRepository(umlPkg, umlParentPkg)
@@ -76,7 +76,8 @@ routine createCorrespondingRepository(uml::Package umlPkg, uml::Package umlParen
 		add correspondence between pcmRepository and umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		execute{
 			val fileExtension = DefaultLiterals.PCM_REPOSITORY_EXTENSION
-			var relativeModelPath = userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH)
+			
+			var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH).startInteraction
 			if (relativeModelPath.nullOrEmpty){
 				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME;
 			}
@@ -108,7 +109,7 @@ routine createCorrespondingSystem(uml::Package umlPkg, uml::Package umlParentPkg
 		add correspondence between pcmSystem and umlPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
 		execute{
 			val fileExtension = DefaultLiterals.PCM_SYSTEM_EXTENSION
-			var relativeModelPath = userInteracting.getTextInput(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH)
+			var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH).startInteraction
 			if (relativeModelPath.nullOrEmpty){
 				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_SYSTEM_FILE_NAME;
 			}
