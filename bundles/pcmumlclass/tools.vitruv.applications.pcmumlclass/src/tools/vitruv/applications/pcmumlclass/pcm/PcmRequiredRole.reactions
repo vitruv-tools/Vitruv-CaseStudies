@@ -164,6 +164,24 @@ routine deleteCorrespondingRequiredField(pcm::OperationRequiredRole pcmRequired)
 	}
 }
 
+reaction RequiredRoleNameChanged{
+	after attribute replaced at pcm::OperationRequiredRole[entityName]
+	with {affectedEObject.entityName === newValue}
+	call changeNameOfCorrespondingRequiredElements(affectedEObject, newValue)
+}
+
+routine changeNameOfCorrespondingRequiredElements(pcm::OperationRequiredRole pcmRequired, String newName){
+	match {
+		val umlConstructorParameter = retrieve uml::Parameter corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+		val umlRequiredField = retrieve uml::Property corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
+	}
+	action {
+		execute {
+			umlConstructorParameter.name = newName
+			umlRequiredField.name = newName
+		}
+	}
+}
 
 reaction RequiredRoleInterfaceChanged{
 	after element pcm::OperationInterface replaced at pcm::OperationRequiredRole[requiredInterface__OperationRequiredRole]

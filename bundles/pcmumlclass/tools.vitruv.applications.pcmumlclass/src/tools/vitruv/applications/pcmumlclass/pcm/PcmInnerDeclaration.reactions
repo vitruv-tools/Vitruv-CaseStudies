@@ -15,6 +15,8 @@ reactions: pcmInnerDeclarationReactions
 in reaction to changes in PCM
 execute actions in UML
 
+// TODO can't import the same routines in multiple Reaction files. Even using qualified-non qualified names I only get two imports but I need three.   
+//import routines pcmDataTypePropagationReactions using qualified names
 
 reaction InnerDeclarationInserted{
 	after element pcm::InnerDeclaration inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
@@ -142,6 +144,26 @@ reaction InnerDeclarationTypeChanged {
 	with {affectedEObject.datatype_InnerDeclaration === newValue && newValue != oldValue}
 	call changeTypeOfCorrespondingAttribute(affectedEObject, newValue)
 }
+
+//routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmInnerDeclaration, pcm::DataType pcmDataType){
+//	match {
+//		val umlProperty = retrieve uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+//		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+//	}
+//	action {
+//		execute {			
+//			if (previousTypeWasCollectionType.isPresent){
+//				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
+//			}
+//			if (pcmDataType instanceof CollectionDataType){
+//				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
+//			}
+//			else {
+//				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlProperty)
+//			}
+//		}
+//	}
+//}
 
 routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmInnerDeclaration, pcm::DataType pcmDataType){
 	match {

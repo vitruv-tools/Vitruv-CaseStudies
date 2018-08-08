@@ -12,6 +12,9 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
+import org.eclipse.uml2.uml.Type
+import org.palladiosimulator.pcm.repository.DataType
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::InnerDeclaration with 
@@ -49,8 +52,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 
 
 
-	def private Repository createRepository_CompositeDataType_CompositeDataType2(){
-		
+	def private Repository createRepository(){
 		val pcmRepository = helper.createRepository()
 		helper.createCompositeDataType(pcmRepository)
 		val pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
@@ -72,110 +74,56 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 //			null 						<== 		null				// terminates with wrong result		
 // --> Exception: Could not save VURI for UMLPrimitiveTypes.library.uml (read-only path)		
 
-
-	@Test
-	@Ignore
-	def void testCreateAttributeConcept_PCM_primitiveType() {
-		var pcmRepository = createRepository_CompositeDataType_CompositeDataType2()
+	
+	private def void testCreateAttributeConcept_PCM(Repository inPcmRepository, DataType pcmType) {
+		var pcmRepository = inPcmRepository
 		var pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
 
 		var pcmAttribute = RepositoryFactory.eINSTANCE.createInnerDeclaration
 		pcmAttribute.entityName = TEST_ATTRIBUTE
-		pcmAttribute.datatype_InnerDeclaration = helper.PCM_INT
+		pcmAttribute.datatype_InnerDeclaration = pcmType
 		pcmCompositeType.innerDeclaration_CompositeDataType += pcmAttribute
-		saveAndSynchronizeChanges(pcmAttribute)
 		
+		saveAndSynchronizeChanges(pcmAttribute)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
 		
 		pcmAttribute = pcmCompositeType.innerDeclaration_CompositeDataType.findFirst[it.entityName == TEST_ATTRIBUTE]
 		assertNotNull(pcmAttribute)
 		checkAttributeConcept(pcmAttribute)
+		assertTrue(EcoreUtil.equals(pcmAttribute.datatype_InnerDeclaration, helper.getModifiableInstance(pcmType)))
 	}
-	
-	@Test
-	@Ignore
-	def void testCreateAttributeConcept_UML_primitiveType() {
-		var pcmRepository = createRepository_CompositeDataType_CompositeDataType2()
-		var umlCompositeTypeClass = helper.getUmlCompositeDataTypeClass(pcmRepository)
-		startRecordingChanges(umlCompositeTypeClass)
-		
-		var umlAttribute = umlCompositeTypeClass.createOwnedAttribute(TEST_ATTRIBUTE, helper.UML_INT)
-		
-		saveAndSynchronizeChanges(umlAttribute)
-		reloadResourceAndReturnRoot(umlAttribute)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		
-		umlAttribute = helper.getUmlCompositeDataTypeClass(pcmRepository).ownedAttributes.findFirst[it.name == TEST_ATTRIBUTE]
-		assertNotNull(umlAttribute)
-		checkAttributeConcept(umlAttribute)
+
+
+	@Test @Ignore
+	def void testCreateAttributeConcept_PCM_primitiveType() {
+		var pcmRepository = createRepository()
+		testCreateAttributeConcept_PCM(pcmRepository, helper.PCM_INT)
 	}
 	
 	@Test
 	def void testCreateAttributeConcept_PCM_compositeType() {
-		var pcmRepository = createRepository_CompositeDataType_CompositeDataType2()
-		var pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
-
-		var pcmAttribute = RepositoryFactory.eINSTANCE.createInnerDeclaration
-		pcmAttribute.entityName = TEST_ATTRIBUTE
-		pcmAttribute.datatype_InnerDeclaration = helper.getPcmCompositeDataType_2(pcmRepository)
-		pcmCompositeType.innerDeclaration_CompositeDataType += pcmAttribute
-		saveAndSynchronizeChanges(pcmAttribute)
-		
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
-		
-		pcmAttribute = pcmCompositeType.innerDeclaration_CompositeDataType.findFirst[it.entityName == TEST_ATTRIBUTE]
-		assertNotNull(pcmAttribute)
-		checkAttributeConcept(pcmAttribute)
-	}
-	
-	@Test
-	def void testCreateAttributeConcept_UML_compositeType() {
-		var pcmRepository = createRepository_CompositeDataType_CompositeDataType2()
-		var umlCompositeTypeClass = helper.getUmlCompositeDataTypeClass(pcmRepository)
-		startRecordingChanges(umlCompositeTypeClass)
-		
-		var umlAttribute = umlCompositeTypeClass.createOwnedAttribute(TEST_ATTRIBUTE, helper.getUmlCompositeDataTypeClass_2(pcmRepository))
-		
-		saveAndSynchronizeChanges(umlAttribute)
-		reloadResourceAndReturnRoot(umlAttribute)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		
-		umlAttribute = helper.getUmlCompositeDataTypeClass(pcmRepository).ownedAttributes.findFirst[it.name == TEST_ATTRIBUTE]
-		assertNotNull(umlAttribute)
-		checkAttributeConcept(umlAttribute)
+		var pcmRepository = createRepository()
+		//innerDeclaration with same type as outer CompositeDataType doesn't trigger change event
+		testCreateAttributeConcept_PCM(pcmRepository, helper.getPcmCompositeDataType_2(pcmRepository))
 	}
 	
 	@Test
 	def void testCreateAttributeConcept_PCM_collectionType() {
-		var pcmRepository = createRepository_CompositeDataType_CompositeDataType2()
-		var pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
-
-		var pcmAttribute = RepositoryFactory.eINSTANCE.createInnerDeclaration
-		pcmAttribute.entityName = TEST_ATTRIBUTE
-		pcmAttribute.datatype_InnerDeclaration = helper.getPcmCollectionDataType(pcmRepository)
-		pcmCompositeType.innerDeclaration_CompositeDataType += pcmAttribute
-		saveAndSynchronizeChanges(pcmAttribute)
-		
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
-		
-		pcmAttribute = pcmCompositeType.innerDeclaration_CompositeDataType.findFirst[it.entityName == TEST_ATTRIBUTE]
-		assertNotNull(pcmAttribute)
-		checkAttributeConcept(pcmAttribute)
+		var pcmRepository = createRepository()
+		testCreateAttributeConcept_PCM(pcmRepository, helper.getPcmCollectionDataType(pcmRepository))
 	}
 	
-	@Test
-	def void testCreateAttributeConcept_UML_collectionType() {
-		var pcmRepository = createRepository_CompositeDataType_CompositeDataType2()
+
+	private def void testCreateAttributeConcept_UML(Repository inPcmRepository, Type umlType, int lower, int upper) {
+		var pcmRepository = inPcmRepository
 		var umlCompositeTypeClass = helper.getUmlCompositeDataTypeClass(pcmRepository)
 		startRecordingChanges(umlCompositeTypeClass)
 		
-		// the attribute.type needs to be set to the innerType of the Collection type
-		var umlAttribute = umlCompositeTypeClass.createOwnedAttribute(TEST_ATTRIBUTE, helper.getUmlCompositeDataTypeClass_2(pcmRepository))
-		umlAttribute.lower = 0
-		umlAttribute.upper = LiteralUnlimitedNatural.UNLIMITED
+		var umlAttribute = umlCompositeTypeClass.createOwnedAttribute(TEST_ATTRIBUTE, null)
+		umlAttribute.type = umlType
+		umlAttribute.lower = lower
+		umlAttribute.upper = upper
 		
 		saveAndSynchronizeChanges(umlAttribute)
 		reloadResourceAndReturnRoot(umlAttribute)
@@ -183,8 +131,28 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		
 		umlAttribute = helper.getUmlCompositeDataTypeClass(pcmRepository).ownedAttributes.findFirst[it.name == TEST_ATTRIBUTE]
 		assertNotNull(umlAttribute)
-		assertTrue(umlAttribute.upper == LiteralUnlimitedNatural.UNLIMITED)
 		checkAttributeConcept(umlAttribute)
+		assertTrue(EcoreUtil.equals(umlAttribute.type, helper.getModifiableInstance(umlType)))
+		assertTrue(umlAttribute.lower == lower)
+		assertTrue(umlAttribute.upper == upper)
+	}
+	
+	@Test @Ignore
+	def void testCreateAttributeConcept_UML_primitiveType() {
+		var pcmRepository = createRepository()
+		testCreateAttributeConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
+	}
+	
+	@Test
+	def void testCreateAttributeConcept_UML_compositeType() {
+		var pcmRepository = createRepository()
+		testCreateAttributeConcept_UML(pcmRepository, helper.getUmlCompositeDataTypeClass(pcmRepository), 1, 1)
+	}
+	
+	@Test
+	def void testCreateAttributeConcept_UML_collectionType() {
+		var pcmRepository = createRepository()
+		testCreateAttributeConcept_UML(pcmRepository, helper.getUmlCompositeDataTypeClass_2(pcmRepository), 0, LiteralUnlimitedNatural.UNLIMITED)
 	}
 	
 }

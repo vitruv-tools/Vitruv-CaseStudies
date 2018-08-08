@@ -3,6 +3,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import mir.^routines.pcmDataTypePropagationReactions.RemoveCollectionTypeCorrespondenceFromParameterOrPropertyRoutine
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -18,6 +19,9 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 reactions: pcmSignatureReactions
 in reaction to changes in PCM
 execute actions in UML
+
+//import pcmDataTypePropagationReactions using qualified names
+import routines pcmDataTypePropagationReactions using qualified names
 
 reaction SignatureInsertedInInterface {
 	after element pcm::OperationSignature inserted in pcm::OperationInterface[signatures__OperationInterface]
@@ -208,16 +212,13 @@ routine renameCorrespondingOperation(pcm::OperationSignature pcmSignature, Strin
 	}
 }
 
-// Following reactions are very similar to to PcmParameter.reactions and PcmInnerDeclaration.reactions.
-// See PcmCollectionDataType.reactions for more explanation.
-
-// TODO zusammenlegen und routinen mit uml elementen als eingabe
 reaction SignatureReturnTypeChanged{
 	after element pcm::DataType replaced at pcm::OperationSignature[returnType__OperationSignature]
 	with {affectedEObject.returnType__OperationSignature === newValue}
 	call changeTypeOfCorrespondingReturnParameter(affectedEObject, newValue)
 }
 
+//inner routines defined in PcmDataTypePropagation.reactions
 routine changeTypeOfCorrespondingReturnParameter(pcm::OperationSignature pcmSignature, pcm::DataType pcmDataType){
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
@@ -226,67 +227,14 @@ routine changeTypeOfCorrespondingReturnParameter(pcm::OperationSignature pcmSign
 	action {
 		execute {			
 			if (previousTypeWasCollectionType.isPresent){
-				removeCollectionTypeCorrespondenceFromReturnParameter(pcmSignature)
+				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 			}
 			if (pcmDataType instanceof CollectionDataType){
-				addCollectionTypeCorrespondenceToReturnParameter(pcmSignature, pcmDataType)
+				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 			}
 			else {
-				replaceTypeOfCorrespondingReturnParameter(pcmSignature, pcmDataType)
+				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlParam)
 			}
 		}
 	}
 }
-
-routine removeCollectionTypeCorrespondenceFromReturnParameter(pcm::OperationSignature pcmSignature){
-	match {
-		val umlParam = retrieve uml::Parameter corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
-		val pcmPreviousCollectionType = retrieve asserted pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
-	}
-	action {
-		update umlParam {
-			umlParam.type = null
-			umlParam.lower = 1
-			umlParam.upper = 1
-		}
-		remove correspondence between pcmPreviousCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
-	}
-}
-
-routine addCollectionTypeCorrespondenceToReturnParameter(pcm::OperationSignature pcmSignature, pcm::CollectionDataType pcmCollectionType){
-	match {
-		val umlParam = retrieve uml::Parameter corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
-		val umlInnerType = retrieve optional uml::Type corresponding to pcmCollectionType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
-	}
-	action {
-		update umlParam {
-			umlParam.lower = 0
-			umlParam.upper = LiteralUnlimitedNatural.UNLIMITED
-		}
-		add correspondence between pcmCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
-		call replaceTypeOfCorrespondingReturnParameter(pcmSignature, pcmCollectionType.innerType_CollectionDataType)
-	}
-}
-
-routine replaceTypeOfCorrespondingReturnParameter(pcm::OperationSignature pcmSignature, pcm::DataType pcmSimpleType){
-	match {
-		val umlParam = retrieve uml::Parameter corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
-		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
-		val umlCompositeType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-	}
-	action {
-		update umlParam {
-			umlParam.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
-		}
-	}
-}
-
-
-
-
-
-
-
-
-
-

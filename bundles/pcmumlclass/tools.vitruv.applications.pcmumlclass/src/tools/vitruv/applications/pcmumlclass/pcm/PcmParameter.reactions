@@ -14,11 +14,12 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //		UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
 //		ParameterConceptTest
 
-//TODO fix Reaction names 
-
 reactions: pcmParameterReactions
 in reaction to changes in PCM
 execute actions in UML
+
+// TODO can't import the same routines in multiple Reaction files. Even using qualified-non qualified names I only get two imports but I need three.   
+//import routines pcmDataTypePropagationReactions using qualified names
 
 reaction ParameterInsertedInSignature {
 	after element pcm::Parameter inserted in pcm::OperationSignature[parameters__OperationSignature]
@@ -166,6 +167,26 @@ reaction ParameterTypeChanged{
 	with {affectedEObject.dataType__Parameter === newValue}
 	call changeTypeOfCorrespondingRegularParameter(affectedEObject, newValue)
 }
+
+//routine new_changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmDataType){
+//	match {
+//		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+//		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+//	}
+//	action {
+//		execute {
+//			if (previousTypeWasCollectionType.isPresent){
+//				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
+//			}
+//			if (pcmDataType instanceof CollectionDataType){
+//				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
+//			}
+//			else {
+//				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlParam)
+//			}
+//		}
+//	}
+//}
 
 routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmDataType){
 	match {

@@ -12,6 +12,11 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
+import org.eclipse.uml2.uml.Type
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.junit.Ignore
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.palladiosimulator.pcm.repository.DataType
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Parameter 
@@ -55,6 +60,8 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 	def private Repository createRepositoryWithSignature(){
 		val pcmRepository = helper.createRepository()
 		helper.createCompositeDataType(pcmRepository)
+		val pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
+		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 		val pcmInterface = helper.createOperationInterface(pcmRepository)
 		helper.createOperationSignature(pcmInterface)
 		
@@ -66,9 +73,9 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
 	}	
 
-	@Test
-	def void testCreateParameterConcept_UML() {
-		var pcmRepository = createRepositoryWithSignature
+	
+	private def void testCreateParameterConcept_UML(Repository inPcmRepository, Type umlType, int lower, int upper) {
+		var pcmRepository = inPcmRepository
 		var pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 		var umlOperation = helper.getUmlOperation(pcmInterface)
 		startRecordingChanges(umlOperation)
@@ -76,9 +83,11 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		// If there is any unnamed parameter already inserted and synchronized, 
 		// the correspondence model might not be able to differentiate the new from he old parameter and return false correspondences,
 		// because the name change for the new Parameter is applied later. Until then, the new Parameter has the same unnamed-TUID as the already existing one.
-		var umlParameter = umlOperation.createOwnedParameter(tools.vitruv.applications.pcmumlclass.tests.ParameterConceptTest.TEST_PARAMETER_NAME, null) 
+		var umlParameter = umlOperation.createOwnedParameter(TEST_PARAMETER_NAME, null) 
 		umlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
-		umlParameter.type = helper.getUmlCompositeDataTypeClass(pcmRepository)
+		umlParameter.type = umlType
+		umlParameter.lower = lower
+		umlParameter.upper = upper
 		saveAndSynchronizeChanges(umlParameter)
 		
 		reloadResourceAndReturnRoot(umlParameter)
@@ -86,23 +95,44 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 		umlOperation = helper.getUmlOperation(pcmInterface)
 		
-		umlParameter = umlOperation.ownedParameters.findFirst[it.name == tools.vitruv.applications.pcmumlclass.tests.ParameterConceptTest.TEST_PARAMETER_NAME]
+		umlParameter = umlOperation.ownedParameters.findFirst[it.name == TEST_PARAMETER_NAME]
 		assertNotNull(umlParameter)
 		checkParameterConcept(umlParameter)
+		assertTrue(EcoreUtil.equals(umlParameter.type, helper.getModifiableInstance(umlType)))
+		assertTrue(umlParameter.lower == lower)
+		assertTrue(umlParameter.upper == upper)
+	}
+
+	@Test @Ignore
+	def void testCreateParameterConcept_UML_primitiveType() {
+		var pcmRepository = createRepositoryWithSignature
+		testCreateParameterConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
 	}
 	
 	@Test
-	def void testCreateParameterConcept_PCM() {
+	def void testCreateParameterConcept_UML_compositeType() {
 		var pcmRepository = createRepositoryWithSignature
+		testCreateParameterConcept_UML(pcmRepository, helper.getUmlCompositeDataTypeClass(pcmRepository), 1, 1)
+	}
+	
+	@Test
+	def void testCreateParameterConcept_UML_collectionType() {
+		var pcmRepository = createRepositoryWithSignature
+		testCreateParameterConcept_UML(pcmRepository, helper.getUmlCompositeDataTypeClass_2(pcmRepository), 0, LiteralUnlimitedNatural.UNLIMITED)
+	}
+	
+	
+	private def void _testCreateParameterConcept_PCM_withType(Repository inPcmRepository, DataType pcmType) {
+		var pcmRepository = inPcmRepository
 		var pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 		var pcmSignature = helper.getPcmOperationSignature(pcmInterface)
 		
 		var pcmParameter = RepositoryFactory.eINSTANCE.createParameter
 		pcmParameter.parameterName = tools.vitruv.applications.pcmumlclass.tests.ParameterConceptTest.TEST_PARAMETER_NAME
-		pcmParameter.dataType__Parameter = helper.getPcmCompositeDataType(pcmRepository)
+		pcmParameter.dataType__Parameter = pcmType
 		pcmSignature.parameters__OperationSignature += pcmParameter
-		saveAndSynchronizeChanges(pcmParameter)
 		
+		saveAndSynchronizeChanges(pcmParameter)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 		pcmSignature = helper.getPcmOperationSignature(pcmInterface)
@@ -110,13 +140,25 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		pcmParameter = pcmSignature.parameters__OperationSignature.findFirst[it.parameterName == tools.vitruv.applications.pcmumlclass.tests.ParameterConceptTest.TEST_PARAMETER_NAME]
 		assertNotNull(pcmParameter)
 		checkParameterConcept(pcmParameter)
+		assertTrue(EcoreUtil.equals(pcmParameter.dataType__Parameter, helper.getModifiableInstance(pcmType)))
 	}
 	
+	@Test @Ignore
+	def void testCreateParameterConcept_PCM_primitiveType() {
+		var pcmRepository = createRepositoryWithSignature
+		_testCreateParameterConcept_PCM_withType(pcmRepository, helper.PCM_INT)
+	}
 	
+	@Test
+	def void testCreateParameterConcept_PCM_compositeType() {
+		var pcmRepository = createRepositoryWithSignature
+		_testCreateParameterConcept_PCM_withType(pcmRepository, helper.getPcmCompositeDataType(pcmRepository))
+	}
 	
-	
-	
-	
-	
+	@Test
+	def void testCreateParameterConcept_PCM_collectionType() {
+		var pcmRepository = createRepositoryWithSignature
+		_testCreateParameterConcept_PCM_withType(pcmRepository, helper.getPcmCollectionDataType(pcmRepository))
+	}
 	
 }

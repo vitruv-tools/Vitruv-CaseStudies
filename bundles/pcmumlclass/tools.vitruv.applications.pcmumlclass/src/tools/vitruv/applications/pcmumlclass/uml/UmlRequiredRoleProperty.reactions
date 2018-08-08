@@ -1,6 +1,7 @@
 import org.eclipse.uml2.uml.Class
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import org.eclipse.uml2.uml.Interface
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -85,10 +86,11 @@ routine createCorrespondingRequiredRole(uml::Property umlProperty, uml::Class um
 	}
 	action {
 		val pcmRequired = create pcm::OperationRequiredRole and initialize {
-			pcmRequired.requiredInterface__OperationRequiredRole = pcmInterface
 			pcmComponent.requiredRoles_InterfaceRequiringEntity += pcmRequired
 		}
 		add correspondence between pcmRequired and umlProperty tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
+		call changeTypeOfCorrespondingRequiredRole(umlProperty, umlProperty.type as Interface) // cast is ok since the retrieve already worked
+		call changeNameOfCorrespondingRequiredRole(umlProperty, umlProperty.name)
 	}
 }
 
@@ -134,6 +136,23 @@ routine deleteCorrespondingRequiredRole(uml::Property umlProperty){
 	action {
 		remove correspondence between pcmRequired and umlProperty tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 		delete pcmRequired
+	}
+}
+
+reaction RequiredRolePropertyNameChanged {
+	after attribute replaced at uml::Property[name]
+	with {affectedEObject.name === newValue}
+	call changeNameOfCorrespondingRequiredRole(affectedEObject, newValue)
+}
+
+routine changeNameOfCorrespondingRequiredRole(uml::Property umlProperty, String newName){
+	match{
+		val pcmRequired = retrieve pcm::OperationRequiredRole corresponding to umlProperty tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
+	}
+	action {
+		update pcmRequired {
+			pcmRequired.entityName = newName
+		}
 	}
 }
 
