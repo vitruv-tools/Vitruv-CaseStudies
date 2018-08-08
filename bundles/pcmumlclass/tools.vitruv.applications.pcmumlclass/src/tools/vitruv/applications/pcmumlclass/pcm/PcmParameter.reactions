@@ -1,4 +1,3 @@
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
@@ -17,9 +16,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 reactions: pcmParameterReactions
 in reaction to changes in PCM
 execute actions in UML
-
-// TODO can't import the same routines in multiple Reaction files. Even using qualified-non qualified names I only get two imports but I need three.   
-//import routines pcmDataTypePropagationReactions using qualified names
+  
+import routines pcmDataTypePropagationReactions using qualified names
 
 reaction ParameterInsertedInSignature {
 	after element pcm::Parameter inserted in pcm::OperationSignature[parameters__OperationSignature]
@@ -168,26 +166,6 @@ reaction ParameterTypeChanged{
 	call changeTypeOfCorrespondingRegularParameter(affectedEObject, newValue)
 }
 
-//routine new_changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmDataType){
-//	match {
-//		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-//		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
-//	}
-//	action {
-//		execute {
-//			if (previousTypeWasCollectionType.isPresent){
-//				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-//			}
-//			if (pcmDataType instanceof CollectionDataType){
-//				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-//			}
-//			else {
-//				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlParam)
-//			}
-//		}
-//	}
-//}
-
 routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmDataType){
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
@@ -196,59 +174,18 @@ routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::
 	action {
 		execute {
 			if (previousTypeWasCollectionType.isPresent){
-				removeCollectionTypeCorrespondenceFromRegularParameter(pcmParam)
+				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 			}
 			if (pcmDataType instanceof CollectionDataType){
-				addCollectionTypeCorrespondenceToRegularParameter(pcmParam, pcmDataType)
+				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 			}
 			else {
-				replaceTypeOfCorrespondingRegularParameter(pcmParam, pcmDataType)
+				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlParam)
 			}
 		}
 	}
 }
 
-routine removeCollectionTypeCorrespondenceFromRegularParameter(pcm::Parameter pcmParam){
-	match {
-		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-		val pcmPreviousCollectionType = retrieve asserted pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
-	}
-	action {
-		update umlParam {
-			umlParam.type = null
-			umlParam.lower = 1
-			umlParam.upper = 1
-		}
-		remove correspondence between pcmPreviousCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
-	}
-}
-
-routine addCollectionTypeCorrespondenceToRegularParameter(pcm::Parameter pcmParam, pcm::CollectionDataType pcmCollectionType){
-	match {
-		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-	}
-	action {
-		update umlParam {
-			umlParam.lower = 0
-			umlParam.upper = LiteralUnlimitedNatural.UNLIMITED
-		}
-		add correspondence between pcmCollectionType and umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
-		call replaceTypeOfCorrespondingRegularParameter(pcmParam, pcmCollectionType.innerType_CollectionDataType)
-	}
-}
-
-routine replaceTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmSimpleType){
-	match {
-		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
-		val umlCompositeType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-	}
-	action {
-		update umlParam {
-			umlParam.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
-		}
-	}
-}
 
 
 

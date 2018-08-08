@@ -1,6 +1,5 @@
-import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.palladiosimulator.pcm.repository.CollectionDataType
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -14,9 +13,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 reactions: pcmInnerDeclarationReactions
 in reaction to changes in PCM
 execute actions in UML
-
-// TODO can't import the same routines in multiple Reaction files. Even using qualified-non qualified names I only get two imports but I need three.   
-//import routines pcmDataTypePropagationReactions using qualified names
+ 
+import routines pcmDataTypePropagationReactions using qualified names
 
 reaction InnerDeclarationInserted{
 	after element pcm::InnerDeclaration inserted in pcm::CompositeDataType[innerDeclaration_CompositeDataType]
@@ -145,26 +143,6 @@ reaction InnerDeclarationTypeChanged {
 	call changeTypeOfCorrespondingAttribute(affectedEObject, newValue)
 }
 
-//routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmInnerDeclaration, pcm::DataType pcmDataType){
-//	match {
-//		val umlProperty = retrieve uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-//		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
-//	}
-//	action {
-//		execute {			
-//			if (previousTypeWasCollectionType.isPresent){
-//				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
-//			}
-//			if (pcmDataType instanceof CollectionDataType){
-//				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
-//			}
-//			else {
-//				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlProperty)
-//			}
-//		}
-//	}
-//}
-
 routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmInnerDeclaration, pcm::DataType pcmDataType){
 	match {
 		val umlProperty = retrieve uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.INNER_DECLARATION__PROPERTY
@@ -173,60 +151,14 @@ routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmInnerDeclara
 	action {
 		execute {			
 			if (previousTypeWasCollectionType.isPresent){
-				removeCollectionTypeCorrespondenceFromAttribute(pcmInnerDeclaration)
+				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
 			}
 			if (pcmDataType instanceof CollectionDataType){
-				addCollectionTypeCorrespondenceToAttribute(pcmInnerDeclaration, pcmDataType)
+				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
 			}
 			else {
-				replaceTypeOfCorrespondingAttribute(pcmInnerDeclaration, pcmDataType)
+				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlProperty)
 			}
 		}
 	}
 }
-
-routine removeCollectionTypeCorrespondenceFromAttribute(pcm::InnerDeclaration pcmInnerDeclaration){
-	match {
-		val umlProperty = retrieve uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		val pcmPreviousCollectionType = retrieve asserted pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
-	}
-	action {
-		update umlProperty {
-			umlProperty.type = null
-			umlProperty.lower = 1
-			umlProperty.upper = 1
-		}
-		remove correspondence between pcmPreviousCollectionType and umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
-	}
-}
-
-routine addCollectionTypeCorrespondenceToAttribute(pcm::InnerDeclaration pcmAttribute, pcm::CollectionDataType pcmCollectionType){
-	match {
-		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-	}
-	action {
-		update umlAttribute {
-			umlAttribute.lower = 0
-			umlAttribute.upper = LiteralUnlimitedNatural.UNLIMITED
-		}
-		add correspondence between pcmCollectionType and umlAttribute tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
-		call replaceTypeOfCorrespondingAttribute(pcmAttribute, pcmCollectionType.innerType_CollectionDataType)
-	}
-}
-
-routine replaceTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmAttribute, pcm::DataType pcmSimpleType){
-	match {
-		val umlAttribute = retrieve uml::Property corresponding to pcmAttribute tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
-		val umlCompositeType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-	}
-	action {
-		update umlAttribute {
-			umlAttribute.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
-		}
-	}
-}
-
-
-
-
