@@ -128,11 +128,13 @@ routine changeTypeOfUmlParameterCorrespondence(uml::Parameter umlParameter){
 
 reaction RegularOrReturnParameterLowerChanged{
 	after element replaced at uml::Parameter[lowerValue]
+//	with {affectedEObject.lower == newValue.integerValue} // .integerValue appears to be an unsupported operation
 	call regularOrReturnParameterMultiplicityChanged(affectedEObject)
 }
 
 reaction RegularOrReturnParameterUpperChanged{
 	after element replaced at uml::Parameter[upperValue]
+//	with {affectedEObject.upper == newValue.integerValue} // .integerValue appears to be an unsupported operation
 	call regularOrReturnParameterMultiplicityChanged(affectedEObject)
 }
 

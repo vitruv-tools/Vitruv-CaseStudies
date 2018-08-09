@@ -95,7 +95,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 	}
 
 
-	@Test @Ignore
+	@Test
 	def void testCreateAttributeConcept_PCM_primitiveType() {
 		var pcmRepository = createRepository()
 		testCreateAttributeConcept_PCM(pcmRepository, helper.PCM_INT)
@@ -137,7 +137,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(umlAttribute.upper == upper)
 	}
 	
-	@Test @Ignore
+	@Test
 	def void testCreateAttributeConcept_UML_primitiveType() {
 		var pcmRepository = createRepository()
 		testCreateAttributeConcept_UML(pcmRepository, helper.UML_INT, 1, 1)

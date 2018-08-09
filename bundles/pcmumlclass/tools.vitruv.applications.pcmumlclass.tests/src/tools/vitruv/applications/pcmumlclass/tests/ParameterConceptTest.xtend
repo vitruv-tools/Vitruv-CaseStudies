@@ -103,7 +103,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(umlParameter.upper == upper)
 	}
 
-	@Test @Ignore
+	@Test
 	def void testCreateParameterConcept_UML_primitiveType() {
 		var pcmRepository = createRepositoryWithSignature
 		testCreateParameterConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
@@ -143,7 +143,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(EcoreUtil.equals(pcmParameter.dataType__Parameter, helper.getModifiableInstance(pcmType)))
 	}
 	
-	@Test @Ignore
+	@Test
 	def void testCreateParameterConcept_PCM_primitiveType() {
 		var pcmRepository = createRepositoryWithSignature
 		_testCreateParameterConcept_PCM_withType(pcmRepository, helper.PCM_INT)

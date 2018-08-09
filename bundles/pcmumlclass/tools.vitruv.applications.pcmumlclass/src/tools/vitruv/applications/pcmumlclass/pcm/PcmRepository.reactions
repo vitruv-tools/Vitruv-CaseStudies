@@ -38,7 +38,7 @@ routine initializePcmRepositoryUmlPackagesCorrespondence(pcm::Repository pcmRepo
 			if(!umlRepositoryPkg.present) createUmlRepositoryPackage(pcmRepo)
 			if(!umlContractsPkg.present) createUmlContractsPackage(pcmRepo)
 			if(!umlDatatypesPkg.present) createUmlDatatypesPackage(pcmRepo)
-//			bootstrapPrimitiveDatatypes(pcmRepo) // TODO enable PrimitiveDataType-bootstrapping when "can't save UMLPrimitiveTypes" is fixed
+			bootstrapPrimitiveDatatypes(pcmRepo) // TODO enable PrimitiveDataType-bootstrapping when "can't save UMLPrimitiveTypes" is fixed
 		}
 	}
 }
