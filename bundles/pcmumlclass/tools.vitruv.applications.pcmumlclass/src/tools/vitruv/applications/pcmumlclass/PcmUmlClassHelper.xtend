@@ -13,6 +13,11 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import org.eclipse.uml2.uml.Type
+import org.palladiosimulator.pcm.repository.CompositeDataType
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.palladiosimulator.pcm.repository.CollectionDataType
+import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 class PcmUmlClassHelper {
 	private new(){}
@@ -28,6 +33,7 @@ class PcmUmlClassHelper {
 	def public static getPcmPrimitiveTypes(ResourceSet resourceSet){
 		var List<PrimitiveDataType> pcmPrimitiveTypes = #[]
 		val uri = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository")
+//		val uri = URI.createURI("platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository")
 		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
 			val resource = resourceSet.getResource(uri,true)
 			pcmPrimitiveTypes = resource.allContents.filter(PrimitiveDataType).toList				
@@ -38,6 +44,7 @@ class PcmUmlClassHelper {
 	def public static getUmlPrimitiveTypes(ResourceSet resourceSet){
 		var List<PrimitiveType> umlPrimitiveTypes = #[]
 		val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
+//		val uri = URI.createURI("platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml")
 		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
 			val resource = resourceSet.getResource(uri,true)
 			umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList		
@@ -91,7 +98,37 @@ class PcmUmlClassHelper {
 		return !ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, pkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE, Repository).nullOrEmpty
 	}
 	
-	
+	public static def getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper){
+		if (umlType === null) return null
+		
+		val pcmPrimitiveType = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, umlType, TagLiterals.DATATYPE__TYPE, PrimitiveDataType)
+		val pcmCompositeType = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, umlType, TagLiterals.COMPOSITE_DATATYPE__CLASS, CompositeDataType)
+		val pcmSimpleType = #[pcmPrimitiveType.head, pcmCompositeType.head].findFirst[it !== null]
+		
+		if (umlType !== null && pcmSimpleType === null){
+			// TODO warn user that a non-synchronized DataType has been set where it should not
+			return null
+		}
+		
+		var pcmDataType = pcmSimpleType
+		if (pcmSimpleType !== null && lower == 0 && upper == LiteralUnlimitedNatural.UNLIMITED){
+			//find fitting CollectionType with collection.innerType ==
+			val pcmRepository = pcmSimpleType.repository__DataType
+			// TODO userInteraction to disambiguate from multiple Collection Types
+			var pcmCollectionDataType = pcmRepository.dataTypes__Repository.filter(CollectionDataType).findFirst[it.innerType_CollectionDataType === pcmSimpleType]
+			
+			if (pcmCollectionDataType === null){
+				// none found -> create default
+				pcmCollectionDataType = RepositoryFactory.eINSTANCE.createCollectionDataType
+				pcmCollectionDataType.entityName = umlType.name + "_CollectionDataType"
+				pcmCollectionDataType.innerType_CollectionDataType = pcmSimpleType
+				pcmRepository.dataTypes__Repository += pcmCollectionDataType
+			}
+			pcmDataType = pcmCollectionDataType
+		}
+		
+		return pcmDataType
+	}
 	
 	
 }

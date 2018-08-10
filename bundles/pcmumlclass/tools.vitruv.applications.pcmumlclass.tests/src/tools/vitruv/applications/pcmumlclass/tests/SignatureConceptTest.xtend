@@ -118,11 +118,6 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		assertEquals(upper, umlOperation.upper)
 	}
 	
-	@Test
-	@Ignore
-	def void testCreateSignatureConcept_UML() {
-		_testCreateSignatureConcept_UML
-	}
 	@Test 
 //	@Ignore
 	def void testCreateSignatureConcept_UML_primitiveReturnType() {
@@ -130,13 +125,13 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		_testReturnTypePropagation_UML(pcmRepository, helper.UML_STRING, 1, 1)
 	}
 	@Test
-	@Ignore
+//	@Ignore
 	def void testCreateSignatureConcept_UML_compositeReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
 		_testReturnTypePropagation_UML(pcmRepository, helper.getUmlCompositeDataTypeClass(pcmRepository), 1, 1)
 	}
 	@Test
-	@Ignore
+//	@Ignore
 	def void testCreateSignatureConcept_UML_collectionReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
 		_testReturnTypePropagation_UML(pcmRepository, helper.getUmlCompositeDataTypeClass_2(pcmRepository), 0, LiteralUnlimitedNatural.UNLIMITED)
@@ -162,19 +157,6 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(pcmSignature.entityName == TEST_SIGNATURE_NAME)
 		var reloadedPcmType = helper.getModifiableInstance(pcmType)
 		assertTrue(EcoreUtil.equals(pcmSignature.returnType__OperationSignature, reloadedPcmType))
-//		if(pcmType !== null){
-//			if(pcmType instanceof PrimitiveDataType){
-//				assertEquals(
-//					(pcmType as PrimitiveDataType).type,
-//					(pcmSignature.returnType__OperationSignature as PrimitiveDataType).type
-//				)
-//			} else {
-//				assertEquals(
-//					(pcmType as Entity).id, 
-//					(pcmSignature.returnType__OperationSignature as Entity).id
-//				)
-//			}	
-//		}
 	}
 	
 	@Test
@@ -185,14 +167,14 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	def void testCreateSignatureConcept_PCM_compositeReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.getPcmCompositeDataType(pcmRepository))
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	def void testCreateSignatureConcept_PCM_collectionReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.getPcmCollectionDataType(pcmRepository))

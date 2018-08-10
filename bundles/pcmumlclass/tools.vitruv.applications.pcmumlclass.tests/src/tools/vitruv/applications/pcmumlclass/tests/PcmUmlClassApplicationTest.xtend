@@ -93,7 +93,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlType, TagLiterals.DATATYPE__TYPE)
 		val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		return (correspondingPrimitiveType || correspondingCompositeType) // inner collection types are not supported
-			&& lower == 1 && upper == 1
+			&& upper == 1 // && lower == 1 // lower could also be 0
 	}
 	
 	private static def boolean isCorrectCollectionTypeCorrespondence(CorrespondenceModel correspondenceModel, 
@@ -108,18 +108,27 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		if (pcmDatatype === null || umlProperty.type === null){
 			return pcmDatatype === null && umlProperty.type === null
 		}
-		return isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlProperty.type, umlProperty.lower, umlProperty.upper)
-			|| (corresponds(correspondenceModel, pcmDatatype, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
-				&& isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlProperty.type, umlProperty.lower, umlProperty.upper))
+		
+		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlProperty.type, umlProperty.lower, umlProperty.upper)
+		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
+		val collectionTypeCorrespondenceIsCorrect = 
+			if(pcmDatatype instanceof CollectionDataType) 
+				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlProperty.type, umlProperty.lower, umlProperty.upper)
+			else null
+		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
 	
 	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Parameter umlParam){
 		if (pcmDatatype === null || umlParam.type === null){
 			return pcmDatatype === null && umlParam.type === null
 		}
-		return isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower, umlParam.upper)
-			|| (corresponds(correspondenceModel, pcmDatatype, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-				&& isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlParam.type, umlParam.lower, umlParam.upper))
+		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower, umlParam.upper)
+		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
+		val collectionTypeCorrespondenceIsCorrect = 
+			if(pcmDatatype instanceof CollectionDataType) 
+				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlParam.type, umlParam.lower, umlParam.upper)
+			else null
+		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
 	
 }
