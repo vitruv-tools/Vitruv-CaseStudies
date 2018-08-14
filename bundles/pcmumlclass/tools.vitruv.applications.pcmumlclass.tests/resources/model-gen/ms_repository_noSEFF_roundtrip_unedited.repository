@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ASCII"?>
+<repository:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:repository="http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" id="_UggG4J-oEei3esfllU1V1w" entityName="DefaultRepository">
+  <components__Repository xsi:type="repository:BasicComponent" id="_XNbnMJ-oEei3esfllU1V1w" entityName="UserDBAdapter">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_XTCf8J-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_UtqZIJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_XVxD0J-oEei3esfllU1V1w" entityName="Required_IDB_UserDBAdapter" requiredInterface__OperationRequiredRole="_Wdf_EJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_XeQRcJ-oEei3esfllU1V1w" entityName="AudioWatermarking">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_Xj934J-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_XmrNoJ-oEei3esfllU1V1w" entityName="Required_IDownload_AudioWatermarking" requiredInterface__OperationRequiredRole="_U5fOoJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_XvImEJ-oEei3esfllU1V1w" entityName="Reencoding">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_X03aoJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_X3qP8J-oEei3esfllU1V1w" entityName="Required_IDownload_Reencoding" requiredInterface__OperationRequiredRole="_U5fOoJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_YAfb0J-oEei3esfllU1V1w" entityName="MediaManagement">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_YGR6wJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_VgtmsJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_YJp-4J-oEei3esfllU1V1w" entityName="Required_IDownload_MediaManagement" requiredInterface__OperationRequiredRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_YLd8wJ-oEei3esfllU1V1w" entityName="Required_IPackaging_MediaManagement" requiredInterface__OperationRequiredRole="_VUXz0J-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_YNQFcJ-oEei3esfllU1V1w" entityName="Required_IMediaAccess_MediaManagement" requiredInterface__OperationRequiredRole="_VFBJMJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_YgvCIJ-oEei3esfllU1V1w" entityName="Facade">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_YmsgMJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_V6LPkJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_Yp3I8J-oEei3esfllU1V1w" entityName="Required_IMediaManagement_Facade" requiredInterface__OperationRequiredRole="_VgtmsJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_Yrp4sJ-oEei3esfllU1V1w" entityName="Required_IUserDB_Facade" requiredInterface__OperationRequiredRole="_XAn6QJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_Y5m1IJ-oEei3esfllU1V1w" entityName="MediaAccess">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_Y_3OIJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_VFBJMJ-oEei3esfllU1V1w"/>
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_ZBSKcJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_ZFTu0J-oEei3esfllU1V1w" entityName="Required_IDB_MediaAccess" requiredInterface__OperationRequiredRole="_Wdf_EJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_ZHHFoJ-oEei3esfllU1V1w" entityName="Required_IDataStorage_MediaAccess" requiredInterface__OperationRequiredRole="_Wq0CUJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_ZVh8IJ-oEei3esfllU1V1w" entityName="Packaging">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_Zc5vcJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_VUXz0J-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_ZhqToJ-oEei3esfllU1V1w" entityName="DB">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_Zn0mAJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_Wdf_EJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_ZsgRsJ-oEei3esfllU1V1w" entityName="FileStorage">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_Zyp9AJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_Wq0CUJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_Z3dkgJ-oEei3esfllU1V1w" entityName="TagWatermarking">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_Z9mBsJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_aAmSYJ-oEei3esfllU1V1w" entityName="Required_IDownload_TagWatermarking" requiredInterface__OperationRequiredRole="_U5fOoJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_aJ9pwJ-oEei3esfllU1V1w" entityName="Cache">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_aT96UJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_aWnlsJ-oEei3esfllU1V1w" entityName="Required_IDownload_Cache" requiredInterface__OperationRequiredRole="_U5fOoJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_afa8YJ-oEei3esfllU1V1w" entityName="UserManagement">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_alUJAJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_XAn6QJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_an_pkJ-oEei3esfllU1V1w" entityName="Required_IUserDB_UserManagement" requiredInterface__OperationRequiredRole="_UtqZIJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_axWZ4J-oEei3esfllU1V1w" entityName="DownloadLoadBalancer">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_a3Z-kJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_a6XL8J-oEei3esfllU1V1w" entityName="Required_IDownload_Replica2_DownloadLoadBalancer" requiredInterface__OperationRequiredRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_a8xmwJ-oEei3esfllU1V1w" entityName="Required_IDownload_Replica1_DownloadLoadBalancer" requiredInterface__OperationRequiredRole="_U5fOoJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <components__Repository xsi:type="repository:BasicComponent" id="_bJ2ZcJ-oEei3esfllU1V1w" entityName="ParallelWatermarking">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_bPz3gJ-oEei3esfllU1V1w" providedInterface__OperationProvidedRole="_U5fOoJ-oEei3esfllU1V1w"/>
+    <requiredRoles_InterfaceRequiringEntity xsi:type="repository:OperationRequiredRole" id="_bSZRcJ-oEei3esfllU1V1w" entityName="Required_IDownload_Watermarking" requiredInterface__OperationRequiredRole="_U5fOoJ-oEei3esfllU1V1w"/>
+  </components__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_UtqZIJ-oEei3esfllU1V1w" entityName="IUserDB">
+    <signatures__OperationInterface id="_UuopgJ-oEei3esfllU1V1w" entityName="addUser"/>
+    <signatures__OperationInterface id="_UvaFkJ-oEei3esfllU1V1w" entityName="getUserData"/>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_U5fOoJ-oEei3esfllU1V1w" entityName="IDownload">
+    <signatures__OperationInterface id="_U6bCwJ-oEei3esfllU1V1w" entityName="download" returnType__OperationSignature="_UnSrYJ-oEei3esfllU1V1w">
+      <parameters__OperationSignature dataType__Parameter="_UnSrYJ-oEei3esfllU1V1w" parameterName="audioRequest" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_VFBJMJ-oEei3esfllU1V1w" entityName="IMediaAccess">
+    <signatures__OperationInterface id="_VF8WQJ-oEei3esfllU1V1w" entityName="upload">
+      <parameters__OperationSignature dataType__Parameter="_UkrcQJ-oEei3esfllU1V1w" parameterName="file" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+    <signatures__OperationInterface id="_VGvAcJ-oEei3esfllU1V1w" entityName="getFileList"/>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_VUXz0J-oEei3esfllU1V1w" entityName="IPackaging">
+    <signatures__OperationInterface id="_VVX5YJ-oEei3esfllU1V1w" entityName="zip" returnType__OperationSignature="_UkrcQJ-oEei3esfllU1V1w">
+      <parameters__OperationSignature dataType__Parameter="_UnSrYJ-oEei3esfllU1V1w" parameterName="audios" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_VgtmsJ-oEei3esfllU1V1w" entityName="IMediaManagement">
+    <signatures__OperationInterface id="_VhqB4J-oEei3esfllU1V1w" entityName="upload">
+      <parameters__OperationSignature dataType__Parameter="_UkrcQJ-oEei3esfllU1V1w" parameterName="file" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+    <signatures__OperationInterface id="_ViiLoJ-oEei3esfllU1V1w" entityName="download" returnType__OperationSignature="_UkrcQJ-oEei3esfllU1V1w">
+      <parameters__OperationSignature dataType__Parameter="_UnSrYJ-oEei3esfllU1V1w" parameterName="audioRequest" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+    <signatures__OperationInterface id="_VjTnsJ-oEei3esfllU1V1w" entityName="getFileList"/>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_V6LPkJ-oEei3esfllU1V1w" entityName="IFacade">
+    <signatures__OperationInterface id="_V7W7UJ-oEei3esfllU1V1w" entityName="upload">
+      <parameters__OperationSignature dataType__Parameter="_UkrcQJ-oEei3esfllU1V1w" parameterName="file" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+    <signatures__OperationInterface id="_V8JlgJ-oEei3esfllU1V1w" entityName="getFileList"/>
+    <signatures__OperationInterface id="_V9C9YJ-oEei3esfllU1V1w" entityName="register"/>
+    <signatures__OperationInterface id="_V94q4J-oEei3esfllU1V1w" entityName="login"/>
+    <signatures__OperationInterface id="_V_ks8J-oEei3esfllU1V1w" entityName="download" returnType__OperationSignature="_UkrcQJ-oEei3esfllU1V1w">
+      <parameters__OperationSignature dataType__Parameter="_UnSrYJ-oEei3esfllU1V1w" parameterName="audioRequest" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_Wdf_EJ-oEei3esfllU1V1w" entityName="IDB">
+    <signatures__OperationInterface id="_WejH8J-oEei3esfllU1V1w" entityName="query"/>
+    <signatures__OperationInterface id="_WfVyIJ-oEei3esfllU1V1w" entityName="getFileList"/>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_Wq0CUJ-oEei3esfllU1V1w" entityName="IFileStorage">
+    <signatures__OperationInterface id="_Wry5wJ-oEei3esfllU1V1w" entityName="getFiles" returnType__OperationSignature="_UkrcQJ-oEei3esfllU1V1w">
+      <parameters__OperationSignature dataType__Parameter="_UnSrYJ-oEei3esfllU1V1w" parameterName="audioRequest" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+    <signatures__OperationInterface id="_WsjuwJ-oEei3esfllU1V1w" entityName="storeFile">
+      <parameters__OperationSignature dataType__Parameter="_UkrcQJ-oEei3esfllU1V1w" parameterName="file" modifier__Parameter="inout"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_XAn6QJ-oEei3esfllU1V1w" entityName="IUserManagement">
+    <signatures__OperationInterface id="_XBmxsJ-oEei3esfllU1V1w" entityName="register"/>
+    <signatures__OperationInterface id="_XCW_oJ-oEei3esfllU1V1w" entityName="login"/>
+  </interfaces__Repository>
+  <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_UkrcQJ-oEei3esfllU1V1w" entityName="FileContent"/>
+  <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_UnSrYJ-oEei3esfllU1V1w" entityName="AudioCollectionRequest">
+    <innerDeclaration_CompositeDataType entityName="Count"/>
+    <innerDeclaration_CompositeDataType entityName="Size"/>
+  </dataTypes__Repository>
+</repository:Repository>

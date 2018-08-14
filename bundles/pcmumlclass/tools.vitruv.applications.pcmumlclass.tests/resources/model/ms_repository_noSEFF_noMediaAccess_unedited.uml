@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" name="umlrootmodel">
+  <packagedElement xmi:type="uml:Package" name="defaultRepository">
+    <packagedElement xmi:type="uml:Package" name="contracts">
+      <packagedElement xmi:type="uml:Interface" name="IUserDB">
+        <ownedOperation name="addUser">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+        <ownedOperation name="getUserData">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IDownload">
+        <ownedOperation name="download">
+          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/AudioCollectionRequest" direction="return"/>
+          <ownedParameter name="audioRequest" type="//defaultRepository/datatypes/AudioCollectionRequest" direction="inout"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IMediaAccess">
+        <ownedOperation name="upload">
+          <ownedParameter name="returnParam" direction="return"/>
+          <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent" direction="inout"/>
+        </ownedOperation>
+        <ownedOperation name="getFileList">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IPackaging">
+        <ownedOperation name="zip">
+          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return"/>
+          <ownedParameter name="audios" type="//defaultRepository/datatypes/AudioCollectionRequest" direction="inout"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IMediaManagement">
+        <ownedOperation name="upload">
+          <ownedParameter name="returnParam" direction="return"/>
+          <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent" direction="inout"/>
+        </ownedOperation>
+        <ownedOperation name="download">
+          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return"/>
+          <ownedParameter name="audioRequest" type="//defaultRepository/datatypes/AudioCollectionRequest" direction="inout"/>
+        </ownedOperation>
+        <ownedOperation name="getFileList">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IFacade">
+        <ownedOperation name="upload">
+          <ownedParameter name="returnParam" direction="return"/>
+          <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent" direction="inout"/>
+        </ownedOperation>
+        <ownedOperation name="getFileList">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+        <ownedOperation name="register">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+        <ownedOperation name="login">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+        <ownedOperation name="download">
+          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return"/>
+          <ownedParameter name="audioRequest" type="//defaultRepository/datatypes/AudioCollectionRequest" direction="inout"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IDB">
+        <ownedOperation name="query">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+        <ownedOperation name="getFileList">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IFileStorage">
+        <ownedOperation name="getFiles">
+          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return"/>
+          <ownedParameter name="audioRequest" type="//defaultRepository/datatypes/AudioCollectionRequest" direction="inout"/>
+        </ownedOperation>
+        <ownedOperation name="storeFile">
+          <ownedParameter name="returnParam" direction="return"/>
+          <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent" direction="inout"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IUserManagement">
+        <ownedOperation name="register">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+        <ownedOperation name="login">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="datatypes">
+      <packagedElement xmi:type="uml:Class" name="FileContent"/>
+      <packagedElement xmi:type="uml:Class" name="AudioCollectionRequest">
+        <ownedAttribute name="Count"/>
+        <ownedAttribute name="Size"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="userDBAdapter">
+      <packagedElement xmi:type="uml:Class" name="UserDBAdapterImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IUserDB"/>
+        <ownedAttribute name="Required_IDB_UserDBAdapter" type="//defaultRepository/contracts/IDB"/>
+        <ownedOperation name="UserDBAdapterImpl">
+          <ownedParameter name="Required_IDB_UserDBAdapter" type="//defaultRepository/contracts/IDB"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="audioWatermarking">
+      <packagedElement xmi:type="uml:Class" name="AudioWatermarkingImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IDownload"/>
+        <ownedAttribute name="Required_IDownload_AudioWatermarking" type="//defaultRepository/contracts/IDownload"/>
+        <ownedOperation name="AudioWatermarkingImpl">
+          <ownedParameter name="Required_IDownload_AudioWatermarking" type="//defaultRepository/contracts/IDownload"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="reencoding">
+      <packagedElement xmi:type="uml:Class" name="ReencodingImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IDownload"/>
+        <ownedAttribute name="Required_IDownload_Reencoding" type="//defaultRepository/contracts/IDownload"/>
+        <ownedOperation name="ReencodingImpl">
+          <ownedParameter name="Required_IDownload_Reencoding" type="//defaultRepository/contracts/IDownload"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="mediaManagement">
+      <packagedElement xmi:type="uml:Class" name="MediaManagementImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IMediaManagement"/>
+        <ownedAttribute name="Required_IDownload_MediaManagement" type="//defaultRepository/contracts/IDownload"/>
+        <ownedAttribute name="Required_IPackaging_MediaManagement" type="//defaultRepository/contracts/IPackaging"/>
+        <ownedAttribute name="Required_IMediaAccess_MediaManagement" type="//defaultRepository/contracts/IMediaAccess"/>
+        <ownedOperation name="MediaManagementImpl">
+          <ownedParameter name="Required_IDownload_MediaManagement" type="//defaultRepository/contracts/IDownload"/>
+          <ownedParameter name="Required_IPackaging_MediaManagement" type="//defaultRepository/contracts/IPackaging"/>
+          <ownedParameter name="Required_IMediaAccess_MediaManagement" type="//defaultRepository/contracts/IMediaAccess"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="facade">
+      <packagedElement xmi:type="uml:Class" name="FacadeImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IFacade"/>
+        <ownedAttribute name="Required_IMediaManagement_Facade" type="//defaultRepository/contracts/IMediaManagement"/>
+        <ownedAttribute name="Required_IUserDB_Facade" type="//defaultRepository/contracts/IUserManagement"/>
+        <ownedOperation name="FacadeImpl">
+          <ownedParameter name="Required_IMediaManagement_Facade" type="//defaultRepository/contracts/IMediaManagement"/>
+          <ownedParameter name="Required_IUserDB_Facade" type="//defaultRepository/contracts/IUserManagement"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="parallelWatermarking">
+      <packagedElement xmi:type="uml:Class" name="ParallelWatermarkingImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IDownload"/>
+        <ownedAttribute name="Required_IDownload_Watermarking" type="//defaultRepository/contracts/IDownload"/>
+        <ownedOperation name="ParallelWatermarkingImpl">
+          <ownedParameter name="Required_IDownload_Watermarking" type="//defaultRepository/contracts/IDownload"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="packaging">
+      <packagedElement xmi:type="uml:Class" name="PackagingImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IPackaging"/>
+        <ownedOperation name="PackagingImpl"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="dB">
+      <packagedElement xmi:type="uml:Class" name="DBImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IDB"/>
+        <ownedOperation name="DBImpl"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="fileStorage">
+      <packagedElement xmi:type="uml:Class" name="FileStorageImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IFileStorage"/>
+        <ownedOperation name="FileStorageImpl"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="tagWatermarking">
+      <packagedElement xmi:type="uml:Class" name="TagWatermarkingImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IDownload"/>
+        <ownedAttribute name="Required_IDownload_TagWatermarking" type="//defaultRepository/contracts/IDownload"/>
+        <ownedOperation name="TagWatermarkingImpl">
+          <ownedParameter name="Required_IDownload_TagWatermarking" type="//defaultRepository/contracts/IDownload"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="cache">
+      <packagedElement xmi:type="uml:Class" name="CacheImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IDownload"/>
+        <ownedAttribute name="Required_IDownload_Cache" type="//defaultRepository/contracts/IDownload"/>
+        <ownedOperation name="CacheImpl">
+          <ownedParameter name="Required_IDownload_Cache" type="//defaultRepository/contracts/IDownload"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="userManagement">
+      <packagedElement xmi:type="uml:Class" name="UserManagementImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IUserManagement"/>
+        <ownedAttribute name="Required_IUserDB_UserManagement" type="//defaultRepository/contracts/IUserDB"/>
+        <ownedOperation name="UserManagementImpl">
+          <ownedParameter name="Required_IUserDB_UserManagement" type="//defaultRepository/contracts/IUserDB"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="downloadLoadBalancer">
+      <packagedElement xmi:type="uml:Class" name="DownloadLoadBalancerImpl" isFinalSpecialization="true">
+        <generalization general="//defaultRepository/contracts/IDownload"/>
+        <ownedAttribute name="Required_IDownload_Replica2_DownloadLoadBalancer" type="//defaultRepository/contracts/IDownload"/>
+        <ownedAttribute name="Required_IDownload_Replica1_DownloadLoadBalancer" type="//defaultRepository/contracts/IDownload"/>
+        <ownedOperation name="DownloadLoadBalancerImpl">
+          <ownedParameter name="Required_IDownload_Replica2_DownloadLoadBalancer" type="//defaultRepository/contracts/IDownload"/>
+          <ownedParameter name="Required_IDownload_Replica1_DownloadLoadBalancer" type="//defaultRepository/contracts/IDownload"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>
