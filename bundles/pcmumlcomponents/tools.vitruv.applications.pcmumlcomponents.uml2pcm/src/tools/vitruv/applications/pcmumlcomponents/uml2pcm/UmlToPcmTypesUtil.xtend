@@ -57,10 +57,7 @@ class UmlToPcmTypesUtil {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlType]).flatten
 		var correspondences = correspondingElements
 		val tagName = if (isCollection) COLLECTION_TYPE_TAG else ""
-		correspondences = correspondenceModel.reactionsView.getCorrespondences(#[umlType])
-							   .filter[c | c.tag == tagName]
-							   .map[c | c.bs.head]
-							   .toSet()
+		correspondences = correspondenceModel.reactionsView.getCorrespondingEObjects(#[umlType], tagName).flatten
 		if (!correspondences.empty) {
 			return correspondences.head as org.palladiosimulator.pcm.repository.DataType
 		}
@@ -95,6 +92,8 @@ class UmlToPcmTypesUtil {
 			val pcmCollectionType = createCollectionDataType(umlType.name, correspondingType, pcmRepository)
 			createTaggedCorrespondence(correspondenceModel, umlType, pcmCollectionType, COLLECTION_TYPE_TAG)
 			return pcmCollectionType
+		} else if (correspondingType === null) {
+			throw new IllegalStateException("No corresponding type was found for: " + umlType);
 		}
 		return correspondingType
 	}
