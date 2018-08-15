@@ -16,6 +16,7 @@ import org.apache.log4j.Logger
 import org.emftext.language.java.types.NamespaceClassifierReference
 import tools.vitruv.framework.change.processing.ChangePropagationObservable
 import tools.vitruv.framework.userinteraction.UserInteractor
+import org.eclipse.uml2.uml.UMLPackage
 
 /**
  * Helper class for the Java2Uml reactions. Contains functions who depends on
@@ -105,7 +106,7 @@ class JavaToUmlHelper {
      * @return the uml root model
      */
     def static Model getUmlModel(ChangePropagationObservable observable, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
-        val Set<Model> models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
+        val Iterable<Model> models = correspondenceModel.getCorrespondingEObjects(UMLPackage.Literals.MODEL).filter(Model)
         if (models.nullOrEmpty) {
 			val model = UMLFactory.eINSTANCE.createModel();
 			val userModelName = userInteractor.textInputDialogBuilder.message(MODELNAME_INPUTMESSAGE).startInteraction()
@@ -121,7 +122,7 @@ class JavaToUmlHelper {
             }
             //We add a correspondence of the model with itself to save it in the correspondence model
             observable.notifyObjectCreated(model);
-			correspondenceModel.createAndAddCorrespondence(model, model)
+			correspondenceModel.createAndAddCorrespondence(UMLPackage.Literals.MODEL, model)
 			return model;
         }
         if (1 != models.size) {
