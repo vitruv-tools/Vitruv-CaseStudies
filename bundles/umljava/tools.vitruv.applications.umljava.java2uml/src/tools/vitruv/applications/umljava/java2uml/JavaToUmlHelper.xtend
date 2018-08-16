@@ -12,10 +12,11 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import tools.vitruv.framework.userinteraction.UserInteracting
 import org.apache.log4j.Logger
 import org.emftext.language.java.types.NamespaceClassifierReference
 import tools.vitruv.framework.change.processing.ChangePropagationObservable
+import tools.vitruv.framework.userinteraction.UserInteractor
+import org.eclipse.uml2.uml.UMLPackage
 
 /**
  * Helper class for the Java2Uml reactions. Contains functions who depends on
@@ -101,15 +102,15 @@ class JavaToUmlHelper {
      * none could be found.
      * 
      * @param correspondenceModel the correspondence model that contains /should contain the uml root model
-     * @param userInteracting the userinteracting to promt the user if a new uml model must be created
+     * @param userInteractor the userinteracting to promt the user if a new uml model must be created
      * @return the uml root model
      */
-    def static Model getUmlModel(ChangePropagationObservable observable, CorrespondenceModel correspondenceModel, UserInteracting userInteracting) {
-        val Set<Model> models = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model)
+    def static Model getUmlModel(ChangePropagationObservable observable, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
+        val Iterable<Model> models = correspondenceModel.getCorrespondingEObjects(UMLPackage.Literals.MODEL).filter(Model)
         if (models.nullOrEmpty) {
 			val model = UMLFactory.eINSTANCE.createModel();
-			val userModelName = userInteracting.getTextInput(MODELNAME_INPUTMESSAGE)
-			val userModelPath = userInteracting.getTextInput(MODELPATH_INPUTMESSAGE)
+			val userModelName = userInteractor.textInputDialogBuilder.message(MODELNAME_INPUTMESSAGE).startInteraction()
+			val userModelPath = userInteractor.textInputDialogBuilder.message(MODELPATH_INPUTMESSAGE).startInteraction()
 			if (userModelName.nullOrEmpty) {
 				model.name = MODELNAME;
 			} else {
@@ -121,7 +122,7 @@ class JavaToUmlHelper {
             }
             //We add a correspondence of the model with itself to save it in the correspondence model
             observable.notifyObjectCreated(model);
-			correspondenceModel.createAndAddCorrespondence(model, model)
+			correspondenceModel.createAndAddCorrespondence(UMLPackage.Literals.MODEL, model)
 			return model;
         }
         if (1 != models.size) {
@@ -180,7 +181,7 @@ class JavaToUmlHelper {
      * @param message the message to show
      * 
      */
-    def static void showMessage(UserInteracting userinteraction, String message) {
+    def static void showMessage(UserInteractor userinteraction, String message) {
         userinteraction.showMessage(message)
     }
 }

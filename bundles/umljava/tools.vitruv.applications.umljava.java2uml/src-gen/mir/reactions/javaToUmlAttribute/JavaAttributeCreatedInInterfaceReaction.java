@@ -114,7 +114,7 @@ public class JavaAttributeCreatedInInterfaceReaction extends AbstractReactionRea
       String _plus = ("Adding fields to " + _simpleName);
       String _plus_1 = (_plus + " is not supported. Please remove ");
       String _plus_2 = (_plus_1 + newValue);
-      JavaToUmlHelper.showMessage(this.userInteracting, _plus_2);
+      JavaToUmlHelper.showMessage(this.userInteractor, _plus_2);
     }
   }
 }

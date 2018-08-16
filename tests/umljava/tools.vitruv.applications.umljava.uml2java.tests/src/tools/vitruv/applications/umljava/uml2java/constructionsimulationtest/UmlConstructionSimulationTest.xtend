@@ -11,7 +11,6 @@ class UmlConstructionSimulationTest extends Uml2JavaTransformationTest {
     def void testModel1() {
         //selections are needed when collection data types are created in java
         //due to 0..* associations. The user chooses a collection datatype.
-        userInteractor.addNextSelections(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
         testUmlModel("resources/model1.uml")
         //Check manually in the JUnit-workspace.
     }

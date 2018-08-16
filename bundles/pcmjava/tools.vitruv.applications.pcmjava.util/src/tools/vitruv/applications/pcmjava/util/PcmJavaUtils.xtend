@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmjava.util
 
-import com.google.common.collect.Sets
 import tools.vitruv.framework.tuid.Tuid
 import tools.vitruv.framework.util.datatypes.VURI
 import tools.vitruv.framework.util.datatypes.ClaimableMap
@@ -12,7 +11,6 @@ import org.eclipse.core.resources.IProject
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.JavaRoot
 import org.emftext.language.java.containers.Package
 import org.emftext.language.java.members.Method
@@ -26,8 +24,6 @@ import org.palladiosimulator.pcm.system.System
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import static extension tools.vitruv.framework.util.bridges.CollectionBridge.*
-import tools.vitruv.framework.correspondence.Correspondence
 import tools.vitruv.framework.util.command.ResourceAccess
 import tools.vitruv.domains.pcm.PcmNamespace
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
@@ -38,8 +34,6 @@ import tools.vitruv.framework.tuid.TuidManager
 
 class PcmJavaUtils {
 	private static val Logger logger = Logger.getLogger(PcmJavaUtils.simpleName)
-
-	static Set<Class<?>> pcmJavaRootObjects = Sets.newHashSet(Repository, System, Package, CompilationUnit)
 
 	protected new() {
 	}
@@ -201,67 +195,6 @@ class PcmJavaUtils {
 
 	public dispatch static def getNameFromPCMDataType(CompositeDataType compositeDataType) {
 		return compositeDataType.entityName
-	}
-
-	def public static deleteNonRootEObjectInList(EObject affectedEObject, EObject oldEObject,
-		CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
-		removeCorrespondenceAndAllObjects(oldEObject, affectedEObject, correspondenceModel, pcmJavaRootObjects,
-			resourceAccess)
-		return resourceAccess
-	}
-
-	def static ResourceAccess removeCorrespondenceAndAllObjects(EObject object, EObject exRootObject,
-		CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
-		removeCorrespondenceAndAllObjects(object, exRootObject, correspondenceModel, pcmJavaRootObjects, resourceAccess)
-	}
-
-	def static ResourceAccess removeCorrespondenceAndAllObjects(EObject object, EObject exRootObject,
-		CorrespondenceModel correspondenceModel, Set<Class<?>> rootObjects, ResourceAccess resourceAccess) {
-		var Set<Correspondence> correspondences = null
-		if (null !== exRootObject) {
-			val rootTuid = correspondenceModel.calculateTuidFromEObject(exRootObject)
-			val String prefix = rootTuid.toString
-			EcoreUtil.remove(object)
-			val tuid = correspondenceModel.calculateTuidFromEObject(object, exRootObject, prefix)
-			correspondences = correspondenceModel.
-				removeCorrespondencesThatInvolveAtLeastAndDependendForTuids(tuid.toSet)
-		} else {
-			correspondences = correspondenceModel.removeCorrespondencesThatInvolveAtLeastAndDependend(object.toSet)
-		}
-		for (correspondence : correspondences) {
-			resolveAndRemoveEObject(correspondence.getATuids, correspondenceModel, resourceAccess, rootObjects)
-			resolveAndRemoveEObject(correspondence.getBTuids, correspondenceModel, resourceAccess, rootObjects)
-		}
-		return resourceAccess
-	}
-
-	def private static resolveAndRemoveEObject(Iterable<Tuid> tuids, CorrespondenceModel correspondenceModel,
-		ResourceAccess resourceAccess, Set<Class<?>> rootObjectClasses) {
-		for (tuid : tuids) {
-			try {
-				val eObject = correspondenceModel.resolveEObjectFromTuid(tuid)
-				if (null !== eObject) {
-					EcoreUtil.delete(eObject)
-				}
-				if (eObject.isInstanceOfARootClass(rootObjectClasses)) {
-					TuidManager.instance.registerObjectUnderModification(eObject);
-					EcoreUtil.remove(eObject);
-					TuidManager.instance.updateTuidsOfRegisteredObjects
-					TuidManager.instance.flushRegisteredObjectsUnderModification
-				}
-			} catch (RuntimeException e) {
-				// ignore runtime exception during object deletion
-			}
-		}
-	}
-
-	def private static boolean isInstanceOfARootClass(EObject eObject, Set<Class<?>> rootObjectClasses) {
-		for (rootClass : rootObjectClasses) {
-			if (rootClass.isInstance(eObject)) {
-				return true
-			}
-		}
-		return false
 	}
 
 	def static updateNameAttribute(Set<EObject> correspondingEObjects, Object newValue,

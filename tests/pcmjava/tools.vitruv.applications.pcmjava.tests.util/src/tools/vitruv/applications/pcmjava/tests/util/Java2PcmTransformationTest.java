@@ -236,7 +236,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	}
 
 	protected BasicComponent addSecondPackageCorrespondsToBasicComponent() throws Throwable {
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		return this.createSecondPackage(BasicComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
@@ -457,7 +457,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	 *
 	 * @throws Throwable
 	 */
-	// private void setUserInteractor(final UserInteracting newUserInteracting)
+	// private void setUserInteractor(final UserInteractor newUserInteractor)
 	// throws Throwable {
 	//// final PCMJavaBuilder pcmJavaBuilder =
 	// this.getPCMJavaBuilderFromProject();
@@ -465,22 +465,22 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	// JavaBridge
 	//// .getFieldFromClass(VitruviusEmfBuilder.class, "transformingProviding",
 	// pcmJavaBuilder);
-	// this.setUserInteractor(newUserInteracting);
+	// this.setUserInteractor(newUserInteractor);
 	// }
 
 	protected CompositeComponent addSecondPackageCorrespondsToCompositeComponent() throws Throwable {
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
 		return this.createSecondPackage(CompositeComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
 	}
 
 	protected org.palladiosimulator.pcm.system.System addSecondPackageCorrespondsToSystem() throws Throwable {
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.getSelection());
 		return this.createSecondPackage(System.class, Pcm2JavaTestUtils.SYSTEM_NAME);
 	}
 
 	protected void addSecondPackageCorrespondsWithoutCorrespondences() throws Throwable {
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
 		this.createSecondPackageWithoutCorrespondence(Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
@@ -621,12 +621,12 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected OperationInterface addInterfaceInSecondPackageWithCorrespondence(final String packageName)
 			throws Throwable {
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
 		return this.createInterfaceInPackage(packageName);
 	}
 
 	protected EObject addInterfaceInPackageWithoutCorrespondence(final String packageName) throws Throwable {
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
 		Package jaMoPPPackage = this.getPackageWithNameFromCorrespondenceModel(packageName);
 		return this.createInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(),
 				"I" + packageName, false);
@@ -835,10 +835,10 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected String addPackageAndImplementingClass(final String componentName)
 			throws CoreException, IOException, InterruptedException {
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		final Package mediaStorePackage = this.createPackageWithPackageInfo(Pcm2JavaTestUtils.REPOSITORY_NAME,
 				componentName);
-		this.getUserInteractor().addNextSelections(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 
 		final String implementingClassName = componentName + "Impl";
 		this.addClassInPackage(mediaStorePackage, BasicComponent.class, implementingClassName);

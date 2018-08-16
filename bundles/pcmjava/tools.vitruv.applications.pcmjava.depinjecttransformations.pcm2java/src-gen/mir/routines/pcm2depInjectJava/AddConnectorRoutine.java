@@ -25,7 +25,7 @@ public class AddConnectorRoutine extends AbstractRepairRoutineRealization {
       RepositoryComponent _encapsulatedComponent__AssemblyContext = assemblyContext.getEncapsulatedComponent__AssemblyContext();
       boolean _tripleNotEquals = (_encapsulatedComponent__AssemblyContext != null);
       if (_tripleNotEquals) {
-        PcmJamoppUtilsGuice.createBindCallForConnector(assemblyContext, assemblyConnector, this.correspondenceModel, this.userInteracting);
+        PcmJamoppUtilsGuice.createBindCallForConnector(assemblyContext, assemblyConnector, this.correspondenceModel, this.userInteractor);
       } else {
       }
     }

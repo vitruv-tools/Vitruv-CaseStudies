@@ -26,7 +26,7 @@ public class CreatePCMReturnTypeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void update0Element(final TypeReference returnType, final OperationSignature opSignature, final Method javaMethod) {
-      final DataType pcmDataType = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(returnType, this.correspondenceModel, this.userInteracting, 
+      final DataType pcmDataType = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(returnType, this.correspondenceModel, this.userInteractor, 
         opSignature.getInterface__OperationSignature().getRepository__Interface(), javaMethod.getArrayDimension());
       opSignature.setReturnType__OperationSignature(pcmDataType);
     }

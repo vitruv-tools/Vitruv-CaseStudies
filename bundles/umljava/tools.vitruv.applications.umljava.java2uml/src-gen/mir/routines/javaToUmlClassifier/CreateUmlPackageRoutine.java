@@ -34,7 +34,7 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
     public void callRoutine1(final org.emftext.language.java.containers.Package jPackage, final org.eclipse.uml2.uml.Package uPackage, @Extension final RoutinesFacade _routinesFacade) {
       boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jPackage.getNamespaces());
       if (_isNullOrEmpty) {
-        _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), jPackage);
+        _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), jPackage);
       } else {
         _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jPackage.getNamespaces())), jPackage);
       }

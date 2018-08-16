@@ -43,7 +43,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     public void update0Element(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass) {
       boolean _equals = Objects.equal(newDirection, ParameterDirectionKind.RETURN_LITERAL);
       if (_equals) {
-        jMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uParam.getType(), customTypeClass, jMethod.getContainingCompilationUnit(), this.userInteracting));
+        jMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uParam.getType(), customTypeClass, jMethod.getContainingCompilationUnit(), this.userInteractor));
       } else {
         boolean _equals_1 = Objects.equal(oldDirection, ParameterDirectionKind.RETURN_LITERAL);
         if (_equals_1) {

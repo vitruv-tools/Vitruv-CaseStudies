@@ -56,7 +56,7 @@ routine createJavaClassMethod(uml::Classifier uClassifier, uml::Operation uOpera
         val javaMethod = create java::ClassMethod and initialize {
             javaMethod.name = uOperation.name;
             setJavaVisibility(javaMethod, uOperation.visibility)
-            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jClassifier.getContainingCompilationUnit, userInteracting)
+            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jClassifier.getContainingCompilationUnit, userInteractor)
         }
         update jClassifier {
             jClassifier.members += javaMethod;
@@ -120,7 +120,7 @@ routine setJavaMethodReturnType(uml::Operation uOperation) {
     }
     action {
         update javaMethod {
-            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, returnType, javaMethod.getContainingCompilationUnit, userInteracting)
+            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, returnType, javaMethod.getContainingCompilationUnit, userInteractor)
         }
     }
 }
@@ -173,13 +173,13 @@ routine createJavaInterfaceMethod(uml::Interface uInterface, uml::Operation uOpe
     action {
         val javaMethod = create java::InterfaceMethod and initialize {
             javaMethod.name = uOperation.name;
-            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jInterface.getContainingCompilationUnit, userInteracting)
+            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jInterface.getContainingCompilationUnit, userInteractor)
             javaMethod.makePublic
         }
-        add correspondence between uOperation and javaMethod
         update jInterface {
             jInterface.members += javaMethod;
         }
+        add correspondence between uOperation and javaMethod
     }
 }
 
@@ -264,12 +264,12 @@ routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
     action {
         val javaParam = create java::OrdinaryParameter and initialize {
             javaParam.name = umlParam.name;
-            javaParam.typeReference = createTypeReferenceAndUpdateImport(umlParam.type, customTypeClass, javaMethod.getContainingCompilationUnit, userInteracting)
+            javaParam.typeReference = createTypeReferenceAndUpdateImport(umlParam.type, customTypeClass, javaMethod.getContainingCompilationUnit, userInteractor)
         }
-        add correspondence between javaParam and umlParam
         update javaMethod {
             javaMethod.parameters += javaParam;
         }
+        add correspondence between javaParam and umlParam
     }
 }
 
@@ -301,7 +301,7 @@ routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
     }
     action {
         update jParam {
-            jParam.typeReference = createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit, userInteracting)
+            jParam.typeReference = createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit, userInteractor)
         }
     }
 }
@@ -323,7 +323,7 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
     action {
         update jMethod {
             if (newDirection == ParameterDirectionKind.RETURN_LITERAL) {
-                jMethod.typeReference = createTypeReferenceAndUpdateImport(uParam.type, customTypeClass, jMethod.getContainingCompilationUnit, userInteracting)
+                jMethod.typeReference = createTypeReferenceAndUpdateImport(uParam.type, customTypeClass, jMethod.getContainingCompilationUnit, userInteractor)
             } else if (oldDirection == ParameterDirectionKind.RETURN_LITERAL) {
                 jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
             }
@@ -346,18 +346,18 @@ reaction UmlParameterDirectionKindChangedInvalid {
     after attribute replaced at uml::Parameter[direction]
     with (newValue !== ParameterDirectionKind.RETURN_LITERAL)
     && (newValue !== ParameterDirectionKind.IN_LITERAL)
-    call showMessage(userInteracting, "The ParameterDirectionKind " + newValue + " is not supported")
+    call showMessage(userInteractor, "The ParameterDirectionKind " + newValue + " is not supported")
 }
 
 reaction UmlInterfaceMethodVisibilityChanged {
     after attribute replaced at uml::Operation[visibility]
     with (affectedEObject.eContainer instanceof org.eclipse.uml2.uml.Interface)
     && newValue != VisibilityKind.PUBLIC_LITERAL
-    call showMessage(userInteracting, "Non-public operations in interface are not valid. Please set " + affectedEObject + " to public")
+    call showMessage(userInteractor, "Non-public operations in interface are not valid. Please set " + affectedEObject + " to public")
 }
 
 reaction UmlInterfaceMethodMadeFinal {
     after attribute replaced at uml::Operation[isLeaf]
     with affectedEObject.class_ instanceof org.eclipse.uml2.uml.Interface
-    call showMessage(userInteracting, "Final Operations in Interfaces are not supported. Please undo it: " + affectedEObject)
+    call showMessage(userInteractor, "Final Operations in Interfaces are not supported. Please undo it: " + affectedEObject)
 }

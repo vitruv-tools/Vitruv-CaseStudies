@@ -28,7 +28,7 @@ import tools.vitruv.domains.java.util.JavaModificationUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
+import tools.vitruv.framework.userinteraction.UserInteractionOptions;
 
 @SuppressWarnings("all")
 public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepairRoutineRealization {
@@ -69,7 +69,7 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
         collectionDataTypeNames.add(collectionDataType.getName());
       }
       final String selectTypeMsg = "Please select type (or interface) that should be used for the type";
-      final int selectedType = this.userInteracting.selectFromMessage(UserInteractionType.MODAL, selectTypeMsg, ((String[])Conversions.unwrapArray(collectionDataTypeNames, String.class)));
+      final int selectedType = (this.userInteractor.getSingleSelectionDialogBuilder().message(selectTypeMsg).choices(collectionDataTypeNames).windowModality(UserInteractionOptions.WindowModality.MODAL).startInteraction()).intValue();
       final Set<Class<?>> _converted_collectionDataTypes = (Set<Class<?>>)collectionDataTypes;
       final Class<?> selectedClass = ((Class<?>[])Conversions.unwrapArray(_converted_collectionDataTypes, Class.class))[selectedType];
       _routinesFacade.createJavaClass(dataType, datatypesPackage, dataType.getEntityName());

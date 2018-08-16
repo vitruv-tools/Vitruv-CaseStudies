@@ -94,7 +94,7 @@ public class UmlInterfaceMadeFinalReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Interface affectedEObject, final EAttribute affectedFeature, final Boolean oldValue, final Boolean newValue, @Extension final RoutinesFacade _routinesFacade) {
-      UmlToJavaHelper.showMessage(this.userInteracting, (("We do not support making final interfaces. Please change " + affectedEObject) + " to non-final. "));
+      UmlToJavaHelper.showMessage(this.userInteractor, (("We do not support making final interfaces. Please change " + affectedEObject) + " to non-final. "));
     }
   }
 }

@@ -63,7 +63,7 @@ routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
     }
     action {
         update uAttr {
-            uAttr.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteracting), correspondenceModel)
+            uAttr.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteractor), correspondenceModel)
         }
     }
 }
@@ -95,6 +95,6 @@ routine setUmlAttributeFinal(java::Field jAttr, Boolean isFinal) {
 
 reaction JavaAttributeCreatedInInterface {
     after element java::Field created and inserted in java::Interface[members]
-    call showMessage(userInteracting, "Adding fields to " + affectedEObject.class.simpleName +" is not supported. Please remove " + newValue)
+    call showMessage(userInteractor, "Adding fields to " + affectedEObject.class.simpleName +" is not supported. Please remove " + newValue)
     
 }

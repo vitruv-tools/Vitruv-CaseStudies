@@ -31,20 +31,20 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val umlInterface = createUmlInterface(interfaceName)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten;
 		assertEquals(1, correspondingElements.length);
+		assertTrue(correspondingElements.get(0) instanceof OperationInterface)
 		val pcmInterface = (correspondingElements.get(0) as OperationInterface)
-		assertTrue(pcmInterface instanceof OperationInterface)
 		assertEquals(interfaceName, pcmInterface.entityName)
 	}
 	
 	@Test
 	public def void createIntefaceOperationTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
-		userInteractor.addNextSelections(10)
+		userInteractor.addNextSingleSelection(10)
 		val p1Type = UMLFactory.eINSTANCE.createPrimitiveType()
 		p1Type.name = "dataType1";
 		rootElement.packagedElements += p1Type
 		
-		userInteractor.addNextSelections(2)
+		userInteractor.addNextSingleSelection(2)
 		val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
 		returnType.name = UML_TYPE_BOOL
 		rootElement.packagedElements += returnType
@@ -58,8 +58,8 @@ class InterfacesTest extends AbstractUmlPcmTest {
 
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten;
 		assertEquals(1, correspondingElements.length);
+		assertTrue(correspondingElements.get(0) instanceof OperationSignature)
 		val pcmOperation = (correspondingElements.get(0) as OperationSignature)
-		assertTrue(pcmOperation instanceof OperationSignature)
 		assertEquals(umlOperation.name, pcmOperation.entityName)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(umlOperation.type.name),
 			(pcmOperation.returnType__OperationSignature as PrimitiveDataType).type)
@@ -69,7 +69,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	protected def Operation createInterfaceOperation(Interface umlInterface, String operationName, String operationType) {
-		userInteractor.addNextSelections(getDataTypeUserSelection(operationType))
+		userInteractor.addNextSingleSelection(getDataTypeUserSelection(operationType))
 		val returnType = UMLFactory.eINSTANCE.createPrimitiveType()
 		returnType.name = operationType
 		rootElement.packagedElements += returnType

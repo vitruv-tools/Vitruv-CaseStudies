@@ -41,8 +41,8 @@ public class DeleteClassRoutine extends AbstractRepairRoutineRealization {
         String _name = classPackage.getName();
         String _plus = ("Delete the corresponding Package \'" + _name);
         final String question = (_plus + "\' and all its contained elements?");
-        boolean _modalTextYesNoUserInteracting = SharedUtil.modalTextYesNoUserInteracting(this.userInteracting, question);
-        if (_modalTextYesNoUserInteracting) {
+        boolean _modalTextYesNoUserInteractor = SharedUtil.modalTextYesNoUserInteractor(this.userInteractor, question);
+        if (_modalTextYesNoUserInteractor) {
           for (final Iterator<PackageableElement> iter = classPackage.getPackagedElements().iterator(); iter.hasNext();) {
             {
               final PackageableElement classElement = iter.next();

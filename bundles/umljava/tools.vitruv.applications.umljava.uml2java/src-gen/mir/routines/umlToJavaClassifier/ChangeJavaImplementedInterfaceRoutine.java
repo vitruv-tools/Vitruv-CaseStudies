@@ -31,7 +31,7 @@ public class ChangeJavaImplementedInterfaceRoutine extends AbstractRepairRoutine
     
     public void update0Element(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Interface jInterface) {
       EList<TypeReference> _implements = jClass.getImplements();
-      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, jClass.getContainingCompilationUnit(), this.userInteracting);
+      TypeReference _createTypeReferenceAndUpdateImport = UmlToJavaHelper.createTypeReferenceAndUpdateImport(null, jInterface, jClass.getContainingCompilationUnit(), this.userInteractor);
       _implements.add(_createTypeReferenceAndUpdateImport);
     }
     

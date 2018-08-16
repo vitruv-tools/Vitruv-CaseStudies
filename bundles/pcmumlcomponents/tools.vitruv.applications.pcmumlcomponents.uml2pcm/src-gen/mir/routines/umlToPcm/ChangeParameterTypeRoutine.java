@@ -31,7 +31,7 @@ public class ChangeParameterTypeRoutine extends AbstractRepairRoutineRealization
         final boolean unbounded = ((umlParameter.lowerBound() != 1) || (umlParameter.upperBound() != 1));
         final Repository pcmRepository = pcmParameter.getOperationSignature__Parameter().getInterface__OperationSignature().getRepository__Interface();
         Type _type = umlParameter.getType();
-        resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmRepository, Boolean.valueOf(unbounded), this.userInteracting, this.correspondenceModel);
+        resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmRepository, Boolean.valueOf(unbounded), this.userInteractor, this.correspondenceModel);
       }
       pcmParameter.setDataType__Parameter(resolvedType);
     }

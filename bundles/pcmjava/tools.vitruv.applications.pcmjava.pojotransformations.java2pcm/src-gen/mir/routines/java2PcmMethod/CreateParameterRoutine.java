@@ -48,7 +48,7 @@ public class CreateParameterRoutine extends AbstractRepairRoutineRealization {
     public void updatePcmParameterElement(final OrdinaryParameter javaParameter, final Parametrizable javaMethod, final OperationSignature operationSignature, final Parameter pcmParameter) {
       pcmParameter.setOperationSignature__Parameter(operationSignature);
       pcmParameter.setDataType__Parameter(TypeReferenceCorrespondenceHelper.getDataTypeFromTypeReference(javaParameter.getTypeReference(), this.correspondenceModel, 
-        this.userInteracting, null));
+        this.userInteractor, null));
       DataType _dataType__Parameter = pcmParameter.getDataType__Parameter();
       _dataType__Parameter.setRepository__DataType(operationSignature.getInterface__OperationSignature().getRepository__Interface());
       ParameterUtil.setName(pcmParameter, javaParameter.getName());

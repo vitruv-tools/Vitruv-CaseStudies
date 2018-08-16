@@ -3,7 +3,7 @@ package tools.vitruv.applications.umlclassumlcomponents.sharedutil;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import tools.vitruv.testutils.TestUserInteractor;
+import tools.vitruv.testutils.TestUserInteraction;
 
 public class UserInteractionTestUtil {
 	
@@ -15,8 +15,11 @@ public class UserInteractionTestUtil {
 	}
 	
 	//Commit currently pending UserInteractions
-	public static void sendCollectedUserInteractionSelections(TestUserInteractor userInteractor) {
-	        userInteractor.addNextSelections(concurrentIntLinkedQueue.toArray(new Integer[0]));
-	        concurrentIntLinkedQueue.clear();
+	public static void sendCollectedUserInteractionSelections(TestUserInteraction userInteractor) {
+		int[] selectionIndices = concurrentIntLinkedQueue.stream().mapToInt(i -> i).toArray();
+		for (int selection : selectionIndices) {
+			userInteractor.addNextSingleSelection(selection);
+		}
+        concurrentIntLinkedQueue.clear();
 	}
 }

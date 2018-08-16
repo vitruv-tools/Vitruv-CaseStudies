@@ -29,7 +29,7 @@ public class AddUmlSuperClassRoutine extends AbstractRepairRoutineRealization {
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class jSuperClass, final org.eclipse.uml2.uml.Class uClass) {
-      final Type uSuperClass = JavaToUmlHelper.getUmlType(jSuperClass, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel);
+      final Type uSuperClass = JavaToUmlHelper.getUmlType(jSuperClass, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel);
       if (((uSuperClass != null) && (uSuperClass instanceof org.eclipse.uml2.uml.Class))) {
         UmlClassifierAndPackageUtil.addUmlSuperClassifier(uClass, ((org.eclipse.uml2.uml.Class) uSuperClass));
       } else {

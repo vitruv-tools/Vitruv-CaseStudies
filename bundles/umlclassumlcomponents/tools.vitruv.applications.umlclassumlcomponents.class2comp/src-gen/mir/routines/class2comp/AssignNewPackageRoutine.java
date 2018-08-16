@@ -13,7 +13,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
+import tools.vitruv.framework.userinteraction.UserInteractionOptions;
 
 @SuppressWarnings("all")
 public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
@@ -41,7 +41,7 @@ public class AssignNewPackageRoutine extends AbstractRepairRoutineRealization {
         String _name = oldPackage.getName();
         String _plus = ("Chosen Component is already linked to existing Package \'" + _name);
         final String errorMsg = (_plus + "\'.");
-        this.userInteracting.showMessage(UserInteractionType.MODELESS, errorMsg);
+        this.userInteractor.getNotificationDialogBuilder().message(errorMsg).windowModality(UserInteractionOptions.WindowModality.MODELESS).startInteraction();
       }
     }
   }

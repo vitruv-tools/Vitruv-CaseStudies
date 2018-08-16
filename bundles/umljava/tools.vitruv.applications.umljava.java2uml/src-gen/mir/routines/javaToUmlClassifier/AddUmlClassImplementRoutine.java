@@ -30,7 +30,7 @@ public class AddUmlClassImplementRoutine extends AbstractRepairRoutineRealizatio
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Classifier jInterface, final org.eclipse.uml2.uml.Class uClass) {
-      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), this.correspondenceModel);
+      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel);
       if (((uInterface != null) && (uInterface instanceof Interface))) {
         String _name = uInterface.getName();
         String _name_1 = uInterface.getName();

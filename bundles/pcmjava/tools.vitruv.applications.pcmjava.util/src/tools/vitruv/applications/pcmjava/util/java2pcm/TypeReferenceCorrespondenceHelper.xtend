@@ -40,11 +40,11 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.framework.userinteraction.UserInteracting
 import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import tools.vitruv.framework.userinteraction.UserInteractor
 
 /**
  * Helper to map type References to PCM data types
@@ -105,9 +105,9 @@ class TypeReferenceCorrespondenceHelper {
 	}
 
 	public def static DataType getCorrespondingPCMDataTypeForTypeReference(TypeReference typeReference,
-		CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo,
+		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo,
 		long arrayDimension) {
-			var DataType pcmDataType = getDataTypeFromTypeReference(typeReference, correspondenceModel, userInteracting,
+			var DataType pcmDataType = getDataTypeFromTypeReference(typeReference, correspondenceModel, userInteractor,
 				repo)
 
 			if (arrayDimension > 0 && null !== pcmDataType && null !== repo) {
@@ -136,29 +136,29 @@ class TypeReferenceCorrespondenceHelper {
 		}
 
 		def static DataType getDataTypeFromTypeReference(TypeReference typeReference,
-			CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo) {
+			CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
 			if (typeReference instanceof PrimitiveType) {
 				return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference as PrimitiveType)
 			} else if (typeReference instanceof ClassifierReference) {
 				return getPCMDataTypeForClassifierReference(typeReference as ClassifierReference, correspondenceModel,
-					userInteracting, repo)
+					userInteractor, repo)
 			} else if (typeReference instanceof NamespaceClassifierReference) {
 				return getPCMDataTypeForNamespaceClassifierReference(typeReference as NamespaceClassifierReference,
-					correspondenceModel, userInteracting, repo)
+					correspondenceModel, userInteractor, repo)
 			}
 			return null
 		}
 
 		def private static DataType getPCMDataTypeForNamespaceClassifierReference(
 			NamespaceClassifierReference reference, CorrespondenceModel correspondenceModel,
-			UserInteracting userInteracting, Repository repo) {
+			UserInteractor userInteractor, Repository repo) {
 			if (!reference.classifierReferences.nullOrEmpty) {
 
 				// just create the data type from the first classifier that is non null
 				for (classifierRef : reference.classifierReferences) {
 					if (null !== classifierRef) {
 						return getPCMDataTypeForClassifierReference(classifierRef, correspondenceModel,
-							userInteracting, repo)
+							userInteractor, repo)
 					}
 				}
 			}
@@ -168,7 +168,7 @@ class TypeReferenceCorrespondenceHelper {
 		}
 
 		def private static DataType getPCMDataTypeForClassifierReference(ClassifierReference classifierReference,
-			CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo) {
+			CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
 			val Classifier classifier = classifierReference.target
 			if (null !== classifier) {
 
@@ -196,7 +196,7 @@ class TypeReferenceCorrespondenceHelper {
 				}
 
 				// no data type found -->create one from the class
-				val DataType newDataType = createDataTypeForClassifier(classifier, correspondenceModel, userInteracting,
+				val DataType newDataType = createDataTypeForClassifier(classifier, correspondenceModel, userInteractor,
 					repo)
 				return newDataType
 			}
@@ -204,7 +204,7 @@ class TypeReferenceCorrespondenceHelper {
 		}
 
 		def private static DataType createDataTypeForClassifier(Classifier classifier,
-			CorrespondenceModel correspondenceModel, UserInteracting userInteracting, Repository repo) {
+			CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
 			if (null === classifier) {
 				logger.warn("Classifier is null! Can not create a data type for the classifier")
 				return null
@@ -228,7 +228,7 @@ class TypeReferenceCorrespondenceHelper {
 
 			/*val String message = "Automatically created the corresponding composite data type " + cdt.entityName +
 			 * 	" for classifier " + classifier.name + correspondingWarning
-			 userInteracting.showMessage(UserInteractionType.MODELESS, message)*/
+			 userInteractor.showMessage(UserInteractionType.MODELESS, message)*/
 			return cdt
 		}
 

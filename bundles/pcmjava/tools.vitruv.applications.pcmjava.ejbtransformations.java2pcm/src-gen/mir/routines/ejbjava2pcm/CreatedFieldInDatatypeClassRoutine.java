@@ -42,7 +42,7 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     
     public void updateInnerDecElement(final org.emftext.language.java.classifiers.Class clazz, final Field field, final CompositeDataType compositeDataType, final InnerDeclaration innerDec) {
       innerDec.setDatatype_InnerDeclaration(TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(field.getTypeReference(), this.correspondenceModel, 
-        this.userInteracting, compositeDataType.getRepository__DataType(), field.getArrayDimension()));
+        this.userInteractor, compositeDataType.getRepository__DataType(), field.getArrayDimension()));
       innerDec.setEntityName(field.getName());
     }
   }

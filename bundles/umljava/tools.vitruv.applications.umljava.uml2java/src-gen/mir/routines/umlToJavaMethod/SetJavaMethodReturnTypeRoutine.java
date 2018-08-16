@@ -26,7 +26,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final Operation uOperation, final Method javaMethod, final Optional<org.emftext.language.java.classifiers.Class> returnType) {
-      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), returnType, javaMethod.getContainingCompilationUnit(), this.userInteracting));
+      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), returnType, javaMethod.getContainingCompilationUnit(), this.userInteractor));
     }
     
     public EObject getCorrepondenceSourceJavaMethod(final Operation uOperation) {

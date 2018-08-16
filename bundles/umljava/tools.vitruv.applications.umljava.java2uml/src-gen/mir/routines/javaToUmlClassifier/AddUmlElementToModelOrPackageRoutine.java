@@ -23,7 +23,7 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
     public void callRoutine1(final CompilationUnit jCompUnit, final Classifier uClassifier, @Extension final RoutinesFacade _routinesFacade) {
       boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jCompUnit.getNamespaces());
       if (_isNullOrEmpty) {
-        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteracting), jCompUnit);
+        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), jCompUnit);
       } else {
         _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())), jCompUnit);
       }

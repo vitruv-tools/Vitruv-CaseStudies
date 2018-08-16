@@ -32,13 +32,13 @@
 			<id>Eclipse Oxygen</id>
 			<layout>p2</layout>
 			<!--<url>http://download.eclipse.org/releases/oxygen</url>-->
-			<url>https://sdqbuild.ipd.kit.edu/nexus/content/groups/eclipse-oxygen-complete/</url>
+			<url>http://ftp-stud.hs-esslingen.de/pub/Mirrors/eclipse/releases/oxygen/</url>
 		</repository>
-		<!--<repository>
+		<repository>
 			<id>Eclipse Oxygen Updates</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/eclipse/updates/4.7</url>
-		</repository>-->
+		</repository>
 		<repository>
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
@@ -49,11 +49,10 @@
 			<layout>p2</layout>
 			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/</url>
 		</repository>
-		<!-- TODO Remove after new Palladio release -->
 		<repository>
-			<id>Palladiosimulator Nightly</id>
+			<id>Palladiosimulator</id>
 			<layout>p2</layout>
-			<url>https://sdqbuild.ipd.kit.edu/nexus/content/repositories/palladiosimulator-nightly/</url>
+			<url>https://sdqweb.ipd.kit.edu/eclipse/palladiosimulator/releases/latest/</url>
 		</repository>
 	</repositories>
 
@@ -96,6 +95,24 @@
 					  </configuration>
 				  </execution>
 			  </executions>
+			  <!-- Needed due to Xtext bug: https://github.com/eclipse/xtext/issues/1231 -->
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.jdt</groupId>
+						<artifactId>org.eclipse.jdt.core</artifactId>
+						<version>3.12.2</version>
+					</dependency>
+					<dependency>
+						<groupId>org.eclipse.platform</groupId>
+						<artifactId>org.eclipse.core.runtime</artifactId>
+						<version>3.12.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.eclipse.platform</groupId>
+						<artifactId>org.eclipse.equinox.common</artifactId>
+						<version>3.8.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<!-- Cleans the xtend-gen folder -->
 			<plugin>

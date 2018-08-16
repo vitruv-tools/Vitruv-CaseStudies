@@ -2,12 +2,15 @@ package mir.routines.class2comp;
 
 import com.google.common.collect.Iterables;
 import java.io.IOException;
+import java.util.ArrayList;
 import mir.routines.class2comp.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Component;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Usage;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -50,6 +53,18 @@ public class RemoveInterfaceRoutine extends AbstractRepairRoutineRealization {
       final Iterable<Usage> matchingUsages = IterableExtensions.<Component, Usage>map(compsWithMatchingUsage, _function_2);
       for (final Usage compUsage : matchingUsages) {
         compUsage.destroy();
+      }
+      final Function1<Component, Iterable<InterfaceRealization>> _function_3 = (Component it) -> {
+        final Function1<InterfaceRealization, Boolean> _function_4 = (InterfaceRealization it_1) -> {
+          return Boolean.valueOf(it_1.getSuppliers().contains(compInterface));
+        };
+        return IterableExtensions.<InterfaceRealization>filter(it.getInterfaceRealizations(), _function_4);
+      };
+      final Iterable<InterfaceRealization> interfaceRealizations = Iterables.<InterfaceRealization>concat(IterableExtensions.<Component, Iterable<InterfaceRealization>>map(Iterables.<Component>filter(compModel.getPackagedElements(), Component.class), _function_3));
+      final ArrayList<InterfaceRealization> fixMappedRealizations = CollectionLiterals.<InterfaceRealization>newArrayList();
+      Iterables.<InterfaceRealization>addAll(fixMappedRealizations, interfaceRealizations);
+      for (final InterfaceRealization realization : fixMappedRealizations) {
+        realization.destroy();
       }
     }
   }

@@ -16,7 +16,7 @@ import tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
-import tools.vitruv.framework.userinteraction.UserInteractionType;
+import tools.vitruv.framework.userinteraction.UserInteractionOptions;
 
 @SuppressWarnings("all")
 public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
@@ -36,7 +36,7 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
       String _name = classPackage.getName();
       String _plus = ("Do you want to link this Package \'" + _name);
       final String question = (_plus + "\' to an existing Component?");
-      return SharedUtil.modalTextYesNoUserInteracting(this.userInteracting, question);
+      return SharedUtil.modalTextYesNoUserInteractor(this.userInteractor, question);
     }
     
     public void callRoutine1(final org.eclipse.uml2.uml.Package classPackage, final Model compModel, @Extension final RoutinesFacade _routinesFacade) {
@@ -51,11 +51,11 @@ public class CreatedPackageRoutine extends AbstractRepairRoutineRealization {
           return e.getName();
         };
         final List<String> options = ListExtensions.<Component, String>map(componentsList, _function);
-        final int selection = SharedUtil.modalTextUserinteracting(this.userInteracting, question, ((String[])Conversions.unwrapArray(options, String.class)));
+        final int selection = SharedUtil.modalTextUserinteracting(this.userInteractor, question, ((String[])Conversions.unwrapArray(options, String.class)));
         final Component umlComp = componentsList.get(selection);
         _routinesFacade.assignNewPackage(classPackage, umlComp);
       } else {
-        this.userInteracting.showMessage(UserInteractionType.MODELESS, "No available Component found");
+        this.userInteractor.getNotificationDialogBuilder().message("No available Component found").windowModality(UserInteractionOptions.WindowModality.MODELESS).startInteraction();
       }
     }
   }

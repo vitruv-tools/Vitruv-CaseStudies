@@ -35,7 +35,7 @@ class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
     
     @Test
     def void testCreateAssociation1() {
-        this.userInteractor.addNextSelections(0)
+        this.userInteractor.addNextSingleSelection(0)
         createDirectedAssociation(uClass1, uClass2, 0, 1)
         saveAndSynchronizeChanges(rootElement)
         
@@ -50,7 +50,7 @@ class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
 	
 	@Test
 	def void testCreateAssociation2() {
-		this.userInteractor.addNextSelections(0)
+		this.userInteractor.addNextSingleSelection(0)
 		createDirectedAssociation(uClass1, uClass2, 1, 1)
 		saveAndSynchronizeChanges(rootElement)
 		
@@ -66,7 +66,7 @@ class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
 	
 	@Test
 	def void testCreateAssociation3() {
-	    this.userInteractor.addNextSelections(0) //0 is ArrayList
+	    this.userInteractor.addNextSingleSelection(0) //0 is ArrayList
         createDirectedAssociation(uClass1, uClass2, 0, LiteralUnlimitedNatural.UNLIMITED)
         saveAndSynchronizeChanges(rootElement)
         

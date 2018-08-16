@@ -3,7 +3,8 @@ import static extension tools.vitruv.applications.umljava.util.java.JavaModifier
 import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import tools.vitruv.framework.userinteraction.UserInteractionType
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -29,10 +30,10 @@ routine createJavaClass(uml::Classifier umlClassifier) {
         	javaClassifier.name = umlClassifier.name;
         	javaClassifier.makePublic
         }
-        add correspondence between umlClassifier and javaClassifier
         call { 
         	createJavaCompilationUnit (umlClassifier, javaClassifier, umlClassifier.namespace)
         }
+        add correspondence between umlClassifier and javaClassifier
     }
 }
 
@@ -50,12 +51,12 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
             javaCompilationUnit.classifiers += jClassifier;
             persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
         }
-        add correspondence between umlClassifier and javaCompilationUnit
         call {
             if (jPackage.present) {
                 jPackage.get.compilationUnits += javaCompilationUnit
             }
         }
+        add correspondence between umlClassifier and javaCompilationUnit
 	}
 }
 
@@ -143,9 +144,11 @@ routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
     action {
         call {
             if (uClass.generals.size == 1) {
-                jClass.extends = createTypeReferenceAndUpdateImport(null, superJavaClass, jClass.containingCompilationUnit, userInteracting);
+                jClass.extends = createTypeReferenceAndUpdateImport(null, superJavaClass, jClass.containingCompilationUnit, userInteractor);
             } else {
-                userInteracting.showMessage(UserInteractionType.MODAL, "Warning: Can not synchronize multiple inheritance for " + uClass)
+                userInteractor.notificationDialogBuilder.message("Can not synchronize multiple inheritance for " + uClass)
+                    .title("Warning").notificationType(NotificationType.WARNING).windowModality(WindowModality.MODAL)
+                    .startInteraction()
                 logger.warn("Routine not executed: Tried to set multiple inheritance for " + uClass)
             }
         }
@@ -194,7 +197,7 @@ routine changeJavaImplementedInterface(uml::Interface uInterface, uml::Interface
         	}
         }
         update jClass {
-            jClass.implements += createTypeReferenceAndUpdateImport(null, jInterface, jClass.containingCompilationUnit, userInteracting)
+            jClass.implements += createTypeReferenceAndUpdateImport(null, jInterface, jClass.containingCompilationUnit, userInteractor)
         }
     }
 }
@@ -238,10 +241,10 @@ routine createJavaInterface(uml::Interface umlInterface) {
             javaInterface.name = umlInterface.name;
             javaInterface.makePublic
         }
-        add correspondence between umlInterface and javaInterface
         call {
 			createJavaCompilationUnit(umlInterface, javaInterface, umlInterface.namespace)
 		}
+		add correspondence between umlInterface and javaInterface
     }
 }
  
@@ -257,7 +260,7 @@ routine changeJavaSuperInterface(uml::Interface superUMLInterface, uml::Interfac
     }
     action {
         update jI {
-            jI.extends += createTypeReferenceAndUpdateImport(null, superJavaInterface, jI.containingCompilationUnit, userInteracting)
+            jI.extends += createTypeReferenceAndUpdateImport(null, superJavaInterface, jI.containingCompilationUnit, userInteractor)
         }
     }
 }
@@ -295,10 +298,10 @@ routine createJavaEnum(uml::Enumeration uEnum) {
 			jEnum.name = uEnum.name
 			jEnum.makePublic
 		}
-		add correspondence between uEnum and jEnum
 		call {
 			createJavaCompilationUnit(uEnum, jEnum, uEnum.namespace)
 		}
+		add correspondence between uEnum and jEnum
 	}
 }
 
@@ -315,10 +318,10 @@ routine createJavaEnumConstant(uml::EnumerationLiteral uLiteral, uml::Enumeratio
 		val jConstant = create java::EnumConstant and initialize {
 			jConstant.name = uLiteral.name
 		}
-		add correspondence between jConstant and uLiteral
 		update jEnum {
 			jEnum.constants += jConstant
 		}
+		add correspondence between jConstant and uLiteral
 	}
 }
 
@@ -439,7 +442,9 @@ routine checkIfCorrespondingJavaPrimitiveTypeExists(uml::PrimitiveType uPrimType
     action {
         call {
             if (mapToJavaPrimitiveType(uPrimType) === null) {
-                userInteracting.showMessage(UserInteractionType.MODAL, "There is no corresponding Java-PrimitiveType for " + uPrimType + " (case sensitive)")
+                userInteractor.notificationDialogBuilder.message("There is no corresponding Java-PrimitiveType for "
+                    + uPrimType + " (case sensitive)").title("Warning").notificationType(NotificationType.WARNING)
+                    .windowModality(WindowModality.MODAL)
             }
         }
     }

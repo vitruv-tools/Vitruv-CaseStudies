@@ -241,7 +241,7 @@ routine createPCMParameter(java::Parameter jaMoPPParam, pcm::OperationSignature 
 		val pcmParameter = create pcm::Parameter and initialize {
 			PcmJavaUtils.setParameterName(pcmParameter, jaMoPPParam.name)
 			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.typeReference, 
-				correspondenceModel, userInteracting, opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
+				correspondenceModel, userInteractor, opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
 		}
 		update opSignature {
 			opSignature.parameters__OperationSignature.add(pcmParameter)
@@ -269,7 +269,7 @@ routine createdReturnType(java::InterfaceMethod method, java::TypeReference type
 routine createPCMReturnType(java::TypeReference returnType, pcm::OperationSignature opSignature, java::Method javaMethod) {
 	action {
 		update opSignature {
-			val pcmDataType = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(returnType, correspondenceModel, userInteracting, 
+			val pcmDataType = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(returnType, correspondenceModel, userInteractor, 
 					opSignature.interface__OperationSignature.repository__Interface, javaMethod.arrayDimension
 			)
 			opSignature.returnType__OperationSignature = pcmDataType
@@ -293,7 +293,7 @@ routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
 		val innerDec = create pcm::InnerDeclaration and initialize {
 			innerDec.datatype_InnerDeclaration = TypeReferenceCorrespondenceHelper.
 					getCorrespondingPCMDataTypeForTypeReference(field.typeReference, correspondenceModel,
-						userInteracting, compositeDataType.repository__DataType, field.arrayDimension)
+						userInteractor, compositeDataType.repository__DataType, field.arrayDimension)
 			innerDec.entityName = field.name
 		}
 		add correspondence between innerDec and field

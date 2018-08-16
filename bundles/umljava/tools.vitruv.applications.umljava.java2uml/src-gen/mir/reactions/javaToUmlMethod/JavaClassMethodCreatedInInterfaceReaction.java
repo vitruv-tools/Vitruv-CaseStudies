@@ -110,7 +110,7 @@ public class JavaClassMethodCreatedInInterfaceReaction extends AbstractReactionR
     }
     
     public void callRoutine1(final InsertEReference insertChange, final Interface affectedEObject, final EReference affectedFeature, final ClassMethod newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      JavaToUmlHelper.showMessage(this.userInteracting, ("ClassMethods are currently not supported in Interfaces. Please delete " + newValue));
+      JavaToUmlHelper.showMessage(this.userInteractor, ("ClassMethods are currently not supported in Interfaces. Please delete " + newValue));
     }
   }
 }
