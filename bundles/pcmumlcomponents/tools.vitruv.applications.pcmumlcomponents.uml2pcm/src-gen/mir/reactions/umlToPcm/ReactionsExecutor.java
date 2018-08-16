@@ -20,8 +20,6 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.umlToPcm.DeletedElementReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToPcm"))));
     this.addReaction(new mir.reactions.umlToPcm.ChangedMultiplicityLowerValueReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToPcm"))));
     this.addReaction(new mir.reactions.umlToPcm.ChangedMultiplicityUpperValueReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToPcm"))));
-    this.addReaction(new mir.reactions.umlToPcm.ChangedMultiplicityLowerReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToPcm"))));
-    this.addReaction(new mir.reactions.umlToPcm.ChangedMultiplicityUpperReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToPcm"))));
     this.addReaction(new mir.reactions.umlToPcm.CreatedUmlModelReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToPcm"))));
     this.addReaction(new mir.reactions.umlToPcm.CreatedPrimitiveDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToPcm"))));
     this.addReaction(new mir.reactions.umlToPcm.CreatedDataTypeReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToPcm"))));
