@@ -80,14 +80,6 @@ reaction ChangedMultiplicityUpperValue {
 	call updateMultiplicityType(affectedEObject)
 }
 
-reaction ChangedMultiplicityLower {
-	after attribute replaced at uml::MultiplicityElement[lower]
-	call updateMultiplicityType(affectedEObject)
-}
-reaction ChangedMultiplicityUpper {
-	after attribute replaced at uml::MultiplicityElement[upper]
-	call updateMultiplicityType(affectedEObject)
-}
 routine updateMultiplicityType(uml::MultiplicityElement umlElement) {
 	match {
 		val pcmElement = retrieve EObject corresponding to umlElement
