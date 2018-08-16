@@ -29,7 +29,8 @@ public class ChangeInterfaceOperationTypeRoutine extends AbstractRepairRoutineRe
     public void update0Element(final Operation umlOperation, final Parameter umlParameter, final OperationSignature pcmSignature) {
       DataType resolvedType = null;
       if ((((resolvedType == null) && (umlParameter.getType() != null)) && (umlParameter.getType() instanceof org.eclipse.uml2.uml.DataType))) {
-        final boolean unbounded = ((umlParameter.lowerBound() != 1) || (umlParameter.upperBound() != 1));
+        int _upperBound = umlParameter.upperBound();
+        final boolean unbounded = (_upperBound != 1);
         Type _type = umlParameter.getType();
         resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(((org.eclipse.uml2.uml.DataType) _type), pcmSignature.getInterface__OperationSignature().getRepository__Interface(), Boolean.valueOf(unbounded), this.userInteractor, this.correspondenceModel);
       }
