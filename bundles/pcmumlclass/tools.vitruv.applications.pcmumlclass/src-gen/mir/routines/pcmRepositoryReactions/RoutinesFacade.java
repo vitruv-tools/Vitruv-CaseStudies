@@ -1,0 +1,79 @@
+package mir.routines.pcmRepositoryReactions;
+
+import mir.routines.pcmRepositoryReactions.BootstrapPrimitiveDatatypesRoutine;
+import mir.routines.pcmRepositoryReactions.ChangeNameOfCorrespondingRepositoryPackageRoutine;
+import mir.routines.pcmRepositoryReactions.CreateUmlContractsPackageRoutine;
+import mir.routines.pcmRepositoryReactions.CreateUmlDatatypesPackageRoutine;
+import mir.routines.pcmRepositoryReactions.CreateUmlRepositoryPackageRoutine;
+import mir.routines.pcmRepositoryReactions.DeleteCorrespondingRepositoryPackagesRoutine;
+import mir.routines.pcmRepositoryReactions.InitializePcmRepositoryUmlPackagesCorrespondenceRoutine;
+import org.palladiosimulator.pcm.repository.Repository;
+import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
+import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
+import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
+import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPath;
+
+@SuppressWarnings("all")
+public class RoutinesFacade extends AbstractRepairRoutinesFacade {
+  public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
+    super(routinesFacadesProvider, reactionsImportPath, executionState);
+  }
+  
+  public boolean initializePcmRepositoryUmlPackagesCorrespondence(final Repository pcmRepo) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    InitializePcmRepositoryUmlPackagesCorrespondenceRoutine routine = new InitializePcmRepositoryUmlPackagesCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+  
+  public boolean createUmlRepositoryPackage(final Repository pcmRepo) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateUmlRepositoryPackageRoutine routine = new CreateUmlRepositoryPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+  
+  public boolean createUmlContractsPackage(final Repository pcmRepo) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateUmlContractsPackageRoutine routine = new CreateUmlContractsPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+  
+  public boolean createUmlDatatypesPackage(final Repository pcmRepo) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateUmlDatatypesPackageRoutine routine = new CreateUmlDatatypesPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+  
+  public boolean changeNameOfCorrespondingRepositoryPackage(final Repository pcmRepo) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    ChangeNameOfCorrespondingRepositoryPackageRoutine routine = new ChangeNameOfCorrespondingRepositoryPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+  
+  public boolean deleteCorrespondingRepositoryPackages(final Repository pcmRepo) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    DeleteCorrespondingRepositoryPackagesRoutine routine = new DeleteCorrespondingRepositoryPackagesRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+  
+  public boolean bootstrapPrimitiveDatatypes(final Repository pcmRepo) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    BootstrapPrimitiveDatatypesRoutine routine = new BootstrapPrimitiveDatatypesRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+}
