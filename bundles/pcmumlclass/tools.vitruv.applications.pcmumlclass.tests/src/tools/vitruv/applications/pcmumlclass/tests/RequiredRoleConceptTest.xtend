@@ -87,7 +87,10 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		saveAndSynchronizeChanges(pcmRequired)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
-		pcmRequired = helper.getPcmComponent(pcmRepository).requiredRoles_InterfaceRequiringEntity.head as OperationRequiredRole
+		val pcmComponent = helper.getPcmComponent(pcmRepository)
+		assertEquals("There should be exactly one RequiredRole since only one was created by the test case.", 
+			1, pcmComponent.requiredRoles_InterfaceRequiringEntity.size)
+		pcmRequired = pcmComponent.requiredRoles_InterfaceRequiringEntity.head as OperationRequiredRole
 		assertNotNull(pcmRequired)
 		checkRequiredRoleConcept(pcmRequired)
 	}
@@ -104,8 +107,10 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		reloadResourceAndReturnRoot(umlConstructorParameter)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
-		umlConstructorParameter = helper.getUmlComponentConstructor(pcmRepository)?.ownedParameters
-			.findFirst[it.name == REQUIRED_ROLE_NAME]
+		umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
+		assertEquals("There should be exactly one Parameter for one RequiredRole created by the test case.", 
+			1, umlConstructor.ownedParameters.size)
+		umlConstructorParameter = umlConstructor.ownedParameters.findFirst[it.name == REQUIRED_ROLE_NAME]
 		assertNotNull(umlConstructorParameter)
 		checkRequiredRoleConcept(umlConstructorParameter)
 	}
@@ -124,6 +129,9 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		reloadResourceAndReturnRoot(umlRequiredInstanceField)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
+		umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
+		assertEquals("There should be exactly one Property for one RequiredRole created by the test case.", 
+			1, umlComponentImpl.ownedAttributes.size)
 		umlRequiredInstanceField = helper.getUmlComponentImpl(pcmRepository).ownedAttributes.findFirst[it.name == REQUIRED_ROLE_NAME]
 		assertNotNull(umlRequiredInstanceField)
 		checkRequiredRoleConcept(umlRequiredInstanceField)

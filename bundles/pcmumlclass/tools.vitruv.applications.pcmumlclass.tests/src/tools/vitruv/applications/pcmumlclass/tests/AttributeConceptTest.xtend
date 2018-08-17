@@ -91,13 +91,16 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		pcmAttribute = pcmCompositeType.innerDeclaration_CompositeDataType.findFirst[it.entityName == TEST_ATTRIBUTE]
 		assertNotNull(pcmAttribute)
 		checkAttributeConcept(pcmAttribute)
-		assertTrue(EcoreUtil.equals(pcmAttribute.datatype_InnerDeclaration, helper.getModifiableInstance(pcmType)))
+		val reloadedPcmType = helper.getModifiableInstance(pcmType)
+		assertNotNull("The DataType should not be null after reload", reloadedPcmType)
+		assertTrue(EcoreUtil.equals(pcmAttribute.datatype_InnerDeclaration, reloadedPcmType))
 	}
 
 
 	@Test
 	def void testCreateAttributeConcept_PCM_primitiveType() {
 		var pcmRepository = createRepository()
+		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_INT)
 		testCreateAttributeConcept_PCM(pcmRepository, helper.PCM_INT)
 	}
 	
@@ -132,7 +135,10 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		umlAttribute = helper.getUmlCompositeDataTypeClass(pcmRepository).ownedAttributes.findFirst[it.name == TEST_ATTRIBUTE]
 		assertNotNull(umlAttribute)
 		checkAttributeConcept(umlAttribute)
-		assertTrue(EcoreUtil.equals(umlAttribute.type, helper.getModifiableInstance(umlType)))
+		
+		val reloadedUmlType = helper.getModifiableInstance(umlType)
+		assertNotNull("The DataType should not be null after reload", reloadedUmlType)
+		assertTrue(EcoreUtil.equals(umlAttribute.type, reloadedUmlType))
 		assertTrue(umlAttribute.lower == lower)
 		assertTrue(umlAttribute.upper == upper)
 	}
@@ -140,6 +146,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateAttributeConcept_UML_primitiveType() {
 		var pcmRepository = createRepository()
+		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_INT)
 		testCreateAttributeConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
 	}
 	

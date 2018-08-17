@@ -31,15 +31,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 //	private static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms.repository"
 	// all SEFFs removed because the TUID-generator failed for ResourceDemandParameters 
 	private static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_noSEFF.repository" 
-	// MediaAccess-Component removed, because the TUIDs of the two uml::Generalization corresponding to the two ProvidedRoles 
-	// collide, since their types are null before the type is set, because of the delayed attribute set. 
-	// Any subsequent changes on one of the Generalizations (e.g. setting the correct general-value) changes both correspondence entries,
-	// which leads to multiple ProvidedInterface-Correspondences being detected for one Generalization and an exception being thrown on the next change.  
-	// SOLVED by stepwise ProvidedRole insertion
-//	private static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_noSEFF_noMediaAccess.repository" 
-
 	private static val UML_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_repository_noSEFF_unedited.uml"
-//	private static val UML_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_repository_noSEFF_noMediaAccess_unedited.uml"
 	 
 	private static val UML_GENERATED_MEDIA_STORE_MODEL_PATH = "model-gen/ms_repository.uml"
 	private static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH = "model-gen/ms_repository.repository"
@@ -128,7 +120,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 			resourceSet.getResource(URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH),true), 
 			getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		)
-		assertEquals("Encountered differences after round-trip batch creation. (that was kind of expected)" + comparison.differences.size, 0, comparison.differences.size)
+		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
 		// expected (and found deltas):
 		//	- each PCM element has a different id since it is unique and those are newly generated elements
 		//	- the ProvidedRole elements are detected as deletion and add, because id and name are changed (name cannot be synchronized via UML)

@@ -56,7 +56,8 @@ routine detectOrCreateCorrespondingRequiredRole(uml::Property umlProperty, uml::
 		call {
 			if (!pcmRequired.isPresent){
 				val pcmRequiredCandidate = pcmComponent.requiredRoles_InterfaceRequiringEntity
-					.filter(OperationRequiredRole).findFirst[it.requiredInterface__OperationRequiredRole === pcmInterface]
+					.filter(OperationRequiredRole)
+					.findFirst[it.requiredInterface__OperationRequiredRole === pcmInterface && it.entityName == umlProperty.name]
 				if (pcmRequiredCandidate !== null){
 					addCorrespondenceForExistingRequiredRole(umlProperty, pcmRequiredCandidate)
 				}

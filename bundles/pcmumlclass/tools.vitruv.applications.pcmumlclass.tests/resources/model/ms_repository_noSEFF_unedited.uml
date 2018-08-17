@@ -93,8 +93,12 @@
     <packagedElement xmi:type="uml:Package" name="datatypes">
       <packagedElement xmi:type="uml:Class" name="FileContent"/>
       <packagedElement xmi:type="uml:Class" name="AudioCollectionRequest">
-        <ownedAttribute name="Count"/>
-        <ownedAttribute name="Size"/>
+        <ownedAttribute name="Count">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+        <ownedAttribute name="Size">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" name="userDBAdapter">

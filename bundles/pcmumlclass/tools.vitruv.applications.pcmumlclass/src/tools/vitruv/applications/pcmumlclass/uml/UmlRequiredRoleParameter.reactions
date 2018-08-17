@@ -56,7 +56,8 @@ routine parameter_detectOrCreateCorrespondingRequiredRole(uml::Parameter umlPara
 		call {
 			if (!pcmRequired.isPresent){
 				val pcmRequiredCandidate = pcmComponent.requiredRoles_InterfaceRequiringEntity
-					.filter(OperationRequiredRole).findFirst[it.requiredInterface__OperationRequiredRole === pcmInterface]
+					.filter(OperationRequiredRole)
+					.findFirst[it.requiredInterface__OperationRequiredRole === pcmInterface && it.entityName == umlParameter.name]
 				if (pcmRequiredCandidate !== null){
 					parameter_addCorrespondenceForExistingRequiredRole(umlParameter, pcmRequiredCandidate)
 				}
@@ -70,7 +71,7 @@ routine parameter_detectOrCreateCorrespondingRequiredRole(uml::Parameter umlPara
 
 routine parameter_addCorrespondenceForExistingRequiredRole(uml::Parameter umlParameter, pcm::OperationRequiredRole pcmRequired){
 	match{
-		require absence of uml::Property corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
+		require absence of uml::Parameter corresponding to pcmRequired tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
 		require absence of pcm::OperationRequiredRole corresponding to umlParameter tagged with TagLiterals.REQUIRED_ROLE__PARAMETER
 	}
 	action {

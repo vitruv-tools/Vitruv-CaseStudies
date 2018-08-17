@@ -113,15 +113,20 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		
 		checkSignatureConcept(umlOperation)
 		var reloadedUmlType = helper.getModifiableInstance(umlType)
+		assertNotNull("The DataType should not be null after reload", reloadedUmlType)
 		assertTrue(EcoreUtil.equals(umlOperation.type, reloadedUmlType))
 		assertEquals(lower, umlOperation.lower)
 		assertEquals(upper, umlOperation.upper)
+		assertEquals("The Operation should have only a return parameter, since no other parameters were supposed to be added by this test.",
+			1, umlOperation.ownedParameters.size
+		)
 	}
 	
 	@Test 
 //	@Ignore
 	def void testCreateSignatureConcept_UML_primitiveReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
+		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_STRING)
 		_testReturnTypePropagation_UML(pcmRepository, helper.UML_STRING, 1, 1)
 	}
 	@Test
@@ -155,14 +160,20 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(pcmSignature)
 		checkSignatureConcept(pcmSignature)
 		assertTrue(pcmSignature.entityName == TEST_SIGNATURE_NAME)
-		var reloadedPcmType = helper.getModifiableInstance(pcmType)
+		val reloadedPcmType = helper.getModifiableInstance(pcmType)
+		assertNotNull("The DataType should not be null after reload", reloadedPcmType)
 		assertTrue(EcoreUtil.equals(pcmSignature.returnType__OperationSignature, reloadedPcmType))
+		
+		assertEquals("The Signature should have no parameter, since none were supposed to be added by this test.",
+			0, pcmSignature.parameters__OperationSignature.size
+		)
 	}
 	
 	@Test
 //	@Ignore
 	def void testCreateSignatureConcept_PCM_primitiveReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
+		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_STRING)
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.PCM_STRING)
 	}
 	
