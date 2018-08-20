@@ -1,14 +1,12 @@
 package mir.routines.umlInnerDeclarationPropertyReactions;
 
 import java.io.IOException;
-import java.util.Optional;
 import mir.routines.umlInnerDeclarationPropertyReactions.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
-import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import tools.vitruv.applications.pcmumlclass.TagLiterals;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -24,11 +22,11 @@ public class CreateCorrespondingInnerDeclarationRoutine extends AbstractRepairRo
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final Optional<DataType> pcmInnerType, final InnerDeclaration pcmInnerDeclaration) {
+    public EObject getElement1(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final InnerDeclaration pcmInnerDeclaration) {
       return pcmInnerDeclaration;
     }
     
-    public EObject getCorrepondenceSource1(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final Optional<DataType> pcmInnerType) {
+    public EObject getCorrepondenceSource1(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType) {
       return umlProperty;
     }
     
@@ -40,28 +38,26 @@ public class CreateCorrespondingInnerDeclarationRoutine extends AbstractRepairRo
       return umlCompositeType;
     }
     
-    public String getRetrieveTag2(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final Optional<DataType> pcmInnerType) {
+    public String getRetrieveTag2(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType) {
       return TagLiterals.INNER_DECLARATION__PROPERTY;
     }
     
-    public EObject getElement2(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final Optional<DataType> pcmInnerType, final InnerDeclaration pcmInnerDeclaration) {
+    public EObject getElement2(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final InnerDeclaration pcmInnerDeclaration) {
       return umlProperty;
     }
     
-    public String getTag1(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final Optional<DataType> pcmInnerType, final InnerDeclaration pcmInnerDeclaration) {
+    public String getTag1(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final InnerDeclaration pcmInnerDeclaration) {
       return TagLiterals.INNER_DECLARATION__PROPERTY;
     }
     
-    public void updatePcmInnerDeclarationElement(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final Optional<DataType> pcmInnerType, final InnerDeclaration pcmInnerDeclaration) {
+    public void updatePcmInnerDeclarationElement(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final InnerDeclaration pcmInnerDeclaration) {
       pcmInnerDeclaration.setEntityName(umlProperty.getName());
-      pcmInnerDeclaration.setDatatype_InnerDeclaration(pcmInnerType.orElse(null));
       EList<InnerDeclaration> _innerDeclaration_CompositeDataType = pcmCompositeType.getInnerDeclaration_CompositeDataType();
       _innerDeclaration_CompositeDataType.add(pcmInnerDeclaration);
     }
     
-    public EObject getCorrepondenceSourcePcmInnerType(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType) {
-      Type _type = umlProperty.getType();
-      return _type;
+    public void callRoutine1(final Property umlProperty, final org.eclipse.uml2.uml.Class umlCompositeType, final CompositeDataType pcmCompositeType, final InnerDeclaration pcmInnerDeclaration, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.propagateTypeChange(umlProperty);
     }
   }
   
@@ -91,28 +87,21 @@ public class CreateCorrespondingInnerDeclarationRoutine extends AbstractRepairRo
     	return false;
     }
     registerObjectUnderModification(pcmCompositeType);
-    	Optional<org.palladiosimulator.pcm.repository.DataType> pcmInnerType = Optional.ofNullable(getCorrespondingElement(
-    		userExecution.getCorrepondenceSourcePcmInnerType(umlProperty, umlCompositeType, pcmCompositeType), // correspondence source supplier
-    		org.palladiosimulator.pcm.repository.DataType.class,
-    		(org.palladiosimulator.pcm.repository.DataType _element) -> true, // correspondence precondition checker
-    		null, 
-    		false // asserted
-    		)
-    );
-    registerObjectUnderModification(pcmInnerType.isPresent() ? pcmInnerType.get() : null);
     if (!getCorrespondingElements(
-    	userExecution.getCorrepondenceSource1(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerType), // correspondence source supplier
+    	userExecution.getCorrepondenceSource1(umlProperty, umlCompositeType, pcmCompositeType), // correspondence source supplier
     	org.palladiosimulator.pcm.repository.InnerDeclaration.class,
     	(org.palladiosimulator.pcm.repository.InnerDeclaration _element) -> true, // correspondence precondition checker
-    	userExecution.getRetrieveTag2(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerType)
+    	userExecution.getRetrieveTag2(umlProperty, umlCompositeType, pcmCompositeType)
     ).isEmpty()) {
     	return false;
     }
     org.palladiosimulator.pcm.repository.InnerDeclaration pcmInnerDeclaration = org.palladiosimulator.pcm.repository.impl.RepositoryFactoryImpl.eINSTANCE.createInnerDeclaration();
     notifyObjectCreated(pcmInnerDeclaration);
-    userExecution.updatePcmInnerDeclarationElement(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerType, pcmInnerDeclaration);
+    userExecution.updatePcmInnerDeclarationElement(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerDeclaration);
     
-    addCorrespondenceBetween(userExecution.getElement1(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerType, pcmInnerDeclaration), userExecution.getElement2(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerType, pcmInnerDeclaration), userExecution.getTag1(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerType, pcmInnerDeclaration));
+    addCorrespondenceBetween(userExecution.getElement1(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerDeclaration), userExecution.getElement2(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerDeclaration), userExecution.getTag1(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerDeclaration));
+    
+    userExecution.callRoutine1(umlProperty, umlCompositeType, pcmCompositeType, pcmInnerDeclaration, this.getRoutinesFacade());
     
     postprocessElements();
     

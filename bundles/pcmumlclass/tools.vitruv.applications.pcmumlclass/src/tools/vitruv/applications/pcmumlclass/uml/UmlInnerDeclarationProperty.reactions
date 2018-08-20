@@ -77,16 +77,17 @@ routine addCorrespondenceForExistingInnerDeclaration(uml::Property umlProperty, 
 routine createCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Class umlCompositeType){
 	match{
 		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-		val pcmInnerType = retrieve optional pcm::DataType corresponding to umlProperty.type //tagged with TagLiterals.DATATYPE__TYPE 
+//		val pcmInnerType = retrieve optional pcm::DataType corresponding to umlProperty.type //tagged with TagLiterals.DATATYPE__TYPE 
 		require absence of pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
 	}
 	action {
 		val pcmInnerDeclaration = create pcm::InnerDeclaration and initialize {
 			pcmInnerDeclaration.entityName = umlProperty.name
-			pcmInnerDeclaration.datatype_InnerDeclaration = pcmInnerType.orElse(null)
+//			pcmInnerDeclaration.datatype_InnerDeclaration = pcmInnerType.orElse(null) // TODO replaced by propagateTypeChanged call
 			pcmCompositeType.innerDeclaration_CompositeDataType += pcmInnerDeclaration
 		}
 		add correspondence between pcmInnerDeclaration and umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
+		call propagateTypeChange(umlProperty)
 	}
 }
 
@@ -152,122 +153,6 @@ routine changeNameOfCorrespondingInnerDeclaration(uml::Property umlProperty, Str
 	}
 }
 
-//Type changes and CollectionDataType correspondence
-//
-//reaction InnerDeclarationPropertyTypeChanged {
-//	after element uml::Type replaced at uml::Property[type]
-//	with {affectedEObject.type === newValue && newValue != oldValue}
-//	call changeTypeOfCorrespondingInnerDeclaration(affectedEObject, newValue)
-//}
-//
-//routine changeTypeOfCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Type umlNewInnerType){
-//	match{
-//		// pcmInnerDeclaration restricts the context -> aborts for parameters that don't have to be synchronized 
-//		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-//		
-//		val pcmPrimitiveType = retrieve optional pcm::DataType corresponding to umlNewInnerType tagged with TagLiterals.DATATYPE__TYPE 
-//		val pcmCompositeType = retrieve optional pcm::DataType corresponding to umlNewInnerType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS  
-//	}
-//	action {
-//		execute {
-//			if(umlProperty.lower == 0 && umlProperty.upper == LiteralUnlimitedNatural.UNLIMITED){ //assume multiplicity for collection-type is given
-//				setCorrespondingTypeToNewCollectionType(umlProperty, umlNewInnerType)
-//			}
-//			else {
-//				pcmInnerDeclaration.datatype_InnerDeclaration = pcmPrimitiveType.orElse(pcmCompositeType.orElse(null))
-//			} 
-//		}
-//	}
-//}
-//
-//routine setCorrespondingTypeToNewCollectionType(uml::Property umlProperty, uml::Type umlNewInnerType){
-//	match{
-//		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-//		
-//		val pcmPrimitiveType = retrieve optional pcm::DataType corresponding to umlNewInnerType tagged with TagLiterals.DATATYPE__TYPE 
-//		val pcmCompositeType = retrieve optional pcm::DataType corresponding to umlNewInnerType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS 
-//		val pcmOldCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY 
-//	}
-//	action {
-//		execute {
-//			if(umlProperty.lower == 0 && umlProperty.upper == LiteralUnlimitedNatural.UNLIMITED){
-//				//select new matching Type
-//				val pcmRepository = pcmInnerDeclaration.compositeDataType_InnerDeclaration?.repository__DataType
-//				val pcmNewInnerType = pcmPrimitiveType.orElse(pcmCompositeType.orElse(null))
-//				val pcmNewCollectionType = pcmRepository.dataTypes__Repository.filter(CollectionDataType).findFirst[it.innerType_CollectionDataType == pcmNewInnerType]
-//				
-//				if(pcmNewCollectionType !== null){	// new Type found
-//					if(pcmNewCollectionType != pcmOldCollectionType.orElse(null)){
-//						removeCorrespondenceForCollectionType(umlProperty)
-//						pcmInnerDeclaration.datatype_InnerDeclaration = pcmNewCollectionType
-//						addCorrespondenceForCollectionType(umlProperty, pcmNewCollectionType)
-//					}
-//				}
-//				else{
-//					// no matching type found, set inner type and drop multiplicity
-//					removeCorrespondenceForCollectionType(umlProperty)
-//					pcmInnerDeclaration.datatype_InnerDeclaration = pcmNewInnerType
-//				}
-//			}
-//		}
-//	}
-//}
-//
-//routine removeCorrespondenceForCollectionType(uml::Property umlProperty){
-//	match{ 
-//		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY 
-//	}
-//	action{
-//		update umlProperty{
-//			umlProperty.lower = 1
-//			umlProperty.upper = 1
-//		}
-//		remove correspondence between pcmCollectionType and umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
-//	}
-//}
-//
-//routine addCorrespondenceForCollectionType(uml::Property umlProperty, pcm::CollectionDataType pcmCollectionType){
-//	action{
-//		update umlProperty{
-//			umlProperty.lower = 0
-//			umlProperty.upper = LiteralUnlimitedNatural.UNLIMITED
-//		}
-//		add correspondence between pcmCollectionType and umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
-//	}
-//}
-//
-//reaction InnerDeclarationPropertyLowerChanged{
-//	after element replaced at uml::Property[lowerValue]
-//	call innerDeclarationPropertyMultiplicityChanged(affectedEObject)
-//}
-//
-//reaction InnerDeclarationPropertyUpperChanged{
-//	after element replaced at uml::Property[upperValue]
-//	call innerDeclarationPropertyMultiplicityChanged(affectedEObject)
-//}
-//
-//routine innerDeclarationPropertyMultiplicityChanged(uml::Property umlProperty){
-//	match {
-//		// pcmInnerDeclaration restricts the context -> aborts for parameters that don't have to be synchronized 
-//		val pcmInnerDeclaration = retrieve pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
-//		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlProperty tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
-//	}
-//	action {
-//		call {
-//			if (umlProperty.lower == 0 && umlProperty.upper == LiteralUnlimitedNatural.UNLIMITED){
-//				setCorrespondingTypeToNewCollectionType(umlProperty, umlProperty.type)
-//			} 
-//			else if(pcmCollectionType.isPresent){
-//				removeCorrespondenceForCollectionType(umlProperty)
-//			}
-//		}
-//	}
-//}
-//
-//
-//
-//
-//
 reaction InnerDeclarationPropertyTypeChanged {
 	after element replaced at uml::Property[type]
 	with {affectedEObject.type === newValue && oldValue !== newValue}
@@ -307,7 +192,7 @@ routine propagateTypeChange(uml::Property umlProperty){
 			val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(correspondenceModel, umlProperty.type, umlProperty.lower, umlProperty.upper)
 			pcmInnerDeclaration.datatype_InnerDeclaration = pcmDataType
 			
-			if(pcmOldCollectionType.isPresent) removeCorrespondenceForOldCollectionType(umlProperty)
+			if(pcmOldCollectionType.isPresent && pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType(umlProperty)
 			if(pcmDataType instanceof CollectionDataType) addCorrespondenceForCollectionType(umlProperty, pcmDataType as CollectionDataType)
 		}
 	}

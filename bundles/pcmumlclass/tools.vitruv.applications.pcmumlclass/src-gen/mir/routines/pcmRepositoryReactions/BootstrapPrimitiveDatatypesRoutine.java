@@ -16,7 +16,6 @@ import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper;
 import tools.vitruv.applications.pcmumlclass.TagLiterals;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
@@ -76,7 +75,7 @@ public class BootstrapPrimitiveDatatypesRoutine extends AbstractRepairRoutineRea
           }
           final PrimitiveType umlType = _switchResult;
           if ((umlType != null)) {
-            ReactionsCorrespondenceHelper.addCorrespondence(this.correspondenceModel, pcmType, umlType, TagLiterals.DATATYPE__TYPE);
+            _routinesFacade.addPrimitiveDatatypeCorrespondence(pcmType, umlType);
           }
         }
       }

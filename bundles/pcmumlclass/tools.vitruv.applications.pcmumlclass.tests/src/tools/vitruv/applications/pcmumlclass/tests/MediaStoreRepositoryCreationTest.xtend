@@ -23,6 +23,10 @@ import org.eclipse.emf.ecore.EObject
 import org.palladiosimulator.pcm.repository.Repository
 import org.junit.Ignore
 import org.palladiosimulator.pcm.repository.ProvidedRole
+import org.eclipse.emf.ecore.EReference
+import javax.xml.stream.events.EntityReference
+import org.palladiosimulator.pcm.repository.RepositoryFactory
+import org.eclipse.uml2.uml.UMLFactory
 
 class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 
@@ -89,6 +93,66 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		val umlMsModel = umlMsRepositoryResource.contents.head as Model
 		assertNotNull(umlMsModel)
 		simulateRepositoryInsertion_UML(umlMsModel, UML_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
+	}
+	
+	@Test
+	def void testMinimalRepositoryWithCompositeTypeRoundtrip_PCM2UML2PCM() {
+		var pcmRepo_forward = RepositoryFactory.eINSTANCE.createRepository
+		pcmRepo_forward.entityName = "TestRepository"
+		val pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
+		pcmRepo_forward.dataTypes__Repository += pcmCompositeType
+		pcmCompositeType.entityName = "TestCompositeType"
+		val pcmInnerDeclaration = RepositoryFactory.eINSTANCE.createInnerDeclaration
+		pcmCompositeType.innerDeclaration_CompositeDataType += pcmInnerDeclaration
+		pcmInnerDeclaration.entityName = "testAttribute"
+		pcmInnerDeclaration.datatype_InnerDeclaration = helper.PCM_INT
+		
+		pcmRepo_forward = simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH, UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
+		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+		
+		val umlRepo_backward = getModelResource(UML_GENERATED_MEDIA_STORE_MODEL_PATH).contents.head as Model
+		simulateRepositoryInsertion_UML(umlRepo_backward, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		
+		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		
+		val pcmRepo_backward = getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2).contents.head as Repository
+		val comparison = compare(pcmRepo_forward, pcmRepo_backward)
+		//expect 3 differences - thats the result if no type is set, because of id changes
+		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 3, comparison.differences.size)
+		// TODO the pcmInnerDeclaration.datatype_InnerDeclaration is set to null if it was a PrimitiveDataType:
+		//		The uml::PrimitiveType gets a different UUID on the backwards propagation and therefore the correspondence cannot be resolved.
+		// 		Maybe this happens because a second instance of the uml::PrimitiveType is created in memory?
+	}
+	
+	@Test
+	def void testMinimalRepositoryWithCompositeTypeRoundtrip_UML2PCM2UML() {
+		var umlRepo_forward = UMLFactory.eINSTANCE.createModel
+		umlRepo_forward.name = "umlrootmodel"
+		val umlRepoPkg = umlRepo_forward.createNestedPackage("testRepository")
+		val umlDatatypesPkg = umlRepoPkg.createNestedPackage(DefaultLiterals.DATATYPES_PACKAGE_NAME)
+		val umlContractsPkg = umlRepoPkg.createNestedPackage(DefaultLiterals.CONTRACTS_PACKAGE_NAME)
+		val umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass("TestCompositeType", false)
+		val umlProperty = umlCompositeTypeClass.createOwnedAttribute("testAttribute", helper.UML_INT)
+//		val umlProperty = umlCompositeTypeClass.createOwnedAttribute("testAttribute", null)
+		
+		umlRepo_forward = simulateRepositoryInsertion_UML(umlRepo_forward, UML_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
+		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
+		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+		
+		val pcmRepo_forward = getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH).contents.head as Repository
+		simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		
+		val umlRepo_backward = getModelResource(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2).contents.head as Model
+		val comparison = compare(umlRepo_forward, umlRepo_backward)
+		//expect 0 differences because there are no changed IDs on the uml side
+		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
+		// TODO the umlProperty.type is set to null if it was a PrimitiveType:
+		//		The pcm::PrimitiveDataType gets a different UUID on the backwards propagation and therefore the correspondence cannot be resolved.
+		// 		Maybe this happens because a second instance of the uml::PrimitiveType is created in memory?
 	}
 	
 	@Test
@@ -162,9 +226,10 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		}
 		contractsPackage.packagedElements += originalInterface
 		saveAndSynchronizeChanges(umlRepositoryModel)
+		var generatedModel = reloadResourceAndReturnRoot(umlRepositoryModel) as Model
 		
 		//retrieve elements after reload
-		repositoryPackage = umlRepositoryModel.nestedPackages.head
+		repositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
 		contractsPackage = repositoryPackage.nestedPackages
 			.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
@@ -173,21 +238,21 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 			.filter(Interface).findFirst[it.name == originalInterface.name]
 		assertNotNull(generatedInterface)
 		
+		// merge each Parameter from the originalOperation with the generated Operation's parameters
 		for (generatedOperation : generatedInterface.ownedOperations){
-			// merge each Parameter from the originalOperation with the generated Operation element
 			for (originalParameter : originalOperationParameterMapping.getOrDefault(generatedOperation.name, new ArrayList<Parameter>)){
 				val generatedParameter = generatedOperation.ownedParameters.findFirst[it.name == originalParameter.name]
 				if (generatedParameter !== null){
 					mergeElements(originalParameter, generatedParameter, "name")
 				}
 				else {
-					generatedOperation.ownedParameters += originalParameter // else add the whole Parameter
+					generatedOperation.ownedParameters += originalParameter
 				}
 			}
 		}
 		
-		saveAndSynchronizeChanges(umlRepositoryModel)
-		return reloadResourceAndReturnRoot(umlRepositoryModel) as Model
+		saveAndSynchronizeChanges(generatedModel)
+		return reloadResourceAndReturnRoot(generatedModel) as Model
 	}
 	
 	
@@ -217,15 +282,26 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 			.filter(Class).findFirst[it.name == originalComponentImpl.name]
 		assertNotNull(generatedComponentImpl)
 		
-		// merge everything except operations which are separately handled, because the constructor and some of its parameters will have been generated.
+		// merge everything except operations which are separately handled, because some of the constructor parameters will be generated.
 		mergeElements(originalComponentImpl, generatedComponentImpl, "ownedOperation")
+		
+		saveAndSynchronizeChanges(generatedModel) //should generate the constructor Parameters corresponding to RequiredRoles
+		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
+		generatedRepositoryPackage = generatedModel.nestedPackages.head
+		assertNotNull(generatedRepositoryPackage)
+		generatedComponentPackage = generatedRepositoryPackage.nestedPackages
+			.findFirst[it.name == originalComponentPackage.name]
+		assertNotNull(generatedComponentPackage)
+		generatedComponentImpl = generatedComponentPackage.packagedElements
+			.filter(Class).findFirst[it.name == originalComponentImpl.name]
+		assertNotNull(generatedComponentImpl)
 		
 		// merge the original with the generated constructor
 		val originalConstructor = originalComponentImpl.ownedOperations.findFirst[it.name == originalComponentImpl.name]
 		val generatedConstructor = generatedComponentImpl.ownedOperations.findFirst[it.name == originalComponentImpl.name]
 		assertNotNull(originalConstructor)
 		assertNotNull(generatedConstructor)
-//		mergeElements(originalConstructor, generatedConstructor, "ownedParameter") // somehow still removes the parameters and dangling elements cause exception
+		mergeElements(originalConstructor, generatedConstructor, "ownedParameter") // TODO somehow still removes the parameters and dangling elements cause exception
 		for (originalParameter : originalConstructor.ownedParameters.clone){
 			val generatedParameter = generatedConstructor.ownedParameters.findFirst[it.name == originalParameter.name]
 			if (generatedParameter !== null){
@@ -284,7 +360,13 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	
 	public def mergeElements(EObject original, EObject generated, String ... skipFeatures){
 		for (feature : original.eClass.EAllStructuralFeatures){
-			if(!feature.derived && feature.changeable && original.eIsSet(feature) && !skipFeatures.contains(feature.name)){
+			if(
+				!feature.derived 
+				&& feature.changeable 
+				&& original.eIsSet(feature) 
+				&& !(feature instanceof EReference && (feature as EReference).isContainer) // TODO don't overwrite up-tree containment
+				&& !skipFeatures.contains(feature.name)
+			){
 				generated.eSet(feature, original.eGet(feature))
 			}
 		}

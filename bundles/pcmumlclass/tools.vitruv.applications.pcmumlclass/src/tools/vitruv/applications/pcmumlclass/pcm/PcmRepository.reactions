@@ -198,8 +198,18 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo){
 					// TODO warning where used: pcm::Char, pcm::Byte, uml::UnlimitedNatural have no mapping
 				}
 				if (umlType !== null)
-					ReactionsCorrespondenceHelper.addCorrespondence(correspondenceModel, pcmType, umlType, TagLiterals.DATATYPE__TYPE)
+					addPrimitiveDatatypeCorrespondence(pcmType, umlType)
 			}
 		}
+	}
+}
+
+routine addPrimitiveDatatypeCorrespondence(pcm::PrimitiveDataType pcmPrimitiveType, uml::PrimitiveType umlPrimitiveType){
+	match {
+		require absence of uml::PrimitiveType corresponding to pcmPrimitiveType tagged with TagLiterals.DATATYPE__TYPE
+		require absence of pcm::PrimitiveDataType corresponding to umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE
+	}
+	action{
+		add correspondence between pcmPrimitiveType and umlPrimitiveType tagged with TagLiterals.DATATYPE__TYPE
 	}
 }

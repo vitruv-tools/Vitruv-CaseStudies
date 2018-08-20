@@ -1,5 +1,6 @@
 package mir.routines.pcmRepositoryReactions;
 
+import mir.routines.pcmRepositoryReactions.AddPrimitiveDatatypeCorrespondenceRoutine;
 import mir.routines.pcmRepositoryReactions.BootstrapPrimitiveDatatypesRoutine;
 import mir.routines.pcmRepositoryReactions.ChangeNameOfCorrespondingRepositoryPackageRoutine;
 import mir.routines.pcmRepositoryReactions.CreateUmlContractsPackageRoutine;
@@ -7,6 +8,8 @@ import mir.routines.pcmRepositoryReactions.CreateUmlDatatypesPackageRoutine;
 import mir.routines.pcmRepositoryReactions.CreateUmlRepositoryPackageRoutine;
 import mir.routines.pcmRepositoryReactions.DeleteCorrespondingRepositoryPackagesRoutine;
 import mir.routines.pcmRepositoryReactions.InitializePcmRepositoryUmlPackagesCorrespondenceRoutine;
+import org.eclipse.uml2.uml.PrimitiveType;
+import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -74,6 +77,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     BootstrapPrimitiveDatatypesRoutine routine = new BootstrapPrimitiveDatatypesRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+  
+  public boolean addPrimitiveDatatypeCorrespondence(final PrimitiveDataType pcmPrimitiveType, final PrimitiveType umlPrimitiveType) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AddPrimitiveDatatypeCorrespondenceRoutine routine = new AddPrimitiveDatatypeCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmPrimitiveType, umlPrimitiveType);
     return routine.applyRoutine();
   }
 }
