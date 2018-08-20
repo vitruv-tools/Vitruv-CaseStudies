@@ -19,6 +19,7 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.umlAssemblyContextPropertyReactions.AssemblyContextPropertyInsertedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlAssemblyContextPropertyReactions"))));
     this.addReaction(new mir.reactions.umlAssemblyContextPropertyReactions.AssemblyContextPropertyRemovedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlAssemblyContextPropertyReactions"))));
     this.addReaction(new mir.reactions.umlAssemblyContextPropertyReactions.AssemblyContextPropertyDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlAssemblyContextPropertyReactions"))));
+    this.addReaction(new mir.reactions.umlAssemblyContextPropertyReactions.AssemblyContextPropertyNameChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlAssemblyContextPropertyReactions"))));
     this.addReaction(new mir.reactions.umlAssemblyContextPropertyReactions.AssemblyContextPropertyTypeChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlAssemblyContextPropertyReactions"))));
   }
 }

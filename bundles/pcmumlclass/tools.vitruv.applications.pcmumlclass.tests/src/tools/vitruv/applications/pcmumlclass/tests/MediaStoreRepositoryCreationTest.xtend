@@ -57,33 +57,6 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 	}
 	
-	private def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath){
-		val originalRepository = inOriginalRepository
-		val originalComponentList = originalRepository.components__Repository.clone.toList
-		// insert ProvidedRoles later one by one, to avoid TUID collisions
-		val originalComponentProvidedRoleMap = new HashMap<String, List<ProvidedRole>>()
-		for (originalComponent : originalRepository.components__Repository){
-			originalComponentProvidedRoleMap.put(originalComponent.entityName, originalComponent.providedRoles_InterfaceProvidingEntity.clone.toList)
-			originalComponent.providedRoles_InterfaceProvidingEntity.clear
-		}
-		
-		userInteractor.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
-		createAndSynchronizeModel(pcmOutputPath, originalRepository)
-		var generatedRepository = reloadResourceAndReturnRoot(originalRepository) as Repository
-		
-		// now insert ProvidedRoles one by one and synchronize in between, to avoid TUID collisions
-		for (originalComponent : originalComponentList){
-			for (originalPrividedRole : originalComponentProvidedRoleMap.getOrDefault(originalComponent.entityName, new ArrayList<ProvidedRole>())){
-				val generatedComponent = generatedRepository.components__Repository.findFirst[it.entityName == originalComponent.entityName]
-				assertNotNull(generatedComponent)
-				generatedComponent.providedRoles_InterfaceProvidingEntity += originalPrividedRole
-				saveAndSynchronizeChanges(generatedRepository)
-				generatedRepository = reloadResourceAndReturnRoot(generatedRepository) as Repository
-			}
-		}
-		return generatedRepository 
-	}
-	
 	@Test
 	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_UML2PCM() {
@@ -191,6 +164,33 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		//	- TODO PrimitiveType references are unset, because their synchronization does not work yet
 		//	- Parameter modifiers are set to INOUT, because UML has no enum element for NONE
 		//	- FailureType is lost, because it is not propagated (limited scope of this master's thesis)
+	}
+	
+	private def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath){
+		val originalRepository = inOriginalRepository
+		val originalComponentList = originalRepository.components__Repository.clone.toList
+		// insert ProvidedRoles later one by one, to avoid TUID collisions
+		val originalComponentProvidedRoleMap = new HashMap<String, List<ProvidedRole>>()
+		for (originalComponent : originalRepository.components__Repository){
+			originalComponentProvidedRoleMap.put(originalComponent.entityName, originalComponent.providedRoles_InterfaceProvidingEntity.clone.toList)
+			originalComponent.providedRoles_InterfaceProvidingEntity.clear
+		}
+		
+		userInteractor.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
+		createAndSynchronizeModel(pcmOutputPath, originalRepository)
+		var generatedRepository = reloadResourceAndReturnRoot(originalRepository) as Repository
+		
+		// now insert ProvidedRoles one by one and synchronize in between, to avoid TUID collisions
+		for (originalComponent : originalComponentList){
+			for (originalPrividedRole : originalComponentProvidedRoleMap.getOrDefault(originalComponent.entityName, new ArrayList<ProvidedRole>())){
+				val generatedComponent = generatedRepository.components__Repository.findFirst[it.entityName == originalComponent.entityName]
+				assertNotNull(generatedComponent)
+				generatedComponent.providedRoles_InterfaceProvidingEntity += originalPrividedRole
+				saveAndSynchronizeChanges(generatedRepository)
+				generatedRepository = reloadResourceAndReturnRoot(generatedRepository) as Repository
+			}
+		}
+		return generatedRepository 
 	}
 	
 	private def simulateDataTypeInsertion_UML(Model umlRepositoryModel, PackageableElement umlDataType){

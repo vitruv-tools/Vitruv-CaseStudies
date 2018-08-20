@@ -6,6 +6,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.entity.ComposedProvidingRequiringEntity;
 import org.palladiosimulator.pcm.repository.RepositoryComponent;
@@ -65,6 +66,10 @@ public class CreateCorrespondingAssemblyContextRoutine extends AbstractRepairRou
       Type _type = umlProperty.getType();
       return _type;
     }
+    
+    public void callRoutine1(final Property umlProperty, final org.eclipse.uml2.uml.Class umlComponent, final ComposedProvidingRequiringEntity pcmCompositeComponent, final RepositoryComponent pcmInnerComponent, final AssemblyContext pcmAssemblyContext, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.changeNameOfCorrespondingAssemblyContext(umlProperty, umlProperty.getName());
+    }
   }
   
   public CreateCorrespondingAssemblyContextRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Property umlProperty, final org.eclipse.uml2.uml.Class umlComponent) {
@@ -117,6 +122,8 @@ public class CreateCorrespondingAssemblyContextRoutine extends AbstractRepairRou
     userExecution.updatePcmAssemblyContextElement(umlProperty, umlComponent, pcmCompositeComponent, pcmInnerComponent, pcmAssemblyContext);
     
     addCorrespondenceBetween(userExecution.getElement1(umlProperty, umlComponent, pcmCompositeComponent, pcmInnerComponent, pcmAssemblyContext), userExecution.getElement2(umlProperty, umlComponent, pcmCompositeComponent, pcmInnerComponent, pcmAssemblyContext), userExecution.getTag1(umlProperty, umlComponent, pcmCompositeComponent, pcmInnerComponent, pcmAssemblyContext));
+    
+    userExecution.callRoutine1(umlProperty, umlComponent, pcmCompositeComponent, pcmInnerComponent, pcmAssemblyContext, this.getRoutinesFacade());
     
     postprocessElements();
     

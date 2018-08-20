@@ -33,6 +33,7 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(corresponds(cm, pcmAssemblyContext, umlAssemblyContextProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY))
 		assertTrue(corresponds(cm, pcmAssemblyContext.parentStructure__AssemblyContext, umlAssemblyContextProperty.owner,TagLiterals.IPRE__IMPLEMENTATION))
 		assertTrue(corresponds(cm, pcmAssemblyContext.encapsulatedComponent__AssemblyContext, umlAssemblyContextProperty.type, TagLiterals.IPRE__IMPLEMENTATION))
+		assertTrue(pcmAssemblyContext.entityName == umlAssemblyContextProperty.name)
 	}
 	
 	def protected checkAssemblyContextConcept(AssemblyContext pcmAssemblyContext){
@@ -69,6 +70,7 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		var pcmComponent = helper.getPcmComponent(pcmRepository)
 		
 		var pcmAssemblyContext = CompositionFactory.eINSTANCE.createAssemblyContext
+		pcmAssemblyContext.entityName = PROPERTY_NAME
 		pcmAssemblyContext.encapsulatedComponent__AssemblyContext = helper.getPcmComponent_2(pcmRepository) // TODO same component doesn't trigger change event
 		pcmComponent.assemblyContexts__ComposedStructure += pcmAssemblyContext
 		

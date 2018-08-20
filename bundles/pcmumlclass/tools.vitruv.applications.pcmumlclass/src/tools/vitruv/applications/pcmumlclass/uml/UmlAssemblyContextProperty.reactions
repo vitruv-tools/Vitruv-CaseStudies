@@ -92,6 +92,7 @@ routine createCorrespondingAssemblyContext(uml::Property umlProperty, uml::Class
 			pcmCompositeComponent.assemblyContexts__ComposedStructure += pcmAssemblyContext
 		}
 		add correspondence between pcmAssemblyContext and umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
+		call changeNameOfCorrespondingAssemblyContext(umlProperty, umlProperty.name)
 	}
 }
 
@@ -137,6 +138,23 @@ routine deleteCorrespondingAssemblyContext(uml::Property umlProperty){
 	action {
 		remove correspondence between pcmAssemblyContext and umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 		delete pcmAssemblyContext
+	}
+}
+
+reaction AssemblyContextPropertyNameChanged {
+	after attribute replaced at uml::Property[name]
+	with {affectedEObject.name == newValue}
+	call changeNameOfCorrespondingAssemblyContext(affectedEObject, newValue)
+}
+
+routine changeNameOfCorrespondingAssemblyContext(uml::Property umlProperty, String newName){
+	match{
+		val pcmAssemblyContext = retrieve pcm::AssemblyContext corresponding to umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
+	}
+	action {
+		update pcmAssemblyContext {
+			pcmAssemblyContext.entityName = newName
+		}
 	}
 }
 

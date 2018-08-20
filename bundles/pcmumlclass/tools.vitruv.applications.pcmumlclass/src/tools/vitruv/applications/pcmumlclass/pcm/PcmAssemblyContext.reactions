@@ -124,6 +124,23 @@ routine deleteCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssem
 	}
 }
 
+reaction AssemblyContextNameChanged {
+	after attribute replaced at pcm::AssemblyContext[entityName]
+	with {affectedEObject.entityName == newValue}
+	call changeNameOfCorrespondingAssemblyContextProperty(affectedEObject, newValue)
+}
+
+routine changeNameOfCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssembly, String newName){
+	match {
+		val umlProperty = retrieve uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
+	}
+	action{
+		update umlProperty {
+			umlProperty.name = newName
+		}
+	}
+}
+
 reaction AssemblyContextComponentChanged {
 	after element pcm::RepositoryComponent replaced at pcm::AssemblyContext[encapsulatedComponent__AssemblyContext]
 	with {affectedEObject.encapsulatedComponent__AssemblyContext === newValue}

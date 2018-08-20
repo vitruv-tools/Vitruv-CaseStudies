@@ -19,6 +19,7 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.pcmAssemblyContextReactions.AssemblyContextInsertedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmAssemblyContextReactions"))));
     this.addReaction(new mir.reactions.pcmAssemblyContextReactions.AssemblyContextRemovedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmAssemblyContextReactions"))));
     this.addReaction(new mir.reactions.pcmAssemblyContextReactions.AssemblyContextDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmAssemblyContextReactions"))));
+    this.addReaction(new mir.reactions.pcmAssemblyContextReactions.AssemblyContextNameChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmAssemblyContextReactions"))));
     this.addReaction(new mir.reactions.pcmAssemblyContextReactions.AssemblyContextComponentChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmAssemblyContextReactions"))));
   }
 }

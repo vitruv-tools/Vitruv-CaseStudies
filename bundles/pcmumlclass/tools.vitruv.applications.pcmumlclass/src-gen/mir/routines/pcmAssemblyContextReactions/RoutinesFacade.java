@@ -1,6 +1,7 @@
 package mir.routines.pcmAssemblyContextReactions;
 
 import mir.routines.pcmAssemblyContextReactions.AddCorrespondenceForExistingAssemblyContextPropertyRoutine;
+import mir.routines.pcmAssemblyContextReactions.ChangeNameOfCorrespondingAssemblyContextPropertyRoutine;
 import mir.routines.pcmAssemblyContextReactions.ChangeTypeOfCorrespondingAssemblyContextPropertyRoutine;
 import mir.routines.pcmAssemblyContextReactions.CreateCorrespondingAssemblyContextPropertyRoutine;
 import mir.routines.pcmAssemblyContextReactions.DeleteCorrespondingAssemblyContextPropertyRoutine;
@@ -78,6 +79,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     DeleteCorrespondingAssemblyContextPropertyRoutine routine = new DeleteCorrespondingAssemblyContextPropertyRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmAssembly);
+    return routine.applyRoutine();
+  }
+  
+  public boolean changeNameOfCorrespondingAssemblyContextProperty(final AssemblyContext pcmAssembly, final String newName) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    ChangeNameOfCorrespondingAssemblyContextPropertyRoutine routine = new ChangeNameOfCorrespondingAssemblyContextPropertyRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmAssembly, newName);
     return routine.applyRoutine();
   }
   
