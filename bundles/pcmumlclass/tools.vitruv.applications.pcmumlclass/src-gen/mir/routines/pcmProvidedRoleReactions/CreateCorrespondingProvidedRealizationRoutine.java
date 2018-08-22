@@ -5,8 +5,8 @@ import java.util.Optional;
 import mir.routines.pcmProvidedRoleReactions.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
@@ -16,15 +16,15 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class CreateCorrespondingProvidedGeneralizationRoutine extends AbstractRepairRoutineRealization {
-  private CreateCorrespondingProvidedGeneralizationRoutine.ActionUserExecution userExecution;
+public class CreateCorrespondingProvidedRealizationRoutine extends AbstractRepairRoutineRealization {
+  private CreateCorrespondingProvidedRealizationRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl, final Optional<Interface> umlInterface, final Generalization umlGeneralization) {
+    public EObject getElement1(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl, final Optional<Interface> umlInterface, final InterfaceRealization umlRealization) {
       return pcmProvided;
     }
     
@@ -46,32 +46,32 @@ public class CreateCorrespondingProvidedGeneralizationRoutine extends AbstractRe
     }
     
     public String getRetrieveTag2(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl) {
-      return TagLiterals.PROVIDED_ROLE__GENERALIZATION;
+      return TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION;
     }
     
-    public EObject getElement2(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl, final Optional<Interface> umlInterface, final Generalization umlGeneralization) {
-      return umlGeneralization;
+    public EObject getElement2(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl, final Optional<Interface> umlInterface, final InterfaceRealization umlRealization) {
+      return umlRealization;
     }
     
     public String getRetrieveTag3(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl) {
       return TagLiterals.INTERFACE_TO_INTERFACE;
     }
     
-    public String getTag1(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl, final Optional<Interface> umlInterface, final Generalization umlGeneralization) {
-      return TagLiterals.PROVIDED_ROLE__GENERALIZATION;
+    public String getTag1(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl, final Optional<Interface> umlInterface, final InterfaceRealization umlRealization) {
+      return TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION;
     }
     
-    public void updateUmlGeneralizationElement(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl, final Optional<Interface> umlInterface, final Generalization umlGeneralization) {
-      umlGeneralization.setSpecific(umlComponentImpl);
-      umlGeneralization.setGeneral(umlInterface.orElse(null));
-      EList<Generalization> _generalizations = umlComponentImpl.getGeneralizations();
-      _generalizations.add(umlGeneralization);
+    public void updateUmlRealizationElement(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, final org.eclipse.uml2.uml.Class umlComponentImpl, final Optional<Interface> umlInterface, final InterfaceRealization umlRealization) {
+      umlRealization.setImplementingClassifier(umlComponentImpl);
+      umlRealization.setContract(umlInterface.orElse(null));
+      EList<InterfaceRealization> _interfaceRealizations = umlComponentImpl.getInterfaceRealizations();
+      _interfaceRealizations.add(umlRealization);
     }
   }
   
-  public CreateCorrespondingProvidedGeneralizationRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
+  public CreateCorrespondingProvidedRealizationRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
     super(routinesFacade, reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.pcmProvidedRoleReactions.CreateCorrespondingProvidedGeneralizationRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.pcmProvidedRoleReactions.CreateCorrespondingProvidedRealizationRoutine.ActionUserExecution(getExecutionState(), this);
     this.pcmProvided = pcmProvided;this.pcmIPRE = pcmIPRE;
   }
   
@@ -80,7 +80,7 @@ public class CreateCorrespondingProvidedGeneralizationRoutine extends AbstractRe
   private InterfaceProvidingRequiringEntity pcmIPRE;
   
   protected boolean executeRoutine() throws IOException {
-    getLogger().debug("Called routine CreateCorrespondingProvidedGeneralizationRoutine with input:");
+    getLogger().debug("Called routine CreateCorrespondingProvidedRealizationRoutine with input:");
     getLogger().debug("   pcmProvided: " + this.pcmProvided);
     getLogger().debug("   pcmIPRE: " + this.pcmIPRE);
     
@@ -97,8 +97,8 @@ public class CreateCorrespondingProvidedGeneralizationRoutine extends AbstractRe
     registerObjectUnderModification(umlComponentImpl);
     if (!getCorrespondingElements(
     	userExecution.getCorrepondenceSource1(pcmProvided, pcmIPRE, umlComponentImpl), // correspondence source supplier
-    	org.eclipse.uml2.uml.Generalization.class,
-    	(org.eclipse.uml2.uml.Generalization _element) -> true, // correspondence precondition checker
+    	org.eclipse.uml2.uml.InterfaceRealization.class,
+    	(org.eclipse.uml2.uml.InterfaceRealization _element) -> true, // correspondence precondition checker
     	userExecution.getRetrieveTag2(pcmProvided, pcmIPRE, umlComponentImpl)
     ).isEmpty()) {
     	return false;
@@ -112,11 +112,11 @@ public class CreateCorrespondingProvidedGeneralizationRoutine extends AbstractRe
     		)
     );
     registerObjectUnderModification(umlInterface.isPresent() ? umlInterface.get() : null);
-    org.eclipse.uml2.uml.Generalization umlGeneralization = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createGeneralization();
-    notifyObjectCreated(umlGeneralization);
-    userExecution.updateUmlGeneralizationElement(pcmProvided, pcmIPRE, umlComponentImpl, umlInterface, umlGeneralization);
+    org.eclipse.uml2.uml.InterfaceRealization umlRealization = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createInterfaceRealization();
+    notifyObjectCreated(umlRealization);
+    userExecution.updateUmlRealizationElement(pcmProvided, pcmIPRE, umlComponentImpl, umlInterface, umlRealization);
     
-    addCorrespondenceBetween(userExecution.getElement1(pcmProvided, pcmIPRE, umlComponentImpl, umlInterface, umlGeneralization), userExecution.getElement2(pcmProvided, pcmIPRE, umlComponentImpl, umlInterface, umlGeneralization), userExecution.getTag1(pcmProvided, pcmIPRE, umlComponentImpl, umlInterface, umlGeneralization));
+    addCorrespondenceBetween(userExecution.getElement1(pcmProvided, pcmIPRE, umlComponentImpl, umlInterface, umlRealization), userExecution.getElement2(pcmProvided, pcmIPRE, umlComponentImpl, umlInterface, umlRealization), userExecution.getTag1(pcmProvided, pcmIPRE, umlComponentImpl, umlInterface, umlRealization));
     
     postprocessElements();
     

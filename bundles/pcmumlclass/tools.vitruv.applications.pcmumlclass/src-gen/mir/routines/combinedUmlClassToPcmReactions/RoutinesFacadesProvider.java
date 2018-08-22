@@ -48,8 +48,8 @@ public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
     	case "combinedUmlClassToPcmReactions.umlIPREConstructorOperationReactions": {
     		return new mir.routines.umlIPREConstructorOperationReactions.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
-    	case "combinedUmlClassToPcmReactions.umlProvidedRoleGeneralizationReactions": {
-    		return new mir.routines.umlProvidedRoleGeneralizationReactions.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
+    	case "combinedUmlClassToPcmReactions.umlProvidedRoleRealizationReactions": {
+    		return new mir.routines.umlProvidedRoleRealizationReactions.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	case "combinedUmlClassToPcmReactions.umlRequiredRoleParameterReactions": {
     		return new mir.routines.umlRequiredRoleParameterReactions.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);

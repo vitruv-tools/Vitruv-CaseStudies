@@ -1,10 +1,9 @@
-package mir.reactions.umlProvidedRoleGeneralizationReactions;
+package mir.reactions.umlProvidedRoleRealizationReactions;
 
-import mir.routines.umlProvidedRoleGeneralizationReactions.RoutinesFacade;
+import mir.routines.umlProvidedRoleRealizationReactions.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -14,12 +13,12 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
 
 @SuppressWarnings("all")
-public class ProvidedRoleGeneralizationTypeChangedReaction extends AbstractReactionRealization {
-  private ReplaceSingleValuedEReference<Generalization, Interface> replaceChange;
+public class ProvidedRoleRealizationTypeChangedReaction extends AbstractReactionRealization {
+  private ReplaceSingleValuedEReference<InterfaceRealization, Interface> replaceChange;
   
   private int currentlyMatchedChange;
   
-  public ProvidedRoleGeneralizationTypeChangedReaction(final RoutinesFacade routinesFacade) {
+  public ProvidedRoleRealizationTypeChangedReaction(final RoutinesFacade routinesFacade) {
     super(routinesFacade);
   }
   
@@ -27,7 +26,7 @@ public class ProvidedRoleGeneralizationTypeChangedReaction extends AbstractReact
     if (!checkPrecondition(change)) {
     	return;
     }
-    org.eclipse.uml2.uml.Generalization affectedEObject = replaceChange.getAffectedEObject();
+    org.eclipse.uml2.uml.InterfaceRealization affectedEObject = replaceChange.getAffectedEObject();
     EReference affectedFeature = replaceChange.getAffectedFeature();
     org.eclipse.uml2.uml.Interface oldValue = replaceChange.getOldValue();
     org.eclipse.uml2.uml.Interface newValue = replaceChange.getNewValue();
@@ -39,7 +38,7 @@ public class ProvidedRoleGeneralizationTypeChangedReaction extends AbstractReact
     }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.reactions.umlProvidedRoleGeneralizationReactions.ProvidedRoleGeneralizationTypeChangedReaction.ActionUserExecution userExecution = new mir.reactions.umlProvidedRoleGeneralizationReactions.ProvidedRoleGeneralizationTypeChangedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.umlProvidedRoleRealizationReactions.ProvidedRoleRealizationTypeChangedReaction.ActionUserExecution userExecution = new mir.reactions.umlProvidedRoleRealizationReactions.ProvidedRoleRealizationTypeChangedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
@@ -65,11 +64,11 @@ public class ProvidedRoleGeneralizationTypeChangedReaction extends AbstractReact
   
   private boolean matchReplaceChange(final EChange change) {
     if (change instanceof ReplaceSingleValuedEReference<?, ?>) {
-    	ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Generalization, org.eclipse.uml2.uml.Interface> _localTypedChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Generalization, org.eclipse.uml2.uml.Interface>) change;
-    	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Generalization)) {
+    	ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface> _localTypedChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
     		return false;
     	}
-    	if (!_localTypedChange.getAffectedFeature().getName().equals("general")) {
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("contract")) {
     		return false;
     	}
     	if (_localTypedChange.isFromNonDefaultValue() && !(_localTypedChange.getOldValue() instanceof org.eclipse.uml2.uml.Interface)) {
@@ -78,16 +77,16 @@ public class ProvidedRoleGeneralizationTypeChangedReaction extends AbstractReact
     	if (_localTypedChange.isToNonDefaultValue() && !(_localTypedChange.getNewValue() instanceof org.eclipse.uml2.uml.Interface)) {
     		return false;
     	}
-    	this.replaceChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Generalization, org.eclipse.uml2.uml.Interface>) change;
+    	this.replaceChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.InterfaceRealization, org.eclipse.uml2.uml.Interface>) change;
     	return true;
     }
     
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final Generalization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue) {
-    Classifier _general = affectedEObject.getGeneral();
-    return (_general == newValue);
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final InterfaceRealization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue) {
+    Interface _contract = affectedEObject.getContract();
+    return (_contract == newValue);
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -95,7 +94,7 @@ public class ProvidedRoleGeneralizationTypeChangedReaction extends AbstractReact
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final Generalization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final InterfaceRealization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.changeTypeOfCorrespondingProvidedRole(affectedEObject, newValue);
     }
   }

@@ -92,7 +92,7 @@ public class ProvidedRoleRemovedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final RemoveEReference removeChange, final InterfaceProvidingRequiringEntity affectedEObject, final EReference affectedFeature, final OperationProvidedRole oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.removeCorrespondingProvidedGeneralization(oldValue, affectedEObject);
+      _routinesFacade.removeCorrespondingProvidedRealization(oldValue, affectedEObject);
     }
   }
 }

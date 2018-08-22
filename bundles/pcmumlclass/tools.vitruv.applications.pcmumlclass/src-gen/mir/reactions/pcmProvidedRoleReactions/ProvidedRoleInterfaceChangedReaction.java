@@ -96,7 +96,7 @@ public class ProvidedRoleInterfaceChangedReaction extends AbstractReactionRealiz
     }
     
     public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final OperationProvidedRole affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final OperationInterface newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeInterfaceOfCorrespondingProvidedGeneralization(affectedEObject, newValue);
+      _routinesFacade.changeInterfaceOfCorrespondingProvidedRealization(affectedEObject, newValue);
     }
   }
 }

@@ -19,6 +19,7 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.pcmProvidedRoleReactions.ProvidedRoleInsertedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmProvidedRoleReactions"))));
     this.addReaction(new mir.reactions.pcmProvidedRoleReactions.ProvidedRoleRemovedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmProvidedRoleReactions"))));
     this.addReaction(new mir.reactions.pcmProvidedRoleReactions.ProvidedRoleDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmProvidedRoleReactions"))));
+    this.addReaction(new mir.reactions.pcmProvidedRoleReactions.ProvidedRoleNameChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmProvidedRoleReactions"))));
     this.addReaction(new mir.reactions.pcmProvidedRoleReactions.ProvidedRoleInterfaceChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcmProvidedRoleReactions"))));
   }
 }

@@ -1,4 +1,4 @@
-package mir.routines.umlProvidedRoleGeneralizationReactions;
+package mir.routines.umlProvidedRoleRealizationReactions;
 
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRoutinesFacadesProvider;
@@ -9,8 +9,8 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPa
 public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
   public AbstractRepairRoutinesFacade createRoutinesFacade(final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState sharedExecutionState) {
     switch(reactionsImportPath.getPathString()) {
-    	case "umlProvidedRoleGeneralizationReactions": {
-    		return new mir.routines.umlProvidedRoleGeneralizationReactions.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
+    	case "umlProvidedRoleRealizationReactions": {
+    		return new mir.routines.umlProvidedRoleRealizationReactions.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
     	default: {
     		throw new IllegalArgumentException("Unexpected import path: " + reactionsImportPath.getPathString());

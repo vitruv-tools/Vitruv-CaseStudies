@@ -1,8 +1,8 @@
-package mir.reactions.umlProvidedRoleGeneralizationReactions;
+package mir.reactions.umlProvidedRoleRealizationReactions;
 
-import mir.routines.umlProvidedRoleGeneralizationReactions.RoutinesFacade;
+import mir.routines.umlProvidedRoleRealizationReactions.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Generalization;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -12,12 +12,12 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.feature.reference.RemoveEReference;
 
 @SuppressWarnings("all")
-public class ProvidedRoleGeneralizationRemovedReaction extends AbstractReactionRealization {
-  private RemoveEReference<org.eclipse.uml2.uml.Class, Generalization> removeChange;
+public class ProvidedRoleRealizationRemovedReaction extends AbstractReactionRealization {
+  private RemoveEReference<org.eclipse.uml2.uml.Class, InterfaceRealization> removeChange;
   
   private int currentlyMatchedChange;
   
-  public ProvidedRoleGeneralizationRemovedReaction(final RoutinesFacade routinesFacade) {
+  public ProvidedRoleRealizationRemovedReaction(final RoutinesFacade routinesFacade) {
     super(routinesFacade);
   }
   
@@ -27,7 +27,7 @@ public class ProvidedRoleGeneralizationRemovedReaction extends AbstractReactionR
     }
     org.eclipse.uml2.uml.Class affectedEObject = removeChange.getAffectedEObject();
     EReference affectedFeature = removeChange.getAffectedFeature();
-    org.eclipse.uml2.uml.Generalization oldValue = removeChange.getOldValue();
+    org.eclipse.uml2.uml.InterfaceRealization oldValue = removeChange.getOldValue();
     int index = removeChange.getIndex();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
@@ -37,7 +37,7 @@ public class ProvidedRoleGeneralizationRemovedReaction extends AbstractReactionR
     }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.reactions.umlProvidedRoleGeneralizationReactions.ProvidedRoleGeneralizationRemovedReaction.ActionUserExecution userExecution = new mir.reactions.umlProvidedRoleGeneralizationReactions.ProvidedRoleGeneralizationRemovedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.umlProvidedRoleRealizationReactions.ProvidedRoleRealizationRemovedReaction.ActionUserExecution userExecution = new mir.reactions.umlProvidedRoleRealizationReactions.ProvidedRoleRealizationRemovedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(removeChange, affectedEObject, affectedFeature, oldValue, index, this.getRoutinesFacade());
     
     resetChanges();
@@ -50,17 +50,17 @@ public class ProvidedRoleGeneralizationRemovedReaction extends AbstractReactionR
   
   private boolean matchRemoveChange(final EChange change) {
     if (change instanceof RemoveEReference<?, ?>) {
-    	RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Generalization> _localTypedChange = (RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Generalization>) change;
+    	RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.InterfaceRealization> _localTypedChange = (RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.InterfaceRealization>) change;
     	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Class)) {
     		return false;
     	}
-    	if (!_localTypedChange.getAffectedFeature().getName().equals("generalization")) {
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("interfaceRealization")) {
     		return false;
     	}
-    	if (!(_localTypedChange.getOldValue() instanceof org.eclipse.uml2.uml.Generalization)) {
+    	if (!(_localTypedChange.getOldValue() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
     		return false;
     	}
-    	this.removeChange = (RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.Generalization>) change;
+    	this.removeChange = (RemoveEReference<org.eclipse.uml2.uml.Class, org.eclipse.uml2.uml.InterfaceRealization>) change;
     	return true;
     }
     
@@ -80,8 +80,8 @@ public class ProvidedRoleGeneralizationRemovedReaction extends AbstractReactionR
     return true;
   }
   
-  private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Generalization oldValue, final int index) {
-    boolean _contains = affectedEObject.getGeneralizations().contains(oldValue);
+  private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final InterfaceRealization oldValue, final int index) {
+    boolean _contains = affectedEObject.getInterfaceRealizations().contains(oldValue);
     return (!_contains);
   }
   
@@ -90,7 +90,7 @@ public class ProvidedRoleGeneralizationRemovedReaction extends AbstractReactionR
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final RemoveEReference removeChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Generalization oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final RemoveEReference removeChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final InterfaceRealization oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.removeCorrespondingProvidedRole(oldValue, affectedEObject);
     }
   }

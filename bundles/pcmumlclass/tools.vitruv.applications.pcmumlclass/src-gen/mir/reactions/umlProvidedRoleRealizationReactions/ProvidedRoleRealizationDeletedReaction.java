@@ -1,7 +1,7 @@
-package mir.reactions.umlProvidedRoleGeneralizationReactions;
+package mir.reactions.umlProvidedRoleRealizationReactions;
 
-import mir.routines.umlProvidedRoleGeneralizationReactions.RoutinesFacade;
-import org.eclipse.uml2.uml.Generalization;
+import mir.routines.umlProvidedRoleRealizationReactions.RoutinesFacade;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -11,12 +11,12 @@ import tools.vitruv.framework.change.echange.EChange;
 import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 
 @SuppressWarnings("all")
-public class ProvidedRoleGeneralizationDeletedReaction extends AbstractReactionRealization {
-  private DeleteEObject<Generalization> deleteChange;
+public class ProvidedRoleRealizationDeletedReaction extends AbstractReactionRealization {
+  private DeleteEObject<InterfaceRealization> deleteChange;
   
   private int currentlyMatchedChange;
   
-  public ProvidedRoleGeneralizationDeletedReaction(final RoutinesFacade routinesFacade) {
+  public ProvidedRoleRealizationDeletedReaction(final RoutinesFacade routinesFacade) {
     super(routinesFacade);
   }
   
@@ -24,11 +24,11 @@ public class ProvidedRoleGeneralizationDeletedReaction extends AbstractReactionR
     if (!checkPrecondition(change)) {
     	return;
     }
-    org.eclipse.uml2.uml.Generalization affectedEObject = deleteChange.getAffectedEObject();
+    org.eclipse.uml2.uml.InterfaceRealization affectedEObject = deleteChange.getAffectedEObject();
     				
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.reactions.umlProvidedRoleGeneralizationReactions.ProvidedRoleGeneralizationDeletedReaction.ActionUserExecution userExecution = new mir.reactions.umlProvidedRoleGeneralizationReactions.ProvidedRoleGeneralizationDeletedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.umlProvidedRoleRealizationReactions.ProvidedRoleRealizationDeletedReaction.ActionUserExecution userExecution = new mir.reactions.umlProvidedRoleRealizationReactions.ProvidedRoleRealizationDeletedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(deleteChange, affectedEObject, this.getRoutinesFacade());
     
     resetChanges();
@@ -36,11 +36,11 @@ public class ProvidedRoleGeneralizationDeletedReaction extends AbstractReactionR
   
   private boolean matchDeleteChange(final EChange change) {
     if (change instanceof DeleteEObject<?>) {
-    	DeleteEObject<org.eclipse.uml2.uml.Generalization> _localTypedChange = (DeleteEObject<org.eclipse.uml2.uml.Generalization>) change;
-    	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Generalization)) {
+    	DeleteEObject<org.eclipse.uml2.uml.InterfaceRealization> _localTypedChange = (DeleteEObject<org.eclipse.uml2.uml.InterfaceRealization>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.InterfaceRealization)) {
     		return false;
     	}
-    	this.deleteChange = (DeleteEObject<org.eclipse.uml2.uml.Generalization>) change;
+    	this.deleteChange = (DeleteEObject<org.eclipse.uml2.uml.InterfaceRealization>) change;
     	return true;
     }
     
@@ -70,7 +70,7 @@ public class ProvidedRoleGeneralizationDeletedReaction extends AbstractReactionR
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final DeleteEObject deleteChange, final Generalization affectedEObject, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final DeleteEObject deleteChange, final InterfaceRealization affectedEObject, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.deleteCorrespondingProvidedRole(affectedEObject);
     }
   }

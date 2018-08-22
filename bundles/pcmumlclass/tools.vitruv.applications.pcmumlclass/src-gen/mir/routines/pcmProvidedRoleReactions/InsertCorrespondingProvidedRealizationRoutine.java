@@ -10,8 +10,8 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class InsertCorrespondingProvidedGeneralizationRoutine extends AbstractRepairRoutineRealization {
-  private InsertCorrespondingProvidedGeneralizationRoutine.ActionUserExecution userExecution;
+public class InsertCorrespondingProvidedRealizationRoutine extends AbstractRepairRoutineRealization {
+  private InsertCorrespondingProvidedRealizationRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
@@ -19,17 +19,17 @@ public class InsertCorrespondingProvidedGeneralizationRoutine extends AbstractRe
     }
     
     public void callRoutine2(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.moveCorrespondingProvidedGeneralization(pcmProvided, pcmIPRE);
+      _routinesFacade.moveCorrespondingProvidedRealization(pcmProvided, pcmIPRE);
     }
     
     public void callRoutine1(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.detectOrCreateCorrespondingProvidedGeneralization(pcmProvided, pcmIPRE);
+      _routinesFacade.detectOrCreateCorrespondingProvidedRealization(pcmProvided, pcmIPRE);
     }
   }
   
-  public InsertCorrespondingProvidedGeneralizationRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
+  public InsertCorrespondingProvidedRealizationRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
     super(routinesFacade, reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.pcmProvidedRoleReactions.InsertCorrespondingProvidedGeneralizationRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.pcmProvidedRoleReactions.InsertCorrespondingProvidedRealizationRoutine.ActionUserExecution(getExecutionState(), this);
     this.pcmProvided = pcmProvided;this.pcmIPRE = pcmIPRE;
   }
   
@@ -38,7 +38,7 @@ public class InsertCorrespondingProvidedGeneralizationRoutine extends AbstractRe
   private InterfaceProvidingRequiringEntity pcmIPRE;
   
   protected boolean executeRoutine() throws IOException {
-    getLogger().debug("Called routine InsertCorrespondingProvidedGeneralizationRoutine with input:");
+    getLogger().debug("Called routine InsertCorrespondingProvidedRealizationRoutine with input:");
     getLogger().debug("   pcmProvided: " + this.pcmProvided);
     getLogger().debug("   pcmIPRE: " + this.pcmIPRE);
     

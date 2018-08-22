@@ -20,7 +20,7 @@ import umlInnerDeclarationPropertyReactions using qualified names
 import umlRepositoryComponentPackageReactions using qualified names
 import umlIPREClassReactions using qualified names
 import umlIPREConstructorOperationReactions using qualified names
-import umlProvidedRoleGeneralizationReactions using qualified names
+import umlProvidedRoleRealizationReactions using qualified names
 import umlRequiredRoleParameterReactions using qualified names
 import umlRequiredRolePropertyReactions using qualified names
 import umlAssemblyContextPropertyReactions using qualified names

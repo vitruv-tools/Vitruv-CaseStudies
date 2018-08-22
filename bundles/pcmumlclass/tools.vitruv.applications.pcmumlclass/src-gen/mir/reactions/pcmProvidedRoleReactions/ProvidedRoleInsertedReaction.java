@@ -91,7 +91,7 @@ public class ProvidedRoleInsertedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final InsertEReference insertChange, final InterfaceProvidingRequiringEntity affectedEObject, final EReference affectedFeature, final OperationProvidedRole newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.insertCorrespondingProvidedGeneralization(newValue, affectedEObject);
+      _routinesFacade.insertCorrespondingProvidedRealization(newValue, affectedEObject);
     }
   }
 }

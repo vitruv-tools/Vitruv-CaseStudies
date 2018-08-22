@@ -9,24 +9,23 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.compare.Comparison
 import org.eclipse.emf.compare.EMFCompare
 import org.eclipse.emf.compare.scope.DefaultComparisonScope
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
 import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.UMLFactory
+import org.junit.Ignore
 import org.junit.Test
+import org.palladiosimulator.pcm.repository.ProvidedRole
+import org.palladiosimulator.pcm.repository.Repository
+import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
 import static org.junit.Assert.*
-import org.eclipse.uml2.uml.Interface
-import org.eclipse.emf.ecore.EObject
-import org.palladiosimulator.pcm.repository.Repository
-import org.junit.Ignore
-import org.palladiosimulator.pcm.repository.ProvidedRole
-import org.eclipse.emf.ecore.EReference
-import javax.xml.stream.events.EntityReference
-import org.palladiosimulator.pcm.repository.RepositoryFactory
-import org.eclipse.uml2.uml.UMLFactory
 
 class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 
@@ -43,7 +42,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	private static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2 = "model-gen/ms_repository_backward.repository"
 
 	@Test
-	@Ignore //skip until needed because of performance
+//	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML() {
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
 		val pcmMsRepositoryResource = resourceSet.getResource(uri,true)
@@ -58,7 +57,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-	@Ignore //skip until needed because of performance
+//	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_UML2PCM() {
 		val uri = URI.createURI(UML_MEDIA_STORE_REPOSITORY_PATH)
 		val umlMsRepositoryResource = resourceSet.getResource(uri,true)
@@ -69,6 +68,44 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
+//	@Ignore //skip until needed because of performance
+	def void testMediaStoreRepositoryCreation_PCM2UML2PCM() {
+		// forwards
+		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
+		val pcmMsRepositoryResource = resourceSet.getResource(uri,true)
+		assertNotNull(pcmMsRepositoryResource)
+		val pcmMsRepository = pcmMsRepositoryResource.contents.head as Repository
+		assertNotNull(pcmMsRepository)
+		
+		simulateRepositoryInsertion_PCM(pcmMsRepository, PCM_GENERATED_MEDIA_STORE_MODEL_PATH, UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+		
+		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
+		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+		
+		// backwards 
+		val umlMsRepositoryResource = getModelResource(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+		assertNotNull(umlMsRepositoryResource)
+		val umlMsModel = umlMsRepositoryResource.contents.head as Model
+		assertNotNull(umlMsModel)
+		simulateRepositoryInsertion_UML(umlMsModel, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		
+		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		
+		val comparison = compare(
+			resourceSet.getResource(URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH),true), 
+			getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		)
+		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
+		// expected (and found deltas):
+		//	- each PCM element has a different id since it is unique and those are newly generated elements
+		//	- TODO PrimitiveType references are unset, because their synchronization does not work yet
+		//	- Parameter modifiers are set to INOUT, because UML has no enum element for NONE
+		//	- FailureType is lost, because it is not propagated (limited scope of this master's thesis)
+	}
+	
+	@Test
+	@Ignore
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_PCM2UML2PCM() {
 		var pcmRepo_forward = RepositoryFactory.eINSTANCE.createRepository
 		pcmRepo_forward.entityName = "TestRepository"
@@ -100,6 +137,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
+	@Ignore
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_UML2PCM2UML() {
 		var umlRepo_forward = UMLFactory.eINSTANCE.createModel
 		umlRepo_forward.name = "umlrootmodel"
@@ -128,43 +166,6 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		// 		Maybe this happens because a second instance of the uml::PrimitiveType is created in memory?
 	}
 	
-	@Test
-	@Ignore //skip until needed because of performance
-	def void testMediaStoreRepositoryCreation_PCM2UML2PCM() {
-		// forwards
-		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
-		val pcmMsRepositoryResource = resourceSet.getResource(uri,true)
-		assertNotNull(pcmMsRepositoryResource)
-		val pcmMsRepository = pcmMsRepositoryResource.contents.head as Repository
-		assertNotNull(pcmMsRepository)
-		
-		simulateRepositoryInsertion_PCM(pcmMsRepository, PCM_GENERATED_MEDIA_STORE_MODEL_PATH, UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		
-		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
-		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		
-		// backwards 
-		val umlMsRepositoryResource = getModelResource(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		assertNotNull(umlMsRepositoryResource)
-		val umlMsModel = umlMsRepositoryResource.contents.head as Model
-		assertNotNull(umlMsModel)
-		simulateRepositoryInsertion_UML(umlMsModel, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		
-		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		
-		val comparison = compare(
-			resourceSet.getResource(URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH),true), 
-			getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		)
-		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
-		// expected (and found deltas):
-		//	- each PCM element has a different id since it is unique and those are newly generated elements
-		//	- the ProvidedRole elements are detected as deletion and add, because id and name are changed (name cannot be synchronized via UML)
-		//	- TODO PrimitiveType references are unset, because their synchronization does not work yet
-		//	- Parameter modifiers are set to INOUT, because UML has no enum element for NONE
-		//	- FailureType is lost, because it is not propagated (limited scope of this master's thesis)
-	}
 	
 	private def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath){
 		val originalRepository = inOriginalRepository
@@ -283,7 +284,12 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertNotNull(generatedComponentImpl)
 		
 		// merge everything except operations which are separately handled, because some of the constructor parameters will be generated.
-		mergeElements(originalComponentImpl, generatedComponentImpl, "ownedOperation")
+		mergeElements(originalComponentImpl, generatedComponentImpl, "ownedOperation", "interfaceRealization")
+		for (originalRealization : originalComponentImpl.interfaceRealizations.clone){
+			originalComponentImpl.interfaceRealizations -= originalRealization
+			originalRealization.clients -= originalComponentImpl // needs to be manually cleared, or else originalComponentImpl is still set as a client and causes UUID error
+			generatedComponentImpl.interfaceRealizations += originalRealization
+		}
 		
 		saveAndSynchronizeChanges(generatedModel) //should generate the constructor Parameters corresponding to RequiredRoles
 		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
@@ -301,7 +307,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		val generatedConstructor = generatedComponentImpl.ownedOperations.findFirst[it.name == originalComponentImpl.name]
 		assertNotNull(originalConstructor)
 		assertNotNull(generatedConstructor)
-		mergeElements(originalConstructor, generatedConstructor, "ownedParameter") // TODO somehow still removes the parameters and dangling elements cause exception
+		mergeElements(originalConstructor, generatedConstructor, "ownedParameter")
 		for (originalParameter : originalConstructor.ownedParameters.clone){
 			val generatedParameter = generatedConstructor.ownedParameters.findFirst[it.name == originalParameter.name]
 			if (generatedParameter !== null){
@@ -364,7 +370,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 				!feature.derived 
 				&& feature.changeable 
 				&& original.eIsSet(feature) 
-				&& !(feature instanceof EReference && (feature as EReference).isContainer) // TODO don't overwrite up-tree containment
+				&& !(feature instanceof EReference && (feature as EReference).isContainer) 
 				&& !skipFeatures.contains(feature.name)
 			){
 				generated.eSet(feature, original.eGet(feature))

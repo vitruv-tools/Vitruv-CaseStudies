@@ -1,14 +1,15 @@
 package mir.routines.pcmProvidedRoleReactions;
 
-import mir.routines.pcmProvidedRoleReactions.AddCorrespondenceForExistingGeneralizationRoutine;
-import mir.routines.pcmProvidedRoleReactions.ChangeInterfaceOfCorrespondingProvidedGeneralizationRoutine;
-import mir.routines.pcmProvidedRoleReactions.CreateCorrespondingProvidedGeneralizationRoutine;
-import mir.routines.pcmProvidedRoleReactions.DeleteCorrespondingProvidedGeneralizationRoutine;
-import mir.routines.pcmProvidedRoleReactions.DetectOrCreateCorrespondingProvidedGeneralizationRoutine;
-import mir.routines.pcmProvidedRoleReactions.InsertCorrespondingProvidedGeneralizationRoutine;
-import mir.routines.pcmProvidedRoleReactions.MoveCorrespondingProvidedGeneralizationRoutine;
-import mir.routines.pcmProvidedRoleReactions.RemoveCorrespondingProvidedGeneralizationRoutine;
-import org.eclipse.uml2.uml.Generalization;
+import mir.routines.pcmProvidedRoleReactions.AddCorrespondenceForExistingRealizationRoutine;
+import mir.routines.pcmProvidedRoleReactions.ChangeInterfaceOfCorrespondingProvidedRealizationRoutine;
+import mir.routines.pcmProvidedRoleReactions.ChangeNameOfCorrespondingProvidedRealizationRoutine;
+import mir.routines.pcmProvidedRoleReactions.CreateCorrespondingProvidedRealizationRoutine;
+import mir.routines.pcmProvidedRoleReactions.DeleteCorrespondingProvidedRealizationRoutine;
+import mir.routines.pcmProvidedRoleReactions.DetectOrCreateCorrespondingProvidedRealizationRoutine;
+import mir.routines.pcmProvidedRoleReactions.InsertCorrespondingProvidedRealizationRoutine;
+import mir.routines.pcmProvidedRoleReactions.MoveCorrespondingProvidedRealizationRoutine;
+import mir.routines.pcmProvidedRoleReactions.RemoveCorrespondingProvidedRealizationRoutine;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.palladiosimulator.pcm.core.entity.InterfaceProvidingRequiringEntity;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationProvidedRole;
@@ -25,67 +26,75 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
-  public boolean insertCorrespondingProvidedGeneralization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
+  public boolean insertCorrespondingProvidedRealization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    InsertCorrespondingProvidedGeneralizationRoutine routine = new InsertCorrespondingProvidedGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
+    InsertCorrespondingProvidedRealizationRoutine routine = new InsertCorrespondingProvidedRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
     return routine.applyRoutine();
   }
   
-  public boolean detectOrCreateCorrespondingProvidedGeneralization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
+  public boolean detectOrCreateCorrespondingProvidedRealization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    DetectOrCreateCorrespondingProvidedGeneralizationRoutine routine = new DetectOrCreateCorrespondingProvidedGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
+    DetectOrCreateCorrespondingProvidedRealizationRoutine routine = new DetectOrCreateCorrespondingProvidedRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
     return routine.applyRoutine();
   }
   
-  public boolean addCorrespondenceForExistingGeneralization(final OperationProvidedRole pcmProvided, final Generalization umlGeneralization) {
+  public boolean addCorrespondenceForExistingRealization(final OperationProvidedRole pcmProvided, final InterfaceRealization umlRealization) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    AddCorrespondenceForExistingGeneralizationRoutine routine = new AddCorrespondenceForExistingGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, umlGeneralization);
+    AddCorrespondenceForExistingRealizationRoutine routine = new AddCorrespondenceForExistingRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, umlRealization);
     return routine.applyRoutine();
   }
   
-  public boolean createCorrespondingProvidedGeneralization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
+  public boolean createCorrespondingProvidedRealization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    CreateCorrespondingProvidedGeneralizationRoutine routine = new CreateCorrespondingProvidedGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
+    CreateCorrespondingProvidedRealizationRoutine routine = new CreateCorrespondingProvidedRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
     return routine.applyRoutine();
   }
   
-  public boolean moveCorrespondingProvidedGeneralization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
+  public boolean moveCorrespondingProvidedRealization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    MoveCorrespondingProvidedGeneralizationRoutine routine = new MoveCorrespondingProvidedGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
+    MoveCorrespondingProvidedRealizationRoutine routine = new MoveCorrespondingProvidedRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
     return routine.applyRoutine();
   }
   
-  public boolean removeCorrespondingProvidedGeneralization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
+  public boolean removeCorrespondingProvidedRealization(final OperationProvidedRole pcmProvided, final InterfaceProvidingRequiringEntity pcmIPRE) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    RemoveCorrespondingProvidedGeneralizationRoutine routine = new RemoveCorrespondingProvidedGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
+    RemoveCorrespondingProvidedRealizationRoutine routine = new RemoveCorrespondingProvidedRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmIPRE);
     return routine.applyRoutine();
   }
   
-  public boolean deleteCorrespondingProvidedGeneralization(final OperationProvidedRole pcmProvided) {
+  public boolean deleteCorrespondingProvidedRealization(final OperationProvidedRole pcmProvided) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    DeleteCorrespondingProvidedGeneralizationRoutine routine = new DeleteCorrespondingProvidedGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided);
+    DeleteCorrespondingProvidedRealizationRoutine routine = new DeleteCorrespondingProvidedRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided);
     return routine.applyRoutine();
   }
   
-  public boolean changeInterfaceOfCorrespondingProvidedGeneralization(final OperationProvidedRole pcmProvided, final OperationInterface pcmInterface) {
+  public boolean changeNameOfCorrespondingProvidedRealization(final OperationProvidedRole pcmProvided, final String newName) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    ChangeInterfaceOfCorrespondingProvidedGeneralizationRoutine routine = new ChangeInterfaceOfCorrespondingProvidedGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmInterface);
+    ChangeNameOfCorrespondingProvidedRealizationRoutine routine = new ChangeNameOfCorrespondingProvidedRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, newName);
+    return routine.applyRoutine();
+  }
+  
+  public boolean changeInterfaceOfCorrespondingProvidedRealization(final OperationProvidedRole pcmProvided, final OperationInterface pcmInterface) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    ChangeInterfaceOfCorrespondingProvidedRealizationRoutine routine = new ChangeInterfaceOfCorrespondingProvidedRealizationRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmProvided, pcmInterface);
     return routine.applyRoutine();
   }
 }

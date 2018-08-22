@@ -71,7 +71,7 @@ public class ProvidedRoleDeletedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final DeleteEObject deleteChange, final OperationProvidedRole affectedEObject, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.deleteCorrespondingProvidedGeneralization(affectedEObject);
+      _routinesFacade.deleteCorrespondingProvidedRealization(affectedEObject);
     }
   }
 }

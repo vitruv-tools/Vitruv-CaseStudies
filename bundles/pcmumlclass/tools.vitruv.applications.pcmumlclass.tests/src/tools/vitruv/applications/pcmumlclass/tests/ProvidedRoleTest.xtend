@@ -1,7 +1,7 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import org.apache.log4j.Logger
-import org.eclipse.uml2.uml.Generalization
+import org.eclipse.uml2.uml.InterfaceRealization
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.Repository
@@ -13,36 +13,39 @@ import static org.junit.Assert.*
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationProvidedRole 
- * in an pcm::InterfaceProvidingRequiringEntity (IPRE) with an uml::Generalization in the uml::Class (implementation) corresponding to the IPRE.
+ * in an pcm::InterfaceProvidingRequiringEntity (IPRE) with an uml::InterfaceRealization in the uml::Class (implementation) corresponding to the IPRE.
  * <br><br>
  * Related files: PcmProvidedRole.reactions, UmlProvidedRoleGeneralization.reactions
  */
 class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 
-    protected static val final Logger logger = Logger.getLogger(typeof(ProvidedRoleTest).simpleName);	 
+    protected static val final Logger logger = Logger.getLogger(typeof(ProvidedRoleTest).simpleName)
+    
+    private static val PROVIDED_ROLE_NAME = "testProvidedRole"
 	
 	def public static void checkProvidedRoleConcept(
 			CorrespondenceModel cm,
 			OperationProvidedRole pcmProvided,
-			Generalization umlGeneralization
+			InterfaceRealization umlRealization
 	){
 		assertNotNull(pcmProvided)
-		assertNotNull(umlGeneralization)
-		assertTrue(corresponds(cm, pcmProvided, umlGeneralization, TagLiterals.PROVIDED_ROLE__GENERALIZATION))
+		assertNotNull(umlRealization)
+		assertTrue(corresponds(cm, pcmProvided, umlRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION))
+		assertTrue(pcmProvided.entityName == umlRealization.name)
 		//the respective type references have to correspond
-		assertTrue(corresponds(cm, pcmProvided.providedInterface__OperationProvidedRole, umlGeneralization.general,TagLiterals.INTERFACE_TO_INTERFACE))
+		assertTrue(corresponds(cm, pcmProvided.providedInterface__OperationProvidedRole, umlRealization.contract,TagLiterals.INTERFACE_TO_INTERFACE))
 		// the owning component and component implementation have to correspond
-		assertTrue(corresponds(cm, pcmProvided.providingEntity_ProvidedRole, umlGeneralization.specific, TagLiterals.IPRE__IMPLEMENTATION))
+		assertTrue(corresponds(cm, pcmProvided.providingEntity_ProvidedRole, umlRealization.implementingClassifier, TagLiterals.IPRE__IMPLEMENTATION))
 	}
 	
 	def protected checkProvidedRoleConcept(OperationProvidedRole pcmProvided){
-		val umlGeneralization = helper.getModifiableCorr(pcmProvided, Generalization, TagLiterals.PROVIDED_ROLE__GENERALIZATION)
-		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlGeneralization)
+		val umlRealization = helper.getModifiableCorr(pcmProvided, InterfaceRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
+		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
 	}
 	
-	def protected checkProvidedRoleConcept(Generalization umlGeneralization){
-		val pcmProvided = helper.getModifiableCorr(umlGeneralization, OperationProvidedRole, TagLiterals.PROVIDED_ROLE__GENERALIZATION)
-		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlGeneralization)
+	def protected checkProvidedRoleConcept(InterfaceRealization umlRealization){
+		val pcmProvided = helper.getModifiableCorr(umlRealization, OperationProvidedRole, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
+		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
 	}
 
 	def private Repository createRepository_Component_Interface(){
@@ -63,6 +66,7 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 		var pcmRepository = createRepository_Component_Interface
 		
 		var pcmProvided = RepositoryFactory.eINSTANCE.createOperationProvidedRole
+		pcmProvided.entityName = PROVIDED_ROLE_NAME
 		pcmProvided.providedInterface__OperationProvidedRole = helper.getPcmOperationInterface(pcmRepository)
 		helper.getPcmComponent(pcmRepository).providedRoles_InterfaceProvidingEntity += pcmProvided
 		
@@ -79,23 +83,16 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 		var pcmRepository = createRepository_Component_Interface
 		startRecordingChanges(helper.getUmlComponentImpl(pcmRepository))
 		
-		var umlGeneralization = helper.getUmlComponentImpl(pcmRepository).createGeneralization(helper.getUmlInterface(pcmRepository))
+		var umlRealization = helper.getUmlComponentImpl(pcmRepository)
+			.createInterfaceRealization(PROVIDED_ROLE_NAME, helper.getUmlInterface(pcmRepository))
 		
-		saveAndSynchronizeChanges(umlGeneralization)
-		reloadResourceAndReturnRoot(umlGeneralization)
+		saveAndSynchronizeChanges(umlRealization)
+		reloadResourceAndReturnRoot(umlRealization)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
 		val umlInterface = helper.getUmlInterface(pcmRepository) //necessary that it is final for Lambda
-		umlGeneralization = helper.getUmlComponentImpl(pcmRepository).generalizations.findFirst[it.general == umlInterface]
-		checkProvidedRoleConcept(umlGeneralization)
+		umlRealization = helper.getUmlComponentImpl(pcmRepository).interfaceRealizations.findFirst[it.contract == umlInterface]
+		checkProvidedRoleConcept(umlRealization)
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

@@ -27,7 +27,7 @@ public class TagLiterals {
 	public static final String REPOSITORY_TO_REPOSITORY_PACKAGE = "repository-package";
 	
 
-	public static final String PROVIDED_ROLE__GENERALIZATION = "provided-interface-generalization";
+	public static final String PROVIDED_ROLE__INTERFACE_REALIZATION = "provided-interface-generalization"; 
 	
 	public static final String REQUIRED_ROLE__PARAMETER = "required-constructor-parameter";
 	public static final String REQUIRED_ROLE__PROPERTY = "required-instance-property";

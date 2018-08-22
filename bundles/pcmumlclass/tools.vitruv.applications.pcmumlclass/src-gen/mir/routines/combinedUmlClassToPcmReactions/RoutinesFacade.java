@@ -21,7 +21,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     this.umlRepositoryComponentPackageReactions = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlRepositoryComponentPackageReactions")));
     this.umlIPREClassReactions = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlIPREClassReactions")));
     this.umlIPREConstructorOperationReactions = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlIPREConstructorOperationReactions")));
-    this.umlProvidedRoleGeneralizationReactions = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlProvidedRoleGeneralizationReactions")));
+    this.umlProvidedRoleRealizationReactions = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlProvidedRoleRealizationReactions")));
     this.umlRequiredRoleParameterReactions = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlRequiredRoleParameterReactions")));
     this.umlRequiredRolePropertyReactions = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlRequiredRolePropertyReactions")));
     this.umlAssemblyContextPropertyReactions = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlAssemblyContextPropertyReactions")));
@@ -51,7 +51,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   
   public final mir.routines.umlIPREConstructorOperationReactions.RoutinesFacade umlIPREConstructorOperationReactions;
   
-  public final mir.routines.umlProvidedRoleGeneralizationReactions.RoutinesFacade umlProvidedRoleGeneralizationReactions;
+  public final mir.routines.umlProvidedRoleRealizationReactions.RoutinesFacade umlProvidedRoleRealizationReactions;
   
   public final mir.routines.umlRequiredRoleParameterReactions.RoutinesFacade umlRequiredRoleParameterReactions;
   
