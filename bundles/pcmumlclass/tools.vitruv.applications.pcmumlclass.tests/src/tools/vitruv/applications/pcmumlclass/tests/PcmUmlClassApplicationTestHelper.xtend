@@ -22,13 +22,17 @@ import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationSignature
+import java.util.function.Function
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.Resource
 
 final class PcmUmlClassApplicationTestHelper {
-	public new (CorrespondenceModel testCorrespondenceModel, ResourceSet testResourceSet){
+	public new (CorrespondenceModel testCorrespondenceModel, Function<URI, EObject> eObjectRetriever, Function<URI, Resource> resourceRetriever){
 		this.correspondenceModel = testCorrespondenceModel
-		this.resourceSet = testResourceSet
+		this.eObjectRetriever = eObjectRetriever
+		this.resourceRetriever = resourceRetriever
 		
-		val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(resourceSet)	
+		val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(resourceRetriever)	
 		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
 		PCM_INT = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.INT]
 		PCM_DOUBLE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.DOUBLE]
@@ -36,7 +40,7 @@ final class PcmUmlClassApplicationTestHelper {
 		PCM_CHAR = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.CHAR]
 		PCM_BYTE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BYTE]
 		
-		val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(resourceSet)
+		val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(resourceRetriever)
 		UML_BOOL =  umlPrimitiveTypes.findFirst[it.name == "Boolean"]
 		UML_INT =  umlPrimitiveTypes.findFirst[it.name == "Integer"]
 		UML_REAL =  umlPrimitiveTypes.findFirst[it.name == "Real"]
@@ -45,7 +49,8 @@ final class PcmUmlClassApplicationTestHelper {
 	}
 	
 	private val CorrespondenceModel correspondenceModel
-	private val ResourceSet resourceSet
+	private val Function<URI, EObject> eObjectRetriever
+	private val Function<URI, Resource> resourceRetriever
 	
 	/**
 	 * Fetches the given {@link EObject} from the {@link ResourceSet} of the running test.
@@ -60,7 +65,7 @@ final class PcmUmlClassApplicationTestHelper {
 	 */
 	def public <T extends EObject> getModifiableInstance(T original){
 		val originalURI = EcoreUtil.getURI(original)
-		return resourceSet.getEObject(originalURI, true) as T
+		return eObjectRetriever.apply(originalURI) as T
 	}
 	
 	def public <T extends EObject> Set<T> getCorrSet(EObject source, Class<T> typeFilter){
