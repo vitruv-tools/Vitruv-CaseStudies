@@ -30,6 +30,10 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
       _ownedParameters.add(uParam);
     }
     
+    public EObject getCorrepondenceSource1(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation) {
+      return jParam;
+    }
+    
     public void updateUParamElement(final Parametrizable jMeth, final OrdinaryParameter jParam, final Operation uOperation, final Parameter uParam) {
       uParam.setName(jParam.getName());
     }
@@ -73,6 +77,14 @@ public class CreateUmlParameterRoutine extends AbstractRepairRoutineRealization 
     	return false;
     }
     registerObjectUnderModification(uOperation);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(jMeth, jParam, uOperation), // correspondence source supplier
+    	org.eclipse.uml2.uml.Parameter.class,
+    	(org.eclipse.uml2.uml.Parameter _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.eclipse.uml2.uml.Parameter uParam = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createParameter();
     notifyObjectCreated(uParam);
     userExecution.updateUParamElement(jMeth, jParam, uOperation, uParam);

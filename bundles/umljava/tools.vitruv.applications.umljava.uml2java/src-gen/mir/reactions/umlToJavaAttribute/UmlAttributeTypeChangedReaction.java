@@ -85,7 +85,7 @@ public class UmlAttributeTypeChangedReaction extends AbstractReactionRealization
     }
     
     public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final Property affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeJavaAttributeType(affectedEObject, newValue);
+      _routinesFacade.changeJavaAttributeType(affectedEObject);
     }
   }
 }

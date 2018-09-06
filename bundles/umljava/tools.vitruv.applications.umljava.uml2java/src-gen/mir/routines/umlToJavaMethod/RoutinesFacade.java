@@ -68,11 +68,11 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean setJavaMethodReturnType(final Operation uOperation) {
+  public boolean setJavaMethodReturnType(final Operation uOperation, final Parameter uParam) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    SetJavaMethodReturnTypeRoutine routine = new SetJavaMethodReturnTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    SetJavaMethodReturnTypeRoutine routine = new SetJavaMethodReturnTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, uParam);
     return routine.applyRoutine();
   }
   

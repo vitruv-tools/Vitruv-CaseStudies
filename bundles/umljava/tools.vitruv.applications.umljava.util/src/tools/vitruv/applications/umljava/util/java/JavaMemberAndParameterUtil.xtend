@@ -169,7 +169,7 @@ class JavaMemberAndParameterUtil {
     * @param visibility Visibility of the Setter
     */
    def static createJavaSetterForAttribute(Field jAttribute, JavaVisibility visibility) {
-       val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference))
+       val param = createJavaParameter(jAttribute.name.toFirstLower, EcoreUtil.copy(jAttribute.typeReference))
        val setterMethod = createJavaClassMethod(buildSetterName(jAttribute.name), null, visibility, false, false, #[param])
        val paramReference = createIdentifierReference(param)
        val attributeAssignment = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment, EcoreUtil.copy(paramReference))
@@ -356,10 +356,10 @@ class JavaMemberAndParameterUtil {
     }
     
     def static String buildSetterName(String attributeName) {
-        return "set" + firstLettertoUppercase(attributeName)
+        return "set" + attributeName.toFirstUpper
     }
     
     def static String buildGetterName(String attributeName) {
-        return "get" + firstLettertoUppercase(attributeName)
+        return "get" + attributeName.toFirstUpper
     }
 }

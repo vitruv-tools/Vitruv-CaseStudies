@@ -4,7 +4,10 @@ import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Feature;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.Operation;
@@ -16,6 +19,7 @@ import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.Field;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadesProvider;
@@ -42,14 +46,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.setJavaAttributeFinal(umlAttr);
   }
   
-  public boolean changeJavaAttributeType(final Property uAttr, final Type uType) {
+  public boolean changeJavaAttributeType(final Property uAttribute) {
     mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaAttribute")));
-    return _routinesFacade.changeJavaAttributeType(uAttr, uType);
-  }
-  
-  public boolean handleMultiplicityForJavaAttribute(final Property uAttribute) {
-    mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaAttribute")));
-    return _routinesFacade.handleMultiplicityForJavaAttribute(uAttribute);
+    return _routinesFacade.changeJavaAttributeType(uAttribute);
   }
   
   public boolean createJavaGetter(final Field jAttribute) {
@@ -97,24 +96,34 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.setJavaClassAbstract(umlClass);
   }
   
-  public boolean changeJavaSuperClass(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass) {
+  public boolean addJavaSuperClass(final org.eclipse.uml2.uml.Class uClass, final Generalization uGeneralization) {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
-    return _routinesFacade.changeJavaSuperClass(superUMLClass, uClass);
+    return _routinesFacade.addJavaSuperClass(uClass, uGeneralization);
   }
   
-  public boolean deleteJavaSuperClass(final org.eclipse.uml2.uml.Class uClass) {
+  public boolean deleteJavaSuperClass(final Generalization uGeneralization) {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
-    return _routinesFacade.deleteJavaSuperClass(uClass);
+    return _routinesFacade.deleteJavaSuperClass(uGeneralization);
   }
   
-  public boolean changeJavaImplementedInterface(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
+  public boolean createJavaClassImplementsReference(final InterfaceRealization uRealization, final org.eclipse.uml2.uml.Class uClass) {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
-    return _routinesFacade.changeJavaImplementedInterface(uInterface, oldInterface, uClass);
+    return _routinesFacade.createJavaClassImplementsReference(uRealization, uClass);
   }
   
-  public boolean deleteJavaImplementedInterface(final Interface uInterface, final org.eclipse.uml2.uml.Class uClass) {
+  public boolean addImplementsCorrespondence(final InterfaceRealization uRealization, final TypeReference jReference) {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
-    return _routinesFacade.deleteJavaImplementedInterface(uInterface, uClass);
+    return _routinesFacade.addImplementsCorrespondence(uRealization, jReference);
+  }
+  
+  public boolean deleteJavaClassImplementsReference(final InterfaceRealization uRealization, final org.eclipse.uml2.uml.Class uClass) {
+    mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
+    return _routinesFacade.deleteJavaClassImplementsReference(uRealization, uClass);
+  }
+  
+  public boolean replaceJavaClassImplementsReference(final InterfaceRealization uRealization, final org.eclipse.uml2.uml.Class uClass) {
+    mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
+    return _routinesFacade.replaceJavaClassImplementsReference(uRealization, uClass);
   }
   
   public boolean createJavaInterface(final Interface umlInterface) {
@@ -122,14 +131,19 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.createJavaInterface(umlInterface);
   }
   
-  public boolean changeJavaSuperInterface(final Interface superUMLInterface, final Interface uI) {
+  public boolean addJavaSuperInterface(final Interface uInterface, final Generalization uGeneralization) {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
-    return _routinesFacade.changeJavaSuperInterface(superUMLInterface, uI);
+    return _routinesFacade.addJavaSuperInterface(uInterface, uGeneralization);
   }
   
-  public boolean deleteJavaSuperInterface(final Interface superUMLInterface, final Interface uI) {
+  public boolean addGeneralizationCorrespondence(final Generalization uGeneralization, final TypeReference jReference) {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
-    return _routinesFacade.deleteJavaSuperInterface(superUMLInterface, uI);
+    return _routinesFacade.addGeneralizationCorrespondence(uGeneralization, jReference);
+  }
+  
+  public boolean deleteJavaSuperInterface(final Generalization uGeneralization) {
+    mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
+    return _routinesFacade.deleteJavaSuperInterface(uGeneralization);
   }
   
   public boolean createJavaEnum(final Enumeration uEnum) {
@@ -145,6 +159,16 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public boolean deleteJavaEnumConstant(final EnumerationLiteral uLiteral) {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
     return _routinesFacade.deleteJavaEnumConstant(uLiteral);
+  }
+  
+  public boolean checkIfUmlModelCorrespondenceExists(final Model newModel) {
+    mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
+    return _routinesFacade.checkIfUmlModelCorrespondenceExists(newModel);
+  }
+  
+  public boolean addUmlModelCorrespondence(final Model newModel) {
+    mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
+    return _routinesFacade.addUmlModelCorrespondence(newModel);
   }
   
   public boolean createJavaPackage(final org.eclipse.uml2.uml.Package uPackage, final org.eclipse.uml2.uml.Package uSuperPackage) {
@@ -192,9 +216,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.deleteJavaMethod(uOperation);
   }
   
-  public boolean setJavaMethodReturnType(final Operation uOperation) {
+  public boolean setJavaMethodReturnType(final Operation uOperation, final Parameter uParam) {
     mir.routines.umlToJavaMethod.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaMethod")));
-    return _routinesFacade.setJavaMethodReturnType(uOperation);
+    return _routinesFacade.setJavaMethodReturnType(uOperation, uParam);
   }
   
   public boolean setStatic(final Feature uFeat) {

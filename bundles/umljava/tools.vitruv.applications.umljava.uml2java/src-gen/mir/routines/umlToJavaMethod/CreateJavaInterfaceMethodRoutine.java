@@ -8,9 +8,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.members.Member;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,7 +26,6 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     
     public void updateJavaMethodElement(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final InterfaceMethod javaMethod) {
       javaMethod.setName(uOperation.getName());
-      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jInterface.getContainingCompilationUnit(), this.userInteractor));
       javaMethod.makePublic();
     }
     
@@ -37,6 +36,10 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     public void update0Element(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final InterfaceMethod javaMethod) {
       EList<Member> _members = jInterface.getMembers();
       _members.add(javaMethod);
+    }
+    
+    public EObject getCorrepondenceSource1(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass) {
+      return uOperation;
     }
     
     public EObject getCorrepondenceSourceCustomTypeClass(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface) {
@@ -54,6 +57,10 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     
     public EObject getCorrepondenceSourceJInterface(final Interface uInterface, final Operation uOperation) {
       return uInterface;
+    }
+    
+    public void callRoutine1(final Interface uInterface, final Operation uOperation, final org.emftext.language.java.classifiers.Interface jInterface, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final InterfaceMethod javaMethod, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.setJavaMethodReturnType(uOperation, uOperation.getReturnResult());
     }
   }
   
@@ -92,6 +99,14 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     		)
     );
     registerObjectUnderModification(customTypeClass.isPresent() ? customTypeClass.get() : null);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(uInterface, uOperation, jInterface, customTypeClass), // correspondence source supplier
+    	org.emftext.language.java.members.InterfaceMethod.class,
+    	(org.emftext.language.java.members.InterfaceMethod _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.members.InterfaceMethod javaMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createInterfaceMethod();
     notifyObjectCreated(javaMethod);
     userExecution.updateJavaMethodElement(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
@@ -100,6 +115,8 @@ public class CreateJavaInterfaceMethodRoutine extends AbstractRepairRoutineReali
     userExecution.update0Element(uInterface, uOperation, jInterface, customTypeClass, javaMethod);
     
     addCorrespondenceBetween(userExecution.getElement2(uInterface, uOperation, jInterface, customTypeClass, javaMethod), userExecution.getElement3(uInterface, uOperation, jInterface, customTypeClass, javaMethod), "");
+    
+    userExecution.callRoutine1(uInterface, uOperation, jInterface, customTypeClass, javaMethod, this.getRoutinesFacade());
     
     postprocessElements();
     

@@ -1,8 +1,16 @@
-import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import java.util.ArrayList
+import java.util.Collection
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.Property
+import org.emftext.language.java.types.TypeReference
+import tools.vitruv.domains.java.util.JavaModificationUtil
+
+import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import org.emftext.language.java.classifiers.ConcreteClassifier
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -30,6 +38,7 @@ reaction UmlAttributeCreatedInDataType {//Enum is a DataType
 routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttribute) {
     match {
         val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
+        require absence of java::Field corresponding to umlAttribute // TODO existance check
     }
     action {
         val javaAttribute = create java::Field and initialize {
@@ -40,6 +49,10 @@ routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttrib
             jClassifier.members += javaAttribute
         }
         add correspondence between umlAttribute and javaAttribute
+        call {
+            createJavaGetter(javaAttribute)
+            createJavaSetter(javaAttribute)
+        }
     }
 }
 
@@ -83,71 +96,61 @@ routine setJavaAttributeFinal(uml::Property umlAttr) {
     }
 }
 
+// TODO changed umlAttribute type-/multiplicity-changed propagation
+// TODO check if guards help reduce unnecessary collection type requests
 reaction UmlAttributeTypeChanged {
     after element uml::Type replaced at uml::Property[type]
-    call changeJavaAttributeType(affectedEObject, newValue)
-}
-
-routine changeJavaAttributeType(uml::Property uAttr, uml::Type uType) {
-    match {
-        val jAttr = retrieve java::Field corresponding to uAttr
-        val customType = retrieve optional java::Class corresponding to uType
-    }
-    action {
-        call {
-            jAttr.typeReference = createTypeReferenceAndUpdateImport(uType, customType, jAttr.getContainingCompilationUnit, userInteractor)
-            updateAttributeTypeInSetters(jAttr)
-            updateAttributeTypeInGetters(jAttr)
-        }
-    }
+    call changeJavaAttributeType(affectedEObject)
 }
 
 reaction UmlLowerMultiplicityChanged {
     after attribute replaced at uml::LiteralInteger[value]
-    call {
-        handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
-    }
+    with affectedEObject.owner instanceof Property
+    call changeJavaAttributeType(affectedEObject.owner as Property)
 }
 
 reaction UmlUpperMultiplicityChanged {
     after attribute replaced at uml::LiteralUnlimitedNatural[value]
-    call handleMultiplicityForJavaAttribute(affectedEObject.owner as org.eclipse.uml2.uml.Property)
+    with affectedEObject.owner instanceof Property
+    call changeJavaAttributeType(affectedEObject.owner as Property)
 }
 
-
-routine handleMultiplicityForJavaAttribute(uml::Property uAttribute) {
+routine changeJavaAttributeType(uml::Property uAttribute) {
     match {
         val jAttribute = retrieve java::Field corresponding to uAttribute
-        val jType = retrieve java::Class corresponding to uAttribute.type
+        val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uAttribute.type
     }
     action {
-        update jAttribute {
-            if (uAttribute.lower == 0) {
-                if (uAttribute.upper == 1) {
-                    jAttribute.typeReference = createTypeReferenceAndUpdateImport(uAttribute.type, jType, jAttribute.getContainingCompilationUnit, userInteractor)
-                } else if (uAttribute.upper == LiteralUnlimitedNatural.UNLIMITED) {
-                    jAttribute.typeReference = createCollectiontypeReference(letUserSelectCollectionTypeName(userInteractor), jType)
-                } else {
-                    showMessage(userInteractor, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
-                }
-            } else if (uAttribute.lower == 1) {
-                if (uAttribute.upper == 1) {
-                    jAttribute.typeReference = createTypeReferenceAndUpdateImport(uAttribute.type, jType, jAttribute.getContainingCompilationUnit, userInteractor)
-                } else {
-                    showMessage(userInteractor, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
-                }
-            } else {
-                showMessage(userInteractor, "We do not support the multiplicity [" + uAttribute.lower + ".." + uAttribute.upper + ". Please change it to [0..1], [1..1] or [0..*].")
-            }
-        }
         call {
-            if (uAttribute.lower == 1 && uAttribute.upper == 1) {
-                createJavaGetter(jAttribute)
-                createJavaSetter(jAttribute)
-            }
+        	propagateTypedMultiplicityElementTypeChanged_defaultObject(uAttribute, uAttribute.lower, uAttribute.upper, jAttribute, jCustomType, userInteractor)
+        	
+//        	val objectNsRef = JavaModificationUtil.createNamespaceClassifierReference(jAttribute.objectClass)// default to java.lang.Object
+//        	var typeReference = createTypeReference(uAttribute.type, jCustomType, objectNsRef, userInteractor)
+//        	
+//        	// TODO check if write new reference is necessary (both cases: simple reference or collection<reference>)
+//        	
+//        	
+//			if(uAttribute.lower == 0 && uAttribute.upper == LiteralUnlimitedNatural.UNLIMITED) {
+//        		if(isCollectionTypeReference(jAttribute.typeReference)){
+//        			// reuse previously selected CollectionType
+//        			val collectionClassifier = getClassifier(jAttribute.typeReference) as ConcreteClassifier
+//        			typeReference = createCollectionTypeReference(collectionClassifier, typeReference)
+//        		}
+//        		else {
+//        			// no previously selected CollectionType
+//		        	val Class<? extends Collection> collectionType = userSelectCollectionType(userInteractor)
+//					typeReference = createCollectionTypeReference(collectionType, typeReference)
+//        		}
+//			}
+//			
+//			jAttribute.typeReference = typeReference
+//			addJavaImport(jAttribute.containingCompilationUnit, typeReference)
+		    updateAttributeTypeInSetters(jAttribute)
+		    updateAttributeTypeInGetters(jAttribute)
         }
     }
 }
+
 
 routine createJavaGetter(java::Field jAttribute) {
     action {

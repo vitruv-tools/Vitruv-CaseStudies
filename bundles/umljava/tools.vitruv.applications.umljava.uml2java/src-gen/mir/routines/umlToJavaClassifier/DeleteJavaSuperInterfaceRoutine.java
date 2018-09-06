@@ -3,8 +3,8 @@ package mir.routines.umlToJavaClassifier;
 import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Interface;
-import tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil;
+import org.eclipse.uml2.uml.Generalization;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -18,62 +18,39 @@ public class DeleteJavaSuperInterfaceRoutine extends AbstractRepairRoutineRealiz
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Interface superUMLInterface, final Interface uI, final org.emftext.language.java.classifiers.Interface jI, final org.emftext.language.java.classifiers.Interface javaSuperInterface) {
-      return jI;
+    public EObject getElement1(final Generalization uGeneralization, final TypeReference jReference) {
+      return jReference;
     }
     
-    public void update0Element(final Interface superUMLInterface, final Interface uI, final org.emftext.language.java.classifiers.Interface jI, final org.emftext.language.java.classifiers.Interface javaSuperInterface) {
-      JavaContainerAndClassifierUtil.removeClassifierFromIterator(jI.getExtends().iterator(), javaSuperInterface);
-    }
-    
-    public EObject getCorrepondenceSourceJI(final Interface superUMLInterface, final Interface uI) {
-      return uI;
-    }
-    
-    public EObject getCorrepondenceSourceJavaSuperInterface(final Interface superUMLInterface, final Interface uI, final org.emftext.language.java.classifiers.Interface jI) {
-      return superUMLInterface;
+    public EObject getCorrepondenceSourceJReference(final Generalization uGeneralization) {
+      return uGeneralization;
     }
   }
   
-  public DeleteJavaSuperInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Interface superUMLInterface, final Interface uI) {
+  public DeleteJavaSuperInterfaceRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Generalization uGeneralization) {
     super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.DeleteJavaSuperInterfaceRoutine.ActionUserExecution(getExecutionState(), this);
-    this.superUMLInterface = superUMLInterface;this.uI = uI;
+    this.uGeneralization = uGeneralization;
   }
   
-  private Interface superUMLInterface;
-  
-  private Interface uI;
+  private Generalization uGeneralization;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaSuperInterfaceRoutine with input:");
-    getLogger().debug("   superUMLInterface: " + this.superUMLInterface);
-    getLogger().debug("   uI: " + this.uI);
+    getLogger().debug("   uGeneralization: " + this.uGeneralization);
     
-    org.emftext.language.java.classifiers.Interface jI = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJI(superUMLInterface, uI), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Interface.class,
-    	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
+    org.emftext.language.java.types.TypeReference jReference = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceJReference(uGeneralization), // correspondence source supplier
+    	org.emftext.language.java.types.TypeReference.class,
+    	(org.emftext.language.java.types.TypeReference _element) -> true, // correspondence precondition checker
     	null, 
     	false // asserted
     	);
-    if (jI == null) {
+    if (jReference == null) {
     	return false;
     }
-    registerObjectUnderModification(jI);
-    org.emftext.language.java.classifiers.Interface javaSuperInterface = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJavaSuperInterface(superUMLInterface, uI, jI), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Interface.class,
-    	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
-    	null, 
-    	false // asserted
-    	);
-    if (javaSuperInterface == null) {
-    	return false;
-    }
-    registerObjectUnderModification(javaSuperInterface);
-    // val updatedElement userExecution.getElement1(superUMLInterface, uI, jI, javaSuperInterface);
-    userExecution.update0Element(superUMLInterface, uI, jI, javaSuperInterface);
+    registerObjectUnderModification(jReference);
+    deleteObject(userExecution.getElement1(uGeneralization, jReference));
     
     postprocessElements();
     

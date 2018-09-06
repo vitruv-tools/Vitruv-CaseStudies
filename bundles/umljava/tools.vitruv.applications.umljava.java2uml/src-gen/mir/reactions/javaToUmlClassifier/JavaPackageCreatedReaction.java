@@ -71,6 +71,7 @@ public class JavaPackageCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final InsertRootEObject insertChange, final org.emftext.language.java.containers.Package newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.detectOrCreateUmlModel(newValue);
       _routinesFacade.createUmlPackage(newValue);
     }
   }

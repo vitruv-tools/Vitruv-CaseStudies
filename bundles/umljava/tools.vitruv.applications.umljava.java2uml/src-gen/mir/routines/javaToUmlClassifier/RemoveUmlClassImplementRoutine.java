@@ -3,9 +3,9 @@ package mir.routines.javaToUmlClassifier;
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Type;
-import org.emftext.language.java.classifiers.Interface;
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
+import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -20,39 +20,51 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface, final org.eclipse.uml2.uml.Class uClass) {
+    public EObject getElement1(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final org.eclipse.uml2.uml.Class uClass, final InterfaceRealization uRealization) {
       return uClass;
     }
     
-    public EObject getCorrepondenceSourceUClass(final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface) {
+    public EObject getCorrepondenceSourceUClass(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference) {
       return jClass;
     }
     
-    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface, final org.eclipse.uml2.uml.Class uClass) {
-      final Type uInterface = JavaToUmlHelper.getUmlType(jInterface, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel);
-      if (((uInterface != null) && (uInterface instanceof org.eclipse.uml2.uml.Interface))) {
-        UmlClassifierAndPackageUtil.removeUmlImplementedInterface(uClass, ((org.eclipse.uml2.uml.Interface) uInterface));
+    public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final org.eclipse.uml2.uml.Class uClass, final InterfaceRealization uRealization) {
+      Interface _contract = null;
+      if (uRealization!=null) {
+        _contract=uRealization.getContract();
       }
+      final Interface uInterface = _contract;
+      if ((uInterface != null)) {
+        UmlClassifierAndPackageUtil.removeUmlImplementedInterface(uClass, uInterface);
+      }
+    }
+    
+    public EObject getElement2(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final org.eclipse.uml2.uml.Class uClass, final InterfaceRealization uRealization) {
+      return uRealization;
+    }
+    
+    public EObject getCorrepondenceSourceURealization(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final org.eclipse.uml2.uml.Class uClass) {
+      return jReference;
     }
   }
   
-  public RemoveUmlClassImplementRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface) {
+  public RemoveUmlClassImplementRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference) {
     super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.javaToUmlClassifier.RemoveUmlClassImplementRoutine.ActionUserExecution(getExecutionState(), this);
-    this.jClass = jClass;this.jInterface = jInterface;
+    this.jClass = jClass;this.jReference = jReference;
   }
   
   private org.emftext.language.java.classifiers.Class jClass;
   
-  private Interface jInterface;
+  private TypeReference jReference;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RemoveUmlClassImplementRoutine with input:");
     getLogger().debug("   jClass: " + this.jClass);
-    getLogger().debug("   jInterface: " + this.jInterface);
+    getLogger().debug("   jReference: " + this.jReference);
     
     org.eclipse.uml2.uml.Class uClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUClass(jClass, jInterface), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUClass(jClass, jReference), // correspondence source supplier
     	org.eclipse.uml2.uml.Class.class,
     	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
     	null, 
@@ -62,8 +74,21 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
     	return false;
     }
     registerObjectUnderModification(uClass);
-    // val updatedElement userExecution.getElement1(jClass, jInterface, uClass);
-    userExecution.update0Element(jClass, jInterface, uClass);
+    org.eclipse.uml2.uml.InterfaceRealization uRealization = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceURealization(jClass, jReference, uClass), // correspondence source supplier
+    	org.eclipse.uml2.uml.InterfaceRealization.class,
+    	(org.eclipse.uml2.uml.InterfaceRealization _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
+    if (uRealization == null) {
+    	return false;
+    }
+    registerObjectUnderModification(uRealization);
+    // val updatedElement userExecution.getElement1(jClass, jReference, uClass, uRealization);
+    userExecution.update0Element(jClass, jReference, uClass, uRealization);
+    
+    deleteObject(userExecution.getElement2(jClass, jReference, uClass, uRealization));
     
     postprocessElements();
     

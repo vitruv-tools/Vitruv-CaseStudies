@@ -108,6 +108,7 @@ public class JavaClassCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final InsertEReference insertChange, final CompilationUnit affectedEObject, final EReference affectedFeature, final org.emftext.language.java.classifiers.Class newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.detectOrCreateUmlModel(affectedEObject);
       _routinesFacade.createUmlClass(newValue, affectedEObject);
     }
   }

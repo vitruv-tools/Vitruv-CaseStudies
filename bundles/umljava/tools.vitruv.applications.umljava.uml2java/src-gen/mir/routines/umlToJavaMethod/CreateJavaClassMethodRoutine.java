@@ -7,11 +7,12 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Member;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.applications.umljava.util.java.JavaModifierUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -29,7 +30,6 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
     public void updateJavaMethodElement(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       javaMethod.setName(uOperation.getName());
       JavaModifierUtil.setJavaVisibility(javaMethod, uOperation.getVisibility());
-      javaMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uOperation.getType(), customTypeClass, jClassifier.getContainingCompilationUnit(), this.userInteractor));
     }
     
     public EObject getElement1(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
@@ -39,6 +39,10 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
     public void update0Element(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       EList<Member> _members = jClassifier.getMembers();
       _members.add(javaMethod);
+    }
+    
+    public EObject getCorrepondenceSource1(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass) {
+      return uOperation;
     }
     
     public EObject getCorrepondenceSourceCustomTypeClass(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier) {
@@ -56,6 +60,14 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
     
     public EObject getElement3(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod) {
       return javaMethod;
+    }
+    
+    public void callRoutine1(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, final ClassMethod javaMethod, @Extension final RoutinesFacade _routinesFacade) {
+      Parameter _returnResult = uOperation.getReturnResult();
+      boolean _tripleNotEquals = (_returnResult != null);
+      if (_tripleNotEquals) {
+        _routinesFacade.setJavaMethodReturnType(uOperation, uOperation.getReturnResult());
+      }
     }
   }
   
@@ -94,6 +106,14 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
     		)
     );
     registerObjectUnderModification(customTypeClass.isPresent() ? customTypeClass.get() : null);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(uClassifier, uOperation, jClassifier, customTypeClass), // correspondence source supplier
+    	org.emftext.language.java.members.ClassMethod.class,
+    	(org.emftext.language.java.members.ClassMethod _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.members.ClassMethod javaMethod = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createClassMethod();
     notifyObjectCreated(javaMethod);
     userExecution.updateJavaMethodElement(uClassifier, uOperation, jClassifier, customTypeClass, javaMethod);
@@ -102,6 +122,8 @@ public class CreateJavaClassMethodRoutine extends AbstractRepairRoutineRealizati
     userExecution.update0Element(uClassifier, uOperation, jClassifier, customTypeClass, javaMethod);
     
     addCorrespondenceBetween(userExecution.getElement2(uClassifier, uOperation, jClassifier, customTypeClass, javaMethod), userExecution.getElement3(uClassifier, uOperation, jClassifier, customTypeClass, javaMethod), "");
+    
+    userExecution.callRoutine1(uClassifier, uOperation, jClassifier, customTypeClass, javaMethod, this.getRoutinesFacade());
     
     postprocessElements();
     

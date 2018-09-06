@@ -1,4 +1,8 @@
 import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import org.eclipse.uml2.uml.UMLPackage
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
 
@@ -22,6 +26,7 @@ reaction JavaAttributeCreatedInEnum {
 routine createUmlAttributeInEnum(java::Enumeration jEnum, java::Field jAttr) {
     match {
         val uEnum = retrieve uml::Enumeration corresponding to jEnum
+        require absence of uml::Property corresponding to jAttr // TODO existance check
     }
     action {
         val uAttr = create uml::Property and initialize {
@@ -37,6 +42,7 @@ routine createUmlAttributeInEnum(java::Enumeration jEnum, java::Field jAttr) {
 routine createUmlAttributeInClass(java::Class jClass, java::Field jAttr) {
     match {
         val uClass = retrieve uml::Class corresponding to jClass
+        require absence of uml::Property corresponding to jAttr  // TODO existance check
     }
     action {
         val uAttr = create uml::Property and initialize {
@@ -59,11 +65,11 @@ reaction JavaAttributeTypeChanged {
 routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
     match {
         val uAttr = retrieve uml::Property corresponding to jAttr
-        
     }
     action {
         update uAttr {
-            uAttr.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteractor), correspondenceModel)
+        	// TODO type propagation changed
+        	propagateTypeChangeToTypedMultiplicityElement(uAttr, uAttr, jAttr, correspondenceModel)
         }
     }
 }

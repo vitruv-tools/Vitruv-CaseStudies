@@ -6,8 +6,9 @@ import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -25,15 +26,15 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
       return uParam;
     }
     
-    public EObject getElement1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<org.emftext.language.java.classifiers.Class> customClass) {
+    public EObject getElement1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<ConcreteClassifier> jCustomType) {
       return jParam;
     }
     
-    public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<org.emftext.language.java.classifiers.Class> customClass) {
-      jParam.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit(), this.userInteractor));
+    public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<ConcreteClassifier> jCustomType) {
+      UmlJavaTypePropagationHelper.propagateTypedMultiplicityElementTypeChanged_defaultObject(uParam, uParam.getLower(), uParam.getUpper(), jParam, jCustomType, this.userInteractor);
     }
     
-    public EObject getCorrepondenceSourceCustomClass(final Parameter uParam, final Type uType, final OrdinaryParameter jParam) {
+    public EObject getCorrepondenceSourceJCustomType(final Parameter uParam, final Type uType, final OrdinaryParameter jParam) {
       return uType;
     }
   }
@@ -64,17 +65,17 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     	return false;
     }
     registerObjectUnderModification(jParam);
-    	Optional<org.emftext.language.java.classifiers.Class> customClass = Optional.ofNullable(getCorrespondingElement(
-    		userExecution.getCorrepondenceSourceCustomClass(uParam, uType, jParam), // correspondence source supplier
-    		org.emftext.language.java.classifiers.Class.class,
-    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    	Optional<org.emftext.language.java.classifiers.ConcreteClassifier> jCustomType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceJCustomType(uParam, uType, jParam), // correspondence source supplier
+    		org.emftext.language.java.classifiers.ConcreteClassifier.class,
+    		(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     		null, 
     		false // asserted
     		)
     );
-    registerObjectUnderModification(customClass.isPresent() ? customClass.get() : null);
-    // val updatedElement userExecution.getElement1(uParam, uType, jParam, customClass);
-    userExecution.update0Element(uParam, uType, jParam, customClass);
+    registerObjectUnderModification(jCustomType.isPresent() ? jCustomType.get() : null);
+    // val updatedElement userExecution.getElement1(uParam, uType, jParam, jCustomType);
+    userExecution.update0Element(uParam, uType, jParam, jCustomType);
     
     postprocessElements();
     

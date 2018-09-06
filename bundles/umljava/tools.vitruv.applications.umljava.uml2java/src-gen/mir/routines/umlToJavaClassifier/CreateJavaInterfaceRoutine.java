@@ -22,6 +22,10 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
       return umlInterface;
     }
     
+    public EObject getCorrepondenceSource1(final Interface umlInterface) {
+      return umlInterface;
+    }
+    
     public void updateJavaInterfaceElement(final Interface umlInterface, final org.emftext.language.java.classifiers.Interface javaInterface) {
       javaInterface.setName(umlInterface.getName());
       javaInterface.makePublic();
@@ -48,6 +52,14 @@ public class CreateJavaInterfaceRoutine extends AbstractRepairRoutineRealization
     getLogger().debug("Called routine CreateJavaInterfaceRoutine with input:");
     getLogger().debug("   umlInterface: " + this.umlInterface);
     
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(umlInterface), // correspondence source supplier
+    	org.emftext.language.java.classifiers.Interface.class,
+    	(org.emftext.language.java.classifiers.Interface _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.classifiers.Interface javaInterface = org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl.eINSTANCE.createInterface();
     notifyObjectCreated(javaInterface);
     userExecution.updateJavaInterfaceElement(umlInterface, javaInterface);

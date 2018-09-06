@@ -32,6 +32,10 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
       _members.add(jConstructor);
     }
     
+    public EObject getCorrepondenceSource1(final Classifier uClassifier, final Operation uOperation, final ConcreteClassifier jClassifier) {
+      return uOperation;
+    }
+    
     public EObject getCorrepondenceSourceJClassifier(final Classifier uClassifier, final Operation uOperation) {
       return uClassifier;
     }
@@ -76,6 +80,14 @@ public class CreateJavaConstructorRoutine extends AbstractRepairRoutineRealizati
     	return false;
     }
     registerObjectUnderModification(jClassifier);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(uClassifier, uOperation, jClassifier), // correspondence source supplier
+    	org.emftext.language.java.members.Constructor.class,
+    	(org.emftext.language.java.members.Constructor _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.members.Constructor jConstructor = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createConstructor();
     notifyObjectCreated(jConstructor);
     userExecution.updateJConstructorElement(uClassifier, uOperation, jClassifier, jConstructor);

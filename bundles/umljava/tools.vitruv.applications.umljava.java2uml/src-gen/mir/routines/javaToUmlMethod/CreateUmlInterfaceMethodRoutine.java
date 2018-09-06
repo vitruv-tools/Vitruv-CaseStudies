@@ -29,6 +29,10 @@ public class CreateUmlInterfaceMethodRoutine extends AbstractRepairRoutineRealiz
       _ownedOperations.add(uOperation);
     }
     
+    public EObject getCorrepondenceSource1(final InterfaceMethod jMeth, final Interface jInterface, final org.eclipse.uml2.uml.Interface uInterface) {
+      return jMeth;
+    }
+    
     public EObject getElement2(final InterfaceMethod jMeth, final Interface jInterface, final org.eclipse.uml2.uml.Interface uInterface, final Operation uOperation) {
       return jMeth;
     }
@@ -73,6 +77,14 @@ public class CreateUmlInterfaceMethodRoutine extends AbstractRepairRoutineRealiz
     	return false;
     }
     registerObjectUnderModification(uInterface);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(jMeth, jInterface, uInterface), // correspondence source supplier
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.eclipse.uml2.uml.Operation uOperation = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createOperation();
     notifyObjectCreated(uOperation);
     userExecution.updateUOperationElement(jMeth, jInterface, uInterface, uOperation);

@@ -3,7 +3,9 @@ import org.emftext.language.java.types.TypesFactory
 import org.eclipse.emf.ecore.util.EcoreUtil
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import org.eclipse.uml2.uml.VisibilityKind
+import org.eclipse.uml2.uml.Operation
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -51,23 +53,31 @@ routine createJavaClassMethod(uml::Classifier uClassifier, uml::Operation uOpera
     match {
         val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
         val customTypeClass = retrieve optional java::Class corresponding to uOperation.type
+        require absence of java::ClassMethod corresponding to uOperation // TODO existance check
     }
     action {
         val javaMethod = create java::ClassMethod and initialize {
             javaMethod.name = uOperation.name;
             setJavaVisibility(javaMethod, uOperation.visibility)
-            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jClassifier.getContainingCompilationUnit, userInteractor)
+            // type propagation changed
+//            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jClassifier.getContainingCompilationUnit, userInteractor)
         }
         update jClassifier {
             jClassifier.members += javaMethod;
         }
         add correspondence between uOperation and javaMethod
+        call {
+        	if (uOperation.getReturnResult !== null){
+        		setJavaMethodReturnType(uOperation, uOperation.getReturnResult)
+        	}
+        }
     }
 }
 
 routine createJavaConstructor(uml::Classifier uClassifier, uml::Operation uOperation) {
     match {
         val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
+        require absence of java::Constructor corresponding to uOperation // TODO existance check
     }
     action {
         val jConstructor = create java::Constructor and initialize {
@@ -110,17 +120,24 @@ routine deleteJavaMethod(uml::Operation uOperation) {
 reaction UmlMethodReturnTypeChanged {
     after element uml::Type replaced at uml::Parameter[type]
     with affectedEObject.direction == ParameterDirectionKind.RETURN_LITERAL
-    call setJavaMethodReturnType(affectedEObject.operation)
+    call setJavaMethodReturnType(affectedEObject.operation, affectedEObject)
 }
 
-routine setJavaMethodReturnType(uml::Operation uOperation) {
+routine setJavaMethodReturnType(uml::Operation uOperation, uml::Parameter uParam) {
     match {
-        val javaMethod = retrieve java::Method corresponding to uOperation
-        val returnType = retrieve optional java::Class corresponding to uOperation.type
+        val jMethod = retrieve java::Method corresponding to uOperation
+        val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uParam?.type
     }
     action {
-        update javaMethod {
-            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, returnType, javaMethod.getContainingCompilationUnit, userInteractor)
+        update jMethod {
+//            jMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, jCustomType, jMethod.getContainingCompilationUnit, userInteractor)
+            // TODO type propagation changed
+            if (uParam !== null){
+		    	propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam.lower, uParam.upper, jMethod, jCustomType, userInteractor)
+            }
+            else {
+            	jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
+            }
         }
     }
 }
@@ -169,17 +186,20 @@ routine createJavaInterfaceMethod(uml::Interface uInterface, uml::Operation uOpe
     match {
         val jInterface = retrieve java::Interface corresponding to uInterface
         val customTypeClass = retrieve optional java::Class corresponding to uOperation.type
+        require absence of java::InterfaceMethod corresponding to uOperation // TODO existance check
     }
     action {
         val javaMethod = create java::InterfaceMethod and initialize {
             javaMethod.name = uOperation.name;
-            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jInterface.getContainingCompilationUnit, userInteractor)
             javaMethod.makePublic
+            // type propagation changed
+//            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jInterface.getContainingCompilationUnit, userInteractor)
         }
         update jInterface {
             jInterface.members += javaMethod;
         }
         add correspondence between uOperation and javaMethod
+        call setJavaMethodReturnType(uOperation, uOperation.getReturnResult) // returnResult may be null
     }
 }
 
@@ -259,18 +279,28 @@ reaction UmlParameterCreated {
 routine createJavaParameter(uml::Operation uMeth, uml::Parameter umlParam) {
     match {
         val javaMethod = retrieve java::Parametrizable corresponding to uMeth
-        val customTypeClass = retrieve optional java::Class corresponding to umlParam.type
+        val customType = retrieve optional java::ConcreteClassifier corresponding to umlParam.type // TODO error: does this handle Interfaces?
+        require absence of java::OrdinaryParameter corresponding to umlParam // TODO existance check
     }
     action {
         val javaParam = create java::OrdinaryParameter and initialize {
             javaParam.name = umlParam.name;
-            javaParam.typeReference = createTypeReferenceAndUpdateImport(umlParam.type, customTypeClass, javaMethod.getContainingCompilationUnit, userInteractor)
+//            javaParam.typeReference = createTypeReferenceAndUpdateImport(umlParam.type, customType, javaMethod.getContainingCompilationUnit, userInteractor)
         }
         update javaMethod {
             javaMethod.parameters += javaParam;
         }
         add correspondence between javaParam and umlParam
+        call changeJavaParameterType(umlParam, umlParam.type)
+        // TODO on initialization the Interfaces or Datatypes may not yet be synchronized, because uml changes seem to be already applied and Components are synchronized before Interfaces.
+        // But the typeChanged-Change will still occur after the containment hierarchy is established and correctly propagate the type information.
     }
+}
+
+reaction UmlReturnParameterDeleted {
+    after element uml::Parameter deleted and removed from uml::Operation[ownedParameter]
+    with oldValue.direction == ParameterDirectionKind.RETURN_LITERAL
+    call setJavaMethodReturnType(affectedEObject, affectedEObject.getReturnResult)
 }
 
 reaction UmlParameterDeleted {
@@ -297,11 +327,13 @@ reaction UmlParameterTypeChanged {
 routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
     match {
         val jParam = retrieve java::OrdinaryParameter corresponding to uParam
-        val customClass = retrieve optional java::Class corresponding to uType
+        val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uType // TODO error: does this handle Interfaces?
     }
     action {
         update jParam {
-            jParam.typeReference = createTypeReferenceAndUpdateImport(uType, customClass, jParam.getContainingCompilationUnit, userInteractor)
+//        	jParam.typeReference = createTypeReferenceAndUpdateImport(uType, jCustomType, jParam.getContainingCompilationUnit, userInteractor)
+        	// TODO type propagation changed
+        	propagateTypedMultiplicityElementTypeChanged_defaultObject(uParam, uParam.lower, uParam.upper, jParam, jCustomType, userInteractor)
         }
     }
 }
@@ -318,12 +350,14 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
     match {
         val jMethod = retrieve java::Method corresponding to uOperation
         val jParam = retrieve optional java::OrdinaryParameter corresponding to uParam
-        val customTypeClass = retrieve optional java::Class corresponding to uParam.type
+        val jCustomType = retrieve optional java::ConcreteClassifier corresponding to uParam.type
     }
     action {
         update jMethod {
             if (newDirection == ParameterDirectionKind.RETURN_LITERAL) {
-                jMethod.typeReference = createTypeReferenceAndUpdateImport(uParam.type, customTypeClass, jMethod.getContainingCompilationUnit, userInteractor)
+//            	jMethod.typeReference = createTypeReferenceAndUpdateImport(uParam.type, customTypeClass, jMethod.getContainingCompilationUnit, userInteractor)
+                // TODO type propagation changed
+		    	propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam.lower, uParam.upper, jMethod, jCustomType, userInteractor)
             } else if (oldDirection == ParameterDirectionKind.RETURN_LITERAL) {
                 jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
             }
@@ -331,7 +365,7 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
         call {
             if (newDirection == ParameterDirectionKind.RETURN_LITERAL && jParam.present) {
                 EcoreUtil.remove(jParam.get)
-            } else if (newDirection == ParameterDirectionKind.IN_LITERAL && jParam === null) {
+            } else if (newDirection == ParameterDirectionKind.IN_LITERAL && !jParam.isPresent) {
                 createJavaParameter(uOperation, uParam)
             }
         }

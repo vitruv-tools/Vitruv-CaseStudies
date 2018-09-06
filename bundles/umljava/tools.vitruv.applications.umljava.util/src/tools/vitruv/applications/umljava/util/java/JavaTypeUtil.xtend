@@ -38,7 +38,8 @@ class JavaTypeUtil {
         return typeReferences
     }
     
-    def static TypeReference createCollectiontypeReference(String collectionQualifiedName, Class innerTypeClass) {
+    // TODO changed "Class innerTypeClass" to "ConcreteClassifier innerTypeClass" because Interfaces could be contained as well
+    def static TypeReference createCollectiontypeReference(String collectionQualifiedName, ConcreteClassifier innerTypeClass) {
         val innerTypeReference = createNamespaceReferenceFromClassifier(innerTypeClass)
         val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
         qualifiedTypeArgument.typeReference = innerTypeReference;

@@ -29,6 +29,10 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
       _constants.add(jConstant);
     }
     
+    public EObject getCorrepondenceSource1(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum) {
+      return uLiteral;
+    }
+    
     public EObject getElement2(final EnumerationLiteral uLiteral, final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum, final EnumConstant jConstant) {
       return jConstant;
     }
@@ -72,6 +76,14 @@ public class CreateJavaEnumConstantRoutine extends AbstractRepairRoutineRealizat
     	return false;
     }
     registerObjectUnderModification(jEnum);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(uLiteral, uEnum, jEnum), // correspondence source supplier
+    	org.emftext.language.java.members.EnumConstant.class,
+    	(org.emftext.language.java.members.EnumConstant _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.members.EnumConstant jConstant = org.emftext.language.java.members.impl.MembersFactoryImpl.eINSTANCE.createEnumConstant();
     notifyObjectCreated(jConstant);
     userExecution.updateJConstantElement(uLiteral, uEnum, jEnum, jConstant);

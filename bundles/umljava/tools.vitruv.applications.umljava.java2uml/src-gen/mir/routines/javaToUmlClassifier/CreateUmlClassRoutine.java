@@ -22,6 +22,10 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
       return uClass;
     }
     
+    public EObject getCorrepondenceSource1(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit) {
+      return jClass;
+    }
+    
     public EObject getElement4(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Class uClass) {
       return jCompUnit;
     }
@@ -58,6 +62,14 @@ public class CreateUmlClassRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("   jClass: " + this.jClass);
     getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(jClass, jCompUnit), // correspondence source supplier
+    	org.eclipse.uml2.uml.Class.class,
+    	(org.eclipse.uml2.uml.Class _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.eclipse.uml2.uml.Class uClass = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createClass();
     notifyObjectCreated(uClass);
     userExecution.updateUClassElement(jClass, jCompUnit, uClass);

@@ -1,8 +1,12 @@
 import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*;
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
 import org.emftext.language.java.modifiers.Public
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
+import org.emftext.language.java.containers.CompilationUnit
+import org.eclipse.uml2.uml.UMLPackage
+import org.eclipse.uml2.uml.ParameterDirectionKind
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -25,6 +29,7 @@ reaction JavaClassMethodCreated {
 routine createUmlClassMethod(java::ClassMethod jMeth, java::ConcreteClassifier jClassifier) {
     match {
         val uClassifier = retrieve uml::Classifier corresponding to jClassifier
+		require absence of uml::Operation corresponding to jMeth // TODO existance check
     }
     action {
         val uOperation = create uml::Operation and initialize {
@@ -67,6 +72,7 @@ reaction JavaInterfaceMethodCreated {
 routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jInterface) {
     match {
         val uInterface = retrieve uml::Interface corresponding to jInterface
+		require absence of uml::Operation corresponding to jMeth // TODO existance check
     }
     action {
         val uOperation = create uml::Operation and initialize {
@@ -88,6 +94,7 @@ reaction JavaConstructorCreated {
 routine createUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
     match {
         val uClassifier = retrieve uml::Class corresponding to jClassifier
+		require absence of uml::Operation corresponding to jConstructor // TODO existance check
     }
     action {
         val uConstructor = create uml::Operation and initialize {
@@ -191,6 +198,7 @@ reaction JavaParameterCreated {
 routine createUmlParameter(java::Parametrizable jMeth, java::OrdinaryParameter jParam) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
+		require absence of uml::Parameter corresponding to jParam // TODO existance check
     }
     action {
         val uParam = create uml::Parameter and initialize {
@@ -225,10 +233,13 @@ reaction JavaParameterTypeChanged {
 routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReference jType) {
     match {
         val uParam = retrieve uml::Parameter corresponding to jParam
+        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
     }
     action {
         update uParam {
-            uParam.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteractor), correspondenceModel)
+//            uParam.type = getUmlType(jType, uModel, correspondenceModel)
+        	// TODO type propagation changed
+        	propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam, correspondenceModel)
         }
     }
 }
@@ -241,12 +252,21 @@ reaction JavaReturnTypeChanged {
 routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
+        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
     }
-     action {
-         update uOperation {
-             uOperation.type = getUmlType(jType, getUmlModel(changePropagationObservable, correspondenceModel, userInteractor), correspondenceModel)
-         }
-     }
+    action {
+		update uOperation {
+		//             uOperation.type = getUmlType(jType, uModel, correspondenceModel)
+			var uParam = uOperation.getReturnResult
+			if (uParam === null){
+				// create a new return parameter
+				uParam = uOperation.createOwnedParameter("returnParameter", null)
+				uParam.direction = ParameterDirectionKind.RETURN_LITERAL
+			}
+        	// TODO type propagation changed
+        	propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jMeth, correspondenceModel)
+		}
+    }
 }
 
 //===========================================
@@ -273,14 +293,20 @@ routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem, java
     }
     action {
         update uElem {
-            uElem.visibility = getUMLVisibilityKindFromJavaModifier(mod);
+        	uElem.visibility = getUMLVisibilityKindFromJavaModifier(mod);
         }
     }
 }
 
 reaction JavaNamedElementRenamed {
     after attribute replaced at java::NamedElement[name]
+    with !(affectedEObject instanceof CompilationUnit)
     call renameUmlNamedElement(affectedEObject)
+}
+
+reaction JavaCompilationUnitRenamed {
+    after attribute replaced at java::CompilationUnit[name]
+    call renameUmlNamedElementCorrespondingToCompilationUnit(affectedEObject)
 }
 
 routine renameUmlNamedElement(java::NamedElement jElement) {
@@ -290,6 +316,22 @@ routine renameUmlNamedElement(java::NamedElement jElement) {
     action {
         update uElement {
             uElement.name = jElement.name;
+        }
+    }
+}
+
+routine renameUmlNamedElementCorrespondingToCompilationUnit(java::CompilationUnit jElement) {
+    match {
+        val uElement = retrieve uml::NamedElement corresponding to jElement
+    }
+    action {
+        update uElement {
+        	var propagatedName = jElement.name
+        	val namespacePrefix = jElement.namespaces.join(".") + "."
+        	// trim off the namespace and file-extension in case the name is loaded fully classified
+        	propagatedName = propagatedName.replaceFirst(namespacePrefix, "")
+        	propagatedName = propagatedName.replaceFirst(".java", "")
+            uElement.name = propagatedName;
         }
     }
 }

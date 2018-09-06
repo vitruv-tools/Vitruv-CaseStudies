@@ -6,7 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -29,7 +29,7 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void update0Element(final Field jAttr, final TypeReference jType, final Property uAttr) {
-      uAttr.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel));
+      UmlJavaTypePropagationHelper.propagateTypeChangeToTypedMultiplicityElement(uAttr, uAttr, jAttr, this.correspondenceModel);
     }
   }
   

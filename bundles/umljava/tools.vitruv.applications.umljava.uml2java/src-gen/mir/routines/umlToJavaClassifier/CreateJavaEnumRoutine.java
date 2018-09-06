@@ -27,6 +27,10 @@ public class CreateJavaEnumRoutine extends AbstractRepairRoutineRealization {
       return uEnum;
     }
     
+    public EObject getCorrepondenceSource1(final Enumeration uEnum) {
+      return uEnum;
+    }
+    
     public EObject getElement2(final Enumeration uEnum, final org.emftext.language.java.classifiers.Enumeration jEnum) {
       return jEnum;
     }
@@ -48,6 +52,14 @@ public class CreateJavaEnumRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreateJavaEnumRoutine with input:");
     getLogger().debug("   uEnum: " + this.uEnum);
     
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(uEnum), // correspondence source supplier
+    	org.emftext.language.java.classifiers.Enumeration.class,
+    	(org.emftext.language.java.classifiers.Enumeration _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.classifiers.Enumeration jEnum = org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl.eINSTANCE.createEnumeration();
     notifyObjectCreated(jEnum);
     userExecution.updateJEnumElement(uEnum, jEnum);

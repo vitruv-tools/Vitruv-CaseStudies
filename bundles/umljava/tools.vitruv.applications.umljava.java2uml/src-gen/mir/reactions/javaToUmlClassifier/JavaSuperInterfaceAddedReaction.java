@@ -3,9 +3,10 @@ package mir.reactions.javaToUmlClassifier;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -83,7 +84,9 @@ public class JavaSuperInterfaceAddedReaction extends AbstractReactionRealization
     }
     
     public void callRoutine1(final InsertEReference insertChange, final Interface affectedEObject, final EReference affectedFeature, final TypeReference newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.addUmlSuperinterfaces(affectedEObject, JavaTypeUtil.getClassifierFromTypeReference(newValue));
+      Classifier _classifier = UmlJavaTypePropagationHelper.getClassifier(newValue);
+      final Interface jSuperInterface = ((Interface) _classifier);
+      _routinesFacade.addUmlSuperinterfaces(affectedEObject, newValue, jSuperInterface);
     }
   }
 }

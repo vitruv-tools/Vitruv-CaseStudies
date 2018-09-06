@@ -23,6 +23,10 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
       return uInterface;
     }
     
+    public EObject getCorrepondenceSource1(final Interface jInterface, final CompilationUnit jCompUnit) {
+      return jInterface;
+    }
+    
     public EObject getElement4(final Interface jInterface, final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Interface uInterface) {
       return jCompUnit;
     }
@@ -59,6 +63,14 @@ public class CreateUmlInterfaceRoutine extends AbstractRepairRoutineRealization 
     getLogger().debug("   jInterface: " + this.jInterface);
     getLogger().debug("   jCompUnit: " + this.jCompUnit);
     
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(jInterface, jCompUnit), // correspondence source supplier
+    	org.eclipse.uml2.uml.Interface.class,
+    	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.eclipse.uml2.uml.Interface uInterface = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createInterface();
     notifyObjectCreated(uInterface);
     userExecution.updateUInterfaceElement(jInterface, jCompUnit, uInterface);

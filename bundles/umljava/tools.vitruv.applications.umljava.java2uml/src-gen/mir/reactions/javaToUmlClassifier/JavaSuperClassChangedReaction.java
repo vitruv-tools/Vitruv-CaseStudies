@@ -5,6 +5,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.types.TypeReference;
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -86,7 +87,8 @@ public class JavaSuperClassChangedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue) {
-    return (newValue != null);
+    Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(newValue);
+    return (_classifierFromTypeReference instanceof org.emftext.language.java.classifiers.Class);
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -95,8 +97,14 @@ public class JavaSuperClassChangedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final TypeReference newValue, @Extension final RoutinesFacade _routinesFacade) {
-      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(newValue);
-      _routinesFacade.addUmlSuperClass(affectedEObject, ((org.emftext.language.java.classifiers.Class) _classifierFromTypeReference));
+      if ((oldValue != null)) {
+        _routinesFacade.deleteUmlSuperClassGeneralization(newValue);
+      }
+      if ((newValue != null)) {
+        Classifier _classifier = UmlJavaTypePropagationHelper.getClassifier(newValue);
+        final org.emftext.language.java.classifiers.Class jSuperClass = ((org.emftext.language.java.classifiers.Class) _classifier);
+        _routinesFacade.addUmlSuperClassGeneralization(affectedEObject, newValue, jSuperClass);
+      }
     }
   }
 }

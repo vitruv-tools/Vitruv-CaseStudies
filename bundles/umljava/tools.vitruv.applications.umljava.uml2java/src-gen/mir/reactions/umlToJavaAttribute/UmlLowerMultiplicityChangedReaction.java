@@ -32,6 +32,11 @@ public class UmlLowerMultiplicityChangedReaction extends AbstractReactionRealiza
     java.lang.Integer oldValue = replaceChange.getOldValue();
     java.lang.Integer newValue = replaceChange.getNewValue();
     				
+    getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
+    	resetChanges();
+    	return;
+    }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.reactions.umlToJavaAttribute.UmlLowerMultiplicityChangedReaction.ActionUserExecution userExecution = new mir.reactions.umlToJavaAttribute.UmlLowerMultiplicityChangedReaction.ActionUserExecution(this.executionState, this);
@@ -80,6 +85,11 @@ public class UmlLowerMultiplicityChangedReaction extends AbstractReactionRealiza
     return false;
   }
   
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final LiteralInteger affectedEObject, final EAttribute affectedFeature, final Integer oldValue, final Integer newValue) {
+    Element _owner = affectedEObject.getOwner();
+    return (_owner instanceof Property);
+  }
+  
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
       super(reactionExecutionState);
@@ -87,7 +97,7 @@ public class UmlLowerMultiplicityChangedReaction extends AbstractReactionRealiza
     
     public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final LiteralInteger affectedEObject, final EAttribute affectedFeature, final Integer oldValue, final Integer newValue, @Extension final RoutinesFacade _routinesFacade) {
       Element _owner = affectedEObject.getOwner();
-      _routinesFacade.handleMultiplicityForJavaAttribute(((Property) _owner));
+      _routinesFacade.changeJavaAttributeType(((Property) _owner));
     }
   }
 }

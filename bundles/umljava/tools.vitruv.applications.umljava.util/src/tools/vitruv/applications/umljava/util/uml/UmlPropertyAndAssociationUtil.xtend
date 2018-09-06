@@ -49,7 +49,7 @@ class UmlPropertyAndAssociationUtil {
      * 
      */
     def static Association createDirectedAssociation(Class fromClass, Class toClass, int lowerLimit, int upperLimit) {
-        fromClass.createAssociation(true, AggregationKind.NONE_LITERAL, firstLettertoLowercase(toClass.name), lowerLimit, upperLimit, toClass, false, AggregationKind.NONE_LITERAL, firstLettertoLowercase(fromClass.name), 0, 1)
+        fromClass.createAssociation(true, AggregationKind.NONE_LITERAL, toClass.name.toFirstLower, lowerLimit, upperLimit, toClass, false, AggregationKind.NONE_LITERAL, fromClass.name.toFirstLower, 0, 1)
     }
     
     def static ValueSpecification createValueSpecificationWithIntValue(int value) {

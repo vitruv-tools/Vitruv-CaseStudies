@@ -3,10 +3,7 @@ package mir.reactions.javaToUmlClassifier;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.emftext.language.java.classifiers.Classifier;
-import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -84,8 +81,7 @@ public class JavaClassImplementRemovedReaction extends AbstractReactionRealizati
     }
     
     public void callRoutine1(final RemoveEReference removeChange, final org.emftext.language.java.classifiers.Class affectedEObject, final EReference affectedFeature, final TypeReference oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      Classifier _classifierFromTypeReference = JavaTypeUtil.getClassifierFromTypeReference(oldValue);
-      _routinesFacade.removeUmlClassImplement(affectedEObject, ((Interface) _classifierFromTypeReference));
+      _routinesFacade.removeUmlClassImplement(affectedEObject, oldValue);
     }
   }
 }

@@ -5,12 +5,10 @@ import mir.routines.umlToJavaAttribute.CreateJavaAttributeRoutine;
 import mir.routines.umlToJavaAttribute.CreateJavaGetterRoutine;
 import mir.routines.umlToJavaAttribute.CreateJavaSetterRoutine;
 import mir.routines.umlToJavaAttribute.DeleteJavaAttributeRoutine;
-import mir.routines.umlToJavaAttribute.HandleMultiplicityForJavaAttributeRoutine;
 import mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine;
 import mir.routines.umlToJavaAttribute.SetJavaAttributeFinalRoutine;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.members.Field;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -49,19 +47,11 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean changeJavaAttributeType(final Property uAttr, final Type uType) {
+  public boolean changeJavaAttributeType(final Property uAttribute) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    ChangeJavaAttributeTypeRoutine routine = new ChangeJavaAttributeTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uAttr, uType);
-    return routine.applyRoutine();
-  }
-  
-  public boolean handleMultiplicityForJavaAttribute(final Property uAttribute) {
-    RoutinesFacade _routinesFacade = this;
-    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
-    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    HandleMultiplicityForJavaAttributeRoutine routine = new HandleMultiplicityForJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, uAttribute);
+    ChangeJavaAttributeTypeRoutine routine = new ChangeJavaAttributeTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uAttribute);
     return routine.applyRoutine();
   }
   

@@ -33,6 +33,10 @@ public class CreateUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
       return jEnum;
     }
     
+    public EObject getCorrepondenceSource1(final Enumeration jEnum, final EnumConstant jConstant, final org.eclipse.uml2.uml.Enumeration uEnum) {
+      return jConstant;
+    }
+    
     public EObject getElement2(final Enumeration jEnum, final EnumConstant jConstant, final org.eclipse.uml2.uml.Enumeration uEnum, final EnumerationLiteral uLiteral) {
       return jConstant;
     }
@@ -72,6 +76,14 @@ public class CreateUmlEnumLiteralRoutine extends AbstractRepairRoutineRealizatio
     	return false;
     }
     registerObjectUnderModification(uEnum);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(jEnum, jConstant, uEnum), // correspondence source supplier
+    	org.eclipse.uml2.uml.EnumerationLiteral.class,
+    	(org.eclipse.uml2.uml.EnumerationLiteral _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.eclipse.uml2.uml.EnumerationLiteral uLiteral = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createEnumerationLiteral();
     notifyObjectCreated(uLiteral);
     userExecution.updateULiteralElement(jEnum, jConstant, uEnum, uLiteral);

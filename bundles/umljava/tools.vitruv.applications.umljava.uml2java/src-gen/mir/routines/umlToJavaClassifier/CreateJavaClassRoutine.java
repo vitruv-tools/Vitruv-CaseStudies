@@ -22,6 +22,14 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
       return umlClassifier;
     }
     
+    public EObject getCorrepondenceSource1(final Classifier umlClassifier) {
+      return umlClassifier;
+    }
+    
+    public EObject getCorrepondenceSource2(final Classifier umlClassifier) {
+      return umlClassifier;
+    }
+    
     public EObject getElement2(final Classifier umlClassifier, final org.emftext.language.java.classifiers.Class javaClassifier) {
       return javaClassifier;
     }
@@ -48,6 +56,22 @@ public class CreateJavaClassRoutine extends AbstractRepairRoutineRealization {
     getLogger().debug("Called routine CreateJavaClassRoutine with input:");
     getLogger().debug("   umlClassifier: " + this.umlClassifier);
     
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(umlClassifier), // correspondence source supplier
+    	org.emftext.language.java.classifiers.Class.class,
+    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource2(umlClassifier), // correspondence source supplier
+    	org.emftext.language.java.containers.CompilationUnit.class,
+    	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.classifiers.Class javaClassifier = org.emftext.language.java.classifiers.impl.ClassifiersFactoryImpl.eINSTANCE.createClass();
     notifyObjectCreated(javaClassifier);
     userExecution.updateJavaClassifierElement(umlClassifier, javaClassifier);
