@@ -47,10 +47,10 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	
 	@After
 	def void after() {
-		if (uEnum !== null) {
-			uEnum.destroy
-		}
-		saveAndSynchronizeChanges(rootElement)
+//		if (uEnum !== null) {
+//			uEnum.destroy
+//		}
+//		saveAndSynchronizeChanges(rootElement)
 	}
 	
 	@Test

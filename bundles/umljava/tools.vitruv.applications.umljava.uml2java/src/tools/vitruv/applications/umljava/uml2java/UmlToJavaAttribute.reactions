@@ -50,8 +50,10 @@ routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttrib
         }
         add correspondence between umlAttribute and javaAttribute
         call {
-            createJavaGetter(javaAttribute)
-            createJavaSetter(javaAttribute)
+        	if (uClassifier !== null && uClassifier instanceof org.eclipse.uml2.uml.Class){
+	            createJavaGetter(javaAttribute)
+	            createJavaSetter(javaAttribute)
+        	}
         }
     }
 }
@@ -72,8 +74,11 @@ routine deleteJavaAttribute(uml::Property umlAttr) {
     }
     action {
         call {
-            removeJavaGettersOfAttribute(jAttr)
-            removeJavaSettersOfAttribute(jAttr)
+        	val uClassifier = umlAttr.eContainer
+        	if (uClassifier !== null && uClassifier instanceof org.eclipse.uml2.uml.Class){
+	            removeJavaGettersOfAttribute(jAttr)
+	            removeJavaSettersOfAttribute(jAttr)
+            }
         }
         delete jAttr
         
@@ -124,27 +129,6 @@ routine changeJavaAttributeType(uml::Property uAttribute) {
         call {
         	propagateTypedMultiplicityElementTypeChanged_defaultObject(uAttribute, uAttribute.lower, uAttribute.upper, jAttribute, jCustomType, userInteractor)
         	
-//        	val objectNsRef = JavaModificationUtil.createNamespaceClassifierReference(jAttribute.objectClass)// default to java.lang.Object
-//        	var typeReference = createTypeReference(uAttribute.type, jCustomType, objectNsRef, userInteractor)
-//        	
-//        	// TODO check if write new reference is necessary (both cases: simple reference or collection<reference>)
-//        	
-//        	
-//			if(uAttribute.lower == 0 && uAttribute.upper == LiteralUnlimitedNatural.UNLIMITED) {
-//        		if(isCollectionTypeReference(jAttribute.typeReference)){
-//        			// reuse previously selected CollectionType
-//        			val collectionClassifier = getClassifier(jAttribute.typeReference) as ConcreteClassifier
-//        			typeReference = createCollectionTypeReference(collectionClassifier, typeReference)
-//        		}
-//        		else {
-//        			// no previously selected CollectionType
-//		        	val Class<? extends Collection> collectionType = userSelectCollectionType(userInteractor)
-//					typeReference = createCollectionTypeReference(collectionType, typeReference)
-//        		}
-//			}
-//			
-//			jAttribute.typeReference = typeReference
-//			addJavaImport(jAttribute.containingCompilationUnit, typeReference)
 		    updateAttributeTypeInSetters(jAttribute)
 		    updateAttributeTypeInGetters(jAttribute)
         }

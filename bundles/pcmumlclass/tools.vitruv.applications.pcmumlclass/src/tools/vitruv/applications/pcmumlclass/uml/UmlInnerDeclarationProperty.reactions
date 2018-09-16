@@ -3,6 +3,7 @@ import org.palladiosimulator.pcm.repository.CollectionDataType
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import org.eclipse.uml2.uml.Property
+import org.palladiosimulator.pcm.repository.Repository
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -189,7 +190,8 @@ routine propagateTypeChange(uml::Property umlProperty){
 	}
 	action {
 		execute {
-			val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(correspondenceModel, umlProperty.type, umlProperty.lower, umlProperty.upper)
+			val pcmRepository = pcmInnerDeclaration.eResource.allContents.filter(Repository).head
+			val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(correspondenceModel, umlProperty.type, umlProperty.lower, umlProperty.upper, pcmRepository)
 			pcmInnerDeclaration.datatype_InnerDeclaration = pcmDataType
 			
 			if(pcmOldCollectionType.isPresent && pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType(umlProperty)

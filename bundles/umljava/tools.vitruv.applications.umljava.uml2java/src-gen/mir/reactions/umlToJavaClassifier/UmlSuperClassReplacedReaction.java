@@ -94,9 +94,15 @@ public class UmlSuperClassReplacedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final Generalization affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, final org.eclipse.uml2.uml.Class newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.deleteJavaSuperClass(affectedEObject);
+      final Generalization uGeneralization = affectedEObject;
       Classifier _specific = affectedEObject.getSpecific();
-      _routinesFacade.addJavaSuperClass(((org.eclipse.uml2.uml.Class) _specific), affectedEObject);
+      final org.eclipse.uml2.uml.Class uClass = ((org.eclipse.uml2.uml.Class) _specific);
+      if ((oldValue != null)) {
+        _routinesFacade.deleteJavaSuperClass(uGeneralization);
+      }
+      if ((newValue != null)) {
+        _routinesFacade.addJavaSuperClass(uClass, uGeneralization);
+      }
     }
   }
 }

@@ -86,7 +86,7 @@ public class UmlInterfaceRealizationReplacedReaction extends AbstractReactionRea
   }
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final InterfaceRealization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue) {
-    return ((oldValue != null) && (affectedEObject.getImplementingClassifier() instanceof org.eclipse.uml2.uml.Class));
+    return ((affectedEObject.getImplementingClassifier() != null) && (affectedEObject.getImplementingClassifier() instanceof org.eclipse.uml2.uml.Class));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
@@ -95,8 +95,15 @@ public class UmlInterfaceRealizationReplacedReaction extends AbstractReactionRea
     }
     
     public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final InterfaceRealization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
+      final InterfaceRealization uRealization = affectedEObject;
       BehavioredClassifier _implementingClassifier = affectedEObject.getImplementingClassifier();
-      _routinesFacade.replaceJavaClassImplementsReference(affectedEObject, ((org.eclipse.uml2.uml.Class) _implementingClassifier));
+      final org.eclipse.uml2.uml.Class uClass = ((org.eclipse.uml2.uml.Class) _implementingClassifier);
+      if ((oldValue != null)) {
+        _routinesFacade.deleteJavaClassImplementsReference(uRealization, uClass);
+      }
+      if ((newValue != null)) {
+        _routinesFacade.createJavaClassImplementsReference(uRealization, uClass);
+      }
     }
   }
 }

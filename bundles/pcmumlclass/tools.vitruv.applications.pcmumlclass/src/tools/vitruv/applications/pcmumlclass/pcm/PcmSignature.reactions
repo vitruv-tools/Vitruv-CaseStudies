@@ -218,19 +218,8 @@ reaction SignatureReturnTypeChanged{
 routine changeTypeOfCorrespondingReturnParameter(pcm::OperationSignature pcmSignature, pcm::DataType pcmDataType){
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
-		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
 	action {
-		execute {			
-			if (previousTypeWasCollectionType.isPresent){
-				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-			}
-			if (pcmDataType instanceof CollectionDataType){
-				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-			}
-			else {
-				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlParam)
-			}
-		}
+		call pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 	}
 }

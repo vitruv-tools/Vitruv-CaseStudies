@@ -23,9 +23,8 @@ public class AddParentInterfaceRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void executeAction1(final Interface umlInterface, final Classifier umlNewParent, final OperationInterface pcmInterface, final OperationInterface pcmNewParent, @Extension final RoutinesFacade _routinesFacade) {
-      boolean _contains = pcmInterface.getParentInterfaces__Interface().contains(pcmNewParent);
-      boolean _not = (!_contains);
-      if (_not) {
+      final boolean isAlreadyParent = pcmInterface.getParentInterfaces__Interface().contains(pcmNewParent);
+      if ((!isAlreadyParent)) {
         EList<org.palladiosimulator.pcm.repository.Interface> _parentInterfaces__Interface = pcmInterface.getParentInterfaces__Interface();
         _parentInterfaces__Interface.add(pcmNewParent);
       }

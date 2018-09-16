@@ -32,11 +32,6 @@ public class UmlSuperInterfaceReplacedReaction extends AbstractReactionRealizati
     org.eclipse.uml2.uml.Interface oldValue = replaceChange.getOldValue();
     org.eclipse.uml2.uml.Interface newValue = replaceChange.getNewValue();
     				
-    getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
-    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
-    	resetChanges();
-    	return;
-    }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.reactions.umlToJavaClassifier.UmlSuperInterfaceReplacedReaction.ActionUserExecution userExecution = new mir.reactions.umlToJavaClassifier.UmlSuperInterfaceReplacedReaction.ActionUserExecution(this.executionState, this);
@@ -85,19 +80,19 @@ public class UmlSuperInterfaceReplacedReaction extends AbstractReactionRealizati
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final Generalization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue) {
-    return ((affectedEObject.getSpecific() != null) && (affectedEObject.getSpecific() instanceof Interface));
-  }
-  
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
       super(reactionExecutionState);
     }
     
     public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final Generalization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.deleteJavaSuperInterface(affectedEObject);
-      Classifier _specific = affectedEObject.getSpecific();
-      _routinesFacade.addJavaSuperInterface(((Interface) _specific), affectedEObject);
+      if ((oldValue != null)) {
+        _routinesFacade.deleteJavaSuperInterface(affectedEObject);
+      }
+      if (((affectedEObject.getSpecific() != null) && (affectedEObject.getSpecific() instanceof Interface))) {
+        Classifier _specific = affectedEObject.getSpecific();
+        _routinesFacade.addJavaSuperInterface(((Interface) _specific), affectedEObject);
+      }
     }
   }
 }

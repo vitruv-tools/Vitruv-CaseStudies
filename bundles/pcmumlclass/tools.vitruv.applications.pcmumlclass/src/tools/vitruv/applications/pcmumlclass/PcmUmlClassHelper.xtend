@@ -98,7 +98,7 @@ class PcmUmlClassHelper {
 		return !ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, pkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE, Repository).nullOrEmpty
 	}
 	
-	public static def getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper){
+	public static def getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper, Repository dataTypeRepository){
 		if (umlType === null) return null
 		
 		val pcmPrimitiveType = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, umlType, TagLiterals.DATATYPE__TYPE, PrimitiveDataType)
@@ -113,7 +113,8 @@ class PcmUmlClassHelper {
 		var pcmDataType = pcmSimpleType
 		if (pcmSimpleType !== null && lower == 0 && upper == LiteralUnlimitedNatural.UNLIMITED){
 			//find fitting CollectionType with collection.innerType ==
-			val pcmRepository = pcmSimpleType.repository__DataType
+//			val pcmRepository = pcmSimpleType.repository__DataType //This does not work, since it might retrieve the primitive type repository
+			val pcmRepository = dataTypeRepository
 			// TODO userInteraction to disambiguate from multiple Collection Types
 			var pcmCollectionDataType = pcmRepository.dataTypes__Repository.filter(CollectionDataType).findFirst[it.innerType_CollectionDataType === pcmSimpleType]
 			

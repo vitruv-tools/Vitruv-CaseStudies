@@ -1,8 +1,10 @@
 package mir.routines.pcmDataTypePropagationReactions;
 
-import mir.routines.pcmDataTypePropagationReactions.AddCollectionTypeCorrespondenceToParameterOrPropertyRoutine;
-import mir.routines.pcmDataTypePropagationReactions.RemoveCollectionTypeCorrespondenceFromParameterOrPropertyRoutine;
-import mir.routines.pcmDataTypePropagationReactions.ReplaceTypeOfCorrespondingParameterOrPropertyRoutine;
+import mir.routines.pcmDataTypePropagationReactions.AddCollectionDataTypeCorrespondenceRoutine;
+import mir.routines.pcmDataTypePropagationReactions.RemoveOldCollectionDataTypeCorrespondenceRoutine;
+import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrPropertyRoutine;
+import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrProperty_CollectionRoutine;
+import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrProperty_NonCollectionRoutine;
 import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.TypedElement;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -20,27 +22,43 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
-  public boolean removeCollectionTypeCorrespondenceFromParameterOrProperty(final CollectionDataType oldCollectionDataType, final TypedElement umlElement, final MultiplicityElement umlMultiplicity, final String tag) {
+  public boolean setTypeOfUmlParameterOrProperty(final DataType pcmType, final TypedElement umlElement, final MultiplicityElement umlMultiplicity, final String tag) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    RemoveCollectionTypeCorrespondenceFromParameterOrPropertyRoutine routine = new RemoveCollectionTypeCorrespondenceFromParameterOrPropertyRoutine(_routinesFacade, _reactionExecutionState, _caller, oldCollectionDataType, umlElement, umlMultiplicity, tag);
+    SetTypeOfUmlParameterOrPropertyRoutine routine = new SetTypeOfUmlParameterOrPropertyRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType, umlElement, umlMultiplicity, tag);
     return routine.applyRoutine();
   }
   
-  public boolean addCollectionTypeCorrespondenceToParameterOrProperty(final CollectionDataType newCollectionDataType, final TypedElement umlElement, final MultiplicityElement umlMultiplicity, final String tag) {
+  public boolean setTypeOfUmlParameterOrProperty_NonCollection(final DataType pcmType, final TypedElement umlElement, final MultiplicityElement umlMultiplicity, final String tag) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    AddCollectionTypeCorrespondenceToParameterOrPropertyRoutine routine = new AddCollectionTypeCorrespondenceToParameterOrPropertyRoutine(_routinesFacade, _reactionExecutionState, _caller, newCollectionDataType, umlElement, umlMultiplicity, tag);
+    SetTypeOfUmlParameterOrProperty_NonCollectionRoutine routine = new SetTypeOfUmlParameterOrProperty_NonCollectionRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType, umlElement, umlMultiplicity, tag);
     return routine.applyRoutine();
   }
   
-  public boolean replaceTypeOfCorrespondingParameterOrProperty(final DataType pcmSimpleType, final TypedElement umlElement) {
+  public boolean setTypeOfUmlParameterOrProperty_Collection(final CollectionDataType pcmType, final TypedElement umlElement, final MultiplicityElement umlMultiplicity, final String tag) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    ReplaceTypeOfCorrespondingParameterOrPropertyRoutine routine = new ReplaceTypeOfCorrespondingParameterOrPropertyRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmSimpleType, umlElement);
+    SetTypeOfUmlParameterOrProperty_CollectionRoutine routine = new SetTypeOfUmlParameterOrProperty_CollectionRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType, umlElement, umlMultiplicity, tag);
+    return routine.applyRoutine();
+  }
+  
+  public boolean removeOldCollectionDataTypeCorrespondence(final TypedElement umlElement, final String tag) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    RemoveOldCollectionDataTypeCorrespondenceRoutine routine = new RemoveOldCollectionDataTypeCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, umlElement, tag);
+    return routine.applyRoutine();
+  }
+  
+  public boolean addCollectionDataTypeCorrespondence(final CollectionDataType pcmType, final TypedElement umlElement, final String tag) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AddCollectionDataTypeCorrespondenceRoutine routine = new AddCollectionDataTypeCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType, umlElement, tag);
     return routine.applyRoutine();
   }
 }

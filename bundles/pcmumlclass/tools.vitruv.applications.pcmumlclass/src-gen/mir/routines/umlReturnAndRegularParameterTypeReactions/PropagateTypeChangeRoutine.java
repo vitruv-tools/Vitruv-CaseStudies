@@ -1,14 +1,18 @@
 package mir.routines.umlReturnAndRegularParameterTypeReactions;
 
+import com.google.common.collect.Iterators;
 import java.io.IOException;
 import java.util.Optional;
 import mir.routines.umlReturnAndRegularParameterTypeReactions.RoutinesFacade;
+import org.eclipse.emf.cdo.CDOObject;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
+import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper;
 import tools.vitruv.applications.pcmumlclass.TagLiterals;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -26,19 +30,28 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
     
     public void executeAction1(final Parameter umlParameter, final Optional<OperationSignature> pcmSignature, final Optional<org.palladiosimulator.pcm.repository.Parameter> pcmParameter, final Optional<CollectionDataType> pcmCollectionType, @Extension final RoutinesFacade _routinesFacade) {
       if ((pcmSignature.isPresent() || pcmParameter.isPresent())) {
-        final DataType pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(this.correspondenceModel, umlParameter.getType(), umlParameter.getLower(), umlParameter.getUpper());
+        CDOObject _xifexpression = null;
         boolean _isPresent = pcmSignature.isPresent();
         if (_isPresent) {
+          _xifexpression = pcmSignature.get();
+        } else {
+          _xifexpression = pcmParameter.get();
+        }
+        final EObject pcmStoredElement = _xifexpression;
+        final Repository pcmRepository = IteratorExtensions.<Repository>head(Iterators.<Repository>filter(pcmStoredElement.eResource().getAllContents(), Repository.class));
+        final DataType pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(this.correspondenceModel, umlParameter.getType(), umlParameter.getLower(), umlParameter.getUpper(), pcmRepository);
+        boolean _isPresent_1 = pcmSignature.isPresent();
+        if (_isPresent_1) {
           OperationSignature _get = pcmSignature.get();
           _get.setReturnType__OperationSignature(pcmDataType);
         }
-        boolean _isPresent_1 = pcmParameter.isPresent();
-        if (_isPresent_1) {
+        boolean _isPresent_2 = pcmParameter.isPresent();
+        if (_isPresent_2) {
           org.palladiosimulator.pcm.repository.Parameter _get_1 = pcmParameter.get();
           _get_1.setDataType__Parameter(pcmDataType);
         }
-        boolean _isPresent_2 = pcmCollectionType.isPresent();
-        if (_isPresent_2) {
+        boolean _isPresent_3 = pcmCollectionType.isPresent();
+        if (_isPresent_3) {
           _routinesFacade.removeCorrespondenceForOldCollectionType_Parameter(umlParameter);
         }
         if ((pcmDataType instanceof CollectionDataType)) {

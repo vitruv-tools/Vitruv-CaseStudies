@@ -42,7 +42,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	private static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2 = "model-gen/ms_repository_backward.repository"
 
 	@Test
-//	@Ignore //skip until needed because of performance
+	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML() {
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
 		val pcmMsRepositoryResource = resourceSet.getResource(uri,true)
@@ -57,7 +57,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-//	@Ignore //skip until needed because of performance
+	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_UML2PCM() {
 		val uri = URI.createURI(UML_MEDIA_STORE_REPOSITORY_PATH)
 		val umlMsRepositoryResource = resourceSet.getResource(uri,true)
@@ -68,7 +68,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-//	@Ignore //skip until needed because of performance
+	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML2PCM() {
 		// forwards
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
@@ -105,7 +105,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_PCM2UML2PCM() {
 		var pcmRepo_forward = RepositoryFactory.eINSTANCE.createRepository
 		pcmRepo_forward.entityName = "TestRepository"
@@ -137,7 +137,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_UML2PCM2UML() {
 		var umlRepo_forward = UMLFactory.eINSTANCE.createModel
 		umlRepo_forward.name = "umlrootmodel"

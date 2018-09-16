@@ -1,14 +1,17 @@
 package mir.routines.umlInnerDeclarationPropertyReactions;
 
+import com.google.common.collect.Iterators;
 import java.io.IOException;
 import java.util.Optional;
 import mir.routines.umlInnerDeclarationPropertyReactions.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
+import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper;
 import tools.vitruv.applications.pcmumlclass.TagLiterals;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -25,7 +28,8 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void executeAction1(final Property umlProperty, final InnerDeclaration pcmInnerDeclaration, final Optional<CollectionDataType> pcmOldCollectionType, @Extension final RoutinesFacade _routinesFacade) {
-      final DataType pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(this.correspondenceModel, umlProperty.getType(), umlProperty.getLower(), umlProperty.getUpper());
+      final Repository pcmRepository = IteratorExtensions.<Repository>head(Iterators.<Repository>filter(pcmInnerDeclaration.eResource().getAllContents(), Repository.class));
+      final DataType pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(this.correspondenceModel, umlProperty.getType(), umlProperty.getLower(), umlProperty.getUpper(), pcmRepository);
       pcmInnerDeclaration.setDatatype_InnerDeclaration(pcmDataType);
       if ((pcmOldCollectionType.isPresent() && (pcmOldCollectionType.get() != pcmDataType))) {
         _routinesFacade.removeCorrespondenceForOldCollectionType(umlProperty);

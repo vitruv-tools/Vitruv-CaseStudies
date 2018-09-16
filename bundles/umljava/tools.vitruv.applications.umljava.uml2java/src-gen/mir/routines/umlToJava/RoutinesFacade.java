@@ -121,11 +121,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.deleteJavaClassImplementsReference(uRealization, uClass);
   }
   
-  public boolean replaceJavaClassImplementsReference(final InterfaceRealization uRealization, final org.eclipse.uml2.uml.Class uClass) {
-    mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
-    return _routinesFacade.replaceJavaClassImplementsReference(uRealization, uClass);
-  }
-  
   public boolean createJavaInterface(final Interface umlInterface) {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
     return _routinesFacade.createJavaInterface(umlInterface);

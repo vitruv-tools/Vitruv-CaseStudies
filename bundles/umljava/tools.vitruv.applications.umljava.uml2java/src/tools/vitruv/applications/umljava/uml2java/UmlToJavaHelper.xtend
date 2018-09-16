@@ -24,47 +24,9 @@ class UmlToJavaHelper {
     
 	private new() {
 	}
-    
-    
-//    def static TypeReference createTypeReferenceAndUpdateImport(Type dType, ConcreteClassifier cType, CompilationUnit compUnit, UserInteractor userInteractor) {
-//    	createTypeReferenceAndUpdateImport(dType, Optional.of(cType), compUnit, userInteractor)
-//    }
-//    
-//    /**
-// 	 * Creates a Java-NamespaceClssifierReference if cType != null and adds a
-// 	 * import if cType's class is not in the same package as the compilation unit.
-// 	 * 
-//     * Creates a PrimitiveType if dType != null && cType == null
-//     * Creates Void if both Types are null
-//     * If none of the above cases apply, dType is a unknown type. it will create a Java-NamespaceClassifierReference
-//     * out of a dummy Java-Class with the name of dtype. The user will be requested to check
-//     * these circumstances.
-//     * 
-//     * @param dType uml-DataType
-//     * @param cType java-ConcreteClassifier
-//     * @param compUnit the compilation unit of the class in which this type reference is created
-//     * @param userInteractor needed to show info messages for the user
-//     * @return the java type reference that fits dType or cType
-//     */
-//	def static TypeReference createTypeReferenceAndUpdateImport(Type dType, Optional<? extends ConcreteClassifier> cType, CompilationUnit compUnit, UserInteractor userInteractor) {
-//		if (dType === null && !cType.present) {
-//		    return TypesFactory.eINSTANCE.createVoid();
-//		} else if (cType.present) {
-//		    val namespaceOftype = cType.get.javaNamespace.join(".")
-//		    if (!namespaceOftype.equals(compUnit.javaNamespace.join("."))) {
-//		        compUnit.imports += createJavaClassImport(namespaceOftype + "." + cType.get.name)
-//		    }
-//	        return createNamespaceReferenceFromClassifier(cType.get);
-//	    } else if (dType instanceof PrimitiveType) {
-//	        return mapToJavaPrimitiveType(dType);
-//	    } else {// dType is not null and not primitive, but a unknown Classifier.
-//	        val dClass = ClassifiersFactory.eINSTANCE.createClass;
-//	        dClass.name = dType.name;
-//	        userInteractor.showMessage("Added unknown Type " + dType + " in " +  compUnit.name + ". Please check the validity of imports.")
-//	        return createNamespaceReferenceFromClassifier(dClass)
-//		}
-//	} 
-		
+	
+	//TODO re-/move primitive type mapping
+	
 	/**
 	 * Returns the corresponding Java-PrimitiveType by checking the given Uml-PrimitiveType's name.
 	 * (Case-sensitive)

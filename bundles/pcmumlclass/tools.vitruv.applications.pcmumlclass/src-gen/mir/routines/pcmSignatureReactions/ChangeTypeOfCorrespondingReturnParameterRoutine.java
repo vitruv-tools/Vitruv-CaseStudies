@@ -1,12 +1,10 @@
 package mir.routines.pcmSignatureReactions;
 
 import java.io.IOException;
-import java.util.Optional;
 import mir.routines.pcmSignatureReactions.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import tools.vitruv.applications.pcmumlclass.TagLiterals;
@@ -23,32 +21,16 @@ public class ChangeTypeOfCorrespondingReturnParameterRoutine extends AbstractRep
       super(reactionExecutionState);
     }
     
-    public void executeAction1(final OperationSignature pcmSignature, final DataType pcmDataType, final Parameter umlParam, final Optional<CollectionDataType> previousTypeWasCollectionType, @Extension final RoutinesFacade _routinesFacade) {
-      boolean _isPresent = previousTypeWasCollectionType.isPresent();
-      if (_isPresent) {
-        _routinesFacade.pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get(), umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER);
-      }
-      if ((pcmDataType instanceof CollectionDataType)) {
-        _routinesFacade.pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(((CollectionDataType)pcmDataType), umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER);
-      } else {
-        _routinesFacade.pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlParam);
-      }
-    }
-    
     public String getRetrieveTag1(final OperationSignature pcmSignature, final DataType pcmDataType) {
       return TagLiterals.SIGNATURE__RETURN_PARAMETER;
-    }
-    
-    public EObject getCorrepondenceSourcePreviousTypeWasCollectionType(final OperationSignature pcmSignature, final DataType pcmDataType, final Parameter umlParam) {
-      return umlParam;
     }
     
     public EObject getCorrepondenceSourceUmlParam(final OperationSignature pcmSignature, final DataType pcmDataType) {
       return pcmSignature;
     }
     
-    public String getRetrieveTag2(final OperationSignature pcmSignature, final DataType pcmDataType, final Parameter umlParam) {
-      return TagLiterals.COLLECTION_DATATYPE__PARAMETER;
+    public void callRoutine1(final OperationSignature pcmSignature, final DataType pcmDataType, final Parameter umlParam, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER);
     }
   }
   
@@ -78,16 +60,7 @@ public class ChangeTypeOfCorrespondingReturnParameterRoutine extends AbstractRep
     	return false;
     }
     registerObjectUnderModification(umlParam);
-    	Optional<org.palladiosimulator.pcm.repository.CollectionDataType> previousTypeWasCollectionType = Optional.ofNullable(getCorrespondingElement(
-    		userExecution.getCorrepondenceSourcePreviousTypeWasCollectionType(pcmSignature, pcmDataType, umlParam), // correspondence source supplier
-    		org.palladiosimulator.pcm.repository.CollectionDataType.class,
-    		(org.palladiosimulator.pcm.repository.CollectionDataType _element) -> true, // correspondence precondition checker
-    		userExecution.getRetrieveTag2(pcmSignature, pcmDataType, umlParam), 
-    		false // asserted
-    		)
-    );
-    registerObjectUnderModification(previousTypeWasCollectionType.isPresent() ? previousTypeWasCollectionType.get() : null);
-    userExecution.executeAction1(pcmSignature, pcmDataType, umlParam, previousTypeWasCollectionType, this.getRoutinesFacade());
+    userExecution.callRoutine1(pcmSignature, pcmDataType, umlParam, this.getRoutinesFacade());
     
     postprocessElements();
     

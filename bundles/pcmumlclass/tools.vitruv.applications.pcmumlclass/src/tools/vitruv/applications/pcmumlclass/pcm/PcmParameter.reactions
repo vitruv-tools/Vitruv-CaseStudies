@@ -158,8 +158,6 @@ routine changeDirectionOfCorrespondingRegularParameter(pcm::Parameter pcmParam){
 	}
 }
 
-// Following reactions are very similar to to PcmSignature.reactions and PcmInnerDeclaration.reactions.
-// See PcmCollectionDataType.reactions for more explanation.
 reaction ParameterTypeChanged{
 	after element pcm::DataType replaced at pcm::Parameter[dataType__Parameter]
 	with {affectedEObject.dataType__Parameter === newValue}
@@ -169,20 +167,9 @@ reaction ParameterTypeChanged{
 routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::DataType pcmDataType){
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-		val previousTypeWasCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParam tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
 	action {
-		execute {
-			if (previousTypeWasCollectionType.isPresent){
-				pcmDataTypePropagationReactions.removeCollectionTypeCorrespondenceFromParameterOrProperty(previousTypeWasCollectionType.get, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-			}
-			if (pcmDataType instanceof CollectionDataType){
-				pcmDataTypePropagationReactions.addCollectionTypeCorrespondenceToParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-			}
-			else {
-				pcmDataTypePropagationReactions.replaceTypeOfCorrespondingParameterOrProperty(pcmDataType, umlParam)
-			}
-		}
+		call pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 	}
 }
 

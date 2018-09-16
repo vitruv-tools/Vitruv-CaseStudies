@@ -23,7 +23,6 @@ import mir.routines.umlToJavaClassifier.DeleteJavaSuperClassRoutine;
 import mir.routines.umlToJavaClassifier.DeleteJavaSuperInterfaceRoutine;
 import mir.routines.umlToJavaClassifier.RenameJavaClassifierRoutine;
 import mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine;
-import mir.routines.umlToJavaClassifier.ReplaceJavaClassImplementsReferenceRoutine;
 import mir.routines.umlToJavaClassifier.SetJavaClassAbstractRoutine;
 import mir.routines.umlToJavaClassifier.SetJavaClassFinalRoutine;
 import org.eclipse.uml2.uml.Classifier;
@@ -136,14 +135,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     DeleteJavaClassImplementsReferenceRoutine routine = new DeleteJavaClassImplementsReferenceRoutine(_routinesFacade, _reactionExecutionState, _caller, uRealization, uClass);
-    return routine.applyRoutine();
-  }
-  
-  public boolean replaceJavaClassImplementsReference(final InterfaceRealization uRealization, final org.eclipse.uml2.uml.Class uClass) {
-    RoutinesFacade _routinesFacade = this;
-    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
-    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    ReplaceJavaClassImplementsReferenceRoutine routine = new ReplaceJavaClassImplementsReferenceRoutine(_routinesFacade, _reactionExecutionState, _caller, uRealization, uClass);
     return routine.applyRoutine();
   }
   

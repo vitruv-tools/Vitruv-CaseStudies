@@ -139,48 +139,6 @@ routine setJavaClassAbstract(uml::Class umlClass) {
     }
 }
 
-//reaction UmlSuperClassChanged {
-//    after element uml::Generalization inserted in uml::Class[generalization]
-//    call {
-//    	changeJavaSuperClass(newValue.general as org.eclipse.uml2.uml.Class, affectedEObject)
-//    }
-//}
-//
-//routine changeJavaSuperClass(uml::Class superUMLClass, uml::Class uClass) {
-//    match {
-//        val jClass = retrieve java::Class corresponding to uClass
-//        val superJavaClass = retrieve java::Class corresponding to superUMLClass
-//    }
-//    action {
-//        call {
-//            if (uClass.generals.size == 1) {
-//                jClass.extends = createTypeReferenceAndUpdateImport(null, superJavaClass, jClass.containingCompilationUnit, userInteractor);
-//            } else {
-//                userInteractor.notificationDialogBuilder.message("Can not synchronize multiple inheritance for " + uClass)
-//                    .title("Warning").notificationType(NotificationType.WARNING).windowModality(WindowModality.MODAL)
-//                    .startInteraction()
-//                logger.warn("Routine not executed: Tried to set multiple inheritance for " + uClass)
-//            }
-//        }
-//    }
-//}
-//
-//reaction UmlSuperClassDeleted {
-//    after element uml::Generalization removed from uml::Class[generalization]
-//    call deleteJavaSuperClass(affectedEObject)
-//}
-//
-//routine deleteJavaSuperClass(uml::Class uClass) {
-//    match {
-//        val jClass = retrieve java::Class corresponding to uClass
-//    }
-//    action {
-//        update jClass {
-//            jClass.extends = null;
-//        }
-//    }
-//}
-
 // TODO uml superclass propagation changed
 reaction UmlSuperClassAdded {
     after element uml::Generalization inserted in uml::Class[generalization]
@@ -230,58 +188,14 @@ reaction UmlSuperClassReplaced{
 	after element uml::Class replaced at uml::Generalization[general]
 	with {affectedEObject.specific !== null && affectedEObject.specific instanceof org.eclipse.uml2.uml.Class}
 	call {
-		deleteJavaSuperClass(affectedEObject)
-		addJavaSuperClass(affectedEObject.specific as org.eclipse.uml2.uml.Class, affectedEObject)
+		val uGeneralization = affectedEObject
+		val uClass = affectedEObject.specific as org.eclipse.uml2.uml.Class
+		if (oldValue !== null)
+			deleteJavaSuperClass(uGeneralization)
+		if (newValue !== null)
+			addJavaSuperClass(uClass, uGeneralization)
 	}
 }
-
-//reaction UmlInterfaceImplementerChanged {
-//	after element uml::Class replaced at uml::InterfaceRealization[implementingClassifier]
-//	call {
-//		deleteJavaImplementedInterface(affectedEObject.suppliers.head as org.eclipse.uml2.uml.Interface, oldValue)
-//		changeJavaImplementedInterface(affectedEObject.suppliers.head as org.eclipse.uml2.uml.Interface, null, newValue)
-//	}
-//}
-//
-//reaction UmlImplementedInterfaceChanged {
-//    after element uml::Interface inserted in uml::InterfaceRealization[supplier]
-//    call changeJavaImplementedInterface(newValue, null, affectedEObject.eContainer as org.eclipse.uml2.uml.Class)
-//
-//}
-//
-//routine changeJavaImplementedInterface(uml::Interface uInterface, uml::Interface oldInterface, uml::Class uClass) {
-//    match {
-//        val jClass = retrieve java::Class corresponding to uClass
-//        val jInterface = retrieve java::Interface corresponding to uInterface
-//    }
-//    action {
-//    	call {
-//            if (oldInterface !== null) {
-//        		deleteJavaImplementedInterface(oldInterface, uClass)
-//        	}
-//        }
-//        update jClass {
-//            jClass.implements += createTypeReferenceAndUpdateImport(null, jInterface, jClass.containingCompilationUnit, userInteractor)
-//        }
-//    }
-//}
-//
-//reaction UmlImplementedInterfaceDeleted {
-//    after element uml::InterfaceRealization removed from uml::Class[interfaceRealization]
-//    call deleteJavaImplementedInterface(oldValue.suppliers.head as org.eclipse.uml2.uml.Interface , affectedEObject)
-//}
-//
-//routine deleteJavaImplementedInterface(uml::Interface uInterface, uml::Class uClass) {
-//    match {
-//        val jClass = retrieve java::Class corresponding to uClass
-//        val jInterface = retrieve java::Interface corresponding to uInterface
-//    }
-//    action {
-//        update jClass {
-//            removeClassifierFromIterator(jClass.implements.iterator, jInterface) 
-//        }
-//    }
-//}
 
 // TODO uml interface implemented propagation changed
 reaction UmlInterfaceRealizationCreated {
@@ -336,16 +250,17 @@ routine deleteJavaClassImplementsReference(uml::InterfaceRealization uRealizatio
 
 reaction UmlInterfaceRealizationReplaced {
 	after element replaced at uml::InterfaceRealization[contract]
-	with {oldValue !== null  && affectedEObject.implementingClassifier instanceof org.eclipse.uml2.uml.Class}
-	call replaceJavaClassImplementsReference(affectedEObject, affectedEObject.implementingClassifier as org.eclipse.uml2.uml.Class)
-}
-
-routine replaceJavaClassImplementsReference(uml::InterfaceRealization uRealization, uml::Class uClass){
-	action {
-       call deleteJavaClassImplementsReference(uRealization, uClass)
-       call createJavaClassImplementsReference(uRealization, uClass)
+	with {affectedEObject.implementingClassifier !== null && affectedEObject.implementingClassifier instanceof org.eclipse.uml2.uml.Class}
+	call {
+		val uRealization = affectedEObject
+		val uClass = affectedEObject.implementingClassifier as org.eclipse.uml2.uml.Class
+		if (oldValue !== null) 
+			deleteJavaClassImplementsReference(uRealization, uClass)
+		if (newValue !== null)
+			createJavaClassImplementsReference(uRealization, uClass)
 	}
 }
+
 
 
 reaction UmlDataTypeCreated {
@@ -379,40 +294,6 @@ routine createJavaInterface(uml::Interface umlInterface) {
 		add correspondence between umlInterface and javaInterface
     }
 }
- 
-//reaction UmlSuperInterfaceChanged {
-//    after element uml::Generalization inserted in uml::Interface[generalization]
-//    call changeJavaSuperInterface(newValue.general as org.eclipse.uml2.uml.Interface, affectedEObject)
-//}
-//
-//routine changeJavaSuperInterface(uml::Interface superUMLInterface, uml::Interface uI) {
-//    match {
-//        val jI = retrieve java::Interface corresponding to uI
-//        val superJavaInterface = retrieve java::Interface corresponding to superUMLInterface
-//    }
-//    action {
-//        update jI {
-//            jI.extends += createTypeReferenceAndUpdateImport(null, superJavaInterface, jI.containingCompilationUnit, userInteractor)
-//        }
-//    }
-//}
-//
-//reaction UmlSuperInterfaceDeleted {
-//    after element uml::Generalization removed from uml::Interface[generalization]
-//    call deleteJavaSuperInterface(oldValue.general as org.eclipse.uml2.uml.Interface, affectedEObject)
-//}
-//
-//routine deleteJavaSuperInterface(uml::Interface superUMLInterface, uml::Interface uI) {
-//    match {
-//        val jI = retrieve java::Interface corresponding to uI
-//        val javaSuperInterface = retrieve java::Interface corresponding to superUMLInterface
-//    }
-//    action {
-//        update jI {
-//            removeClassifierFromIterator(jI.extends.iterator, javaSuperInterface)
-//        }
-//    }
-//}
 
 // TODO uml super interface propagation changed
 reaction UmlSuperInterfaceAdded {
@@ -464,10 +345,11 @@ routine deleteJavaSuperInterface(uml::Generalization uGeneralization) {
 
 reaction UmlSuperInterfaceReplaced{
 	after element uml::Interface replaced at uml::Generalization[general]
-	with {affectedEObject.specific !== null && affectedEObject.specific instanceof Interface}
 	call {
-		deleteJavaSuperInterface(affectedEObject)
-		addJavaSuperInterface(affectedEObject.specific as Interface, affectedEObject)
+		if(oldValue !== null) 
+			deleteJavaSuperInterface(affectedEObject)
+		if(affectedEObject.specific !== null && affectedEObject.specific instanceof Interface)
+			addJavaSuperInterface(affectedEObject.specific as Interface, affectedEObject)
 	}
 }
 

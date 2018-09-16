@@ -32,6 +32,9 @@ public class ReplaceParentInterfaceRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void callRoutine1(final Generalization gen, final Classifier newParent, final Classifier oldParent, final OperationInterface pcmInterface, @Extension final RoutinesFacade _routinesFacade) {
+      if ((oldParent == newParent)) {
+        return;
+      }
       Classifier _specific = gen.getSpecific();
       _routinesFacade.removeParentInterface(((Interface) _specific), oldParent);
       Classifier _general = gen.getGeneral();
