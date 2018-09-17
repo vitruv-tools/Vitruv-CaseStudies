@@ -37,7 +37,7 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         val jInterface = createSimpleJavaInterfaceWithCompilationUnit(STANDARD_INTERFACE_NAME)
         
         val uInterface = getCorrespondingInterface(jInterface)
-        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, getUmlRootModel(JavaToUmlHelper.rootModelFile))
+        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, registeredUmlModel)
         assertInterfaceEquals(uInterface, jInterface)
     }
     
@@ -55,7 +55,7 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         val comp = jInterface.containingCompilationUnit
         EcoreUtil.delete(jInterface)
         saveAndSynchronizeChanges(comp)
-        assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, org.eclipse.uml2.uml.Interface, INTERFACE_NAME).nullOrEmpty)
+        assertTrue(getUmlPackagedElementsbyName(org.eclipse.uml2.uml.Interface, INTERFACE_NAME).nullOrEmpty)
     }
     
     @Test

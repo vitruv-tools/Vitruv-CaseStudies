@@ -13,6 +13,8 @@ import tools.vitruv.framework.userinteraction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
+import org.emftext.language.java.classifiers.Classifier
+import org.emftext.language.java.classifiers.ConcreteClassifier
 
 /**
  * A helper class that contains util functions which depends on
@@ -68,7 +70,7 @@ class UmlToJavaHelper {
      */
     def static createGetterForAttribute(Field jAttribute) {
         val jGetter = createJavaGetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
-        (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += jGetter
+        jAttribute.containingConcreteClassifier.members += jGetter
     }
     
     /**
@@ -78,7 +80,7 @@ class UmlToJavaHelper {
      */
     def static createSetterForAttribute(Field jAttribute) {
         val jSetter = createJavaSetterForAttribute(jAttribute, JavaVisibility.PUBLIC)
-        (jAttribute.eContainer as org.emftext.language.java.classifiers.Class).members += jSetter
+        jAttribute.containingConcreteClassifier.members += jSetter
     }
     
     

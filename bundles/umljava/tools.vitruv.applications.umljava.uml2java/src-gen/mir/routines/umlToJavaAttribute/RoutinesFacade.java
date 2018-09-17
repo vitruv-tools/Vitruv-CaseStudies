@@ -71,11 +71,11 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean renameJavaAttribute(final String oldName, final String newName, final Property uAttribute) {
+  public boolean renameJavaAttribute(final String newName, final String oldName, final Property uAttribute) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    RenameJavaAttributeRoutine routine = new RenameJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, oldName, newName, uAttribute);
+    RenameJavaAttributeRoutine routine = new RenameJavaAttributeRoutine(_routinesFacade, _reactionExecutionState, _caller, newName, oldName, uAttribute);
     return routine.applyRoutine();
   }
 }

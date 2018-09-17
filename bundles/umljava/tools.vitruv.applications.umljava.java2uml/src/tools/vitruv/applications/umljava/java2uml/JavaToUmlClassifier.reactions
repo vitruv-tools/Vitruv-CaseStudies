@@ -174,11 +174,10 @@ routine setUmlClassFinal(java::Class jClass, Boolean isFinal) {
 // TODO java super class propagation changed
 reaction JavaSuperClassChanged {
     after element java::TypeReference replaced at java::Class[^extends]
-    with {getClassifierFromTypeReference(newValue) instanceof org.emftext.language.java.classifiers.Class}
     call {
     	if (oldValue !== null)
-    		deleteUmlSuperClassGeneralization(newValue)
-    	if (newValue !== null){
+    		deleteUmlSuperClassGeneralization(oldValue)
+    	if (newValue !== null && getClassifierFromTypeReference(newValue) instanceof org.emftext.language.java.classifiers.Class){
     		val jSuperClass = getClassifier(newValue) as org.emftext.language.java.classifiers.Class
     		addUmlSuperClassGeneralization(affectedEObject, newValue, jSuperClass)
     	}

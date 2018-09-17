@@ -15,6 +15,7 @@ import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
 import tools.vitruv.applications.umljava.util.java.JavaStandardType
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
 
 /**
  * Test class for testing the attribute reactions.
@@ -58,7 +59,8 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         
         val uAttr = getCorrespondingAttribute(attr)
         val uClass = getCorrespondingClass(jClass)
-        assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, createUmlPrimitiveType(JavaStandardType.INT),
+        val umlInteger = UmlJavaTypePropagationHelper.getSupoortedPredefinedUmlPrimitiveTypes(resourceSet).findFirst[it.name == "Integer"]
+        assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlInteger,
             false, false, uClass, null, null)
         assertAttributeEquals(uAttr, attr)
     }

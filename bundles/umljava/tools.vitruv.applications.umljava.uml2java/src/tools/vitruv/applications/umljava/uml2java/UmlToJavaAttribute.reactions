@@ -50,10 +50,11 @@ routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttrib
         }
         add correspondence between umlAttribute and javaAttribute
         call {
-        	if (uClassifier !== null && uClassifier instanceof org.eclipse.uml2.uml.Class){
+//        	if (uClassifier !== null && uClassifier instanceof org.eclipse.uml2.uml.Class){
 	            createJavaGetter(javaAttribute)
 	            createJavaSetter(javaAttribute)
-        	}
+//        	}
+			changeJavaAttributeType(umlAttribute)
         }
     }
 }
@@ -161,7 +162,7 @@ reaction UmlAttributeRenamed {
     call renameJavaAttribute(newValue, oldValue, affectedEObject)
 }
 
-routine renameJavaAttribute(String oldName, String newName, uml::Property uAttribute) {
+routine renameJavaAttribute(String newName, String oldName, uml::Property uAttribute) {
     match {
         val jAttribute = retrieve java::Field corresponding to uAttribute
     }

@@ -54,10 +54,9 @@ public class CreateJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void callRoutine1(final Classifier uClassifier, final Property umlAttribute, final ConcreteClassifier jClassifier, final Field javaAttribute, @Extension final RoutinesFacade _routinesFacade) {
-      if (((uClassifier != null) && (uClassifier instanceof org.eclipse.uml2.uml.Class))) {
-        _routinesFacade.createJavaGetter(javaAttribute);
-        _routinesFacade.createJavaSetter(javaAttribute);
-      }
+      _routinesFacade.createJavaGetter(javaAttribute);
+      _routinesFacade.createJavaSetter(javaAttribute);
+      _routinesFacade.changeJavaAttributeType(umlAttribute);
     }
   }
   

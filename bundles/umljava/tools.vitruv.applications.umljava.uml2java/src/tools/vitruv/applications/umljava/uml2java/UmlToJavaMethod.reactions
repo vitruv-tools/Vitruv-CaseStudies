@@ -52,25 +52,20 @@ routine createJavaMethod(uml::Classifier uClassifier, uml::Operation uOperation)
 routine createJavaClassMethod(uml::Classifier uClassifier, uml::Operation uOperation) {
     match {
         val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
-        val customTypeClass = retrieve optional java::Class corresponding to uOperation.type
         require absence of java::ClassMethod corresponding to uOperation // TODO existance check
     }
     action {
         val javaMethod = create java::ClassMethod and initialize {
             javaMethod.name = uOperation.name;
             setJavaVisibility(javaMethod, uOperation.visibility)
-            // type propagation changed
+            // TODO type propagation changed
 //            javaMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, customTypeClass, jClassifier.getContainingCompilationUnit, userInteractor)
         }
         update jClassifier {
             jClassifier.members += javaMethod;
         }
         add correspondence between uOperation and javaMethod
-        call {
-        	if (uOperation.getReturnResult !== null){
-        		setJavaMethodReturnType(uOperation, uOperation.getReturnResult)
-        	}
-        }
+        call setJavaMethodReturnType(uOperation, uOperation.getReturnResult) // if uOperation.getReturnResult is null, setReturnType should set void
     }
 }
 
@@ -123,6 +118,7 @@ reaction UmlMethodReturnTypeChanged {
     call setJavaMethodReturnType(affectedEObject.operation, affectedEObject)
 }
 
+// if uParam is null, then the return type will be set to 'void'
 routine setJavaMethodReturnType(uml::Operation uOperation, uml::Parameter uParam) {
     match {
         val jMethod = retrieve java::Method corresponding to uOperation
@@ -130,7 +126,6 @@ routine setJavaMethodReturnType(uml::Operation uOperation, uml::Parameter uParam
     }
     action {
         update jMethod {
-//            jMethod.typeReference = createTypeReferenceAndUpdateImport(uOperation.type, jCustomType, jMethod.getContainingCompilationUnit, userInteractor)
             // TODO type propagation changed
             if (uParam !== null){
 		    	propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam.lower, uParam.upper, jMethod, jCustomType, userInteractor)

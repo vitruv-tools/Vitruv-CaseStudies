@@ -42,9 +42,9 @@ import org.eclipse.emf.ecore.EObject
  */
 class JavaToUmlHelper {
     private static val logger = Logger.getLogger(JavaToUmlHelper.simpleName)
-    public static def getRootModelFile(){
-    	return "model/model.uml" //TODO deprecated and nonfunctional, but here for now, so that the tests don't complain
-    }
+//    public static def getRootModelFile(){
+//    	return "model/model.uml" //TODO deprecated and nonfunctional, but here for now, so that the tests don't complain
+//    }
     
 
 //    def static dispatch Type getUmlType(Void jVoid, Model model, CorrespondenceModel correspondenceModel) {

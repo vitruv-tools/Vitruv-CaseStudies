@@ -59,7 +59,7 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     @Test
     def void testDeletePackage() {
         deleteAndSynchronizeModel(buildJavaFilePath(jPackageLevel1))
-        assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Package, PACKAGE_LEVEL_1).nullOrEmpty)
+        assertTrue(getUmlPackagedElementsbyName(Package, PACKAGE_LEVEL_1).nullOrEmpty)
         
     }
     

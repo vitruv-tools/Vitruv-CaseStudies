@@ -3,43 +3,42 @@ package tools.vitruv.applications.umljava.util
 import java.util.ArrayList
 import java.util.Collection
 import java.util.HashSet
+import java.util.LinkedList
+import java.util.List
 import java.util.Optional
 import org.apache.log4j.Logger
+import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.MultiplicityElement
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
+import org.eclipse.uml2.uml.TypedElement
+import org.eclipse.uml2.uml.UMLPackage
 import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.generics.GenericsFactory
 import org.emftext.language.java.generics.QualifiedTypeArgument
+import org.emftext.language.java.imports.ClassifierImport
+import org.emftext.language.java.imports.ImportsFactory
+import org.emftext.language.java.types.Boolean
 import org.emftext.language.java.types.ClassifierReference
+import org.emftext.language.java.types.Double
+import org.emftext.language.java.types.Int
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.domains.java.util.JavaModificationUtil
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import java.util.LinkedList
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
-import org.eclipse.uml2.uml.TypedElement
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.imports.ClassifierImport
-import org.emftext.language.java.imports.ImportsFactory
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.emftext.language.java.parameters.OrdinaryParameter
-import org.emftext.language.java.members.Method
-import org.emftext.language.java.members.Field
-import org.eclipse.uml2.uml.Parameter
-import org.eclipse.uml2.uml.MultiplicityElement
-import java.util.List
-import org.eclipse.emf.common.util.URI
-import org.eclipse.uml2.uml.UMLPackage
-import org.emftext.language.java.types.Int
+import org.eclipse.emf.ecore.resource.ResourceSet
 
 /**
  * Helper class for the Uml <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -55,13 +54,18 @@ class UmlJavaTypePropagationHelper {
     public static val UML_PRIMITIVE_INTEGER_TAG = "Integer"
     public static val UML_PRIMITIVE_STRING_TAG = "String"
     
-    public static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm){
-		var List<PrimitiveType> umlPrimitiveTypes = #[]
+    public static def List<PrimitiveType> getSupoortedPredefinedUmlPrimitiveTypes(ResourceSet rs){
+    	var List<PrimitiveType> umlPrimitiveTypes = #[]
 		val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
 		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
-			val resource = cm.resource.resourceSet.getResource(uri,true)
+			val resource = rs.getResource(uri,true)
 			umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList		
 		}
+		return umlPrimitiveTypes
+    }
+    
+    public static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm){
+		var List<PrimitiveType> umlPrimitiveTypes = getSupoortedPredefinedUmlPrimitiveTypes(cm.resource.resourceSet)
 		for (primitive : umlPrimitiveTypes){
 			val alreadyRegistered = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, primitive.name, PrimitiveType).head
 			if (alreadyRegistered === null) 
@@ -256,11 +260,11 @@ class UmlJavaTypePropagationHelper {
 	// TODO how do I use the same java-doc for both methods
 	def static dispatch PrimitiveType mapJavaPrimitiveToUmlPrimitive(org.emftext.language.java.types.PrimitiveType jRef, CorrespondenceModel cm){
 		return switch jRef {
-			case jRef instanceof org.emftext.language.java.types.Boolean:
+			case jRef instanceof Boolean:
 				ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, UML_PRIMITIVE_BOOLEAN_TAG, PrimitiveType).head
-			case jRef instanceof org.emftext.language.java.types.Double:
+			case jRef instanceof Double:
 				ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, UML_PRIMITIVE_REAL_TAG, PrimitiveType).head
-			case jRef instanceof org.emftext.language.java.types.Int:
+			case jRef instanceof Int:
 				ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, UML_PRIMITIVE_INTEGER_TAG, PrimitiveType).head
 			default:{
 				logger.warn("Tried to map a java primitive type, that is not supported by the uml <-> java transformations: " + jRef)
@@ -275,7 +279,13 @@ class UmlJavaTypePropagationHelper {
             case "Real": return TypesFactory.eINSTANCE.createDouble
             case "Integer": return TypesFactory.eINSTANCE.createInt
             case "String": return JavaModificationUtil.createNamespaceClassifierReferenceForName("java.lang", "String")
-            default: throw new IllegalArgumentException("Unknown standard primitive type name: " +  uType.name)
+            default: {
+//            	throw new IllegalArgumentException("Unknown standard primitive type name: " +  uType.name)
+            	logger.warn(
+            		"(uml -> java) Unsupported uml::PrimitiveType with name: " +  uType.name + 
+            		"\n Please use the types defined in \"pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml\".")
+            	return  TypesFactory.eINSTANCE.createVoid
+            }
         }
 	}
 	
@@ -348,7 +358,7 @@ class UmlJavaTypePropagationHelper {
     		typeReference = JavaModificationUtil.createNamespaceClassifierReference(jType.get)
     	}
     	else if (uType !== null && uType instanceof PrimitiveType) {
-    		typeReference = mapUmlPrimitiveToJavaPrimitive(uType as PrimitiveType) // TODO impl correct mapping
+    		typeReference = mapUmlPrimitiveToJavaPrimitive(uType as PrimitiveType)
     	}
     	else if (uType === null) {
     		typeReference = defaultReference

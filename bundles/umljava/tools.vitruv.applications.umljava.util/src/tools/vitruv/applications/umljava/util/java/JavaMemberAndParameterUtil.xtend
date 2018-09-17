@@ -108,8 +108,10 @@ class JavaMemberAndParameterUtil {
     
     def static createJavaParameter(String name, TypeReference type) {
         val param = ParametersFactory.eINSTANCE.createOrdinaryParameter;
-        setName(param, name)
-        setTypeReference(param, type)
+//        setName(param, name)
+//        setTypeReference(param, type)
+		param.name = name
+		param.typeReference = type
         return param;
     }
     
@@ -286,7 +288,7 @@ class JavaMemberAndParameterUtil {
         setter.name = buildSetterName(jAttribute.name)
         for (expStatement : setter.statements.filter(ExpressionStatement)) {
             val selfReference = getAttributeSelfReferenceInExpressionStatement(expStatement, oldName)
-            selfReference.target = jAttribute
+            if(selfReference !== null ) selfReference.target = jAttribute
         }
         
     }
@@ -320,7 +322,8 @@ class JavaMemberAndParameterUtil {
      * @param jAttribute the attribute with the new name
      */
     def static void renameGettersOfAttribute(Field jAttribute, String oldName) {
-        for (getter : getJavaGettersOfAttribute(jAttribute.containingConcreteClassifier, oldName)) {
+    	val getters = getJavaGettersOfAttribute(jAttribute.containingConcreteClassifier, oldName)
+        for (getter : getters) {
             renameGetterOfAttribute(getter, jAttribute)
         }
     }

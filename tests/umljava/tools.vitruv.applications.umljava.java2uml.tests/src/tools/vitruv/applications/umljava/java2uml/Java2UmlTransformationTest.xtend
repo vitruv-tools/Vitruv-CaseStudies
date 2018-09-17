@@ -13,6 +13,9 @@ import org.apache.log4j.Logger
 import java.util.List
 import org.emftext.language.java.members.EnumConstant
 import org.emftext.language.java.members.Member
+import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
+import org.eclipse.uml2.uml.UMLPackage
+import java.util.ArrayList
 
 /**
  * Abstract Class for Java To UML Tests. Contains functions to create Java-CompilationUnits 
@@ -145,8 +148,9 @@ abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
      * @param elementName the name of the packageable elements to find
      * @return all packageable elements in the uml model that matches the type and the elementName
      */
-    def protected getUmlPackagedElementsbyName(String modelPath, Class<? extends org.eclipse.uml2.uml.PackageableElement> type, String elementName) {
-        val model = getUmlRootModel(modelPath)
+    def protected getUmlPackagedElementsbyName(Class<? extends org.eclipse.uml2.uml.PackageableElement> type, String elementName) {
+        val model = registeredUmlModel
+        if (model ===null) return new ArrayList<org.eclipse.uml2.uml.PackageableElement>()
         return model.packagedElements.filter(type).filter[it.name == elementName].toList;
     }
     
@@ -201,23 +205,13 @@ abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
         return getFirstCorrespondingObjectWithClass(jPackage, org.eclipse.uml2.uml.Package)
     }
     
-    /**
-     * Loads the uml root model given by the modelPath.
-     * Returns null if no model could be found.
-     * 
-     * This method is primarily used for the java to uml tests to
-     * access the uml root model. The uml root model will be created
-     * when the first uml classifier creating reaction is executed.
-     * 
-     * @param modelPath the project root relative path of the uml model
-     * @return the uml model or null if none could be found 
-     */
-    def protected getUmlRootModel(String modelPath) {
-        val model = getModelResource(modelPath).allContents.head
+    def protected getRegisteredUmlModel() {
+        val model = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, UMLPackage.Literals.MODEL, Model).head
         if (!(model instanceof Model)) {
             logger.warn("No Uml Rootmodel found.")
             return null
         }
-        return model as Model
+        return model
     }
+    
 }

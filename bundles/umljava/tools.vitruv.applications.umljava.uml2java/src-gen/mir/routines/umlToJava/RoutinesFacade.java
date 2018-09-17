@@ -61,9 +61,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.createJavaSetter(jAttribute);
   }
   
-  public boolean renameJavaAttribute(final String oldName, final String newName, final Property uAttribute) {
+  public boolean renameJavaAttribute(final String newName, final String oldName, final Property uAttribute) {
     mir.routines.umlToJavaAttribute.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaAttribute")));
-    return _routinesFacade.renameJavaAttribute(oldName, newName, uAttribute);
+    return _routinesFacade.renameJavaAttribute(newName, oldName, uAttribute);
   }
   
   public boolean createJavaClass(final Classifier umlClassifier) {

@@ -46,7 +46,7 @@ class JavaToUmlEnumTest extends Java2UmlTransformationTest {
         
         val uEnum = getCorrespondingEnum(enumeration)
         assertUmlEnumTraits(uEnum, STANDARD_ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, false, false,
-            getUmlRootModel(JavaToUmlHelper.rootModelFile), createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2))
+            registeredUmlModel, createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2))
         assertEnumEquals(uEnum, enumeration)
     }
     
@@ -67,7 +67,7 @@ class JavaToUmlEnumTest extends Java2UmlTransformationTest {
 
         EcoreUtil.delete(jEnum)
         saveAndSynchronizeChanges(comp)
-        val uEnum = getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, org.eclipse.uml2.uml.Enumeration, ENUM_NAME).head
+        val uEnum = getUmlPackagedElementsbyName(org.eclipse.uml2.uml.Enumeration, ENUM_NAME).head
         assertNull(uEnum)
     }
     

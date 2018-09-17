@@ -19,49 +19,6 @@ reactions: pcmDataTypePropagationReactions
 in reaction to changes in PCM
 execute actions in UML
 
-//routine removeCollectionTypeCorrespondenceFromParameterOrProperty(
-//		pcm::CollectionDataType oldCollectionDataType, 
-//		uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, // same element; Parameter or Property
-//		String tag
-//){
-//	action {
-//		update umlElement {
-//			umlElement.type = null
-//		}
-//		update umlMultiplicity{
-//			umlMultiplicity.lower = 1
-//			umlMultiplicity.upper = 1
-//		}
-//		remove correspondence between oldCollectionDataType and umlElement tagged with tag
-//	}
-//}
-//
-//routine addCollectionTypeCorrespondenceToParameterOrProperty(
-//		pcm::CollectionDataType newCollectionDataType, 
-//		uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, // same element; Parameter or Property
-//		String tag
-//){
-//	action {
-//		update umlMultiplicity {
-//			umlMultiplicity.lower = 0
-//			umlMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
-//		}
-//		add correspondence between newCollectionDataType and umlElement tagged with tag
-//		call replaceTypeOfCorrespondingParameterOrProperty(newCollectionDataType.innerType_CollectionDataType, umlElement)
-//	}
-//}
-//
-//routine replaceTypeOfCorrespondingParameterOrProperty(pcm::DataType pcmSimpleType, uml::TypedElement umlElement){
-//	match {
-//		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.DATATYPE__TYPE
-//		val umlCompositeType = retrieve optional uml::Type corresponding to pcmSimpleType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-//	}
-//	action {
-//		update umlElement {
-//			umlElement.type = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
-//		}
-//	}
-//}
 
 routine setTypeOfUmlParameterOrProperty(
 		pcm::DataType pcmType, 

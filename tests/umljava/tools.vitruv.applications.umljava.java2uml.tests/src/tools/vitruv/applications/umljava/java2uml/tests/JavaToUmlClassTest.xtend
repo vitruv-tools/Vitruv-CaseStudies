@@ -43,7 +43,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 
 		val uClass = getCorrespondingClass(cls);
 		assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false,
-			getUmlRootModel(JavaToUmlHelper.rootModelFile))
+			registeredUmlModel)
 		assertClassEquals(uClass, cls)
 	}
 
@@ -72,7 +72,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 		EcoreUtil.delete(jClass)
 		saveAndSynchronizeChanges(comp)
 
-		val uClass = getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).head
+		val uClass = getUmlPackagedElementsbyName(Class, CLASS_NAME).head
 		assertNull(uClass)
 	}
 
@@ -86,7 +86,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 		assertNotNull(getCorrespondingClass(jClass))
 		deleteAndSynchronizeModel(compUnitFilePath)
 
-		assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).nullOrEmpty)
+		assertTrue(getUmlPackagedElementsbyName(Class, CLASS_NAME).nullOrEmpty)
 	}
 
 	/**
