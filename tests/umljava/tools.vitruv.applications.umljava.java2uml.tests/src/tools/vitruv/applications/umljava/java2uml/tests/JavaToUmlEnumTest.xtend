@@ -1,19 +1,20 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.classifiers.Enumeration
+import org.emftext.language.java.types.TypesFactory
+import org.junit.Before
+import org.junit.Test
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.junit.Before
-import static org.junit.Assert.*
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.junit.Test
-import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import org.eclipse.uml2.uml.VisibilityKind
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
-import org.emftext.language.java.types.TypesFactory
 
 /**
  * This class contains Tests for creating, deleting and renaming enums.
@@ -31,7 +32,7 @@ class JavaToUmlEnumTest extends Java2UmlTransformationTest {
     private static val OPERATION_NAME = "operationName"
     private static val ATTRIBUTE_NAME = "attributeName"
     private static val TYPECLASS = "TypeClass"
-    private static var org.emftext.language.java.classifiers.Enumeration jEnum
+    private static var Enumeration jEnum
     private static val enumConstants1 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_1)
     private static val enumConstants2 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2)
     

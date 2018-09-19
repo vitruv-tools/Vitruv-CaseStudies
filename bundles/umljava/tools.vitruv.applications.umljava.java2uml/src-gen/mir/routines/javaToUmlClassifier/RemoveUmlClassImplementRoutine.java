@@ -2,11 +2,10 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -29,14 +28,8 @@ public class RemoveUmlClassImplementRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final org.eclipse.uml2.uml.Class uClass, final InterfaceRealization uRealization) {
-      Interface _contract = null;
-      if (uRealization!=null) {
-        _contract=uRealization.getContract();
-      }
-      final Interface uInterface = _contract;
-      if ((uInterface != null)) {
-        UmlClassifierAndPackageUtil.removeUmlImplementedInterface(uClass, uInterface);
-      }
+      EList<InterfaceRealization> _interfaceRealizations = uClass.getInterfaceRealizations();
+      _interfaceRealizations.remove(uRealization);
     }
     
     public EObject getElement2(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final org.eclipse.uml2.uml.Class uClass, final InterfaceRealization uRealization) {

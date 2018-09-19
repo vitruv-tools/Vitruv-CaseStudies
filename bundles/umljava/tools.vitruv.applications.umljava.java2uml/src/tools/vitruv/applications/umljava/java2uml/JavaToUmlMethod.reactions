@@ -1,12 +1,14 @@
-import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*;
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
-import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
-import org.emftext.language.java.modifiers.Public
+import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.emftext.language.java.classifiers.Class
+import org.emftext.language.java.classifiers.Enumeration
+import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
-import org.emftext.language.java.containers.CompilationUnit
-import org.eclipse.uml2.uml.UMLPackage
-import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.emftext.language.java.modifiers.Public
+
+import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -21,15 +23,15 @@ execute actions in UML
 
 reaction JavaClassMethodCreated {
     after element java::ClassMethod created and inserted in java::ConcreteClassifier[members]
-    with (affectedEObject instanceof org.emftext.language.java.classifiers.Class)
-    || (affectedEObject instanceof org.emftext.language.java.classifiers.Enumeration)
+    with (affectedEObject instanceof Class)
+    || (affectedEObject instanceof Enumeration)
     call createUmlClassMethod(newValue, affectedEObject)
 }
 
 routine createUmlClassMethod(java::ClassMethod jMeth, java::ConcreteClassifier jClassifier) {
     match {
         val uClassifier = retrieve uml::Classifier corresponding to jClassifier
-		require absence of uml::Operation corresponding to jMeth // TODO existance check
+		require absence of uml::Operation corresponding to jMeth
     }
     action {
         val uOperation = create uml::Operation and initialize {
@@ -72,7 +74,7 @@ reaction JavaInterfaceMethodCreated {
 routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jInterface) {
     match {
         val uInterface = retrieve uml::Interface corresponding to jInterface
-		require absence of uml::Operation corresponding to jMeth // TODO existance check
+		require absence of uml::Operation corresponding to jMeth
     }
     action {
         val uOperation = create uml::Operation and initialize {
@@ -94,7 +96,7 @@ reaction JavaConstructorCreated {
 routine createUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
     match {
         val uClassifier = retrieve uml::Class corresponding to jClassifier
-		require absence of uml::Operation corresponding to jConstructor // TODO existance check
+		require absence of uml::Operation corresponding to jConstructor
     }
     action {
         val uConstructor = create uml::Operation and initialize {
@@ -198,7 +200,7 @@ reaction JavaParameterCreated {
 routine createUmlParameter(java::Parametrizable jMeth, java::OrdinaryParameter jParam) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
-		require absence of uml::Parameter corresponding to jParam // TODO existance check
+		require absence of uml::Parameter corresponding to jParam
     }
     action {
         val uParam = create uml::Parameter and initialize {
@@ -233,12 +235,9 @@ reaction JavaParameterTypeChanged {
 routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReference jType) {
     match {
         val uParam = retrieve uml::Parameter corresponding to jParam
-        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
     }
     action {
         update uParam {
-//            uParam.type = getUmlType(jType, uModel, correspondenceModel)
-        	// TODO type propagation changed
         	propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam, correspondenceModel)
         }
     }
@@ -252,18 +251,15 @@ reaction JavaReturnTypeChanged {
 routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
-        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
     }
     action {
 		update uOperation {
-		//             uOperation.type = getUmlType(jType, uModel, correspondenceModel)
 			var uParam = uOperation.getReturnResult
 			if (uParam === null){
 				// create a new return parameter
 				uParam = uOperation.createOwnedParameter("returnParameter", null)
 				uParam.direction = ParameterDirectionKind.RETURN_LITERAL
 			}
-        	// TODO type propagation changed
         	propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jMeth, correspondenceModel)
 		}
     }

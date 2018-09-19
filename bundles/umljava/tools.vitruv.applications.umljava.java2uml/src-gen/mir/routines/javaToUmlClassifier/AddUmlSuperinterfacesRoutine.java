@@ -5,8 +5,6 @@ import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Generalization;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.types.TypeReference;
@@ -23,17 +21,13 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceUModel(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface) {
-      return UMLPackage.Literals.MODEL;
-    }
-    
-    public EObject getCorrepondenceSource1(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface, final Model uModel, final org.eclipse.uml2.uml.Interface uInterface, final org.eclipse.uml2.uml.Interface uSuperInterface) {
+    public EObject getCorrepondenceSource1(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface, final org.eclipse.uml2.uml.Interface uInterface, final org.eclipse.uml2.uml.Interface uSuperInterface) {
       return jReference;
     }
     
-    public void executeAction1(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface, final Model uModel, final org.eclipse.uml2.uml.Interface uInterface, final org.eclipse.uml2.uml.Interface uSuperInterface, @Extension final RoutinesFacade _routinesFacade) {
-      if (((uSuperInterface != null) && (uSuperInterface instanceof org.eclipse.uml2.uml.Interface))) {
-        final Generalization uGeneralization = uInterface.createGeneralization(((org.eclipse.uml2.uml.Interface) uSuperInterface));
+    public void executeAction1(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface, final org.eclipse.uml2.uml.Interface uInterface, final org.eclipse.uml2.uml.Interface uSuperInterface, @Extension final RoutinesFacade _routinesFacade) {
+      if ((uSuperInterface != null)) {
+        final Generalization uGeneralization = uInterface.createGeneralization(uSuperInterface);
         _routinesFacade.addGeneralizationCorrespondence(uGeneralization, jReference);
       } else {
         Logger _logger = this.getLogger();
@@ -46,11 +40,11 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
       }
     }
     
-    public EObject getCorrepondenceSourceUSuperInterface(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface, final Model uModel, final org.eclipse.uml2.uml.Interface uInterface) {
+    public EObject getCorrepondenceSourceUSuperInterface(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface, final org.eclipse.uml2.uml.Interface uInterface) {
       return jSuperInterface;
     }
     
-    public EObject getCorrepondenceSourceUInterface(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface, final Model uModel) {
+    public EObject getCorrepondenceSourceUInterface(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface) {
       return jInterface;
     }
   }
@@ -73,19 +67,8 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     getLogger().debug("   jReference: " + this.jReference);
     getLogger().debug("   jSuperInterface: " + this.jSuperInterface);
     
-    org.eclipse.uml2.uml.Model uModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUModel(jInterface, jReference, jSuperInterface), // correspondence source supplier
-    	org.eclipse.uml2.uml.Model.class,
-    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
-    	null, 
-    	false // asserted
-    	);
-    if (uModel == null) {
-    	return false;
-    }
-    registerObjectUnderModification(uModel);
     org.eclipse.uml2.uml.Interface uInterface = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUInterface(jInterface, jReference, jSuperInterface, uModel), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUInterface(jInterface, jReference, jSuperInterface), // correspondence source supplier
     	org.eclipse.uml2.uml.Interface.class,
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null, 
@@ -96,7 +79,7 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     }
     registerObjectUnderModification(uInterface);
     org.eclipse.uml2.uml.Interface uSuperInterface = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUSuperInterface(jInterface, jReference, jSuperInterface, uModel, uInterface), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceUSuperInterface(jInterface, jReference, jSuperInterface, uInterface), // correspondence source supplier
     	org.eclipse.uml2.uml.Interface.class,
     	(org.eclipse.uml2.uml.Interface _element) -> true, // correspondence precondition checker
     	null, 
@@ -107,14 +90,14 @@ public class AddUmlSuperinterfacesRoutine extends AbstractRepairRoutineRealizati
     }
     registerObjectUnderModification(uSuperInterface);
     if (!getCorrespondingElements(
-    	userExecution.getCorrepondenceSource1(jInterface, jReference, jSuperInterface, uModel, uInterface, uSuperInterface), // correspondence source supplier
+    	userExecution.getCorrepondenceSource1(jInterface, jReference, jSuperInterface, uInterface, uSuperInterface), // correspondence source supplier
     	org.eclipse.uml2.uml.Generalization.class,
     	(org.eclipse.uml2.uml.Generalization _element) -> true, // correspondence precondition checker
     	null
     ).isEmpty()) {
     	return false;
     }
-    userExecution.executeAction1(jInterface, jReference, jSuperInterface, uModel, uInterface, uSuperInterface, this.getRoutinesFacade());
+    userExecution.executeAction1(jInterface, jReference, jSuperInterface, uInterface, uSuperInterface, this.getRoutinesFacade());
     
     postprocessElements();
     

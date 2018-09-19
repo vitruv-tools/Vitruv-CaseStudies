@@ -1,21 +1,21 @@
 package tools.vitruv.applications.umljava.util.java
 
 import java.util.List
+import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.emftext.language.java.classifiers.Classifier
-import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.generics.GenericsFactory
 import org.emftext.language.java.generics.QualifiedTypeArgument
+import org.emftext.language.java.types.ClassifierReference
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypedElement
 import org.emftext.language.java.types.TypesFactory
-import org.apache.log4j.Logger
-import org.emftext.language.java.types.ClassifierReference
+
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**

@@ -48,7 +48,7 @@ public class DetectOrCreateUmlModelRoutine extends AbstractRepairRoutineRealizat
       Model umlRootModel = null;
       if ((alreadyPersistedEObject == null)) {
         throw new UnsupportedOperationException(
-          "Can not persist an uml::Model from JavaToUml-reactions without any previously persisted elements.");
+          "Cannot persist/load an uml::Model from JavaToUml-reactions without any previously persisted elements.");
       }
       final URI uri = PersistenceHelper.getURIFromSourceProjectFolder(alreadyPersistedEObject, rootModelFile);
       boolean _existsResourceAtUri = URIUtil.existsResourceAtUri(uri);

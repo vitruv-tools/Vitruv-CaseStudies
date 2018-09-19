@@ -1,14 +1,16 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
-import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import org.junit.Before
-import org.junit.Test
-import static org.junit.Assert.*
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.After
+import org.junit.Before
 import org.junit.Ignore
+import org.junit.Test
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.
@@ -22,8 +24,8 @@ class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
     private static val PACKAGE_RENAMED = "packagerenamed"
     private static val CLASS_NAME = "ClassName"
     
-    private static var org.eclipse.uml2.uml.Package uPackageLevel1
-    private static var org.eclipse.uml2.uml.Class uClass
+    private static var Package uPackageLevel1
+    private static var Class uClass
     
     @Before
     def void before() {
@@ -31,17 +33,6 @@ class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
         uClass = createUmlClassAndAddToPackage(uPackageLevel1, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
         saveAndSynchronizeChanges(rootElement)
         
-    }
-    
-    @After
-    def void after() {
-        if (uPackageLevel1 !== null) {
-            uPackageLevel1.destroy
-        }
-        if (uClass !== null) {
-            uClass.destroy
-        }
-        saveAndSynchronizeChanges(rootElement)
     }
     
     @Test

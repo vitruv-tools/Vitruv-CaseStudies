@@ -29,8 +29,8 @@ public class AddUmlSuperClassGeneralizationRoutine extends AbstractRepairRoutine
     }
     
     public void executeAction1(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final org.emftext.language.java.classifiers.Class jSuperClass, final org.eclipse.uml2.uml.Class uClass, final org.eclipse.uml2.uml.Class uSuperClass, @Extension final RoutinesFacade _routinesFacade) {
-      if (((uSuperClass != null) && (uSuperClass instanceof org.eclipse.uml2.uml.Class))) {
-        final Generalization uGeneralization = uClass.createGeneralization(((org.eclipse.uml2.uml.Class) uSuperClass));
+      if ((uSuperClass != null)) {
+        final Generalization uGeneralization = uClass.createGeneralization(uSuperClass);
         _routinesFacade.addGeneralizationCorrespondence(uGeneralization, jReference);
       } else {
         Logger _logger = this.getLogger();

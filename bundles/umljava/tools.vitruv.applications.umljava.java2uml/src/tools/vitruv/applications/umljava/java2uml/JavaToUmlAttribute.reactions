@@ -1,7 +1,5 @@
-import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
+import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
-import org.eclipse.uml2.uml.UMLPackage
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -26,7 +24,7 @@ reaction JavaAttributeCreatedInEnum {
 routine createUmlAttributeInEnum(java::Enumeration jEnum, java::Field jAttr) {
     match {
         val uEnum = retrieve uml::Enumeration corresponding to jEnum
-        require absence of uml::Property corresponding to jAttr // TODO existance check
+        require absence of uml::Property corresponding to jAttr
     }
     action {
         val uAttr = create uml::Property and initialize {
@@ -42,7 +40,7 @@ routine createUmlAttributeInEnum(java::Enumeration jEnum, java::Field jAttr) {
 routine createUmlAttributeInClass(java::Class jClass, java::Field jAttr) {
     match {
         val uClass = retrieve uml::Class corresponding to jClass
-        require absence of uml::Property corresponding to jAttr  // TODO existance check
+        require absence of uml::Property corresponding to jAttr
     }
     action {
         val uAttr = create uml::Property and initialize {
@@ -68,7 +66,6 @@ routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
     }
     action {
         update uAttr {
-        	// TODO type propagation changed
         	propagateTypeChangeToTypedMultiplicityElement(uAttr, uAttr, jAttr, correspondenceModel)
         }
     }
@@ -102,5 +99,4 @@ routine setUmlAttributeFinal(java::Field jAttr, Boolean isFinal) {
 reaction JavaAttributeCreatedInInterface {
     after element java::Field created and inserted in java::Interface[members]
     call showMessage(userInteractor, "Adding fields to " + affectedEObject.class.simpleName +" is not supported. Please remove " + newValue)
-    
 }

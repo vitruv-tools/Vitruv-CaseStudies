@@ -1,19 +1,20 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
-import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static org.junit.Assert.*
+import org.eclipse.uml2.uml.Enumeration
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.types.TypesFactory
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.emftext.language.java.types.TypesFactory
-import org.junit.After
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
 
 /**
  * A Test class for creating, renaming and deleting enums.
@@ -31,26 +32,14 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	private static val OPERATION_NAME = "operationName"
 	private static val TYPE_CLASS = "TypeClass"
 	private static val ATTRIBUTE_NAME = "attributeName"
-	private static var org.eclipse.uml2.uml.Enumeration uEnum
+	private static var Enumeration uEnum
 	private static val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
 	private static val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
-    
-
-    
-    
 	
 	@Before
 	def void before() {
 		uEnum = createUmlEnumAndAddToPackage(rootElement, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, enumLiterals1)
 		saveAndSynchronizeChanges(uEnum)
-	}
-	
-	@After
-	def void after() {
-//		if (uEnum !== null) {
-//			uEnum.destroy
-//		}
-//		saveAndSynchronizeChanges(rootElement)
 	}
 	
 	@Test

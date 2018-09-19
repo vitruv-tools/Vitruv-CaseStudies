@@ -6,7 +6,6 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
-import tools.vitruv.applications.umljava.util.java.JavaTypeUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -90,7 +89,7 @@ public class JavaSuperClassChangedReaction extends AbstractReactionRealization {
       if ((oldValue != null)) {
         _routinesFacade.deleteUmlSuperClassGeneralization(oldValue);
       }
-      if (((newValue != null) && (JavaTypeUtil.getClassifierFromTypeReference(newValue) instanceof org.emftext.language.java.classifiers.Class))) {
+      if (((newValue != null) && (UmlJavaTypePropagationHelper.getClassifier(newValue) instanceof org.emftext.language.java.classifiers.Class))) {
         Classifier _classifier = UmlJavaTypePropagationHelper.getClassifier(newValue);
         final org.emftext.language.java.classifiers.Class jSuperClass = ((org.emftext.language.java.classifiers.Class) _classifier);
         _routinesFacade.addUmlSuperClassGeneralization(affectedEObject, newValue, jSuperClass);

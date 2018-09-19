@@ -1,16 +1,11 @@
-import java.util.ArrayList
-import java.util.Collection
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Property
-import org.emftext.language.java.types.TypeReference
-import tools.vitruv.domains.java.util.JavaModificationUtil
 
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import org.emftext.language.java.classifiers.ConcreteClassifier
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -38,7 +33,7 @@ reaction UmlAttributeCreatedInDataType {//Enum is a DataType
 routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttribute) {
     match {
         val jClassifier = retrieve java::ConcreteClassifier corresponding to uClassifier
-        require absence of java::Field corresponding to umlAttribute // TODO existance check
+        require absence of java::Field corresponding to umlAttribute
     }
     action {
         val javaAttribute = create java::Field and initialize {
@@ -50,10 +45,8 @@ routine createJavaAttribute(uml::Classifier uClassifier, uml::Property umlAttrib
         }
         add correspondence between umlAttribute and javaAttribute
         call {
-//        	if (uClassifier !== null && uClassifier instanceof org.eclipse.uml2.uml.Class){
-	            createJavaGetter(javaAttribute)
-	            createJavaSetter(javaAttribute)
-//        	}
+            createJavaGetter(javaAttribute)
+            createJavaSetter(javaAttribute)
 			changeJavaAttributeType(umlAttribute)
         }
     }
@@ -76,13 +69,12 @@ routine deleteJavaAttribute(uml::Property umlAttr) {
     action {
         call {
         	val uClassifier = umlAttr.eContainer
-        	if (uClassifier !== null && uClassifier instanceof org.eclipse.uml2.uml.Class){
+        	if (uClassifier !== null && uClassifier instanceof Class){
 	            removeJavaGettersOfAttribute(jAttr)
 	            removeJavaSettersOfAttribute(jAttr)
             }
         }
         delete jAttr
-        
     }
 }
 
@@ -102,8 +94,6 @@ routine setJavaAttributeFinal(uml::Property umlAttr) {
     }
 }
 
-// TODO changed umlAttribute type-/multiplicity-changed propagation
-// TODO check if guards help reduce unnecessary collection type requests
 reaction UmlAttributeTypeChanged {
     after element uml::Type replaced at uml::Property[type]
     call changeJavaAttributeType(affectedEObject)

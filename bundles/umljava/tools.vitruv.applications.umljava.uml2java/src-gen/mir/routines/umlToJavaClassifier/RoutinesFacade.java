@@ -6,7 +6,6 @@ import mir.routines.umlToJavaClassifier.AddJavaSuperClassRoutine;
 import mir.routines.umlToJavaClassifier.AddJavaSuperInterfaceRoutine;
 import mir.routines.umlToJavaClassifier.AddUmlModelCorrespondenceRoutine;
 import mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine;
-import mir.routines.umlToJavaClassifier.CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine;
 import mir.routines.umlToJavaClassifier.CheckIfUmlModelCorrespondenceExistsRoutine;
 import mir.routines.umlToJavaClassifier.CreateJavaClassImplementsReferenceRoutine;
 import mir.routines.umlToJavaClassifier.CreateJavaClassRoutine;
@@ -25,6 +24,7 @@ import mir.routines.umlToJavaClassifier.RenameJavaClassifierRoutine;
 import mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine;
 import mir.routines.umlToJavaClassifier.SetJavaClassAbstractRoutine;
 import mir.routines.umlToJavaClassifier.SetJavaClassFinalRoutine;
+import mir.routines.umlToJavaClassifier.WarnUserToUsePredefinedPrimitiveTypesRoutine;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
@@ -33,7 +33,6 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Namespace;
-import org.eclipse.uml2.uml.PrimitiveType;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.types.TypeReference;
@@ -242,11 +241,11 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean checkIfCorrespondingJavaPrimitiveTypeExists(final PrimitiveType uPrimType) {
+  public boolean warnUserToUsePredefinedPrimitiveTypes() {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine routine = new CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine(_routinesFacade, _reactionExecutionState, _caller, uPrimType);
+    WarnUserToUsePredefinedPrimitiveTypesRoutine routine = new WarnUserToUsePredefinedPrimitiveTypesRoutine(_routinesFacade, _reactionExecutionState, _caller);
     return routine.applyRoutine();
   }
 }

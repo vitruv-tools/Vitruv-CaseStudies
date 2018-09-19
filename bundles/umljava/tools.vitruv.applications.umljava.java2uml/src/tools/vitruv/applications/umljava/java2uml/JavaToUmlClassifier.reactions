@@ -1,14 +1,13 @@
-import static extension tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import org.emftext.language.java.classifiers.Interface;
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*;
-import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*;
-import org.eclipse.uml2.uml.UMLPackage
-import org.eclipse.uml2.uml.Model
-import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
+import org.eclipse.uml2.uml.UMLPackage
+import org.emftext.language.java.classifiers.Class
+import org.emftext.language.java.classifiers.Interface
+import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
+
+import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -21,7 +20,6 @@ execute actions in UML
 //=========================================== Class
 //===========================================
 
-// TODO new routine to handle uml::Model initialization in java -> uml reactions
 routine detectOrCreateUmlModel(EObject alreadyPersistedEObject){
 	match {
 		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
@@ -44,19 +42,20 @@ routine detectOrCreateUmlModel(EObject alreadyPersistedEObject){
 			if(alreadyPersistedEObject === null){
 				// no objects persisted jet -> can't automatically retrieve projectPath
 				throw new UnsupportedOperationException(
-					"Can not persist an uml::Model from JavaToUml-reactions without any previously persisted elements."
+					"Cannot persist/load an uml::Model from JavaToUml-reactions without any previously persisted elements."
 				);
 			}
 			val uri = PersistenceHelper.getURIFromSourceProjectFolder(alreadyPersistedEObject, rootModelFile) 
 			if(URIUtil.existsResourceAtUri(uri)){ 
-				// TODO the resource is only found if it was previously persisted, wich only happens after the change propagation terminates 
+				// The resource is only found if it was previously persisted, which only happens after the change propagation terminates.
+				// This should not be a problem, as long as any created model is registered on creation, to prevent creating a second one.
 				val resource = alreadyPersistedEObject.eResource.resourceSet.getResource(uri,true)
 				umlRootModel = resource.allContents.filter(Model).head				
 			}
-			if(umlRootModel === null){ //the resource didn't exist, or did not contain a uml::Model object
+			if(umlRootModel === null){ 
+				//the resource didn't exist, or did not contain a uml::Model object
 				umlRootModel = UMLFactory.eINSTANCE.createModel
 				umlRootModel.name = userModelName;
-				
 				persistProjectRelative(alreadyPersistedEObject, umlRootModel, rootModelFile)
 			}
 			if(umlRootModel !== null){
@@ -87,7 +86,7 @@ reaction JavaClassCreated {
 
 routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
 	match {
-		require absence of uml::Class corresponding to jClass // TODO existance check
+		require absence of uml::Class corresponding to jClass
 	}
     action {
         val uClass = create uml::Class and initialize {
@@ -171,14 +170,13 @@ routine setUmlClassFinal(java::Class jClass, Boolean isFinal) {
     }
 }
 
-// TODO java super class propagation changed
 reaction JavaSuperClassChanged {
     after element java::TypeReference replaced at java::Class[^extends]
     call {
     	if (oldValue !== null)
     		deleteUmlSuperClassGeneralization(oldValue)
-    	if (newValue !== null && getClassifierFromTypeReference(newValue) instanceof org.emftext.language.java.classifiers.Class){
-    		val jSuperClass = getClassifier(newValue) as org.emftext.language.java.classifiers.Class
+    	if (newValue !== null && getClassifier(newValue) instanceof Class){
+    		val jSuperClass = getClassifier(newValue) as Class
     		addUmlSuperClassGeneralization(affectedEObject, newValue, jSuperClass)
     	}
     }
@@ -187,18 +185,13 @@ reaction JavaSuperClassChanged {
 routine addUmlSuperClassGeneralization(java::Class jClass, java::TypeReference jReference, java::Class jSuperClass){
 	match {
 		val uClass = retrieve uml::Class corresponding to jClass
-//        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 		val uSuperClass = retrieve uml::Class corresponding to jSuperClass
 		require absence of uml::Generalization corresponding to jReference
-        //We can not retrieve the corresponding Uml-SuperClass here because the
-        //jSuperClass doesn't need to reference the 'real' jSuperClass-Element
 	}
 	action {
 		execute {
-//			val jSuperClass = getClassifierFromTypeReference(jReference) as org.emftext.language.java.classifiers.Class
-//            val uSuperClass = getUmlType(jSuperClass, uModel, correspondenceModel)
-            if (uSuperClass !== null && uSuperClass instanceof org.eclipse.uml2.uml.Class) {
-                val uGeneralization = uClass.createGeneralization(uSuperClass as org.eclipse.uml2.uml.Class)
+            if (uSuperClass !== null) {
+                val uGeneralization = uClass.createGeneralization(uSuperClass)
                 addGeneralizationCorrespondence(uGeneralization, jReference)
             } else {
                 logger.warn("Could not add " + jSuperClass.name + " as super class for " + uClass + " because the corresponding UML-SuperClass is null")
@@ -217,34 +210,28 @@ routine deleteUmlSuperClassGeneralization(java::TypeReference jReference){
 	}
 }
 
-
-// TODO java interface implemented propagation changed
 reaction JavaClassImplementAdded {
     after element java::TypeReference created and inserted in java::Class[implements]
     call{
     	val jInterface = getClassifier(newValue) as Interface
-	    addUmlClassImplement(affectedEObject, newValue, jInterface)//getClassifierFromTypeReference(newValue))
+	    addUmlClassImplement(affectedEObject, newValue, jInterface)
     } 
 }
 
 routine addUmlClassImplement(java::Class jClass, java::TypeReference jReference, java::Interface jInterface) {
     match {
         val uClass = retrieve uml::Class corresponding to jClass
-//        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 		val uInterface = retrieve uml::Interface corresponding to jInterface
-        require absence of uml::InterfaceRealization corresponding to jReference // TODO existance check
-        //We can not retrieve the corresponding Uml-Interface here because the
-        //jInterface doesn't need to reference the 'real' jInterface-Element
+        require absence of uml::InterfaceRealization corresponding to jReference
     }
     action {
         execute {
-//        	val jInterface = getClassifierFromTypeReference(jReference)
-//            val uInterface = getUmlType(jInterface, uModel, correspondenceModel)
             if (uInterface !== null) {
                 val uRealization = uClass.createInterfaceRealization(uInterface.name + uInterface.name, uInterface)
                 addImplementsCorrespondence(jReference, uRealization)
             } else {
-                logger.warn("Could not add " + jInterface.name + " as implemented interface for " + uClass + " because the corresponding UML-Interface is null")
+                logger.warn("Could not add " + jInterface.name + " as implemented interface for " + uClass 
+                	+ " because the corresponding UML-Interface is null")
             }
             
         }
@@ -272,16 +259,16 @@ routine removeUmlClassImplement(java::Class jClass, java::TypeReference jReferen
     }
     action {
         update uClass {
-            val uInterface = uRealization?.contract
-            if (uInterface !== null) {
-                uClass.removeUmlImplementedInterface(uInterface)
-            }
+        	// TODO replaced tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+//            val uInterface = uRealization?.contract
+//            if (uInterface !== null) {
+//                uClass.removeUmlImplementedInterface(uInterface)
+//            }
+            uClass.interfaceRealizations -= uRealization
         }
         delete uRealization
     }
 }
-
-// TODO handle ReferenceChanges for java::TypeReferences that correspond to uml::InterfaceRealization and uml::Generalization respectively
 
 //===========================================
 //=========================================== Interface
@@ -298,7 +285,7 @@ reaction JavaInterfaceCreated {
 
 routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCompUnit) {
 	match {
-		require absence of uml::Interface corresponding to jInterface // TODO existance check
+		require absence of uml::Interface corresponding to jInterface
 	}
     action {
         val uInterface = create uml::Interface and initialize {
@@ -312,7 +299,6 @@ routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCo
     }
 }
 
-// TODO java super interface propagation changed
 reaction JavaSuperInterfaceAdded {
     after element java::TypeReference inserted in java::Interface[^extends]
     call {
@@ -323,26 +309,19 @@ reaction JavaSuperInterfaceAdded {
 
 routine addUmlSuperinterfaces(java::Interface jInterface, java::TypeReference jReference, java::Interface jSuperInterface) {
     match {
-        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
         val uInterface = retrieve uml::Interface corresponding to jInterface
         val uSuperInterface = retrieve uml::Interface corresponding to jSuperInterface
-        //We can not retrieve the corresponding Uml-SuperInterface here because the
-        //jSuperInterface doesn't need to reference the 'real' jSuperInterface-Element
         require absence of uml::Generalization corresponding to jReference
     }
     action {
         execute {
-        	// TODO changed to direct retrieve
-//        	val jSuperInterface = getClassifierFromTypeReference(jReference)
-//            val uSuperInterface = getUmlType(jSuperInterface, uModel, correspondenceModel)
-            if (uSuperInterface !== null && uSuperInterface instanceof org.eclipse.uml2.uml.Interface) {
-//                uInterface.addUmlSuperClassifier(uSuperInterface as org.eclipse.uml2.uml.Interface)
-            	val uGeneralization = uInterface.createGeneralization(uSuperInterface as org.eclipse.uml2.uml.Interface)
+            if (uSuperInterface !== null) {
+            	val uGeneralization = uInterface.createGeneralization(uSuperInterface)
             	addGeneralizationCorrespondence(uGeneralization, jReference)
             } else {
-                logger.warn("Could not add " + jSuperInterface.name + " as super interface for " + uInterface + " because the corresponding UML-Superinterface is null")
+                logger.warn("Could not add " + jSuperInterface.name + " as super interface for " + uInterface 
+                	+ " because the corresponding UML-Superinterface is null")
             }
-            
         }
     }
 }
@@ -388,7 +367,7 @@ reaction JavaPackageCreated {
 routine createUmlPackage(java::Package jPackage) {
 	match {
         val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
-		require absence of uml::Package corresponding to jPackage // TODO existance check
+		require absence of uml::Package corresponding to jPackage
 	}
 	action {
 		val uPackage = create uml::Package and initialize {
@@ -399,6 +378,7 @@ routine createUmlPackage(java::Package jPackage) {
 		    if (jPackage.namespaces.nullOrEmpty) {
 		        addUmlElementToPackage(uPackage, uModel)
 		    } else {
+		    	// find package by name is necessary, since jPackage does not explicitly model parent-child package relations 
 		        addUmlElementToPackage(uPackage, findUmlPackage(correspondenceModel, jPackage.namespaces.last))
 		    }
 		}
@@ -448,7 +428,9 @@ routine removeUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier
     }
     action {
         update uPackage {
-            removePackagedElementFromPackage(uPackage, uClassifier)
+//        	TODO replace tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+//            removePackagedElementFromPackage(uPackage, uClassifier)
+            uPackage.packagedElements -= uClassifier
         }
     }
 }
@@ -484,7 +466,7 @@ reaction JavaEnumCreated {
 
 routine createUmlEnum(java::Enumeration jEnum, java::CompilationUnit jCompUnit) {
 	match {
-		require absence of uml::Enumeration corresponding to jEnum // TODO existance check
+		require absence of uml::Enumeration corresponding to jEnum
 	}
     action {
         val uEnum = create uml::Enumeration and initialize {
@@ -506,7 +488,7 @@ reaction JavaEnumConstantCreated {
 routine createUmlEnumLiteral(java::Enumeration jEnum, java::EnumConstant jConstant) {
     match {
         val uEnum = retrieve uml::Enumeration corresponding to jEnum
-		require absence of uml::EnumerationLiteral corresponding to jConstant // TODO existance check
+		require absence of uml::EnumerationLiteral corresponding to jConstant
     }
     action {
         val uLiteral = create uml::EnumerationLiteral and initialize {

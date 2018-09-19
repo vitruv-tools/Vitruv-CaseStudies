@@ -9,6 +9,7 @@ import java.util.Optional
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.MultiplicityElement
@@ -37,8 +38,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import org.eclipse.emf.ecore.resource.ResourceSet
 
 /**
  * Helper class for the Uml <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -54,7 +53,7 @@ class UmlJavaTypePropagationHelper {
     public static val UML_PRIMITIVE_INTEGER_TAG = "Integer"
     public static val UML_PRIMITIVE_STRING_TAG = "String"
     
-    public static def List<PrimitiveType> getSupoortedPredefinedUmlPrimitiveTypes(ResourceSet rs){
+    public static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(ResourceSet rs){
     	var List<PrimitiveType> umlPrimitiveTypes = #[]
 		val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
 		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
@@ -65,7 +64,7 @@ class UmlJavaTypePropagationHelper {
     }
     
     public static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm){
-		var List<PrimitiveType> umlPrimitiveTypes = getSupoortedPredefinedUmlPrimitiveTypes(cm.resource.resourceSet)
+		var List<PrimitiveType> umlPrimitiveTypes = getSupportedPredefinedUmlPrimitiveTypes(cm.resource.resourceSet)
 		for (primitive : umlPrimitiveTypes){
 			val alreadyRegistered = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, primitive.name, PrimitiveType).head
 			if (alreadyRegistered === null) 
@@ -137,7 +136,7 @@ class UmlJavaTypePropagationHelper {
 			classifier = EcoreUtil.resolve(classifier, resSet) as Classifier
 		}
 		//normalize
-		normalizeURI(classifier) // TODO is this really necessary? slowdown and errors for bigger classes like ArrayList
+		normalizeURI(classifier)
 		return classifier
 	}
 	def static dispatch Classifier getClassifier(NamespaceClassifierReference jRef){
@@ -205,7 +204,7 @@ class UmlJavaTypePropagationHelper {
 	}
 	
 	def static org.emftext.language.java.types.PrimitiveType unwrapWrappedPrimitiveType(TypeReference jRef){
-		val classifier = getClassifierFromTypeReference(jRef)
+		val classifier = getClassifier(jRef)
 		if (classifier === null) return null
 		val qualifiedName = getQualifiedName(classifier)
 		
@@ -322,13 +321,14 @@ class UmlJavaTypePropagationHelper {
 		}
 		
 		val targetNamespace = if (jType.containingCompilationUnit !== null) jType.containingCompilationUnit.namespaces.join(".") else ""
-		val qualifiedName = if (targetNamespace != "") targetNamespace + "." + jType.name else jType.name
+		val qualifiedName = getQualifiedName(jType)
 		
-		val samePackage = false // TODO targetNamespace.equals(compUnit.namespaces.join("."))
+		// ignored samePackage, so that move-changes of a compilationUnit can be more easily remedied, because the import still exists
+		val samePackage = false // targetNamespace.equals(compUnit.namespaces.join(".")) 
 		val alreadyImported = compUnit.imports.filterNull.filter(ClassifierImport).exists[
-			it.classifier.name == jType.name
 			// EcoreUtil.equals(it.classifier, jType) 
 			// compares all features and internal references (which is expensive for real classes like ArrayList)
+			it.classifier.name == jType.name // instead of EcureUtil.equals; this does not consider namespaces
 		]
 		if (!samePackage && !alreadyImported) {
 			val classifierImport = ImportsFactory.eINSTANCE.createClassifierImport

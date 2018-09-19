@@ -3,9 +3,7 @@ package mir.routines.javaToUmlMethod;
 import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.UMLPackage;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
@@ -26,15 +24,11 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
       return jParam;
     }
     
-    public EObject getCorrepondenceSourceUModel(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
-      return UMLPackage.Literals.MODEL;
-    }
-    
-    public EObject getElement1(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam, final Model uModel) {
+    public EObject getElement1(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
       return uParam;
     }
     
-    public void update0Element(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam, final Model uModel) {
+    public void update0Element(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
       UmlJavaTypePropagationHelper.propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam, this.correspondenceModel);
     }
   }
@@ -65,19 +59,8 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
     	return false;
     }
     registerObjectUnderModification(uParam);
-    org.eclipse.uml2.uml.Model uModel = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceUModel(jParam, jType, uParam), // correspondence source supplier
-    	org.eclipse.uml2.uml.Model.class,
-    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
-    	null, 
-    	false // asserted
-    	);
-    if (uModel == null) {
-    	return false;
-    }
-    registerObjectUnderModification(uModel);
-    // val updatedElement userExecution.getElement1(jParam, jType, uParam, uModel);
-    userExecution.update0Element(jParam, jType, uParam, uModel);
+    // val updatedElement userExecution.getElement1(jParam, jType, uParam);
+    userExecution.update0Element(jParam, jType, uParam);
     
     postprocessElements();
     

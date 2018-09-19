@@ -1,18 +1,19 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import org.eclipse.uml2.uml.VisibilityKind
-import org.eclipse.emf.ecore.util.EcoreUtil
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 
 /**
  * A Test class to test classes and their traits.

@@ -13,7 +13,6 @@ import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
-import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
@@ -186,9 +185,9 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.deleteJavaPackage(uPackage);
   }
   
-  public boolean checkIfCorrespondingJavaPrimitiveTypeExists(final PrimitiveType uPrimType) {
+  public boolean warnUserToUsePredefinedPrimitiveTypes() {
     mir.routines.umlToJavaClassifier.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaClassifier")));
-    return _routinesFacade.checkIfCorrespondingJavaPrimitiveTypeExists(uPrimType);
+    return _routinesFacade.warnUserToUsePredefinedPrimitiveTypes();
   }
   
   public boolean createJavaMethod(final Classifier uClassifier, final Operation uOperation) {
