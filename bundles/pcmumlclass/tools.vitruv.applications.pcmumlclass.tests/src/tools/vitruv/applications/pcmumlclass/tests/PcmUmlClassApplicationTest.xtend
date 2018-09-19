@@ -38,7 +38,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	protected var PcmUmlClassApplicationTestHelper helper
 	
 	override protected setup() {
-		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, resourceSet)
+		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri | uri.getModelElement], [uri | uri.modelResource])
 	}
 	
 	override protected cleanup() {
@@ -69,7 +69,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		stopRecordingChanges(modelElement) 
 		val resourceURI = modelElement.eResource.URI
 		modelElement.eResource.unload
-		val rootElement = resourceSet.getResource(resourceURI,true).contents.head
+		val rootElement = getModelResource(resourceURI).contents.head
 		if(rootElement !== null){
 			startRecordingChanges(rootElement) // calls changeRecorder.addToRecording -> calls registerContentsAtUuidResolver
 		}

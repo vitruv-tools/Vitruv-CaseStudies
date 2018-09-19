@@ -26,6 +26,9 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
 import static org.junit.Assert.*
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.junit.Before
 
 class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 
@@ -41,11 +44,22 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	private static val UML_GENERATED_MEDIA_STORE_MODEL_PATH_2 = "model-gen/ms_repository_backward.uml"
 	private static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2 = "model-gen/ms_repository_backward.repository"
 
+	private var ResourceSet testResourceSet;
+	
+	@Before
+	public def void before() {
+		testResourceSet = new ResourceSetImpl();
+	}
+
+	private def getTestResource(URI uri) {
+		return testResourceSet.getResource(uri, true)
+	}
+
 	@Test
 	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML() {
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
-		val pcmMsRepositoryResource = resourceSet.getResource(uri,true)
+		val pcmMsRepositoryResource = uri.testResource
 		assertNotNull(pcmMsRepositoryResource)
 		val pcmMsRepository = pcmMsRepositoryResource.contents.head as Repository
 		assertNotNull(pcmMsRepository)
@@ -60,7 +74,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_UML2PCM() {
 		val uri = URI.createURI(UML_MEDIA_STORE_REPOSITORY_PATH)
-		val umlMsRepositoryResource = resourceSet.getResource(uri,true)
+		val umlMsRepositoryResource = uri.testResource
 		assertNotNull(umlMsRepositoryResource)
 		val umlMsModel = umlMsRepositoryResource.contents.head as Model
 		assertNotNull(umlMsModel)
@@ -72,7 +86,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	def void testMediaStoreRepositoryCreation_PCM2UML2PCM() {
 		// forwards
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
-		val pcmMsRepositoryResource = resourceSet.getResource(uri,true)
+		val pcmMsRepositoryResource = uri.testResource
 		assertNotNull(pcmMsRepositoryResource)
 		val pcmMsRepository = pcmMsRepositoryResource.contents.head as Repository
 		assertNotNull(pcmMsRepository)
@@ -83,7 +97,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
 		// backwards 
-		val umlMsRepositoryResource = getModelResource(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
+		val umlMsRepositoryResource = UML_GENERATED_MEDIA_STORE_MODEL_PATH.modelVuri.EMFUri.testResource
 		assertNotNull(umlMsRepositoryResource)
 		val umlMsModel = umlMsRepositoryResource.contents.head as Model
 		assertNotNull(umlMsModel)
@@ -93,7 +107,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		
 		val comparison = compare(
-			resourceSet.getResource(URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH),true), 
+			URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH).testResource, 
 			getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		)
 		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
@@ -121,7 +135,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
-		val umlRepo_backward = getModelResource(UML_GENERATED_MEDIA_STORE_MODEL_PATH).contents.head as Model
+		val umlRepo_backward = UML_GENERATED_MEDIA_STORE_MODEL_PATH.modelVuri.EMFUri.testResource.contents.head as Model
 		simulateRepositoryInsertion_UML(umlRepo_backward, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
@@ -152,7 +166,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
-		val pcmRepo_forward = getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH).contents.head as Repository
+		val pcmRepo_forward = PCM_GENERATED_MEDIA_STORE_MODEL_PATH.modelVuri.EMFUri.testResource.contents.head as Repository
 		simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)

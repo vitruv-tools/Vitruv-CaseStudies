@@ -18,8 +18,13 @@ import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.RepositoryFactory
+import java.util.function.Function
+import org.eclipse.emf.ecore.resource.Resource
 
 class PcmUmlClassHelper {
+	private static val PCM_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository");
+	private static val UML_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml");
+	
 	private new(){}
 	
 	def public static getPcmPrimitiveTypes(EObject alreadyPersistedObject){
@@ -30,23 +35,33 @@ class PcmUmlClassHelper {
 		return getUmlPrimitiveTypes(alreadyPersistedObject.eResource.resourceSet)
 	}
 	
+	def public static getPcmPrimitiveTypes(Function<URI, Resource> resourceRetriever) {
+		val resource = resourceRetriever.apply(PCM_PRIMITIVE_TYPES_URI)
+		val pcmPrimitiveTypes = resource.allContents.filter(PrimitiveDataType).toList
+		return pcmPrimitiveTypes
+	}
+	
 	def public static getPcmPrimitiveTypes(ResourceSet resourceSet){
 		var List<PrimitiveDataType> pcmPrimitiveTypes = #[]
-		val uri = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository")
 //		val uri = URI.createURI("platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository")
 		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
-			val resource = resourceSet.getResource(uri,true)
+			val resource = resourceSet.getResource(PCM_PRIMITIVE_TYPES_URI,true)
 			pcmPrimitiveTypes = resource.allContents.filter(PrimitiveDataType).toList				
 		}
 		return pcmPrimitiveTypes
 	}
 	
+	def public static getUmlPrimitiveTypes(Function<URI, Resource> resourceRetriever) {
+		val resource = resourceRetriever.apply(UML_PRIMITIVE_TYPES_URI)
+		val umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList
+		return umlPrimitiveTypes
+	}
+	
 	def public static getUmlPrimitiveTypes(ResourceSet resourceSet){
 		var List<PrimitiveType> umlPrimitiveTypes = #[]
-		val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
 //		val uri = URI.createURI("platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml")
 		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
-			val resource = resourceSet.getResource(uri,true)
+			val resource = resourceSet.getResource(UML_PRIMITIVE_TYPES_URI,true)
 			umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList		
 		}
 		return umlPrimitiveTypes
