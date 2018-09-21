@@ -38,6 +38,8 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
+import java.util.function.Function
+import org.eclipse.emf.ecore.resource.Resource
 
 /**
  * Helper class for the Uml <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -59,6 +61,16 @@ class UmlJavaTypePropagationHelper {
 		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
 			val resource = rs.getResource(uri,true)
 			umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList		
+		}
+		return umlPrimitiveTypes
+    }
+    
+    public static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(Function<URI, Resource> resourceRetriever){
+    	var List<PrimitiveType> umlPrimitiveTypes = #[]
+		val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
+		val resource = resourceRetriever.apply(uri)
+		if (resource !== null){
+			umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList
 		}
 		return umlPrimitiveTypes
     }

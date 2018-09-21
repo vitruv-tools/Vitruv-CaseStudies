@@ -29,6 +29,7 @@ import static org.junit.Assert.*
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.junit.Before
+import org.junit.After
 
 class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 
@@ -53,6 +54,11 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 
 	private def getTestResource(URI uri) {
 		return testResourceSet.getResource(uri, true)
+	}
+	
+	@After
+	public def void after() {
+		testResourceSet = null
 	}
 
 	@Test
@@ -82,7 +88,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-	@Ignore //skip until needed because of performance
+//	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML2PCM() {
 		// forwards
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
@@ -107,19 +113,18 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		
 		val comparison = compare(
-			URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH).testResource, 
-			getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+			URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH), 
+			PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2.modelVuri.EMFUri
 		)
 		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
 		// expected (and found deltas):
 		//	- each PCM element has a different id since it is unique and those are newly generated elements
-		//	- TODO PrimitiveType references are unset, because their synchronization does not work yet
 		//	- Parameter modifiers are set to INOUT, because UML has no enum element for NONE
 		//	- FailureType is lost, because it is not propagated (limited scope of this master's thesis)
 	}
 	
 	@Test
-//	@Ignore
+	@Ignore
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_PCM2UML2PCM() {
 		var pcmRepo_forward = RepositoryFactory.eINSTANCE.createRepository
 		pcmRepo_forward.entityName = "TestRepository"
@@ -143,6 +148,11 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		
 		val pcmRepo_backward = getModelResource(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2).contents.head as Repository
 		val comparison = compare(pcmRepo_forward, pcmRepo_backward)
+		val differences = comparison.differences
+		
+		val comparison2 = compare(PCM_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
+		val c2_diffs = comparison2.differences
+		
 		//expect 3 differences - thats the result if no type is set, because of id changes
 		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 3, comparison.differences.size)
 		// TODO the pcmInnerDeclaration.datatype_InnerDeclaration is set to null if it was a PrimitiveDataType:
@@ -151,7 +161,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-//	@Ignore
+	@Ignore
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_UML2PCM2UML() {
 		var umlRepo_forward = UMLFactory.eINSTANCE.createModel
 		umlRepo_forward.name = "umlrootmodel"
@@ -175,36 +185,13 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		val comparison = compare(umlRepo_forward, umlRepo_backward)
 		//expect 0 differences because there are no changed IDs on the uml side
 		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
-		// TODO the umlProperty.type is set to null if it was a PrimitiveType:
-		//		The pcm::PrimitiveDataType gets a different UUID on the backwards propagation and therefore the correspondence cannot be resolved.
-		// 		Maybe this happens because a second instance of the uml::PrimitiveType is created in memory?
 	}
-	
 	
 	private def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath){
 		val originalRepository = inOriginalRepository
-		val originalComponentList = originalRepository.components__Repository.clone.toList
-		// insert ProvidedRoles later one by one, to avoid TUID collisions
-		val originalComponentProvidedRoleMap = new HashMap<String, List<ProvidedRole>>()
-		for (originalComponent : originalRepository.components__Repository){
-			originalComponentProvidedRoleMap.put(originalComponent.entityName, originalComponent.providedRoles_InterfaceProvidingEntity.clone.toList)
-			originalComponent.providedRoles_InterfaceProvidingEntity.clear
-		}
-		
 		userInteractor.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
 		createAndSynchronizeModel(pcmOutputPath, originalRepository)
 		var generatedRepository = reloadResourceAndReturnRoot(originalRepository) as Repository
-		
-		// now insert ProvidedRoles one by one and synchronize in between, to avoid TUID collisions
-		for (originalComponent : originalComponentList){
-			for (originalPrividedRole : originalComponentProvidedRoleMap.getOrDefault(originalComponent.entityName, new ArrayList<ProvidedRole>())){
-				val generatedComponent = generatedRepository.components__Repository.findFirst[it.entityName == originalComponent.entityName]
-				assertNotNull(generatedComponent)
-				generatedComponent.providedRoles_InterfaceProvidingEntity += originalPrividedRole
-				saveAndSynchronizeChanges(generatedRepository)
-				generatedRepository = reloadResourceAndReturnRoot(generatedRepository) as Repository
-			}
-		}
 		return generatedRepository 
 	}
 	
@@ -372,7 +359,24 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		return generatedModel
 	}
 	
-	public def Comparison compare(Notifier original, Notifier generated) {
+	public def Comparison compare(String original_withinProjektPath, String generated_withinProjektPath){
+		val originalUri = original_withinProjektPath.modelVuri.EMFUri
+		val generatedUri = generated_withinProjektPath.modelVuri.EMFUri
+		return compare(originalUri, generatedUri)
+	}
+	
+	/**
+	 * Compare the root elements at the specified URIs, by first loading them into a temporary ResourceSet 
+	 * to make sure they are consistent with the disk state.
+	 */
+	public def Comparison compare(URI originalUri, URI generatedUri){
+		val resourceSet = new ResourceSetImpl()
+		val original = resourceSet.getResource(originalUri, true).contents.head
+		val generated = resourceSet.getResource(generatedUri, true).contents.head
+		return compare(original, generated)
+	}
+	
+	private def Comparison compare(Notifier original, Notifier generated) {
 		val comparator = EMFCompare.builder().build();
 		val scope = new DefaultComparisonScope(original, generated, original)
 		return comparator.compare(scope);

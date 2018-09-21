@@ -42,7 +42,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	}
 	
 	override protected cleanup() {
-		//not used so that test-projects can be checked manually for easier debugging
+		helper = null
 	}
 	
 	

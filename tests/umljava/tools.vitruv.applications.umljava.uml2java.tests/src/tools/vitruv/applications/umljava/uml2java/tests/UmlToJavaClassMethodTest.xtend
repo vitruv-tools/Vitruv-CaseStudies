@@ -47,7 +47,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     def void before() {
         uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
         typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
-        pType = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceSet).findFirst[it.name=="Integer"]
+        pType = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
         uParam = createUmlParameter(PARAMETER_NAME, pType)
         uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
         uClass.ownedOperations += uOperation;

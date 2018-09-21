@@ -18,6 +18,10 @@ import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import java.util.function.Function
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.EObject
 
 /**
  * Test class for testing the attribute reactions.
@@ -33,7 +37,7 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     
     private static var Field jAttr
     private static var Class jClass
-    private static var Class typeClass
+    private static var Class typeClass 
     
     /**
      * Initializes two java classes. One class contains an attribute.
@@ -61,7 +65,7 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         
         val uAttr = getCorrespondingAttribute(attr)
         val uClass = getCorrespondingClass(jClass)
-        val umlInteger = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceSet).findFirst[it.name == "Integer"]
+        val umlInteger = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
         assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlInteger,
             false, false, uClass, null, null)
         assertAttributeEquals(uAttr, attr)
