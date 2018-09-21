@@ -85,8 +85,8 @@ class PcmUmlClassHelper {
 				case IN: ParameterDirectionKind.IN_LITERAL
 				case OUT: ParameterDirectionKind.OUT_LITERAL
 				case INOUT: ParameterDirectionKind.INOUT_LITERAL
-				case NONE: ParameterDirectionKind.INOUT_LITERAL
-				default: ParameterDirectionKind.INOUT_LITERAL}
+				case NONE: ParameterDirectionKind.IN_LITERAL
+				default: ParameterDirectionKind.IN_LITERAL}
 	}
 	
 	/**
