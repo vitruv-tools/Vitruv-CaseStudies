@@ -12,8 +12,7 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	should be set for uml::InterfaceRealization[contract] of the IPRE implementation class.
 //
 //	Related files: 
-//		PcmProvidedRole.reactions, 
-//		UmlProvidedRoleRealization.reactions,
+//		PcmProvidedRole.reactions,
 //		ProvidedRoleTest
 
 reactions: umlProvidedRoleRealizationReactions

@@ -28,7 +28,7 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public void executeAction1(final Parameter umlParameter, final Optional<OperationSignature> pcmSignature, final Optional<org.palladiosimulator.pcm.repository.Parameter> pcmParameter, final Optional<CollectionDataType> pcmCollectionType, @Extension final RoutinesFacade _routinesFacade) {
+    public void executeAction1(final Parameter umlParameter, final Optional<OperationSignature> pcmSignature, final Optional<org.palladiosimulator.pcm.repository.Parameter> pcmParameter, final Optional<CollectionDataType> pcmOldCollectionType, @Extension final RoutinesFacade _routinesFacade) {
       if ((pcmSignature.isPresent() || pcmParameter.isPresent())) {
         CDOObject _xifexpression = null;
         boolean _isPresent = pcmSignature.isPresent();
@@ -50,8 +50,7 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
           org.palladiosimulator.pcm.repository.Parameter _get_1 = pcmParameter.get();
           _get_1.setDataType__Parameter(pcmDataType);
         }
-        boolean _isPresent_3 = pcmCollectionType.isPresent();
-        if (_isPresent_3) {
+        if ((pcmOldCollectionType.isPresent() && (pcmOldCollectionType.get() != pcmDataType))) {
           _routinesFacade.removeCorrespondenceForOldCollectionType_Parameter(umlParameter);
         }
         if ((pcmDataType instanceof CollectionDataType)) {
@@ -68,12 +67,12 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
       return TagLiterals.PARAMETER__REGULAR_PARAMETER;
     }
     
-    public String getRetrieveTag3(final Parameter umlParameter, final Optional<OperationSignature> pcmSignature, final Optional<org.palladiosimulator.pcm.repository.Parameter> pcmParameter) {
-      return TagLiterals.COLLECTION_DATATYPE__PROPERTY;
+    public EObject getCorrepondenceSourcePcmOldCollectionType(final Parameter umlParameter, final Optional<OperationSignature> pcmSignature, final Optional<org.palladiosimulator.pcm.repository.Parameter> pcmParameter) {
+      return umlParameter;
     }
     
-    public EObject getCorrepondenceSourcePcmCollectionType(final Parameter umlParameter, final Optional<OperationSignature> pcmSignature, final Optional<org.palladiosimulator.pcm.repository.Parameter> pcmParameter) {
-      return umlParameter;
+    public String getRetrieveTag3(final Parameter umlParameter, final Optional<OperationSignature> pcmSignature, final Optional<org.palladiosimulator.pcm.repository.Parameter> pcmParameter) {
+      return TagLiterals.COLLECTION_DATATYPE__PROPERTY;
     }
     
     public EObject getCorrepondenceSourcePcmSignature(final Parameter umlParameter) {
@@ -115,16 +114,16 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
     		)
     );
     registerObjectUnderModification(pcmParameter.isPresent() ? pcmParameter.get() : null);
-    	Optional<org.palladiosimulator.pcm.repository.CollectionDataType> pcmCollectionType = Optional.ofNullable(getCorrespondingElement(
-    		userExecution.getCorrepondenceSourcePcmCollectionType(umlParameter, pcmSignature, pcmParameter), // correspondence source supplier
+    	Optional<org.palladiosimulator.pcm.repository.CollectionDataType> pcmOldCollectionType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourcePcmOldCollectionType(umlParameter, pcmSignature, pcmParameter), // correspondence source supplier
     		org.palladiosimulator.pcm.repository.CollectionDataType.class,
     		(org.palladiosimulator.pcm.repository.CollectionDataType _element) -> true, // correspondence precondition checker
     		userExecution.getRetrieveTag3(umlParameter, pcmSignature, pcmParameter), 
     		false // asserted
     		)
     );
-    registerObjectUnderModification(pcmCollectionType.isPresent() ? pcmCollectionType.get() : null);
-    userExecution.executeAction1(umlParameter, pcmSignature, pcmParameter, pcmCollectionType, this.getRoutinesFacade());
+    registerObjectUnderModification(pcmOldCollectionType.isPresent() ? pcmOldCollectionType.get() : null);
+    userExecution.executeAction1(umlParameter, pcmSignature, pcmParameter, pcmOldCollectionType, this.getRoutinesFacade());
     
     postprocessElements();
     

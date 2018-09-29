@@ -10,7 +10,7 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //
 //	Related files: 
 //		PcmSignature.reactions,
-//		UmlSignatureOperation.reactions, UmlReturnAndRegularParameterType.reactions,
+//		UmlReturnAndRegularParameterType.reactions,
 //		SignatureConceptTest
 
 reactions: umlSignatureOperationReactions

@@ -9,7 +9,7 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines handle type and multiplicity changes for an uml::Parameter corresponding to 
-//	a pcm::Signature (return parameter) or a pcm::Parameter in an pcm::Signature (regular Parameter)
+//	a pcm::Signature (return parameter) or a pcm::Parameter in an pcm::Signature (regular Parameter).
 //
 // 	For more details see PcmCollectionDataType.reactions.
 //
@@ -31,7 +31,6 @@ reaction RegularOrReturnParameterTypeChanged {
 
 reaction RegularOrReturnParameterLowerChanged{
 	after element replaced at uml::Parameter[lowerValue]
-//	with {affectedEObject.lower == newValue.integerValue} // .integerValue appears to be an unsupported operation
 	call propagateTypeChange(affectedEObject)
 }
 reaction RegularOrReturnParameterLowerChanged2{
@@ -42,7 +41,6 @@ reaction RegularOrReturnParameterLowerChanged2{
 
 reaction RegularOrReturnParameterUpperChanged{
 	after element replaced at uml::Parameter[upperValue]
-//	with {affectedEObject.upper == newValue.integerValue} // .integerValue appears to be an unsupported operation
 	call propagateTypeChange(affectedEObject)
 }
 
@@ -57,7 +55,7 @@ routine propagateTypeChange(uml::Parameter umlParameter){
 		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParameter tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
 		val pcmParameter = retrieve optional pcm::Parameter corresponding to umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 		
-		val pcmCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		val pcmOldCollectionType = retrieve optional pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
 	}
 	action {
 		execute {
@@ -68,7 +66,7 @@ routine propagateTypeChange(uml::Parameter umlParameter){
 				if (pcmSignature.isPresent) {pcmSignature.get.returnType__OperationSignature = pcmDataType}
 				if (pcmParameter.isPresent) {pcmParameter.get.dataType__Parameter = pcmDataType}
 				
-				if(pcmCollectionType.isPresent) removeCorrespondenceForOldCollectionType_Parameter(umlParameter)
+				if(pcmOldCollectionType.isPresent  && pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType_Parameter(umlParameter)
 				if(pcmDataType instanceof CollectionDataType) addCorrespondenceForCollectionType_Parameter(umlParameter, pcmDataType)
 			}
 		}

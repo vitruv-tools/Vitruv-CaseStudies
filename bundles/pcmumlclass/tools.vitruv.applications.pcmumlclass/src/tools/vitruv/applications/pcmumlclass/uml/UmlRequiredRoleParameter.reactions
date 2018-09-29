@@ -11,7 +11,7 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //
 //	Related files: 
 //		PcmRequiredRole.reactions, 
-//		UmlRequiredRoleParameter.reactions, UmlRequiredRoleProperty.reactions,
+//		UmlRequiredRoleProperty.reactions,
 //		RequiredRoleConceptTest
 
 reactions: umlRequiredRoleParameterReactions

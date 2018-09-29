@@ -7,11 +7,11 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines synchronize a pcm::OperationRequiredRole of a pcm::InterfaceProvidingRequiringEntity (IPRE)
-//	with its corresponding uml::Property (field in the IPRE implementation class used to store the Component passed to the constructor).
+//	with its corresponding uml::Property (the field in the IPRE implementation class, which is used to store the Component passed to the constructor).
 //
 //	Related files: 
 //		PcmRequiredRole.reactions, 
-//		UmlRequiredRoleParameter.reactions, UmlRequiredRoleProperty.reactions,
+//		UmlRequiredRoleParameter.reactions,
 //		RequiredRoleConceptTest
 
 reactions: umlRequiredRolePropertyReactions
@@ -27,7 +27,6 @@ reaction RequiredRolePropertyInserted{
 routine insertCorrespondingRequiredRole(uml::Property umlProperty, uml::Class umlComponent){
 	match {
 		val pcmComponent = retrieve optional pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
-//		val pcmRequired = retrieve optional pcm::OperationRequiredRole corresponding to umlProperty tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
 		val pcmInterface = retrieve optional pcm::OperationInterface corresponding to umlProperty.type tagged with TagLiterals.INTERFACE_TO_INTERFACE 
 	}
 	action {

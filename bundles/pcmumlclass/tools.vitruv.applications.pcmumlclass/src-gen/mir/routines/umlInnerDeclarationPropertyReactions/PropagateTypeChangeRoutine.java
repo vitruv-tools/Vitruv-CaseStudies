@@ -35,7 +35,7 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
         _routinesFacade.removeCorrespondenceForOldCollectionType(umlProperty);
       }
       if ((pcmDataType instanceof CollectionDataType)) {
-        _routinesFacade.addCorrespondenceForCollectionType(umlProperty, ((CollectionDataType) pcmDataType));
+        _routinesFacade.addCorrespondenceForCollectionType(umlProperty, ((CollectionDataType)pcmDataType));
       }
     }
     

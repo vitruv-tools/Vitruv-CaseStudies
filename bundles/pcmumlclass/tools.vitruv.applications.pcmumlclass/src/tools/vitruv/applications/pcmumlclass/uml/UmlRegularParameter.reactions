@@ -12,7 +12,7 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //
 //	Related files: 
 //		PcmParameter.reactions
-//		UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
+//		UmlReturnAndRegularParameterType.reactions
 //		ParameterConceptTest
 
 reactions: umlRegularParameterReactions
@@ -27,7 +27,6 @@ reaction RegularParameterInserted {
 
 routine insertCorrespondingRegularParameter(uml::Parameter umlParam, uml::Operation umlOperation){
 	match {
-		// pcmSignature limits the context
 		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlOperation tagged with TagLiterals.SIGNATURE__OPERATION
 		require absence of pcm::OperationSignature corresponding to umlParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
 		
@@ -176,7 +175,6 @@ routine changeModifierOfCorrespondingRegularParameter(uml::Parameter umlParamete
 			for (modifier : ParameterModifier.values){
 				if (PcmUmlClassHelper.getMatchingParameterDirection(modifier) === umlParameter.direction){
 					matchingModifier = modifier
-//					break // is not supported in xtend
 				}
 			}
 			pcmParameter.modifier__Parameter = matchingModifier

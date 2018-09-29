@@ -11,15 +11,12 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //
 //	Related files: 
 //		PcmInterface.reactions
-//		UmlInterface.reactions
 //		UmlInterfaceGeneralization.reactions
 //		InterfaceConceptTest
 
 reactions: umlInterfaceReactions
 in reaction to changes in UML
 execute actions in PCM
-
-
 
 reaction InterfaceInserted {
 	after element uml::Interface inserted in uml::Package[packagedElement]

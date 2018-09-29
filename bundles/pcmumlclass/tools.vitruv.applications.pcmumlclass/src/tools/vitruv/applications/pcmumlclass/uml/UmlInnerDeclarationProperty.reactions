@@ -1,9 +1,8 @@
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.palladiosimulator.pcm.repository.CollectionDataType
-import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import org.eclipse.uml2.uml.Property
+import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.Repository
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -13,7 +12,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //
 //	Related files: 
 //		PcmInnerDeclaration.reactions, 
-//		UmlReturnAndRegularParameterType.reactions (similar type propagation reactions), 
 //		AttributeConceptTest
 
 reactions: umlInnerDeclarationPropertyReactions
@@ -78,13 +76,11 @@ routine addCorrespondenceForExistingInnerDeclaration(uml::Property umlProperty, 
 routine createCorrespondingInnerDeclaration(uml::Property umlProperty, uml::Class umlCompositeType){
 	match{
 		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to umlCompositeType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
-//		val pcmInnerType = retrieve optional pcm::DataType corresponding to umlProperty.type //tagged with TagLiterals.DATATYPE__TYPE 
 		require absence of pcm::InnerDeclaration corresponding to umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
 	}
 	action {
 		val pcmInnerDeclaration = create pcm::InnerDeclaration and initialize {
 			pcmInnerDeclaration.entityName = umlProperty.name
-//			pcmInnerDeclaration.datatype_InnerDeclaration = pcmInnerType.orElse(null) // TODO replaced by propagateTypeChanged call
 			pcmCompositeType.innerDeclaration_CompositeDataType += pcmInnerDeclaration
 		}
 		add correspondence between pcmInnerDeclaration and umlProperty tagged with TagLiterals.INNER_DECLARATION__PROPERTY
@@ -195,7 +191,7 @@ routine propagateTypeChange(uml::Property umlProperty){
 			pcmInnerDeclaration.datatype_InnerDeclaration = pcmDataType
 			
 			if(pcmOldCollectionType.isPresent && pcmOldCollectionType.get !== pcmDataType) removeCorrespondenceForOldCollectionType(umlProperty)
-			if(pcmDataType instanceof CollectionDataType) addCorrespondenceForCollectionType(umlProperty, pcmDataType as CollectionDataType)
+			if(pcmDataType instanceof CollectionDataType) addCorrespondenceForCollectionType(umlProperty, pcmDataType)
 		}
 	}
 }

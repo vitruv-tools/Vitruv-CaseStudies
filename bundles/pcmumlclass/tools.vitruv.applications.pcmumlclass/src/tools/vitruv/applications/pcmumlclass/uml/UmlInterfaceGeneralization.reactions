@@ -10,7 +10,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	Related files: 
 //		PcmInterface.reactions
 //		UmlInterface.reactions
-//		UmlInterfaceGeneralization.reactions
 //		InterfaceConceptTest
 
 reactions: umlInterfaceGeneralizationReactions

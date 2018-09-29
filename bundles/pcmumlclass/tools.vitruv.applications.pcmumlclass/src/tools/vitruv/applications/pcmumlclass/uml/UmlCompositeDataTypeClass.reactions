@@ -10,7 +10,7 @@ in reaction to changes in UML
 execute actions in PCM
 
 //	The following reactions and routines synchronize a pcm::CompositeDataType in a pcm::Repository
-//	with an uml::Class in an uml::Package (the datatypes package corresponding to the repository).
+//	with an uml::Class in the datatypes uml::Package corresponding to the repository.
 //
 // 	The correspondence is instantiated from this side when the uml::Class is inserted in the datatypes package.
 //	The correspondence is deleted when the uml::Class is deleted.
