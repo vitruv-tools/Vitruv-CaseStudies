@@ -5,10 +5,9 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines synchronize a pcm::OperationRequiredRole of a pcm::InterfaceProvidingRequiringEntity (IPRE)
 //	with its corresponding uml::Parameter (constructor parameter of the IPRE implementation class) and 
-//	uml::Property (field in the IPRE implementation class used to store the Component passed to the constructor).
+//	uml::Property (the field in the IPRE implementation class used to store the Component passed to the constructor).
 //
 //	Related files: 
-//		PcmRequiredRole.reactions, 
 //		UmlRequiredRoleParameter.reactions, UmlRequiredRoleProperty.reactions,
 //		RequiredRoleConceptTest
 
@@ -38,7 +37,7 @@ routine detectOrCreateCorrespondingRequiredConstructorParameter(pcm::OperationRe
 	action {
 		call {
 			if (!umlConstructorParameter.isPresent){
-				//TODO what would be a good criterion for detecting RequiredConstructorParameters?
+				//TODO what would be a good criterion for detecting the RequiredConstructorParameter?
 				createCorrespondingRequiredConstructorParameter(pcmRequired, pcmIPRE)
 			}
 		}
@@ -69,7 +68,7 @@ routine detectOrCreateCorrespondingRequiredField(pcm::OperationRequiredRole pcmR
 	action {
 		call {
 			if (!umlRequiredField.isPresent){
-				//TODO what would be a good criterion for detecting RequiredField?
+				//TODO what would be a good criterion for detecting the RequiredField?
 				createCorrespondingRequiredField(pcmRequired, pcmIPRE)
 			}
 		}

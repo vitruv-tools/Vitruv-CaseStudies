@@ -1,5 +1,4 @@
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import org.palladiosimulator.pcm.repository.CollectionDataType
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 
@@ -10,7 +9,7 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	and the return type of the signature with an uml::Parameter (return parameter) in the uml::Operation.
 //
 //	Related files: 
-//		PcmSignature.reactions,
+//		PcmDataTypePropagation.reactions,
 //		UmlSignatureOperation.reactions, UmlReturnAndRegularParameterType.reactions,
 //		SignatureConceptTest
 
@@ -137,7 +136,7 @@ routine createCorrespondingReturnParameter(pcm::OperationSignature pcmSignature)
 	action {
 		val umlReturnParam = create uml::Parameter and initialize {
 			umlReturnParam.direction = ParameterDirectionKind.RETURN_LITERAL
-			umlReturnParam.name = DefaultLiterals.RETURN_PARAM_NAME // the name needs to be set, so that its TUID is distinct and the object is not confused with new instances
+			umlReturnParam.name = DefaultLiterals.RETURN_PARAM_NAME // the name should be set, so that its TUID is distinct and the object is not confused with new instances
 			umlOperation.ownedParameters += umlReturnParam
 		}
 		add correspondence between pcmSignature and umlReturnParam tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER

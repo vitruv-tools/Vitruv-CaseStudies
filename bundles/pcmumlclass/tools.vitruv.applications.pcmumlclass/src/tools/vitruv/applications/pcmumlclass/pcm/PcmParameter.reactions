@@ -1,4 +1,3 @@
-import org.palladiosimulator.pcm.repository.CollectionDataType
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 
@@ -8,8 +7,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	The following reactions and routines synchronize a pcm::Parameter in an pcm::OperationSignature (regular Parameter)
 //	with an uml::Parameter in an uml::Operation corresponding to the signature.
 //
-//	Related files: 
-//		PcmParameter.reactions
+//	Related files:
+//		PcmDataTypePropagation.reactions,
 //		UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
 //		ParameterConceptTest
 

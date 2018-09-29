@@ -29,7 +29,7 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
     
     public void executeAction1(final Property umlProperty, final InnerDeclaration pcmInnerDeclaration, final Optional<CollectionDataType> pcmOldCollectionType, @Extension final RoutinesFacade _routinesFacade) {
       final Repository pcmRepository = IteratorExtensions.<Repository>head(Iterators.<Repository>filter(pcmInnerDeclaration.eResource().getAllContents(), Repository.class));
-      final DataType pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(this.correspondenceModel, umlProperty.getType(), umlProperty.getLower(), umlProperty.getUpper(), pcmRepository);
+      final DataType pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(this.correspondenceModel, umlProperty.getType(), umlProperty.getLower(), umlProperty.getUpper(), pcmRepository, this.userInteractor);
       pcmInnerDeclaration.setDatatype_InnerDeclaration(pcmDataType);
       if ((pcmOldCollectionType.isPresent() && (pcmOldCollectionType.get() != pcmDataType))) {
         _routinesFacade.removeCorrespondenceForOldCollectionType(umlProperty);

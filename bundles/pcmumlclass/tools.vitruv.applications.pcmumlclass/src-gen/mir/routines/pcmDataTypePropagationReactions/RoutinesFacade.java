@@ -5,10 +5,13 @@ import mir.routines.pcmDataTypePropagationReactions.RemoveOldCollectionDataTypeC
 import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrPropertyRoutine;
 import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrProperty_CollectionRoutine;
 import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrProperty_NonCollectionRoutine;
+import mir.routines.pcmDataTypePropagationReactions.UnsupportedPrimitiveTypeSetWarningRoutine;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.TypedElement;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
+import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
@@ -59,6 +62,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     AddCollectionDataTypeCorrespondenceRoutine routine = new AddCollectionDataTypeCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType, umlElement, tag);
+    return routine.applyRoutine();
+  }
+  
+  public boolean unsupportedPrimitiveTypeSetWarning(final PrimitiveDataType primitive, final EObject entity) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    UnsupportedPrimitiveTypeSetWarningRoutine routine = new UnsupportedPrimitiveTypeSetWarningRoutine(_routinesFacade, _reactionExecutionState, _caller, primitive, entity);
     return routine.applyRoutine();
   }
 }

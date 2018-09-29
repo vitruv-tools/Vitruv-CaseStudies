@@ -39,7 +39,7 @@ public class PropagateTypeChangeRoutine extends AbstractRepairRoutineRealization
         }
         final EObject pcmStoredElement = _xifexpression;
         final Repository pcmRepository = IteratorExtensions.<Repository>head(Iterators.<Repository>filter(pcmStoredElement.eResource().getAllContents(), Repository.class));
-        final DataType pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(this.correspondenceModel, umlParameter.getType(), umlParameter.getLower(), umlParameter.getUpper(), pcmRepository);
+        final DataType pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(this.correspondenceModel, umlParameter.getType(), umlParameter.getLower(), umlParameter.getUpper(), pcmRepository, this.userInteractor);
         boolean _isPresent_1 = pcmSignature.isPresent();
         if (_isPresent_1) {
           OperationSignature _get = pcmSignature.get();

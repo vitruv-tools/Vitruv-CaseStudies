@@ -77,7 +77,7 @@ class JavaMemberAndParameterUtil {
      * @param params list of parameters for the interface method
      * @return the new interface method
      */
-    def static createJavaInterfaceMethod(String name, TypeReference returnType, EList<Parameter> params) {
+    def static createJavaInterfaceMethod(String name, TypeReference returnType, List<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createInterfaceMethod;
         setName(jMethod, name)
         setTypeReference(jMethod, returnType)

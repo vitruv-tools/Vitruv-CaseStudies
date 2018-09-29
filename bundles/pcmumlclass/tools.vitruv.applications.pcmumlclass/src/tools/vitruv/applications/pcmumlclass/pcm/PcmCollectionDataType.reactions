@@ -10,8 +10,8 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //
 // 	pcm::CollectionDataTypes are not directly mapped to any uml::Type-element, but rather the uml::Property and uml::Parameter
 //	that should hold a corresponding type, is typed with the correspondence of the pcm::CollectionDataType[innerType_CollectionDataType],
-//	and its multiplicity is set to (0..*). pcm::CollectionDataTypes should not hold inner pcm::CollcetionDataTypes, 
-//	because that could not be represented with this convention.
+//	and its multiplicity is set to (0..*). 
+//	pcm::CollectionDataTypes should not hold inner pcm::CollectionDataTypes, because that could not be represented with this convention.
 //
 //	This is relevant for:
 //		uml::Parameter corresponding to pcm::Signature (return parameter),

@@ -5,7 +5,7 @@ import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines synchronize a pcm::AssemblyContext in a pcm::ComposedProvidingRequiringEntity (CPRE)
-//	with a uml::Property in an uml::Class (the implementation class to the CPRE).
+//	with a uml::Property in the implementation uml::Class to the CPRE.
 //
 // 	The correspondence is instantiated from this side when the pcm::AssemblyContext is inserted.
 //	The correspondence is deleted when the pcm::AssemblyContext is deleted.

@@ -1,16 +1,12 @@
 package mir.routines.pcmRepositoryReactions;
 
-import com.google.common.base.Objects;
 import java.io.IOException;
 import java.util.List;
 import mir.routines.pcmRepositoryReactions.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper;
 import tools.vitruv.applications.pcmumlclass.TagLiterals;
@@ -32,48 +28,7 @@ public class BootstrapPrimitiveDatatypesRoutine extends AbstractRepairRoutineRea
       final List<PrimitiveType> umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(pcmRepo);
       for (final PrimitiveDataType pcmType : pcmPrimitiveTypes) {
         {
-          PrimitiveType _switchResult = null;
-          PrimitiveTypeEnum _type = pcmType.getType();
-          if (_type != null) {
-            switch (_type) {
-              case BOOL:
-                final Function1<PrimitiveType, Boolean> _function = (PrimitiveType it) -> {
-                  String _name = it.getName();
-                  return Boolean.valueOf(Objects.equal(_name, "Boolean"));
-                };
-                _switchResult = IterableExtensions.<PrimitiveType>findFirst(umlPrimitiveTypes, _function);
-                break;
-              case INT:
-                final Function1<PrimitiveType, Boolean> _function_1 = (PrimitiveType it) -> {
-                  String _name = it.getName();
-                  return Boolean.valueOf(Objects.equal(_name, "Integer"));
-                };
-                _switchResult = IterableExtensions.<PrimitiveType>findFirst(umlPrimitiveTypes, _function_1);
-                break;
-              case DOUBLE:
-                final Function1<PrimitiveType, Boolean> _function_2 = (PrimitiveType it) -> {
-                  String _name = it.getName();
-                  return Boolean.valueOf(Objects.equal(_name, "Real"));
-                };
-                _switchResult = IterableExtensions.<PrimitiveType>findFirst(umlPrimitiveTypes, _function_2);
-                break;
-              case STRING:
-                final Function1<PrimitiveType, Boolean> _function_3 = (PrimitiveType it) -> {
-                  String _name = it.getName();
-                  return Boolean.valueOf(Objects.equal(_name, "String"));
-                };
-                _switchResult = IterableExtensions.<PrimitiveType>findFirst(umlPrimitiveTypes, _function_3);
-                break;
-              case CHAR:
-              case BYTE:
-              default:
-                _switchResult = null;
-                break;
-            }
-          } else {
-            _switchResult = null;
-          }
-          final PrimitiveType umlType = _switchResult;
+          final PrimitiveType umlType = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes);
           if ((umlType != null)) {
             _routinesFacade.addPrimitiveDatatypeCorrespondence(pcmType, umlType);
           }

@@ -20,6 +20,8 @@ import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import java.util.function.Function
 import org.eclipse.emf.ecore.resource.Resource
+import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 
 class PcmUmlClassHelper {
 	private static val PCM_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository");
@@ -43,11 +45,8 @@ class PcmUmlClassHelper {
 	
 	def public static getPcmPrimitiveTypes(ResourceSet resourceSet){
 		var List<PrimitiveDataType> pcmPrimitiveTypes = #[]
-//		val uri = URI.createURI("platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository")
-		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
-			val resource = resourceSet.getResource(PCM_PRIMITIVE_TYPES_URI,true)
-			pcmPrimitiveTypes = resource.allContents.filter(PrimitiveDataType).toList				
-		}
+		val resource = resourceSet.getResource(PCM_PRIMITIVE_TYPES_URI,true)
+		pcmPrimitiveTypes = resource.allContents.filter(PrimitiveDataType).toList				
 		return pcmPrimitiveTypes
 	}
 	
@@ -59,12 +58,29 @@ class PcmUmlClassHelper {
 	
 	def public static getUmlPrimitiveTypes(ResourceSet resourceSet){
 		var List<PrimitiveType> umlPrimitiveTypes = #[]
-//		val uri = URI.createURI("platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml")
-		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
-			val resource = resourceSet.getResource(UML_PRIMITIVE_TYPES_URI,true)
-			umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList		
-		}
+		val resource = resourceSet.getResource(UML_PRIMITIVE_TYPES_URI,true)
+		umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList
 		return umlPrimitiveTypes
+	}
+	
+	public static def isSupportedPcmPrimitiveType(PrimitiveDataType pcmPrimitiveType){
+		return switch (pcmPrimitiveType.type){
+			case PrimitiveTypeEnum.BOOL,
+			case PrimitiveTypeEnum.INT,
+			case PrimitiveTypeEnum.DOUBLE,
+			case PrimitiveTypeEnum.STRING: true
+			default: false
+			}
+	}
+	
+	public static def isSupportedUmlPrimitiveType(PrimitiveType umlPrimitiveType){
+		return switch (umlPrimitiveType.name){
+			case "Boolean",
+			case "Integer",
+			case "Real",
+			case "String": true
+			default: false
+			}
 	}
 	
 	def public static PrimitiveType mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType, Iterable<PrimitiveType> umlPredifinedPrimitiveTypes){
@@ -73,10 +89,8 @@ class PcmUmlClassHelper {
 			case PrimitiveTypeEnum.INT: umlPredifinedPrimitiveTypes.findFirst[it.name == "Integer"]
 			case PrimitiveTypeEnum.DOUBLE: umlPredifinedPrimitiveTypes.findFirst[it.name == "Real"]
 			case PrimitiveTypeEnum.STRING: umlPredifinedPrimitiveTypes.findFirst[it.name == "String"]
-			case PrimitiveTypeEnum.CHAR,
-			case PrimitiveTypeEnum.BYTE,
 			default : null
-			// TODO decide how to map Char, Byte, UnlimitedNatural
+			// pcm::Char, pcm::Byte, uml::UnlimitedNatural are not mapped and the user is notified if one of these types is set
 		}
 	}
 	
@@ -113,7 +127,7 @@ class PcmUmlClassHelper {
 		return !ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, pkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE, Repository).nullOrEmpty
 	}
 	
-	public static def getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper, Repository dataTypeRepository){
+	public static def getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper, Repository pcmRepository, UserInteractor userInteractor){
 		if (umlType === null) return null
 		
 		val pcmPrimitiveType = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, umlType, TagLiterals.DATATYPE__TYPE, PrimitiveDataType)
@@ -121,18 +135,27 @@ class PcmUmlClassHelper {
 		val pcmSimpleType = #[pcmPrimitiveType.head, pcmCompositeType.head].findFirst[it !== null]
 		
 		if (umlType !== null && pcmSimpleType === null){
-			// TODO warn user that a non-synchronized DataType has been set where it should not
+			// warn user that a non-synchronized DataType has been set where it should not
+			userInteractor.notificationDialogBuilder.message("The uml::Type " + umlType + " could not be resolved to a corresponding pcm::DataType.")
+				.notificationType(NotificationType.WARNING).startInteraction
 			return null
 		}
 		
 		var pcmDataType = pcmSimpleType
 		if (pcmSimpleType !== null && lower == 0 && upper == LiteralUnlimitedNatural.UNLIMITED){
-			//find fitting CollectionType with collection.innerType ==
-//			val pcmRepository = pcmSimpleType.repository__DataType //This does not work, since it might retrieve the primitive type repository
-			val pcmRepository = dataTypeRepository
-			// TODO userInteraction to disambiguate from multiple Collection Types
-			var pcmCollectionDataType = pcmRepository.dataTypes__Repository.filter(CollectionDataType).findFirst[it.innerType_CollectionDataType === pcmSimpleType]
-			
+			// userInteraction to disambiguate from multiple Collection Types
+			val pcmCollectionTypeCandidates = pcmRepository.dataTypes__Repository.filter(CollectionDataType).filter[it.innerType_CollectionDataType === pcmSimpleType].toList
+			var CollectionDataType pcmCollectionDataType = null
+			if (pcmCollectionTypeCandidates.size <= 1){
+				pcmCollectionDataType = pcmCollectionTypeCandidates.head
+			}
+			else {
+				val userSelection = userInteractor.singleSelectionDialogBuilder
+					.message("Please select the appropriate pcm::CollectionDataType:")
+					.choices(pcmCollectionTypeCandidates.map[it.entityName])
+					.startInteraction
+				pcmCollectionDataType = pcmCollectionTypeCandidates.get(userSelection)
+			}
 			if (pcmCollectionDataType === null){
 				// none found -> create default
 				pcmCollectionDataType = RepositoryFactory.eINSTANCE.createCollectionDataType

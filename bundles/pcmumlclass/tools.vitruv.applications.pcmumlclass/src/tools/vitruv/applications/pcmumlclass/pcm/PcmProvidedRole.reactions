@@ -8,7 +8,6 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	with an uml::InterfaceRealization in the uml::Class (implementation) corresponding to the IPRE.
 //
 //	Related files: 
-//		PcmProvidedRole.reactions, 
 //		UmlProvidedRoleRealization.reactions,
 //		ProvidedRoleTest
 

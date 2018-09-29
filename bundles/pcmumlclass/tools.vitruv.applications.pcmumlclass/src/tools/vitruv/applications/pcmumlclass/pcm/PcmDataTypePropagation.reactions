@@ -1,19 +1,21 @@
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import tools.vitruv.applications.pcmumlclass.TagLiterals
 import org.palladiosimulator.pcm.repository.CollectionDataType
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
+import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following routines define how a pcm::DataType change is propagated to the relevant uml::Parameter or uml::Property.
 //
-//	Since both Parameter and Property inherit from TypedElement and MultiplicityElement, but don't combine those traits, 
+//	Since both Parameter and Property inherit from TypedElement and MultiplicityElement, but don't combine those traits in a common superclass, 
 //	the routines expect two references to the same element but differently typed.
 //
 //	Related files: (used in)
 //		PcmSignature.reactions,
+//		PcmInnerDeclaration.reactions,
+//		PcmParameter.reactions
 
 reactions: pcmDataTypePropagationReactions
 in reaction to changes in PCM
@@ -109,7 +111,44 @@ routine addCollectionDataTypeCorrespondence(
 	}
 }
 
+// UNSUPPORTED WARNING - unsupported/unmapped PrimitiveType has been set warning
+reaction UnsupportedPrimitiveTypeSetAtInnerDeclaration{
+	after element pcm::PrimitiveDataType replaced at pcm::InnerDeclaration[datatype_InnerDeclaration]
+	with {
+		affectedEObject.datatype_InnerDeclaration === newValue
+		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
+	}
+	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
+}
 
+reaction UnsupportedPrimitiveTypeSetAtParameter{
+	after element pcm::PrimitiveDataType replaced at pcm::Parameter[dataType__Parameter]
+	with {
+		affectedEObject.dataType__Parameter === newValue
+		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
+	}
+	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
+}
 
+reaction UnsupportedPrimitiveTypeSetAtSignature{
+	after element pcm::PrimitiveDataType replaced at pcm::OperationSignature[returnType__OperationSignature]
+	with {
+		affectedEObject.returnType__OperationSignature === newValue
+		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
+	}
+	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
+}
 
+routine unsupportedPrimitiveTypeSetWarning(pcm::PrimitiveDataType primitive, EObject entity){
+	action{
+		execute{
+			userInteractor.notificationDialogBuilder
+				.message("The pcm::PrimitiveDataType " + primitive + " set at the pcm element " + entity 
+					+ " has no good match in the predefined set of uml::PrimitiveTypes "
+					+ " used by these transformations and is therefore not supported.")
+				.notificationType(NotificationType.WARNING)
+				.startInteraction
+		}
+	}
+}
 
