@@ -1,8 +1,11 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.Type
 import org.junit.Test
+import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.ParameterModifier
 import org.palladiosimulator.pcm.repository.Repository
@@ -12,11 +15,6 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import org.eclipse.uml2.uml.Type
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.junit.Ignore
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.palladiosimulator.pcm.repository.DataType
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Parameter 
@@ -25,8 +23,6 @@ import org.palladiosimulator.pcm.repository.DataType
  * Related files: PcmParameter.reactions, UmlRegularParameter.reactions, UmlReturnAndRegularParameterType.reactions
  */
 class ParameterConceptTest extends PcmUmlClassApplicationTest {
-
-    protected static val final Logger logger = Logger.getLogger(typeof(ParameterConceptTest).simpleName);
 
 	private static val TEST_PARAMETER_NAME = "testParameter"
 	 
@@ -80,9 +76,6 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		var umlOperation = helper.getUmlOperation(pcmInterface)
 		startRecordingChanges(umlOperation)
 		
-		// If there is any unnamed parameter already inserted and synchronized, 
-		// the correspondence model might not be able to differentiate the new from he old parameter and return false correspondences,
-		// because the name change for the new Parameter is applied later. Until then, the new Parameter has the same unnamed-TUID as the already existing one.
 		var umlParameter = umlOperation.createOwnedParameter(TEST_PARAMETER_NAME, null) 
 		umlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
 		umlParameter.type = umlType
@@ -131,7 +124,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		var pcmSignature = helper.getPcmOperationSignature(pcmInterface)
 		
 		var pcmParameter = RepositoryFactory.eINSTANCE.createParameter
-		pcmParameter.parameterName = tools.vitruv.applications.pcmumlclass.tests.ParameterConceptTest.TEST_PARAMETER_NAME
+		pcmParameter.parameterName = ParameterConceptTest.TEST_PARAMETER_NAME
 		pcmParameter.dataType__Parameter = pcmType
 		pcmSignature.parameters__OperationSignature += pcmParameter
 		
@@ -140,7 +133,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 		pcmSignature = helper.getPcmOperationSignature(pcmInterface)
 		
-		pcmParameter = pcmSignature.parameters__OperationSignature.findFirst[it.parameterName == tools.vitruv.applications.pcmumlclass.tests.ParameterConceptTest.TEST_PARAMETER_NAME]
+		pcmParameter = pcmSignature.parameters__OperationSignature.findFirst[it.parameterName == ParameterConceptTest.TEST_PARAMETER_NAME]
 		assertNotNull(pcmParameter)
 		checkParameterConcept(pcmParameter)
 		val reloadedPcmType = helper.getModifiableInstance(pcmType)

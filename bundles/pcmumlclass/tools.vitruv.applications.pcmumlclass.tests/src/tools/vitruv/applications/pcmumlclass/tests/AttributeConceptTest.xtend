@@ -1,10 +1,11 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Property
-import org.junit.Ignore
+import org.eclipse.uml2.uml.Type
 import org.junit.Test
+import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -12,9 +13,6 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import org.eclipse.uml2.uml.Type
-import org.palladiosimulator.pcm.repository.DataType
-import org.eclipse.emf.ecore.util.EcoreUtil
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::InnerDeclaration with 
@@ -24,8 +22,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
  */
 class AttributeConceptTest extends PcmUmlClassApplicationTest {
 
-    protected static val final Logger logger = Logger.getLogger(typeof(AttributeConceptTest).simpleName);
-	
 	private static val TEST_ATTRIBUTE = "testAttribute"
 	
 	def public static void checkAttributeConcept(CorrespondenceModel cm, 
@@ -66,15 +62,6 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
 	}
 	
-//	TODO For some reason, Primitive(Data)Type [pcm::PDT/uml::PT] correspondences can only be resolved once/in one direction. Every round-trip fails:
-//		PCM 							-- 				UML
-//		PDT (id=960) ~ PT (id=1003) 	==> 	PT (id=1003)
-//			null						<==		PT (id=1003) ~ null 	// no correspondence found
-//			null 						==> 		null				
-//			null 						<== 		null				// terminates with wrong result		
-// --> Exception: Could not save VURI for UMLPrimitiveTypes.library.uml (read-only path)		
-
-	
 	private def void testCreateAttributeConcept_PCM(Repository inPcmRepository, DataType pcmType) {
 		var pcmRepository = inPcmRepository
 		var pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
@@ -107,7 +94,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateAttributeConcept_PCM_compositeType() {
 		var pcmRepository = createRepository()
-		//innerDeclaration with same type as outer CompositeDataType doesn't trigger change event
+		//TODO innerDeclaration with same type as outer CompositeDataType doesn't trigger change event
 		testCreateAttributeConcept_PCM(pcmRepository, helper.getPcmCompositeDataType_2(pcmRepository))
 	}
 	

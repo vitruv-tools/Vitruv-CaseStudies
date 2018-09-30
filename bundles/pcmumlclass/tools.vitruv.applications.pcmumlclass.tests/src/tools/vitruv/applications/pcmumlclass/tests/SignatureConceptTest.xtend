@@ -1,11 +1,10 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Type
-import org.junit.Ignore
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.OperationSignature
@@ -16,9 +15,6 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.core.entity.Entity
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationSignature with its
@@ -27,8 +23,6 @@ import org.palladiosimulator.pcm.core.entity.Entity
  * Related files: PcmSignature.reactions, UmlSignatureOperation.reactions, UmlReturnAndRegularParameterType.reactions
  */
 class SignatureConceptTest extends PcmUmlClassApplicationTest {
-
-    protected static val final Logger logger = Logger.getLogger(typeof(SignatureConceptTest).simpleName);
 
 	private static val TEST_SIGNATURE_NAME = "testSignature"
 	
@@ -123,25 +117,23 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test 
-//	@Ignore
 	def void testCreateSignatureConcept_UML_primitiveReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
 		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_STRING)
 		_testReturnTypePropagation_UML(pcmRepository, helper.UML_STRING, 1, 1)
 	}
+	
 	@Test
-//	@Ignore
 	def void testCreateSignatureConcept_UML_compositeReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
 		_testReturnTypePropagation_UML(pcmRepository, helper.getUmlCompositeDataTypeClass(pcmRepository), 1, 1)
 	}
+	
 	@Test
-//	@Ignore
 	def void testCreateSignatureConcept_UML_collectionReturnType() {
 		var pcmRepository = _testCreateSignatureConcept_UML
 		_testReturnTypePropagation_UML(pcmRepository, helper.getUmlCompositeDataTypeClass_2(pcmRepository), 0, LiteralUnlimitedNatural.UNLIMITED)
 	}
-	
 	
 	private def _testCreateSignatureConcept_PCM_withReturnType(Repository inPcmRepository, DataType pcmType) {
 		var pcmRepository = inPcmRepository
@@ -170,7 +162,6 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-//	@Ignore
 	def void testCreateSignatureConcept_PCM_primitiveReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
 		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_STRING)
@@ -178,19 +169,14 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-//	@Ignore
 	def void testCreateSignatureConcept_PCM_compositeReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.getPcmCompositeDataType(pcmRepository))
 	}
 	
 	@Test
-//	@Ignore
 	def void testCreateSignatureConcept_PCM_collectionReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.getPcmCollectionDataType(pcmRepository))
 	}
-	
-	
-	
 }

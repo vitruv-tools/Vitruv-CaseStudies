@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.Property
 import org.junit.Test
 import org.palladiosimulator.pcm.core.composition.AssemblyContext
@@ -19,8 +18,6 @@ import static org.junit.Assert.*
  */
 class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 
-    protected static val final Logger logger = Logger.getLogger(typeof(AssemblyContextConceptTest).simpleName);
-    
 	private static val PROPERTY_NAME = "testAssemblyContextField"
 
 	def public static void checkAssemblyContextConcept(
@@ -71,7 +68,8 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		
 		var pcmAssemblyContext = CompositionFactory.eINSTANCE.createAssemblyContext
 		pcmAssemblyContext.entityName = PROPERTY_NAME
-		pcmAssemblyContext.encapsulatedComponent__AssemblyContext = helper.getPcmComponent_2(pcmRepository) // TODO same component doesn't trigger change event
+		// TODO setting the same component as container and encapsulated doesn't seem to trigger change event
+		pcmAssemblyContext.encapsulatedComponent__AssemblyContext = helper.getPcmComponent_2(pcmRepository) 
 		pcmComponent.assemblyContexts__ComposedStructure += pcmAssemblyContext
 		
 		saveAndSynchronizeChanges(pcmAssemblyContext)

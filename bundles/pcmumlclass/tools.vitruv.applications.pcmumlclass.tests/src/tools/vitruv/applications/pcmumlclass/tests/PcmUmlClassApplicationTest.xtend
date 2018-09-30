@@ -92,7 +92,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		modelElement.eResource.unload
 		val rootElement = getModelResource(resourceURI).contents.head
 		if(rootElement !== null){
-			startRecordingChanges(rootElement) // calls changeRecorder.addToRecording -> calls registerContentsAtUuidResolver
+			startRecordingChanges(rootElement)
 		}
 		return rootElement
 	}
@@ -152,7 +152,12 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
 	
-	
+	/* Because of transitive change propagation between the Pcm and Uml domains, it is necessary to stepwise simulate
+	 * the insertion of Uml-models and reload the view, in oder to achieve the wanted propagation of a correct ComponentRepository.
+	 * In a editor based creation process, this would automatically be done if the synchronization is called often enough (enough saves).
+	 * Because of the necessary reloads, the model is loaded (while the out-of-synch elements remain) and registered with new IDs in the UUID resolver.
+	 * This might make it necessary to provide the VM that runs the tests with additional heap space.
+	 */
 	protected def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath){
 		val originalRepository = inOriginalRepository
 		userInteractor.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model

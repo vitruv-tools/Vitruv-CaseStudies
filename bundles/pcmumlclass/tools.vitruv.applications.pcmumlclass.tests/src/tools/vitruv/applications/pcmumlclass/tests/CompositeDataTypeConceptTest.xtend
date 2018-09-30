@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
 import org.junit.Test
@@ -24,8 +23,6 @@ import static org.junit.Assert.*
  */
 class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 
-    protected static val final Logger logger = Logger.getLogger(typeof(CompositeDataTypeConceptTest).simpleName);
-	
 	private static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
 	private static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
 	
@@ -71,7 +68,6 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 	}
 
 	@Test
-//	@Ignore
 	def void testCreateCompositeDataTypeConcept_UML() {
 		var pcmRepository = createRepositoryConcept()
 		var umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
@@ -152,10 +148,4 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(pcmCompositeType)
 		checkCompositeDataTypeConcept(pcmCompositeType)
 	}
-	
-	
-	
-	
-	
-	
 }

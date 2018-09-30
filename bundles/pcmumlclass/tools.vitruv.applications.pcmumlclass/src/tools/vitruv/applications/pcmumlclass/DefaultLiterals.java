@@ -16,7 +16,6 @@ public class DefaultLiterals {
 	public static final String UML_EXTENSION = ".uml";
 	
 	public static final String ROOT_MODEL_NAME = "umlrootmodel";
-//	public static final String REPOSITORY_PACKAGE_NAME = "repository";
 	public static final String CONTRACTS_PACKAGE_NAME = "contracts";
 	public static final String DATATYPES_PACKAGE_NAME = "datatypes";
 	public static final String IMPLEMENTATION_SUFFIX = "Impl";
@@ -28,8 +27,6 @@ public class DefaultLiterals {
 	public static final String INPUT_REQUEST_NEW_MODEL_PATH = "Please enter where to save the new corresponding model, e.g. \"model/<file-name>\"";
 	
 	public static final String INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL = "Do you want to delete the UML model associated with this PCM repository?";
-	public static final int INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES = 0;
-	public static final int INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_NO = 1;
 	
 	public static final String USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__REQUEST = "This package can correspond to a new RepositoryComponent. Please select the component type you want to create:";
 	public static final List<String> USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__OPTIONS = Arrays.asList("BasicComponent", "CompositeComponent", "SubSystem", "No Correspondence");

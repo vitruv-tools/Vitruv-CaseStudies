@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
@@ -14,7 +13,6 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
 
-
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Repository
  * with its corresponding uml::Packages.
@@ -23,8 +21,6 @@ import static org.junit.Assert.*
  */
 class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 
-    protected static val final Logger logger = Logger.getLogger(typeof(RepositoryConceptTest).simpleName);
-	
 	def protected static checkRepositoryConcept(
 			CorrespondenceModel cm, 
 			Repository pcmRepo,
@@ -136,7 +132,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		var umlRepositoryPackage = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
 		var umlModel = umlRepositoryPackage.nestingPackage
 		
-		userInteractor.addNextConfirmationInput(true)// DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
+		userInteractor.addNextConfirmationInput(true)
 		deleteAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		
 		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)

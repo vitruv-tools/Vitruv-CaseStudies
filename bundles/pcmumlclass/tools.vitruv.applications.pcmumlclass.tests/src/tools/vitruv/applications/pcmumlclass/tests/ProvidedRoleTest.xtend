@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
@@ -18,8 +17,6 @@ import static org.junit.Assert.*
  * Related files: PcmProvidedRole.reactions, UmlProvidedRoleGeneralization.reactions
  */
 class ProvidedRoleTest extends PcmUmlClassApplicationTest {
-
-    protected static val final Logger logger = Logger.getLogger(typeof(ProvidedRoleTest).simpleName)
     
     private static val PROVIDED_ROLE_NAME = "testProvidedRole"
 	

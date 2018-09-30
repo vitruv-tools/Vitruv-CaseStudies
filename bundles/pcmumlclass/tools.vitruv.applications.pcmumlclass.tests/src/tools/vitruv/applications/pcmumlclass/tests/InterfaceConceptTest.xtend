@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Interface
 import org.junit.Test
@@ -14,15 +13,13 @@ import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import static org.junit.Assert.*
 
 /**
- * The following reactions and routines synchronize a pcm::OperationInterface
+ *  This test class tests the reactions and routines are supposed to synchronize a pcm::OperationInterface
  * with its corresponding uml::Interface (in the contracts uml::Package corresponding to a pcm::Repository).
  * <br><br>
  * Related files: PcmInterface.reactions, UmlInterface.reactions, UmlInterfaceGeneralization.reactions
  */
 class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
-    protected static val final Logger logger = Logger.getLogger(typeof(InterfaceConceptTest).simpleName);
-	
 	private static val TEST_INTERFACE_NAME = "TestInterface"
 	
 	def public static checkInterfaceConcept(CorrespondenceModel cm, 
@@ -103,12 +100,4 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(mPcmInterface)
 		checkInterfaceConcept(mPcmInterface)
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 }

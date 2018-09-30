@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Property
 import org.junit.Test
@@ -22,8 +21,6 @@ import static org.junit.Assert.*
  */
 class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 
-    protected static val final Logger logger = Logger.getLogger(typeof(RequiredRoleConceptTest).simpleName);
-	
 	private val REQUIRED_ROLE_NAME = "testRequiredRole"	 
 	
 	def public static void checkRequiredRoleConcept(
@@ -122,7 +119,6 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		var umlInterface = helper.getUmlInterface(pcmRepository)
 		startRecordingChanges(umlComponentImpl)
 		
-		// write-access fails but, read/iterate seems to be fine 
 		var umlRequiredInstanceField = umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
 		
 		saveAndSynchronizeChanges(umlRequiredInstanceField)
@@ -136,12 +132,4 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(umlRequiredInstanceField)
 		checkRequiredRoleConcept(umlRequiredInstanceField)
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 }

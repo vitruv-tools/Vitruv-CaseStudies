@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
@@ -23,8 +22,6 @@ import static org.junit.Assert.*
  * This might make it necessary to provide the VM that runs the tests with additional heap space.
  */
 class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
-
-    protected static val final Logger logger = Logger.getLogger(typeof(MediaStoreRepositoryCreationTest).simpleName);
 
 //	private static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms.repository"
 	// all SEFFs removed because the TUID-generator failed for ResourceDemandParameters 
@@ -63,7 +60,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-//	@Ignore //skip until needed because of performance
+	@Ignore //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML2PCM() {
 		// forwards
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
@@ -91,7 +88,9 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 			URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH), 
 			PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2.modelVuri.EMFUri
 		)
-		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
+		assertEquals("Encountered differences after round-trip batch creation. That was kind of expected."
+			+ "\nLast manual check looked good with 245 differences", 0, comparison.differences.size
+		)
 		// expected (and found deltas):
 		//	- each PCM element has a different id since it is unique and those are newly generated elements
 		//	- FailureType is lost, because it is not propagated (limited scope of this master's thesis)
@@ -132,9 +131,9 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		umlRepo_forward.name = "umlrootmodel"
 		val umlRepoPkg = umlRepo_forward.createNestedPackage("testRepository")
 		val umlDatatypesPkg = umlRepoPkg.createNestedPackage(DefaultLiterals.DATATYPES_PACKAGE_NAME)
-		val umlContractsPkg = umlRepoPkg.createNestedPackage(DefaultLiterals.CONTRACTS_PACKAGE_NAME)
+		umlRepoPkg.createNestedPackage(DefaultLiterals.CONTRACTS_PACKAGE_NAME)
 		val umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass("TestCompositeType", false)
-		val umlProperty = umlCompositeTypeClass.createOwnedAttribute("testAttribute", helper.UML_INT)
+		umlCompositeTypeClass.createOwnedAttribute("testAttribute", helper.UML_INT)
 		
 		umlRepo_forward = simulateRepositoryInsertion_UML(umlRepo_forward, UML_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)

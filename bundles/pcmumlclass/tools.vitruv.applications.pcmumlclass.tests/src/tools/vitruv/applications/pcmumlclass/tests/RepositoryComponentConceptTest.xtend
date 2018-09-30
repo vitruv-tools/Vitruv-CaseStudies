@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
@@ -28,8 +27,6 @@ import static org.junit.Assert.*
  */
 class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 
-    protected static val final Logger logger = Logger.getLogger(typeof(RepositoryComponentConceptTest).simpleName);
-    
 	private val COMPONENT_NAME = "testComponent"
 	 
 	def public static void checkRepositoryComponentConcept(
@@ -100,7 +97,6 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 		checkRepositoryComponentConcept(pcmComponent)
 	}
 	
-	
 	@Test
 	def void testRepositoryComponentConcept_UML() {
 		var pcmRepository = createRepository
@@ -119,13 +115,4 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 		
 		checkRepositoryComponentConcept(umlComponentPkg)
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

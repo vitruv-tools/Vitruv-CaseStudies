@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Operation
@@ -27,8 +26,6 @@ import static org.junit.Assert.*
  * 		UmlIPREConstructorOperation.reactions
  */
 class SystemConceptTest extends PcmUmlClassApplicationTest {
-
-    protected static val final Logger logger = Logger.getLogger(typeof(SystemConceptTest).simpleName);
 
 	private static val PCM_MODEL_FILE = "model/System.system"
 	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
