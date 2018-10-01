@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" name="umlrootmodel">
+  <packagedElement xmi:type="uml:Package" name="defaultRepository">
+    <packagedElement xmi:type="uml:Package" name="contracts">
+      <packagedElement xmi:type="uml:Interface" name="IDownload">
+        <ownedOperation name="download">
+          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/AudioCollectionRequest" direction="return"/>
+          <ownedParameter name="audioRequest" type="//defaultRepository/datatypes/AudioCollectionRequest"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IMediaAccess">
+        <ownedOperation name="upload">
+          <ownedParameter name="returnParam" direction="return"/>
+          <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent"/>
+        </ownedOperation>
+        <ownedOperation name="getFileList">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IDB">
+        <ownedOperation name="query">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+        <ownedOperation name="getFileList">
+          <ownedParameter name="returnParam" direction="return"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" name="IFileStorage">
+        <ownedOperation name="getFiles">
+          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return"/>
+          <ownedParameter name="audioRequest" type="//defaultRepository/datatypes/AudioCollectionRequest"/>
+        </ownedOperation>
+        <ownedOperation name="storeFile">
+          <ownedParameter name="returnParam" direction="return"/>
+          <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="datatypes">
+      <packagedElement xmi:type="uml:Class" name="FileContent"/>
+      <packagedElement xmi:type="uml:Class" name="AudioCollectionRequest">
+        <ownedAttribute name="Count">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+        <ownedAttribute name="Size">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" name="mediaAccess">
+      <packagedElement xmi:type="uml:Class" name="MediaAccessImpl" isFinalSpecialization="true">
+        <ownedAttribute name="Required_IDB_MediaAccess" type="//defaultRepository/contracts/IDB"/>
+        <ownedAttribute name="Required_IDataStorage_MediaAccess" type="//defaultRepository/contracts/IFileStorage"/>
+        <interfaceRealization name="Provided_IMediaAccess_MediaAccess" client="//defaultRepository/mediaAccess/MediaAccessImpl" supplier="//defaultRepository/contracts/IMediaAccess" contract="//defaultRepository/contracts/IMediaAccess"/>
+        <interfaceRealization name="Provided_IDownload_MediaAccess" client="//defaultRepository/mediaAccess/MediaAccessImpl" supplier="//defaultRepository/contracts/IDownload" contract="//defaultRepository/contracts/IDownload"/>
+        <ownedOperation name="MediaAccessImpl">
+          <ownedParameter name="Required_IDB_MediaAccess" type="//defaultRepository/contracts/IDB"/>
+          <ownedParameter name="Required_IDataStorage_MediaAccess" type="//defaultRepository/contracts/IFileStorage"/>
+        </ownedOperation>
+      </packagedElement>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>

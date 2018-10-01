@@ -1,16 +1,21 @@
-package tools.vitruv.applications.pcmumlclass;
+package tools.vitruv.applications.pcmumlclassjava;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
+import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification;
+import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification;
+import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
 import tools.vitruv.framework.applications.AbstractVitruvApplication; 
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 
-public class PcmUmlClassApplication extends AbstractVitruvApplication {
+public class PcmUmlClassJavaApplication extends AbstractVitruvApplication {
 
-	public PcmUmlClassApplication() {
+	public PcmUmlClassJavaApplication() {
 		patchDomains();
 	}
 	
@@ -19,17 +24,20 @@ public class PcmUmlClassApplication extends AbstractVitruvApplication {
 		Set<ChangePropagationSpecification> specs = new HashSet<ChangePropagationSpecification>();
 		specs.add(new CombinedPcmToUmlClassReactionsChangePropagationSpecification());
 		specs.add(new CombinedUmlClassToPcmReactionsChangePropagationSpecification());
+		specs.add(new UmlToJavaChangePropagationSpecification());
+		specs.add(new JavaToUmlChangePropagationSpecification());
 		return specs;
 	}
 
 	@Override
 	public String getName() {
-		return "PCM <-> UML Class";
+		return "PCM <-> UML Class <-> Java";
 	}
 	
 	private void patchDomains() {
 		new UmlDomainProvider().getDomain().enableTransitiveChangePropagation();
 		new PcmDomainProvider().getDomain().enableTransitiveChangePropagation();
+		new JavaDomainProvider().getDomain().enableTransitiveChangePropagation();
 	}
 
 }
