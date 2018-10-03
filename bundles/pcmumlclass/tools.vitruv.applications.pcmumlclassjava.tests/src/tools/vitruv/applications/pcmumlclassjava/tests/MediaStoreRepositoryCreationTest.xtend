@@ -206,7 +206,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	}
 	
 	@Test
-//	@Ignore
+	@Ignore
 	def void testMediaStoreCreation_JavaInserted_reducedAndManuallyReplicated() {
 //		setInteractiveUserInteractor
 		

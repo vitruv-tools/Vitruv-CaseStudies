@@ -111,8 +111,11 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		startRecordingChanges(umlCompositeTypeClass)
 		
 		var umlAttribute = umlCompositeTypeClass.createOwnedAttribute(TEST_ATTRIBUTE, null)
-		umlAttribute.type = umlType
+		// CollectionType propagation only works if the typeSet is propagated first or last, 
+		// otherwise it will overwrite one of the multiplicity changes on the back-propagation (pcm -> uml).
+		// The failure is explicitly produced here to show case the problem as long as it exists.
 		umlAttribute.lower = lower
+		umlAttribute.type = umlType 
 		umlAttribute.upper = upper
 		
 		saveAndSynchronizeChanges(umlAttribute)
@@ -145,6 +148,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 	
 	@Test
 	def void testCreateAttributeConcept_UML_collectionType() {
+		// expected to fail see the explanation in 'testCreateAttributeConcept_UML(..)'
 		var pcmRepository = createRepository()
 		testCreateAttributeConcept_UML(pcmRepository, helper.getUmlCompositeDataTypeClass_2(pcmRepository), 0, LiteralUnlimitedNatural.UNLIMITED)
 	}
