@@ -1,0 +1,74 @@
+import java.util.Collection
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.types.TypesFactory
+import tools.vitruv.domains.java.util.JavaModificationUtil
+
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
+
+reactions: umlToJavaTypePropagation
+in reaction to changes in UML
+execute actions in Java
+
+routine propagateTypedMultiplicityElementTypeChanged(
+		uml::TypedElement uElement, uml::MultiplicityElement uMultiplicity, // uml::Property or uml::Parameter
+		java::TypedElement jElement, // java::Field, java::Parameter, or java::Method
+		java::ConcreteClassifier jType, // new type retrieved from correspondences or null
+		java::TypeReference defaultReference
+	) {
+	action{
+		execute{
+	    	var typeReference = createTypeReference(uElement.type, jType, defaultReference, userInteractor)
+	    	
+			if(uMultiplicity.lower == 0 && uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED) {
+				if (typeReference === defaultReference){
+					// default to java.lang.Object as an inner type
+					typeReference = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass)
+				}
+	    		if(isCollectionTypeReference(jElement.typeReference)){
+	    			// reuse previously selected CollectionType
+	    			val collectionClassifier = getClassifier(jElement.typeReference) as ConcreteClassifier
+	    			typeReference = createCollectionTypeReference(collectionClassifier, typeReference)
+	    		}
+	    		else {
+	    			// no previously selected CollectionType
+		        	val Class<? extends Collection> collectionType = userSelectCollectionType(userInteractor)
+					typeReference = createCollectionTypeReference(collectionType, typeReference)
+	    		}
+			}
+			
+			jElement.typeReference = typeReference
+			addJavaImport(jElement.containingCompilationUnit, typeReference)
+		}
+	}
+}
+	
+routine propagateTypedMultiplicityElementTypeChanged_defaultObject(
+		uml::TypedElement uElement, uml::MultiplicityElement uMultiplicity, // uml::Property or uml::Parameter
+		java::TypedElement jElement, // java::Field, java::Parameter, or java::Method
+		java::ConcreteClassifier jType // new type retrieved from correspondences or null
+	) {
+	action{
+		call{
+			val objectNsRef = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass)// default to java.lang.Object
+			propagateTypedMultiplicityElementTypeChanged(uElement, uMultiplicity, jElement, jType, objectNsRef)
+		}
+	}
+}
+
+routine propagateTypedMultiplicityElementTypeChanged_defaultVoid(
+		uml::TypedElement uElement, uml::MultiplicityElement uMultiplicity, // uml::Property or uml::Parameter
+		java::TypedElement jElement, // java::Field, java::Parameter, or java::Method
+		java::ConcreteClassifier jType // new type retrieved from correspondences or null
+	) {
+	action{
+		call{
+			val voidRef = TypesFactory.eINSTANCE.createVoid
+			propagateTypedMultiplicityElementTypeChanged(uElement, uMultiplicity, jElement, jType, voidRef)
+		}
+	}
+}
+	

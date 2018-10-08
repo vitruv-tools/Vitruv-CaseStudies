@@ -7,10 +7,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypesFactory;
-import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -28,13 +28,9 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
       return uOperation;
     }
     
-    public EObject getElement1(final Operation uOperation, final Parameter uParam, final Method jMethod, final Optional<ConcreteClassifier> jCustomType) {
-      return jMethod;
-    }
-    
-    public void update0Element(final Operation uOperation, final Parameter uParam, final Method jMethod, final Optional<ConcreteClassifier> jCustomType) {
+    public void executeAction1(final Operation uOperation, final Parameter uParam, final Method jMethod, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
       if ((uParam != null)) {
-        UmlJavaTypePropagationHelper.propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam.getLower(), uParam.getUpper(), jMethod, jCustomType, this.userInteractor);
+        _routinesFacade.umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam, jMethod, jCustomType.orElse(null));
       } else {
         jMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
       }
@@ -84,8 +80,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     		)
     );
     registerObjectUnderModification(jCustomType.isPresent() ? jCustomType.get() : null);
-    // val updatedElement userExecution.getElement1(uOperation, uParam, jMethod, jCustomType);
-    userExecution.update0Element(uOperation, uParam, jMethod, jCustomType);
+    userExecution.executeAction1(uOperation, uParam, jMethod, jCustomType, this.getRoutinesFacade());
     
     postprocessElements();
     

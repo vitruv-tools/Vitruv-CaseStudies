@@ -9,7 +9,6 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Field;
-import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -34,7 +33,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final Property uAttribute, final Field jAttribute, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
-      UmlJavaTypePropagationHelper.propagateTypedMultiplicityElementTypeChanged_defaultObject(uAttribute, uAttribute.getLower(), uAttribute.getUpper(), jAttribute, jCustomType, this.userInteractor);
+      _routinesFacade.umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultObject(uAttribute, uAttribute, jAttribute, jCustomType.orElse(null));
       JavaMemberAndParameterUtil.updateAttributeTypeInSetters(jAttribute);
       JavaMemberAndParameterUtil.updateAttributeTypeInGetters(jAttribute);
     }

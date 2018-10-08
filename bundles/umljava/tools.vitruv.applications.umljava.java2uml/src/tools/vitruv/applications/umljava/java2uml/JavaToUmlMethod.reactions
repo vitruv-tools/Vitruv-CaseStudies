@@ -7,7 +7,6 @@ import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
 
 import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
@@ -16,6 +15,8 @@ import "http://www.emftext.org/java" as java
 reactions: javaToUmlMethod
 in reaction to changes in Java
 execute actions in UML
+
+import routines javaToUmlTypePropagation using qualified names
 
 //===========================================
 //=========================================== Method
@@ -237,9 +238,7 @@ routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReferen
         val uParam = retrieve uml::Parameter corresponding to jParam
     }
     action {
-        update uParam {
-        	propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam, correspondenceModel)
-        }
+        call javaToUmlTypePropagation.propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam)
     }
 }
 
@@ -253,14 +252,14 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
         val uOperation = retrieve uml::Operation corresponding to jMeth
     }
     action {
-		update uOperation {
+		execute {
 			var uParam = uOperation.getReturnResult
 			if (uParam === null){
 				// create a new return parameter
 				uParam = uOperation.createOwnedParameter("returnParameter", null)
 				uParam.direction = ParameterDirectionKind.RETURN_LITERAL
 			}
-        	propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jMeth, correspondenceModel)
+        	javaToUmlTypePropagation.propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jMeth)
 		}
     }
 }

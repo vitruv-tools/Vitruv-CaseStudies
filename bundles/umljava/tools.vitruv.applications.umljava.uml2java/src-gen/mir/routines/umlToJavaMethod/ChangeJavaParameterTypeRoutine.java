@@ -6,9 +6,9 @@ import mir.routines.umlToJavaMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -26,16 +26,12 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
       return uParam;
     }
     
-    public EObject getElement1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<ConcreteClassifier> jCustomType) {
-      return jParam;
-    }
-    
-    public void update0Element(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<ConcreteClassifier> jCustomType) {
-      UmlJavaTypePropagationHelper.propagateTypedMultiplicityElementTypeChanged_defaultObject(uParam, uParam.getLower(), uParam.getUpper(), jParam, jCustomType, this.userInteractor);
-    }
-    
     public EObject getCorrepondenceSourceJCustomType(final Parameter uParam, final Type uType, final OrdinaryParameter jParam) {
       return uType;
+    }
+    
+    public void callRoutine1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultObject(uParam, uParam, jParam, jCustomType.orElse(null));
     }
   }
   
@@ -74,8 +70,7 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     		)
     );
     registerObjectUnderModification(jCustomType.isPresent() ? jCustomType.get() : null);
-    // val updatedElement userExecution.getElement1(uParam, uType, jParam, jCustomType);
-    userExecution.update0Element(uParam, uType, jParam, jCustomType);
+    userExecution.callRoutine1(uParam, uType, jParam, jCustomType, this.getRoutinesFacade());
     
     postprocessElements();
     

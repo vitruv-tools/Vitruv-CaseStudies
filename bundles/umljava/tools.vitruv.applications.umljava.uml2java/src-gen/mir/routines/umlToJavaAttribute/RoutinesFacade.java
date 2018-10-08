@@ -21,7 +21,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPa
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
+    this.umlToJavaTypePropagation = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaTypePropagation")));
   }
+  
+  public final mir.routines.umlToJavaTypePropagation.RoutinesFacade umlToJavaTypePropagation;
   
   public boolean createJavaAttribute(final Classifier uClassifier, final Property umlAttribute) {
     RoutinesFacade _routinesFacade = this;

@@ -15,7 +15,6 @@ import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.types.TypesFactory;
-import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -37,14 +36,10 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
       return uOperation;
     }
     
-    public EObject getElement1(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<ConcreteClassifier> jCustomType) {
-      return jMethod;
-    }
-    
-    public void update0Element(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<ConcreteClassifier> jCustomType) {
+    public void executeAction1(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
       boolean _equals = Objects.equal(newDirection, ParameterDirectionKind.RETURN_LITERAL);
       if (_equals) {
-        UmlJavaTypePropagationHelper.propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam.getLower(), uParam.getUpper(), jMethod, jCustomType, this.userInteractor);
+        _routinesFacade.umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam, jMethod, jCustomType.orElse(null));
       } else {
         boolean _equals_1 = Objects.equal(oldDirection, ParameterDirectionKind.RETURN_LITERAL);
         if (_equals_1) {
@@ -119,8 +114,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     		)
     );
     registerObjectUnderModification(jCustomType.isPresent() ? jCustomType.get() : null);
-    // val updatedElement userExecution.getElement1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, jCustomType);
-    userExecution.update0Element(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, jCustomType);
+    userExecution.executeAction1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, jCustomType, this.getRoutinesFacade());
     
     userExecution.callRoutine1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, jCustomType, this.getRoutinesFacade());
     

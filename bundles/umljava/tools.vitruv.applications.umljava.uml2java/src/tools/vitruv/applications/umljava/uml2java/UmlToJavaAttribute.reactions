@@ -2,7 +2,6 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Property
 
 import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
 
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
@@ -13,6 +12,8 @@ import "http://www.emftext.org/java" as java
 reactions: umlToJavaAttribute
 in reaction to changes in UML
 execute actions in Java
+
+import routines umlToJavaTypePropagation using qualified names
 
 reaction UmlAttributeCreatedInClass {
     after element uml::Property created and inserted in uml::Class[ownedAttribute]
@@ -118,7 +119,7 @@ routine changeJavaAttributeType(uml::Property uAttribute) {
     }
     action {
         call {
-        	propagateTypedMultiplicityElementTypeChanged_defaultObject(uAttribute, uAttribute.lower, uAttribute.upper, jAttribute, jCustomType, userInteractor)
+        	umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultObject(uAttribute, uAttribute, jAttribute, jCustomType.orElse(null))
         	
 		    updateAttributeTypeInSetters(jAttribute)
 		    updateAttributeTypeInGetters(jAttribute)

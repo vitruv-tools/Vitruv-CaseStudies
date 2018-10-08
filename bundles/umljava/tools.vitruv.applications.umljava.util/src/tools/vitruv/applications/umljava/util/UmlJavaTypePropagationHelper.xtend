@@ -358,16 +358,46 @@ class UmlJavaTypePropagationHelper {
 	    }
 	}
 	
-	
+	/**
+	 * Creates a java::TypeReference with the correct type for the passed uml::Type. 
+	 * Depending on the Class of uType, this can be a java::NamespaceClassifierReference or a java PrimitiveType. 
+	 * 
+	 * @param uType
+	 * 		the input uml Type
+	 * @param jType 
+	 * 		the ConcreteClassifier (Class or Interface) that was retrieved from the correspondence model
+	 * @param defaultReference 
+	 * 		the output TypeReference this method should default to, if uType is null or cannot be mapped
+	 */
 	def static TypeReference createTypeReference(
 		Type uType, 
 		Optional<? extends ConcreteClassifier> jType, 
 		TypeReference defaultReference,
 		UserInteractor userInteractor
 	){
+    	return createTypeReference(uType, jType.orElse(null), defaultReference, userInteractor)
+	}
+	
+	/**
+	 * Creates a java::TypeReference with the correct type for the passed uml::Type. 
+	 * Depending on the Class of uType, this can be a java::NamespaceClassifierReference or a java PrimitiveType. 
+	 * 
+	 * @param uType
+	 * 		the input uml Type
+	 * @param jType 
+	 * 		the ConcreteClassifier (Class or Interface) that was retrieved from the correspondence model (may be null)
+	 * @param defaultReference 
+	 * 		the output TypeReference this method should default to, if uType is null or cannot be mapped
+	 */
+	def static TypeReference createTypeReference(
+		Type uType, 
+		ConcreteClassifier jType,  
+		TypeReference defaultReference,
+		UserInteractor userInteractor
+	){
 		var TypeReference typeReference = null
-    	if (jType.isPresent) {
-    		typeReference = JavaModificationUtil.createNamespaceClassifierReference(jType.get)
+    	if (jType !== null) {
+    		typeReference = JavaModificationUtil.createNamespaceClassifierReference(jType)
     	}
     	else if (uType !== null && uType instanceof PrimitiveType) {
     		typeReference = mapUmlPrimitiveToJavaPrimitive(uType as PrimitiveType)
@@ -420,81 +450,6 @@ class UmlJavaTypePropagationHelper {
     	val collectionTypeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(collectionNamespace, collectionSimpleName)
     	
 		return createCollectionTypeReference(collectionTypeReference, innerTypeReference)
-	}
-	
-	
-	
-	////////////////////// type propagation routine uml -> java ////////////
-	
-	private def static propagateTypedMultiplicityElementTypeChanged(
-		TypedElement uElement, int lower, int upper, // uml::Property or uml::Parameter
-		org.emftext.language.java.types.TypedElement jElement, // java::Field, java::Parameter, or java::Method
-		Optional<? extends ConcreteClassifier> jType, // new type retrieved from correspondences
-		TypeReference defaultReference,
-		UserInteractor userInteractor
-	) {
-    	var typeReference = createTypeReference(uElement.type, jType, defaultReference, userInteractor)
-    	
-		if(lower == 0 && upper == LiteralUnlimitedNatural.UNLIMITED) {
-			if (typeReference === defaultReference){
-				// default to java.lang.Object as an inner type
-				typeReference = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass)
-			}
-    		if(isCollectionTypeReference(jElement.typeReference)){
-    			// reuse previously selected CollectionType
-    			val collectionClassifier = getClassifier(jElement.typeReference) as ConcreteClassifier
-    			typeReference = createCollectionTypeReference(collectionClassifier, typeReference)
-    		}
-    		else {
-    			// no previously selected CollectionType
-	        	val Class<? extends Collection> collectionType = userSelectCollectionType(userInteractor)
-				typeReference = createCollectionTypeReference(collectionType, typeReference)
-    		}
-		}
-		
-		jElement.typeReference = typeReference
-		addJavaImport(jElement.containingCompilationUnit, typeReference)
-	}
-	
-	def static propagateTypedMultiplicityElementTypeChanged_defaultObject(
-		TypedElement uElement, int lower, int upper, // uml::Property or uml::Parameter
-		org.emftext.language.java.types.TypedElement jElement, // java::Field, java::Parameter, or java::Method
-		Optional<? extends ConcreteClassifier> jType, // new type retrieved from correspondences
-		UserInteractor userInteractor
-	) {
-		val objectNsRef = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass)// default to java.lang.Object
-		propagateTypedMultiplicityElementTypeChanged(uElement, lower, upper, jElement, jType, objectNsRef, userInteractor)
-	}
-	
-	def static propagateTypedMultiplicityElementTypeChanged_defaultVoid(
-		TypedElement uElement, int lower, int upper, // uml::Property or uml::Parameter
-		org.emftext.language.java.types.TypedElement jElement, // java::Field, java::Parameter, or java::Method
-		Optional<? extends ConcreteClassifier> jType, // new type retrieved from correspondences
-		UserInteractor userInteractor
-	) {
-		val voidRef = TypesFactory.eINSTANCE.createVoid
-		propagateTypedMultiplicityElementTypeChanged(uElement, lower, upper, jElement, jType, voidRef, userInteractor)
-	}
-	
-	
-	////////////////////// type propagation routine uml <- java ////////////
-	def static propagateTypeChangeToTypedMultiplicityElement(
-		TypedElement uTyped, MultiplicityElement uMultiplicity, // same element -- uml::Property or uml::Parameter
-		org.emftext.language.java.types.TypedElement jElement, // java::Field, java::Parameter, or java::Method
-		CorrespondenceModel cm
-	){
-		val jType = jElement.typeReference
-		val isCollectionReference = isCollectionTypeReference(jType)
-    	if (isCollectionReference){
-    		uMultiplicity.lower = 0
-    		uMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
-    		val innerTypeRef = getInnerTypeRefOfCollectionReference(jType)
-    		val innerType = if(innerTypeRef !== null) getUmlTypeFromReference(innerTypeRef, cm) else null
-    		uTyped.type = innerType
-    	}
-    	else {
-    		uTyped.type = getUmlTypeFromReference(jType, cm)
-    	}
 	}
 	
 }

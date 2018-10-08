@@ -1,0 +1,32 @@
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+
+import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.emftext.org/java" as java
+
+reactions: javaToUmlTypePropagation
+in reaction to changes in Java
+execute actions in UML
+
+routine propagateTypeChangeToTypedMultiplicityElement(
+		uml::TypedElement uTyped, uml::MultiplicityElement uMultiplicity, // same element -- uml::Property or uml::Parameter
+		java::TypedElement jElement // java::Field, java::Parameter, or java::Method
+	){
+	action{
+		execute{
+			val jType = jElement.typeReference
+			val isCollectionReference = isCollectionTypeReference(jType)
+	    	if (isCollectionReference){
+	    		uMultiplicity.lower = 0
+	    		uMultiplicity.upper = LiteralUnlimitedNatural.UNLIMITED
+	    		val innerTypeRef = getInnerTypeRefOfCollectionReference(jType)
+	    		val innerType = if(innerTypeRef !== null) getUmlTypeFromReference(innerTypeRef, correspondenceModel) else null
+	    		uTyped.type = innerType
+	    	}
+	    	else {
+	    		uTyped.type = getUmlTypeFromReference(jType, correspondenceModel)
+	    	}
+		}
+	}
+}
