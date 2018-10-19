@@ -133,7 +133,7 @@ routine setJavaMethodReturnType(uml::Operation uOperation, uml::Parameter uParam
     action {
         execute {
             if (uParam !== null){
-		    	umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam, jMethod, jCustomType.orElse(null))
+		    	umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null))
             }
             else {
             	jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
@@ -329,7 +329,7 @@ routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
     }
     action {
         call {
-        	umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultObject(uParam, uParam, jParam, jCustomType.orElse(null))
+        	umlToJavaTypePropagation.propagateOrdinaryParameterTypeChanged(uParam, jParam, jCustomType.orElse(null))
         }
     }
 }
@@ -351,7 +351,7 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
     action {
         execute {
             if (newDirection == ParameterDirectionKind.RETURN_LITERAL) {
-		    	umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam, jMethod, jCustomType.orElse(null))
+		    	umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null))
             } else if (oldDirection == ParameterDirectionKind.RETURN_LITERAL) {
                 jMethod.typeReference = TypesFactory.eINSTANCE.createVoid
             }

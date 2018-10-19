@@ -25,7 +25,7 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void callRoutine1(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.javaToUmlTypePropagation.propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam);
+      _routinesFacade.javaToUmlTypePropagation.propagateParameterTypeChange(jParam, uParam);
     }
   }
   

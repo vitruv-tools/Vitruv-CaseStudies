@@ -146,6 +146,6 @@ routine changeTypeOfCorrespondingAttribute(pcm::InnerDeclaration pcmInnerDeclara
 		val umlProperty = retrieve uml::Property corresponding to pcmInnerDeclaration tagged with TagLiterals.INNER_DECLARATION__PROPERTY
 	}
 	action {
-		call pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
+		call pcmDataTypePropagationReactions.setUmlPropertyType(pcmDataType, umlProperty)
 	}
 }

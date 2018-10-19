@@ -168,7 +168,7 @@ routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParam, pcm::
 		val umlParam = retrieve uml::Parameter corresponding to pcmParam tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
 	}
 	action {
-		call pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
+		call pcmDataTypePropagationReactions.setUmlParameterType(pcmDataType, umlParam)
 	}
 }
 

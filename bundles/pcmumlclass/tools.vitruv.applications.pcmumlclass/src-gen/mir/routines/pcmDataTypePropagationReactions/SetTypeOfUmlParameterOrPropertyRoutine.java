@@ -21,6 +21,10 @@ public class SetTypeOfUmlParameterOrPropertyRoutine extends AbstractRepairRoutin
     }
     
     public void callRoutine1(final DataType pcmType, final TypedElement umlElement, final MultiplicityElement umlMultiplicity, final String tag, @Extension final RoutinesFacade _routinesFacade) {
+      if ((umlElement != umlMultiplicity)) {
+        throw new IllegalStateException(
+          ("uml::TypedElement umlElement and uml::MultiplicityElement uMultiplicity" + "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."));
+      }
       if (((pcmType != null) && (pcmType instanceof CollectionDataType))) {
         _routinesFacade.setTypeOfUmlParameterOrProperty_Collection(((CollectionDataType) pcmType), umlElement, umlMultiplicity, tag);
       } else {

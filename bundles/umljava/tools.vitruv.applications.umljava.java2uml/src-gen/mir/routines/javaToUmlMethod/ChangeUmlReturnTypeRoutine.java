@@ -28,7 +28,7 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
         uParam = uOperation.createOwnedParameter("returnParameter", null);
         uParam.setDirection(ParameterDirectionKind.RETURN_LITERAL);
       }
-      _routinesFacade.javaToUmlTypePropagation.propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jMeth);
+      _routinesFacade.javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam);
     }
     
     public EObject getCorrepondenceSourceUOperation(final Method jMeth, final TypeReference jType) {

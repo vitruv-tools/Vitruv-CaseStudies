@@ -119,7 +119,7 @@ routine changeJavaAttributeType(uml::Property uAttribute) {
     }
     action {
         call {
-        	umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultObject(uAttribute, uAttribute, jAttribute, jCustomType.orElse(null))
+        	umlToJavaTypePropagation.propagatePropertyTypeChanged(uAttribute, jAttribute, jCustomType.orElse(null))
         	
 		    updateAttributeTypeInSetters(jAttribute)
 		    updateAttributeTypeInGetters(jAttribute)

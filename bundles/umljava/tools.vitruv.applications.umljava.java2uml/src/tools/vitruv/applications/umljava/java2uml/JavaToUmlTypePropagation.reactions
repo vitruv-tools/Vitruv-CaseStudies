@@ -9,10 +9,40 @@ reactions: javaToUmlTypePropagation
 in reaction to changes in Java
 execute actions in UML
 
+routine propagateAttributeTypeChange(java::Field jAtt, uml::Property uAtt){
+	action{
+		call propagateTypeChangeToTypedMultiplicityElement(uAtt, uAtt, jAtt)
+	}
+}
+
+routine propagateMethodReturnTypeChange(java::Method jMethod, uml::Parameter uReturnParameter){
+	action{
+		call propagateTypeChangeToTypedMultiplicityElement(uReturnParameter, uReturnParameter, jMethod)
+	}
+}
+
+routine propagateParameterTypeChange(java::OrdinaryParameter jParam, uml::Parameter uParam){
+	action{
+		call propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam)
+	}
+}
+
+// ******** general variants to reduce code duplication. If possible please use the facade routines above
+
 routine propagateTypeChangeToTypedMultiplicityElement(
 		uml::TypedElement uTyped, uml::MultiplicityElement uMultiplicity, // same element -- uml::Property or uml::Parameter
 		java::TypedElement jElement // java::Field, java::Parameter, or java::Method
 	){
+	match{
+		check{
+			if(uTyped !== uMultiplicity){
+				throw new IllegalStateException("uml::TypedElement uTyped and uml::MultiplicityElement uMultiplicity"
+					+ "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
+				)
+			}
+			true
+		}
+	}
 	action{
 		execute{
 			val jType = jElement.typeReference

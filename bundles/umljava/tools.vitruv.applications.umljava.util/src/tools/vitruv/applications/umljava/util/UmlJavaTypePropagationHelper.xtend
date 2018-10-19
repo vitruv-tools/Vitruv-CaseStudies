@@ -1,21 +1,19 @@
 package tools.vitruv.applications.umljava.util
 
 import java.util.ArrayList
-import java.util.Collection
 import java.util.HashSet
 import java.util.LinkedList
 import java.util.List
 import java.util.Optional
+import java.util.function.Function
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.eclipse.uml2.uml.MultiplicityElement
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
-import org.eclipse.uml2.uml.TypedElement
 import org.eclipse.uml2.uml.UMLPackage
 import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ConcreteClassifier
@@ -38,8 +36,6 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
-import java.util.function.Function
-import org.eclipse.emf.ecore.resource.Resource
 
 /**
  * Helper class for the Uml <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -58,10 +54,8 @@ class UmlJavaTypePropagationHelper {
     public static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(ResourceSet rs){
     	var List<PrimitiveType> umlPrimitiveTypes = #[]
 		val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
-		if(true){ //URIUtil.existsResourceAtUri(uri)){	//check does not yet support 'pathmap://' URIs
-			val resource = rs.getResource(uri,true)
-			umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList		
-		}
+		val resource = rs.getResource(uri,true)
+		umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList		
 		return umlPrimitiveTypes
     }
     
@@ -84,7 +78,7 @@ class UmlJavaTypePropagationHelper {
 		}
     }
     
-	private static val supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
+	private static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
 	
 	def static boolean isCollectionTypeReference(TypeReference jRef){
 		val classifier = getClassifier(jRef)
@@ -103,7 +97,7 @@ class UmlJavaTypePropagationHelper {
 	 * @param userInteractor the userInteractor to prompt the message
 	 * @return the selected Collection implementation Class 
 	 */
-    def static Class<? extends Collection> userSelectCollectionType(UserInteractor userInteractor) {
+    def static Class<?> userSelectCollectionType(UserInteractor userInteractor) {
         val String selectTypeMsg = "Select a Collection type for the association end"
         val int selectedType = userInteractor.singleSelectionDialogBuilder.message(selectTypeMsg)
             .choices(supportedCollectionTypes.map[it.name]).windowModality(WindowModality.MODAL).startInteraction()
@@ -268,7 +262,7 @@ class UmlJavaTypePropagationHelper {
 			}
 		}
 	}
-	// TODO how do I use the same java-doc for both methods
+	
 	def static dispatch PrimitiveType mapJavaPrimitiveToUmlPrimitive(org.emftext.language.java.types.PrimitiveType jRef, CorrespondenceModel cm){
 		return switch jRef {
 			case jRef instanceof Boolean:
@@ -332,15 +326,26 @@ class UmlJavaTypePropagationHelper {
 			return null // nothing to do
 		}
 		
-		val targetNamespace = if (jType.containingCompilationUnit !== null) jType.containingCompilationUnit.namespaces.join(".") else ""
-		val qualifiedName = getQualifiedName(jType)
-		
-		// ignored samePackage, so that move-changes of a compilationUnit can be more easily remedied, because the import still exists
-		val samePackage = false // targetNamespace.equals(compUnit.namespaces.join(".")) 
+		/*
+		 * If a referenced type lives in the same package as the concerned CompilationUnit, then an import
+		 * is generally unnecessary. However, if the Compilation unit is then moved to another package,
+		 * the transformation has to ensure that imports for types in the same package are added afterwards.
+		 * 
+		 * The samePackage check is disabled, because the required transformation implementation to support 
+		 * this feature is still missing. Until then, imports are added for every referenced Type, so that the 
+		 * CompilationUnit remains compilable after beeing moved.
+		 */
+//		val targetNamespace = if (jType.containingCompilationUnit !== null) jType.containingCompilationUnit.namespaces.join(".") else ""
+//		val samePackage = targetNamespace.equals(compUnit.namespaces.join(".")) 
+		val samePackage = false 
 		val alreadyImported = compUnit.imports.filterNull.filter(ClassifierImport).exists[
-			// EcoreUtil.equals(it.classifier, jType) 
-			// compares all features and internal references (which is expensive for real classes like ArrayList)
-			it.classifier.name == jType.name // instead of EcureUtil.equals; this does not consider namespaces
+			it.classifier.name == jType.name
+			//TODO unclear how to handle name conflicts
+			/* It is possible that two Types have the same name but different namespaces. In this case
+			 * at least one of the types has to be used fully qualified throughout the compilation unit.
+			 * How should such a problem be communicated and how can the JaMoPP printer then be triggered 
+			 * to write TypeReferences fully qualified. 
+			*/
 		]
 		if (!samePackage && !alreadyImported) {
 			val classifierImport = ImportsFactory.eINSTANCE.createClassifierImport
@@ -442,7 +447,7 @@ class UmlJavaTypePropagationHelper {
 	}
 	
 	def static NamespaceClassifierReference createCollectionTypeReference (
-		Class<? extends Collection> collectionType,
+		Class<?> collectionType,
 		TypeReference innerTypeReference
 	){
     	val collectionNamespace = collectionType.name.replace("." + collectionType.simpleName, "")

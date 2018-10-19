@@ -21,6 +21,30 @@ reactions: pcmDataTypePropagationReactions
 in reaction to changes in PCM
 execute actions in UML
 
+routine setUmlParameterType(
+		pcm::DataType pcmType, 
+		uml::Parameter umlParameter
+){
+	action {
+		call {
+			setTypeOfUmlParameterOrProperty(pcmType, umlParameter, umlParameter, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
+		}
+	}
+}
+
+routine setUmlPropertyType(
+		pcm::DataType pcmType, 
+		uml::Property umlProperty
+){
+	action {
+		call {
+			setTypeOfUmlParameterOrProperty(pcmType, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
+		}
+	}
+}
+
+
+// ******** general variants to reduce code duplication. If possible please use the facade routines above
 
 routine setTypeOfUmlParameterOrProperty(
 		pcm::DataType pcmType, 
@@ -29,6 +53,12 @@ routine setTypeOfUmlParameterOrProperty(
 ){
 	action {
 		call {
+			if(umlElement !== umlMultiplicity){
+				throw new IllegalStateException("uml::TypedElement umlElement and uml::MultiplicityElement uMultiplicity"
+					+ "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
+				)
+			}
+			
 			if (pcmType !== null && pcmType instanceof CollectionDataType){
 				setTypeOfUmlParameterOrProperty_Collection(pcmType as CollectionDataType, umlElement, umlMultiplicity, tag)
 			}
@@ -91,10 +121,7 @@ routine removeOldCollectionDataTypeCorrespondence(
 		val oldCollectionType = retrieve pcm::CollectionDataType corresponding to umlElement tagged with tag
 	}
 	action {
-//		execute{
-//			ReactionsCorrespondenceHelper.removeCorrespondencesBetweenElements(correspondenceModel, oldCollectionType, umlElement, tag)
-//		}
-		remove correspondence between oldCollectionType and umlElement tagged with tag // TODO does not work without tags
+		remove correspondence between oldCollectionType and umlElement tagged with tag
 	}
 }
 

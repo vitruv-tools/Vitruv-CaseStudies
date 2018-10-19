@@ -33,7 +33,7 @@ public class ChangeJavaAttributeTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final Property uAttribute, final Field jAttribute, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultObject(uAttribute, uAttribute, jAttribute, jCustomType.orElse(null));
+      _routinesFacade.umlToJavaTypePropagation.propagatePropertyTypeChanged(uAttribute, jAttribute, jCustomType.orElse(null));
       JavaMemberAndParameterUtil.updateAttributeTypeInSetters(jAttribute);
       JavaMemberAndParameterUtil.updateAttributeTypeInGetters(jAttribute);
     }

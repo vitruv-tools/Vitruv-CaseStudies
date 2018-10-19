@@ -65,7 +65,7 @@ routine changeUmlAttributeType(java::Field jAttr, java::TypeReference jType) {
         val uAttr = retrieve uml::Property corresponding to jAttr
     }
     action {
-        call javaToUmlTypePropagation.propagateTypeChangeToTypedMultiplicityElement(uAttr, uAttr, jAttr)
+        call javaToUmlTypePropagation.propagateAttributeTypeChange(jAttr, uAttr)
     }
 }
 

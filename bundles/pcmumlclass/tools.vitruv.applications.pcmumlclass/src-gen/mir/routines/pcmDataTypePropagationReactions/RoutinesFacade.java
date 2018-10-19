@@ -5,9 +5,13 @@ import mir.routines.pcmDataTypePropagationReactions.RemoveOldCollectionDataTypeC
 import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrPropertyRoutine;
 import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrProperty_CollectionRoutine;
 import mir.routines.pcmDataTypePropagationReactions.SetTypeOfUmlParameterOrProperty_NonCollectionRoutine;
+import mir.routines.pcmDataTypePropagationReactions.SetUmlParameterTypeRoutine;
+import mir.routines.pcmDataTypePropagationReactions.SetUmlPropertyTypeRoutine;
 import mir.routines.pcmDataTypePropagationReactions.UnsupportedPrimitiveTypeSetWarningRoutine;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.MultiplicityElement;
+import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.TypedElement;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.DataType;
@@ -23,6 +27,22 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPa
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
+  }
+  
+  public boolean setUmlParameterType(final DataType pcmType, final Parameter umlParameter) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    SetUmlParameterTypeRoutine routine = new SetUmlParameterTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType, umlParameter);
+    return routine.applyRoutine();
+  }
+  
+  public boolean setUmlPropertyType(final DataType pcmType, final Property umlProperty) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    SetUmlPropertyTypeRoutine routine = new SetUmlPropertyTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmType, umlProperty);
+    return routine.applyRoutine();
   }
   
   public boolean setTypeOfUmlParameterOrProperty(final DataType pcmType, final TypedElement umlElement, final MultiplicityElement umlMultiplicity, final String tag) {

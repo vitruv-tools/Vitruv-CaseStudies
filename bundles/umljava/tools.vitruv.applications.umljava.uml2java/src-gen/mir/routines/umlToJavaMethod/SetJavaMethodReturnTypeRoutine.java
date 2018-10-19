@@ -30,7 +30,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     
     public void executeAction1(final Operation uOperation, final Parameter uParam, final Method jMethod, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
       if ((uParam != null)) {
-        _routinesFacade.umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam, jMethod, jCustomType.orElse(null));
+        _routinesFacade.umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null));
       } else {
         jMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
       }

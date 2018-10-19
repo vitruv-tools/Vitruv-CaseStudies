@@ -1,10 +1,10 @@
-import java.util.Collection
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.domains.java.util.JavaModificationUtil
 
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import org.eclipse.uml2.uml.ParameterDirectionKind
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -13,18 +13,76 @@ reactions: umlToJavaTypePropagation
 in reaction to changes in UML
 execute actions in Java
 
+routine propagatePropertyTypeChanged(
+		uml::Property uProperty,
+		java::Field jElement,
+		java::ConcreteClassifier jType // new type retrieved from correspondences or null
+	) {
+	action{
+		call{
+			propagateTypedMultiplicityElementTypeChanged_defaultObject(uProperty, uProperty, jElement, jType)
+		}
+	}
+}
+
+routine propagateReturnParameterTypeChanged(
+		uml::Parameter uReturnParameter,
+		java::Method jMethod,
+		java::ConcreteClassifier jType // new type retrieved from correspondences or null
+	) {
+	action{
+		call{
+			if (uReturnParameter.direction !== ParameterDirectionKind.RETURN_LITERAL){
+				throw new IllegalStateException("An uml::Parameter with direction!=RETURN_LITERAL cannot be synchronized with a java::Method.")
+			}
+			propagateTypedMultiplicityElementTypeChanged_defaultVoid(uReturnParameter, uReturnParameter, jMethod, jType)
+		}
+	}
+}
+
+routine propagateOrdinaryParameterTypeChanged(
+		uml::Parameter uParameter,
+		java::OrdinaryParameter jParameter,
+		java::ConcreteClassifier jType // new type retrieved from correspondences or null
+	) {
+	action{
+		call{
+			if (uParameter.direction === ParameterDirectionKind.RETURN_LITERAL){
+				throw new IllegalStateException("An uml::Parameter with direction==RETURN_LITERAL cannot be synchronized with a java::Parameter.")
+			}
+			else{
+				propagateTypedMultiplicityElementTypeChanged_defaultObject(uParameter, uParameter, jParameter, jType)
+			}
+		}
+	}
+}
+
+
+// ******** general variants to reduce code duplication. If possible please use the facade routines above
+
 routine propagateTypedMultiplicityElementTypeChanged(
 		uml::TypedElement uElement, uml::MultiplicityElement uMultiplicity, // uml::Property or uml::Parameter
 		java::TypedElement jElement, // java::Field, java::Parameter, or java::Method
 		java::ConcreteClassifier jType, // new type retrieved from correspondences or null
 		java::TypeReference defaultReference
 	) {
+	match{
+		check{
+			if(uElement !== uMultiplicity){
+				throw new IllegalStateException("uml::TypedElement uElement and uml::MultiplicityElement uMultiplicity"
+					+ "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
+				)
+			}
+			true
+		}
+	}
 	action{
 		execute{
 	    	var typeReference = createTypeReference(uElement.type, jType, defaultReference, userInteractor)
 	    	
 			if(uMultiplicity.lower == 0 && uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED) {
 				if (typeReference === defaultReference){
+					// could not create a specific typeReference for the uElement.type
 					// default to java.lang.Object as an inner type
 					typeReference = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass)
 				}
@@ -35,7 +93,7 @@ routine propagateTypedMultiplicityElementTypeChanged(
 	    		}
 	    		else {
 	    			// no previously selected CollectionType
-		        	val Class<? extends Collection> collectionType = userSelectCollectionType(userInteractor)
+		        	val Class<?> collectionType = userSelectCollectionType(userInteractor)
 					typeReference = createCollectionTypeReference(collectionType, typeReference)
 	    		}
 			}

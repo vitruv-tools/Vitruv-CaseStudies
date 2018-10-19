@@ -4,9 +4,10 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.List
 import org.apache.log4j.Logger
-import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
+import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.EnumConstant
@@ -17,14 +18,12 @@ import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.parameters.Parametrizable
 import org.emftext.language.java.statements.ExpressionStatement
-import org.emftext.language.java.types.TypeReference
-import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
-import static tools.vitruv.applications.umljava.util.CommonUtil.*
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.statements.Return
+import org.emftext.language.java.types.TypeReference
+
+import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 /**
  * A util class for field, method and parameter related util functions.

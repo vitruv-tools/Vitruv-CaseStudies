@@ -30,7 +30,7 @@ public class ChangeTypeOfCorrespondingReturnParameterRoutine extends AbstractRep
     }
     
     public void callRoutine1(final OperationSignature pcmSignature, final DataType pcmDataType, final Parameter umlParam, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER);
+      _routinesFacade.pcmDataTypePropagationReactions.setUmlParameterType(pcmDataType, umlParam);
     }
   }
   

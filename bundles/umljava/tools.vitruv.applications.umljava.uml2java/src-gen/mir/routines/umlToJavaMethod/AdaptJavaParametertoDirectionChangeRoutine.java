@@ -39,7 +39,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     public void executeAction1(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
       boolean _equals = Objects.equal(newDirection, ParameterDirectionKind.RETURN_LITERAL);
       if (_equals) {
-        _routinesFacade.umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultVoid(uParam, uParam, jMethod, jCustomType.orElse(null));
+        _routinesFacade.umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null));
       } else {
         boolean _equals_1 = Objects.equal(oldDirection, ParameterDirectionKind.RETURN_LITERAL);
         if (_equals_1) {

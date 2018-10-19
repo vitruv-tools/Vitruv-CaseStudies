@@ -1,7 +1,6 @@
 package mir.routines.umlToJavaTypePropagation;
 
 import java.io.IOException;
-import java.util.Collection;
 import mir.routines.umlToJavaTypePropagation.RoutinesFacade;
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural;
 import org.eclipse.uml2.uml.MultiplicityElement;
@@ -37,12 +36,24 @@ public class PropagateTypedMultiplicityElementTypeChangedRoutine extends Abstrac
           final ConcreteClassifier collectionClassifier = ((ConcreteClassifier) _classifier);
           typeReference = UmlJavaTypePropagationHelper.createCollectionTypeReference(collectionClassifier, typeReference);
         } else {
-          final Class<? extends Collection> collectionType = UmlJavaTypePropagationHelper.userSelectCollectionType(this.userInteractor);
+          final Class<?> collectionType = UmlJavaTypePropagationHelper.userSelectCollectionType(this.userInteractor);
           typeReference = UmlJavaTypePropagationHelper.createCollectionTypeReference(collectionType, typeReference);
         }
       }
       jElement.setTypeReference(typeReference);
       UmlJavaTypePropagationHelper.addJavaImport(jElement.getContainingCompilationUnit(), typeReference);
+    }
+    
+    public boolean checkMatcherPrecondition1(final TypedElement uElement, final MultiplicityElement uMultiplicity, final org.emftext.language.java.types.TypedElement jElement, final ConcreteClassifier jType, final TypeReference defaultReference) {
+      boolean _xblockexpression = false;
+      {
+        if ((uElement != uMultiplicity)) {
+          throw new IllegalStateException(
+            ("uml::TypedElement uElement and uml::MultiplicityElement uMultiplicity" + "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."));
+        }
+        _xblockexpression = true;
+      }
+      return _xblockexpression;
     }
   }
   
@@ -70,6 +81,9 @@ public class PropagateTypedMultiplicityElementTypeChangedRoutine extends Abstrac
     getLogger().debug("   jType: " + this.jType);
     getLogger().debug("   defaultReference: " + this.defaultReference);
     
+    if (!userExecution.checkMatcherPrecondition1(uElement, uMultiplicity, jElement, jType, defaultReference)) {
+    	return false;
+    }
     userExecution.executeAction1(uElement, uMultiplicity, jElement, jType, defaultReference, this.getRoutinesFacade());
     
     postprocessElements();

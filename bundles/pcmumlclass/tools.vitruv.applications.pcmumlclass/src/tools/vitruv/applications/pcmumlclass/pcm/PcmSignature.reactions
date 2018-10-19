@@ -219,6 +219,6 @@ routine changeTypeOfCorrespondingReturnParameter(pcm::OperationSignature pcmSign
 		val umlParam = retrieve uml::Parameter corresponding to pcmSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
 	}
 	action {
-		call pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
+		call pcmDataTypePropagationReactions.setUmlParameterType(pcmDataType, umlParam)
 	}
 }

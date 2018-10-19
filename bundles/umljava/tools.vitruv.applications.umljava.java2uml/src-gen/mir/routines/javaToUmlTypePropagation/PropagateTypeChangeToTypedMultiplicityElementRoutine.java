@@ -41,6 +41,18 @@ public class PropagateTypeChangeToTypedMultiplicityElementRoutine extends Abstra
         uTyped.setType(UmlJavaTypePropagationHelper.getUmlTypeFromReference(jType, this.correspondenceModel));
       }
     }
+    
+    public boolean checkMatcherPrecondition1(final TypedElement uTyped, final MultiplicityElement uMultiplicity, final org.emftext.language.java.types.TypedElement jElement) {
+      boolean _xblockexpression = false;
+      {
+        if ((uTyped != uMultiplicity)) {
+          throw new IllegalStateException(
+            ("uml::TypedElement uTyped and uml::MultiplicityElement uMultiplicity" + "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."));
+        }
+        _xblockexpression = true;
+      }
+      return _xblockexpression;
+    }
   }
   
   public PropagateTypeChangeToTypedMultiplicityElementRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final TypedElement uTyped, final MultiplicityElement uMultiplicity, final org.emftext.language.java.types.TypedElement jElement) {
@@ -61,6 +73,9 @@ public class PropagateTypeChangeToTypedMultiplicityElementRoutine extends Abstra
     getLogger().debug("   uMultiplicity: " + this.uMultiplicity);
     getLogger().debug("   jElement: " + this.jElement);
     
+    if (!userExecution.checkMatcherPrecondition1(uTyped, uMultiplicity, jElement)) {
+    	return false;
+    }
     userExecution.executeAction1(uTyped, uMultiplicity, jElement, this.getRoutinesFacade());
     
     postprocessElements();

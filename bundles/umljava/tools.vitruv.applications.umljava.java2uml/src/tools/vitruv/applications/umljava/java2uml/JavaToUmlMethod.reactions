@@ -238,7 +238,7 @@ routine changeUmlParameterType(java::OrdinaryParameter jParam, java::TypeReferen
         val uParam = retrieve uml::Parameter corresponding to jParam
     }
     action {
-        call javaToUmlTypePropagation.propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jParam)
+        call javaToUmlTypePropagation.propagateParameterTypeChange(jParam, uParam)
     }
 }
 
@@ -259,7 +259,7 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
 				uParam = uOperation.createOwnedParameter("returnParameter", null)
 				uParam.direction = ParameterDirectionKind.RETURN_LITERAL
 			}
-        	javaToUmlTypePropagation.propagateTypeChangeToTypedMultiplicityElement(uParam, uParam, jMeth)
+        	javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam)
 		}
     }
 }

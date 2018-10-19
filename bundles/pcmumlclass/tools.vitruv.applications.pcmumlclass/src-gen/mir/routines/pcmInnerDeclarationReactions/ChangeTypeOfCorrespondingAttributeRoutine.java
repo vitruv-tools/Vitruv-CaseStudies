@@ -30,7 +30,7 @@ public class ChangeTypeOfCorrespondingAttributeRoutine extends AbstractRepairRou
     }
     
     public void callRoutine1(final InnerDeclaration pcmInnerDeclaration, final DataType pcmDataType, final Property umlProperty, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY);
+      _routinesFacade.pcmDataTypePropagationReactions.setUmlPropertyType(pcmDataType, umlProperty);
     }
   }
   

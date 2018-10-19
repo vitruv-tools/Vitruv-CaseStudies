@@ -31,7 +31,7 @@ public class ChangeJavaParameterTypeRoutine extends AbstractRepairRoutineRealiza
     }
     
     public void callRoutine1(final Parameter uParam, final Type uType, final OrdinaryParameter jParam, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.umlToJavaTypePropagation.propagateTypedMultiplicityElementTypeChanged_defaultObject(uParam, uParam, jParam, jCustomType.orElse(null));
+      _routinesFacade.umlToJavaTypePropagation.propagateOrdinaryParameterTypeChanged(uParam, jParam, jCustomType.orElse(null));
     }
   }
   

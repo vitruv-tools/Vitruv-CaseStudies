@@ -18,10 +18,6 @@ import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import java.util.function.Function
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.ecore.EObject
 
 /**
  * Test class for testing the attribute reactions.

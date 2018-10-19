@@ -259,11 +259,6 @@ routine removeUmlClassImplement(java::Class jClass, java::TypeReference jReferen
     }
     action {
         update uClass {
-        	// TODO replaced tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-//            val uInterface = uRealization?.contract
-//            if (uInterface !== null) {
-//                uClass.removeUmlImplementedInterface(uInterface)
-//            }
             uClass.interfaceRealizations -= uRealization
         }
         delete uRealization
@@ -428,8 +423,6 @@ routine removeUmlPackageOfClass(java::Package jPackage, java::ConcreteClassifier
     }
     action {
         update uPackage {
-//        	TODO replace tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-//            removePackagedElementFromPackage(uPackage, uClassifier)
             uPackage.packagedElements -= uClassifier
         }
     }

@@ -37,7 +37,7 @@ routine detectOrCreateCorrespondingRequiredConstructorParameter(pcm::OperationRe
 	action {
 		call {
 			if (!umlConstructorParameter.isPresent){
-				//TODO what would be a good criterion for detecting the RequiredConstructorParameter?
+				// what would be a good criterion for detecting the RequiredConstructorParameter?
 				createCorrespondingRequiredConstructorParameter(pcmRequired, pcmIPRE)
 			}
 		}
@@ -68,7 +68,7 @@ routine detectOrCreateCorrespondingRequiredField(pcm::OperationRequiredRole pcmR
 	action {
 		call {
 			if (!umlRequiredField.isPresent){
-				//TODO what would be a good criterion for detecting the RequiredField?
+				// what would be a good criterion for detecting the RequiredField?
 				createCorrespondingRequiredField(pcmRequired, pcmIPRE)
 			}
 		}

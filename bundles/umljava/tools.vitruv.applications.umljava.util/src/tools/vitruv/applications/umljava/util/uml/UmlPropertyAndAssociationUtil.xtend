@@ -7,7 +7,6 @@ import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.ValueSpecification
 import org.eclipse.uml2.uml.VisibilityKind
-import static tools.vitruv.applications.umljava.util.CommonUtil.*
 
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.setName
 

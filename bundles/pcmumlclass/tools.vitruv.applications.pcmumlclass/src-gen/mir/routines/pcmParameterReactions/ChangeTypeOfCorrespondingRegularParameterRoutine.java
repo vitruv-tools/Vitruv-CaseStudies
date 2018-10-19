@@ -29,7 +29,7 @@ public class ChangeTypeOfCorrespondingRegularParameterRoutine extends AbstractRe
     }
     
     public void callRoutine1(final Parameter pcmParam, final DataType pcmDataType, final org.eclipse.uml2.uml.Parameter umlParam, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.pcmDataTypePropagationReactions.setTypeOfUmlParameterOrProperty(pcmDataType, umlParam, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER);
+      _routinesFacade.pcmDataTypePropagationReactions.setUmlParameterType(pcmDataType, umlParam);
     }
   }
   
