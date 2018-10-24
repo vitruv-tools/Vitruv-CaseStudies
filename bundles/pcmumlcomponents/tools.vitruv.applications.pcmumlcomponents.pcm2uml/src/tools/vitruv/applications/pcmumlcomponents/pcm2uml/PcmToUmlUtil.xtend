@@ -18,8 +18,8 @@ import org.palladiosimulator.pcm.repository.ParameterModifier
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
-import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsFactory
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.extensions.dslsruntime.reactions.ReactionsCorrespondenceModelViewFactory
 
 class PcmToUmlUtil {
 
@@ -77,10 +77,7 @@ class PcmToUmlUtil {
 	}
 
 	private static def getReactionsView(CorrespondenceModel correspondenceModel) {
-		return correspondenceModel.getEditableView(
-			ReactionsCorrespondence,
-			[ReactionsFactory.eINSTANCE.createReactionsCorrespondence()]
-		)
+		return correspondenceModel.getEditableView(ReactionsCorrespondenceModelViewFactory.getInstance());
 	}
 
 	protected static def ReactionsCorrespondence createTaggedCorrespondence(CorrespondenceModel correspondenceModel,
