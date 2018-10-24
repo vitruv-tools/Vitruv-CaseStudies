@@ -7,7 +7,6 @@ import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
 
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*

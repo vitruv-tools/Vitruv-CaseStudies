@@ -1,16 +1,11 @@
 package tools.vitruv.applications.pcmjava.util.java2pcm
 
-import com.google.common.collect.Sets
-import tools.vitruv.framework.util.datatypes.VURI
-import tools.vitruv.framework.tuid.Tuid
-import tools.vitruv.framework.util.datatypes.ClaimableMap
 import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import java.util.Map
 import java.util.Set
 import org.apache.log4j.Logger
-import org.eclipse.emf.ecore.EAttribute
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.emftext.language.java.classifiers.Classifier
@@ -22,7 +17,6 @@ import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypedElement
-import org.palladiosimulator.pcm.core.entity.NamedElement
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
@@ -74,64 +68,6 @@ abstract class Java2PcmUtils extends PcmJavaUtils {
 			PcmNamespace.PCM_ATTRIBUTE_ENTITY_NAME, featureCorrespondenceMap)
 	}
 
-	def static updateNameAttribute(
-		Set<EObject> correspondingEObjects,
-		Object newValue,
-		EStructuralFeature affectedFeature,
-		ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap,
-		CorrespondenceModel correspondenceModel,
-		boolean saveFilesOfChangedEObjects
-	) {
-		val Set<Class<? extends EObject>> pcmRootClasses = Sets.newHashSet(Repository, System)
-		updateNameAttribute(correspondingEObjects, newValue, affectedFeature, featureCorrespondenceMap,
-			correspondenceModel, saveFilesOfChangedEObjects, pcmRootClasses)
-	}
-
-	def static void updateNameAttributeForPCMRootObjects(Iterable<NamedElement> pcmRootElements,
-		EStructuralFeature affectedFeature, Object newValue, CorrespondenceModel correspondenceModel,
-		ResourceAccess resourceAccess) {
-			for (pcmRoot : pcmRootElements) {
-				if (!(pcmRoot instanceof Repository) && !(pcmRoot instanceof System)) {
-					logger.warn("EObject " + pcmRoot + " is not an instance of a PCM Root object - element" + pcmRoot +
-						"will not be renamed")
-
-			} else {
-				val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(pcmRoot)
-	
-				// change name		
-				pcmRoot.entityName = newValue.toString;
-	
-				val VURI oldVURI = VURI.getInstance(pcmRoot.eResource.getURI)
-				PcmJavaUtils.handleRootChanges(pcmRoot, correspondenceModel, oldVURI, resourceAccess, oldVURI, oldTuid)
-			}
-		}
-	}
-	
-	def static void updateNameAsSingleValuedEAttribute(EObject eObject, EAttribute affectedAttribute,
-		Object oldValue, Object newValue,
-		ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap, CorrespondenceModel correspondenceModel, 
-		ResourceAccess resourceAccess) {
-		val correspondingEObjects = PcmJavaUtils.checkKeyAndCorrespondingObjects(eObject, affectedAttribute,
-			featureCorrespondenceMap, correspondenceModel)
-		if (correspondingEObjects.nullOrEmpty) {
-			return
-		}
-		val Set<NamedElement> rootPCMEObjects = new HashSet
-		rootPCMEObjects.addAll(correspondingEObjects.filter(typeof(Repository)))
-		rootPCMEObjects.addAll(correspondingEObjects.filter(typeof(System)))
-		var boolean saveFilesOfChangedEObjects = true
-		if (!rootPCMEObjects.nullOrEmpty) {
-			saveFilesOfChangedEObjects = false
-		}
-		Java2PcmUtils.updateNameAttribute(correspondingEObjects, newValue, affectedAttribute,
-			featureCorrespondenceMap, correspondenceModel, saveFilesOfChangedEObjects)
-		if (!rootPCMEObjects.nullOrEmpty) {
-			Java2PcmUtils.updateNameAttributeForPCMRootObjects(rootPCMEObjects, affectedAttribute, newValue,
-				correspondenceModel, resourceAccess)
-		}
-		return
-	}
-	
 	def static createNewCorrespondingEObjects(EObject newEObject, EObject[] newCorrespondingEObjects,
 		CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
 		if (newCorrespondingEObjects.nullOrEmpty) {
