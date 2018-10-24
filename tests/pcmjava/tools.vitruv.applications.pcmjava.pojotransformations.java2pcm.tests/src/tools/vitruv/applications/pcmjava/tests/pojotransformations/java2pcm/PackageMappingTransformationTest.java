@@ -41,7 +41,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
         final CorrespondenceModel ci = this.getCorrespondenceModel();
         assertTrue("CorrespondenceModel == null", null != ci);
         assertTrue("No repository found in correspondence instance.",
-                0 < CorrespondenceModelUtil.getAllEObjectsOfTypeInCorrespondences(ci, Repository.class).size());
+                0 < ci.getAllEObjectsOfTypeInCorrespondences(Repository.class).size());
     }
 
     /**

@@ -633,8 +633,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	}
 
 	protected Package getPackageWithNameFromCorrespondenceModel(final String name) throws CoreException {
-		final Set<Package> packages = CorrespondenceModelUtil
-				.getAllEObjectsOfTypeInCorrespondences(this.getCorrespondenceModel(), Package.class);
+		final Set<Package> packages = this.getCorrespondenceModel().getAllEObjectsOfTypeInCorrespondences(Package.class);
 		for (final Package currentPackage : packages) {
 			if (currentPackage.getName().equals(name)) {
 				return currentPackage;

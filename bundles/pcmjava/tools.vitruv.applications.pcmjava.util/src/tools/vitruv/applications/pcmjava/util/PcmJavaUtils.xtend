@@ -1,10 +1,7 @@
 package tools.vitruv.applications.pcmjava.util
 
-import tools.vitruv.framework.tuid.Tuid
 import tools.vitruv.framework.util.datatypes.VURI
-import tools.vitruv.framework.util.datatypes.ClaimableMap
 import java.util.Map
-import java.util.Set
 import org.apache.log4j.Logger
 import org.eclipse.core.resources.IFile
 import org.eclipse.core.resources.IProject
@@ -53,15 +50,6 @@ class PcmJavaUtils {
 			logger.info("No corresponding objects found for " + eObject)
 		}
 		return correspondingEObjects
-	}
-
-	def private static boolean eObjectInstanceOfRootEObject(EObject object, Set<Class<? extends EObject>> classes) {
-		for (c : classes) {
-			if (c.isInstance(object)) {
-				return true
-			}
-		}
-		return false
 	}
 
 	/**
@@ -148,26 +136,26 @@ class PcmJavaUtils {
 	}
 
 	def dispatch static handleRootChanges(Iterable<EObject> eObjects, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete, Tuid oldTuid) {
+		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete) {
 		eObjects.forEach [ eObject |
-			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete, oldTuid)
+			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete)
 		]
 	}
 
 	def dispatch static handleRootChanges(EObject[] eObjects, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete, Tuid oldTuid) {
+		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete) {
 		eObjects.forEach [ eObject |
-			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete, oldTuid)
+			handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete)
 		]
 	}
 
 	def dispatch static handleRootChanges(EObject eObject, CorrespondenceModel correspondenceModel,
-		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete, Tuid oldTuid) {
-		handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete, oldTuid)
+		VURI sourceModelVURI, ResourceAccess resourceAccess, VURI vuriToDelete) {
+		handleSingleRootChange(eObject, correspondenceModel, sourceModelVURI, resourceAccess, vuriToDelete)
 	}
 
 	def static handleSingleRootChange(EObject eObject, CorrespondenceModel correspondenceModel, VURI sourceModelVURI,
-		ResourceAccess resourceAccess, VURI vuriToDelete, Tuid oldTuid) {
+		ResourceAccess resourceAccess, VURI vuriToDelete) {
 		TuidManager.instance.registerObjectUnderModification(eObject);
 		EcoreUtil.remove(eObject)
 		TuidManager.instance.updateTuidsOfRegisteredObjects;
@@ -195,40 +183,6 @@ class PcmJavaUtils {
 
 	public dispatch static def getNameFromPCMDataType(CompositeDataType compositeDataType) {
 		return compositeDataType.entityName
-	}
-
-	def static updateNameAttribute(Set<EObject> correspondingEObjects, Object newValue,
-			EStructuralFeature affectedFeature,
-			ClaimableMap<EStructuralFeature, EStructuralFeature> featureCorrespondenceMap,
-			CorrespondenceModel correspondenceModel, boolean saveFilesOfChangedEObjects,
-			Set<Class<? extends EObject>> classesOfRootObjects) {
-		val EStructuralFeature eStructuralFeature = featureCorrespondenceMap.claimValueForKey(affectedFeature)
-
-		val boolean rootAffected = correspondingEObjects.exists [ eObject |
-			eObjectInstanceOfRootEObject(eObject, classesOfRootObjects)
-		]
-		if (rootAffected) {
-			logger.error("The method updateNameattribut is not able to rename root objects")
-			return
-		}
-		for (EObject correspondingObject : correspondingEObjects) {
-			if (null === correspondingObject) {
-				logger.error("corresponding object is null")
-			} else {
-				val Tuid oldTuid = correspondenceModel.calculateTuidFromEObject(correspondingObject)
-				if (correspondingObject.eClass.EAllStructuralFeatures.contains(eStructuralFeature)) {
-					correspondingObject.eSet(eStructuralFeature, newValue)
-				}
-				if (correspondingObject instanceof Parameter && eStructuralFeature.name == "entityName") {
-					setParameterName(correspondingObject as Parameter, newValue as String);
-				}
-
-				oldTuid.updateTuid(correspondingObject)
-				if (saveFilesOfChangedEObjects) {
-					// nothing to do here?
-				}
-			}
-		}
 	}
 
 	public static def void setParameterName(Parameter parameter, String newName) {
