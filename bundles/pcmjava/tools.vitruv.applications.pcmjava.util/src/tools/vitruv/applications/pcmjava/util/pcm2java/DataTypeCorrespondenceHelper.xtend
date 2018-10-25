@@ -77,13 +77,6 @@ class DataTypeCorrespondenceHelper {
 		return TypesFactory.eINSTANCE.createClassifierReference
 	}
 
-	public static def Type claimUniqueCorrespondingJaMoPPDataType(DataType dataType, CorrespondenceModel ci) {
-		if (null === dataType) {
-			return TypesFactory.eINSTANCE.createVoid
-		}
-		return claimUniqueCorrespondingType(dataType, ci)
-	}
-
 	private static def dispatch Type claimUniqueCorrespondingType(CollectionDataType cdt, CorrespondenceModel ci) {
 		return ci.getCorrespondingEObjectsByType(cdt, ConcreteClassifier).claimOne
 	}
