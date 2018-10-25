@@ -18,6 +18,7 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 /**
  * Mapping transformation for primitive data types
@@ -56,7 +57,7 @@ class DataTypeCorrespondenceHelper {
 		if (null === primitveTypeMappingMap) {
 			initPrimitiveTypeMap()
 		}
-		return primitveTypeMappingMap.claimValueForKey(pdt.type)
+		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
 	}
 
 	public static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,
