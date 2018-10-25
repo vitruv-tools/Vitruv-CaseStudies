@@ -38,13 +38,13 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 
 /**
  * Helper to map type References to PCM data types
@@ -112,7 +112,7 @@ class TypeReferenceCorrespondenceHelper {
 
 			if (arrayDimension > 0 && null !== pcmDataType && null !== repo) {
 				// find CollectionDatatype list for innerValue or create new one
-				val typeName = "List_" + Pcm2JavaUtils.getNameFromPCMDataType(pcmDataType)
+				val typeName = "List_" + PcmJavaUtils.getNameFromPCMDataType(pcmDataType)
 				var collectionDataType = repo.dataTypes__Repository.filter(CollectionDataType).findFirst [
 					it.entityName.equals(typeName)
 				]
