@@ -19,9 +19,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.ClassifierReference
 import org.emftext.language.java.types.PrimitiveType
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.repository.CollectionDataType
-import org.palladiosimulator.pcm.repository.CompositeDataType
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 /**
@@ -170,16 +167,4 @@ public class Java2PcmHelper {
 		return null
 	}
 	
-	//PCMJavaUtils
-	public dispatch static def getNameFromPCMDataType(PrimitiveDataType primitiveDataType) {
-		return primitiveDataType.type.getName
-	}
-
-	public dispatch static def getNameFromPCMDataType(CollectionDataType collectionDataType) {
-		return collectionDataType.entityName
-	}
-
-	public dispatch static def getNameFromPCMDataType(CompositeDataType compositeDataType) {
-		return compositeDataType.entityName
-	}
 }

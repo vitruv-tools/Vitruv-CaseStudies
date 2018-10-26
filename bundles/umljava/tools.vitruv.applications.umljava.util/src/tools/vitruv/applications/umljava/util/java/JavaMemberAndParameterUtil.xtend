@@ -4,7 +4,6 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.List
 import org.apache.log4j.Logger
-import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.ClassMethod
@@ -77,7 +76,7 @@ class JavaMemberAndParameterUtil {
      * @param params list of parameters for the interface method
      * @return the new interface method
      */
-    def static createJavaInterfaceMethod(String name, TypeReference returnType, EList<Parameter> params) {
+    def static createJavaInterfaceMethod(String name, TypeReference returnType, List<Parameter> params) {
         val jMethod = MembersFactory.eINSTANCE.createInterfaceMethod;
         setName(jMethod, name)
         setTypeReference(jMethod, returnType)

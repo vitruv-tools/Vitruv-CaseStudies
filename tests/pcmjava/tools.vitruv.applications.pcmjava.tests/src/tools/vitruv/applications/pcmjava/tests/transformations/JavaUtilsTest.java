@@ -1,19 +1,15 @@
 package tools.vitruv.applications.pcmjava.tests.transformations;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.containers.CompilationUnit;
-import org.emftext.language.java.members.ClassMethod;
 import org.junit.Test;
 
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils;
 import tools.vitruv.domains.java.util.JavaModificationUtil;
 
 /**
@@ -40,14 +36,4 @@ public class JavaUtilsTest {
         assertEquals("ClassifierName name is wrong", cu.getClassifiers().get(0).getName(), className);
     }
 
-    @Test
-    public void testCreateMethod() throws Throwable {
-        final String content = "public void test() {\n" + "System.out.println(\"Hello world\");" + "\n}";
-        final EObject eObject = Pcm2JavaUtils.createJaMoPPMethod(content);
-
-        assertNotNull("eObject is null", eObject);
-        assertTrue("eObject is not instance of method", eObject instanceof ClassMethod);
-        final ClassMethod cm = (ClassMethod) eObject;
-        assertEquals("Method name is not the expected method name", "test", cm.getName());
-    }
 }

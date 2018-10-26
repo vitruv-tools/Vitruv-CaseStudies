@@ -18,6 +18,7 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 /**
  * Mapping transformation for primitive data types
@@ -56,7 +57,7 @@ class DataTypeCorrespondenceHelper {
 		if (null === primitveTypeMappingMap) {
 			initPrimitiveTypeMap()
 		}
-		return primitveTypeMappingMap.claimValueForKey(pdt.type)
+		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
 	}
 
 	public static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,
@@ -74,13 +75,6 @@ class DataTypeCorrespondenceHelper {
 			"found type " + type +
 				"is neither a TypeReference nor a ConcreteClassifier - could not create and return TypeReference")
 		return TypesFactory.eINSTANCE.createClassifierReference
-	}
-
-	public static def Type claimUniqueCorrespondingJaMoPPDataType(DataType dataType, CorrespondenceModel ci) {
-		if (null === dataType) {
-			return TypesFactory.eINSTANCE.createVoid
-		}
-		return claimUniqueCorrespondingType(dataType, ci)
 	}
 
 	private static def dispatch Type claimUniqueCorrespondingType(CollectionDataType cdt, CorrespondenceModel ci) {

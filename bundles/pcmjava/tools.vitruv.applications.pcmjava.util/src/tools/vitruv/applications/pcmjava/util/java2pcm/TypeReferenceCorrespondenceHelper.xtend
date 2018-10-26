@@ -1,14 +1,7 @@
 package tools.vitruv.applications.pcmjava.util.java2pcm
 
-import java.util.HashMap
-import java.util.Map
 import java.util.Set
 import org.apache.log4j.Logger
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.types.Boolean
 import org.emftext.language.java.types.Byte
@@ -38,13 +31,14 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaUtils
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.util.datatypes.ClaimableHashMap
 import tools.vitruv.framework.util.datatypes.ClaimableMap
 
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+import tools.vitruv.domains.pcm.util.PrimitiveTypesRepositoryLoader
 
 /**
  * Helper to map type References to PCM data types
@@ -61,37 +55,37 @@ class TypeReferenceCorrespondenceHelper {
 	private def static initPrimitiveTypeMap() {
 		primitveTypeMappingMap = new ClaimableHashMap
 		primitveTypeMappingMap.put(Boolean,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("BOOL"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BOOL"))
 		primitveTypeMappingMap.put(BooleanImpl,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("BOOL"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BOOL"))
 		primitveTypeMappingMap.put(Byte,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("BYTE"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BYTE"))
 		primitveTypeMappingMap.put(ByteImpl,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("BYTE"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("BYTE"))
 		primitveTypeMappingMap.put(Char,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("CHAR"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("CHAR"))
 		primitveTypeMappingMap.put(CharImpl,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("CHAR"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("CHAR"))
 		primitveTypeMappingMap.put(Double,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("DOUBLE"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE"))
 		primitveTypeMappingMap.put(DoubleImpl,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("DOUBLE"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE"))
 		primitveTypeMappingMap.put(Int,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("INT"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
 		primitveTypeMappingMap.put(IntImpl,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("INT"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
 		primitveTypeMappingMap.put(Long,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("INT"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
 		primitveTypeMappingMap.put(LongImpl,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("INT"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
 		primitveTypeMappingMap.put(Float,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("DOUBLE"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE"))
 		primitveTypeMappingMap.put(FloatImpl,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("DOUBLE"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("DOUBLE"))
 		primitveTypeMappingMap.put(Short,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("INT"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
 		primitveTypeMappingMap.put(ShortImpl,
-			TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.getPrimitiveDataTypes.get("INT"))
+			PrimitiveTypesRepositoryLoader.getPrimitiveDataTypes.get("INT"))
 	}
 
 	private synchronized def static DataType claimPCMDataTypeForJaMoPPPrimitiveType(PrimitiveType primitiveType) {
@@ -112,7 +106,7 @@ class TypeReferenceCorrespondenceHelper {
 
 			if (arrayDimension > 0 && null !== pcmDataType && null !== repo) {
 				// find CollectionDatatype list for innerValue or create new one
-				val typeName = "List_" + Pcm2JavaUtils.getNameFromPCMDataType(pcmDataType)
+				val typeName = "List_" + PcmJavaUtils.getNameFromPCMDataType(pcmDataType)
 				var collectionDataType = repo.dataTypes__Repository.filter(CollectionDataType).findFirst [
 					it.entityName.equals(typeName)
 				]
@@ -174,8 +168,7 @@ class TypeReferenceCorrespondenceHelper {
 
 				// if classifier is string return primitive type string
 				if (classifier.name.equalsIgnoreCase("String")) {
-					return TypeReferenceCorrespondenceHelper.PrimitiveTypeCorrespondenceHelper.
-						getPrimitiveDataTypeString()
+					return PrimitiveTypesRepositoryLoader.getPrimitiveDataTypeString()
 				}
 				var Set<DataType> dataTypes = null
 				try {
@@ -230,62 +223,6 @@ class TypeReferenceCorrespondenceHelper {
 			 * 	" for classifier " + classifier.name + correspondingWarning
 			 userInteractor.showMessage(UserInteractionType.MODELESS, message)*/
 			return cdt
-		}
-
-		/**
-		 * loads the primitive PCM types from standard primitive types URI
-		 * (partially) copied from DefaultResourceEnvironment from SoMoX
-		 */
-		private static class PrimitiveTypeCorrespondenceHelper {
-			private new() {
-			}
-
-			val private static String PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository";
-
-			var private static Repository primitiveTypesRepository;
-			var private static Map<String, PrimitiveDataType> primitives = new HashMap<String, PrimitiveDataType>()
-
-			/**
-			 * Retrieves a map of {@link PrimitiveDataType}s as defined in the
-			 * standard PCM resource repository.
-			 * 
-			 * @return A cached map of primitive data types.
-			 */
-			def public static Map<String, PrimitiveDataType> getPrimitiveDataTypes() {
-				if (primitiveTypesRepository === null) {
-					primitiveTypesRepository = getPrimitiveTypesRepository();
-					for (DataType d : primitiveTypesRepository.getDataTypes__Repository()) {
-						if (d instanceof PrimitiveDataType) {
-							val PrimitiveDataType pdt = d as PrimitiveDataType;
-							primitives.put(pdt.getType().getName(), pdt);
-						}
-					}
-				}
-				return primitives;
-			}
-
-			def private static Repository getPrimitiveTypesRepository() {
-				if (primitiveTypesRepository !== null) {
-					return primitiveTypesRepository;
-				}
-
-				val Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-				val Map<String, Object> m = reg.getExtensionToFactoryMap();
-				m.put("repository", new XMIResourceFactoryImpl());
-
-				val URI uri = URI.createURI(PRIMITIVETYPES_URI);
-
-				val ResourceSet resSet = new ResourceSetImpl();
-				val Resource resource = resSet.getResource(uri, true);
-
-				primitiveTypesRepository = resource.getContents().get(0) as Repository;
-				return primitiveTypesRepository;
-			}
-
-			def static getPrimitiveDataTypeString() {
-				return getPrimitiveDataTypes().get("STRING")
-			}
-
 		}
 
 	}
