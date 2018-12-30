@@ -111,7 +111,7 @@ public class JavaInterfaceCreatedReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final InsertEReference insertChange, final CompilationUnit affectedEObject, final EReference affectedFeature, final Interface newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.detectOrCreateUmlModel(affectedEObject);
-      UmlJavaTypePropagationHelper.registerPredefinedUmlPrimitiveTypes(this.correspondenceModel);
+      UmlJavaTypePropagationHelper.registerPredefinedUmlPrimitiveTypes(this.correspondenceModel, affectedEObject.eResource().getResourceSet());
       _routinesFacade.createUmlInterface(newValue, affectedEObject);
     }
   }

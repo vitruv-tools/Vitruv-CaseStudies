@@ -69,8 +69,8 @@ class UmlJavaTypePropagationHelper {
 		return umlPrimitiveTypes
     }
     
-    public static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm){
-		var List<PrimitiveType> umlPrimitiveTypes = getSupportedPredefinedUmlPrimitiveTypes(cm.resource.resourceSet)
+    public static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm, ResourceSet rs){
+		var List<PrimitiveType> umlPrimitiveTypes = getSupportedPredefinedUmlPrimitiveTypes(rs)
 		for (primitive : umlPrimitiveTypes){
 			val alreadyRegistered = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, primitive.name, PrimitiveType).head
 			if (alreadyRegistered === null) 

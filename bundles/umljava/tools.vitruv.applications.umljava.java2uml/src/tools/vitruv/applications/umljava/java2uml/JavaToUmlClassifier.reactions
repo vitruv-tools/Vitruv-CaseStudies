@@ -79,7 +79,7 @@ reaction JavaClassCreated {
     after element java::Class created and inserted in java::CompilationUnit[classifiers]
     call {
     	detectOrCreateUmlModel(affectedEObject)
-		registerPredefinedUmlPrimitiveTypes(correspondenceModel)
+		registerPredefinedUmlPrimitiveTypes(correspondenceModel, affectedEObject.eResource.resourceSet)
 	    createUmlClass(newValue, affectedEObject)
     }
 }
@@ -273,7 +273,7 @@ reaction JavaInterfaceCreated {
     after element java::Interface created and inserted in java::CompilationUnit[classifiers]
     call {
     	detectOrCreateUmlModel(affectedEObject)
-		registerPredefinedUmlPrimitiveTypes(correspondenceModel)
+		registerPredefinedUmlPrimitiveTypes(correspondenceModel, affectedEObject.eResource.resourceSet)
     	createUmlInterface(newValue, affectedEObject)
 	}
 }
@@ -354,7 +354,7 @@ reaction JavaPackageCreated {
     after element java::Package inserted as root
     call {
     	detectOrCreateUmlModel(newValue)
-		registerPredefinedUmlPrimitiveTypes(correspondenceModel)
+		registerPredefinedUmlPrimitiveTypes(correspondenceModel, newValue.eResource.resourceSet)
 	    createUmlPackage(newValue)
     }
 }
@@ -452,7 +452,7 @@ reaction JavaEnumCreated {
     after element java::Enumeration created and inserted in java::CompilationUnit[classifiers]
     call {
     	detectOrCreateUmlModel(affectedEObject)
-		registerPredefinedUmlPrimitiveTypes(correspondenceModel)
+		registerPredefinedUmlPrimitiveTypes(correspondenceModel, affectedEObject.eResource.resourceSet)
 	    createUmlEnum(newValue, affectedEObject)
     }
 }
