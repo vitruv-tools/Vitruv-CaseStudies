@@ -138,7 +138,9 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	@Test
 //	@Ignore
 	def void testMinimalRepository_PcmUmlJava_collectionTypeReplace() {
-		setInteractiveUserInteractor
+//		setInteractiveUserInteractor // replace manual inputs 
+		userInteractor.addNextTextInput("") // uses default uml model path and name
+		userInteractor.addNextSingleSelection(0) // uses default java collection type
 		
 		val pcmRepo = RepositoryFactory.eINSTANCE.createRepository
 		pcmRepo.entityName = "TestRepository"
