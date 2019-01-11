@@ -61,7 +61,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, #[PARAMETER_NAME].toEList(),
 			#[parameterType as Type].toEList())
 		val umlParameter = umlOperation.ownedParameters.head
-		umlParameter.lower = 0
+		umlParameter.upper = 2
 		saveAndSynchronizeChanges(rootElement)
 
 		val pcmRepository = rootElement.correspondingElements.head as Repository

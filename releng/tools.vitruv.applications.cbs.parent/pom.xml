@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>tools.vitruv</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.2.0</version>
+	</parent>
+	<artifactId>applications-cbs-parent</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<repositories>
+		<repository>
+			<id>Vitruv Framework</id>
+			<layout>p2</layout>
+			<url>https://vitruv-tools.github.io/updatesite/nightly/framework/</url>
+		</repository>
+		<repository>
+			<id>Vitruv Domains</id>
+			<layout>p2</layout>
+			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/</url>
+		</repository>
+		<repository>
+			<id>Palladiosimulator</id>
+			<layout>p2</layout>
+			<url>https://sdqweb.ipd.kit.edu/eclipse/palladiosimulator/releases/latest/</url>
+		</repository>
+	</repositories>
+
+</project>

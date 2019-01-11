@@ -4,7 +4,6 @@ import java.util.Comparator
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.expressions.ExpressionsFactory
 import org.emftext.language.java.literals.LiteralsFactory
@@ -21,21 +20,16 @@ import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.references.ReferencesFactory
 import org.emftext.language.java.statements.StatementsFactory
-import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypesFactory
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import tools.vitruv.framework.util.datatypes.ClaimableHashMap
-import tools.vitruv.framework.util.datatypes.ClaimableMap
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
 import java.util.Optional
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 class Pcm2JavaHelper {
-
 	
 	def static Constructor getOrCreateConstructorToClass(Class javaClass) {
 		val constructors = javaClass.members.filter[it instanceof Constructor].map[it as Constructor]
@@ -126,28 +120,6 @@ class Pcm2JavaHelper {
 		})
 	}
 
-	private static var ClaimableMap<PrimitiveTypeEnum, Type> primitveTypeMappingMap;
-
-	private def static initPrimitiveTypeMap() {
-		primitveTypeMappingMap = new ClaimableHashMap<PrimitiveTypeEnum, Type>()
-		val stringClassifier = ClassifiersFactory.eINSTANCE.createClass
-		stringClassifier.setName("String")
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.BOOL, TypesFactory.eINSTANCE.createBoolean)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.BYTE, TypesFactory.eINSTANCE.createByte)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.CHAR, TypesFactory.eINSTANCE.createChar)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.DOUBLE, TypesFactory.eINSTANCE.createDouble)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.INT, TypesFactory.eINSTANCE.createInt)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.LONG, TypesFactory.eINSTANCE.createLong)
-		primitveTypeMappingMap.put(PrimitiveTypeEnum.STRING, stringClassifier)
-	}
-
-	public synchronized def static Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType pdt) {
-		if (null === primitveTypeMappingMap) {
-			initPrimitiveTypeMap()
-		}
-		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
-	}
-
 	public static def TypeReference createTypeReference(DataType originalDataType,
 		Optional<Class> correspondingJavaClassIfExisting) {
 		if (null === originalDataType) {
@@ -155,7 +127,7 @@ class Pcm2JavaHelper {
 		}
 		var TypeReference innerDataTypeReference = null;
 		if (originalDataType instanceof PrimitiveDataType) {
-			val type = EcoreUtil.copy(claimJaMoPPTypeForPrimitiveDataType(originalDataType));
+			val type = EcoreUtil.copy(DataTypeCorrespondenceHelper.claimJaMoPPTypeForPrimitiveDataType(originalDataType));
 			if (type instanceof TypeReference) {
 				innerDataTypeReference = type;
 			} else if (type instanceof ConcreteClassifier) {

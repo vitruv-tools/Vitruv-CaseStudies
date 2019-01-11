@@ -12,10 +12,10 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.domains.pcm.util.RepositoryModelLoader
 import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorrespondence
-import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsFactory
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.extensions.dslsruntime.reactions.ReactionsCorrespondenceModelViewFactory
 
 class UmlToPcmTypesUtil {
 
@@ -33,10 +33,7 @@ class UmlToPcmTypesUtil {
 	)
 	
 	private static def getReactionsView(CorrespondenceModel correspondenceModel) {
-		return correspondenceModel.getEditableView(
-			ReactionsCorrespondence,
-			[ReactionsFactory.eINSTANCE.createReactionsCorrespondence()]
-		)
+		return correspondenceModel.getEditableView(ReactionsCorrespondenceModelViewFactory.instance);
 	}
 	
 	static def PrimitiveTypeEnum getDataTypeEnumValue(String typeName) {

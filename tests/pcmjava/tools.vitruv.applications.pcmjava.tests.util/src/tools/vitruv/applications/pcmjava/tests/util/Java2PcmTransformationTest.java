@@ -42,7 +42,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.refactoring.IJavaRefactorings;
 import org.eclipse.jdt.core.refactoring.descriptors.RenameJavaElementDescriptor;
-import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
+import org.eclipse.jdt.internal.core.manipulation.StubUtility;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringContribution;
@@ -633,8 +633,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	}
 
 	protected Package getPackageWithNameFromCorrespondenceModel(final String name) throws CoreException {
-		final Set<Package> packages = CorrespondenceModelUtil
-				.getAllEObjectsOfTypeInCorrespondences(this.getCorrespondenceModel(), Package.class);
+		final Set<Package> packages = this.getCorrespondenceModel().getAllEObjectsOfTypeInCorrespondences(Package.class);
 		for (final Package currentPackage : packages) {
 			if (currentPackage.getName().equals(name)) {
 				return currentPackage;

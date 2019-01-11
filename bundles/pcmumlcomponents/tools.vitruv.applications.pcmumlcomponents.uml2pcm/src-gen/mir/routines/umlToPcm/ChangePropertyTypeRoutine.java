@@ -26,7 +26,8 @@ public class ChangePropertyTypeRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void update0Element(final Property umlProperty, final DataType umlType, final InnerDeclaration pcmDeclaration) {
-      final boolean unbounded = ((umlProperty.upperBound() != 1) || (umlProperty.lowerBound() != 1));
+      int _upperBound = umlProperty.upperBound();
+      final boolean unbounded = (_upperBound != 1);
       final Repository pcmRepository = pcmDeclaration.getCompositeDataType_InnerDeclaration().getRepository__DataType();
       pcmDeclaration.setDatatype_InnerDeclaration(UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, Boolean.valueOf(unbounded), this.userInteractor, this.correspondenceModel));
     }

@@ -80,14 +80,6 @@ reaction ChangedMultiplicityUpperValue {
 	call updateMultiplicityType(affectedEObject)
 }
 
-reaction ChangedMultiplicityLower {
-	after attribute replaced at uml::MultiplicityElement[lower]
-	call updateMultiplicityType(affectedEObject)
-}
-reaction ChangedMultiplicityUpper {
-	after attribute replaced at uml::MultiplicityElement[upper]
-	call updateMultiplicityType(affectedEObject)
-}
 routine updateMultiplicityType(uml::MultiplicityElement umlElement) {
 	match {
 		val pcmElement = retrieve EObject corresponding to umlElement
@@ -233,7 +225,7 @@ routine changePropertyType(uml::Property umlProperty, uml::DataType umlType) {
 	}
 	action {
 		update pcmDeclaration {
-			val unbounded = umlProperty.upperBound != 1 || umlProperty.lowerBound != 1
+			val unbounded = umlProperty.upperBound != 1
 			val pcmRepository = pcmDeclaration.compositeDataType_InnerDeclaration.repository__DataType
 			pcmDeclaration.datatype_InnerDeclaration = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlType, pcmRepository, unbounded, userInteractor, correspondenceModel)
 		}
@@ -365,7 +357,7 @@ routine changeInterfaceOperationType(uml::Operation umlOperation, uml::Parameter
 			//var resolvedType = pcmType
 			var org.palladiosimulator.pcm.repository.DataType resolvedType = null
 			if (resolvedType === null && umlParameter.type !== null && umlParameter.type instanceof DataType) {
-				val unbounded = umlParameter.lowerBound != 1 || umlParameter.upperBound != 1
+				val unbounded = umlParameter.upperBound != 1
 				resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlParameter.type as DataType, pcmSignature.interface__OperationSignature.repository__Interface, unbounded, userInteractor, correspondenceModel)
 			}
 			pcmSignature.returnType__OperationSignature = resolvedType
@@ -399,7 +391,7 @@ routine changeParameterType(uml::Parameter umlParameter) {
 		update pcmParameter {
 			var org.palladiosimulator.pcm.repository.DataType resolvedType = null
 			if (resolvedType === null && umlParameter.type !== null && umlParameter.type instanceof DataType) {
-				val unbounded = umlParameter.lowerBound != 1 || umlParameter.upperBound != 1
+				val unbounded = umlParameter.upperBound != 1
 				val pcmRepository = pcmParameter.operationSignature__Parameter.interface__OperationSignature.repository__Interface
 				resolvedType = UmlToPcmTypesUtil.retrieveCorrespondingPcmType(umlParameter.type as DataType, pcmRepository, unbounded, userInteractor, correspondenceModel)
 			}
