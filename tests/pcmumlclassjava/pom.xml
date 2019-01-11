@@ -5,20 +5,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>tools.vitruv</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>tests</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	<artifactId>bundles</artifactId>
+	<artifactId>pcmumlclassjava-tests</artifactId>
 	<packaging>pom</packaging>
-	<name>Bundle Modules</name>
+	<name>PCM-UML Class-Java Application Tests</name>
 
 	<modules>
-		<module>pcmjava</module>
-		<module>pcmumlclass</module>
-		<module>pcmumlcomponents</module>
-		<module>umlclassumlcomponents</module>
-		<module>umljava</module>
+		<module>tools.vitruv.applications.pcmumlclassjava.tests</module>
 	</modules>
-
+	
 </project>
