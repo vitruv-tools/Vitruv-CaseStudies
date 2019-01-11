@@ -41,4 +41,5 @@ Require-Bundle: tools.vitruv.testutils;bundle-version="0.2.0",
   tools.vitruv.applications.pcmumlclass,
   tools.vitruv.applications.umljava.java2uml,
   tools.vitruv.applications.umljava.uml2java,
-  tools.vitruv.applications.umljava.util
+  tools.vitruv.applications.umljava.util,
+  org.palladiosimulator.pcm.resources
