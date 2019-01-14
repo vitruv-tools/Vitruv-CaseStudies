@@ -122,23 +122,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	}
 	
 	@Test
-	@Ignore
-	def void testMinimalRepository_PcmUmlJava() {
-		setInteractiveUserInteractor
-		
-		var pcmRepo_forward = createRepository
-		val pcmPath = "model/repository.repository"
-		val umlPath = "model/repository.uml"
-		createAndSynchronizeModel(pcmPath, pcmRepo_forward)
-		assertModelExists(pcmPath)
-		assertModelExists(umlPath)
-		
-	}
-	
-	@Test
-//	@Ignore
 	def void testMinimalRepository_PcmUmlJava_collectionTypeReplace() {
-//		setInteractiveUserInteractor // replace manual inputs 
 		userInteractor.addNextTextInput("") // uses default uml model path and name
 		userInteractor.addNextSingleSelection(0) // uses default java collection type
 		
@@ -176,42 +160,21 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		
 		pcmSignature2.returnType__OperationSignature = pcmCompositeType_Collection
 		saveAndSynchronizeChanges(pcmRepo)
-		
 	}
 	
 	@Test
-	@Ignore
-	def void testMediaStoreCreation_PcmInserted() {
-		setInteractiveUserInteractor
-		
-		var pcmRepo_forward = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH).testResource.contents.head as Repository
-		
-//		val pcmPath = "model/repository.repository"
-		val umlPath = "model/repository.uml" // the default output if no input is given to the UserInteractor
-		createAndSynchronizeModel(PCM_GENERATED_MEDIA_STORE_MODEL_PATH, pcmRepo_forward)
-		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
-		assertModelExists(umlPath)
-		
-	}
-	
-	@Test
-	@Ignore
 	def void testMediaStoreCreation_UmlInserted_reduced() {
-//		setInteractiveUserInteractor
-		
 		var umlRepo_forward = URI.createURI(UML_MEDIA_STORE_REDUCED_PATH).testResource.contents.head as Model
 		
 		simulateRepositoryInsertion_UML(umlRepo_forward, UML_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
-		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
-		
+		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)	
 	}
 	
+	// REMARK: Currently failing due to incomplete Java UUIDs
 	@Test
 	@Ignore
-	def void testMediaStoreCreation_JavaInserted_reducedAndManuallyReplicated() {
-//		setInteractiveUserInteractor
-		
+	def void testMediaStoreCreation_JavaInserted_reducedAndManuallyReplicated() {		
 		val REPOSITORY_PKG_NAME = "defaultRepository"
 		val CONTRACTS_PKG_NAME = "contracts"
 		val DATATYPES_PKG_NAME = "datatypes"
@@ -277,6 +240,34 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		var jAtt_requiredIFileStorage = createJavaAttribute(ATTRIBUTE_NAME, jIRef_IFileStorage, JavaVisibility.PRIVATE, false, false)
 		jClass_MediaAccessImpl.members += jAtt_requiredIFileStorage
 		saveAndSynchronizeChanges(jClass_MediaAccessImpl)
+	}
+	
+	// REMARK: Only for manual test execution
+	@Test
+	@Ignore
+	def void testMediaStoreCreation_PcmInserted() {
+		setInteractiveUserInteractor
+		
+		var pcmRepo_forward = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH).testResource.contents.head as Repository
+		
+		val umlPath = "model/repository.uml" // the default output if no input is given to the UserInteractor
+		createAndSynchronizeModel(PCM_GENERATED_MEDIA_STORE_MODEL_PATH, pcmRepo_forward)
+		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
+		assertModelExists(umlPath)	
+	}
+	
+	// REMARK: Only for manual test execution
+	@Test
+	@Ignore
+	def void testMinimalRepository_PcmUmlJava() {
+		setInteractiveUserInteractor
+		
+		var pcmRepo_forward = createRepository
+		val pcmPath = "model/repository.repository"
+		val umlPath = "model/repository.uml"
+		createAndSynchronizeModel(pcmPath, pcmRepo_forward)
+		assertModelExists(pcmPath)
+		assertModelExists(umlPath)
 	}
 	
 }
