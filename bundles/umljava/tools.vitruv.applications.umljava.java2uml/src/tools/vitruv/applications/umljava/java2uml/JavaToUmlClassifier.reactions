@@ -20,14 +20,14 @@ execute actions in UML
 //=========================================== Class
 //===========================================
 
-routine detectOrCreateUmlModel(EObject alreadyPersistedEObject){
+routine detectOrCreateUmlModel(EObject alreadyPersistedEObject) {
 	match {
 		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
 	}
 	action {
 		execute {
-    		val MODELNAME_INPUTMESSAGE = "Please enter a name for the uml root model (no file ending)"
-    		val MODELPATH_INPUTMESSAGE = "Please enter a path for the uml root model (project relative)"
+    		val MODELNAME_INPUTMESSAGE = "Please enter a name for the UML root model (no file ending)"
+    		val MODELPATH_INPUTMESSAGE = "Please enter a path for the UML root model (project relative)"
 			var userModelName = userInteractor.textInputDialogBuilder.message(MODELNAME_INPUTMESSAGE).startInteraction()
 			var userModelPath = userInteractor.textInputDialogBuilder.message(MODELPATH_INPUTMESSAGE).startInteraction()
 			if (userModelName.nullOrEmpty) {
@@ -39,33 +39,33 @@ routine detectOrCreateUmlModel(EObject alreadyPersistedEObject){
             val rootModelFile = userModelPath + "/" + userModelName + ".uml"
             //check if a model at the specified path already exists; create one if necessary
 			var Model umlRootModel = null
-			if(alreadyPersistedEObject === null){
+			if(alreadyPersistedEObject === null) {
 				// no objects persisted jet -> can't automatically retrieve projectPath
 				throw new UnsupportedOperationException(
-					"Cannot persist/load an uml::Model from JavaToUml-reactions without any previously persisted elements."
+					"Cannot persist/load a uml::Model from JavaToUml-reactions without any previously persisted elements."
 				);
 			}
 			val uri = PersistenceHelper.getURIFromSourceProjectFolder(alreadyPersistedEObject, rootModelFile) 
-			if(URIUtil.existsResourceAtUri(uri)){ 
+			if (URIUtil.existsResourceAtUri(uri)) { 
 				// The resource is only found if it was previously persisted, which only happens after the change propagation terminates.
 				// This should not be a problem, as long as any created model is registered on creation, to prevent creating a second one.
 				val resource = alreadyPersistedEObject.eResource.resourceSet.getResource(uri,true)
 				umlRootModel = resource.allContents.filter(Model).head				
 			}
-			if(umlRootModel === null){ 
+			if (umlRootModel === null) { 
 				//the resource didn't exist, or did not contain a uml::Model object
 				umlRootModel = UMLFactory.eINSTANCE.createModel
 				umlRootModel.name = userModelName;
 				persistProjectRelative(alreadyPersistedEObject, umlRootModel, rootModelFile)
 			}
-			if(umlRootModel !== null){
+			if (umlRootModel !== null ) {
 				registerUmlModelInCorrespondenceModel(umlRootModel)
 			}
 		}
 	}
 }
 
-routine registerUmlModelInCorrespondenceModel(uml::Model uModel){
+routine registerUmlModelInCorrespondenceModel(uml::Model uModel) {
 	match {
 		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
 	}

@@ -150,7 +150,7 @@ abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
      */
     def protected getUmlPackagedElementsbyName(Class<? extends org.eclipse.uml2.uml.PackageableElement> type, String elementName) {
         val model = registeredUmlModel
-        if (model ===null) return new ArrayList<org.eclipse.uml2.uml.PackageableElement>()
+        if (model === null) return new ArrayList<org.eclipse.uml2.uml.PackageableElement>()
         return model.packagedElements.filter(type).filter[it.name == elementName].toList;
     }
     

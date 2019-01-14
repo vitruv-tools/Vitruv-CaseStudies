@@ -6,7 +6,6 @@ import org.eclipse.uml2.uml.Package
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteractor
 
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 /**

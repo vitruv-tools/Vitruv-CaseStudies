@@ -107,8 +107,6 @@ class JavaMemberAndParameterUtil {
     
     def static createJavaParameter(String name, TypeReference type) {
         val param = ParametersFactory.eINSTANCE.createOrdinaryParameter;
-//        setName(param, name)
-//        setTypeReference(param, type)
 		param.name = name
 		param.typeReference = type
         return param;

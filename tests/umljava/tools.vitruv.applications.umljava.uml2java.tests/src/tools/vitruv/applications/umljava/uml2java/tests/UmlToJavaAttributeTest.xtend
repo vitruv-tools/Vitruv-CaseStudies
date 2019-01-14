@@ -45,7 +45,7 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
         uClass.ownedAttributes += uAttr;
         pType = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
         saveAndSynchronizeChanges(rootElement);
-    }    
+    }
 
     @Test
     def testCreatePrimitiveAttribute() {

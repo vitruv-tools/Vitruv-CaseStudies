@@ -36,7 +36,7 @@ class JavaModifierUtil {
         } else {
             val visibilityModifier = getJavaVisibilityModifierFromEnum(visibility)
             if (visibilityModifier !== null) {
-            	if(!modifiable.hasModifier(visibilityModifier.class)) {
+            	if (!modifiable.hasModifier(visibilityModifier.class)) {
 	                removeJavaVisibilityModifiers(modifiable)
 	                setJavaModifier(modifiable, visibilityModifier, true)
                 }

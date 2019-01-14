@@ -52,8 +52,6 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	    val jEnum = getCorrespondingEnum(enumeration)
 	    assertJavaEnumTraits(jEnum, STANDARD_ENUM_NAME, JavaVisibility.PRIVATE, createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2))
 	    assertEnumEquals(enumeration, jEnum)
-	    
-	    
 	}
 	
 	@Test

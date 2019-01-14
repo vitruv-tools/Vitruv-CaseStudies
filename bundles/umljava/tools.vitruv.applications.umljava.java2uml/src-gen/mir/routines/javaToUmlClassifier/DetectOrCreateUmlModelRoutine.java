@@ -32,8 +32,8 @@ public class DetectOrCreateUmlModelRoutine extends AbstractRepairRoutineRealizat
     }
     
     public void executeAction1(final EObject alreadyPersistedEObject, @Extension final RoutinesFacade _routinesFacade) {
-      final String MODELNAME_INPUTMESSAGE = "Please enter a name for the uml root model (no file ending)";
-      final String MODELPATH_INPUTMESSAGE = "Please enter a path for the uml root model (project relative)";
+      final String MODELNAME_INPUTMESSAGE = "Please enter a name for the UML root model (no file ending)";
+      final String MODELPATH_INPUTMESSAGE = "Please enter a path for the UML root model (project relative)";
       String userModelName = this.userInteractor.getTextInputDialogBuilder().message(MODELNAME_INPUTMESSAGE).startInteraction();
       String userModelPath = this.userInteractor.getTextInputDialogBuilder().message(MODELPATH_INPUTMESSAGE).startInteraction();
       boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(userModelName);
@@ -48,7 +48,7 @@ public class DetectOrCreateUmlModelRoutine extends AbstractRepairRoutineRealizat
       Model umlRootModel = null;
       if ((alreadyPersistedEObject == null)) {
         throw new UnsupportedOperationException(
-          "Cannot persist/load an uml::Model from JavaToUml-reactions without any previously persisted elements.");
+          "Cannot persist/load a uml::Model from JavaToUml-reactions without any previously persisted elements.");
       }
       final URI uri = PersistenceHelper.getURIFromSourceProjectFolder(alreadyPersistedEObject, rootModelFile);
       boolean _existsResourceAtUri = URIUtil.existsResourceAtUri(uri);

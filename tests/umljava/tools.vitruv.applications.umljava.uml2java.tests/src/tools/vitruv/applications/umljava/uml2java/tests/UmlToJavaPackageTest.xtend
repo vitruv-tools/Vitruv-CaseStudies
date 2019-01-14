@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
-import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Before
@@ -25,12 +24,11 @@ class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
     private static val CLASS_NAME = "ClassName"
     
     private static var Package uPackageLevel1
-    private static var Class uClass
-    
+
     @Before
     def void before() {
         uPackageLevel1 = createUmlPackageAndAddToSuperPackage(PACKAGE_LEVEL_1, rootElement)
-        uClass = createUmlClassAndAddToPackage(uPackageLevel1, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
+        createUmlClassAndAddToPackage(uPackageLevel1, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
         saveAndSynchronizeChanges(rootElement)
         
     }

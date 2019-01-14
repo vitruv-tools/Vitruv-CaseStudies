@@ -25,7 +25,7 @@ import routines javaToUmlTypePropagation using qualified names
 reaction JavaClassMethodCreated {
     after element java::ClassMethod created and inserted in java::ConcreteClassifier[members]
     with (affectedEObject instanceof Class)
-    || (affectedEObject instanceof Enumeration)
+    	|| (affectedEObject instanceof Enumeration)
     call createUmlClassMethod(newValue, affectedEObject)
 }
 

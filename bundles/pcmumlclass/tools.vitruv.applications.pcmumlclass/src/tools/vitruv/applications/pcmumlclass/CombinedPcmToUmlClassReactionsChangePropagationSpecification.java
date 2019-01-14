@@ -1,5 +1,5 @@
 package tools.vitruv.applications.pcmumlclass;
 
-public class CombinedPcmToUmlClassReactionsChangePropagationSpecification
-		extends mir.reactions.combinedPcmToUmlClassReactions.CombinedPcmToUmlClassReactionsChangePropagationSpecification {
+public class CombinedPcmToUmlClassReactionsChangePropagationSpecification extends
+		mir.reactions.combinedPcmToUmlClassReactions.CombinedPcmToUmlClassReactionsChangePropagationSpecification {
 }

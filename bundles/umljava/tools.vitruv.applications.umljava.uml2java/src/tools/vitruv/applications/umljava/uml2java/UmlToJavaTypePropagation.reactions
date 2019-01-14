@@ -18,8 +18,8 @@ routine propagatePropertyTypeChanged(
 		java::Field jElement,
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 	) {
-	action{
-		call{
+	action {
+		call {
 			propagateTypedMultiplicityElementTypeChanged_defaultObject(uProperty, uProperty, jElement, jType)
 		}
 	}
@@ -30,9 +30,9 @@ routine propagateReturnParameterTypeChanged(
 		java::Method jMethod,
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 	) {
-	action{
-		call{
-			if (uReturnParameter.direction !== ParameterDirectionKind.RETURN_LITERAL){
+	action {
+		call {
+			if (uReturnParameter.direction !== ParameterDirectionKind.RETURN_LITERAL) {
 				throw new IllegalStateException("An uml::Parameter with direction!=RETURN_LITERAL cannot be synchronized with a java::Method.")
 			}
 			propagateTypedMultiplicityElementTypeChanged_defaultVoid(uReturnParameter, uReturnParameter, jMethod, jType)
@@ -45,9 +45,9 @@ routine propagateOrdinaryParameterTypeChanged(
 		java::OrdinaryParameter jParameter,
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 	) {
-	action{
-		call{
-			if (uParameter.direction === ParameterDirectionKind.RETURN_LITERAL){
+	action {
+		call {
+			if (uParameter.direction === ParameterDirectionKind.RETURN_LITERAL) {
 				throw new IllegalStateException("An uml::Parameter with direction==RETURN_LITERAL cannot be synchronized with a java::Parameter.")
 			}
 			else{
@@ -66,9 +66,9 @@ routine propagateTypedMultiplicityElementTypeChanged(
 		java::ConcreteClassifier jType, // new type retrieved from correspondences or null
 		java::TypeReference defaultReference
 	) {
-	match{
-		check{
-			if(uElement !== uMultiplicity){
+	match {
+		check {
+			if(uElement !== uMultiplicity) {
 				throw new IllegalStateException("uml::TypedElement uElement and uml::MultiplicityElement uMultiplicity"
 					+ "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
 				)
@@ -76,8 +76,8 @@ routine propagateTypedMultiplicityElementTypeChanged(
 			true
 		}
 	}
-	action{
-		execute{
+	action {
+		execute {
 	    	var typeReference = createTypeReference(uElement.type, jType, defaultReference, userInteractor)
 	    	
 			if(uMultiplicity.lower == 0 && uMultiplicity.upper == LiteralUnlimitedNatural.UNLIMITED) {
@@ -109,8 +109,8 @@ routine propagateTypedMultiplicityElementTypeChanged_defaultObject(
 		java::TypedElement jElement, // java::Field, java::Parameter, or java::Method
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 	) {
-	action{
-		call{
+	action {
+		call {
 			val objectNsRef = JavaModificationUtil.createNamespaceClassifierReference(jElement.objectClass)// default to java.lang.Object
 			propagateTypedMultiplicityElementTypeChanged(uElement, uMultiplicity, jElement, jType, objectNsRef)
 		}
@@ -122,8 +122,8 @@ routine propagateTypedMultiplicityElementTypeChanged_defaultVoid(
 		java::TypedElement jElement, // java::Field, java::Parameter, or java::Method
 		java::ConcreteClassifier jType // new type retrieved from correspondences or null
 	) {
-	action{
-		call{
+	action {
+		call {
 			val voidRef = TypesFactory.eINSTANCE.createVoid
 			propagateTypedMultiplicityElementTypeChanged(uElement, uMultiplicity, jElement, jType, voidRef)
 		}
