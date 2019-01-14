@@ -87,7 +87,8 @@ public class CollectionDataTypeInnerTypeChangedReaction extends AbstractReaction
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final CollectionDataType affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue) {
     DataType _innerType_CollectionDataType = affectedEObject.getInnerType_CollectionDataType();
-    return Objects.equal(_innerType_CollectionDataType, newValue);
+    boolean _equals = Objects.equal(_innerType_CollectionDataType, newValue);
+    return _equals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

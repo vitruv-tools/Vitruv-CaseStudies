@@ -82,7 +82,8 @@ public class AssemblyContextInsertedReaction extends AbstractReactionRealization
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final ComposedProvidingRequiringEntity affectedEObject, final EReference affectedFeature, final AssemblyContext newValue, final int index) {
-    return affectedEObject.getAssemblyContexts__ComposedStructure().contains(newValue);
+    boolean _contains = affectedEObject.getAssemblyContexts__ComposedStructure().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

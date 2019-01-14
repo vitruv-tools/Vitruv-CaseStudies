@@ -81,7 +81,8 @@ public class ParentInterfaceAddedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final OperationInterface affectedEObject, final EReference affectedFeature, final OperationInterface newValue, final int index) {
-    return affectedEObject.getParentInterfaces__Interface().contains(newValue);
+    boolean _contains = affectedEObject.getParentInterfaces__Interface().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

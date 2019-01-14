@@ -82,7 +82,8 @@ public class ParentInterfaceRemovedReaction extends AbstractReactionRealization 
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final OperationInterface affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final int index) {
     boolean _contains = affectedEObject.getParentInterfaces__Interface().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

@@ -83,7 +83,8 @@ public class CompositeDataTypeRemovedFromRepositoryReaction extends AbstractReac
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final Repository affectedEObject, final EReference affectedFeature, final CompositeDataType oldValue, final int index) {
     boolean _contains = affectedEObject.getDataTypes__Repository().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

@@ -83,7 +83,8 @@ public class InterfaceGeneralizationRemovedReaction extends AbstractReactionReal
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final Interface affectedEObject, final EReference affectedFeature, final Generalization oldValue, final int index) {
     boolean _contains = affectedEObject.getGeneralizations().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

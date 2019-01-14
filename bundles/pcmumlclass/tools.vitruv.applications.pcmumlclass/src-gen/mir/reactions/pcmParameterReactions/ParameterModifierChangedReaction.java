@@ -86,7 +86,8 @@ public class ParameterModifierChangedReaction extends AbstractReactionRealizatio
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterModifier oldValue, final ParameterModifier newValue) {
     ParameterModifier _modifier__Parameter = affectedEObject.getModifier__Parameter();
-    return (_modifier__Parameter == newValue);
+    boolean _tripleEquals = (_modifier__Parameter == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

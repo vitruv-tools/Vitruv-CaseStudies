@@ -82,7 +82,8 @@ public class RequiredRoleInsertedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final InterfaceProvidingRequiringEntity affectedEObject, final EReference affectedFeature, final OperationRequiredRole newValue, final int index) {
-    return affectedEObject.getRequiredRoles_InterfaceRequiringEntity().contains(newValue);
+    boolean _contains = affectedEObject.getRequiredRoles_InterfaceRequiringEntity().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

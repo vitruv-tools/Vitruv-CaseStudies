@@ -86,22 +86,22 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * 		any eObject in the Resource you want to reload  
 	 * @return the root element in the reloaded Resource, or null if none is present
 	 */
-	protected def EObject reloadResourceAndReturnRoot(EObject modelElement){
+	protected def EObject reloadResourceAndReturnRoot(EObject modelElement) {
 		stopRecordingChanges(modelElement) 
 		val resourceURI = modelElement.eResource.URI
 		modelElement.eResource.unload
 		val rootElement = getModelResource(resourceURI).contents.head
-		if(rootElement !== null){
+		if(rootElement !== null) {
 			startRecordingChanges(rootElement)
 		}
 		return rootElement
 	}
 	
-	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b){
+	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b) {
 		return cm.getCorrespondingEObjects(#[a]).exists( corrSet | EcoreUtil.equals(corrSet.head, b))
 	}
 	
-	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b, String tag){
+	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b, String tag) {
 		return EcoreUtil.equals(b, ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, a, tag, b.class).head)
 	}
 	
@@ -110,7 +110,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	
 	private static def boolean isCorrectSimpleTypeCorrespondence(CorrespondenceModel correspondenceModel, 
 		DataType pcmDatatype, Type umlType, int lower, int upper
-	){
+	) {
 		val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlType, TagLiterals.DATATYPE__TYPE)
 		val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		return (correspondingPrimitiveType || correspondingCompositeType) // inner collection types are not supported
@@ -119,14 +119,14 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	
 	private static def boolean isCorrectCollectionTypeCorrespondence(CorrespondenceModel correspondenceModel, 
 		CollectionDataType pcmCollection, Type umlType, int lower, int upper
-	){
+	) {
 		return lower == 0 
 			&& upper == LiteralUnlimitedNatural.UNLIMITED
 			&& isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmCollection.innerType_CollectionDataType, umlType, 1, 1)
 	}
 	
-	def protected static isCorrect_DataType_Property_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Property umlProperty){
-		if (pcmDatatype === null || umlProperty.type === null){
+	def protected static isCorrect_DataType_Property_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Property umlProperty) {
+		if (pcmDatatype === null || umlProperty.type === null) {
 			return pcmDatatype === null && umlProperty.type === null
 		}
 		
@@ -139,8 +139,8 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
 	
-	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Parameter umlParam){
-		if (pcmDatatype === null || umlParam.type === null){
+	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Parameter umlParam) {
+		if (pcmDatatype === null || umlParam.type === null) {
 			return pcmDatatype === null && umlParam.type === null
 		}
 		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower, umlParam.upper)
@@ -158,7 +158,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * Because of the necessary reloads, the model is loaded (while the out-of-synch elements remain) and registered with new IDs in the UUID resolver.
 	 * This might make it necessary to provide the VM that runs the tests with additional heap space.
 	 */
-	protected def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath){
+	protected def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath) {
 		val originalRepository = inOriginalRepository
 		userInteractor.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
 		createAndSynchronizeModel(pcmOutputPath, originalRepository)
@@ -166,7 +166,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return generatedRepository 
 	}
 	
-	private def simulateDataTypeInsertion_UML(Model umlRepositoryModel, PackageableElement umlDataType){
+	private def simulateDataTypeInsertion_UML(Model umlRepositoryModel, PackageableElement umlDataType) {
 		val repositoryPackage = umlRepositoryModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
 		val datatypesPackage = repositoryPackage.nestedPackages
@@ -178,14 +178,14 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return reloadResourceAndReturnRoot(umlRepositoryModel) as Model 
 	}
 	
-	private def simulateContractsPackageElementInsertion_UML(Model umlRepositoryModel, PackageableElement originalContractsPackageElement){
+	private def simulateContractsPackageElementInsertion_UML(Model umlRepositoryModel, PackageableElement originalContractsPackageElement) {
 		var repositoryPackage = umlRepositoryModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
 		var contractsPackage = repositoryPackage.nestedPackages
 			.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
 		assertNotNull(contractsPackage)
 		
-		if (!(originalContractsPackageElement instanceof Interface)){
+		if (!(originalContractsPackageElement instanceof Interface)) {
 			contractsPackage.packagedElements += originalContractsPackageElement
 			return umlRepositoryModel
 		}
@@ -193,7 +193,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		
 		// add each operation without its parameters because at least the returnParameters will be already generated
 		val originalOperationParameterMapping = new HashMap<String, List<Parameter>>()
-		for (originalOperation : originalInterface.ownedOperations){
+		for (originalOperation : originalInterface.ownedOperations) {
 			originalOperationParameterMapping.put(originalOperation.name, originalOperation.ownedParameters.clone.toList)
 			originalOperation.ownedParameters.clear
 		}
@@ -212,10 +212,10 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		assertNotNull(generatedInterface)
 		
 		// merge each Parameter from the originalOperation with the generated Operation's parameters
-		for (generatedOperation : generatedInterface.ownedOperations){
-			for (originalParameter : originalOperationParameterMapping.getOrDefault(generatedOperation.name, new ArrayList<Parameter>)){
+		for (generatedOperation : generatedInterface.ownedOperations) {
+			for (originalParameter : originalOperationParameterMapping.getOrDefault(generatedOperation.name, new ArrayList<Parameter>)) {
 				val generatedParameter = generatedOperation.ownedParameters.findFirst[it.name == originalParameter.name]
-				if (generatedParameter !== null){
+				if (generatedParameter !== null) {
 					mergeElements(originalParameter, generatedParameter, "name")
 				}
 				else {
@@ -229,7 +229,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	}
 	
 	
-	private def simulateComponentInsertion_UML(Model inUmlRepositoryModel, org.eclipse.uml2.uml.Package originalComponentPackage, int userDisambigutationComponentType){
+	private def simulateComponentInsertion_UML(Model inUmlRepositoryModel, org.eclipse.uml2.uml.Package originalComponentPackage, int userDisambigutationComponentType) {
 		var generatedModel = inUmlRepositoryModel
 		var generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
@@ -257,7 +257,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		
 		// merge everything except operations which are separately handled, because some of the constructor parameters will be generated.
 		mergeElements(originalComponentImpl, generatedComponentImpl, "ownedOperation", "interfaceRealization")
-		for (originalRealization : originalComponentImpl.interfaceRealizations.clone){
+		for (originalRealization : originalComponentImpl.interfaceRealizations.clone) {
 			originalComponentImpl.interfaceRealizations -= originalRealization
 			originalRealization.clients -= originalComponentImpl // needs to be manually cleared, or else originalComponentImpl is still set as a client and causes UUID error
 			generatedComponentImpl.interfaceRealizations += originalRealization
@@ -280,9 +280,9 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		assertNotNull(originalConstructor)
 		assertNotNull(generatedConstructor)
 		mergeElements(originalConstructor, generatedConstructor, "ownedParameter")
-		for (originalParameter : originalConstructor.ownedParameters.clone){
+		for (originalParameter : originalConstructor.ownedParameters.clone) {
 			val generatedParameter = generatedConstructor.ownedParameters.findFirst[it.name == originalParameter.name]
-			if (generatedParameter !== null){
+			if (generatedParameter !== null) {
 				mergeElements(originalParameter, generatedParameter, "name")
 			}
 			else {
@@ -290,7 +290,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 			}
 		}
 		// move/copy the remaining operations
-		for (originalOperation : originalComponentImpl.ownedOperations.clone.filter[it.name != originalComponentImpl.name]){
+		for (originalOperation : originalComponentImpl.ownedOperations.clone.filter[it.name != originalComponentImpl.name]) {
 			generatedComponentImpl.ownedOperations += originalOperation
 		}
 		
@@ -318,13 +318,13 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		
 		// Create copies of the lists outside the model so that containment is irrelevant
 		// and that the loops do not iterate over a changing List.
-		for (originalDatatype : originalDatatypesPackage.packagedElements.clone){
+		for (originalDatatype : originalDatatypesPackage.packagedElements.clone) {
 			generatedModel = simulateDataTypeInsertion_UML(generatedModel, originalDatatype) 
 		}
-		for (originalContractsPackageElement : originalContractsPackage.packagedElements.clone){
+		for (originalContractsPackageElement : originalContractsPackage.packagedElements.clone) {
 			generatedModel = simulateContractsPackageElementInsertion_UML(generatedModel, originalContractsPackageElement)
 		}
-		for (originalComponentPackage : originalComponentPackages){
+		for (originalComponentPackage : originalComponentPackages) {
 			generatedModel = simulateComponentInsertion_UML(generatedModel, originalComponentPackage, DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT)
 		}
 		return generatedModel
@@ -341,7 +341,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * @return
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
-	public def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath){
+	public def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath) {
 		val originalUri = originalWithinProjektPath.modelVuri.EMFUri
 		val generatedUri = generatedWithinProjektPath.modelVuri.EMFUri
 		return compare(originalUri, generatedUri)
@@ -358,7 +358,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * @return
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
-	public def Comparison compare(URI originalUri, URI generatedUri){
+	public def Comparison compare(URI originalUri, URI generatedUri) {
 		val resourceSet = new ResourceSetImpl()
 		val original = resourceSet.getResource(originalUri, true).contents.head
 		val generated = resourceSet.getResource(generatedUri, true).contents.head
@@ -386,15 +386,15 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * @param skipFeatures
 	 * 		the names of the features that should be ignored
 	 */
-	public def mergeElements(EObject original, EObject generated, String ... skipFeatures){
-		for (feature : original.eClass.EAllStructuralFeatures){
+	public def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
+		for (feature : original.eClass.EAllStructuralFeatures) {
 			if(
 				!feature.derived 
 				&& feature.changeable 
 				&& original.eIsSet(feature) 
 				&& !(feature instanceof EReference && (feature as EReference).isContainer) 
 				&& !skipFeatures.contains(feature.name)
-			){
+			) {
 				generated.eSet(feature, original.eGet(feature))
 			}
 		}

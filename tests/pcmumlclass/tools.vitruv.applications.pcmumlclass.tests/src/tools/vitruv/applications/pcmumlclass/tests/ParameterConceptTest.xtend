@@ -26,14 +26,14 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 
 	private static val TEST_PARAMETER_NAME = "testParameter"
 	 
-	def private static boolean checkParameterModifiers(ParameterModifier pcmModifier, ParameterDirectionKind umlDirection){
+	def private static boolean checkParameterModifiers(ParameterModifier pcmModifier, ParameterDirectionKind umlDirection) {
 		return umlDirection == PcmUmlClassHelper.getMatchingParameterDirection(pcmModifier)
 	}
 	
 	def public static checkParameterConcept(CorrespondenceModel cm, 
 			Parameter pcmParam, 
 			org.eclipse.uml2.uml.Parameter umlParam
-	){
+	) {
 		assertNotNull(pcmParam)
 		assertNotNull(umlParam)
 		assertTrue(corresponds(cm, pcmParam, umlParam, TagLiterals.PARAMETER__REGULAR_PARAMETER))
@@ -43,17 +43,17 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(corresponds(cm, pcmParam.operationSignature__Parameter, umlParam.operation, TagLiterals.SIGNATURE__OPERATION))
 	}
 	
-	def protected checkParameterConcept(Parameter pcmParam ){
+	def protected checkParameterConcept(Parameter pcmParam ) {
 		val mUmlParam = helper.getModifiableCorr(pcmParam , org.eclipse.uml2.uml.Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
 		checkParameterConcept(correspondenceModel, pcmParam , mUmlParam)
 	}
 	
-	def protected checkParameterConcept(org.eclipse.uml2.uml.Parameter umlParam){
+	def protected checkParameterConcept(org.eclipse.uml2.uml.Parameter umlParam) {
 		val mPcmParam = helper.getModifiableCorr(umlParam, Parameter, TagLiterals.PARAMETER__REGULAR_PARAMETER)
 		checkParameterConcept(correspondenceModel, mPcmParam , umlParam)
 	}
 
-	def private Repository createRepositoryWithSignature(){
+	def private Repository createRepositoryWithSignature() {
 		val pcmRepository = helper.createRepository()
 		helper.createCompositeDataType(pcmRepository)
 		val pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)

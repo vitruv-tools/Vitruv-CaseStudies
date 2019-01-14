@@ -29,7 +29,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 	def public static checkCompositeDataTypeConcept(CorrespondenceModel cm, 
 			CompositeDataType pcmCompositeType, 
 			Class umlClass
-	){
+	) {
 		assertTrue(corresponds(cm, pcmCompositeType, umlClass))
 		assertTrue(pcmCompositeType.entityName == umlClass.name)
 		//Repository should correspond to the datatypes package
@@ -44,11 +44,11 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 				.exists[it == false]
 		)
 	}
-	def protected checkCompositeDataTypeConcept(CompositeDataType pcmCompositeType){
+	def protected checkCompositeDataTypeConcept(CompositeDataType pcmCompositeType) {
 		val umlClass = helper.getModifiableCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
-	def protected checkCompositeDataTypeConcept(Class umlClass){
+	def protected checkCompositeDataTypeConcept(Class umlClass) {
 		val pcmCompositeType = helper.getModifiableCorr(umlClass, CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
@@ -56,7 +56,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 	/**
 	 * Initialize a pcm::Repository and its corresponding uml-counterparts.
 	 */
-	def private Repository createRepositoryConcept(){
+	def private Repository createRepositoryConcept() {
 		val pcmRepository = helper.createRepository
 		
 		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)

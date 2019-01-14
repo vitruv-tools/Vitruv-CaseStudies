@@ -86,7 +86,8 @@ public class InterfaceRenamedReaction extends AbstractReactionRealization {
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final OperationInterface affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
     String _entityName = affectedEObject.getEntityName();
-    return Objects.equal(_entityName, newValue);
+    boolean _equals = Objects.equal(_entityName, newValue);
+    return _equals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

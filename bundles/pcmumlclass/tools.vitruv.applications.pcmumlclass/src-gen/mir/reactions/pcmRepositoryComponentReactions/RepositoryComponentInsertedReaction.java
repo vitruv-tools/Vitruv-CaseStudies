@@ -82,7 +82,8 @@ public class RepositoryComponentInsertedReaction extends AbstractReactionRealiza
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final Repository affectedEObject, final EReference affectedFeature, final RepositoryComponent newValue, final int index) {
-    return affectedEObject.getComponents__Repository().contains(newValue);
+    boolean _contains = affectedEObject.getComponents__Repository().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

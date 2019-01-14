@@ -86,7 +86,8 @@ public class ParameterTypeChangedReaction extends AbstractReactionRealization {
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final Parameter affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue) {
     DataType _dataType__Parameter = affectedEObject.getDataType__Parameter();
-    return (_dataType__Parameter == newValue);
+    boolean _tripleEquals = (_dataType__Parameter == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

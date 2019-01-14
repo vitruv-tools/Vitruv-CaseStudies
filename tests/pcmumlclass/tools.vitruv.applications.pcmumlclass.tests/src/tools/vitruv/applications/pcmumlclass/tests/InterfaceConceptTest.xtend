@@ -25,7 +25,7 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 	def public static checkInterfaceConcept(CorrespondenceModel cm, 
 			OperationInterface pcmInterface, 
 			Interface umlInterface
-	){
+	) {
 		assertNotNull(pcmInterface)
 		assertNotNull(umlInterface)
 		assertTrue(corresponds(cm, pcmInterface, umlInterface,	TagLiterals.INTERFACE_TO_INTERFACE))
@@ -42,16 +42,16 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 				.exists[it == false]
 		)
 	}
-	def protected checkInterfaceConcept(OperationInterface pcmInterface){
+	def protected checkInterfaceConcept(OperationInterface pcmInterface) {
 		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
 	}
-	def protected checkInterfaceConcept(Interface umlInterface){
+	def protected checkInterfaceConcept(Interface umlInterface) {
 		val pcmInterface = helper.getModifiableCorr(umlInterface, OperationInterface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
 	}
 
-	def private Repository createRepositoryConcept(){
+	def private Repository createRepositoryConcept() {
 		var pcmRepository = helper.createRepository
 		
 		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)

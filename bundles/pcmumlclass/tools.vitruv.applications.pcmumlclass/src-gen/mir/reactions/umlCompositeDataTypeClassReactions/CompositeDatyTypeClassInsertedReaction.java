@@ -81,7 +81,8 @@ public class CompositeDatyTypeClassInsertedReaction extends AbstractReactionReal
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class newValue, final int index) {
     org.eclipse.uml2.uml.Package _package = newValue.getPackage();
-    return (_package == affectedEObject);
+    boolean _tripleEquals = (_package == affectedEObject);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

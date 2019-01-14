@@ -25,32 +25,35 @@ execute actions in PCM
 
 reaction RegularOrReturnParameterTypeChanged {
 	after element replaced at uml::Parameter[type]
-	with {affectedEObject.type === newValue && oldValue !== newValue}
+	with affectedEObject.type === newValue 
+		&& oldValue !== newValue
 	call propagateTypeChange(affectedEObject)
 }
 
-reaction RegularOrReturnParameterLowerChanged{
+reaction RegularOrReturnParameterLowerChanged {
 	after element replaced at uml::Parameter[lowerValue]
 	call propagateTypeChange(affectedEObject)
 }
-reaction RegularOrReturnParameterLowerChanged2{
+reaction RegularOrReturnParameterLowerChanged2 {
 	after attribute replaced at uml::LiteralInteger[value]
-	with {affectedEObject.owner instanceof Parameter && affectedEObject.value == newValue}
+	with affectedEObject.owner instanceof Parameter 
+		&& affectedEObject.value == newValue
 	call propagateTypeChange(affectedEObject.owner as Parameter)
 }
 
-reaction RegularOrReturnParameterUpperChanged{
+reaction RegularOrReturnParameterUpperChanged {
 	after element replaced at uml::Parameter[upperValue]
 	call propagateTypeChange(affectedEObject)
 }
 
-reaction RegularOrReturnParameterUpperChanged2{
+reaction RegularOrReturnParameterUpperChanged2 {
 	after attribute replaced at uml::LiteralUnlimitedNatural[value]
-	with {affectedEObject.owner instanceof Parameter && affectedEObject.value == newValue}
+	with affectedEObject.owner instanceof Parameter 
+		&& affectedEObject.value == newValue
 	call propagateTypeChange(affectedEObject.owner as Parameter)
 }
 
-routine propagateTypeChange(uml::Parameter umlParameter){
+routine propagateTypeChange(uml::Parameter umlParameter) {
 	match {
 		val pcmSignature = retrieve optional pcm::OperationSignature corresponding to umlParameter tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
 		val pcmParameter = retrieve optional pcm::Parameter corresponding to umlParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
@@ -59,7 +62,7 @@ routine propagateTypeChange(uml::Parameter umlParameter){
 	}
 	action {
 		execute {
-			if (pcmSignature.isPresent || pcmParameter.isPresent){ // limit context to synchronized uml::Parameters
+			if (pcmSignature.isPresent || pcmParameter.isPresent) { // limit context to synchronized uml::Parameters
 				val EObject pcmStoredElement = if (pcmSignature.isPresent) pcmSignature.get else pcmParameter.get
 				val pcmRepository = pcmStoredElement.eResource.allContents.filter(Repository).head
 				val pcmDataType = PcmUmlClassHelper.getCorrespondingPcmDataType(correspondenceModel, umlParameter.type, umlParameter.lower, umlParameter.upper, pcmRepository, userInteractor)
@@ -73,7 +76,7 @@ routine propagateTypeChange(uml::Parameter umlParameter){
 	}
 }
 
-routine removeCorrespondenceForOldCollectionType_Parameter(uml::Parameter umlParameter){
+routine removeCorrespondenceForOldCollectionType_Parameter(uml::Parameter umlParameter) {
 	match {
 		val pcmCollectionType = retrieve pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
@@ -81,7 +84,8 @@ routine removeCorrespondenceForOldCollectionType_Parameter(uml::Parameter umlPar
 		remove correspondence between pcmCollectionType and umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
 }
-routine addCorrespondenceForCollectionType_Parameter(uml::Parameter umlParameter, pcm::CollectionDataType pcmCollectionType){
+
+routine addCorrespondenceForCollectionType_Parameter(uml::Parameter umlParameter, pcm::CollectionDataType pcmCollectionType) {
 	match {
 		// one Parameter can only correspond to one CollectionDataType, but one CollectionDataType can correspond to many Parameters
 		require absence of pcm::CollectionDataType corresponding to umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
@@ -90,12 +94,4 @@ routine addCorrespondenceForCollectionType_Parameter(uml::Parameter umlParameter
 		add correspondence between pcmCollectionType and umlParameter tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 	}
 }
-
-
-
-
-
-
-
-
 

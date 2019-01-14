@@ -86,7 +86,8 @@ public class RegularParameterNameChangedReaction extends AbstractReactionRealiza
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
     String _name = affectedEObject.getName();
-    return Objects.equal(_name, newValue);
+    boolean _equals = Objects.equal(_name, newValue);
+    return _equals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

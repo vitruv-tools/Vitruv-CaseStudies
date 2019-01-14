@@ -86,7 +86,8 @@ public class RequiredRoleInterfaceChangedReaction extends AbstractReactionRealiz
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final OperationRequiredRole affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final OperationInterface newValue) {
     OperationInterface _requiredInterface__OperationRequiredRole = affectedEObject.getRequiredInterface__OperationRequiredRole();
-    return (_requiredInterface__OperationRequiredRole == newValue);
+    boolean _tripleEquals = (_requiredInterface__OperationRequiredRole == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

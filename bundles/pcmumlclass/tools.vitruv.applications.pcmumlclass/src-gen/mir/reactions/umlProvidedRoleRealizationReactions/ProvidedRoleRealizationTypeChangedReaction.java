@@ -86,7 +86,8 @@ public class ProvidedRoleRealizationTypeChangedReaction extends AbstractReaction
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final InterfaceRealization affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue) {
     Interface _contract = affectedEObject.getContract();
-    return (_contract == newValue);
+    boolean _tripleEquals = (_contract == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

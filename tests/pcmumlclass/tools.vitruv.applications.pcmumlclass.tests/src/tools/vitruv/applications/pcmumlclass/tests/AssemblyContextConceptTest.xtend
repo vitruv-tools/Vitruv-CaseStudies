@@ -24,7 +24,7 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 			CorrespondenceModel cm,
 			AssemblyContext pcmAssemblyContext,
 			Property umlAssemblyContextProperty
-	){
+	) {
 		assertNotNull(pcmAssemblyContext)
 		assertNotNull(umlAssemblyContextProperty)
 		assertTrue(corresponds(cm, pcmAssemblyContext, umlAssemblyContextProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY))
@@ -33,12 +33,12 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(pcmAssemblyContext.entityName == umlAssemblyContextProperty.name)
 	}
 	
-	def protected checkAssemblyContextConcept(AssemblyContext pcmAssemblyContext){
+	def protected checkAssemblyContextConcept(AssemblyContext pcmAssemblyContext) {
 		val umlAssemblyContextProperty = helper.getModifiableCorr(pcmAssemblyContext, Property, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
 		checkAssemblyContextConcept(correspondenceModel, pcmAssemblyContext, umlAssemblyContextProperty)
 	}
 	
-	def protected checkAssemblyContextConcept(Property umlAssemblyContextProperty){
+	def protected checkAssemblyContextConcept(Property umlAssemblyContextProperty) {
 		val pcmAssemblyContext = helper.getModifiableCorr(umlAssemblyContextProperty, AssemblyContext, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY)
 		checkAssemblyContextConcept(correspondenceModel, pcmAssemblyContext, umlAssemblyContextProperty)
 	}
@@ -46,7 +46,7 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 	/**
 	 * Initialize a pcm::Repository with two CompositeComponents and synchronize them with their uml-counterparts.
 	 */
-	def private Repository createRepository_2Components(){
+	def private Repository createRepository_2Components() {
 		
 		val pcmRepository = helper.createRepository
 		helper.createComponent(pcmRepository)
@@ -96,13 +96,5 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(umlAssemblyContextProperty)
 		checkAssemblyContextConcept(umlAssemblyContextProperty)
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

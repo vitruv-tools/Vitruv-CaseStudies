@@ -81,7 +81,8 @@ public class RequiredRolePropertyInsertedReaction extends AbstractReactionRealiz
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Property newValue, final int index) {
-    return affectedEObject.getOwnedAttributes().contains(newValue);
+    boolean _contains = affectedEObject.getOwnedAttributes().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

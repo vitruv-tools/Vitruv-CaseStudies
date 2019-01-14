@@ -27,7 +27,7 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 			Package umlRepositoryPkg, 
 			Package umlContractsPkg,
 			Package umlDatatypesPkg
-	){
+	) {
 		// correspondence constraints
 		assertTrue(corresponds(cm, pcmRepo, umlRepositoryPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
 		assertTrue(corresponds(cm, pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE))
@@ -42,14 +42,14 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(umlDatatypesPkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME)
 	}
 	
-	def protected checkUmlRepositoryPackage(Package umlRepositoryPkg){
+	def protected checkUmlRepositoryPackage(Package umlRepositoryPkg) {
 		assertTrue(umlRepositoryPkg !== null)
 		val pcmRepository = helper.getModifiableCorr(umlRepositoryPkg, Repository, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
 		assertTrue(pcmRepository !== null)
 		checkPcmRepository(pcmRepository)
 	}
 	
-	def protected checkPcmRepository(Repository pcmRepository){
+	def protected checkPcmRepository(Repository pcmRepository) {
 		assertTrue(pcmRepository !== null)
 		val umlRepositoryPkg = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
 		val umlContractsPkg = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)

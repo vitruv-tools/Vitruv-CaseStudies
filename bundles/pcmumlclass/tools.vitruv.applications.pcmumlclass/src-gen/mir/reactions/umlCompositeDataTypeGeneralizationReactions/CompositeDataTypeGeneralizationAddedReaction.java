@@ -81,7 +81,8 @@ public class CompositeDataTypeGeneralizationAddedReaction extends AbstractReacti
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Generalization newValue, final int index) {
-    return affectedEObject.getGeneralizations().contains(newValue);
+    boolean _contains = affectedEObject.getGeneralizations().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

@@ -83,7 +83,8 @@ public class RequiredRoleRemovedReaction extends AbstractReactionRealization {
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final InterfaceProvidingRequiringEntity affectedEObject, final EReference affectedFeature, final OperationRequiredRole oldValue, final int index) {
     boolean _contains = affectedEObject.getRequiredRoles_InterfaceRequiringEntity().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

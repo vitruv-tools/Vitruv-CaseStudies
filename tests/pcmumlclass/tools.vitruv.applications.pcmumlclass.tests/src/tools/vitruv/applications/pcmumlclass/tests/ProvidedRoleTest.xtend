@@ -24,7 +24,7 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 			CorrespondenceModel cm,
 			OperationProvidedRole pcmProvided,
 			InterfaceRealization umlRealization
-	){
+	) {
 		assertNotNull(pcmProvided)
 		assertNotNull(umlRealization)
 		assertTrue(corresponds(cm, pcmProvided, umlRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION))
@@ -35,17 +35,17 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 		assertTrue(corresponds(cm, pcmProvided.providingEntity_ProvidedRole, umlRealization.implementingClassifier, TagLiterals.IPRE__IMPLEMENTATION))
 	}
 	
-	def protected checkProvidedRoleConcept(OperationProvidedRole pcmProvided){
+	def protected checkProvidedRoleConcept(OperationProvidedRole pcmProvided) {
 		val umlRealization = helper.getModifiableCorr(pcmProvided, InterfaceRealization, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
 		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
 	}
 	
-	def protected checkProvidedRoleConcept(InterfaceRealization umlRealization){
+	def protected checkProvidedRoleConcept(InterfaceRealization umlRealization) {
 		val pcmProvided = helper.getModifiableCorr(umlRealization, OperationProvidedRole, TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION)
 		checkProvidedRoleConcept(correspondenceModel, pcmProvided, umlRealization)
 	}
 
-	def private Repository createRepository_Component_Interface(){
+	def private Repository createRepository_Component_Interface() {
 		val pcmRepository = helper.createRepository()
 		helper.createComponent(pcmRepository)
 		helper.createOperationInterface(pcmRepository)

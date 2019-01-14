@@ -82,7 +82,8 @@ public class InnerDeclarationInsertedReaction extends AbstractReactionRealizatio
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final CompositeDataType affectedEObject, final EReference affectedFeature, final InnerDeclaration newValue, final int index) {
-    return affectedEObject.getInnerDeclaration_CompositeDataType().contains(newValue);
+    boolean _contains = affectedEObject.getInnerDeclaration_CompositeDataType().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

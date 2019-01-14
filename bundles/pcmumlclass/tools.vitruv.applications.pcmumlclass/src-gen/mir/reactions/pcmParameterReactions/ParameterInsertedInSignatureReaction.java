@@ -82,7 +82,8 @@ public class ParameterInsertedInSignatureReaction extends AbstractReactionRealiz
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final OperationSignature affectedEObject, final EReference affectedFeature, final Parameter newValue, final int index) {
-    return affectedEObject.getParameters__OperationSignature().contains(newValue);
+    boolean _contains = affectedEObject.getParameters__OperationSignature().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

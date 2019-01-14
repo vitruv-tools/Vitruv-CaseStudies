@@ -82,7 +82,8 @@ public class CompositeDataTypeInsertedInRepositoryReaction extends AbstractReact
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final Repository affectedEObject, final EReference affectedFeature, final CompositeDataType newValue, final int index) {
-    return affectedEObject.getDataTypes__Repository().contains(newValue);
+    boolean _contains = affectedEObject.getDataTypes__Repository().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

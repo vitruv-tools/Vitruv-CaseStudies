@@ -85,7 +85,8 @@ public class ProvidedRoleRealizationNameChangedReaction extends AbstractReaction
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final InterfaceRealization affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
     String _name = affectedEObject.getName();
-    return (_name == newValue);
+    boolean _tripleEquals = (_name == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

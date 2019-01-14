@@ -81,7 +81,8 @@ public class RepositoryComponentPackageRemovedReaction extends AbstractReactionR
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Package oldValue, final int index) {
     boolean _contains = affectedEObject.getNestedPackages().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

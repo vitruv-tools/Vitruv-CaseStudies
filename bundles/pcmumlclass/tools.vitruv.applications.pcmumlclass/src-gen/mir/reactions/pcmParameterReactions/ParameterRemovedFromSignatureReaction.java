@@ -83,7 +83,8 @@ public class ParameterRemovedFromSignatureReaction extends AbstractReactionReali
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final OperationSignature affectedEObject, final EReference affectedFeature, final Parameter oldValue, final int index) {
     boolean _contains = affectedEObject.getParameters__OperationSignature().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

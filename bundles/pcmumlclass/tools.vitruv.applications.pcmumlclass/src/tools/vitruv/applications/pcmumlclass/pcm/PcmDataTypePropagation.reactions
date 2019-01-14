@@ -23,8 +23,7 @@ execute actions in UML
 
 routine setUmlParameterType(
 		pcm::DataType pcmType, 
-		uml::Parameter umlParameter
-){
+		uml::Parameter umlParameter) {
 	action {
 		call {
 			setTypeOfUmlParameterOrProperty(pcmType, umlParameter, umlParameter, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
@@ -34,8 +33,7 @@ routine setUmlParameterType(
 
 routine setUmlPropertyType(
 		pcm::DataType pcmType, 
-		uml::Property umlProperty
-){
+		uml::Property umlProperty) {
 	action {
 		call {
 			setTypeOfUmlParameterOrProperty(pcmType, umlProperty, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
@@ -49,20 +47,18 @@ routine setUmlPropertyType(
 routine setTypeOfUmlParameterOrProperty(
 		pcm::DataType pcmType, 
 		uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, // same element; Parameter or Property
-		String tag
-){
+		String tag) {
 	action {
 		call {
-			if(umlElement !== umlMultiplicity){
+			if(umlElement !== umlMultiplicity) {
 				throw new IllegalStateException("uml::TypedElement umlElement and uml::MultiplicityElement uMultiplicity"
 					+ "have to be the same element (uml::Parameter or uml::Property) for this routine to work, but they were not."
 				)
 			}
 			
-			if (pcmType !== null && pcmType instanceof CollectionDataType){
+			if (pcmType !== null && pcmType instanceof CollectionDataType) {
 				setTypeOfUmlParameterOrProperty_Collection(pcmType as CollectionDataType, umlElement, umlMultiplicity, tag)
-			}
-			else {
+			} else {
 				setTypeOfUmlParameterOrProperty_NonCollection(pcmType, umlElement, umlMultiplicity, tag)
 			}
 		}
@@ -72,8 +68,7 @@ routine setTypeOfUmlParameterOrProperty(
 routine setTypeOfUmlParameterOrProperty_NonCollection(
 		pcm::DataType pcmType, 
 		uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, // same element; Parameter or Property
-		String tag
-){
+		String tag) {
 	match {
 		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmType tagged with TagLiterals.DATATYPE__TYPE
 		val umlCompositeType = retrieve optional uml::Type corresponding to pcmType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
@@ -93,8 +88,7 @@ routine setTypeOfUmlParameterOrProperty_NonCollection(
 routine setTypeOfUmlParameterOrProperty_Collection(
 		pcm::CollectionDataType pcmType, 
 		uml::TypedElement umlElement, uml::MultiplicityElement umlMultiplicity, // same element; Parameter or Property
-		String tag
-){
+		String tag) {
 	match {
 		val umlPrimitiveType = retrieve optional uml::Type corresponding to pcmType.innerType_CollectionDataType tagged with TagLiterals.DATATYPE__TYPE
 		val umlCompositeType = retrieve optional uml::Type corresponding to pcmType.innerType_CollectionDataType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
@@ -115,8 +109,7 @@ routine setTypeOfUmlParameterOrProperty_Collection(
 
 routine removeOldCollectionDataTypeCorrespondence(
 		uml::TypedElement umlElement, // Parameter or Property
-		String tag
-){
+		String tag) {
 	match {
 		val oldCollectionType = retrieve pcm::CollectionDataType corresponding to umlElement tagged with tag
 	}
@@ -128,8 +121,7 @@ routine removeOldCollectionDataTypeCorrespondence(
 routine addCollectionDataTypeCorrespondence(
 		pcm::CollectionDataType pcmType, 
 		uml::TypedElement umlElement, // Parameter or Property
-		String tag
-){
+		String tag) {
 	match {
 		require absence of pcm::CollectionDataType corresponding to umlElement tagged with tag
 	}
@@ -139,36 +131,30 @@ routine addCollectionDataTypeCorrespondence(
 }
 
 // UNSUPPORTED WARNING - unsupported/unmapped PrimitiveType has been set warning
-reaction UnsupportedPrimitiveTypeSetAtInnerDeclaration{
+reaction UnsupportedPrimitiveTypeSetAtInnerDeclaration {
 	after element pcm::PrimitiveDataType replaced at pcm::InnerDeclaration[datatype_InnerDeclaration]
-	with {
-		affectedEObject.datatype_InnerDeclaration === newValue
+	with affectedEObject.datatype_InnerDeclaration === newValue
 		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
-	}
 	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
 }
 
-reaction UnsupportedPrimitiveTypeSetAtParameter{
+reaction UnsupportedPrimitiveTypeSetAtParameter {
 	after element pcm::PrimitiveDataType replaced at pcm::Parameter[dataType__Parameter]
-	with {
-		affectedEObject.dataType__Parameter === newValue
+	with affectedEObject.dataType__Parameter === newValue
 		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
-	}
 	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
 }
 
-reaction UnsupportedPrimitiveTypeSetAtSignature{
+reaction UnsupportedPrimitiveTypeSetAtSignature {
 	after element pcm::PrimitiveDataType replaced at pcm::OperationSignature[returnType__OperationSignature]
-	with {
-		affectedEObject.returnType__OperationSignature === newValue
+	with affectedEObject.returnType__OperationSignature === newValue
 		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
-	}
 	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
 }
 
-routine unsupportedPrimitiveTypeSetWarning(pcm::PrimitiveDataType primitive, EObject entity){
-	action{
-		execute{
+routine unsupportedPrimitiveTypeSetWarning(pcm::PrimitiveDataType primitive, EObject entity) {
+	action {
+		execute {
 			userInteractor.notificationDialogBuilder
 				.message("The pcm::PrimitiveDataType " + primitive + " set at the pcm element " + entity 
 					+ " has no good match in the predefined set of uml::PrimitiveTypes "

@@ -83,7 +83,8 @@ public class InterfaceRemovedFromRepositoryReaction extends AbstractReactionReal
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final Repository affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final int index) {
     boolean _contains = affectedEObject.getInterfaces__Repository().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

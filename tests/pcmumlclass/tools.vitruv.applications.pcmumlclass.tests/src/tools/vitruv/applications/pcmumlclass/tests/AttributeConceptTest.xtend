@@ -28,7 +28,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 	def public static void checkAttributeConcept(CorrespondenceModel cm, 
 			InnerDeclaration pcmAttribute, 
 			Property umlAttribute
-	){
+	) {
 		assertNotNull(pcmAttribute)
 		assertNotNull(umlAttribute)
 		assertTrue(corresponds(cm, pcmAttribute, umlAttribute, TagLiterals.INNER_DECLARATION__PROPERTY))
@@ -38,18 +38,17 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		//types should correspond
 		assertTrue(isCorrect_DataType_Property_Correspondence(cm, pcmAttribute.datatype_InnerDeclaration, umlAttribute))
 	}
-	def protected checkAttributeConcept(InnerDeclaration pcmAttribute){
+	def protected checkAttributeConcept(InnerDeclaration pcmAttribute) {
 		val umlAttribute = helper.getModifiableCorr(pcmAttribute, Property, TagLiterals.INNER_DECLARATION__PROPERTY)
 		checkAttributeConcept(correspondenceModel, pcmAttribute, umlAttribute)
 	}
-	def protected checkAttributeConcept(Property umlAttribute){
+	def protected checkAttributeConcept(Property umlAttribute) {
 		val pcmAttribute = helper.getModifiableCorr(umlAttribute, InnerDeclaration, TagLiterals.INNER_DECLARATION__PROPERTY)
 		checkAttributeConcept(correspondenceModel, pcmAttribute, umlAttribute)
 	}
 
 
-
-	def private Repository createRepository(){
+	def private Repository createRepository() {
 		val pcmRepository = helper.createRepository()
 		helper.createCompositeDataType(pcmRepository)
 		val pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)

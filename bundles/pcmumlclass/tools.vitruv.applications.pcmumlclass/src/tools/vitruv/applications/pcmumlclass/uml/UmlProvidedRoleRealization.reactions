@@ -21,11 +21,11 @@ execute actions in PCM
 
 reaction ProvidedRoleRealizationAdded {
 	after element uml::InterfaceRealization inserted in uml::Class[interfaceRealization]
-	with {affectedEObject.interfaceRealizations.contains(newValue)} //validity check
+	with affectedEObject.interfaceRealizations.contains(newValue) //validity check
 	call insertCorrespondingProvidedRole(newValue, affectedEObject)
 }
 
-routine insertCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent){
+routine insertCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent) {
 	match{
 		// context check
 		val pcmComponent = retrieve optional pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
@@ -35,11 +35,10 @@ routine insertCorrespondingProvidedRole(uml::InterfaceRealization umlRealization
 		call {
 			if (pcmComponent.isPresent 
 				&& (pcmInterface.isPresent || umlRealization.contract === null) // allow 'null' for uninitialized InterfaceRealization
-			){
+			) {
 				detectOrCreateCorrespondingProvidedRole(umlRealization, umlComponent)
 				moveCorrespondingProvidedRole(umlRealization, umlComponent)
-			}
-			else {
+			} else {
 				// not a matching context -> delete correspondence, if it exists
 				deleteCorrespondingProvidedRole(umlRealization)
 			}
@@ -47,21 +46,20 @@ routine insertCorrespondingProvidedRole(uml::InterfaceRealization umlRealization
 	}
 }
 
-routine detectOrCreateCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent){
-	match{
+routine detectOrCreateCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent) {
+	match {
 		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlRealization.contract tagged with TagLiterals.INTERFACE_TO_INTERFACE
 		val pcmProvided = retrieve optional pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
 	action {
 		call {
-			if (!pcmProvided.isPresent){
+			if (!pcmProvided.isPresent) {
 				val pcmProvidedCandidate = pcmComponent.providedRoles_InterfaceProvidingEntity
 					.filter(OperationProvidedRole).findFirst[it.providedInterface__OperationProvidedRole === pcmInterface]
-				if (pcmProvidedCandidate !== null){
+				if (pcmProvidedCandidate !== null) {
 					addCorrespondenceForExistingProvidedRole(umlRealization, pcmProvidedCandidate)
-				}
-				else {
+				} else {
 					createCorrespondingProvidedRole(umlRealization, umlComponent)
 				}
 			}
@@ -69,8 +67,8 @@ routine detectOrCreateCorrespondingProvidedRole(uml::InterfaceRealization umlRea
 	}
 }
 
-routine addCorrespondenceForExistingProvidedRole(uml::InterfaceRealization umlRealization, pcm::OperationProvidedRole pcmProvided){
-	match{
+routine addCorrespondenceForExistingProvidedRole(uml::InterfaceRealization umlRealization, pcm::OperationProvidedRole pcmProvided) {
+	match {
 		require absence of uml::InterfaceRealization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 		require absence of pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
@@ -79,8 +77,8 @@ routine addCorrespondenceForExistingProvidedRole(uml::InterfaceRealization umlRe
 	}
 }
 
-routine createCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent){
-	match{
+routine createCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent) {
+	match {
 		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlRealization.contract tagged with TagLiterals.INTERFACE_TO_INTERFACE
 		require absence of pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
@@ -95,8 +93,8 @@ routine createCorrespondingProvidedRole(uml::InterfaceRealization umlRealization
 	}
 }
 
-routine moveCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent){
-	match{
+routine moveCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent) {
+	match {
 		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val pcmProvided = retrieve pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
@@ -109,12 +107,12 @@ routine moveCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, 
 
 reaction ProvidedRoleRealizationRemoved {
 	after element uml::InterfaceRealization removed from uml::Class[interfaceRealization]
-	with {!affectedEObject.interfaceRealizations.contains(oldValue)} //validity check
+	with !affectedEObject.interfaceRealizations.contains(oldValue) //validity check
 	call removeCorrespondingProvidedRole(oldValue, affectedEObject)
 }
 
-routine removeCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent){
-	match{
+routine removeCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Class umlComponent) {
+	match {
 		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val pcmProvided = retrieve pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
@@ -133,8 +131,8 @@ reaction ProvidedRoleRealizationDeleted {
 	call deleteCorrespondingProvidedRole(affectedEObject)
 }
 
-routine deleteCorrespondingProvidedRole(uml::InterfaceRealization umlRealization){
-	match{
+routine deleteCorrespondingProvidedRole(uml::InterfaceRealization umlRealization) {
+	match {
 		val pcmProvided = retrieve pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
 	action {
@@ -145,11 +143,11 @@ routine deleteCorrespondingProvidedRole(uml::InterfaceRealization umlRealization
 
 reaction ProvidedRoleRealizationNameChanged {
 	after attribute replaced at uml::InterfaceRealization[name]
-	with {affectedEObject.name === newValue}
+	with affectedEObject.name === newValue
 	call changeNameOfCorrespondingProvidedRole(affectedEObject, newValue)
 }
 
-routine changeNameOfCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, String newName){
+routine changeNameOfCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, String newName) {
 	match{
 		val pcmProvided = retrieve pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
@@ -162,11 +160,11 @@ routine changeNameOfCorrespondingProvidedRole(uml::InterfaceRealization umlReali
 
 reaction ProvidedRoleRealizationTypeChanged {
 	after element uml::Interface replaced at uml::InterfaceRealization[contract]
-	with {affectedEObject.contract === newValue}
+	with affectedEObject.contract === newValue
 	call changeTypeOfCorrespondingProvidedRole(affectedEObject, newValue)
 }
 
-routine changeTypeOfCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Interface umlNewInterface){
+routine changeTypeOfCorrespondingProvidedRole(uml::InterfaceRealization umlRealization, uml::Interface umlNewInterface) {
 	match{
 		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlRealization.implementingClassifier tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val pcmProvided = retrieve optional pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
@@ -174,17 +172,14 @@ routine changeTypeOfCorrespondingProvidedRole(uml::InterfaceRealization umlReali
 	}
 	action {
 		execute {
-			if (!pcmProvided.isPresent && pcmNewInterface.isPresent){
+			if (!pcmProvided.isPresent && pcmNewInterface.isPresent) {
 				createCorrespondingProvidedRole(umlRealization, umlRealization.implementingClassifier as org.eclipse.uml2.uml.Class)
-			}
-			else if (pcmProvided.isPresent && pcmNewInterface.isPresent){
+			} else if (pcmProvided.isPresent && pcmNewInterface.isPresent) {
 				pcmProvided.get.providedInterface__OperationProvidedRole = pcmNewInterface.get
-			}
-			else if(pcmProvided.isPresent && umlNewInterface === null){
+			} else if(pcmProvided.isPresent && umlNewInterface === null) {
 				//might be a transitional state -> keep correspondence, but synchronize 'null'
 				pcmProvided.get.providedInterface__OperationProvidedRole = null
-			}
-			else {
+			} else {
 				logger.warn("The general-type of a uml::InterfaceRealization in a pcm::OperationProvidedRole ~ uml::InterfaceRealization correspondence"
 							+ "has been set to a non-OperationInterface type. This is against convention and the corresponding OperationProvidedRole will be deleted.")
 				deleteCorrespondingProvidedRole(umlRealization)
@@ -192,12 +187,4 @@ routine changeTypeOfCorrespondingProvidedRole(uml::InterfaceRealization umlReali
 		}
 	}
 }
-
-
-
-
-
-
-
-
 

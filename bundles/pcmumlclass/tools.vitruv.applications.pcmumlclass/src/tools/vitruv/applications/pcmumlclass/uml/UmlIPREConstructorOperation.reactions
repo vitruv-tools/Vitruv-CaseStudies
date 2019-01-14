@@ -18,9 +18,9 @@ reactions: umlIPREConstructorOperationReactions
 in reaction to changes in UML
 execute actions in PCM
 
-reaction IPREConstructorOperationNameChanged{
+reaction IPREConstructorOperationNameChanged {
 	after attribute replaced at uml::Operation[name]
-	with {affectedEObject.name == newValue}
+	with affectedEObject.name == newValue
 	call changeNameOfCorrespondingIPRE_Constructor(affectedEObject, newValue)
 }
 
@@ -30,12 +30,12 @@ routine changeNameOfCorrespondingIPRE_Constructor(uml::Operation umlOperation, S
 	}
 	action {
 		update pcmIPRE {
-			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)){
+			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
 				pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
-			}
-			else {
+			} else {
 				pcmIPRE.entityName = newName
 			}
 		}
 	}
 }
+

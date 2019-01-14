@@ -19,7 +19,7 @@ execute actions in PCM
 
 reaction SignatureOperationInserted {
 	after element uml::Operation inserted in uml::Interface[ownedOperation]
-	with {newValue.interface === affectedEObject} // validity check
+	with newValue.interface === affectedEObject // validity check
 	call insertCorrespondingSignature(newValue, affectedEObject)
 }
 
@@ -29,11 +29,10 @@ routine insertCorrespondingSignature(uml::Operation umlOperation, uml::Interface
 	}
 	action {
 		call {
-			if (pcmInterface.isPresent){
+			if (pcmInterface.isPresent) {
 				detectOrCreateCorrespondingSignature(umlOperation, umlInterface)
 				moveCorrespondingSignature(umlOperation, umlInterface)
-			}
-			else {
+			} else {
 				deleteCorrespondingSignature(umlOperation)
 			}
 		}
@@ -47,12 +46,11 @@ routine detectOrCreateCorrespondingSignature(uml::Operation umlOperation, uml::I
 	}
 	action {
 		call {
-			if (!pcmSignature.isPresent){
+			if (!pcmSignature.isPresent) {
 				val pcmSignatureCandidate = pcmInterface.signatures__OperationInterface.findFirst[it.entityName == umlOperation.name]
-				if (pcmSignatureCandidate !== null){
+				if (pcmSignatureCandidate !== null) {
 					addCorrespondenceForExistingSignature(umlOperation, pcmSignatureCandidate)
-				}
-				else {
+				} else {
 					createCorrespondingSignature(umlOperation, umlInterface)
 				}
 			}
@@ -98,7 +96,7 @@ routine moveCorrespondingSignature(uml::Operation umlOperation, uml::Interface u
 
 reaction SignatureOperationRemoved {
 	after element uml::Operation removed from uml::Interface[ownedOperation]
-	with {oldValue.interface !== affectedEObject}
+	with oldValue.interface !== affectedEObject
 	call removeCorrespondingSignature(oldValue, affectedEObject)
 }
 
@@ -131,7 +129,7 @@ routine deleteCorrespondingSignature(uml::Operation umlOperation) {
 
 reaction SignatureOperationRenamed {
 	after attribute replaced at uml::Operation[name]
-	with {affectedEObject.name == newValue}
+	with affectedEObject.name == newValue
 	call renameCorrespondingSignature(affectedEObject, newValue)
 }
 
@@ -145,3 +143,4 @@ routine renameCorrespondingSignature(uml::Operation umlOperation, String newName
 		}
 	}
 }
+

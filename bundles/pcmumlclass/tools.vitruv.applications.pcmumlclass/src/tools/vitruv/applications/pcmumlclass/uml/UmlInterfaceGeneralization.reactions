@@ -19,11 +19,11 @@ execute actions in PCM
 
 reaction InterfaceGeneralizationAdded {
 	after element uml::Generalization inserted in uml::Interface[generalization]
-	with {affectedEObject.generalizations.contains(newValue)} //validity check
+	with affectedEObject.generalizations.contains(newValue) //validity check
 	call addParentInterface(affectedEObject, newValue.general)
 }
 
-routine addParentInterface(uml::Interface umlInterface, uml::Classifier umlNewParent){
+routine addParentInterface(uml::Interface umlInterface, uml::Classifier umlNewParent) {
 	match {
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
 		val pcmNewParent = retrieve pcm::OperationInterface corresponding to umlNewParent tagged with TagLiterals.INTERFACE_TO_INTERFACE
@@ -31,7 +31,7 @@ routine addParentInterface(uml::Interface umlInterface, uml::Classifier umlNewPa
 	action {
 		execute {
 			val isAlreadyParent = pcmInterface.parentInterfaces__Interface.contains(pcmNewParent) 
-			if (!isAlreadyParent){
+			if (!isAlreadyParent) {
 				pcmInterface.parentInterfaces__Interface += pcmNewParent
 			}
 		}
@@ -40,11 +40,11 @@ routine addParentInterface(uml::Interface umlInterface, uml::Classifier umlNewPa
 
 reaction InterfaceGeneralizationRemoved {
 	after element uml::Generalization removed from uml::Interface[generalization]
-	with {!affectedEObject.generalizations.contains(oldValue)} //validity check
+	with !affectedEObject.generalizations.contains(oldValue) //validity check
 	call removeParentInterface(affectedEObject, oldValue.general)
 }
 
-routine removeParentInterface(uml::Interface umlInterface, uml::Classifier umlOldParent){
+routine removeParentInterface(uml::Interface umlInterface, uml::Classifier umlOldParent) {
 	match {
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
 		val pcmOldParent = retrieve pcm::OperationInterface corresponding to umlOldParent tagged with TagLiterals.INTERFACE_TO_INTERFACE
@@ -59,12 +59,12 @@ routine removeParentInterface(uml::Interface umlInterface, uml::Classifier umlOl
 
 reaction ParentInterfaceReplaced {
 	after element replaced at uml::Generalization[general]
-	with {affectedEObject.specific instanceof Interface}
-//	with {affectedEObject.general === newValue} // delay validity check to ensure that the old parent interface is removed
+	with affectedEObject.specific instanceof Interface
+//	with affectedEObject.general === newValue // delay validity check to ensure that the old parent interface is removed
 	call replaceParentInterface(affectedEObject, newValue, oldValue)
 }
 
-routine replaceParentInterface(uml::Generalization gen, uml::Classifier newParent, uml::Classifier oldParent){
+routine replaceParentInterface(uml::Generalization gen, uml::Classifier newParent, uml::Classifier oldParent) {
 	match {
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to gen.specific tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
@@ -73,13 +73,10 @@ routine replaceParentInterface(uml::Generalization gen, uml::Classifier newParen
 			if (oldParent === newParent) return; //nothing to do
 			
 			removeParentInterface(gen.specific as Interface, oldParent)
-			if (gen.general === newParent){ // delayed validity check
+			if (gen.general === newParent) { // delayed validity check
 				addParentInterface(gen.specific as Interface, newParent)
 			}
 		}
 	}
 }
-
-
-
 

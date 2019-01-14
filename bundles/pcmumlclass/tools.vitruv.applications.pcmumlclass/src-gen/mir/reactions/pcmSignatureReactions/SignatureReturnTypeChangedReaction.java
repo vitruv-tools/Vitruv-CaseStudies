@@ -86,7 +86,8 @@ public class SignatureReturnTypeChangedReaction extends AbstractReactionRealizat
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final OperationSignature affectedEObject, final EReference affectedFeature, final DataType oldValue, final DataType newValue) {
     DataType _returnType__OperationSignature = affectedEObject.getReturnType__OperationSignature();
-    return (_returnType__OperationSignature == newValue);
+    boolean _tripleEquals = (_returnType__OperationSignature == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

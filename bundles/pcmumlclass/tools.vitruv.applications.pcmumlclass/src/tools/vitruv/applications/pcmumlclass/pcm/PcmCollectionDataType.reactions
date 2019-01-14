@@ -28,9 +28,9 @@ reactions: pcmCollectionDataTypeReactions
 in reaction to changes in PCM
 execute actions in UML
 
-reaction CollectionDataTypeInnerTypeChanged{
+reaction CollectionDataTypeInnerTypeChanged {
 	after element replaced at pcm::CollectionDataType[innerType_CollectionDataType]
-	with {affectedEObject.innerType_CollectionDataType == newValue}
+	with affectedEObject.innerType_CollectionDataType == newValue
 	call changeTypeOfCorrespondingPropertyOrParameter(affectedEObject, newValue)
 }
 
@@ -39,7 +39,7 @@ reaction CollectionDataTypeInnerTypeChanged{
  * 
  * Assumes that the innerType of the CollectionDataType is not set to another CollectionDataType.
  */
-routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcmCollection, pcm::DataType newInnerType){
+routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcmCollection, pcm::DataType newInnerType) {
 	match {
 		val umlParameterList = retrieve many uml::Parameter corresponding to pcmCollection tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
 		val umlPropertyList = retrieve many uml::Property corresponding to pcmCollection tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
@@ -48,17 +48,18 @@ routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcm
 		val umlCompositeType = retrieve optional uml::Type corresponding to newInnerType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
-		execute{
+		execute {
 			if (newInnerType instanceof CollectionDataType) logger.warn(DefaultLiterals.WARNING_NESTED_COLLECTION_DATA_TYPE)
 			
 			// if the newInnerType is null or a CollectionDataType, this synchronizes the corresponding element's type to null
 			val umlType = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
-			for (umlParameter : umlParameterList){
+			for (umlParameter : umlParameterList) {
 				umlParameter.type = umlType
 			}
-			for (umlProperty : umlPropertyList){
+			for (umlProperty : umlPropertyList) {
 				umlProperty.type = umlType
 			}
 		}
 	}
 }
+

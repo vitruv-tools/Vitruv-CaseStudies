@@ -83,7 +83,8 @@ public class SignatureOperationInsertedReaction extends AbstractReactionRealizat
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final Interface affectedEObject, final EReference affectedFeature, final Operation newValue, final int index) {
     Interface _interface = newValue.getInterface();
-    return (_interface == affectedEObject);
+    boolean _tripleEquals = (_interface == affectedEObject);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

@@ -35,7 +35,7 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 			Package umlComponentPkg,
 			Class umlComponentImpl,
 			Operation umlComponentConstructor
-	){
+	) {
 		assertNotNull(pcmComponent)
 		assertNotNull(umlComponentPkg)
 		assertNotNull(umlComponentImpl)
@@ -55,14 +55,14 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(corresponds(cm, pcmComponent.repository__RepositoryComponent, umlComponentPkg.nestingPackage, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
 	}
 	
-	def protected checkRepositoryComponentConcept(RepositoryComponent pcmComponent){
+	def protected checkRepositoryComponentConcept(RepositoryComponent pcmComponent) {
 		val  umlComponentPkg = helper.getModifiableCorr(pcmComponent, Package, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 		val  umlComponentImpl = helper.getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
 		val  umlComponentConstructor = helper.getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
 		checkRepositoryComponentConcept(correspondenceModel, pcmComponent, umlComponentPkg, umlComponentImpl, umlComponentConstructor)
 	}
 	
-	def protected checkRepositoryComponentConcept(Package umlComponentPkg){
+	def protected checkRepositoryComponentConcept(Package umlComponentPkg) {
 		val  pcmComponent = helper.getModifiableCorr(umlComponentPkg, RepositoryComponent, TagLiterals.REPOSITORY_COMPONENT__PACKAGE)
 		assertNotNull(pcmComponent)
 		checkRepositoryComponentConcept(pcmComponent)
@@ -71,7 +71,7 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 	/**
 	 * Initialize a pcm::Repository and its corresponding uml-counterparts.
 	 */
-	def private Repository createRepository(){
+	def private Repository createRepository() {
 		var pcmRepository = helper.createRepository()
 		
 		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)

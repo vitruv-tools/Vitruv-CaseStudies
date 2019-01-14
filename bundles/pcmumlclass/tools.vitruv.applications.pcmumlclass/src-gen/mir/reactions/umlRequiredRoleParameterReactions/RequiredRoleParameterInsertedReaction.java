@@ -82,7 +82,8 @@ public class RequiredRoleParameterInsertedReaction extends AbstractReactionReali
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final Operation affectedEObject, final EReference affectedFeature, final Parameter newValue, final int index) {
-    return affectedEObject.getOwnedParameters().contains(newValue);
+    boolean _contains = affectedEObject.getOwnedParameters().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

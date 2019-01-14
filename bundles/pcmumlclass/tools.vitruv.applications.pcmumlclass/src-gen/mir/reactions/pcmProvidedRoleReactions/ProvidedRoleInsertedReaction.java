@@ -82,7 +82,8 @@ public class ProvidedRoleInsertedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final InterfaceProvidingRequiringEntity affectedEObject, final EReference affectedFeature, final OperationProvidedRole newValue, final int index) {
-    return affectedEObject.getProvidedRoles_InterfaceProvidingEntity().contains(newValue);
+    boolean _contains = affectedEObject.getProvidedRoles_InterfaceProvidingEntity().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

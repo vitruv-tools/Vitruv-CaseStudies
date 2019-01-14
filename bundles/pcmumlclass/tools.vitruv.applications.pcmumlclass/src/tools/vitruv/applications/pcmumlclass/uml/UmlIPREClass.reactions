@@ -22,15 +22,15 @@ execute actions in PCM
 
 reaction IPREClassRemoved {
 	after element uml::Class removed from uml::Package[packagedElement]
-	with {oldValue.package !== affectedEObject}
+	with oldValue.package !== affectedEObject
 	call warnUserAboutImplRemoveIfIPRECorrespondenceExists(oldValue, affectedEObject)
 }
 
-routine warnUserAboutImplRemoveIfIPRECorrespondenceExists(uml::Class umlClass, uml::Package umlPackage){
-	match{
+routine warnUserAboutImplRemoveIfIPRECorrespondenceExists(uml::Class umlClass, uml::Package umlPackage) {
+	match {
 		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
-	action{
+	action {
 		execute {
 			if (pcmRepositoryComponent.isPresent)
 				logger.warn(DefaultLiterals.WARNING_IPRE_IMPLEMENTATION_REMOVED + umlClass)
@@ -40,20 +40,19 @@ routine warnUserAboutImplRemoveIfIPRECorrespondenceExists(uml::Class umlClass, u
 
 reaction IPREClassNameChanged {
 	after attribute replaced at uml::Class[name]
-	with {affectedEObject.name == newValue}
+	with affectedEObject.name == newValue
 	call changeNameOfCorrespondingIPRE_Implementation(affectedEObject, newValue)
 }
 
-routine changeNameOfCorrespondingIPRE_Implementation(uml::Class umlClass, String newName){
-	match{
+routine changeNameOfCorrespondingIPRE_Implementation(uml::Class umlClass, String newName) {
+	match {
 		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
-	action{
+	action {
 		update pcmIPRE {
-			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)){
+			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
 				pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
-			}
-			else {
+			} else {
 				pcmIPRE.entityName = newName
 			}
 		}

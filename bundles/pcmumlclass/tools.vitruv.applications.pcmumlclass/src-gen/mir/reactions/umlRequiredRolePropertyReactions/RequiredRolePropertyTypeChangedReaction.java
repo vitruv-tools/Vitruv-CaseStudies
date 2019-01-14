@@ -87,7 +87,8 @@ public class RequiredRolePropertyTypeChangedReaction extends AbstractReactionRea
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final Property affectedEObject, final EReference affectedFeature, final Interface oldValue, final Interface newValue) {
     Type _type = affectedEObject.getType();
-    return (_type == newValue);
+    boolean _tripleEquals = (_type == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

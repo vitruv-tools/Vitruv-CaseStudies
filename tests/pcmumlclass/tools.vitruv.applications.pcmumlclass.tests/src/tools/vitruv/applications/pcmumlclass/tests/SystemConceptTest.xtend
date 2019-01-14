@@ -40,7 +40,7 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 			Package umlSystemPkg,
 			Class umlSystemImpl,
 			Operation umlSystemConstructor
-	){
+	) {
 		assertNotNull(pcmSystem)
 		assertNotNull(umlSystemPkg)
 		assertNotNull(umlSystemImpl)
@@ -55,14 +55,14 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(umlSystemImpl.package === umlSystemPkg)
 	}
 	
-	def protected checkSystemConcept(Package umlSystemPkg){
+	def protected checkSystemConcept(Package umlSystemPkg) {
 		assertNotNull(umlSystemPkg)
 		val pcmSystem = helper.getModifiableCorr(umlSystemPkg, System, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
 		assertNotNull(pcmSystem)
 		checkSystemConcept(pcmSystem)
 	}
 	
-	def protected checkSystemConcept(System pcmSystem){
+	def protected checkSystemConcept(System pcmSystem) {
 		assertNotNull(pcmSystem)
 		val umlSystemPkg = helper.getModifiableCorr(pcmSystem, Package, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
 		val umlSystemImpl = helper.getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)

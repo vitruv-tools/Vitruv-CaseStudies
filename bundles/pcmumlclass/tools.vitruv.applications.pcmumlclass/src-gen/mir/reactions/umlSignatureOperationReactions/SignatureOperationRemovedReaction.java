@@ -83,7 +83,8 @@ public class SignatureOperationRemovedReaction extends AbstractReactionRealizati
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final Interface affectedEObject, final EReference affectedFeature, final Operation oldValue, final int index) {
     Interface _interface = oldValue.getInterface();
-    return (_interface != affectedEObject);
+    boolean _tripleNotEquals = (_interface != affectedEObject);
+    return _tripleNotEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

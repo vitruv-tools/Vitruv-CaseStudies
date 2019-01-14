@@ -81,7 +81,8 @@ public class CompositeDataTypeParentAddedReaction extends AbstractReactionRealiz
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final CompositeDataType affectedEObject, final EReference affectedFeature, final CompositeDataType newValue, final int index) {
-    return affectedEObject.getParentType_CompositeDataType().contains(newValue);
+    boolean _contains = affectedEObject.getParentType_CompositeDataType().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

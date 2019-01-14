@@ -85,7 +85,8 @@ public class RequiredRoleNameChangedReaction extends AbstractReactionRealization
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final OperationRequiredRole affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
     String _entityName = affectedEObject.getEntityName();
-    return (_entityName == newValue);
+    boolean _tripleEquals = (_entityName == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

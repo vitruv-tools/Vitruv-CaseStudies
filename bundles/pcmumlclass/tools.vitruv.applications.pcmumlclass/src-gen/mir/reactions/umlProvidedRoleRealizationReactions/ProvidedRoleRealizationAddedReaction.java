@@ -81,7 +81,8 @@ public class ProvidedRoleRealizationAddedReaction extends AbstractReactionRealiz
   }
   
   private boolean checkUserDefinedPrecondition(final InsertEReference insertChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final InterfaceRealization newValue, final int index) {
-    return affectedEObject.getInterfaceRealizations().contains(newValue);
+    boolean _contains = affectedEObject.getInterfaceRealizations().contains(newValue);
+    return _contains;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

@@ -86,7 +86,8 @@ public class AssemblyContextPropertyTypeChangedReaction extends AbstractReaction
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final Property affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, final org.eclipse.uml2.uml.Class newValue) {
     Type _type = affectedEObject.getType();
-    return (_type == newValue);
+    boolean _tripleEquals = (_type == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

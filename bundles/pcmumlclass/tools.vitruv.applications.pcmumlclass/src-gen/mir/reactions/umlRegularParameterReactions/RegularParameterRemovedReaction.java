@@ -83,7 +83,8 @@ public class RegularParameterRemovedReaction extends AbstractReactionRealization
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final Operation affectedEObject, final EReference affectedFeature, final Parameter oldValue, final int index) {
     boolean _contains = affectedEObject.getOwnedParameters().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

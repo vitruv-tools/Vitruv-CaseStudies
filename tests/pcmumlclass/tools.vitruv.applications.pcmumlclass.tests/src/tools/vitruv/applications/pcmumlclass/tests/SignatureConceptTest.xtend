@@ -30,7 +30,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 			CorrespondenceModel cm, 
 			OperationSignature pcmSignature, 
 			Operation umlOperation
-	){
+	) {
 		val returnParam = umlOperation.ownedParameters.findFirst[param | param.direction === ParameterDirectionKind.RETURN_LITERAL]
 		assertNotNull(pcmSignature)
 		assertNotNull(umlOperation)
@@ -46,17 +46,17 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		assertTrue(corresponds(cm, pcmSignature.interface__OperationSignature, umlOperation.interface, TagLiterals.INTERFACE_TO_INTERFACE))
 	}
 	
-	def protected checkSignatureConcept(OperationSignature pcmSignature){
+	def protected checkSignatureConcept(OperationSignature pcmSignature) {
 		val umlOperation = helper.getModifiableCorr(pcmSignature, Operation, TagLiterals.SIGNATURE__OPERATION)
 		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
 	}
 	
-	def protected checkSignatureConcept(Operation umlOperation){
+	def protected checkSignatureConcept(Operation umlOperation) {
 		val pcmSignature = helper.getModifiableCorr(umlOperation, OperationSignature, TagLiterals.SIGNATURE__OPERATION)
 		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
 	}
 
-	def private Repository createRepositoryWithInterface(){
+	def private Repository createRepositoryWithInterface() {
 		var pcmRepository = helper.createRepository()
 		helper.createOperationInterface(pcmRepository)
 		helper.createCompositeDataType(pcmRepository)
@@ -69,7 +69,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
 	}
 	
-	private def _testCreateSignatureConcept_UML(){
+	private def _testCreateSignatureConcept_UML() {
 		var pcmRepository = createRepositoryWithInterface()
 		var umlInterface = helper.getUmlInterface(pcmRepository)
 		startRecordingChanges(umlInterface)
@@ -88,7 +88,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		return pcmRepository
 	}
 	
-	private def _testReturnTypePropagation_UML(Repository inPcmRepository, Type umlType, int lower, int upper){
+	private def _testReturnTypePropagation_UML(Repository inPcmRepository, Type umlType, int lower, int upper) {
 		var pcmRepository = inPcmRepository
 		var umlInterface = helper.getUmlInterface(pcmRepository)
 		var umlOperation = umlInterface.ownedOperations.head

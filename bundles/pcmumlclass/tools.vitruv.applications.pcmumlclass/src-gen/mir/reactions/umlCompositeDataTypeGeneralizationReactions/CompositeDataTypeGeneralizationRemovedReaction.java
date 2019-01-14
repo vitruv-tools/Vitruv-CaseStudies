@@ -82,7 +82,8 @@ public class CompositeDataTypeGeneralizationRemovedReaction extends AbstractReac
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final org.eclipse.uml2.uml.Class affectedEObject, final EReference affectedFeature, final Generalization oldValue, final int index) {
     boolean _contains = affectedEObject.getGeneralizations().contains(oldValue);
-    return (!_contains);
+    boolean _not = (!_contains);
+    return _not;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

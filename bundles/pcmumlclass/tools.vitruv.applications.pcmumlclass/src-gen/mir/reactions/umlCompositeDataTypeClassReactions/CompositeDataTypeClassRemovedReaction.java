@@ -81,7 +81,8 @@ public class CompositeDataTypeClassRemovedReaction extends AbstractReactionReali
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final org.eclipse.uml2.uml.Package affectedEObject, final EReference affectedFeature, final org.eclipse.uml2.uml.Class oldValue, final int index) {
     org.eclipse.uml2.uml.Package _package = oldValue.getPackage();
-    return (_package != affectedEObject);
+    boolean _tripleNotEquals = (_package != affectedEObject);
+    return _tripleNotEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

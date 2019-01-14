@@ -87,7 +87,8 @@ public class ProvidedRoleInterfaceChangedReaction extends AbstractReactionRealiz
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final OperationProvidedRole affectedEObject, final EReference affectedFeature, final OperationInterface oldValue, final OperationInterface newValue) {
     OperationInterface _providedInterface__OperationProvidedRole = affectedEObject.getProvidedInterface__OperationProvidedRole();
-    return Objects.equal(_providedInterface__OperationProvidedRole, newValue);
+    boolean _equals = Objects.equal(_providedInterface__OperationProvidedRole, newValue);
+    return _equals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

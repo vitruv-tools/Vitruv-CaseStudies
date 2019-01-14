@@ -86,7 +86,8 @@ public class RegularParameterDirectionChangedReaction extends AbstractReactionRe
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final ParameterDirectionKind oldValue, final ParameterDirectionKind newValue) {
     ParameterDirectionKind _direction = affectedEObject.getDirection();
-    return (_direction == newValue);
+    boolean _tripleEquals = (_direction == newValue);
+    return _tripleEquals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
