@@ -152,7 +152,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		pcmSignature2.entityName = "testSignature_primitiveCollection"
 		pcmSignature2.returnType__OperationSignature = pcmPrimitiveType_Collection
 		
-		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_FILE_NAME
+		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_EXTENSION
 		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
 		createAndSynchronizeModel(pcmPath, pcmRepo)
 		assertModelExists(pcmPath)
@@ -263,7 +263,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		setInteractiveUserInteractor
 		
 		var pcmRepo_forward = createRepository
-		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_FILE_NAME
+		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_EXTENSION
 		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
 		createAndSynchronizeModel(pcmPath, pcmRepo_forward)
 		assertModelExists(pcmPath)
