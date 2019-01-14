@@ -152,8 +152,8 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		pcmSignature2.entityName = "testSignature_primitiveCollection"
 		pcmSignature2.returnType__OperationSignature = pcmPrimitiveType_Collection
 		
-		val pcmPath = "model/repository.repository"
-		val umlPath = "model/repository.uml"
+		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_FILE_NAME
+		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
 		createAndSynchronizeModel(pcmPath, pcmRepo)
 		assertModelExists(pcmPath)
 		assertModelExists(umlPath)
@@ -250,7 +250,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		
 		var pcmRepo_forward = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH).testResource.contents.head as Repository
 		
-		val umlPath = "model/repository.uml" // the default output if no input is given to the UserInteractor
+		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION // the default output if no input is given to the UserInteractor
 		createAndSynchronizeModel(PCM_GENERATED_MEDIA_STORE_MODEL_PATH, pcmRepo_forward)
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(umlPath)	
@@ -263,8 +263,8 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		setInteractiveUserInteractor
 		
 		var pcmRepo_forward = createRepository
-		val pcmPath = "model/repository.repository"
-		val umlPath = "model/repository.uml"
+		val pcmPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME + DefaultLiterals.PCM_REPOSITORY_FILE_NAME
+		val umlPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
 		createAndSynchronizeModel(pcmPath, pcmRepo_forward)
 		assertModelExists(pcmPath)
 		assertModelExists(umlPath)
