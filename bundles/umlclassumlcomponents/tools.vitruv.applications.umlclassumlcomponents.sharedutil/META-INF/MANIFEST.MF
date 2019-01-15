@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: SharedUtil
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.sharedutil
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents.sharedutil
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.1.0.qualifier
 Export-Package: tools.vitruv.applications.umlclassumlcomponents.sharedutil
 Require-Bundle: org.eclipse.uml2.uml,
  org.apache.log4j,
