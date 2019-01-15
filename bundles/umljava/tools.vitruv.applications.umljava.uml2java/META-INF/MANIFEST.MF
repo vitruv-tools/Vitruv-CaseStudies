@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius UML-Java Transformations UML -> Java
 Bundle-SymbolicName: tools.vitruv.applications.umljava.uml2java
+Automatic-Module-Name: tools.vitruv.applications.umljava.uml2java
 Bundle-Version: 0.1.0.qualifier
 Eclipse-ExtensibleAPI: true
 Require-Bundle: com.google.guava,
