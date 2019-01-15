@@ -66,10 +66,8 @@ public class PcmJamoppUtilsGuice {
 
 	def public static createConfigureMethodForAssemblyContext(AssemblyContext assemblyContext,
 		RepositoryComponent component, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
-		var Class jaMoPPClass = null
 		var Class jaMoPPCompositeClass = null
 		try {
-			jaMoPPClass = correspondenceModel.getCorrespondingEObjectsByType(component, Class).claimOne
 			jaMoPPCompositeClass = correspondenceModel.getCorrespondingEObjectsByType(
 				assemblyContext.parentStructure__AssemblyContext, Class).claimOne
 
