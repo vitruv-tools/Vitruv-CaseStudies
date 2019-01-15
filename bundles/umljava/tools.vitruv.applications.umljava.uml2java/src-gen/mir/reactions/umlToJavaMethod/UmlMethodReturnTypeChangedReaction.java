@@ -98,7 +98,7 @@ public class UmlMethodReturnTypeChangedReaction extends AbstractReactionRealizat
     }
     
     public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.setJavaMethodReturnType(affectedEObject.getOperation());
+      _routinesFacade.setJavaMethodReturnType(affectedEObject.getOperation(), affectedEObject);
     }
   }
 }

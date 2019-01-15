@@ -3,6 +3,8 @@ package mir.routines.umlToJavaClassifier;
 import java.io.IOException;
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Generalization;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -16,44 +18,39 @@ public class DeleteJavaSuperClassRoutine extends AbstractRepairRoutineRealizatio
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass) {
-      return jClass;
+    public EObject getElement1(final Generalization uGeneralization, final TypeReference jReference) {
+      return jReference;
     }
     
-    public EObject getCorrepondenceSourceJClass(final org.eclipse.uml2.uml.Class uClass) {
-      return uClass;
-    }
-    
-    public void update0Element(final org.eclipse.uml2.uml.Class uClass, final org.emftext.language.java.classifiers.Class jClass) {
-      jClass.setExtends(null);
+    public EObject getCorrepondenceSourceJReference(final Generalization uGeneralization) {
+      return uGeneralization;
     }
   }
   
-  public DeleteJavaSuperClassRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final org.eclipse.uml2.uml.Class uClass) {
+  public DeleteJavaSuperClassRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Generalization uGeneralization) {
     super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaClassifier.DeleteJavaSuperClassRoutine.ActionUserExecution(getExecutionState(), this);
-    this.uClass = uClass;
+    this.uGeneralization = uGeneralization;
   }
   
-  private org.eclipse.uml2.uml.Class uClass;
+  private Generalization uGeneralization;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine DeleteJavaSuperClassRoutine with input:");
-    getLogger().debug("   uClass: " + this.uClass);
+    getLogger().debug("   uGeneralization: " + this.uGeneralization);
     
-    org.emftext.language.java.classifiers.Class jClass = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJClass(uClass), // correspondence source supplier
-    	org.emftext.language.java.classifiers.Class.class,
-    	(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    org.emftext.language.java.types.TypeReference jReference = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceJReference(uGeneralization), // correspondence source supplier
+    	org.emftext.language.java.types.TypeReference.class,
+    	(org.emftext.language.java.types.TypeReference _element) -> true, // correspondence precondition checker
     	null, 
     	false // asserted
     	);
-    if (jClass == null) {
+    if (jReference == null) {
     	return false;
     }
-    registerObjectUnderModification(jClass);
-    // val updatedElement userExecution.getElement1(uClass, jClass);
-    userExecution.update0Element(uClass, jClass);
+    registerObjectUnderModification(jReference);
+    deleteObject(userExecution.getElement1(uGeneralization, jReference));
     
     postprocessElements();
     

@@ -4,9 +4,9 @@ import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -24,12 +24,8 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
       return jParam;
     }
     
-    public EObject getElement1(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
-      return uParam;
-    }
-    
-    public void update0Element(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam) {
-      uParam.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel));
+    public void callRoutine1(final OrdinaryParameter jParam, final TypeReference jType, final Parameter uParam, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.javaToUmlTypePropagation.propagateParameterTypeChange(jParam, uParam);
     }
   }
   
@@ -59,8 +55,7 @@ public class ChangeUmlParameterTypeRoutine extends AbstractRepairRoutineRealizat
     	return false;
     }
     registerObjectUnderModification(uParam);
-    // val updatedElement userExecution.getElement1(jParam, jType, uParam);
-    userExecution.update0Element(jParam, jType, uParam);
+    userExecution.callRoutine1(jParam, jType, uParam, this.getRoutinesFacade());
     
     postprocessElements();
     

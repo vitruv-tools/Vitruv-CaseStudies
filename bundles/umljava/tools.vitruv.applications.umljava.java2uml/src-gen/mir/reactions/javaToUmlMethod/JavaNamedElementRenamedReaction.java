@@ -4,6 +4,7 @@ import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.commons.NamedElement;
+import org.emftext.language.java.containers.CompilationUnit;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -30,6 +31,11 @@ public class JavaNamedElementRenamedReaction extends AbstractReactionRealization
     java.lang.String oldValue = replaceChange.getOldValue();
     java.lang.String newValue = replaceChange.getNewValue();
     				
+    getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
+    if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
+    	resetChanges();
+    	return;
+    }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
     mir.reactions.javaToUmlMethod.JavaNamedElementRenamedReaction.ActionUserExecution userExecution = new mir.reactions.javaToUmlMethod.JavaNamedElementRenamedReaction.ActionUserExecution(this.executionState, this);
@@ -76,6 +82,10 @@ public class JavaNamedElementRenamedReaction extends AbstractReactionRealization
     }
     
     return false;
+  }
+  
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final NamedElement affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
+    return (!(affectedEObject instanceof CompilationUnit));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {

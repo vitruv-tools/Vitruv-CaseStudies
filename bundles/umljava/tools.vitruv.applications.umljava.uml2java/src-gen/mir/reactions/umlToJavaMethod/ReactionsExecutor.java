@@ -29,6 +29,7 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.umlToJavaMethod.UmlElementVisibilityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaMethod"))));
     this.addReaction(new mir.reactions.umlToJavaMethod.UmlNamedElementRenamedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaMethod"))));
     this.addReaction(new mir.reactions.umlToJavaMethod.UmlParameterCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaMethod"))));
+    this.addReaction(new mir.reactions.umlToJavaMethod.UmlReturnParameterDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaMethod"))));
     this.addReaction(new mir.reactions.umlToJavaMethod.UmlParameterDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaMethod"))));
     this.addReaction(new mir.reactions.umlToJavaMethod.UmlParameterTypeChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaMethod"))));
     this.addReaction(new mir.reactions.umlToJavaMethod.UmlParameterDirectionChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("umlToJavaMethod"))));

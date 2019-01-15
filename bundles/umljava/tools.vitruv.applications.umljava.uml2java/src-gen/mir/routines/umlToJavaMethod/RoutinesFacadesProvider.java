@@ -12,6 +12,9 @@ public class RoutinesFacadesProvider extends AbstractRoutinesFacadesProvider {
     	case "umlToJavaMethod": {
     		return new mir.routines.umlToJavaMethod.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
     	}
+    	case "umlToJavaMethod.umlToJavaTypePropagation": {
+    		return new mir.routines.umlToJavaTypePropagation.RoutinesFacade(this, reactionsImportPath, sharedExecutionState);
+    	}
     	default: {
     		throw new IllegalArgumentException("Unexpected import path: " + reactionsImportPath.getPathString());
     	}

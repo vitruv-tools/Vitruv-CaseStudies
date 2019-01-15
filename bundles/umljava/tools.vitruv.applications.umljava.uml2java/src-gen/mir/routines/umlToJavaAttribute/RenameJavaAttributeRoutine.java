@@ -20,37 +20,37 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getCorrepondenceSourceJAttribute(final String oldName, final String newName, final Property uAttribute) {
+    public EObject getCorrepondenceSourceJAttribute(final String newName, final String oldName, final Property uAttribute) {
       return uAttribute;
     }
     
-    public void callRoutine1(final String oldName, final String newName, final Property uAttribute, final Field jAttribute, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final String newName, final String oldName, final Property uAttribute, final Field jAttribute, @Extension final RoutinesFacade _routinesFacade) {
       jAttribute.setName(uAttribute.getName());
       JavaMemberAndParameterUtil.renameGettersOfAttribute(jAttribute, oldName);
       JavaMemberAndParameterUtil.renameSettersOfAttribute(jAttribute, oldName);
     }
   }
   
-  public RenameJavaAttributeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final String oldName, final String newName, final Property uAttribute) {
+  public RenameJavaAttributeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final String newName, final String oldName, final Property uAttribute) {
     super(routinesFacade, reactionExecutionState, calledBy);
     this.userExecution = new mir.routines.umlToJavaAttribute.RenameJavaAttributeRoutine.ActionUserExecution(getExecutionState(), this);
-    this.oldName = oldName;this.newName = newName;this.uAttribute = uAttribute;
+    this.newName = newName;this.oldName = oldName;this.uAttribute = uAttribute;
   }
   
-  private String oldName;
-  
   private String newName;
+  
+  private String oldName;
   
   private Property uAttribute;
   
   protected boolean executeRoutine() throws IOException {
     getLogger().debug("Called routine RenameJavaAttributeRoutine with input:");
-    getLogger().debug("   oldName: " + this.oldName);
     getLogger().debug("   newName: " + this.newName);
+    getLogger().debug("   oldName: " + this.oldName);
     getLogger().debug("   uAttribute: " + this.uAttribute);
     
     org.emftext.language.java.members.Field jAttribute = getCorrespondingElement(
-    	userExecution.getCorrepondenceSourceJAttribute(oldName, newName, uAttribute), // correspondence source supplier
+    	userExecution.getCorrepondenceSourceJAttribute(newName, oldName, uAttribute), // correspondence source supplier
     	org.emftext.language.java.members.Field.class,
     	(org.emftext.language.java.members.Field _element) -> true, // correspondence precondition checker
     	null, 
@@ -60,7 +60,7 @@ public class RenameJavaAttributeRoutine extends AbstractRepairRoutineRealization
     	return false;
     }
     registerObjectUnderModification(jAttribute);
-    userExecution.callRoutine1(oldName, newName, uAttribute, jAttribute, this.getRoutinesFacade());
+    userExecution.callRoutine1(newName, oldName, uAttribute, jAttribute, this.getRoutinesFacade());
     
     postprocessElements();
     

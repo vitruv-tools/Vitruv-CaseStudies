@@ -29,8 +29,11 @@ public class DeleteJavaAttributeRoutine extends AbstractRepairRoutineRealization
     }
     
     public void callRoutine1(final Property umlAttr, final Field jAttr, @Extension final RoutinesFacade _routinesFacade) {
-      JavaMemberAndParameterUtil.removeJavaGettersOfAttribute(jAttr);
-      JavaMemberAndParameterUtil.removeJavaSettersOfAttribute(jAttr);
+      final EObject uClassifier = umlAttr.eContainer();
+      if (((uClassifier != null) && (uClassifier instanceof org.eclipse.uml2.uml.Class))) {
+        JavaMemberAndParameterUtil.removeJavaGettersOfAttribute(jAttr);
+        JavaMemberAndParameterUtil.removeJavaSettersOfAttribute(jAttr);
+      }
     }
   }
   

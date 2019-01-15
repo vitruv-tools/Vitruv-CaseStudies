@@ -1,20 +1,23 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
-import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
-import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.Field
 import org.junit.Test
-import static org.junit.Assert.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.eclipse.uml2.uml.VisibilityKind
-import org.eclipse.emf.ecore.util.EcoreUtil
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
 import tools.vitruv.applications.umljava.util.java.JavaStandardType
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 
 /**
  * Test class for testing the attribute reactions.
@@ -29,8 +32,8 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     private static val TYPE_CLASS = "TypeClass"
     
     private static var Field jAttr
-    private static var org.emftext.language.java.classifiers.Class jClass
-    private static var org.emftext.language.java.classifiers.Class typeClass
+    private static var Class jClass
+    private static var Class typeClass 
     
     /**
      * Initializes two java classes. One class contains an attribute.
@@ -58,7 +61,8 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         
         val uAttr = getCorrespondingAttribute(attr)
         val uClass = getCorrespondingClass(jClass)
-        assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, createUmlPrimitiveType(JavaStandardType.INT),
+        val umlInteger = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+        assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlInteger,
             false, false, uClass, null, null)
         assertAttributeEquals(uAttr, attr)
     }

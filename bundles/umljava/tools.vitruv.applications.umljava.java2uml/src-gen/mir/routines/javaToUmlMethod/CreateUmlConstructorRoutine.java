@@ -29,6 +29,10 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
       _ownedOperations.add(uConstructor);
     }
     
+    public EObject getCorrepondenceSource1(final Constructor jConstructor, final ConcreteClassifier jClassifier, final org.eclipse.uml2.uml.Class uClassifier) {
+      return jConstructor;
+    }
+    
     public EObject getCorrepondenceSourceUClassifier(final Constructor jConstructor, final ConcreteClassifier jClassifier) {
       return jClassifier;
     }
@@ -72,6 +76,14 @@ public class CreateUmlConstructorRoutine extends AbstractRepairRoutineRealizatio
     	return false;
     }
     registerObjectUnderModification(uClassifier);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(jConstructor, jClassifier, uClassifier), // correspondence source supplier
+    	org.eclipse.uml2.uml.Operation.class,
+    	(org.eclipse.uml2.uml.Operation _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.eclipse.uml2.uml.Operation uConstructor = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createOperation();
     notifyObjectCreated(uConstructor);
     userExecution.updateUConstructorElement(jConstructor, jClassifier, uClassifier, uConstructor);

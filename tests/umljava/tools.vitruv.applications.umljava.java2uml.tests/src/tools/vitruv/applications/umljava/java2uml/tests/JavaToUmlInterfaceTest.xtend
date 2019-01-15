@@ -1,15 +1,16 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
-import static org.junit.Assert.*;
-import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import org.junit.Test
-import org.junit.Before
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
-import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.classifiers.Interface
+import org.junit.Before
+import org.junit.Test
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 /**
  * A Test class for interface tests. Checks their creation, renaming, deleting and the 
@@ -24,7 +25,7 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
     private static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
     private static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
     
-    private static var org.emftext.language.java.classifiers.Interface jInterface
+    private static var Interface jInterface
     
     @Before
     def void before() {
@@ -37,7 +38,7 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         val jInterface = createSimpleJavaInterfaceWithCompilationUnit(STANDARD_INTERFACE_NAME)
         
         val uInterface = getCorrespondingInterface(jInterface)
-        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, getUmlRootModel(JavaToUmlHelper.rootModelFile))
+        assertUmlInterfaceTraits(uInterface, STANDARD_INTERFACE_NAME, VisibilityKind.PUBLIC_LITERAL, registeredUmlModel)
         assertInterfaceEquals(uInterface, jInterface)
     }
     
@@ -55,7 +56,7 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
         val comp = jInterface.containingCompilationUnit
         EcoreUtil.delete(jInterface)
         saveAndSynchronizeChanges(comp)
-        assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, org.eclipse.uml2.uml.Interface, INTERFACE_NAME).nullOrEmpty)
+        assertTrue(getUmlPackagedElementsbyName(org.eclipse.uml2.uml.Interface, INTERFACE_NAME).nullOrEmpty)
     }
     
     @Test

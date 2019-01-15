@@ -1,0 +1,26 @@
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: combinedUmlClassToPcmReactions
+in reaction to changes in UML
+execute actions in PCM
+
+import umlRepositoryAndSystemPackageReactions using qualified names
+
+import umlInterfaceReactions using qualified names
+import umlInterfaceGeneralizationReactions using qualified names
+import umlSignatureOperationReactions using qualified names
+import umlRegularParameterReactions using qualified names
+import umlReturnAndRegularParameterTypeReactions using qualified names
+
+import umlCompositeDataTypeClassReactions using qualified names
+import umlCompositeDataTypeGeneralizationReactions using qualified names
+import umlInnerDeclarationPropertyReactions using qualified names
+
+import umlRepositoryComponentPackageReactions using qualified names
+import umlIPREClassReactions using qualified names
+import umlIPREConstructorOperationReactions using qualified names
+import umlProvidedRoleRealizationReactions using qualified names
+import umlRequiredRoleParameterReactions using qualified names
+import umlRequiredRolePropertyReactions using qualified names
+import umlAssemblyContextPropertyReactions using qualified names

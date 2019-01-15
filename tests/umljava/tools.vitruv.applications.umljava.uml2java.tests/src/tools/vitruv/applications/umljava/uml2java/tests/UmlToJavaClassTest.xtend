@@ -5,14 +5,13 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.junit.After
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 
 /**
  * This class provides tests for basic class tests in the uml to java direction
@@ -35,13 +34,6 @@ class UmlToJavaClassTest extends Uml2JavaTransformationTest {
 	def void before() {
 	    uClass = createUmlClassAndAddToPackage(rootElement, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
         saveAndSynchronizeChanges(rootElement)
-	}
-	
-	@After
-	def void after() {
-	    if (uClass !== null) {
-	        uClass.destroy;
-	    }
 	}
 
 	@Test

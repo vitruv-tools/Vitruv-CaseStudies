@@ -30,7 +30,6 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassMadeNonFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaSuperClassChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
-    this.addReaction(new mir.reactions.javaToUmlClassifier.JavaSuperClassRemovedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassImplementAddedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassImplementRemovedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaInterfaceCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
@@ -62,6 +61,7 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.javaToUmlMethod.JavaElementVisibilityChangedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlMethod"))));
     this.addReaction(new mir.reactions.javaToUmlMethod.JavaElementMadePackagePrivateReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlMethod"))));
     this.addReaction(new mir.reactions.javaToUmlMethod.JavaNamedElementRenamedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlMethod"))));
+    this.addReaction(new mir.reactions.javaToUmlMethod.JavaCompilationUnitRenamedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlMethod"))));
     this.addReaction(new mir.reactions.javaToUmlMethod.JavaClassMethodCreatedInInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlMethod"))));
     this.addReaction(new mir.reactions.javaToUmlMethod.JavaParameterMadeFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlMethod"))));
   }

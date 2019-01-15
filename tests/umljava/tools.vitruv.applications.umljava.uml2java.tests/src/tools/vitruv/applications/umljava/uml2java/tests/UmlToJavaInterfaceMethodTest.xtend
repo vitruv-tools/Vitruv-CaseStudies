@@ -39,20 +39,6 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
         saveAndSynchronizeChanges(rootElement);
     }
     
-    //@After
-    def void after() {
-        if (uInterface !== null) {
-            uInterface.destroy;
-        }
-        if (uOperation !== null) {
-            uOperation.destroy;
-        }
-        if (typeClass !== null) {
-            typeClass.destroy;
-        }
-        saveAndSynchronizeChanges(rootElement)
-    }
-    
     @Test
     def void testCreateInterfaceMethod() {
         val interfaceMethod = createUmlInterfaceOperation(STANDARD_IOPERATION_NAME, null, null)

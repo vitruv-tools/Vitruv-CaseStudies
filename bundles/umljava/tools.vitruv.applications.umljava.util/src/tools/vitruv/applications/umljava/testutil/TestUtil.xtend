@@ -31,6 +31,7 @@ import org.eclipse.uml2.uml.Model
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.ClassMethod
 import org.eclipse.uml2.uml.VisibilityKind
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
 
 /**
  * Util class for assertions that works bidirectional.
@@ -211,7 +212,10 @@ class TestUtil {
     }
 	
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType, org.emftext.language.java.types.PrimitiveType jPrimType) {
-        assertEquals(uPrimType.name, jPrimType.eClass.name.toLowerCase)
+		assertNotNull(uPrimType)
+		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
+		assertFalse(jTypeMapped instanceof Void) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
+		assertEquals(jTypeMapped.class, jPrimType.class)
     }
 	
 	def static void assertParameterListEquals(List<org.eclipse.uml2.uml.Parameter> uParamList, List<org.emftext.language.java.parameters.Parameter> jParamList) {

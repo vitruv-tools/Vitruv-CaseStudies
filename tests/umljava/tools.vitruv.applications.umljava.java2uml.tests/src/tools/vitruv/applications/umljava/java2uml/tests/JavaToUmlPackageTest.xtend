@@ -1,15 +1,15 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
-import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import static org.junit.Assert.*
-import org.junit.Test
-import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
-import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
 import org.eclipse.uml2.uml.Package
+import org.emftext.language.java.classifiers.Class
+import org.junit.Test
+import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 
+import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 /**
  * This class contains basis tests for java packages.
@@ -25,7 +25,7 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     private static val CLASS_NAME2 = "ClassName2"
     
     private static var org.emftext.language.java.containers.Package jPackageLevel1
-    private static var org.emftext.language.java.classifiers.Class jClass
+    private static var Class jClass
     
     def override setup() {
     	super.setup();
@@ -59,7 +59,7 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     @Test
     def void testDeletePackage() {
         deleteAndSynchronizeModel(buildJavaFilePath(jPackageLevel1))
-        assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Package, PACKAGE_LEVEL_1).nullOrEmpty)
+        assertTrue(getUmlPackagedElementsbyName(Package, PACKAGE_LEVEL_1).nullOrEmpty)
         
     }
     

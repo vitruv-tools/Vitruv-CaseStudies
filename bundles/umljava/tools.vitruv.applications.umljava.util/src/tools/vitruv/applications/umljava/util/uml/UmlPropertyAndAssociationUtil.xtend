@@ -7,7 +7,6 @@ import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.ValueSpecification
 import org.eclipse.uml2.uml.VisibilityKind
-import static tools.vitruv.applications.umljava.util.CommonUtil.*
 
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.setName
 
@@ -49,7 +48,7 @@ class UmlPropertyAndAssociationUtil {
      * 
      */
     def static Association createDirectedAssociation(Class fromClass, Class toClass, int lowerLimit, int upperLimit) {
-        fromClass.createAssociation(true, AggregationKind.NONE_LITERAL, firstLettertoLowercase(toClass.name), lowerLimit, upperLimit, toClass, false, AggregationKind.NONE_LITERAL, firstLettertoLowercase(fromClass.name), 0, 1)
+        fromClass.createAssociation(true, AggregationKind.NONE_LITERAL, toClass.name.toFirstLower, lowerLimit, upperLimit, toClass, false, AggregationKind.NONE_LITERAL, fromClass.name.toFirstLower, 0, 1)
     }
     
     def static ValueSpecification createValueSpecificationWithIntValue(int value) {

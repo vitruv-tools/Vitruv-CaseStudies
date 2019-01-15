@@ -86,7 +86,7 @@ class JavaStatementUtil {
             val assignmentExpression = expressionStatement.expression as AssignmentExpression
             if ((assignmentExpression.child as SelfReference).self instanceof This) {
                 val selfReference = (assignmentExpression.child as SelfReference).next as IdentifierReference
-                if (selfReference.target.name.equals(attributeName)) {
+                if (selfReference.target.name == attributeName) {
                     return selfReference
                 }
                 return null

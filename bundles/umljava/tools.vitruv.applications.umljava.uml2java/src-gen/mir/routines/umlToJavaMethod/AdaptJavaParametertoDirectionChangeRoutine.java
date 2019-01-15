@@ -11,10 +11,10 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.parameters.OrdinaryParameter;
 import org.emftext.language.java.types.TypesFactory;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -36,14 +36,10 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
       return uOperation;
     }
     
-    public EObject getElement1(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass) {
-      return jMethod;
-    }
-    
-    public void update0Element(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass) {
+    public void executeAction1(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
       boolean _equals = Objects.equal(newDirection, ParameterDirectionKind.RETURN_LITERAL);
       if (_equals) {
-        jMethod.setTypeReference(UmlToJavaHelper.createTypeReferenceAndUpdateImport(uParam.getType(), customTypeClass, jMethod.getContainingCompilationUnit(), this.userInteractor));
+        _routinesFacade.umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null));
       } else {
         boolean _equals_1 = Objects.equal(oldDirection, ParameterDirectionKind.RETURN_LITERAL);
         if (_equals_1) {
@@ -52,16 +48,16 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
       }
     }
     
-    public EObject getCorrepondenceSourceCustomTypeClass(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam) {
+    public EObject getCorrepondenceSourceJCustomType(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam) {
       Type _type = uParam.getType();
       return _type;
     }
     
-    public void callRoutine1(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<org.emftext.language.java.classifiers.Class> customTypeClass, @Extension final RoutinesFacade _routinesFacade) {
+    public void callRoutine1(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
       if ((Objects.equal(newDirection, ParameterDirectionKind.RETURN_LITERAL) && jParam.isPresent())) {
         EcoreUtil.remove(jParam.get());
       } else {
-        if ((Objects.equal(newDirection, ParameterDirectionKind.IN_LITERAL) && (jParam == null))) {
+        if ((Objects.equal(newDirection, ParameterDirectionKind.IN_LITERAL) && (!jParam.isPresent()))) {
           _routinesFacade.createJavaParameter(uOperation, uParam);
         }
       }
@@ -109,19 +105,18 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
     		)
     );
     registerObjectUnderModification(jParam.isPresent() ? jParam.get() : null);
-    	Optional<org.emftext.language.java.classifiers.Class> customTypeClass = Optional.ofNullable(getCorrespondingElement(
-    		userExecution.getCorrepondenceSourceCustomTypeClass(uOperation, uParam, oldDirection, newDirection, jMethod, jParam), // correspondence source supplier
-    		org.emftext.language.java.classifiers.Class.class,
-    		(org.emftext.language.java.classifiers.Class _element) -> true, // correspondence precondition checker
+    	Optional<org.emftext.language.java.classifiers.ConcreteClassifier> jCustomType = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceJCustomType(uOperation, uParam, oldDirection, newDirection, jMethod, jParam), // correspondence source supplier
+    		org.emftext.language.java.classifiers.ConcreteClassifier.class,
+    		(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     		null, 
     		false // asserted
     		)
     );
-    registerObjectUnderModification(customTypeClass.isPresent() ? customTypeClass.get() : null);
-    // val updatedElement userExecution.getElement1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, customTypeClass);
-    userExecution.update0Element(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, customTypeClass);
+    registerObjectUnderModification(jCustomType.isPresent() ? jCustomType.get() : null);
+    userExecution.executeAction1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, jCustomType, this.getRoutinesFacade());
     
-    userExecution.callRoutine1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, customTypeClass, this.getRoutinesFacade());
+    userExecution.callRoutine1(uOperation, uParam, oldDirection, newDirection, jMethod, jParam, jCustomType, this.getRoutinesFacade());
     
     postprocessElements();
     

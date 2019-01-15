@@ -4,9 +4,11 @@ import java.io.IOException;
 import mir.routines.javaToUmlMethod.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.ParameterDirectionKind;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -20,12 +22,13 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
       super(reactionExecutionState);
     }
     
-    public EObject getElement1(final Method jMeth, final TypeReference jType, final Operation uOperation) {
-      return uOperation;
-    }
-    
-    public void update0Element(final Method jMeth, final TypeReference jType, final Operation uOperation) {
-      uOperation.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel));
+    public void executeAction1(final Method jMeth, final TypeReference jType, final Operation uOperation, @Extension final RoutinesFacade _routinesFacade) {
+      Parameter uParam = uOperation.getReturnResult();
+      if ((uParam == null)) {
+        uParam = uOperation.createOwnedParameter("returnParameter", null);
+        uParam.setDirection(ParameterDirectionKind.RETURN_LITERAL);
+      }
+      _routinesFacade.javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam);
     }
     
     public EObject getCorrepondenceSourceUOperation(final Method jMeth, final TypeReference jType) {
@@ -59,8 +62,7 @@ public class ChangeUmlReturnTypeRoutine extends AbstractRepairRoutineRealization
     	return false;
     }
     registerObjectUnderModification(uOperation);
-    // val updatedElement userExecution.getElement1(jMeth, jType, uOperation);
-    userExecution.update0Element(jMeth, jType, uOperation);
+    userExecution.executeAction1(jMeth, jType, uOperation, this.getRoutinesFacade());
     
     postprocessElements();
     

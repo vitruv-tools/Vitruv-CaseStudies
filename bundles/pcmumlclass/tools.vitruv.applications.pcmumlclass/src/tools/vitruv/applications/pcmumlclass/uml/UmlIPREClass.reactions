@@ -1,0 +1,61 @@
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+
+//	The following reactions and routines synchronize a pcm::InterfaceProvidingRequiringEntity (RepositoryComponent or System) 
+//	with its corresponding uml::Class (implementation).
+//
+//	Because pcm::RepositoryComponents and pcm::Systems have different containment conventions, their corresponding implementation 
+//	classes are generated via round-trip and because of convention not removed from the package.
+//	Therefore we assume that the insertion or removal of a IPRE implementation does not have to be handled here.
+//
+//	Related files: 
+//		PcmRepositoryComponent.reactions, PcmSystem.reactions
+//		RepositoryComponentConceptTest, SystemConceptTest		
+
+reactions: umlIPREClassReactions
+in reaction to changes in UML
+execute actions in PCM
+
+reaction IPREClassRemoved {
+	after element uml::Class removed from uml::Package[packagedElement]
+	with oldValue.package !== affectedEObject
+	call warnUserAboutImplRemoveIfIPRECorrespondenceExists(oldValue, affectedEObject)
+}
+
+routine warnUserAboutImplRemoveIfIPRECorrespondenceExists(uml::Class umlClass, uml::Package umlPackage) {
+	match {
+		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+	action {
+		execute {
+			if (pcmRepositoryComponent.isPresent)
+				logger.warn(DefaultLiterals.WARNING_IPRE_IMPLEMENTATION_REMOVED + umlClass)
+		}
+	}
+}
+
+reaction IPREClassNameChanged {
+	after attribute replaced at uml::Class[name]
+	with affectedEObject.name == newValue
+	call changeNameOfCorrespondingIPRE_Implementation(affectedEObject, newValue)
+}
+
+routine changeNameOfCorrespondingIPRE_Implementation(uml::Class umlClass, String newName) {
+	match {
+		val pcmIPRE = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
+	}
+	action {
+		update pcmIPRE {
+			if (newName.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
+				pcmIPRE.entityName = newName.substring(0, newName.length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length).toFirstUpper
+			} else {
+				pcmIPRE.entityName = newName
+			}
+		}
+	}
+}
+

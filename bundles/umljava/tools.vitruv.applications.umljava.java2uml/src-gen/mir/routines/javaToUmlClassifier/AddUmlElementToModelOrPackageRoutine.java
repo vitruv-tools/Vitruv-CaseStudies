@@ -2,7 +2,10 @@ package mir.routines.javaToUmlClassifier;
 
 import java.io.IOException;
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.emftext.language.java.containers.CompilationUnit;
@@ -20,12 +23,16 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final CompilationUnit jCompUnit, final Classifier uClassifier, @Extension final RoutinesFacade _routinesFacade) {
+    public EObject getCorrepondenceSourceUModel(final CompilationUnit jCompUnit, final Classifier uClassifier) {
+      return UMLPackage.Literals.MODEL;
+    }
+    
+    public void callRoutine1(final CompilationUnit jCompUnit, final Classifier uClassifier, final Model uModel, @Extension final RoutinesFacade _routinesFacade) {
       boolean _isNullOrEmpty = IterableExtensions.isNullOrEmpty(jCompUnit.getNamespaces());
       if (_isNullOrEmpty) {
-        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), jCompUnit);
+        _routinesFacade.addUmlElementToPackage(uClassifier, uModel);
       } else {
-        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())), jCompUnit);
+        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())));
       }
     }
   }
@@ -45,7 +52,18 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
     getLogger().debug("   jCompUnit: " + this.jCompUnit);
     getLogger().debug("   uClassifier: " + this.uClassifier);
     
-    userExecution.callRoutine1(jCompUnit, uClassifier, this.getRoutinesFacade());
+    org.eclipse.uml2.uml.Model uModel = getCorrespondingElement(
+    	userExecution.getCorrepondenceSourceUModel(jCompUnit, uClassifier), // correspondence source supplier
+    	org.eclipse.uml2.uml.Model.class,
+    	(org.eclipse.uml2.uml.Model _element) -> true, // correspondence precondition checker
+    	null, 
+    	false // asserted
+    	);
+    if (uModel == null) {
+    	return false;
+    }
+    registerObjectUnderModification(uModel);
+    userExecution.callRoutine1(jCompUnit, uClassifier, uModel, this.getRoutinesFacade());
     
     postprocessElements();
     

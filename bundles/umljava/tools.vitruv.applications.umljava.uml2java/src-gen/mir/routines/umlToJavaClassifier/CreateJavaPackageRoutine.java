@@ -28,6 +28,10 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
       return jPackage;
     }
     
+    public EObject getCorrepondenceSource1(final org.eclipse.uml2.uml.Package uPackage, final org.eclipse.uml2.uml.Package uSuperPackage, final Optional<org.emftext.language.java.containers.Package> jSuperPackage) {
+      return uPackage;
+    }
+    
     public EObject getElement2(final org.eclipse.uml2.uml.Package uPackage, final org.eclipse.uml2.uml.Package uSuperPackage, final Optional<org.emftext.language.java.containers.Package> jSuperPackage, final org.emftext.language.java.containers.Package jPackage) {
       return uPackage;
     }
@@ -77,6 +81,14 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
     		)
     );
     registerObjectUnderModification(jSuperPackage.isPresent() ? jSuperPackage.get() : null);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(uPackage, uSuperPackage, jSuperPackage), // correspondence source supplier
+    	org.emftext.language.java.containers.Package.class,
+    	(org.emftext.language.java.containers.Package _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.containers.Package jPackage = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createPackage();
     notifyObjectCreated(jPackage);
     userExecution.updateJPackageElement(uPackage, uSuperPackage, jSuperPackage, jPackage);

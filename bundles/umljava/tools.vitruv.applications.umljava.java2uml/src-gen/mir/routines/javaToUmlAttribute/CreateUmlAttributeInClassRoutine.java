@@ -32,6 +32,10 @@ public class CreateUmlAttributeInClassRoutine extends AbstractRepairRoutineReali
       _ownedAttributes.add(uAttr);
     }
     
+    public EObject getCorrepondenceSource1(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass) {
+      return jAttr;
+    }
+    
     public EObject getElement2(final org.emftext.language.java.classifiers.Class jClass, final Field jAttr, final org.eclipse.uml2.uml.Class uClass, final Property uAttr) {
       return jAttr;
     }
@@ -71,6 +75,14 @@ public class CreateUmlAttributeInClassRoutine extends AbstractRepairRoutineReali
     	return false;
     }
     registerObjectUnderModification(uClass);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(jClass, jAttr, uClass), // correspondence source supplier
+    	org.eclipse.uml2.uml.Property.class,
+    	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.eclipse.uml2.uml.Property uAttr = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createProperty();
     notifyObjectCreated(uAttr);
     userExecution.updateUAttrElement(jClass, jAttr, uClass, uAttr);

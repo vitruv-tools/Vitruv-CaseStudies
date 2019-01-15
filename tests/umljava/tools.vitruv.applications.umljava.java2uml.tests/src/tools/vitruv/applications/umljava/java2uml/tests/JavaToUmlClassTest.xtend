@@ -1,18 +1,19 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper
-import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import org.eclipse.uml2.uml.VisibilityKind
-import org.eclipse.emf.ecore.util.EcoreUtil
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+
+import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
 
 /**
  * A Test class to test classes and their traits.
@@ -43,7 +44,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 
 		val uClass = getCorrespondingClass(cls);
 		assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false,
-			getUmlRootModel(JavaToUmlHelper.rootModelFile))
+			registeredUmlModel)
 		assertClassEquals(uClass, cls)
 	}
 
@@ -72,7 +73,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 		EcoreUtil.delete(jClass)
 		saveAndSynchronizeChanges(comp)
 
-		val uClass = getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).head
+		val uClass = getUmlPackagedElementsbyName(Class, CLASS_NAME).head
 		assertNull(uClass)
 	}
 
@@ -86,7 +87,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 		assertNotNull(getCorrespondingClass(jClass))
 		deleteAndSynchronizeModel(compUnitFilePath)
 
-		assertTrue(getUmlPackagedElementsbyName(JavaToUmlHelper.rootModelFile, Class, CLASS_NAME).nullOrEmpty)
+		assertTrue(getUmlPackagedElementsbyName(Class, CLASS_NAME).nullOrEmpty)
 	}
 
 	/**

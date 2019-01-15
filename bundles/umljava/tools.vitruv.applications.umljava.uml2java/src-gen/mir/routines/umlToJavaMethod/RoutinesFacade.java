@@ -34,7 +34,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPa
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
+    this.umlToJavaTypePropagation = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("umlToJavaTypePropagation")));
   }
+  
+  public final mir.routines.umlToJavaTypePropagation.RoutinesFacade umlToJavaTypePropagation;
   
   public boolean createJavaMethod(final Classifier uClassifier, final Operation uOperation) {
     RoutinesFacade _routinesFacade = this;
@@ -68,11 +71,11 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean setJavaMethodReturnType(final Operation uOperation) {
+  public boolean setJavaMethodReturnType(final Operation uOperation, final Parameter uParam) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    SetJavaMethodReturnTypeRoutine routine = new SetJavaMethodReturnTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    SetJavaMethodReturnTypeRoutine routine = new SetJavaMethodReturnTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, uParam);
     return routine.applyRoutine();
   }
   

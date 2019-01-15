@@ -35,6 +35,10 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
       return umlClassifier;
     }
     
+    public EObject getCorrepondenceSource1(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final Optional<org.emftext.language.java.containers.Package> jPackage) {
+      return umlClassifier;
+    }
+    
     public EObject getElement2(final Classifier umlClassifier, final ConcreteClassifier jClassifier, final Namespace uNamespace, final Optional<org.emftext.language.java.containers.Package> jPackage, final CompilationUnit javaCompilationUnit) {
       return javaCompilationUnit;
     }
@@ -90,6 +94,14 @@ public class CreateJavaCompilationUnitRoutine extends AbstractRepairRoutineReali
     		)
     );
     registerObjectUnderModification(jPackage.isPresent() ? jPackage.get() : null);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(umlClassifier, jClassifier, uNamespace, jPackage), // correspondence source supplier
+    	org.emftext.language.java.containers.CompilationUnit.class,
+    	(org.emftext.language.java.containers.CompilationUnit _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.emftext.language.java.containers.CompilationUnit javaCompilationUnit = org.emftext.language.java.containers.impl.ContainersFactoryImpl.eINSTANCE.createCompilationUnit();
     notifyObjectCreated(javaCompilationUnit);
     userExecution.updateJavaCompilationUnitElement(umlClassifier, jClassifier, uNamespace, jPackage, javaCompilationUnit);

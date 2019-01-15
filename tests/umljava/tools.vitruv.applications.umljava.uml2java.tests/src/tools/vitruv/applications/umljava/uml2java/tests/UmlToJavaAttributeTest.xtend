@@ -1,19 +1,23 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
-import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import org.junit.Test
-import static org.junit.Assert.*
-import org.junit.Before
-import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.types.TypesFactory
+import org.junit.Before
+import org.junit.Test
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlPropertyAndAssociationUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
-import org.emftext.language.java.types.TypesFactory
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.junit.After
 
 /**
  * This Test class checks the creating, deleting and modifying of attributes in den uml to java
@@ -25,13 +29,13 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
     private static val ATTRIBUTE_NAME = "attributName";
     private static val ATTRIBUTE_RENAME = "attributeRenamed";
     private static val STANDARD_ATTRIBUTE_NAME = "standardAttributName";
-    private static val PRIMITIVE_TYPE = "int";
     private static val CLASS_NAME = "ClassName";
     private static val TYPE_CLASS = "TypeClass";
     
     private static var Property uAttr;
-    private static var org.eclipse.uml2.uml.Class uClass;
-    private static var org.eclipse.uml2.uml.Class typeClass;
+    private static var Class uClass;
+    private static var Class typeClass;
+    private static var PrimitiveType pType
     
     @Before
     def void before() {
@@ -39,25 +43,12 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
         typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS);
         uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false);
         uClass.ownedAttributes += uAttr;
+        pType = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
         saveAndSynchronizeChanges(rootElement);
     }
-    
-    @After
-    def void after() {
-        if (uClass !== null) {
-            uClass.destroy;
-        }
-        if (typeClass !== null) {
-            typeClass.destroy;
-        }
-        if (uAttr !== null) {
-            uAttr.destroy;
-        }
-        saveAndSynchronizeChanges(rootElement);
-    }
+
     @Test
     def testCreatePrimitiveAttribute() {
-        val pType = createUmlPrimitiveTypeAndAddToModel(rootElement, PRIMITIVE_TYPE);
         val attr = createUmlAttribute(STANDARD_ATTRIBUTE_NAME, pType, VisibilityKind.PUBLIC_LITERAL, false, false);
         uClass.ownedAttributes += attr;
         saveAndSynchronizeChanges(uClass);       
@@ -91,6 +82,8 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
         val jAttr = getCorrespondingAttribute(uAttr)
         assertEquals(ATTRIBUTE_RENAME, uAttr.name)
         assertAttributeEquals(uAttr, jAttr)
+		assertTrue(javaGetterForAttributeExists(jAttr))
+        assertTrue(javaSetterForAttributeExists(jAttr))
         assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
     }
     
@@ -142,7 +135,7 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
     
     @Test
     def testChangeAttributeType() {
-        uAttr.type = createUmlPrimitiveTypeAndAddToModel(rootElement, PRIMITIVE_TYPE)
+        uAttr.type = pType
         saveAndSynchronizeChanges(rootElement)
         
         val jClass = getCorrespondingClass(uClass)

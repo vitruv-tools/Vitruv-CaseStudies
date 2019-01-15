@@ -109,7 +109,7 @@ public class UmlPrimitiveTypeCreatedReaction extends AbstractReactionRealization
     }
     
     public void callRoutine1(final InsertEReference insertChange, final Model affectedEObject, final EReference affectedFeature, final PrimitiveType newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.checkIfCorrespondingJavaPrimitiveTypeExists(newValue);
+      _routinesFacade.warnUserToUsePredefinedPrimitiveTypes();
     }
   }
 }

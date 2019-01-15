@@ -1,12 +1,13 @@
 package mir.routines.javaToUmlClassifier;
 
+import mir.routines.javaToUmlClassifier.AddGeneralizationCorrespondenceRoutine;
+import mir.routines.javaToUmlClassifier.AddImplementsCorrespondenceRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlClassImplementRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlElementToModelOrPackageRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlPackageOfClassRoutine;
-import mir.routines.javaToUmlClassifier.AddUmlSuperClassRoutine;
+import mir.routines.javaToUmlClassifier.AddUmlSuperClassGeneralizationRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlSuperinterfacesRoutine;
-import mir.routines.javaToUmlClassifier.ClearUmlSuperClassifiersRoutine;
 import mir.routines.javaToUmlClassifier.CreateUmlClassRoutine;
 import mir.routines.javaToUmlClassifier.CreateUmlEnumLiteralRoutine;
 import mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine;
@@ -15,19 +16,26 @@ import mir.routines.javaToUmlClassifier.CreateUmlPackageRoutine;
 import mir.routines.javaToUmlClassifier.DeleteUmlClassifierRoutine;
 import mir.routines.javaToUmlClassifier.DeleteUmlEnumLiteralRoutine;
 import mir.routines.javaToUmlClassifier.DeleteUmlPackageRoutine;
+import mir.routines.javaToUmlClassifier.DeleteUmlSuperClassGeneralizationRoutine;
+import mir.routines.javaToUmlClassifier.DetectOrCreateUmlModelRoutine;
+import mir.routines.javaToUmlClassifier.RegisterUmlModelInCorrespondenceModelRoutine;
 import mir.routines.javaToUmlClassifier.RemoveUmlClassImplementRoutine;
 import mir.routines.javaToUmlClassifier.RemoveUmlPackageOfClassRoutine;
 import mir.routines.javaToUmlClassifier.RemoveUmlSuperInterfaceRoutine;
 import mir.routines.javaToUmlClassifier.SetUmlClassAbstractRoutine;
 import mir.routines.javaToUmlClassifier.SetUmlClassFinalRoutine;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Generalization;
+import org.eclipse.uml2.uml.InterfaceRealization;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageableElement;
-import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Enumeration;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.EnumConstant;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
@@ -41,6 +49,22 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
+  public boolean detectOrCreateUmlModel(final EObject alreadyPersistedEObject) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    DetectOrCreateUmlModelRoutine routine = new DetectOrCreateUmlModelRoutine(_routinesFacade, _reactionExecutionState, _caller, alreadyPersistedEObject);
+    return routine.applyRoutine();
+  }
+  
+  public boolean registerUmlModelInCorrespondenceModel(final Model uModel) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    RegisterUmlModelInCorrespondenceModelRoutine routine = new RegisterUmlModelInCorrespondenceModelRoutine(_routinesFacade, _reactionExecutionState, _caller, uModel);
+    return routine.applyRoutine();
+  }
+  
   public boolean createUmlClass(final org.emftext.language.java.classifiers.Class jClass, final CompilationUnit jCompUnit) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
@@ -49,11 +73,11 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean addUmlElementToPackage(final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage, final EObject persistedObject) {
+  public boolean addUmlElementToPackage(final PackageableElement uPackageable, final org.eclipse.uml2.uml.Package uPackage) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    AddUmlElementToPackageRoutine routine = new AddUmlElementToPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, uPackageable, uPackage, persistedObject);
+    AddUmlElementToPackageRoutine routine = new AddUmlElementToPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, uPackageable, uPackage);
     return routine.applyRoutine();
   }
   
@@ -81,35 +105,43 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean addUmlSuperClass(final org.emftext.language.java.classifiers.Class jClass, final org.emftext.language.java.classifiers.Class jSuperClass) {
+  public boolean addUmlSuperClassGeneralization(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final org.emftext.language.java.classifiers.Class jSuperClass) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    AddUmlSuperClassRoutine routine = new AddUmlSuperClassRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jSuperClass);
+    AddUmlSuperClassGeneralizationRoutine routine = new AddUmlSuperClassGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jReference, jSuperClass);
     return routine.applyRoutine();
   }
   
-  public boolean clearUmlSuperClassifiers(final org.emftext.language.java.classifiers.Class jClass) {
+  public boolean deleteUmlSuperClassGeneralization(final TypeReference jReference) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    ClearUmlSuperClassifiersRoutine routine = new ClearUmlSuperClassifiersRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass);
+    DeleteUmlSuperClassGeneralizationRoutine routine = new DeleteUmlSuperClassGeneralizationRoutine(_routinesFacade, _reactionExecutionState, _caller, jReference);
     return routine.applyRoutine();
   }
   
-  public boolean addUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final Classifier jInterface) {
+  public boolean addUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference, final Interface jInterface) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    AddUmlClassImplementRoutine routine = new AddUmlClassImplementRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jInterface);
+    AddUmlClassImplementRoutine routine = new AddUmlClassImplementRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jReference, jInterface);
     return routine.applyRoutine();
   }
   
-  public boolean removeUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final Interface jInterface) {
+  public boolean addImplementsCorrespondence(final TypeReference jReference, final InterfaceRealization uRealization) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    RemoveUmlClassImplementRoutine routine = new RemoveUmlClassImplementRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jInterface);
+    AddImplementsCorrespondenceRoutine routine = new AddImplementsCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, jReference, uRealization);
+    return routine.applyRoutine();
+  }
+  
+  public boolean removeUmlClassImplement(final org.emftext.language.java.classifiers.Class jClass, final TypeReference jReference) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    RemoveUmlClassImplementRoutine routine = new RemoveUmlClassImplementRoutine(_routinesFacade, _reactionExecutionState, _caller, jClass, jReference);
     return routine.applyRoutine();
   }
   
@@ -121,19 +153,27 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean addUmlSuperinterfaces(final Interface jInterface, final Classifier jSuperInterface) {
+  public boolean addUmlSuperinterfaces(final Interface jInterface, final TypeReference jReference, final Interface jSuperInterface) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    AddUmlSuperinterfacesRoutine routine = new AddUmlSuperinterfacesRoutine(_routinesFacade, _reactionExecutionState, _caller, jInterface, jSuperInterface);
+    AddUmlSuperinterfacesRoutine routine = new AddUmlSuperinterfacesRoutine(_routinesFacade, _reactionExecutionState, _caller, jInterface, jReference, jSuperInterface);
     return routine.applyRoutine();
   }
   
-  public boolean removeUmlSuperInterface(final Interface jInterface, final Classifier jSuperClassifier) {
+  public boolean addGeneralizationCorrespondence(final Generalization uGeneralization, final TypeReference jReference) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    RemoveUmlSuperInterfaceRoutine routine = new RemoveUmlSuperInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, jInterface, jSuperClassifier);
+    AddGeneralizationCorrespondenceRoutine routine = new AddGeneralizationCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, uGeneralization, jReference);
+    return routine.applyRoutine();
+  }
+  
+  public boolean removeUmlSuperInterface(final Interface jInterface, final TypeReference jReference) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    RemoveUmlSuperInterfaceRoutine routine = new RemoveUmlSuperInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, jInterface, jReference);
     return routine.applyRoutine();
   }
   
@@ -169,7 +209,7 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean addUmlElementToModelOrPackage(final CompilationUnit jCompUnit, final org.eclipse.uml2.uml.Classifier uClassifier) {
+  public boolean addUmlElementToModelOrPackage(final CompilationUnit jCompUnit, final Classifier uClassifier) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();

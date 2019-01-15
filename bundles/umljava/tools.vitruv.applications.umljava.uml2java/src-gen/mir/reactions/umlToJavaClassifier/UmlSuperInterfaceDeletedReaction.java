@@ -2,7 +2,6 @@ package mir.reactions.umlToJavaClassifier;
 
 import mir.routines.umlToJavaClassifier.RoutinesFacade;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -83,8 +82,7 @@ public class UmlSuperInterfaceDeletedReaction extends AbstractReactionRealizatio
     }
     
     public void callRoutine1(final RemoveEReference removeChange, final Interface affectedEObject, final EReference affectedFeature, final Generalization oldValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      Classifier _general = oldValue.getGeneral();
-      _routinesFacade.deleteJavaSuperInterface(((Interface) _general), affectedEObject);
+      _routinesFacade.deleteJavaSuperInterface(oldValue);
     }
   }
 }

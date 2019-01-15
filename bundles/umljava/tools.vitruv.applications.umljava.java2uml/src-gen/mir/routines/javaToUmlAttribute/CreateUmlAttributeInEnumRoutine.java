@@ -33,6 +33,10 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
       return jEnum;
     }
     
+    public EObject getCorrepondenceSource1(final Enumeration jEnum, final Field jAttr, final org.eclipse.uml2.uml.Enumeration uEnum) {
+      return jAttr;
+    }
+    
     public EObject getElement2(final Enumeration jEnum, final Field jAttr, final org.eclipse.uml2.uml.Enumeration uEnum, final Property uAttr) {
       return jAttr;
     }
@@ -72,6 +76,14 @@ public class CreateUmlAttributeInEnumRoutine extends AbstractRepairRoutineRealiz
     	return false;
     }
     registerObjectUnderModification(uEnum);
+    if (!getCorrespondingElements(
+    	userExecution.getCorrepondenceSource1(jEnum, jAttr, uEnum), // correspondence source supplier
+    	org.eclipse.uml2.uml.Property.class,
+    	(org.eclipse.uml2.uml.Property _element) -> true, // correspondence precondition checker
+    	null
+    ).isEmpty()) {
+    	return false;
+    }
     org.eclipse.uml2.uml.Property uAttr = org.eclipse.uml2.uml.internal.impl.UMLFactoryImpl.eINSTANCE.createProperty();
     notifyObjectCreated(uAttr);
     userExecution.updateUAttrElement(jEnum, jAttr, uEnum, uAttr);

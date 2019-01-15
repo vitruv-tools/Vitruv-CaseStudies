@@ -1,19 +1,22 @@
 package mir.routines.umlToJavaClassifier;
 
-import mir.routines.umlToJavaClassifier.ChangeJavaImplementedInterfaceRoutine;
-import mir.routines.umlToJavaClassifier.ChangeJavaSuperClassRoutine;
-import mir.routines.umlToJavaClassifier.ChangeJavaSuperInterfaceRoutine;
+import mir.routines.umlToJavaClassifier.AddGeneralizationCorrespondenceRoutine;
+import mir.routines.umlToJavaClassifier.AddImplementsCorrespondenceRoutine;
+import mir.routines.umlToJavaClassifier.AddJavaSuperClassRoutine;
+import mir.routines.umlToJavaClassifier.AddJavaSuperInterfaceRoutine;
+import mir.routines.umlToJavaClassifier.AddUmlModelCorrespondenceRoutine;
 import mir.routines.umlToJavaClassifier.ChangePackageOfJavaCompilationUnitRoutine;
-import mir.routines.umlToJavaClassifier.CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine;
+import mir.routines.umlToJavaClassifier.CheckIfUmlModelCorrespondenceExistsRoutine;
+import mir.routines.umlToJavaClassifier.CreateJavaClassImplementsReferenceRoutine;
 import mir.routines.umlToJavaClassifier.CreateJavaClassRoutine;
 import mir.routines.umlToJavaClassifier.CreateJavaCompilationUnitRoutine;
 import mir.routines.umlToJavaClassifier.CreateJavaEnumConstantRoutine;
 import mir.routines.umlToJavaClassifier.CreateJavaEnumRoutine;
 import mir.routines.umlToJavaClassifier.CreateJavaInterfaceRoutine;
 import mir.routines.umlToJavaClassifier.CreateJavaPackageRoutine;
+import mir.routines.umlToJavaClassifier.DeleteJavaClassImplementsReferenceRoutine;
 import mir.routines.umlToJavaClassifier.DeleteJavaClassRoutine;
 import mir.routines.umlToJavaClassifier.DeleteJavaEnumConstantRoutine;
-import mir.routines.umlToJavaClassifier.DeleteJavaImplementedInterfaceRoutine;
 import mir.routines.umlToJavaClassifier.DeleteJavaPackageRoutine;
 import mir.routines.umlToJavaClassifier.DeleteJavaSuperClassRoutine;
 import mir.routines.umlToJavaClassifier.DeleteJavaSuperInterfaceRoutine;
@@ -21,14 +24,18 @@ import mir.routines.umlToJavaClassifier.RenameJavaClassifierRoutine;
 import mir.routines.umlToJavaClassifier.RenameJavaPackageRoutine;
 import mir.routines.umlToJavaClassifier.SetJavaClassAbstractRoutine;
 import mir.routines.umlToJavaClassifier.SetJavaClassFinalRoutine;
+import mir.routines.umlToJavaClassifier.WarnUserToUsePredefinedPrimitiveTypesRoutine;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Namespace;
-import org.eclipse.uml2.uml.PrimitiveType;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.containers.CompilationUnit;
+import org.emftext.language.java.types.TypeReference;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.RoutinesFacadeExecutionState;
@@ -90,35 +97,43 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean changeJavaSuperClass(final org.eclipse.uml2.uml.Class superUMLClass, final org.eclipse.uml2.uml.Class uClass) {
+  public boolean addJavaSuperClass(final org.eclipse.uml2.uml.Class uClass, final Generalization uGeneralization) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    ChangeJavaSuperClassRoutine routine = new ChangeJavaSuperClassRoutine(_routinesFacade, _reactionExecutionState, _caller, superUMLClass, uClass);
+    AddJavaSuperClassRoutine routine = new AddJavaSuperClassRoutine(_routinesFacade, _reactionExecutionState, _caller, uClass, uGeneralization);
     return routine.applyRoutine();
   }
   
-  public boolean deleteJavaSuperClass(final org.eclipse.uml2.uml.Class uClass) {
+  public boolean deleteJavaSuperClass(final Generalization uGeneralization) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    DeleteJavaSuperClassRoutine routine = new DeleteJavaSuperClassRoutine(_routinesFacade, _reactionExecutionState, _caller, uClass);
+    DeleteJavaSuperClassRoutine routine = new DeleteJavaSuperClassRoutine(_routinesFacade, _reactionExecutionState, _caller, uGeneralization);
     return routine.applyRoutine();
   }
   
-  public boolean changeJavaImplementedInterface(final Interface uInterface, final Interface oldInterface, final org.eclipse.uml2.uml.Class uClass) {
+  public boolean createJavaClassImplementsReference(final InterfaceRealization uRealization, final org.eclipse.uml2.uml.Class uClass) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    ChangeJavaImplementedInterfaceRoutine routine = new ChangeJavaImplementedInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, uInterface, oldInterface, uClass);
+    CreateJavaClassImplementsReferenceRoutine routine = new CreateJavaClassImplementsReferenceRoutine(_routinesFacade, _reactionExecutionState, _caller, uRealization, uClass);
     return routine.applyRoutine();
   }
   
-  public boolean deleteJavaImplementedInterface(final Interface uInterface, final org.eclipse.uml2.uml.Class uClass) {
+  public boolean addImplementsCorrespondence(final InterfaceRealization uRealization, final TypeReference jReference) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    DeleteJavaImplementedInterfaceRoutine routine = new DeleteJavaImplementedInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, uInterface, uClass);
+    AddImplementsCorrespondenceRoutine routine = new AddImplementsCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, uRealization, jReference);
+    return routine.applyRoutine();
+  }
+  
+  public boolean deleteJavaClassImplementsReference(final InterfaceRealization uRealization, final org.eclipse.uml2.uml.Class uClass) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    DeleteJavaClassImplementsReferenceRoutine routine = new DeleteJavaClassImplementsReferenceRoutine(_routinesFacade, _reactionExecutionState, _caller, uRealization, uClass);
     return routine.applyRoutine();
   }
   
@@ -130,19 +145,27 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean changeJavaSuperInterface(final Interface superUMLInterface, final Interface uI) {
+  public boolean addJavaSuperInterface(final Interface uInterface, final Generalization uGeneralization) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    ChangeJavaSuperInterfaceRoutine routine = new ChangeJavaSuperInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, superUMLInterface, uI);
+    AddJavaSuperInterfaceRoutine routine = new AddJavaSuperInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, uInterface, uGeneralization);
     return routine.applyRoutine();
   }
   
-  public boolean deleteJavaSuperInterface(final Interface superUMLInterface, final Interface uI) {
+  public boolean addGeneralizationCorrespondence(final Generalization uGeneralization, final TypeReference jReference) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    DeleteJavaSuperInterfaceRoutine routine = new DeleteJavaSuperInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, superUMLInterface, uI);
+    AddGeneralizationCorrespondenceRoutine routine = new AddGeneralizationCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, uGeneralization, jReference);
+    return routine.applyRoutine();
+  }
+  
+  public boolean deleteJavaSuperInterface(final Generalization uGeneralization) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    DeleteJavaSuperInterfaceRoutine routine = new DeleteJavaSuperInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, uGeneralization);
     return routine.applyRoutine();
   }
   
@@ -167,6 +190,22 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     DeleteJavaEnumConstantRoutine routine = new DeleteJavaEnumConstantRoutine(_routinesFacade, _reactionExecutionState, _caller, uLiteral);
+    return routine.applyRoutine();
+  }
+  
+  public boolean checkIfUmlModelCorrespondenceExists(final Model newModel) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CheckIfUmlModelCorrespondenceExistsRoutine routine = new CheckIfUmlModelCorrespondenceExistsRoutine(_routinesFacade, _reactionExecutionState, _caller, newModel);
+    return routine.applyRoutine();
+  }
+  
+  public boolean addUmlModelCorrespondence(final Model newModel) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AddUmlModelCorrespondenceRoutine routine = new AddUmlModelCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, newModel);
     return routine.applyRoutine();
   }
   
@@ -202,11 +241,11 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean checkIfCorrespondingJavaPrimitiveTypeExists(final PrimitiveType uPrimType) {
+  public boolean warnUserToUsePredefinedPrimitiveTypes() {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine routine = new CheckIfCorrespondingJavaPrimitiveTypeExistsRoutine(_routinesFacade, _reactionExecutionState, _caller, uPrimType);
+    WarnUserToUsePredefinedPrimitiveTypesRoutine routine = new WarnUserToUsePredefinedPrimitiveTypesRoutine(_routinesFacade, _reactionExecutionState, _caller);
     return routine.applyRoutine();
   }
 }

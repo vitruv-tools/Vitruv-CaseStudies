@@ -6,6 +6,8 @@ import java.util.List
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
+import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.EnumConstant
@@ -16,14 +18,12 @@ import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.parameters.Parametrizable
 import org.emftext.language.java.statements.ExpressionStatement
-import org.emftext.language.java.types.TypeReference
-import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
-import static tools.vitruv.applications.umljava.util.CommonUtil.*
-import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.statements.Return
+import org.emftext.language.java.types.TypeReference
+
+import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaStatementUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 /**
  * A util class for field, method and parameter related util functions.
@@ -107,8 +107,8 @@ class JavaMemberAndParameterUtil {
     
     def static createJavaParameter(String name, TypeReference type) {
         val param = ParametersFactory.eINSTANCE.createOrdinaryParameter;
-        setName(param, name)
-        setTypeReference(param, type)
+		param.name = name
+		param.typeReference = type
         return param;
     }
     
@@ -168,7 +168,7 @@ class JavaMemberAndParameterUtil {
     * @param visibility Visibility of the Setter
     */
    def static createJavaSetterForAttribute(Field jAttribute, JavaVisibility visibility) {
-       val param = createJavaParameter(firstLettertoLowercase(jAttribute.name), EcoreUtil.copy(jAttribute.typeReference))
+       val param = createJavaParameter(jAttribute.name.toFirstLower, EcoreUtil.copy(jAttribute.typeReference))
        val setterMethod = createJavaClassMethod(buildSetterName(jAttribute.name), null, visibility, false, false, #[param])
        val paramReference = createIdentifierReference(param)
        val attributeAssignment = createAssignmentExpression(createSelfReferenceToAttribute(jAttribute), OperatorsFactory.eINSTANCE.createAssignment, EcoreUtil.copy(paramReference))
@@ -285,7 +285,7 @@ class JavaMemberAndParameterUtil {
         setter.name = buildSetterName(jAttribute.name)
         for (expStatement : setter.statements.filter(ExpressionStatement)) {
             val selfReference = getAttributeSelfReferenceInExpressionStatement(expStatement, oldName)
-            selfReference.target = jAttribute
+            if(selfReference !== null ) selfReference.target = jAttribute
         }
         
     }
@@ -319,7 +319,8 @@ class JavaMemberAndParameterUtil {
      * @param jAttribute the attribute with the new name
      */
     def static void renameGettersOfAttribute(Field jAttribute, String oldName) {
-        for (getter : getJavaGettersOfAttribute(jAttribute.containingConcreteClassifier, oldName)) {
+    	val getters = getJavaGettersOfAttribute(jAttribute.containingConcreteClassifier, oldName)
+        for (getter : getters) {
             renameGetterOfAttribute(getter, jAttribute)
         }
     }
@@ -355,10 +356,10 @@ class JavaMemberAndParameterUtil {
     }
     
     def static String buildSetterName(String attributeName) {
-        return "set" + firstLettertoUppercase(attributeName)
+        return "set" + attributeName.toFirstUpper
     }
     
     def static String buildGetterName(String attributeName) {
-        return "get" + firstLettertoUppercase(attributeName)
+        return "get" + attributeName.toFirstUpper
     }
 }

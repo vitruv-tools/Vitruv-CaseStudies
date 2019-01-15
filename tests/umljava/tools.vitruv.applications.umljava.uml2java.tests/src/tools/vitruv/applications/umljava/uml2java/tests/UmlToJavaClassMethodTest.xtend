@@ -1,20 +1,23 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.types.TypesFactory
+import org.junit.Before
+import org.junit.Test
+import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 
+import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import org.junit.Test
-import static org.junit.Assert.*;
-import org.junit.Before
-import org.junit.After
-import org.eclipse.uml2.uml.Operation
-import org.eclipse.uml2.uml.VisibilityKind
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import org.emftext.language.java.types.TypesFactory
 
 /**
  * A Test class to test class methods and its traits.
@@ -27,14 +30,13 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     private static val OPERATION_NAME = "classMethod";
     private static val STANDARD_OPERATION_NAME = "standardMethod";
     private static val OPERATION_RENAME = "classMethodRenamed";
-    private static val PRIMITIVE_TYPE = "int"
     private static val PARAMETER_NAME = "parameterName";
     private static val DATATYPE_NAME = "DataTypeName";
     
-    private static var org.eclipse.uml2.uml.Class uClass
-    private static var org.eclipse.uml2.uml.Class typeClass
-    private static var org.eclipse.uml2.uml.Parameter uParam
-    private static var org.eclipse.uml2.uml.PrimitiveType pType
+    private static var Class uClass
+    private static var Class typeClass
+    private static var Parameter uParam
+    private static var PrimitiveType pType
     private static var Operation uOperation
     
     /**
@@ -45,33 +47,12 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     def void before() {
         uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
         typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
-        pType = createUmlPrimitiveTypeAndAddToModel(rootElement, PRIMITIVE_TYPE)
+        pType = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
         uParam = createUmlParameter(PARAMETER_NAME, pType)
         uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
         uClass.ownedOperations += uOperation;
         rootElement.packagedElements += uClass;
         rootElement.packagedElements += typeClass;
-        rootElement.packagedElements += pType;
-        saveAndSynchronizeChanges(rootElement);
-    }
-    
-    @After
-    def void after() {
-        if (uOperation !== null) {
-            uOperation.destroy;
-        }
-        if (uClass !== null) {
-            uClass.destroy;
-        }
-        if (typeClass !== null) {
-            typeClass.destroy;
-        }
-        if (uParam !== null) {
-        	uParam.destroy
-        }
-        if (pType !== null) {
-        	pType.destroy
-        }
         saveAndSynchronizeChanges(rootElement);
     }
     

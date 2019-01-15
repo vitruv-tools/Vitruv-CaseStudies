@@ -14,30 +14,12 @@
 	<name>Test Modules</name>
 
 	<modules>
-		<module>umljava</module>
-		<module>umlclassumlcomponents</module>
-		<module>pcmumlcomponents</module>
 		<module>pcmjava</module>
+		<module>pcmumlclass</module>
+		<module>pcmumlclassjava</module>
+		<module>pcmumlcomponents</module>
+		<module>umlclassumlcomponents</module>
+		<module>umljava</module>
 	</modules>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<useUIHarness>true</useUIHarness>
-					<failIfNoTests>false</failIfNoTests>
-					<includes>
-						<include>**/*Test*.class</include>
-					</includes>
-					<excludes>
-						<exclude>**/Abstract*</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	
 </project>

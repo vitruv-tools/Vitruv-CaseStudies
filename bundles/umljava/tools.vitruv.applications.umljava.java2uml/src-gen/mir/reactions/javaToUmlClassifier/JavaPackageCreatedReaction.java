@@ -2,6 +2,7 @@ package mir.reactions.javaToUmlClassifier;
 
 import mir.routines.javaToUmlClassifier.RoutinesFacade;
 import org.eclipse.xtext.xbase.lib.Extension;
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -71,6 +72,8 @@ public class JavaPackageCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final InsertRootEObject insertChange, final org.emftext.language.java.containers.Package newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.detectOrCreateUmlModel(newValue);
+      UmlJavaTypePropagationHelper.registerPredefinedUmlPrimitiveTypes(this.correspondenceModel, newValue.eResource().getResourceSet());
       _routinesFacade.createUmlPackage(newValue);
     }
   }

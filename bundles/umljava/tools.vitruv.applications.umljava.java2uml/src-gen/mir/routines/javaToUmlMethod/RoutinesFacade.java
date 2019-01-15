@@ -11,6 +11,7 @@ import mir.routines.javaToUmlMethod.CreateUmlInterfaceMethodRoutine;
 import mir.routines.javaToUmlMethod.CreateUmlParameterRoutine;
 import mir.routines.javaToUmlMethod.DeleteJavaParameterRoutine;
 import mir.routines.javaToUmlMethod.DeleteUmlMethodRoutine;
+import mir.routines.javaToUmlMethod.RenameUmlNamedElementCorrespondingToCompilationUnitRoutine;
 import mir.routines.javaToUmlMethod.RenameUmlNamedElementRoutine;
 import mir.routines.javaToUmlMethod.SetUmlFeatureStaticRoutine;
 import mir.routines.javaToUmlMethod.SetUmlMethodAbstractRoutine;
@@ -20,6 +21,7 @@ import org.eclipse.uml2.uml.Operation;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.commons.NamedElement;
+import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.InterfaceMethod;
@@ -41,7 +43,10 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPa
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
+    this.javaToUmlTypePropagation = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("javaToUmlTypePropagation")));
   }
+  
+  public final mir.routines.javaToUmlTypePropagation.RoutinesFacade javaToUmlTypePropagation;
   
   public boolean createUmlClassMethod(final ClassMethod jMeth, final ConcreteClassifier jClassifier) {
     RoutinesFacade _routinesFacade = this;
@@ -160,6 +165,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     RenameUmlNamedElementRoutine routine = new RenameUmlNamedElementRoutine(_routinesFacade, _reactionExecutionState, _caller, jElement);
+    return routine.applyRoutine();
+  }
+  
+  public boolean renameUmlNamedElementCorrespondingToCompilationUnit(final CompilationUnit jElement) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    RenameUmlNamedElementCorrespondingToCompilationUnitRoutine routine = new RenameUmlNamedElementCorrespondingToCompilationUnitRoutine(_routinesFacade, _reactionExecutionState, _caller, jElement);
     return routine.applyRoutine();
   }
 }

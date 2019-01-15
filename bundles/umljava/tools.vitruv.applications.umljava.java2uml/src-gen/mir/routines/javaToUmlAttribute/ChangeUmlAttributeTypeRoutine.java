@@ -4,9 +4,9 @@ import java.io.IOException;
 import mir.routines.javaToUmlAttribute.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.types.TypeReference;
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -24,12 +24,8 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
       return jAttr;
     }
     
-    public EObject getElement1(final Field jAttr, final TypeReference jType, final Property uAttr) {
-      return uAttr;
-    }
-    
-    public void update0Element(final Field jAttr, final TypeReference jType, final Property uAttr) {
-      uAttr.setType(JavaToUmlHelper.getUmlType(jType, JavaToUmlHelper.getUmlModel(this.changePropagationObservable, this.correspondenceModel, this.userInteractor), this.correspondenceModel));
+    public void callRoutine1(final Field jAttr, final TypeReference jType, final Property uAttr, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.javaToUmlTypePropagation.propagateAttributeTypeChange(jAttr, uAttr);
     }
   }
   
@@ -59,8 +55,7 @@ public class ChangeUmlAttributeTypeRoutine extends AbstractRepairRoutineRealizat
     	return false;
     }
     registerObjectUnderModification(uAttr);
-    // val updatedElement userExecution.getElement1(jAttr, jType, uAttr);
-    userExecution.update0Element(jAttr, jType, uAttr);
+    userExecution.callRoutine1(jAttr, jType, uAttr, this.getRoutinesFacade());
     
     postprocessElements();
     

@@ -1,0 +1,25 @@
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: combinedPcmToUmlClassReactions
+in reaction to changes in PCM
+execute actions in UML
+
+import pcmRepositoryReactions using qualified names
+import pcmSystemReactions using qualified names
+
+import pcmInterfaceReactions using qualified names
+import pcmSignatureReactions using qualified names
+import pcmParameterReactions using qualified names
+
+// - PrimitiveDataTypes are mapped in the repository reactions, because they are bootstrapped in
+// - CollectionDataTypes correspond to the combination of multiplicity and type of the uml element that is supposed to have a corresponding type.
+// 	 	Because of that, the Reactions for CollectionDatatypes are spread to wherever a type can be changed (Signature, Parameter, InnerDeclaration)
+import pcmCompositeDataTypeReactions using qualified names
+import pcmInnerDeclarationReactions using qualified names
+import pcmCollectionDataTypeReactions using qualified names
+
+import pcmRepositoryComponentReactions using qualified names
+import pcmRequiredRoleReactions using qualified names
+import pcmProvidedRoleReactions using qualified names
+import pcmAssemblyContextReactions using qualified names

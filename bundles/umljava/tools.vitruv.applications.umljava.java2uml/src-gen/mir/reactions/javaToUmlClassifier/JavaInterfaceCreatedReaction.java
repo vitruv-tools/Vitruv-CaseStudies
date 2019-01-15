@@ -5,6 +5,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
+import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -109,6 +110,8 @@ public class JavaInterfaceCreatedReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final InsertEReference insertChange, final CompilationUnit affectedEObject, final EReference affectedFeature, final Interface newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.detectOrCreateUmlModel(affectedEObject);
+      UmlJavaTypePropagationHelper.registerPredefinedUmlPrimitiveTypes(this.correspondenceModel, affectedEObject.eResource().getResourceSet());
       _routinesFacade.createUmlInterface(newValue, affectedEObject);
     }
   }

@@ -36,8 +36,10 @@ class JavaModifierUtil {
         } else {
             val visibilityModifier = getJavaVisibilityModifierFromEnum(visibility)
             if (visibilityModifier !== null) {
-                removeJavaVisibilityModifiers(modifiable)
-                setJavaModifier(modifiable, visibilityModifier, true)
+            	if (!modifiable.hasModifier(visibilityModifier.class)) {
+	                removeJavaVisibilityModifiers(modifiable)
+	                setJavaModifier(modifiable, visibilityModifier, true)
+                }
             } else {
                 logger.warn("No corresponding Java-Visibility-Modifier found for " + visibility)
             }
@@ -164,9 +166,9 @@ class JavaModifierUtil {
      * @param modifiable the AnnotableAndModifiable from which all visibility modifiers should be removed
      */
     def static removeJavaVisibilityModifiers(AnnotableAndModifiable modifiable) {
-        modifiable.removeModifier(typeof(Private))
-        modifiable.removeModifier(typeof(Protected))
-        modifiable.removeModifier(typeof(Public))
+        if (modifiable.hasModifier(typeof(Private))) modifiable.removeModifier(typeof(Private))
+        if (modifiable.hasModifier(typeof(Protected))) modifiable.removeModifier(typeof(Protected))
+        if (modifiable.hasModifier(typeof(Public))) modifiable.removeModifier(typeof(Public))
     }
     
     /**

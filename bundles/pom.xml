@@ -14,10 +14,11 @@
 	<name>Bundle Modules</name>
 
 	<modules>
-		<module>umljava</module>
-		<module>umlclassumlcomponents</module>
 		<module>pcmjava</module>
+		<module>pcmumlclass</module>
 		<module>pcmumlcomponents</module>
+		<module>umlclassumlcomponents</module>
+		<module>umljava</module>
 	</modules>
 
 </project>
