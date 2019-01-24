@@ -2,8 +2,10 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.commons.NamedElement;
+import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -24,7 +26,8 @@ public class CreateOperationInterfaceRoutine extends AbstractRepairRoutineRealiz
     }
     
     public void update0Element(final Repository repo, final NamedElement namedElement, final OperationInterface operationInterface) {
-      repo.getInterfaces__Repository().add(operationInterface);
+      EList<Interface> _interfaces__Repository = repo.getInterfaces__Repository();
+      _interfaces__Repository.add(operationInterface);
     }
     
     public EObject getElement2(final Repository repo, final NamedElement namedElement, final OperationInterface operationInterface) {

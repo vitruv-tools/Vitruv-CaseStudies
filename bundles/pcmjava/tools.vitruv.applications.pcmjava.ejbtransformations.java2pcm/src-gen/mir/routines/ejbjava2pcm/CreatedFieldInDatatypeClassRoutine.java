@@ -2,6 +2,7 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.Field;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
@@ -25,7 +26,8 @@ public class CreatedFieldInDatatypeClassRoutine extends AbstractRepairRoutineRea
     }
     
     public void update0Element(final org.emftext.language.java.classifiers.Class clazz, final Field field, final CompositeDataType compositeDataType, final InnerDeclaration innerDec) {
-      compositeDataType.getInnerDeclaration_CompositeDataType().add(innerDec);
+      EList<InnerDeclaration> _innerDeclaration_CompositeDataType = compositeDataType.getInnerDeclaration_CompositeDataType();
+      _innerDeclaration_CompositeDataType.add(innerDec);
     }
     
     public EObject getCorrepondenceSourceCompositeDataType(final org.emftext.language.java.classifiers.Class clazz, final Field field) {

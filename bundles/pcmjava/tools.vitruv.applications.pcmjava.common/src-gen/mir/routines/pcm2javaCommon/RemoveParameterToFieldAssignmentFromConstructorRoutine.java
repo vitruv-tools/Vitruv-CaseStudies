@@ -46,7 +46,8 @@ public class RemoveParameterToFieldAssignmentFromConstructorRoutine extends Abst
                 if ((field instanceof Field)) {
                   boolean _equals = ((Field)field).getName().equals(fieldName);
                   if (_equals) {
-                    ctor.getStatements().remove(statement);
+                    EList<Statement> _statements_1 = ctor.getStatements();
+                    _statements_1.remove(((ExpressionStatement)statement));
                     return;
                   }
                 }

@@ -2,9 +2,11 @@ package mir.routines.pcm2javaCommon;
 
 import java.io.IOException;
 import mir.routines.pcm2javaCommon.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.members.ClassMethod;
 import org.emftext.language.java.members.InterfaceMethod;
+import org.emftext.language.java.members.Member;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.Signature;
@@ -30,7 +32,8 @@ public class CreateSEFFRoutine extends AbstractRepairRoutineRealization {
     public void update0Element(final ServiceEffectSpecification seff, final org.emftext.language.java.classifiers.Class componentClass, final InterfaceMethod interfaceMethod, final ClassMethod classMethod) {
       ClassMethod correspondingClassMethod = Pcm2JavaHelper.findMethodInClass(componentClass, classMethod);
       if ((null == correspondingClassMethod)) {
-        componentClass.getMembers().add(classMethod);
+        EList<Member> _members = componentClass.getMembers();
+        _members.add(classMethod);
         correspondingClassMethod = classMethod;
       } else {
         correspondingClassMethod.setName(interfaceMethod.getName());

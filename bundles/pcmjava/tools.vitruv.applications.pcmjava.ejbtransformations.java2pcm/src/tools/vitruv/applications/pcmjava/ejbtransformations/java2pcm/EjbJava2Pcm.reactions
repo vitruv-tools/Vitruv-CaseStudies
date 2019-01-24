@@ -11,7 +11,7 @@ import org.palladiosimulator.pcm.repository.Repository
 import java.util.Collections
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationSignature
-import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
+import tools.vitruv.framework.^correspondence.CorrespondenceModelUtil
 import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
 
 import "http://www.emftext.org/java" as java
@@ -25,7 +25,7 @@ execute actions in PCM
 // ################ create Repository for first package################
 reaction CreatedFirstPackage {
 	after element java::Package inserted as root 
-	call createRepositoryForFirstPackage(newValue)  
+	call createRepositoryForFirstPackage(newValue)
 }
 
 routine createRepositoryForFirstPackage(java::Package javaPackage) {
@@ -69,7 +69,7 @@ routine createBasicComponent(pcm::Repository repo, java::NamedElement namedEleme
 		}
 		add correspondence between basicComponent and namedElement
 		update repo {
-			repo.components__Repository.add(basicComponent);		
+			repo.components__Repository += basicComponent;		
 		}
 	}
 }
@@ -102,7 +102,7 @@ routine createOperationInterface(pcm::Repository repo, java::NamedElement namedE
 		}
 		add correspondence between operationInterface and namedElement
 		update operationInterface {
-			repo.interfaces__Repository.add(operationInterface);		
+			repo.interfaces__Repository += operationInterface;		
 		}
 	}
 }
@@ -213,7 +213,7 @@ routine createOperationSignature(java::InterfaceMethod interfaceMethod, pcm::Ope
 		add correspondence between opSignature and interfaceMethod
 		call {
 			opSignature.entityName = interfaceMethod.name
-			opInterface.signatures__OperationInterface.add(opSignature)
+			opInterface.signatures__OperationInterface += opSignature
 			interfaceMethod.parameters.forEach[createPCMParameter(opSignature)]
 			interfaceMethod.typeReference.createPCMReturnType(opSignature, interfaceMethod)
 		}
@@ -244,7 +244,7 @@ routine createPCMParameter(java::Parameter jaMoPPParam, pcm::OperationSignature 
 				correspondenceModel, userInteractor, opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
 		}
 		update opSignature {
-			opSignature.parameters__OperationSignature.add(pcmParameter)
+			opSignature.parameters__OperationSignature += pcmParameter
 		}
 		add correspondence between pcmParameter and jaMoPPParam
 	}
@@ -298,7 +298,7 @@ routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
 		}
 		add correspondence between innerDec and field
 		update compositeDataType {
-			compositeDataType.innerDeclaration_CompositeDataType.add(innerDec)
+			compositeDataType.innerDeclaration_CompositeDataType += innerDec
 		}
 	}
 }
@@ -337,7 +337,7 @@ routine createSEFFForClassMethod(pcm::BasicComponent basicComponent, pcm::Operat
 		}
 		add correspondence between seff and classMethod
 		update basicComponent {
-			basicComponent.serviceEffectSpecifications__BasicComponent.add(seff)
+			basicComponent.serviceEffectSpecifications__BasicComponent += seff
 		}	
 	}
 }

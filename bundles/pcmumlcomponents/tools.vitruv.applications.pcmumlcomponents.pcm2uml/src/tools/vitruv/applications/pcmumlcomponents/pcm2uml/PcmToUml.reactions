@@ -180,7 +180,7 @@ routine deleteInnerDeclaration(pcm::CompositeDataType dataType, pcm::InnerDeclar
 		val umlProperty = retrieve asserted uml::Property corresponding to innerDeclaration
 	}
 	action {
-		call compositeType.ownedAttributes.remove(umlProperty)
+		call compositeType.ownedAttributes -= umlProperty
 	}
 }
 

@@ -344,7 +344,7 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 			collectionDataTypes += #[ArrayList, LinkedList, Vector, Stack, HashSet];
 			val List<String> collectionDataTypeNames = new ArrayList<String>(collectionDataTypes.size);
 			for (collectionDataType : collectionDataTypes) {
-				collectionDataTypeNames.add(collectionDataType.name);
+				collectionDataTypeNames += collectionDataType.name;
 			}
 			val String selectTypeMsg = "Please select type (or interface) that should be used for the type";
 			val int selectedType = userInteractor.singleSelectionDialogBuilder.message(selectTypeMsg)
@@ -589,7 +589,7 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
 			compilationUnit.name = classifier.name + ".java";
-			compilationUnit.classifiers.add(classifier);
+			compilationUnit.classifiers += classifier;
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
 		}
 		add correspondence between compilationUnit and sourceElementMappedToClass
@@ -651,7 +651,7 @@ routine addProvidedRole(pcm::OperationProvidedRole providedRole) {
 		}
 		add correspondence between namespaceClassifierReference and providedRole
 		update javaClass {
-			javaClass.implements.add(namespaceClassifierReference);
+			javaClass.implements += namespaceClassifierReference;
 		}
 	}
 }
@@ -749,9 +749,9 @@ routine addParameterAndAssignmentToConstructor(pcm::NamedElement parameterCorres
 		}
 		add correspondence between newParameter and parameterCorrespondenceSource
 		update constructor {
-			constructor.parameters.add(newParameter);
+			constructor.parameters += newParameter;
 			val asssignment = createAssignmentFromParameterToField(fieldToBeAssigned, newParameter);
-			constructor.statements.add(asssignment);
+			constructor.statements += asssignment;
 		}
 	}
 }
@@ -795,7 +795,7 @@ routine removeParameterToFieldAssignmentFromConstructor(java::Constructor ctor, 
 								val field = fieldReference.target;
 								if (field instanceof Field) {
 									if (field.name.equals(fieldName)) {
-										ctor.statements.remove(statement);
+										ctor.statements -= statement;
 										return;
 									}
 								}
@@ -882,7 +882,7 @@ routine renameMethodForOperationSignature(pcm::OperationSignature operationSigna
 			operationInterface.repository__Interface.components__Repository.forEach [ comp |
 				val opProvRoles = comp.providedRoles_InterfaceProvidingEntity.filter(OperationProvidedRole);
 				opProvRoles.filter[it.providedInterface__OperationProvidedRole.id == operationInterface.id].forEach [ opProRole |
-					implementingComponents.add(opProRole.providingEntity_ProvidedRole);
+					implementingComponents += opProRole.providingEntity_ProvidedRole;
 				]
 			]
 			val basicComponents = implementingComponents.filter(BasicComponent);
@@ -1091,7 +1091,7 @@ routine createSEFF(pcm::ServiceEffectSpecification seff) {
 		update componentClass {
 			var correspondingClassMethod = componentClass.findMethodInClass(classMethod);
 			if (null === correspondingClassMethod) {
-				componentClass.members.add(classMethod);
+				componentClass.members += classMethod;
 				correspondingClassMethod = classMethod;
 			} else {
 				correspondingClassMethod.name = interfaceMethod.name;

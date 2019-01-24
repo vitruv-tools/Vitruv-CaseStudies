@@ -66,7 +66,8 @@ public class CreateCollectionDataTypeImplementationRoutine extends AbstractRepai
       int _size = collectionDataTypes.size();
       final List<String> collectionDataTypeNames = new ArrayList<String>(_size);
       for (final Class<?> collectionDataType : collectionDataTypes) {
-        collectionDataTypeNames.add(collectionDataType.getName());
+        String _name = collectionDataType.getName();
+        collectionDataTypeNames.add(_name);
       }
       final String selectTypeMsg = "Please select type (or interface) that should be used for the type";
       final int selectedType = (this.userInteractor.getSingleSelectionDialogBuilder().message(selectTypeMsg).choices(collectionDataTypeNames).windowModality(UserInteractionOptions.WindowModality.MODAL).startInteraction()).intValue();

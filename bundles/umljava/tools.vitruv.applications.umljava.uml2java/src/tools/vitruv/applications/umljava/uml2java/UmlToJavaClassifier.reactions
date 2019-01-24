@@ -156,7 +156,7 @@ routine addJavaSuperClass(uml::Class uClass, uml::Generalization uGeneralization
     action {
         execute {
         	if (uClass.generals.size == 1) {
-	            var typeReference = createTypeReference(uGeneralization.general as Class, Optional.of(jSuperClass), null, userInteractor)
+	            var typeReference = createTypeReference(uGeneralization.general as Class, Optional.^of(jSuperClass), null, userInteractor)
 	            addJavaImport(jClass.containingCompilationUnit, typeReference)
 	            jClass.extends = typeReference
 	            addGeneralizationCorrespondence(uGeneralization, typeReference)
@@ -210,7 +210,7 @@ routine createJavaClassImplementsReference(uml::InterfaceRealization uRealizatio
 	}
 	action {
 		execute { // Should actually be split into execute and call
-            var typeReference = createTypeReference(uRealization.contract, Optional.of(jInterface), null, userInteractor)
+            var typeReference = createTypeReference(uRealization.contract, Optional.^of(jInterface), null, userInteractor)
             addJavaImport(jClass.containingCompilationUnit, typeReference)
             jClass.implements += typeReference
             addImplementsCorrespondence(uRealization, typeReference)
@@ -307,7 +307,7 @@ routine addJavaSuperInterface(uml::Interface uInterface, uml::Generalization uGe
     }
     action {
         execute{
-            var typeReference = createTypeReference(uGeneralization.general as Interface, Optional.of(jSuperInterface), null, userInteractor)
+            var typeReference = createTypeReference(uGeneralization.general as Interface, Optional.^of(jSuperInterface), null, userInteractor)
             addJavaImport(jInterface.containingCompilationUnit, typeReference)
             jInterface.extends += typeReference
             addGeneralizationCorrespondence(uGeneralization, typeReference)
