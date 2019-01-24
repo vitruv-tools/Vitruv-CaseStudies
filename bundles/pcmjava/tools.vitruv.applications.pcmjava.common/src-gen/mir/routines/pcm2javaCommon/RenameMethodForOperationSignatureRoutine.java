@@ -55,7 +55,8 @@ public class RenameMethodForOperationSignatureRoutine extends AbstractRepairRout
           return Boolean.valueOf(Objects.equal(_id, _id_1));
         };
         final Consumer<OperationProvidedRole> _function_2 = (OperationProvidedRole opProRole) -> {
-          implementingComponents.add(opProRole.getProvidingEntity_ProvidedRole());
+          InterfaceProvidingEntity _providingEntity_ProvidedRole = opProRole.getProvidingEntity_ProvidedRole();
+          implementingComponents.add(_providingEntity_ProvidedRole);
         };
         IterableExtensions.<OperationProvidedRole>filter(opProvRoles, _function_1).forEach(_function_2);
       };

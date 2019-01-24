@@ -36,7 +36,8 @@ public class CreateCompilationUnitRoutine extends AbstractRepairRoutineRealizati
       String _name_1 = classifier.getName();
       String _plus = (_name_1 + ".java");
       compilationUnit.setName(_plus);
-      compilationUnit.getClassifiers().add(classifier);
+      EList<ConcreteClassifier> _classifiers = compilationUnit.getClassifiers();
+      _classifiers.add(classifier);
       this.persistProjectRelative(sourceElementMappedToClass, compilationUnit, JavaPersistenceHelper.buildJavaFilePath(compilationUnit));
     }
     

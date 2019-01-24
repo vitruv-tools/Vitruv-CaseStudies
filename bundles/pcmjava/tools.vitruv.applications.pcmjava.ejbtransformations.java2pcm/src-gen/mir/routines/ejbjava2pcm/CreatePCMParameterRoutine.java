@@ -2,6 +2,7 @@ package mir.routines.ejbjava2pcm;
 
 import java.io.IOException;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.emftext.language.java.parameters.Parameter;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -25,7 +26,8 @@ public class CreatePCMParameterRoutine extends AbstractRepairRoutineRealization 
     }
     
     public void update0Element(final Parameter jaMoPPParam, final OperationSignature opSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {
-      opSignature.getParameters__OperationSignature().add(pcmParameter);
+      EList<org.palladiosimulator.pcm.repository.Parameter> _parameters__OperationSignature = opSignature.getParameters__OperationSignature();
+      _parameters__OperationSignature.add(pcmParameter);
     }
     
     public EObject getElement2(final Parameter jaMoPPParam, final OperationSignature opSignature, final org.palladiosimulator.pcm.repository.Parameter pcmParameter) {

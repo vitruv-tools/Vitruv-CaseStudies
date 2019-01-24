@@ -3,6 +3,7 @@ package mir.routines.ejbjava2pcm;
 import java.io.IOException;
 import java.util.function.Consumer;
 import mir.routines.ejbjava2pcm.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.members.InterfaceMethod;
@@ -32,7 +33,8 @@ public class CreateOperationSignatureRoutine extends AbstractRepairRoutineRealiz
     
     public void callRoutine1(final InterfaceMethod interfaceMethod, final OperationInterface opInterface, final OperationSignature opSignature, @Extension final RoutinesFacade _routinesFacade) {
       opSignature.setEntityName(interfaceMethod.getName());
-      opInterface.getSignatures__OperationInterface().add(opSignature);
+      EList<OperationSignature> _signatures__OperationInterface = opInterface.getSignatures__OperationInterface();
+      _signatures__OperationInterface.add(opSignature);
       final Consumer<Parameter> _function = (Parameter it) -> {
         _routinesFacade.createPCMParameter(it, opSignature);
       };

@@ -18,7 +18,7 @@ import "http://www.emftext.org/java" as java
 
 reactions: umlToJavaMethod
 in reaction to changes in UML
-execute actions inJava
+execute actions in Java
 
 import routines umlToJavaTypePropagation using qualified names
 
@@ -358,7 +358,7 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
         }
         call {
             if (newDirection == ParameterDirectionKind.RETURN_LITERAL && jParam.present) {
-                EcoreUtil.remove(jParam.get)
+                EcoreUtil.^remove(jParam.get)
             } else if (newDirection == ParameterDirectionKind.IN_LITERAL && !jParam.isPresent) {
                 createJavaParameter(uOperation, uParam)
             }

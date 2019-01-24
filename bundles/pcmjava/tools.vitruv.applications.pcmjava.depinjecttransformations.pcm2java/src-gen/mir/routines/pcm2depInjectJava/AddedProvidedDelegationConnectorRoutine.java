@@ -55,7 +55,8 @@ public class AddedProvidedDelegationConnectorRoutine extends AbstractRepairRouti
           return;
         }
       }
-      systemClass.getImplements().add(namespaceClassifierRef);
+      EList<TypeReference> _implements_1 = systemClass.getImplements();
+      _implements_1.add(namespaceClassifierRef);
       final Import classifierImport = JavaModificationUtil.addImportToCompilationUnitOfClassifier(systemClass, jaMoPPInterface);
       this.correspondenceModel.createAndAddCorrespondence(CollectionBridge.<EObject>toList(pcmSystem), Collections.<EObject>unmodifiableList(CollectionLiterals.<EObject>newArrayList(namespaceClassifierRef, classifierImport)));
     }

@@ -2,11 +2,13 @@ package mir.routines.pcm2javaCommon;
 
 import java.io.IOException;
 import mir.routines.pcm2javaCommon.RoutinesFacade;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.java.members.Constructor;
 import org.emftext.language.java.members.Field;
 import org.emftext.language.java.parameters.OrdinaryParameter;
+import org.emftext.language.java.parameters.Parameter;
 import org.emftext.language.java.statements.Statement;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
@@ -29,9 +31,11 @@ public class AddParameterAndAssignmentToConstructorRoutine extends AbstractRepai
     }
     
     public void update0Element(final NamedElement parameterCorrespondenceSource, final Constructor constructor, final NamespaceClassifierReference typeReference, final Field fieldToBeAssigned, final String parameterName, final OrdinaryParameter newParameter) {
-      constructor.getParameters().add(newParameter);
+      EList<Parameter> _parameters = constructor.getParameters();
+      _parameters.add(newParameter);
       final Statement asssignment = JavaModificationUtil.createAssignmentFromParameterToField(fieldToBeAssigned, newParameter);
-      constructor.getStatements().add(asssignment);
+      EList<Statement> _statements = constructor.getStatements();
+      _statements.add(asssignment);
     }
     
     public void updateNewParameterElement(final NamedElement parameterCorrespondenceSource, final Constructor constructor, final NamespaceClassifierReference typeReference, final Field fieldToBeAssigned, final String parameterName, final OrdinaryParameter newParameter) {
