@@ -16,6 +16,7 @@ import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.testutils.VitruviusApplicationTest
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.common.util.URI
@@ -32,21 +33,12 @@ import org.eclipse.uml2.uml.Interface
 import java.util.HashMap
 import java.util.List
 
+import static org.junit.Assert.*
 import java.util.ArrayList
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.AfterEach
-import java.nio.file.Path
-import tools.vitruv.testutils.LegacyVitruvApplicationTest
 
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.hamcrest.MatcherAssert.assertThat;
-import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
-import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
-
-abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
-	override protected getChangePropagationSpecifications() {
-		return #[
+abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
+	override protected createChangePropagationSpecifications() {
+		return #[ // TODO (TS) here
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification, 
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
 		];  
@@ -56,6 +48,10 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		new PcmDomainProvider().domain.enableTransitiveChangePropagation
 		new UmlDomainProvider().domain.enableTransitiveChangePropagation
 	}
+	override protected getVitruvDomains() {
+		patchDomains();
+		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain];
+	}
 	
 	protected var PcmUmlClassApplicationTestHelper helper
 	protected var ResourceSet testResourceSet;
@@ -64,15 +60,12 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		return testResourceSet.getResource(uri, true)
 	}
 	
-	@BeforeEach
-	def protected void setup() {
-		patchDomains
-		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri | uri.resourceAt])
+	override protected setup() {
+		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri | uri.getModelElement], [uri | uri.modelResource])
 		testResourceSet = new ResourceSetImpl();
 	}
 	
-	@AfterEach
-	def protected void cleanup() {
+	override protected cleanup() {
 		testResourceSet = null
 		helper = null
 	}
@@ -97,7 +90,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		stopRecordingChanges(modelElement) 
 		val resourceURI = modelElement.eResource.URI
 		modelElement.eResource.unload
-		val rootElement = resourceAt(resourceURI).contents.head
+		val rootElement = getModelResource(resourceURI).contents.head
 		if(rootElement !== null) {
 			startRecordingChanges(rootElement)
 		}
@@ -167,7 +160,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 */
 	protected def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath) {
 		val originalRepository = inOriginalRepository
-		userInteraction.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
+		userInteractor.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
 		createAndSynchronizeModel(pcmOutputPath, originalRepository)
 		var generatedRepository = reloadResourceAndReturnRoot(originalRepository) as Repository
 		return generatedRepository 
@@ -231,7 +224,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			}
 		}
 		
-		//saveAndSynchronizeChanges(generatedModel)
+		saveAndSynchronizeChanges(generatedModel)
 		return reloadResourceAndReturnRoot(generatedModel) as Model
 	}
 	
@@ -248,7 +241,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		originalComponentPackage.packagedElements -= originalComponentImpl
 		assertTrue(originalComponentPackage.packagedElements.empty)
 		
-		userInteraction.addNextSingleSelection(userDisambigutationComponentType)
+		userInteractor.addNextSingleSelection(userDisambigutationComponentType)
 		generatedRepositoryPackage.nestedPackages += originalComponentPackage //throws UUID error when tested on its own
 		saveAndSynchronizeChanges(generatedModel) //should generate generatedComponentImpl
 		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
@@ -318,8 +311,8 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			.filter[it !== originalContractsPackage && it !== originalDatatypesPackage].toList
 		umlRepositoryPackage.nestedPackages.clear
 		
-		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // rootelement is supposed to be a repository
-		userInteraction.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
+		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // rootelement is supposed to be a repository
+		userInteractor.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
 		createAndSynchronizeModel(umlOutputPath, originalRepositoryModel)
 		var generatedModel = reloadResourceAndReturnRoot(originalRepositoryModel) as Model
 		
@@ -348,9 +341,9 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * @return
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
-	def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath) {
-		val originalUri = getUri(Path.of(originalWithinProjektPath))
-		val generatedUri = getUri(Path.of(generatedWithinProjektPath))
+	public def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath) {
+		val originalUri = originalWithinProjektPath.modelVuri.EMFUri
+		val generatedUri = generatedWithinProjektPath.modelVuri.EMFUri
 		return compare(originalUri, generatedUri)
 	}
 	
@@ -365,7 +358,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * @return
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
-	def Comparison compare(URI originalUri, URI generatedUri) {
+	public def Comparison compare(URI originalUri, URI generatedUri) {
 		val resourceSet = new ResourceSetImpl()
 		val original = resourceSet.getResource(originalUri, true).contents.head
 		val generated = resourceSet.getResource(generatedUri, true).contents.head
@@ -376,7 +369,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * This directly applies the default EMFCompare comparator to the passed elements. 
 	 * It does not ensure that the compared elements are in sync with the disk state.  
 	 */
-	def Comparison compare(Notifier original, Notifier generated) {
+	public def Comparison compare(Notifier original, Notifier generated) {
 		val comparator = EMFCompare.builder().build();
 		val scope = new DefaultComparisonScope(original, generated, original)
 		return comparator.compare(scope);
@@ -393,7 +386,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * @param skipFeatures
 	 * 		the names of the features that should be ignored
 	 */
-	def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
+	public def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
 		for (feature : original.eClass.EAllStructuralFeatures) {
 			if(
 				!feature.derived 

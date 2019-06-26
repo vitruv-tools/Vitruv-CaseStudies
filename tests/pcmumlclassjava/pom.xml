@@ -15,6 +15,7 @@
 
 	<modules>
 		<module>tools.vitruv.applications.pcmumlclassjava.tests</module>
+    <module>tools.vitruv.applications.transitivechange.tests</module>
 	</modules>
 	
 </project>
