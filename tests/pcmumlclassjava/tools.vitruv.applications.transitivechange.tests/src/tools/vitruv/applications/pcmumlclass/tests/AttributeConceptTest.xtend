@@ -70,6 +70,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		pcmAttribute.entityName = TEST_ATTRIBUTE
 		pcmAttribute.datatype_InnerDeclaration = pcmType
 		pcmCompositeType.innerDeclaration_CompositeDataType += pcmAttribute
+		userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
 		
 		saveAndSynchronizeChanges(pcmAttribute)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository

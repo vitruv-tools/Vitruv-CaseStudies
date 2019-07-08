@@ -143,6 +143,8 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		pcmSignature.entityName = TEST_SIGNATURE_NAME
 		pcmSignature.returnType__OperationSignature = pcmType
 		pcmInterface.signatures__OperationInterface += pcmSignature
+		userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
+		
 		saveAndSynchronizeChanges(pcmSignature)
 		
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository

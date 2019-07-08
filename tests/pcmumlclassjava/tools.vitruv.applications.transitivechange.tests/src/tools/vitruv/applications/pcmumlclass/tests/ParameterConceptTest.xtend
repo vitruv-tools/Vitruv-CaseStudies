@@ -127,6 +127,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		pcmParameter.parameterName = ParameterConceptTest.TEST_PARAMETER_NAME
 		pcmParameter.dataType__Parameter = pcmType
 		pcmSignature.parameters__OperationSignature += pcmParameter
+		userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
 		
 		saveAndSynchronizeChanges(pcmParameter)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
