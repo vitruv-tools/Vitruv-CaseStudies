@@ -1,56 +1,69 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.List
+import org.apache.log4j.Logger
+import org.eclipse.emf.common.notify.Notifier
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.compare.Comparison
+import org.eclipse.emf.compare.EMFCompare
+import org.eclipse.emf.compare.scope.DefaultComparisonScope
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.Model
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Type
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.DataType
+import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
+import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
+import tools.vitruv.domains.java.JavaDomainProvider
+import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.testutils.VitruviusApplicationTest
-import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.compare.Comparison
-import org.eclipse.emf.common.notify.Notifier
-import org.eclipse.emf.compare.EMFCompare
-import org.eclipse.emf.compare.scope.DefaultComparisonScope
-import org.eclipse.emf.ecore.EReference
-import org.palladiosimulator.pcm.repository.Repository
-import org.eclipse.uml2.uml.PackageableElement
-import org.eclipse.uml2.uml.Model
-import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import org.eclipse.uml2.uml.Interface
-import java.util.HashMap
-import java.util.List
 
 import static org.junit.Assert.*
-import java.util.ArrayList
 
 abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
+	protected static final int ARRAY_LIST_SELECTION = 0;
+	private static val logger = Logger.getLogger(typeof(PcmUmlClassApplicationTest).simpleName)
+	
 	override protected createChangePropagationSpecifications() {
-		return #[ // TODO (TS) here
+		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification, 
-			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
+			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
+			new UmlToJavaChangePropagationSpecification(),
+			new JavaToUmlChangePropagationSpecification()
 		];  
 	}
 	
 	private def patchDomains() {
 		new PcmDomainProvider().domain.enableTransitiveChangePropagation
 		new UmlDomainProvider().domain.enableTransitiveChangePropagation
+		new JavaDomainProvider().domain.enableTransitiveChangePropagation
 	}
 	override protected getVitruvDomains() {
 		patchDomains();
-		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain];
+		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain];
 	}
 	
 	protected var PcmUmlClassApplicationTestHelper helper
@@ -68,6 +81,67 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	override protected cleanup() {
 		testResourceSet = null
 		helper = null
+	}
+	
+	/**
+	 * Retrieves the first corresponding java interface for a given uml interface
+	 */
+	def protected getCorrespondingInterface(org.eclipse.uml2.uml.Interface uInterface) { // TODO TS do I still need this?
+		return getFirstCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
+	}
+	
+	    /**
+     * Retrieves all corresponding objects of obj, filters the result list by the class c
+     * and returns the first element of the remaining list
+     * 
+     * {@link #getCorrespondingObjectList(EObject)}
+     * @param obj the object for which the first corresponding object should be retrieved
+     * @return the first corresponding object of obj or null if none could be found
+     */
+    def private <T extends EObject> getFirstCorrespondingObjectWithClass(EObject obj, java.lang.Class<T> c) {  // TODO TS do I still need this?
+        val correspondingObjectList = getCorrespondingObjectListWithClass(obj, c)
+        if (correspondingObjectList.nullOrEmpty) {
+            logger.warn("There are no corresponding objects for " + obj + " of the type " + c.class + ". Returning null.")
+            return null
+        } else if (correspondingObjectList.size > 1) {
+            logger.warn("There are more than one corresponding object for " + obj + " of the type " + c.class + ". Returning the first.")
+        }
+        return correspondingObjectList.head
+    }
+    
+        /**
+     * Retrieves all corresponding objects of obj.
+     * 
+     * {@link tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest#getCorrespondenceModel}
+     * @param obj the object for which the corresponding objects should be retrieved
+     * @return the corresponding objects of obj or null if none could be found
+     * @throws IllegalArgumentException if obj is null
+     */
+    def private getCorrespondingObjectList(EObject obj) {  // TODO TS do I still need this?
+        if (obj === null) {
+            throw new IllegalArgumentException("Cannot retrieve correspondence for null")
+        }
+        val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten;
+        if (corrList.nullOrEmpty) {
+            logger.warn("No Correspondences found for " + obj)
+            return null
+        }
+        return corrList
+    }
+    
+    /**
+     * Retrieves all corresponding objects of obj and filters the result list by the class c
+     * 
+     * {@link #getCorrespondingObjectList(EObject)}
+     * @param obj the object for which the corresponding objects should be retrieved
+     * @return the corresponding objects of obj filtered by c or null if none could be found
+     */
+    def private <T extends EObject> getCorrespondingObjectListWithClass(EObject obj, java.lang.Class<T> c) {  // TODO TS do I still need this?
+        return getCorrespondingObjectList(obj)?.filter(c)
+    }
+	
+	def protected assertJavaFileExists(String fileName, String[] namespaces) {
+		assertModelExists(JavaPersistenceHelper.buildJavaFilePath(fileName + ".java", namespaces));  // TODO TS do I still need this?
 	}
 	
 	/**
@@ -229,14 +303,14 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	}
 	
 	
-	private def simulateComponentInsertion_UML(Model inUmlRepositoryModel, org.eclipse.uml2.uml.Package originalComponentPackage, int userDisambigutationComponentType) {
+	private def simulateComponentInsertion_UML(Model inUmlRepositoryModel, Package originalComponentPackage, int userDisambigutationComponentType) {
 		var generatedModel = inUmlRepositoryModel
 		var generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
 		
 		// Simulate adding a Component via round-trip by adding the components package.
 		// For that, first remove the implementation from the original package to avoid duplication.
-		val originalComponentImpl = originalComponentPackage.packagedElements.filter(org.eclipse.uml2.uml.Class).head
+		val originalComponentImpl = originalComponentPackage.packagedElements.filter(Class).head
 		assertNotNull(originalComponentImpl)
 		originalComponentPackage.packagedElements -= originalComponentImpl
 		assertTrue(originalComponentPackage.packagedElements.empty)
@@ -252,7 +326,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 			.findFirst[it.name == originalComponentPackage.name]
 		assertNotNull(generatedComponentPackage)
 		var generatedComponentImpl = generatedComponentPackage.packagedElements
-			.filter(org.eclipse.uml2.uml.Class).findFirst[it.name == originalComponentImpl.name]
+			.filter(Class).findFirst[it.name == originalComponentImpl.name]
 		assertNotNull(generatedComponentImpl)
 		
 		// merge everything except operations which are separately handled, because some of the constructor parameters will be generated.
@@ -271,7 +345,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 			.findFirst[it.name == originalComponentPackage.name]
 		assertNotNull(generatedComponentPackage)
 		generatedComponentImpl = generatedComponentPackage.packagedElements
-			.filter(org.eclipse.uml2.uml.Class).findFirst[it.name == originalComponentImpl.name]
+			.filter(Class).findFirst[it.name == originalComponentImpl.name]
 		assertNotNull(generatedComponentImpl)
 		
 		// merge the original with the generated constructor
