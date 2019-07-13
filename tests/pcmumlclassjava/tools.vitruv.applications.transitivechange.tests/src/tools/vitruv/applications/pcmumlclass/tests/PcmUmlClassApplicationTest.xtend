@@ -3,6 +3,7 @@ package tools.vitruv.applications.pcmumlclass.tests
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.List
+import java.util.Set
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.notify.Notifier
 import org.eclipse.emf.common.util.URI
@@ -31,7 +32,6 @@ import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChang
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
 import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
@@ -46,104 +46,123 @@ import static org.junit.Assert.*
 abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	protected static final int ARRAY_LIST_SELECTION = 0;
 	private static val logger = Logger.getLogger(typeof(PcmUmlClassApplicationTest).simpleName)
-	
+
 	override protected createChangePropagationSpecifications() {
 		return #[
-			new CombinedPcmToUmlClassReactionsChangePropagationSpecification, 
+			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
-			new UmlToJavaChangePropagationSpecification(),
-			new JavaToUmlChangePropagationSpecification()
-		];  
+			new UmlToJavaChangePropagationSpecification() // ,
+			// new JavaToUmlChangePropagationSpecification()
+		];
 	}
-	
+
 	private def patchDomains() {
 		new PcmDomainProvider().domain.enableTransitiveChangePropagation
 		new UmlDomainProvider().domain.enableTransitiveChangePropagation
 		new JavaDomainProvider().domain.enableTransitiveChangePropagation
 	}
+
 	override protected getVitruvDomains() {
 		patchDomains();
 		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain];
 	}
-	
+
 	protected var PcmUmlClassApplicationTestHelper helper
 	protected var ResourceSet testResourceSet;
-	
+
 	protected def getTestResource(URI uri) {
 		return testResourceSet.getResource(uri, true)
 	}
-	
+
 	override protected setup() {
-		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri | uri.getModelElement], [uri | uri.modelResource])
+		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri|uri.getModelElement], [uri|uri.modelResource])
 		testResourceSet = new ResourceSetImpl();
 	}
-	
+
 	override protected cleanup() {
 		testResourceSet = null
 		helper = null
 	}
-	
+
 	/**
 	 * Retrieves the first corresponding java interface for a given uml interface
 	 */
-	def protected getCorrespondingInterface(org.eclipse.uml2.uml.Interface uInterface) { // TODO TS do I still need this?
+	def protected getCorrespondingJavaInterface(Interface uInterface) { // TODO TS do I still need this?
 		return getFirstCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
 	}
-	
-	    /**
-     * Retrieves all corresponding objects of obj, filters the result list by the class c
-     * and returns the first element of the remaining list
-     * 
-     * {@link #getCorrespondingObjectList(EObject)}
-     * @param obj the object for which the first corresponding object should be retrieved
-     * @return the first corresponding object of obj or null if none could be found
-     */
-    def private <T extends EObject> getFirstCorrespondingObjectWithClass(EObject obj, java.lang.Class<T> c) {  // TODO TS do I still need this?
-        val correspondingObjectList = getCorrespondingObjectListWithClass(obj, c)
-        if (correspondingObjectList.nullOrEmpty) {
-            logger.warn("There are no corresponding objects for " + obj + " of the type " + c.class + ". Returning null.")
-            return null
-        } else if (correspondingObjectList.size > 1) {
-            logger.warn("There are more than one corresponding object for " + obj + " of the type " + c.class + ". Returning the first.")
-        }
-        return correspondingObjectList.head
-    }
-    
-        /**
-     * Retrieves all corresponding objects of obj.
-     * 
-     * {@link tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest#getCorrespondenceModel}
-     * @param obj the object for which the corresponding objects should be retrieved
-     * @return the corresponding objects of obj or null if none could be found
-     * @throws IllegalArgumentException if obj is null
-     */
-    def private getCorrespondingObjectList(EObject obj) {  // TODO TS do I still need this?
-        if (obj === null) {
-            throw new IllegalArgumentException("Cannot retrieve correspondence for null")
-        }
-        val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten;
-        if (corrList.nullOrEmpty) {
-            logger.warn("No Correspondences found for " + obj)
-            return null
-        }
-        return corrList
-    }
-    
-    /**
-     * Retrieves all corresponding objects of obj and filters the result list by the class c
-     * 
-     * {@link #getCorrespondingObjectList(EObject)}
-     * @param obj the object for which the corresponding objects should be retrieved
-     * @return the corresponding objects of obj filtered by c or null if none could be found
-     */
-    def private <T extends EObject> getCorrespondingObjectListWithClass(EObject obj, java.lang.Class<T> c) {  // TODO TS do I still need this?
-        return getCorrespondingObjectList(obj)?.filter(c)
-    }
-	
-	def protected assertJavaFileExists(String fileName, String[] namespaces) {
-		assertModelExists(JavaPersistenceHelper.buildJavaFilePath(fileName + ".java", namespaces));  // TODO TS do I still need this?
+
+	/**
+	 * Retrieves the first corresponding java package for a given uml package
+	 */
+	def protected getCorrespondingJavaPackage(Package uPackage) {
+		return getFirstCorrespondingObjectWithClass(uPackage, org.emftext.language.java.containers.Package)
 	}
-	
+
+	/**
+	 * Retrieves the first corresponding uml package for a given java package
+	 */
+	def protected getCorrespondingUMLPackage(org.emftext.language.java.containers.Package javaPackage) {
+		return getFirstCorrespondingObjectWithClass(javaPackage, Package)
+	}
+
+	/**
+	 * Retrieves all corresponding objects of obj, filters the result list by the class c
+	 * and returns the first element of the remaining list
+	 * 
+	 * {@link #getCorrespondingObjectList(EObject)}
+	 * @param obj the object for which the first corresponding object should be retrieved
+	 * @return the first corresponding object of obj or null if none could be found
+	 */
+	def private <T extends EObject> getFirstCorrespondingObjectWithClass(EObject obj, java.lang.Class<T> c) { // TODO TS do I still need this?
+		val correspondingObjectList = getCorrespondingObjectListWithClass(obj, c)
+		if (correspondingObjectList.nullOrEmpty) {
+			logger.warn("There are no corresponding objects for " + obj + " of the type " + c.class + ". Returning null.")
+			return null
+		} else if (correspondingObjectList.size > 1) {
+			logger.warn("There are more than one corresponding object for " + obj + " of the type " + c.class + ". Returning the first.")
+		}
+		return correspondingObjectList.head
+	}
+
+	/**
+	 * Retrieves all corresponding objects of obj.
+	 * 
+	 * {@link tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest#getCorrespondenceModel}
+	 * @param obj the object for which the corresponding objects should be retrieved
+	 * @return the corresponding objects of obj or null if none could be found
+	 * @throws IllegalArgumentException if obj is null
+	 */
+	def private getCorrespondingObjectList(EObject obj) { // TODO TS do I still need this?
+		if (obj === null) {
+			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
+		}
+		val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten;
+		if (corrList.nullOrEmpty) {
+			logger.warn("No Correspondences found for " + obj)
+			return null
+		}
+		return corrList
+	}
+
+	def protected <E> Set<E> getCorrespondingObjectsOfClass(java.lang.Class<E> clazz) {
+		return getCorrespondenceModel.getAllEObjectsOfTypeInCorrespondences(clazz)
+	}
+
+	/**
+	 * Retrieves all corresponding objects of obj and filters the result list by the class c
+	 * 
+	 * {@link #getCorrespondingObjectList(EObject)}
+	 * @param obj the object for which the corresponding objects should be retrieved
+	 * @return the corresponding objects of obj filtered by c or null if none could be found
+	 */
+	def private <T extends EObject> getCorrespondingObjectListWithClass(EObject obj, java.lang.Class<T> c) { // TODO TS do I still need this?
+		return getCorrespondingObjectList(obj)?.filter(c)
+	}
+
+	def protected assertJavaFileExists(String fileName, String[] namespaces) {
+		assertModelExists(JavaPersistenceHelper.buildJavaFilePath(fileName + ".java", namespaces)); // TODO TS do I still need this?
+	}
+
 	/**
 	 * Reloads the Resource of the passed element and returns the root element.
 	 * <br><br>
@@ -161,71 +180,82 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * @return the root element in the reloaded Resource, or null if none is present
 	 */
 	protected def EObject reloadResourceAndReturnRoot(EObject modelElement) {
-		stopRecordingChanges(modelElement) 
+		stopRecordingChanges(modelElement)
 		val resourceURI = modelElement.eResource.URI
 		modelElement.eResource.unload
 		val rootElement = getModelResource(resourceURI).contents.head
-		if(rootElement !== null) {
+		if (rootElement !== null) {
 			startRecordingChanges(rootElement)
 		}
 		return rootElement
 	}
-	
+
 	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b) {
-		return cm.getCorrespondingEObjects(#[a]).exists( corrSet | EcoreUtil.equals(corrSet.head, b))
+		return cm.getCorrespondingEObjects(#[a]).exists(corrSet|EcoreUtil.equals(corrSet.head, b))
 	}
-	
+
 	def protected static corresponds(CorrespondenceModel cm, EObject a, EObject b, String tag) {
 		return EcoreUtil.equals(b, ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, a, tag, b.class).head)
 	}
-	
-	
-	//DataType consistency constraints; defined here because it is used in multiple tests
-	
-	private static def boolean isCorrectSimpleTypeCorrespondence(CorrespondenceModel correspondenceModel, 
-		DataType pcmDatatype, Type umlType, int lower, int upper
+
+	// DataType consistency constraints; defined here because it is used in multiple tests
+	private static def boolean isCorrectSimpleTypeCorrespondence(
+		CorrespondenceModel correspondenceModel,
+		DataType pcmDatatype,
+		Type umlType,
+		int lower,
+		int upper
 	) {
 		val correspondingPrimitiveType = corresponds(correspondenceModel, pcmDatatype, umlType, TagLiterals.DATATYPE__TYPE)
 		val correspondingCompositeType = corresponds(correspondenceModel, pcmDatatype, umlType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		return (correspondingPrimitiveType || correspondingCompositeType) // inner collection types are not supported
-			&& upper == 1 // && lower == 1 // lower could also be 0
+		&& upper == 1 // && lower == 1 // lower could also be 0
 	}
-	
-	private static def boolean isCorrectCollectionTypeCorrespondence(CorrespondenceModel correspondenceModel, 
-		CollectionDataType pcmCollection, Type umlType, int lower, int upper
+
+	private static def boolean isCorrectCollectionTypeCorrespondence(
+		CorrespondenceModel correspondenceModel,
+		CollectionDataType pcmCollection,
+		Type umlType,
+		int lower,
+		int upper
 	) {
-		return lower == 0 
-			&& upper == LiteralUnlimitedNatural.UNLIMITED
-			&& isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmCollection.innerType_CollectionDataType, umlType, 1, 1)
+		return lower == 0 && upper == LiteralUnlimitedNatural.UNLIMITED &&
+			isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmCollection.innerType_CollectionDataType, umlType, 1, 1)
 	}
-	
-	def protected static isCorrect_DataType_Property_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Property umlProperty) {
+
+	def protected static isCorrect_DataType_Property_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype,
+		Property umlProperty) {
 		if (pcmDatatype === null || umlProperty.type === null) {
 			return pcmDatatype === null && umlProperty.type === null
 		}
-		
-		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlProperty.type, umlProperty.lower, umlProperty.upper)
+
+		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlProperty.type, umlProperty.lower,
+			umlProperty.upper)
 		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
-		val collectionTypeCorrespondenceIsCorrect = 
-			if(pcmDatatype instanceof CollectionDataType) 
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlProperty.type, umlProperty.lower, umlProperty.upper)
-			else null
+		val collectionTypeCorrespondenceIsCorrect = if (pcmDatatype instanceof CollectionDataType)
+				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlProperty.type, umlProperty.lower,
+					umlProperty.upper)
+			else
+				null
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
-	
-	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype, Parameter umlParam) {
+
+	def protected static isCorrect_DataType_Parameter_Correspondence(CorrespondenceModel correspondenceModel, DataType pcmDatatype,
+		Parameter umlParam) {
 		if (pcmDatatype === null || umlParam.type === null) {
 			return pcmDatatype === null && umlParam.type === null
 		}
-		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower, umlParam.upper)
+		val simpleTypeCorrespondence = isCorrectSimpleTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower,
+			umlParam.upper)
 		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
-		val collectionTypeCorrespondenceIsCorrect = 
-			if(pcmDatatype instanceof CollectionDataType) 
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlParam.type, umlParam.lower, umlParam.upper)
-			else null
+		val collectionTypeCorrespondenceIsCorrect = if (pcmDatatype instanceof CollectionDataType)
+				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlParam.type, umlParam.lower,
+					umlParam.upper)
+			else
+				null
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
-	
+
 	/* Because of transitive change propagation between the Pcm and Uml domains, it is necessary to stepwise simulate
 	 * the insertion of Uml-models and reload the view, in oder to achieve the wanted propagation of a correct ComponentRepository.
 	 * In a editor based creation process, this would automatically be done if the synchronization is called often enough (enough saves).
@@ -237,34 +267,32 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		userInteractor.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
 		createAndSynchronizeModel(pcmOutputPath, originalRepository)
 		var generatedRepository = reloadResourceAndReturnRoot(originalRepository) as Repository
-		return generatedRepository 
+		return generatedRepository
 	}
-	
+
 	private def simulateDataTypeInsertion_UML(Model umlRepositoryModel, PackageableElement umlDataType) {
 		val repositoryPackage = umlRepositoryModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
-		val datatypesPackage = repositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
+		val datatypesPackage = repositoryPackage.nestedPackages.findFirst[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
 		assertNotNull(datatypesPackage)
-		
+
 		datatypesPackage.packagedElements += umlDataType
 		saveAndSynchronizeChanges(umlRepositoryModel)
-		return reloadResourceAndReturnRoot(umlRepositoryModel) as Model 
+		return reloadResourceAndReturnRoot(umlRepositoryModel) as Model
 	}
-	
+
 	private def simulateContractsPackageElementInsertion_UML(Model umlRepositoryModel, PackageableElement originalContractsPackageElement) {
 		var repositoryPackage = umlRepositoryModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
-		var contractsPackage = repositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
+		var contractsPackage = repositoryPackage.nestedPackages.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
 		assertNotNull(contractsPackage)
-		
+
 		if (!(originalContractsPackageElement instanceof Interface)) {
 			contractsPackage.packagedElements += originalContractsPackageElement
 			return umlRepositoryModel
 		}
 		val originalInterface = originalContractsPackageElement as Interface
-		
+
 		// add each operation without its parameters because at least the returnParameters will be already generated
 		val originalOperationParameterMapping = new HashMap<String, List<Parameter>>()
 		for (originalOperation : originalInterface.ownedOperations) {
@@ -274,61 +302,55 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		contractsPackage.packagedElements += originalInterface
 		saveAndSynchronizeChanges(umlRepositoryModel)
 		var generatedModel = reloadResourceAndReturnRoot(umlRepositoryModel) as Model
-		
-		//retrieve elements after reload
+
+		// retrieve elements after reload
 		repositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(repositoryPackage)
-		contractsPackage = repositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
+		contractsPackage = repositoryPackage.nestedPackages.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
 		assertNotNull(contractsPackage)
-		var generatedInterface = contractsPackage.packagedElements
-			.filter(Interface).findFirst[it.name == originalInterface.name]
+		var generatedInterface = contractsPackage.packagedElements.filter(Interface).findFirst[it.name == originalInterface.name]
 		assertNotNull(generatedInterface)
-		
+
 		// merge each Parameter from the originalOperation with the generated Operation's parameters
 		for (generatedOperation : generatedInterface.ownedOperations) {
 			for (originalParameter : originalOperationParameterMapping.getOrDefault(generatedOperation.name, new ArrayList<Parameter>)) {
 				val generatedParameter = generatedOperation.ownedParameters.findFirst[it.name == originalParameter.name]
 				if (generatedParameter !== null) {
 					mergeElements(originalParameter, generatedParameter, "name")
-				}
-				else {
+				} else {
 					generatedOperation.ownedParameters += originalParameter
 				}
 			}
 		}
-		
+
 		saveAndSynchronizeChanges(generatedModel)
 		return reloadResourceAndReturnRoot(generatedModel) as Model
 	}
-	
-	
+
 	private def simulateComponentInsertion_UML(Model inUmlRepositoryModel, Package originalComponentPackage, int userDisambigutationComponentType) {
 		var generatedModel = inUmlRepositoryModel
 		var generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
-		
+
 		// Simulate adding a Component via round-trip by adding the components package.
 		// For that, first remove the implementation from the original package to avoid duplication.
 		val originalComponentImpl = originalComponentPackage.packagedElements.filter(Class).head
 		assertNotNull(originalComponentImpl)
 		originalComponentPackage.packagedElements -= originalComponentImpl
 		assertTrue(originalComponentPackage.packagedElements.empty)
-		
+
 		userInteractor.addNextSingleSelection(userDisambigutationComponentType)
-		generatedRepositoryPackage.nestedPackages += originalComponentPackage //throws UUID error when tested on its own
-		saveAndSynchronizeChanges(generatedModel) //should generate generatedComponentImpl
-		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
-		
+		generatedRepositoryPackage.nestedPackages += originalComponentPackage // throws UUID error when tested on its own
+		saveAndSynchronizeChanges(generatedModel) // should generate generatedComponentImpl
+		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model
+
 		generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
-		var generatedComponentPackage = generatedRepositoryPackage.nestedPackages
-			.findFirst[it.name == originalComponentPackage.name]
+		var generatedComponentPackage = generatedRepositoryPackage.nestedPackages.findFirst[it.name == originalComponentPackage.name]
 		assertNotNull(generatedComponentPackage)
-		var generatedComponentImpl = generatedComponentPackage.packagedElements
-			.filter(Class).findFirst[it.name == originalComponentImpl.name]
+		var generatedComponentImpl = generatedComponentPackage.packagedElements.filter(Class).findFirst[it.name == originalComponentImpl.name]
 		assertNotNull(generatedComponentImpl)
-		
+
 		// merge everything except operations which are separately handled, because some of the constructor parameters will be generated.
 		mergeElements(originalComponentImpl, generatedComponentImpl, "ownedOperation", "interfaceRealization")
 		for (originalRealization : originalComponentImpl.interfaceRealizations.clone) {
@@ -336,18 +358,16 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 			originalRealization.clients -= originalComponentImpl // needs to be manually cleared, or else originalComponentImpl is still set as a client and causes UUID error
 			generatedComponentImpl.interfaceRealizations += originalRealization
 		}
-		
-		saveAndSynchronizeChanges(generatedModel) //should generate the constructor Parameters corresponding to RequiredRoles
-		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
+
+		saveAndSynchronizeChanges(generatedModel) // should generate the constructor Parameters corresponding to RequiredRoles
+		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model
 		generatedRepositoryPackage = generatedModel.nestedPackages.head
 		assertNotNull(generatedRepositoryPackage)
-		generatedComponentPackage = generatedRepositoryPackage.nestedPackages
-			.findFirst[it.name == originalComponentPackage.name]
+		generatedComponentPackage = generatedRepositoryPackage.nestedPackages.findFirst[it.name == originalComponentPackage.name]
 		assertNotNull(generatedComponentPackage)
-		generatedComponentImpl = generatedComponentPackage.packagedElements
-			.filter(Class).findFirst[it.name == originalComponentImpl.name]
+		generatedComponentImpl = generatedComponentPackage.packagedElements.filter(Class).findFirst[it.name == originalComponentImpl.name]
 		assertNotNull(generatedComponentImpl)
-		
+
 		// merge the original with the generated constructor
 		val originalConstructor = originalComponentImpl.ownedOperations.findFirst[it.name == originalComponentImpl.name]
 		val generatedConstructor = generatedComponentImpl.ownedOperations.findFirst[it.name == originalComponentImpl.name]
@@ -358,8 +378,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 			val generatedParameter = generatedConstructor.ownedParameters.findFirst[it.name == originalParameter.name]
 			if (generatedParameter !== null) {
 				mergeElements(originalParameter, generatedParameter, "name")
-			}
-			else {
+			} else {
 				generatedConstructor.ownedParameters += originalParameter
 			}
 		}
@@ -367,43 +386,42 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		for (originalOperation : originalComponentImpl.ownedOperations.clone.filter[it.name != originalComponentImpl.name]) {
 			generatedComponentImpl.ownedOperations += originalOperation
 		}
-		
+
 		saveAndSynchronizeChanges(generatedModel)
-		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
+		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model
 		return generatedModel
 	}
-	
+
 	protected def simulateRepositoryInsertion_UML(Model originalRepositoryModel, String umlOutputPath, String pcmOutputPath) {
 		assertNotNull(originalRepositoryModel)
 		val umlRepositoryPackage = originalRepositoryModel.nestedPackages.head
 		assertNotNull(umlRepositoryPackage)
-		val originalContractsPackage = umlRepositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
-		val originalDatatypesPackage = umlRepositoryPackage.nestedPackages
-			.findFirst[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
-		val originalComponentPackages = umlRepositoryPackage.nestedPackages
-			.filter[it !== originalContractsPackage && it !== originalDatatypesPackage].toList
+		val originalContractsPackage = umlRepositoryPackage.nestedPackages.findFirst[it.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME]
+		val originalDatatypesPackage = umlRepositoryPackage.nestedPackages.findFirst[it.name == DefaultLiterals.DATATYPES_PACKAGE_NAME]
+		val originalComponentPackages = umlRepositoryPackage.nestedPackages.
+			filter[it !== originalContractsPackage && it !== originalDatatypesPackage].toList
 		umlRepositoryPackage.nestedPackages.clear
-		
+
 		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // rootelement is supposed to be a repository
 		userInteractor.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
 		createAndSynchronizeModel(umlOutputPath, originalRepositoryModel)
 		var generatedModel = reloadResourceAndReturnRoot(originalRepositoryModel) as Model
-		
+
 		// Create copies of the lists outside the model so that containment is irrelevant
 		// and that the loops do not iterate over a changing List.
 		for (originalDatatype : originalDatatypesPackage.packagedElements.clone) {
-			generatedModel = simulateDataTypeInsertion_UML(generatedModel, originalDatatype) 
+			generatedModel = simulateDataTypeInsertion_UML(generatedModel, originalDatatype)
 		}
 		for (originalContractsPackageElement : originalContractsPackage.packagedElements.clone) {
 			generatedModel = simulateContractsPackageElementInsertion_UML(generatedModel, originalContractsPackageElement)
 		}
 		for (originalComponentPackage : originalComponentPackages) {
-			generatedModel = simulateComponentInsertion_UML(generatedModel, originalComponentPackage, DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT)
+			generatedModel = simulateComponentInsertion_UML(generatedModel, originalComponentPackage,
+				DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT)
 		}
 		return generatedModel
 	}
-	
+
 	/**
 	 * Compare the root elements of the Resources at the specified project-relative paths, 
 	 * by first loading them into a temporary ResourceSet to make sure they are consistent with the disk state.
@@ -420,7 +438,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		val generatedUri = generatedWithinProjektPath.modelVuri.EMFUri
 		return compare(originalUri, generatedUri)
 	}
-	
+
 	/**
 	 * Compare the root elements at the specified URIs, by first loading them into a temporary ResourceSet 
 	 * to make sure they are consistent with the disk state.
@@ -438,7 +456,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		val generated = resourceSet.getResource(generatedUri, true).contents.head
 		return compare(original, generated)
 	}
-	
+
 	/**
 	 * This directly applies the default EMFCompare comparator to the passed elements. 
 	 * It does not ensure that the compared elements are in sync with the disk state.  
@@ -448,7 +466,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		val scope = new DefaultComparisonScope(original, generated, original)
 		return comparator.compare(scope);
 	}
-	
+
 	/**
 	 * Copy the attributes and move the references from the original element to the target element.
 	 * The container feature is always ignored, to avoid moving the target element to the original's container.
@@ -462,16 +480,11 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 */
 	public def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
 		for (feature : original.eClass.EAllStructuralFeatures) {
-			if(
-				!feature.derived 
-				&& feature.changeable 
-				&& original.eIsSet(feature) 
-				&& !(feature instanceof EReference && (feature as EReference).isContainer) 
-				&& !skipFeatures.contains(feature.name)
-			) {
+			if (!feature.derived && feature.changeable && original.eIsSet(feature) &&
+				!(feature instanceof EReference && (feature as EReference).isContainer) && !skipFeatures.contains(feature.name)) {
 				generated.eSet(feature, original.eGet(feature))
 			}
 		}
 	}
-	
+
 }

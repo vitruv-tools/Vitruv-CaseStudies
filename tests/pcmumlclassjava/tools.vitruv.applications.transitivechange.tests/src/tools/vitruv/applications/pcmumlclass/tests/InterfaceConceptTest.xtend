@@ -60,7 +60,7 @@ class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
 	def protected checkJavaInterfaceConcept(OperationInterface pcmInterface, Interface umlInterface) {
 		assertJavaFileExists(TEST_INTERFACE_NAME, #[PcmUmlClassApplicationTestHelper.REPOSITORY_NAME.toFirstLower, CONTRACTS_PACKAGE])
-		val javaInterface = getCorrespondingInterface(umlInterface)
+		val javaInterface = getCorrespondingJavaInterface(umlInterface)
 		assertEquals(TEST_INTERFACE_NAME, javaInterface.name)
 	}
 
