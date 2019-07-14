@@ -1,22 +1,24 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
+import java.util.ArrayList
 import java.util.Set
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.InterfaceRealization
+import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Property
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
+import tools.vitruv.applications.umljava.testutil.TestUtil
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 
 import static org.junit.Assert.*
-import org.eclipse.uml2.uml.NamedElement
-import java.util.ArrayList
-import org.eclipse.uml2.uml.InterfaceRealization
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
@@ -40,20 +42,23 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		assertTrue(javaClass.allSuperClassifiers.contains(javaInterface))
 	}
 
-	// Check Java interface methods:
-	// for (umlMethod : umlInterface.allOperations) {
-	// val javaMethod = getCorrespondingJavaInterfaceMethod(umlMethod)
-	// JavaTestUtil.assertJavaInterfaceMethodTraits(javaMethod, umlMethod.name, TypesFactory.eINSTANCE.createVoid, null, javaInterface)
-	// TestUtil.assertInterfaceMethodEquals(umlMethod, javaMethod)
-	// }
-	// Check Java class methods:
-	// for (umlMethod : umlClass.allOperations) {
-	// val javaMethod = getCorrespondingJavaClassMethod(umlMethod)
-	// JavaTestUtil.assertJavaClassMethodTraits(javaMethod, umlMethod.name, JavaVisibility.PUBLIC, TypesFactory.eINSTANCE.createVoid, false,
-	// false, null, javaClass)
-	// TestUtil.assertClassMethodEquals(umlMethod, javaMethod)
-	// }
-	
+	def protected checkJavaPackage(Package umlPackage) {
+		val javaPackage = getCorrespondingJavaPackage(umlPackage)
+		assertEquals(umlPackage.name, javaPackage.name)
+		TestUtil.assertPackageEquals(umlPackage, javaPackage)
+	}
+
+	def protected checkJavaAttribute(Property umlAttribute) {
+		val javaAttribute = getCorrespondingJavaAttribute(umlAttribute)
+		assertEquals(umlAttribute.name, javaAttribute.name)
+		TestUtil.assertVisibilityEquals(umlAttribute, javaAttribute)
+		TestUtil.assertFinalAttributeEquals(umlAttribute, javaAttribute)
+		TestUtil.assertStaticEquals(umlAttribute, javaAttribute)
+		if (umlAttribute.upper != LiteralUnlimitedNatural.UNLIMITED && umlAttribute.upper < 2) {
+			TestUtil.assertTypeEquals(umlAttribute.type, javaAttribute.typeReference) // Type is only equal for non collection types
+		}
+	}
+
 	def protected String[] convertNamespaces(NamedElement element) {
 		val result = new ArrayList
 		element.allNamespaces.forEach[it|result.add(0, it.name)] // reversed list of names
