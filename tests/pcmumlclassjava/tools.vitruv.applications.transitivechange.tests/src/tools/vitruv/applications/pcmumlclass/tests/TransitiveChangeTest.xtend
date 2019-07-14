@@ -8,10 +8,25 @@ import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Property
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import org.eclipse.uml2.uml.Classifier
+import org.eclipse.uml2.uml.Operation
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
+
+	/**
+	 * Retrieves the first corresponding java class method for a given uml operation
+	 */
+	def protected getCorrespondingJavaClassMethod(Operation uOperation) {
+		return getFirstCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.ClassMethod)
+	}
+
+	/**
+	 * Retrieves the first corresponding java interface method for a given uml operation
+	 */
+	def protected getCorrespondingJavaInterfaceMethod(Operation uOperation) {
+		return getFirstCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.InterfaceMethod)
+	}
 
 	/**
 	 * Retrieves the first corresponding java field for a given uml property
