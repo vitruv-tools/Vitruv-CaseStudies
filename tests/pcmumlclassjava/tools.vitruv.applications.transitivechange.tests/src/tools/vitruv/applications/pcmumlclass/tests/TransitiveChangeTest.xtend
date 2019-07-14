@@ -3,36 +3,82 @@ package tools.vitruv.applications.pcmumlclass.tests
 import java.util.Set
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Property
+import org.emftext.language.java.members.ClassMethod
+import org.emftext.language.java.members.Field
+import org.emftext.language.java.members.InterfaceMethod
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
-import org.eclipse.uml2.uml.Classifier
-import org.eclipse.uml2.uml.Operation
+
+import static org.junit.Assert.*
+import org.eclipse.uml2.uml.NamedElement
+import java.util.ArrayList
+import org.eclipse.uml2.uml.InterfaceRealization
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
 
+	def protected checkJavaInterface(Interface umlInterface) {
+		assertJavaFileExists(umlInterface.name, umlInterface.convertNamespaces)
+		val javaInterface = getCorrespondingJavaInterface(umlInterface)
+		assertEquals(umlInterface.name, javaInterface.name)
+	}
+
+	def protected checkJavaClass(Classifier umlClass) {
+		val javaClass = getCorrespondingJavaClass(umlClass)
+		assertJavaFileExists(umlClass.name, umlClass.convertNamespaces);
+		assertEquals(umlClass.name, javaClass.name)
+	}
+
+	def protected checkJavaInterfaceRealization(InterfaceRealization umlRealization) {
+		val javaInterface = getCorrespondingJavaInterface(umlRealization.contract)
+		val javaClass = getCorrespondingJavaClass(umlRealization.implementingClassifier)
+		assertTrue(javaClass.allSuperClassifiers.contains(javaInterface))
+	}
+
+	// Check Java interface methods:
+	// for (umlMethod : umlInterface.allOperations) {
+	// val javaMethod = getCorrespondingJavaInterfaceMethod(umlMethod)
+	// JavaTestUtil.assertJavaInterfaceMethodTraits(javaMethod, umlMethod.name, TypesFactory.eINSTANCE.createVoid, null, javaInterface)
+	// TestUtil.assertInterfaceMethodEquals(umlMethod, javaMethod)
+	// }
+	// Check Java class methods:
+	// for (umlMethod : umlClass.allOperations) {
+	// val javaMethod = getCorrespondingJavaClassMethod(umlMethod)
+	// JavaTestUtil.assertJavaClassMethodTraits(javaMethod, umlMethod.name, JavaVisibility.PUBLIC, TypesFactory.eINSTANCE.createVoid, false,
+	// false, null, javaClass)
+	// TestUtil.assertClassMethodEquals(umlMethod, javaMethod)
+	// }
+	
+	def protected String[] convertNamespaces(NamedElement element) {
+		val result = new ArrayList
+		element.allNamespaces.forEach[it|result.add(0, it.name)] // reversed list of names
+		return result.drop(1).toList.toArray(#[]) // drop root element namespace
+	}
+
 	/**
 	 * Retrieves the first corresponding java class method for a given uml operation
 	 */
 	def protected getCorrespondingJavaClassMethod(Operation uOperation) {
-		return getFirstCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.ClassMethod)
+		return getFirstCorrespondingObjectWithClass(uOperation, ClassMethod)
 	}
 
 	/**
 	 * Retrieves the first corresponding java interface method for a given uml operation
 	 */
 	def protected getCorrespondingJavaInterfaceMethod(Operation uOperation) {
-		return getFirstCorrespondingObjectWithClass(uOperation, org.emftext.language.java.members.InterfaceMethod)
+		return getFirstCorrespondingObjectWithClass(uOperation, InterfaceMethod)
 	}
 
 	/**
 	 * Retrieves the first corresponding java field for a given uml property
 	 */
 	def protected getCorrespondingJavaAttribute(Property uAttribute) {
-		return getFirstCorrespondingObjectWithClass(uAttribute, org.emftext.language.java.members.Field)
+		return getFirstCorrespondingObjectWithClass(uAttribute, Field)
 	}
 
 	/**
@@ -45,7 +91,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	/**
 	 * Retrieves the first corresponding java interface for a given uml interface
 	 */
-	def protected getCorrespondingJavaInterface(Interface uInterface) { // TODO TS do I still need this?
+	def protected getCorrespondingJavaInterface(Interface uInterface) {
 		return getFirstCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
 	}
 
@@ -71,7 +117,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	 * @param obj the object for which the first corresponding object should be retrieved
 	 * @return the first corresponding object of obj or null if none could be found
 	 */
-	def private <T extends EObject> getFirstCorrespondingObjectWithClass(EObject obj, Class<T> c) { // TODO TS do I still need this?
+	def private <T extends EObject> getFirstCorrespondingObjectWithClass(EObject obj, Class<T> c) {
 		val correspondingObjectList = getCorrespondingObjectListWithClass(obj, c)
 		if (correspondingObjectList.nullOrEmpty) {
 			logger.warn("There are no corresponding objects for " + obj + " of the type " + c.class + ". Returning null.")
@@ -90,7 +136,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	 * @return the corresponding objects of obj or null if none could be found
 	 * @throws IllegalArgumentException if obj is null
 	 */
-	def private getCorrespondingObjectList(EObject obj) { // TODO TS do I still need this?
+	def private getCorrespondingObjectList(EObject obj) {
 		if (obj === null) {
 			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
 		}
@@ -113,12 +159,12 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	 * @param obj the object for which the corresponding objects should be retrieved
 	 * @return the corresponding objects of obj filtered by c or null if none could be found
 	 */
-	def private <T extends EObject> getCorrespondingObjectListWithClass(EObject obj, Class<T> c) { // TODO TS do I still need this?
+	def private <T extends EObject> getCorrespondingObjectListWithClass(EObject obj, Class<T> c) {
 		return getCorrespondingObjectList(obj)?.filter(c)
 	}
 
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {
-		assertModelExists(JavaPersistenceHelper.buildJavaFilePath(fileName + ".java", namespaces)); // TODO TS do I still need this?
+		assertModelExists(JavaPersistenceHelper.buildJavaFilePath(fileName + ".java", namespaces));
 	}
 
 }
