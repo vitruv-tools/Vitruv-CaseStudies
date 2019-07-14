@@ -18,7 +18,7 @@ import static org.junit.Assert.*
  * <br><br>
  * Related files: PcmInterface.reactions, UmlInterface.reactions, UmlInterfaceGeneralization.reactions
  */
-class InterfaceConceptTest extends PcmUmlClassApplicationTest {
+class InterfaceConceptTest extends TransitiveChangeTest {
 
 	private static val TEST_INTERFACE_NAME = "TestInterface"
 	private static val CONTRACTS_PACKAGE = "contracts"

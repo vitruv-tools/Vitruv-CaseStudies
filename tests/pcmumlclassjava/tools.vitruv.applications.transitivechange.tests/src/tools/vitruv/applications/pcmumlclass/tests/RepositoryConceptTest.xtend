@@ -21,7 +21,7 @@ import java.util.ArrayList
  * <br><br>
  * Related files: PcmRepository.reactions, UmlRepositoryAndSystemPackage.reactions
  */
-class RepositoryConceptTest extends PcmUmlClassApplicationTest {
+class RepositoryConceptTest extends TransitiveChangeTest {
 
 	def protected static checkRepositoryConcept(
 		CorrespondenceModel cm,

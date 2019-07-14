@@ -3,8 +3,6 @@ package tools.vitruv.applications.pcmumlclass.tests
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.List
-import java.util.Set
-import org.apache.log4j.Logger
 import org.eclipse.emf.common.notify.Notifier
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.compare.Comparison
@@ -34,7 +32,6 @@ import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
 import tools.vitruv.domains.java.JavaDomainProvider
-import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
@@ -45,7 +42,6 @@ import static org.junit.Assert.*
 
 abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	protected static final int ARRAY_LIST_SELECTION = 0;
-	private static val logger = Logger.getLogger(typeof(PcmUmlClassApplicationTest).simpleName)
 
 	override protected createChangePropagationSpecifications() {
 		return #[
@@ -82,85 +78,6 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	override protected cleanup() {
 		testResourceSet = null
 		helper = null
-	}
-
-	/**
-	 * Retrieves the first corresponding java interface for a given uml interface
-	 */
-	def protected getCorrespondingJavaInterface(Interface uInterface) { // TODO TS do I still need this?
-		return getFirstCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
-	}
-
-	/**
-	 * Retrieves the first corresponding java package for a given uml package
-	 */
-	def protected getCorrespondingJavaPackage(Package uPackage) {
-		return getFirstCorrespondingObjectWithClass(uPackage, org.emftext.language.java.containers.Package)
-	}
-
-	/**
-	 * Retrieves the first corresponding uml package for a given java package
-	 */
-	def protected getCorrespondingUMLPackage(org.emftext.language.java.containers.Package javaPackage) {
-		return getFirstCorrespondingObjectWithClass(javaPackage, Package)
-	}
-
-	/**
-	 * Retrieves all corresponding objects of obj, filters the result list by the class c
-	 * and returns the first element of the remaining list
-	 * 
-	 * {@link #getCorrespondingObjectList(EObject)}
-	 * @param obj the object for which the first corresponding object should be retrieved
-	 * @return the first corresponding object of obj or null if none could be found
-	 */
-	def private <T extends EObject> getFirstCorrespondingObjectWithClass(EObject obj, java.lang.Class<T> c) { // TODO TS do I still need this?
-		val correspondingObjectList = getCorrespondingObjectListWithClass(obj, c)
-		if (correspondingObjectList.nullOrEmpty) {
-			logger.warn("There are no corresponding objects for " + obj + " of the type " + c.class + ". Returning null.")
-			return null
-		} else if (correspondingObjectList.size > 1) {
-			logger.warn("There are more than one corresponding object for " + obj + " of the type " + c.class + ". Returning the first.")
-		}
-		return correspondingObjectList.head
-	}
-
-	/**
-	 * Retrieves all corresponding objects of obj.
-	 * 
-	 * {@link tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest#getCorrespondenceModel}
-	 * @param obj the object for which the corresponding objects should be retrieved
-	 * @return the corresponding objects of obj or null if none could be found
-	 * @throws IllegalArgumentException if obj is null
-	 */
-	def private getCorrespondingObjectList(EObject obj) { // TODO TS do I still need this?
-		if (obj === null) {
-			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
-		}
-		val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten;
-		if (corrList.nullOrEmpty) {
-			logger.warn("No Correspondences found for " + obj)
-			return null
-		}
-		return corrList
-	}
-
-	def protected <E> Set<E> getCorrespondingObjectsOfClass(java.lang.Class<E> clazz) {
-		return getCorrespondenceModel.getAllEObjectsOfTypeInCorrespondences(clazz)
-	}
-
-	/**
-	 * Retrieves all corresponding objects of obj and filters the result list by the class c
-	 * 
-	 * {@link #getCorrespondingObjectList(EObject)}
-	 * @param obj the object for which the corresponding objects should be retrieved
-	 * @return the corresponding objects of obj filtered by c or null if none could be found
-	 */
-	def private <T extends EObject> getCorrespondingObjectListWithClass(EObject obj, java.lang.Class<T> c) { // TODO TS do I still need this?
-		return getCorrespondingObjectList(obj)?.filter(c)
-	}
-
-	def protected assertJavaFileExists(String fileName, String[] namespaces) {
-		assertModelExists(JavaPersistenceHelper.buildJavaFilePath(fileName + ".java", namespaces)); // TODO TS do I still need this?
 	}
 
 	/**
