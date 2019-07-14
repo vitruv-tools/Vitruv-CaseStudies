@@ -11,7 +11,6 @@ import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.applications.umljava.testutil.TestUtil
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
@@ -44,25 +43,13 @@ class AttributeConceptTest extends TransitiveChangeTest {
 	def protected checkAttributeConcept(InnerDeclaration pcmAttribute) {
 		val umlAttribute = helper.getModifiableCorr(pcmAttribute, Property, TagLiterals.INNER_DECLARATION__PROPERTY)
 		checkAttributeConcept(correspondenceModel, pcmAttribute, umlAttribute)
-		checkJavaAttributeConcept(umlAttribute)
+		checkJavaAttribute(umlAttribute)
 	}
 
 	def protected checkAttributeConcept(Property umlAttribute) {
 		val pcmAttribute = helper.getModifiableCorr(umlAttribute, InnerDeclaration, TagLiterals.INNER_DECLARATION__PROPERTY)
 		checkAttributeConcept(correspondenceModel, pcmAttribute, umlAttribute)
-		checkJavaAttributeConcept(umlAttribute)
-	}
-
-	def protected checkJavaAttributeConcept(Property umlAttribute) {
-		val javaAttribute = getCorrespondingJavaAttribute(umlAttribute)
-		assertEquals(TEST_ATTRIBUTE, javaAttribute.name)
-		TestUtil.assertVisibilityEquals(umlAttribute, javaAttribute)
-		TestUtil.assertFinalAttributeEquals(umlAttribute, javaAttribute)
-		TestUtil.assertStaticEquals(umlAttribute, javaAttribute)
-		// Type is only equal for non collection types:
-		if (umlAttribute.upper != LiteralUnlimitedNatural.UNLIMITED && umlAttribute.upper < 2) {
-			TestUtil.assertTypeEquals(umlAttribute.type, javaAttribute.typeReference)
-		}
+		checkJavaAttribute(umlAttribute)
 	}
 
 	def private Repository createRepository() {

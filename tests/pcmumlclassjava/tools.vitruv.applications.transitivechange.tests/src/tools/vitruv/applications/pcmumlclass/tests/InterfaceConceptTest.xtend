@@ -21,7 +21,6 @@ import static org.junit.Assert.*
 class InterfaceConceptTest extends TransitiveChangeTest {
 
 	private static val TEST_INTERFACE_NAME = "TestInterface"
-	private static val CONTRACTS_PACKAGE = "contracts"
 
 	def public static checkInterfaceConcept(
 		CorrespondenceModel cm,
@@ -49,19 +48,13 @@ class InterfaceConceptTest extends TransitiveChangeTest {
 	def protected checkInterfaceConcept(OperationInterface pcmInterface) {
 		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
-		checkJavaInterfaceConcept(pcmInterface, umlInterface)
+		checkJavaInterface(umlInterface)
 	}
 
 	def protected checkInterfaceConcept(Interface umlInterface) {
 		val pcmInterface = helper.getModifiableCorr(umlInterface, OperationInterface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
-		checkJavaInterfaceConcept(pcmInterface, umlInterface)
-	}
-
-	def protected checkJavaInterfaceConcept(OperationInterface pcmInterface, Interface umlInterface) {
-		assertJavaFileExists(TEST_INTERFACE_NAME, #[PcmUmlClassApplicationTestHelper.REPOSITORY_NAME.toFirstLower, CONTRACTS_PACKAGE])
-		val javaInterface = getCorrespondingJavaInterface(umlInterface)
-		assertEquals(TEST_INTERFACE_NAME, javaInterface.name)
+		checkJavaInterface(umlInterface)
 	}
 
 	def private Repository createRepositoryConcept() {

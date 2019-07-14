@@ -12,8 +12,6 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import tools.vitruv.applications.umljava.testutil.TestUtil
-import java.util.ArrayList
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Repository
@@ -68,14 +66,8 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 	 * Checks whether the Java package structure fits to the UML package structure (assumes UML is correct)
 	 */
 	def protected checkJavaRepositoryPackage(Package umlRepositoryPackage) {
-		val umlPackagesToCheck = new ArrayList
-		umlPackagesToCheck.add(umlRepositoryPackage)
-		umlPackagesToCheck.addAll(umlRepositoryPackage.nestedPackages) // add contracts and datatypes
-		for (umlPackage : umlPackagesToCheck) {
-			val javaPackage = getCorrespondingJavaPackage(umlPackage)
-			assertEquals(umlPackage.name, javaPackage.name)
-			TestUtil.assertPackageEquals(umlPackage, javaPackage)
-		}
+		checkJavaPackage(umlRepositoryPackage)
+		umlRepositoryPackage.nestedPackages.forEach[it|checkJavaPackage(it)]
 	}
 
 	@Test
@@ -158,7 +150,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 		assertFalse(umlModel?.packagedElements.empty)
 		umlModel = reloadResourceAndReturnRoot(umlModel) as Model
 		assertTrue(umlModel?.packagedElements.empty)
-		
+
 		// There should be not Java packages:
 		val allJavaPackages = typeof(org.emftext.language.java.containers.Package).getCorrespondingObjectsOfClass
 		assertEquals("Too many Java packages: " + allJavaPackages, umlModel?.packagedElements.size, allJavaPackages.size)
