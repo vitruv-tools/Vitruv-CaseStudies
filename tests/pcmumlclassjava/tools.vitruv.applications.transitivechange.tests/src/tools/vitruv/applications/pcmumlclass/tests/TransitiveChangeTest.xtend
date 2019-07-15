@@ -9,12 +9,9 @@ import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.NamedElement
-import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Property
-import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Field
-import org.emftext.language.java.members.InterfaceMethod
 import tools.vitruv.applications.umljava.testutil.TestUtil
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 
@@ -26,30 +23,30 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	def protected checkJavaInterface(Interface umlInterface) {
 		assertJavaFileExists(umlInterface.name, umlInterface.convertNamespaces)
-		val javaInterface = getCorrespondingJavaInterface(umlInterface)
+		val javaInterface = getFirstCorrespondingObject(umlInterface, org.emftext.language.java.classifiers.Interface)
 		assertEquals(umlInterface.name, javaInterface.name)
 	}
 
 	def protected checkJavaClass(Classifier umlClass) {
-		val javaClass = getCorrespondingJavaClass(umlClass)
+		val javaClass = getFirstCorrespondingObject(umlClass, org.emftext.language.java.classifiers.Class)
 		assertJavaFileExists(umlClass.name, umlClass.convertNamespaces);
 		assertEquals(umlClass.name, javaClass.name)
 	}
 
 	def protected checkJavaInterfaceRealization(InterfaceRealization umlRealization) {
-		val javaInterface = getCorrespondingJavaInterface(umlRealization.contract)
-		val javaClass = getCorrespondingJavaClass(umlRealization.implementingClassifier)
+		val javaInterface = getFirstCorrespondingObject(umlRealization.contract, org.emftext.language.java.classifiers.Interface)
+		val javaClass = getFirstCorrespondingObject(umlRealization.implementingClassifier, org.emftext.language.java.classifiers.Class)
 		assertTrue(javaClass.allSuperClassifiers.contains(javaInterface))
 	}
 
 	def protected checkJavaPackage(Package umlPackage) {
-		val javaPackage = getCorrespondingJavaPackage(umlPackage)
+		val javaPackage = getFirstCorrespondingObject(umlPackage, org.emftext.language.java.containers.Package)
 		assertEquals(umlPackage.name, javaPackage.name)
 		TestUtil.assertPackageEquals(umlPackage, javaPackage)
 	}
 
 	def protected checkJavaAttribute(Property umlAttribute) {
-		val javaAttribute = getCorrespondingJavaAttribute(umlAttribute)
+		val javaAttribute = getFirstCorrespondingObject(umlAttribute, Field)
 		assertEquals(umlAttribute.name, javaAttribute.name)
 		TestUtil.assertVisibilityEquals(umlAttribute, javaAttribute)
 		TestUtil.assertFinalAttributeEquals(umlAttribute, javaAttribute)
@@ -57,61 +54,6 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		if (umlAttribute.upper != LiteralUnlimitedNatural.UNLIMITED && umlAttribute.upper < 2) {
 			TestUtil.assertTypeEquals(umlAttribute.type, javaAttribute.typeReference) // Type is only equal for non collection types
 		}
-	}
-
-	def protected String[] convertNamespaces(NamedElement element) {
-		val result = new ArrayList
-		element.allNamespaces.forEach[it|result.add(0, it.name)] // reversed list of names
-		return result.drop(1).toList.toArray(#[]) // drop root element namespace
-	}
-
-	/**
-	 * Retrieves the first corresponding java class method for a given uml operation
-	 */
-	def protected getCorrespondingJavaClassMethod(Operation uOperation) {
-		return getFirstCorrespondingObjectWithClass(uOperation, ClassMethod)
-	}
-
-	/**
-	 * Retrieves the first corresponding java interface method for a given uml operation
-	 */
-	def protected getCorrespondingJavaInterfaceMethod(Operation uOperation) {
-		return getFirstCorrespondingObjectWithClass(uOperation, InterfaceMethod)
-	}
-
-	/**
-	 * Retrieves the first corresponding java field for a given uml property
-	 */
-	def protected getCorrespondingJavaAttribute(Property uAttribute) {
-		return getFirstCorrespondingObjectWithClass(uAttribute, Field)
-	}
-
-	/**
-	 * Retrieves the first corresponding java class for a given uml class
-	 */
-	def protected getCorrespondingJavaClass(Classifier uClass) {
-		return getFirstCorrespondingObjectWithClass(uClass, org.emftext.language.java.classifiers.Class)
-	}
-
-	/**
-	 * Retrieves the first corresponding java interface for a given uml interface
-	 */
-	def protected getCorrespondingJavaInterface(Interface uInterface) {
-		return getFirstCorrespondingObjectWithClass(uInterface, org.emftext.language.java.classifiers.Interface)
-	}
-
-	/**
-	 * Retrieves the first corresponding java package for a given uml package
-	 */
-	def protected getCorrespondingJavaPackage(Package uPackage) {
-		return getFirstCorrespondingObjectWithClass(uPackage, org.emftext.language.java.containers.Package)
-	}
-
-	/**
-	 * Retrieves the first corresponding uml package for a given java package
-	 */
-	def protected getCorrespondingUMLPackage(org.emftext.language.java.containers.Package javaPackage) {
-		return getFirstCorrespondingObjectWithClass(javaPackage, Package)
 	}
 
 	/**
@@ -122,8 +64,11 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	 * @param obj the object for which the first corresponding object should be retrieved
 	 * @return the first corresponding object of obj or null if none could be found
 	 */
-	def private <T extends EObject> getFirstCorrespondingObjectWithClass(EObject obj, Class<T> c) {
-		val correspondingObjectList = getCorrespondingObjectListWithClass(obj, c)
+	def protected <T extends EObject> getFirstCorrespondingObject(EObject obj, Class<T> c) {
+		if (obj === null) {
+			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
+		}
+		val correspondingObjectList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten.filter(c);
 		if (correspondingObjectList.nullOrEmpty) {
 			logger.warn("There are no corresponding objects for " + obj + " of the type " + c.class + ". Returning null.")
 			return null
@@ -133,26 +78,13 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		return correspondingObjectList.head
 	}
 
-	/**
-	 * Retrieves all corresponding objects of obj.
+	/** Retrieves all corresponding objects of the type defined by class c
 	 * 
 	 * {@link tools.vitruv.framework.tests.VitruviusUnmonitoredApplicationTest#getCorrespondenceModel}
 	 * @param obj the object for which the corresponding objects should be retrieved
-	 * @return the corresponding objects of obj or null if none could be found
+	 * @return the corresponding objects of obj filtered by c or null if none could be found
 	 * @throws IllegalArgumentException if obj is null
 	 */
-	def private getCorrespondingObjectList(EObject obj) {
-		if (obj === null) {
-			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
-		}
-		val corrList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten;
-		if (corrList.nullOrEmpty) {
-			logger.warn("No Correspondences found for " + obj)
-			return null
-		}
-		return corrList
-	}
-
 	def protected <E> Set<E> getCorrespondingObjectsOfClass(Class<E> clazz) {
 		return getCorrespondenceModel.getAllEObjectsOfTypeInCorrespondences(clazz)
 	}
@@ -164,12 +96,16 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	 * @param obj the object for which the corresponding objects should be retrieved
 	 * @return the corresponding objects of obj filtered by c or null if none could be found
 	 */
-	def private <T extends EObject> getCorrespondingObjectListWithClass(EObject obj, Class<T> c) {
-		return getCorrespondingObjectList(obj)?.filter(c)
-	}
-
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {
-		assertModelExists(JavaPersistenceHelper.buildJavaFilePath(fileName + ".java", namespaces));
+		assertModelExists(JavaPersistenceHelper.buildJavaFilePath('''«fileName».java''', namespaces))
 	}
 
+	/**
+	 * Namespaces of NamedElement (EList of namespaces) to Array of namespace names.
+	 */
+	def private String[] convertNamespaces(NamedElement element) {
+		val result = new ArrayList
+		element.allNamespaces.forEach[it|result.add(0, it.name)] // reversed list of names
+		return result.drop(1).toList.toArray(#[]) // drop root element namespace
+	}
 }
