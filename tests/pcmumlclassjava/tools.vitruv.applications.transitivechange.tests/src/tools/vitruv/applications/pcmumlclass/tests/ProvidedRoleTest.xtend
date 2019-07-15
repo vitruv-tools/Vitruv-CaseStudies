@@ -51,6 +51,7 @@ class ProvidedRoleTest extends TransitiveChangeTest {
 		checkJavaInterface(umlRealization.contract)
 		checkJavaClass(umlRealization.implementingClassifier)
 		checkJavaInterfaceRealization(umlRealization)
+		umlRealization.implementingClassifier.allOperations.forEach[checkJavaConstructor]
 	}
 
 	def private Repository createRepository_Component_Interface() {
