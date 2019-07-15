@@ -11,11 +11,17 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Property
+import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Field
-import tools.vitruv.applications.umljava.testutil.TestUtil
+import org.emftext.language.java.members.InterfaceMethod
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 
 import static org.junit.Assert.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import org.eclipse.uml2.uml.Operation
+import org.emftext.language.java.members.Method
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
@@ -42,18 +48,49 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	def protected checkJavaPackage(Package umlPackage) {
 		val javaPackage = getFirstCorrespondingObject(umlPackage, org.emftext.language.java.containers.Package)
 		assertEquals(umlPackage.name, javaPackage.name)
-		TestUtil.assertPackageEquals(umlPackage, javaPackage)
+		assertPackageEquals(umlPackage, javaPackage)
 	}
 
 	def protected checkJavaAttribute(Property umlAttribute) {
 		val javaAttribute = getFirstCorrespondingObject(umlAttribute, Field)
 		assertEquals(umlAttribute.name, javaAttribute.name)
-		TestUtil.assertVisibilityEquals(umlAttribute, javaAttribute)
-		TestUtil.assertFinalAttributeEquals(umlAttribute, javaAttribute)
-		TestUtil.assertStaticEquals(umlAttribute, javaAttribute)
+		assertVisibilityEquals(umlAttribute, javaAttribute)
+		assertFinalAttributeEquals(umlAttribute, javaAttribute)
+		assertStaticEquals(umlAttribute, javaAttribute)
 		if (umlAttribute.upper != LiteralUnlimitedNatural.UNLIMITED && umlAttribute.upper < 2) {
-			TestUtil.assertTypeEquals(umlAttribute.type, javaAttribute.typeReference) // Type is only equal for non collection types
+			assertTypeEquals(umlAttribute.type, javaAttribute.typeReference) // Type is only equal for non collection types
 		}
+	}
+
+	def protected checkJavaConstructor(Operation umlConstructor) {
+		val javaConstructor = getFirstCorrespondingObject(umlConstructor, org.emftext.language.java.members.Constructor)
+		assertEquals(umlConstructor.name, javaConstructor.name)
+		assertJavaModifiableAbstract(javaConstructor, umlConstructor.abstract)
+		assertStaticEquals(umlConstructor, javaConstructor)
+		assertVisibilityEquals(umlConstructor, javaConstructor)
+		assertParameterListEquals(umlConstructor.ownedParameters, javaConstructor.parameters)
+	}
+
+	def protected checkJavaMethod(Operation umlOperation) {
+		val javaMethod = getFirstCorrespondingObject(umlOperation, Method)
+		checkJavaMethod(javaMethod, umlOperation)
+	}
+
+	def private dispatch checkJavaMethod(Void javaMethod, Operation umlOperation) {
+		fail('''No correlating Java method for «umlOperation»''')
+	}
+
+	def private dispatch checkJavaMethod(ClassMethod javaMethod, Operation umlOperation) {
+		val javaClass = javaMethod.eContainer as org.emftext.language.java.classifiers.Class
+		assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract, null,
+			javaClass)
+		assertClassMethodEquals(umlOperation, javaMethod)
+	}
+
+	def private dispatch checkJavaMethod(InterfaceMethod javaMethod, Operation umlOperation) {
+		val javaInterface = javaMethod.eContainer as org.emftext.language.java.classifiers.Interface
+		assertJavaInterfaceMethodTraits(javaMethod, umlOperation.name, null, null, javaInterface)
+		assertInterfaceMethodEquals(umlOperation, javaMethod)
 	}
 
 	/**
