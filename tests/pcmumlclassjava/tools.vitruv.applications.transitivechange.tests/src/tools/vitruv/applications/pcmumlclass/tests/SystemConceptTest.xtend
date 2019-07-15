@@ -25,7 +25,7 @@ import static org.junit.Assert.*
  * 		UmlIPREClass.reactions,
  * 		UmlIPREConstructorOperation.reactions
  */
-class SystemConceptTest extends PcmUmlClassApplicationTest {
+class SystemConceptTest extends TransitiveChangeTest {
 
 	private static val PCM_MODEL_FILE = "model/System.system"
 	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
@@ -68,6 +68,9 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 		val umlSystemImpl = helper.getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)
 		val umlSystemConstructor = helper.getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
 		checkSystemConcept(correspondenceModel, pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
+		checkJavaPackage(umlSystemPkg)
+		checkJavaClass(umlSystemImpl)
+		checkJavaConstructor(umlSystemConstructor)
 	}
 
 	@Test
