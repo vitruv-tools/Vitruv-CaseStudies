@@ -203,6 +203,10 @@ class TestUtil {
 		throw new IllegalArgumentException("The java TypeReference " + jTypeReference + " is neither a PrimitiveType nor a NamespaceClassifierReference")
 	}
 	
+	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Interface uInterface, NamespaceClassifierReference namespaceRef) {
+		assertEquals(uInterface.name, getInterfaceFromTypeReference(namespaceRef).name)
+	}
+	
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.Class uClass, NamespaceClassifierReference namespaceRef) {
 	    assertEquals(uClass.name, getClassifierFromTypeReference(namespaceRef).name)
 	}
