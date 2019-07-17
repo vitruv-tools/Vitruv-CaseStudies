@@ -15,6 +15,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
+import org.eclipse.uml2.uml.Interface
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationSignature with its
@@ -22,7 +23,7 @@ import static org.junit.Assert.*
  * <br><br>
  * Related files: PcmSignature.reactions, UmlSignatureOperation.reactions, UmlReturnAndRegularParameterType.reactions
  */
-class SignatureConceptTest extends PcmUmlClassApplicationTest {
+class SignatureConceptTest extends TransitiveChangeTest {
 
 	private static val TEST_SIGNATURE_NAME = "testSignature"
 	
@@ -49,11 +50,25 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 	def protected checkSignatureConcept(OperationSignature pcmSignature) {
 		val umlOperation = helper.getModifiableCorr(pcmSignature, Operation, TagLiterals.SIGNATURE__OPERATION)
 		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
+		checkJavaSignatureConcept(umlOperation, pcmSignature)
 	}
 	
 	def protected checkSignatureConcept(Operation umlOperation) {
 		val pcmSignature = helper.getModifiableCorr(umlOperation, OperationSignature, TagLiterals.SIGNATURE__OPERATION)
 		checkSignatureConcept(correspondenceModel, pcmSignature, umlOperation)
+		checkJavaSignatureConcept(umlOperation, pcmSignature)
+	}
+	
+	def protected checkJavaSignatureConcept(Operation umlOperation, OperationSignature pcmSignature) {
+		val pcmRepository = pcmSignature.interface__OperationSignature.repository__Interface
+		checkJavaInterface(umlOperation.eContainer as Interface)
+		checkJavaMethod(umlOperation)
+		// Created before test cases, should be still there:
+		val umlPackage = helper.getUmlRepositoryPackage(pcmRepository)
+		checkJavaPackage(umlPackage)
+		umlPackage.nestedPackages.forEach[checkJavaPackage]
+		helper.getUmlCompositeDataTypeClass(pcmRepository).checkJavaClass
+		helper.getUmlCompositeDataTypeClass_2(pcmRepository).checkJavaClass
 	}
 
 	def private Repository createRepositoryWithInterface() {
