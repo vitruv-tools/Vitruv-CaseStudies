@@ -214,6 +214,14 @@ class TestUtil {
 	def static dispatch void assertTypeEquals(java.lang.Void nullReference, Void voidType) {
         //umlType is null, javaType is void -> Do nothing, assertion passed.
     }
+    
+    // IMPORTANT EXCEPTION: String is NOT a primitive in the Java model, which means this dispatch case needs to exist:
+    def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType, NamespaceClassifierReference namespaceRef) {
+		assertNotNull(uPrimType)
+		val jTypeMapped = UmlJavaTypePropagationHelper.mapUmlPrimitiveToJavaPrimitive(uPrimType)
+		assertFalse(jTypeMapped instanceof Void) // if the uml type is non null and supported by the transformations, then it should not be mapped to void
+		assertEquals(getClassifierFromTypeReference(jTypeMapped).name, getClassifierFromTypeReference(namespaceRef).name)
+    }
 	
 	def static dispatch void assertTypeEquals(org.eclipse.uml2.uml.PrimitiveType uPrimType, org.emftext.language.java.types.PrimitiveType jPrimType) {
 		assertNotNull(uPrimType)
