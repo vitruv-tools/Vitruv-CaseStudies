@@ -9,19 +9,21 @@ import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.NamedElement
+import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Property
+import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.ClassMethod
+import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
+import org.emftext.language.java.members.Method
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import org.eclipse.uml2.uml.Operation
-import org.emftext.language.java.members.Method
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
@@ -34,14 +36,14 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	}
 
 	def protected checkJavaClass(Classifier umlClass) {
-		val javaClass = getFirstCorrespondingObject(umlClass, org.emftext.language.java.classifiers.Class)
+		val javaClass = getFirstCorrespondingObject(umlClass, Class)
 		assertJavaFileExists(umlClass.name, umlClass.convertNamespaces);
 		assertEquals(umlClass.name, javaClass.name)
 	}
 
 	def protected checkJavaInterfaceRealization(InterfaceRealization umlRealization) {
 		val javaInterface = getFirstCorrespondingObject(umlRealization.contract, org.emftext.language.java.classifiers.Interface)
-		val javaClass = getFirstCorrespondingObject(umlRealization.implementingClassifier, org.emftext.language.java.classifiers.Class)
+		val javaClass = getFirstCorrespondingObject(umlRealization.implementingClassifier, Class)
 		assertTrue(javaClass.allSuperClassifiers.contains(javaInterface))
 	}
 
@@ -63,7 +65,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	}
 
 	def protected checkJavaConstructor(Operation umlConstructor) {
-		val javaConstructor = getFirstCorrespondingObject(umlConstructor, org.emftext.language.java.members.Constructor)
+		val javaConstructor = getFirstCorrespondingObject(umlConstructor, Constructor)
 		assertEquals(umlConstructor.name, javaConstructor.name)
 		assertJavaModifiableAbstract(javaConstructor, umlConstructor.abstract)
 		assertStaticEquals(umlConstructor, javaConstructor)
@@ -81,16 +83,18 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	}
 
 	def private dispatch checkJavaMethod(ClassMethod javaMethod, Operation umlOperation) {
-		val javaClass = javaMethod.eContainer as org.emftext.language.java.classifiers.Class
+		val javaClass = javaMethod.eContainer as Class
 		assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract, null,
 			javaClass)
-		assertClassMethodEquals(umlOperation, javaMethod)
+		assertFinalMethodEquals(umlOperation, javaMethod)
+		assertTypeEquals(umlOperation.type, javaMethod.typeReference)
 	}
 
 	def private dispatch checkJavaMethod(InterfaceMethod javaMethod, Operation umlOperation) {
 		val javaInterface = javaMethod.eContainer as org.emftext.language.java.classifiers.Interface
 		assertJavaInterfaceMethodTraits(javaMethod, umlOperation.name, null, null, javaInterface)
-		assertInterfaceMethodEquals(umlOperation, javaMethod)
+		assertJavaModifiableAbstract(javaMethod, umlOperation.abstract)
+		assertTypeEquals(umlOperation.type, javaMethod.typeReference)
 	}
 
 	/**
@@ -101,7 +105,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	 * @param obj the object for which the first corresponding object should be retrieved
 	 * @return the first corresponding object of obj or null if none could be found
 	 */
-	def protected <T extends EObject> getFirstCorrespondingObject(EObject obj, Class<T> c) {
+	def protected <T extends EObject> getFirstCorrespondingObject(EObject obj, java.lang.Class<T> c) {
 		if (obj === null) {
 			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
 		}
@@ -122,7 +126,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	 * @return the corresponding objects of obj filtered by c or null if none could be found
 	 * @throws IllegalArgumentException if obj is null
 	 */
-	def protected <E> Set<E> getCorrespondingObjectsOfClass(Class<E> clazz) {
+	def protected <E> Set<E> getCorrespondingObjectsOfClass(java.lang.Class<E> clazz) {
 		return getCorrespondenceModel.getAllEObjectsOfTypeInCorrespondences(clazz)
 	}
 
