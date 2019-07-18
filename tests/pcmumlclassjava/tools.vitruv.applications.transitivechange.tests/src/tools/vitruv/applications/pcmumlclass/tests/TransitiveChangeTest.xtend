@@ -1,6 +1,7 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import java.util.ArrayList
+import java.util.Collection
 import java.util.Set
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
@@ -12,18 +13,22 @@ import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Property
+import org.eclipse.uml2.uml.Type
 import org.emftext.language.java.classifiers.Class
+import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
+import org.emftext.language.java.types.TypeReference
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
@@ -37,7 +42,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	def protected checkJavaClass(Classifier umlClass) {
 		val javaClass = getFirstCorrespondingObject(umlClass, Class)
-		assertJavaFileExists(umlClass.name, umlClass.convertNamespaces);
+		assertJavaFileExists(umlClass.name, umlClass.convertNamespaces)
 		assertEquals(umlClass.name, javaClass.name)
 	}
 
@@ -59,9 +64,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		assertVisibilityEquals(umlAttribute, javaAttribute)
 		assertFinalAttributeEquals(umlAttribute, javaAttribute)
 		assertStaticEquals(umlAttribute, javaAttribute)
-		if (umlAttribute.upper != LiteralUnlimitedNatural.UNLIMITED && umlAttribute.upper < 2) {
-			assertTypeEquals(umlAttribute.type, javaAttribute.typeReference) // Type is only equal for non collection types
-		}
+		checkTypes(umlAttribute.type, javaAttribute.typeReference, umlAttribute.upper)
 	}
 
 	def protected checkJavaConstructor(Operation umlConstructor) {
@@ -76,6 +79,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	def protected checkJavaMethod(Operation umlOperation) {
 		val javaMethod = getFirstCorrespondingObject(umlOperation, Method)
 		checkJavaMethod(javaMethod, umlOperation)
+		checkTypes(umlOperation.type, javaMethod.typeReference, umlOperation.upper)
 	}
 
 	def private dispatch checkJavaMethod(Void javaMethod, Operation umlOperation) {
@@ -87,14 +91,29 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract, null,
 			javaClass)
 		assertFinalMethodEquals(umlOperation, javaMethod)
-		assertTypeEquals(umlOperation.type, javaMethod.typeReference)
 	}
 
 	def private dispatch checkJavaMethod(InterfaceMethod javaMethod, Operation umlOperation) {
 		val javaInterface = javaMethod.eContainer as org.emftext.language.java.classifiers.Interface
 		assertJavaInterfaceMethodTraits(javaMethod, umlOperation.name, null, null, javaInterface)
 		assertJavaModifiableAbstract(javaMethod, umlOperation.abstract)
-		assertTypeEquals(umlOperation.type, javaMethod.typeReference)
+	}
+
+	/**
+	 * Simply checks whether a UML type is equal to a Java type with the exception that when the UML multiplicity suggests 
+	 * a collection type, the Java collection type is retrieved for the comparison. 
+	 */
+	def protected checkTypes(Type umlType, TypeReference javaTypeReference, int umlTypeUpperBound) {
+		if (umlTypeUpperBound > 1 || umlTypeUpperBound == LiteralUnlimitedNatural.UNLIMITED) { // has multiary multiplicity
+			val referencedClassifier = getClassifierFromTypeReference(javaTypeReference)
+			if (!referencedClassifier.isCollection) {
+				fail('''UML type «umlType.name» has a multiary multiplicity and should be represented in Java through a collection type instead of «referencedClassifier»''')
+			}
+			val collectionType = getInnerTypeReferenceOfCollectionTypeReference(javaTypeReference)
+			assertTypeEquals(umlType, collectionType) // use type of collection arguments
+		} else {
+			assertTypeEquals(umlType, javaTypeReference) // compare directly
+		}
 	}
 
 	/**
@@ -109,7 +128,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		if (obj === null) {
 			throw new IllegalArgumentException("Cannot retrieve correspondence for null")
 		}
-		val correspondingObjectList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten.filter(c);
+		val correspondingObjectList = getCorrespondenceModel.getCorrespondingEObjects(#[obj]).flatten.filter(c)
 		if (correspondingObjectList.nullOrEmpty) {
 			logger.warn("There are no corresponding objects for " + obj + " of the type " + c.class + ". Returning null.")
 			return null
@@ -139,6 +158,17 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	 */
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {
 		assertModelExists(JavaPersistenceHelper.buildJavaFilePath('''«fileName».java''', namespaces))
+	}
+
+	/**
+	 * Checks whether a classifier is a java.util.Collection. This means any super type or itself must be a collection.
+	 */
+	def private dispatch boolean isCollection(Classifier classifier) {
+		return false; // classifier is type parameter => cannot be collection
+	}
+
+	def private dispatch boolean isCollection(ConcreteClassifier classifier) {
+		typeof(Collection).name == classifier.qualifiedName || classifier.allSuperClassifiers.stream.anyMatch[isCollection]
 	}
 
 	/**
