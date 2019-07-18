@@ -6,6 +6,7 @@ import java.util.Set
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Classifier
+import org.eclipse.uml2.uml.Generalization
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
@@ -46,10 +47,16 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		assertEquals(umlClass.name, javaClass.name)
 	}
 
-	def protected checkJavaInterfaceRealization(InterfaceRealization umlRealization) {
+	def protected checkJavaRealization(InterfaceRealization umlRealization) {
 		val javaInterface = getFirstCorrespondingObject(umlRealization.contract, org.emftext.language.java.classifiers.Interface)
 		val javaClass = getFirstCorrespondingObject(umlRealization.implementingClassifier, Class)
 		assertTrue(javaClass.allSuperClassifiers.contains(javaInterface))
+	}
+	
+	def protected checkJavaGeneralization(Generalization umlGeneralization) {	
+		val javaSuperClass = getFirstCorrespondingObject(umlGeneralization.general, Class)
+		val javaSubClass = getFirstCorrespondingObject(umlGeneralization.specific, Class)
+		assertTrue(javaSubClass.allSuperClassifiers.contains(javaSuperClass))
 	}
 
 	def protected checkJavaPackage(Package umlPackage) {
