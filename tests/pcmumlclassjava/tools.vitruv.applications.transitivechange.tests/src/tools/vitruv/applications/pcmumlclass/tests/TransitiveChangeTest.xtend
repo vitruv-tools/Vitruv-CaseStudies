@@ -52,8 +52,8 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		val javaClass = getFirstCorrespondingObject(umlRealization.implementingClassifier, Class)
 		assertTrue(javaClass.allSuperClassifiers.contains(javaInterface))
 	}
-	
-	def protected checkJavaGeneralization(Generalization umlGeneralization) {	
+
+	def protected checkJavaGeneralization(Generalization umlGeneralization) {
 		val javaSuperClass = getFirstCorrespondingObject(umlGeneralization.general, Class)
 		val javaSubClass = getFirstCorrespondingObject(umlGeneralization.specific, Class)
 		assertTrue(javaSubClass.allSuperClassifiers.contains(javaSuperClass))
@@ -87,6 +87,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		val javaMethod = getFirstCorrespondingObject(umlOperation, Method)
 		checkJavaMethod(javaMethod, umlOperation)
 		checkTypes(umlOperation.type, javaMethod.typeReference, umlOperation.upper)
+		assertParameterListEquals(umlOperation.ownedParameters, javaMethod.parameters)
 	}
 
 	def private dispatch checkJavaMethod(Void javaMethod, Operation umlOperation) {
