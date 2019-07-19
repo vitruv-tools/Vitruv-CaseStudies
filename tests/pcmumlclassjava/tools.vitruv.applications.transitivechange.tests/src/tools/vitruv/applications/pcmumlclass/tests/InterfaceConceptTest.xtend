@@ -48,13 +48,21 @@ class InterfaceConceptTest extends TransitiveChangeTest {
 	def protected checkInterfaceConcept(OperationInterface pcmInterface) {
 		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
-		checkJavaInterface(umlInterface)
+		checkJavaInterfaceConcept(umlInterface, pcmInterface)
 	}
 
 	def protected checkInterfaceConcept(Interface umlInterface) {
 		val pcmInterface = helper.getModifiableCorr(umlInterface, OperationInterface, TagLiterals.INTERFACE_TO_INTERFACE)
 		checkInterfaceConcept(correspondenceModel, pcmInterface, umlInterface)
+		checkJavaInterfaceConcept(umlInterface, pcmInterface)
+	}
+	
+	def protected checkJavaInterfaceConcept(Interface umlInterface, OperationInterface pcmInterface) {
 		checkJavaInterface(umlInterface)
+		// Created before test cases, should be still there:
+		val umlPackage = helper.getUmlRepositoryPackage(pcmInterface.repository__Interface)
+		umlPackage.checkJavaPackage
+		umlPackage.nestedPackages.forEach[checkJavaPackage]
 	}
 
 	def private Repository createRepositoryConcept() {

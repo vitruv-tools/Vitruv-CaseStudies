@@ -67,7 +67,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 	 */
 	def protected checkJavaRepositoryPackage(Package umlRepositoryPackage) {
 		checkJavaPackage(umlRepositoryPackage)
-		umlRepositoryPackage.nestedPackages.forEach[it|checkJavaPackage(it)]
+		umlRepositoryPackage.nestedPackages.forEach[checkJavaPackage]
 	}
 
 	@Test
