@@ -48,10 +48,10 @@ class ProvidedRoleTest extends TransitiveChangeTest {
 	}
 
 	def protected checkJavaProvidedRoleConcept(InterfaceRealization umlRealization, OperationProvidedRole pcmProvided) {
-		checkJavaInterface(umlRealization.contract)
-		checkJavaClass(umlRealization.implementingClassifier)
+		checkJavaType(umlRealization.contract)
+		checkJavaType(umlRealization.implementingClassifier)
 		checkJavaRealization(umlRealization)
-		umlRealization.implementingClassifier.allOperations.forEach[checkJavaConstructor]
+		umlRealization.implementingClassifier.operations.forEach[checkJavaConstructor]
 		// Created before test cases, should be still there:
 		val umlPackage = helper.getUmlRepositoryPackage(pcmProvided.providedInterface__OperationProvidedRole.repository__Interface)
 		umlPackage.checkJavaPackage

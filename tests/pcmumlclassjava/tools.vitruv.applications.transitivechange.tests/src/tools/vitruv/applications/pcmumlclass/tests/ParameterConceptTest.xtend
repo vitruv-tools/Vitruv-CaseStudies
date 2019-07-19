@@ -62,9 +62,9 @@ class ParameterConceptTest extends TransitiveChangeTest {
 		val umlPackage = helper.getUmlRepositoryPackage(pcmRepository)
 		umlPackage.checkJavaPackage
 		umlPackage.nestedPackages.forEach[checkJavaPackage]
-		helper.getUmlInterface(pcmRepository).checkJavaInterface
-		helper.getUmlCompositeDataTypeClass(pcmRepository).checkJavaClass
-		helper.getUmlCompositeDataTypeClass_2(pcmRepository).checkJavaClass
+		helper.getUmlInterface(pcmRepository).checkJavaType
+		helper.getUmlCompositeDataTypeClass(pcmRepository).checkJavaType
+		helper.getUmlCompositeDataTypeClass_2(pcmRepository).checkJavaType
 	}
 
 	def private Repository createRepositoryWithSignature() {

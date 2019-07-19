@@ -63,8 +63,8 @@ class RepositoryComponentConceptTest extends TransitiveChangeTest {
 		val umlComponentConstructor = helper.getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
 		checkRepositoryComponentConcept(correspondenceModel, pcmComponent, umlComponentPkg, umlComponentImpl, umlComponentConstructor)
 		// Check Java model:
-		umlComponentImpl.checkJavaClass
 		umlComponentConstructor.checkJavaConstructor
+		umlComponentImpl.checkJavaType
 		// Created before test cases, should be still there:
 		val umlPackage = helper.getUmlRepositoryPackage(pcmComponent.repository__RepositoryComponent)
 		umlPackage.checkJavaPackage

@@ -61,14 +61,14 @@ class SignatureConceptTest extends TransitiveChangeTest {
 	
 	def protected checkJavaSignatureConcept(Operation umlOperation, OperationSignature pcmSignature) {
 		val pcmRepository = pcmSignature.interface__OperationSignature.repository__Interface
-		checkJavaInterface(umlOperation.eContainer as Interface)
+		checkJavaType(umlOperation.eContainer as Interface)
 		checkJavaMethod(umlOperation)
 		// Created before test cases, should be still there:
 		val umlPackage = helper.getUmlRepositoryPackage(pcmRepository)
 		checkJavaPackage(umlPackage)
 		umlPackage.nestedPackages.forEach[checkJavaPackage]
-		helper.getUmlCompositeDataTypeClass(pcmRepository).checkJavaClass
-		helper.getUmlCompositeDataTypeClass_2(pcmRepository).checkJavaClass
+		helper.getUmlCompositeDataTypeClass(pcmRepository).checkJavaType
+		helper.getUmlCompositeDataTypeClass_2(pcmRepository).checkJavaType
 	}
 
 	def private Repository createRepositoryWithInterface() {

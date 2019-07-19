@@ -69,15 +69,15 @@ class RequiredRoleConceptTest extends TransitiveChangeTest {
 
 	def protected checkRequiredRoleJavaConcept(Operation umlConstructor, Property umlRequiredInstance, Repository pcmRepository) {
 		// Created during the test cases:
-		checkJavaClass(umlConstructor.eContainer as Classifier)
+		checkJavaType(umlConstructor.eContainer as Classifier)
 		checkJavaConstructor(umlConstructor)
 		checkJavaAttribute(umlRequiredInstance)
 		// Created before test cases, should be still there:
 		val umlPackage = helper.getUmlRepositoryPackage(pcmRepository)
 		checkJavaPackage(umlPackage)
 		umlPackage.nestedPackages.forEach[checkJavaPackage]
-		helper.getUmlComponentImpl(pcmRepository).checkJavaClass
-		helper.getUmlInterface(pcmRepository).checkJavaInterface
+		helper.getUmlComponentImpl(pcmRepository).checkJavaType
+		helper.getUmlInterface(pcmRepository).checkJavaType
 	}
 
 	def private Repository createRepository_Component_Interface() {

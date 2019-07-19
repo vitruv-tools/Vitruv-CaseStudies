@@ -55,8 +55,8 @@ class AssemblyContextConceptTest extends TransitiveChangeTest {
 		val umlPackage = helper.getUmlRepositoryPackage(pcmRepository)
 		checkJavaPackage(umlPackage)
 		umlPackage.nestedPackages.forEach[checkJavaPackage]
-		helper.getUmlComponentImpl(pcmRepository).checkJavaClass
-		helper.getUmlComponentImpl_2(pcmRepository).checkJavaClass
+		helper.getUmlComponentImpl(pcmRepository).checkJavaType
+		helper.getUmlComponentImpl_2(pcmRepository).checkJavaType
 	}
 
 	/**

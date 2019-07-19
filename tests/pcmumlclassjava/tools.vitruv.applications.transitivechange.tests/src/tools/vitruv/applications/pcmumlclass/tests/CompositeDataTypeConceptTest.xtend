@@ -56,10 +56,10 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
 	}
 
 	def protected checkJavaCompositeDataTypeConcept(Class umlClass, CompositeDataType pcmCompositeType) {
-		checkJavaClass(umlClass)
+		checkJavaType(umlClass)
 		umlClass.generalizations.forEach[it|it.checkJavaGeneralization]
-		umlClass.generalizations.forEach[it|it.general.checkJavaClass]
-		umlClass.generalizations.forEach[it|it.specific.checkJavaClass]
+		umlClass.generalizations.forEach[it|it.general.checkJavaType]
+		umlClass.generalizations.forEach[it|it.specific.checkJavaType]
 		// Created before test cases, should be still there:
 		val umlPackage = helper.getUmlRepositoryPackage(pcmCompositeType.repository__DataType)
 		umlPackage.checkJavaPackage

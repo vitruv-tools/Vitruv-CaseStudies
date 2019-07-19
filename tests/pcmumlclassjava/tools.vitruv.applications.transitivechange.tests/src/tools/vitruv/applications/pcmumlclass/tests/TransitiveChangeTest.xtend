@@ -7,7 +7,6 @@ import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Generalization
-import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.NamedElement
@@ -17,6 +16,7 @@ import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Type
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.classifiers.Interface
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
@@ -35,22 +35,16 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
 
-	def protected checkJavaInterface(Interface umlInterface) {
-		assertJavaFileExists(umlInterface.name, umlInterface.convertNamespaces)
-		val javaInterface = getFirstCorrespondingObject(umlInterface, org.emftext.language.java.classifiers.Interface)
-		assertEquals(umlInterface.name, javaInterface.name)
-	}
-
-	def protected checkJavaClass(Classifier umlClass) {
-		val javaClass = getFirstCorrespondingObject(umlClass, Class)
-		assertJavaFileExists(umlClass.name, umlClass.convertNamespaces)
-		assertEquals(umlClass.name, javaClass.name)
+	def protected checkJavaType(Classifier umlClassifier) {
+		assertJavaFileExists(Classifier.name, umlClassifier.convertNamespaces)
+		val javaType = getFirstCorrespondingObject(umlClassifier, Type)
+		assertEquals(javaType.name, javaType.name)
 	}
 
 	def protected checkJavaRealization(InterfaceRealization umlRealization) {
-		val javaInterface = getFirstCorrespondingObject(umlRealization.contract, org.emftext.language.java.classifiers.Interface)
-		val javaClass = getFirstCorrespondingObject(umlRealization.implementingClassifier, Class)
-		assertTrue(javaClass.allSuperClassifiers.contains(javaInterface))
+		val javaInterface = getFirstCorrespondingObject(umlRealization.contract, Interface)
+		val javaClassifier = getFirstCorrespondingObject(umlRealization.implementingClassifier, Class)
+		assertTrue(javaClassifier.allSuperClassifiers.contains(javaInterface)) // classes AND interfaces
 	}
 
 	def protected checkJavaGeneralization(Generalization umlGeneralization) {
@@ -102,7 +96,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	}
 
 	def private dispatch checkJavaMethod(InterfaceMethod javaMethod, Operation umlOperation) {
-		val javaInterface = javaMethod.eContainer as org.emftext.language.java.classifiers.Interface
+		val javaInterface = javaMethod.eContainer as Interface
 		assertJavaInterfaceMethodTraits(javaMethod, umlOperation.name, null, null, javaInterface)
 		assertJavaModifiableAbstract(javaMethod, umlOperation.abstract)
 	}

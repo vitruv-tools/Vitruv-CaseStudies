@@ -69,7 +69,7 @@ class SystemConceptTest extends TransitiveChangeTest {
 		val umlSystemConstructor = helper.getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
 		checkSystemConcept(correspondenceModel, pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
 		checkJavaPackage(umlSystemPkg)
-		checkJavaClass(umlSystemImpl)
+		checkJavaType(umlSystemImpl)
 		checkJavaConstructor(umlSystemConstructor)
 	}
 

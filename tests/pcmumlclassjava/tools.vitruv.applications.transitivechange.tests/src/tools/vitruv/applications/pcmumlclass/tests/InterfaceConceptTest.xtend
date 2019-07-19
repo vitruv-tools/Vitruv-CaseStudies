@@ -58,7 +58,7 @@ class InterfaceConceptTest extends TransitiveChangeTest {
 	}
 	
 	def protected checkJavaInterfaceConcept(Interface umlInterface, OperationInterface pcmInterface) {
-		checkJavaInterface(umlInterface)
+		checkJavaType(umlInterface)
 		// Created before test cases, should be still there:
 		val umlPackage = helper.getUmlRepositoryPackage(pcmInterface.repository__Interface)
 		umlPackage.checkJavaPackage
