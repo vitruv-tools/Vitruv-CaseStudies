@@ -4,13 +4,11 @@ import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
 @RunWith(Suite)
-
 @Suite.SuiteClasses(
-    AssemblyContextConceptTest,
+	AssemblyContextConceptTest,
     AttributeConceptTest,
     CompositeDataTypeConceptTest,
     InterfaceConceptTest,
-    MediaStoreRepositoryCreationTest,
     ParameterConceptTest,
     ProvidedRoleTest,
     RepositoryComponentConceptTest,
@@ -18,6 +16,5 @@ import org.junit.runners.Suite
     RequiredRoleConceptTest,
     SignatureConceptTest,
     SystemConceptTest)
-class PcmUmlClassTestSuite {
-	
+class TransitiveChangeTestSuite {
 }

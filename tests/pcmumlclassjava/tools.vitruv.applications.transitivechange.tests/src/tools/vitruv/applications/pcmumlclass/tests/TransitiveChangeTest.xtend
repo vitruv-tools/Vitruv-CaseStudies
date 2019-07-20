@@ -36,9 +36,9 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
 
 	def protected checkJavaType(Classifier umlClassifier) {
-		assertJavaFileExists(Classifier.name, umlClassifier.convertNamespaces)
-		val javaType = getFirstCorrespondingObject(umlClassifier, Type)
-		assertEquals(javaType.name, javaType.name)
+		assertJavaFileExists(umlClassifier.name, umlClassifier.convertNamespaces)
+		val javaType = getFirstCorrespondingObject(umlClassifier, ConcreteClassifier)
+		assertEquals(umlClassifier.name, javaType.name)
 	}
 
 	def protected checkJavaRealization(InterfaceRealization umlRealization) {
