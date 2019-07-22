@@ -374,7 +374,7 @@ routine createUmlPackage(java::Package jPackage) {
 		        addUmlElementToPackage(uPackage, uModel)
 		    } else {
 		    	// find package by name is necessary, since jPackage does not explicitly model parent-child package relations 
-		        addUmlElementToPackage(uPackage, findUmlPackage(correspondenceModel, jPackage.namespaces.last))
+		        addUmlElementToPackage(uPackage, findUmlPackage(uModel, jPackage.namespaces.last))
 		    }
 		}
 	}
@@ -437,7 +437,7 @@ routine addUmlElementToModelOrPackage(java::CompilationUnit jCompUnit, uml::Clas
             if (jCompUnit.namespaces.nullOrEmpty) {
                 addUmlElementToPackage(uClassifier, uModel)
             } else {
-                addUmlElementToPackage(uClassifier, findUmlPackage(correspondenceModel, jCompUnit.namespaces.last))
+                addUmlElementToPackage(uClassifier, findUmlPackage(uModel, jCompUnit.namespaces.last))
             }
         }
         

@@ -46,7 +46,7 @@ public class CreateUmlPackageRoutine extends AbstractRepairRoutineRealization {
       if (_isNullOrEmpty) {
         _routinesFacade.addUmlElementToPackage(uPackage, uModel);
       } else {
-        _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jPackage.getNamespaces())));
+        _routinesFacade.addUmlElementToPackage(uPackage, JavaToUmlHelper.findUmlPackage(uModel, IterableExtensions.<String>last(jPackage.getNamespaces())));
       }
     }
   }
