@@ -18,6 +18,7 @@ import mir.routines.javaToUmlClassifier.DeleteUmlEnumLiteralRoutine;
 import mir.routines.javaToUmlClassifier.DeleteUmlPackageRoutine;
 import mir.routines.javaToUmlClassifier.DeleteUmlSuperClassGeneralizationRoutine;
 import mir.routines.javaToUmlClassifier.DetectOrCreateUmlModelRoutine;
+import mir.routines.javaToUmlClassifier.PotentiallyMoveClassRoutine;
 import mir.routines.javaToUmlClassifier.RegisterUmlModelInCorrespondenceModelRoutine;
 import mir.routines.javaToUmlClassifier.RemoveUmlClassImplementRoutine;
 import mir.routines.javaToUmlClassifier.RemoveUmlPackageOfClassRoutine;
@@ -78,6 +79,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     AddUmlElementToPackageRoutine routine = new AddUmlElementToPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, uPackageable, uPackage);
+    return routine.applyRoutine();
+  }
+  
+  public boolean potentiallyMoveClass(final CompilationUnit compUnit) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    PotentiallyMoveClassRoutine routine = new PotentiallyMoveClassRoutine(_routinesFacade, _reactionExecutionState, _caller, compUnit);
     return routine.applyRoutine();
   }
   
