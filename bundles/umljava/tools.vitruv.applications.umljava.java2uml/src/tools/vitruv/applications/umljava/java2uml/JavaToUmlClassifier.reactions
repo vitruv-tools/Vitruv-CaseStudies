@@ -109,7 +109,7 @@ routine addUmlElementToPackage(uml::PackageableElement uPackageable, uml::Packag
 }
 
 reaction JavaCompUnitDeleted {
-    after element java::CompilationUnit removed as root
+    after element java::CompilationUnit deleted and removed as root
     call deleteUmlClassifier(oldValue.classifiers.head, oldValue)
 }
 
