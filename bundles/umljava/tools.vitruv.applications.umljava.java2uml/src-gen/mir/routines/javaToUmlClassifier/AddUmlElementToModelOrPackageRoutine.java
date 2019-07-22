@@ -32,7 +32,7 @@ public class AddUmlElementToModelOrPackageRoutine extends AbstractRepairRoutineR
       if (_isNullOrEmpty) {
         _routinesFacade.addUmlElementToPackage(uClassifier, uModel);
       } else {
-        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.findUmlPackage(this.correspondenceModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())));
+        _routinesFacade.addUmlElementToPackage(uClassifier, JavaToUmlHelper.findUmlPackage(uModel, IterableExtensions.<String>last(jCompUnit.getNamespaces())));
       }
     }
   }
