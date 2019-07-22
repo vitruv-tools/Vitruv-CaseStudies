@@ -108,6 +108,26 @@ routine addUmlElementToPackage(uml::PackageableElement uPackageable, uml::Packag
     }
 }
 
+reaction JavaCompUnitCreated {
+	after element java::CompilationUnit inserted as root
+	call potentiallyMoveClass(newValue)
+}
+
+// If there is a corresponding class, move it
+routine potentiallyMoveClass(java::CompilationUnit compUnit) {
+	match {
+		val umlClass = retrieve uml::Class corresponding to compUnit
+	}
+	action {
+		call {
+			if (umlClass.package !== null) {
+				umlClass.package.packagedElements -= umlClass
+			}
+			addUmlElementToModelOrPackage(compUnit, umlClass)
+		}
+	}	
+}
+
 reaction JavaCompUnitDeleted {
     after element java::CompilationUnit deleted and removed as root
     call deleteUmlClassifier(oldValue.classifiers.head, oldValue)

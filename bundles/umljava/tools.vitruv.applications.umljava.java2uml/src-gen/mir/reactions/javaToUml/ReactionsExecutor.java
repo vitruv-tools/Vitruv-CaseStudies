@@ -23,6 +23,7 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
     this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeMadeNonFinalReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlAttribute"))));
     this.addReaction(new mir.reactions.javaToUmlAttribute.JavaAttributeCreatedInInterfaceReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlAttribute"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
+    this.addReaction(new mir.reactions.javaToUmlClassifier.JavaCompUnitCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaCompUnitDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassifierDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassMadeAbstractReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUml.javaToUmlClassifier"))));

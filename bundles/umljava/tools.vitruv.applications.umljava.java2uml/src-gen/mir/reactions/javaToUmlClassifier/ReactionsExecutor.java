@@ -17,6 +17,7 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
   
   protected void setup() {
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUmlClassifier"))));
+    this.addReaction(new mir.reactions.javaToUmlClassifier.JavaCompUnitCreatedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaCompUnitDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassifierDeletedReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUmlClassifier"))));
     this.addReaction(new mir.reactions.javaToUmlClassifier.JavaClassMadeAbstractReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("javaToUmlClassifier"))));
