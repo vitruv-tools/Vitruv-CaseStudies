@@ -10,11 +10,14 @@ import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealiz
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
+import tools.vitruv.framework.change.echange.eobject.DeleteEObject;
 import tools.vitruv.framework.change.echange.root.RemoveRootEObject;
 
 @SuppressWarnings("all")
 public class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
   private RemoveRootEObject<CompilationUnit> removeChange;
+  
+  private DeleteEObject<CompilationUnit> deleteChange;
   
   private int currentlyMatchedChange;
   
@@ -37,8 +40,22 @@ public class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
     resetChanges();
   }
   
+  private boolean matchDeleteChange(final EChange change) {
+    if (change instanceof DeleteEObject<?>) {
+    	DeleteEObject<org.emftext.language.java.containers.CompilationUnit> _localTypedChange = (DeleteEObject<org.emftext.language.java.containers.CompilationUnit>) change;
+    	if (!(_localTypedChange.getAffectedEObject() instanceof org.emftext.language.java.containers.CompilationUnit)) {
+    		return false;
+    	}
+    	this.deleteChange = (DeleteEObject<org.emftext.language.java.containers.CompilationUnit>) change;
+    	return true;
+    }
+    
+    return false;
+  }
+  
   private void resetChanges() {
     removeChange = null;
+    deleteChange = null;
     currentlyMatchedChange = 0;
   }
   
@@ -59,6 +76,16 @@ public class JavaCompUnitDeletedReaction extends AbstractReactionRealization {
     if (currentlyMatchedChange == 0) {
     	if (!matchRemoveChange(change)) {
     		resetChanges();
+    		return false;
+    	} else {
+    		currentlyMatchedChange++;
+    	}
+    	return false; // Only proceed on the last of the expected changes
+    }
+    if (currentlyMatchedChange == 1) {
+    	if (!matchDeleteChange(change)) {
+    		resetChanges();
+    		checkPrecondition(change); // Reexecute to potentially register this as first change
     		return false;
     	} else {
     		currentlyMatchedChange++;
