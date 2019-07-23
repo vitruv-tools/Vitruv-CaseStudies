@@ -6,6 +6,7 @@ import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.classifiers.Interface
 import org.emftext.language.java.generics.GenericsFactory
 import org.emftext.language.java.generics.QualifiedTypeArgument
 import org.emftext.language.java.types.ClassifierReference
@@ -63,9 +64,7 @@ class JavaTypeUtil {
     }
     
     /**
-     * 
-     * @return the classifier that is wrapped in the typeref. Returns null if the type reference does not contain
-     *          any classifier
+     * @return the classifier that is wrapped in the typeref. Returns null if the type reference does not contain any classifier
      */
     def static Classifier getClassifierFromTypeReference(TypeReference typeRef) {
         val type = getJavaTypeFromTypeReference(typeRef)
@@ -73,6 +72,19 @@ class JavaTypeUtil {
             return type
         } else {
             logger.warn("The TypeReference " + typeRef + " does not contain a Classifier. Returning null.")
+            return null
+        }
+    }
+    
+    /**
+     * @return the interface that is wrapped in the typeref. Returns null if the type reference does not contain any interfaces
+     */
+    def static Interface getInterfaceFromTypeReference(TypeReference typeRef) {
+        val type = getJavaTypeFromTypeReference(typeRef)
+        if (type instanceof Interface) {
+            return type
+        } else {
+            logger.warn("The TypeReference " + typeRef + " does not contain a Interface. Returning null.")
             return null
         }
     }
