@@ -52,7 +52,7 @@ routine createJavaClass(uml::Classifier umlClassifier) {
 
 routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteClassifier jClassifier, uml::Namespace uNamespace) {
 	match {
-	    val jPackage = retrieve optional java::Package corresponding to uNamespace
+        val jPackage = retrieve optional java::Package corresponding to uNamespace
         require absence of java::CompilationUnit corresponding to umlClassifier
 	}
 	action {
@@ -80,6 +80,7 @@ reaction UmlClassifierRenamed {
 
 routine renameJavaClassifier(uml::Classifier umlClassifier) {
     match {
+        val jPackage = retrieve optional java::Package corresponding to umlClassifier.eContainer
         val javaClassifier = retrieve java::ConcreteClassifier corresponding to umlClassifier
         val javaCompilationUnit = retrieve java::CompilationUnit corresponding to umlClassifier
     }
@@ -88,8 +89,17 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
             javaClassifier.name = umlClassifier.name;
         }
         update javaCompilationUnit {
+            if (jPackage.present) {
+                javaCompilationUnit.namespaces.clear();
+                javaCompilationUnit.namespaces += jPackage.get.javaPackageAsStringList
+            }
             javaCompilationUnit.name = umlClassifier.name + ".java";
             persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
+        }
+        call {
+            if (jPackage.present) {
+                jPackage.get.compilationUnits += javaCompilationUnit
+            }
         }
     }
 }
