@@ -10,3 +10,4 @@ Require-Bundle: org.junit,
  tools.vitruv.applications.umljava.tests,
  tools.vitruv.applications.umlclassumlcomponents.tests,
  tools.vitruv.applications.pcmumlcomponents.tests
+Export-Package: tools.vitruv.applications.cbs.tests;x-internal:=true

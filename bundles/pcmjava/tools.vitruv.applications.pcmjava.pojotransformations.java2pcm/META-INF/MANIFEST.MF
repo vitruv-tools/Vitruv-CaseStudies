@@ -27,4 +27,10 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.domains.java.util;visibility:=reexport,
  tools.vitruv.domains.pcm.util;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
+Export-Package: mir.reactions.java2Pcm;x-internal:=true,
+ mir.reactions.java2PcmClassifier;x-internal:=true,
+ mir.reactions.java2PcmMethod;x-internal:=true,
+ mir.routines.java2Pcm;x-internal:=true,
+ mir.routines.java2PcmClassifier;x-internal:=true,
+ mir.routines.java2PcmMethod;x-internal:=true,
+ tools.vitruv.applications.pcmjava.pojotransformations.java2pcm

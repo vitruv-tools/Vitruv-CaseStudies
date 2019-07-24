@@ -20,3 +20,5 @@ Require-Bundle: org.eclipse.core.runtime,
  tools.vitruv.domains.pcm.util
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: tools.vitruv.applications.pcmjava.ui;x-internal:=true,
+ tools.vitruv.applications.pcmjava.ui.projectwizard;x-internal:=true

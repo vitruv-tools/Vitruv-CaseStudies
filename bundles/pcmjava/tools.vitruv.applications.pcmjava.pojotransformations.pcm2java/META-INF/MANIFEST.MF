@@ -4,7 +4,10 @@ Bundle-Name: Vitruvius PCM-Java POJO Transformations PCM -> Java
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations.pcm2java;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
 Bundle-Version: 0.1.0.qualifier
-Export-Package: tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
+Export-Package: mappings.generated;x-internal:=true,
+ mir.reactions.pcm2java;x-internal:=true,
+ mir.routines.pcm2java;x-internal:=true,
+ tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
 Require-Bundle: org.eclipse.emf.ecore,
  com.google.guava,
  org.apache.log4j,
