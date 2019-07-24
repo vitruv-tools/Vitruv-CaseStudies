@@ -5,7 +5,10 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents.pcm2uml
 Automatic-Module-Name: tools.vitruv.applications.pcmumlcomponents.pcm2uml
 Bundle-Version: 0.1.0.qualifier
 Eclipse-ExtensibleAPI: true
-Export-Package: tools.vitruv.applications.pcmumlcomponents.pcm2uml
+Export-Package: mappings.generated;x-internal:=true,
+ mir.reactions.pcmToUml;x-internal:=true,
+ mir.routines.pcmToUml;x-internal:=true,
+ tools.vitruv.applications.pcmumlcomponents.pcm2uml
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,

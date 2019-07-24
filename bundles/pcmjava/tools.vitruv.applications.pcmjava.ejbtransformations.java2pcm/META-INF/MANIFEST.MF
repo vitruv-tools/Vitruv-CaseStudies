@@ -4,7 +4,11 @@ Bundle-Name: Vitruvius PCM-Java EJB Transformations Java -> PCM
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm
 Bundle-Version: 0.1.0.qualifier
-Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming
+Export-Package: mappings.generated;x-internal:=true,
+ mir.reactions.ejbjava2pcm;x-internal:=true,
+ mir.routines.ejbjava2pcm;x-internal:=true,
+ tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm;x-internal:=true,
+ tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming
 Require-Bundle: org.apache.log4j,
  com.google.guava,
  org.eclipse.xtend.lib,
