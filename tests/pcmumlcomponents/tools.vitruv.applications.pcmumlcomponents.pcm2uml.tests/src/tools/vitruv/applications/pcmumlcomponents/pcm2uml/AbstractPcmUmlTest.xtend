@@ -14,7 +14,7 @@ import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.testutils.VitruviusApplicationTest
 
-class AbstractPcmUmlTest extends VitruviusApplicationTest {
+abstract class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
 	protected static val MODEL_NAME = "model";
 	//private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
