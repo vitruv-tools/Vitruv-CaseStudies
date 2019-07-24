@@ -16,7 +16,7 @@ import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.testutils.VitruviusApplicationTest
 import org.eclipse.emf.common.util.BasicEList
 
-class AbstractUmlPcmTest extends VitruviusApplicationTest {
+abstract class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml";
 	protected static val MODEL_NAME = "model";
 	protected static val COMPONENT_NAME = "TestComponent"

@@ -13,4 +13,5 @@ Require-Bundle: tools.vitruv.testutils,
  tools.vitruv.extensions.constructionsimulation;bundle-version="0.2.0",
  tools.vitruv.extensions.constructionsimulation.util;bundle-version="0.2.0"
 Bundle-Vendor: vitruv.tools
-Export-Package: tools.vitruv.applications.pcmumlcomponents.uml2pcm
+Export-Package: tools.vitruv.applications.pcmumlcomponents.uml2pcm,
+ tools.vitruv.applications.pcmumlcomponents.uml2pcm.constructionsimulation;x-internal:=true

@@ -4,7 +4,9 @@ Bundle-Name: Class2comp
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.class2comp
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents.class2comp
 Bundle-Version: 0.1.0.qualifier
-Export-Package: tools.vitruv.applications.umlclassumlcomponents.class2comp
+Export-Package: mir.reactions.class2comp;x-internal:=true,
+ mir.routines.class2comp;x-internal:=true,
+ tools.vitruv.applications.umlclassumlcomponents.class2comp
 Require-Bundle: org.eclipse.uml2.uml,
  org.apache.log4j,
  com.google.guava,
