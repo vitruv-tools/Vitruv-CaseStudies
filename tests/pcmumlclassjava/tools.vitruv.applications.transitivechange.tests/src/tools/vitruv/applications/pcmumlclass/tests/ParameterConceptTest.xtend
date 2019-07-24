@@ -58,8 +58,9 @@ class ParameterConceptTest extends TransitiveChangeTest {
 	def protected checkJavaParameterConcept(org.eclipse.uml2.uml.Parameter umlParameter, Parameter pcmParameter) {
 		umlParameter.operation.checkJavaMethod
 		// Created before test cases, should be still there:
-		val pcmRepository = pcmParameter.dataType__Parameter.repository__DataType
+		var pcmRepository = pcmParameter.operationSignature__Parameter.interface__OperationSignature.repository__Interface
 		val umlPackage = helper.getUmlRepositoryPackage(pcmRepository)
+		assertNotNull("Could not retrieve UML package of " + pcmRepository, umlPackage)
 		umlPackage.checkJavaPackage
 		umlPackage.nestedPackages.forEach[checkJavaPackage]
 		helper.getUmlInterface(pcmRepository).checkJavaType
