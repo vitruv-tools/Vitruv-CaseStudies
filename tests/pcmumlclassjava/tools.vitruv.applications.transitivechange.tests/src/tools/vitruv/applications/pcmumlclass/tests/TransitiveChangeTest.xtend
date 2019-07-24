@@ -12,6 +12,7 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.PackageableElement
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Type
 import org.emftext.language.java.classifiers.Class
@@ -34,6 +35,31 @@ import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
+
+	def protected dispatch void checkJavaModel(PackageableElement element) { // TODO TS should be either utilized or removed
+		fail('''Java model check was not implemented for «element.class.simpleName» «element.name» («element»).''')
+	}
+
+	def protected dispatch void checkJavaModel(Type umlType) { // TODO TS should be either utilized or removed
+		logger.debug('''Not checking UML «umlType.class.simpleName» «umlType.name»!''') // Only check classifiers
+	}
+
+	def protected dispatch void checkJavaModel(Package umlPackage) { // TODO TS should be either utilized or removed
+		umlPackage.checkJavaPackage
+		umlPackage.ownedTypes.forEach[checkJavaModel]
+		umlPackage.nestedPackages.forEach[checkJavaModel]
+	}
+
+	def protected dispatch void checkJavaModel(Classifier umlClassifier) { // TODO TS should be either utilized or removed
+		umlClassifier.checkJavaType
+		umlClassifier.attributes.forEach[checkJavaAttribute]
+		umlClassifier.operations.filter[it|it.name == umlClassifier.name].forEach[checkJavaConstructor]
+		umlClassifier.operations.filter[it|it.name != umlClassifier.name].forEach[checkJavaMethod]
+		umlClassifier.generalizations.forEach[checkJavaGeneralization]
+		if (umlClassifier instanceof org.eclipse.uml2.uml.Class) {
+			(umlClassifier as org.eclipse.uml2.uml.Class).interfaceRealizations.forEach[checkJavaRealization]
+		}
+	}
 
 	def protected checkJavaType(Classifier umlClassifier) {
 		assertJavaFileExists(umlClassifier.name, umlClassifier.convertNamespaces)
@@ -90,14 +116,14 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	def private dispatch checkJavaMethod(ClassMethod javaMethod, Operation umlOperation) {
 		val javaClass = javaMethod.eContainer as Class
-		assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract, null,
+		assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract, javaMethod.parameters,
 			javaClass)
 		assertFinalMethodEquals(umlOperation, javaMethod)
 	}
 
 	def private dispatch checkJavaMethod(InterfaceMethod javaMethod, Operation umlOperation) {
 		val javaInterface = javaMethod.eContainer as Interface
-		assertJavaInterfaceMethodTraits(javaMethod, umlOperation.name, null, null, javaInterface)
+		assertJavaInterfaceMethodTraits(javaMethod, umlOperation.name, null, javaMethod.parameters, javaInterface)
 		assertJavaModifiableAbstract(javaMethod, umlOperation.abstract)
 	}
 
