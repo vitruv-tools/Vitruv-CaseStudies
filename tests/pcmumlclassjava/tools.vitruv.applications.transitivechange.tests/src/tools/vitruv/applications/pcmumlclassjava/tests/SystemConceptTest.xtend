@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclass.tests
+package tools.vitruv.applications.pcmumlclassjava.tests
 
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Model

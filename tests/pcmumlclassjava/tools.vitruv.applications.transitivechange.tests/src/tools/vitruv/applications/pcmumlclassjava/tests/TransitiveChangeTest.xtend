@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclass.tests
+package tools.vitruv.applications.pcmumlclassjava.tests
 
 import java.util.ArrayList
 import java.util.Collection
@@ -24,8 +24,15 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
+import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
+import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
+import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
+import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
+import tools.vitruv.domains.pcm.PcmDomainProvider
+import tools.vitruv.domains.uml.UmlDomainProvider
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
@@ -33,6 +40,24 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
+	
+	protected static final int ARRAY_LIST_SELECTION = 0;
+	
+	override protected createChangePropagationSpecifications() {
+		return #[
+			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
+			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
+			new UmlToJavaChangePropagationSpecification() // ,
+			// new JavaToUmlChangePropagationSpecification()
+		];
+	}
+
+	override protected getVitruvDomains() {
+		new PcmDomainProvider().domain.enableTransitiveChangePropagation
+		new UmlDomainProvider().domain.enableTransitiveChangePropagation
+		new JavaDomainProvider().domain.enableTransitiveChangePropagation
+		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain];
+	}	
 
 	private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
 

@@ -4,7 +4,6 @@ Bundle-Name: Transitive Transformation Tests PCM Java UML Class
 Bundle-SymbolicName: tools.vitruv.applications.transitivechange.tests
 Bundle-Version: 0.1.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.transitivechange.tests
-Fragment-Host: tools.vitruv.applications.pcmumlclass
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: tools.vitruv.testutils;bundle-version="0.2.0",
  tools.vitruv.framework.change.processing,
@@ -20,5 +19,12 @@ Require-Bundle: tools.vitruv.testutils;bundle-version="0.2.0",
  tools.vitruv.applications.umljava.java2uml,
  tools.vitruv.applications.umljava.uml2java,
  tools.vitruv.domains.java.util,
- tools.vitruv.applications.umljava.util
+ tools.vitruv.applications.pcmumlclass;bundle-version="0.1.0",
+ tools.vitruv.applications.umljava;bundle-version="0.1.0",
+ tools.vitruv.applications.umljava.util;bundle-version="0.1.0",
+ org.apache.log4j;bundle-version="1.2.15",
+ com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro
 Export-Package: tools.vitruv.applications.pcmumlclass.tests

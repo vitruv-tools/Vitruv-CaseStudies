@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclass.tests
+package tools.vitruv.applications.pcmumlclassjava.tests
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
@@ -11,6 +11,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
 import static org.junit.Assert.*
+import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::CompositeDataType in a pcm::Repository

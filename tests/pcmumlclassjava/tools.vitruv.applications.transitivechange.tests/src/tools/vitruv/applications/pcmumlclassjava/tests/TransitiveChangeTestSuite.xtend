@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclass.tests
+package tools.vitruv.applications.pcmumlclassjava.tests
 
 import org.junit.runner.RunWith
 import org.junit.runners.Suite

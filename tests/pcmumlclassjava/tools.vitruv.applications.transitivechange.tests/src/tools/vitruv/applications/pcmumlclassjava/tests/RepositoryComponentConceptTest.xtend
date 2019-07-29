@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclass.tests
+package tools.vitruv.applications.pcmumlclassjava.tests
 
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Operation
@@ -14,6 +14,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
+import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize synchronize a pcm::RepositoryComponent with 
