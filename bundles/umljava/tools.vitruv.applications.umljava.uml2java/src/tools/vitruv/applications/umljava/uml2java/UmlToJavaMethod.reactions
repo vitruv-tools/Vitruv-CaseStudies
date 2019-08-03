@@ -269,7 +269,7 @@ routine renameJavaNamedElement(uml::NamedElement uElem, String name) {
 
 reaction UmlParameterCreated {
     after element uml::Parameter created and inserted in uml::Operation[ownedParameter]
-    with newValue.direction == ParameterDirectionKind.IN_LITERAL && newValue.name !== null
+    with (newValue.direction == ParameterDirectionKind.IN_LITERAL || newValue.direction == ParameterDirectionKind.INOUT_LITERAL) && newValue.name !== null
     call createJavaParameter(affectedEObject, newValue)
 
 }
@@ -303,7 +303,7 @@ reaction UmlReturnParameterDeleted {
 
 reaction UmlParameterDeleted {
     after element uml::Parameter deleted and removed from uml::Operation[ownedParameter]
-    with oldValue.direction == ParameterDirectionKind.IN_LITERAL
+    with oldValue.direction == ParameterDirectionKind.IN_LITERAL || oldValue.direction == ParameterDirectionKind.INOUT_LITERAL
     call deleteJavaParameter(oldValue)
 }
 
@@ -318,7 +318,7 @@ routine deleteJavaParameter(uml::Parameter uParam) {
 
 reaction UmlParameterTypeChanged {
     after element uml::Type replaced at uml::Parameter[type]
-    with affectedEObject.direction == ParameterDirectionKind.IN_LITERAL
+    with affectedEObject.direction == ParameterDirectionKind.IN_LITERAL || affectedEObject.direction == ParameterDirectionKind.INOUT_LITERAL
     call  changeJavaParameterType(affectedEObject, newValue)
 }
 
@@ -337,7 +337,7 @@ routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
 reaction UmlParameterDirectionChanged {
     after attribute replaced at uml::Parameter[direction]
     with (newValue == ParameterDirectionKind.RETURN_LITERAL)
-    || (newValue == ParameterDirectionKind.IN_LITERAL)
+    || (newValue == ParameterDirectionKind.IN_LITERAL) || (newValue == ParameterDirectionKind.INOUT_LITERAL)
     call adaptJavaParametertoDirectionChange(affectedEObject.operation, affectedEObject, oldValue, newValue)
 }
 
@@ -359,7 +359,7 @@ routine adaptJavaParametertoDirectionChange(uml::Operation uOperation, uml::Para
         call {
             if (newDirection == ParameterDirectionKind.RETURN_LITERAL && jParam.present) {
                 EcoreUtil.^remove(jParam.get)
-            } else if (newDirection == ParameterDirectionKind.IN_LITERAL && !jParam.isPresent) {
+            } else if ((newDirection == ParameterDirectionKind.IN_LITERAL || newDirection == ParameterDirectionKind.INOUT_LITERAL) && !jParam.isPresent) {
                 createJavaParameter(uOperation, uParam)
             }
         }

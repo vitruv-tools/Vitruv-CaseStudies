@@ -57,7 +57,7 @@ public class AdaptJavaParametertoDirectionChangeRoutine extends AbstractRepairRo
       if ((Objects.equal(newDirection, ParameterDirectionKind.RETURN_LITERAL) && jParam.isPresent())) {
         EcoreUtil.remove(jParam.get());
       } else {
-        if ((Objects.equal(newDirection, ParameterDirectionKind.IN_LITERAL) && (!jParam.isPresent()))) {
+        if (((Objects.equal(newDirection, ParameterDirectionKind.IN_LITERAL) || Objects.equal(newDirection, ParameterDirectionKind.INOUT_LITERAL)) && (!jParam.isPresent()))) {
           _routinesFacade.createJavaParameter(uOperation, uParam);
         }
       }
