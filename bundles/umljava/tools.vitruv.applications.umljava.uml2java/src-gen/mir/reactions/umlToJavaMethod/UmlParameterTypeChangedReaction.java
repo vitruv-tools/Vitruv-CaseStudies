@@ -87,9 +87,7 @@ public class UmlParameterTypeChangedReaction extends AbstractReactionRealization
   }
   
   private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue) {
-    ParameterDirectionKind _direction = affectedEObject.getDirection();
-    boolean _equals = Objects.equal(_direction, ParameterDirectionKind.IN_LITERAL);
-    return _equals;
+    return (Objects.equal(affectedEObject.getDirection(), ParameterDirectionKind.IN_LITERAL) || Objects.equal(affectedEObject.getDirection(), ParameterDirectionKind.INOUT_LITERAL));
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
