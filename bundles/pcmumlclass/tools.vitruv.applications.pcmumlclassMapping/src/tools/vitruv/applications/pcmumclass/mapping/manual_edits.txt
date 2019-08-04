@@ -1,0 +1,27 @@
+when importing newly (from mappings) generated reactions, the following steps
+have to be done manually:
+
+- add the routine import: 
+import routines umlXpcmRoutines
+- remove all bidirectional routine stubs (will be marked red after importing)
+
+Additionally:
+
+
+only for umlXpcmRepository:
+
+L2R:
+in repository_CreateMapping(uml::Package repositoryPkg_, uml::Package contractsPkg_ , uml::Package datatypesPkg_) :
+
+		execute {
+		persistProjectRelative(repositoryPkg_, repository_, 'Repository.repository')		
+		}		
+
+R2L:
+in repository_CreateMapping(repository::Repository repository_) . execute :
+
+persistProjectRelative(repository_, repositoryPkg_, 'Repository.uml')
+
+
+
+

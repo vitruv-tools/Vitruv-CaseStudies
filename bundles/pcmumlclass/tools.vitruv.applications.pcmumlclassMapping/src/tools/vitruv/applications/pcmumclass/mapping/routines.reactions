@@ -1,0 +1,27 @@
+//will be ignored anyway because we only import the routines
+reactions: umlXpcmRoutines 
+in reaction to changes in UML
+execute actions in PCM
+
+routine updateRepoName(uml::Package repositoryPkg, uml::Package contractsPkg , uml::Package datatypesPkg) {
+	match{
+		val repository = retrieve pcm::Repository corresponding to repositoryPkg tagged with "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:repositoryPkg_with_Repository:repository"
+	} 	
+	action {
+		execute {
+			repository.entityName = repositoryPkg.name.toFirstUpper					
+		}
+	}
+}
+
+routine updateRepoPackageName(repository::Repository repository) {
+	match{
+		val repositoryPkg = retrieve asserted uml::Package corresponding to repository tagged with "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:repositoryPkg_with_Repository:repository"
+	}	
+	action {
+		update repositoryPkg {
+		if (repositoryPkg.name != repository.entityName.toFirstLower)
+			repositoryPkg.name = repository.entityName.toFirstLower					
+		}
+	}
+}

@@ -1,0 +1,9 @@
+package tools.vitruv.applications.pcmumclass.mapping.tests
+
+class TagLiterals {
+
+	public static final String REPOSITORY_TO_CONTRACTS_PACKAGE = "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:contractsPkg_with_Repository:repository"
+	public static final String REPOSITORY_TO_DATATYPES_PACKAGE = "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:datatypesPkg_with_Repository:repository"
+	public static final String REPOSITORY_TO_REPOSITORY_PACKAGE = "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:repositoryPkg_with_Repository:repository"
+
+}
