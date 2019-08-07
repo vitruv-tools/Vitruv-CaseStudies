@@ -111,7 +111,9 @@ public class UmlParameterDeletedReaction extends AbstractReactionRealization {
   }
   
   private boolean checkUserDefinedPrecondition(final RemoveEReference removeChange, final Operation affectedEObject, final EReference affectedFeature, final Parameter oldValue, final int index) {
-    return (Objects.equal(oldValue.getDirection(), ParameterDirectionKind.IN_LITERAL) || Objects.equal(oldValue.getDirection(), ParameterDirectionKind.INOUT_LITERAL));
+    ParameterDirectionKind _direction = oldValue.getDirection();
+    boolean _equals = Objects.equal(_direction, ParameterDirectionKind.IN_LITERAL);
+    return _equals;
   }
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
