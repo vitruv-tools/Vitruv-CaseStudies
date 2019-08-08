@@ -1,6 +1,7 @@
 package mir.routines.umlToJavaMethod;
 
-import mir.routines.umlToJavaMethod.AdaptJavaParametertoDirectionChangeRoutine;
+import mir.routines.umlToJavaMethod.AdaptParameterDirectionChangedFromReturnRoutine;
+import mir.routines.umlToJavaMethod.AdaptParameterDirectionChangedToReturnRoutine;
 import mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine;
 import mir.routines.umlToJavaMethod.ChangeJavaParameterTypeRoutine;
 import mir.routines.umlToJavaMethod.CreateJavaClassMethodRoutine;
@@ -8,6 +9,7 @@ import mir.routines.umlToJavaMethod.CreateJavaConstructorRoutine;
 import mir.routines.umlToJavaMethod.CreateJavaInterfaceMethodRoutine;
 import mir.routines.umlToJavaMethod.CreateJavaMethodRoutine;
 import mir.routines.umlToJavaMethod.CreateJavaParameterRoutine;
+import mir.routines.umlToJavaMethod.CreateMissingJavaParameterRoutine;
 import mir.routines.umlToJavaMethod.DeleteJavaMethodRoutine;
 import mir.routines.umlToJavaMethod.DeleteJavaParameterRoutine;
 import mir.routines.umlToJavaMethod.RenameJavaNamedElementRoutine;
@@ -21,7 +23,6 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutinesFacade;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -127,6 +128,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
+  public boolean createMissingJavaParameter(final Parameter uParameter) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateMissingJavaParameterRoutine routine = new CreateMissingJavaParameterRoutine(_routinesFacade, _reactionExecutionState, _caller, uParameter);
+    return routine.applyRoutine();
+  }
+  
   public boolean createJavaParameter(final Operation uMeth, final Parameter umlParam) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
@@ -151,11 +160,19 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean adaptJavaParametertoDirectionChange(final Operation uOperation, final Parameter uParam, final ParameterDirectionKind oldDirection, final ParameterDirectionKind newDirection) {
+  public boolean adaptParameterDirectionChangedFromReturn(final Operation uOperation) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    AdaptJavaParametertoDirectionChangeRoutine routine = new AdaptJavaParametertoDirectionChangeRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, uParam, oldDirection, newDirection);
+    AdaptParameterDirectionChangedFromReturnRoutine routine = new AdaptParameterDirectionChangedFromReturnRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation);
+    return routine.applyRoutine();
+  }
+  
+  public boolean adaptParameterDirectionChangedToReturn(final Operation uOperation, final Parameter uParam) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AdaptParameterDirectionChangedToReturnRoutine routine = new AdaptParameterDirectionChangedToReturnRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, uParam);
     return routine.applyRoutine();
   }
 }
