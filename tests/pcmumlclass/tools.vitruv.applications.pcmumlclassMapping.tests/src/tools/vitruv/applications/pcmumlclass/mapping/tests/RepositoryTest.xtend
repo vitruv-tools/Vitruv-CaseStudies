@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumclass.mapping.tests
+package tools.vitruv.applications.pcmumlclass.mapping.tests
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Model
@@ -7,13 +7,12 @@ import org.eclipse.uml2.uml.UMLFactory
 import org.junit.Test
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
+import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-class RepositoryTest extends PcmUmlClassTest {
 
-	final static String PCM_MODEL_FILE = 'Repository.repository'
-	final static String UML_MODEL_FILE = 'Repository.uml'
+class RepositoryTest extends PcmUmlClassTest {
 
 	override getMappingName() {
 		'umlXpcmRepository'
@@ -123,7 +122,7 @@ class RepositoryTest extends PcmUmlClassTest {
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
 		println(pcmRepository.entityName)
-		assertTrue(pcmRepository.entityName == newName.toFirstUpper)
+		assertEquals( newName.toFirstUpper,pcmRepository.entityName)
 		checkPcmRepository(pcmRepository)
 	}
 

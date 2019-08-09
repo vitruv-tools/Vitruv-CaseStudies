@@ -44,7 +44,7 @@ mapping Signature{
    	 		}
    	 	}
    	 	
-   	 	routine updateOperationSignatureReturnType(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+   	 	routine updateOperationSignatureReturnType(pcm::OperationSignature operationSignature, pcm::OperationInterface operationInterface){
    	 		action{
    	 			execute{   	 			
    	 			}

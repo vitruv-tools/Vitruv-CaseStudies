@@ -20,9 +20,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmRoles_R2L in reaction to changes in PCM
 execute actions in UML
-
 import routines umlXpcmRoutines 
-
 reaction OnRequiredRoleOperationInterfaceInsertedAsRoot {
 	after element repository::OperationInterface created
 	call requiredRole_ElementCreatedCheck(affectedEObject)
@@ -113,20 +111,6 @@ reaction OnProvidedRoleEntityNameReplacedAtOperationProvidedRoleBidirectional {
 	call providedRole_BidirectionalCheck(affectedEObject)
 }
 
-routine updatePropertyName(repository::OperationRequiredRole role, repository::OperationInterface operationInterface , entity::InterfaceProvidingRequiringEntity requiringEntity) {
-	action {
-		execute {
-		}
-	}
-}
-
-routine updateParameterName(repository::OperationRequiredRole role, repository::OperationInterface operationInterface , entity::InterfaceProvidingRequiringEntity requiringEntity) {
-	action {
-		execute {
-		}
-	}
-}
-
 routine requiredRole_BidirectionalUpdate(repository::OperationRequiredRole role_, repository::OperationInterface operationInterface_ , entity::InterfaceProvidingRequiringEntity requiringEntity_) {
 	action {
 		call updatePropertyName(role_, operationInterface_ , requiringEntity_)
@@ -138,33 +122,33 @@ routine requiredRole_CreateMapping(repository::OperationRequiredRole role_, repo
 	match {
 		require absence of uml::Property corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Property:property_with_OperationRequiredRole:role"
 		require absence of uml::Parameter corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Parameter:parameter_with_OperationRequiredRole:role"
-		require absence of uml::Class corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationRequiredRole:role"
+		require absence of uml::Class corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationRequiredRole:role"
 		require absence of uml::Interface corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationRequiredRole:role"
 		require absence of uml::Operation corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Operation:operation_with_OperationRequiredRole:role"
+		val implementation_ = retrieve uml::Class corresponding to requiringEntity_ tagged with "umlXpcmComponent_map_UML_and_PCM_correspondence_Class:implementation_with_RepositoryComponent:component"
+		val interface_ = retrieve uml::Interface corresponding to operationInterface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		val operation_ = retrieve uml::Operation corresponding to operationInterface_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationInterface:operationInterface"
 	}
 	action {
 		val property_ = create uml::Property
 		val parameter_ = create uml::Parameter
-		val class_ = create uml::Class
-		val interface_ = create uml::Interface
-		val operation_ = create uml::Operation
 		add correspondence between property_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Property:property_with_OperationRequiredRole:role"
 		add correspondence between parameter_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Parameter:parameter_with_OperationRequiredRole:role"
-		add correspondence between class_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationRequiredRole:role"
+		add correspondence between implementation_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationRequiredRole:role"
 		add correspondence between interface_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationRequiredRole:role"
 		add correspondence between operation_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Operation:operation_with_OperationRequiredRole:role"
 		add correspondence between property_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Property:property_with_OperationInterface:operationInterface"
 		add correspondence between parameter_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Parameter:parameter_with_OperationInterface:operationInterface"
-		add correspondence between class_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationInterface:operationInterface"
+		add correspondence between implementation_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationInterface:operationInterface"
 		add correspondence between interface_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
 		add correspondence between operation_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Operation:operation_with_OperationInterface:operationInterface"
 		add correspondence between property_ and requiringEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Property:property_with_InterfaceProvidingRequiringEntity:requiringEntity"
 		add correspondence between parameter_ and requiringEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Parameter:parameter_with_InterfaceProvidingRequiringEntity:requiringEntity"
-		add correspondence between class_ and requiringEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_InterfaceProvidingRequiringEntity:requiringEntity"
+		add correspondence between implementation_ and requiringEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_InterfaceProvidingRequiringEntity:requiringEntity"
 		add correspondence between interface_ and requiringEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_InterfaceProvidingRequiringEntity:requiringEntity"
 		add correspondence between operation_ and requiringEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Operation:operation_with_InterfaceProvidingRequiringEntity:requiringEntity"
 		execute {
-			class_.getOwnedAttributes().^add(property_)
+			implementation_.getOwnedAttributes().^add(property_)
 			property_.setType(interface_)
 			parameter_.setType(interface_)
 			operation_.getOwnedParameters().^add(parameter_)
@@ -173,13 +157,10 @@ routine requiredRole_CreateMapping(repository::OperationRequiredRole role_, repo
 	}
 }
 
-routine requiredRole_DeleteMapping(uml::Property property_, uml::Parameter parameter_ , uml::Class class_ , uml::Interface interface_ , uml::Operation operation_) {
+routine requiredRole_DeleteMapping(uml::Property property_, uml::Parameter parameter_ , uml::Class implementation_ , uml::Interface interface_ , uml::Operation operation_) {
 	action {
 		delete property_
 		delete parameter_
-		delete class_
-		delete interface_
-		delete operation_
 	}
 }
 
@@ -207,17 +188,17 @@ routine requiredRole_ElementDeletedCheck(ecore::EObject affectedEObject) {
 	match {
 		val property_correspondingTo_role = retrieve optional uml::Property corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Property:property_with_OperationRequiredRole:role"
 		val parameter_correspondingTo_role = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Parameter:parameter_with_OperationRequiredRole:role"
-		val class_correspondingTo_role = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationRequiredRole:role"
+		val implementation_correspondingTo_role = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationRequiredRole:role"
 		val interface_correspondingTo_role = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationRequiredRole:role"
 		val operation_correspondingTo_role = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Operation:operation_with_OperationRequiredRole:role"
 		val property_correspondingTo_operationInterface = retrieve optional uml::Property corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Property:property_with_OperationInterface:operationInterface"
 		val parameter_correspondingTo_operationInterface = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Parameter:parameter_with_OperationInterface:operationInterface"
-		val class_correspondingTo_operationInterface = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationInterface:operationInterface"
+		val implementation_correspondingTo_operationInterface = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationInterface:operationInterface"
 		val interface_correspondingTo_operationInterface = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
 		val operation_correspondingTo_operationInterface = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Operation:operation_with_OperationInterface:operationInterface"
 		val property_correspondingTo_requiringEntity = retrieve optional uml::Property corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Property:property_with_InterfaceProvidingRequiringEntity:requiringEntity"
 		val parameter_correspondingTo_requiringEntity = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Parameter:parameter_with_InterfaceProvidingRequiringEntity:requiringEntity"
-		val class_correspondingTo_requiringEntity = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_InterfaceProvidingRequiringEntity:requiringEntity"
+		val implementation_correspondingTo_requiringEntity = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_InterfaceProvidingRequiringEntity:requiringEntity"
 		val interface_correspondingTo_requiringEntity = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_InterfaceProvidingRequiringEntity:requiringEntity"
 		val operation_correspondingTo_requiringEntity = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Operation:operation_with_InterfaceProvidingRequiringEntity:requiringEntity"
 	}
@@ -225,25 +206,25 @@ routine requiredRole_ElementDeletedCheck(ecore::EObject affectedEObject) {
 		call {
 			var Property property_
 			var Parameter parameter_
-			var Class class_
+			var Class implementation_
 			var Interface interface_
 			var Operation operation_
 			if ( property_correspondingTo_role . isPresent ( ) ) property_ = property_correspondingTo_role . get ( )
 			if ( parameter_correspondingTo_role . isPresent ( ) ) parameter_ = parameter_correspondingTo_role . get ( )
-			if ( class_correspondingTo_role . isPresent ( ) ) class_ = class_correspondingTo_role . get ( )
+			if ( implementation_correspondingTo_role . isPresent ( ) ) implementation_ = implementation_correspondingTo_role . get ( )
 			if ( interface_correspondingTo_role . isPresent ( ) ) interface_ = interface_correspondingTo_role . get ( )
 			if ( operation_correspondingTo_role . isPresent ( ) ) operation_ = operation_correspondingTo_role . get ( )
 			if ( property_correspondingTo_operationInterface . isPresent ( ) ) property_ = property_correspondingTo_operationInterface . get ( )
 			if ( parameter_correspondingTo_operationInterface . isPresent ( ) ) parameter_ = parameter_correspondingTo_operationInterface . get ( )
-			if ( class_correspondingTo_operationInterface . isPresent ( ) ) class_ = class_correspondingTo_operationInterface . get ( )
+			if ( implementation_correspondingTo_operationInterface . isPresent ( ) ) implementation_ = implementation_correspondingTo_operationInterface . get ( )
 			if ( interface_correspondingTo_operationInterface . isPresent ( ) ) interface_ = interface_correspondingTo_operationInterface . get ( )
 			if ( operation_correspondingTo_operationInterface . isPresent ( ) ) operation_ = operation_correspondingTo_operationInterface . get ( )
 			if ( property_correspondingTo_requiringEntity . isPresent ( ) ) property_ = property_correspondingTo_requiringEntity . get ( )
 			if ( parameter_correspondingTo_requiringEntity . isPresent ( ) ) parameter_ = parameter_correspondingTo_requiringEntity . get ( )
-			if ( class_correspondingTo_requiringEntity . isPresent ( ) ) class_ = class_correspondingTo_requiringEntity . get ( )
+			if ( implementation_correspondingTo_requiringEntity . isPresent ( ) ) implementation_ = implementation_correspondingTo_requiringEntity . get ( )
 			if ( interface_correspondingTo_requiringEntity . isPresent ( ) ) interface_ = interface_correspondingTo_requiringEntity . get ( )
 			if ( operation_correspondingTo_requiringEntity . isPresent ( ) ) operation_ = operation_correspondingTo_requiringEntity . get ( )
-			if ( property_ !== null && parameter_ !== null && class_ !== null && interface_ !== null && operation_ !== null ) requiredRole_DeleteMapping ( property_ , parameter_ , class_ , interface_ , operation_ )
+			if ( property_ !== null && parameter_ !== null && implementation_ !== null && interface_ !== null && operation_ !== null ) requiredRole_DeleteMapping ( property_ , parameter_ , implementation_ , interface_ , operation_ )
 		}
 	}
 }
@@ -259,13 +240,6 @@ routine requiredRole_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 	}
 }
 
-routine updateInterfaceRealizationName(repository::OperationProvidedRole role, repository::OperationInterface operationInterface , entity::InterfaceProvidingRequiringEntity providingEntity) {
-	action {
-		execute {
-		}
-	}
-}
-
 routine providedRole_BidirectionalUpdate(repository::OperationProvidedRole role_, repository::OperationInterface operationInterface_ , entity::InterfaceProvidingRequiringEntity providingEntity_) {
 	action {
 		call updateInterfaceRealizationName(role_, operationInterface_ , providingEntity_)
@@ -275,35 +249,33 @@ routine providedRole_BidirectionalUpdate(repository::OperationProvidedRole role_
 routine providedRole_CreateMapping(repository::OperationProvidedRole role_, repository::OperationInterface operationInterface_ , entity::InterfaceProvidingRequiringEntity providingEntity_) {
 	match {
 		require absence of uml::InterfaceRealization corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_InterfaceRealization:interfaceRealization_with_OperationProvidedRole:role"
-		require absence of uml::Class corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationProvidedRole:role"
+		require absence of uml::Class corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationProvidedRole:role"
 		require absence of uml::Interface corresponding to role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationProvidedRole:role"
+		val implementation_ = retrieve uml::Class corresponding to providingEntity_ tagged with "umlXpcmComponent_map_UML_and_PCM_correspondence_Class:implementation_with_RepositoryComponent:component"
+		val interface_ = retrieve uml::Interface corresponding to operationInterface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
 	}
 	action {
 		val interfaceRealization_ = create uml::InterfaceRealization
-		val class_ = create uml::Class
-		val interface_ = create uml::Interface
 		add correspondence between interfaceRealization_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_InterfaceRealization:interfaceRealization_with_OperationProvidedRole:role"
-		add correspondence between class_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationProvidedRole:role"
+		add correspondence between implementation_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationProvidedRole:role"
 		add correspondence between interface_ and role_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationProvidedRole:role"
 		add correspondence between interfaceRealization_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_InterfaceRealization:interfaceRealization_with_OperationInterface:operationInterface"
-		add correspondence between class_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationInterface:operationInterface"
+		add correspondence between implementation_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationInterface:operationInterface"
 		add correspondence between interface_ and operationInterface_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
 		add correspondence between interfaceRealization_ and providingEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_InterfaceRealization:interfaceRealization_with_InterfaceProvidingRequiringEntity:providingEntity"
-		add correspondence between class_ and providingEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_InterfaceProvidingRequiringEntity:providingEntity"
+		add correspondence between implementation_ and providingEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_InterfaceProvidingRequiringEntity:providingEntity"
 		add correspondence between interface_ and providingEntity_ tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_InterfaceProvidingRequiringEntity:providingEntity"
 		execute {
-			class_.getInterfaceRealizations().^add(interfaceRealization_)
+			implementation_.getInterfaceRealizations().^add(interfaceRealization_)
 			interfaceRealization_.setContract(interface_)
 		}
 		call providedRole_BidirectionalUpdate(role_, operationInterface_ , providingEntity_)
 	}
 }
 
-routine providedRole_DeleteMapping(uml::InterfaceRealization interfaceRealization_, uml::Class class_ , uml::Interface interface_) {
+routine providedRole_DeleteMapping(uml::InterfaceRealization interfaceRealization_, uml::Class implementation_ , uml::Interface interface_) {
 	action {
 		delete interfaceRealization_
-		delete class_
-		delete interface_
 	}
 }
 
@@ -330,30 +302,30 @@ routine providedRole_ElementCreatedCheck(ecore::EObject affectedEObject) {
 routine providedRole_ElementDeletedCheck(ecore::EObject affectedEObject) {
 	match {
 		val interfaceRealization_correspondingTo_role = retrieve optional uml::InterfaceRealization corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_InterfaceRealization:interfaceRealization_with_OperationProvidedRole:role"
-		val class_correspondingTo_role = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationProvidedRole:role"
+		val implementation_correspondingTo_role = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationProvidedRole:role"
 		val interface_correspondingTo_role = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationProvidedRole:role"
 		val interfaceRealization_correspondingTo_operationInterface = retrieve optional uml::InterfaceRealization corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_InterfaceRealization:interfaceRealization_with_OperationInterface:operationInterface"
-		val class_correspondingTo_operationInterface = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_OperationInterface:operationInterface"
+		val implementation_correspondingTo_operationInterface = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_OperationInterface:operationInterface"
 		val interface_correspondingTo_operationInterface = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
 		val interfaceRealization_correspondingTo_providingEntity = retrieve optional uml::InterfaceRealization corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_InterfaceRealization:interfaceRealization_with_InterfaceProvidingRequiringEntity:providingEntity"
-		val class_correspondingTo_providingEntity = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:class_with_InterfaceProvidingRequiringEntity:providingEntity"
+		val implementation_correspondingTo_providingEntity = retrieve optional uml::Class corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Class:implementation_with_InterfaceProvidingRequiringEntity:providingEntity"
 		val interface_correspondingTo_providingEntity = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmRoles_map_UML_and_PCM_correspondence_Interface:interface_with_InterfaceProvidingRequiringEntity:providingEntity"
 	}
 	action {
 		call {
 			var InterfaceRealization interfaceRealization_
-			var Class class_
+			var Class implementation_
 			var Interface interface_
 			if ( interfaceRealization_correspondingTo_role . isPresent ( ) ) interfaceRealization_ = interfaceRealization_correspondingTo_role . get ( )
-			if ( class_correspondingTo_role . isPresent ( ) ) class_ = class_correspondingTo_role . get ( )
+			if ( implementation_correspondingTo_role . isPresent ( ) ) implementation_ = implementation_correspondingTo_role . get ( )
 			if ( interface_correspondingTo_role . isPresent ( ) ) interface_ = interface_correspondingTo_role . get ( )
 			if ( interfaceRealization_correspondingTo_operationInterface . isPresent ( ) ) interfaceRealization_ = interfaceRealization_correspondingTo_operationInterface . get ( )
-			if ( class_correspondingTo_operationInterface . isPresent ( ) ) class_ = class_correspondingTo_operationInterface . get ( )
+			if ( implementation_correspondingTo_operationInterface . isPresent ( ) ) implementation_ = implementation_correspondingTo_operationInterface . get ( )
 			if ( interface_correspondingTo_operationInterface . isPresent ( ) ) interface_ = interface_correspondingTo_operationInterface . get ( )
 			if ( interfaceRealization_correspondingTo_providingEntity . isPresent ( ) ) interfaceRealization_ = interfaceRealization_correspondingTo_providingEntity . get ( )
-			if ( class_correspondingTo_providingEntity . isPresent ( ) ) class_ = class_correspondingTo_providingEntity . get ( )
+			if ( implementation_correspondingTo_providingEntity . isPresent ( ) ) implementation_ = implementation_correspondingTo_providingEntity . get ( )
 			if ( interface_correspondingTo_providingEntity . isPresent ( ) ) interface_ = interface_correspondingTo_providingEntity . get ( )
-			if ( interfaceRealization_ !== null && class_ !== null && interface_ !== null ) providedRole_DeleteMapping ( interfaceRealization_ , class_ , interface_ )
+			if ( interfaceRealization_ !== null && implementation_ !== null && interface_ !== null ) providedRole_DeleteMapping ( interfaceRealization_ , implementation_ , interface_ )
 		}
 	}
 }

@@ -52,9 +52,7 @@ routine repository_CreateMapping(uml::Package repositoryPkg_, uml::Package contr
 		add correspondence between repository_ and repositoryPkg_ tagged with "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:repositoryPkg_with_Repository:repository"
 		add correspondence between repository_ and contractsPkg_ tagged with "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:contractsPkg_with_Repository:repository"
 		add correspondence between repository_ and datatypesPkg_ tagged with "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:datatypesPkg_with_Repository:repository"
-		execute {
-		persistProjectRelative(repositoryPkg_, repository_, 'Repository.repository')		
-		}		
+		call createRepositoryRoot(repositoryPkg_, repository_)
 		call repository_BidirectionalUpdate(repositoryPkg_, contractsPkg_ , datatypesPkg_)
 	}
 }

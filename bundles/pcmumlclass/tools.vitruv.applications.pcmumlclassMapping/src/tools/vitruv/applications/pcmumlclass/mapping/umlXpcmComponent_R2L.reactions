@@ -14,9 +14,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmComponent_R2L in reaction to changes in PCM
 execute actions in UML
-
 import routines umlXpcmRoutines 
-
 reaction OnRepositoryComponentRepositoryInsertedAsRoot {
 	after element repository::Repository created
 	call repositoryComponent_ElementCreatedCheck(affectedEObject)
@@ -45,27 +43,6 @@ reaction OnRepositoryComponentRepositoryComponentDeleted {
 reaction OnRepositoryComponentEntityNameReplacedAtRepositoryComponentBidirectional {
 	after attribute replaced at repository::RepositoryComponent[entityName]
 	call repositoryComponent_BidirectionalCheck(affectedEObject)
-}
-
-routine updateImplementationName(repository::RepositoryComponent component, repository::Repository repository) {
-	action {
-		execute {
-		}
-	}
-}
-
-routine updatePackageName(repository::RepositoryComponent component, repository::Repository repository) {
-	action {
-		execute {
-		}
-	}
-}
-
-routine updateConstructorName(repository::RepositoryComponent component, repository::Repository repository) {
-	action {
-		execute {
-		}
-	}
 }
 
 routine repositoryComponent_BidirectionalUpdate(repository::RepositoryComponent component_, repository::Repository repository_) {

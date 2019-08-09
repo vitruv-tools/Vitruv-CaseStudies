@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumclass.mapping.tests
+package tools.vitruv.applications.pcmumlclass.mapping.tests
 
 import java.util.function.Function
 import org.eclipse.emf.common.util.URI
@@ -11,7 +11,7 @@ import tools.vitruv.dsls.mirbase.mirBase.MirBaseFactory
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-class PcmUmlClassHelper {
+class PcmUmlClassTestHelper {
 	private val CorrespondenceModel correspondenceModel
 	private val Function<URI, EObject> eObjectRetriever
 

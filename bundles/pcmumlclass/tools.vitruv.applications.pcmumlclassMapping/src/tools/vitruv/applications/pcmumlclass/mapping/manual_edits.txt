@@ -13,14 +13,13 @@ only for umlXpcmRepository:
 L2R:
 in repository_CreateMapping(uml::Package repositoryPkg_, uml::Package contractsPkg_ , uml::Package datatypesPkg_) :
 
-		execute {
-		persistProjectRelative(repositoryPkg_, repository_, 'Repository.repository')		
-		}		
+call createRepositoryRoot(repositoryPkg_, repository_)
 
 R2L:
 in repository_CreateMapping(repository::Repository repository_) . execute :
 
-persistProjectRelative(repository_, repositoryPkg_, 'Repository.uml')
+call createUmlModelRoot(repository_, repositoryPkg_)
+
 
 
 

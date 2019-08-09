@@ -6,4 +6,8 @@ in reaction to changes in PCM
 execute actions in UML
 
 import umlXpcmComponent_R2L using qualified names
+import umlXpcmDatatypes_R2L using qualified names
+import umlXpcmInterface_R2L using qualified names
 import umlXpcmRepository_R2L using qualified names
+import umlXpcmRoles_R2L using qualified names
+import umlXpcmSignature_R2L using qualified names

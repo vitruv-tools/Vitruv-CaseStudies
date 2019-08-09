@@ -2,9 +2,42 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Umlpcm
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclassMapping
+Automatic-Module-Name: tools.vitruv.applications.pcmumlclassMapping
 Bundle-Version: 1.0.0.qualifier
+Eclipse-ExtensibleAPI: true
 Export-Package: mir.reactions.combinedPcmToUml,
- mir.reactions.combinedUmlToPcm
+ mir.reactions.combinedUmlToPcm,
+ mir.reactions.pcmDataTypePropagationReactions,
+ mir.reactions.umlXpcmComponent_L2R,
+ mir.reactions.umlXpcmComponent_R2L,
+ mir.reactions.umlXpcmDatatypes_L2R,
+ mir.reactions.umlXpcmDatatypes_R2L,
+ mir.reactions.umlXpcmInterface_L2R,
+ mir.reactions.umlXpcmInterface_R2L,
+ mir.reactions.umlXpcmRepository_L2R,
+ mir.reactions.umlXpcmRepository_R2L,
+ mir.reactions.umlXpcmRoles_L2R,
+ mir.reactions.umlXpcmRoles_R2L,
+ mir.reactions.umlXpcmRoutines,
+ mir.reactions.umlXpcmSignature_L2R,
+ mir.reactions.umlXpcmSignature_R2L,
+ mir.routines.combinedPcmToUml,
+ mir.routines.combinedUmlToPcm,
+ mir.routines.pcmDataTypePropagationReactions,
+ mir.routines.umlXpcmComponent_L2R,
+ mir.routines.umlXpcmComponent_R2L,
+ mir.routines.umlXpcmDatatypes_L2R,
+ mir.routines.umlXpcmDatatypes_R2L,
+ mir.routines.umlXpcmInterface_L2R,
+ mir.routines.umlXpcmInterface_R2L,
+ mir.routines.umlXpcmRepository_L2R,
+ mir.routines.umlXpcmRepository_R2L,
+ mir.routines.umlXpcmRoles_L2R,
+ mir.routines.umlXpcmRoles_R2L,
+ mir.routines.umlXpcmRoutines,
+ mir.routines.umlXpcmSignature_L2R,
+ mir.routines.umlXpcmSignature_R2L,
+ tools.vitruv.applications.pcmumlclass.mapping
 Require-Bundle: org.junit;bundle-version="4.12.0",
  org.eclipse.xtext.testing,
  org.eclipse.xtext.xbase.testing,
@@ -27,6 +60,6 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.apache.log4j;bundle-version="1.2.15",
  tools.vitruv.framework.correspondence,
  tools.vitruv.framework.userinteraction,
- tools.vitruv.extensions.dslsruntime.mappings
-Automatic-Module-Name: tools.vitruv.dsls.mappings.test.umlpcm
+ tools.vitruv.extensions.dslsruntime.mappings,
+ org.apache.commons.lang3;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

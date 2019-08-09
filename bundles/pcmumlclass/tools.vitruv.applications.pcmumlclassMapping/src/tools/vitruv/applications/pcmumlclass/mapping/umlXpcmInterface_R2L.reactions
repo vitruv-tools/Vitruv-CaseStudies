@@ -14,7 +14,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmInterface_R2L in reaction to changes in PCM
 execute actions in UML
-
+import routines umlXpcmRoutines 
 reaction OnOperationInterfaceRepositoryInsertedAsRoot {
 	after element repository::Repository created
 	call operationInterface_ElementCreatedCheck(affectedEObject)
@@ -58,13 +58,6 @@ reaction OnOperationInterfaceParentOperationInterfaceRemovedFromOperationInterfa
 reaction OnOperationInterfaceParentOperationInterfaceDeleted {
 	after element repository::OperationInterface deleted
 	call operationInterfaceParent_ElementDeletedCheck(affectedEObject)
-}
-
-routine updateInterfaceName(repository::OperationInterface operationInterface, repository::Repository repository) {
-	action {
-		execute {
-		}
-	}
 }
 
 routine operationInterface_BidirectionalUpdate(repository::OperationInterface operationInterface_, repository::Repository repository_) {

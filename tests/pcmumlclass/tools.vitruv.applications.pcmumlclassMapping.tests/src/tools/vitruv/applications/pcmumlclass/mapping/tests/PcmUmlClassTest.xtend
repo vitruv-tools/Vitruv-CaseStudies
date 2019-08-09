@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumclass.mapping.tests
+package tools.vitruv.applications.pcmumlclass.mapping.tests
 
 import mir.reactions.combinedPcmToUml.CombinedPcmToUmlChangePropagationSpecification
 import mir.reactions.combinedUmlToPcm.CombinedUmlToPcmChangePropagationSpecification
@@ -21,9 +21,9 @@ abstract class PcmUmlClassTest extends VitruviusApplicationTest {
 			new CombinedUmlToPcmChangePropagationSpecification
 		];
 	}
-
+	
 	protected var ResourceSet testResourceSet;
-	protected var PcmUmlClassHelper helper
+	protected var PcmUmlClassTestHelper helper
 
 	protected def getTestResource(URI uri) {
 		return testResourceSet.getResource(uri, true)
@@ -42,7 +42,7 @@ abstract class PcmUmlClassTest extends VitruviusApplicationTest {
 
 	override protected setup() {
 		testResourceSet = new ResourceSetImpl();
-		helper = new PcmUmlClassHelper(correspondenceModel, [uri|uri.getModelElement], [uri|uri.modelResource])
+		helper = new PcmUmlClassTestHelper(correspondenceModel, [uri|uri.getModelElement], [uri|uri.modelResource])
 	}
 
 	protected def EObject reloadResourceAndReturnRoot(EObject modelElement) {
