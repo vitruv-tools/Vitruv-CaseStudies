@@ -8,7 +8,7 @@ class MappingUpdateHelper {
 
 	static def updateFromSources(MappingUpdateHelper.MappingUpdateParameter target,
 		MappingUpdateHelper.MappingUpdateParameter... sources) {
-		val updateSource = sources.findFirst[it.isUpdateSource(target)]
+		val updateSource = sources.findFirst[isCurrentUpdateSource(target)]
 		if (updateSource !== null) {
 			// there was actually an update 
 			val newValue = updateSource.interchangeableValue
@@ -21,7 +21,7 @@ class MappingUpdateHelper {
 		}
 	}
 
-	static def simpleEObjectParameter(EObject object, String featureName) {
+	static def simpleEObjectParameter(EObject object, String featureName) { 
 		val feature = object.eClass.EAllStructuralFeatures.findFirst[it.name == featureName]
 		simpleObjectParameter(object.eGet(feature), [object.eSet(feature, it)])
 	}
@@ -54,8 +54,7 @@ class MappingUpdateHelper {
 		}
 	}
 
-	private static def isUpdateSource(MappingUpdateHelper.MappingUpdateParameter source,
-		MappingUpdateHelper.MappingUpdateParameter target) {
+	private static def isCurrentUpdateSource(MappingUpdateParameter source, MappingUpdateParameter target) {
 		if (target.interchangeableValue === null) {
 			// inital update, just take the first one
 			return true
@@ -63,11 +62,11 @@ class MappingUpdateHelper {
 		target.interchangeableValue != source.interchangeableValue
 	}
 
-	public static interface ValueSetter {
+	static interface ValueSetter {
 		def void set(Object value)
 	}
 
-	public static interface MappingUpdateParameter {
+	static interface MappingUpdateParameter {
 		def Object interchangeableValue()
 
 		def void updateValue(Object interchangeableValue)

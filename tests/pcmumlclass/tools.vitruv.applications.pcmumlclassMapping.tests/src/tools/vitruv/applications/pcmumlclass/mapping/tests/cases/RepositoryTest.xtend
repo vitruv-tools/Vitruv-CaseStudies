@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmumlclass.mapping.tests
+package tools.vitruv.applications.pcmumlclass.mapping.tests.cases
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Model
@@ -8,15 +8,13 @@ import org.junit.Test
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
+import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassApplicationTestHelper
+import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
 
 class RepositoryTest extends PcmUmlClassTest {
-
-	override getMappingName() {
-		'umlXpcmRepository'
-	}
 
 	def protected static checkRepositoryConcept(
 		CorrespondenceModel cm,

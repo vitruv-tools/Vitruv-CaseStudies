@@ -71,7 +71,7 @@ routine updateComponentName(uml::Package componentPackage, uml::Package reposito
 			val componentUpdate = objectParameter([pcmComponent.entityName], 
 				[pcmComponent.entityName = (it as String)]
 			)
-			val componentPackageSource = objectParameter([componentPackage.name.toFirstUpper],
+			val componentPackageSource = objectParameter([componentPackage.name?.toFirstUpper],
 				[componentPackage.name = (it as String).toFirstLower]
 			)
 			val implementationSource = objectParameter([StringUtils.removeEnd(implementation.name,DefaultLiterals.IMPLEMENTATION_SUFFIX)],
