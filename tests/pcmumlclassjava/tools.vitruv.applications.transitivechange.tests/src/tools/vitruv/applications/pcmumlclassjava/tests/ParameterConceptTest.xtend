@@ -12,10 +12,10 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Parameter 
@@ -92,7 +92,7 @@ class ParameterConceptTest extends TransitiveChangeTest {
 		startRecordingChanges(umlOperation)
 
 		var umlParameter = umlOperation.createOwnedParameter(TEST_PARAMETER_NAME, null)
-		umlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
+		umlParameter.direction = ParameterDirectionKind.IN_LITERAL
 		umlParameter.type = umlType
 		umlParameter.lower = lower
 		umlParameter.upper = upper
