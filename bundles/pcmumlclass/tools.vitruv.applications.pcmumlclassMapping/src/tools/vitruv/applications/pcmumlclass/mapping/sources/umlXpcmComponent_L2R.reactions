@@ -14,7 +14,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmComponent_L2R in reaction to changes in UML
 execute actions in PCM
-import routines umlXpcmRoutines 
+import routines umlXpcmRoutines
 reaction OnRepositoryComponentPackageInsertedInPackage {
 	after element uml::Package inserted in uml::Package[packagedElement]
 	call repositoryComponent_ElementCreatedCheck(affectedEObject)
@@ -60,19 +60,19 @@ reaction OnRepositoryComponentOperationDeleted {
 	call repositoryComponent_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnRepositoryComponentNameReplacedAtOperationBidirectional {
+reaction OnRepositoryComponentNameReplacedAtOperation_nameBidirectional {
 	after attribute replaced at uml::Operation[name]
-	call repositoryComponent_BidirectionalCheck(affectedEObject)
+	call onRepositoryComponentNameReplacedAtOperation_nameBidirectionalRepair(affectedEObject)
 }
 
-reaction OnRepositoryComponentNameReplacedAtClassBidirectional {
+reaction OnRepositoryComponentNameReplacedAtClass_nameBidirectional {
 	after attribute replaced at uml::Class[name]
-	call repositoryComponent_BidirectionalCheck(affectedEObject)
+	call onRepositoryComponentNameReplacedAtClass_nameBidirectionalRepair(affectedEObject)
 }
 
-reaction OnRepositoryComponentNameReplacedAtPackageBidirectional {
+reaction OnRepositoryComponentNameReplacedAtPackage_nameBidirectional {
 	after attribute replaced at uml::Package[name]
-	call repositoryComponent_BidirectionalCheck(affectedEObject)
+	call onRepositoryComponentNameReplacedAtPackage_nameBidirectionalRepair(affectedEObject)
 }
 
 routine repositoryComponent_BidirectionalUpdate(uml::Package componentPackage_, uml::Package repositoryPackage_ , uml::Class implementation_ , uml::Operation constructor_) {
@@ -110,13 +110,13 @@ routine repositoryComponent_DeleteMapping(repository::RepositoryComponent compon
 	}
 }
 
-routine repositoryComponent_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine repositoryComponent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof Package ) { var Package componentPackage_ = affectedEObject for ( implementation__candidate : componentPackage_ . packagedElements ) { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var repositoryPackage__candidate = componentPackage_ . eContainer { if ( repositoryPackage__candidate !== null && repositoryPackage__candidate instanceof Package ) { var Package repositoryPackage_ = repositoryPackage__candidate as Package for ( constructor__candidate : implementation_ . ownedOperations ) { if ( constructor__candidate !== null && constructor__candidate instanceof Operation ) { var Operation constructor_ = constructor__candidate as Operation { repositoryComponent_BidirectionalUpdate ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) return } } } } } } } } }
-			if ( affectedEObject instanceof Package ) { var Package repositoryPackage_ = affectedEObject for ( componentPackage__candidate : repositoryPackage_ . packagedElements ) { if ( componentPackage__candidate !== null && componentPackage__candidate instanceof Package ) { var Package componentPackage_ = componentPackage__candidate as Package for ( implementation__candidate : componentPackage_ . packagedElements ) { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class for ( constructor__candidate : implementation_ . ownedOperations ) { if ( constructor__candidate !== null && constructor__candidate instanceof Operation ) { var Operation constructor_ = constructor__candidate as Operation { repositoryComponent_BidirectionalUpdate ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) return } } } } } } } }
-			if ( affectedEObject instanceof Class ) { var Class implementation_ = affectedEObject { var componentPackage__candidate = implementation_ . eContainer { if ( componentPackage__candidate !== null && componentPackage__candidate instanceof Package ) { var Package componentPackage_ = componentPackage__candidate as Package { var repositoryPackage__candidate = componentPackage_ . eContainer { if ( repositoryPackage__candidate !== null && repositoryPackage__candidate instanceof Package ) { var Package repositoryPackage_ = repositoryPackage__candidate as Package for ( constructor__candidate : implementation_ . ownedOperations ) { if ( constructor__candidate !== null && constructor__candidate instanceof Operation ) { var Operation constructor_ = constructor__candidate as Operation { repositoryComponent_BidirectionalUpdate ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) return } } } } } } } } } }
-			if ( affectedEObject instanceof Operation ) { var Operation constructor_ = affectedEObject { var implementation__candidate = constructor_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var componentPackage__candidate = implementation_ . eContainer { if ( componentPackage__candidate !== null && componentPackage__candidate instanceof Package ) { var Package componentPackage_ = componentPackage__candidate as Package { var repositoryPackage__candidate = componentPackage_ . eContainer { if ( repositoryPackage__candidate !== null && repositoryPackage__candidate instanceof Package ) { var Package repositoryPackage_ = repositoryPackage__candidate as Package { repositoryComponent_BidirectionalUpdate ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) return } } } } } } } } } } }
+			if ( affectedEObject instanceof Package ) { var Package componentPackage_ = affectedEObject for ( implementation__candidate : componentPackage_ . packagedElements ) { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var repositoryPackage__candidate = componentPackage_ . eContainer { if ( repositoryPackage__candidate !== null && repositoryPackage__candidate instanceof Package ) { var Package repositoryPackage_ = repositoryPackage__candidate as Package for ( constructor__candidate : implementation_ . ownedOperations ) { if ( constructor__candidate !== null && constructor__candidate instanceof Operation ) { var Operation constructor_ = constructor__candidate as Operation { { if ( routineName === "updateComponentName" ) updateComponentName ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) } return } } } } } } } } }
+			if ( affectedEObject instanceof Package ) { var Package repositoryPackage_ = affectedEObject for ( componentPackage__candidate : repositoryPackage_ . packagedElements ) { if ( componentPackage__candidate !== null && componentPackage__candidate instanceof Package ) { var Package componentPackage_ = componentPackage__candidate as Package for ( implementation__candidate : componentPackage_ . packagedElements ) { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class for ( constructor__candidate : implementation_ . ownedOperations ) { if ( constructor__candidate !== null && constructor__candidate instanceof Operation ) { var Operation constructor_ = constructor__candidate as Operation { { if ( routineName === "updateComponentName" ) updateComponentName ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) } return } } } } } } } }
+			if ( affectedEObject instanceof Class ) { var Class implementation_ = affectedEObject { var componentPackage__candidate = implementation_ . eContainer { if ( componentPackage__candidate !== null && componentPackage__candidate instanceof Package ) { var Package componentPackage_ = componentPackage__candidate as Package { var repositoryPackage__candidate = componentPackage_ . eContainer { if ( repositoryPackage__candidate !== null && repositoryPackage__candidate instanceof Package ) { var Package repositoryPackage_ = repositoryPackage__candidate as Package for ( constructor__candidate : implementation_ . ownedOperations ) { if ( constructor__candidate !== null && constructor__candidate instanceof Operation ) { var Operation constructor_ = constructor__candidate as Operation { { if ( routineName === "updateComponentName" ) updateComponentName ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) } return } } } } } } } } } }
+			if ( affectedEObject instanceof Operation ) { var Operation constructor_ = affectedEObject { var implementation__candidate = constructor_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var componentPackage__candidate = implementation_ . eContainer { if ( componentPackage__candidate !== null && componentPackage__candidate instanceof Package ) { var Package componentPackage_ = componentPackage__candidate as Package { var repositoryPackage__candidate = componentPackage_ . eContainer { if ( repositoryPackage__candidate !== null && repositoryPackage__candidate instanceof Package ) { var Package repositoryPackage_ = repositoryPackage__candidate as Package { { if ( routineName === "updateComponentName" ) updateComponentName ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) } return } } } } } } } } } } }
 		}
 	}
 }
@@ -169,5 +169,23 @@ routine repositoryComponent_ElementUpdatedCheck(ecore::EObject affectedEObject) 
 			if ( affectedEObject instanceof Operation ) { var Operation constructor_ = affectedEObject { var implementation__candidate = constructor_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var componentPackage__candidate = implementation_ . eContainer { if ( componentPackage__candidate !== null && componentPackage__candidate instanceof Package ) { var Package componentPackage_ = componentPackage__candidate as Package { var repositoryPackage__candidate = componentPackage_ . eContainer { if ( repositoryPackage__candidate !== null && repositoryPackage__candidate instanceof Package ) { var Package repositoryPackage_ = repositoryPackage__candidate as Package { repositoryComponent_CreateMapping ( componentPackage_ , repositoryPackage_ , implementation_ , constructor_ ) return } } } } } } } } } } }
 			repositoryComponent_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onRepositoryComponentNameReplacedAtOperation_nameBidirectionalRepair(uml::Operation affectedEObject) {
+	action {
+		call repositoryComponent_BidirectionalCheck(affectedEObject, "updateComponentName")
+	}
+}
+
+routine onRepositoryComponentNameReplacedAtClass_nameBidirectionalRepair(uml::Class affectedEObject) {
+	action {
+		call repositoryComponent_BidirectionalCheck(affectedEObject, "updateComponentName")
+	}
+}
+
+routine onRepositoryComponentNameReplacedAtPackage_nameBidirectionalRepair(uml::Package affectedEObject) {
+	action {
+		call repositoryComponent_BidirectionalCheck(affectedEObject, "updateComponentName")
 	}
 }

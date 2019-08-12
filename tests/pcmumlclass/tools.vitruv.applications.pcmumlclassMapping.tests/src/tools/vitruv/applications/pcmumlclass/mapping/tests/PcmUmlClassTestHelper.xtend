@@ -38,18 +38,18 @@ class PcmUmlClassTestHelper {
 	public static val COMPOSITE_DATATYPE_NAME_2 = "TestCompositeType_2"
 	public static val COLLECTION_DATATYPE_NAME = "TestCollectionType"
 
-//	public val PrimitiveDataType PCM_BOOL
-//	public val PrimitiveDataType PCM_INT
-//	public val PrimitiveDataType PCM_DOUBLE
-//	public val PrimitiveDataType PCM_STRING
-//	public val PrimitiveDataType PCM_CHAR
-//	public val PrimitiveDataType PCM_BYTE
-//
-//	public val PrimitiveType UML_BOOL
-//	public val PrimitiveType UML_INT
-//	public val PrimitiveType UML_REAL
-//	public val PrimitiveType UML_STRING
-//	public val PrimitiveType UML_UNLIMITED_NATURAL
+	public val PrimitiveDataType PCM_BOOL
+	public val PrimitiveDataType PCM_INT
+	public val PrimitiveDataType PCM_DOUBLE
+	public val PrimitiveDataType PCM_STRING
+	public val PrimitiveDataType PCM_CHAR
+	public val PrimitiveDataType PCM_BYTE
+
+	public val PrimitiveType UML_BOOL
+	public val PrimitiveType UML_INT
+	public val PrimitiveType UML_REAL
+	public val PrimitiveType UML_STRING
+	public val PrimitiveType UML_UNLIMITED_NATURAL
 
 	private val CorrespondenceModel correspondenceModel
 	private val Function<URI, EObject> eObjectRetriever
@@ -59,20 +59,20 @@ class PcmUmlClassTestHelper {
 		this.correspondenceModel = testCorrespondenceModel
 		this.eObjectRetriever = eObjectRetriever
 
-//		val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(resourceRetriever)
-//		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
-//		PCM_INT = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.INT]
-//		PCM_DOUBLE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.DOUBLE]
-//		PCM_STRING = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.STRING]
-//		PCM_CHAR = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.CHAR]
-//		PCM_BYTE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BYTE]
-//
-//		val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(resourceRetriever)
-//		UML_BOOL = umlPrimitiveTypes.findFirst[it.name == "Boolean"]
-//		UML_INT = umlPrimitiveTypes.findFirst[it.name == "Integer"]
-//		UML_REAL = umlPrimitiveTypes.findFirst[it.name == "Real"]
-//		UML_STRING = umlPrimitiveTypes.findFirst[it.name == "String"]
-//		UML_UNLIMITED_NATURAL = umlPrimitiveTypes.findFirst[it.name == "UnlimitedNatural"]
+		val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(resourceRetriever)
+		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
+		PCM_INT = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.INT]
+		PCM_DOUBLE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.DOUBLE]
+		PCM_STRING = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.STRING]
+		PCM_CHAR = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.CHAR]
+		PCM_BYTE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BYTE]
+
+		val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(resourceRetriever)
+		UML_BOOL = umlPrimitiveTypes.findFirst[it.name == "Boolean"]
+		UML_INT = umlPrimitiveTypes.findFirst[it.name == "Integer"]
+		UML_REAL = umlPrimitiveTypes.findFirst[it.name == "Real"]
+		UML_STRING = umlPrimitiveTypes.findFirst[it.name == "String"]
+		UML_UNLIMITED_NATURAL = umlPrimitiveTypes.findFirst[it.name == "UnlimitedNatural"]
 	}
 
 	/**

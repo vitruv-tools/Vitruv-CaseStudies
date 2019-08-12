@@ -27,9 +27,10 @@ mapping RequiredRole {
 	}
 	such that{
 		observe changes{
-			pcm::OperationRequiredRole[entityName]
-			uml::Property[name]
-			uml::Parameter[name]
+			pcm::OperationRequiredRole[entityName] call updateRequiredRoleCorrespondingUmlNames
+			uml::Property[name] call updateRequiredRoleName
+			uml::Parameter[name] call updateRequiredRoleName
+			uml::Parameter[type] call changeTypeOfCorrespondingRequiredRole
 		}
 		
 		routine updateRequiredRoleName(uml::Property property, uml::Parameter parameter, uml::Class implementation, uml::Interface interface_, uml::Operation operation){
@@ -39,14 +40,14 @@ mapping RequiredRole {
    	 		}
    	 	}
    	 	
-   	 	routine updatePropertyName(pcm::OperationRequiredRole role, pcm::OperationInterface operationInterface, pcm::InterfaceProvidingRequiringEntity requiringEntity){
+   	 	routine changeTypeOfCorrespondingRequiredRole(uml::Property property, uml::Parameter parameter, uml::Class implementation, uml::Interface interface_, uml::Operation operation){
    	 		action{
    	 			execute{   	 			
    	 			}
    	 		}
    	 	}
    	 	
-   	 	routine updateParameterName(pcm::OperationRequiredRole role, pcm::OperationInterface operationInterface, pcm::InterfaceProvidingRequiringEntity requiringEntity){
+   	 	routine updateRequiredRoleCorrespondingUmlNames(pcm::OperationRequiredRole role, pcm::OperationInterface operationInterface, pcm::InterfaceProvidingRequiringEntity requiringEntity){
    	 		action{
    	 			execute{   	 			
    	 			}
@@ -75,8 +76,8 @@ mapping ProvidedRole {
 	}
 	such that{
 		observe changes{
-			pcm::OperationProvidedRole[entityName]
-			uml::InterfaceRealization[name]
+			pcm::OperationProvidedRole[entityName] call updateInterfaceRealizationName
+			uml::InterfaceRealization[name] call updateProvidedRoleName
 		}
 		
 		routine updateProvidedRoleName(uml::InterfaceRealization interfaceRealization, uml::Class implementation, uml::Interface interface_){

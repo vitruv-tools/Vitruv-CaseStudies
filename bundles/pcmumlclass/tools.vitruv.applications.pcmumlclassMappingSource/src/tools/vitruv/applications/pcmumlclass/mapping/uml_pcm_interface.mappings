@@ -19,8 +19,8 @@ mapping OperationInterface {
 	}
 	such that{
 		observe changes{
-			pcm::OperationInterface[entityName]
-			uml::Interface[name]
+			pcm::OperationInterface[entityName] call updateInterfaceName
+			uml::Interface[name] call updateOperationInterfaceName
 		}
 		
 		routine updateOperationInterfaceName(uml::Interface interface_, uml::Package contractsPackage){

@@ -11,3 +11,4 @@ import umlXpcmInterface_R2L using qualified names
 import umlXpcmRepository_R2L using qualified names
 import umlXpcmRoles_R2L using qualified names
 import umlXpcmSignature_R2L using qualified names
+import pcmCollectionDataTypeReactions using qualified names

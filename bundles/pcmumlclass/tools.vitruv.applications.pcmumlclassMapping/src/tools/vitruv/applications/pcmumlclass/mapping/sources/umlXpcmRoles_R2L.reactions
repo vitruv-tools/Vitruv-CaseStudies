@@ -20,7 +20,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmRoles_R2L in reaction to changes in PCM
 execute actions in UML
-import routines umlXpcmRoutines 
+import routines umlXpcmRoutines
 reaction OnRequiredRoleOperationInterfaceInsertedAsRoot {
 	after element repository::OperationInterface created
 	call requiredRole_ElementCreatedCheck(affectedEObject)
@@ -56,14 +56,14 @@ reaction OnRequiredRoleOperationRequiredRoleDeleted {
 	call requiredRole_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnRequiredRoleOperationInterfaceReplacedAtOperationRequiredRole {
+reaction OnRequiredRoleOperationInterfaceReplacedAtOperationRequiredRole_requiredInterface__OperationRequiredRole {
 	after element repository::OperationInterface replaced at repository::OperationRequiredRole[requiredInterface__OperationRequiredRole]
 	call requiredRole_ElementUpdatedCheck(affectedEObject)
 }
 
-reaction OnRequiredRoleEntityNameReplacedAtOperationRequiredRoleBidirectional {
+reaction OnRequiredRoleEntityNameReplacedAtOperationRequiredRole_entityNameBidirectional {
 	after attribute replaced at repository::OperationRequiredRole[entityName]
-	call requiredRole_BidirectionalCheck(affectedEObject)
+	call onRequiredRoleEntityNameReplacedAtOperationRequiredRole_entityNameBidirectionalRepair(affectedEObject)
 }
 
 reaction OnProvidedRoleOperationInterfaceInsertedAsRoot {
@@ -101,20 +101,19 @@ reaction OnProvidedRoleOperationProvidedRoleDeleted {
 	call providedRole_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnProvidedRoleOperationInterfaceReplacedAtOperationProvidedRole {
+reaction OnProvidedRoleOperationInterfaceReplacedAtOperationProvidedRole_providedInterface__OperationProvidedRole {
 	after element repository::OperationInterface replaced at repository::OperationProvidedRole[providedInterface__OperationProvidedRole]
 	call providedRole_ElementUpdatedCheck(affectedEObject)
 }
 
-reaction OnProvidedRoleEntityNameReplacedAtOperationProvidedRoleBidirectional {
+reaction OnProvidedRoleEntityNameReplacedAtOperationProvidedRole_entityNameBidirectional {
 	after attribute replaced at repository::OperationProvidedRole[entityName]
-	call providedRole_BidirectionalCheck(affectedEObject)
+	call onProvidedRoleEntityNameReplacedAtOperationProvidedRole_entityNameBidirectionalRepair(affectedEObject)
 }
 
 routine requiredRole_BidirectionalUpdate(repository::OperationRequiredRole role_, repository::OperationInterface operationInterface_ , entity::InterfaceProvidingRequiringEntity requiringEntity_) {
 	action {
-		call updatePropertyName(role_, operationInterface_ , requiringEntity_)
-		call updateParameterName(role_, operationInterface_ , requiringEntity_)
+		call updateRequiredRoleCorrespondingUmlNames(role_, operationInterface_ , requiringEntity_)
 	}
 }
 
@@ -164,12 +163,12 @@ routine requiredRole_DeleteMapping(uml::Property property_, uml::Parameter param
 	}
 }
 
-routine requiredRole_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine requiredRole_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof OperationRequiredRole ) { var OperationRequiredRole role_ = affectedEObject { var requiringEntity__candidate = role_ . eContainer { if ( requiringEntity__candidate !== null && requiringEntity__candidate instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity requiringEntity_ = requiringEntity__candidate as InterfaceProvidingRequiringEntity { var operationInterface__candidate = role_ . requiredInterface__OperationRequiredRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { requiredRole_BidirectionalUpdate ( role_ , operationInterface_ , requiringEntity_ ) return } } } } } } } }
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( role__candidate : operationInterface_ . eCrossReferences ) { if ( role__candidate !== null && role__candidate instanceof OperationRequiredRole ) { var OperationRequiredRole role_ = role__candidate as OperationRequiredRole if ( operationInterface_ === role_ . requiredInterface__OperationRequiredRole ) { var requiringEntity__candidate = role_ . eContainer { if ( requiringEntity__candidate !== null && requiringEntity__candidate instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity requiringEntity_ = requiringEntity__candidate as InterfaceProvidingRequiringEntity { requiredRole_BidirectionalUpdate ( role_ , operationInterface_ , requiringEntity_ ) return } } } } } } }
-			if ( affectedEObject instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity requiringEntity_ = affectedEObject for ( role__candidate : requiringEntity_ . requiredRoles_InterfaceRequiringEntity ) { if ( role__candidate !== null && role__candidate instanceof OperationRequiredRole ) { var OperationRequiredRole role_ = role__candidate as OperationRequiredRole { var operationInterface__candidate = role_ . requiredInterface__OperationRequiredRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { requiredRole_BidirectionalUpdate ( role_ , operationInterface_ , requiringEntity_ ) return } } } } } } }
+			if ( affectedEObject instanceof OperationRequiredRole ) { var OperationRequiredRole role_ = affectedEObject { var requiringEntity__candidate = role_ . eContainer { if ( requiringEntity__candidate !== null && requiringEntity__candidate instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity requiringEntity_ = requiringEntity__candidate as InterfaceProvidingRequiringEntity { var operationInterface__candidate = role_ . requiredInterface__OperationRequiredRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateRequiredRoleCorrespondingUmlNames" ) updateRequiredRoleCorrespondingUmlNames ( role_ , operationInterface_ , requiringEntity_ ) } return } } } } } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( role__candidate : operationInterface_ . eCrossReferences ) { if ( role__candidate !== null && role__candidate instanceof OperationRequiredRole ) { var OperationRequiredRole role_ = role__candidate as OperationRequiredRole if ( operationInterface_ === role_ . requiredInterface__OperationRequiredRole ) { var requiringEntity__candidate = role_ . eContainer { if ( requiringEntity__candidate !== null && requiringEntity__candidate instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity requiringEntity_ = requiringEntity__candidate as InterfaceProvidingRequiringEntity { { if ( routineName === "updateRequiredRoleCorrespondingUmlNames" ) updateRequiredRoleCorrespondingUmlNames ( role_ , operationInterface_ , requiringEntity_ ) } return } } } } } } }
+			if ( affectedEObject instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity requiringEntity_ = affectedEObject for ( role__candidate : requiringEntity_ . requiredRoles_InterfaceRequiringEntity ) { if ( role__candidate !== null && role__candidate instanceof OperationRequiredRole ) { var OperationRequiredRole role_ = role__candidate as OperationRequiredRole { var operationInterface__candidate = role_ . requiredInterface__OperationRequiredRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateRequiredRoleCorrespondingUmlNames" ) updateRequiredRoleCorrespondingUmlNames ( role_ , operationInterface_ , requiringEntity_ ) } return } } } } } } }
 		}
 	}
 }
@@ -279,12 +278,12 @@ routine providedRole_DeleteMapping(uml::InterfaceRealization interfaceRealizatio
 	}
 }
 
-routine providedRole_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine providedRole_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof OperationProvidedRole ) { var OperationProvidedRole role_ = affectedEObject { var providingEntity__candidate = role_ . eContainer { if ( providingEntity__candidate !== null && providingEntity__candidate instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity providingEntity_ = providingEntity__candidate as InterfaceProvidingRequiringEntity { var operationInterface__candidate = role_ . providedInterface__OperationProvidedRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { providedRole_BidirectionalUpdate ( role_ , operationInterface_ , providingEntity_ ) return } } } } } } } }
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( role__candidate : operationInterface_ . eCrossReferences ) { if ( role__candidate !== null && role__candidate instanceof OperationProvidedRole ) { var OperationProvidedRole role_ = role__candidate as OperationProvidedRole if ( operationInterface_ === role_ . providedInterface__OperationProvidedRole ) { var providingEntity__candidate = role_ . eContainer { if ( providingEntity__candidate !== null && providingEntity__candidate instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity providingEntity_ = providingEntity__candidate as InterfaceProvidingRequiringEntity { providedRole_BidirectionalUpdate ( role_ , operationInterface_ , providingEntity_ ) return } } } } } } }
-			if ( affectedEObject instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity providingEntity_ = affectedEObject for ( role__candidate : providingEntity_ . providedRoles_InterfaceProvidingEntity ) { if ( role__candidate !== null && role__candidate instanceof OperationProvidedRole ) { var OperationProvidedRole role_ = role__candidate as OperationProvidedRole { var operationInterface__candidate = role_ . providedInterface__OperationProvidedRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { providedRole_BidirectionalUpdate ( role_ , operationInterface_ , providingEntity_ ) return } } } } } } }
+			if ( affectedEObject instanceof OperationProvidedRole ) { var OperationProvidedRole role_ = affectedEObject { var providingEntity__candidate = role_ . eContainer { if ( providingEntity__candidate !== null && providingEntity__candidate instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity providingEntity_ = providingEntity__candidate as InterfaceProvidingRequiringEntity { var operationInterface__candidate = role_ . providedInterface__OperationProvidedRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateInterfaceRealizationName" ) updateInterfaceRealizationName ( role_ , operationInterface_ , providingEntity_ ) } return } } } } } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( role__candidate : operationInterface_ . eCrossReferences ) { if ( role__candidate !== null && role__candidate instanceof OperationProvidedRole ) { var OperationProvidedRole role_ = role__candidate as OperationProvidedRole if ( operationInterface_ === role_ . providedInterface__OperationProvidedRole ) { var providingEntity__candidate = role_ . eContainer { if ( providingEntity__candidate !== null && providingEntity__candidate instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity providingEntity_ = providingEntity__candidate as InterfaceProvidingRequiringEntity { { if ( routineName === "updateInterfaceRealizationName" ) updateInterfaceRealizationName ( role_ , operationInterface_ , providingEntity_ ) } return } } } } } } }
+			if ( affectedEObject instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity providingEntity_ = affectedEObject for ( role__candidate : providingEntity_ . providedRoles_InterfaceProvidingEntity ) { if ( role__candidate !== null && role__candidate instanceof OperationProvidedRole ) { var OperationProvidedRole role_ = role__candidate as OperationProvidedRole { var operationInterface__candidate = role_ . providedInterface__OperationProvidedRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateInterfaceRealizationName" ) updateInterfaceRealizationName ( role_ , operationInterface_ , providingEntity_ ) } return } } } } } } }
 		}
 	}
 }
@@ -338,5 +337,17 @@ routine providedRole_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 			if ( affectedEObject instanceof InterfaceProvidingRequiringEntity ) { var InterfaceProvidingRequiringEntity providingEntity_ = affectedEObject for ( role__candidate : providingEntity_ . providedRoles_InterfaceProvidingEntity ) { if ( role__candidate !== null && role__candidate instanceof OperationProvidedRole ) { var OperationProvidedRole role_ = role__candidate as OperationProvidedRole { var operationInterface__candidate = role_ . providedInterface__OperationProvidedRole { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { providedRole_CreateMapping ( role_ , operationInterface_ , providingEntity_ ) return } } } } } } }
 			providedRole_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onRequiredRoleEntityNameReplacedAtOperationRequiredRole_entityNameBidirectionalRepair(repository::OperationRequiredRole affectedEObject) {
+	action {
+		call requiredRole_BidirectionalCheck(affectedEObject, "updateRequiredRoleCorrespondingUmlNames")
+	}
+}
+
+routine onProvidedRoleEntityNameReplacedAtOperationProvidedRole_entityNameBidirectionalRepair(repository::OperationProvidedRole affectedEObject) {
+	action {
+		call providedRole_BidirectionalCheck(affectedEObject, "updateInterfaceRealizationName")
 	}
 }

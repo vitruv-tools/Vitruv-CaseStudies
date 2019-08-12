@@ -14,7 +14,8 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmComponent_R2L in reaction to changes in PCM
 execute actions in UML
-import routines umlXpcmRoutines 
+import routines umlXpcmRoutines
+
 reaction OnRepositoryComponentRepositoryInsertedAsRoot {
 	after element repository::Repository created
 	call repositoryComponent_ElementCreatedCheck(affectedEObject)
@@ -40,16 +41,14 @@ reaction OnRepositoryComponentRepositoryComponentDeleted {
 	call repositoryComponent_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnRepositoryComponentEntityNameReplacedAtRepositoryComponentBidirectional {
+reaction OnRepositoryComponentEntityNameReplacedAtRepositoryComponent_entityNameBidirectional {
 	after attribute replaced at repository::RepositoryComponent[entityName]
-	call repositoryComponent_BidirectionalCheck(affectedEObject)
+	call onRepositoryComponentEntityNameReplacedAtRepositoryComponent_entityNameBidirectionalRepair(affectedEObject)
 }
 
 routine repositoryComponent_BidirectionalUpdate(repository::RepositoryComponent component_, repository::Repository repository_) {
 	action {
-		call updateImplementationName(component_, repository_)
-		call updatePackageName(component_, repository_)
-		call updateConstructorName(component_, repository_)
+		call updateComponentCorrespondingUmlNames(component_, repository_)
 	}
 }
 
@@ -90,11 +89,11 @@ routine repositoryComponent_DeleteMapping(uml::Package componentPackage_, uml::P
 	}
 }
 
-routine repositoryComponent_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine repositoryComponent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof RepositoryComponent ) { var RepositoryComponent component_ = affectedEObject { var repository__candidate = component_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { repositoryComponent_BidirectionalUpdate ( component_ , repository_ ) return } } } } }
-			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null && component__candidate instanceof RepositoryComponent ) { var RepositoryComponent component_ = component__candidate as RepositoryComponent { repositoryComponent_BidirectionalUpdate ( component_ , repository_ ) return } } } }
+			if ( affectedEObject instanceof RepositoryComponent ) { var RepositoryComponent component_ = affectedEObject { var repository__candidate = component_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { { if ( routineName === "updateComponentCorrespondingUmlNames" ) updateComponentCorrespondingUmlNames ( component_ , repository_ ) } return } } } } }
+			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null && component__candidate instanceof RepositoryComponent ) { var RepositoryComponent component_ = component__candidate as RepositoryComponent { { if ( routineName === "updateComponentCorrespondingUmlNames" ) updateComponentCorrespondingUmlNames ( component_ , repository_ ) } return } } } }
 		}
 	}
 }
@@ -145,5 +144,11 @@ routine repositoryComponent_ElementUpdatedCheck(ecore::EObject affectedEObject) 
 			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null && component__candidate instanceof RepositoryComponent ) { var RepositoryComponent component_ = component__candidate as RepositoryComponent { repositoryComponent_CreateMapping ( component_ , repository_ ) return } } } }
 			repositoryComponent_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onRepositoryComponentEntityNameReplacedAtRepositoryComponent_entityNameBidirectionalRepair(repository::RepositoryComponent affectedEObject) {
+	action {
+		call repositoryComponent_BidirectionalCheck(affectedEObject, "updateComponentCorrespondingUmlNames")
 	}
 }

@@ -20,34 +20,19 @@ mapping Repository {
    
     such that {
 		observe changes {
-			pcm::Repository[entityName] 
-			uml::Package[name]
+			pcm::Repository[entityName] call updateRepoPackageName
+			uml::Package[name] call updateRepoName
 		}
 		
 	  	routine updateRepoPackageName(pcm::Repository repository) { 
-//			match{
-//				val repositoryPkg = retrieve asserted uml::Package corresponding to repositoryPkg tagged with "umlXpcm_map_UML_and_PCM_correspondence_Repository:repository_with_Package:repositoryPkg"		
-//			}	
 			action {
-				execute {
-					
+				execute {				
 				}
-			//	call {}
-				//update repositoryPkg {
-				//if (repositoryPkg.name != affectedEObject.entityName.toFirstLower)
-				//repositoryPkg.name = affectedEObject.entityName.toFirstLower					
-				//}
 			}
 		}
 		routine updateRepoName(uml::Package repositoryPkg, uml::Package contractsPkg, uml::Package datatypesPkg) {
-			//match{
-			//	val repository = retrieve optional pcm::Repository corresponding to affectedEObject tagged with "umlXpcm_map_UML_and_PCM_correspondence_Repository:repository_with_Package:repositoryPkg"
-			//} 	
 			action {
 				execute {
-					//if(repository.isPresent){
-					//	repository.get.entityName = affectedEObject.name.toFirstUpper					
-					//}
 				}
 			}
 		}

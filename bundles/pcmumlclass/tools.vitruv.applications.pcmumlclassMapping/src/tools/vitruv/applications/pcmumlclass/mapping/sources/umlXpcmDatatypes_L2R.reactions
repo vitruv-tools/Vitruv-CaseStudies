@@ -14,7 +14,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmDatatypes_L2R in reaction to changes in UML
 execute actions in PCM
-import routines umlXpcmRoutines 
+import routines umlXpcmRoutines
 reaction OnCompositeDataypePackageInsertedAsRoot {
 	after element uml::Package created
 	call compositeDataype_ElementCreatedCheck(affectedEObject)
@@ -40,9 +40,9 @@ reaction OnCompositeDataypeClassDeleted {
 	call compositeDataype_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnCompositeDataypeNameReplacedAtClassBidirectional {
+reaction OnCompositeDataypeNameReplacedAtClass_nameBidirectional {
 	after attribute replaced at uml::Class[name]
-	call compositeDataype_BidirectionalCheck(affectedEObject)
+	call onCompositeDataypeNameReplacedAtClass_nameBidirectionalRepair(affectedEObject)
 }
 
 reaction OnCompositeDatatypeParentClassInsertedAsRoot {
@@ -101,11 +101,11 @@ routine compositeDataype_DeleteMapping(repository::CompositeDataType type_, repo
 	}
 }
 
-routine compositeDataype_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine compositeDataype_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject { var datatypesPackage__candidate = class_ . eContainer { if ( datatypesPackage__candidate !== null && datatypesPackage__candidate instanceof Package ) { var Package datatypesPackage_ = datatypesPackage__candidate as Package { compositeDataype_BidirectionalUpdate ( class_ , datatypesPackage_ ) return } } } } }
-			if ( affectedEObject instanceof Package ) { var Package datatypesPackage_ = affectedEObject for ( class__candidate : datatypesPackage_ . packagedElements ) { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDataype_BidirectionalUpdate ( class_ , datatypesPackage_ ) return } } } }
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject { var datatypesPackage__candidate = class_ . eContainer { if ( datatypesPackage__candidate !== null && datatypesPackage__candidate instanceof Package ) { var Package datatypesPackage_ = datatypesPackage__candidate as Package { { if ( routineName === "updateCompositeDataTypeName" ) updateCompositeDataTypeName ( class_ , datatypesPackage_ ) } return } } } } }
+			if ( affectedEObject instanceof Package ) { var Package datatypesPackage_ = affectedEObject for ( class__candidate : datatypesPackage_ . packagedElements ) { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { { if ( routineName === "updateCompositeDataTypeName" ) updateCompositeDataTypeName ( class_ , datatypesPackage_ ) } return } } } }
 		}
 	}
 }
@@ -182,11 +182,11 @@ routine compositeDatatypeParent_DeleteMapping(repository::CompositeDataType type
 	}
 }
 
-routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { compositeDatatypeParent_BidirectionalUpdate ( class_ , generalization_ ) return } } } }
-			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDatatypeParent_BidirectionalUpdate ( class_ , generalization_ ) return } } } } }
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { { } return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { { } return } } } } }
 		}
 	}
 }
@@ -227,5 +227,11 @@ routine compositeDatatypeParent_ElementUpdatedCheck(ecore::EObject affectedEObje
 			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } } }
 			compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onCompositeDataypeNameReplacedAtClass_nameBidirectionalRepair(uml::Class affectedEObject) {
+	action {
+		call compositeDataype_BidirectionalCheck(affectedEObject, "updateCompositeDataTypeName")
 	}
 }

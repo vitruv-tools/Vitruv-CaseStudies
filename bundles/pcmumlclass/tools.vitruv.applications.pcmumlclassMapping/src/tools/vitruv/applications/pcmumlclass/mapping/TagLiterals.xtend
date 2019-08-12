@@ -8,11 +8,10 @@ class TagLiterals {
 
 	public static final String COLLECTION_DATATYPE__PARAMETER = "collection-typed-parameter";
 	public static final String COLLECTION_DATATYPE__PROPERTY = "collection-typed-property";
-//	public static final String PARAMETER__REGULAR_PARAMETER = "interface-operation-parameter";
+	public static final String PARAMETER__REGULAR_PARAMETER = "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_Parameter:parameter";
 //	public static final String SYSTEM__SYSTEM_PACKAGE = "system-package";
 	
-	public static final String COMPOSITE_DATATYPE__CLASS = "umlXpcmComponent_map_UML_and_PCM_correspondence_Class:implementation_with_RepositoryComponent:component";
-	
+	public static final String COMPOSITE_DATATYPE__CLASS = "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type";
 	public static final String DATATYPE__TYPE = "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type";	
 	public static final String INTERFACE_TO_INTERFACE = "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface";
 

@@ -1,10 +1,10 @@
 import java.util.List
 import org.eclipse.uml2.uml.Package
 import org.palladiosimulator.pcm.repository.Repository
-import java.util.Optional
 import org.eclipse.xtext.xbase.lib.ObjectExtensions
+import java.util.Optional
 import org.eclipse.xtext.xbase.lib.BooleanExtensions
-import org.eclipse.uml2.uml.UMLFactory
+
 import "http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" as repository
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
@@ -12,7 +12,6 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 reactions: umlXpcmRepository_R2L in reaction to changes in PCM
 execute actions in UML
 import routines umlXpcmRoutines
-
 reaction OnRepositoryRepositoryInsertedAsRoot {
 	after element repository::Repository created
 	call repository_ElementCreatedCheck(affectedEObject)
@@ -23,9 +22,9 @@ reaction OnRepositoryRepositoryDeleted {
 	call repository_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnRepositoryEntityNameReplacedAtRepositoryBidirectional {
+reaction OnRepositoryEntityNameReplacedAtRepository_entityNameBidirectional {
 	after attribute replaced at repository::Repository[entityName]
-	call repository_BidirectionalCheck(affectedEObject)
+	call onRepositoryEntityNameReplacedAtRepository_entityNameBidirectionalRepair(affectedEObject)
 }
 
 routine repository_BidirectionalUpdate(repository::Repository repository_) {
@@ -66,10 +65,10 @@ routine repository_DeleteMapping(uml::Package repositoryPkg_, uml::Package contr
 	}
 }
 
-routine repository_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine repository_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject repository_BidirectionalUpdate ( repository_ ) }
+			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject { if ( routineName === "updateRepoPackageName" ) updateRepoPackageName ( repository_ ) } }
 		}
 	}
 }
@@ -107,5 +106,11 @@ routine repository_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject repository_CreateMapping ( repository_ ) }
 			repository_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onRepositoryEntityNameReplacedAtRepository_entityNameBidirectionalRepair(repository::Repository affectedEObject) {
+	action {
+		call repository_BidirectionalCheck(affectedEObject, "updateRepoPackageName")
 	}
 }

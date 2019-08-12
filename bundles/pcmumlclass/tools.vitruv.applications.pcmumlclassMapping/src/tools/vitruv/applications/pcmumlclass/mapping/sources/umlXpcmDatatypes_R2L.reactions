@@ -14,7 +14,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmDatatypes_R2L in reaction to changes in PCM
 execute actions in UML
-import routines umlXpcmRoutines 
+import routines umlXpcmRoutines
 reaction OnCompositeDataypeRepositoryInsertedAsRoot {
 	after element repository::Repository created
 	call compositeDataype_ElementCreatedCheck(affectedEObject)
@@ -40,9 +40,9 @@ reaction OnCompositeDataypeCompositeDataTypeDeleted {
 	call compositeDataype_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnCompositeDataypeEntityNameReplacedAtCompositeDataTypeBidirectional {
+reaction OnCompositeDataypeEntityNameReplacedAtCompositeDataType_entityNameBidirectional {
 	after attribute replaced at repository::CompositeDataType[entityName]
-	call compositeDataype_BidirectionalCheck(affectedEObject)
+	call onCompositeDataypeEntityNameReplacedAtCompositeDataType_entityNameBidirectionalRepair(affectedEObject)
 }
 
 reaction OnCompositeDatatypeParentCompositeDataTypeInsertedInCompositeDataType {
@@ -59,7 +59,6 @@ reaction OnCompositeDatatypeParentCompositeDataTypeDeleted {
 	after element repository::CompositeDataType deleted
 	call compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
 }
-
 
 routine compositeDataype_BidirectionalUpdate(repository::CompositeDataType type_, repository::Repository repository_) {
 	action {
@@ -92,11 +91,11 @@ routine compositeDataype_DeleteMapping(uml::Class class_, uml::Package datatypes
 	}
 }
 
-routine compositeDataype_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine compositeDataype_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject { var repository__candidate = type_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { compositeDataype_BidirectionalUpdate ( type_ , repository_ ) return } } } } }
-			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( type__candidate : repository_ . dataTypes__Repository ) { if ( type__candidate !== null && type__candidate instanceof CompositeDataType ) { var CompositeDataType type_ = type__candidate as CompositeDataType { compositeDataype_BidirectionalUpdate ( type_ , repository_ ) return } } } }
+			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject { var repository__candidate = type_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { { if ( routineName === "updateClassName" ) updateClassName ( type_ , repository_ ) } return } } } } }
+			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( type__candidate : repository_ . dataTypes__Repository ) { if ( type__candidate !== null && type__candidate instanceof CompositeDataType ) { var CompositeDataType type_ = type__candidate as CompositeDataType { { if ( routineName === "updateClassName" ) updateClassName ( type_ , repository_ ) } return } } } }
 		}
 	}
 }
@@ -173,11 +172,11 @@ routine compositeDatatypeParent_DeleteMapping(uml::Class class_, uml::Generaliza
 	}
 }
 
-routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject for ( parentType__candidate : type_ . parentType_CompositeDataType ) { if ( parentType__candidate !== null && parentType__candidate instanceof CompositeDataType ) { var CompositeDataType parentType_ = parentType__candidate as CompositeDataType { compositeDatatypeParent_BidirectionalUpdate ( type_ , parentType_ ) return } } } }
-			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType parentType_ = affectedEObject for ( type__candidate : parentType_ . eCrossReferences ) { if ( type__candidate !== null && type__candidate instanceof CompositeDataType ) { var CompositeDataType type_ = type__candidate as CompositeDataType if ( type_ . parentType_CompositeDataType . contains ( parentType_ ) ) { compositeDatatypeParent_BidirectionalUpdate ( type_ , parentType_ ) return } } } }
+			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject for ( parentType__candidate : type_ . parentType_CompositeDataType ) { if ( parentType__candidate !== null && parentType__candidate instanceof CompositeDataType ) { var CompositeDataType parentType_ = parentType__candidate as CompositeDataType { { } return } } } }
+			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType parentType_ = affectedEObject for ( type__candidate : parentType_ . eCrossReferences ) { if ( type__candidate !== null && type__candidate instanceof CompositeDataType ) { var CompositeDataType type_ = type__candidate as CompositeDataType if ( type_ . parentType_CompositeDataType . contains ( parentType_ ) ) { { } return } } } }
 		}
 	}
 }
@@ -218,5 +217,11 @@ routine compositeDatatypeParent_ElementUpdatedCheck(ecore::EObject affectedEObje
 			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType parentType_ = affectedEObject for ( type__candidate : parentType_ . eCrossReferences ) { if ( type__candidate !== null && type__candidate instanceof CompositeDataType ) { var CompositeDataType type_ = type__candidate as CompositeDataType if ( type_ . parentType_CompositeDataType . contains ( parentType_ ) ) { compositeDatatypeParent_CreateMapping ( type_ , parentType_ ) return } } } }
 			compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onCompositeDataypeEntityNameReplacedAtCompositeDataType_entityNameBidirectionalRepair(repository::CompositeDataType affectedEObject) {
+	action {
+		call compositeDataype_BidirectionalCheck(affectedEObject, "updateClassName")
 	}
 }

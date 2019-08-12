@@ -10,9 +10,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmRepository_L2R in reaction to changes in UML
 execute actions in PCM
-
-import routines umlXpcmRoutines 
-
+import routines umlXpcmRoutines
 reaction OnRepositoryPackageInsertedInPackage {
 	after element uml::Package inserted in uml::Package[packagedElement]
 	call repository_ElementCreatedCheck(affectedEObject)
@@ -28,14 +26,14 @@ reaction OnRepositoryPackageDeleted {
 	call repository_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnRepositoryNameReplacedAtPackage {
+reaction OnRepositoryNameReplacedAtPackage_name {
 	after attribute replaced at uml::Package[name]
 	call repository_ElementUpdatedCheck(affectedEObject)
 }
 
-reaction OnRepositoryNameReplacedAtPackageBidirectional {
+reaction OnRepositoryNameReplacedAtPackage_nameBidirectional {
 	after attribute replaced at uml::Package[name]
-	call repository_BidirectionalCheck(affectedEObject)
+	call onRepositoryNameReplacedAtPackage_nameBidirectionalRepair(affectedEObject)
 }
 
 routine repository_BidirectionalUpdate(uml::Package repositoryPkg_, uml::Package contractsPkg_ , uml::Package datatypesPkg_) {
@@ -43,6 +41,7 @@ routine repository_BidirectionalUpdate(uml::Package repositoryPkg_, uml::Package
 		call updateRepoName(repositoryPkg_, contractsPkg_ , datatypesPkg_)
 	}
 }
+
 routine repository_CreateMapping(uml::Package repositoryPkg_, uml::Package contractsPkg_ , uml::Package datatypesPkg_) {
 	match {
 		require absence of repository::Repository corresponding to repositoryPkg_ tagged with "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:repositoryPkg_with_Repository:repository"
@@ -63,12 +62,12 @@ routine repository_DeleteMapping(repository::Repository repository_) {
 	}
 }
 
-routine repository_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine repository_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof Package ) { var Package repositoryPkg_ = affectedEObject for ( datatypesPkg__candidate : repositoryPkg_ . packagedElements ) { if ( datatypesPkg__candidate !== null && datatypesPkg__candidate instanceof Package ) { var Package datatypesPkg_ = datatypesPkg__candidate as Package if ( "datatypes" === datatypesPkg_ . getName ( ) ) for ( contractsPkg__candidate : repositoryPkg_ . packagedElements ) { if ( contractsPkg__candidate !== null && contractsPkg__candidate instanceof Package ) { var Package contractsPkg_ = contractsPkg__candidate as Package if ( "contracts" === contractsPkg_ . getName ( ) ) { repository_BidirectionalUpdate ( repositoryPkg_ , contractsPkg_ , datatypesPkg_ ) return } } } } } }
-			if ( affectedEObject instanceof Package ) { var Package contractsPkg_ = affectedEObject if ( "contracts" === contractsPkg_ . getName ( ) ) { var repositoryPkg__candidate = contractsPkg_ . eContainer { if ( repositoryPkg__candidate !== null && repositoryPkg__candidate instanceof Package ) { var Package repositoryPkg_ = repositoryPkg__candidate as Package for ( datatypesPkg__candidate : repositoryPkg_ . packagedElements ) { if ( datatypesPkg__candidate !== null && datatypesPkg__candidate instanceof Package ) { var Package datatypesPkg_ = datatypesPkg__candidate as Package if ( "datatypes" === datatypesPkg_ . getName ( ) ) { repository_BidirectionalUpdate ( repositoryPkg_ , contractsPkg_ , datatypesPkg_ ) return } } } } } } }
-			if ( affectedEObject instanceof Package ) { var Package datatypesPkg_ = affectedEObject if ( "datatypes" === datatypesPkg_ . getName ( ) ) { var repositoryPkg__candidate = datatypesPkg_ . eContainer { if ( repositoryPkg__candidate !== null && repositoryPkg__candidate instanceof Package ) { var Package repositoryPkg_ = repositoryPkg__candidate as Package for ( contractsPkg__candidate : repositoryPkg_ . packagedElements ) { if ( contractsPkg__candidate !== null && contractsPkg__candidate instanceof Package ) { var Package contractsPkg_ = contractsPkg__candidate as Package if ( "contracts" === contractsPkg_ . getName ( ) ) { repository_BidirectionalUpdate ( repositoryPkg_ , contractsPkg_ , datatypesPkg_ ) return } } } } } } }
+			if ( affectedEObject instanceof Package ) { var Package repositoryPkg_ = affectedEObject for ( datatypesPkg__candidate : repositoryPkg_ . packagedElements ) { if ( datatypesPkg__candidate !== null && datatypesPkg__candidate instanceof Package ) { var Package datatypesPkg_ = datatypesPkg__candidate as Package if ( "datatypes" === datatypesPkg_ . getName ( ) ) for ( contractsPkg__candidate : repositoryPkg_ . packagedElements ) { if ( contractsPkg__candidate !== null && contractsPkg__candidate instanceof Package ) { var Package contractsPkg_ = contractsPkg__candidate as Package if ( "contracts" === contractsPkg_ . getName ( ) ) { { if ( routineName === "updateRepoName" ) updateRepoName ( repositoryPkg_ , contractsPkg_ , datatypesPkg_ ) } return } } } } } }
+			if ( affectedEObject instanceof Package ) { var Package contractsPkg_ = affectedEObject if ( "contracts" === contractsPkg_ . getName ( ) ) { var repositoryPkg__candidate = contractsPkg_ . eContainer { if ( repositoryPkg__candidate !== null && repositoryPkg__candidate instanceof Package ) { var Package repositoryPkg_ = repositoryPkg__candidate as Package for ( datatypesPkg__candidate : repositoryPkg_ . packagedElements ) { if ( datatypesPkg__candidate !== null && datatypesPkg__candidate instanceof Package ) { var Package datatypesPkg_ = datatypesPkg__candidate as Package if ( "datatypes" === datatypesPkg_ . getName ( ) ) { { if ( routineName === "updateRepoName" ) updateRepoName ( repositoryPkg_ , contractsPkg_ , datatypesPkg_ ) } return } } } } } } }
+			if ( affectedEObject instanceof Package ) { var Package datatypesPkg_ = affectedEObject if ( "datatypes" === datatypesPkg_ . getName ( ) ) { var repositoryPkg__candidate = datatypesPkg_ . eContainer { if ( repositoryPkg__candidate !== null && repositoryPkg__candidate instanceof Package ) { var Package repositoryPkg_ = repositoryPkg__candidate as Package for ( contractsPkg__candidate : repositoryPkg_ . packagedElements ) { if ( contractsPkg__candidate !== null && contractsPkg__candidate instanceof Package ) { var Package contractsPkg_ = contractsPkg__candidate as Package if ( "contracts" === contractsPkg_ . getName ( ) ) { { if ( routineName === "updateRepoName" ) updateRepoName ( repositoryPkg_ , contractsPkg_ , datatypesPkg_ ) } return } } } } } } }
 		}
 	}
 }
@@ -108,5 +107,11 @@ routine repository_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 			if ( affectedEObject instanceof Package ) { var Package datatypesPkg_ = affectedEObject if ( "datatypes" === datatypesPkg_ . getName ( ) ) { var repositoryPkg__candidate = datatypesPkg_ . eContainer { if ( repositoryPkg__candidate !== null && repositoryPkg__candidate instanceof Package ) { var Package repositoryPkg_ = repositoryPkg__candidate as Package for ( contractsPkg__candidate : repositoryPkg_ . packagedElements ) { if ( contractsPkg__candidate !== null && contractsPkg__candidate instanceof Package ) { var Package contractsPkg_ = contractsPkg__candidate as Package if ( "contracts" === contractsPkg_ . getName ( ) ) { repository_CreateMapping ( repositoryPkg_ , contractsPkg_ , datatypesPkg_ ) return } } } } } } }
 			repository_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onRepositoryNameReplacedAtPackage_nameBidirectionalRepair(uml::Package affectedEObject) {
+	action {
+		call repository_BidirectionalCheck(affectedEObject, "updateRepoName")
 	}
 }

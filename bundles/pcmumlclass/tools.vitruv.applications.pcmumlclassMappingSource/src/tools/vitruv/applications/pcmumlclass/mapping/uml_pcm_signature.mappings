@@ -5,12 +5,16 @@ mappings: umlXpcmSignature for UML and PCM
 
 mapping Signature{
 	map(pcm::OperationSignature operationSignature
-	//	abstract pcm::DataType returnType as pcm::PrimitiveDataType
+		pcm::Parameter parameter
+		abstract pcm::DataType returnType as pcm::PrimitiveDataType
 		mapped pcm::OperationInterface operationInterface with interface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
 	)
 	with{
 		operationSignature in operationInterface[signatures__OperationInterface]
-	//	returnType in operationSignature[returnType__OperationSignature]
+		parameter in operationSignature[parameters__OperationSignature]
+		returnType in operationSignature[returnType__OperationSignature]
+		//direction is return for retunType
+		"returnParam" equals parameter[parameterName]
 	}
 	and(uml::Operation operation
 		uml::Parameter returnParameter
@@ -25,12 +29,21 @@ mapping Signature{
 	}
 	such that{
 		observe changes{
-			uml::Operation[name]
-			pcm::OperationSignature[entityName]
-			pcm::OperationSignature[returnType__OperationSignature]	
+			pcm::OperationSignature[entityName] call updateOperationName
+			pcm::OperationSignature[returnType__OperationSignature]	call updateOperationSignatureReturnType
+			uml::Operation[name] call updateOperationSignatureName	
+			// name and direction is set by single sided conditions!
+			//pcm::Parameter[parameterName] call renameCorrespondingRegularParameter			
+			//pcm::Parameter[modifier__Parameter] call changeDirectionOfCorrespondingRegularParameter
+			//uml::Parameter[name] call changeNameOfCorrespondingRegularParameter
+			//uml::Parameter[direction] call changeModifierOfCorrespondingRegularParameter
+			pcm::Parameter[dataType__Parameter] call changeTypeOfCorrespondingRegularParameter
+			uml::Parameter[type] call propagateTypeChange
+			uml::Parameter[lowerValue] call propagateTypeChange
+			uml::Parameter[upperValue] call propagateTypeChange
 		}
-		
-		routine updateOperationName(pcm::OperationSignature operationSignature, pcm::OperationInterface operationInterface){
+								
+		routine updateOperationName(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
    	 		action{
    	 			execute{   	 			
    	 			}
@@ -44,12 +57,53 @@ mapping Signature{
    	 		}
    	 	}
    	 	
-   	 	routine updateOperationSignatureReturnType(pcm::OperationSignature operationSignature, pcm::OperationInterface operationInterface){
+   	 	routine updateOperationSignatureReturnType(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
    	 		action{
    	 			execute{   	 			
    	 			}
    	 		}
    	 	}
    	 	
+   	 	routine changeTypeOfCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine propagateTypeChange(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}  
+   	 	
+//   	 	routine renameCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
+//   	 		action{
+//   	 			execute{   	 			
+//   	 			}
+//   	 		}
+//   	 	}
+
+//   	 	routine changeDirectionOfCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface) {
+//   	 		action{
+//   	 			execute{   	 			
+//   	 			}
+//   	 		}
+//   	 	}
+   	 	
+//   	 	routine changeNameOfCorrespondingRegularParameter(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+//   	 		action{
+//   	 			execute{   	 			
+//   	 			}
+//   	 		}
+//   	 	}
+   	 	
+//   	 	routine changeModifierOfCorrespondingRegularParameter(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+//   	 		action{
+//   	 			execute{   	 			
+//   	 			}
+//   	 		}
+//   	 	}	  	 	   	 	
 	}
 }

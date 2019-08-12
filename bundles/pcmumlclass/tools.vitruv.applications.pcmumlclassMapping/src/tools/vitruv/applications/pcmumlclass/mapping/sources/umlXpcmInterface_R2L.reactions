@@ -14,7 +14,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmInterface_R2L in reaction to changes in PCM
 execute actions in UML
-import routines umlXpcmRoutines 
+import routines umlXpcmRoutines
 reaction OnOperationInterfaceRepositoryInsertedAsRoot {
 	after element repository::Repository created
 	call operationInterface_ElementCreatedCheck(affectedEObject)
@@ -40,9 +40,9 @@ reaction OnOperationInterfaceOperationInterfaceDeleted {
 	call operationInterface_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnOperationInterfaceEntityNameReplacedAtOperationInterfaceBidirectional {
+reaction OnOperationInterfaceEntityNameReplacedAtOperationInterface_entityNameBidirectional {
 	after attribute replaced at repository::OperationInterface[entityName]
-	call operationInterface_BidirectionalCheck(affectedEObject)
+	call onOperationInterfaceEntityNameReplacedAtOperationInterface_entityNameBidirectionalRepair(affectedEObject)
 }
 
 reaction OnOperationInterfaceParentOperationInterfaceInsertedInOperationInterface {
@@ -91,11 +91,11 @@ routine operationInterface_DeleteMapping(uml::Interface interface_, uml::Package
 	}
 }
 
-routine operationInterface_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine operationInterface_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject { var repository__candidate = operationInterface_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { operationInterface_BidirectionalUpdate ( operationInterface_ , repository_ ) return } } } } }
-			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( operationInterface__candidate : repository_ . interfaces__Repository ) { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { operationInterface_BidirectionalUpdate ( operationInterface_ , repository_ ) return } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject { var repository__candidate = operationInterface_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { { if ( routineName === "updateInterfaceName" ) updateInterfaceName ( operationInterface_ , repository_ ) } return } } } } }
+			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( operationInterface__candidate : repository_ . interfaces__Repository ) { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateInterfaceName" ) updateInterfaceName ( operationInterface_ , repository_ ) } return } } } }
 		}
 	}
 }
@@ -172,11 +172,11 @@ routine operationInterfaceParent_DeleteMapping(uml::Interface interface_, uml::G
 	}
 }
 
-routine operationInterfaceParent_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine operationInterfaceParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( parentInterface__candidate : operationInterface_ . parentInterfaces__Interface ) { if ( parentInterface__candidate !== null && parentInterface__candidate instanceof OperationInterface ) { var OperationInterface parentInterface_ = parentInterface__candidate as OperationInterface { operationInterfaceParent_BidirectionalUpdate ( operationInterface_ , parentInterface_ ) return } } } }
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface parentInterface_ = affectedEObject for ( operationInterface__candidate : parentInterface_ . eCrossReferences ) { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface if ( operationInterface_ . parentInterfaces__Interface . contains ( parentInterface_ ) ) { operationInterfaceParent_BidirectionalUpdate ( operationInterface_ , parentInterface_ ) return } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( parentInterface__candidate : operationInterface_ . parentInterfaces__Interface ) { if ( parentInterface__candidate !== null && parentInterface__candidate instanceof OperationInterface ) { var OperationInterface parentInterface_ = parentInterface__candidate as OperationInterface { { } return } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface parentInterface_ = affectedEObject for ( operationInterface__candidate : parentInterface_ . eCrossReferences ) { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface if ( operationInterface_ . parentInterfaces__Interface . contains ( parentInterface_ ) ) { { } return } } } }
 		}
 	}
 }
@@ -217,5 +217,11 @@ routine operationInterfaceParent_ElementUpdatedCheck(ecore::EObject affectedEObj
 			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface parentInterface_ = affectedEObject for ( operationInterface__candidate : parentInterface_ . eCrossReferences ) { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface if ( operationInterface_ . parentInterfaces__Interface . contains ( parentInterface_ ) ) { operationInterfaceParent_CreateMapping ( operationInterface_ , parentInterface_ ) return } } } }
 			operationInterfaceParent_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onOperationInterfaceEntityNameReplacedAtOperationInterface_entityNameBidirectionalRepair(repository::OperationInterface affectedEObject) {
+	action {
+		call operationInterface_BidirectionalCheck(affectedEObject, "updateInterfaceName")
 	}
 }

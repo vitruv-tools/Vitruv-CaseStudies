@@ -18,8 +18,8 @@ mapping CompositeDataype {
 	}
 	such that{
 		observe changes{
-			uml::Class[name]
-			pcm::CompositeDataType[entityName]
+			uml::Class[name] call updateCompositeDataTypeName
+			pcm::CompositeDataType[entityName] call updateClassName
 		}
 		
 		routine updateClassName(pcm::CompositeDataType type, pcm::Repository repository){

@@ -20,7 +20,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 reactions: umlXpcmRoles_L2R in reaction to changes in UML
 execute actions in PCM
-import routines umlXpcmRoutines 
+import routines umlXpcmRoutines
 reaction OnRequiredRoleClassInsertedAsRoot {
 	after element uml::Class created
 	call requiredRole_ElementCreatedCheck(affectedEObject)
@@ -66,12 +66,12 @@ reaction OnRequiredRolePropertyDeleted {
 	call requiredRole_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnRequiredRoleInterfaceReplacedAtProperty {
+reaction OnRequiredRoleInterfaceReplacedAtProperty_type {
 	after element uml::Interface replaced at uml::TypedElement[type]
 	call requiredRole_ElementUpdatedCheck(affectedEObject)
 }
 
-reaction OnRequiredRoleInterfaceReplacedAtParameter {
+reaction OnRequiredRoleInterfaceReplacedAtParameter_type {
 	after element uml::Interface replaced at uml::TypedElement[type]
 	call requiredRole_ElementUpdatedCheck(affectedEObject)
 }
@@ -91,14 +91,19 @@ reaction OnRequiredRoleParameterDeleted {
 	call requiredRole_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnRequiredRoleNameReplacedAtPropertyBidirectional {
+reaction OnRequiredRoleNameReplacedAtProperty_nameBidirectional {
 	after attribute replaced at uml::Property[name]
-	call requiredRole_BidirectionalCheck(affectedEObject)
+	call onRequiredRoleNameReplacedAtProperty_nameBidirectionalRepair(affectedEObject)
 }
 
-reaction OnRequiredRoleNameReplacedAtParameterBidirectional {
+reaction OnRequiredRoleNameReplacedAtParameter_nameBidirectional {
 	after attribute replaced at uml::Parameter[name]
-	call requiredRole_BidirectionalCheck(affectedEObject)
+	call onRequiredRoleNameReplacedAtParameter_nameBidirectionalRepair(affectedEObject)
+}
+
+reaction OnRequiredRoleElementReplacedAtParameter_typeBidirectional {
+	after element replaced at uml::TypedElement[type]
+	call onRequiredRoleElementReplacedAtParameter_typeBidirectionalRepair(affectedEObject)
 }
 
 reaction OnProvidedRoleClassInsertedAsRoot {
@@ -136,19 +141,20 @@ reaction OnProvidedRoleInterfaceRealizationDeleted {
 	call providedRole_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnProvidedRoleInterfaceReplacedAtInterfaceRealization {
+reaction OnProvidedRoleInterfaceReplacedAtInterfaceRealization_contract {
 	after element uml::Interface replaced at uml::InterfaceRealization[contract]
 	call providedRole_ElementUpdatedCheck(affectedEObject)
 }
 
-reaction OnProvidedRoleNameReplacedAtInterfaceRealizationBidirectional {
+reaction OnProvidedRoleNameReplacedAtInterfaceRealization_nameBidirectional {
 	after attribute replaced at uml::InterfaceRealization[name]
-	call providedRole_BidirectionalCheck(affectedEObject)
+	call onProvidedRoleNameReplacedAtInterfaceRealization_nameBidirectionalRepair(affectedEObject)
 }
 
 routine requiredRole_BidirectionalUpdate(uml::Property property_, uml::Parameter parameter_ , uml::Class implementation_ , uml::Interface interface_ , uml::Operation operation_) {
 	action {
 		call updateRequiredRoleName(property_, parameter_ , implementation_ , interface_ , operation_)
+		call changeTypeOfCorrespondingRequiredRole(property_, parameter_ , implementation_ , interface_ , operation_)
 	}
 }
 
@@ -191,14 +197,14 @@ routine requiredRole_DeleteMapping(repository::OperationRequiredRole role_, repo
 	}
 }
 
-routine requiredRole_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine requiredRole_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof Property ) { var Property property_ = affectedEObject { var implementation__candidate = property_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var interface__candidate = property_ . type { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface for ( parameter__candidate : interface_ . eCrossReferences ) { if ( parameter__candidate !== null && parameter__candidate instanceof Parameter ) { var Parameter parameter_ = parameter__candidate as Parameter if ( interface_ === parameter_ . type ) { var operation__candidate = parameter_ . eContainer { if ( operation__candidate !== null && operation__candidate instanceof Operation ) { var Operation operation_ = operation__candidate as Operation { requiredRole_BidirectionalUpdate ( property_ , parameter_ , implementation_ , interface_ , operation_ ) return } } } } } } } } } } } } }
-			if ( affectedEObject instanceof Parameter ) { var Parameter parameter_ = affectedEObject { var operation__candidate = parameter_ . eContainer { if ( operation__candidate !== null && operation__candidate instanceof Operation ) { var Operation operation_ = operation__candidate as Operation { var interface__candidate = parameter_ . type { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface for ( property__candidate : interface_ . eCrossReferences ) { if ( property__candidate !== null && property__candidate instanceof Property ) { var Property property_ = property__candidate as Property if ( interface_ === property_ . type ) { var implementation__candidate = property_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { requiredRole_BidirectionalUpdate ( property_ , parameter_ , implementation_ , interface_ , operation_ ) return } } } } } } } } } } } } }
-			if ( affectedEObject instanceof Class ) { var Class implementation_ = affectedEObject for ( property__candidate : implementation_ . ownedAttributes ) { if ( property__candidate !== null && property__candidate instanceof Property ) { var Property property_ = property__candidate as Property { var interface__candidate = property_ . type { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface for ( parameter__candidate : interface_ . eCrossReferences ) { if ( parameter__candidate !== null && parameter__candidate instanceof Parameter ) { var Parameter parameter_ = parameter__candidate as Parameter if ( interface_ === parameter_ . type ) { var operation__candidate = parameter_ . eContainer { if ( operation__candidate !== null && operation__candidate instanceof Operation ) { var Operation operation_ = operation__candidate as Operation { requiredRole_BidirectionalUpdate ( property_ , parameter_ , implementation_ , interface_ , operation_ ) return } } } } } } } } } } } }
-			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( parameter__candidate : interface_ . eCrossReferences ) { if ( parameter__candidate !== null && parameter__candidate instanceof Parameter ) { var Parameter parameter_ = parameter__candidate as Parameter if ( interface_ === parameter_ . type ) for ( property__candidate : interface_ . eCrossReferences ) { if ( property__candidate !== null && property__candidate instanceof Property ) { var Property property_ = property__candidate as Property if ( interface_ === property_ . type ) { var implementation__candidate = property_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var operation__candidate = parameter_ . eContainer { if ( operation__candidate !== null && operation__candidate instanceof Operation ) { var Operation operation_ = operation__candidate as Operation { requiredRole_BidirectionalUpdate ( property_ , parameter_ , implementation_ , interface_ , operation_ ) return } } } } } } } } } } } }
-			if ( affectedEObject instanceof Operation ) { var Operation operation_ = affectedEObject for ( parameter__candidate : operation_ . ownedParameters ) { if ( parameter__candidate !== null && parameter__candidate instanceof Parameter ) { var Parameter parameter_ = parameter__candidate as Parameter { var interface__candidate = parameter_ . type { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface for ( property__candidate : interface_ . eCrossReferences ) { if ( property__candidate !== null && property__candidate instanceof Property ) { var Property property_ = property__candidate as Property if ( interface_ === property_ . type ) { var implementation__candidate = property_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { requiredRole_BidirectionalUpdate ( property_ , parameter_ , implementation_ , interface_ , operation_ ) return } } } } } } } } } } } }
+			if ( affectedEObject instanceof Property ) { var Property property_ = affectedEObject { var implementation__candidate = property_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var interface__candidate = property_ . type { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface for ( parameter__candidate : interface_ . eCrossReferences ) { if ( parameter__candidate !== null && parameter__candidate instanceof Parameter ) { var Parameter parameter_ = parameter__candidate as Parameter if ( interface_ === parameter_ . type ) { var operation__candidate = parameter_ . eContainer { if ( operation__candidate !== null && operation__candidate instanceof Operation ) { var Operation operation_ = operation__candidate as Operation { { if ( routineName === "updateRequiredRoleName" ) updateRequiredRoleName ( property_ , parameter_ , implementation_ , interface_ , operation_ ) if ( routineName === "changeTypeOfCorrespondingRequiredRole" ) changeTypeOfCorrespondingRequiredRole ( property_ , parameter_ , implementation_ , interface_ , operation_ ) } return } } } } } } } } } } } } }
+			if ( affectedEObject instanceof Parameter ) { var Parameter parameter_ = affectedEObject { var operation__candidate = parameter_ . eContainer { if ( operation__candidate !== null && operation__candidate instanceof Operation ) { var Operation operation_ = operation__candidate as Operation { var interface__candidate = parameter_ . type { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface for ( property__candidate : interface_ . eCrossReferences ) { if ( property__candidate !== null && property__candidate instanceof Property ) { var Property property_ = property__candidate as Property if ( interface_ === property_ . type ) { var implementation__candidate = property_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { { if ( routineName === "updateRequiredRoleName" ) updateRequiredRoleName ( property_ , parameter_ , implementation_ , interface_ , operation_ ) if ( routineName === "changeTypeOfCorrespondingRequiredRole" ) changeTypeOfCorrespondingRequiredRole ( property_ , parameter_ , implementation_ , interface_ , operation_ ) } return } } } } } } } } } } } } }
+			if ( affectedEObject instanceof Class ) { var Class implementation_ = affectedEObject for ( property__candidate : implementation_ . ownedAttributes ) { if ( property__candidate !== null && property__candidate instanceof Property ) { var Property property_ = property__candidate as Property { var interface__candidate = property_ . type { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface for ( parameter__candidate : interface_ . eCrossReferences ) { if ( parameter__candidate !== null && parameter__candidate instanceof Parameter ) { var Parameter parameter_ = parameter__candidate as Parameter if ( interface_ === parameter_ . type ) { var operation__candidate = parameter_ . eContainer { if ( operation__candidate !== null && operation__candidate instanceof Operation ) { var Operation operation_ = operation__candidate as Operation { { if ( routineName === "updateRequiredRoleName" ) updateRequiredRoleName ( property_ , parameter_ , implementation_ , interface_ , operation_ ) if ( routineName === "changeTypeOfCorrespondingRequiredRole" ) changeTypeOfCorrespondingRequiredRole ( property_ , parameter_ , implementation_ , interface_ , operation_ ) } return } } } } } } } } } } } }
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( parameter__candidate : interface_ . eCrossReferences ) { if ( parameter__candidate !== null && parameter__candidate instanceof Parameter ) { var Parameter parameter_ = parameter__candidate as Parameter if ( interface_ === parameter_ . type ) for ( property__candidate : interface_ . eCrossReferences ) { if ( property__candidate !== null && property__candidate instanceof Property ) { var Property property_ = property__candidate as Property if ( interface_ === property_ . type ) { var implementation__candidate = property_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var operation__candidate = parameter_ . eContainer { if ( operation__candidate !== null && operation__candidate instanceof Operation ) { var Operation operation_ = operation__candidate as Operation { { if ( routineName === "updateRequiredRoleName" ) updateRequiredRoleName ( property_ , parameter_ , implementation_ , interface_ , operation_ ) if ( routineName === "changeTypeOfCorrespondingRequiredRole" ) changeTypeOfCorrespondingRequiredRole ( property_ , parameter_ , implementation_ , interface_ , operation_ ) } return } } } } } } } } } } } }
+			if ( affectedEObject instanceof Operation ) { var Operation operation_ = affectedEObject for ( parameter__candidate : operation_ . ownedParameters ) { if ( parameter__candidate !== null && parameter__candidate instanceof Parameter ) { var Parameter parameter_ = parameter__candidate as Parameter { var interface__candidate = parameter_ . type { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface for ( property__candidate : interface_ . eCrossReferences ) { if ( property__candidate !== null && property__candidate instanceof Property ) { var Property property_ = property__candidate as Property if ( interface_ === property_ . type ) { var implementation__candidate = property_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { { if ( routineName === "updateRequiredRoleName" ) updateRequiredRoleName ( property_ , parameter_ , implementation_ , interface_ , operation_ ) if ( routineName === "changeTypeOfCorrespondingRequiredRole" ) changeTypeOfCorrespondingRequiredRole ( property_ , parameter_ , implementation_ , interface_ , operation_ ) } return } } } } } } } } } } } }
 		}
 	}
 }
@@ -310,12 +316,12 @@ routine providedRole_DeleteMapping(repository::OperationProvidedRole role_, repo
 	}
 }
 
-routine providedRole_BidirectionalCheck(ecore::EObject affectedEObject) {
+routine providedRole_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof InterfaceRealization ) { var InterfaceRealization interfaceRealization_ = affectedEObject { var implementation__candidate = interfaceRealization_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var interface__candidate = interfaceRealization_ . contract { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { providedRole_BidirectionalUpdate ( interfaceRealization_ , implementation_ , interface_ ) return } } } } } } } }
-			if ( affectedEObject instanceof Class ) { var Class implementation_ = affectedEObject for ( interfaceRealization__candidate : implementation_ . interfaceRealizations ) { if ( interfaceRealization__candidate !== null && interfaceRealization__candidate instanceof InterfaceRealization ) { var InterfaceRealization interfaceRealization_ = interfaceRealization__candidate as InterfaceRealization { var interface__candidate = interfaceRealization_ . contract { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { providedRole_BidirectionalUpdate ( interfaceRealization_ , implementation_ , interface_ ) return } } } } } } }
-			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( interfaceRealization__candidate : interface_ . eCrossReferences ) { if ( interfaceRealization__candidate !== null && interfaceRealization__candidate instanceof InterfaceRealization ) { var InterfaceRealization interfaceRealization_ = interfaceRealization__candidate as InterfaceRealization if ( interface_ === interfaceRealization_ . contract ) { var implementation__candidate = interfaceRealization_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { providedRole_BidirectionalUpdate ( interfaceRealization_ , implementation_ , interface_ ) return } } } } } } }
+			if ( affectedEObject instanceof InterfaceRealization ) { var InterfaceRealization interfaceRealization_ = affectedEObject { var implementation__candidate = interfaceRealization_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { var interface__candidate = interfaceRealization_ . contract { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { { if ( routineName === "updateProvidedRoleName" ) updateProvidedRoleName ( interfaceRealization_ , implementation_ , interface_ ) } return } } } } } } } }
+			if ( affectedEObject instanceof Class ) { var Class implementation_ = affectedEObject for ( interfaceRealization__candidate : implementation_ . interfaceRealizations ) { if ( interfaceRealization__candidate !== null && interfaceRealization__candidate instanceof InterfaceRealization ) { var InterfaceRealization interfaceRealization_ = interfaceRealization__candidate as InterfaceRealization { var interface__candidate = interfaceRealization_ . contract { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { { if ( routineName === "updateProvidedRoleName" ) updateProvidedRoleName ( interfaceRealization_ , implementation_ , interface_ ) } return } } } } } } }
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( interfaceRealization__candidate : interface_ . eCrossReferences ) { if ( interfaceRealization__candidate !== null && interfaceRealization__candidate instanceof InterfaceRealization ) { var InterfaceRealization interfaceRealization_ = interfaceRealization__candidate as InterfaceRealization if ( interface_ === interfaceRealization_ . contract ) { var implementation__candidate = interfaceRealization_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { { if ( routineName === "updateProvidedRoleName" ) updateProvidedRoleName ( interfaceRealization_ , implementation_ , interface_ ) } return } } } } } } }
 		}
 	}
 }
@@ -369,5 +375,29 @@ routine providedRole_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( interfaceRealization__candidate : interface_ . eCrossReferences ) { if ( interfaceRealization__candidate !== null && interfaceRealization__candidate instanceof InterfaceRealization ) { var InterfaceRealization interfaceRealization_ = interfaceRealization__candidate as InterfaceRealization if ( interface_ === interfaceRealization_ . contract ) { var implementation__candidate = interfaceRealization_ . eContainer { if ( implementation__candidate !== null && implementation__candidate instanceof Class ) { var Class implementation_ = implementation__candidate as Class { providedRole_CreateMapping ( interfaceRealization_ , implementation_ , interface_ ) return } } } } } } }
 			providedRole_ElementDeletedCheck(affectedEObject)
 		}
+	}
+}
+
+routine onRequiredRoleNameReplacedAtProperty_nameBidirectionalRepair(uml::Property affectedEObject) {
+	action {
+		call requiredRole_BidirectionalCheck(affectedEObject, "updateRequiredRoleName")
+	}
+}
+
+routine onRequiredRoleNameReplacedAtParameter_nameBidirectionalRepair(uml::Parameter affectedEObject) {
+	action {
+		call requiredRole_BidirectionalCheck(affectedEObject, "updateRequiredRoleName")
+	}
+}
+
+routine onRequiredRoleElementReplacedAtParameter_typeBidirectionalRepair(uml::TypedElement affectedEObject) {
+	action {
+		call requiredRole_BidirectionalCheck(affectedEObject, "changeTypeOfCorrespondingRequiredRole")
+	}
+}
+
+routine onProvidedRoleNameReplacedAtInterfaceRealization_nameBidirectionalRepair(uml::InterfaceRealization affectedEObject) {
+	action {
+		call providedRole_BidirectionalCheck(affectedEObject, "updateProvidedRoleName")
 	}
 }

@@ -37,8 +37,8 @@ class RepositoryComponentTest extends PcmUmlClassTest{
 		assertTrue(corresponds(cm, pcmComponent, umlComponentConstructor, TagLiterals.IPRE__CONSTRUCTOR))
 		assertEquals(umlComponentPkg.name, pcmComponent.entityName.toFirstLower) 
 		assertEquals(umlComponentPkg.name.toFirstUpper, pcmComponent.entityName)
-		assertEquals(umlComponentImpl.name, pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX)
-		assertEquals(umlComponentConstructor.name, pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX )
+		assertEquals( pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX, umlComponentImpl.name)
+		assertEquals( pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX, umlComponentConstructor.name )
 		// decided against explicit constructor return type, because it's a common convention
 		//commented out, broke the test
 		//assertTrue(umlComponentImpl.isFinalSpecialization)
