@@ -96,6 +96,7 @@ class ParameterConceptTest extends TransitiveChangeTest {
 		umlParameter.type = umlType
 		umlParameter.lower = lower
 		umlParameter.upper = upper
+		userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION)
 		saveAndSynchronizeChanges(umlParameter)
 
 		reloadResourceAndReturnRoot(umlParameter)

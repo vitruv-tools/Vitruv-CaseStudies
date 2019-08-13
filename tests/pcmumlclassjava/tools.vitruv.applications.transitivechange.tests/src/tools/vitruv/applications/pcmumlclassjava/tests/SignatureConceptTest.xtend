@@ -114,6 +114,7 @@ class SignatureConceptTest extends TransitiveChangeTest {
 		umlReturnParameter.lower = lower
 		umlReturnParameter.upper = upper
 		
+		userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION)
 		saveAndSynchronizeChanges(umlInterface)
 		reloadResourceAndReturnRoot(umlInterface)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
