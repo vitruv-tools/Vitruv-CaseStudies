@@ -1,5 +1,6 @@
 package mir.routines.umlToJavaMethod;
 
+import mir.routines.umlToJavaMethod.AdaptParameterBoundChangedRoutine;
 import mir.routines.umlToJavaMethod.AdaptParameterDirectionChangedFromReturnRoutine;
 import mir.routines.umlToJavaMethod.AdaptParameterDirectionChangedToReturnRoutine;
 import mir.routines.umlToJavaMethod.ChangeJavaElementVisibilityRoutine;
@@ -157,6 +158,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     ChangeJavaParameterTypeRoutine routine = new ChangeJavaParameterTypeRoutine(_routinesFacade, _reactionExecutionState, _caller, uParam, uType);
+    return routine.applyRoutine();
+  }
+  
+  public boolean adaptParameterBoundChanged(final Operation uOperation, final Parameter uParam) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AdaptParameterBoundChangedRoutine routine = new AdaptParameterBoundChangedRoutine(_routinesFacade, _reactionExecutionState, _caller, uOperation, uParam);
     return routine.applyRoutine();
   }
   

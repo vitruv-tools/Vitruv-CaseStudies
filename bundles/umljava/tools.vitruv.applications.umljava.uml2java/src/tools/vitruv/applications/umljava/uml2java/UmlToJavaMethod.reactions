@@ -3,6 +3,7 @@ import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.VisibilityKind
@@ -343,6 +344,42 @@ routine changeJavaParameterType(uml::Parameter uParam, uml::Type uType) {
     action {
         call {
             umlToJavaTypePropagation.propagateOrdinaryParameterTypeChanged(uParam, jParam, jCustomType.orElse(null))
+        }
+    }
+}
+
+reaction RegularOrReturnParameterLowerChanged {
+    after element replaced at uml::Parameter[lowerValue]
+    call adaptParameterBoundChanged(affectedEObject.operation, affectedEObject)
+}
+
+reaction RegularOrReturnParameterUpperChanged {
+    after element replaced at uml::Parameter[upperValue]
+    call adaptParameterBoundChanged(affectedEObject.operation, affectedEObject)
+}
+
+reaction RegularOrReturnParameterIntegerBoundChanged {
+    after attribute replaced at uml::LiteralInteger[value]
+    with affectedEObject.owner instanceof Parameter 
+        && affectedEObject.value == newValue
+    call adaptParameterBoundChanged((affectedEObject.owner as Parameter).operation, affectedEObject.owner as Parameter)
+}
+
+reaction RegularOrReturnParameterUnlimitedBoundChanged {
+    after attribute replaced at uml::LiteralUnlimitedNatural[value]
+    with affectedEObject.owner instanceof Parameter 
+        && affectedEObject.value == newValue
+    call adaptParameterBoundChanged((affectedEObject.owner as Parameter).operation, affectedEObject.owner as Parameter)
+}
+
+routine adaptParameterBoundChanged(uml::Operation uOperation, uml::Parameter uParam) {
+    action {
+        execute {
+            if(uParam.direction == ParameterDirectionKind.RETURN_LITERAL) {
+                setJavaMethodReturnType(uOperation, uParam)
+            } else if (uParam.direction == ParameterDirectionKind.IN_LITERAL) {
+                changeJavaParameterType(uParam, uParam.type)
+            }
         }
     }
 }
