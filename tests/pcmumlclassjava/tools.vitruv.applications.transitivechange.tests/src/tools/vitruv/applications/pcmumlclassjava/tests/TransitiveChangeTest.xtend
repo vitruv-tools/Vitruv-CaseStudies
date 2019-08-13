@@ -2,6 +2,7 @@ package tools.vitruv.applications.pcmumlclassjava.tests
 
 import java.util.ArrayList
 import java.util.Collection
+import java.util.List
 import java.util.Set
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
@@ -13,6 +14,8 @@ import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.PackageableElement
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Type
 import org.emftext.language.java.classifiers.Class
@@ -40,9 +43,9 @@ import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
-	
+
 	protected static final int ARRAY_LIST_SELECTION = 0;
-	
+
 	override protected createChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
@@ -57,7 +60,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		new UmlDomainProvider().domain.enableTransitiveChangePropagation
 		new JavaDomainProvider().domain.enableTransitiveChangePropagation
 		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain];
-	}	
+	}
 
 	private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
 
@@ -141,8 +144,8 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	def private dispatch checkJavaMethod(ClassMethod javaMethod, Operation umlOperation) {
 		val javaClass = javaMethod.eContainer as Class
-		assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract, javaMethod.parameters,
-			javaClass)
+		assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract,
+			javaMethod.parameters, javaClass)
 		assertFinalMethodEquals(umlOperation, javaMethod)
 	}
 
@@ -222,6 +225,28 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	def private dispatch boolean isCollection(ConcreteClassifier classifier) {
 		typeof(Collection).name == classifier.qualifiedName || classifier.allSuperClassifiers.stream.anyMatch[isCollection]
+	}
+	
+	/**
+	 * Fixed version of TestUtil.assertParameterListEquals(), mostly copied.
+	 */
+	def private void assertParameterListEquals(List<Parameter> umlParameters, List<org.emftext.language.java.parameters.Parameter> javaParameters) {
+		val uParamListWithoutReturn = umlParameters.filter[direction != ParameterDirectionKind.RETURN_LITERAL]
+		if (uParamListWithoutReturn === null) {
+			assertNull(javaParameters)
+		} else {
+			assertEquals(uParamListWithoutReturn.size, javaParameters.size)
+			for (umlParameter : uParamListWithoutReturn) {
+				val javaParameter = javaParameters.filter[name == umlParameter.name]
+				if (javaParameter.nullOrEmpty) {
+					fail("There is no corresponding java parameter with the name '" + umlParameter.name + "'")
+				} else if (javaParameter.size > 1) {
+					println("There are more than one parameter with the name '" + umlParameter.name + "'")
+				} else {
+					checkTypes(umlParameter.type, javaParameter.head.typeReference, umlParameter.upper)
+				}
+			}
+		}
 	}
 
 	/**
