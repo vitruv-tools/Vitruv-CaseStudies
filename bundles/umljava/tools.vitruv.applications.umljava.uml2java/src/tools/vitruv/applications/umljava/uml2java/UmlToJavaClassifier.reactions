@@ -494,11 +494,14 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
                 for (compUnit : jPackage.compilationUnits) {
                     changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
                 }
-           }
+            }
+            // TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:
+            for (nestedPackage : uPackage.nestedPackages) {
+                renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages 
+            }
         }
     }
 }
-
 
 routine changePackageOfJavaCompilationUnit(java::Package jPackage, java::CompilationUnit jCompUnit, uml::Namespace uNamespace) {
     action {
