@@ -10,44 +10,41 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
 import org.emftext.language.java.members.Method;
-import org.emftext.language.java.types.TypesFactory;
+import org.emftext.language.java.parameters.OrdinaryParameter;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 
 @SuppressWarnings("all")
-public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealization {
-  private SetJavaMethodReturnTypeRoutine.ActionUserExecution userExecution;
+public class AdaptParameterDirectionChangedToReturnRoutine extends AbstractRepairRoutineRealization {
+  private AdaptParameterDirectionChangedToReturnRoutine.ActionUserExecution userExecution;
   
   private static class ActionUserExecution extends AbstractRepairRoutineRealization.UserExecution {
     public ActionUserExecution(final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy) {
       super(reactionExecutionState);
     }
     
+    public EObject getCorrepondenceSourceJParam(final Operation uOperation, final Parameter uParam, final Method jMethod) {
+      return uParam;
+    }
+    
     public EObject getCorrepondenceSourceJMethod(final Operation uOperation, final Parameter uParam) {
       return uOperation;
     }
     
-    public void executeAction1(final Operation uOperation, final Parameter uParam, final Method jMethod, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
-      if ((uParam != null)) {
-        _routinesFacade.umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null));
-      } else {
-        jMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
-      }
+    public void executeAction1(final Operation uOperation, final Parameter uParam, final Method jMethod, final Optional<OrdinaryParameter> jParam, final Optional<ConcreteClassifier> jCustomType, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.umlToJavaTypePropagation.propagateReturnParameterTypeChanged(uParam, jMethod, jCustomType.orElse(null));
     }
     
-    public EObject getCorrepondenceSourceJCustomType(final Operation uOperation, final Parameter uParam, final Method jMethod) {
-      Type _type = null;
-      if (uParam!=null) {
-        _type=uParam.getType();
-      }
+    public EObject getCorrepondenceSourceJCustomType(final Operation uOperation, final Parameter uParam, final Method jMethod, final Optional<OrdinaryParameter> jParam) {
+      Type _type = uParam.getType();
       return _type;
     }
   }
   
-  public SetJavaMethodReturnTypeRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation uOperation, final Parameter uParam) {
+  public AdaptParameterDirectionChangedToReturnRoutine(final RoutinesFacade routinesFacade, final ReactionExecutionState reactionExecutionState, final CallHierarchyHaving calledBy, final Operation uOperation, final Parameter uParam) {
     super(routinesFacade, reactionExecutionState, calledBy);
-    this.userExecution = new mir.routines.umlToJavaMethod.SetJavaMethodReturnTypeRoutine.ActionUserExecution(getExecutionState(), this);
+    this.userExecution = new mir.routines.umlToJavaMethod.AdaptParameterDirectionChangedToReturnRoutine.ActionUserExecution(getExecutionState(), this);
     this.uOperation = uOperation;this.uParam = uParam;
   }
   
@@ -56,7 +53,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
   private Parameter uParam;
   
   protected boolean executeRoutine() throws IOException {
-    getLogger().debug("Called routine SetJavaMethodReturnTypeRoutine with input:");
+    getLogger().debug("Called routine AdaptParameterDirectionChangedToReturnRoutine with input:");
     getLogger().debug("   uOperation: " + this.uOperation);
     getLogger().debug("   uParam: " + this.uParam);
     
@@ -71,8 +68,17 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     	return false;
     }
     registerObjectUnderModification(jMethod);
+    	Optional<org.emftext.language.java.parameters.OrdinaryParameter> jParam = Optional.ofNullable(getCorrespondingElement(
+    		userExecution.getCorrepondenceSourceJParam(uOperation, uParam, jMethod), // correspondence source supplier
+    		org.emftext.language.java.parameters.OrdinaryParameter.class,
+    		(org.emftext.language.java.parameters.OrdinaryParameter _element) -> true, // correspondence precondition checker
+    		null, 
+    		false // asserted
+    		)
+    );
+    registerObjectUnderModification(jParam.isPresent() ? jParam.get() : null);
     	Optional<org.emftext.language.java.classifiers.ConcreteClassifier> jCustomType = Optional.ofNullable(getCorrespondingElement(
-    		userExecution.getCorrepondenceSourceJCustomType(uOperation, uParam, jMethod), // correspondence source supplier
+    		userExecution.getCorrepondenceSourceJCustomType(uOperation, uParam, jMethod, jParam), // correspondence source supplier
     		org.emftext.language.java.classifiers.ConcreteClassifier.class,
     		(org.emftext.language.java.classifiers.ConcreteClassifier _element) -> true, // correspondence precondition checker
     		null, 
@@ -80,7 +86,7 @@ public class SetJavaMethodReturnTypeRoutine extends AbstractRepairRoutineRealiza
     		)
     );
     registerObjectUnderModification(jCustomType.isPresent() ? jCustomType.get() : null);
-    userExecution.executeAction1(uOperation, uParam, jMethod, jCustomType, this.getRoutinesFacade());
+    userExecution.executeAction1(uOperation, uParam, jMethod, jParam, jCustomType, this.getRoutinesFacade());
     
     postprocessElements();
     

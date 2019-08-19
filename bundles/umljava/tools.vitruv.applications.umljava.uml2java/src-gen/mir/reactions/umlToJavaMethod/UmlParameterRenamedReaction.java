@@ -2,25 +2,24 @@ package mir.reactions.umlToJavaMethod;
 
 import com.google.common.base.Objects;
 import mir.routines.umlToJavaMethod.RoutinesFacade;
-import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
-import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractReactionRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
 import tools.vitruv.framework.change.echange.EChange;
-import tools.vitruv.framework.change.echange.feature.reference.ReplaceSingleValuedEReference;
+import tools.vitruv.framework.change.echange.feature.attribute.ReplaceSingleValuedEAttribute;
 
 @SuppressWarnings("all")
-public class UmlParameterTypeChangedReaction extends AbstractReactionRealization {
-  private ReplaceSingleValuedEReference<Parameter, Type> replaceChange;
+public class UmlParameterRenamedReaction extends AbstractReactionRealization {
+  private ReplaceSingleValuedEAttribute<Parameter, String> replaceChange;
   
   private int currentlyMatchedChange;
   
-  public UmlParameterTypeChangedReaction(final RoutinesFacade routinesFacade) {
+  public UmlParameterRenamedReaction(final RoutinesFacade routinesFacade) {
     super(routinesFacade);
   }
   
@@ -29,9 +28,9 @@ public class UmlParameterTypeChangedReaction extends AbstractReactionRealization
     	return;
     }
     org.eclipse.uml2.uml.Parameter affectedEObject = replaceChange.getAffectedEObject();
-    EReference affectedFeature = replaceChange.getAffectedFeature();
-    org.eclipse.uml2.uml.Type oldValue = replaceChange.getOldValue();
-    org.eclipse.uml2.uml.Type newValue = replaceChange.getNewValue();
+    EAttribute affectedFeature = replaceChange.getAffectedFeature();
+    java.lang.String oldValue = replaceChange.getOldValue();
+    java.lang.String newValue = replaceChange.getNewValue();
     				
     getLogger().trace("Passed change matching of Reaction " + this.getClass().getName());
     if (!checkUserDefinedPrecondition(replaceChange, affectedEObject, affectedFeature, oldValue, newValue)) {
@@ -40,7 +39,7 @@ public class UmlParameterTypeChangedReaction extends AbstractReactionRealization
     }
     getLogger().trace("Passed complete precondition check of Reaction " + this.getClass().getName());
     				
-    mir.reactions.umlToJavaMethod.UmlParameterTypeChangedReaction.ActionUserExecution userExecution = new mir.reactions.umlToJavaMethod.UmlParameterTypeChangedReaction.ActionUserExecution(this.executionState, this);
+    mir.reactions.umlToJavaMethod.UmlParameterRenamedReaction.ActionUserExecution userExecution = new mir.reactions.umlToJavaMethod.UmlParameterRenamedReaction.ActionUserExecution(this.executionState, this);
     userExecution.callRoutine1(replaceChange, affectedEObject, affectedFeature, oldValue, newValue, this.getRoutinesFacade());
     
     resetChanges();
@@ -65,28 +64,28 @@ public class UmlParameterTypeChangedReaction extends AbstractReactionRealization
   }
   
   private boolean matchReplaceChange(final EChange change) {
-    if (change instanceof ReplaceSingleValuedEReference<?, ?>) {
-    	ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.Type> _localTypedChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.Type>) change;
+    if (change instanceof ReplaceSingleValuedEAttribute<?, ?>) {
+    	ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, java.lang.String> _localTypedChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, java.lang.String>) change;
     	if (!(_localTypedChange.getAffectedEObject() instanceof org.eclipse.uml2.uml.Parameter)) {
     		return false;
     	}
-    	if (!_localTypedChange.getAffectedFeature().getName().equals("type")) {
+    	if (!_localTypedChange.getAffectedFeature().getName().equals("name")) {
     		return false;
     	}
-    	if (_localTypedChange.isFromNonDefaultValue() && !(_localTypedChange.getOldValue() instanceof org.eclipse.uml2.uml.Type)) {
+    	if (_localTypedChange.isFromNonDefaultValue() && !(_localTypedChange.getOldValue() instanceof java.lang.String)) {
     		return false;
     	}
-    	if (_localTypedChange.isToNonDefaultValue() && !(_localTypedChange.getNewValue() instanceof org.eclipse.uml2.uml.Type)) {
+    	if (_localTypedChange.isToNonDefaultValue() && !(_localTypedChange.getNewValue() instanceof java.lang.String)) {
     		return false;
     	}
-    	this.replaceChange = (ReplaceSingleValuedEReference<org.eclipse.uml2.uml.Parameter, org.eclipse.uml2.uml.Type>) change;
+    	this.replaceChange = (ReplaceSingleValuedEAttribute<org.eclipse.uml2.uml.Parameter, java.lang.String>) change;
     	return true;
     }
     
     return false;
   }
   
-  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEReference replaceChange, final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue) {
+  private boolean checkUserDefinedPrecondition(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue) {
     ParameterDirectionKind _direction = affectedEObject.getDirection();
     boolean _equals = Objects.equal(_direction, ParameterDirectionKind.IN_LITERAL);
     return _equals;
@@ -97,8 +96,8 @@ public class UmlParameterTypeChangedReaction extends AbstractReactionRealization
       super(reactionExecutionState);
     }
     
-    public void callRoutine1(final ReplaceSingleValuedEReference replaceChange, final Parameter affectedEObject, final EReference affectedFeature, final Type oldValue, final Type newValue, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.changeJavaParameterType(affectedEObject, newValue);
+    public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Parameter affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createMissingJavaParameter(affectedEObject);
     }
   }
 }
