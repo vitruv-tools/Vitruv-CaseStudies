@@ -15,9 +15,9 @@ Bidirectional transformation between UML and PCM, but only unidirectional transf
  | fix3 | [PR 46](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/46) | While renaming UML packages the namespaces of child packages were not updated. |
  | fix4 | [PR 45](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/45) | Java parameters were not created when a unnamed UML parameter was renamed. |
  | fix5 | [PR 47](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/47) | Missing adaption of Java types (collection <--> non-collection type) when changing the multiplicities of UML return types. |
- | fix6 | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | UML classes were deleted although Java compilation units were only removed from their container. |
+ | fix6 | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | When inserting Java compilation units, correlating UML classes were not moved to the correlating UML package of the compilation unit. |
  | fix7 | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | *Multiple commits for one issue, see fix6.* |
- | fix8 | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | *Multiple commits for one issue, see fix6.* |
+ | fix8 | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | UML classes were deleted although Java compilation units were only removed from their container. |
 
 ### PCM <--> UML <--> Java
 Bidirectional transformation between UML and PCM, as well as between UML and Java.
