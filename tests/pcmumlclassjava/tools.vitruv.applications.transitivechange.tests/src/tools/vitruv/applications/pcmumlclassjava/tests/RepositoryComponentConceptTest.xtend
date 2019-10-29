@@ -116,6 +116,7 @@ class RepositoryComponentConceptTest extends TransitiveChangeTest {
 		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
 		var umlComponentPkg = umlRepositoryPkg.createNestedPackage(COMPONENT_NAME)
 
+		userInteractor.addNextSingleSelection(0)
 		saveAndSynchronizeChanges(umlComponentPkg)
 		reloadResourceAndReturnRoot(umlComponentPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
