@@ -21,3 +21,9 @@ Bidirectional transformation between UML and PCM, but only unidirectional transf
 
 ### PCM <--> UML <--> Java
 Bidirectional transformation between UML and PCM, as well as between UML and Java.
+
+  | tag | correlating pull request | addressed problem |
+  | -- | -- | -- |
+  | fix9* | [PR 44](https://github.com/vitruv-tools/Vitruv-Domains-ComponentBasedSystems/pull/44) | Unnamed Java packages lead to problems with invalid paths. This could lead to duplicate package names. |
+
+**this fix tag is not located in this repository, as it concerns the domains repository. The correlating pull request is also part of that repository.*
