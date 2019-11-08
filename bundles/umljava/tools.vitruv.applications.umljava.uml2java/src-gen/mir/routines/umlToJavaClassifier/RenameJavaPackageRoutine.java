@@ -50,6 +50,10 @@ public class RenameJavaPackageRoutine extends AbstractRepairRoutineRealization {
           _routinesFacade.changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace);
         }
       }
+      EList<org.eclipse.uml2.uml.Package> _nestedPackages = uPackage.getNestedPackages();
+      for (final org.eclipse.uml2.uml.Package nestedPackage : _nestedPackages) {
+        _routinesFacade.renameJavaPackage(nestedPackage, uNamespace);
+      }
     }
   }
   
