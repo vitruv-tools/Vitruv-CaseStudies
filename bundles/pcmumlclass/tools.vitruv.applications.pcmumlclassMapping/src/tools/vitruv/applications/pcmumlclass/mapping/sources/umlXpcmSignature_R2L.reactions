@@ -4,8 +4,8 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.eclipse.xtext.xbase.lib.ObjectExtensions
-import org.eclipse.xtext.xbase.lib.BooleanExtensions
 import org.palladiosimulator.pcm.repository.DataType
+import org.eclipse.xtext.xbase.lib.BooleanExtensions
 import org.palladiosimulator.pcm.repository.OperationInterface
 import java.util.Optional
 
@@ -16,7 +16,6 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 reactions: umlXpcmSignature_R2L in reaction to changes in PCM
 execute actions in UML
 import routines umlXpcmRoutines
-
 reaction OnSignatureDataTypeInsertedAsRoot {
 	after element repository::DataType created
 	call signature_ElementCreatedCheck(affectedEObject)
@@ -52,28 +51,8 @@ reaction OnSignatureOperationSignatureDeleted {
 	call signature_ElementDeletedCheck(affectedEObject)
 }
 
-reaction OnSignatureParameterInsertedInOperationSignature {
-	after element repository::Parameter inserted in repository::OperationSignature[parameters__OperationSignature]
-	call signature_ElementCreatedCheck(affectedEObject)
-}
-
-reaction OnSignatureParameterRemovedFromOperationSignature {
-	after element repository::Parameter removed from repository::OperationSignature[parameters__OperationSignature]
-	call signature_ElementDeletedCheck(affectedEObject)
-}
-
-reaction OnSignatureParameterDeleted {
-	after element repository::Parameter deleted
-	call signature_ElementDeletedCheck(affectedEObject)
-}
-
 reaction OnSignatureDataTypeReplacedAtOperationSignature_returnType__OperationSignature {
 	after element repository::DataType replaced at repository::OperationSignature[returnType__OperationSignature]
-	call signature_ElementUpdatedCheck(affectedEObject)
-}
-
-reaction OnSignatureParameterNameReplacedAtParameter_parameterName {
-	after attribute replaced at repository::Parameter[parameterName]
 	call signature_ElementUpdatedCheck(affectedEObject)
 }
 
@@ -87,20 +66,14 @@ reaction OnSignatureElementReplacedAtOperationSignature_returnType__OperationSig
 	call onSignatureElementReplacedAtOperationSignature_returnType__OperationSignatureBidirectionalRepair(affectedEObject)
 }
 
-reaction OnSignatureElementReplacedAtParameter_dataType__ParameterBidirectional {
-	after element replaced at repository::Parameter[dataType__Parameter]
-	call onSignatureElementReplacedAtParameter_dataType__ParameterBidirectionalRepair(affectedEObject)
-}
-
-routine signature_BidirectionalUpdate(repository::OperationSignature operationSignature_, repository::Parameter parameter_ , repository::DataType returnType_ , repository::OperationInterface operationInterface_) {
+routine signature_BidirectionalUpdate(repository::OperationSignature operationSignature_, repository::DataType returnType_ , repository::OperationInterface operationInterface_) {
 	action {
-		call updateOperationName(operationSignature_, parameter_ , returnType_ , operationInterface_)
-		call updateOperationSignatureReturnType(operationSignature_, parameter_ , returnType_ , operationInterface_)
-		call changeTypeOfCorrespondingRegularParameter(operationSignature_, parameter_ , returnType_ , operationInterface_)
+		call updateSignatureUmlName(operationSignature_, returnType_ , operationInterface_)
+		call updateSignatureUmlReturnType(operationSignature_, returnType_ , operationInterface_)
 	}
 }
 
-routine signature_CreateMapping(repository::OperationSignature operationSignature_, repository::Parameter parameter_ , repository::DataType returnType_ , repository::OperationInterface operationInterface_) {
+routine signature_CreateMapping(repository::OperationSignature operationSignature_, repository::DataType returnType_ , repository::OperationInterface operationInterface_) {
 	match {
 		require absence of uml::Operation corresponding to operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationSignature:operationSignature"
 		require absence of uml::Parameter corresponding to operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_OperationSignature:operationSignature"
@@ -113,9 +86,6 @@ routine signature_CreateMapping(repository::OperationSignature operationSignatur
 		add correspondence between operation_ and operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationSignature:operationSignature"
 		add correspondence between returnParameter_ and operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_OperationSignature:operationSignature"
 		add correspondence between interface_ and operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_OperationSignature:operationSignature"
-		add correspondence between operation_ and parameter_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_Parameter:parameter"
-		add correspondence between returnParameter_ and parameter_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_Parameter:parameter"
-		add correspondence between interface_ and parameter_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_Parameter:parameter"
 		add correspondence between operation_ and returnType_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_DataType:returnType"
 		add correspondence between returnParameter_ and returnType_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_DataType:returnType"
 		add correspondence between interface_ and returnType_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_DataType:returnType"
@@ -127,7 +97,7 @@ routine signature_CreateMapping(repository::OperationSignature operationSignatur
 			operation_.getOwnedParameters().^add(returnParameter_)
 			returnParameter_.setName("returnParam")
 		}
-		call signature_BidirectionalUpdate(operationSignature_, parameter_ , returnType_ , operationInterface_)
+		call signature_BidirectionalUpdate(operationSignature_, returnType_ , operationInterface_)
 	}
 }
 
@@ -141,10 +111,9 @@ routine signature_DeleteMapping(uml::Operation operation_, uml::Parameter return
 routine signature_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateOperationName" ) updateOperationName ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) if ( routineName === "updateOperationSignatureReturnType" ) updateOperationSignatureReturnType ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) if ( routineName === "changeTypeOfCorrespondingRegularParameter" ) changeTypeOfCorrespondingRegularParameter ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) } return } } } } } } } } } }
-			if ( affectedEObject instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = affectedEObject if ( "returnParam" === parameter_ . getParameterName ( ) ) { var operationSignature__candidate = parameter_ . eContainer { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateOperationName" ) updateOperationName ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) if ( routineName === "updateOperationSignatureReturnType" ) updateOperationSignatureReturnType ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) if ( routineName === "changeTypeOfCorrespondingRegularParameter" ) changeTypeOfCorrespondingRegularParameter ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) } return } } } } } } } } } } }
-			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateOperationName" ) updateOperationName ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) if ( routineName === "updateOperationSignatureReturnType" ) updateOperationSignatureReturnType ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) if ( routineName === "changeTypeOfCorrespondingRegularParameter" ) changeTypeOfCorrespondingRegularParameter ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) } return } } } } } } } } }
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { { if ( routineName === "updateOperationName" ) updateOperationName ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) if ( routineName === "updateOperationSignatureReturnType" ) updateOperationSignatureReturnType ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) if ( routineName === "changeTypeOfCorrespondingRegularParameter" ) changeTypeOfCorrespondingRegularParameter ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) } return } } } } } } } } }
+			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateSignatureUmlName" ) updateSignatureUmlName ( operationSignature_ , returnType_ , operationInterface_ ) if ( routineName === "updateSignatureUmlReturnType" ) updateSignatureUmlReturnType ( operationSignature_ , returnType_ , operationInterface_ ) } return } } } } } } } }
+			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateSignatureUmlName" ) updateSignatureUmlName ( operationSignature_ , returnType_ , operationInterface_ ) if ( routineName === "updateSignatureUmlReturnType" ) updateSignatureUmlReturnType ( operationSignature_ , returnType_ , operationInterface_ ) } return } } } } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { { if ( routineName === "updateSignatureUmlName" ) updateSignatureUmlName ( operationSignature_ , returnType_ , operationInterface_ ) if ( routineName === "updateSignatureUmlReturnType" ) updateSignatureUmlReturnType ( operationSignature_ , returnType_ , operationInterface_ ) } return } } } } } } }
 		}
 	}
 }
@@ -152,10 +121,9 @@ routine signature_BidirectionalCheck(ecore::EObject affectedEObject, plain Strin
 routine signature_ElementCreatedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
-			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) return } } } } } } } } } }
-			if ( affectedEObject instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = affectedEObject if ( "returnParam" === parameter_ . getParameterName ( ) ) { var operationSignature__candidate = parameter_ . eContainer { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) return } } } } } } } } } } }
-			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) return } } } } } } } } }
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { signature_CreateMapping ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) return } } } } } } } } }
+			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } } }
+			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } }
 		}
 	}
 }
@@ -165,9 +133,6 @@ routine signature_ElementDeletedCheck(ecore::EObject affectedEObject) {
 		val operation_correspondingTo_operationSignature = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationSignature:operationSignature"
 		val returnParameter_correspondingTo_operationSignature = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_OperationSignature:operationSignature"
 		val interface_correspondingTo_operationSignature = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_OperationSignature:operationSignature"
-		val operation_correspondingTo_parameter = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_Parameter:parameter"
-		val returnParameter_correspondingTo_parameter = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_Parameter:parameter"
-		val interface_correspondingTo_parameter = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_Parameter:parameter"
 		val operation_correspondingTo_returnType = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_DataType:returnType"
 		val returnParameter_correspondingTo_returnType = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_DataType:returnType"
 		val interface_correspondingTo_returnType = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_DataType:returnType"
@@ -178,14 +143,11 @@ routine signature_ElementDeletedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
 			var Operation operation_
-			var org.eclipse.uml2.uml.Parameter returnParameter_
+			var Parameter returnParameter_
 			var Interface interface_
 			if ( operation_correspondingTo_operationSignature . isPresent ( ) ) operation_ = operation_correspondingTo_operationSignature . get ( )
 			if ( returnParameter_correspondingTo_operationSignature . isPresent ( ) ) returnParameter_ = returnParameter_correspondingTo_operationSignature . get ( )
 			if ( interface_correspondingTo_operationSignature . isPresent ( ) ) interface_ = interface_correspondingTo_operationSignature . get ( )
-			if ( operation_correspondingTo_parameter . isPresent ( ) ) operation_ = operation_correspondingTo_parameter . get ( )
-			if ( returnParameter_correspondingTo_parameter . isPresent ( ) ) returnParameter_ = returnParameter_correspondingTo_parameter . get ( )
-			if ( interface_correspondingTo_parameter . isPresent ( ) ) interface_ = interface_correspondingTo_parameter . get ( )
 			if ( operation_correspondingTo_returnType . isPresent ( ) ) operation_ = operation_correspondingTo_returnType . get ( )
 			if ( returnParameter_correspondingTo_returnType . isPresent ( ) ) returnParameter_ = returnParameter_correspondingTo_returnType . get ( )
 			if ( interface_correspondingTo_returnType . isPresent ( ) ) interface_ = interface_correspondingTo_returnType . get ( )
@@ -200,10 +162,9 @@ routine signature_ElementDeletedCheck(ecore::EObject affectedEObject) {
 routine signature_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
-			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) return } } } } } } } } } }
-			if ( affectedEObject instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = affectedEObject if ( "returnParam" === parameter_ . getParameterName ( ) ) { var operationSignature__candidate = parameter_ . eContainer { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) return } } } } } } } } } } }
-			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) return } } } } } } } } }
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature for ( parameter__candidate : operationSignature_ . parameters__OperationSignature ) { if ( parameter__candidate !== null && parameter__candidate instanceof org.palladiosimulator.pcm.repository.Parameter ) { var org.palladiosimulator.pcm.repository.Parameter parameter_ = parameter__candidate as org.palladiosimulator.pcm.repository.Parameter if ( "returnParam" === parameter_ . getParameterName ( ) ) { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { signature_CreateMapping ( operationSignature_ , parameter_ , returnType_ , operationInterface_ ) return } } } } } } } } }
+			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } } }
+			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } }
 			signature_ElementDeletedCheck(affectedEObject)
 		}
 	}
@@ -211,18 +172,12 @@ routine signature_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 
 routine onSignatureEntityNameReplacedAtOperationSignature_entityNameBidirectionalRepair(repository::OperationSignature affectedEObject) {
 	action {
-		call signature_BidirectionalCheck(affectedEObject, "updateOperationName")
+		call signature_BidirectionalCheck(affectedEObject, "updateSignatureUmlName")
 	}
 }
 
 routine onSignatureElementReplacedAtOperationSignature_returnType__OperationSignatureBidirectionalRepair(repository::OperationSignature affectedEObject) {
 	action {
-		call signature_BidirectionalCheck(affectedEObject, "updateOperationSignatureReturnType")
-	}
-}
-
-routine onSignatureElementReplacedAtParameter_dataType__ParameterBidirectionalRepair(repository::Parameter affectedEObject) {
-	action {
-		call signature_BidirectionalCheck(affectedEObject, "changeTypeOfCorrespondingRegularParameter")
+		call signature_BidirectionalCheck(affectedEObject, "updateSignatureUmlReturnType")
 	}
 }

@@ -50,9 +50,9 @@ routine repository_CreateMapping(repository::Repository repository_) {
 			repositoryPkg_.getPackagedElements().^add(contractsPkg_)
 			repositoryPkg_.getPackagedElements().^add(datatypesPkg_)
 			contractsPkg_.setName("contracts")
-			datatypesPkg_.setName("datatypes")
+			datatypesPkg_.setName("datatypes")			
 		}
-		call createUmlModelRoot(repository_, repositoryPkg_)
+		call createUmlModelRoot(repository_, repositoryPkg_)		
 		call repository_BidirectionalUpdate(repository_)
 	}
 }

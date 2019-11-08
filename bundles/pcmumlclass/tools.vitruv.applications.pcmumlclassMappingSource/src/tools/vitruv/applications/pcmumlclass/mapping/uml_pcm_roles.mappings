@@ -17,7 +17,7 @@ mapping RequiredRole {
 		uml::Parameter parameter
 		mapped uml::Class implementation with requiringEntity tagged "umlXpcmComponent_map_UML_and_PCM_correspondence_Class:implementation_with_RepositoryComponent:component"
 		mapped uml::Interface interface with operationInterface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
-		mapped uml::Operation operation with operationInterface tagged "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationInterface:operationInterface"
+		mapped uml::Operation operation with requiringEntity tagged "umlXpcmComponent_map_UML_and_PCM_correspondence_Operation:constructor_with_RepositoryComponent:component"
 	)
 	with{
 		property in implementation[ownedAttribute]

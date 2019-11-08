@@ -235,18 +235,7 @@ routine updateInterfaceRealizationName(pcm::OperationProvidedRole role, pcm::Ope
    	 	
 //signature mapping routines	 	 
  
-routine updateOperationName(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
-	match{
-		val operation = retrieve uml::Operation corresponding to operationSignature tagged with TagLiterals.SIGNATURE__OPERATION
-	} 	
-	action {
-		execute {
-			 operation.name	= operationSignature.entityName
-		}
-	}
-}
-   	 	
-routine updateOperationSignatureName(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+ routine updateSignaturePcmName(uml::Operation operation, uml::Parameter returnParameter , uml::Interface interface_) {
 	match{
 		val operationSignature = retrieve pcm::OperationSignature corresponding to operation tagged with TagLiterals.SIGNATURE__OPERATION
 	} 	
@@ -256,34 +245,53 @@ routine updateOperationSignatureName(uml::Operation operation, uml::Parameter re
 		}
 	}
 }
-   	 	
- routine updateOperationSignatureReturnType(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
+
+routine updateSignaturePcmReturnType(uml::Operation operation, uml::Parameter returnParameter , uml::Interface interface_) {
+	action{
+		call umlReturnAndRegularParameterTypeReactions.propagateTypeChange(returnParameter)
+	}
+}
+
+routine updateSignatureUmlName(repository::OperationSignature operationSignature, repository::DataType returnType , repository::OperationInterface operationInterface) {
+	match{
+		val operation = retrieve uml::Operation corresponding to operationSignature tagged with TagLiterals.SIGNATURE__OPERATION
+	} 	
+	action {
+		execute {
+			 operation.name	= operationSignature.entityName
+		}
+	}
+}
+
+routine updateSignatureUmlReturnType(repository::OperationSignature operationSignature, repository::DataType returnType , repository::OperationInterface operationInterface) {
 	match {
 		val umlParam = retrieve uml::Parameter corresponding to operationSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
 	}
 	action {
 		execute {
+			println('update signature uml type')
 			//fix for setting return literal
 			umlParam.direction = ParameterDirectionKind.RETURN_LITERAL
 		}
 		call pcmDataTypePropagationReactions.setUmlParameterType(returnType, umlParam)
 	}
-}	  	 	 
-
-routine changeTypeOfCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
-	match {
-		val umlParam = retrieve uml::Parameter corresponding to parameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
-	}
-	action {
-		call pcmDataTypePropagationReactions.setUmlParameterType(parameter.dataType__Parameter, umlParam)
-	}
-} 	
-
-routine propagateTypeChange(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_) {
-	action{
-		call umlReturnAndRegularParameterTypeReactions.propagateTypeChange(returnParameter)
-	}
 }
+	
+
+//routine changeTypeOfCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
+//	match {
+//		val umlParam = retrieve uml::Parameter corresponding to parameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+//	}
+//	action {
+//		call pcmDataTypePropagationReactions.setUmlParameterType(parameter.dataType__Parameter, umlParam)
+//	}
+//} 	
+
+//routine propagateTypeChange(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_) {
+//	action{
+//		call umlReturnAndRegularParameterTypeReactions.propagateTypeChange(returnParameter)
+//	}
+//}
 
 //routine renameCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
 //	match {

@@ -5,16 +5,13 @@ mappings: umlXpcmSignature for UML and PCM
 
 mapping Signature{
 	map(pcm::OperationSignature operationSignature
-		pcm::Parameter parameter
 		abstract pcm::DataType returnType as pcm::PrimitiveDataType
 		mapped pcm::OperationInterface operationInterface with interface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
 	)
 	with{
 		operationSignature in operationInterface[signatures__OperationInterface]
-		parameter in operationSignature[parameters__OperationSignature]
 		returnType in operationSignature[returnType__OperationSignature]
-		//direction is return for retunType
-		"returnParam" equals parameter[parameterName]
+		//todo: direction is return for retunType
 	}
 	and(uml::Operation operation
 		uml::Parameter returnParameter
@@ -29,81 +26,42 @@ mapping Signature{
 	}
 	such that{
 		observe changes{
-			pcm::OperationSignature[entityName] call updateOperationName
-			pcm::OperationSignature[returnType__OperationSignature]	call updateOperationSignatureReturnType
-			uml::Operation[name] call updateOperationSignatureName	
+			pcm::OperationSignature[entityName] call updateSignatureUmlName
+			pcm::OperationSignature[returnType__OperationSignature]	call updateSignatureUmlReturnType
+			uml::Operation[name] call updateSignaturePcmName	
 			// name and direction is set by single sided conditions!
-			//pcm::Parameter[parameterName] call renameCorrespondingRegularParameter			
-			//pcm::Parameter[modifier__Parameter] call changeDirectionOfCorrespondingRegularParameter
-			//uml::Parameter[name] call changeNameOfCorrespondingRegularParameter
-			//uml::Parameter[direction] call changeModifierOfCorrespondingRegularParameter
-			pcm::Parameter[dataType__Parameter] call changeTypeOfCorrespondingRegularParameter
-			uml::Parameter[type] call propagateTypeChange
-			uml::Parameter[lowerValue] call propagateTypeChange
-			uml::Parameter[upperValue] call propagateTypeChange
+			//uml::Parameter[name] call 
+			//uml::Parameter[direction] call 
+			uml::Parameter[type] call updateSignaturePcmReturnType
 		}
 								
-		routine updateOperationName(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
+		routine updateSignatureUmlName(pcm::OperationSignature operationSignature, pcm::DataType returnType, pcm::OperationInterface operationInterface){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	 
+   	 	routine updateSignatureUmlReturnType(pcm::OperationSignature operationSignature, pcm::DataType returnType, pcm::OperationInterface operationInterface){
    	 		action{
    	 			execute{   	 			
    	 			}
    	 		}
    	 	}
    	 	
-   	 	routine updateOperationSignatureName(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+   	 	routine updateSignaturePcmName(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
    	 		action{
    	 			execute{   	 			
    	 			}
    	 		}
    	 	}
-   	 	
-   	 	routine updateOperationSignatureReturnType(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
-   	 		action{
-   	 			execute{   	 			
-   	 			}
-   	 		}
-   	 	}
-   	 	
-   	 	routine changeTypeOfCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
-   	 		action{
-   	 			execute{   	 			
-   	 			}
-   	 		}
-   	 	}
-   	 	
-   	 	routine propagateTypeChange(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+   	 	   	 
+   	 	routine updateSignaturePcmReturnType(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
    	 		action{
    	 			execute{   	 			
    	 			}
    	 		}
    	 	}  
-   	 	
-//   	 	routine renameCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface){
-//   	 		action{
-//   	 			execute{   	 			
-//   	 			}
-//   	 		}
-//   	 	}
 
-//   	 	routine changeDirectionOfCorrespondingRegularParameter(pcm::OperationSignature operationSignature, pcm::Parameter parameter,pcm::DataType returnType, pcm::OperationInterface operationInterface) {
-//   	 		action{
-//   	 			execute{   	 			
-//   	 			}
-//   	 		}
-//   	 	}
-   	 	
-//   	 	routine changeNameOfCorrespondingRegularParameter(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
-//   	 		action{
-//   	 			execute{   	 			
-//   	 			}
-//   	 		}
-//   	 	}
-   	 	
-//   	 	routine changeModifierOfCorrespondingRegularParameter(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
-//   	 		action{
-//   	 			execute{   	 			
-//   	 			}
-//   	 		}
-//   	 	}	  	 	   	 	
 	}
 }

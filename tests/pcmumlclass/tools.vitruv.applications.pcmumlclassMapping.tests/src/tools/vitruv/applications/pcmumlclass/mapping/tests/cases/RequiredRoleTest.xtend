@@ -1,5 +1,7 @@
 package tools.vitruv.applications.pcmumlclass.mapping.tests.cases
 
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Property
 import org.junit.Test
@@ -12,6 +14,9 @@ import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
+import org.palladiosimulator.pcm.repository.OperationInterface
+import org.eclipse.uml2.uml.Operation
+import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 
 class RequiredRoleTest extends PcmUmlClassTest {
 
@@ -37,8 +42,8 @@ class RequiredRoleTest extends PcmUmlClassTest {
 		assertTrue(
 			corresponds(cm, pcmRequired.requiringEntity_RequiredRole, umlRequiredParameter.operation?.class_,
 				TagLiterals.IPRE__IMPLEMENTATION))
-		assertTrue(pcmRequired.entityName == umlRequiredInstance.name)
-		assertTrue(pcmRequired.entityName == umlRequiredParameter.name)
+		assertEquals(pcmRequired.entityName , umlRequiredInstance.name)
+		assertEquals(pcmRequired.entityName , umlRequiredParameter.name)
 	}
 
 	def protected checkRequiredRoleConcept(OperationRequiredRole pcmRequired) {
@@ -49,15 +54,8 @@ class RequiredRoleTest extends PcmUmlClassTest {
 		checkRequiredRoleConcept(correspondenceModel, pcmRequired, umlRequiredInstance, umlRequiredParameter)
 	}
 
-	def protected checkRequiredRoleConcept(Property umlRequiredInstance) {
+	def protected checkRequiredRoleConcept(Property umlRequiredInstance, Parameter umlRequiredParameter) {
 		assertNotNull(umlRequiredInstance)
-		val pcmRequired = helper.getModifiableCorr(umlRequiredInstance, OperationRequiredRole,
-			TagLiterals.REQUIRED_ROLE__PROPERTY)
-		assertNotNull(pcmRequired)
-		checkRequiredRoleConcept(pcmRequired)
-	}
-
-	def protected checkRequiredRoleConcept(Parameter umlRequiredParameter) {
 		assertNotNull(umlRequiredParameter)
 		val pcmRequired = helper.getModifiableCorr(umlRequiredParameter, OperationRequiredRole,
 			TagLiterals.REQUIRED_ROLE__PARAMETER)
@@ -67,12 +65,17 @@ class RequiredRoleTest extends PcmUmlClassTest {
 
 	def private Repository createRepository_Component_Interface() {
 		var pcmRepository = helper.createRepository
-		helper.createComponent(pcmRepository)
-		helper.createOperationInterface(pcmRepository)
-
-		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
-
+		val pcmComponent =helper.createComponent(pcmRepository)
+		var pcmInterface = helper.createOperationInterface(pcmRepository)
+		saveAndSynchronizeChanges(pcmComponent)
+		saveAndSynchronizeChanges(pcmInterface)		
+		val umlComponentImpl = helper.getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
+		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
+		val umlOperation= helper.getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
+		assertNotNull(umlComponentImpl)
+		assertNotNull(umlInterface)
+		assertNotNull(umlOperation)
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository
 	}
 
@@ -82,12 +85,16 @@ class RequiredRoleTest extends PcmUmlClassTest {
 
 		var pcmRequired = RepositoryFactory.eINSTANCE.createOperationRequiredRole
 		pcmRequired.requiredInterface__OperationRequiredRole = helper.getPcmOperationInterface(pcmRepository)
-		helper.getPcmComponent(pcmRepository).requiredRoles_InterfaceRequiringEntity += pcmRequired
+		var pcmComponent = helper.getPcmComponent(pcmRepository)
+		pcmComponent.requiredRoles_InterfaceRequiringEntity += pcmRequired
 
 		saveAndSynchronizeChanges(pcmRequired)
+		val umlRequiredInstance = helper.getCorr(pcmRequired, Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
+		assertNotNull(umlRequiredInstance)
+		
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-
-		val pcmComponent = helper.getPcmComponent(pcmRepository)
+		
+		pcmComponent = helper.getPcmComponent(pcmRepository)
 		assertEquals("There should be exactly one RequiredRole since only one was created by the test case.", 1,
 			pcmComponent.requiredRoles_InterfaceRequiringEntity.size)
 		pcmRequired = pcmComponent.requiredRoles_InterfaceRequiringEntity.head as OperationRequiredRole
@@ -96,15 +103,29 @@ class RequiredRoleTest extends PcmUmlClassTest {
 	}
 
 	@Test
-	def void testRequiredRoleConcept_UML_RequiredConstructorParameter() {
+	def void testRequiredRoleConcept_UML() {
 		var pcmRepository = createRepository_Component_Interface
 		var umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
-		startRecordingChanges(umlConstructor)
-
+		var umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
+		var umlInterface = helper.getUmlInterface(pcmRepository)
+		assertNotNull(umlInterface)
+		assertNotNull(umlComponentImpl)
+		assertNotNull(umlConstructor)		
+		//startRecordingChanges(umlComponentImpl)
+		
+		//property in implementation[ownedAttribute]  	,	interface in property[type]		
+		var umlRequiredInstanceField = umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
+		//umlRequiredInstanceField.type = umlInterface
+		saveAndSynchronizeChanges(umlComponentImpl)
+		
+		//startRecordingChanges(umlConstructor)		
+		//	parameter in operation[ownedParameter]  , interface in parameter[type]
 		var umlConstructorParameter = umlConstructor.createOwnedParameter(REQUIRED_ROLE_NAME,
-			helper.getUmlInterface(pcmRepository))
-
+			umlInterface)
+		//umlConstructorParameter.type =  umlInterface
+		println('should create mapping now')	
 		saveAndSynchronizeChanges(umlConstructorParameter)
+		
 		reloadResourceAndReturnRoot(umlConstructorParameter)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 
@@ -113,29 +134,15 @@ class RequiredRoleTest extends PcmUmlClassTest {
 			umlConstructor.ownedParameters.size)
 		umlConstructorParameter = umlConstructor.ownedParameters.findFirst[it.name == REQUIRED_ROLE_NAME]
 		assertNotNull(umlConstructorParameter)
-		checkRequiredRoleConcept(umlConstructorParameter)
-	}
-
-	@Test
-	def void testRequiredRoleConcept_UML_RequiredInstanceField() {
-		var pcmRepository = createRepository_Component_Interface
-		var umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
-		var umlInterface = helper.getUmlInterface(pcmRepository)
-		startRecordingChanges(umlComponentImpl)
-
-		var umlRequiredInstanceField = umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
-
-		saveAndSynchronizeChanges(umlRequiredInstanceField)
-		reloadResourceAndReturnRoot(umlRequiredInstanceField)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-
-		umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
+				umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
 		assertEquals("There should be exactly one Property for one RequiredRole created by the test case.", 1,
 			umlComponentImpl.ownedAttributes.size)
 		umlRequiredInstanceField = helper.getUmlComponentImpl(pcmRepository).ownedAttributes.findFirst [
 			it.name == REQUIRED_ROLE_NAME
 		]
 		assertNotNull(umlRequiredInstanceField)
-		checkRequiredRoleConcept(umlRequiredInstanceField)
+		checkRequiredRoleConcept(umlRequiredInstanceField, umlConstructorParameter)
 	}
+
+
 }

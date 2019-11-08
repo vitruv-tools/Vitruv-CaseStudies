@@ -92,8 +92,7 @@ class RepositoryTest extends PcmUmlClassTest {
 		//should not be created yet, because package has wrong name		
 		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		var umlContractsPkg = umlRepositoryPkg.createNestedPackage("contracts")				
-		saveAndSynchronizeChanges(umlModel)
-	
+		saveAndSynchronizeChanges(umlModel)	
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 
 		umlModel = reloadResourceAndReturnRoot(umlModel) as Model

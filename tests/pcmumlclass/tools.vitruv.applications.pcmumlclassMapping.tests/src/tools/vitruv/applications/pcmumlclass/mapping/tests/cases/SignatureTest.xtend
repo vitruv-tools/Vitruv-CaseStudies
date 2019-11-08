@@ -39,6 +39,7 @@ class SignatureTest extends PcmUmlClassTest {
 		// the name needs to be set, so that its TUID is distinct and the object is not confused with new instances
 		assertEquals(DefaultLiterals.RETURN_PARAM_NAME, returnParam.name)
 		// return types of both model elements should correspond to each other if they are set
+		println('''pcm «pcmSignature.returnType__OperationSignature»  uml «returnParam»''')
 		assertTrue(
 			isCorrect_DataType_Parameter_Correspondence(cm, pcmSignature.returnType__OperationSignature, returnParam))
 		// should both be contained in corresponding interfaces

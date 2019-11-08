@@ -23,6 +23,8 @@ reactions: umlReturnAndRegularParameterTypeReactions
 in reaction to changes in UML
 execute actions in PCM
 
+//in parameter mapping aufnehmen (falls nicht optional)
+
 reaction RegularOrReturnParameterLowerChanged2 {
 	after attribute replaced at uml::LiteralInteger[value]
 	with affectedEObject.owner instanceof Parameter 

@@ -86,18 +86,13 @@ class InterfaceTest extends PcmUmlClassTest {
 	@Test
 	def void testCreateInterfaceConcept_PCM() {
 		var pcmRepository = createRepositoryConcept()
-		var umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
-		startRecordingChanges(umlContractsPkg)
 
 		var mPcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
 		mPcmInterface.entityName = TEST_INTERFACE_NAME
 		pcmRepository.interfaces__Repository += mPcmInterface
 		saveAndSynchronizeChanges(mPcmInterface)
 
-		reloadResourceAndReturnRoot(umlContractsPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
-
 		mPcmInterface = pcmRepository.interfaces__Repository.head as OperationInterface
 		assertNotNull(mPcmInterface)
 		checkInterfaceConcept(mPcmInterface)
