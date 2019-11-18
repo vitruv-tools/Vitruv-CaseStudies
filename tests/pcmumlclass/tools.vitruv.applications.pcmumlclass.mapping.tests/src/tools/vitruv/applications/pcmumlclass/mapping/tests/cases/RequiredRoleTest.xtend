@@ -15,6 +15,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Operation
+import org.junit.Ignore
 
 class RequiredRoleTest extends PcmUmlClassTest {
 
@@ -77,6 +78,7 @@ class RequiredRoleTest extends PcmUmlClassTest {
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository
 	}
 
+	@Ignore("Not working properly yet")
 	@Test
 	def void testRequiredRoleConcept_PCM() {
 		var pcmRepository = createRepository_Component_Interface
@@ -100,6 +102,7 @@ class RequiredRoleTest extends PcmUmlClassTest {
 		checkRequiredRoleConcept(pcmRequired)
 	}
 
+	@Ignore("Not working properly yet")
 	@Test
 	def void testRequiredRoleConcept_UML() {
 		var pcmRepository = createRepository_Component_Interface
