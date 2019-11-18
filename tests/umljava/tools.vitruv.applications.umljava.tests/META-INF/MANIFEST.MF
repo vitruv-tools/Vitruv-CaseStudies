@@ -4,7 +4,7 @@ Bundle-Name: Vitruvius UML-Java Tests
 Bundle-SymbolicName: tools.vitruv.applications.umljava.tests
 Automatic-Module-Name: tools.vitruv.applications.umljava.tests
 Bundle-Version: 0.1.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  tools.vitruv.applications.umljava.java2uml,
  tools.vitruv.applications.umljava.uml2java

@@ -37,4 +37,4 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.domains.java.util,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.domains.java;visibility:=reexport
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11

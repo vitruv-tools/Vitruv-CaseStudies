@@ -4,7 +4,7 @@ Bundle-Name: Vitruv UML-Java Application
 Bundle-SymbolicName: tools.vitruv.applications.umljava;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.umljava
 Bundle-Version: 0.1.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: 
  tools.vitruv.framework.applications,
  tools.vitruv.applications.umljava.java2uml,
