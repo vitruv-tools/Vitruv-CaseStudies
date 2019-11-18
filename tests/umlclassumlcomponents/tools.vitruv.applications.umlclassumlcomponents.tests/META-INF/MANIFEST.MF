@@ -4,7 +4,7 @@ Bundle-Name: Vitruvius UML Class-UML Components Tests
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.tests
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents.tests
 Bundle-Version: 0.1.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  tools.vitruv.applications.umlclassumlcomponents.class2comp.tests,
  tools.vitruv.applications.umlclassumlcomponents.comp2class.tests

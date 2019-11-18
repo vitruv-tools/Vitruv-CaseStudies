@@ -35,22 +35,28 @@ import java.util.List
 
 import static org.junit.Assert.*
 import java.util.ArrayList
+import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
+import tools.vitruv.domains.java.JavaDomainProvider
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
 
 abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	override protected createChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification, 
-			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
+			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
+			new UmlToJavaChangePropagationSpecification,
+			new JavaToUmlChangePropagationSpecification
 		];  
 	}
 	
 	private def patchDomains() {
 		new PcmDomainProvider().domain.enableTransitiveChangePropagation
 		new UmlDomainProvider().domain.enableTransitiveChangePropagation
+		new JavaDomainProvider().domain.enableTransitiveChangePropagation
 	}
 	override protected getVitruvDomains() {
 		patchDomains();
-		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain];
+		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain];
 	}
 	
 	protected var PcmUmlClassApplicationTestHelper helper

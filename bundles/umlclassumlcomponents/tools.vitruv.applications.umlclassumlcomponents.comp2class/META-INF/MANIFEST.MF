@@ -23,4 +23,4 @@ Require-Bundle: org.eclipse.uml2.uml,
  tools.vitruv.extensions.dslsruntime.mappings,
  tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.applications.umlclassumlcomponents.sharedutil
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
