@@ -1,8 +1,6 @@
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.UMLFactory
-import org.palladiosimulator.pcm.repository.ParameterModifier
 import tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals
-import tools.vitruv.applications.pcmumlclass.mapping.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 
 import static tools.vitruv.extensions.dslsruntime.mappings.updates.MappingRoutineUpdateHelper.*
