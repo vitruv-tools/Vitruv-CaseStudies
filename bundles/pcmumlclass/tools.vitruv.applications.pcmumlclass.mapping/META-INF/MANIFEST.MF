@@ -1,10 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Umlpcm
-Bundle-SymbolicName: tools.vitruv.applications.pcmumlclassMapping
-Automatic-Module-Name: tools.vitruv.applications.pcmumlclassMapping
-Bundle-Version: 1.0.0.qualifier
-Eclipse-ExtensibleAPI: true
+Bundle-Name: Pcm-UML Class Mappings
+Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping
+Bundle-Version: 0.1.0.qualifier
 Export-Package: mir.reactions.combinedPcmToUml,
  mir.reactions.combinedUmlToPcm,
  mir.reactions.pcmDataTypePropagationReactions,
@@ -62,4 +60,6 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  tools.vitruv.framework.userinteraction,
  org.apache.commons.lang3;bundle-version="3.1.0",
  tools.vitruv.extensions.dslsruntime.mappings
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.mapping
+Eclipse-ExtensibleAPI: true

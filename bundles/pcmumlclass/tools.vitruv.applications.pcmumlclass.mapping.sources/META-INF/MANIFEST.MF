@@ -1,10 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: PcmumlclassMappingSource
-Bundle-SymbolicName: tools.vitruv.applications.pcmumlclassMappingSource
-Bundle-Version: 1.0.0.qualifier
-Automatic-Module-Name: tools.vitruv.applications.pcmumlclassMappingSource
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Name: PCM-UML Class Mappings Sources
+Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping.sources
+Bundle-Version: 0.1.0.qualifier
 Require-Bundle: tools.vitruv.dsls.mappings,
  org.junit;bundle-version="4.12.0",
  org.eclipse.xtext.testing,
@@ -36,3 +34,5 @@ Require-Bundle: tools.vitruv.dsls.mappings,
  tools.vitruv.dsls.reactions,
  tools.vitruv.dsls.mirbase,
  tools.vitruv.dsls.mappings
+Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.mapping.sources
+Bundle-RequiredExecutionEnvironment: JavaSE-11
