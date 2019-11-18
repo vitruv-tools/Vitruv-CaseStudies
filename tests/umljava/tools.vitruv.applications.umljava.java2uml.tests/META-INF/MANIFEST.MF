@@ -5,7 +5,7 @@ Bundle-SymbolicName: tool.vitruv.applications.umljava.java2uml.tests
 Automatic-Module-Name: tool.vitruv.applications.umljava.java2uml.tests
 Bundle-Version: 0.1.0.qualifier
 Fragment-Host: tools.vitruv.applications.umljava.java2uml
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.testutils;bundle-version="0.2.0",
  tools.vitruv.framework.change.processing,
  org.junit;bundle-version="4.12.0",

@@ -36,10 +36,10 @@
       <import plugin="org.emftext.language.java.resource.java"/>
       <import plugin="org.emftext.commons.antlr3_4_0" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.emftext.language.java.resource.bcel"/>
-      <import feature="tools.vitruv.framework.feature" version="0.2.0"/>
-      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.2.0"/>
-      <import feature="tools.vitruv.domains.java.feature" version="0.2.0"/>
-      <import feature="tools.vitruv.domains.pcm.feature" version="0.2.0"/>
+      <import feature="tools.vitruv.framework.feature" version="0.3.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.3.0"/>
+      <import feature="tools.vitruv.domains.java.feature" version="0.3.0"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="0.3.0"/>
    </requires>
 
    <plugin

@@ -29,5 +29,5 @@ Require-Bundle: com.google.guava,
  org.eclipse.uml2.uml,
  org.palladiosimulator.pcm,
  org.palladiosimulator.pcm.resources;bundle-version="4.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools

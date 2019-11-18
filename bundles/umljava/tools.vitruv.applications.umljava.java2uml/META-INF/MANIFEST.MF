@@ -27,7 +27,7 @@ Require-Bundle: com.google.guava,
  tools.vitruv.applications.umljava.util,
  tools.vitruv.applications.umljava.uml2java,
  org.apache.commons.io;bundle-version="2.2.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: mappings.generated;x-internal:=true,
  mir.reactions.javaToUml;x-internal:=true,
  mir.reactions.javaToUmlAttribute;x-internal:=true,

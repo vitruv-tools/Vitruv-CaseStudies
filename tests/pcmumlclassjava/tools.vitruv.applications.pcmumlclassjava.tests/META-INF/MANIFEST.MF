@@ -4,7 +4,7 @@ Bundle-Name: Vitruvius PCM <-> UML Class <-> Java Transformations Tests
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclassjava.tests;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclassjava.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: model;x-internal:=true,
  tools.vitruv.applications.pcmumlclassjava,
  tools.vitruv.applications.pcmumlclassjava.tests;x-internal:=true
