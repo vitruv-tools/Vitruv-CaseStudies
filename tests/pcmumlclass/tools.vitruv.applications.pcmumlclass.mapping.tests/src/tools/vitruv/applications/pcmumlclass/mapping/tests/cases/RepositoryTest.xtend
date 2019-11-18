@@ -83,16 +83,16 @@ class RepositoryTest extends PcmUmlClassTest {
 		saveAndSynchronizeChanges(umlModel)
 		//should not be created yet, because datatypes and contracts are missing
 		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		var umlDatatypesPkg = umlRepositoryPkg.createNestedPackage("datatypes")
-		saveAndSynchronizeChanges(umlModel)
+		val umlDatatypesPkg = umlRepositoryPkg.createNestedPackage("datatypes")
+		saveAndSynchronizeChanges(umlDatatypesPkg)
 		//should not be created yet, because contracts is missing
 		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		var wrongNamePkg = umlRepositoryPkg.createNestedPackage("contractsF")				
-		saveAndSynchronizeChanges(umlModel)
+		val wrongNamePkg = umlRepositoryPkg.createNestedPackage("contractsF")				
+		saveAndSynchronizeChanges(wrongNamePkg)
 		//should not be created yet, because package has wrong name		
 		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		var umlContractsPkg = umlRepositoryPkg.createNestedPackage("contracts")				
-		saveAndSynchronizeChanges(umlModel)	
+		val umlContractsPkg = umlRepositoryPkg.createNestedPackage("contracts")				
+		saveAndSynchronizeChanges(umlContractsPkg)	
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 
 		umlModel = reloadResourceAndReturnRoot(umlModel) as Model

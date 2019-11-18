@@ -14,9 +14,7 @@ import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import org.palladiosimulator.pcm.repository.OperationInterface
 import org.eclipse.uml2.uml.Operation
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 
 class RequiredRoleTest extends PcmUmlClassTest {
 

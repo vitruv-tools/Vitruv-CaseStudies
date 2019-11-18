@@ -98,7 +98,7 @@ class RepositoryComponentTest extends PcmUmlClassTest{
 		var umlComponentPkg = umlRepositoryPkg.createNestedPackage(componentPackageName)
 		val umlImplementationClass = umlComponentPkg.createOwnedClass(COMPONENT_NAME+DefaultLiterals.IMPLEMENTATION_SUFFIX, false)
 		val umlConstructor = umlImplementationClass.createOwnedOperation(COMPONENT_NAME+DefaultLiterals.IMPLEMENTATION_SUFFIX, null ,null)	
-		saveAndSynchronizeChanges(umlComponentPkg)
+		saveAndSynchronizeChanges(umlConstructor)
 		reloadResourceAndReturnRoot(umlComponentPkg)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
