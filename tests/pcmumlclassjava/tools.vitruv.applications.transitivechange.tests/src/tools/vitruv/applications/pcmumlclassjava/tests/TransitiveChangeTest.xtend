@@ -27,9 +27,11 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
+import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
+import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
 import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import tools.vitruv.domains.java.JavaDomainProvider
@@ -41,7 +43,6 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
@@ -52,7 +53,8 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
 			new UmlToJavaChangePropagationSpecification(),
-			new JavaToUmlChangePropagationSpecification()
+			new JavaToUmlChangePropagationSpecification(),
+			new Pcm2JavaChangePropagationSpecification()
 		];
 	}
 
@@ -110,6 +112,12 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
 	def protected checkJavaPackage(Package umlPackage) {
 		val javaPackage = getFirstCorrespondingObject(umlPackage, org.emftext.language.java.containers.Package)
+		assertEquals(umlPackage.name, javaPackage.name)
+		assertPackageEquals(umlPackage, javaPackage)
+	}
+	
+	def protected checkUmlPackage(org.emftext.language.java.containers.Package javaPackage) {
+		val umlPackage = getFirstCorrespondingObject(javaPackage, Package)
 		assertEquals(umlPackage.name, javaPackage.name)
 		assertPackageEquals(umlPackage, javaPackage)
 	}
