@@ -75,7 +75,7 @@ routine renamePackageForRepository(pcm::Repository repository) {
 	}
 	action {
 		update rootPackage {
-			rootPackage.name = repository.entityName;
+			rootPackage.name = repository.entityName.toFirstLower;
 		}
 		call {
 			renameJavaPackage(repository, rootPackage, "contracts", "contracts");
@@ -523,7 +523,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 				javaPackage.namespaces += parentPackage.namespaces;
 				javaPackage.namespaces += parentPackage.name;
 			}
-			javaPackage.name = packageName;
+			javaPackage.name = packageName.toFirstLower;
 			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
 		}
 		add correspondence between javaPackage and sourceElementMappedToPackage
