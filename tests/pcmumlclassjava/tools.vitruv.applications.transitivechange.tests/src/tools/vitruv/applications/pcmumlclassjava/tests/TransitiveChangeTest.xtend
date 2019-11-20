@@ -10,6 +10,7 @@ import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Generalization
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
@@ -115,7 +116,14 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 		assertEquals(umlPackage.name, javaPackage.name)
 		assertPackageEquals(umlPackage, javaPackage)
 	}
-	
+
+	def protected checkNumberOfJavaPackages(Package umlRootPackage) {
+		val allJavaPackages = typeof(org.emftext.language.java.containers.Package).getCorrespondingObjectsOfClass
+		var umlPackagesCount = umlRootPackage.countPackages
+		if (umlRootPackage instanceof Model) umlPackagesCount -= 1 // do not count the model
+		assertEquals(allJavaPackages.size, umlPackagesCount)
+	}
+
 	def protected checkUmlPackage(org.emftext.language.java.containers.Package javaPackage) {
 		val umlPackage = getFirstCorrespondingObject(javaPackage, Package)
 		assertEquals(umlPackage.name, javaPackage.name)
@@ -224,6 +232,18 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {
 		assertModelExists(JavaPersistenceHelper.buildJavaFilePath('''«fileName».java''', namespaces))
 	}
+	
+	def private dispatch int countPackages(Package umlPackage) {
+		var count = 1
+		for (element : umlPackage.packagedElements) {
+			count += countPackages(element)
+		}
+		return count
+	}
+
+	def private dispatch countPackages(PackageableElement element) {
+		return 0
+	}
 
 	/**
 	 * Checks whether a classifier is a java.util.Collection. This means any super type or itself must be a collection.
@@ -235,7 +255,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 	def private dispatch boolean isCollection(ConcreteClassifier classifier) {
 		typeof(Collection).name == classifier.qualifiedName || classifier.allSuperClassifiers.stream.anyMatch[isCollection]
 	}
-	
+
 	/**
 	 * Fixed version of TestUtil.assertParameterListEquals(), mostly copied.
 	 */
