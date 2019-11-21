@@ -28,6 +28,13 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
 
 **this fix tag is not located in this repository, as it concerns the domains repository. The correlating pull request is also part of that repository.*
 
+### PCM <--> UML <--> Java <-- PCM
+Bidirectional transformation between UML and PCM, as well as between UML and Java. Unidirectional transformation from PCM to Java.
+
+  | tag | correlating pull request | addressed problem |
+  | -- | -- | -- |
+  | TBA | [PR 50](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/50) | The repository name was not adapted when creating the correlating Java packages (first letter lower case). This led to duplicate packages. |
+
 ### Fix to Test Case Failure/Error Correlation
 
 The following tables shows the concept test cases affected by the problems that were addressed by the fixes. Fail means the test did not produce the expected results, while error means the test crashed during its execution. A total of 39 test cases were executed.
