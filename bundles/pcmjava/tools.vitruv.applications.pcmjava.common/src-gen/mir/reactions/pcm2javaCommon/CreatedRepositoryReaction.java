@@ -100,8 +100,12 @@ public class CreatedRepositoryReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final InsertRootEObject insertChange, final Repository newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       final Repository repository = newValue;
-      _routinesFacade.createJavaPackage(repository, null, repository.getEntityName(), "repository_root");
-      _routinesFacade.createRepositorySubPackages(repository);
+      String _entityName = repository.getEntityName();
+      boolean _tripleNotEquals = (_entityName != null);
+      if (_tripleNotEquals) {
+        _routinesFacade.createJavaPackage(repository, null, repository.getEntityName(), "repository_root");
+        _routinesFacade.createRepositorySubPackages(repository);
+      }
     }
   }
 }
