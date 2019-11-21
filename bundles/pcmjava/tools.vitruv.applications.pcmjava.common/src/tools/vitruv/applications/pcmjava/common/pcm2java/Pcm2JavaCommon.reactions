@@ -46,8 +46,10 @@ reaction CreatedRepository {
 	after element pcm::Repository created and inserted as root
 	call {
 		val repository = newValue;
-		createJavaPackage(repository, null, repository.entityName, "repository_root");
-		createRepositorySubPackages(repository);
+		if(repository.entityName !== null) {
+			createJavaPackage(repository, null, repository.entityName, "repository_root");
+			createRepositorySubPackages(repository);
+		}
 	}
 }
 
