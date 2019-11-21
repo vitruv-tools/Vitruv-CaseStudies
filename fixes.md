@@ -10,14 +10,14 @@ Bidirectional transformation between UML and PCM, but only unidirectional transf
 
  | tag | correlating pull request | addressed problem |
  | -- | -- | -- |
- | fix1 | [PR 42](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/42) | UML parent packages were deleted before child packages. |
+ | [fix1](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix1) | [PR 42](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/42) | UML parent packages were deleted before child packages. |
  | ~~fix2~~ *(deleted)* | *not really a fix, see [PR 45](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/45)* | *See fix4.* |
- | fix3 | [PR 46](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/46) | While renaming UML packages the namespaces of child packages were not updated. |
- | fix4 | [PR 45](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/45) | Java parameters were not created when a unnamed UML parameter was renamed. |
- | fix5 | [PR 47](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/47) | Missing adaption of Java types (collection <--> non-collection type) when changing the multiplicities of UML return types. |
- | fix6 | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | When inserting Java compilation units, correlating UML classes were not moved to the correlating UML package of the compilation unit. |
- | fix7 | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | *Multiple commits for one issue, see fix6.* |
- | fix8 | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | UML classes were deleted although Java compilation units were only removed from their container. |
+ | [fix3](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix3) | [PR 46](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/46) | While renaming UML packages the namespaces of child packages were not updated. |
+ | [fix4](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix4) | [PR 45](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/45) | Java parameters were not created when a unnamed UML parameter was renamed. |
+ | [fix5](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix5) | [PR 47](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/47) | Missing adaption of Java types (collection <--> non-collection type) when changing the multiplicities of UML return types. |
+ | [fix6](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix6) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | When inserting Java compilation units, correlating UML classes were not moved to the correlating UML package of the compilation unit. |
+ | [fix7](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix7) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | *Multiple commits for one issue, see fix6.* |
+ | [fix8](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix8) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | UML classes were deleted although Java compilation units were only removed from their container. |
 
 ### PCM <--> UML <--> Java
 Bidirectional transformation between UML and PCM, as well as between UML and Java.
@@ -33,7 +33,7 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
 
   | tag | correlating pull request | addressed problem |
   | -- | -- | -- |
-  | TBA | [PR 50](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/50) | The repository name was not adapted when creating the correlating Java packages (first letter lower case). This led to duplicate packages. |
+  | [fix10](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix10) | [PR 50](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/50) | The repository name was not adapted when creating the correlating Java packages (first letter lower case). This led to duplicate packages. |
 
 ### Fix to Test Case Failure/Error Correlation
 
