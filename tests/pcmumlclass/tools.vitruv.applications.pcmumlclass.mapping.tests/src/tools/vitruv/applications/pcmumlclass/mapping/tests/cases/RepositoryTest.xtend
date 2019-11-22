@@ -13,9 +13,11 @@ import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
+import org.apache.log4j.Logger
 
 class RepositoryTest extends PcmUmlClassTest {
-
+	private static val logger = Logger.getLogger(RepositoryTest)
+	
 	def protected static checkRepositoryConcept(
 		CorrespondenceModel cm,
 		Repository pcmRepo,
@@ -118,7 +120,7 @@ class RepositoryTest extends PcmUmlClassTest {
 		saveAndSynchronizeChanges(pcmRepository)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
-		println(pcmRepository.entityName)
+		logger.debug(pcmRepository.entityName)
 		assertEquals( newName.toFirstUpper,pcmRepository.entityName)
 		checkPcmRepository(pcmRepository)
 	}

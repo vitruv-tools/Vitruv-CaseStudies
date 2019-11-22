@@ -16,8 +16,10 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Operation
 import org.junit.Ignore
+import org.apache.log4j.Logger
 
 class RequiredRoleTest extends PcmUmlClassTest {
+	private static val logger = Logger.getLogger(RequiredRoleTest)
 
 	private val REQUIRED_ROLE_NAME = "testRequiredRole"
 
@@ -124,7 +126,7 @@ class RequiredRoleTest extends PcmUmlClassTest {
 		var umlConstructorParameter = umlConstructor.createOwnedParameter(REQUIRED_ROLE_NAME,
 			umlInterface)
 		//umlConstructorParameter.type =  umlInterface
-		println('should create mapping now')	
+		logger.debug('should create mapping now')	
 		saveAndSynchronizeChanges(umlConstructorParameter)
 		
 		reloadResourceAndReturnRoot(umlConstructorParameter)

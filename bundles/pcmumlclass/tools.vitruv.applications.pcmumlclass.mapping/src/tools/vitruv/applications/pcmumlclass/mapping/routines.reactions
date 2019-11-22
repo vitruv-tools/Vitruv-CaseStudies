@@ -267,7 +267,7 @@ routine updateSignatureUmlReturnType(repository::OperationSignature operationSig
 	}
 	action {
 		execute {
-			println('update signature uml type')
+			logger.debug('update signature uml type')
 			//fix for setting return literal
 			umlParam.direction = ParameterDirectionKind.RETURN_LITERAL
 		}

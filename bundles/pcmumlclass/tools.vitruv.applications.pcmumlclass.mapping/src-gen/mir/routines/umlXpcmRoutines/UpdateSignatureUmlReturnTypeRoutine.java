@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.palladiosimulator.pcm.repository.DataType;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -25,7 +24,7 @@ public class UpdateSignatureUmlReturnTypeRoutine extends AbstractRepairRoutineRe
     }
     
     public void executeAction1(final OperationSignature operationSignature, final DataType returnType, final OperationInterface operationInterface, final Parameter umlParam, @Extension final RoutinesFacade _routinesFacade) {
-      InputOutput.<String>println("update signature uml type");
+      this.getLogger().debug("update signature uml type");
       umlParam.setDirection(ParameterDirectionKind.RETURN_LITERAL);
     }
     
