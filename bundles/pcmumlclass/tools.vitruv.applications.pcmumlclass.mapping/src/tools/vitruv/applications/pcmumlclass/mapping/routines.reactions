@@ -1,0 +1,346 @@
+import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.UMLFactory
+import tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals
+import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
+
+import static tools.vitruv.extensions.dslsruntime.mappings.updates.MappingRoutineUpdateHelper.*
+
+import static extension tools.vitruv.applications.pcmumlclass.mapping.MappingUpdateUtils.*
+
+//will be ignored anyway because we only import the routines
+reactions: umlXpcmRoutines 
+in reaction to changes in UML
+execute actions in PCM
+
+import routines pcmDataTypePropagationReactions using qualified names
+import routines umlReturnAndRegularParameterTypeReactions using qualified names
+
+//routines to persist the root models
+
+routine createRepositoryRoot(uml::Package repositoryPkg, pcm::Repository repository){
+	action{
+		execute {
+			persistProjectRelative(repositoryPkg, repository, DefaultLiterals.PCM_MODEL_FILE)		
+		}		
+	}
+}
+
+routine createUmlModelRoot(pcm::Repository repository, uml::Package repositoryPkg){
+	action{
+		execute{
+			val umlRootModel = UMLFactory.eINSTANCE.createModel
+			umlRootModel.name = 'umlrootmodel'
+			umlRootModel.nestedPackages += repositoryPkg
+			persistProjectRelative(repository, umlRootModel, DefaultLiterals.UML_MODEL_FILE)			
+		}
+	}
+}
+
+//repository mapping routines
+
+routine updateRepoName(uml::Package repositoryPkg, uml::Package contractsPkg , uml::Package datatypesPkg) {
+	match{
+		val repository = retrieve pcm::Repository corresponding to repositoryPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	} 	
+	action {
+		execute {
+			// => repository.entityName = repositoryPkg.name.toFirstUpper		
+			val repositoryTarget = eObjectTarget(repository, 'entityName')
+			val packageSource = eObjectSource(repositoryPkg, 'name', transformationFirstUpper(true))			
+			updateFromSources(repositoryTarget, packageSource)			
+		}
+	}
+}
+
+routine updateRepoPackageName(repository::Repository repository) {
+	match{
+		val repositoryPkg = retrieve asserted uml::Package corresponding to repository tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	}	
+	action {
+		execute{
+			// 	=> repositoryPkg.name = repository.entityName.toFirstLower	
+			val packageTarget = eObjectTarget(repositoryPkg,'name')
+			val repositorySource = eObjectSource(repository, 'entityName', transformationFirstLower(true))		
+			updateFromSources(packageTarget, repositorySource)
+		}
+	}
+}
+
+//repository component mapping routines 
+
+routine updateComponentName(uml::Package componentPackage, uml::Package repositoryPackage, uml::Class implementation, uml::Operation constructor){
+	match{
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to componentPackage tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+	} 	
+	action {
+		//check if the componentPackage, implementation or constructor name was updated
+		execute {
+			val componentTarget = eObjectTarget(pcmComponent, 'entityName')
+			val componentPackageSource = eObjectSource(componentPackage, 'name', transformationFirstUpper(true))	
+			val implementationSource = eObjectSource(implementation, 'name', transformationFirstUpper(false).chain(transformationImplementationSuffix(false, true)))
+			val constructorSource = eObjectSource(constructor, 'name', transformationFirstUpper(false).chain(transformationImplementationSuffix(false, true)))
+			updateFromSources(componentTarget, componentPackageSource, implementationSource, constructorSource)					
+		}
+	}
+}
+   	 
+routine updateComponentCorrespondingUmlNames(repository::RepositoryComponent component, repository::Repository repository) {
+	match{
+		val umlComponentImplementation = retrieve uml::Class corresponding to component tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val umlComponentPackage = retrieve uml::Package corresponding to component tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		val umlComponentConstructor = retrieve uml::Operation corresponding to component tagged with TagLiterals.IPRE__CONSTRUCTOR	
+	} 	
+	action {
+		execute {
+			// => umlComponentImplementation.name = component.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX			
+			// => umlComponentConstructor.name = component.entityName +  DefaultLiterals.IMPLEMENTATION_SUFFIX			
+			// => umlComponentPackage.name = component.entityName.toFirstLower			
+			val componentSource = eObjectSource(component, 'entityName', transformationFirstUpper(false).chain(transformationImplementationSuffix(true, false)))
+			val componentSourcePackage = eObjectSource(component, 'entityName', transformationFirstLower(true))
+			updateFromSources(eObjectTarget(umlComponentImplementation, 'name'), componentSource)
+			updateFromSources(eObjectTarget(umlComponentPackage, 'name'), componentSourcePackage)
+			updateFromSources(eObjectTarget(umlComponentConstructor, 'name'), componentSource)
+		}
+	}
+}
+   	 
+//datatypes mapping routines
+ 
+routine updateClassName(pcm::CompositeDataType type, pcm::Repository repository){
+	match{
+		val umlCompositeClass = retrieve uml::Class corresponding to type tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+	} 	
+	action {
+		execute {
+			umlCompositeClass.name = type.entityName		
+		}
+	}
+}
+   	 	
+routine updateCompositeDataTypeName(uml::Class class_, uml::Package datatypesPackage){
+	match{
+		val pcmCompositeType = retrieve pcm::CompositeDataType corresponding to class_ tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+	} 	
+	action {
+		execute {
+			pcmCompositeType.entityName = class_.name			
+		}
+	}
+}
+   	 	
+//interface mapping routines
+ 
+routine updateOperationInterfaceName(uml::Interface interface_, uml::Package contractsPackage){
+	match{
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to interface_ tagged with TagLiterals.INTERFACE_TO_INTERFACE
+	} 	
+	action {
+		execute {
+			pcmInterface.entityName = interface_.name		
+		}
+	}
+}
+   	 	
+routine updateInterfaceName(pcm::OperationInterface operationInterface, pcm::Repository repository){
+	match{
+		val umlInterface = retrieve uml::Interface corresponding to operationInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+	} 	
+	action {
+		execute {
+			umlInterface.name = operationInterface.entityName	
+		}
+	}
+}
+   	 	
+//roles mapping routines
+ 
+routine updateRequiredRoleName(uml::Property property, uml::Parameter parameter, uml::Class implementation, uml::Interface interface_, uml::Operation operation){
+	match{
+		val role = retrieve pcm::OperationRequiredRole corresponding to property tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
+	} 	
+	action {
+		//check if either the name of the property or parameter was changed
+		execute {
+			val roleTarget = eObjectTarget(role, 'entityName')
+			val propertySource = simpleEObjectSource(property, 'name')
+			val parameterSource = simpleEObjectSource(parameter, 'name')
+			updateFromSources(roleTarget, propertySource, parameterSource)
+		}
+	}
+}
+
+
+routine changeTypeOfCorrespondingRequiredRole(uml::Property umlProperty, uml::Parameter parameter , uml::Class implementation , uml::Interface interface_, uml::Operation operation) {
+	match {
+	//	val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlProperty.owner tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val pcmRequired = retrieve  pcm::OperationRequiredRole corresponding to umlProperty tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
+		val pcmNewInterface = retrieve pcm::OperationInterface corresponding to parameter.type tagged with TagLiterals.INTERFACE_TO_INTERFACE 
+	}
+	action {
+		execute {
+			pcmRequired.requiredInterface__OperationRequiredRole = pcmNewInterface
+//			pcmRequired.requiredInterface__OperationRequiredRole = pcmNewInterface
+//			if (!pcmRequired.isPresent && pcmNewInterface.isPresent) {
+//				createCorrespondingRequiredRole(umlProperty, umlProperty.owner as Class)
+//			} else if (pcmRequired.isPresent && pcmNewInterface.isPresent) {
+//				pcmRequired.get.requiredInterface__OperationRequiredRole = pcmNewInterface.get
+//			} else if(pcmRequired.isPresent && umlNewInterface === null) {
+//				//might be a transitional state -> keep correspondence, but synchronize 'null'
+//				pcmRequired.get.requiredInterface__OperationRequiredRole = null
+//			} else {
+//				logger.warn("The type of a uml::Property in a pcm::OperationRequiredRole ~ uml::Property correspondence"
+//							+ "has been set to a non-OperationInterface type. This is against convention and the corresponding OperationRequiredRole will be deleted.")
+//				deleteCorrespondingRequiredRole(umlProperty)
+//			}
+		}
+	}
+}
+
+routine updateRequiredRoleCorrespondingUmlNames(repository::OperationRequiredRole role, repository::OperationInterface operationInterface , entity::InterfaceProvidingRequiringEntity requiringEntity) {
+	match{
+		val property = retrieve uml::Property corresponding to role tagged with TagLiterals.REQUIRED_ROLE__PROPERTY
+		val parameter = retrieve uml::Parameter corresponding to role tagged with TagLiterals.REQUIRED_ROLE__PARAMETER		
+	} 
+	action {
+		execute {
+			property.name = role.entityName	
+			parameter.name = role.entityName	
+		}
+	}
+}
+
+routine updateProvidedRoleName(uml::InterfaceRealization interfaceRealization, uml::Class implementation, uml::Interface interface_){
+	match{
+		val role = retrieve pcm::OperationProvidedRole corresponding to interfaceRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
+	} 	
+	action {
+		execute {
+			role.entityName = interfaceRealization.name			
+		}
+	}
+}
+   	 	
+routine updateInterfaceRealizationName(pcm::OperationProvidedRole role, pcm::OperationInterface operationInterface, pcm::InterfaceProvidingRequiringEntity providingEntity){
+	match{
+		val interfaceRealization = retrieve uml::InterfaceRealization corresponding to role tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
+	} 	
+	action {
+		execute {
+			interfaceRealization.name = role.entityName 
+		}
+	}
+}  	
+   	 	
+//signature mapping routines	 	 
+ 
+ routine updateSignaturePcmName(uml::Operation operation, uml::Parameter returnParameter , uml::Interface interface_) {
+	match{
+		val operationSignature = retrieve pcm::OperationSignature corresponding to operation tagged with TagLiterals.SIGNATURE__OPERATION
+	} 	
+	action {
+		execute {
+			operationSignature.entityName = operation.name			
+		}
+	}
+}
+
+routine updateSignaturePcmReturnType(uml::Operation operation, uml::Parameter returnParameter , uml::Interface interface_) {
+	action{
+		call umlReturnAndRegularParameterTypeReactions.propagateTypeChange(returnParameter)
+	}
+}
+
+routine updateSignatureUmlName(repository::OperationSignature operationSignature, repository::DataType returnType , repository::OperationInterface operationInterface) {
+	match{
+		val operation = retrieve uml::Operation corresponding to operationSignature tagged with TagLiterals.SIGNATURE__OPERATION
+	} 	
+	action {
+		execute {
+			 operation.name	= operationSignature.entityName
+		}
+	}
+}
+
+routine updateSignatureUmlReturnType(repository::OperationSignature operationSignature, repository::DataType returnType , repository::OperationInterface operationInterface) {
+	match {
+		val umlParam = retrieve uml::Parameter corresponding to operationSignature tagged with TagLiterals.SIGNATURE__RETURN_PARAMETER
+	}
+	action {
+		execute {
+			logger.debug('update signature uml type')
+			//fix for setting return literal
+			umlParam.direction = ParameterDirectionKind.RETURN_LITERAL
+		}
+		call pcmDataTypePropagationReactions.setUmlParameterType(returnType, umlParam)
+	}
+}
+	
+
+//routine changeTypeOfCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
+//	match {
+//		val umlParam = retrieve uml::Parameter corresponding to parameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+//	}
+//	action {
+//		call pcmDataTypePropagationReactions.setUmlParameterType(parameter.dataType__Parameter, umlParam)
+//	}
+//} 	
+
+//routine propagateTypeChange(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_) {
+//	action{
+//		call umlReturnAndRegularParameterTypeReactions.propagateTypeChange(returnParameter)
+//	}
+//}
+
+//routine renameCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
+//	match {
+//		val umlParam = retrieve uml::Parameter corresponding to parameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+//	}
+//	action {
+//		update umlParam {
+//			umlParam.name = parameter.parameterName
+//		}
+//	}
+//}
+
+//routine changeDirectionOfCorrespondingRegularParameter(repository::OperationSignature operationSignature, repository::Parameter parameter , repository::DataType returnType , repository::OperationInterface operationInterface) {
+//	match {
+//		val umlParam = retrieve uml::Parameter corresponding to parameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+//	}
+//	action {
+//		update umlParam {
+//			umlParam.direction = PcmUmlClassHelper.getMatchingParameterDirection(parameter.modifier__Parameter)
+//		}
+//	}
+//}
+
+
+
+//routine changeNameOfCorrespondingRegularParameter(uml::Operation operation, uml::Parameter returnParameter , uml::Interface interface_) {
+//	match {
+//		val pcmParam = retrieve pcm::Parameter corresponding to returnParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+//	}
+//	action {
+//		update pcmParam{
+//			pcmParam.parameterName = returnParameter.name
+//		}
+//	}
+//}
+
+//routine changeModifierOfCorrespondingRegularParameter(uml::Operation operation, uml::Parameter returnParameter , uml::Interface interface_) {
+//	match {
+//		val pcmParameter = retrieve pcm::Parameter corresponding to returnParameter tagged with TagLiterals.PARAMETER__REGULAR_PARAMETER
+//	}
+//	action {
+//		update pcmParameter {
+//			var matchingModifier = ParameterModifier.NONE
+//			for (modifier : ParameterModifier.values) {
+//				if (PcmUmlClassHelper.getMatchingParameterDirection(modifier) === returnParameter.direction) {
+//					matchingModifier = modifier
+//				}
+//			}
+//			pcmParameter.modifier__Parameter = matchingModifier
+//		}
+//	}
+//}
+
+

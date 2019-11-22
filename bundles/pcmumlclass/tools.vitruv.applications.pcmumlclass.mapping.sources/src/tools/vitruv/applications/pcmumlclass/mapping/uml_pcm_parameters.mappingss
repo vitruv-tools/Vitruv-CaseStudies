@@ -1,0 +1,114 @@
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+    	
+mappings: umlXpcmParameters for UML and PCM
+ 
+//TODO: finish mapping 
+
+mapping PrimitiveParameter  {
+	map(pcm::Parameter pcmParameter
+		pcm::PrimitiveDataType type
+		mapped pcm::OperationSignature operationSignature with operation
+	)
+	with{
+		type in pcmParameter[dataType__Parameter]
+		pcmParameter in operationSignature[parameters__OperationSignature]
+	}
+	and (uml::Parameter umlParameter
+		 uml::PrimitiveType primitiveType		
+		 mapped uml::Operation operation with operationSignature
+	)
+	with{
+		1 equals umlParameter[upper]
+		primitiveType in umlParameter[type]		
+		umlParameter in umlOperation[ownedParameters]
+	}
+	such that{
+		pcm::Parameter[dataType__Parameter] call changeTypeOfCorrespondingRegularParameter	
+		pcm::Parameter[modifier__Parameter] call changeDirectionOfCorrespondingRegularParameter
+		pcm::Parameter[parameterName] call renameCorrespondingRegularParameter
+		uml::Parameter[name] call changeNameOfCorrespondingRegularParameter
+		uml::Parameter[direction] call changeModifierOfCorrespondingRegularParameter
+		uml::Parameter[type] call propagateTypeChange
+		uml::Parameter[lowerValue] call propagateTypeChange
+		uml::Parameter[upperValue] call propagateTypeChange
+		
+		routine changeTypeOfCorrespondingRegularParameter(pcm::Parameter pcmParameter, pcm::PrimitiveDataType type, pcm::OperationSignature){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine changeDirectionOfCorrespondingRegularParameter(pcm::Parameter pcmParameter, pcm::PrimitiveDataType type, pcm::OperationSignature) {
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine renameCorrespondingRegularParameter(pcm::Parameter pcmParameter, pcm::PrimitiveDataType type, pcm::OperationSignature){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine propagateTypeChange(uml::Parameter umlParameter, uml::PrimitiveType primitiveType, uml::Operation operation){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}  
+   	 	
+   	 	routine changeNameOfCorrespondingRegularParameter(uml::Parameter umlParameter, uml::PrimitiveType primitiveType, uml::Operation operation){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine changeModifierOfCorrespondingRegularParameter(uml::Parameter umlParameter, uml::PrimitiveType primitiveType, uml::Operation operation){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}	  	 	   	 	
+	}
+}
+
+
+mapping CollectionParameter  {
+	map(pcm::Parameter pcmParameter
+		pcm::CollectionDataType type
+	)
+	with{
+		type in pcmParameter[dataType__Parameter]
+	}
+	and (uml::Parameter umlParameter)
+	with{
+		1 not equals umlParameter[upper]
+	}
+	such that{
+		
+	}
+}
+
+mapping CompositeParameter  {
+	map(pcm::Parameter pcmParameter
+		pcm::CompositeDataType type
+	)
+	with{
+		type in pcmParameter[dataType__Parameter]
+	}
+	and (uml::Parameter umlParameter)
+	with{
+		1 equals umlParameter[upper]
+	}
+	such that{
+		
+	}
+}
+
+
+

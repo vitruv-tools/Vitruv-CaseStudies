@@ -1,0 +1,66 @@
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+    	
+mappings: umlXpcmDatatypes for UML and PCM
+ 
+mapping CompositeDataype {
+	map(pcm::CompositeDataType type
+		mapped pcm::Repository repository with datatypesPackage tagged "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:datatypesPkg_with_Repository:repository"
+	)
+	with {
+		type in repository[dataTypes__Repository]
+	}
+	and(uml::Class class
+		mapped uml::Package datatypesPackage with repository tagged "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:datatypesPkg_with_Repository:repository"
+	)
+	with{
+		class in datatypesPackage[packagedElement]
+	}
+	such that{
+		observe changes{
+			uml::Class[name] call updateCompositeDataTypeName
+			pcm::CompositeDataType[entityName] call updateClassName
+		}
+		
+		routine updateClassName(pcm::CompositeDataType type, pcm::Repository repository){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine updateCompositeDataTypeName(uml::Class class_, uml::Package datatypesPackage){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+	}
+}
+
+//not sure if this can be combined into the mapping above, or if this is independent
+mapping CompositeDatatypeParent {
+	map(mapped pcm::CompositeDataType type with class tagged "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+		pcm::CompositeDataType parentType
+	)
+	with{
+		parentType in type[parentType_CompositeDataType]
+	}
+	and(mapped uml::Class class with type tagged "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+		uml::Generalization generalization
+	)
+	with{
+		generalization in class[generalization]
+		//these produce cycles, are they really needed?
+		//generalization in class[general]
+		//class in generalization[specific]		
+		//todo after element replaced at uml::Generalization[general] if its needed?
+	}
+}
+
+//collectiondatatype is only a bootstrap mapping
+
+//mapping CollectionDatatype{
+//	map(pcm::CollectionDataType type)
+//	and(uml::Properties properties)
+//}

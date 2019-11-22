@@ -1,0 +1,237 @@
+import java.util.List
+import org.palladiosimulator.pcm.repository.Repository
+import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Package
+import org.eclipse.xtext.xbase.lib.ObjectExtensions
+import org.eclipse.xtext.xbase.lib.BooleanExtensions
+import org.palladiosimulator.pcm.repository.CompositeDataType
+import java.util.Optional
+import org.eclipse.uml2.uml.Generalization
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" as repository
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+reactions: umlXpcmDatatypes_L2R in reaction to changes in UML
+execute actions in PCM
+import routines umlXpcmRoutines
+reaction OnCompositeDataypePackageInsertedAsRoot {
+	after element uml::Package created
+	call compositeDataype_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnCompositeDataypePackageDeleted {
+	after element uml::Package deleted
+	call compositeDataype_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnCompositeDataypeClassInsertedInPackage {
+	after element uml::Class inserted in uml::Package[packagedElement]
+	call compositeDataype_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnCompositeDataypeClassRemovedFromPackage {
+	after element uml::Class removed from uml::Package[packagedElement]
+	call compositeDataype_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnCompositeDataypeClassDeleted {
+	after element uml::Class deleted
+	call compositeDataype_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnCompositeDataypeNameReplacedAtClass_nameBidirectional {
+	after attribute replaced at uml::Class[name]
+	call onCompositeDataypeNameReplacedAtClass_nameBidirectionalRepair(affectedEObject)
+}
+
+reaction OnCompositeDatatypeParentClassInsertedAsRoot {
+	after element uml::Class created
+	call compositeDatatypeParent_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnCompositeDatatypeParentClassDeleted {
+	after element uml::Class deleted
+	call compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnCompositeDatatypeParentGeneralizationInsertedInClass {
+	after element uml::Generalization inserted in uml::Classifier[generalization]
+	call compositeDatatypeParent_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnCompositeDatatypeParentGeneralizationRemovedFromClass {
+	after element uml::Generalization removed from uml::Classifier[generalization]
+	call compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnCompositeDatatypeParentGeneralizationDeleted {
+	after element uml::Generalization deleted
+	call compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
+}
+
+routine compositeDataype_BidirectionalUpdate(uml::Class class_, uml::Package datatypesPackage_) {
+	action {
+		call updateCompositeDataTypeName(class_, datatypesPackage_)
+	}
+}
+
+routine compositeDataype_CreateMapping(uml::Class class_, uml::Package datatypesPackage_) {
+	match {
+		require absence of repository::CompositeDataType corresponding to class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+		require absence of repository::Repository corresponding to class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_Repository:repository"
+		val repository_ = retrieve repository::Repository corresponding to datatypesPackage_ tagged with "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:datatypesPkg_with_Repository:repository"
+	}
+	action {
+		val type_ = create repository::CompositeDataType
+		add correspondence between type_ and class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+		add correspondence between repository_ and class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_Repository:repository"
+		add correspondence between type_ and datatypesPackage_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Package:datatypesPackage_with_CompositeDataType:type"
+		add correspondence between repository_ and datatypesPackage_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Package:datatypesPackage_with_Repository:repository"
+		execute {
+			repository_.getDataTypes__Repository().^add(type_)
+		}
+		call compositeDataype_BidirectionalUpdate(class_, datatypesPackage_)
+	}
+}
+
+routine compositeDataype_DeleteMapping(repository::CompositeDataType type_, repository::Repository repository_) {
+	action {
+		delete type_
+	}
+}
+
+routine compositeDataype_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
+	action {
+		call {
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject { var datatypesPackage__candidate = class_ . eContainer { if ( datatypesPackage__candidate !== null && datatypesPackage__candidate instanceof Package ) { var Package datatypesPackage_ = datatypesPackage__candidate as Package { { if ( routineName === "updateCompositeDataTypeName" ) updateCompositeDataTypeName ( class_ , datatypesPackage_ ) } return } } } } }
+			if ( affectedEObject instanceof Package ) { var Package datatypesPackage_ = affectedEObject for ( class__candidate : datatypesPackage_ . packagedElements ) { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { { if ( routineName === "updateCompositeDataTypeName" ) updateCompositeDataTypeName ( class_ , datatypesPackage_ ) } return } } } }
+		}
+	}
+}
+
+routine compositeDataype_ElementCreatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject { var datatypesPackage__candidate = class_ . eContainer { if ( datatypesPackage__candidate !== null && datatypesPackage__candidate instanceof Package ) { var Package datatypesPackage_ = datatypesPackage__candidate as Package { compositeDataype_CreateMapping ( class_ , datatypesPackage_ ) return } } } } }
+			if ( affectedEObject instanceof Package ) { var Package datatypesPackage_ = affectedEObject for ( class__candidate : datatypesPackage_ . packagedElements ) { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDataype_CreateMapping ( class_ , datatypesPackage_ ) return } } } }
+		}
+	}
+}
+
+routine compositeDataype_ElementDeletedCheck(ecore::EObject affectedEObject) {
+	match {
+		val type_correspondingTo_class = retrieve optional repository::CompositeDataType corresponding to affectedEObject tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+		val repository_correspondingTo_class = retrieve optional repository::Repository corresponding to affectedEObject tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_Repository:repository"
+		val type_correspondingTo_datatypesPackage = retrieve optional repository::CompositeDataType corresponding to affectedEObject tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Package:datatypesPackage_with_CompositeDataType:type"
+		val repository_correspondingTo_datatypesPackage = retrieve optional repository::Repository corresponding to affectedEObject tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Package:datatypesPackage_with_Repository:repository"
+	}
+	action {
+		call {
+			var CompositeDataType type_
+			var Repository repository_
+			if ( type_correspondingTo_class . isPresent ( ) ) type_ = type_correspondingTo_class . get ( )
+			if ( repository_correspondingTo_class . isPresent ( ) ) repository_ = repository_correspondingTo_class . get ( )
+			if ( type_correspondingTo_datatypesPackage . isPresent ( ) ) type_ = type_correspondingTo_datatypesPackage . get ( )
+			if ( repository_correspondingTo_datatypesPackage . isPresent ( ) ) repository_ = repository_correspondingTo_datatypesPackage . get ( )
+			if ( type_ !== null && repository_ !== null ) compositeDataype_DeleteMapping ( type_ , repository_ )
+		}
+	}
+}
+
+routine compositeDataype_ElementUpdatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject { var datatypesPackage__candidate = class_ . eContainer { if ( datatypesPackage__candidate !== null && datatypesPackage__candidate instanceof Package ) { var Package datatypesPackage_ = datatypesPackage__candidate as Package { compositeDataype_CreateMapping ( class_ , datatypesPackage_ ) return } } } } }
+			if ( affectedEObject instanceof Package ) { var Package datatypesPackage_ = affectedEObject for ( class__candidate : datatypesPackage_ . packagedElements ) { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDataype_CreateMapping ( class_ , datatypesPackage_ ) return } } } }
+			compositeDataype_ElementDeletedCheck(affectedEObject)
+		}
+	}
+}
+
+routine compositeDatatypeParent_BidirectionalUpdate(uml::Class class_, uml::Generalization generalization_) {
+	action {
+		execute {
+			return
+		}
+	}
+}
+
+routine compositeDatatypeParent_CreateMapping(uml::Class class_, uml::Generalization generalization_) {
+	match {
+		require absence of repository::CompositeDataType corresponding to class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+		require absence of repository::CompositeDataType corresponding to class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:parentType"
+		val type_ = retrieve repository::CompositeDataType corresponding to class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+	}
+	action {
+		val parentType_ = create repository::CompositeDataType
+		add correspondence between type_ and class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+		add correspondence between parentType_ and class_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:parentType"
+		add correspondence between type_ and generalization_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Generalization:generalization_with_CompositeDataType:type"
+		add correspondence between parentType_ and generalization_ tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Generalization:generalization_with_CompositeDataType:parentType"
+		execute {
+			type_.getParentType_CompositeDataType().^add(parentType_)
+		}
+		call compositeDatatypeParent_BidirectionalUpdate(class_, generalization_)
+	}
+}
+
+routine compositeDatatypeParent_DeleteMapping(repository::CompositeDataType type_, repository::CompositeDataType parentType_) {
+	action {
+		delete parentType_
+	}
+}
+
+routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
+	action {
+		call {
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { { } return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { { } return } } } } }
+		}
+	}
+}
+
+routine compositeDatatypeParent_ElementCreatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } } }
+		}
+	}
+}
+
+routine compositeDatatypeParent_ElementDeletedCheck(ecore::EObject affectedEObject) {
+	match {
+		val type_correspondingTo_class = retrieve optional repository::CompositeDataType corresponding to affectedEObject tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:type"
+		val parentType_correspondingTo_class = retrieve optional repository::CompositeDataType corresponding to affectedEObject tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Class:class_with_CompositeDataType:parentType"
+		val type_correspondingTo_generalization = retrieve optional repository::CompositeDataType corresponding to affectedEObject tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Generalization:generalization_with_CompositeDataType:type"
+		val parentType_correspondingTo_generalization = retrieve optional repository::CompositeDataType corresponding to affectedEObject tagged with "umlXpcmDatatypes_map_UML_and_PCM_correspondence_Generalization:generalization_with_CompositeDataType:parentType"
+	}
+	action {
+		call {
+			var CompositeDataType type_
+			var CompositeDataType parentType_
+			if ( type_correspondingTo_class . isPresent ( ) ) type_ = type_correspondingTo_class . get ( )
+			if ( parentType_correspondingTo_class . isPresent ( ) ) parentType_ = parentType_correspondingTo_class . get ( )
+			if ( type_correspondingTo_generalization . isPresent ( ) ) type_ = type_correspondingTo_generalization . get ( )
+			if ( parentType_correspondingTo_generalization . isPresent ( ) ) parentType_ = parentType_correspondingTo_generalization . get ( )
+			if ( type_ !== null && parentType_ !== null ) compositeDatatypeParent_DeleteMapping ( type_ , parentType_ )
+		}
+	}
+}
+
+routine compositeDatatypeParent_ElementUpdatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } } }
+			compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
+		}
+	}
+}
+
+routine onCompositeDataypeNameReplacedAtClass_nameBidirectionalRepair(uml::Class affectedEObject) {
+	action {
+		call compositeDataype_BidirectionalCheck(affectedEObject, "updateCompositeDataTypeName")
+	}
+}

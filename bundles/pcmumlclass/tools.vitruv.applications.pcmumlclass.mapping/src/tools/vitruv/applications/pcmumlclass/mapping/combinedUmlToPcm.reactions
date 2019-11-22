@@ -1,0 +1,20 @@
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: combinedUmlToPcm
+in reaction to changes in UML
+execute actions in PCM
+
+import umlXpcmComponent_L2R using qualified names
+import umlXpcmDatatypes_L2R using qualified names
+import umlXpcmInterface_L2R using qualified names
+import umlXpcmRepository_L2R using qualified names
+import umlXpcmRoles_L2R using qualified names
+import umlXpcmSignature_L2R using qualified names
+import umlReturnAndRegularParameterTypeReactions using qualified names
+
+//fix for missing single sided condition for signature returntype
+reaction OnParameterDirectionReplacedAtParameter {
+	after attribute replaced at uml::Parameter[direction]
+	call umlXpcmSignature_L2R.signature_ElementUpdatedCheck(affectedEObject)
+}

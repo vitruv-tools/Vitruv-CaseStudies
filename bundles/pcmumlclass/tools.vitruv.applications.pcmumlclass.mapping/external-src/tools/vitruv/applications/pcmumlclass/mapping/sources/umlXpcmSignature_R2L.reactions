@@ -1,0 +1,183 @@
+import java.util.List
+import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.Parameter
+import org.palladiosimulator.pcm.repository.OperationSignature
+import org.eclipse.xtext.xbase.lib.ObjectExtensions
+import org.palladiosimulator.pcm.repository.DataType
+import org.eclipse.xtext.xbase.lib.BooleanExtensions
+import org.palladiosimulator.pcm.repository.OperationInterface
+import java.util.Optional
+
+import "http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" as repository
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+reactions: umlXpcmSignature_R2L in reaction to changes in PCM
+execute actions in UML
+import routines umlXpcmRoutines
+reaction OnSignatureDataTypeInsertedAsRoot {
+	after element repository::DataType created
+	call signature_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnSignatureDataTypeDeleted {
+	after element repository::DataType deleted
+	call signature_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnSignatureOperationInterfaceInsertedAsRoot {
+	after element repository::OperationInterface created
+	call signature_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnSignatureOperationInterfaceDeleted {
+	after element repository::OperationInterface deleted
+	call signature_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnSignatureOperationSignatureInsertedInOperationInterface {
+	after element repository::OperationSignature inserted in repository::OperationInterface[signatures__OperationInterface]
+	call signature_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnSignatureOperationSignatureRemovedFromOperationInterface {
+	after element repository::OperationSignature removed from repository::OperationInterface[signatures__OperationInterface]
+	call signature_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnSignatureOperationSignatureDeleted {
+	after element repository::OperationSignature deleted
+	call signature_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnSignatureDataTypeReplacedAtOperationSignature_returnType__OperationSignature {
+	after element repository::DataType replaced at repository::OperationSignature[returnType__OperationSignature]
+	call signature_ElementUpdatedCheck(affectedEObject)
+}
+
+reaction OnSignatureEntityNameReplacedAtOperationSignature_entityNameBidirectional {
+	after attribute replaced at repository::OperationSignature[entityName]
+	call onSignatureEntityNameReplacedAtOperationSignature_entityNameBidirectionalRepair(affectedEObject)
+}
+
+reaction OnSignatureElementReplacedAtOperationSignature_returnType__OperationSignatureBidirectional {
+	after element replaced at repository::OperationSignature[returnType__OperationSignature]
+	call onSignatureElementReplacedAtOperationSignature_returnType__OperationSignatureBidirectionalRepair(affectedEObject)
+}
+
+routine signature_BidirectionalUpdate(repository::OperationSignature operationSignature_, repository::DataType returnType_ , repository::OperationInterface operationInterface_) {
+	action {
+		call updateSignatureUmlName(operationSignature_, returnType_ , operationInterface_)
+		call updateSignatureUmlReturnType(operationSignature_, returnType_ , operationInterface_)
+	}
+}
+
+routine signature_CreateMapping(repository::OperationSignature operationSignature_, repository::DataType returnType_ , repository::OperationInterface operationInterface_) {
+	match {
+		require absence of uml::Operation corresponding to operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationSignature:operationSignature"
+		require absence of uml::Parameter corresponding to operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_OperationSignature:operationSignature"
+		require absence of uml::Interface corresponding to operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_OperationSignature:operationSignature"
+		val interface_ = retrieve uml::Interface corresponding to operationInterface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+	}
+	action {
+		val operation_ = create uml::Operation
+		val returnParameter_ = create uml::Parameter
+		add correspondence between operation_ and operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationSignature:operationSignature"
+		add correspondence between returnParameter_ and operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_OperationSignature:operationSignature"
+		add correspondence between interface_ and operationSignature_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_OperationSignature:operationSignature"
+		add correspondence between operation_ and returnType_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_DataType:returnType"
+		add correspondence between returnParameter_ and returnType_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_DataType:returnType"
+		add correspondence between interface_ and returnType_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_DataType:returnType"
+		add correspondence between operation_ and operationInterface_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationInterface:operationInterface"
+		add correspondence between returnParameter_ and operationInterface_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_OperationInterface:operationInterface"
+		add correspondence between interface_ and operationInterface_ tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		execute {
+			interface_.getOwnedOperations().^add(operation_)
+			operation_.getOwnedParameters().^add(returnParameter_)
+			returnParameter_.setName("returnParam")
+		}
+		call signature_BidirectionalUpdate(operationSignature_, returnType_ , operationInterface_)
+	}
+}
+
+routine signature_DeleteMapping(uml::Operation operation_, uml::Parameter returnParameter_ , uml::Interface interface_) {
+	action {
+		delete operation_
+		delete returnParameter_
+	}
+}
+
+routine signature_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
+	action {
+		call {
+			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateSignatureUmlName" ) updateSignatureUmlName ( operationSignature_ , returnType_ , operationInterface_ ) if ( routineName === "updateSignatureUmlReturnType" ) updateSignatureUmlReturnType ( operationSignature_ , returnType_ , operationInterface_ ) } return } } } } } } } }
+			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { { if ( routineName === "updateSignatureUmlName" ) updateSignatureUmlName ( operationSignature_ , returnType_ , operationInterface_ ) if ( routineName === "updateSignatureUmlReturnType" ) updateSignatureUmlReturnType ( operationSignature_ , returnType_ , operationInterface_ ) } return } } } } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { { if ( routineName === "updateSignatureUmlName" ) updateSignatureUmlName ( operationSignature_ , returnType_ , operationInterface_ ) if ( routineName === "updateSignatureUmlReturnType" ) updateSignatureUmlReturnType ( operationSignature_ , returnType_ , operationInterface_ ) } return } } } } } } }
+		}
+	}
+}
+
+routine signature_ElementCreatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } } }
+			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } }
+		}
+	}
+}
+
+routine signature_ElementDeletedCheck(ecore::EObject affectedEObject) {
+	match {
+		val operation_correspondingTo_operationSignature = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationSignature:operationSignature"
+		val returnParameter_correspondingTo_operationSignature = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_OperationSignature:operationSignature"
+		val interface_correspondingTo_operationSignature = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_OperationSignature:operationSignature"
+		val operation_correspondingTo_returnType = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_DataType:returnType"
+		val returnParameter_correspondingTo_returnType = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_DataType:returnType"
+		val interface_correspondingTo_returnType = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_DataType:returnType"
+		val operation_correspondingTo_operationInterface = retrieve optional uml::Operation corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Operation:operation_with_OperationInterface:operationInterface"
+		val returnParameter_correspondingTo_operationInterface = retrieve optional uml::Parameter corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Parameter:returnParameter_with_OperationInterface:operationInterface"
+		val interface_correspondingTo_operationInterface = retrieve optional uml::Interface corresponding to affectedEObject tagged with "umlXpcmSignature_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+	}
+	action {
+		call {
+			var Operation operation_
+			var Parameter returnParameter_
+			var Interface interface_
+			if ( operation_correspondingTo_operationSignature . isPresent ( ) ) operation_ = operation_correspondingTo_operationSignature . get ( )
+			if ( returnParameter_correspondingTo_operationSignature . isPresent ( ) ) returnParameter_ = returnParameter_correspondingTo_operationSignature . get ( )
+			if ( interface_correspondingTo_operationSignature . isPresent ( ) ) interface_ = interface_correspondingTo_operationSignature . get ( )
+			if ( operation_correspondingTo_returnType . isPresent ( ) ) operation_ = operation_correspondingTo_returnType . get ( )
+			if ( returnParameter_correspondingTo_returnType . isPresent ( ) ) returnParameter_ = returnParameter_correspondingTo_returnType . get ( )
+			if ( interface_correspondingTo_returnType . isPresent ( ) ) interface_ = interface_correspondingTo_returnType . get ( )
+			if ( operation_correspondingTo_operationInterface . isPresent ( ) ) operation_ = operation_correspondingTo_operationInterface . get ( )
+			if ( returnParameter_correspondingTo_operationInterface . isPresent ( ) ) returnParameter_ = returnParameter_correspondingTo_operationInterface . get ( )
+			if ( interface_correspondingTo_operationInterface . isPresent ( ) ) interface_ = interface_correspondingTo_operationInterface . get ( )
+			if ( operation_ !== null && returnParameter_ !== null && interface_ !== null ) signature_DeleteMapping ( operation_ , returnParameter_ , interface_ )
+		}
+	}
+}
+
+routine signature_ElementUpdatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof OperationSignature ) { var OperationSignature operationSignature_ = affectedEObject { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } } }
+			if ( affectedEObject instanceof DataType ) { var DataType returnType_ = affectedEObject for ( operationSignature__candidate : returnType_ . eCrossReferences ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature if ( returnType_ === operationSignature_ . returnType__OperationSignature ) { var operationInterface__candidate = operationSignature_ . eContainer { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( operationSignature__candidate : operationInterface_ . signatures__OperationInterface ) { if ( operationSignature__candidate !== null && operationSignature__candidate instanceof OperationSignature ) { var OperationSignature operationSignature_ = operationSignature__candidate as OperationSignature { var returnType__candidate = operationSignature_ . returnType__OperationSignature { if ( returnType__candidate !== null && returnType__candidate instanceof DataType ) { var DataType returnType_ = returnType__candidate as DataType { signature_CreateMapping ( operationSignature_ , returnType_ , operationInterface_ ) return } } } } } } }
+			signature_ElementDeletedCheck(affectedEObject)
+		}
+	}
+}
+
+routine onSignatureEntityNameReplacedAtOperationSignature_entityNameBidirectionalRepair(repository::OperationSignature affectedEObject) {
+	action {
+		call signature_BidirectionalCheck(affectedEObject, "updateSignatureUmlName")
+	}
+}
+
+routine onSignatureElementReplacedAtOperationSignature_returnType__OperationSignatureBidirectionalRepair(repository::OperationSignature affectedEObject) {
+	action {
+		call signature_BidirectionalCheck(affectedEObject, "updateSignatureUmlReturnType")
+	}
+}
