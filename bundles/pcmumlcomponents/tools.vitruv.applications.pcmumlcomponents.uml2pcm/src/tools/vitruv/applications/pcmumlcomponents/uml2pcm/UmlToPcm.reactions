@@ -3,6 +3,7 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.PrimitiveType
+import org.eclipse.uml2.uml.UMLPackage
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmTypesUtil
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
 import org.eclipse.uml2.uml.Property
@@ -106,7 +107,10 @@ routine updateMultiplicityType(uml::MultiplicityElement umlElement) {
 
 reaction CreatedUmlModel {
 	after element uml::Model created and inserted as root
-	call createPcmRepository(newValue)
+	call{
+		createPcmRepository(newValue)
+		ensureUmlModelCorrespondenceExists(newValue)
+	}
 }
 
 routine createPcmRepository(uml::Model umlModel) {
@@ -116,6 +120,21 @@ routine createPcmRepository(uml::Model umlModel) {
 			persistProjectRelative(umlModel, pcmRepository, "repository/" + umlModel.name + ".repository")
 		}
 		add correspondence between umlModel and pcmRepository
+	}
+}
+
+routine ensureUmlModelCorrespondenceExists(uml::Model newModel) {
+	match {
+		val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
+	}
+	action {
+		execute if (!alreadyCorrespondingModels.contains(newModel)) addUmlModelCorrespondence(newModel)
+	}
+}
+
+routine addUmlModelCorrespondence(uml::Model newModel){
+	action {
+		add correspondence between UMLPackage.Literals.MODEL and newModel
 	}
 }
 
