@@ -35,6 +35,7 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
   | -- | -- | -- |
   | [fix10](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix10) | [PR 50](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/50) | The repository name was not adapted when creating the correlating Java packages (first letter lower case). This led to duplicate packages. |
   | [fix11](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix11) | [PR 51](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/51) | Misplaced Java packages were created when creating Java packages correlating to unnamed PCM repositories. |
+  | [fix12](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix12) | TODO | Duplicate UMl root models were sometimes created due to missing model tag correspondence. |
 
 ### Fix to Test Case Failure/Error Correlation
 
