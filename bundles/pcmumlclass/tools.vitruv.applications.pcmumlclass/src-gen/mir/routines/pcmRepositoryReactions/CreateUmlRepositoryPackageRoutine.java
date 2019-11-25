@@ -97,6 +97,7 @@ public class CreateUmlRepositoryPackageRoutine extends AbstractRepairRoutineReal
       }
       EList<org.eclipse.uml2.uml.Package> _nestedPackages = umlRootModel.getNestedPackages();
       _nestedPackages.add(umlRepositoryPkg);
+      _routinesFacade.ensureUmlModelCorrespondenceExists(umlRootModel);
     }
   }
   

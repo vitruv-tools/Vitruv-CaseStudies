@@ -1,13 +1,16 @@
 package mir.routines.pcmRepositoryReactions;
 
 import mir.routines.pcmRepositoryReactions.AddPrimitiveDatatypeCorrespondenceRoutine;
+import mir.routines.pcmRepositoryReactions.AddUmlModelCorrespondenceRoutine;
 import mir.routines.pcmRepositoryReactions.BootstrapPrimitiveDatatypesRoutine;
 import mir.routines.pcmRepositoryReactions.ChangeNameOfCorrespondingRepositoryPackageRoutine;
 import mir.routines.pcmRepositoryReactions.CreateUmlContractsPackageRoutine;
 import mir.routines.pcmRepositoryReactions.CreateUmlDatatypesPackageRoutine;
 import mir.routines.pcmRepositoryReactions.CreateUmlRepositoryPackageRoutine;
 import mir.routines.pcmRepositoryReactions.DeleteCorrespondingRepositoryPackagesRoutine;
+import mir.routines.pcmRepositoryReactions.EnsureUmlModelCorrespondenceExistsRoutine;
 import mir.routines.pcmRepositoryReactions.InitializePcmRepositoryUmlPackagesCorrespondenceRoutine;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -37,6 +40,22 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     CreateUmlRepositoryPackageRoutine routine = new CreateUmlRepositoryPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmRepo);
+    return routine.applyRoutine();
+  }
+  
+  public boolean ensureUmlModelCorrespondenceExists(final Model newModel) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    EnsureUmlModelCorrespondenceExistsRoutine routine = new EnsureUmlModelCorrespondenceExistsRoutine(_routinesFacade, _reactionExecutionState, _caller, newModel);
+    return routine.applyRoutine();
+  }
+  
+  public boolean addUmlModelCorrespondence(final Model newModel) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AddUmlModelCorrespondenceRoutine routine = new AddUmlModelCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, newModel);
     return routine.applyRoutine();
   }
   
