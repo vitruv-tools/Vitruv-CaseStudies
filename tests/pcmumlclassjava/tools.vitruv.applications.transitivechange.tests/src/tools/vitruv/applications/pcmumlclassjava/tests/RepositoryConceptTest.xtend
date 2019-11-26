@@ -9,10 +9,10 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Repository
@@ -67,8 +67,11 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 	 * Checks whether the Java package structure fits to the UML package structure (assumes UML is correct)
 	 */
 	def protected checkJavaRepositoryPackage(Package umlRepositoryPackage) {
-		checkJavaPackage(umlRepositoryPackage)
+		umlRepositoryPackage.checkJavaPackage
 		umlRepositoryPackage.nestedPackages.forEach[checkJavaPackage]
+		
+		val javaRepositoryPackage = getFirstCorrespondingObject(umlRepositoryPackage, org.emftext.language.java.containers.Package)
+		javaRepositoryPackage.checkUmlPackage
 	}
 
 	@Test
@@ -124,6 +127,11 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 
 		assertTrue(pcmRepository.entityName == newName.toFirstUpper)
 		checkPcmRepository(pcmRepository)
+		
+		// There should be no Java packages:
+		var umlRepositoryPackage = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+		var umlModel = umlRepositoryPackage.nestingPackage
+		umlModel.checkNumberOfJavaPackages
 	}
 
 	@Test
@@ -152,7 +160,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 		umlModel = reloadResourceAndReturnRoot(umlModel) as Model
 		assertTrue(umlModel?.packagedElements.empty)
 
-		// There should be not Java packages:
+		// There should be no Java packages:
 		val allJavaPackages = typeof(org.emftext.language.java.containers.Package).getCorrespondingObjectsOfClass
 		assertEquals("Too many Java packages: " + allJavaPackages, umlModel?.packagedElements.size, allJavaPackages.size)
 	}
