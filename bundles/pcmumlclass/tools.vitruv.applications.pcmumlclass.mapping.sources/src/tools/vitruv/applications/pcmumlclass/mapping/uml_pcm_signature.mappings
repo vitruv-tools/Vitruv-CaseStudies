@@ -1,0 +1,67 @@
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+    	
+mappings: umlXpcmSignature for UML and PCM
+
+mapping Signature{
+	map(pcm::OperationSignature operationSignature
+		abstract pcm::DataType returnType as pcm::PrimitiveDataType
+		mapped pcm::OperationInterface operationInterface with interface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+	)
+	with{
+		operationSignature in operationInterface[signatures__OperationInterface]
+		returnType in operationSignature[returnType__OperationSignature]
+		//todo: direction is return for retunType
+	}
+	and(uml::Operation operation
+		uml::Parameter returnParameter
+		mapped uml::Interface interface with operationInterface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+	)
+	with{
+		operation in interface[ownedOperation]
+		returnParameter in operation[ownedParameter]
+		"returnParam" equals returnParameter[name]
+		//does not work yet because its an enum not a string
+		//"return" equals returnParameter[direction]
+	}
+	such that{
+		observe changes{
+			pcm::OperationSignature[entityName] call updateSignatureUmlName
+			pcm::OperationSignature[returnType__OperationSignature]	call updateSignatureUmlReturnType
+			uml::Operation[name] call updateSignaturePcmName	
+			// name and direction is set by single sided conditions!
+			//uml::Parameter[name] call 
+			//uml::Parameter[direction] call 
+			uml::Parameter[type] call updateSignaturePcmReturnType
+		}
+								
+		routine updateSignatureUmlName(pcm::OperationSignature operationSignature, pcm::DataType returnType, pcm::OperationInterface operationInterface){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	 
+   	 	routine updateSignatureUmlReturnType(pcm::OperationSignature operationSignature, pcm::DataType returnType, pcm::OperationInterface operationInterface){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine updateSignaturePcmName(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	   	 
+   	 	routine updateSignaturePcmReturnType(uml::Operation operation, uml::Parameter returnParameter, uml::Interface interface_){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}  
+
+	}
+}

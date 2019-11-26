@@ -1,0 +1,237 @@
+import java.util.List
+import org.palladiosimulator.pcm.repository.Repository
+import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.Package
+import org.eclipse.xtext.xbase.lib.ObjectExtensions
+import org.eclipse.xtext.xbase.lib.BooleanExtensions
+import org.palladiosimulator.pcm.repository.OperationInterface
+import java.util.Optional
+import org.eclipse.uml2.uml.Generalization
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+import "http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" as repository
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+reactions: umlXpcmInterface_L2R in reaction to changes in UML
+execute actions in PCM
+import routines umlXpcmRoutines
+reaction OnOperationInterfacePackageInsertedAsRoot {
+	after element uml::Package created
+	call operationInterface_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfacePackageDeleted {
+	after element uml::Package deleted
+	call operationInterface_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfaceInterfaceInsertedInPackage {
+	after element uml::Interface inserted in uml::Package[packagedElement]
+	call operationInterface_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfaceInterfaceRemovedFromPackage {
+	after element uml::Interface removed from uml::Package[packagedElement]
+	call operationInterface_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfaceInterfaceDeleted {
+	after element uml::Interface deleted
+	call operationInterface_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfaceNameReplacedAtInterface_nameBidirectional {
+	after attribute replaced at uml::Interface[name]
+	call onOperationInterfaceNameReplacedAtInterface_nameBidirectionalRepair(affectedEObject)
+}
+
+reaction OnOperationInterfaceParentInterfaceInsertedAsRoot {
+	after element uml::Interface created
+	call operationInterfaceParent_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfaceParentInterfaceDeleted {
+	after element uml::Interface deleted
+	call operationInterfaceParent_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfaceParentGeneralizationInsertedInInterface {
+	after element uml::Generalization inserted in uml::Classifier[generalization]
+	call operationInterfaceParent_ElementCreatedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfaceParentGeneralizationRemovedFromInterface {
+	after element uml::Generalization removed from uml::Classifier[generalization]
+	call operationInterfaceParent_ElementDeletedCheck(affectedEObject)
+}
+
+reaction OnOperationInterfaceParentGeneralizationDeleted {
+	after element uml::Generalization deleted
+	call operationInterfaceParent_ElementDeletedCheck(affectedEObject)
+}
+
+routine operationInterface_BidirectionalUpdate(uml::Interface interface_, uml::Package contractsPackage_) {
+	action {
+		call updateOperationInterfaceName(interface_, contractsPackage_)
+	}
+}
+
+routine operationInterface_CreateMapping(uml::Interface interface_, uml::Package contractsPackage_) {
+	match {
+		require absence of repository::OperationInterface corresponding to interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		require absence of repository::Repository corresponding to interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_Repository:repository"
+		val repository_ = retrieve repository::Repository corresponding to contractsPackage_ tagged with "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:contractsPkg_with_Repository:repository"
+	}
+	action {
+		val operationInterface_ = create repository::OperationInterface
+		add correspondence between operationInterface_ and interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		add correspondence between repository_ and interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_Repository:repository"
+		add correspondence between operationInterface_ and contractsPackage_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Package:contractsPackage_with_OperationInterface:operationInterface"
+		add correspondence between repository_ and contractsPackage_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Package:contractsPackage_with_Repository:repository"
+		execute {
+			repository_.getInterfaces__Repository().^add(operationInterface_)
+		}
+		call operationInterface_BidirectionalUpdate(interface_, contractsPackage_)
+	}
+}
+
+routine operationInterface_DeleteMapping(repository::OperationInterface operationInterface_, repository::Repository repository_) {
+	action {
+		delete operationInterface_
+	}
+}
+
+routine operationInterface_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
+	action {
+		call {
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject { var contractsPackage__candidate = interface_ . eContainer { if ( contractsPackage__candidate !== null && contractsPackage__candidate instanceof Package ) { var Package contractsPackage_ = contractsPackage__candidate as Package { { if ( routineName === "updateOperationInterfaceName" ) updateOperationInterfaceName ( interface_ , contractsPackage_ ) } return } } } } }
+			if ( affectedEObject instanceof Package ) { var Package contractsPackage_ = affectedEObject for ( interface__candidate : contractsPackage_ . packagedElements ) { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { { if ( routineName === "updateOperationInterfaceName" ) updateOperationInterfaceName ( interface_ , contractsPackage_ ) } return } } } }
+		}
+	}
+}
+
+routine operationInterface_ElementCreatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject { var contractsPackage__candidate = interface_ . eContainer { if ( contractsPackage__candidate !== null && contractsPackage__candidate instanceof Package ) { var Package contractsPackage_ = contractsPackage__candidate as Package { operationInterface_CreateMapping ( interface_ , contractsPackage_ ) return } } } } }
+			if ( affectedEObject instanceof Package ) { var Package contractsPackage_ = affectedEObject for ( interface__candidate : contractsPackage_ . packagedElements ) { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { operationInterface_CreateMapping ( interface_ , contractsPackage_ ) return } } } }
+		}
+	}
+}
+
+routine operationInterface_ElementDeletedCheck(ecore::EObject affectedEObject) {
+	match {
+		val operationInterface_correspondingTo_interface = retrieve optional repository::OperationInterface corresponding to affectedEObject tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		val repository_correspondingTo_interface = retrieve optional repository::Repository corresponding to affectedEObject tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_Repository:repository"
+		val operationInterface_correspondingTo_contractsPackage = retrieve optional repository::OperationInterface corresponding to affectedEObject tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Package:contractsPackage_with_OperationInterface:operationInterface"
+		val repository_correspondingTo_contractsPackage = retrieve optional repository::Repository corresponding to affectedEObject tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Package:contractsPackage_with_Repository:repository"
+	}
+	action {
+		call {
+			var OperationInterface operationInterface_
+			var Repository repository_
+			if ( operationInterface_correspondingTo_interface . isPresent ( ) ) operationInterface_ = operationInterface_correspondingTo_interface . get ( )
+			if ( repository_correspondingTo_interface . isPresent ( ) ) repository_ = repository_correspondingTo_interface . get ( )
+			if ( operationInterface_correspondingTo_contractsPackage . isPresent ( ) ) operationInterface_ = operationInterface_correspondingTo_contractsPackage . get ( )
+			if ( repository_correspondingTo_contractsPackage . isPresent ( ) ) repository_ = repository_correspondingTo_contractsPackage . get ( )
+			if ( operationInterface_ !== null && repository_ !== null ) operationInterface_DeleteMapping ( operationInterface_ , repository_ )
+		}
+	}
+}
+
+routine operationInterface_ElementUpdatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject { var contractsPackage__candidate = interface_ . eContainer { if ( contractsPackage__candidate !== null && contractsPackage__candidate instanceof Package ) { var Package contractsPackage_ = contractsPackage__candidate as Package { operationInterface_CreateMapping ( interface_ , contractsPackage_ ) return } } } } }
+			if ( affectedEObject instanceof Package ) { var Package contractsPackage_ = affectedEObject for ( interface__candidate : contractsPackage_ . packagedElements ) { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { operationInterface_CreateMapping ( interface_ , contractsPackage_ ) return } } } }
+			operationInterface_ElementDeletedCheck(affectedEObject)
+		}
+	}
+}
+
+routine operationInterfaceParent_BidirectionalUpdate(uml::Interface interface_, uml::Generalization generalization_) {
+	action {
+		execute {
+			return
+		}
+	}
+}
+
+routine operationInterfaceParent_CreateMapping(uml::Interface interface_, uml::Generalization generalization_) {
+	match {
+		require absence of repository::OperationInterface corresponding to interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		require absence of repository::OperationInterface corresponding to interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:parentInterface"
+		val operationInterface_ = retrieve repository::OperationInterface corresponding to interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+	}
+	action {
+		val parentInterface_ = create repository::OperationInterface
+		add correspondence between operationInterface_ and interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		add correspondence between parentInterface_ and interface_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:parentInterface"
+		add correspondence between operationInterface_ and generalization_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Generalization:generalization_with_OperationInterface:operationInterface"
+		add correspondence between parentInterface_ and generalization_ tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Generalization:generalization_with_OperationInterface:parentInterface"
+		execute {
+			operationInterface_.getParentInterfaces__Interface().^add(parentInterface_)
+		}
+		call operationInterfaceParent_BidirectionalUpdate(interface_, generalization_)
+	}
+}
+
+routine operationInterfaceParent_DeleteMapping(repository::OperationInterface operationInterface_, repository::OperationInterface parentInterface_) {
+	action {
+		delete parentInterface_
+	}
+}
+
+routine operationInterfaceParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
+	action {
+		call {
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { { } return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var interface__candidate = generalization_ . eContainer { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { { } return } } } } }
+		}
+	}
+}
+
+routine operationInterfaceParent_ElementCreatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var interface__candidate = generalization_ . eContainer { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } } }
+		}
+	}
+}
+
+routine operationInterfaceParent_ElementDeletedCheck(ecore::EObject affectedEObject) {
+	match {
+		val operationInterface_correspondingTo_interface = retrieve optional repository::OperationInterface corresponding to affectedEObject tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		val parentInterface_correspondingTo_interface = retrieve optional repository::OperationInterface corresponding to affectedEObject tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:parentInterface"
+		val operationInterface_correspondingTo_generalization = retrieve optional repository::OperationInterface corresponding to affectedEObject tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Generalization:generalization_with_OperationInterface:operationInterface"
+		val parentInterface_correspondingTo_generalization = retrieve optional repository::OperationInterface corresponding to affectedEObject tagged with "umlXpcmInterface_map_UML_and_PCM_correspondence_Generalization:generalization_with_OperationInterface:parentInterface"
+	}
+	action {
+		call {
+			var OperationInterface operationInterface_
+			var OperationInterface parentInterface_
+			if ( operationInterface_correspondingTo_interface . isPresent ( ) ) operationInterface_ = operationInterface_correspondingTo_interface . get ( )
+			if ( parentInterface_correspondingTo_interface . isPresent ( ) ) parentInterface_ = parentInterface_correspondingTo_interface . get ( )
+			if ( operationInterface_correspondingTo_generalization . isPresent ( ) ) operationInterface_ = operationInterface_correspondingTo_generalization . get ( )
+			if ( parentInterface_correspondingTo_generalization . isPresent ( ) ) parentInterface_ = parentInterface_correspondingTo_generalization . get ( )
+			if ( operationInterface_ !== null && parentInterface_ !== null ) operationInterfaceParent_DeleteMapping ( operationInterface_ , parentInterface_ )
+		}
+	}
+}
+
+routine operationInterfaceParent_ElementUpdatedCheck(ecore::EObject affectedEObject) {
+	action {
+		call {
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var interface__candidate = generalization_ . eContainer { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } } }
+			operationInterfaceParent_ElementDeletedCheck(affectedEObject)
+		}
+	}
+}
+
+routine onOperationInterfaceNameReplacedAtInterface_nameBidirectionalRepair(uml::Interface affectedEObject) {
+	action {
+		call operationInterface_BidirectionalCheck(affectedEObject, "updateOperationInterfaceName")
+	}
+}

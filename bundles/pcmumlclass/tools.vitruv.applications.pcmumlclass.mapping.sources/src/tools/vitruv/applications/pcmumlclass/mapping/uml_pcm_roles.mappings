@@ -1,0 +1,97 @@
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+    	
+mappings: umlXpcmRoles for UML and PCM
+ 
+mapping RequiredRole {
+
+	map(pcm::OperationRequiredRole role
+		mapped pcm::OperationInterface operationInterface with interface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		mapped pcm::InterfaceProvidingRequiringEntity requiringEntity with implementation tagged "umlXpcmComponent_map_UML_and_PCM_correspondence_Class:implementation_with_RepositoryComponent:component"		
+	)
+	with{
+		role in requiringEntity[requiredRoles_InterfaceRequiringEntity]
+		operationInterface in role[requiredInterface__OperationRequiredRole]
+	}
+	and(uml::Property property
+		uml::Parameter parameter
+		mapped uml::Class implementation with requiringEntity tagged "umlXpcmComponent_map_UML_and_PCM_correspondence_Class:implementation_with_RepositoryComponent:component"
+		mapped uml::Interface interface with operationInterface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		mapped uml::Operation operation with requiringEntity tagged "umlXpcmComponent_map_UML_and_PCM_correspondence_Operation:constructor_with_RepositoryComponent:component"
+	)
+	with{
+		property in implementation[ownedAttribute]
+		interface in property[type]		
+		interface in parameter[type]
+		parameter in operation[ownedParameter]
+	}
+	such that{
+		observe changes{
+			pcm::OperationRequiredRole[entityName] call updateRequiredRoleCorrespondingUmlNames
+			uml::Property[name] call updateRequiredRoleName
+			uml::Parameter[name] call updateRequiredRoleName
+			uml::Parameter[type] call changeTypeOfCorrespondingRequiredRole
+		}
+		
+		routine updateRequiredRoleName(uml::Property property, uml::Parameter parameter, uml::Class implementation, uml::Interface interface_, uml::Operation operation){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine changeTypeOfCorrespondingRequiredRole(uml::Property property, uml::Parameter parameter, uml::Class implementation, uml::Interface interface_, uml::Operation operation){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine updateRequiredRoleCorrespondingUmlNames(pcm::OperationRequiredRole role, pcm::OperationInterface operationInterface, pcm::InterfaceProvidingRequiringEntity requiringEntity){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+	}
+
+}
+
+mapping ProvidedRole {
+	map(pcm::OperationProvidedRole role
+		mapped pcm::OperationInterface operationInterface with interface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		mapped pcm::InterfaceProvidingRequiringEntity providingEntity with implementation tagged "umlXpcmComponent_map_UML_and_PCM_correspondence_Class:implementation_with_RepositoryComponent:component"		
+	)
+	with{
+		role in providingEntity[providedRoles_InterfaceProvidingEntity]
+		operationInterface in role[providedInterface__OperationProvidedRole]
+	}
+	and(uml::InterfaceRealization interfaceRealization
+		mapped uml::Class implementation with providingEntity tagged "umlXpcmComponent_map_UML_and_PCM_correspondence_Class:implementation_with_RepositoryComponent:component"
+		mapped uml::Interface interface with operationInterface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+	)
+	with{
+		interfaceRealization in implementation[interfaceRealization]
+		interface in interfaceRealization[contract]
+	}
+	such that{
+		observe changes{
+			pcm::OperationProvidedRole[entityName] call updateInterfaceRealizationName
+			uml::InterfaceRealization[name] call updateProvidedRoleName
+		}
+		
+		routine updateProvidedRoleName(uml::InterfaceRealization interfaceRealization, uml::Class implementation, uml::Interface interface_){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine updateInterfaceRealizationName(pcm::OperationProvidedRole role, pcm::OperationInterface operationInterface, pcm::InterfaceProvidingRequiringEntity providingEntity){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+	}
+}

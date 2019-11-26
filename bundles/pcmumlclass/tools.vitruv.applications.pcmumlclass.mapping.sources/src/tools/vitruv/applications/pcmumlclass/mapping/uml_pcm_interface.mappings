@@ -1,0 +1,60 @@
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+    	
+mappings: umlXpcmInterface for UML and PCM
+ 
+mapping OperationInterface {
+
+	map(pcm::OperationInterface operationInterface
+		mapped pcm::Repository repository with contractsPackage tagged "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:contractsPkg_with_Repository:repository"
+	)
+	with{
+		operationInterface in repository[interfaces__Repository]
+	}
+	and(uml::Interface interface
+		mapped uml::Package contractsPackage with repository tagged "umlXpcmRepository_map_UML_and_PCM_correspondence_Package:contractsPkg_with_Repository:repository"	
+	)
+	with{
+		interface in contractsPackage[packagedElement]		
+	}
+	such that{
+		observe changes{
+			pcm::OperationInterface[entityName] call updateInterfaceName
+			uml::Interface[name] call updateOperationInterfaceName
+		}
+		
+		routine updateOperationInterfaceName(uml::Interface interface_, uml::Package contractsPackage){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+   	 	
+   	 	routine updateInterfaceName(pcm::OperationInterface operationInterface, pcm::Repository repository){
+   	 		action{
+   	 			execute{   	 			
+   	 			}
+   	 		}
+   	 	}
+	}	
+}
+//not sure if this can be combined into the mapping above, or if this is independent
+mapping OperationInterfaceParent{
+	
+	map(mapped pcm::OperationInterface operationInterface with interface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		pcm::OperationInterface parentInterface
+	)
+	with{
+		parentInterface in operationInterface[parentInterfaces__Interface]
+	}
+	and(mapped uml::Interface interface with operationInterface tagged "umlXpcmInterface_map_UML_and_PCM_correspondence_Interface:interface_with_OperationInterface:operationInterface"
+		uml::Generalization generalization
+	)
+	with{
+		generalization in interface[generalization]
+		//these produce cycles, are they really needed?
+		//generalization in class[general]
+		//class in generalization[specific]	
+		//todo 	element replaced at	uml::Generalization[general]  (is this really needed?)
+	}
+}
