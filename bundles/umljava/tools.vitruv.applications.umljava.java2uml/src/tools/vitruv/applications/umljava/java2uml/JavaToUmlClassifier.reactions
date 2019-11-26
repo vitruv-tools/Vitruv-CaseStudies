@@ -375,15 +375,34 @@ reaction JavaPackageCreated {
     call {
     	detectOrCreateUmlModel(newValue)
 		registerPredefinedUmlPrimitiveTypes(correspondenceModel, newValue.eResource.resourceSet)
-	    createUmlPackage(newValue)
+	    createOrFindUmlPackage(newValue)
     }
 }
 
-routine createUmlPackage(java::Package jPackage) {
+routine createOrFindUmlPackage(java::Package jPackage) {
 	match {
         val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 		require absence of uml::Package corresponding to jPackage
 	}
+	action {
+		call {
+			val uPackage = findUmlPackage(uModel, jPackage.name)
+			if(uPackage === null) {
+				createUmlPackage(jPackage, uModel)
+			} else {
+				addPackageCorrespondence(jPackage, uPackage)
+			}
+		}
+	}
+}
+
+routine addPackageCorrespondence(java::Package jPackage, uml::Package uPackage) {
+	action {
+		 add correspondence between uPackage and jPackage
+	}
+}
+
+routine createUmlPackage(java::Package jPackage, uml::Model uModel) {
 	action {
 		val uPackage = create uml::Package and initialize {
 			uPackage.name = jPackage.name

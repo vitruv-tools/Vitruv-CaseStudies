@@ -2,12 +2,14 @@ package mir.routines.javaToUmlClassifier;
 
 import mir.routines.javaToUmlClassifier.AddGeneralizationCorrespondenceRoutine;
 import mir.routines.javaToUmlClassifier.AddImplementsCorrespondenceRoutine;
+import mir.routines.javaToUmlClassifier.AddPackageCorrespondenceRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlClassImplementRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlElementToModelOrPackageRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlElementToPackageRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlPackageOfClassRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlSuperClassGeneralizationRoutine;
 import mir.routines.javaToUmlClassifier.AddUmlSuperinterfacesRoutine;
+import mir.routines.javaToUmlClassifier.CreateOrFindUmlPackageRoutine;
 import mir.routines.javaToUmlClassifier.CreateUmlClassRoutine;
 import mir.routines.javaToUmlClassifier.CreateUmlEnumLiteralRoutine;
 import mir.routines.javaToUmlClassifier.CreateUmlEnumRoutine;
@@ -186,11 +188,27 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean createUmlPackage(final org.emftext.language.java.containers.Package jPackage) {
+  public boolean createOrFindUmlPackage(final org.emftext.language.java.containers.Package jPackage) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    CreateUmlPackageRoutine routine = new CreateUmlPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, jPackage);
+    CreateOrFindUmlPackageRoutine routine = new CreateOrFindUmlPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, jPackage);
+    return routine.applyRoutine();
+  }
+  
+  public boolean addPackageCorrespondence(final org.emftext.language.java.containers.Package jPackage, final org.eclipse.uml2.uml.Package uPackage) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AddPackageCorrespondenceRoutine routine = new AddPackageCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, jPackage, uPackage);
+    return routine.applyRoutine();
+  }
+  
+  public boolean createUmlPackage(final org.emftext.language.java.containers.Package jPackage, final Model uModel) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateUmlPackageRoutine routine = new CreateUmlPackageRoutine(_routinesFacade, _reactionExecutionState, _caller, jPackage, uModel);
     return routine.applyRoutine();
   }
   
