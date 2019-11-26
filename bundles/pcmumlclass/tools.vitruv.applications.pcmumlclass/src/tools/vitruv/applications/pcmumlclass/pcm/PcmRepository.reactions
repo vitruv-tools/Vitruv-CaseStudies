@@ -79,7 +79,6 @@ routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
 			if(umlRootModel === null) { //the resource didn't exist, or did not contain a uml::Model object
 				umlRootModel = UMLFactory.eINSTANCE.createModel
 				umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
-				
 				persistProjectRelative(pcmRepo, umlRootModel, relativeModelPath);
 			}
 			

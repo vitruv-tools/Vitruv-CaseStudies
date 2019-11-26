@@ -1,0 +1,63 @@
+import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
+
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+//	The following reaction and routine synchronize the inner type of a pcm::CollectionDataType 
+//	with all uml::Properties and uml::Parameters typed with the correspondence of this pcm::CollectionDataType.
+//
+// 	pcm::CollectionDataTypes are not directly mapped to any uml::Type-element, but rather the uml::Property and uml::Parameter
+//	that should hold a corresponding type, is typed with the correspondence of the pcm::CollectionDataType[innerType_CollectionDataType],
+//	and its multiplicity is set to (0..*). 
+//	pcm::CollectionDataTypes should not hold inner pcm::CollectionDataTypes, because that could not be represented with this convention.
+//
+//	This is relevant for:
+//		uml::Parameter corresponding to pcm::Signature (return parameter),
+//		uml::Parameter corresponding to pcm::Parameter in a pcm::Signature (regular parameter),
+//		uml::Property corresponding to pcm::InnerDeclaration
+//	In all other contexts where architecturally relevant Parameters or Properties appear, they should be interface or component typed.
+//
+//	Related files: 
+//		PcmSignature.reactions, PcmParameter.reactions, PcmInnerDeclaration.reactions
+//		UmlReturnAndRegularParameterType.reactions, UmlInnerDeclarationProperty.reactions
+//		SignatureConceptTest, ParameterConceptTest, AttributeConceptTest
+
+reactions: pcmCollectionDataTypeReactions
+in reaction to changes in PCM
+execute actions in UML
+
+reaction CollectionDataTypeInnerTypeChanged {
+	after element replaced at pcm::CollectionDataType[innerType_CollectionDataType]
+	with affectedEObject.innerType_CollectionDataType == newValue
+	call changeTypeOfCorrespondingPropertyOrParameter(affectedEObject, newValue)
+}
+
+/**
+ * Change the type of the corresponding uml::Parameter or uml::Property.
+ * 
+ * Assumes that the innerType of the CollectionDataType is not set to another CollectionDataType.
+ */
+routine changeTypeOfCorrespondingPropertyOrParameter(pcm::CollectionDataType pcmCollection, pcm::DataType newInnerType) {
+	match {
+		val umlParameterList = retrieve many uml::Parameter corresponding to pcmCollection tagged with TagLiterals.COLLECTION_DATATYPE__PARAMETER
+		val umlPropertyList = retrieve many uml::Property corresponding to pcmCollection tagged with TagLiterals.COLLECTION_DATATYPE__PROPERTY
+		
+		val umlPrimitiveType = retrieve optional uml::Type corresponding to newInnerType tagged with TagLiterals.DATATYPE__TYPE
+		val umlCompositeType = retrieve optional uml::Type corresponding to newInnerType tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+	}
+	action {
+		execute {
+			//if (newInnerType instanceof CollectionDataType) logger.warn(DefaultLiterals.WARNING_NESTED_COLLECTION_DATA_TYPE)
+			
+			// if the newInnerType is null or a CollectionDataType, this synchronizes the corresponding element's type to null
+			val umlType = umlPrimitiveType.orElse(umlCompositeType.orElse(null))
+			for (umlParameter : umlParameterList) {
+				umlParameter.type = umlType
+			}
+			for (umlProperty : umlPropertyList) {
+				umlProperty.type = umlType
+			}
+		}
+	}
+}
+
