@@ -38,6 +38,11 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
   }
   
+  public boolean createRepositoryPackages(final Repository repository) {
+    mir.routines.pcm2javaCommon.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("pcm2javaCommon")));
+    return _routinesFacade.createRepositoryPackages(repository);
+  }
+  
   public boolean createRepositorySubPackages(final Repository repository) {
     mir.routines.pcm2javaCommon.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("pcm2javaCommon")));
     return _routinesFacade.createRepositorySubPackages(repository);

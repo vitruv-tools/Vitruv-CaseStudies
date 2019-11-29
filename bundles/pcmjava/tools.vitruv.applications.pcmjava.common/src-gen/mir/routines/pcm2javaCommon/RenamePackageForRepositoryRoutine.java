@@ -5,6 +5,7 @@ import java.io.IOException;
 import mir.routines.pcm2javaCommon.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.StringExtensions;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
@@ -29,7 +30,7 @@ public class RenamePackageForRepositoryRoutine extends AbstractRepairRoutineReal
     }
     
     public void update0Element(final Repository repository, final org.emftext.language.java.containers.Package rootPackage) {
-      rootPackage.setName(repository.getEntityName());
+      rootPackage.setName(StringExtensions.toFirstLower(repository.getEntityName()));
     }
     
     public String getRetrieveTag1(final Repository repository) {

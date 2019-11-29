@@ -42,14 +42,23 @@ execute actions in Java
 // ###################################################
 // ################ PACKAGE REACTIONS ################
 
-reaction CreatedRepository {
-	after element pcm::Repository created and inserted as root
+reaction RenamedRepository {
+	after attribute replaced at pcm::Repository[entityName]
 	call {
-		val repository = newValue;
-		if(repository.entityName !== null) {
+		createRepositoryPackages(affectedEObject)
+		renamePackageForRepository(affectedEObject)
+	} 
+}
+
+routine createRepositoryPackages(pcm::Repository repository) {
+	match {
+		require absence of java::Package corresponding to repository
+	}
+	action {
+		call {
 			createJavaPackage(repository, null, repository.entityName, "repository_root");
 			createRepositorySubPackages(repository);
-		}
+		} 
 	}
 }
 
@@ -65,11 +74,6 @@ routine createRepositorySubPackages(pcm::Repository repository) {
 	}
 }
 
-reaction RenamedRepository {
-	after attribute replaced at pcm::Repository[entityName]
-	call renamePackageForRepository(affectedEObject)
-}
-
 routine renamePackageForRepository(pcm::Repository repository) {
 	match {
 		val rootPackage = retrieve java::Package corresponding to repository
@@ -77,7 +81,7 @@ routine renamePackageForRepository(pcm::Repository repository) {
 	}
 	action {
 		update rootPackage {
-			rootPackage.name = repository.entityName;
+			rootPackage.name = repository.entityName.toFirstLower;
 		}
 		call {
 			renameJavaPackage(repository, rootPackage, "contracts", "contracts");

@@ -84,6 +84,7 @@ public class RenamedRepositoryReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final ReplaceSingleValuedEAttribute replaceChange, final Repository affectedEObject, final EAttribute affectedFeature, final String oldValue, final String newValue, @Extension final RoutinesFacade _routinesFacade) {
+      _routinesFacade.createRepositoryPackages(affectedEObject);
       _routinesFacade.renamePackageForRepository(affectedEObject);
     }
   }
