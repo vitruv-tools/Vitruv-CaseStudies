@@ -16,7 +16,6 @@ class ReactionsExecutor extends AbstractReactionsExecutor {
   }
   
   protected void setup() {
-    this.addReaction(new mir.reactions.pcm2javaCommon.CreatedRepositoryReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2javaCommon.RenamedRepositoryReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2javaCommon.CreatedSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2javaCommon"))));
     this.addReaction(new mir.reactions.pcm2javaCommon.DeletedSystemReaction(this.getRoutinesFacadesProvider().getRoutinesFacade(ReactionsImportPath.fromPathString("pcm2javaCommon"))));
