@@ -5,7 +5,7 @@ They can be viewed with: `git tag -l "fix*"`
 
 And details can be viewed with: `git show fix1`
 
-### PCM <--> UML --> Java (8 fixes)
+### PCM ↔︎ UML → Java (8 fixes)
 Bidirectional transformation between UML and PCM, but only unidirectional transformation from UML to Java.
 
  | tag | correlating pull request | addressed problem |
@@ -19,7 +19,7 @@ Bidirectional transformation between UML and PCM, but only unidirectional transf
  | [fix7](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix7) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | *Multiple commits for one issue, see fix6.* |
  | [fix8](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix8) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | UML classes were deleted although Java compilation units were only removed from their container. |
 
-### PCM <--> UML <--> Java
+### PCM ↔︎ UML ↔︎ Java
 Bidirectional transformation between UML and PCM, as well as between UML and Java.
 
   | tag | correlating pull request | addressed problem |
@@ -28,7 +28,7 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
 
 **this fix tag is not located in this repository, as it concerns the domains repository. The correlating pull request is also part of that repository.*
 
-### PCM <--> UML <--> Java <-- PCM
+### PCM ↔︎ UML ↔︎ Java ← PCM
 Bidirectional transformation between UML and PCM, as well as between UML and Java. Unidirectional transformation from PCM to Java.
 
   | tag | correlating pull request | addressed problem |
@@ -36,13 +36,15 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
   | [fix10](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix10) | [PR 50](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/50) | The repository name was not adapted when creating the correlating Java packages (first letter lower case). This led to duplicate packages. |
   | [fix11](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix11) | [PR 51](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/51) | Misplaced Java packages were created when creating Java packages correlating to unnamed PCM repositories. |
   | [fix12](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix12) | [PR 53](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/53) | Duplicate UML root models were sometimes created due to missing model tag correspondence. |
-  | [fix13](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix13) | [PR 54](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/54) | Duplicate UML packages were created due to the UML package already existing but missing the UML/Java correspondence. |
+  | [fix13](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix13) | [PR 54](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/54) | Duplicate UML packages were created due to the UML package already existing but missing the UML ↔︎ Java correspondence. |
+  | [fix14](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix14) | [PR 56](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/56) | Duplicate UML interfaces were created due to the UML interface already existing but missing the UML ↔︎ Java correspondence. |
+
 
 ### Fix to Test Case Failure/Error Correlation
 
 The following tables shows the concept test cases affected by the problems that were addressed by the fixes. Fail means the test did not produce the expected results, while error means the test crashed during its execution. A total of 39 test cases were executed.
 
-**PCM <--> UML --> Java:**
+**PCM ↔︎ UML → Java:**
 
 | Affected Concept Test Case                     | fix1 | fix3 | fix4 | fix5 | fix6/7 | fix8 | fix9 |
 |------------------------------------------------|------|------|------|------|--------|------|------|
@@ -61,7 +63,7 @@ The following tables shows the concept test cases affected by the problems that 
 | Signature (Collection return type, UML)        |      |      |      | Fail |        |      |      |
 | System (UML)                                   |      |      |      |      | Fail   |      |      |
 
-**PCM <--> UML <--> Java:**
+**PCM ↔︎ UML ↔︎ Java:**
 
 | Affected Concept Test Case                     | fix1 | fix3 | fix4 | fix5 | fix6/7 | fix8  | fix9  |
 |------------------------------------------------|------|------|------|------|--------|-------|-------|
