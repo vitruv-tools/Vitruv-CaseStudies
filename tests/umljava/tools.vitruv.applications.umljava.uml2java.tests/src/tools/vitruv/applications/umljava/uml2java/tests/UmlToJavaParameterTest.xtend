@@ -56,7 +56,6 @@ class UmlToJavaParameterTest extends Uml2JavaTransformationTest {
     def testCreateParameter() {
         val uParam = createUmlParameter(STANDARD_PARAMETER_NAME, typeClass)
         uOperation.ownedParameters += uParam;
-        println(uParam.direction)
         saveAndSynchronizeChanges(uOperation);
 
         val jParam = getCorrespondingParameter(uParam)
