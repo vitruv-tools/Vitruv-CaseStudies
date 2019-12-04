@@ -110,7 +110,7 @@ public class CreatedInterfaceReaction extends AbstractReactionRealization {
     }
     
     public void callRoutine1(final InsertEReference insertChange, final Repository affectedEObject, final EReference affectedFeature, final Interface newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
-      _routinesFacade.createInterfaceImplementation(newValue);
+      _routinesFacade.createOrFindJavaInterface(newValue);
     }
   }
 }

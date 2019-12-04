@@ -2,6 +2,7 @@ package mir.routines.pcm2javaCommon;
 
 import mir.routines.pcm2javaCommon.AddAssemblyContextToComposedStructureRoutine;
 import mir.routines.pcm2javaCommon.AddInnerDeclarationToCompositeDataTypeRoutine;
+import mir.routines.pcm2javaCommon.AddMissingInterfaceCorrespondenceRoutine;
 import mir.routines.pcm2javaCommon.AddParameterAndAssignmentToConstructorRoutine;
 import mir.routines.pcm2javaCommon.AddProvidedRoleRoutine;
 import mir.routines.pcm2javaCommon.AddRequiredRoleRoutine;
@@ -20,11 +21,11 @@ import mir.routines.pcm2javaCommon.CreateCompositeDataTypeImplementationRoutine;
 import mir.routines.pcm2javaCommon.CreateImplementationForComponentRoutine;
 import mir.routines.pcm2javaCommon.CreateImplementationForSystemRoutine;
 import mir.routines.pcm2javaCommon.CreateInnerDeclarationImplementationRoutine;
-import mir.routines.pcm2javaCommon.CreateInterfaceImplementationRoutine;
 import mir.routines.pcm2javaCommon.CreateJavaClassRoutine;
 import mir.routines.pcm2javaCommon.CreateJavaInterfaceRoutine;
 import mir.routines.pcm2javaCommon.CreateJavaPackageRoutine;
 import mir.routines.pcm2javaCommon.CreateMethodForOperationSignatureRoutine;
+import mir.routines.pcm2javaCommon.CreateOrFindJavaInterfaceRoutine;
 import mir.routines.pcm2javaCommon.CreateParameterRoutine;
 import mir.routines.pcm2javaCommon.CreateRepositoryPackagesRoutine;
 import mir.routines.pcm2javaCommon.CreateRepositorySubPackagesRoutine;
@@ -171,14 +172,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean createInterfaceImplementation(final Interface interf) {
-    RoutinesFacade _routinesFacade = this;
-    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
-    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    CreateInterfaceImplementationRoutine routine = new CreateInterfaceImplementationRoutine(_routinesFacade, _reactionExecutionState, _caller, interf);
-    return routine.applyRoutine();
-  }
-  
   public boolean renameInterface(final OperationInterface interf) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
@@ -299,11 +292,27 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean createJavaInterface(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
+  public boolean createOrFindJavaInterface(final Interface pcmInterface) {
     RoutinesFacade _routinesFacade = this;
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    CreateJavaInterfaceRoutine routine = new CreateJavaInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, sourceElementMappedToClass, containingPackage, className);
+    CreateOrFindJavaInterfaceRoutine routine = new CreateOrFindJavaInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmInterface);
+    return routine.applyRoutine();
+  }
+  
+  public boolean addMissingInterfaceCorrespondence(final Interface pcmInterface, final org.emftext.language.java.classifiers.Interface javaInterface) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    AddMissingInterfaceCorrespondenceRoutine routine = new AddMissingInterfaceCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmInterface, javaInterface);
+    return routine.applyRoutine();
+  }
+  
+  public boolean createJavaInterface(final Interface pcmInterface, final org.emftext.language.java.containers.Package containingPackage) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateJavaInterfaceRoutine routine = new CreateJavaInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmInterface, containingPackage);
     return routine.applyRoutine();
   }
   
