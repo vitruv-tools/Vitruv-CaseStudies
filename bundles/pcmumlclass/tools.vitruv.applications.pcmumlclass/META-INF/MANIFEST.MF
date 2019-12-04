@@ -89,9 +89,5 @@ Require-Bundle: com.google.guava,
   tools.vitruv.extensions.dslsruntime.reactions;visibility:=reexport,
   tools.vitruv.extensions.dslsruntime.mappings,
   tools.vitruv.domains.pcm.util,
-  org.palladiosimulator.pcm,
-  org.eclipse.uml2.uml,
-  org.emftext.language.java,
-  org.apache.commons.io;bundle-version="2.2.0",
-  org.palladiosimulator.pcm.resources
+  org.apache.commons.io;bundle-version="2.2.0"
 Comment: Do not remove org.palladiosimulator.pcm.resources dependency. It is needed because the PCM primitive types repo is provided by this plugin, which is loaded using the URI string and, thus, does not induce a statically checked dependency
