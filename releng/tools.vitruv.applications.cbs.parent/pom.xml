@@ -26,7 +26,7 @@
 		<repository>
 			<id>Palladiosimulator</id>
 			<layout>p2</layout>
-			<url>https://sdqweb.ipd.kit.edu/eclipse/palladiosimulator/releases/latest/</url>
+			<url>https://updatesite.palladio-simulator.com/palladio-core-pcm/releases/latest/</url>
 		</repository>
 	</repositories>
 
