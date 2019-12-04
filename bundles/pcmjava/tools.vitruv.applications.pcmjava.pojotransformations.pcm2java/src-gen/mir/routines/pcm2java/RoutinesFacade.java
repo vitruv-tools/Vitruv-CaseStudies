@@ -88,11 +88,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.renameComponentClass(component);
   }
   
-  public boolean createInterfaceImplementation(final Interface interf) {
-    mir.routines.pcm2javaCommon.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("pcm2javaCommon")));
-    return _routinesFacade.createInterfaceImplementation(interf);
-  }
-  
   public boolean renameInterface(final OperationInterface interf) {
     mir.routines.pcm2javaCommon.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("pcm2javaCommon")));
     return _routinesFacade.renameInterface(interf);
@@ -168,9 +163,19 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     return _routinesFacade.createJavaClass(sourceElementMappedToClass, containingPackage, className);
   }
   
-  public boolean createJavaInterface(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
+  public boolean createOrFindJavaInterface(final Interface pcmInterface) {
     mir.routines.pcm2javaCommon.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("pcm2javaCommon")));
-    return _routinesFacade.createJavaInterface(sourceElementMappedToClass, containingPackage, className);
+    return _routinesFacade.createOrFindJavaInterface(pcmInterface);
+  }
+  
+  public boolean addMissingInterfaceCorrespondence(final Interface pcmInterface, final org.emftext.language.java.classifiers.Interface javaInterface) {
+    mir.routines.pcm2javaCommon.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("pcm2javaCommon")));
+    return _routinesFacade.addMissingInterfaceCorrespondence(pcmInterface, javaInterface);
+  }
+  
+  public boolean createJavaInterface(final Interface pcmInterface, final org.emftext.language.java.containers.Package containingPackage) {
+    mir.routines.pcm2javaCommon.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().append(ReactionsImportPath.fromPathString("pcm2javaCommon")));
+    return _routinesFacade.createJavaInterface(pcmInterface, containingPackage);
   }
   
   public boolean createCompilationUnit(final NamedElement sourceElementMappedToClass, final ConcreteClassifier classifier, final org.emftext.language.java.containers.Package containingPackage) {

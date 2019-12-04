@@ -257,19 +257,7 @@ reaction DeletedComponent {
 
 reaction CreatedInterface {
 	after element created and inserted in pcm::Repository[interfaces__Repository]
-	call createInterfaceImplementation(newValue)
-}
-
-routine createInterfaceImplementation(pcm::Interface interf) {
-	match {
-		val contractsPackage = retrieve java::Package corresponding to interf.repository__Interface
-			with contractsPackage.name == "contracts"
-	}
-	action {
-		call {
-			createJavaInterface(interf, contractsPackage, interf.entityName);
-		}
-	}
+	call createOrFindJavaInterface(newValue)
 }
 
 reaction RenamedInterface {
@@ -578,14 +566,39 @@ routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Pack
 	}
 }
 
-routine createJavaInterface(pcm::NamedElement sourceElementMappedToClass, java::Package containingPackage, String className) {
+routine createOrFindJavaInterface(pcm::Interface pcmInterface) {
+	match {
+		val contractsPackage = retrieve java::Package corresponding to pcmInterface.repository__Interface tagged with "contracts"
+        require absence of java::Interface corresponding to pcmInterface
+        require absence of java::CompilationUnit corresponding to pcmInterface
+	}
+	action {
+		call {
+			val foundInterface = findInterface(pcmInterface.entityName, contractsPackage)
+			if(foundInterface === null) {
+				createJavaInterface(pcmInterface, contractsPackage)
+			} else {
+				addMissingInterfaceCorrespondence(pcmInterface, foundInterface)
+			}
+		}
+	}
+}
+
+routine addMissingInterfaceCorrespondence(pcm::Interface pcmInterface, java::Interface javaInterface ) {
+	action {
+		add correspondence between javaInterface and pcmInterface
+		add correspondence between javaInterface.containingCompilationUnit and pcmInterface
+	}
+}
+
+routine createJavaInterface(pcm::Interface pcmInterface, java::Package containingPackage) {
 	action {
 		val javaInterface = create java::Interface and initialize {
-			javaInterface.name = className;
+			javaInterface.name = pcmInterface.entityName;
 			javaInterface.addModifier(ModifiersFactory.eINSTANCE.createPublic());
 		}
-		add correspondence between javaInterface and sourceElementMappedToClass
-		call createCompilationUnit(sourceElementMappedToClass, javaInterface, containingPackage)
+		add correspondence between javaInterface and pcmInterface
+		call createCompilationUnit(pcmInterface, javaInterface, containingPackage)
 	}
 }
 
