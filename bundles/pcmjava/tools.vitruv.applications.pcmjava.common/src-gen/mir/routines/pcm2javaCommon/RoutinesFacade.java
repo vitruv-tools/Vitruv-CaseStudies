@@ -26,6 +26,7 @@ import mir.routines.pcm2javaCommon.CreateJavaInterfaceRoutine;
 import mir.routines.pcm2javaCommon.CreateJavaPackageRoutine;
 import mir.routines.pcm2javaCommon.CreateMethodForOperationSignatureRoutine;
 import mir.routines.pcm2javaCommon.CreateParameterRoutine;
+import mir.routines.pcm2javaCommon.CreateRepositoryPackagesRoutine;
 import mir.routines.pcm2javaCommon.CreateRepositorySubPackagesRoutine;
 import mir.routines.pcm2javaCommon.CreateSEFFRoutine;
 import mir.routines.pcm2javaCommon.DeleteJavaClassifierRoutine;
@@ -88,6 +89,14 @@ import tools.vitruv.extensions.dslsruntime.reactions.structure.ReactionsImportPa
 public class RoutinesFacade extends AbstractRepairRoutinesFacade {
   public RoutinesFacade(final RoutinesFacadesProvider routinesFacadesProvider, final ReactionsImportPath reactionsImportPath, final RoutinesFacadeExecutionState executionState) {
     super(routinesFacadesProvider, reactionsImportPath, executionState);
+  }
+  
+  public boolean createRepositoryPackages(final Repository repository) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    CreateRepositoryPackagesRoutine routine = new CreateRepositoryPackagesRoutine(_routinesFacade, _reactionExecutionState, _caller, repository);
+    return routine.applyRoutine();
   }
   
   public boolean createRepositorySubPackages(final Repository repository) {
