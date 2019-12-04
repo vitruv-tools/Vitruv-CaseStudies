@@ -5,6 +5,7 @@ import java.io.IOException;
 import mir.routines.pcm2javaCommon.RoutinesFacade;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.xbase.lib.StringExtensions;
 import tools.vitruv.domains.java.util.JavaPersistenceHelper;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
@@ -48,7 +49,7 @@ public class CreateJavaPackageRoutine extends AbstractRepairRoutineRealization {
         String _name = parentPackage.getName();
         _namespaces_2.add(_name);
       }
-      javaPackage.setName(packageName);
+      javaPackage.setName(StringExtensions.toFirstLower(packageName));
       this.persistProjectRelative(sourceElementMappedToPackage, javaPackage, JavaPersistenceHelper.buildJavaFilePath(javaPackage));
     }
   }
