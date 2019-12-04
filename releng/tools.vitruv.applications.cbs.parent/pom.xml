@@ -21,7 +21,7 @@
 		<repository>
 			<id>Vitruv Domains</id>
 			<layout>p2</layout>
-			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/</url>
+			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</url>
 		</repository>
 		<repository>
 			<id>Palladiosimulator</id>
