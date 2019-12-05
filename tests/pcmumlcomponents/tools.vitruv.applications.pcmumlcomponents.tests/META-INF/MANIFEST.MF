@@ -9,3 +9,4 @@ Require-Bundle: org.junit,
  tools.vitruv.applications.pcmumlcomponents.pcm2uml,
  tools.vitruv.applications.pcmumlcomponents.uml2pcm
 Export-Package: tools.vitruv.applications.pcmumlcomponents.tests
+Bundle-Vendor: vitruv.tools

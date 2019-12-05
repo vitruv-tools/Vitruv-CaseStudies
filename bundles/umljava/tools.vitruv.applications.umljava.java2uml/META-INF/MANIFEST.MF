@@ -40,3 +40,4 @@ Export-Package: mappings.generated;x-internal:=true,
  mir.routines.javaToUmlMethod;x-internal:=true,
  mir.routines.javaToUmlTypePropagation;x-internal:=true,
  tools.vitruv.applications.umljava.java2uml
+Bundle-Vendor: vitruv.tools

@@ -38,4 +38,5 @@ Export-Package: mappings.generated;x-internal:=true,
  mir.routines.umlToJavaMethod;x-internal:=true,
  mir.routines.umlToJavaTypePropagation;x-internal:=true,
  tools.vitruv.applications.umljava.uml2java
+Bundle-Vendor: vitruv.tools
 

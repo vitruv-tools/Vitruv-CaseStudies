@@ -61,3 +61,4 @@ Export-Package: mir.reactions.umlXpcmComponent_L2R;x-internal:=true,
  mir.routines.umlXpcmSignature_L2R;x-internal:=true,
  mir.routines.umlXpcmSignature_R2L;x-internal:=true,
  tools.vitruv.applications.pcmumlclass.mapping;x-internal:=true
+Bundle-Vendor: vitruv.tools

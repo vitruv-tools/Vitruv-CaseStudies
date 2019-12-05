@@ -22,3 +22,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: tools.vitruv.applications.pcmjava.ui;x-internal:=true,
  tools.vitruv.applications.pcmjava.ui.projectwizard;x-internal:=true
+Bundle-Vendor: vitruv.tools

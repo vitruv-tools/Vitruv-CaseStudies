@@ -45,3 +45,4 @@ Require-Bundle: tools.vitruv.testutils;bundle-version="0.2.0",
  tools.vitruv.applications.umljava.util,
  org.palladiosimulator.pcm.resources
 Import-Package: tools.vitruv.applications.pcmumlclass.tests
+Bundle-Vendor: vitruv.tools

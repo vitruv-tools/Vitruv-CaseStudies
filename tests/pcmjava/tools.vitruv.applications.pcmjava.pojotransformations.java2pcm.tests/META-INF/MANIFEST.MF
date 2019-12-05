@@ -24,3 +24,4 @@ Require-Bundle: org.junit,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
 Export-Package: tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm
 Import-Package: tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
+Bundle-Vendor: vitruv.tools

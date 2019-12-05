@@ -9,3 +9,4 @@ Require-Bundle: org.junit,
  tools.vitruv.applications.umlclassumlcomponents.class2comp.tests,
  tools.vitruv.applications.umlclassumlcomponents.comp2class.tests
 Export-Package: tools.vitruv.applications.umlclassumlcomponentstests
+Bundle-Vendor: vitruv.tools

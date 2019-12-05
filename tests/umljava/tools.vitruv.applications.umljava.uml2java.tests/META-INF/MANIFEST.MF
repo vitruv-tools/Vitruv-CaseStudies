@@ -12,3 +12,4 @@ Require-Bundle: tools.vitruv.testutils,
 Export-Package: tools.vitruv.applications.umljava.uml2java,
  tools.vitruv.applications.umljava.uml2java.constructionsimulationtest;x-internal:=true,
  tools.vitruv.applications.umljava.uml2java.tests;x-internal:=true
+Bundle-Vendor: vitruv.tools

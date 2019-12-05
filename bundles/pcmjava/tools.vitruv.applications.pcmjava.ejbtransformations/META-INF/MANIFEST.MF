@@ -8,3 +8,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm,
  tools.vitruv.framework.applications
 Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations
+Bundle-Vendor: vitruv.tools
