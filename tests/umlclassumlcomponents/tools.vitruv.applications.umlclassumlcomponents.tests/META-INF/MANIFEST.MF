@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruvius UML Class-UML Components Tests
+Bundle-Name: Vitruvius UMLComp-UMLClass Transformations Tests
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.tests
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents.tests
 Bundle-Version: 0.1.0.qualifier
