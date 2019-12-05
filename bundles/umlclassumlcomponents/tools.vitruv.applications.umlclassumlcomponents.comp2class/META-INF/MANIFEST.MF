@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Comp2Class
+Bundle-Name: Vitruvius UMLClass-UMLComp Transformations Components -> Class
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.comp2class
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents.comp2class
 Bundle-Version: 0.1.0.qualifier

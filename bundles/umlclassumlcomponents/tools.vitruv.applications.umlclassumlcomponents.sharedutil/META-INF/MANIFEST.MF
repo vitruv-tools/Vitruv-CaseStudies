@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: SharedUtil
+Bundle-Name: Vitruvius UMLClass-UMLComp Utilities
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.sharedutil
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents.sharedutil
 Bundle-Version: 0.1.0.qualifier

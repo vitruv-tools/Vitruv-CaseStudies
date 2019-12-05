@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: PCM-UML Class Mappings Sources
+Bundle-Name: Vitruvius PCM-UML Class Mappings Sources
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping.sources
 Bundle-Version: 0.1.0.qualifier
 Require-Bundle: tools.vitruv.dsls.mappings,

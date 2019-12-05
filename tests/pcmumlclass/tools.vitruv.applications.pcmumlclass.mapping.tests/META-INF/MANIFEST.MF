@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: PCM-UML Class Mappings Tests
+Bundle-Name: Vitruvius PCM-UML Class Mappings Tests
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping.tests
 Bundle-Version: 0.1.0.qualifier
 Fragment-Host: tools.vitruv.applications.pcmumlclass.mapping
