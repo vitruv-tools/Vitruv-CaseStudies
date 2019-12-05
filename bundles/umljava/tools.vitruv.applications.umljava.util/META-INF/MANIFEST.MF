@@ -31,3 +31,4 @@ Export-Package: tools.vitruv.applications.umljava.testutil,
  tools.vitruv.applications.umljava.util,
  tools.vitruv.applications.umljava.util.java,
  tools.vitruv.applications.umljava.util.uml
+Bundle-Vendor: vitruv.tools

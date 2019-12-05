@@ -43,3 +43,4 @@ Require-Bundle: com.google.guava,
  tools.vitruv.domains.pcm,
  tools.vitruv.domains.java
 Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Vendor: vitruv.tools

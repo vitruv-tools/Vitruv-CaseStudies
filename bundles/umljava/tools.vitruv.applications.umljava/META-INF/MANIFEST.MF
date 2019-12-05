@@ -10,3 +10,4 @@ Require-Bundle:
  tools.vitruv.applications.umljava.java2uml,
  tools.vitruv.applications.umljava.uml2java
 Export-Package: tools.vitruv.applications.umljava
+Bundle-Vendor: vitruv.tools

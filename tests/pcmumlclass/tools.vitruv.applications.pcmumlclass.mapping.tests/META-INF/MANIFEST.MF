@@ -37,3 +37,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.mapping.tests
 Export-Package: tools.vitruv.applications.pcmumlclass.mapping.tests;x-internal:=true,
  tools.vitruv.applications.pcmumlclass.mapping.tests.cases;x-internal:=true
+Bundle-Vendor: vitruv.tools

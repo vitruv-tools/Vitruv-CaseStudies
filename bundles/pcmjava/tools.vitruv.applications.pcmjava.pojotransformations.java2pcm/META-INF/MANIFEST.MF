@@ -34,3 +34,4 @@ Export-Package: mir.reactions.java2Pcm;x-internal:=true,
  mir.routines.java2PcmClassifier;x-internal:=true,
  mir.routines.java2PcmMethod;x-internal:=true,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
+Bundle-Vendor: vitruv.tools

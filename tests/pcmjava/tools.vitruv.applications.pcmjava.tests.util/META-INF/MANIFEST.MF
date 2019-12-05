@@ -31,3 +31,4 @@ Require-Bundle: org.junit,
  tools.vitruv.domains.java.builder,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm;bundle-version="0.1.0"
 Export-Package: tools.vitruv.applications.pcmjava.tests.util
+Bundle-Vendor: vitruv.tools

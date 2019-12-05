@@ -30,3 +30,4 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.domains.java;visibility:=reexport,
  tools.vitruv.domains.pcm;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Vendor: vitruv.tools

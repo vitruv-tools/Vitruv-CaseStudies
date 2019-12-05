@@ -18,3 +18,4 @@ Require-Bundle: tools.vitruv.testutils;bundle-version="0.2.0",
  org.eclipse.text;bundle-version="3.6.0",
  org.eclipse.emf.compare
 Export-Package: tools.vitruv.applications.pcmumlclass.tests
+Bundle-Vendor: vitruv.tools
