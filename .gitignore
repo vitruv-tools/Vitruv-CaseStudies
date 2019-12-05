@@ -7,6 +7,9 @@ tmp/
 *.swp
 *.class
 
+# Genenerated Files
+src-gen/
+
 # Xtend
 xtend-gen/
 *._trace
