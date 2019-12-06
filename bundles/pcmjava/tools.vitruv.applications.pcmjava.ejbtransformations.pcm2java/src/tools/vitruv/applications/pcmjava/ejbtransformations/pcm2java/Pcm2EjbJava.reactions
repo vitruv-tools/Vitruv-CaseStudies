@@ -88,18 +88,18 @@ routine pcm2javaCommon::createJavaClass(pcm::NamedElement sourceElementMappedToC
 	}
 }
 
-routine pcm2javaCommon::createJavaInterface(pcm::NamedElement sourceElementMappedToClass, java::Package containingPackage, String className) {
+routine pcm2javaCommon::createJavaInterface(pcm::Interface pcmInterface, java::Package containingPackage) {
 	action {
 		val javaInterface = create java::Interface and initialize {
-			javaInterface.name = className;
+			javaInterface.name = pcmInterface.entityName;
 			javaInterface.addModifier(ModifiersFactory.eINSTANCE.createPublic());
 			// ejb start
 			javaInterface.addAnnotationToAnnotableAndModifiable("Remote");
 			addImportToClassFromString(javaInterface, #["javax", "ejb"], "Remote");
 			// ejb end
 		}
-		add correspondence between javaInterface and sourceElementMappedToClass
-		call createCompilationUnit(sourceElementMappedToClass, javaInterface, containingPackage)
+		add correspondence between javaInterface and pcmInterface
+		call createCompilationUnit(pcmInterface, javaInterface, containingPackage)
 	}
 }
 

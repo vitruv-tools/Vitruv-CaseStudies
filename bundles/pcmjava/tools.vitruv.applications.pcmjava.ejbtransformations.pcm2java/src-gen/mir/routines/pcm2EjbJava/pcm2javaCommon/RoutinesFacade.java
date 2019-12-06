@@ -7,6 +7,7 @@ import mir.routines.pcm2EjbJava.pcm2javaCommon.CreateParameterRoutine;
 import mir.routines.pcm2EjbJava.pcm2javaCommon.RemoveRequiredRoleRoutine;
 import org.palladiosimulator.pcm.core.entity.InterfaceRequiringEntity;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
+import org.palladiosimulator.pcm.repository.Interface;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
 import org.palladiosimulator.pcm.repository.Parameter;
 import org.palladiosimulator.pcm.repository.RequiredRole;
@@ -30,11 +31,11 @@ public class RoutinesFacade extends mir.routines.pcm2javaCommon.RoutinesFacade {
     return routine.applyRoutine();
   }
   
-  public boolean createJavaInterface(final NamedElement sourceElementMappedToClass, final org.emftext.language.java.containers.Package containingPackage, final String className) {
+  public boolean createJavaInterface(final Interface pcmInterface, final org.emftext.language.java.containers.Package containingPackage) {
     mir.routines.pcm2EjbJava.RoutinesFacade _routinesFacade = this._getRoutinesFacadesProvider().getRoutinesFacade(this._getReactionsImportPath().subPathTo("pcm2EjbJava"));
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    CreateJavaInterfaceRoutine routine = new CreateJavaInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, sourceElementMappedToClass, containingPackage, className);
+    CreateJavaInterfaceRoutine routine = new CreateJavaInterfaceRoutine(_routinesFacade, _reactionExecutionState, _caller, pcmInterface, containingPackage);
     return routine.applyRoutine();
   }
   
