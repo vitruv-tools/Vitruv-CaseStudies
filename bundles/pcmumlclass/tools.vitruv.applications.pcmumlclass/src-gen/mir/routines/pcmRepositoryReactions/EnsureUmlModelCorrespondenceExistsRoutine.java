@@ -6,7 +6,6 @@ import mir.routines.pcmRepositoryReactions.RoutinesFacade;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.UMLPackage;
-import org.eclipse.xtext.xbase.lib.Extension;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState;
 import tools.vitruv.extensions.dslsruntime.reactions.structure.CallHierarchyHaving;
@@ -24,12 +23,18 @@ public class EnsureUmlModelCorrespondenceExistsRoutine extends AbstractRepairRou
       return UMLPackage.Literals.MODEL;
     }
     
-    public void executeAction1(final Model newModel, final List<Model> alreadyCorrespondingModels, @Extension final RoutinesFacade _routinesFacade) {
+    public EObject getElement1(final Model newModel, final List<Model> alreadyCorrespondingModels) {
+      return UMLPackage.Literals.MODEL;
+    }
+    
+    public EObject getElement2(final Model newModel, final List<Model> alreadyCorrespondingModels) {
+      return newModel;
+    }
+    
+    public boolean checkMatcherPrecondition1(final Model newModel, final List<Model> alreadyCorrespondingModels) {
       boolean _contains = alreadyCorrespondingModels.contains(newModel);
       boolean _not = (!_contains);
-      if (_not) {
-        _routinesFacade.addUmlModelCorrespondence(newModel);
-      }
+      return _not;
     }
   }
   
@@ -54,7 +59,10 @@ public class EnsureUmlModelCorrespondenceExistsRoutine extends AbstractRepairRou
     for (EObject _element : alreadyCorrespondingModels) {	
     	registerObjectUnderModification(_element);
     }
-    userExecution.executeAction1(newModel, alreadyCorrespondingModels, this.getRoutinesFacade());
+    if (!userExecution.checkMatcherPrecondition1(newModel, alreadyCorrespondingModels)) {
+    	return false;
+    }
+    addCorrespondenceBetween(userExecution.getElement1(newModel, alreadyCorrespondingModels), userExecution.getElement2(newModel, alreadyCorrespondingModels), "");
     
     postprocessElements();
     
