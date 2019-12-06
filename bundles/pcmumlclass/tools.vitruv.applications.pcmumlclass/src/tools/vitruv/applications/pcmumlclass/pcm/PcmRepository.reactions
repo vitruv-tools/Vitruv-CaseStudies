@@ -93,13 +93,8 @@ routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
 routine ensureUmlModelCorrespondenceExists(uml::Model newModel) {
 	match {
 		val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
+		check !alreadyCorrespondingModels.contains(newModel)
 	}
-	action {
-		execute if (!alreadyCorrespondingModels.contains(newModel)) addUmlModelCorrespondence(newModel)
-	}
-}
-
-routine addUmlModelCorrespondence(uml::Model newModel){
 	action {
 		add correspondence between UMLPackage.Literals.MODEL and newModel
 	}
