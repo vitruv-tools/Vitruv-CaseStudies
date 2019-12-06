@@ -41,7 +41,7 @@ class JavaToUmlHelper {
 
     /**
      * Searches and retrieves the UML interface located in a specific package of a UML model that has an equal name as the given package name.
-     * If there is more than one package with the given name or the package can not be located, an {@link IllegalStateException} is thrown.
+     * If there is more than one package with the given name an {@link IllegalStateException} is thrown.
      * 
      * @param umlModel the UML model Model in which the UML packages should be searched
      * @param interfaceName the interface name for which a fitting UML interface should be retrieved
@@ -50,12 +50,8 @@ class JavaToUmlHelper {
      */
     def static Interface findUmlInterface(Model umlModel, String interfaceName, String packageName) {
 		val uPackage = findUmlPackage(umlModel, packageName)
-		if (uPackage === null) {
-			throw new IllegalStateException("Could not locate the package " + packageName + " in the UMl model " + umlModel)
-		}
-		val interfaces = uPackage.ownedTypes.filter[it instanceof Interface].filter[name == interfaceName].toSet
+		val interfaces = uPackage?.ownedTypes?.filter[it instanceof Interface]?.filter[name == interfaceName]?.toSet
 		if (interfaces.nullOrEmpty) {
-			logger.warn("The UML interface with the name " + interfaceName + " does not exist in the package " + uPackage)
 			return null
 		}
 		if (interfaces.size > 1) {
