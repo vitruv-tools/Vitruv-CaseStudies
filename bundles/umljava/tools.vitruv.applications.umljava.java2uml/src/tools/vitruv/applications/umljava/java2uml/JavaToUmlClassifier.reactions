@@ -292,26 +292,46 @@ routine removeUmlClassImplement(java::Class jClass, java::TypeReference jReferen
 reaction JavaInterfaceCreated {
     after element java::Interface created and inserted in java::CompilationUnit[classifiers]
     call {
-    	detectOrCreateUmlModel(affectedEObject)
+		detectOrCreateUmlModel(affectedEObject)
 		registerPredefinedUmlPrimitiveTypes(correspondenceModel, affectedEObject.eResource.resourceSet)
-    	createUmlInterface(newValue, affectedEObject)
+		createOrFindUmlInterface(newValue, affectedEObject)
+	}
+}
+
+routine createOrFindUmlInterface(java::Interface jInterface, java::CompilationUnit jCompUnit) {
+	match {
+        val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+		require absence of uml::Interface corresponding to jInterface
+	}
+	action {
+		call {
+			val uInterface = findUmlInterface(uModel, jInterface.name, jCompUnit.namespaces.last)
+			if(uInterface === null) {
+				createUmlInterface(jInterface, jCompUnit)
+			} else {
+				addInterfaceCorrespondence(jInterface, uInterface, jCompUnit)
+			}
+		}
 	}
 }
 
 routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCompUnit) {
-	match {
-		require absence of uml::Interface corresponding to jInterface
-	}
     action {
         val uInterface = create uml::Interface and initialize {
             uInterface.name = jInterface.name;
         }
-        add correspondence between uInterface and jInterface
+		call {
+			addInterfaceCorrespondence(jInterface, uInterface, jCompUnit)
+			addUmlElementToModelOrPackage(jCompUnit, uInterface)
+		}
+	}
+}
+
+routine addInterfaceCorrespondence(java::Interface jInterface, uml::Interface uInterface, java::CompilationUnit jCompUnit) {
+	action {
+		add correspondence between uInterface and jInterface
         add correspondence between uInterface and jCompUnit
-        call {
-            addUmlElementToModelOrPackage(jCompUnit, uInterface)
-        }   
-    }
+	}
 }
 
 reaction JavaSuperInterfaceAdded {

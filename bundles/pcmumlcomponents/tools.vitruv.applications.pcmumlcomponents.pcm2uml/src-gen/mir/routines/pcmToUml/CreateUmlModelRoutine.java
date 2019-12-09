@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.PackageImport;
+import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.palladiosimulator.pcm.repository.Repository;
 import tools.vitruv.extensions.dslsruntime.reactions.AbstractRepairRoutineRealization;
@@ -34,8 +35,16 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
       return pcmRepository;
     }
     
+    public EObject getElement4(final Repository pcmRepository, final PackageImport packageImport, final Model umlModel) {
+      return umlModel;
+    }
+    
     public EObject getElement2(final Repository pcmRepository, final PackageImport packageImport, final Model umlModel) {
       return umlModel;
+    }
+    
+    public EObject getElement3(final Repository pcmRepository, final PackageImport packageImport, final Model umlModel) {
+      return UMLPackage.Literals.MODEL;
     }
     
     public void updateUmlModelElement(final Repository pcmRepository, final PackageImport packageImport, final Model umlModel) {
@@ -70,6 +79,8 @@ public class CreateUmlModelRoutine extends AbstractRepairRoutineRealization {
     userExecution.updateUmlModelElement(pcmRepository, packageImport, umlModel);
     
     addCorrespondenceBetween(userExecution.getElement1(pcmRepository, packageImport, umlModel), userExecution.getElement2(pcmRepository, packageImport, umlModel), "");
+    
+    addCorrespondenceBetween(userExecution.getElement3(pcmRepository, packageImport, umlModel), userExecution.getElement4(pcmRepository, packageImport, umlModel), "");
     
     postprocessElements();
     

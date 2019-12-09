@@ -26,6 +26,7 @@ import mir.routines.umlToPcm.DeleteDataTypeRoutine;
 import mir.routines.umlToPcm.DeleteElementRoutine;
 import mir.routines.umlToPcm.DeleteInnerDeclarationOfPropertyRoutine;
 import mir.routines.umlToPcm.DeleteParameterRoutine;
+import mir.routines.umlToPcm.EnsureUmlModelCorrespondenceExistsRoutine;
 import mir.routines.umlToPcm.RenameCollectionTypeRoutine;
 import mir.routines.umlToPcm.RenameElementRoutine;
 import mir.routines.umlToPcm.RenameNamedElementRoutine;
@@ -103,6 +104,14 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     CreatePcmRepositoryRoutine routine = new CreatePcmRepositoryRoutine(_routinesFacade, _reactionExecutionState, _caller, umlModel);
+    return routine.applyRoutine();
+  }
+  
+  public boolean ensureUmlModelCorrespondenceExists(final Model newModel) {
+    RoutinesFacade _routinesFacade = this;
+    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
+    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
+    EnsureUmlModelCorrespondenceExistsRoutine routine = new EnsureUmlModelCorrespondenceExistsRoutine(_routinesFacade, _reactionExecutionState, _caller, newModel);
     return routine.applyRoutine();
   }
   

@@ -9,6 +9,7 @@ import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.Parameter
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil
 import org.eclipse.uml2.uml.DataType
+import org.eclipse.uml2.uml.UMLPackage
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
@@ -70,6 +71,7 @@ routine createUmlModel(pcm::Repository pcmRepository) {
 			persistProjectRelative(pcmRepository, umlModel, "model/" + pcmRepository.entityName + ".uml")	
 		}
 		add correspondence between pcmRepository and umlModel
+		add correspondence between UMLPackage.Literals.MODEL and umlModel
 	}
 }
 

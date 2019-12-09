@@ -100,6 +100,7 @@ public class CreatedUmlModelReaction extends AbstractReactionRealization {
     
     public void callRoutine1(final InsertRootEObject insertChange, final Model newValue, final int index, @Extension final RoutinesFacade _routinesFacade) {
       _routinesFacade.createPcmRepository(newValue);
+      _routinesFacade.ensureUmlModelCorrespondenceExists(newValue);
     }
   }
 }

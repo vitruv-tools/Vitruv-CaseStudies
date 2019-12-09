@@ -11,12 +11,13 @@ class ModelTest extends AbstractUmlPcmTest {
 	public def void testRepositoryCreation() {
 		assertModelExists("repository/" + MODEL_NAME + ".repository");
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
-		assertEquals(1, correspondingElements.size);
-		val pcmRepository = correspondingElements.get(0);
-		assertTrue(pcmRepository instanceof Repository);
+		assertEquals(2, correspondingElements.size); // repository AND model tag
+		val correspondingRepositories = correspondingElements.filter[it instanceof Repository].toList
+		assertEquals(1, correspondingRepositories.size); // but should be only one repository
+		val pcmRepository = correspondingRepositories.get(0);
 		assertEquals(MODEL_NAME, (pcmRepository as Repository).entityName);
 	}
-	
+
 	@Test
 	public def void testRepositoryRename() {
 		val newName = 'foo';
@@ -24,6 +25,6 @@ class ModelTest extends AbstractUmlPcmTest {
 		saveAndSynchronizeChanges(rootElement);
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
 		val pcmRepository = correspondingElements.get(0);
-		assertEquals(newName, (pcmRepository as Repository).entityName); 
+		assertEquals(newName, (pcmRepository as Repository).entityName);
 	}
 }
