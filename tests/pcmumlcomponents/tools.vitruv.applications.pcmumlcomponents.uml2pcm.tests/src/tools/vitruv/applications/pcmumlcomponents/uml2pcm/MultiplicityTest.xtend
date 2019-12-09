@@ -35,7 +35,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 0, UnlimitedNaturalLiteralExp.UNLIMITED)
 		saveAndSynchronizeChanges(rootElement)
 
-		val pcmRepository = rootElement.correspondingElements.head as Repository
+		val pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(3, pcmRepository.dataTypes__Repository.length)
 
 		val collectionType = pcmRepository.dataTypes__Repository.findFirst[t|t instanceof CollectionDataType]
@@ -64,7 +64,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		umlParameter.upper = 2
 		saveAndSynchronizeChanges(rootElement)
 
-		val pcmRepository = rootElement.correspondingElements.head as Repository
+		val pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(2, pcmRepository.dataTypes__Repository.length)
 
 		val pcmParameter = umlParameter.correspondingElements.head as Parameter
@@ -85,7 +85,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		umlParameter.lower = 0
 		saveAndSynchronizeChanges(rootElement)
 
-		val pcmRepository = rootElement.correspondingElements.head as Repository
+		val pcmRepository = rootElement.claimCorrespondingRepository
 		val collectionType = pcmRepository.dataTypes__Repository.findFirst[t|t instanceof CompositeDataType]
 		val pcmOperation = umlOperation.correspondingElements.head as OperationSignature
 		assertEquals(collectionType, pcmOperation.returnType__OperationSignature)
@@ -121,7 +121,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 	public def void deleteMultiplicityType() {
 		val innerDataType = createInnerDataType()
 		saveAndSynchronizeChanges(rootElement)
-		var pcmRepository = rootElement.correspondingElements.head as Repository
+		var pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(1, pcmRepository.dataTypes__Repository.length)
 		
 		val umlDataType = UMLFactory.eINSTANCE.createDataType()
@@ -129,17 +129,17 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		rootElement.packagedElements += umlDataType
 		umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1, UnlimitedNaturalLiteralExp.UNLIMITED)
 		saveAndSynchronizeChanges(rootElement)
-		pcmRepository = rootElement.correspondingElements.head as Repository
+		pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(3, pcmRepository.dataTypes__Repository.length)
 		
 		rootElement.packagedElements -= umlDataType
 		saveAndSynchronizeChanges(rootElement)
-		pcmRepository = rootElement.correspondingElements.head as Repository
+		pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(2, pcmRepository.dataTypes__Repository.length)
 		
 		rootElement.packagedElements -= innerDataType
 		saveAndSynchronizeChanges(rootElement)
-		pcmRepository = rootElement.correspondingElements.head as Repository
+		pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(0, pcmRepository.dataTypes__Repository.length)
 	}
 
