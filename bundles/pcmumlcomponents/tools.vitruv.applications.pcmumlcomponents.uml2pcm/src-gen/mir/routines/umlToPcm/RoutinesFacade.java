@@ -2,7 +2,6 @@ package mir.routines.umlToPcm;
 
 import mir.routines.umlToPcm.AddInterfaceOperationParameterRoutine;
 import mir.routines.umlToPcm.AddOperationParameterRoutine;
-import mir.routines.umlToPcm.AddUmlModelCorrespondenceRoutine;
 import mir.routines.umlToPcm.ChangeInterfaceOperationTypeRoutine;
 import mir.routines.umlToPcm.ChangeParameterDirectionRoutine;
 import mir.routines.umlToPcm.ChangeParameterNameRoutine;
@@ -113,14 +112,6 @@ public class RoutinesFacade extends AbstractRepairRoutinesFacade {
     ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
     CallHierarchyHaving _caller = this._getExecutionState().getCaller();
     EnsureUmlModelCorrespondenceExistsRoutine routine = new EnsureUmlModelCorrespondenceExistsRoutine(_routinesFacade, _reactionExecutionState, _caller, newModel);
-    return routine.applyRoutine();
-  }
-  
-  public boolean addUmlModelCorrespondence(final Model newModel) {
-    RoutinesFacade _routinesFacade = this;
-    ReactionExecutionState _reactionExecutionState = this._getExecutionState().getReactionExecutionState();
-    CallHierarchyHaving _caller = this._getExecutionState().getCaller();
-    AddUmlModelCorrespondenceRoutine routine = new AddUmlModelCorrespondenceRoutine(_routinesFacade, _reactionExecutionState, _caller, newModel);
     return routine.applyRoutine();
   }
   
