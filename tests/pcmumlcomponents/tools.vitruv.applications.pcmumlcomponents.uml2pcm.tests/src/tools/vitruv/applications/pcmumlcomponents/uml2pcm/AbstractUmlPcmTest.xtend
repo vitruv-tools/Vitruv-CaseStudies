@@ -15,6 +15,12 @@ import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.testutils.VitruviusApplicationTest
 import org.eclipse.emf.common.util.BasicEList
+import org.palladiosimulator.pcm.repository.Repository
+import org.eclipse.emf.ecore.EClass
+import org.eclipse.emf.ecore.EcorePackage
+
+import static org.junit.Assert.assertEquals
+import org.eclipse.uml2.uml.UMLPackage
 
 abstract class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml";
@@ -84,6 +90,16 @@ abstract class AbstractUmlPcmTest extends VitruviusApplicationTest {
 		val eList = new BasicEList<T>()
 		eList.addAll(elements)
 		return eList
+	}
+	
+	protected def Repository claimCorrespondingRepository(EObject rootElement) {
+		rootElement.correspondingElements.size == 2
+		val potentialRepositories = rootElement.correspondingElements.filter(Repository)
+		val potentialClasses = rootElement.correspondingElements.filter(EClass)
+		assertEquals(1, potentialRepositories.size)
+		assertEquals(1, potentialClasses.size)
+		assertEquals(UMLPackage.eINSTANCE.model, potentialClasses.get(0))
+		return potentialRepositories.get(0);
 	}
 
 }
