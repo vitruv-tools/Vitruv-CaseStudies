@@ -19,5 +19,4 @@ Require-Bundle: tools.vitruv.testutils;bundle-version="0.2.0",
  org.eclipse.emf.compare,
  tools.vitruv.applications.umljava.uml2java,
  tools.vitruv.applications.umljava.java2uml
-Export-Package: model;x-internal:=true,
- tools.vitruv.applications.pcmumlclass.tests
+Export-Package: tools.vitruv.applications.pcmumlclass.tests
