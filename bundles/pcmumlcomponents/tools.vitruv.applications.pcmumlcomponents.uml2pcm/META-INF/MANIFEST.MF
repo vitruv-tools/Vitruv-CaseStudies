@@ -26,7 +26,6 @@ Require-Bundle: com.google.guava,
  org.palladiosimulator.pcm
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools
-Export-Package: mappings.generated;x-internal:=true,
- mir.reactions.umlToPcm;x-internal:=true,
+Export-Package: mir.reactions.umlToPcm;x-internal:=true,
  mir.routines.umlToPcm;x-internal:=true,
  tools.vitruv.applications.pcmumlcomponents.uml2pcm

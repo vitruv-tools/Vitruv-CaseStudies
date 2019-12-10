@@ -26,8 +26,7 @@ Require-Bundle: com.google.guava,
  org.emftext.language.java,
  tools.vitruv.applications.umljava.util
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Export-Package: mappings.generated;x-internal:=true,
- mir.reactions.umlToJava;x-internal:=true,
+Export-Package: mir.reactions.umlToJava;x-internal:=true,
  mir.reactions.umlToJavaAttribute;x-internal:=true,
  mir.reactions.umlToJavaClassifier;x-internal:=true,
  mir.reactions.umlToJavaMethod;x-internal:=true,
