@@ -17,7 +17,6 @@ import tools.vitruv.testutils.VitruviusApplicationTest
 import org.eclipse.emf.common.util.BasicEList
 import org.palladiosimulator.pcm.repository.Repository
 import org.eclipse.emf.ecore.EClass
-import org.eclipse.emf.ecore.EcorePackage
 
 import static org.junit.Assert.assertEquals
 import org.eclipse.uml2.uml.UMLPackage

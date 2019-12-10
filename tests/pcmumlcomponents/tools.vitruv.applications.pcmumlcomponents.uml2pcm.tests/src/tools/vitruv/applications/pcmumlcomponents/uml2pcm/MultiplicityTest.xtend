@@ -10,7 +10,6 @@ import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Parameter
-import org.palladiosimulator.pcm.repository.Repository
 
 import static org.junit.Assert.*
 import org.palladiosimulator.pcm.repository.OperationSignature
