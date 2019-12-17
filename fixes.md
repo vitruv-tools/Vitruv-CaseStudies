@@ -38,7 +38,7 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
   | [fix12](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix12) | [PR 53](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/53) | Duplicate UML root models were sometimes created due to missing model tag correspondence. |
   | [fix13](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix13) | [PR 54](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/54) | Duplicate UML packages were created due to the UML package already existing but missing the UML ↔︎ Java correspondence. |
   | [fix14](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix14) | [PR 58](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/58) | Duplicate UML interfaces were created due to the UML interface already existing but missing the UML ↔︎ Java correspondence. |
-  | [fix15](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix14) | [PR 57](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/57) | Fixed duplicate interface and compilation unit creation to avoid null segment crashes while saving resources. |
+  | [fix15](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix15) | [PR 57](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/57) | Fixed duplicate interface and compilation unit creation to avoid null segment crashes while saving resources. |
 
 
 ### Fix to Test Case Failure/Error Correlation
