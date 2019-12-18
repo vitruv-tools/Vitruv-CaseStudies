@@ -5,6 +5,7 @@ import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.UMLPackage
+import org.emftext.language.java.containers.ContainersPackage
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
@@ -447,7 +448,30 @@ routine addUmlModelCorrespondence(uml::Model newModel){
 
 reaction UmlPackageCreated {
     after element uml::Package created and inserted in uml::Package[packagedElement]
-    call createJavaPackage(newValue, affectedEObject)
+    call createOrFindJavaPackage(newValue, affectedEObject)
+}
+
+routine createOrFindJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
+	match {
+		require absence of java::Package corresponding to uPackage
+		val allPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+	}
+	action {
+		call {
+			val matchingPackages = allPackages.filter[namespacesAsString + name == getUmlNamespaceAsString(uPackage)]
+			if(matchingPackages.empty) {
+				createJavaPackage(uPackage, uSuperPackage)
+			} else {
+				addPackageCorrespondence(uPackage, matchingPackages.head)
+			}
+		}
+	}
+}
+
+routine addPackageCorrespondence(uml::Package uPackage, java::Package jPackage) {
+	action {
+		add correspondence between jPackage and uPackage
+	}
 }
 
 routine createJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
@@ -469,6 +493,7 @@ routine createJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
             persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
         }
         add correspondence between jPackage and uPackage
+        add correspondence between jPackage and jPackage.eClass
     }
 }
 

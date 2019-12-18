@@ -18,6 +18,7 @@ import org.emftext.language.java.references.SelfReference
 import org.emftext.language.java.statements.ExpressionStatement
 import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.types.TypeReference
+import org.emftext.language.java.containers.ContainersPackage
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
@@ -56,7 +57,7 @@ routine createRepositoryPackages(pcm::Repository repository) {
 	}
 	action {
 		call {
-			createJavaPackage(repository, null, repository.entityName, "repository_root");
+			createOrFindJavaPackage(repository, null, repository.entityName, "repository_root");
 			createRepositorySubPackages(repository);
 		} 
 	}
@@ -68,8 +69,8 @@ routine createRepositorySubPackages(pcm::Repository repository) {
 	}
 	action {
 		call {
-			createJavaPackage(repository, repositoryPackage, "datatypes", "datatypes");
-			createJavaPackage(repository, repositoryPackage, "contracts", "contracts");
+			createOrFindJavaPackage(repository, repositoryPackage, "datatypes", "datatypes");
+			createOrFindJavaPackage(repository, repositoryPackage, "contracts", "contracts");
 		}
 	}
 }
@@ -110,7 +111,7 @@ reaction CreatedSystem {
 	after element pcm::System created and inserted as root
 	call {
 		val system = newValue;
-		createJavaPackage(system, null, system.entityName, "root_system");
+		createOrFindJavaPackage(system, null, system.entityName, "root_system");
 		createImplementationForSystem(system);
 	}
 }
@@ -507,6 +508,33 @@ routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, java:
 // ######################################################
 // ################ JAVA PACKAGE ROUTINES ################
 
+routine createOrFindJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag) {
+	match {
+		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
+		val allPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+	}
+	action {
+		call {
+			var matchingPackages = allPackages.filter[name == packageName.toFirstLower]
+			if(parentPackage !== null) { // checks full package namespace for non-root packages:
+				matchingPackages = matchingPackages.filter[namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + "."]
+			}
+			if(matchingPackages.empty) {
+				createJavaPackage(sourceElementMappedToPackage, parentPackage, packageName, newTag)
+			} else {
+				addPackageCorrespondence(sourceElementMappedToPackage, matchingPackages.head, newTag)
+			}
+		}
+	}
+}
+
+routine addPackageCorrespondence(EObject sourceElementMappedToPackage, java::Package javaPackage, String newTag) {
+	action {
+		add correspondence between javaPackage and sourceElementMappedToPackage
+			tagged with newTag
+	}
+}
+
 routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag) {
 	match {
 		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
@@ -520,6 +548,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 			javaPackage.name = packageName.toFirstLower;
 			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
 		}
+		add correspondence between javaPackage and javaPackage.eClass
 		add correspondence between javaPackage and sourceElementMappedToPackage
 			tagged with newTag
 	}

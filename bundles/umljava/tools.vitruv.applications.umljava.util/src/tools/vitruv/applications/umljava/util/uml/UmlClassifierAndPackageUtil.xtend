@@ -327,6 +327,17 @@ class UmlClassifierAndPackageUtil {
         return buildNamespaceStringList(uNamespace, new ArrayList<String>)
     }
     
+     /**
+     * Converts the namespace of the given namespace into a String
+     * and appends the name of the given namespace to the end of the String
+     * 
+     * org.example.test.test2 --> "org.example.test.test2"
+     * 
+     */
+    def static String getUmlNamespaceAsString(Namespace uNamespace) {
+        return uNamespace.getUmlNamespaceAsStringList.join(".")
+    } 
+    
     def private static List<String> buildNamespaceStringList(Namespace uNamespace, List<String> namespace) {
         namespace += uNamespace?.name
         if (uNamespace?.namespace !== null && !(uNamespace?.namespace instanceof Model)) {
