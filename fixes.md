@@ -39,6 +39,7 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
   | [fix13](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix13) | [PR 54](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/54) | Duplicate UML packages were created due to the UML package already existing but missing the UML ↔︎ Java correspondence. |
   | [fix14](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix14) | [PR 58](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/58) | Duplicate UML interfaces were created due to the UML interface already existing but missing the UML ↔︎ Java correspondence. |
   | [fix15](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix15) | [PR 57](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/57) | Fixed duplicate interface and compilation unit creation to avoid null segment crashes while saving resources. |
+  | [fix16](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix16) | [PR 63](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/63) | Java packages were not properly deleted due to duplicate creation caused by the Java package already existing but missing the correspondence. |
 
 
 ### Fix to Test Case Failure/Error Correlation
