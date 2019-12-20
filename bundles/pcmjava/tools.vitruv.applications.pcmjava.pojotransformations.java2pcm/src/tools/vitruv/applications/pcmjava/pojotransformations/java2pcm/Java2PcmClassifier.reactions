@@ -70,20 +70,20 @@ routine createOrFindArchitecturalElement(java::Package javaPackage, String conta
 }
 
 routine createOrFindArchitecturalElementInPackage(java::Package javaPackage, java::Package containingPackage, String rootPackageName) {
+	}
+}
+
+/**
+ * Required to enable locating existing packages with missing correspondences when keeping more than two models consistent.
+ */
+routine createPackageEClassCorrespondence(java::Package jPackage) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to containingPackage tagged with "package_root"
-		require absence of pcm::RepositoryComponent corresponding to javaPackage
+		val allPackages = retrieve many java::Package corresponding to jPackage.eClass
+		check !allPackages.contains(jPackage)
 	}
-	action {
-		call {
-			val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[entityName == javaPackage.name.toFirstUpper]
-			if (pcmComponentCandidate === null) {
-				createArchitecturalElement(javaPackage, containingPackage.name, rootPackageName)
-			} else {
-				addCorrespondenceAndUpdateRepository(pcmComponentCandidate, javaPackage)
-			}
-		}
-	}
+    action {
+        add correspondence between jPackage and jPackage.eClass
+    }
 }
 
 /**
