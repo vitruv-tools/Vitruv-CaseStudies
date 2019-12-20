@@ -14,7 +14,7 @@ public class TypeReferenceMappingTransformationTest extends Java2PcmPackageMappi
 
     @Test
     public void testAddImplementsToClassWithCorrespondingComponent() throws Throwable {
-        // crete repo
+        // create repo
         this.addRepoContractsAndDatatypesPackage();
         // create class
         this.addSecondPackageCorrespondsWithoutCorrespondences();

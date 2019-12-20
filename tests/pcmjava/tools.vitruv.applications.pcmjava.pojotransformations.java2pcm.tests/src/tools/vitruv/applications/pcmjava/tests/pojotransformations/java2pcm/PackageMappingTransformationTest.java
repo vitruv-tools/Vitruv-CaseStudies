@@ -18,6 +18,7 @@ import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
+import static java.util.stream.Collectors.toSet;
 
 public class PackageMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
@@ -101,7 +102,8 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
         //waitForSynchronization();
 
         final Set<EObject> correspondingEObjects = CorrespondenceModelUtil
-                .getCorrespondingEObjects(this.getCorrespondenceModel(), renamedPackage);
+                .getCorrespondingEObjects(this.getCorrespondenceModel(), renamedPackage)
+                .stream().filter(it -> it != null).collect(toSet()); // filter out null from non-EObject correspondence
         final EObject correspondingEObject = claimOne(correspondingEObjects);
         assertTrue("The corresponding EObject for the package has to be a BasicComponent",
                 correspondingEObject instanceof BasicComponent);
