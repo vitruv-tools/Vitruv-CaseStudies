@@ -1,6 +1,7 @@
 package tools.vitruv.applications.umljava.util.uml
 
 import java.util.ArrayList
+import java.util.Collections
 import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.eclipse.uml2.uml.Classifier
@@ -18,7 +19,7 @@ import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.BehavioredClassifier
 import org.eclipse.uml2.uml.DataType
-import java.util.Collections
+import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
  * Util class for classifier and package functions.
@@ -26,12 +27,8 @@ import java.util.Collections
  * @author Fei
  * 
  */
+@Utility
 class UmlClassifierAndPackageUtil {
-    
-    /**
-     * Prevents instantiation
-     */
-    private new () {}
     
     def static Package createUmlPackageAndAddToSuperPackage(String name, Package superPackage) {
         val uPackage = UMLFactory.eINSTANCE.createPackage
@@ -327,7 +324,7 @@ class UmlClassifierAndPackageUtil {
         return buildNamespaceStringList(uNamespace, new ArrayList<String>)
     }
     
-     /**
+    /**
      * Converts the namespace of the given namespace into a String
      * and appends the name of the given namespace to the end of the String
      * 
@@ -336,7 +333,7 @@ class UmlClassifierAndPackageUtil {
      */
     def static String getUmlNamespaceAsString(Namespace uNamespace) {
         return uNamespace.getUmlNamespaceAsStringList.join(".")
-    } 
+    }
     
     def private static List<String> buildNamespaceStringList(Namespace uNamespace, List<String> namespace) {
         namespace += uNamespace?.name

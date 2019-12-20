@@ -493,6 +493,7 @@ routine createJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
             persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
         }
         add correspondence between jPackage and uPackage
+        // Required to enable locating existing packages with missing correspondences when keeping more than two models consistent:
         add correspondence between jPackage and jPackage.eClass
     }
 }

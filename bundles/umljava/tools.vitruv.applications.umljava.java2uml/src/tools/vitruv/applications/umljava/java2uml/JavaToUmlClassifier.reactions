@@ -393,9 +393,23 @@ routine removeUmlSuperInterface(java::Interface jInterface, java::TypeReference 
 reaction JavaPackageCreated {
     after element java::Package inserted as root
     call {
+    	createPackageEClassCorrespondence(newValue)
     	detectOrCreateUmlModel(newValue)
 		registerPredefinedUmlPrimitiveTypes(correspondenceModel, newValue.eResource.resourceSet)
 	    createOrFindUmlPackage(newValue)
+    }
+}
+
+/**
+ * Required to enable locating existing packages with missing correspondences when keeping more than two models consistent.
+ */
+routine createPackageEClassCorrespondence(java::Package jPackage) {
+	match {
+		val allPackages = retrieve many java::Package corresponding to jPackage.eClass
+		check !allPackages.contains(jPackage)
+	}
+    action {
+        add correspondence between jPackage and jPackage.eClass
     }
 }
 

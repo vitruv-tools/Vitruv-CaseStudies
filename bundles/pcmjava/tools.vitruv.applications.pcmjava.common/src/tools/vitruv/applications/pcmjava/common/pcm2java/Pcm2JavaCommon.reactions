@@ -548,9 +548,9 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 			javaPackage.name = packageName.toFirstLower;
 			persistProjectRelative(sourceElementMappedToPackage, javaPackage, buildJavaFilePath(javaPackage));
 		}
+		add correspondence between javaPackage and sourceElementMappedToPackage tagged with newTag
+		// Required to enable locating existing packages with missing correspondences when keeping more than two models consistent:
 		add correspondence between javaPackage and javaPackage.eClass
-		add correspondence between javaPackage and sourceElementMappedToPackage
-			tagged with newTag
 	}
 }
 
