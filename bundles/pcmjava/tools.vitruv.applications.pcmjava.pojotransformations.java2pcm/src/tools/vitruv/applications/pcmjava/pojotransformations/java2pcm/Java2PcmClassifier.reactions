@@ -24,9 +24,9 @@ reaction PackageCreated {
 	with !newValue.name.contains("contracts") && !newValue.name.contains("datatypes")
 		
 	call {
-		createPackageEClassCorrespondence(newValue)
 		createArchitecturalElement(newValue, getLastPackageName(newValue.name), getRootPackageName(newValue.name))
 		createRepository(newValue, newValue.name, "package_root")
+		createPackageEClassCorrespondence(newValue)
 	}
 }
 
