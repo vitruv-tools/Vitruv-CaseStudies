@@ -432,6 +432,42 @@ routine adaptParameterBoundChanged(uml::Operation uOperation, uml::Parameter uPa
     }
 }
 
+reaction RegularOrReturnParameterLowerChanged {
+    after element replaced at uml::Parameter[lowerValue]
+    call adaptParameterBoundChanged(affectedEObject.operation, affectedEObject)
+}
+
+reaction RegularOrReturnParameterUpperChanged {
+    after element replaced at uml::Parameter[upperValue]
+    call adaptParameterBoundChanged(affectedEObject.operation, affectedEObject)
+}
+
+reaction RegularOrReturnParameterIntegerBoundChanged {
+    after attribute replaced at uml::LiteralInteger[value]
+    with affectedEObject.owner instanceof Parameter 
+        && affectedEObject.value == newValue
+    call adaptParameterBoundChanged((affectedEObject.owner as Parameter).operation, affectedEObject.owner as Parameter)
+}
+
+reaction RegularOrReturnParameterUnlimitedBoundChanged {
+    after attribute replaced at uml::LiteralUnlimitedNatural[value]
+    with affectedEObject.owner instanceof Parameter 
+        && affectedEObject.value == newValue
+    call adaptParameterBoundChanged((affectedEObject.owner as Parameter).operation, affectedEObject.owner as Parameter)
+}
+
+routine adaptParameterBoundChanged(uml::Operation uOperation, uml::Parameter uParam) {
+    action {
+        execute {
+            if(uParam.direction == ParameterDirectionKind.RETURN_LITERAL) {
+                setJavaMethodReturnType(uOperation, uParam)
+            } else if (uParam.direction == ParameterDirectionKind.IN_LITERAL) {
+                changeJavaParameterType(uParam, uParam.type)
+            }
+        }
+    }
+}
+
 reaction UmlParameterDirectionChangedFromIn {
     after attribute replaced at uml::Parameter[direction]
     with oldValue == ParameterDirectionKind.IN_LITERAL
