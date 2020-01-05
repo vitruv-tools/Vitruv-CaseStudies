@@ -28,4 +28,4 @@ Require-Bundle: tools.vitruv.testutils;bundle-version="0.2.0",
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java
-Export-Package: tools.vitruv.applications.pcmumlclassjava.tests
+Export-Package: tools.vitruv.applications.pcmumlclassjava.tests;x-internal:=true
