@@ -78,6 +78,7 @@ class ParameterConceptTest extends TransitiveChangeTest {
 		helper.createOperationSignature(pcmInterface)
 
 		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)

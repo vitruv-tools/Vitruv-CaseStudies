@@ -1,6 +1,7 @@
 package tools.vitruv.applications.pcmumlclassjava.tests
 
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.ParameterDirectionKind
@@ -12,11 +13,10 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.Assert.*
-import org.eclipse.uml2.uml.Interface
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationSignature with its
@@ -80,6 +80,7 @@ class SignatureConceptTest extends TransitiveChangeTest {
 		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 		
 		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
