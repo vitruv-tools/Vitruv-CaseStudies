@@ -29,8 +29,21 @@ execute actions in Java
 
 reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Package[packagedElement]
-    call createOrFindJavaClass(newValue)
+    call {
+        createOrFindJavaClass(newValue)
+        createRootJavaClass(newValue)
+    }
+}
 
+routine createRootJavaClass(uml::Classifier umlClassifier) {
+    match{
+        require absence of java::Class corresponding to umlClassifier
+        require absence of java::CompilationUnit corresponding to umlClassifier
+        require absence of java::Package corresponding to umlClassifier.eContainer
+    }
+    action {
+        call createJavaClass(umlClassifier) // if the direct container is the model
+    }
 }
 
 routine createOrFindJavaClass(uml::Classifier umlClassifier) {
@@ -306,7 +319,20 @@ reaction UmlDataTypeCreated {
 
 reaction UmlInterfaceCreated {
     after element uml::Interface created and inserted in uml::Package[packagedElement]
-    call createOrFindJavaInterface(newValue)
+    call { 
+        createOrFindJavaInterface(newValue)
+        createRootJavaInterface(newValue)
+   }
+}
+
+routine createRootJavaInterface(uml::Interface umlInterface) {
+    match {
+        require absence of java::Interface corresponding to umlInterface
+        require absence of java::Package corresponding to umlInterface.eContainer
+    }
+    action {
+        call createJavaInterface(umlInterface) // if the direct container is the model
+    }
 }
 
 routine createOrFindJavaInterface(uml::Interface umlInterface) {
