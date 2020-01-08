@@ -38,7 +38,6 @@ class UmlToJavaHelper {
         jAttribute.containingConcreteClassifier.members += jSetter
     }
     
-    
     /**
      * Displays the given message with the userInteractor.
      * 
@@ -49,5 +48,4 @@ class UmlToJavaHelper {
         userInteractor.notificationDialogBuilder.message(message).windowModality(WindowModality.MODAL)
             .startInteraction()
     }
-	
 }

@@ -17,6 +17,17 @@ in reaction to changes in Java
 execute actions in UML
 
 //===========================================
+//=========================================== All Types
+//===========================================
+
+routine addTypeCorrespondence(java::ConcreteClassifier jClassifier, uml::Type uType, java::CompilationUnit jCompUnit) {
+	action {
+		add correspondence between uType and jClassifier
+        add correspondence between uType and jCompUnit
+	}
+}
+
+//===========================================
 //=========================================== Class
 //===========================================
 
@@ -80,21 +91,34 @@ reaction JavaClassCreated {
     call {
     	detectOrCreateUmlModel(affectedEObject)
 		registerPredefinedUmlPrimitiveTypes(correspondenceModel, affectedEObject.eResource.resourceSet)
-	    createUmlClass(newValue, affectedEObject)
+	    createOrFindUmlClass(newValue, affectedEObject)
     }
 }
 
-routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
+routine createOrFindUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
 	match {
+		val uModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 		require absence of uml::Class corresponding to jClass
 	}
+    action {
+		call {
+			val uClass = findUmlClass(uModel, jClass.name, jCompUnit.namespaces.last)
+			if(uClass === null) {
+				createUmlClass(jClass, jCompUnit)
+			} else {
+				addTypeCorrespondence(jClass, uClass, jCompUnit)
+			}
+		}
+	}
+}
+
+routine createUmlClass(java::Class jClass, java::CompilationUnit jCompUnit) {
     action {
         val uClass = create uml::Class and initialize {
             uClass.name = jClass.name;
         }
-        add correspondence between uClass and jClass
-        add correspondence between uClass and jCompUnit
         call {
+        	addTypeCorrespondence(jClass, uClass, jCompUnit)
             addUmlElementToModelOrPackage(jCompUnit, uClass)
         }
     }
@@ -309,7 +333,7 @@ routine createOrFindUmlInterface(java::Interface jInterface, java::CompilationUn
 			if(uInterface === null) {
 				createUmlInterface(jInterface, jCompUnit)
 			} else {
-				addInterfaceCorrespondence(jInterface, uInterface, jCompUnit)
+				addTypeCorrespondence(jInterface, uInterface, jCompUnit)
 			}
 		}
 	}
@@ -321,16 +345,9 @@ routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCo
             uInterface.name = jInterface.name;
         }
 		call {
-			addInterfaceCorrespondence(jInterface, uInterface, jCompUnit)
+			addTypeCorrespondence(jInterface, uInterface, jCompUnit)
 			addUmlElementToModelOrPackage(jCompUnit, uInterface)
 		}
-	}
-}
-
-routine addInterfaceCorrespondence(java::Interface jInterface, uml::Interface uInterface, java::CompilationUnit jCompUnit) {
-	action {
-		add correspondence between uInterface and jInterface
-        add correspondence between uInterface and jCompUnit
 	}
 }
 

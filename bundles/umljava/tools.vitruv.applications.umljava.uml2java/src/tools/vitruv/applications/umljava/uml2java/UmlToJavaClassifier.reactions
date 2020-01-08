@@ -29,37 +29,58 @@ execute actions in Java
 
 reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Package[packagedElement]
-    call createJavaClass(newValue)
+    call createOrFindJavaClass(newValue)
 
 }
 
-routine createJavaClass(uml::Classifier umlClassifier) {
-	match{
+routine createOrFindJavaClass(uml::Classifier umlClassifier) {
+    match{
         require absence of java::Class corresponding to umlClassifier
         require absence of java::CompilationUnit corresponding to umlClassifier
-	}
+        val javaPackage = retrieve java::Package corresponding to umlClassifier.eContainer
+    }
+    action {
+        call {
+            val foundClass = findClassifier(umlClassifier.name, javaPackage, org.emftext.language.java.classifiers.Class)
+            if(foundClass === null) {
+                createJavaClass(umlClassifier)
+            } else {
+                addMissingClassifierCorrespondence(umlClassifier, foundClass)
+            }
+        }
+    }
+}
+
+routine createJavaClass(uml::Classifier umlClassifier) {
     action {
         val javaClassifier = create java::Class and initialize {
-        	javaClassifier.name = umlClassifier.name;
-        	javaClassifier.makePublic
+            javaClassifier.name = umlClassifier.name;
+            javaClassifier.makePublic
         }
         call { 
-        	createJavaCompilationUnit (umlClassifier, javaClassifier, umlClassifier.namespace)
+            createJavaCompilationUnit (umlClassifier, javaClassifier, umlClassifier.namespace)
         }
         add correspondence between umlClassifier and javaClassifier
     }
 }
 
+routine addMissingClassifierCorrespondence(uml::Classifier umlClassifier, java::ConcreteClassifier javaClassifier) {
+    action {
+        add correspondence between javaClassifier and umlClassifier
+        add correspondence between javaClassifier.containingCompilationUnit and umlClassifier
+    }
+}
+
 routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteClassifier jClassifier, uml::Namespace uNamespace) {
-	match {
+    match {
         val jPackage = retrieve optional java::Package corresponding to uNamespace
         require absence of java::CompilationUnit corresponding to umlClassifier
-	}
-	action {
-		val javaCompilationUnit = create java::CompilationUnit and initialize {
-			if (jPackage.present) {
-				javaCompilationUnit.namespaces += jPackage.get.javaPackageAsStringList
-			}
+    }
+    action {
+        val javaCompilationUnit = create java::CompilationUnit and initialize {
+            if (jPackage.present) {
+                javaCompilationUnit.namespaces += jPackage.get.javaPackageAsStringList
+            }
             javaCompilationUnit.name = jClassifier.name + ".java";
             javaCompilationUnit.classifiers += jClassifier;
             persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
@@ -70,7 +91,7 @@ routine createJavaCompilationUnit(uml::Classifier umlClassifier, java::ConcreteC
             }
         }
         add correspondence between umlClassifier and javaCompilationUnit
-	}
+    }
 }
 
 reaction UmlClassifierRenamed {
@@ -275,7 +296,7 @@ reaction UmlDataTypeCreated {
     after element uml::DataType created and inserted in uml::Package[packagedElement] 
     with !(newValue instanceof PrimitiveType)
     	&& !(newValue instanceof Enumeration) 
-    call createJavaClass(newValue)
+    call createOrFindJavaClass(newValue)
 }
 
 //===========================================
@@ -285,22 +306,39 @@ reaction UmlDataTypeCreated {
 
 reaction UmlInterfaceCreated {
     after element uml::Interface created and inserted in uml::Package[packagedElement]
-    call createJavaInterface(newValue)
+    call createOrFindJavaInterface(newValue)
+}
+
+routine createOrFindJavaInterface(uml::Interface umlInterface) {
+    match {
+        require absence of java::Interface corresponding to umlInterface
+        val javaPackage = retrieve java::Package corresponding to umlInterface.eContainer
+    }
+    action {
+        call {
+            val foundInterface = findClassifier(umlInterface.name, javaPackage, org.emftext.language.java.classifiers.Interface)
+            if(foundInterface === null) {
+                createJavaInterface(umlInterface)
+            } else {
+                addMissingClassifierCorrespondence(umlInterface, foundInterface)
+            }
+        }
+    }
 }
 
 routine createJavaInterface(uml::Interface umlInterface) {
-	match {
+    match {
         require absence of java::Interface corresponding to umlInterface
-	}
+    }
     action {
         val javaInterface = create java::Interface and initialize {
             javaInterface.name = umlInterface.name;
             javaInterface.makePublic
         }
         call {
-			createJavaCompilationUnit(umlInterface, javaInterface, umlInterface.namespace)
-		}
-		add correspondence between umlInterface and javaInterface
+            createJavaCompilationUnit(umlInterface, javaInterface, umlInterface.namespace)
+        }
+        add correspondence between umlInterface and javaInterface
     }
 }
 
