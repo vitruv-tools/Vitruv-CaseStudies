@@ -345,7 +345,7 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 			}
 			val String selectTypeMsg = "Please select type (or interface) that should be used for the type";
 			val int selectedType = userInteractor.singleSelectionDialogBuilder.message(selectTypeMsg)
-			    .choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction();
+				.choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction();
 			val Class<?> selectedClass = collectionDataTypes.get(selectedType);
 
 			createOrFindJavaClass(dataType, datatypesPackage, dataType.entityName);
@@ -513,14 +513,12 @@ routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, java:
 routine createOrFindJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag) {
 	match {
 		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
-		val allPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+		with matchingPackages.name == packageName.toFirstLower && (parentPackage === null || 
+			matchingPackages.namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + ".")
 	}
 	action {
 		call {
-			var matchingPackages = allPackages.filter[name == packageName.toFirstLower]
-			if(parentPackage !== null) { // checks full package namespace for non-root packages:
-				matchingPackages = matchingPackages.filter[namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + "."]
-			}
 			if(matchingPackages.empty) {
 				createJavaPackage(sourceElementMappedToPackage, parentPackage, packageName, newTag)
 			} else {
@@ -552,7 +550,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 		}
 		add correspondence between javaPackage and sourceElementMappedToPackage tagged with newTag
 		// Required to enable locating existing packages with missing correspondences when keeping more than two models consistent:
-		add correspondence between javaPackage and javaPackage.eClass
+		add correspondence between javaPackage and ContainersPackage.Literals.PACKAGE
 	}
 }
 
@@ -589,8 +587,8 @@ routine deleteJavaPackage(pcm::NamedElement sourceElementMappedToPackage, String
 
 routine createOrFindJavaClass(pcm::NamedElement pcmElement, java::Package containingPackage, String className) {
 	match {
-        require absence of java::Class corresponding to pcmElement
-    }
+		require absence of java::Class corresponding to pcmElement
+	}
 	action {
 		call {
 			val foundClass = findClassifier(className, containingPackage, org.emftext.language.java.classifiers.Class)
@@ -617,8 +615,8 @@ routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Pack
 routine createOrFindJavaInterface(pcm::Interface pcmInterface) {
 	match {
 		val contractsPackage = retrieve java::Package corresponding to pcmInterface.repository__Interface tagged with "contracts"
-        require absence of java::Interface corresponding to pcmInterface
-        require absence of java::CompilationUnit corresponding to pcmInterface
+		require absence of java::Interface corresponding to pcmInterface
+		require absence of java::CompilationUnit corresponding to pcmInterface
 	}
 	action {
 		call {
