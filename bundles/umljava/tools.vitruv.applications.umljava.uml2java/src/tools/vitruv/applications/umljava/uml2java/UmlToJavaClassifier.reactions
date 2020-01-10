@@ -309,7 +309,10 @@ reaction UmlDataTypeCreated {
     after element uml::DataType created and inserted in uml::Package[packagedElement] 
     with !(newValue instanceof PrimitiveType)
     	&& !(newValue instanceof Enumeration) 
-    call createOrFindJavaClass(newValue)
+    call {
+        createOrFindJavaClass(newValue)
+        createRootJavaClass(newValue)
+    } 
 }
 
 //===========================================
