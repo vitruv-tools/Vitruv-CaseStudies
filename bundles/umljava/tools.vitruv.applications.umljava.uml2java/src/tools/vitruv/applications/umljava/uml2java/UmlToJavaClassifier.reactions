@@ -454,11 +454,11 @@ reaction UmlPackageCreated {
 routine createOrFindJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
 	match {
 		require absence of java::Package corresponding to uPackage
-		val allPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+		with matchingPackages.namespacesAsString + matchingPackages.name == getUmlNamespaceAsString(uPackage)
 	}
 	action {
 		call {
-			val matchingPackages = allPackages.filter[namespacesAsString + name == getUmlNamespaceAsString(uPackage)]
 			if(matchingPackages.empty) {
 				createJavaPackage(uPackage, uSuperPackage)
 			} else {
@@ -494,7 +494,7 @@ routine createJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
         }
         add correspondence between jPackage and uPackage
         // Required to enable locating existing packages with missing correspondences when keeping more than two models consistent:
-        add correspondence between jPackage and jPackage.eClass
+        add correspondence between jPackage and ContainersPackage.Literals.PACKAGE
     }
 }
 

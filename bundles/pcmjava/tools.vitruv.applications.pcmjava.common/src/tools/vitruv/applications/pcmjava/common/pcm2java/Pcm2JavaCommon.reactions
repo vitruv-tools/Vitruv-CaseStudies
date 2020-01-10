@@ -511,14 +511,12 @@ routine changeInnerDeclarationType(pcm::InnerDeclaration innerDeclaration, java:
 routine createOrFindJavaPackage(EObject sourceElementMappedToPackage, java::Package parentPackage, String packageName, String newTag) {
 	match {
 		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
-		val allPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
+		with matchingPackages.name == packageName.toFirstLower && (parentPackage === null || 
+			matchingPackages.namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + ".")
 	}
 	action {
 		call {
-			var matchingPackages = allPackages.filter[name == packageName.toFirstLower]
-			if(parentPackage !== null) { // checks full package namespace for non-root packages:
-				matchingPackages = matchingPackages.filter[namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + "."]
-			}
 			if(matchingPackages.empty) {
 				createJavaPackage(sourceElementMappedToPackage, parentPackage, packageName, newTag)
 			} else {
@@ -550,7 +548,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 		}
 		add correspondence between javaPackage and sourceElementMappedToPackage tagged with newTag
 		// Required to enable locating existing packages with missing correspondences when keeping more than two models consistent:
-		add correspondence between javaPackage and javaPackage.eClass
+		add correspondence between javaPackage and ContainersPackage.Literals.PACKAGE
 	}
 }
 
