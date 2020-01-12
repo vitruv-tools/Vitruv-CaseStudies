@@ -6,6 +6,8 @@ import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 
+import static tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.*
+
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
@@ -35,45 +37,63 @@ routine detectOrCreateSystemCorrespondences(pcm::System pcmSystem) {
 	}
 	action {
 		call{
-			if(!umlSystemPackage.isPresent) createCorrespondingSystemPackage(pcmSystem)
+			if(!umlSystemPackage.isPresent) createOrFindCorrespondingSystemPackage(pcmSystem)
 			if(!umlSystemImplementation.isPresent) detectOrCreateCorrespondingSystemImplementation(pcmSystem)
 			if(!umlSystemConstructor.isPresent) detectOrCreateCorrespondingSystemConstructor(pcmSystem)
 		}
 	}
 }
 
-routine createCorrespondingSystemPackage(pcm::System pcmSystem) {
-	match {
-		require absence of uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
-	}
+routine createOrFindCorrespondingSystemPackage(pcm::System pcmSystem) {
+    match {
+        require absence of uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+    }
+    action {
+        call {
+            var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).startInteraction
+            
+            if (relativeModelPath.nullOrEmpty) {
+                relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION;
+            }
+            if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
+                relativeModelPath += DefaultLiterals.UML_EXTENSION
+            }
+            
+            //check if a model at the specified path already exists; create one if necessary
+            var Model umlRootModel = null
+            val uri = PersistenceHelper.getURIFromSourceProjectFolder(pcmSystem, relativeModelPath) 
+            if (URIUtil.existsResourceAtUri(uri)) {
+                val resource = pcmSystem.eResource.resourceSet.getResource(uri,true)
+                umlRootModel = resource.contents.filter(Model).head             
+            }
+            if (umlRootModel === null) { //the resource didn't exist, or did not contain a uml::Model object
+                umlRootModel = UMLFactory.eINSTANCE.createModel
+                umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
+                
+                persistProjectRelative(pcmSystem, umlRootModel, relativeModelPath);
+            }
+            val foundPackage = findUmlPackage(umlRootModel, pcmSystem.entityName.toFirstLower)
+            if(foundPackage === null) {
+                createCorrespondingSystemPackage(pcmSystem, umlRootModel)
+            } else {
+                addSystemPackageCorrespondence(pcmSystem, foundPackage)
+            }
+        }
+    }
+}
+
+routine addSystemPackageCorrespondence(pcm::System pcmSystem, uml::Package umlPackage) {
+    action {
+        add correspondence between pcmSystem and umlPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+    }
+}
+
+routine createCorrespondingSystemPackage(pcm::System pcmSystem, uml::Model umlRootModel) {
 	action {
 		val umlSystemPackage = create uml::Package and initialize{
 			umlSystemPackage.name = pcmSystem.entityName.toFirstLower;
 		}
 		call {
-			var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).startInteraction
-			
-			if (relativeModelPath.nullOrEmpty) {
-				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION;
-			}
-			if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
-				relativeModelPath += DefaultLiterals.UML_EXTENSION
-			}
-			
-			//check if a model at the specified path already exists; create one if necessary
-			var Model umlRootModel = null
-			val uri = PersistenceHelper.getURIFromSourceProjectFolder(pcmSystem, relativeModelPath) 
-			if (URIUtil.existsResourceAtUri(uri)) {
-				val resource = pcmSystem.eResource.resourceSet.getResource(uri,true)
-				umlRootModel = resource.contents.filter(Model).head				
-			}
-			if (umlRootModel === null) { //the resource didn't exist, or did not contain a uml::Model object
-				umlRootModel = UMLFactory.eINSTANCE.createModel
-				umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
-				
-				persistProjectRelative(pcmSystem, umlRootModel, relativeModelPath);
-			}
-			
 			umlRootModel.nestedPackages += umlSystemPackage
 		}
 		add correspondence between pcmSystem and umlSystemPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE

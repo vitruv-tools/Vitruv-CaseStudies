@@ -145,7 +145,7 @@ routine changeSystemImplementationName(pcm::System system) {
 	}
 	action {
 		call {
-			renameJavaPackage(system, null, system.entityName, null);
+			renameJavaPackage(system, null, system.entityName.toFirstLower, null);
 			renameJavaClassifier(system, systemPackage, system.entityName + "Impl");
 		}
 	}

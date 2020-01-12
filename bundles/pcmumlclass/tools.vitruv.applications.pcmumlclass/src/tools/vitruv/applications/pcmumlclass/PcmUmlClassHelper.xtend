@@ -22,13 +22,39 @@ import java.util.function.Function
 import org.eclipse.emf.ecore.resource.Resource
 import tools.vitruv.framework.userinteraction.UserInteractor
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
+import org.eclipse.uml2.uml.Model
+import java.util.Set
+import org.apache.log4j.Logger
 
 class PcmUmlClassHelper {
 	private static val PCM_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository");
 	private static val UML_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml");
+     private static val logger = Logger.getLogger(PcmUmlClassHelper.simpleName)
 
 	private new() {
 	}
+	
+	/**
+	 * TODO FIXME TS This method is DIRECTLY copied from  tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper due to the lack of a shared helper/util class
+     * Searches and retrieves the UML package in the UML model that has an equal name as the given package name.
+     * If there is more than one package with the given name, an {@link IllegalStateException} is thrown.
+     * 
+     * @param umlModel the UML model Model in which the UML packages should be searched
+     * @param packageName the package name for which a fitting UML package should be retrieved
+     * @return the UML package or null if none could be found
+     */
+    def static Package findUmlPackage(Model umlModel, String packageName) {
+        val Set<Package> allPackages = umlModel.eAllContents.filter(Package).toSet
+        val packages = allPackages.filter[name == packageName]
+        if (packages.nullOrEmpty) {
+            logger.warn("The UML-Package with the name " + packageName + " does not exist in the correspondence model")
+            return null
+        }
+        if (packages.size > 1) {
+            throw new IllegalStateException("There is more than one package with name " + packageName + " in the UML model.")
+        }
+        return packages.head
+    }
 
 	def public static getPcmPrimitiveTypes(EObject alreadyPersistedObject) {
 		return getPcmPrimitiveTypes(alreadyPersistedObject.eResource.resourceSet)
