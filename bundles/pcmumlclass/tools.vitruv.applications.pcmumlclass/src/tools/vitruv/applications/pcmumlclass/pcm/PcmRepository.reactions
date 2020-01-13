@@ -1,13 +1,11 @@
-import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
-import org.eclipse.uml2.uml.Model
-import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.UMLPackage
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
-import org.eclipse.uml2.uml.UMLPackage
+
+import static tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -32,13 +30,14 @@ reaction RepositoryCreated {
 
 routine initializePcmRepositoryUmlPackagesCorrespondence(pcm::Repository pcmRepo) {
 	match {
-		val umlRepositoryPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
 		val umlDatatypesPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	action {
 		call {
-			if(!umlRepositoryPkg.present) createUmlRepositoryPackage(pcmRepo)
+			ensureUmlModelExists(pcmRepo)
+			createUmlRepositoryPackage(pcmRepo)
+			// TODO TS these if statements are completely irrelevant, as the routines already check on absence.
 			if(!umlContractsPkg.present) createUmlContractsPackage(pcmRepo)
 			if(!umlDatatypesPkg.present) createUmlDatatypesPackage(pcmRepo)
 			bootstrapPrimitiveDatatypes(pcmRepo)
@@ -46,47 +45,34 @@ routine initializePcmRepositoryUmlPackagesCorrespondence(pcm::Repository pcmRepo
 	}
 }
 
-routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
+routine ensureUmlModelExists(pcm::Repository pcmRepo) { // TODO TS currently duuplicate in system reactions
 	match {
-		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		// if the main package doesn't exist, then there should be no subpackages
-		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
-		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
 	}
 	action {
-		val umlRepositoryPkg = create uml::Package and initialize{
-			umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower;
-		}
 		call {
 			var relativeModelPath = userInteractor.textInputDialogBuilder
 				.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH)
 				.windowModality(WindowModality.MODAL)
 				.startInteraction
-			
-			if (relativeModelPath.nullOrEmpty) {
-				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION;
+			var umlRootModel = loadPersistedModelFromSource(relativeModelPath, pcmRepo)
+			umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
+			if(umlRootModel.isEmpty) {
+				createUmlModel(pcmRepo, relativeModelPath)
 			}
-			if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
-				relativeModelPath += DefaultLiterals.UML_EXTENSION
-			}
-			
-			//check if a model at the specified path already exists; create one if necessary
-			var Model umlRootModel = null
-			val uri = PersistenceHelper.getURIFromSourceProjectFolder(pcmRepo, relativeModelPath) 
-			if(URIUtil.existsResourceAtUri(uri)) {
-				val resource = pcmRepo.eResource.resourceSet.getResource(uri,true)
-				umlRootModel = resource.contents.filter(Model).head				
-			}
-			if(umlRootModel === null) { //the resource didn't exist, or did not contain a uml::Model object
-				umlRootModel = UMLFactory.eINSTANCE.createModel
-				umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
-				persistProjectRelative(pcmRepo, umlRootModel, relativeModelPath);
-			}
-			
-			umlRootModel.nestedPackages += umlRepositoryPkg
+		}
+	}
+}
+
+routine createUmlModel(EObject source, String relativeModelPath) { 
+	action {
+		val umlRootModel = create uml::Model and initialize {
+			umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
+		}
+		call {
+			persistProjectRelative(source, umlRootModel, relativeModelPath)
 			ensureUmlModelCorrespondenceExists(umlRootModel)
 		}
-		add correspondence between pcmRepo and umlRepositoryPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
 }
 
@@ -97,6 +83,23 @@ routine ensureUmlModelCorrespondenceExists(uml::Model newModel) {
 	}
 	action {
 		add correspondence between UMLPackage.Literals.MODEL and newModel
+	}
+}
+
+routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
+	match {
+		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		// if the main package doesn't exist, then there should be no subpackages
+		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
+		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
+	}
+	action { // TODO TS find or create pattern here to avoid further problems
+		val umlRepositoryPkg = create uml::Package and initialize {
+			umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower;
+			umlModel.nestedPackages += umlRepositoryPkg
+		}
+		add correspondence between pcmRepo and umlRepositoryPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 	}
 }
 

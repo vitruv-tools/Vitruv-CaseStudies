@@ -1,10 +1,7 @@
-import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Model
-import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.UMLPackage
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
-import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 
 import static tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.*
 
@@ -31,72 +28,91 @@ reaction SystemCreated {
 
 routine detectOrCreateSystemCorrespondences(pcm::System pcmSystem) {
 	match {
-		val umlSystemPackage = retrieve optional uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
 		val umlSystemImplementation= retrieve optional uml::Class corresponding to pcmSystem tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val umlSystemConstructor = retrieve optional uml::Operation corresponding to pcmSystem tagged with TagLiterals.IPRE__CONSTRUCTOR
 	}
 	action {
 		call{
-			if(!umlSystemPackage.isPresent) createOrFindCorrespondingSystemPackage(pcmSystem)
+			ensureUmlModelExists(pcmSystem)
+			createOrFindCorrespondingSystemPackage(pcmSystem)
+			// TODO TS these if statements are completely irrelevant, as the routines "check absence" (without using absence of)
 			if(!umlSystemImplementation.isPresent) detectOrCreateCorrespondingSystemImplementation(pcmSystem)
 			if(!umlSystemConstructor.isPresent) detectOrCreateCorrespondingSystemConstructor(pcmSystem)
 		}
 	}
 }
 
+routine ensureUmlModelExists(pcm::System pcmSystem) { // TODO TS currently duplicate in repository reactions
+	match {
+		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
+	}
+	action {
+		call {
+			var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).startInteraction
+			var umlRootModel = loadPersistedModelFromSource(relativeModelPath, pcmSystem)
+			umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
+			if(umlRootModel.isEmpty) {
+				createUmlModel(pcmSystem, relativeModelPath)
+			}
+		}
+	}
+}
+
+routine createUmlModel(EObject source, String relativeModelPath) { 
+	action {
+		val umlRootModel = create uml::Model and initialize {
+			umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
+		}
+		call {
+			persistProjectRelative(source, umlRootModel, relativeModelPath)
+			ensureUmlModelCorrespondenceExists(umlRootModel)
+		}
+	}
+}
+
+routine ensureUmlModelCorrespondenceExists(uml::Model newModel) {
+	match {
+		val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
+		check !alreadyCorrespondingModels.contains(newModel)
+	}
+	action {
+		add correspondence between UMLPackage.Literals.MODEL and newModel
+	}
+}
+
 routine createOrFindCorrespondingSystemPackage(pcm::System pcmSystem) {
-    match {
-        require absence of uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
-    }
-    action {
-        call {
-            var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).startInteraction
-            
-            if (relativeModelPath.nullOrEmpty) {
-                relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION;
-            }
-            if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
-                relativeModelPath += DefaultLiterals.UML_EXTENSION
-            }
-            
-            //check if a model at the specified path already exists; create one if necessary
-            var Model umlRootModel = null
-            val uri = PersistenceHelper.getURIFromSourceProjectFolder(pcmSystem, relativeModelPath) 
-            if (URIUtil.existsResourceAtUri(uri)) {
-                val resource = pcmSystem.eResource.resourceSet.getResource(uri,true)
-                umlRootModel = resource.contents.filter(Model).head             
-            }
-            if (umlRootModel === null) { //the resource didn't exist, or did not contain a uml::Model object
-                umlRootModel = UMLFactory.eINSTANCE.createModel
-                umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
-                
-                persistProjectRelative(pcmSystem, umlRootModel, relativeModelPath);
-            }
-            val foundPackage = findUmlPackage(umlRootModel, pcmSystem.entityName.toFirstLower)
-            if(foundPackage === null) {
-                createCorrespondingSystemPackage(pcmSystem, umlRootModel)
-            } else {
-                addSystemPackageCorrespondence(pcmSystem, foundPackage)
-            }
-        }
-    }
+	match {
+		require absence of uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		 val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+	}
+	action {
+		call {
+			val foundPackage = findUmlPackage(umlModel, pcmSystem.entityName.toFirstLower)
+			if(foundPackage === null) {
+				createCorrespondingSystemPackage(pcmSystem, umlModel)
+			} else {
+				addSystemPackageCorrespondence(pcmSystem, foundPackage)
+			}
+		}
+	}
 }
 
 routine addSystemPackageCorrespondence(pcm::System pcmSystem, uml::Package umlPackage) {
-    action {
-        add correspondence between pcmSystem and umlPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
-    }
+	action {
+		add correspondence between pcmSystem and umlPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+	}
 }
 
 routine createCorrespondingSystemPackage(pcm::System pcmSystem, uml::Model umlRootModel) {
+	match {
+		require absence of uml::Package corresponding to pcmSystem tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+	}
 	action {
 		val umlSystemPackage = create uml::Package and initialize{
 			umlSystemPackage.name = pcmSystem.entityName.toFirstLower;
-		}
-		call {
 			umlRootModel.nestedPackages += umlSystemPackage
 		}
-		add correspondence between pcmSystem and umlSystemPackage tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
+		call addSystemPackageCorrespondence(pcmSystem, umlSystemPackage)
 	}
 }
 
