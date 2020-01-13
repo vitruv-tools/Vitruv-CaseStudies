@@ -48,8 +48,9 @@ public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest 
     @SuppressWarnings("unchecked")
     private void assertSystem(final System system) throws Throwable {
         final String expectedName = system.getEntityName();
+        final String expectedLowerCaseName = Character.toLowerCase(expectedName.charAt(0)) + expectedName.substring(1);
         this.assertCorrespondnecesAndCompareNames(system, 3,
                 new Class[] { Package.class, CompilationUnit.class, org.emftext.language.java.classifiers.Class.class },
-                new String[] { expectedName, expectedName + "Impl", expectedName + "Impl" });
+                new String[] { expectedLowerCaseName, expectedName + "Impl", expectedName + "Impl" });
     }
 }
