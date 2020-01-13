@@ -4,6 +4,7 @@ import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import org.eclipse.uml2.uml.UMLPackage
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -23,6 +24,21 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 reactions: umlRepositoryAndSystemPackageReactions
 in reaction to changes in UML
 execute actions in PCM
+
+reaction UmlModelCreated {
+    after element uml::Model created and inserted as root
+    call ensureModelCorrespondenceExists(newValue)
+}
+
+routine ensureModelCorrespondenceExists(uml::Model newModel) {
+    match {
+        val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
+        check !alreadyCorrespondingModels.contains(newModel)
+    }
+    action {
+        add correspondence between UMLPackage.Literals.MODEL and newModel
+    }
+}
 
 reaction RepositoryOrSystemPackageInserted {
 	after element uml::Package inserted in uml::Package[packagedElement]
