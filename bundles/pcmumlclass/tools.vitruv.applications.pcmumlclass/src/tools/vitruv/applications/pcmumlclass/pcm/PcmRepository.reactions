@@ -10,14 +10,14 @@ import static tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.*
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
-//	The following reactions and routines synchronize a pcm::Repository with its corresponding uml::Packages 
-//	(main package for components, contracts package for interfaces, and datatypes package) 
-//	and bootstrap the pcm::PrimitiveDataType - uml::PrimitiveType correspondences for the externally defined primitive types 
-//	on first creation of the repository.
+// The following reactions and routines synchronize a pcm::Repository with its corresponding uml::Packages 
+// (main package for components, contracts package for interfaces, and datatypes package) 
+// and bootstrap the pcm::PrimitiveDataType - uml::PrimitiveType correspondences for the externally defined primitive types 
+// on first creation of the repository.
 //
-//	Related files: 
-//		UmlRepositoryAndSystemPackage.reactions
-//		RepositoryConceptTest
+// Related files: 
+// UmlRepositoryAndSystemPackage.reactions
+// RepositoryConceptTest
 
 reactions: pcmRepositoryReactions
 in reaction to changes in PCM
@@ -25,27 +25,16 @@ execute actions in UML
 
 reaction RepositoryCreated {
 	after element pcm::Repository inserted as root
-	call initializePcmRepositoryUmlPackagesCorrespondence(newValue)
-}
-
-routine initializePcmRepositoryUmlPackagesCorrespondence(pcm::Repository pcmRepo) {
-	match {
-		val umlContractsPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
-		val umlDatatypesPkg = retrieve optional uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
-	}
-	action {
-		call {
-			ensureUmlModelExists(pcmRepo)
-			createUmlRepositoryPackage(pcmRepo)
-			// TODO TS these if statements are completely irrelevant, as the routines already check on absence.
-			if(!umlContractsPkg.present) createUmlContractsPackage(pcmRepo)
-			if(!umlDatatypesPkg.present) createUmlDatatypesPackage(pcmRepo)
-			bootstrapPrimitiveDatatypes(pcmRepo)
-		}
+	call {
+		ensureUmlModelExists(newValue)
+		createUmlRepositoryPackage(newValue)
+		createUmlContractsPackage(newValue)
+		createUmlDatatypesPackage(newValue)
+		bootstrapPrimitiveDatatypes(newValue)
 	}
 }
 
-routine ensureUmlModelExists(pcm::Repository pcmRepo) { // TODO TS currently duuplicate in system reactions
+routine ensureUmlModelExists(pcm::Repository pcmRepo) { // TODO TS currently duplicate in system reactions
 	match {
 		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
 	}
