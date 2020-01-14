@@ -55,6 +55,7 @@ routine ensureUmlModelExists(pcm::Repository pcmRepo) { // TODO TS currently duu
 				.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH)
 				.windowModality(WindowModality.MODAL)
 				.startInteraction
+			relativeModelPath = validateModelPath(relativeModelPath)
 			var umlRootModel = loadPersistedModelFromSource(relativeModelPath, pcmRepo)
 			umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
 			if(umlRootModel.isEmpty) {

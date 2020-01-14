@@ -49,6 +49,7 @@ routine ensureUmlModelExists(pcm::System pcmSystem) { // TODO TS currently dupli
 	action {
 		call {
 			var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH).startInteraction
+			relativeModelPath = validateModelPath(relativeModelPath)
 			var umlRootModel = loadPersistedModelFromSource(relativeModelPath, pcmSystem)
 			umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
 			if(umlRootModel.isEmpty) {
