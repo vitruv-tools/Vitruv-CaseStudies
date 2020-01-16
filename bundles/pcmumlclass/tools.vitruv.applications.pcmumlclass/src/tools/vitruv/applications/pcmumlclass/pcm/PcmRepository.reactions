@@ -4,6 +4,8 @@ import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 
+import static tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.*
+
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
@@ -26,22 +28,41 @@ reaction RepositoryCreated {
 	after element pcm::Repository inserted as root
 	call {
 		ensureUmlModelExists(newValue)
-		createUmlRepositoryPackage(newValue)
+		createOrFindUmlRepositoryPackage(newValue)
 		createUmlContractsPackage(newValue)
 		createUmlDatatypesPackage(newValue)
 		bootstrapPrimitiveDatatypes(newValue)
 	}
 }
 
-routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
+routine createOrFindUmlRepositoryPackage(pcm::Repository pcmRepo) {
 	match {
 		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
 		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		// if the main package doesn't exist, then there should be no subpackages
-		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
-		require absence of uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 	}
-	action { // TODO TS find or create pattern here to avoid further problems
+	action {
+		call {
+			val umlPackage = findUmlPackage(umlModel, pcmRepo.entityName.toFirstLower)
+			if(umlPackage === null) {
+				createUmlRepositoryPackage(pcmRepo)
+			} else {
+				addPackageCorrespondence(pcmRepo, umlPackage)
+			}
+		}
+	}
+}
+
+routine addPackageCorrespondence(pcm::Repository pcmRepo, uml::Package uPackage) {
+	action {
+		add correspondence between pcmRepo and uPackage tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+	}
+}
+
+routine createUmlRepositoryPackage(pcm::Repository pcmRepo) {
+	match {
+		val umlModel = retrieve uml::Model corresponding to UMLPackage.Literals.MODEL
+	}
+	action {
 		val umlRepositoryPkg = create uml::Package and initialize {
 			umlRepositoryPkg.name = pcmRepo.entityName.toFirstLower;
 			umlModel.nestedPackages += umlRepositoryPkg
@@ -128,7 +149,7 @@ routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo) {
 			// ask if the corresponding model should also be deleted
 			val deleteCorrespondingUmlRepository = userInteractor.confirmationDialogBuilder
 					.message(DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL).startInteraction
-													
+
 			if (deleteCorrespondingUmlRepository) {// DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
 				if(umlContractsPkg.present) umlContractsPkg.get.destroy
 				if(umlDatatypesPkg.present) umlDatatypesPkg.get.destroy
