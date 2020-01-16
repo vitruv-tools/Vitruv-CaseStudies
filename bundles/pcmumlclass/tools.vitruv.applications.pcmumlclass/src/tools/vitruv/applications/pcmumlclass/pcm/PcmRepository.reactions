@@ -3,9 +3,6 @@ import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
-
-import static tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -23,6 +20,8 @@ reactions: pcmRepositoryReactions
 in reaction to changes in PCM
 execute actions in UML
 
+import routines sharedRoutines // for UML model handling
+
 reaction RepositoryCreated {
 	after element pcm::Repository inserted as root
 	call {
@@ -31,48 +30,6 @@ reaction RepositoryCreated {
 		createUmlContractsPackage(newValue)
 		createUmlDatatypesPackage(newValue)
 		bootstrapPrimitiveDatatypes(newValue)
-	}
-}
-
-routine ensureUmlModelExists(pcm::Repository pcmRepo) { // TODO TS currently duplicate in system reactions
-	match {
-		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
-	}
-	action {
-		call {
-			var relativeModelPath = userInteractor.textInputDialogBuilder
-				.message(DefaultLiterals.INPUT_REQUEST_MODEL_PATH)
-				.windowModality(WindowModality.MODAL)
-				.startInteraction
-			relativeModelPath = validateModelPath(relativeModelPath)
-			var umlRootModel = loadPersistedModelFromSource(relativeModelPath, pcmRepo)
-			umlRootModel.ifPresent[ensureUmlModelCorrespondenceExists]
-			if(umlRootModel.isEmpty) {
-				createUmlModel(pcmRepo, relativeModelPath)
-			}
-		}
-	}
-}
-
-routine createUmlModel(EObject source, String relativeModelPath) { 
-	action {
-		val umlRootModel = create uml::Model and initialize {
-			umlRootModel.name = DefaultLiterals.ROOT_MODEL_NAME;
-		}
-		call {
-			persistProjectRelative(source, umlRootModel, relativeModelPath)
-			ensureUmlModelCorrespondenceExists(umlRootModel)
-		}
-	}
-}
-
-routine ensureUmlModelCorrespondenceExists(uml::Model newModel) {
-	match {
-		val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
-		check !alreadyCorrespondingModels.contains(newModel)
-	}
-	action {
-		add correspondence between UMLPackage.Literals.MODEL and newModel
 	}
 }
 
