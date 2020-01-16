@@ -32,18 +32,6 @@ reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Package[packagedElement]
     call {
         createOrFindJavaClass(newValue)
-        createRootJavaClass(newValue)
-    }
-}
-
-routine createRootJavaClass(uml::Classifier umlClassifier) {
-    match{
-        require absence of java::Class corresponding to umlClassifier
-        require absence of java::CompilationUnit corresponding to umlClassifier
-        require absence of java::Package corresponding to umlClassifier.eContainer
-    }
-    action {
-        call createJavaClass(umlClassifier) // if the direct container is the model
     }
 }
 
@@ -51,8 +39,20 @@ routine createOrFindJavaClass(uml::Classifier umlClassifier) {
     match{
         require absence of java::Class corresponding to umlClassifier
         require absence of java::CompilationUnit corresponding to umlClassifier
-        val javaPackage = retrieve java::Package corresponding to umlClassifier.eContainer
+        val javaPackage = retrieve optional java::Package corresponding to umlClassifier.eContainer
     }
+    action {
+        call {
+           if (javaPackage.isPresent) {
+               createOrFindJavaClassInPackage(umlClassifier, javaPackage.get)
+           } else {
+                createJavaClass(umlClassifier) // root class, direct container is the model
+           }
+        }
+    }
+}
+
+routine createOrFindJavaClassInPackage(uml::Classifier umlClassifier, java::Package javaPackage) {
     action {
         call {
             val foundClass = findClassifier(umlClassifier.name, javaPackage, org.emftext.language.java.classifiers.Class)
@@ -200,11 +200,11 @@ routine addJavaSuperClass(uml::Class uClass, uml::Generalization uGeneralization
     }
     action {
         execute {
-        	if (uClass.generals.size == 1) {
-	            var typeReference = createTypeReference(uGeneralization.general as Class, Optional.^of(jSuperClass), null, userInteractor)
-	            addJavaImport(jClass.containingCompilationUnit, typeReference)
-	            jClass.extends = typeReference
-	            addGeneralizationCorrespondence(uGeneralization, typeReference)
+            if (uClass.generals.size == 1) {
+                var typeReference = createTypeReference(uGeneralization.general as Class, Optional.^of(jSuperClass), null, userInteractor)
+                addJavaImport(jClass.containingCompilationUnit, typeReference)
+                jClass.extends = typeReference
+                addGeneralizationCorrespondence(uGeneralization, typeReference)
             } else {
                 userInteractor.notificationDialogBuilder.message("Can not synchronize multiple inheritance for " + uClass)
                     .title("Warning").notificationType(NotificationType.WARNING).windowModality(WindowModality.MODAL)
@@ -312,7 +312,6 @@ reaction UmlDataTypeCreated {
     	&& !(newValue instanceof Enumeration) 
     call {
         createOrFindJavaClass(newValue)
-        createRootJavaClass(newValue)
     } 
 }
 
@@ -325,25 +324,26 @@ reaction UmlInterfaceCreated {
     after element uml::Interface created and inserted in uml::Package[packagedElement]
     call { 
         createOrFindJavaInterface(newValue)
-        createRootJavaInterface(newValue)
    }
-}
-
-routine createRootJavaInterface(uml::Interface umlInterface) {
-    match {
-        require absence of java::Interface corresponding to umlInterface
-        require absence of java::Package corresponding to umlInterface.eContainer
-    }
-    action {
-        call createJavaInterface(umlInterface) // if the direct container is the model
-    }
 }
 
 routine createOrFindJavaInterface(uml::Interface umlInterface) {
     match {
         require absence of java::Interface corresponding to umlInterface
-        val javaPackage = retrieve java::Package corresponding to umlInterface.eContainer
+        val javaPackage = retrieve optional java::Package corresponding to umlInterface.eContainer
     }
+    action {
+        call {
+            if (javaPackage.isPresent) {
+                createOrFindJavaInterfaceInPackage(umlInterface, javaPackage.get)
+            } else {
+                createJavaInterface(umlInterface) // root interface, the direct container is the model
+            }
+        }
+    }
+}
+
+routine createOrFindJavaInterfaceInPackage(uml::Interface umlInterface, java::Package javaPackage) {
     action {
         call {
             val foundInterface = findClassifier(umlInterface.name, javaPackage, org.emftext.language.java.classifiers.Interface)
