@@ -30,9 +30,7 @@ execute actions in Java
 
 reaction UmlClassCreated {
     after element uml::Class created and inserted in uml::Package[packagedElement]
-    call {
-        createOrFindJavaClass(newValue)
-    }
+    call createOrFindJavaClass(newValue)
 }
 
 routine createOrFindJavaClass(uml::Classifier umlClassifier) {
@@ -71,9 +69,7 @@ routine createJavaClass(uml::Classifier umlClassifier) {
             javaClassifier.name = umlClassifier.name;
             javaClassifier.makePublic
         }
-        call { 
-            createJavaCompilationUnit (umlClassifier, javaClassifier, umlClassifier.namespace)
-        }
+        call createJavaCompilationUnit (umlClassifier, javaClassifier, umlClassifier.namespace)
         add correspondence between umlClassifier and javaClassifier
     }
 }
@@ -131,11 +127,7 @@ routine renameJavaClassifier(uml::Classifier umlClassifier) {
             javaCompilationUnit.name = umlClassifier.name + ".java";
             persistProjectRelative(umlClassifier, javaCompilationUnit, buildJavaFilePath(javaCompilationUnit));
         }
-        call {
-            if (jPackage.present) {
-                jPackage.get.compilationUnits += javaCompilationUnit
-            }
-        }
+        call jPackage.ifPresent[compilationUnits += javaCompilationUnit]
     }
 }
 
@@ -156,7 +148,7 @@ routine deleteJavaClass(uml::Classifier umlClassifer) {
 }
 
 reaction UmlClassMadeFinal {
-    after attribute replaced at uml::Class[isFinalSpecialization] 
+    after attribute replaced at uml::Class[isFinalSpecialization]
     call setJavaClassFinal(affectedEObject)
 }
 
@@ -260,7 +252,7 @@ routine createJavaClassImplementsReference(uml::InterfaceRealization uRealizatio
             jClass.implements += typeReference
             addImplementsCorrespondence(uRealization, typeReference)
         }
-	}
+    }
 }
 
 routine addImplementsCorrespondence(uml::InterfaceRealization uRealization, java::TypeReference jReference) {
@@ -286,18 +278,18 @@ routine deleteJavaClassImplementsReference(uml::InterfaceRealization uRealizatio
 		update uRealization {
 			uRealization.clients -= uClass
 		}
-        delete jReference
+		delete jReference
 	}
 }
 
 reaction UmlInterfaceRealizationReplaced {
 	after element replaced at uml::InterfaceRealization[contract]
-	with affectedEObject.implementingClassifier !== null 
+	with affectedEObject.implementingClassifier !== null
 		&& affectedEObject.implementingClassifier instanceof Class
 	call {
 		val uRealization = affectedEObject
 		val uClass = affectedEObject.implementingClassifier as Class
-		if (oldValue !== null) 
+		if (oldValue !== null)
 			deleteJavaClassImplementsReference(uRealization, uClass)
 		if (newValue !== null)
 			createJavaClassImplementsReference(uRealization, uClass)
@@ -307,12 +299,10 @@ reaction UmlInterfaceRealizationReplaced {
 
 
 reaction UmlDataTypeCreated {
-    after element uml::DataType created and inserted in uml::Package[packagedElement] 
+    after element uml::DataType created and inserted in uml::Package[packagedElement]
     with !(newValue instanceof PrimitiveType)
-    	&& !(newValue instanceof Enumeration) 
-    call {
-        createOrFindJavaClass(newValue)
-    } 
+        && !(newValue instanceof Enumeration)
+    call createOrFindJavaClass(newValue)
 }
 
 //===========================================
@@ -322,9 +312,7 @@ reaction UmlDataTypeCreated {
 
 reaction UmlInterfaceCreated {
     after element uml::Interface created and inserted in uml::Package[packagedElement]
-    call { 
-        createOrFindJavaInterface(newValue)
-   }
+    call createOrFindJavaInterface(newValue)
 }
 
 routine createOrFindJavaInterface(uml::Interface umlInterface) {
@@ -365,9 +353,7 @@ routine createJavaInterface(uml::Interface umlInterface) {
             javaInterface.name = umlInterface.name;
             javaInterface.makePublic
         }
-        call {
-            createJavaCompilationUnit(umlInterface, javaInterface, umlInterface.namespace)
-        }
+        call createJavaCompilationUnit(umlInterface, javaInterface, umlInterface.namespace)
         add correspondence between umlInterface and javaInterface
     }
 }
@@ -420,7 +406,7 @@ routine deleteJavaSuperInterface(uml::Generalization uGeneralization) {
 reaction UmlSuperInterfaceReplaced {
 	after element uml::Interface replaced at uml::Generalization[general]
 	call {
-		if(oldValue !== null) 
+		if(oldValue !== null)
 			deleteJavaSuperInterface(affectedEObject)
 		if(affectedEObject.specific !== null && affectedEObject.specific instanceof Interface)
 			addJavaSuperInterface(affectedEObject.specific as Interface, affectedEObject)
@@ -499,15 +485,8 @@ reaction UmlModelCreated {
 routine checkIfUmlModelCorrespondenceExists(uml::Model newModel) {
 	match {
 		val alreadyCorrespondingModels = retrieve many uml::Model corresponding to UMLPackage.Literals.MODEL
+		check !alreadyCorrespondingModels.contains(newModel)
 	}
-	action {
-		execute {
-			if (!alreadyCorrespondingModels.contains(newModel))
-				addUmlModelCorrespondence(newModel)
-		}
-	}
-}
-routine addUmlModelCorrespondence(uml::Model newModel){
 	action {
 		add correspondence between UMLPackage.Literals.MODEL and newModel
 	}
@@ -550,7 +529,6 @@ routine createJavaPackage(uml::Package uPackage, uml::Package uSuperPackage) {
         val jPackage = create java::Package and initialize {
             if (uPackage instanceof Model) {
                 jPackage.name = ""
-                
             } else {
                 if (uPackage.namespace !== null) {
                     jPackage.namespaces += getUmlParentNamespaceAsStringList(uPackage)
@@ -590,7 +568,7 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
             }
             // TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:
             for (nestedPackage : uPackage.nestedPackages) {
-                renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages 
+                renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages
             }
         }
     }
@@ -629,12 +607,12 @@ routine warnUserToUsePredefinedPrimitiveTypes() {
     action {
         execute {
             userInteractor.notificationDialogBuilder
-            	.message("Only predefined uml::PrimitiveTypes will be mapped."
-					+ "Please use the types defined in \"pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml\" instead.")
-				.title("Warning")
-				.notificationType(NotificationType.WARNING)
-				.windowModality(WindowModality.MODAL)
-				.startInteraction
+                .message("Only predefined uml::PrimitiveTypes will be mapped."
+                    + "Please use the types defined in \"pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml\" instead.")
+                .title("Warning")
+                .notificationType(NotificationType.WARNING)
+                .windowModality(WindowModality.MODAL)
+                .startInteraction
         }
     }
 }
