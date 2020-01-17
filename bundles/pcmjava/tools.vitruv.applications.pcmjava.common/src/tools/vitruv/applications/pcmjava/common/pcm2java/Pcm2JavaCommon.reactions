@@ -50,7 +50,7 @@ reaction RenamedRepository {
 	call {
 		createRepositoryPackages(affectedEObject)
 		renamePackageForRepository(affectedEObject)
-	} 
+	}
 }
 
 routine createRepositoryPackages(pcm::Repository repository) {
@@ -61,7 +61,7 @@ routine createRepositoryPackages(pcm::Repository repository) {
 		call {
 			createOrFindJavaPackage(repository, null, repository.entityName, "repository_root");
 			createRepositorySubPackages(repository);
-		} 
+		}
 	}
 }
 
@@ -292,9 +292,7 @@ routine createCompositeDataTypeImplementation(pcm::CompositeDataType compositeDa
 			with datatypesPackage.name == "datatypes"
 	}
 	action {
-		call {
-			createOrFindJavaClass(compositeDataType, datatypesPackage, compositeDataType.entityName);
-		}
+		call createOrFindJavaClass(compositeDataType, datatypesPackage, compositeDataType.entityName)
 	}
 }
 
@@ -514,7 +512,7 @@ routine createOrFindJavaPackage(EObject sourceElementMappedToPackage, java::Pack
 	match {
 		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
 		val matchingPackages = retrieve many java::Package corresponding to ContainersPackage.Literals.PACKAGE
-		with matchingPackages.name == packageName.toFirstLower && (parentPackage === null || 
+		with matchingPackages.name == packageName.toFirstLower && (parentPackage === null ||
 			matchingPackages.namespacesAsString == parentPackage.namespacesAsString + parentPackage.name + ".")
 	}
 	action {
@@ -657,9 +655,7 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 			compilationUnit.classifiers += classifier;
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
 		}
-		call {
-			containingPackage.compilationUnits += compilationUnit
-		}
+		call containingPackage.compilationUnits += compilationUnit
 		add correspondence between compilationUnit and sourceElementMappedToClass
 	}
 }

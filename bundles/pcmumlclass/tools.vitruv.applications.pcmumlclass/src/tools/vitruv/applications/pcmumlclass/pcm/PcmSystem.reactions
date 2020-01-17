@@ -5,7 +5,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import static tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.*
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 // The following reactions and routines synchronize a pcm::System with its corresponding uml::Package,
@@ -108,7 +108,7 @@ routine createCorrespondingSystemImplementation(pcm::System pcmSystem) {
 			umlSystemImplementation.name = pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
 			umlSystemImplementation.isFinalSpecialization = true
 			umlSystemPackage.packagedElements += umlSystemImplementation
-		} 
+		}
 		add correspondence between pcmSystem and umlSystemImplementation tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 }

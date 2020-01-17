@@ -6,15 +6,15 @@ import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorresponde
 
 import static tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper.*
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
-// The following reactions and routines synchronize a pcm::Repository with its corresponding uml::Packages 
-// (main package for components, contracts package for interfaces, and datatypes package) 
-// and bootstrap the pcm::PrimitiveDataType - uml::PrimitiveType correspondences for the externally defined primitive types 
+// The following reactions and routines synchronize a pcm::Repository with its corresponding uml::Packages
+// (main package for components, contracts package for interfaces, and datatypes package)
+// and bootstrap the pcm::PrimitiveDataType - uml::PrimitiveType correspondences for the externally defined primitive types
 // on first creation of the repository.
 //
-// Related files: 
+// Related files:
 // UmlRepositoryAndSystemPackage.reactions
 // RepositoryConceptTest
 
@@ -105,7 +105,7 @@ routine createUmlDatatypesPackage(pcm::Repository pcmRepo) {
 }
 
 reaction RepositoryNameChanged {
-	after attribute replaced at pcm::Repository[entityName] 
+	after attribute replaced at pcm::Repository[entityName]
 	with affectedEObject.entityName == newValue
 	call changeNameOfCorrespondingRepositoryPackage(affectedEObject)
 }
@@ -123,7 +123,7 @@ routine changeNameOfCorrespondingRepositoryPackage(pcm::Repository pcmRepo) {
 }
 
 reaction RepositoryDeleted {
-	after element pcm::Repository removed as root 
+	after element pcm::Repository removed as root
 	call deleteCorrespondingRepositoryPackages(oldValue)
 }
 
@@ -136,23 +136,19 @@ routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo) {
 	action {
 		call{
 			// remove correspondences
-			ReactionsCorrespondenceHelper.removeCorrespondencesBetweenElements(correspondenceModel, 
+			ReactionsCorrespondenceHelper.removeCorrespondencesBetweenElements(correspondenceModel,
 				pcmRepo, umlRepositoryPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
-			if(umlContractsPkg.present) {
-				ReactionsCorrespondenceHelper.removeCorrespondencesBetweenElements(
-					correspondenceModel, pcmRepo, umlContractsPkg.get, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
-			}
-			if(umlDatatypesPkg.present) {
-				ReactionsCorrespondenceHelper.removeCorrespondencesBetweenElements(
-					correspondenceModel, pcmRepo, umlDatatypesPkg.get, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
-			}
+			umlContractsPkg.ifPresent[ReactionsCorrespondenceHelper.removeCorrespondencesBetweenElements(
+				correspondenceModel, pcmRepo, it, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)]
+			umlDatatypesPkg.ifPresent[ReactionsCorrespondenceHelper.removeCorrespondencesBetweenElements(
+				correspondenceModel, pcmRepo, it, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)]
 			// ask if the corresponding model should also be deleted
 			val deleteCorrespondingUmlRepository = userInteractor.confirmationDialogBuilder
 					.message(DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL).startInteraction
 
 			if (deleteCorrespondingUmlRepository) {// DefaultLiterals.INPUT_REQUEST_DELETE_CORRESPONDING_UML_MODEL_YES
-				if(umlContractsPkg.present) umlContractsPkg.get.destroy
-				if(umlDatatypesPkg.present) umlDatatypesPkg.get.destroy
+				umlContractsPkg.ifPresent[destroy]
+				umlDatatypesPkg.ifPresent[destroy]
 				umlRepositoryPkg.destroy // delete parent package last to allow the recorder to notice the child package deletion
 			}
 		}
@@ -163,7 +159,7 @@ routine deleteCorrespondingRepositoryPackages(pcm::Repository pcmRepo) {
 //Primitive Datatypes are bootstraped in
 routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 	match {
-		val umlDatatypesPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE	
+		val umlDatatypesPkg = retrieve asserted uml::Package corresponding to pcmRepo tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
 	}
 	action {
 		execute {

@@ -31,7 +31,7 @@ routine addTypeCorrespondence(java::ConcreteClassifier jClassifier, uml::Type uT
 //=========================================== Class
 //===========================================
 
-routine detectOrCreateUmlModel(EObject alreadyPersistedEObject) {
+routine detectOrCreateUmlModel(EObject alreadyPersistedEObject) { // TODO TS This routine needs to be broken up!
 	match {
 		require absence of uml::Model corresponding to UMLPackage.Literals.MODEL
 	}
@@ -43,7 +43,7 @@ routine detectOrCreateUmlModel(EObject alreadyPersistedEObject) {
 			var userModelPath = userInteractor.textInputDialogBuilder.message(MODELPATH_INPUTMESSAGE).startInteraction()
 			if (userModelName.nullOrEmpty) {
 				userModelName = "model"
-			} 
+			}
 			if (userModelPath.nullOrEmpty) {
                 userModelPath = "model"
             }
@@ -56,14 +56,14 @@ routine detectOrCreateUmlModel(EObject alreadyPersistedEObject) {
 					"Cannot persist/load a uml::Model from JavaToUml-reactions without any previously persisted elements."
 				);
 			}
-			val uri = PersistenceHelper.getURIFromSourceProjectFolder(alreadyPersistedEObject, rootModelFile) 
-			if (URIUtil.existsResourceAtUri(uri)) { 
+			val uri = PersistenceHelper.getURIFromSourceProjectFolder(alreadyPersistedEObject, rootModelFile)
+			if (URIUtil.existsResourceAtUri(uri)) {
 				// The resource is only found if it was previously persisted, which only happens after the change propagation terminates.
 				// This should not be a problem, as long as any created model is registered on creation, to prevent creating a second one.
 				val resource = alreadyPersistedEObject.eResource.resourceSet.getResource(uri,true)
-				umlRootModel = resource.allContents.filter(Model).head				
+				umlRootModel = resource.allContents.filter(Model).head
 			}
-			if (umlRootModel === null) { 
+			if (umlRootModel === null) {
 				//the resource didn't exist, or did not contain a uml::Model object
 				umlRootModel = UMLFactory.eINSTANCE.createModel
 				umlRootModel.name = userModelName;
@@ -83,7 +83,6 @@ routine registerUmlModelInCorrespondenceModel(uml::Model uModel) {
 	action {
 		add correspondence between uModel and UMLPackage.Literals.MODEL
 	}
-	
 }
 
 reaction JavaClassCreated {
@@ -149,7 +148,7 @@ routine potentiallyMoveClass(java::CompilationUnit compUnit) {
 			}
 			addUmlElementToModelOrPackage(compUnit, umlClass)
 		}
-	}	
+	}
 }
 
 reaction JavaCompUnitDeleted {
@@ -240,7 +239,6 @@ routine addUmlSuperClassGeneralization(java::Class jClass, java::TypeReference j
             } else {
                 logger.warn("Could not add " + jSuperClass.name + " as super class for " + uClass + " because the corresponding UML-SuperClass is null")
             }
-            
         }
 	}
 }
@@ -257,15 +255,15 @@ routine deleteUmlSuperClassGeneralization(java::TypeReference jReference){
 reaction JavaClassImplementAdded {
     after element java::TypeReference created and inserted in java::Class[implements]
     call{
-    	val jInterface = getClassifier(newValue) as Interface
-	    addUmlClassImplement(affectedEObject, newValue, jInterface)
-    } 
+        val jInterface = getClassifier(newValue) as Interface
+        addUmlClassImplement(affectedEObject, newValue, jInterface)
+    }
 }
 
 routine addUmlClassImplement(java::Class jClass, java::TypeReference jReference, java::Interface jInterface) {
     match {
         val uClass = retrieve uml::Class corresponding to jClass
-		val uInterface = retrieve uml::Interface corresponding to jInterface
+        val uInterface = retrieve uml::Interface corresponding to jInterface
         require absence of uml::InterfaceRealization corresponding to jReference
     }
     action {
@@ -274,10 +272,9 @@ routine addUmlClassImplement(java::Class jClass, java::TypeReference jReference,
                 val uRealization = uClass.createInterfaceRealization(uInterface.name + uInterface.name, uInterface)
                 addImplementsCorrespondence(jReference, uRealization)
             } else {
-                logger.warn("Could not add " + jInterface.name + " as implemented interface for " + uClass 
-                	+ " because the corresponding UML-Interface is null")
+                logger.warn("Could not add " + jInterface.name + " as implemented interface for " + uClass
+                    + " because the corresponding UML-Interface is null")
             }
-            
         }
     }
 }
@@ -371,7 +368,7 @@ routine addUmlSuperinterfaces(java::Interface jInterface, java::TypeReference jR
             	val uGeneralization = uInterface.createGeneralization(uSuperInterface)
             	addGeneralizationCorrespondence(uGeneralization, jReference)
             } else {
-                logger.warn("Could not add " + jSuperInterface.name + " as super interface for " + uInterface 
+                logger.warn("Could not add " + jSuperInterface.name + " as super interface for " + uInterface
                 	+ " because the corresponding UML-Superinterface is null")
             }
         }
@@ -463,7 +460,7 @@ routine createUmlPackage(java::Package jPackage, uml::Model uModel) {
 		    if (jPackage.namespaces.nullOrEmpty) {
 		        addUmlElementToPackage(uPackage, uModel)
 		    } else {
-		    	// find package by name is necessary, since jPackage does not explicitly model parent-child package relations 
+		    	// find package by name is necessary, since jPackage does not explicitly model parent-child package relations
 		        addUmlElementToPackage(uPackage, findUmlPackage(uModel, jPackage.namespaces.last))
 		    }
 		}

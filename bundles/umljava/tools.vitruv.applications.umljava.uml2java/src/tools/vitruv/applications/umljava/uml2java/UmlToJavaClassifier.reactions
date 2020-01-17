@@ -148,7 +148,7 @@ routine deleteJavaClass(uml::Classifier umlClassifer) {
 }
 
 reaction UmlClassMadeFinal {
-    after attribute replaced at uml::Class[isFinalSpecialization] 
+    after attribute replaced at uml::Class[isFinalSpecialization]
     call setJavaClassFinal(affectedEObject)
 }
 
@@ -278,18 +278,18 @@ routine deleteJavaClassImplementsReference(uml::InterfaceRealization uRealizatio
 		update uRealization {
 			uRealization.clients -= uClass
 		}
-        delete jReference
+		delete jReference
 	}
 }
 
 reaction UmlInterfaceRealizationReplaced {
 	after element replaced at uml::InterfaceRealization[contract]
-	with affectedEObject.implementingClassifier !== null 
+	with affectedEObject.implementingClassifier !== null
 		&& affectedEObject.implementingClassifier instanceof Class
 	call {
 		val uRealization = affectedEObject
 		val uClass = affectedEObject.implementingClassifier as Class
-		if (oldValue !== null) 
+		if (oldValue !== null)
 			deleteJavaClassImplementsReference(uRealization, uClass)
 		if (newValue !== null)
 			createJavaClassImplementsReference(uRealization, uClass)
@@ -299,9 +299,9 @@ reaction UmlInterfaceRealizationReplaced {
 
 
 reaction UmlDataTypeCreated {
-    after element uml::DataType created and inserted in uml::Package[packagedElement] 
+    after element uml::DataType created and inserted in uml::Package[packagedElement]
     with !(newValue instanceof PrimitiveType)
-        && !(newValue instanceof Enumeration) 
+        && !(newValue instanceof Enumeration)
     call createOrFindJavaClass(newValue)
 }
 
@@ -406,7 +406,7 @@ routine deleteJavaSuperInterface(uml::Generalization uGeneralization) {
 reaction UmlSuperInterfaceReplaced {
 	after element uml::Interface replaced at uml::Generalization[general]
 	call {
-		if(oldValue !== null) 
+		if(oldValue !== null)
 			deleteJavaSuperInterface(affectedEObject)
 		if(affectedEObject.specific !== null && affectedEObject.specific instanceof Interface)
 			addJavaSuperInterface(affectedEObject.specific as Interface, affectedEObject)
@@ -568,7 +568,7 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
             }
             // TODO TS This should be dealt with by the java domain, as this regards model specific persistence issues:
             for (nestedPackage : uPackage.nestedPackages) {
-                renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages 
+                renameJavaPackage(nestedPackage, uNamespace) // prevents broken subpackages
             }
         }
     }

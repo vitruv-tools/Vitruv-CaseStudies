@@ -6,7 +6,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import org.eclipse.uml2.uml.UMLPackage
 
-import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
+import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 
 //	The following reactions and routines synchronize a pcm::Repository
@@ -14,10 +14,10 @@ import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
 //	or a pcm::System with its corresponding uml::Package.
 //
 //	These reactions handle the correspondence for pcm::Repository and pcm::System correspondences,
-//	because the corresponding uml::Packages have the same requirements for the context and therefore 
-//	the user needs to disambiguate what pcm root element should be created for a new uml::Package. 
+//	because the corresponding uml::Packages have the same requirements for the context and therefore
+//	the user needs to disambiguate what pcm root element should be created for a new uml::Package.
 //
-//	Related files: 
+//	Related files:
 //		PcmRepository.reactions, PcmSystem.reactions
 //		RepositoryConceptTest, SystemConceptTest
 
@@ -73,7 +73,7 @@ routine userDisambiguateRepositoryOrSystemCreation(uml::Package umlPkg, uml::Pac
 					.windowModality(WindowModality.MODAL)
 					.startInteraction
 			switch (pcmElementType) {
-				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY: 
+				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY:
 						createCorrespondingRepository(umlPkg, umlParentPkg)
 				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM:
 						createCorrespondingSystem(umlPkg, umlParentPkg)
@@ -91,26 +91,26 @@ routine createCorrespondingRepository(uml::Package umlPkg, uml::Package umlParen
 		add correspondence between pcmRepository and umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
 		execute {
 			val fileExtension = DefaultLiterals.PCM_REPOSITORY_EXTENSION
-			
+
 			var relativeModelPath = userInteractor.textInputDialogBuilder.message(DefaultLiterals.INPUT_REQUEST_NEW_MODEL_PATH).startInteraction
 			if (relativeModelPath.nullOrEmpty) {
 				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_REPOSITORY_FILE_NAME;
 			}
-			
+
 			//check if a model at the specified path already exists; if so, append a number
 			//remove extension for now, so that it is easier to add a suffix if necessary
 			if (relativeModelPath.endsWith(fileExtension)) {
 				relativeModelPath.substring(0, relativeModelPath.length - fileExtension.length)
 			}
-			var uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + fileExtension) 
+			var uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + fileExtension)
 			while(URIUtil.existsResourceAtUri(uri)) {
-				uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + "-2" + fileExtension) 		
+				uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + "-2" + fileExtension)
 			}
 			//append file extension now
 			if (!relativeModelPath.endsWith(fileExtension)) {
 				relativeModelPath += fileExtension
 			}
-			
+
 			persistProjectRelative(umlPkg, pcmRepository, relativeModelPath);
 		}
 	}
@@ -128,21 +128,21 @@ routine createCorrespondingSystem(uml::Package umlPkg, uml::Package umlParentPkg
 			if (relativeModelPath.nullOrEmpty) {
 				relativeModelPath = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.PCM_SYSTEM_FILE_NAME;
 			}
-			
+
 			//check if a model at the specified path already exists; if so, append a number
 			//remove extension for now, so that it is easier to add a suffix if necessary
 			if (relativeModelPath.endsWith(fileExtension)) {
 				relativeModelPath.substring(0, relativeModelPath.length - fileExtension.length)
 			}
-			var uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + fileExtension) 
+			var uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + fileExtension)
 			while(URIUtil.existsResourceAtUri(uri)) {
-				uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + "-2" + fileExtension) 		
+				uri = PersistenceHelper.getURIFromSourceProjectFolder(umlPkg, relativeModelPath + "-2" + fileExtension)
 			}
 			//append file extension now
 			if (!relativeModelPath.endsWith(fileExtension)) {
 				relativeModelPath += fileExtension
 			}
-			
+
 			persistProjectRelative(umlPkg, pcmSystem, relativeModelPath);
 		}
 	}
@@ -161,8 +161,8 @@ routine deleteCorrespondingRepositoryOrSystem(uml::Package umlPackage) {
 	}
 	action {
 		call {
-			if (pcmRepository.isPresent) deleteCorrespondingRepository(umlPackage)
-			if (pcmSystem.isPresent) deleteCorrespondingSystem(umlPackage)
+			pcmRepository.ifPresent[deleteCorrespondingRepository(umlPackage)]
+			pcmSystem.ifPresent[deleteCorrespondingSystem(umlPackage)]
 		}
 	}
 }
@@ -183,7 +183,7 @@ routine deleteCorrespondingSystem(uml::Package umlSystemPkg) {
 	}
 	action {
 		remove correspondence between pcmSystem and umlSystemPkg tagged with TagLiterals.SYSTEM__SYSTEM_PACKAGE
-		delete pcmSystem 
+		delete pcmSystem
 	}
 }
 
@@ -200,9 +200,9 @@ routine renameCorrespondingRepositoryOrSystem(uml::Package umlPkg, String newNam
 	}
 	action {
 		call {
-			if (pcmRepository.isPresent) 
+			if (pcmRepository.isPresent)
 				pcmRepository.get.entityName = newName?.toFirstUpper
-			else if (pcmSystem.isPresent) 
+			else if (pcmSystem.isPresent)
 				pcmSystem.get.entityName = newName?.toFirstUpper
 		}
 	}
