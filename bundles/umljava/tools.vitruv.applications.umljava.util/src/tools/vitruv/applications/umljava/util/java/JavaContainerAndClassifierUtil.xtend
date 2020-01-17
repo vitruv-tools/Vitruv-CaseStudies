@@ -24,16 +24,15 @@ import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.members.Member
 import org.emftext.language.java.parameters.Parameter
 import java.util.ArrayList
+import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
  * Class for java classifier, package and compilation unit util functions
  * 
  * @author Fei
  */
+@Utility
 class JavaContainerAndClassifierUtil {
-    private new() {
-        
-    }
     
     /**
      * Creates and return a  new java class with the given name, visibility and modifiers
@@ -199,6 +198,20 @@ class JavaContainerAndClassifierUtil {
         writer.println("package " + packageName + ";")
         writer.close
         return file
+    }
+    
+    /**
+     * Finds and retrieves a specific {@link ConcreteClassifier} that is contained in a {@link Package}.
+     * @param name is the name of the desired {@link ConcreteClassifier}.
+     * @param javaPackage is the specific {@link Package} to search in.
+     * @param classifierType specifies the class of the desired {@link ConcreteClassifier}, e.g. {@link Interface}.
+     * @return the found classifier, or null if there is no matching classifer.
+     * @throws IllegalStateException if there are multiple classifers in the package with a matching name.
+     */
+    public static def <T extends ConcreteClassifier> T findClassifier(String name, Package javaPackage, java.lang.Class<T> classifierType) {
+        val matchingClassifiers = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(classifierType).filter[it.name == name]
+        if (matchingClassifiers.size > 1) throw new IllegalStateException("Multiple matching classifers were found: " + matchingClassifiers)
+        return matchingClassifiers.head
     }
     
     /**

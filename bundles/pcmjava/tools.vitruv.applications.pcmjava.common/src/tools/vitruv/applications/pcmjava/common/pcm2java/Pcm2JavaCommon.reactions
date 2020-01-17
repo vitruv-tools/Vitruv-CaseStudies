@@ -19,6 +19,7 @@ import org.emftext.language.java.statements.ExpressionStatement
 import org.emftext.language.java.types.PrimitiveType
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.containers.ContainersPackage
+import org.emftext.language.java.classifiers.Interface
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
@@ -26,12 +27,13 @@ import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.RepositoryComponent
+import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import static extension tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -121,7 +123,7 @@ routine createImplementationForSystem(pcm::System system) {
 		val systemPackage = retrieve java::Package corresponding to system
 	}
 	action {
-		call createJavaClass(system, systemPackage, system.entityName + "Impl")
+		call createOrFindJavaClass(system, systemPackage, system.entityName + "Impl")
 	}
 }
 
@@ -211,7 +213,7 @@ routine createImplementationForComponent(pcm::RepositoryComponent component) {
 		val componentPackage = retrieve java::Package corresponding to component
 	}
 	action {
-		call createJavaClass(component, componentPackage, component.entityName + "Impl")
+		call createOrFindJavaClass(component, componentPackage, component.entityName + "Impl")
 	}
 }
 
@@ -291,7 +293,7 @@ routine createCompositeDataTypeImplementation(pcm::CompositeDataType compositeDa
 	}
 	action {
 		call {
-			createJavaClass(compositeDataType, datatypesPackage, compositeDataType.entityName);
+			createOrFindJavaClass(compositeDataType, datatypesPackage, compositeDataType.entityName);
 		}
 	}
 }
@@ -343,10 +345,10 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 			}
 			val String selectTypeMsg = "Please select type (or interface) that should be used for the type";
 			val int selectedType = userInteractor.singleSelectionDialogBuilder.message(selectTypeMsg)
-			    .choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction();
+				.choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction();
 			val Class<?> selectedClass = collectionDataTypes.get(selectedType);
 
-			createJavaClass(dataType, datatypesPackage, dataType.entityName);
+			createOrFindJavaClass(dataType, datatypesPackage, dataType.entityName);
 			addSuperTypeToDataType(dataType, innerTypeClassOrWrapper, selectedClass.name);
 		}
 	}
@@ -582,6 +584,23 @@ routine deleteJavaPackage(pcm::NamedElement sourceElementMappedToPackage, String
 // ######################################################
 // ################ JAVA CLASS ROUTINES ##################
 
+
+routine createOrFindJavaClass(pcm::NamedElement pcmElement, java::Package containingPackage, String className) {
+	match {
+		require absence of java::Class corresponding to pcmElement
+	}
+	action {
+		call {
+			val foundClass = findClassifier(className, containingPackage, org.emftext.language.java.classifiers.Class)
+			if(foundClass === null) {
+				createJavaClass(pcmElement, containingPackage, className)
+			} else {
+				addMissingClassifierCorrespondence(pcmElement, foundClass)
+			}
+		}
+	}
+}
+
 routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Package containingPackage, String className) {
 	action {
 		val javaClass = create java::Class and initialize {
@@ -596,25 +615,18 @@ routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Pack
 routine createOrFindJavaInterface(pcm::Interface pcmInterface) {
 	match {
 		val contractsPackage = retrieve java::Package corresponding to pcmInterface.repository__Interface tagged with "contracts"
-        require absence of java::Interface corresponding to pcmInterface
-        require absence of java::CompilationUnit corresponding to pcmInterface
+		require absence of java::Interface corresponding to pcmInterface
+		require absence of java::CompilationUnit corresponding to pcmInterface
 	}
 	action {
 		call {
-			val foundInterface = findInterface(pcmInterface.entityName, contractsPackage)
+			val foundInterface = findClassifier(pcmInterface.entityName, contractsPackage, Interface)
 			if(foundInterface === null) {
 				createJavaInterface(pcmInterface, contractsPackage)
 			} else {
-				addMissingInterfaceCorrespondence(pcmInterface, foundInterface)
+				addMissingClassifierCorrespondence(pcmInterface, foundInterface)
 			}
 		}
-	}
-}
-
-routine addMissingInterfaceCorrespondence(pcm::Interface pcmInterface, java::Interface javaInterface ) {
-	action {
-		add correspondence between javaInterface and pcmInterface
-		add correspondence between javaInterface.containingCompilationUnit and pcmInterface
 	}
 }
 
@@ -629,6 +641,13 @@ routine createJavaInterface(pcm::Interface pcmInterface, java::Package containin
 	}
 }
 
+routine addMissingClassifierCorrespondence(pcm::NamedElement pcmElement, java::ConcreteClassifier javaClassifier) {
+	action {
+		add correspondence between javaClassifier and pcmElement
+		add correspondence between javaClassifier.containingCompilationUnit and pcmElement
+	}
+}
+
 routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java::ConcreteClassifier classifier, java::Package containingPackage) {
 	action {
 		val compilationUnit = create java::CompilationUnit and initialize {
@@ -637,6 +656,9 @@ routine createCompilationUnit(pcm::NamedElement sourceElementMappedToClass, java
 			compilationUnit.name = classifier.name + ".java";
 			compilationUnit.classifiers += classifier;
 			persistProjectRelative(sourceElementMappedToClass, compilationUnit, buildJavaFilePath(compilationUnit));
+		}
+		call {
+			containingPackage.compilationUnits += compilationUnit
 		}
 		add correspondence between compilationUnit and sourceElementMappedToClass
 	}
