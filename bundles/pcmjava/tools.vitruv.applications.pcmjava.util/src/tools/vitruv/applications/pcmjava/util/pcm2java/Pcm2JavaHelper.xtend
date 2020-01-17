@@ -8,8 +8,6 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.classifiers.Interface
-import org.emftext.language.java.containers.Package
 import org.emftext.language.java.expressions.ExpressionsFactory
 import org.emftext.language.java.literals.LiteralsFactory
 import org.emftext.language.java.members.ClassMethod
@@ -171,12 +169,6 @@ class Pcm2JavaHelper {
 		if (null !== parameters) {
 			classMethod.parameters.addAll(EcoreUtil.copyAll(parameters))
 		}
-	}
-	
-	public static def Interface findInterface(String interfaceName, Package javaPackage) {
-		val matchingInterfaces = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(Interface).filter[it.name == interfaceName]
-		if(matchingInterfaces.size > 1) throw new IllegalStateException("Multiple matching interfaces were found: " + matchingInterfaces)
-		return matchingInterfaces.head
 	}
 
 	public static def ClassMethod findMethodInClass(ConcreteClassifier concreteClassifier, ClassMethod method) {
