@@ -20,3 +20,4 @@ target/
 
 # Custom
 EvaluationData
+*.DS_Store
