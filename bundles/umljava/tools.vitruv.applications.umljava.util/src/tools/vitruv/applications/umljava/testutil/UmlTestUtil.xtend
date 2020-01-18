@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umljava.testutil
 
-import static org.junit.Assert.*
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Feature
@@ -21,11 +20,13 @@ import org.eclipse.uml2.uml.EnumerationLiteral
 import java.util.List
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import static org.hamcrest.CoreMatchers.*
-import static org.hamcrest.MatcherAssert.assertThat
 import org.eclipse.uml2.uml.LiteralInteger
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
 
 /**
  * Class for assertions that only involves uml elements.

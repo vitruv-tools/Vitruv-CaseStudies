@@ -3,8 +3,8 @@ package tools.vitruv.applications.umljava.java2uml.tests
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Before
 import static org.junit.Assert.*;
-import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import org.junit.Test

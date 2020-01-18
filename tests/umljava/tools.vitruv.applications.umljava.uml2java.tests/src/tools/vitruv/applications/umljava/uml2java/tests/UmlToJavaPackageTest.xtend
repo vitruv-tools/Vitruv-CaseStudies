@@ -9,7 +9,7 @@ import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.

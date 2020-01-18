@@ -2,15 +2,16 @@ package tools.vitruv.applications.umljava.uml2java.tests
 
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlPropertyAndAssociationUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.junit.Before
+
+import static org.junit.Assert.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 
 
 /**

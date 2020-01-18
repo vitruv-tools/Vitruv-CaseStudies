@@ -15,9 +15,9 @@ import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlOperationAndParameterUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
 
 /**
  * This class tests the change of parameter traits.

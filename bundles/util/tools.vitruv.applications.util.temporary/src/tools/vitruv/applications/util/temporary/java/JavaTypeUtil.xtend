@@ -1,5 +1,6 @@
-package tools.vitruv.applications.umljava.util.java
+package tools.vitruv.applications.util.temporary.java
 
+import edu.kit.ipd.sdq.activextendannotations.Utility
 import java.util.List
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.BasicEList
@@ -23,11 +24,11 @@ import static tools.vitruv.domains.java.util.JavaModificationUtil.*
  * Class for type and typereference util function
  * @author Fei
  */
+@Utility
 class JavaTypeUtil {
-    
+
     private static val logger = Logger.getLogger(JavaTypeUtil.simpleName)
-    private new() {}
-    
+
     /**
      * Converts a list with ConcreteClassifiers to a list with corresponding NamespaceClassifierRefrences.
      */
@@ -38,7 +39,7 @@ class JavaTypeUtil {
         }
         return typeReferences
     }
-    
+
     def static TypeReference createCollectiontypeReference(String collectionQualifiedName, ConcreteClassifier innerTypeClass) {
         val innerTypeReference = createNamespaceReferenceFromClassifier(innerTypeClass)
         val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
@@ -47,7 +48,7 @@ class JavaTypeUtil {
         collectionClassNamespaceReference.classifierReferences.get(0).typeArguments += qualifiedTypeArgument;
         return collectionClassNamespaceReference
     }
-    
+
     /**
      * Wraps a copy of the given concreteClassifier into a ClassfierReference which is then wrapped into a namespaceClassifierReference
      * @throws IllegalArgumentException if concreteCLassifier is null
@@ -62,7 +63,7 @@ class JavaTypeUtil {
         namespaceClassifierReference.classifierReferences.add(classifierRef)
         return namespaceClassifierReference
     }
-    
+
     /**
      * @return the classifier that is wrapped in the typeref. Returns null if the type reference does not contain any classifier
      */
@@ -75,7 +76,7 @@ class JavaTypeUtil {
             return null
         }
     }
-    
+
     /**
      * @return the interface that is wrapped in the typeref. Returns null if the type reference does not contain any interfaces
      */
@@ -88,20 +89,20 @@ class JavaTypeUtil {
             return null
         }
     }
-    
+
     /**
      * Unwraps the type reference and returns the contained type.
-     * 
+     *
      */
     def static dispatch Type getJavaTypeFromTypeReference(TypeReference typeRef) {
         logger.warn(typeRef + " is neither a NamespaceClassifierReference nor a PrimitiveType. Returning null.")
         return null
     }
-    
+
     def static dispatch Type getJavaTypeFromTypeReference(PrimitiveType primType) {
         return primType
     }
-    
+
     def static dispatch Type getJavaTypeFromTypeReference(NamespaceClassifierReference namespaceRef) {
         if (namespaceRef.classifierReferences.nullOrEmpty) {
             throw new IllegalArgumentException(namespaceRef + " has no classifierReferences")
@@ -109,7 +110,7 @@ class JavaTypeUtil {
             return getJavaTypeFromTypeReference(namespaceRef.classifierReferences.head)
         }
     }
-    
+
     def static dispatch Type getJavaTypeFromTypeReference(ClassifierReference classifRef) {
         if (classifRef.target === null) {
             throw new IllegalArgumentException(classifRef + " contains no classifier")
@@ -117,12 +118,12 @@ class JavaTypeUtil {
             return classifRef.target
         }
     }
-    
+
     def static dispatch Type getJavaTypeFromTypeReference(Void nullReference) {
         logger.warn("Cannot get Type of a null-TypeReference. Returning null.")
         return null
     }
-    
+
     def static void setTypeReference(TypedElement typedElement, TypeReference typeRef) {
         if (typeRef !== null) {
             typedElement.typeReference = typeRef
@@ -130,7 +131,7 @@ class JavaTypeUtil {
             typedElement.typeReference = TypesFactory.eINSTANCE.createVoid
         }
     }
-    
+
     /**
      * Compares two type references. Both type references must be primitive types or
      * namespaceclassifierreferences or null.
@@ -141,20 +142,20 @@ class JavaTypeUtil {
         logger.warn("No dispatch Method found for the typeReferences " + typeRef1 + " and " + typeRef2 + ". Returning false.")
         return false
     }
-    
+
     def static dispatch typeReferenceEquals(NamespaceClassifierReference typeRef1, NamespaceClassifierReference typeRef2) {
         return getClassifierFromTypeReference(typeRef1).name.equals(getClassifierFromTypeReference(typeRef2).name)
     }
-    
+
     def static dispatch typeReferenceEquals(PrimitiveType primType1, PrimitiveType primtype2) {
         return primType1.class.equals(primtype2.class)
     }
-    
+
     def static dispatch typeReferenceEquals(Void type1, Void typ22) {
         logger.warn("Both TypeReferences to compare are null. Returning true.")
         return true
     }
-    
+
     def static getInnerTypeReferenceOfCollectionTypeReference(TypeReference typeRef) {
        if (typeRef instanceof NamespaceClassifierReference) {
            return (typeRef.classifierReferences.head.typeArguments.head as QualifiedTypeArgument).typeReference

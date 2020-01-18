@@ -1,5 +1,7 @@
-package tools.vitruv.applications.umljava.util.java
+package tools.vitruv.applications.util.temporary.java
 
+import edu.kit.ipd.sdq.activextendannotations.Utility
+import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
@@ -8,19 +10,17 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
-import org.apache.log4j.Logger
 
 /**
  * Util class for java modifiers and visibilities.
  * 
  * @author Fei
  */
+@Utility
 class JavaModifierUtil {
-    
+
     private static val logger = Logger.getLogger(JavaModifierUtil.simpleName)
-    private new() {}
-    
-    
+
     /**
      * Sets for the modifiable the java visibility modifier corresponding to the given JavaVisibility enum constant.
      * If visibility is JavaVisibility.PACKAGE, all visibility modifiers will be removed from the
@@ -36,16 +36,16 @@ class JavaModifierUtil {
         } else {
             val visibilityModifier = getJavaVisibilityModifierFromEnum(visibility)
             if (visibilityModifier !== null) {
-            	if (!modifiable.hasModifier(visibilityModifier.class)) {
-	                removeJavaVisibilityModifiers(modifiable)
-	                setJavaModifier(modifiable, visibilityModifier, true)
+                if (!modifiable.hasModifier(visibilityModifier.class)) {
+                    removeJavaVisibilityModifiers(modifiable)
+                    setJavaModifier(modifiable, visibilityModifier, true)
                 }
             } else {
                 logger.warn("No corresponding Java-Visibility-Modifier found for " + visibility)
             }
         }
     }
-    
+
     /**
      * Returns null if visibility is JavaVisibility.PACKAGE.
      * 
@@ -61,7 +61,7 @@ class JavaModifierUtil {
             default: throw new IllegalArgumentException("Invalid Visibility: " + visibility)
         }
     }
-    
+
     /**
      * Returns the corresponding JavaVisibility enum constant of the given
      * modifier. If modifier is null, it will return JavaVisibility.PACKAGE.
@@ -80,7 +80,7 @@ class JavaModifierUtil {
             default: throw new IllegalArgumentException("Invalid VisibilityModifier: " + modifier)
         }
     }
-    
+
     /**
      * Adds modifier to jModifiable if add is true.
      * Otherwise it will remove all instances of the modifier's class from jModifiable.
@@ -92,7 +92,7 @@ class JavaModifierUtil {
     def static setJavaModifier(AnnotableAndModifiable jModifiable, Modifier modifier, boolean add) {
         if (add) {
             if (!jModifiable.hasModifier(modifier.class)) {
-                jModifiable.addModifier(modifier)  
+                jModifiable.addModifier(modifier)
             } else {
                 logger.warn("The Java AnnotableAndModifiable " + jModifiable.class + " already has the modifier " + modifier.class)
             }
@@ -100,7 +100,7 @@ class JavaModifierUtil {
             jModifiable.removeModifier(modifier.class)
         }
     }
-    
+
     /**
      * Adds mod to jModifiable if mod is not null.
      * 
@@ -112,7 +112,7 @@ class JavaModifierUtil {
             setJavaModifier(jModifiable, mod, true)
         }
     }
-    
+
     /**
      * Sets the name of namedElement to name if name is not null.
      * 
@@ -126,7 +126,7 @@ class JavaModifierUtil {
         }
         namedElement.name = name
     }
-    
+
     /**
      * Adds a final modifier to modifiable, if toAdd is true.
      * Otherwise it removes all final modifiers from modifiable.
@@ -137,7 +137,7 @@ class JavaModifierUtil {
     def static void setFinal(AnnotableAndModifiable modifiable, boolean toAdd) {
         setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createFinal, toAdd)
     }
-    
+
     /**
      * Adds a abstract modifier to modifiable, if toAdd is true.
      * Otherwise it removes all abstract modifiers from modifiable.
@@ -148,7 +148,7 @@ class JavaModifierUtil {
     def static void setAbstract(AnnotableAndModifiable modifiable, boolean toAdd) {
         setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createAbstract, toAdd)
     }
-    
+
     /**
      * Adds a static modifier to modifiable, if toAdd is true.
      * Otherwise it removes all static modifiers from modifiable.
@@ -159,7 +159,7 @@ class JavaModifierUtil {
     def static void setStatic(AnnotableAndModifiable modifiable, boolean toAdd) {
         setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createStatic, toAdd)
     }
-    
+
     /**
      * Removes all Private, Public and Protected modifiers from a modifiable.
      * 
@@ -170,7 +170,7 @@ class JavaModifierUtil {
         if (modifiable.hasModifier(typeof(Protected))) modifiable.removeModifier(typeof(Protected))
         if (modifiable.hasModifier(typeof(Public))) modifiable.removeModifier(typeof(Public))
     }
-    
+
     /**
      * Returns the corresponding JavaVisibility enum constant corresponding to
      * the VisibilityKind enum constant.
@@ -184,10 +184,10 @@ class JavaModifierUtil {
             default: throw new IllegalArgumentException("Unknown VisibilityKind: " + uVisibility)
         }
     }
-    
+
     /**
      * Returns the corresponding VisibilityKind enum constant corresponding to
-     * the JavaVisibility enum constant. This is the reverse function of 
+     * the JavaVisibility enum constant. This is the reverse function of
      * {@link #getJavaVisibilityConstantFromUmlVisibilityKind(VisibilityKind)}
      */
     def static getUmlVisibilityKindFromJavaVisibilityConstant(JavaVisibility jVisibility) {
@@ -199,7 +199,7 @@ class JavaModifierUtil {
             default: throw new IllegalArgumentException("Unknown Java-Visibility: " + jVisibility)
         }
     }
-    
+
     /**
      * Returns the corresponding UMLVisibility enum constant corresponding to
      * the given java visibility modifier
@@ -207,7 +207,7 @@ class JavaModifierUtil {
     def static getUMLVisibilityKindFromJavaModifier(Modifier visibilityModifier) {
         return getUmlVisibilityKindFromJavaVisibilityConstant(getEnumConstantFromJavaVisibility(visibilityModifier))
     }
-    
+
     /**
      * Sets the java visibility modifier corresponding to uVisibility to jModifiable
      * 

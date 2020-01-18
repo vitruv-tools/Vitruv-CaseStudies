@@ -1,30 +1,31 @@
-package tools.vitruv.applications.umljava.util.java
+package tools.vitruv.applications.util.temporary.java
 
+import edu.kit.ipd.sdq.activextendannotations.Utility
+import java.io.File
+import java.io.PrintWriter
+import java.util.ArrayList
 import java.util.Collections
 import java.util.Iterator
 import java.util.List
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
+import org.emftext.language.java.classifiers.Enumeration
 import org.emftext.language.java.classifiers.Interface
+import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.containers.Package
 import org.emftext.language.java.members.Constructor
-import org.emftext.language.java.members.Field
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.TypeReference
-import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
 import org.emftext.language.java.members.EnumConstant
-import org.emftext.language.java.classifiers.Enumeration
-import java.io.File
-import java.io.PrintWriter
-import org.emftext.language.java.commons.NamedElement
+import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.Member
 import org.emftext.language.java.parameters.Parameter
-import java.util.ArrayList
-import edu.kit.ipd.sdq.activextendannotations.Utility
+import org.emftext.language.java.types.NamespaceClassifierReference
+import org.emftext.language.java.types.TypeReference
+
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 /**
  * Class for java classifier, package and compilation unit util functions
@@ -33,11 +34,10 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
  */
 @Utility
 class JavaContainerAndClassifierUtil {
-    
+
     /**
      * Creates and return a  new java class with the given name, visibility and modifiers
      * The new class is not contained in a compilation unit.
-     * 
      * @param name the name of the class
      * @param visibility the visibility of the class
      * @param abstr if the class should be abstract
@@ -53,9 +53,9 @@ class JavaContainerAndClassifierUtil {
 
         return jClass;
     }
+
     /**
      * Creates a new java package
-     * 
      * @param name the name of the new package
      * @param containingPackage the super package of the new package or null if it is the default package
      * @return the new package
@@ -66,11 +66,10 @@ class JavaContainerAndClassifierUtil {
         jPackage.namespaces += getJavaPackageAsStringList(containingPackage)
         return jPackage
     }
-    
+
     /**
      * Creates a new java interface with the given name and list of super interfaces
      * The created interface is not contained in a compilation unit.
-     * 
      * @param name the name of the interface
      * @param superInterfaces the superinterfaces of the interface
      * @return the new interface
@@ -84,11 +83,10 @@ class JavaContainerAndClassifierUtil {
         }
         return jInterface;
     }
-    
+
     /**
      * Creats a new java enum with the given properties
      * The created Enum is not contained in a compilationunit.
-     * 
      * @param name the name of the enum
      * @param visibility the visibility of the enum
      * @param constantsList list of enum constants for the enum
@@ -101,7 +99,7 @@ class JavaContainerAndClassifierUtil {
         addEnumConstantIfNotNull(jEnum, constantsList)
         return jEnum;
     }
-    
+
     /**
      * Add constantList to the enum constants of the given jEnum if constantsList is not null or empty
      * 
@@ -111,12 +109,11 @@ class JavaContainerAndClassifierUtil {
             jEnum.constants.addAll(constantsList)
         }
     }
-    
+
     /**
      * Creates a java compilation unit with the given naem
      * The method automatically sets the .java FileExtension for the compilation unit name
      * There are no classifiers in the compilation unit yet.
-     * 
      * @param nameWithoutFileExtension the name without .java file extension
      * @return the new compilation unit
      */
@@ -125,17 +122,16 @@ class JavaContainerAndClassifierUtil {
         cu.name = nameWithoutFileExtension + ".java"
         return cu
     }
-    
+
     def static createJavaCompilationUnitWithClassifierInPackage(ConcreteClassifier jClassifier, Package jPackage) {
         val compUnit = createEmptyCompilationUnit(jClassifier.name)
         compUnit.classifiers += jClassifier
         compUnit.namespaces.addAll(getJavaPackageAsStringList(jPackage))
         return compUnit
     }
-    
+
     /**
      * Removes all classifiers of the iterator which has the same name as the given classifier classif
-     * 
      * @param iter iterator of typreferences
      * @param classif classifier that shoud be removed from the iterator
      */
@@ -147,42 +143,41 @@ class JavaContainerAndClassifierUtil {
             }
         }
     }
-    
+
     /**
      * For org.example.package it will return [org, example, package]
      * Returns empty list if jPackage is the default package.
-     * 
      */
     def static getJavaPackageAsStringList(Package jPackage) {
-       if (jPackage === null || jPackage.name.nullOrEmpty) { //Defaultpackage
-           return Collections.<String>emptyList()
-       }
-       val packageStringList = new ArrayList<String>()
-       packageStringList.addAll(jPackage.namespaces)
-       packageStringList += jPackage.name
-       return packageStringList
-   }
-   
-   def static Field getJavaAttributeByName(Class jClass, String attributeName) {
-       val candidates = jClass.members.filter(Field)
-       for (member : candidates) {
-           if (member.name == attributeName) {
-               return member
-           }
-       }
-       return null
-   }
-   
-   def static Constructor getFirstJavaConstructor(Class jClass) {
-       val candidates = jClass.members.filter(Constructor)
-       if (!candidates.nullOrEmpty) {
-           return candidates.head
-       } else {
-           return null
-       }
-   }
-   
-   def static removeJavaClassifierFromPackage(Package jPackage, ConcreteClassifier jClassifier) {
+        if (jPackage === null || jPackage.name.nullOrEmpty) { // Defaultpackage
+            return Collections.<String>emptyList()
+        }
+        val packageStringList = new ArrayList<String>()
+        packageStringList.addAll(jPackage.namespaces)
+        packageStringList += jPackage.name
+        return packageStringList
+    }
+
+    def static Field getJavaAttributeByName(Class jClass, String attributeName) {
+        val candidates = jClass.members.filter(Field)
+        for (member : candidates) {
+            if (member.name == attributeName) {
+                return member
+            }
+        }
+        return null
+    }
+
+    def static Constructor getFirstJavaConstructor(Class jClass) {
+        val candidates = jClass.members.filter(Constructor)
+        if (!candidates.nullOrEmpty) {
+            return candidates.head
+        } else {
+            return null
+        }
+    }
+
+    def static removeJavaClassifierFromPackage(Package jPackage, ConcreteClassifier jClassifier) {
         val iter = jPackage.compilationUnits.iterator
         while (iter.hasNext) {
             if (iter.next.name.equals(jClassifier.name)) {
@@ -190,16 +185,16 @@ class JavaContainerAndClassifierUtil {
             }
         }
     }
-    
+
     def static File createPackageInfo(String directory, String packageName) {
-        val file = new File(directory +  "/package-info.java")
+        val file = new File(directory + "/package-info.java")
         file.createNewFile
         val writer = new PrintWriter(file)
         writer.println("package " + packageName + ";")
         writer.close
         return file
     }
-    
+
     /**
      * Finds and retrieves a specific {@link ConcreteClassifier} that is contained in a {@link Package}.
      * @param name is the name of the desired {@link ConcreteClassifier}.
@@ -213,39 +208,42 @@ class JavaContainerAndClassifierUtil {
         if (matchingClassifiers.size > 1) throw new IllegalStateException("Multiple matching classifers were found: " + matchingClassifiers)
         return matchingClassifiers.head
     }
-    
+
     /**
      * Returns the namespace of the compilation unit where the given object is directly or indirectly contained
-     * 
      */
     def static dispatch List<String> getJavaNamespace(CompilationUnit compUnit) {
         return compUnit.namespaces
     }
-    
+
     def static dispatch List<String> getJavaNamespace(ConcreteClassifier classifier) {
         return getJavaNamespace(classifier.eContainer as CompilationUnit)
     }
-    
+
     def static dispatch List<String> getJavaNamespace(NamedElement element) {
         throw new IllegalArgumentException("Unsupported type for retrieving namespace: " + element)
     }
+
     def static dispatch List<String> getJavaNamespace(Void element) {
         throw new IllegalArgumentException("Can not retrieve namespace for " + element)
     }
-    
+
     def static dispatch CompilationUnit getContainingCompilationUnit(ConcreteClassifier classifier) {
         return classifier.eContainer as CompilationUnit
     }
+
     def static dispatch CompilationUnit getContainingCompilationUnit(Member mem) {
         return getContainingCompilationUnit(mem.eContainer as ConcreteClassifier)
     }
+
     def static dispatch CompilationUnit getContainingCompilationUnit(Parameter param) {
         return getContainingCompilationUnit(param.eContainer as Member)
     }
-    
+
     def static dispatch CompilationUnit getContainingCompilationUnit(NamedElement element) {
         throw new IllegalArgumentException("Unsupported type for retrieving compilation unit: " + element)
     }
+
     def static dispatch CompilationUnit getContainingCompilationUnit(Void element) {
         throw new IllegalArgumentException("Can not retrieve compilation unit for " + element)
     }

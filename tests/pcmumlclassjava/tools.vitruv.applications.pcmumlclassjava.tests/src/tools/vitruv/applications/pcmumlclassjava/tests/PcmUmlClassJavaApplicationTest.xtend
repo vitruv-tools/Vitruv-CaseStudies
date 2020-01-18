@@ -10,14 +10,14 @@ import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChang
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.userinteraction.UserInteractionFactory
 
-import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 
 abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest {
 	

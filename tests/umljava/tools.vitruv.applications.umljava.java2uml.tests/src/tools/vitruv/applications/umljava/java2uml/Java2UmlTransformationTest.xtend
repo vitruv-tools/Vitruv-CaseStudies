@@ -3,9 +3,9 @@ package tools.vitruv.applications.umljava.java2uml
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.Model
 import org.emftext.language.java.classifiers.Interface
-import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.members.Field
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
