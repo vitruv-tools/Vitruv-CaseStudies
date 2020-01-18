@@ -7,14 +7,14 @@ import org.emftext.language.java.types.TypesFactory
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 
 /**
  * This class contains Tests for creating, deleting and renaming enums.

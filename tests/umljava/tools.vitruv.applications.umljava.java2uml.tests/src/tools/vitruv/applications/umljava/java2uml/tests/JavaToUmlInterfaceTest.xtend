@@ -10,7 +10,7 @@ import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 /**
  * A Test class for interface tests. Checks their creation, renaming, deleting and the 

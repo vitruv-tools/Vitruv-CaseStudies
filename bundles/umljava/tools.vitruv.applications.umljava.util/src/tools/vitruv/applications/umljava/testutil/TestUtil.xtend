@@ -8,15 +8,6 @@ import org.emftext.language.java.members.Method
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.Final
 import org.emftext.language.java.modifiers.Static
-
-import static org.hamcrest.CoreMatchers.*
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
-import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import org.emftext.language.java.modifiers.Abstract
 import org.emftext.language.java.types.Void
 import org.emftext.language.java.types.TypeReference
@@ -32,6 +23,15 @@ import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.ClassMethod
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
+
+import static org.hamcrest.CoreMatchers.*
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.junit.Assert.*
+import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 
 /**
  * Util class for assertions that works bidirectional.

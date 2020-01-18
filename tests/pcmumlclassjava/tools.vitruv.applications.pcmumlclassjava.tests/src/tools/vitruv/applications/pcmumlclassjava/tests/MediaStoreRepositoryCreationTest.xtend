@@ -9,13 +9,13 @@ import org.palladiosimulator.pcm.repository.ParameterModifier
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import tools.vitruv.applications.umljava.util.java.JavaStandardType
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
+import tools.vitruv.applications.util.temporary.java.JavaStandardType
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
 import static org.junit.Assert.*
-import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaStandardType.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 /**
  * Model creation tests, to test the set of transformations as a whole. 

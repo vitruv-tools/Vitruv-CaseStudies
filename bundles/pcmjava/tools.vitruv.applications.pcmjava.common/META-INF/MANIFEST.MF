@@ -35,4 +35,4 @@ Require-Bundle: org.eclipse.emf.ecore,
  tools.vitruv.domains.java.util,
  tools.vitruv.domains.java,
  tools.vitruv.domains.pcm,
- tools.vitruv.applications.umljava.util
+ tools.vitruv.applications.util.temporary

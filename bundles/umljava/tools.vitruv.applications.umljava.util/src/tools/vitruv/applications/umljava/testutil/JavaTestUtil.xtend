@@ -2,8 +2,7 @@ package tools.vitruv.applications.umljava.testutil
 
 import static org.junit.Assert.*
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import org.emftext.language.java.modifiers.Public
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
@@ -25,6 +24,8 @@ import java.util.List
 import org.emftext.language.java.modifiers.Abstract
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.ClassMethod
+
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 /**
  * Util class for assertions that only involves java elements.

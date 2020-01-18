@@ -1,10 +1,10 @@
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Property
 
-import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-import static tools.vitruv.applications.umljava.util.java.JavaMemberAndParameterUtil.*
+import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
+import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 
-import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -81,7 +81,7 @@ routine deleteJavaAttribute(uml::Property umlAttr) {
 
 reaction UmlAttributeMadeFinal {
     after attribute replaced at uml::Property[isReadOnly]
-    call setJavaAttributeFinal(affectedEObject) 
+    call setJavaAttributeFinal(affectedEObject)
 }
 
 routine setJavaAttributeFinal(uml::Property umlAttr) {
@@ -120,7 +120,7 @@ routine changeJavaAttributeType(uml::Property uAttribute) {
     action {
         call {
         	umlToJavaTypePropagation.propagatePropertyTypeChanged(uAttribute, jAttribute, jCustomType.orElse(null))
-        	
+
 		    updateAttributeTypeInSetters(jAttribute)
 		    updateAttributeTypeInGetters(jAttribute)
         }

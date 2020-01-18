@@ -5,7 +5,7 @@ import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import org.junit.Test
 import java.io.File
 import org.apache.commons.io.FilenameUtils
-import static tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import java.util.List
 
 /**

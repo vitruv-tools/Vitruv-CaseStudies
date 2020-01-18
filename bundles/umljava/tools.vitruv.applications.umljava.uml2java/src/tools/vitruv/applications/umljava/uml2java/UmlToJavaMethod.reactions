@@ -9,9 +9,8 @@ import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
 
-import static tools.vitruv.applications.umljava.uml2java.UmlToJavaHelper.*
-
-import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java

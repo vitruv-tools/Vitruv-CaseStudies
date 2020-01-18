@@ -26,10 +26,9 @@ Require-Bundle: com.google.guava,
  org.junit;bundle-version="4.12.0",
  tools.vitruv.domains.java.util.jamoppparser;bundle-version="0.2.0",
  tools.vitruv.testutils;bundle-version="0.2.0",
- edu.kit.ipd.sdq.activextendannotations
+ edu.kit.ipd.sdq.activextendannotations,
+ tools.vitruv.applications.util.temporary;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: tools.vitruv.applications.umljava.testutil,
- tools.vitruv.applications.umljava.util,
- tools.vitruv.applications.umljava.util.java,
- tools.vitruv.applications.umljava.util.uml
+ tools.vitruv.applications.umljava.util
 Bundle-Vendor: vitruv.tools

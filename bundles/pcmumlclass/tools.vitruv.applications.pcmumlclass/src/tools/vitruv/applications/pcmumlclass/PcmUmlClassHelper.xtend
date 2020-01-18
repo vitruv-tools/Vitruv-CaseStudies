@@ -1,18 +1,13 @@
 package tools.vitruv.applications.pcmumlclass
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
-import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import java.util.List
-import java.util.Optional
-import java.util.Set
 import java.util.function.Function
-import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.PrimitiveType
@@ -24,7 +19,6 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
@@ -34,61 +28,6 @@ import tools.vitruv.framework.userinteraction.UserInteractor
 class PcmUmlClassHelper {
 	private static val PCM_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository");
 	private static val UML_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml");
-	private static val logger = Logger.getLogger(PcmUmlClassHelper.simpleName)
-
-	/**
-	 * Ensures the model path is not null or empty ends with the UML file extension.
-	 * @param relativeModelPath is a relative path to a UML model.
-	 * @returns the relative model path with the file extension or the default model path.
-	 * @see DefaultLiterals.MODEL_DIRECTORY
-	 * @see DefaultLiterals.UML_MODEL_FILE_NAME
-	 */
-	def static validateModelPath(String relativeModelPath) {
-		if (relativeModelPath.nullOrEmpty) {
-			return DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
-		} else if (!relativeModelPath.endsWith(DefaultLiterals.UML_EXTENSION)) {
-			return relativeModelPath + DefaultLiterals.UML_EXTENSION
-		}
-		return relativeModelPath
-	}
-
-	/**
-	 * Tries to load a persisted model from a source object.
-	 * The resource can only be found if it was previously persisted, which happens after the change propagation terminates.
-	 * @param relativeModelPath is the path to the model file.
-	 * @param source is the source object, e.g. a model element contained in that model.
-	 * @returns the optional model or nothing.
-	 */
-	def static Optional<Model> loadPersistedModelFromSource(String relativeModelPath, EObject source) {
-		val uri = PersistenceHelper.getURIFromSourceProjectFolder(source, relativeModelPath) 
-		if (URIUtil.existsResourceAtUri(uri)) { 
-			val resource = source.eResource.resourceSet.getResource(uri, true)
-			return Optional.of(resource.contents.filter(Model).head)
-		}
-		return Optional.empty
-	}
-
-	/**
-	 * TODO FIXME TS This method is DIRECTLY copied from  tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper due to the lack of a shared helper/util class
-	 * Searches and retrieves the UML package in the UML model that has an equal name as the given package name.
-	 * If there is more than one package with the given name, an {@link IllegalStateException} is thrown.
-	 * 
-	 * @param umlModel the UML model Model in which the UML packages should be searched
-	 * @param packageName the package name for which a fitting UML package should be retrieved
-	 * @return the UML package or null if none could be found
-	 */
-	def static Package findUmlPackage(Model umlModel, String packageName) {
-		val Set<Package> allPackages = umlModel.eAllContents.filter(Package).toSet
-		val packages = allPackages.filter[name == packageName]
-		if (packages.nullOrEmpty) {
-			logger.warn("The UML-Package with the name " + packageName + " does not exist in the correspondence model")
-			return null
-		}
-		if (packages.size > 1) {
-			throw new IllegalStateException("There is more than one package with name " + packageName + " in the UML model.")
-		}
-		return packages.head
-	}
 
 	def public static getPcmPrimitiveTypes(EObject alreadyPersistedObject) {
 		return getPcmPrimitiveTypes(alreadyPersistedObject.eResource.resourceSet)

@@ -6,7 +6,10 @@ import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.Interface
 import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 
-import static tools.vitruv.applications.umljava.java2uml.JavaToUmlHelper.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlClass
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlInterface
+import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml

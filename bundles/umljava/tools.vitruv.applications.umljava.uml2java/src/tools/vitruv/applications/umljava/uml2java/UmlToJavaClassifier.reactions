@@ -10,11 +10,11 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.Notificatio
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
-import static tools.vitruv.applications.umljava.util.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
-import static extension tools.vitruv.applications.umljava.util.java.JavaContainerAndClassifierUtil.*
-import static extension tools.vitruv.applications.umljava.util.java.JavaModifierUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
