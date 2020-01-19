@@ -48,7 +48,7 @@ import tools.vitruv.framework.util.bridges.EcoreResourceBridge
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmUtils
+import static tools.vitruv.applications.util.temporary.pcm.RepositoryUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
@@ -682,7 +682,7 @@ public class PcmJamoppUtilsGuice {
 
 		// TODO: check if a similar method exists in POJO utils
 		private def static findBasicComponentByName(String entityName, CorrespondenceModel ci) {
-			val repo = Java2PcmUtils.getRepository(ci)
+			val repo = getFirstRepository(ci)
 			for (BasicComponent comp : repo.components__Repository.filter(BasicComponent)) {
 				try {
 					val implClass = ci.getCorrespondingEObjectsByType(comp, Class).claimOne
@@ -700,7 +700,7 @@ public class PcmJamoppUtilsGuice {
 
 		// TODO: check if a similar method exists in POJO utils
 		private def static findOperationInterfaceByName(String entityName, CorrespondenceModel ci) {
-			val repo = Java2PcmUtils.getRepository(ci)
+			val repo = getFirstRepository(ci)
 			for (OperationInterface opInterface : repo.interfaces__Repository.filter(OperationInterface)) {
 				if (opInterface.entityName == entityName) {
 					return opInterface

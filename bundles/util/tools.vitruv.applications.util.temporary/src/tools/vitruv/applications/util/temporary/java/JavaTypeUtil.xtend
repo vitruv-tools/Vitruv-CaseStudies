@@ -5,6 +5,7 @@ import java.util.List
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.classifiers.Interface
@@ -17,6 +18,7 @@ import org.emftext.language.java.types.Type
 import org.emftext.language.java.types.TypeReference
 import org.emftext.language.java.types.TypedElement
 import org.emftext.language.java.types.TypesFactory
+import tools.vitruv.applications.util.temporary.other.UriUtil
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
@@ -92,7 +94,7 @@ class JavaTypeUtil {
 
     /**
      * Unwraps the type reference and returns the contained type.
-     *
+     * 
      */
     def static dispatch Type getJavaTypeFromTypeReference(TypeReference typeRef) {
         logger.warn(typeRef + " is neither a NamespaceClassifierReference nor a PrimitiveType. Returning null.")
@@ -157,10 +159,58 @@ class JavaTypeUtil {
     }
 
     def static getInnerTypeReferenceOfCollectionTypeReference(TypeReference typeRef) {
-       if (typeRef instanceof NamespaceClassifierReference) {
-           return (typeRef.classifierReferences.head.typeArguments.head as QualifiedTypeArgument).typeReference
-       }
-       logger.warn("Cannot get inner TypeReference of a non-NamespaceClassifierReference. Returning null.")
-       return null
-   }
+        if (typeRef instanceof NamespaceClassifierReference) {
+            return (typeRef.classifierReferences.head.typeArguments.head as QualifiedTypeArgument).typeReference
+        }
+        logger.warn("Cannot get inner TypeReference of a non-NamespaceClassifierReference. Returning null.")
+        return null
+    }
+
+    public static def boolean hasSameTargetReference(TypeReference reference1, TypeReference reference2) {
+        if (reference1 == reference2 || reference1.equals(reference2)) {
+            return true
+        }
+        val target1 = getTargetClassifierFromTypeReference(reference1)
+        val target2 = getTargetClassifierFromTypeReference(reference2)
+        return target1 == target2 || target1.equals(target2)
+    }
+
+    def dispatch static Classifier getTargetClassifierFromTypeReference(TypeReference reference) {
+        return null
+    }
+
+    def dispatch static Classifier getTargetClassifierFromTypeReference(NamespaceClassifierReference reference) {
+        if (reference.classifierReferences.nullOrEmpty) {
+            return null
+        }
+        return getTargetClassifierFromTypeReference(reference.classifierReferences.get(0))
+    }
+
+    def dispatch static Classifier getTargetClassifierFromTypeReference(ClassifierReference reference) {
+        return reference.target
+    }
+
+    def dispatch static Classifier getTargetClassifierFromTypeReference(PrimitiveType reference) {
+        return null
+    }
+
+    public static def Classifier getClassifier(TypeReference typeReference) {
+        var classifier = getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference)
+        return classifier
+    }
+
+    def public static Classifier getTargetClassifierFromImplementsReferenceAndNormalizeURI(TypeReference reference) {
+        var interfaceClassifier = getTargetClassifierFromTypeReference(reference)
+        if (null === interfaceClassifier) {
+            return null
+        }
+
+        if (interfaceClassifier.eIsProxy) {
+            val resSet = reference.eResource.resourceSet
+            interfaceClassifier = EcoreUtil.resolve(interfaceClassifier, resSet) as Classifier
+        }
+        UriUtil.normalizeURI(interfaceClassifier)
+        return interfaceClassifier
+    }
+
 }
