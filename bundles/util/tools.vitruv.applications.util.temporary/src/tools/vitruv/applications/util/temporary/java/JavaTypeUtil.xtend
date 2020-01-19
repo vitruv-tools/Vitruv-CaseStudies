@@ -1,6 +1,7 @@
 package tools.vitruv.applications.util.temporary.java
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
+import java.util.ArrayList
 import java.util.List
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.BasicEList
@@ -211,6 +212,17 @@ class JavaTypeUtil {
         }
         UriUtil.normalizeURI(interfaceClassifier)
         return interfaceClassifier
+    }
+
+    def static findImplementingInterfacesFromTypeRefs(EList<TypeReference> typeReferences) {
+        val implementingInterfaces = new ArrayList<Interface>
+        for(typeRef : typeReferences){
+            val classifier = getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeRef)
+            if(classifier instanceof Interface){
+                implementingInterfaces.add(classifier)
+            }
+        }
+        return implementingInterfaces
     }
 
 }

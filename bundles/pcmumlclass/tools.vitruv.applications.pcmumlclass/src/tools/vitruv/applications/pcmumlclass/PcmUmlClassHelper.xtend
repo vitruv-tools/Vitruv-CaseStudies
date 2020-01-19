@@ -125,7 +125,7 @@ class PcmUmlClassHelper { // FIXME TS extract as many util methods as possible a
 		return repositoryFound
 	}
 
-	def public static boolean isRepositoryPackage(Package pkg, CorrespondenceModel corrModel) {
+	def private static boolean isRepositoryPackage(Package pkg, CorrespondenceModel corrModel) {
 		return !ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, pkg,
 			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE, Repository).nullOrEmpty
 	}

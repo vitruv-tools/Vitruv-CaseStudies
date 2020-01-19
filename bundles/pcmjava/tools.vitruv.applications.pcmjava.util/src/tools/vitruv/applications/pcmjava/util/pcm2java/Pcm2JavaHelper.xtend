@@ -30,7 +30,7 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
-class Pcm2JavaHelper {
+class Pcm2JavaHelper { // FIXME TS extract as many util methods as possible and put into tmp util project
 	
 	def static Constructor getOrCreateConstructorToClass(Class javaClass) {
 		val constructors = javaClass.members.filter[it instanceof Constructor].map[it as Constructor]

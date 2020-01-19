@@ -1,8 +1,10 @@
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
+import org.palladiosimulator.pcm.repository.OperationProvidedRole
 
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*
-import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
-import org.palladiosimulator.pcm.repository.OperationProvidedRole
+import static extension tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference
+import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.hasSameSignature
+import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 import "http://www.emftext.org/java" as java 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -225,7 +227,7 @@ routine createSeffFromImplementingInterface(java::ClassMethod classMethod, java:
 	} 
 	action {
 		call {
-			val methods = javaInterface.methods.filter[sameSignature(classMethod)]
+			val methods = javaInterface.methods.filter[hasSameSignature(classMethod)]
 			for (method : methods) {
 				createSEFF(method, javaClass, classMethod)
 			}
@@ -287,7 +289,7 @@ routine changeReturnType(java::Method javaMethod, java::TypeReference typeRefere
      action {
          update operationSignature {
          	val repository = operationSignature.interface__OperationSignature.repository__Interface
-            operationSignature.returnType__OperationSignature = getPCMDataTypeForTypeReference(typeReference, correspondenceModel, userInteractor, repository, javaMethod)
+            operationSignature.returnType__OperationSignature = getCorrespondingPCMDataTypeForTypeReference(typeReference, correspondenceModel, userInteractor, repository, javaMethod.arrayDimension)
          }
      }
 }

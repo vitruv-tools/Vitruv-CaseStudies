@@ -7,7 +7,9 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.Iterator
 import java.util.List
+import java.util.Set
 import org.emftext.language.java.classifiers.Class
+import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.classifiers.Enumeration
@@ -23,6 +25,7 @@ import org.emftext.language.java.members.Member
 import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.TypeReference
+import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
@@ -208,6 +211,25 @@ class JavaContainerAndClassifierUtil {
         if (matchingClassifiers.size > 1) throw new IllegalStateException("Multiple matching classifers were found: " + matchingClassifiers)
         return matchingClassifiers.head
     }
+    
+    def static Package getContainingPackageFromCorrespondenceModel(Classifier classifier,
+        CorrespondenceModel correspondenceModel) {
+        var namespace = classifier.containingCompilationUnit.namespacesAsString
+        if (namespace.endsWith("$") || namespace.endsWith(".")) {
+            namespace = namespace.substring(0, namespace.length - 1)
+        }
+        val finalNamespace = namespace
+        var Set<Package> packagesWithCorrespondences = correspondenceModel.
+            getAllEObjectsOfTypeInCorrespondences(Package)
+        val packagesWithNamespace = packagesWithCorrespondences.filter [ pack |
+            finalNamespace.equals(pack.namespacesAsString + pack.name)
+        ]
+        if (null !== packagesWithNamespace && 0 < packagesWithNamespace.size &&
+            null !== packagesWithNamespace.iterator.next) {
+            return packagesWithNamespace.iterator.next
+        }
+        return null
+    }
 
     /**
      * Returns the namespace of the compilation unit where the given object is directly or indirectly contained
@@ -248,4 +270,11 @@ class JavaContainerAndClassifierUtil {
         throw new IllegalArgumentException("Can not retrieve compilation unit for " + element)
     }
 
+    def static String getRootPackageName(String packageName) { // TODO TS technically not depending on Java domain
+        return packageName.split("\\.").get(0)
+    }
+
+    def static String getLastPackageName(String packageName) { // TODO TS technically not depending on Java domain
+        return packageName.substring(packageName.indexOf('.') + 1)
+    }
 }
