@@ -19,6 +19,7 @@
 		<module>pcmumlcomponents</module>
 		<module>umlclassumlcomponents</module>
 		<module>umljava</module>
+		<module>util</module>
 	</modules>
 
 </project>
