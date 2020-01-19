@@ -14,6 +14,7 @@ import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.EnumConstant
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.MembersFactory
+import org.emftext.language.java.members.Method
 import org.emftext.language.java.operators.OperatorsFactory
 import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.parameters.ParametersFactory
@@ -376,5 +377,32 @@ class JavaMemberAndParameterUtil {
 
     def static String buildGetterName(String attributeName) {
         return "get" + attributeName.toFirstUpper
+    }
+    
+    /**
+     * Signatures are considered equal if methods have the same name, the same parameter types and the same return type
+     * We do not consider modifiers (e.g. public or private here)
+     */
+    public static def boolean hasSameSignature(Method method1, Method method2) {
+        if (method1 == method2) {
+            return true
+        }
+        if (!method1.name.equals(method2.name)) {
+            return false
+        }
+        if (!hasSameTargetReference(method1.typeReference, method2.typeReference)) {
+            return false
+        }
+        if (method1.parameters.size != method2.parameters.size) {
+            return false
+        }
+        var int i = 0
+        for (param1 : method1.parameters) {
+            if (!hasSameTargetReference(param1.typeReference, method2.parameters.get(i).typeReference)) {
+                return false
+            }
+            i++
+        }
+        return true
     }
 }

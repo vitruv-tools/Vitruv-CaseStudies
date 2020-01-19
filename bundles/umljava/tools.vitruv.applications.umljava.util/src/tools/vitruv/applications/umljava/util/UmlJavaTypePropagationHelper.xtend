@@ -8,7 +8,6 @@ import java.util.Optional
 import java.util.function.Function
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -36,6 +35,7 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
+import static tools.vitruv.applications.util.temporary.other.UriUtil.normalizeURI
 
 /**
  * Helper class for the Uml <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -43,7 +43,7 @@ import static tools.vitruv.applications.umljava.util.CommonUtil.*
  * 
  * @author Torsten Syma
  */
-class UmlJavaTypePropagationHelper {
+class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as possible and put into tmp util project
     private static val logger = Logger.getLogger(UmlJavaTypePropagationHelper.simpleName)
 
     public static val UML_PRIMITIVE_BOOLEAN_TAG = "Boolean"
@@ -190,20 +190,6 @@ class UmlJavaTypePropagationHelper {
             getUmlTypeFromReference(jRef.classifierReferences.head, cm)
         else
             null
-    }
-
-    // Copied from Java2PCMUtils
-    def private static normalizeURI(EObject eObject) {
-        if (null === eObject.eResource || null === eObject.eResource.resourceSet) {
-            return false
-        }
-        val resource = eObject.eResource
-        val resourceSet = resource.resourceSet
-        val uri = resource.getURI
-        val uriConverter = resourceSet.getURIConverter
-        val normalizedURI = uriConverter.normalize(uri)
-        resource.URI = normalizedURI
-        return true
     }
 
     def static String getQualifiedName(Classifier classifier) {

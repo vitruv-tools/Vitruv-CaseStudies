@@ -25,7 +25,7 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.Notificatio
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 @Utility
-class PcmUmlClassHelper {
+class PcmUmlClassHelper { // FIXME TS extract as many util methods as possible and put into tmp util project
 	private static val PCM_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository");
 	private static val UML_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml");
 

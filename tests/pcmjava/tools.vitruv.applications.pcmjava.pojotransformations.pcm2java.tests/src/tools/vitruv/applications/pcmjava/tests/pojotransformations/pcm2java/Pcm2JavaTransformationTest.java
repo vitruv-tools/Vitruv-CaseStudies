@@ -56,9 +56,11 @@ import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
-import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
-import tools.vitruv.applications.pcmjava.util.PcmJavaUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
+import tools.vitruv.applications.util.temporary.pcm.DataTypeUtil;
+import tools.vitruv.applications.util.temporary.pcm.ParameterUtil;
+import tools.vitruv.domains.java.JavaDomainProvider;
+import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
@@ -257,7 +259,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
     protected Parameter addAndSyncParameterToSignature(final OperationSignature opSig, final DataType dataType,
             final String parameterName) throws IOException {
         final Parameter param = RepositoryFactory.eINSTANCE.createParameter();
-        PcmJavaUtils.setParameterName(param, parameterName);
+        ParameterUtil.setParameterName(param, parameterName);
         param.setDataType__Parameter(dataType);
         param.setModifier__Parameter(ParameterModifier.IN);
         param.setOperationSignature__Parameter(opSig);
@@ -564,10 +566,9 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
 
     @Override
     protected List<VitruvDomain> getVitruvDomains() {
-    	List<VitruvDomain> result = new ArrayList<VitruvDomain>();
-    	for (VitruvDomain metamodel : PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels()) {
-    		result.add(metamodel);
-    	}
+        List<VitruvDomain> result = new ArrayList<VitruvDomain>();
+        result.add(new PcmDomainProvider().getDomain());
+        result.add(new JavaDomainProvider().getDomain());
         return result;
     }
 
@@ -602,7 +603,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
         assertEquals("unexpected number of corresponding methods found", 2, methodsFound);
         final String expectedName = innerDec.getEntityName();
         assertEquals("name of field does not mathc name of inner declaration", expectedName, fieldName);
-        final String expectedTypeName = PcmJavaUtils.getNameFromPCMDataType(innerDec.getDatatype_InnerDeclaration());
+        final String expectedTypeName = DataTypeUtil.getNameFromPCMDataType(innerDec.getDatatype_InnerDeclaration());
         assertEquals("name of JaMoPP type is not expected name of PCM datatype", expectedTypeName.toLowerCase(),
                 fieldTypeName.toLowerCase());
 

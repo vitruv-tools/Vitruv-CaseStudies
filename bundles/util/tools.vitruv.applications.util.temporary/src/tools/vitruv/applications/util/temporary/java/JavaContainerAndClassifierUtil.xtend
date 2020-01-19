@@ -247,4 +247,5 @@ class JavaContainerAndClassifierUtil {
     def static dispatch CompilationUnit getContainingCompilationUnit(Void element) {
         throw new IllegalArgumentException("Can not retrieve compilation unit for " + element)
     }
+
 }

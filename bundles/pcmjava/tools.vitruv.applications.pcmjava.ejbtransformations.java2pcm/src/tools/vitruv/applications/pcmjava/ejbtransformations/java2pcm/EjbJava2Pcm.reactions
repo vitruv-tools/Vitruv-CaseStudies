@@ -2,17 +2,18 @@ import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorresponden
 import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
-
-import static tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper.*
-
-import static extension tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper.*
 import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper
 import org.palladiosimulator.pcm.repository.Repository
 import java.util.Collections
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationSignature
 import tools.vitruv.framework.^correspondence.CorrespondenceModelUtil
-import tools.vitruv.applications.pcmjava.util.PcmJavaUtils
+
+import static tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper.*
+import static tools.vitruv.applications.util.temporary.pcm.RepositoryUtil.getFirstRepository
+import static tools.vitruv.applications.util.temporary.pcm.ParameterUtil.setParameterName
+import static extension tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbAnnotationHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getTargetClassifierFromImplementsReferenceAndNormalizeURI
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -30,7 +31,7 @@ reaction CreatedFirstPackage {
 
 routine createRepositoryForFirstPackage(java::Package javaPackage) {
 	match {
-		check EjbJava2PcmHelper.findRepository(correspondenceModel) === null
+		check getFirstRepository(correspondenceModel) === null
 	}
 	action {
 		val repository = create pcm::Repository and initialize {
@@ -48,7 +49,7 @@ reaction CreatedClass {
 	after element inserted in java::CompilationUnit[classifiers]
 		with newValue.isEjbClass 	
 	call {
-		val Repository repo = EjbJava2PcmHelper.findRepository(correspondenceModel)
+		val Repository repo = getFirstRepository(correspondenceModel)
 		createBasicComponent(repo, newValue);
 	} 
 }
@@ -57,7 +58,7 @@ reaction CreateClassAnnotation {
 	after element inserted in java::Class[annotationsAndModifiers]
 		with affectedEObject.isEjbClass 
 	call {
-		val Repository repo = EjbJava2PcmHelper.findRepository(correspondenceModel) 
+		val Repository repo = getFirstRepository(correspondenceModel) 
 		createBasicComponent(repo, affectedEObject as NamedElement)
 	} 
 }
@@ -81,7 +82,7 @@ reaction CreatedInterface {
 	after element inserted in java::CompilationUnit[classifiers]
 		with newValue.isEjbBuisnessInterface 
 	call {
-		val Repository repo = EjbJava2PcmHelper.findRepository(correspondenceModel)
+		val Repository repo = getFirstRepository(correspondenceModel)
 		createOperationInterface(repo, newValue)
 	}
 }
@@ -90,7 +91,7 @@ reaction CreateInterfaceAnnotation {
 	after element inserted in java::Interface[annotationsAndModifiers]
 		with affectedEObject.isEjbBuisnessInterface
 	call {
-		val Repository repo = EjbJava2PcmHelper.findRepository(correspondenceModel)
+		val Repository repo = getFirstRepository(correspondenceModel)
 		createOperationInterface(repo, affectedEObject as NamedElement)
 	}
 }
@@ -122,7 +123,7 @@ routine createdAnnotationForField(java::Field annotatedField) {
 	}
 	action {
 		call {
-			val interfaceName = getClassifier(annotatedField.typeReference).name
+			val interfaceName = getTargetClassifierFromImplementsReferenceAndNormalizeURI(annotatedField.typeReference).name
 			val opInterface = basicComponent.repository__RepositoryComponent.interfaces__Repository.filter(typeof(OperationInterface)).findFirst[it.entityName.equals(interfaceName)]
 			createOperationRequiredRole(basicComponent, opInterface, annotatedField)
 		}
@@ -142,7 +143,7 @@ routine createdField(java::Field field) {
 	}
 	action {
 		call {
-			val interfaceName = getClassifier(field.typeReference).name
+			val interfaceName = getTargetClassifierFromImplementsReferenceAndNormalizeURI(field.typeReference).name
 			val opInterface = basicComponent.repository__RepositoryComponent.interfaces__Repository.filter(typeof(OperationInterface)).findFirst[it.entityName.equals(interfaceName)]
 			createOperationRequiredRole(basicComponent, opInterface, field)
 		}
@@ -178,7 +179,7 @@ routine createdImplements(java::Class clazz, java::TypeReference implementz) {
 		//add correspondence: opr, newValue
 		update opr {
 	    	val opInterface = basicComponent.repository__RepositoryComponent.interfaces__Repository.filter(typeof(OperationInterface)).
-	    			findFirst[it.entityName.equals(getClassifier(implementz).name)]
+	    			findFirst[it.entityName.equals(getTargetClassifierFromImplementsReferenceAndNormalizeURI(implementz).name)]
 	    	if (null !== opInterface){
 				opr.providedInterface__OperationProvidedRole = opInterface
 				opr.providingEntity_ProvidedRole = basicComponent
@@ -239,7 +240,7 @@ routine createdParameterInInterfaceMethod(java::InterfaceMethod method, java::Pa
 routine createPCMParameter(java::Parameter jaMoPPParam, pcm::OperationSignature opSignature) {
 	action {
 		val pcmParameter = create pcm::Parameter and initialize {
-			PcmJavaUtils.setParameterName(pcmParameter, jaMoPPParam.name)
+			setParameterName(pcmParameter, jaMoPPParam.name)
 			pcmParameter.dataType__Parameter = TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference(jaMoPPParam.typeReference, 
 				correspondenceModel, userInteractor, opSignature.interface__OperationSignature.repository__Interface, jaMoPPParam.arrayDimension)
 		}
@@ -319,7 +320,7 @@ routine createdClassMethodInEjbClass(java::Class clazz, java::ClassMethod classM
 	}
 	action {  
 		call {
-			val method = getOoverridenInterfaceMethod(classMethod, clazz)
+			val method = getOverridenInterfaceMethod(classMethod, clazz)
 			val correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, method, OperationSignature)
 			var OperationSignature opSignature = null
 			if(!correspondingEObjects.nullOrEmpty){

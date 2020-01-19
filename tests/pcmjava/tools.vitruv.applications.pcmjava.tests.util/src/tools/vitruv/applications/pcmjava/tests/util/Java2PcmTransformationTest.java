@@ -85,9 +85,10 @@ import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
 
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
+import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.applications.pcmjava.util.PcmJavaRepositoryCreationUtil;
+import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilder;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator;
@@ -132,7 +133,10 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	@Override
 	protected Iterable<VitruvDomain> getVitruvDomains() {
-		return PcmJavaRepositoryCreationUtil.createPcmJamoppMetamodels();
+	    List<VitruvDomain> result = new ArrayList<VitruvDomain>();
+        result.add(new PcmDomainProvider().getDomain());
+        result.add(new JavaDomainProvider().getDomain());
+        return result;
 	}
 
 	protected IProject getCurrentTestProject() {
