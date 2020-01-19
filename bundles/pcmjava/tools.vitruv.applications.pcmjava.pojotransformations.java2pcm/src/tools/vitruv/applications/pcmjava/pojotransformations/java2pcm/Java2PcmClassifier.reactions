@@ -1,7 +1,8 @@
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
-import static extension tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmHelper.*
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getTargetClassifierFromImplementsReferenceAndNormalizeURI
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.ClassifierReference

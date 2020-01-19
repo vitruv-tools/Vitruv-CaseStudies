@@ -8,7 +8,6 @@ import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParamet
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getTargetClassifierFromImplementsReferenceAndNormalizeURI
 
 class EjbJava2PcmHelper {
-    private new(){}
 
     public static def boolean overridesInterfaceMethod(ClassMethod classMethod, Class jaMoPPClass){
         return null !== getOverridenInterfaceMethod(classMethod, jaMoPPClass)
