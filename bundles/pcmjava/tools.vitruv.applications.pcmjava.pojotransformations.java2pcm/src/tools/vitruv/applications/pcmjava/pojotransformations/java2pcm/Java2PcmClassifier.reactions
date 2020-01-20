@@ -1,7 +1,7 @@
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getTargetClassifierFromImplementsReferenceAndNormalizeURI
+import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getClassifierFromTypeReference
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.types.NamespaceClassifierReference
@@ -357,7 +357,7 @@ routine createOperationProvidedRole(java::TypeReference typeReference) {
 	action {
 		call {
 			val javaClass = typeReference.eContainer as Class
-			var javaInterfaceClassifier = getTargetClassifierFromImplementsReferenceAndNormalizeURI(typeReference)
+			var javaInterfaceClassifier = getClassifierFromTypeReference(typeReference)
 			createOperationProvidedRoleFromTypeReference(javaInterfaceClassifier, javaClass, typeReference)
 		}
 	}

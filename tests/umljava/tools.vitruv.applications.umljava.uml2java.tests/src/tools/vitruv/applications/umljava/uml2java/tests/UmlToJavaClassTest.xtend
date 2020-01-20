@@ -10,7 +10,7 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getClassifierFromTypeReference
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 
 /**
