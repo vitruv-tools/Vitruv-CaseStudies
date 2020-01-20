@@ -108,7 +108,7 @@ reaction FieldCreated {
 	after element java::Field inserted in java::Class[members]
 	call {
 		createInnerDeclaration(newValue.containingConcreteClassifier, newValue)
-		val type = getTargetClassifierFromImplementsReferenceAndNormalizeURI(newValue.typeReference)
+		val type = getClassifierFromTypeReference(newValue.typeReference)
 		fieldCreatedCorrespondingToOperationInterface(type, newValue)
 		fieldCreatedCorrespondingToRepositoryComponent(type, newValue)
 		createAssemblyContext(newValue.containingConcreteClassifier, newValue)
@@ -135,7 +135,7 @@ routine createInnerDeclaration(java::ConcreteClassifier classifier, java::Field 
 routine createAssemblyContext(java::ConcreteClassifier classifier, java::Field javaField) {
 	match {
 		val composedProvidingRequiringEntity = retrieve pcm::ComposedProvidingRequiringEntity corresponding to classifier
-		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to getTargetClassifierFromTypeReference(javaField.typeReference)
+		val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to getClassifierFromTypeReference(javaField.typeReference)
 	}
 	action {
 		val assemblyContext = create pcm::AssemblyContext and initialize {

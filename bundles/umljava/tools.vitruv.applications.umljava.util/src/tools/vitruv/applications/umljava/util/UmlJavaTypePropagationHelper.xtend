@@ -76,7 +76,7 @@ class UmlJavaTypePropagationHelper {
             return umlPrimitive
         }
 
-        val classifier = getClassifier(jRef)
+        val classifier = getClassifierFromTypeReference(jRef)
         if (classifier !== null)
             return ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, classifier, null, Type).head
         else {
@@ -92,7 +92,7 @@ class UmlJavaTypePropagationHelper {
     }
 
     def static org.emftext.language.java.types.PrimitiveType unwrapWrappedPrimitiveType(TypeReference jRef) {
-        val classifier = getClassifier(jRef)
+        val classifier = getClassifierFromTypeReference(jRef)
         if (classifier === null) return null
         val qualifiedName = getQualifiedName(classifier)
 
@@ -128,7 +128,7 @@ class UmlJavaTypePropagationHelper {
      * 		the mapped uml::PrimitiveType or null if no matching mapping exists
      */
     def static dispatch PrimitiveType mapJavaPrimitiveToUmlPrimitive(TypeReference jRef, CorrespondenceModel cm) {
-        val classifier = getClassifier(jRef)
+        val classifier = getClassifierFromTypeReference(jRef)
         if (classifier !== null) {
             // check if it is a wrapped primitive type
             val unwrappedPrimitive = unwrapWrappedPrimitiveType(jRef)
