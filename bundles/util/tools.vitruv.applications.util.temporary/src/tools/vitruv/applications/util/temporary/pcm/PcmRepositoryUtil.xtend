@@ -7,10 +7,10 @@ import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 @Utility
-class RepositoryUtil {
-    private static final Logger logger = Logger.getLogger(RepositoryUtil.simpleName)
+class PcmRepositoryUtil {
+    private static final Logger logger = Logger.getLogger(PcmRepositoryUtil.simpleName)
 
-    def public static Repository getFirstRepository(CorrespondenceModel correspondenceModel) {
+    def static Repository getFirstRepository(CorrespondenceModel correspondenceModel) {
         val Set<Repository> repos = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)
         if (repos.nullOrEmpty) {
             return null

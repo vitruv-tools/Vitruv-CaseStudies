@@ -6,7 +6,6 @@ import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.Field
 import org.junit.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
@@ -16,8 +15,10 @@ import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+
 
 /**
  * Test class for testing the attribute reactions.
@@ -61,7 +62,7 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
         
         val uAttr = getCorrespondingAttribute(attr)
         val uClass = getCorrespondingClass(jClass)
-        val umlInteger = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+        val umlInteger = getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
         assertUmlPropertyTraits(uAttr, STANDARD_ATTRIBUTE_NAME, VisibilityKind.PRIVATE_LITERAL, umlInteger,
             false, false, uClass, null, null)
         assertAttributeEquals(uAttr, attr)

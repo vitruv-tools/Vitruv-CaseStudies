@@ -3,29 +3,42 @@ package tools.vitruv.applications.util.temporary.java
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import java.util.ArrayList
 import java.util.Collections
+import java.util.Comparator
 import java.util.List
 import org.apache.log4j.Logger
+import org.eclipse.emf.common.util.ECollections
+import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.expressions.AssignmentExpression
+import org.emftext.language.java.expressions.ExpressionsFactory
+import org.emftext.language.java.literals.LiteralsFactory
 import org.emftext.language.java.members.ClassMethod
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.EnumConstant
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.members.Method
+import org.emftext.language.java.modifiers.Modifier
+import org.emftext.language.java.modifiers.ModifiersFactory
+import org.emftext.language.java.modifiers.Public
 import org.emftext.language.java.operators.OperatorsFactory
 import org.emftext.language.java.parameters.Parameter
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.parameters.Parametrizable
+import org.emftext.language.java.references.ReferencesFactory
 import org.emftext.language.java.statements.ExpressionStatement
 import org.emftext.language.java.statements.Return
+import org.emftext.language.java.statements.StatementsFactory
 import org.emftext.language.java.types.TypeReference
+import org.emftext.language.java.types.TypesFactory
 
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStatementUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 
 /**
  * A util class for field, method and parameter related util functions.
@@ -37,7 +50,7 @@ class JavaMemberAndParameterUtil {
     private static val logger = Logger.getLogger(JavaMemberAndParameterUtil.simpleName)
 
     /**
-     * @return public Operation with name; no return, params or modifier
+     * @return public Operation with name no return, params or modifier
      */
     def static createSimpleJavaOperation(String name) {
         return createJavaClassMethod(name, null, JavaVisibility.PUBLIC, false, false, null)
@@ -56,14 +69,14 @@ class JavaMemberAndParameterUtil {
      * @return the new class method
      */
     def static createJavaClassMethod(String name, TypeReference returnType, JavaVisibility visibility, boolean abstr, boolean stat, List<Parameter> params) {
-        val jMethod = MembersFactory.eINSTANCE.createClassMethod;
+        val jMethod = MembersFactory.eINSTANCE.createClassMethod
         setName(jMethod, name)
         setTypeReference(jMethod, returnType)
         setJavaVisibilityModifier(jMethod, visibility)
         setAbstract(jMethod, abstr)
         setStatic(jMethod, stat)
         addParametersIfNotNull(jMethod, params)
-        return jMethod;
+        return jMethod
     }
 
     /**
@@ -77,12 +90,12 @@ class JavaMemberAndParameterUtil {
      * @return the new interface method
      */
     def static createJavaInterfaceMethod(String name, TypeReference returnType, List<Parameter> params) {
-        val jMethod = MembersFactory.eINSTANCE.createInterfaceMethod;
+        val jMethod = MembersFactory.eINSTANCE.createInterfaceMethod
         setName(jMethod, name)
         setTypeReference(jMethod, returnType)
-        jMethod.makePublic;
+        jMethod.makePublic
         addParametersIfNotNull(jMethod, params)
-        return jMethod;
+        return jMethod
     }
 
     /**
@@ -96,20 +109,20 @@ class JavaMemberAndParameterUtil {
      * @return the new attribute
      */
     def static createJavaAttribute(String name, TypeReference type, JavaVisibility visibility, boolean fin, boolean stat) {
-        val jAttribute = MembersFactory.eINSTANCE.createField;
+        val jAttribute = MembersFactory.eINSTANCE.createField
         setName(jAttribute, name)
         setJavaVisibilityModifier(jAttribute, visibility)
         setFinal(jAttribute, fin)
         setStatic(jAttribute, stat)
         setTypeReference(jAttribute, type)
-        return jAttribute;
+        return jAttribute
     }
 
     def static createJavaParameter(String name, TypeReference type) {
-        val param = ParametersFactory.eINSTANCE.createOrdinaryParameter;
+        val param = ParametersFactory.eINSTANCE.createOrdinaryParameter
         param.name = name
         param.typeReference = type
-        return param;
+        return param
     }
 
     def static createJavaEnumConstant(String name) {
@@ -172,6 +185,15 @@ class JavaMemberAndParameterUtil {
         return constructor
     }
 
+    def static Constructor getOrCreateConstructorToClass(Class javaClass) {
+        val constructors = javaClass.members.filter[it instanceof Constructor].map[it as Constructor]
+        if (constructors.nullOrEmpty) {
+            val Constructor constructor = MembersFactory.eINSTANCE.createConstructor
+            return addConstructorToClass(constructor, javaClass)
+        }
+        return constructors.iterator.next
+    }
+
     /**
      * @param visibility Visibility of the Getter
      */
@@ -192,6 +214,55 @@ class JavaMemberAndParameterUtil {
             EcoreUtil.copy(paramReference))
         setterMethod.statements += wrapExpressionInExpressionStatement(attributeAssignment)
         return setterMethod
+    }
+
+    static def createSetter(Field field, ClassMethod method) {
+        method.name = "set" + field.name.toFirstUpper
+        method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
+        method.typeReference = TypesFactory.eINSTANCE.createVoid
+        val parameter = ParametersFactory.eINSTANCE.createOrdinaryParameter
+        parameter.name = field.name
+        parameter.typeReference = EcoreUtil.copy(field.typeReference)
+        method.parameters.add(parameter)
+        val expressionStatement = StatementsFactory.eINSTANCE.createExpressionStatement
+        val assigmentExpression = ExpressionsFactory.eINSTANCE.createAssignmentExpression
+
+        // this.
+        val selfReference = ReferencesFactory.eINSTANCE.createSelfReference
+        assigmentExpression.child = selfReference
+
+        // .fieldname
+        val fieldReference = ReferencesFactory.eINSTANCE.createIdentifierReference
+        fieldReference.target = field
+        selfReference.next = fieldReference
+        selfReference.^self = LiteralsFactory.eINSTANCE.createThis()
+        // =
+        assigmentExpression.assignmentOperator = OperatorsFactory.eINSTANCE.createAssignment
+
+        // name     
+        val identifierReference = ReferencesFactory.eINSTANCE.createIdentifierReference
+        identifierReference.target = parameter
+
+        assigmentExpression.value = identifierReference
+        expressionStatement.expression = assigmentExpression
+        method.statements.add(expressionStatement)
+        return method
+    }
+
+    static def createGetter(Field field, ClassMethod method) {
+        method.name = "get" + field.name.toFirstUpper
+        method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
+        method.typeReference = EcoreUtil.copy(field.typeReference)
+
+        // this.fieldname
+        val identifierRef = ReferencesFactory.eINSTANCE.createIdentifierReference
+        identifierRef.target = field
+
+        // return
+        val ret = StatementsFactory.eINSTANCE.createReturn
+        ret.returnValue = identifierRef
+        method.statements.add(ret)
+        return method
     }
 
     def static void addParametersIfNotNull(Parametrizable parametrizable, List<Parameter> params) {
@@ -378,12 +449,12 @@ class JavaMemberAndParameterUtil {
     def static String buildGetterName(String attributeName) {
         return "get" + attributeName.toFirstUpper
     }
-    
+
     /**
      * Signatures are considered equal if methods have the same name, the same parameter types and the same return type
      * We do not consider modifiers (e.g. public or private here)
      */
-    public static def boolean hasSameSignature(Method method1, Method method2) {
+    def static boolean hasSameSignature(Method method1, Method method2) {
         if (method1 == method2) {
             return true
         }
@@ -404,5 +475,70 @@ class JavaMemberAndParameterUtil {
             i++
         }
         return true
+    }
+
+    def static void initializeClassMethod(ClassMethod classMethod, Method implementedMethod, boolean ensurePublic) {
+        initializeClassMethod(classMethod, implementedMethod.name, implementedMethod.typeReference, implementedMethod.modifiers, implementedMethod.parameters,
+            ensurePublic)
+    }
+
+    def static void initializeClassMethod(ClassMethod classMethod, String name, TypeReference typeReference, Modifier[] modifiers,
+        Parameter[] parameters, boolean ensurePublic) {
+        classMethod.name = name
+        if (null !== typeReference) {
+            classMethod.typeReference = EcoreUtil.copy(typeReference)
+        }
+        if (null !== modifiers) {
+            classMethod.annotationsAndModifiers.addAll(EcoreUtil.copyAll(modifiers))
+        }
+        if (ensurePublic) {
+            val alreadyPublic = classMethod.annotationsAndModifiers.filter[modifier|modifier instanceof Public].size > 0
+            if (!alreadyPublic) {
+                classMethod.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
+            }
+        }
+        if (null !== parameters) {
+            classMethod.parameters.addAll(EcoreUtil.copyAll(parameters))
+        }
+    }
+
+    def static ClassMethod findMethodInClass(ConcreteClassifier concreteClassifier, ClassMethod method) {
+        for (Method currentMethod : concreteClassifier.methods) {
+            if (currentMethod instanceof ClassMethod && currentMethod.name.equals(method.name) &&
+                currentMethod.typeParameters.size == method.typeParameters.size) {
+                // TODO finish check by comparing type reference and type of each parameter 
+                return currentMethod as ClassMethod
+            }
+        }
+        null
+    }
+
+    /**
+     * sorts the member list to ensure that fields are printed before constructors and constructors before methods
+     */
+    def static sortMembers(EList<? extends EObject> members) {
+        ECollections.sort(members, new Comparator<EObject> {
+
+            override compare(EObject o1, EObject o2) {
+                // fields before constructors and methods
+                if (o1 instanceof Field && (o2 instanceof Method || o2 instanceof Constructor)) {
+                    return -1
+                } else if ((o1 instanceof Method || o1 instanceof Constructor) && o2 instanceof Field) {
+                    return 1
+
+                // constructors before Methods  
+                } else if (o1 instanceof Constructor && o2 instanceof Method) {
+                    return -1
+                } else if (o1 instanceof Method && o2 instanceof Constructor) {
+                    return 1
+                }
+                return 0
+            }
+
+            override equals(Object obj) {
+                return this == obj
+            }
+
+        })
     }
 }

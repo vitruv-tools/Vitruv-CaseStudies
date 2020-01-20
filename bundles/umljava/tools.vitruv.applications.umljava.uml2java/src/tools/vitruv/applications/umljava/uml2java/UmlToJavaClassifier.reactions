@@ -11,6 +11,7 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 
 import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*

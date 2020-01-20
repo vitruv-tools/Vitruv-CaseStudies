@@ -1,8 +1,8 @@
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.palladiosimulator.pcm.repository.CollectionDataType
-import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -134,21 +134,21 @@ routine addCollectionDataTypeCorrespondence(
 reaction UnsupportedPrimitiveTypeSetAtInnerDeclaration {
 	after element pcm::PrimitiveDataType replaced at pcm::InnerDeclaration[datatype_InnerDeclaration]
 	with affectedEObject.datatype_InnerDeclaration === newValue
-		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
+		&& !PcmDataTypeUtil.isSupportedPcmPrimitiveType(newValue) 
 	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
 }
 
 reaction UnsupportedPrimitiveTypeSetAtParameter {
 	after element pcm::PrimitiveDataType replaced at pcm::Parameter[dataType__Parameter]
 	with affectedEObject.dataType__Parameter === newValue
-		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
+		&& !PcmDataTypeUtil.isSupportedPcmPrimitiveType(newValue) 
 	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
 }
 
 reaction UnsupportedPrimitiveTypeSetAtSignature {
 	after element pcm::PrimitiveDataType replaced at pcm::OperationSignature[returnType__OperationSignature]
 	with affectedEObject.returnType__OperationSignature === newValue
-		&& !PcmUmlClassHelper.isSupportedPcmPrimitiveType(newValue) 
+		&& !PcmDataTypeUtil.isSupportedPcmPrimitiveType(newValue) 
 	call unsupportedPrimitiveTypeSetWarning(newValue, affectedEObject)
 }
 

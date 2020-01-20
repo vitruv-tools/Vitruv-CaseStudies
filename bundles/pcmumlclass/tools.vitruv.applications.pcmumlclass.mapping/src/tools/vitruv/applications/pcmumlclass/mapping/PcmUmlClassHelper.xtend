@@ -1,11 +1,6 @@
 package tools.vitruv.applications.pcmumlclass.mapping
 
-import java.util.List
-import java.util.function.Function
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.ecore.resource.ResourceSet
+import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.ParameterDirectionKind
@@ -23,68 +18,10 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.NotificationType
 import tools.vitruv.framework.userinteraction.UserInteractor
 
-class PcmUmlClassHelper { // FIXME TS extract as many util methods as possible (this might be a copy of the non-mapping helper)
-	private static val PCM_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository");
-	private static val UML_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml");
+@Utility
+class PcmUmlClassHelper { // TODO this is a direct copy of the non-mapping PcmUmlClassHelper
 
-	private new() {
-	}
-
-	def public static getPcmPrimitiveTypes(EObject alreadyPersistedObject) {
-		return getPcmPrimitiveTypes(alreadyPersistedObject.eResource.resourceSet)
-	}
-
-	def public static getUmlPrimitiveTypes(EObject alreadyPersistedObject) {
-		return getUmlPrimitiveTypes(alreadyPersistedObject.eResource.resourceSet)
-	}
-
-	def public static getPcmPrimitiveTypes(Function<URI, Resource> resourceRetriever) {
-		val resource = resourceRetriever.apply(PCM_PRIMITIVE_TYPES_URI)
-		val pcmPrimitiveTypes = resource.allContents.filter(PrimitiveDataType).toList
-		return pcmPrimitiveTypes
-	}
-
-	def public static getPcmPrimitiveTypes(ResourceSet resourceSet) {
-		var List<PrimitiveDataType> pcmPrimitiveTypes = #[]
-		val resource = resourceSet.getResource(PCM_PRIMITIVE_TYPES_URI, true)
-		pcmPrimitiveTypes = resource.allContents.filter(PrimitiveDataType).toList
-		return pcmPrimitiveTypes
-	}
-
-	def public static getUmlPrimitiveTypes(Function<URI, Resource> resourceRetriever) {
-		val resource = resourceRetriever.apply(UML_PRIMITIVE_TYPES_URI)
-		val umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList
-		return umlPrimitiveTypes
-	}
-
-	def public static getUmlPrimitiveTypes(ResourceSet resourceSet) {
-		var List<PrimitiveType> umlPrimitiveTypes = #[]
-		val resource = resourceSet.getResource(UML_PRIMITIVE_TYPES_URI, true)
-		umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList
-		return umlPrimitiveTypes
-	}
-
-	public static def isSupportedPcmPrimitiveType(PrimitiveDataType pcmPrimitiveType) {
-		return switch (pcmPrimitiveType.type) {
-			case PrimitiveTypeEnum.BOOL,
-			case PrimitiveTypeEnum.INT,
-			case PrimitiveTypeEnum.DOUBLE,
-			case PrimitiveTypeEnum.STRING: true
-			default: false
-		}
-	}
-
-	public static def isSupportedUmlPrimitiveType(PrimitiveType umlPrimitiveType) {
-		return switch (umlPrimitiveType.name) {
-			case "Boolean",
-			case "Integer",
-			case "Real",
-			case "String": true
-			default: false
-		}
-	}
-
-	def public static PrimitiveType mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
+	def static PrimitiveType mapPrimitiveTypes(PrimitiveDataType pcmPredefinedPrimitiveType,
 		Iterable<PrimitiveType> umlPredifinedPrimitiveTypes) {
 		return switch (pcmPredefinedPrimitiveType.type) {
 			case PrimitiveTypeEnum.BOOL: umlPredifinedPrimitiveTypes.findFirst[it.name == "Boolean"]
@@ -96,7 +33,7 @@ class PcmUmlClassHelper { // FIXME TS extract as many util methods as possible (
 		}
 	}
 
-	def public static getMatchingParameterDirection(ParameterModifier pcmModifier) {
+	def static getMatchingParameterDirection(ParameterModifier pcmModifier) {
 		return switch (pcmModifier) {
 			case IN: ParameterDirectionKind.IN_LITERAL
 			case OUT: ParameterDirectionKind.OUT_LITERAL
@@ -116,7 +53,7 @@ class PcmUmlClassHelper { // FIXME TS extract as many util methods as possible (
 	 * @return 
 	 * 		true, if any nesting package of pkg correspond to a pcm::Repository according to the correspondenceModel
 	 */
-	def public static boolean isContainedInRepositoryHierarchy(Package pkg, CorrespondenceModel correspondenceModel) {
+	def static boolean isContainedInRepositoryHierarchy(Package pkg, CorrespondenceModel correspondenceModel) {
 		var parentPkg = pkg.nestingPackage
 		var repositoryFound = false
 		while (parentPkg !== null && !repositoryFound) {
@@ -126,12 +63,12 @@ class PcmUmlClassHelper { // FIXME TS extract as many util methods as possible (
 		return repositoryFound
 	}
 
-	def public static boolean isRepositoryPackage(Package pkg, CorrespondenceModel corrModel) {
+	def private static boolean isRepositoryPackage(Package pkg, CorrespondenceModel corrModel) {
 		return !ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(corrModel, pkg,
 			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE, Repository).nullOrEmpty
 	}
 
-	public static def getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper,
+	def static getCorrespondingPcmDataType(CorrespondenceModel corrModel, Type umlType, int lower, int upper,
 		Repository pcmRepository, UserInteractor userInteractor) {
 		if(umlType === null) return null
 

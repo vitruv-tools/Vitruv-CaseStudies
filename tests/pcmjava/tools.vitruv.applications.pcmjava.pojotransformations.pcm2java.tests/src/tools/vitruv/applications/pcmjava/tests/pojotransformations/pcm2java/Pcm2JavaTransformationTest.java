@@ -57,8 +57,8 @@ import org.palladiosimulator.pcm.system.System;
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
-import tools.vitruv.applications.util.temporary.pcm.DataTypeUtil;
-import tools.vitruv.applications.util.temporary.pcm.ParameterUtil;
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil;
+import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.pcm.PcmNamespace;
@@ -259,7 +259,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
     protected Parameter addAndSyncParameterToSignature(final OperationSignature opSig, final DataType dataType,
             final String parameterName) throws IOException {
         final Parameter param = RepositoryFactory.eINSTANCE.createParameter();
-        ParameterUtil.setParameterName(param, parameterName);
+        PcmParameterUtil.setParameterName(param, parameterName);
         param.setDataType__Parameter(dataType);
         param.setModifier__Parameter(ParameterModifier.IN);
         param.setOperationSignature__Parameter(opSig);
@@ -603,7 +603,7 @@ public class Pcm2JavaTransformationTest extends VitruviusApplicationTest {
         assertEquals("unexpected number of corresponding methods found", 2, methodsFound);
         final String expectedName = innerDec.getEntityName();
         assertEquals("name of field does not mathc name of inner declaration", expectedName, fieldName);
-        final String expectedTypeName = DataTypeUtil.getNameFromPCMDataType(innerDec.getDatatype_InnerDeclaration());
+        final String expectedTypeName = PcmDataTypeUtil.getNameFromPCMDataType(innerDec.getDatatype_InnerDeclaration());
         assertEquals("name of JaMoPP type is not expected name of PCM datatype", expectedTypeName.toLowerCase(),
                 fieldTypeName.toLowerCase());
 

@@ -32,7 +32,8 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  tools.vitruv.framework.correspondence,
  tools.vitruv.framework.userinteraction,
  tools.vitruv.extensions.dslsruntime.mappings,
- org.eclipse.core.expressions;bundle-version="3.6.300"
+ org.eclipse.core.expressions;bundle-version="3.6.300",
+ tools.vitruv.applications.util.temporary
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.mapping.tests
 Export-Package: tools.vitruv.applications.pcmumlclass.mapping.tests;x-internal:=true,

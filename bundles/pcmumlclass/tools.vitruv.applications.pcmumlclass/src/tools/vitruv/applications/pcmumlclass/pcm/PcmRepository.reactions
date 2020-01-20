@@ -2,9 +2,11 @@ import org.eclipse.uml2.uml.UMLPackage
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -163,8 +165,8 @@ routine bootstrapPrimitiveDatatypes(pcm::Repository pcmRepo) {
 	}
 	action {
 		execute {
-			val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(pcmRepo)
-			val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(pcmRepo)
+			val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(pcmRepo)
+			val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(pcmRepo)
 			for (pcmType : pcmPrimitiveTypes) {
 				val umlType = PcmUmlClassHelper.mapPrimitiveTypes(pcmType, umlPrimitiveTypes)
 				if (umlType !== null)
