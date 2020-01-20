@@ -62,7 +62,8 @@ class JavaTypeUtil {
         var classifier = classifierReference.target
         if (classifier !== null) {
             if (classifier.eIsProxy) { // resolve proxy
-                classifier = EcoreUtil.resolve(classifier, classifier.eResource.resourceSet) as Classifier
+                val resourceSet = classifierReference.eResource.resourceSet
+                classifier = EcoreUtil.resolve(classifier, resourceSet) as Classifier
             }
             normalizeURI(classifier) // TODO TS merged from 3 different methods, some did not resolve and normalize
         }
