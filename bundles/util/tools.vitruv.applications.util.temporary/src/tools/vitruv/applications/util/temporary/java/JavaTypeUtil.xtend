@@ -180,8 +180,8 @@ class JavaTypeUtil {
         if (reference1 == reference2 || reference1.equals(reference2)) {
             return true
         }
-        val target1 = getTypeFromReference(reference1)
-        val target2 = getTypeFromReference(reference2)
+        val target1 = getClassifierFromTypeReference(reference1)
+        val target2 = getClassifierFromTypeReference(reference2)
         return target1 == target2 || target1.equals(target2)
     }
 
