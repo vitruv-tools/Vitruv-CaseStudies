@@ -22,10 +22,11 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.pcmumlclass.mapping.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 class PcmUmlClassTestHelper {
 	public static val REPOSITORY_NAME = "TestRepository"
@@ -59,7 +60,7 @@ class PcmUmlClassTestHelper {
 		this.correspondenceModel = testCorrespondenceModel
 		this.eObjectRetriever = eObjectRetriever
 
-		val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(resourceRetriever)
+		val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(resourceRetriever)
 		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
 		PCM_INT = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.INT]
 		PCM_DOUBLE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.DOUBLE]
@@ -67,7 +68,7 @@ class PcmUmlClassTestHelper {
 		PCM_CHAR = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.CHAR]
 		PCM_BYTE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BYTE]
 
-		val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(resourceRetriever)
+		val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(resourceRetriever)
 		UML_BOOL = umlPrimitiveTypes.findFirst[it.name == "Boolean"]
 		UML_INT = umlPrimitiveTypes.findFirst[it.name == "Integer"]
 		UML_REAL = umlPrimitiveTypes.findFirst[it.name == "Real"]

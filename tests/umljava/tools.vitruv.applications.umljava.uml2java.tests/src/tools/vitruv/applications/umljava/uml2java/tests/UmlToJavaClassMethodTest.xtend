@@ -9,8 +9,8 @@ import org.emftext.language.java.types.TypesFactory
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
@@ -47,7 +47,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
     def void before() {
         uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
         typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
-        pType = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
+        pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
         uParam = createUmlParameter(PARAMETER_NAME, pType)
         uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
         uClass.ownedOperations += uOperation;

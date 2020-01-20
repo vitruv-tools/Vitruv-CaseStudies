@@ -1,37 +1,42 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
-import org.palladiosimulator.pcm.repository.RepositoryFactory
-import org.palladiosimulator.pcm.repository.Repository
-import tools.vitruv.applications.pcmumlclass.DefaultLiterals
-import org.palladiosimulator.pcm.repository.CompositeComponent
-import tools.vitruv.applications.pcmumlclass.TagLiterals
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.emf.ecore.EObject
-import tools.vitruv.framework.correspondence.CorrespondenceModel
-import org.eclipse.emf.ecore.resource.ResourceSet
 import java.util.Set
-import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
-
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import org.palladiosimulator.pcm.repository.CompositeDataType
-import org.palladiosimulator.pcm.repository.DataType
-import org.palladiosimulator.pcm.repository.CollectionDataType
-import org.eclipse.uml2.uml.PrimitiveType
-import org.palladiosimulator.pcm.repository.PrimitiveDataType
-import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
-import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import org.palladiosimulator.pcm.repository.OperationInterface
-import org.palladiosimulator.pcm.repository.OperationSignature
 import java.util.function.Function
 import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.uml2.uml.Interface
+import org.eclipse.uml2.uml.Operation
+import org.eclipse.uml2.uml.Package
+import org.eclipse.uml2.uml.Parameter
+import org.eclipse.uml2.uml.PrimitiveType
+import org.palladiosimulator.pcm.repository.CollectionDataType
+import org.palladiosimulator.pcm.repository.CompositeComponent
+import org.palladiosimulator.pcm.repository.CompositeDataType
+import org.palladiosimulator.pcm.repository.DataType
+import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.repository.OperationSignature
+import org.palladiosimulator.pcm.repository.PrimitiveDataType
+import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
+import org.palladiosimulator.pcm.repository.Repository
+import org.palladiosimulator.pcm.repository.RepositoryFactory
+import tools.vitruv.applications.pcmumlclass.DefaultLiterals
+import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
+import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
+import tools.vitruv.framework.correspondence.CorrespondenceModel
+
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 final class PcmUmlClassApplicationTestHelper {
 	public new (CorrespondenceModel testCorrespondenceModel, Function<URI, EObject> eObjectRetriever, Function<URI, Resource> resourceRetriever) {
 		this.correspondenceModel = testCorrespondenceModel
 		this.eObjectRetriever = eObjectRetriever
 		
-		val pcmPrimitiveTypes = PcmUmlClassHelper.getPcmPrimitiveTypes(resourceRetriever)	
+		val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(resourceRetriever)	
 		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
 		PCM_INT = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.INT]
 		PCM_DOUBLE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.DOUBLE]
@@ -39,7 +44,7 @@ final class PcmUmlClassApplicationTestHelper {
 		PCM_CHAR = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.CHAR]
 		PCM_BYTE = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BYTE]
 		
-		val umlPrimitiveTypes = PcmUmlClassHelper.getUmlPrimitiveTypes(resourceRetriever)
+		val umlPrimitiveTypes = UmlTypeUtil.getUmlPrimitiveTypes(resourceRetriever)
 		UML_BOOL =  umlPrimitiveTypes.findFirst[it.name == "Boolean"]
 		UML_INT =  umlPrimitiveTypes.findFirst[it.name == "Integer"]
 		UML_REAL =  umlPrimitiveTypes.findFirst[it.name == "Real"]
@@ -123,13 +128,13 @@ final class PcmUmlClassApplicationTestHelper {
 	}
 	
 	public def getUmlRepositoryPackage(Repository pcmRepository) {
-		return getModifiableCorr(pcmRepository, org.eclipse.uml2.uml.Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
 	}
 	public def getUmlContractsPackage(Repository pcmRepository) {
-		return getModifiableCorr(pcmRepository, org.eclipse.uml2.uml.Package, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
+		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
 	}
 	public def getUmlDataTypesPackage(Repository pcmRepository) {
-		return getModifiableCorr(pcmRepository, org.eclipse.uml2.uml.Package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
+		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
 	}
 	
 	// CompositeComponent
@@ -163,10 +168,10 @@ final class PcmUmlClassApplicationTestHelper {
 		return getModifiableCorr(getPcmComponent_2(pcmRepository), org.eclipse.uml2.uml.Class, TagLiterals.IPRE__IMPLEMENTATION)
 	}
 	public def getUmlComponentConstructor(Repository pcmRepository) {
-		return getModifiableCorr(getPcmComponent(pcmRepository), org.eclipse.uml2.uml.Operation, TagLiterals.IPRE__CONSTRUCTOR)
+		return getModifiableCorr(getPcmComponent(pcmRepository), Operation, TagLiterals.IPRE__CONSTRUCTOR)
 	}
 	public def getUmlComponentConstructor_2(Repository pcmRepository) {
-		return getModifiableCorr(getPcmComponent_2(pcmRepository), org.eclipse.uml2.uml.Operation, TagLiterals.IPRE__CONSTRUCTOR)
+		return getModifiableCorr(getPcmComponent_2(pcmRepository), Operation, TagLiterals.IPRE__CONSTRUCTOR)
 	}
 	
 	// CompositeDataType
@@ -177,20 +182,20 @@ final class PcmUmlClassApplicationTestHelper {
 		return pcmCompositeDataType
 	}
 	public def createCompositeDataType(Repository pcmRepository) {
-		return createCompositeDataType(pcmRepository, tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
+		return createCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
 	}
 	public def createCompositeDataType_2(Repository pcmRepository) {
-		return createCompositeDataType(pcmRepository, tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
+		return createCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
 	}
 	
 	private def getPcmCompositeDataType(Repository pcmRepository, String componentName) {
 		return pcmRepository.dataTypes__Repository.filter(CompositeDataType).findFirst[it.entityName == componentName]
 	}
 	public def getPcmCompositeDataType(Repository pcmRepository) {
-		return getPcmCompositeDataType(pcmRepository, tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
+		return getPcmCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
 	}
 	public def getPcmCompositeDataType_2(Repository pcmRepository) {
-		return getPcmCompositeDataType(pcmRepository, tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
+		return getPcmCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
 	}
 	
 	public def getUmlCompositeDataTypeClass(Repository pcmRepository) {
@@ -203,7 +208,7 @@ final class PcmUmlClassApplicationTestHelper {
 	// CollectionDataType
 	public def createCollectionDataType(Repository pcmRepository, DataType innerType) {
 		val pcmCollectionType = RepositoryFactory.eINSTANCE.createCollectionDataType
-		pcmCollectionType.entityName = tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME
+		pcmCollectionType.entityName = PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME
 		pcmCollectionType.innerType_CollectionDataType = innerType
 		pcmRepository.dataTypes__Repository += pcmCollectionType
 		return pcmCollectionType
@@ -211,7 +216,7 @@ final class PcmUmlClassApplicationTestHelper {
 	
 	public def getPcmCollectionDataType(Repository pcmRepository) {
 		return pcmRepository.dataTypes__Repository.filter(CollectionDataType)
-			.findFirst[it.entityName == tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME] 
+			.findFirst[it.entityName == PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME] 
 	}
 	
 	// OperationInterface
@@ -226,7 +231,7 @@ final class PcmUmlClassApplicationTestHelper {
 		return pcmRepository.interfaces__Repository.filter(OperationInterface).findFirst[it.entityName == INTERFACE_NAME]
 	}
 	public def getUmlInterface(Repository pcmRepository) {
-		return getModifiableCorr(getPcmOperationInterface(pcmRepository), org.eclipse.uml2.uml.Interface, TagLiterals.INTERFACE_TO_INTERFACE)
+		return getModifiableCorr(getPcmOperationInterface(pcmRepository), Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 	}
 
 	// OperationSignature
@@ -241,10 +246,10 @@ final class PcmUmlClassApplicationTestHelper {
 		return pcmInterface.signatures__OperationInterface.filter(OperationSignature).findFirst[it.entityName == SIGNATURE_NAME]
 	}
 	public def getUmlOperation(OperationInterface pcmInterface) {
-		return getModifiableCorr(getPcmOperationSignature(pcmInterface), org.eclipse.uml2.uml.Operation, TagLiterals.SIGNATURE__OPERATION)
+		return getModifiableCorr(getPcmOperationSignature(pcmInterface), Operation, TagLiterals.SIGNATURE__OPERATION)
 	}
 	public def getUmlReturnParameter(OperationInterface pcmInterface) {
-		return getModifiableCorr(getPcmOperationSignature(pcmInterface), org.eclipse.uml2.uml.Parameter, TagLiterals.SIGNATURE__RETURN_PARAMETER)
+		return getModifiableCorr(getPcmOperationSignature(pcmInterface), Parameter, TagLiterals.SIGNATURE__RETURN_PARAMETER)
 	}
 
 }

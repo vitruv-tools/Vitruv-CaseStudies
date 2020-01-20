@@ -10,7 +10,8 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlClass
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlInterface
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
-import static tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper.*
+import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -221,8 +222,8 @@ reaction JavaSuperClassChanged {
     call {
     	if (oldValue !== null)
     		deleteUmlSuperClassGeneralization(oldValue)
-    	if (newValue !== null && getClassifier(newValue) instanceof Class){
-    		val jSuperClass = getClassifier(newValue) as Class
+    	if (newValue !== null && getTargetClassifierFromImplementsReferenceAndNormalizeURI(newValue) instanceof Class){
+    		val jSuperClass = getTargetClassifierFromImplementsReferenceAndNormalizeURI(newValue) as Class
     		addUmlSuperClassGeneralization(affectedEObject, newValue, jSuperClass)
     	}
     }
@@ -258,7 +259,7 @@ routine deleteUmlSuperClassGeneralization(java::TypeReference jReference){
 reaction JavaClassImplementAdded {
     after element java::TypeReference created and inserted in java::Class[implements]
     call{
-        val jInterface = getClassifier(newValue) as Interface
+        val jInterface = getTargetClassifierFromImplementsReferenceAndNormalizeURI(newValue) as Interface
         addUmlClassImplement(affectedEObject, newValue, jInterface)
     }
 }
@@ -354,7 +355,7 @@ routine createUmlInterface(java::Interface jInterface, java::CompilationUnit jCo
 reaction JavaSuperInterfaceAdded {
     after element java::TypeReference inserted in java::Interface[^extends]
     call {
-    	val jSuperInterface = getClassifier(newValue) as Interface
+    	val jSuperInterface = getTargetClassifierFromImplementsReferenceAndNormalizeURI(newValue) as Interface
     	addUmlSuperinterfaces(affectedEObject, newValue, jSuperInterface)
     }
 }

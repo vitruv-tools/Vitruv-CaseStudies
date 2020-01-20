@@ -8,8 +8,8 @@ import org.emftext.language.java.types.TypesFactory
 import org.junit.Before
 import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import tools.vitruv.applications.umljava.util.UmlJavaTypePropagationHelper
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
@@ -43,7 +43,7 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
         typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS);
         uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false);
         uClass.ownedAttributes += uAttr;
-        pType = UmlJavaTypePropagationHelper.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
+        pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
         saveAndSynchronizeChanges(rootElement);
     }
 

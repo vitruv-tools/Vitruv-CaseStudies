@@ -38,7 +38,7 @@ import tools.vitruv.framework.util.datatypes.ClaimableMap
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractor
 import tools.vitruv.domains.pcm.util.PrimitiveTypesRepositoryLoader
-import tools.vitruv.applications.util.temporary.pcm.DataTypeUtil
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 /**
  * Helper to map type References to PCM data types
@@ -106,7 +106,7 @@ class TypeReferenceCorrespondenceHelper {
 
 			if (arrayDimension > 0 && null !== pcmDataType && null !== repo) {
 				// find CollectionDatatype list for innerValue or create new one
-				val typeName = "List_" + DataTypeUtil.getNameFromPCMDataType(pcmDataType)
+				val typeName = "List_" + PcmDataTypeUtil.getNameFromPCMDataType(pcmDataType)
 				var collectionDataType = repo.dataTypes__Repository.filter(CollectionDataType).findFirst [
 					it.entityName.equals(typeName)
 				]

@@ -39,19 +39,19 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.system.System
+import tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import tools.vitruv.framework.tuid.TuidManager
-import tools.vitruv.framework.util.bridges.EcoreResourceBridge
-
-
-import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
-import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import static tools.vitruv.applications.util.temporary.pcm.RepositoryUtil.*
-import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import tools.vitruv.framework.userinteraction.UserInteractor
+import tools.vitruv.framework.util.bridges.EcoreResourceBridge
+
+import static tools.vitruv.domains.java.util.JavaModificationUtil.*
+
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import static tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.*
 
 /**
  * 
@@ -165,7 +165,7 @@ public class PcmJamoppUtilsGuice {
 	}
 
 	def static ensureConstructorWithInjectAnnotation(Class jaMoPPClass) { 
-		val constructor = getOrCreateConstructorToClass(jaMoPPClass)
+		val constructor = JavaMemberAndParameterUtil.getOrCreateConstructorToClass(jaMoPPClass)
 		if (!checkConstructorForInjectionTag(constructor)) {
 			addInjectToConstructor(constructor, jaMoPPClass)
 		}

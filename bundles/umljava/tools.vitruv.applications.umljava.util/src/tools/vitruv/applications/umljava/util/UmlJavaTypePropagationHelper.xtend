@@ -5,22 +5,11 @@ import java.util.HashSet
 import java.util.LinkedList
 import java.util.List
 import java.util.Optional
-import java.util.function.Function
 import org.apache.log4j.Logger
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLPackage
-import org.emftext.language.java.classifiers.Classifier
 import org.emftext.language.java.classifiers.ConcreteClassifier
-import org.emftext.language.java.containers.CompilationUnit
-import org.emftext.language.java.generics.GenericsFactory
-import org.emftext.language.java.generics.QualifiedTypeArgument
-import org.emftext.language.java.imports.ClassifierImport
-import org.emftext.language.java.imports.ImportsFactory
 import org.emftext.language.java.types.Boolean
 import org.emftext.language.java.types.ClassifierReference
 import org.emftext.language.java.types.Double
@@ -35,7 +24,8 @@ import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModal
 import tools.vitruv.framework.userinteraction.UserInteractor
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.*
-import static tools.vitruv.applications.util.temporary.other.UriUtil.normalizeURI
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
  * Helper class for the Uml <-> Java - reactions. Contains functions for handling java::TypeReferences
@@ -43,7 +33,8 @@ import static tools.vitruv.applications.util.temporary.other.UriUtil.normalizeUR
  * 
  * @author Torsten Syma
  */
-class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as possible and put into tmp util project
+@Utility
+class UmlJavaTypePropagationHelper {
     private static val logger = Logger.getLogger(UmlJavaTypePropagationHelper.simpleName)
 
     public static val UML_PRIMITIVE_BOOLEAN_TAG = "Boolean"
@@ -51,111 +42,19 @@ class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as
     public static val UML_PRIMITIVE_INTEGER_TAG = "Integer"
     public static val UML_PRIMITIVE_STRING_TAG = "String"
 
-    public static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(ResourceSet rs) {
-        var List<PrimitiveType> umlPrimitiveTypes = #[]
-        val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
-        val resource = rs.getResource(uri, true)
-        umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList
-        return umlPrimitiveTypes
-    }
-
-    public static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(Function<URI, Resource> resourceRetriever) {
-        var List<PrimitiveType> umlPrimitiveTypes = #[]
-        val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
-        val resource = resourceRetriever.apply(uri)
-        if (resource !== null) {
-            umlPrimitiveTypes = resource.allContents.filter(PrimitiveType).toList
-        }
-        return umlPrimitiveTypes
-    }
-
-    public static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm, ResourceSet rs) {
-        var List<PrimitiveType> umlPrimitiveTypes = getSupportedPredefinedUmlPrimitiveTypes(rs)
-        for (primitive : umlPrimitiveTypes) {
-            val alreadyRegistered = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, primitive.name,
-                PrimitiveType).head
-            if (alreadyRegistered === null)
-                ReactionsCorrespondenceHelper.addCorrespondence(cm, UMLPackage.Literals.PRIMITIVE_TYPE, primitive, primitive.name)
-        }
-    }
-
     private static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
-
-    def static boolean isCollectionTypeReference(TypeReference jRef) {
-        val classifier = getClassifier(jRef)
-        if (classifier !== null) {
-            val qualifiedName = getQualifiedName(classifier)
-            if (supportedCollectionTypes.exists[it.name == qualifiedName]) {
-                return true
-            }
-        }
-        return false
-    }
 
     /**
      * Prompts a message to the user that allows him to choose a collection datatype.
      * 
      * @param userInteractor the userInteractor to prompt the message
-     * @return the selected Collection implementation Class 
+     * @return the selected Collection implementation Class
      */
     def static Class<?> userSelectCollectionType(UserInteractor userInteractor) {
         val String selectTypeMsg = "Select a Collection type for the association end"
         val int selectedType = userInteractor.singleSelectionDialogBuilder.message(selectTypeMsg).choices(supportedCollectionTypes.map[it.name]).windowModality(
             WindowModality.MODAL).startInteraction()
         return supportedCollectionTypes.get(selectedType)
-    }
-
-    def static dispatch TypeReference getInnerTypeRefOfCollectionReference(TypeReference collRef) {
-        return null
-    }
-
-    def static dispatch TypeReference getInnerTypeRefOfCollectionReference(ClassifierReference collRef) {
-        val typeArgument = collRef.typeArguments.head
-        if (typeArgument !== null && typeArgument instanceof QualifiedTypeArgument) {
-            val typeRef = (typeArgument as QualifiedTypeArgument).typeReference
-            return typeRef
-        }
-        return null
-    }
-
-    def static dispatch TypeReference getInnerTypeRefOfCollectionReference(NamespaceClassifierReference collRef) {
-        return if (!collRef.classifierReferences.nullOrEmpty)
-            getInnerTypeRefOfCollectionReference(collRef.classifierReferences.head)
-        else
-            null
-    }
-
-    def static dispatch Classifier getClassifier(Void jRef) {
-        return null
-    }
-
-    def static dispatch Classifier getClassifier(TypeReference jRef) {
-        return null
-    }
-
-    def static dispatch Classifier getClassifier(org.emftext.language.java.types.PrimitiveType jRef) {
-        return null
-    }
-
-    def static dispatch Classifier getClassifier(ClassifierReference jRef) {
-        var classifier = jRef.target
-        if (classifier === null) return null
-
-        // resolve
-        if (classifier.eIsProxy) {
-            val resSet = classifier.eResource.resourceSet
-            classifier = EcoreUtil.resolve(classifier, resSet) as Classifier
-        }
-        // normalize
-        normalizeURI(classifier)
-        return classifier
-    }
-
-    def static dispatch Classifier getClassifier(NamespaceClassifierReference jRef) {
-        return if (!jRef.classifierReferences.nullOrEmpty)
-            getClassifier(jRef.classifierReferences.head)
-        else
-            null
     }
 
     def static dispatch Type getUmlTypeFromReference(Void jRef, CorrespondenceModel cm) {
@@ -192,17 +91,6 @@ class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as
             null
     }
 
-    def static String getQualifiedName(Classifier classifier) {
-        if (classifier instanceof ConcreteClassifier) {
-            val namespace = if (classifier.containingCompilationUnit !== null) classifier.containingCompilationUnit.namespaces.join(".") else ""
-            val qualifiedName = if (namespace != "") namespace + "." + classifier.name else classifier.name
-            return qualifiedName
-        } else {
-            // can't retrieve namespaces
-            return classifier.name
-        }
-    }
-
     def static org.emftext.language.java.types.PrimitiveType unwrapWrappedPrimitiveType(TypeReference jRef) {
         val classifier = getClassifier(jRef)
         if (classifier === null) return null
@@ -225,14 +113,14 @@ class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as
     /**
      * Retrieves the predefined uml::PrimitiveType corresponding to the java::TypeReference.
      * <br><br>
-     * This method is defined with TypeReference as input instead of the more specific PrimitiveType, 
+     * This method is defined with TypeReference as input instead of the more specific PrimitiveType,
      * because java.lang.String, which is a Classifier held by a TypeReference, and wrapped primitive types
      * are mapped to uml::PrimitiveTypes as well and are supposed to be retrieved with this method.
      * <br><br>
-     * Currently supported java types because only those have a good correspondence in "pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml": 
-     * 	Boolean, Integer, Double, String 
+     * Currently supported java types because only those have a good correspondence in "pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml":
+     * 	Boolean, Integer, Double, String
      * 
-     * @param jRef 
+     * @param jRef
      * 		the java type (ClassifierReference or PrimitiveType) for which to retrieve the registered uml::PrimitiveType
      * @param cm
      * 		the correspondenceModel where the uml::PrimitiveTypes are registered
@@ -246,7 +134,7 @@ class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as
             val unwrappedPrimitive = unwrapWrappedPrimitiveType(jRef)
             if (unwrappedPrimitive !== null)
                 return mapJavaPrimitiveToUmlPrimitive(unwrappedPrimitive, cm)
-            // check if it is of type String, which has to be mapped to an uml::PrimitiveType 
+            // check if it is of type String, which has to be mapped to an uml::PrimitiveType
             if (getQualifiedName(classifier) == "java.lang.String") {
                 val umlString = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, UML_PRIMITIVE_STRING_TAG,
                     PrimitiveType).head
@@ -293,81 +181,16 @@ class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as
         }
     }
 
-    // ///////////////////////////////////////////
-    // ///////////////////////////////////////////
-    def static void addJavaImport(CompilationUnit compUnit, TypeReference jTypeRef) {
-        if (jTypeRef instanceof org.emftext.language.java.types.PrimitiveType) {
-            return // nothing to do
-        } else if (jTypeRef.target !== null && jTypeRef.target instanceof ConcreteClassifier) {
-            val jType = jTypeRef.target as ConcreteClassifier
-            addJavaImport(compUnit, jType)
-            // add imports for typeArguments if any exist
-            if (jTypeRef instanceof NamespaceClassifierReference) {
-                val typeArguments = (jTypeRef as NamespaceClassifierReference).classifierReferences.get(0).typeArguments
-                for (typeArgument : typeArguments.filter(QualifiedTypeArgument).filter[it.typeReference !== null]) {
-                    typeArgument.typeReference
-                    addJavaImport(compUnit, typeArgument.typeReference)
-                }
-            }
-        } else {
-            // shouldn't occur
-        }
-    }
-
-    def static ClassifierImport addJavaImport(CompilationUnit compUnit, ConcreteClassifier jType) {
-        if (compUnit === null) {
-            throw new IllegalStateException("Tried to add a java import without passing a CompilationUnit.")
-        }
-        if (jType === null || jType instanceof org.emftext.language.java.types.PrimitiveType) {
-            return null // nothing to do
-        }
-
-        /*
-         * If a referenced type lives in the same package as the concerned CompilationUnit, then an import
-         * is generally unnecessary. However, if the Compilation unit is then moved to another package,
-         * the transformation has to ensure that imports for types in the same package are added afterwards.
-         * 
-         * The samePackage check is disabled, because the required transformation implementation to support 
-         * this feature is still missing. Until then, imports are added for every referenced Type, so that the 
-         * CompilationUnit remains compilable after beeing moved.
-         */
-//		val targetNamespace = if (jType.containingCompilationUnit !== null) jType.containingCompilationUnit.namespaces.join(".") else ""
-//		val samePackage = targetNamespace.equals(compUnit.namespaces.join(".")) 
-        val samePackage = false
-        val alreadyImported = compUnit.imports.filterNull.filter(ClassifierImport).exists [
-            it.classifier.name == jType.name
-        // TODO unclear how to handle name conflicts
-        /* It is possible that two Types have the same name but different namespaces. In this case
-         * at least one of the types has to be used fully qualified throughout the compilation unit.
-         * How should such a problem be communicated and how can the JaMoPP printer then be triggered 
-         * to write TypeReferences fully qualified. 
-         */
-        ]
-        if (!samePackage && !alreadyImported) {
-            val classifierImport = ImportsFactory.eINSTANCE.createClassifierImport
-            if (null !== jType.containingCompilationUnit) {
-                if (null !== jType.containingCompilationUnit.namespaces) {
-                    classifierImport.namespaces.addAll(jType.containingCompilationUnit.namespaces)
-                }
-            }
-            classifierImport.classifier = jType
-            compUnit.imports.add(classifierImport)
-            return classifierImport
-        } else {
-            return null // nothing to do
-        }
-    }
-
     /**
-     * Creates a java::TypeReference with the correct type for the passed uml::Type. 
-     * Depending on the Class of uType, this can be a java::NamespaceClassifierReference or a java PrimitiveType. 
+     * Creates a java::TypeReference with the correct type for the passed uml::Type.
+     * Depending on the Class of uType, this can be a java::NamespaceClassifierReference or a java PrimitiveType.
      * 
      * @param uType
-     * 		the input uml Type
-     * @param jType 
-     * 		the ConcreteClassifier (Class or Interface) that was retrieved from the correspondence model
-     * @param defaultReference 
-     * 		the output TypeReference this method should default to, if uType is null or cannot be mapped
+     *      the input uml Type
+     * @param jType
+     *      the ConcreteClassifier (Class or Interface) that was retrieved from the correspondence model
+     * @param defaultReference
+     *      the output TypeReference this method should default to, if uType is null or cannot be mapped
      */
     def static TypeReference createTypeReference(
         Type uType,
@@ -379,15 +202,15 @@ class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as
     }
 
     /**
-     * Creates a java::TypeReference with the correct type for the passed uml::Type. 
-     * Depending on the Class of uType, this can be a java::NamespaceClassifierReference or a java PrimitiveType. 
+     * Creates a java::TypeReference with the correct type for the passed uml::Type.
+     * Depending on the Class of uType, this can be a java::NamespaceClassifierReference or a java PrimitiveType.
      * 
      * @param uType
-     * 		the input uml Type
-     * @param jType 
-     * 		the ConcreteClassifier (Class or Interface) that was retrieved from the correspondence model (may be null)
-     * @param defaultReference 
-     * 		the output TypeReference this method should default to, if uType is null or cannot be mapped
+     *      the input uml Type
+     * @param jType
+     *      the ConcreteClassifier (Class or Interface) that was retrieved from the correspondence model (may be null)
+     * @param defaultReference
+     *      the output TypeReference this method should default to, if uType is null or cannot be mapped
      */
     def static TypeReference createTypeReference(
         Type uType,
@@ -412,43 +235,6 @@ class UmlJavaTypePropagationHelper { // FIXME TS extract as many util methods as
             typeReference = defaultReference
         }
         return typeReference
-    }
-
-    def static NamespaceClassifierReference createCollectionTypeReference(
-        NamespaceClassifierReference collectionTypeReference,
-        TypeReference innerTypeReference
-    ) {
-        // wrap typeReference if necessary
-        var wrappedInnerReference = innerTypeReference
-        if (wrappedInnerReference instanceof org.emftext.language.java.types.PrimitiveType) {
-            wrappedInnerReference = JavaModificationUtil.getWrapperTypeReferenceForPrimitiveType(wrappedInnerReference)
-        }
-
-        // set the inner type reference on the NamespaceClassifierReference of the Collection type
-        val qualifiedTypeArgument = GenericsFactory.eINSTANCE.createQualifiedTypeArgument();
-        qualifiedTypeArgument.typeReference = wrappedInnerReference;
-        collectionTypeReference.classifierReferences.get(0).typeArguments += qualifiedTypeArgument;
-
-        return collectionTypeReference
-    }
-
-    def static NamespaceClassifierReference createCollectionTypeReference(
-        ConcreteClassifier collectionTypeClassifier,
-        TypeReference innerTypeReference
-    ) {
-        val collectionTypeReference = JavaModificationUtil.createNamespaceClassifierReference(collectionTypeClassifier)
-        return createCollectionTypeReference(collectionTypeReference, innerTypeReference)
-    }
-
-    def static NamespaceClassifierReference createCollectionTypeReference(
-        Class<?> collectionType,
-        TypeReference innerTypeReference
-    ) {
-        val collectionNamespace = collectionType.name.replace("." + collectionType.simpleName, "")
-        val collectionSimpleName = collectionType.simpleName
-        val collectionTypeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(collectionNamespace, collectionSimpleName)
-
-        return createCollectionTypeReference(collectionTypeReference, innerTypeReference)
     }
 
 }
