@@ -5,7 +5,6 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.LinkedList
 import java.util.List
-import java.util.Optional
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
@@ -43,36 +42,27 @@ class JavaTypeUtil {
 
     /**
      * Retrieves the type referenced by a type reference. This can either be a classifier or a primitive type.
-     * If it is a classifier, proxys are resolved and the classifier URI is normalized.
      * @return the type wrapped in the type reference or null if it is a Void type or unknown type reference.
      */
-    def static dispatch Type getTypeFromReference(TypeReference typeReference) {
+    def private static dispatch Type getTypeFromReference(TypeReference typeReference) {
         logger.warn(typeReference + " is neither a NamespaceClassifierReference nor a PrimitiveType. Returning null.")
         return null
     }
-     
-    def static dispatch Type getTypeFromReference(Void nullTypeReference) {
+
+    def private static dispatch Type getTypeFromReference(Void nullTypeReference) {
         logger.warn("Cannot get Type of a null-TypeReference. Returning null.")
         return null
     }
 
-    def static dispatch Type getTypeFromReference(PrimitiveType primitiveType) {
+    def private static dispatch Type getTypeFromReference(PrimitiveType primitiveType) {
         return primitiveType
     }
 
-    def static dispatch Type getTypeFromReference(ClassifierReference classifierReference) {
-        var classifier = classifierReference.target
-        if (classifier !== null) {
-            if (classifier.eIsProxy) { // resolve proxy
-                val resourceSet = classifierReference.eResource.resourceSet
-                classifier = EcoreUtil.resolve(classifier, resourceSet) as Classifier
-            }
-            normalizeURI(classifier)
-        }
-        return classifier
+    def private static dispatch Type getTypeFromReference(ClassifierReference classifierReference) {
+        return classifierReference.target
     }
 
-    def static dispatch Type getTypeFromReference(NamespaceClassifierReference namespace) {
+    def private static dispatch Type getTypeFromReference(NamespaceClassifierReference namespace) {
         if (namespace === null || namespace.classifierReferences.nullOrEmpty) {
             return null
         }
@@ -87,6 +77,24 @@ class JavaTypeUtil {
         val type = getTypeFromReference(typeRef)
         if (type instanceof Classifier) {
             return type
+        }
+        logger.warn("The TypeReference " + typeRef + " does not contain a Classifier. Returning null.")
+        return null
+    }
+
+    /**
+     * Retrieves the classifier wrapped in a type reference. Proxys are resolved and the classifier URI is normalized.
+     * @return the classifier or null if the type reference does not contain any classifier.
+     */
+    def static Classifier getNormalizedClassifierFromTypeReference(TypeReference typeRef) {
+        var type = getTypeFromReference(typeRef)
+        if (type instanceof Classifier) {
+            if (type.eIsProxy) { // resolve proxy
+                val resourceSet = type.eResource.resourceSet
+                type = EcoreUtil.resolve(type, resourceSet) as Classifier
+            }
+            normalizeURI(type)
+            return type as Classifier
         }
         logger.warn("The TypeReference " + typeRef + " does not contain a Classifier. Returning null.")
         return null
@@ -192,8 +200,10 @@ class JavaTypeUtil {
     def static findImplementingInterfacesFromTypeRefs(EList<TypeReference> typeReferences) {
         val implementingInterfaces = new ArrayList<Interface>
         for (typeRef : typeReferences) {
-            val interface = Optional.ofNullable(getInterfaceFromTypeReference(typeRef))
-            interface.ifPresent[implementingInterfaces.add(it)]
+            val classifier = getNormalizedClassifierFromTypeReference(typeRef)
+            if (classifier instanceof Interface) {
+                implementingInterfaces.add(classifier)
+            }
         }
         return implementingInterfaces
     }
@@ -210,7 +220,7 @@ class JavaTypeUtil {
     }
 
     def static boolean isCollectionTypeReference(TypeReference jRef) {
-        val classifier = getClassifierFromTypeReference(jRef)
+        val classifier = getNormalizedClassifierFromTypeReference(jRef)
         if (classifier !== null) {
             val qualifiedName = getQualifiedName(classifier)
             if (supportedCollectionTypes.exists[it.name == qualifiedName]) {
