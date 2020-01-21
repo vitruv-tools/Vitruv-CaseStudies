@@ -89,7 +89,7 @@ routine propagateTypedMultiplicityElementTypeChanged(
 				}
 	    		if(isCollectionTypeReference(jElement.typeReference)){
 	    			// reuse previously selected CollectionType
-	    			val collectionClassifier = getClassifierFromTypeReference(jElement.typeReference) as ConcreteClassifier
+	    			val collectionClassifier = getNormalizedClassifierFromTypeReference(jElement.typeReference) as ConcreteClassifier
 	    			typeReference = createCollectionTypeReference(collectionClassifier, typeReference)
 	    		}
 	    		else {
