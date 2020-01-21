@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
  * char		 char
  * long      long		
  */
-class DataTypeCorrespondenceHelper {
+class DataTypeCorrespondenceHelper {  // FIXME TS check if something needs to be extracted here
 
 	private new() {
 	}
