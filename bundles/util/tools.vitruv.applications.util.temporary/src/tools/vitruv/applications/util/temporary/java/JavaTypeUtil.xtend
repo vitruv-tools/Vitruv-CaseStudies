@@ -90,7 +90,7 @@ class JavaTypeUtil {
         var type = getTypeFromReference(typeRef)
         if (type instanceof Classifier) {
             if (type.eIsProxy) { // resolve proxy
-                val resourceSet = type.eResource.resourceSet
+                val resourceSet = type.eResource?.resourceSet // resource can be null, but EcoreUtil.resolve() can handle null as resource set
                 type = EcoreUtil.resolve(type, resourceSet) as Classifier
             }
             normalizeURI(type)
