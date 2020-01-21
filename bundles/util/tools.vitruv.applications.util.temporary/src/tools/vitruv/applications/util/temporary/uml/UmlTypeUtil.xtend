@@ -13,7 +13,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorresponde
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 @Utility
-class UmlTypeUtil {
+class UmlTypeUtil { // TODO TS merge with UmlClassifierAndPackagableUtil?
     static val UML_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
     public static val UML_PRIMITIVE_BOOLEAN_TAG = "Boolean"
     public static val UML_PRIMITIVE_REAL_TAG = "Real"

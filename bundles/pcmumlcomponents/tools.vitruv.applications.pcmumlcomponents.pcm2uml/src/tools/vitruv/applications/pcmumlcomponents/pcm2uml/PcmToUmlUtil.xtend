@@ -21,7 +21,7 @@ import tools.vitruv.dsls.reactions.meta.correspondence.reactions.ReactionsCorres
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.extensions.dslsruntime.reactions.ReactionsCorrespondenceModelViewFactory
 
-class PcmToUmlUtil {
+class PcmToUmlUtil { // FIXME TS check if something needs to be extracted from here to the tmp util project
 
 	public static val COLLECTION_TYPE_TAG = "Collection"
 

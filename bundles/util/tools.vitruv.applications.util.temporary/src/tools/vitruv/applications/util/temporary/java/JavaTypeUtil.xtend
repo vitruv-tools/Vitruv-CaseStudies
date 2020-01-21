@@ -5,6 +5,7 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.LinkedList
 import java.util.List
+import java.util.Optional
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
@@ -41,21 +42,22 @@ class JavaTypeUtil {
     private static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
 
     /**
-     * Retrieves the type referenced by a type reference. This can either be a classifier, a primitive type or null.
+     * Retrieves the type referenced by a type reference. This can either be a classifier or a primitive type.
      * If it is a classifier, proxys are resolved and the classifier URI is normalized.
+     * @return the type wrapped in the type reference or null if it is a Void type or unknown type reference.
      */
+    def static dispatch Type getTypeFromReference(TypeReference typeReference) {
+        logger.warn(typeReference + " is neither a NamespaceClassifierReference nor a PrimitiveType. Returning null.")
+        return null
+    }
+     
     def static dispatch Type getTypeFromReference(Void nullTypeReference) {
         logger.warn("Cannot get Type of a null-TypeReference. Returning null.")
         return null
     }
 
-    def static dispatch Type getTypeFromReference(TypeReference typeReference) {
-        logger.warn(typeReference + " is neither a NamespaceClassifierReference nor a PrimitiveType. Returning null.")
-        return null
-    }
-
     def static dispatch Type getTypeFromReference(PrimitiveType primitiveType) {
-        return primitiveType // TODO TS merged from 3 different methods, some return null here
+        return primitiveType
     }
 
     def static dispatch Type getTypeFromReference(ClassifierReference classifierReference) {
@@ -65,7 +67,7 @@ class JavaTypeUtil {
                 val resourceSet = classifierReference.eResource.resourceSet
                 classifier = EcoreUtil.resolve(classifier, resourceSet) as Classifier
             }
-            normalizeURI(classifier) // TODO TS merged from 3 different methods, some did not resolve and normalize
+            normalizeURI(classifier)
         }
         return classifier
     }
@@ -78,7 +80,8 @@ class JavaTypeUtil {
     }
 
     /**
-     * @return the classifier that is wrapped in the typeref. Returns null if the type reference does not contain any classifier
+     * Retrieves the classifier wrapped in a type reference.
+     * @return the classifier or null if the type reference does not contain any classifier.
      */
     def static Classifier getClassifierFromTypeReference(TypeReference typeRef) {
         val type = getTypeFromReference(typeRef)
@@ -90,7 +93,8 @@ class JavaTypeUtil {
     }
 
     /**
-     * @return the interface that is wrapped in the typeref. Returns null if the type reference does not contain any interfaces
+     * Retrieves the interface wrapped in a type reference.
+     * @return the interface or null if the type reference does not contain any interfaces.
      */
     def static Interface getInterfaceFromTypeReference(TypeReference typeRef) {
         val type = getTypeFromReference(typeRef)
@@ -188,10 +192,8 @@ class JavaTypeUtil {
     def static findImplementingInterfacesFromTypeRefs(EList<TypeReference> typeReferences) {
         val implementingInterfaces = new ArrayList<Interface>
         for (typeRef : typeReferences) {
-            val classifier = getTypeFromReference(typeRef)
-            if (classifier instanceof Interface) {
-                implementingInterfaces.add(classifier)
-            }
+            val interface = Optional.ofNullable(getInterfaceFromTypeReference(typeRef))
+            interface.ifPresent[implementingInterfaces.add(it)]
         }
         return implementingInterfaces
     }
@@ -208,9 +210,9 @@ class JavaTypeUtil {
     }
 
     def static boolean isCollectionTypeReference(TypeReference jRef) {
-        val classifier = getTypeFromReference(jRef)
-        if (classifier !== null && classifier instanceof Classifier) {
-            val qualifiedName = getQualifiedName(classifier as Classifier)
+        val classifier = getClassifierFromTypeReference(jRef)
+        if (classifier !== null) {
+            val qualifiedName = getQualifiedName(classifier)
             if (supportedCollectionTypes.exists[it.name == qualifiedName]) {
                 return true
             }
