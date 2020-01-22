@@ -34,7 +34,6 @@ import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChang
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import tools.vitruv.domains.pcm.PcmDomainProvider
@@ -43,8 +42,9 @@ import tools.vitruv.domains.uml.UmlDomainProvider
 import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
