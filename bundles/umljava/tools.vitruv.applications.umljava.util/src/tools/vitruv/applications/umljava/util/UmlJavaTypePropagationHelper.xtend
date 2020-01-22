@@ -34,7 +34,7 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
  * @author Torsten Syma
  */
 @Utility
-class UmlJavaTypePropagationHelper { // FIXME TS check if something needs to be extracted here
+class UmlJavaTypePropagationHelper {
     private static val logger = Logger.getLogger(UmlJavaTypePropagationHelper.simpleName)
 
     public static val UML_PRIMITIVE_BOOLEAN_TAG = "Boolean"
