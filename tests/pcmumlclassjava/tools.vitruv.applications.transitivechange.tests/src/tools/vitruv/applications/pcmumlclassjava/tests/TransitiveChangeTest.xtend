@@ -44,6 +44,7 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.util.java.JavaTypeUtil.*
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
@@ -55,7 +56,8 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
 			new UmlToJavaChangePropagationSpecification(),
 			new JavaToUmlChangePropagationSpecification(),
-			new Pcm2JavaChangePropagationSpecification()
+			new Pcm2JavaChangePropagationSpecification(),
+			new Java2PcmChangePropagationSpecification()
 		];
 	}
 
