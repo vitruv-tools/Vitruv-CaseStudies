@@ -11,6 +11,7 @@ import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 
 import static org.junit.Assert.*
 
@@ -85,6 +86,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 
 		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
 		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
 		saveAndSynchronizeChanges(umlModel)
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 
@@ -114,6 +116,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 
 		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 
 		pcmRepository.entityName = "Pcm2UmlNameChange"
@@ -122,6 +125,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 
 		val newName = "pcm2UmlNameChange_2" // should be synchronized to upper case
 		pcmRepository.entityName = newName
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
 		saveAndSynchronizeChanges(pcmRepository)
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 

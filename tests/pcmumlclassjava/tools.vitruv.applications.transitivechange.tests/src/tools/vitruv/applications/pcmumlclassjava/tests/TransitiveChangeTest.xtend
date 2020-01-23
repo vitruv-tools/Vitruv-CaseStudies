@@ -28,12 +28,14 @@ import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
 import org.emftext.language.java.members.Method
 import org.emftext.language.java.types.TypeReference
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
 import tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.Pcm2JavaChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import tools.vitruv.domains.pcm.PcmDomainProvider
@@ -43,8 +45,6 @@ import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmChangePropagationSpecification
-import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
 class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
