@@ -1,5 +1,6 @@
 import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
+import org.palladiosimulator.pcm.repository.Repository
 
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*
 import static extension tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorrespondenceHelper.getCorrespondingPCMDataTypeForTypeReference
@@ -17,17 +18,30 @@ execute actions in PCM
 reaction JavaNamedElementRenamed {
     after attribute replaced at java::NamedElement[name]
     call {
-    	renameNamedElement(affectedEObject)
+        renameNamedElement(affectedEObject)
+        renameRepository(affectedEObject)
     }
 }
 
 routine renameNamedElement(java::NamedElement javaElement) {
     match {
         val pcmElement = retrieve pcm::NamedElement corresponding to javaElement
+        with !(pcmElement instanceof Repository)
     }
     action {
         update pcmElement {
             pcmElement.entityName = javaElement.name;
+        }
+    }
+}
+
+routine renameRepository(java::NamedElement javaElement) {
+    match {
+        val pcmRepository = retrieve pcm::Repository corresponding to javaElement
+    }
+    action {
+        update pcmRepository {
+            pcmRepository.entityName = javaElement.name.toFirstUpper;
         }
     }
 }
