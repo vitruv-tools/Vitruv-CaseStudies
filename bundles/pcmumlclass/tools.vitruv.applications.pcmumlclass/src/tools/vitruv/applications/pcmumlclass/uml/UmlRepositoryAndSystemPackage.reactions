@@ -5,6 +5,9 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.extensions.dslsruntime.reactions.helper.PersistenceHelper
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 import org.eclipse.uml2.uml.UMLPackage
+import org.palladiosimulator.pcm.repository.RepositoryPackage
+
+import static extension tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.findRepository
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -74,7 +77,7 @@ routine userDisambiguateRepositoryOrSystemCreation(uml::Package umlPkg, uml::Pac
 					.startInteraction
 			switch (pcmElementType) {
 				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY:
-						createCorrespondingRepository(umlPkg, umlParentPkg)
+						createOrFindCorrespondingRepository(umlPkg, umlParentPkg)
 				case DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM:
 						createCorrespondingSystem(umlPkg, umlParentPkg)
 				default: return //do nothing
@@ -83,12 +86,36 @@ routine userDisambiguateRepositoryOrSystemCreation(uml::Package umlPkg, uml::Pac
 	}
 }
 
+routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package umlParentPkg) {
+    match {
+        require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+        val allRepositories = retrieve many pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
+    }
+    action {
+        call {
+            val matchingRepository = allRepositories.findRepository(umlPkg.name?.toFirstUpper)
+            if (matchingRepository === null) {
+                createCorrespondingRepository(umlPkg, umlParentPkg)
+            } else {
+                addRepositoryCorrespondence(matchingRepository, umlPkg)
+            }
+        }
+    }
+}
+
+routine addRepositoryCorrespondence(pcm::Repository pcmRepository, uml::Package umlPkg) {
+    action {
+        add correspondence between pcmRepository and umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+    }
+}
+
 routine createCorrespondingRepository(uml::Package umlPkg, uml::Package umlParentPkg) {
 	action {
 		val pcmRepository = create pcm::Repository and initialize {
 			pcmRepository.entityName = umlPkg.name?.toFirstUpper
 		}
 		add correspondence between pcmRepository and umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
+		add correspondence between pcmRepository and RepositoryPackage.Literals.REPOSITORY
 		execute {
 			val fileExtension = DefaultLiterals.PCM_REPOSITORY_EXTENSION
 
