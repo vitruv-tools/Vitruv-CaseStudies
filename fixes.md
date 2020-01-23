@@ -42,7 +42,16 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
   | [fix16](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix16) | [PR 63](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/63) | Java packages were not properly deleted due to duplicate creation caused by the Java package already existing but missing the correspondence. |
   | [fix17](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix17) | [PR 64](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/64) | UML elements were incorrectly renamed. They were either dropping their first character or completely chopped up due to careless use of methods that expect regular expressions. |
   | [fix18](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix18) | [PR 65](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/65) | Java/UML types were created twice due to already existing but missing the correspondences. This caused crashes during test setups. |
-  
+   | [fix19](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix19) | [PR 66](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/66) | PCM systems were created twice due to already existing but missing the correspondences. Additionally, system name changes were incorrectly propagated. |
+   | [fix20](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix20) | [PR 66](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/66) | Multiple UML models were created due to the lack of any control mechanism that checked the existence of UML models. |
+
+### PCM ↔︎ UML ↔︎ Java ↔︎ PCM
+Bidirectional transformation between UML and PCM, between UML and Java, and between PCM and Java.
+
+  | tag | correlating pull request | addressed problem |
+  | -- | -- | -- |
+  | TODO | [PR 68](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/68) | Duplicate creation of PCM repositories due to already being created but missing the correspondences. |
+  | TODO | [PR 69](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/69) | Invalid repository name propagation due to missing naming pattern enforcement. |
 
 ### Fix to Test Case Failure/Error Correlation
 
