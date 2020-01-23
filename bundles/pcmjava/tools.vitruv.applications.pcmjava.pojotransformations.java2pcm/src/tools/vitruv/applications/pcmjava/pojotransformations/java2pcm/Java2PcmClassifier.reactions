@@ -1,14 +1,17 @@
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
-import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNormalizedClassifierFromTypeReference
-import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.ClassifierReference
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 import org.emftext.language.java.containers.ContainersPackage
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import org.palladiosimulator.pcm.repository.RepositoryPackage
+
+import static extension tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.findRepository
+import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNormalizedClassifierFromTypeReference
+import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -26,7 +29,7 @@ reaction PackageCreated {
 		
 	call {
 		createArchitecturalElement(newValue, getLastPackageName(newValue.name), getRootPackageName(newValue.name))
-		createRepository(newValue, newValue.name, "package_root")
+		createOrFindRepository(newValue, newValue.name, "package_root")
 		createPackageEClassCorrespondence(newValue)
 	}
 }
@@ -73,14 +76,32 @@ routine createArchitecturalElement(java::Package javaPackage, String name, Strin
 	}
 }
 
-/**
- * Creates Repository.
- */
+routine createOrFindRepository(java::Package javaPackage, String packageName, String newTag) {
+    match {
+        require absence of pcm::Repository corresponding to javaPackage tagged with newTag
+        require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
+        val allRepositories = retrieve many pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
+    }
+    action {
+        call {
+            val matchingRepository = allRepositories.findRepository(packageName.toFirstUpper)
+            if (matchingRepository === null) {
+               createRepository(javaPackage, packageName, newTag)
+            } else {
+               addRepositoryCorrespondence(matchingRepository, javaPackage, newTag)
+            }
+        }
+    }
+}
+
+routine addRepositoryCorrespondence(pcm::Repository pcmRepository, java::Package javaPackage, String newTag) {
+    action {
+        add correspondence between pcmRepository and ContainersPackage.Literals.PACKAGE
+        add correspondence between pcmRepository and javaPackage tagged with newTag
+    }
+}
+
 routine createRepository(java::Package javaPackage, String packageName, String newTag) {
-	match {
-		require absence of pcm::Repository corresponding to javaPackage tagged with newTag
-		require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
-	}
 	action {
 		update javaPackage {
 			// If the package-info.java is not persisted, do it
@@ -100,6 +121,7 @@ routine createRepository(java::Package javaPackage, String packageName, String n
 			
 		call createJavaSubPackages(javaPackage)
 		add correspondence between pcmRepository and ContainersPackage.Literals.PACKAGE
+		add correspondence between pcmRepository and RepositoryPackage.Literals.REPOSITORY
 	}
 }
 
@@ -401,7 +423,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 	match {
 		require absence of java::Package corresponding to sourceElementMappedToPackage tagged with newTag
 	} 
-	action { 
+	action { // TODO FIXME find or create pattern
 		val javaPackage = create java::Package and initialize {
 			if (parentPackage !== null) {
 				javaPackage.namespaces += parentPackage.namespaces;

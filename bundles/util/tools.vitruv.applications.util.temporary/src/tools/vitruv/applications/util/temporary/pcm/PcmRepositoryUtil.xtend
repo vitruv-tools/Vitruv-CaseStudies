@@ -10,6 +10,16 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 class PcmRepositoryUtil {
     private static final Logger logger = Logger.getLogger(PcmRepositoryUtil.simpleName)
 
+    /**
+     * Tries to locate a repository with a specific name out of a collection of repositories.
+     * @throws IllegalStateException if there is more than one matching repository.
+     */
+    def static Repository findRepository(Iterable<Repository> allRepositories, String name) {
+        val matchingRepositories = allRepositories.filter[entityName == name]
+        if (matchingRepositories.size > 1) throw new IllegalStateException("There are " + matchingRepositories.size + " repositories with name " + name)
+        return matchingRepositories.head
+    }
+
     def static Repository getFirstRepository(CorrespondenceModel correspondenceModel) {
         val Set<Repository> repos = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)
         if (repos.nullOrEmpty) {
