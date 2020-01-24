@@ -31,7 +31,7 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
     public void testAddFirstPackage() throws Throwable {
         final Repository repo = super.addRepoContractsAndDatatypesPackage();
         assertEquals("Name of the repository is not the same as the name of the package",
-                Pcm2JavaTestUtils.REPOSITORY_NAME, repo.getEntityName());
+                Pcm2JavaTestUtils.REPOSITORY_NAME_EXPECTED, repo.getEntityName());
         this.assertResourceAndFileForEObjects(repo);
         this.assertFilesOnlyForEObjects(repo);
     }

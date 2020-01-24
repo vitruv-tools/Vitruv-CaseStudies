@@ -12,6 +12,7 @@ import org.palladiosimulator.pcm.system.SystemFactory;
 public class Pcm2JavaTestUtils {
 
     public static final String REPOSITORY_NAME = "testRepository";
+    public static final String REPOSITORY_NAME_EXPECTED = "TestRepository";
     public static final String BASIC_COMPONENT_NAME = "TestBasicComponent";
     public static final String IMPLEMENTING_CLASS_NAME = BASIC_COMPONENT_NAME + "Impl";
     public static final String INTERFACE_NAME = "TestInterface";
