@@ -80,11 +80,11 @@ routine createOrFindRepository(java::Package javaPackage, String packageName, St
         require absence of pcm::Repository corresponding to javaPackage tagged with newTag
         require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
         val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
-            with foundRepository.entityName == packageName.toFirstUpper
+            with foundRepository.entityName.toFirstLower == packageName // PCM repositories can be both upper and lower case
     }
     action {
         call {
-            if (foundRepository.present) {
+            if (foundRepository.isPresent) {
                addRepositoryCorrespondence(foundRepository.get, javaPackage, newTag)
             } else {
                createRepository(javaPackage, packageName, newTag)
@@ -111,7 +111,7 @@ routine createRepository(java::Package javaPackage, String packageName, String n
 			}
 		}
 		val pcmRepository = create pcm::Repository and initialize {
-			pcmRepository.entityName = packageName
+			pcmRepository.entityName = packageName.toFirstUpper
 			persistProjectRelative(javaPackage, pcmRepository, "model/" + pcmRepository.entityName + ".repository")
 		}
 		

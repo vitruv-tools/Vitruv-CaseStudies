@@ -88,11 +88,11 @@ routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package um
     match {
         require absence of pcm::Repository corresponding to umlPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
         val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
-            with foundRepository.entityName == umlPkg.name.toFirstUpper
+            with foundRepository.entityName.toFirstLower == umlPkg.name // PCM repositories can be both upper and lower case
     }
     action {
         call {
-            if (foundRepository.present) {
+            if (foundRepository.isPresent) {
                 addRepositoryCorrespondence(foundRepository.get, umlPkg)
             } else {
                 createCorrespondingRepository(umlPkg, umlParentPkg)
