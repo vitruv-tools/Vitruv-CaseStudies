@@ -4,9 +4,10 @@ import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
+import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
+import org.palladiosimulator.pcm.repository.RepositoryPackage
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
-import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -29,11 +30,18 @@ import routines sharedRoutines // for UML model handling
 reaction RepositoryCreated {
 	after element pcm::Repository inserted as root
 	call {
+		addRepositoryCorrespondence(newValue)
 		ensureUmlModelExists(newValue)
 		createOrFindUmlRepositoryPackage(newValue)
 		createUmlContractsPackage(newValue)
 		createUmlDatatypesPackage(newValue)
 		bootstrapPrimitiveDatatypes(newValue)
+	}
+}
+
+routine addRepositoryCorrespondence(pcm::Repository pcmRepository) {
+	action {
+		add correspondence between pcmRepository and RepositoryPackage.Literals.REPOSITORY
 	}
 }
 
