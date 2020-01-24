@@ -24,7 +24,7 @@ reaction PackageCreated {
 	after element java::Package inserted as root
 	//This condition prevents another execution after automatically creating contracts and datatypes package.
 	//The reaction is called because every package insert is a root insert. 
-	with !newValue.name.contains("contracts") && !newValue.name.contains("datatypes")
+	with newValue.name === null || (!newValue.name.contains("contracts") && !newValue.name.contains("datatypes"))
 		
 	call {
 		createArchitecturalElement(newValue, getLastPackageName(newValue.name), getRootPackageName(newValue.name))

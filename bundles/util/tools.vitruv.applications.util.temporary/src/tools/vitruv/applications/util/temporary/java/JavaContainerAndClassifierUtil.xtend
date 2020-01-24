@@ -271,10 +271,10 @@ class JavaContainerAndClassifierUtil {
     }
 
     def static String getRootPackageName(String packageName) { // TODO TS technically not depending on Java domain
-        return packageName.split("\\.").get(0)
+        return packageName?.split("\\.")?.get(0)
     }
 
     def static String getLastPackageName(String packageName) { // TODO TS technically not depending on Java domain
-        return packageName.substring(packageName.indexOf('.') + 1)
+        return packageName?.substring(packageName.indexOf('.') + 1)
     }
 }
