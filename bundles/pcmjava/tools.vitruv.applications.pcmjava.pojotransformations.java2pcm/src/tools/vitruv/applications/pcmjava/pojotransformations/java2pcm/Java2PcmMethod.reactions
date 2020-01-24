@@ -37,7 +37,7 @@ routine renameNamedElement(java::NamedElement javaElement) {
 
 routine renameRepository(java::NamedElement javaElement) {
     match {
-        val pcmRepository = retrieve pcm::Repository corresponding to javaElement
+        val pcmRepository = retrieve pcm::Repository corresponding to javaElement tagged with "package_root"
     }
     action {
         update pcmRepository {
