@@ -8,7 +8,6 @@ import org.emftext.language.java.containers.ContainersPackage
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 
-import static extension tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.findRepository
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNormalizedClassifierFromTypeReference
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
@@ -80,15 +79,15 @@ routine createOrFindRepository(java::Package javaPackage, String packageName, St
     match {
         require absence of pcm::Repository corresponding to javaPackage tagged with newTag
         require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
-        val allRepositories = retrieve many pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
+        val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
+            with foundRepository.entityName == packageName.toFirstUpper
     }
     action {
         call {
-            val matchingRepository = allRepositories.findRepository(packageName.toFirstUpper)
-            if (matchingRepository === null) {
-               createRepository(javaPackage, packageName, newTag)
+            if (foundRepository.present) {
+               addRepositoryCorrespondence(foundRepository.get, javaPackage, newTag)
             } else {
-               addRepositoryCorrespondence(matchingRepository, javaPackage, newTag)
+               createRepository(javaPackage, packageName, newTag)
             }
         }
     }
