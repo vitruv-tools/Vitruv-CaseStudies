@@ -7,6 +7,7 @@ import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUs
 import org.emftext.language.java.containers.ContainersPackage
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import org.palladiosimulator.pcm.repository.RepositoryPackage
+import org.palladiosimulator.pcm.repository.OperationInterface
 
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNormalizedClassifierFromTypeReference
@@ -172,26 +173,42 @@ routine addcorrespondenceAndUpdateRepository(pcm::ImplementationComponentType pc
 //Interface
 reaction InterfaceCreated {
 	after element java::Interface inserted in java::CompilationUnit[classifiers]
-	call createPCMInterface(newValue, affectedEObject)		
+	call createOrFindPCMInterface(newValue, affectedEObject)
 }
 
-routine createPCMInterface(java::Interface javaInterface, java::CompilationUnit compilationUnit) {
+routine createOrFindPCMInterface(java::Interface javaInterface, java::CompilationUnit compilationUnit) {
 	match {
-		val pcmRepository = retrieve pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
-		val contractsPackage = retrieve java::Package corresponding to pcmRepository tagged with "contracts" 
+		val contractsPackage = retrieve java::Package corresponding to ContainersPackage.Literals.PACKAGE
+			with contractsPackage.compilationUnits.contains(compilationUnit)
+		val pcmRepository = retrieve pcm::Repository corresponding to contractsPackage tagged with "contracts"
+		require absence of pcm::OperationInterface corresponding to javaInterface
 	}
 	action {
-		val pcmIface = create pcm::OperationInterface and initialize {
-			pcmIface.entityName = javaInterface.name
+		call {
+		val pcmInterface = pcmRepository.interfaces__Repository.filter(OperationInterface).findFirst[entityName == javaInterface.name]
+			if (pcmInterface === null) {
+				createPCMInterface(javaInterface, compilationUnit, contractsPackage)
+			} else {
+				addInterfaceCorrespondence(pcmInterface, javaInterface, compilationUnit)
+			}
+		}
+	}
+}
+
+routine createPCMInterface(java::Interface javaInterface, java::CompilationUnit compilationUnit, java::Package contractsPackage) {
+	action {
+		val pcmInterface = create pcm::OperationInterface and initialize {
+			pcmInterface.entityName = javaInterface.name
 		}		
 		call {
 			val javaPackage = getContainingPackageFromCorrespondenceModel(javaInterface,
 				correspondenceModel)
 				
 			if (javaPackage.name.equals(contractsPackage.name)) {
-				addcorrespondenceToInterfaceAndUpdateRepository(pcmIface, javaInterface, compilationUnit)
+				addInterfaceCorrespondence(pcmInterface, javaInterface, compilationUnit)
+				updateRepositoryInterfaces(pcmInterface)
 			} else {
-				createdInterfaceNotInContracts(javaInterface, pcmIface, compilationUnit)
+				createdInterfaceNotInContracts(javaInterface, pcmInterface, compilationUnit)
 			}
 		}
 	}
@@ -211,23 +228,28 @@ routine createdInterfaceNotInContracts(java::Interface javaInterface, pcm::Opera
 			val selected = userInteractor.singleSelectionDialogBuilder.message(userMsg).choices(selections)
 			    .windowModality(WindowModality.MODAL).startInteraction()
 			if (selected == Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.selection) {
-				addcorrespondenceToInterfaceAndUpdateRepository(pcmInterface, javaInterface, compilationUnit)
+				addInterfaceCorrespondence(pcmInterface, javaInterface, compilationUnit)
+				updateRepositoryInterfaces(pcmInterface)
 			}
 		}
 	}
 }
 
-/**
- * Add correspondence between OperationInterface and JavaInterface and CompilationUnit. Also adds OperationInterface into Repository.
- */
-routine addcorrespondenceToInterfaceAndUpdateRepository(pcm::OperationInterface pcmInterface, java::Interface javaInterface, java::CompilationUnit compilationUnit) {
+routine addInterfaceCorrespondence(pcm::OperationInterface pcmInterface, java::Interface javaInterface, java::CompilationUnit compilationUnit) {
+	match {
+		require absence of pcm::Interface corresponding to javaInterface
+	}
+	action {
+		add correspondence between pcmInterface and javaInterface
+		add correspondence between pcmInterface and compilationUnit 
+	}
+}
+
+routine updateRepositoryInterfaces(pcm::OperationInterface pcmInterface) {
 	match {
 		val pcmRepository = retrieve pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
 	}
 	action {
-		add correspondence between pcmInterface and javaInterface
-		add correspondence between pcmInterface and compilationUnit	
-			
 		update pcmRepository {
 			pcmRepository.interfaces__Repository += pcmInterface
 		}
