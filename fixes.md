@@ -8,7 +8,7 @@ And details can be viewed with: `git show fix1`
 ### PCM ↔︎ UML → Java (8 fixes)
 Bidirectional transformation between UML and PCM, but only unidirectional transformation from UML to Java.
 
- | tag | correlating pull request | addressed problem |
+ | fix commit tag | correlating pull request | addressed problem |
  | -- | -- | -- |
  | [fix1](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix1) | [PR 42](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/42) | UML parent packages were deleted before child packages. |
  | ~~fix2~~ *(deleted)* | *not really a fix, see [PR 45](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/45)* | *See fix4.* |
@@ -22,7 +22,7 @@ Bidirectional transformation between UML and PCM, but only unidirectional transf
 ### PCM ↔︎ UML ↔︎ Java
 Bidirectional transformation between UML and PCM, as well as between UML and Java.
 
-  | tag | correlating pull request | addressed problem |
+  | fix commit tag | correlating pull request | addressed problem |
   | -- | -- | -- |
   | fix9* | [PR 44](https://github.com/vitruv-tools/Vitruv-Domains-ComponentBasedSystems/pull/44) | Unnamed Java packages lead to problems with invalid paths. This could lead to duplicate package names. |
 
@@ -31,7 +31,7 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
 ### PCM ↔︎ UML ↔︎ Java ← PCM
 Bidirectional transformation between UML and PCM, as well as between UML and Java. Unidirectional transformation from PCM to Java.
 
-  | tag | correlating pull request | addressed problem |
+  | fix commit tag | correlating pull request | addressed problem |
   | -- | -- | -- |
   | [fix10](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix10) | [PR 50](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/50) | The repository name was not adapted when creating the correlating Java packages (first letter lower case). This led to duplicate packages. |
   | [fix11](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix11) | [PR 51](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/51) | Misplaced Java packages were created when creating Java packages correlating to unnamed PCM repositories. |
@@ -48,10 +48,13 @@ Bidirectional transformation between UML and PCM, as well as between UML and Jav
 ### PCM ↔︎ UML ↔︎ Java ↔︎ PCM
 Bidirectional transformation between UML and PCM, between UML and Java, and between PCM and Java.
 
-  | tag | correlating pull request | addressed problem |
+  | fix commit tag | correlating pull request | addressed problem |
   | -- | -- | -- |
-  | TODO | [PR 68](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/68) | Duplicate creation of PCM repositories due to already being created but missing the correspondences. |
-  | TODO | [PR 69](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/69) | Invalid repository name propagation due to missing naming pattern enforcement. |
+  | [fix21](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix21) | [PR 68](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/68) | Duplicate creation of PCM repositories due to already being created but missing the correspondences. |
+  | [fix22](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix22) | [PR 69](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/69) | Invalid repository name propagation due to missing naming pattern enforcement. |
+  | TO DO | [PR 70](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/70) | Change propagation crashed due to inability to deal with null-names when reacting to the creation of Java packages. |
+  | TO DO | [PR 71](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/71) | Duplicate operation interface creation in the PCM model due to the existing operation interface missing the required correspondences. |
+  | TO DO | TO DO | Endless suffix-adding rename cycle of compilation units due to invalid name change propagation of Java compilation units. |
 
 ### Fix to Test Case Failure/Error Correlation
 
