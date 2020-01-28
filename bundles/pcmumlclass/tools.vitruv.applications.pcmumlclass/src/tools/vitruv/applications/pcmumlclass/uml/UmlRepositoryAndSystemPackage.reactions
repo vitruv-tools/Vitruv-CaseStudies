@@ -93,10 +93,22 @@ routine createOrFindCorrespondingRepository(uml::Package umlPkg, uml::Package um
     action {
         call {
             if (foundRepository.isPresent) {
+                ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, umlPkg)
                 addRepositoryCorrespondence(foundRepository.get, umlPkg)
             } else {
                 createCorrespondingRepository(umlPkg, umlParentPkg)
             }
+        }
+    }
+}
+
+routine ensureFirstCaseUpperCaseRepositoryNaming(pcm::Repository pcmRepository, uml::Package umlPackage) {
+    match {
+       check pcmRepository.entityName == umlPackage.name
+    }
+    action {
+        update pcmRepository {
+            pcmRepository.entityName = umlPackage.name.toFirstUpper
         }
     }
 }
