@@ -41,18 +41,16 @@ routine insertCorrespondingInterface(uml::Interface umlInterface, uml::Package u
 routine detectOrCreateCorrespondingInterface(uml::Interface umlInterface, uml::Package umlPackage) {
 	match {
 		val pcmRepository = retrieve pcm::Repository corresponding to umlPackage tagged with TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE
-		val pcmInterface = retrieve optional pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
+		require absence of pcm::OperationInterface corresponding to umlInterface tagged with TagLiterals.INTERFACE_TO_INTERFACE
 	}
 	action {
 		call {
-			if (!pcmInterface.isPresent) {
-				val pcmInterfaceCandidate = pcmRepository.interfaces__Repository.filter(OperationInterface).findFirst[it.entityName == umlInterface.name]
-				if (pcmInterfaceCandidate !== null) {
-					addCorrespondenceForExistingInterface(umlInterface, pcmInterfaceCandidate)
-				} else {
-					createCorrespondingInterface(umlInterface, umlPackage)
-				}
-			}	
+			val pcmInterfaceCandidate = pcmRepository.interfaces__Repository.filter(OperationInterface).findFirst[it.entityName == umlInterface.name]
+			if (pcmInterfaceCandidate !== null) {
+				addCorrespondenceForExistingInterface(umlInterface, pcmInterfaceCandidate)
+			} else {
+				createCorrespondingInterface(umlInterface, umlPackage)
+			}
 		}
 	}
 }
