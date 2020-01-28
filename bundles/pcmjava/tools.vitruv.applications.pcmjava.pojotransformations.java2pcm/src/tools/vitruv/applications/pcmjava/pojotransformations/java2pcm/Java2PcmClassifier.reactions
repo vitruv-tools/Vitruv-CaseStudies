@@ -85,10 +85,22 @@ routine createOrFindRepository(java::Package javaPackage, String packageName, St
     action {
         call {
             if (foundRepository.isPresent) {
+               ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, javaPackage)
                addRepositoryCorrespondence(foundRepository.get, javaPackage, newTag)
             } else {
                createRepository(javaPackage, packageName, newTag)
             }
+        }
+    }
+}
+
+routine ensureFirstCaseUpperCaseRepositoryNaming(pcm::Repository pcmRepository, java::Package javaPackage) {
+    match {
+       check pcmRepository.entityName == javaPackage.name
+    }
+    action {
+        update pcmRepository {
+            pcmRepository.entityName = javaPackage.name.toFirstUpper
         }
     }
 }
