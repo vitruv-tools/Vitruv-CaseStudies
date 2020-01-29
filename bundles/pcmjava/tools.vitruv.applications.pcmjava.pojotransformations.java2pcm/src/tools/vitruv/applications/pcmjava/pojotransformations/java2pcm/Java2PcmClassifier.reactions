@@ -149,7 +149,7 @@ routine createOrFindSystem(java::Package javaPackage, String name) {
             if (foundSystem.isPresent) {
                addSystemCorrespondence(foundSystem.get, javaPackage)
             } else {
-               createSystem(javaPackage, javaPackage.name)
+               createSystem(javaPackage, name)
             }
         }
     }
@@ -318,9 +318,8 @@ routine classMapping(java::Class javaClass, java::CompilationUnit compilationUni
 	}
 	action {
 		call {
-			if (javaPackage?.name?.equals(datatypesPackage.name)) {
+			if (javaPackage !== null && javaPackage.name == datatypesPackage.name) {
 				createDataType(javaClass, compilationUnit)
-				
 			} else {
 				checkSystemAndComponent(javaPackage, javaClass)
 				createElement(javaClass, javaPackage, compilationUnit)
