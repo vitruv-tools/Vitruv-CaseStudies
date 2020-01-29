@@ -2,6 +2,7 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.UMLPackage
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import org.palladiosimulator.pcm.system.SystemPackage
 
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.findUmlPackage
 
@@ -26,11 +27,18 @@ import routines sharedRoutines // for UML model handling
 reaction SystemCreated {
 	after element pcm::System inserted as root
 	call{
+	    addSystemCorrespondence(newValue)
 		ensureUmlModelExists(newValue)
 		createOrFindCorrespondingSystemPackage(newValue)
 		detectOrCreateCorrespondingSystemImplementation(newValue)
 		detectOrCreateCorrespondingSystemConstructor(newValue)
 	}
+}
+
+routine addSystemCorrespondence(pcm::System pcmSystem) {
+    action { // required to enable find-or-create-pattern:
+        add correspondence between pcmSystem and SystemPackage.Literals.SYSTEM
+    }
 }
 
 routine createOrFindCorrespondingSystemPackage(pcm::System pcmSystem) {

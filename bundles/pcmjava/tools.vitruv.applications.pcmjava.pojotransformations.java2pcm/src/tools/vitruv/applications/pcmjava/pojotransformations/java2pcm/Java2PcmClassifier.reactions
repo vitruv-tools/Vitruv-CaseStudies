@@ -8,6 +8,7 @@ import org.emftext.language.java.containers.ContainersPackage
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
 import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.system.SystemPackage
 
 import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNormalizedClassifierFromTypeReference
@@ -28,9 +29,9 @@ reaction PackageCreated {
 	with newValue.name === null || (!newValue.name.contains("contracts") && !newValue.name.contains("datatypes"))
 		
 	call {
+	    createPackageEClassCorrespondence(newValue)
 		createArchitecturalElement(newValue, getLastPackageName(newValue.name), getRootPackageName(newValue.name))
 		createOrFindRepository(newValue, newValue.name, "package_root")
-		createPackageEClassCorrespondence(newValue)
 	}
 }
 
@@ -70,7 +71,7 @@ routine createArchitecturalElement(java::Package javaPackage, String name, Strin
 				case Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.selection: 
 					createCompositeComponent(javaPackage, name, rootPackageName)
 				case Java2PcmUserSelection.SELECT_SYSTEM.selection: 
-					createSystem(javaPackage, name)
+					createOrFindSystem(javaPackage, name)
 			}
 		}
 	}
@@ -86,10 +87,10 @@ routine createOrFindRepository(java::Package javaPackage, String packageName, St
     action {
         call {
             if (foundRepository.isPresent) {
-               ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, javaPackage)
-               addRepositoryCorrespondence(foundRepository.get, javaPackage, newTag)
+                ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, javaPackage)
+                addRepositoryCorrespondence(foundRepository.get, javaPackage, newTag)
             } else {
-               createRepository(javaPackage, packageName, newTag)
+                createRepository(javaPackage, packageName, newTag)
             }
         }
     }
@@ -137,6 +138,29 @@ routine createRepository(java::Package javaPackage, String packageName, String n
 	}
 }
 
+routine createOrFindSystem(java::Package javaPackage, String name) {
+     match {
+        require absence of pcm::System corresponding to javaPackage
+        val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM
+            with foundSystem.entityName.toFirstLower == javaPackage.name // PCM systems can be both upper and lower case
+    }
+    action {
+        call {
+            if (foundSystem.isPresent) {
+               addSystemCorrespondence(foundSystem.get, javaPackage)
+            } else {
+               createSystem(javaPackage, javaPackage.name)
+            }
+        }
+    }
+}
+
+routine addSystemCorrespondence(pcm::System pcmSystem, java::Package javaPackage) {
+    action {
+        add correspondence between pcmSystem and javaPackage tagged with "root_system"
+    }
+}
+
 routine createSystem(java::Package javaPackage, String name) {
 	action {
 		val pcmSystem = create pcm::System and initialize {
@@ -144,6 +168,7 @@ routine createSystem(java::Package javaPackage, String name) {
 			persistProjectRelative(javaPackage, pcmSystem, "model/" + pcmSystem.entityName + ".system")
 		}
 		add correspondence between pcmSystem and javaPackage
+		add correspondence between pcmSystem and SystemPackage.Literals.SYSTEM tagged with "root_system"
 	}
 }
 
@@ -293,7 +318,7 @@ routine classMapping(java::Class javaClass, java::CompilationUnit compilationUni
 	}
 	action {
 		call {
-			if (javaPackage !== null && javaPackage.name.equals(datatypesPackage.name)) {
+			if (javaPackage?.name?.equals(datatypesPackage.name)) {
 				createDataType(javaClass, compilationUnit)
 				
 			} else {
@@ -469,6 +494,7 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 			javaPackage.name = packageName;
 			persistProjectRelative(parentPackage, javaPackage, buildJavaFilePath(javaPackage));
 		}
+		add correspondence between javaPackage and ContainersPackage.Literals.PACKAGE
 		add correspondence between javaPackage and sourceElementMappedToPackage
 			tagged with newTag
 		add correspondence between javaPackage and ContainersPackage.Literals.PACKAGE

@@ -28,6 +28,7 @@ import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.repository.RepositoryPackage
+import org.palladiosimulator.pcm.system.SystemPackage
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
@@ -127,10 +128,16 @@ routine renamePackageForRepository(pcm::Repository repository) {
 reaction CreatedSystem {
 	after element pcm::System created and inserted as root
 	call {
-		val system = newValue;
-		createOrFindJavaPackage(system, null, system.entityName, "root_system");
-		createImplementationForSystem(system);
+		addSystemCorrespondence(newValue)
+		createOrFindJavaPackage(newValue, null, newValue.entityName, "root_system");
+		createImplementationForSystem(newValue);
 	}
+}
+
+routine addSystemCorrespondence(pcm::System pcmSystem) {
+    action { // required to enable find-or-create-pattern:
+        add correspondence between pcmSystem and SystemPackage.Literals.SYSTEM
+    }
 }
 
 routine createImplementationForSystem(pcm::System system) {
