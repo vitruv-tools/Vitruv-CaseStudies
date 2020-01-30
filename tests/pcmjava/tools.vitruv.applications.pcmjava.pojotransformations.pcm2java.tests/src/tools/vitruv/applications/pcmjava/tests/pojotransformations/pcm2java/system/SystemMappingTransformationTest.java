@@ -1,5 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system;
 
+import org.eclipse.emf.ecore.EClass;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
 import org.junit.Test;
@@ -49,8 +50,8 @@ public class SystemMappingTransformationTest extends Pcm2JavaTransformationTest 
     private void assertSystem(final System system) throws Throwable {
         final String expectedName = system.getEntityName();
         final String expectedLowerCaseName = Character.toLowerCase(expectedName.charAt(0)) + expectedName.substring(1);
-        this.assertCorrespondnecesAndCompareNames(system, 3,
-                new Class[] { Package.class, CompilationUnit.class, org.emftext.language.java.classifiers.Class.class },
-                new String[] { expectedLowerCaseName, expectedName + "Impl", expectedName + "Impl" });
+        this.assertCorrespondnecesAndCompareNames(system, 4,
+                new Class[] { Package.class, CompilationUnit.class, org.emftext.language.java.classifiers.Class.class, EClass.class},
+                new String[] { expectedLowerCaseName, expectedName + "Impl", expectedName + "Impl", null});
     }
 }
