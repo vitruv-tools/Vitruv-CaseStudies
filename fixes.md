@@ -52,9 +52,10 @@ Bidirectional transformation between UML and PCM, between UML and Java, and betw
   | -- | -- | -- |
   | [fix21](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix21) | [PR 68](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/68) | Duplicate creation of PCM repositories due to already being created but missing the correspondences. |
   | [fix22](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix22) | [PR 69](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/69) | Invalid repository name propagation due to missing naming pattern enforcement. |
-  | TO DO | [PR 70](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/70) | Change propagation crashed due to inability to deal with null-names when reacting to the creation of Java packages. |
-  | TO DO | [PR 71](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/71) | Duplicate operation interface creation in the PCM model due to the existing operation interface missing the required correspondences. |
-  | TO DO | TO DO | Endless suffix-adding rename cycle of compilation units due to invalid name change propagation of Java compilation units. |
+  | [fix23](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix23) | [PR 70](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/70) | Change propagation crashed due to inability to deal with null-names when reacting to the creation of Java packages. |
+  | [fix24](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix24) | [PR 71](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/71) | Duplicate operation interface creation in the PCM model due to the existing operation interface missing the required correspondences. |
+  | [fix25](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix25) | [PR 72](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/72) | Duplicate creation of PCM systems due to already being created but missing the correspondences. |
+  | TO DO | [PR 73](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/73) | Broken Java to PCM name change propagation that led amongst other problems to an endless suffix-adding rename cycle for classes and compilation units. |
 
 ### Fix to Test Case Failure/Error Correlation
 
