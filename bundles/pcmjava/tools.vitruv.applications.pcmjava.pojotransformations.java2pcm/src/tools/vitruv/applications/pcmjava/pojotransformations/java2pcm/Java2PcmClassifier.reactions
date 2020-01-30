@@ -29,9 +29,9 @@ reaction PackageCreated {
 	with newValue.name === null || (!newValue.name.contains("contracts") && !newValue.name.contains("datatypes"))
 		
 	call {
-	    createPackageEClassCorrespondence(newValue)
 		createArchitecturalElement(newValue, getLastPackageName(newValue.name), getRootPackageName(newValue.name))
 		createOrFindRepository(newValue, newValue.name, "package_root")
+		createPackageEClassCorrespondence(newValue) // IMPORTANT: Always call this last here!
 	}
 }
 
@@ -496,6 +496,5 @@ routine createJavaPackage(EObject sourceElementMappedToPackage, java::Package pa
 		add correspondence between javaPackage and ContainersPackage.Literals.PACKAGE
 		add correspondence between javaPackage and sourceElementMappedToPackage
 			tagged with newTag
-		add correspondence between javaPackage and ContainersPackage.Literals.PACKAGE
 	}
 }
