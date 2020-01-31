@@ -238,13 +238,13 @@ routine renameSystem(java::Package javaPackage) {
 	}
 }
 
-routine renameComponent(java::NamedElement javaElement) {
+routine renameComponent(java::Package javaPackage) {
 	match {
-		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaElement
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaPackage
 	}
 	action {
 		update pcmComponent {
-			pcmComponent.entityName = javaElement.name.toFirstUpper;
+			pcmComponent.entityName = javaPackage.name.toFirstUpper;
 		}
 	}
 }
@@ -357,7 +357,20 @@ routine updateRepositoryInterfaces(pcm::OperationInterface pcmInterface) {
 //Class
 reaction JavaClassRenamed {
 	after attribute replaced at java::Class[name]
-	call renameComponent(affectedEObject)
+	call renameComponentFromClass(affectedEObject)
+}
+
+routine renameComponentFromClass(java::Class javaClass) {
+	match {
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaClass
+	}
+	action {
+		update pcmComponent {
+			var newName = javaClass.name.toFirstUpper
+			if (newName.endsWith("Impl")) newName = newName.substring(0, newName.length - "Impl".length)
+			pcmComponent.entityName = newName
+		}
+	}
 }
 
 reaction ClassCreated {
