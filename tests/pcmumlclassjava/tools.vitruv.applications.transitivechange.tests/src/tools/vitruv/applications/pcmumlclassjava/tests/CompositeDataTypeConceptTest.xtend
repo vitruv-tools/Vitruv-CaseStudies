@@ -9,9 +9,10 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
+import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 
 import static org.junit.Assert.*
-import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHelper
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::CompositeDataType in a pcm::Repository
@@ -88,6 +89,7 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
 		startRecordingChanges(umlDatatypesPkg)
 
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
 		saveAndSynchronizeChanges(umlDatatypesPkg)
 
 		reloadResourceAndReturnRoot(umlDatatypesPkg)
@@ -107,6 +109,7 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
 		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
 		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
 		pcmRepository.dataTypes__Repository += pcmCompositeType
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
 		saveAndSynchronizeChanges(pcmCompositeType)
 
 		reloadResourceAndReturnRoot(umlDatatypesPkg)
@@ -153,6 +156,8 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
 		pcmCompositeTypeParent.entityName = TEST_COMPOSITE_DATATYPE_PARENT
 		pcmRepository.dataTypes__Repository += pcmCompositeTypeParent
 		pcmCompositeType.parentType_CompositeDataType += pcmCompositeTypeParent
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
 		saveAndSynchronizeChanges(pcmCompositeType)
 
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
