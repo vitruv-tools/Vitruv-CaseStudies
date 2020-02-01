@@ -55,7 +55,7 @@ class UmlClassifierAndPackageUtil {
     }
 
     /**
-     * Searches and retrieves the UML interface located in a specific package of a UML model that has an equal name as the given package name.
+     * Searches and retrieves the UML interface located in a specific package of a UML model that has an equal name as the given package name (ignoring the capitalization of the first letter).
      * If there is more than one package with the given name an {@link IllegalStateException} is thrown.
      * @param umlModel the UML model Model in which the UML packages should be searched
      * @param interfaceName the interface name for which a fitting UML interface should be retrieved
@@ -67,7 +67,7 @@ class UmlClassifierAndPackageUtil {
     }
 
     /**
-     * Searches and retrieves the UML class located in a specific package of a UML model that has an equal name as the given package name.
+     * Searches and retrieves the UML class located in a specific package of a UML model that has an equal name as the given package name (ignoring the capitalization of the first letter).
      * If there is more than one package with the given name an {@link IllegalStateException} is thrown.
      * 
      * @param umlModel the UML model Model in which the UML packages should be searched
@@ -84,7 +84,7 @@ class UmlClassifierAndPackageUtil {
         if (uPackage === null) {
             return null
         }
-        val types = uPackage.ownedTypes.filter(type).filter[name == typeName].toSet
+        val types = uPackage.ownedTypes.filter(type).filter[name.toFirstUpper == typeName.toFirstUpper].toSet
         if (types.size > 1) {
             throw new IllegalStateException("There is more than one type with name " + typeName + " in the package " + uPackage)
         }
