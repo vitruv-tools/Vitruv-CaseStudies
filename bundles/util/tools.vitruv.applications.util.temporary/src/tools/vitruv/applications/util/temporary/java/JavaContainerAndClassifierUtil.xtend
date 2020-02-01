@@ -200,14 +200,15 @@ class JavaContainerAndClassifierUtil {
 
     /**
      * Finds and retrieves a specific {@link ConcreteClassifier} that is contained in a {@link Package}.
-     * @param name is the name of the desired {@link ConcreteClassifier}.
+     * The {@link ConcreteClassifier} is found by name, ignoring the capitalization of the first letter.
+     * @param name is the name of the desired {@link ConcreteClassifier}, the first letter can be upper and lower case.
      * @param javaPackage is the specific {@link Package} to search in.
      * @param classifierType specifies the class of the desired {@link ConcreteClassifier}, e.g. {@link Interface}.
      * @return the found classifier, or null if there is no matching classifer.
      * @throws IllegalStateException if there are multiple classifers in the package with a matching name.
      */
     public static def <T extends ConcreteClassifier> T findClassifier(String name, Package javaPackage, java.lang.Class<T> classifierType) {
-        val matchingClassifiers = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(classifierType).filter[it.name == name]
+        val matchingClassifiers = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(classifierType).filter[it.name.toFirstUpper == name.toFirstUpper]
         if (matchingClassifiers.size > 1) throw new IllegalStateException("Multiple matching classifers were found: " + matchingClassifiers)
         return matchingClassifiers.head
     }

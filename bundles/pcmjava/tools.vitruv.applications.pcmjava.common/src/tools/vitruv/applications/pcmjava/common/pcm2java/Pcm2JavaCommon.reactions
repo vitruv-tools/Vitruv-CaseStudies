@@ -624,8 +624,8 @@ routine createOrFindJavaClass(pcm::NamedElement pcmElement, java::Package contai
 routine createJavaClass(pcm::NamedElement sourceElementMappedToClass, java::Package containingPackage, String className) {
 	action {
 		val javaClass = create java::Class and initialize {
-			javaClass.name = className;
-			javaClass.addModifier(ModifiersFactory.eINSTANCE.createPublic());
+			javaClass.name = className.toFirstUpper
+			javaClass.addModifier(ModifiersFactory.eINSTANCE.createPublic())
 		}
 		add correspondence between javaClass and sourceElementMappedToClass
 		call createCompilationUnit(sourceElementMappedToClass, javaClass, containingPackage)
@@ -653,7 +653,7 @@ routine createOrFindJavaInterface(pcm::Interface pcmInterface) {
 routine createJavaInterface(pcm::Interface pcmInterface, java::Package containingPackage) {
 	action {
 		val javaInterface = create java::Interface and initialize {
-			javaInterface.name = pcmInterface.entityName;
+			javaInterface.name = pcmInterface.entityName.toFirstUpper;
 			javaInterface.addModifier(ModifiersFactory.eINSTANCE.createPublic());
 		}
 		add correspondence between javaInterface and pcmInterface
@@ -690,10 +690,10 @@ routine renameJavaClassifier(pcm::NamedElement classSourceElement, java::Package
 	}
 	action {
 		update javaClassifier {
-			javaClassifier.name = className;
+			javaClassifier.name = className.toFirstUpper;
 		}
 		update compilationUnit {
-			compilationUnit.name = className + ".java";
+			compilationUnit.name = className.toFirstUpper + ".java";
 			compilationUnit.namespaces.clear;
 			compilationUnit.namespaces += containingPackage.namespaces;
 			compilationUnit.namespaces += containingPackage.name;
