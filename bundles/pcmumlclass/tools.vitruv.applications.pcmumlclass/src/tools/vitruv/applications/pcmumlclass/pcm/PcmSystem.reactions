@@ -86,7 +86,7 @@ routine detectOrCreateCorrespondingSystemImplementation(pcm::System pcmSystem) {
 	action {
 		call {
 			val umlSystemImplementationCandidate = umlSystemPackage.packagedElements
-					.filter(Class).findFirst[it.name == pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
+					.filter(Class).findFirst[it.name == pcmSystem.entityName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX]
 			if (umlSystemImplementationCandidate !== null) {
 				addCorrespondenceForExistingSystemImplementation(pcmSystem, umlSystemImplementationCandidate)
 			} else {
@@ -113,7 +113,7 @@ routine createCorrespondingSystemImplementation(pcm::System pcmSystem) {
 	}
 	action {
 		val umlSystemImplementation = create uml::Class and initialize {
-			umlSystemImplementation.name = pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			umlSystemImplementation.name = pcmSystem.entityName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
 			umlSystemImplementation.isFinalSpecialization = true
 			umlSystemPackage.packagedElements += umlSystemImplementation
 		}
@@ -129,7 +129,7 @@ routine detectOrCreateCorrespondingSystemConstructor(pcm::System pcmSystem) {
 	action {
 		call {
 			val umlSystemConstructorCandidate = umlSystemImplementation.ownedOperations
-					.findFirst[it.name == pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
+					.findFirst[it.name == pcmSystem.entityName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX]
 			if (umlSystemConstructorCandidate !== null) {
 				addCorrespondenceForExistingSystemConstructor(pcmSystem, umlSystemConstructorCandidate)
 			} else {
@@ -156,7 +156,7 @@ routine createCorrespondingSystemConstructor(pcm::System pcmSystem) {
 	}
 	action {
 		val umlSystemConstructor = create uml::Operation and initialize {
-			umlSystemConstructor.name = pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			umlSystemConstructor.name = pcmSystem.entityName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
 			umlSystemImplementation.ownedOperations += umlSystemConstructor
 		}
 		add correspondence between pcmSystem and umlSystemConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR

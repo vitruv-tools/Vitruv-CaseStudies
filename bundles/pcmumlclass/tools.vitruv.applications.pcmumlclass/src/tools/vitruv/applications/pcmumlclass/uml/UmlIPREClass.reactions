@@ -28,13 +28,10 @@ reaction IPREClassRemoved {
 
 routine warnUserAboutImplRemoveIfIPRECorrespondenceExists(uml::Class umlClass, uml::Package umlPackage) {
 	match {
-		val pcmRepositoryComponent = retrieve optional pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
+		val pcmRepositoryComponent = retrieve pcm::RepositoryComponent corresponding to umlClass tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action {
-		execute {
-			if (pcmRepositoryComponent.isPresent)
-				logger.warn(DefaultLiterals.WARNING_IPRE_IMPLEMENTATION_REMOVED + umlClass)
-		}
+		execute logger.warn(DefaultLiterals.WARNING_IPRE_IMPLEMENTATION_REMOVED + umlClass)
 	}
 }
 

@@ -47,17 +47,15 @@ routine insertCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package
 routine detectOrCreateCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package umlParentPkg) {
 	match {
 		val pcmRepository = retrieve pcm::Repository corresponding to umlParentPkg tagged with TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE
-		val pcmComponent = retrieve optional pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
+		require absence of pcm::RepositoryComponent corresponding to umlPkg tagged with TagLiterals.REPOSITORY_COMPONENT__PACKAGE
 	}
 	action {
 		call {
-			if(!pcmComponent.isPresent) {
-				val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[it.entityName == umlPkg.name.toFirstUpper]
-				if (pcmComponentCandidate !== null) {
-					addCorrespondenceForExistingRepositoryComponent(umlPkg, pcmComponentCandidate)
-				} else {
-					userDisambiguateCorrespondingRepositoryComponentType(umlPkg, umlParentPkg)
-				}
+			val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[entityName.toFirstLower == umlPkg.name]
+			if (pcmComponentCandidate === null) {
+				userDisambiguateCorrespondingRepositoryComponentType(umlPkg, umlParentPkg)
+			} else {
+				addCorrespondenceForExistingRepositoryComponent(umlPkg, pcmComponentCandidate)
 			}
 		}
 	}
@@ -151,12 +149,10 @@ routine removeCorrespondingRepositoryComponent(uml::Package umlPkg, uml::Package
 	}
 }
 
-
 reaction PackageDeleted {
 	after element uml::Package deleted
 	call deleteCorrespondingRepositoryComponent(affectedEObject)
 }
-
 
 routine deleteCorrespondingRepositoryComponent(uml::Package umlComponentPkg) {
 	match {
@@ -167,7 +163,6 @@ routine deleteCorrespondingRepositoryComponent(uml::Package umlComponentPkg) {
 		delete pcmComponent
 	}
 }
-
 
 reaction RepositoryComponentPackageRenamed {
 	after attribute replaced at uml::Package[name]

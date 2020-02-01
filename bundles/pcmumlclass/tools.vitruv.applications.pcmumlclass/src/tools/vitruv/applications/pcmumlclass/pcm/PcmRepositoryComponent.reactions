@@ -117,7 +117,7 @@ routine createCorrespondingComponentImplementation(pcm::RepositoryComponent pcmC
 	}
 	action {
 		val umlComponentImplementation = create uml::Class and initialize {
-			umlComponentImplementation.name = pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			umlComponentImplementation.name = pcmComponent.entityName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
 			umlComponentImplementation.isFinalSpecialization = true
 			umlComponentPackage.packagedElements += umlComponentImplementation
 		} 
@@ -134,7 +134,7 @@ routine detectOrCreateCorrespondingComponentConstructor(pcm::RepositoryComponent
 		call {
 			if (!umlComponentConstructor.isPresent) {
 				val umlComponentConstructorCandidate = umlComponentImplementation.ownedOperations
-						.findFirst[it.name == pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX]
+						.findFirst[it.name == pcmComponent.entityName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX]
 				if (umlComponentConstructorCandidate !== null) {
 					addCorrespondenceForExistingComponentConstructor(pcmComponent, umlComponentConstructorCandidate)
 				} else {
@@ -162,7 +162,7 @@ routine createCorrespondingComponentConstructor(pcm::RepositoryComponent pcmComp
 	}
 	action {
 		val umlComponentConstructor = create uml::Operation and initialize {
-			umlComponentConstructor.name = pcmComponent.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			umlComponentConstructor.name = pcmComponent.entityName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
 			umlComponentImplementation.ownedOperations += umlComponentConstructor
 		}
 		add correspondence between pcmComponent and umlComponentConstructor tagged with TagLiterals.IPRE__CONSTRUCTOR
@@ -233,8 +233,8 @@ routine changeNameOfComponentCorrespondences(pcm::RepositoryComponent pcmCompone
 	action {
 		execute {
 			if (umlComponentPackage.isPresent) umlComponentPackage.get.name = pcmComponent.entityName.toFirstLower
-			if (umlComponentImplementation.isPresent) umlComponentImplementation.get.name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX
-			if (umlComponentConstructor.isPresent) umlComponentConstructor.get.name = newName + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			if (umlComponentImplementation.isPresent) umlComponentImplementation.get.name = newName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
+			if (umlComponentConstructor.isPresent) umlComponentConstructor.get.name = newName.toFirstUpper + DefaultLiterals.IMPLEMENTATION_SUFFIX
 		}
 	}
 }
