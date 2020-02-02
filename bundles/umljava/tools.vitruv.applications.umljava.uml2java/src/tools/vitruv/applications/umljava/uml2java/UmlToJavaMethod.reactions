@@ -43,7 +43,7 @@ reaction UmlMethodCreatedInDataType {
 routine createJavaMethod(uml::Classifier uClassifier, uml::Operation uOperation) {
     action {
         call {
-            if (uClassifier.name.equals(uOperation.name)) {
+            if (uClassifier.name.toFirstUpper == uOperation.name.toFirstUpper) {
                 createJavaConstructor(uClassifier, uOperation)
             } else if (uClassifier instanceof Class
                 || uClassifier instanceof DataType) {
