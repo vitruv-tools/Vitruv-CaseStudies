@@ -56,6 +56,8 @@ Bidirectional transformation between UML and PCM, between UML and Java, and betw
   | [fix24](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix24) | [PR 71](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/71) | Duplicate operation interface creation in the PCM model due to the existing operation interface missing the required correspondences. |
   | [fix25](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix25) | [PR 72](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/72) | Duplicate creation of PCM systems due to already being created but missing the correspondences. |
   | TO DO | [PR 73](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/73) | Broken Java to PCM name change propagation that led amongst other problems to an endless suffix-adding rename cycle for classes and compilation units. |
+  | TO DO | [PR 74](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/74) | Duplicate repository component creation due to the element already existing but missing the required correspondences. |
+  | TO DO | [PR 75](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/75) | Incorrect first letter capitalization during name propagation for repository components and classifiers. |
 
 ### Fix to Test Case Failure/Error Correlation
 
