@@ -242,6 +242,48 @@ routine addCorrespondenceAndUpdateRepository(pcm::RepositoryComponent pcmCompone
 	}
 }
 
+reaction JavaPackageRenamed {
+	after attribute replaced at java::Package[name]
+	call {
+		renameRepository(affectedEObject)
+		renameSystem(affectedEObject)
+		renameComponent(affectedEObject)
+	}
+}
+
+routine renameRepository(java::Package javaPackage) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged with "package_root"
+	}
+	action {
+		update pcmRepository {
+			pcmRepository.entityName = javaPackage.name.toFirstUpper
+		}
+	}
+}
+
+routine renameSystem(java::Package javaPackage) {
+	match {
+		val pcmSystem = retrieve pcm::System corresponding to javaPackage tagged with "root_system"
+	}
+	action {
+		update pcmSystem {
+			pcmSystem.entityName = javaPackage.name.toFirstUpper
+		}
+	}
+}
+
+routine renameComponent(java::Package javaPackage) {
+	match {
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaPackage
+	}
+	action {
+		update pcmComponent {
+			pcmComponent.entityName = javaPackage.name.toFirstUpper;
+		}
+	}
+}
+
 //Interface
 reaction InterfaceCreated {
 	after element java::Interface inserted in java::CompilationUnit[classifiers]
@@ -275,6 +317,21 @@ routine createOrFindContractsInterface(java::Interface javaInterface, java::Comp
 			} else {
 				addInterfaceCorrespondence(pcmInterface, javaInterface, compilationUnit)
 			}
+		}
+	}
+}
+
+reaction JavaInterfaceRenamed {
+	after attribute replaced at java::Interface[name]
+	call renameInterface(affectedEObject)
+}
+
+routine renameInterface(java::Interface javaInterface) {
+	match {
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to javaInterface}
+	action {
+		update pcmInterface {
+			pcmInterface.entityName = javaInterface.name
 		}
 	}
 }
@@ -333,6 +390,24 @@ routine updateRepositoryInterfaces(pcm::OperationInterface pcmInterface) {
 }
 
 //Class
+reaction JavaClassRenamed {
+	after attribute replaced at java::Class[name]
+	call renameComponentFromClass(affectedEObject)
+}
+
+routine renameComponentFromClass(java::Class javaClass) {
+	match {
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaClass
+	}
+	action {
+		update pcmComponent {
+			var newName = javaClass.name.toFirstUpper
+			if (newName.endsWith("Impl")) newName = newName.substring(0, newName.length - "Impl".length)
+			pcmComponent.entityName = newName
+		}
+	}
+}
+
 reaction ClassCreated {
 	after element java::Class inserted in java::CompilationUnit[classifiers]
 	call {
