@@ -1,18 +1,17 @@
+import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
+import org.emftext.language.java.classifiers.Class
+import org.emftext.language.java.containers.ContainersPackage
+import org.emftext.language.java.types.ClassifierReference
+import org.emftext.language.java.types.NamespaceClassifierReference
+import org.palladiosimulator.pcm.repository.OperationInterface
+import org.palladiosimulator.pcm.repository.RepositoryPackage
+import org.palladiosimulator.pcm.system.SystemPackage
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
-import org.emftext.language.java.classifiers.Class
-import org.emftext.language.java.types.NamespaceClassifierReference
-import org.emftext.language.java.types.ClassifierReference
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
-import org.emftext.language.java.containers.ContainersPackage
-import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil
-import org.palladiosimulator.pcm.repository.RepositoryPackage
-import org.palladiosimulator.pcm.repository.OperationInterface
-import org.palladiosimulator.pcm.system.SystemPackage
-
-import static extension tools.vitruv.domains.java.util.JavaPersistenceHelper.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNormalizedClassifierFromTypeReference
-import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -29,7 +28,7 @@ reaction PackageCreated {
 	with newValue.name === null || (!newValue.name.contains("contracts") && !newValue.name.contains("datatypes"))
 		
 	call {
-		createArchitecturalElement(newValue, getLastPackageName(newValue.name), getRootPackageName(newValue.name))
+		createOrFindArchitecturalElement(newValue, getLastPackageName(newValue.name))
 		createOrFindRepository(newValue, newValue.name, "package_root")
 		createPackageEClassCorrespondence(newValue) // IMPORTANT: Always call this last here!
 	}
@@ -43,9 +42,44 @@ routine createPackageEClassCorrespondence(java::Package jPackage) {
 		val allPackages = retrieve many java::Package corresponding to jPackage.eClass
 		check !allPackages.contains(jPackage)
 	}
-    action {
-        add correspondence between jPackage and jPackage.eClass
-    }
+	action {
+		add correspondence between jPackage and jPackage.eClass
+	}
+}
+
+routine createOrFindArchitecturalElement(java::Package javaPackage, String containerName) {
+	match {
+		val containerPackage = retrieve optional java::Package corresponding to ContainersPackage.Literals.PACKAGE
+			with containerPackage.name == containerName
+		require absence of pcm::RepositoryComponent corresponding to javaPackage
+	}
+	action {
+		call {
+			val rootPackageName = getRootPackageName(javaPackage.name)
+			if (containerPackage.isPresent) { // can actually be located if it exists:
+				createOrFindArchitecturalElementInPackage(javaPackage, containerPackage.get, rootPackageName)
+			} else { // cannot be located if it already exists, so just create it anyways:
+				createArchitecturalElement(javaPackage, containerName, rootPackageName)
+			}
+		}
+	}
+}
+
+routine createOrFindArchitecturalElementInPackage(java::Package javaPackage, java::Package containingPackage, String rootPackageName) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to containingPackage tagged with "package_root"
+		require absence of pcm::RepositoryComponent corresponding to javaPackage
+	}
+	action {
+		call {
+			val pcmComponentCandidate = pcmRepository.components__Repository.findFirst[entityName == javaPackage.name.toFirstUpper]
+			if (pcmComponentCandidate === null) {
+				createArchitecturalElement(javaPackage, containingPackage.name, rootPackageName)
+			} else {
+				addCorrespondenceAndUpdateRepository(pcmComponentCandidate, javaPackage)
+			}
+		}
+	}
 }
 
 /**
@@ -78,40 +112,40 @@ routine createArchitecturalElement(java::Package javaPackage, String name, Strin
 }
 
 routine createOrFindRepository(java::Package javaPackage, String packageName, String newTag) {
-    match {
-        require absence of pcm::Repository corresponding to javaPackage tagged with newTag
-        require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
-        val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
-            with foundRepository.entityName.toFirstLower == packageName // PCM repositories can be both upper and lower case
-    }
-    action {
-        call {
-            if (foundRepository.isPresent) {
-                ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, javaPackage)
-                addRepositoryCorrespondence(foundRepository.get, javaPackage, newTag)
-            } else {
-                createRepository(javaPackage, packageName, newTag)
-            }
-        }
-    }
+	match {
+		require absence of pcm::Repository corresponding to javaPackage tagged with newTag
+		require absence of pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
+		val foundRepository = retrieve optional pcm::Repository corresponding to RepositoryPackage.Literals.REPOSITORY
+			with foundRepository.entityName.toFirstLower == packageName // PCM repositories can be both upper and lower case
+	}
+	action {
+		call {
+			if (foundRepository.isPresent) {
+				ensureFirstCaseUpperCaseRepositoryNaming(foundRepository.get, javaPackage)
+				addRepositoryCorrespondence(foundRepository.get, javaPackage, newTag)
+			} else {
+				createRepository(javaPackage, packageName, newTag)
+			}
+		}
+	}
 }
 
 routine ensureFirstCaseUpperCaseRepositoryNaming(pcm::Repository pcmRepository, java::Package javaPackage) {
-    match {
-       check pcmRepository.entityName == javaPackage.name
-    }
-    action {
-        update pcmRepository {
-            pcmRepository.entityName = javaPackage.name.toFirstUpper
-        }
-    }
+	match {
+	   check pcmRepository.entityName == javaPackage.name
+	}
+	action {
+		update pcmRepository {
+			pcmRepository.entityName = javaPackage.name.toFirstUpper
+		}
+	}
 }
 
 routine addRepositoryCorrespondence(pcm::Repository pcmRepository, java::Package javaPackage, String newTag) {
-    action {
-        add correspondence between pcmRepository and ContainersPackage.Literals.PACKAGE
-        add correspondence between pcmRepository and javaPackage tagged with newTag
-    }
+	action {
+		add correspondence between pcmRepository and ContainersPackage.Literals.PACKAGE
+		add correspondence between pcmRepository and javaPackage tagged with newTag
+	}
 }
 
 routine createRepository(java::Package javaPackage, String packageName, String newTag) {
@@ -139,26 +173,26 @@ routine createRepository(java::Package javaPackage, String packageName, String n
 }
 
 routine createOrFindSystem(java::Package javaPackage, String name) {
-     match {
-        require absence of pcm::System corresponding to javaPackage
-        val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM
-            with foundSystem.entityName.toFirstLower == javaPackage.name // PCM systems can be both upper and lower case
-    }
-    action {
-        call {
-            if (foundSystem.isPresent) {
-               addSystemCorrespondence(foundSystem.get, javaPackage)
-            } else {
-               createSystem(javaPackage, name)
-            }
-        }
-    }
+	 match {
+		require absence of pcm::System corresponding to javaPackage
+		val foundSystem = retrieve optional pcm::System corresponding to SystemPackage.Literals.SYSTEM
+			with foundSystem.entityName.toFirstLower == javaPackage.name // PCM systems can be both upper and lower case
+	}
+	action {
+		call {
+			if (foundSystem.isPresent) {
+			   addSystemCorrespondence(foundSystem.get, javaPackage)
+			} else {
+			   createSystem(javaPackage, name)
+			}
+		}
+	}
 }
 
 routine addSystemCorrespondence(pcm::System pcmSystem, java::Package javaPackage) {
-    action {
-        add correspondence between pcmSystem and javaPackage tagged with "root_system"
-    }
+	action {
+		add correspondence between pcmSystem and javaPackage tagged with "root_system"
+	}
 }
 
 routine createSystem(java::Package javaPackage, String name) {
@@ -177,7 +211,7 @@ routine createBasicComponent(java::Package javaPackage, String name, String root
 		val pcmBasicComponent = create pcm::BasicComponent and initialize {
 			pcmBasicComponent.entityName = name
 		}
-		call addcorrespondenceAndUpdateRepository(pcmBasicComponent, javaPackage)
+		call addCorrespondenceAndUpdateRepository(pcmBasicComponent, javaPackage)
 	}
 }
 
@@ -186,23 +220,66 @@ routine createCompositeComponent(java::Package javaPackage, String name, String 
 		val pcmCompositeComponent = create pcm::CompositeComponent and initialize {
 			pcmCompositeComponent.entityName = name
 		}		
-		call addcorrespondenceAndUpdateRepository(pcmCompositeComponent, javaPackage)
+		call addCorrespondenceAndUpdateRepository(pcmCompositeComponent, javaPackage)
 	}
 }
 
 /**
  * Adds correspondence between component and package and add component into repository.
  */
-routine addcorrespondenceAndUpdateRepository(pcm::ImplementationComponentType pcmComponent, java::Package javaPackage) {
+routine addCorrespondenceAndUpdateRepository(pcm::RepositoryComponent pcmComponent, java::Package javaPackage) {
 	match {
 		val pcmRepository = retrieve pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
 		
 	}
 	action {
 		add correspondence between pcmComponent and javaPackage
-		
 		update pcmRepository {
-			pcmRepository.components__Repository += pcmComponent
+			if(!pcmRepository.components__Repository.contains(pcmComponent)) {
+				pcmRepository.components__Repository += pcmComponent
+			}
+		}
+	}
+}
+
+reaction JavaPackageRenamed {
+	after attribute replaced at java::Package[name]
+	call {
+		renameRepository(affectedEObject)
+		renameSystem(affectedEObject)
+		renameComponent(affectedEObject)
+	}
+}
+
+routine renameRepository(java::Package javaPackage) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to javaPackage tagged with "package_root"
+	}
+	action {
+		update pcmRepository {
+			pcmRepository.entityName = javaPackage.name.toFirstUpper
+		}
+	}
+}
+
+routine renameSystem(java::Package javaPackage) {
+	match {
+		val pcmSystem = retrieve pcm::System corresponding to javaPackage tagged with "root_system"
+	}
+	action {
+		update pcmSystem {
+			pcmSystem.entityName = javaPackage.name.toFirstUpper
+		}
+	}
+}
+
+routine renameComponent(java::Package javaPackage) {
+	match {
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaPackage
+	}
+	action {
+		update pcmComponent {
+			pcmComponent.entityName = javaPackage.name.toFirstUpper;
 		}
 	}
 }
@@ -240,6 +317,21 @@ routine createOrFindContractsInterface(java::Interface javaInterface, java::Comp
 			} else {
 				addInterfaceCorrespondence(pcmInterface, javaInterface, compilationUnit)
 			}
+		}
+	}
+}
+
+reaction JavaInterfaceRenamed {
+	after attribute replaced at java::Interface[name]
+	call renameInterface(affectedEObject)
+}
+
+routine renameInterface(java::Interface javaInterface) {
+	match {
+		val pcmInterface = retrieve pcm::OperationInterface corresponding to javaInterface}
+	action {
+		update pcmInterface {
+			pcmInterface.entityName = javaInterface.name
 		}
 	}
 }
@@ -298,6 +390,24 @@ routine updateRepositoryInterfaces(pcm::OperationInterface pcmInterface) {
 }
 
 //Class
+reaction JavaClassRenamed {
+	after attribute replaced at java::Class[name]
+	call renameComponentFromClass(affectedEObject)
+}
+
+routine renameComponentFromClass(java::Class javaClass) {
+	match {
+		val pcmComponent = retrieve pcm::RepositoryComponent corresponding to javaClass
+	}
+	action {
+		update pcmComponent {
+			var newName = javaClass.name.toFirstUpper
+			if (newName.endsWith("Impl")) newName = newName.substring(0, newName.length - "Impl".length)
+			pcmComponent.entityName = newName
+		}
+	}
+}
+
 reaction ClassCreated {
 	after element java::Class inserted in java::CompilationUnit[classifiers]
 	call {
@@ -342,7 +452,7 @@ routine createDataType(java::Class javaClass, java::CompilationUnit compilationU
 				Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.message
 			]
 			val selected = userInteractor.singleSelectionDialogBuilder.message(userMsg).choices(selections)
-			    .windowModality(WindowModality.MODAL).startInteraction()
+				.windowModality(WindowModality.MODAL).startInteraction()
 			switch(selected) {
 				case Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection: 
 					createCompositeDataType(javaClass, compilationUnit)
