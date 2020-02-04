@@ -15,6 +15,7 @@ import org.palladiosimulator.pcm.core.entity.Entity
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimNotMany
 
 import "http://www.emftext.org/java" as java
 import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
@@ -519,14 +520,12 @@ routine createOrFindCompositeDataType(java::Class javaClass, java::CompilationUn
 	}
 	action {
 		call {
-			val foundCompositeDataTypes = pcmRepository.dataTypes__Repository.filter(CompositeDataType)
-				.filter[entityName.toFirstUpper == javaClass.name.toFirstUpper || javaClass.name === null && entityName == "aName"]
-			if (foundCompositeDataTypes.empty) {
+			val foundCompositeDataType = pcmRepository.dataTypes__Repository.filter(CompositeDataType)
+				.filter[entityName.toFirstUpper == javaClass.name.toFirstUpper || javaClass.name === null && entityName == "aName"].claimNotMany
+			if (foundCompositeDataType === null) {
 				createCompositeDataType(javaClass, compilationUnit)
-			} else if (foundCompositeDataTypes.size == 1) {
-				addDataTypeCorrespondence(javaClass, compilationUnit, foundCompositeDataTypes.head)
 			} else {
-				throw new IllegalStateException("Multiple composite data types found: " + foundCompositeDataTypes)
+				addDataTypeCorrespondence(javaClass, compilationUnit, foundCompositeDataType)
 			}
 		}
 	}
@@ -551,14 +550,12 @@ routine createOrFindCollectionDataType(java::Class javaClass, java::CompilationU
 	}
 	action {
 		call {
-			val foundCollectionDataTypes = pcmRepository.dataTypes__Repository.filter(CollectionDataType)
-				.filter[entityName.toFirstUpper == javaClass.name.toFirstUpper || javaClass.name === null && entityName == "aName"]
-			if (foundCollectionDataTypes.empty) {
+			val foundCollectionDataType = pcmRepository.dataTypes__Repository.filter(CollectionDataType)
+				.filter[entityName.toFirstUpper == javaClass.name.toFirstUpper || javaClass.name === null && entityName == "aName"].claimNotMany
+			if (foundCollectionDataType === null) {
 				createCollectionDataType(javaClass, compilationUnit)
-			} else if (foundCollectionDataTypes.size == 1) {
-				addDataTypeCorrespondence(javaClass, compilationUnit, foundCollectionDataTypes.head)
 			} else {
-				throw new IllegalStateException("Multiple collection data types found: " + foundCollectionDataTypes)
+				addDataTypeCorrespondence(javaClass, compilationUnit, foundCollectionDataType)
 			}
 		}
 	}
