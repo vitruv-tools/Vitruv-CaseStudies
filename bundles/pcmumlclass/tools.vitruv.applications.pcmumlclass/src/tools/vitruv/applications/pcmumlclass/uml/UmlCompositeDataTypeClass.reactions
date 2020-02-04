@@ -45,20 +45,18 @@ routine insertCorrespondingCompositeDataType(uml::Class umlClass, uml::Package u
 routine detectOrCreateCorrespondingCompositeDataType(uml::Class umlClass, uml::Package umlPackage) {
 	match{
 		val pcmRepository = retrieve asserted pcm::Repository corresponding to umlPackage tagged with TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE
-		val pcmCompositeType = retrieve optional pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
+		require absence of pcm::CompositeDataType corresponding to umlClass tagged with TagLiterals.COMPOSITE_DATATYPE__CLASS
 	}
 	action {
 		call {
-			if (!pcmCompositeType.isPresent) {
-				val candidates = pcmRepository.dataTypes__Repository.filter(CompositeDataType).filter[type | type.entityName == umlClass.name]
-				switch (candidates.size) {
-					case 0: createCorrespondingCompositeDataType(umlClass, umlPackage)
-					case 1: addCorrespondenceForExistingCompositeDataType(candidates.head, umlClass)
-					default: {
-						logger.warn(DefaultLiterals.WARNING_MULTIPLE_COMPOSITE_DATA_TYPE_CANDIDATES + umlClass)
-						addCorrespondenceForExistingCompositeDataType(candidates.head, umlClass)
-					}
-				}				
+			val candidates = pcmRepository.dataTypes__Repository.filter(CompositeDataType).filter[type | type.entityName == umlClass.name]
+			switch (candidates.size) {
+				case 0: createCorrespondingCompositeDataType(umlClass, umlPackage)
+				case 1: addCorrespondenceForExistingCompositeDataType(candidates.head, umlClass)
+				default: {
+					logger.warn(DefaultLiterals.WARNING_MULTIPLE_COMPOSITE_DATA_TYPE_CANDIDATES + umlClass)
+					addCorrespondenceForExistingCompositeDataType(candidates.head, umlClass)
+				}
 			}
 		}
 	}
