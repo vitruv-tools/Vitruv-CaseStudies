@@ -314,7 +314,19 @@ routine createCompositeDataTypeImplementation(pcm::CompositeDataType compositeDa
 			with datatypesPackage.name == "datatypes"
 	}
 	action {
-		call createOrFindJavaClass(compositeDataType, datatypesPackage, compositeDataType.entityName)
+		call createOrFindDataTypeClass(compositeDataType, datatypesPackage)
+	}
+}
+
+routine createOrFindDataTypeClass(pcm::NamedElement dataType, java::Package datatypesPackage) {
+	action {
+		call {
+			if (dataType.entityName == "aName") {
+				createOrFindJavaClass(dataType, datatypesPackage, null)
+			} else {
+				createOrFindJavaClass(dataType, datatypesPackage, dataType.entityName)
+			}
+		}
 	}
 }
 
@@ -368,7 +380,7 @@ routine createCollectionDataTypeImplementation(pcm::CollectionDataType dataType)
 				.choices(collectionDataTypeNames).windowModality(WindowModality.MODAL).startInteraction();
 			val Class<?> selectedClass = collectionDataTypes.get(selectedType);
 
-			createOrFindJavaClass(dataType, datatypesPackage, dataType.entityName);
+			createOrFindDataTypeClass(dataType, datatypesPackage)
 			addSuperTypeToDataType(dataType, innerTypeClassOrWrapper, selectedClass.name);
 		}
 	}
