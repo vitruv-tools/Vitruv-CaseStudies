@@ -562,7 +562,7 @@ routine renameJavaPackage(uml::Package uPackage, uml::Namespace uNamespace) {
             persistProjectRelative(uPackage, jPackage, buildJavaFilePath(jPackage))
         }
         call {
-            if (!uPackage.name.equals(jPackage.name)) {
+            if (uPackage.name != jPackage.name) {
                 for (compUnit : jPackage.compilationUnits) {
                     changePackageOfJavaCompilationUnit(jPackage, compUnit, uNamespace)
                 }

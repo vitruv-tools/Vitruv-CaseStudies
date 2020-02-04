@@ -135,9 +135,9 @@ reaction CreatedSystem {
 }
 
 routine addSystemCorrespondence(pcm::System pcmSystem) {
-    action { // required to enable find-or-create-pattern:
-        add correspondence between pcmSystem and SystemPackage.Literals.SYSTEM
-    }
+	action { // required to enable find-or-create-pattern:
+		add correspondence between pcmSystem and SystemPackage.Literals.SYSTEM
+	}
 }
 
 routine createImplementationForSystem(pcm::System system) {
@@ -250,7 +250,7 @@ reaction RenameComponent {
 routine renameComponentPackageAndClass(pcm::RepositoryComponent component) {
 	match {
 		val repositoryPackage = retrieve java::Package corresponding to component.repository__RepositoryComponent
-			with repositoryPackage.name.equals(component.repository__RepositoryComponent.entityName)
+			with repositoryPackage.name == component.repository__RepositoryComponent.entityName
 	}
 	action {
 		call {
@@ -880,7 +880,7 @@ routine removeParameterToFieldAssignmentFromConstructor(java::Constructor ctor, 
 							if (fieldReference instanceof IdentifierReference) {
 								val field = fieldReference.target;
 								if (field instanceof Field) {
-									if (field.name.equals(fieldName)) {
+									if (field.name == fieldName) {
 										ctor.statements -= statement;
 										return;
 									}

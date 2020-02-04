@@ -8,6 +8,9 @@ import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
+import org.palladiosimulator.pcm.repository.CompositeDataType
+import org.palladiosimulator.pcm.repository.CollectionDataType
+import org.palladiosimulator.pcm.core.entity.Entity
 
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
@@ -98,7 +101,7 @@ routine createArchitecturalElement(java::Package javaPackage, String name, Strin
 				Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.message
 			]
 			val selected = userInteractor.singleSelectionDialogBuilder.message(userMsg).choices(selections)
-			   .windowModality(WindowModality.MODAL).startInteraction()
+				.windowModality(WindowModality.MODAL).startInteraction()
 			switch(selected) {
 				case Java2PcmUserSelection.SELECT_BASIC_COMPONENT.selection: 
 					createBasicComponent(javaPackage, name, rootPackageName) 
@@ -132,7 +135,7 @@ routine createOrFindRepository(java::Package javaPackage, String packageName, St
 
 routine ensureFirstCaseUpperCaseRepositoryNaming(pcm::Repository pcmRepository, java::Package javaPackage) {
 	match {
-	   check pcmRepository.entityName == javaPackage.name
+		check pcmRepository.entityName == javaPackage.name
 	}
 	action {
 		update pcmRepository {
@@ -181,9 +184,9 @@ routine createOrFindSystem(java::Package javaPackage, String name) {
 	action {
 		call {
 			if (foundSystem.isPresent) {
-			   addSystemCorrespondence(foundSystem.get, javaPackage)
+				addSystemCorrespondence(foundSystem.get, javaPackage)
 			} else {
-			   createSystem(javaPackage, name)
+				createSystem(javaPackage, name)
 			}
 		}
 	}
@@ -392,7 +395,10 @@ routine updateRepositoryInterfaces(pcm::OperationInterface pcmInterface) {
 //Class
 reaction JavaClassRenamed {
 	after attribute replaced at java::Class[name]
-	call renameComponentFromClass(affectedEObject)
+	call {
+		renameComponentFromClass(affectedEObject)
+		renameDataTypeFromClass(affectedEObject)
+	}
 }
 
 routine renameComponentFromClass(java::Class javaClass) {
@@ -404,6 +410,19 @@ routine renameComponentFromClass(java::Class javaClass) {
 			var newName = javaClass.name.toFirstUpper
 			if (newName.endsWith("Impl")) newName = newName.substring(0, newName.length - "Impl".length)
 			pcmComponent.entityName = newName
+		}
+	}
+}
+
+routine renameDataTypeFromClass(java::Class javaClass) {
+	match {
+		val dataType = retrieve pcm::DataType corresponding to javaClass
+	}
+	action {
+		update dataType {
+			if(dataType instanceof Entity) { // primitive data types don't have names
+				dataType.entityName = javaClass.name.toFirstUpper
+			}
 		}
 	}
 }
@@ -446,7 +465,7 @@ routine createDataType(java::Class javaClass, java::CompilationUnit compilationU
 	action {
 		call {
 			val String userMsg = "Class " + javaClass.name +
-						"has been created in the datatypes pacakage. Please decide which kind of data type should be created."
+						" has been created in the datatypes package. Please decide which kind of data type should be created."
 			val String[] selections = #[Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.message,
 				Java2PcmUserSelection.SELECT_COLLECTION_DATA_TYPE.message,
 				Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.message
@@ -455,9 +474,9 @@ routine createDataType(java::Class javaClass, java::CompilationUnit compilationU
 				.windowModality(WindowModality.MODAL).startInteraction()
 			switch(selected) {
 				case Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection: 
-					createCompositeDataType(javaClass, compilationUnit)
+					createOrFindCompositeDataType(javaClass, compilationUnit)
 				case Java2PcmUserSelection.SELECT_COLLECTION_DATA_TYPE.selection: 
-					createCollectionDataType(javaClass, compilationUnit)
+					createOrFindCollectionDataType(javaClass, compilationUnit)
 			}
 		}
 	}
@@ -494,32 +513,73 @@ routine checkSystemAndComponent(java::Package javaPackage, java::Class javaClass
 	}
 }
 
+routine createOrFindCompositeDataType(java::Class javaClass, java::CompilationUnit compilationUnit) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
+	}
+	action {
+		call {
+			val foundCompositeDataTypes = pcmRepository.dataTypes__Repository.filter(CompositeDataType)
+				.filter[entityName.toFirstUpper == javaClass.name.toFirstUpper || javaClass.name === null && entityName == "aName"]
+			if (foundCompositeDataTypes.empty) {
+				createCompositeDataType(javaClass, compilationUnit)
+			} else if (foundCompositeDataTypes.size == 1) {
+				addDataTypeCorrespondence(javaClass, compilationUnit, foundCompositeDataTypes.head)
+			} else {
+				throw new IllegalStateException("Multiple composite data types found: " + foundCompositeDataTypes)
+			}
+		}
+	}
+}
+
 routine createCompositeDataType(java::Class javaClass, java::CompilationUnit compilationUnit) {
 	action {
 		val pcmCompositeDataType = create pcm::CompositeDataType and initialize {
 			pcmCompositeDataType.entityName = javaClass.name
 		}
-		
 		add correspondence between pcmCompositeDataType and javaClass
-		add correspondence between compilationUnit and javaClass
-		
 		call {
+			addDataTypeCorrespondence(javaClass, compilationUnit, pcmCompositeDataType)
 			addDataTypeInRepository(pcmCompositeDataType)
 		}
 	}
 }
+
+routine createOrFindCollectionDataType(java::Class javaClass, java::CompilationUnit compilationUnit) {
+	match {
+		val pcmRepository = retrieve pcm::Repository corresponding to ContainersPackage.Literals.PACKAGE
+	}
+	action {
+		call {
+			val foundCollectionDataTypes = pcmRepository.dataTypes__Repository.filter(CollectionDataType)
+				.filter[entityName.toFirstUpper == javaClass.name.toFirstUpper || javaClass.name === null && entityName == "aName"]
+			if (foundCollectionDataTypes.empty) {
+				createCollectionDataType(javaClass, compilationUnit)
+			} else if (foundCollectionDataTypes.size == 1) {
+				addDataTypeCorrespondence(javaClass, compilationUnit, foundCollectionDataTypes.head)
+			} else {
+				throw new IllegalStateException("Multiple collection data types found: " + foundCollectionDataTypes)
+			}
+		}
+	}
+}
+
 routine createCollectionDataType(java::Class javaClass, java::CompilationUnit compilationUnit) {
 	action {
 		val pcmCollectionDataType = create pcm::CollectionDataType and initialize {
 			pcmCollectionDataType.entityName = javaClass.name
 		}
-		
-		add correspondence between pcmCollectionDataType and javaClass
-		add correspondence between compilationUnit and javaClass
-		
 		call {
+			addDataTypeCorrespondence(javaClass, compilationUnit, pcmCollectionDataType)
 			addDataTypeInRepository(pcmCollectionDataType)
 		}
+	}
+}
+
+routine addDataTypeCorrespondence(java::Class javaClass, java::CompilationUnit compilationUnit, pcm::DataType dataType) {
+	action {
+		add correspondence between dataType and javaClass
+		add correspondence between compilationUnit and javaClass
 	}
 }
 
