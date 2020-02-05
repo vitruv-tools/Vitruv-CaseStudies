@@ -7,9 +7,12 @@ import java.util.Set
 import java.util.Stack
 import java.util.Vector
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.emftext.language.java.classifiers.Interface
+import org.emftext.language.java.containers.ContainersPackage
 import org.emftext.language.java.expressions.AssignmentExpression
 import org.emftext.language.java.generics.GenericsFactory
 import org.emftext.language.java.imports.ClassifierImport
+import org.emftext.language.java.instantiations.NewConstructorCall
 import org.emftext.language.java.members.Constructor
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.modifiers.ModifiersFactory
@@ -31,11 +34,11 @@ import org.palladiosimulator.pcm.repository.RepositoryPackage
 import org.palladiosimulator.pcm.system.SystemPackage
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
+import static tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
+import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
-import static extension tools.vitruv.applications.pcmjava.util.pcm2java.Pcm2JavaHelper.*
-import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 
 import "http://www.emftext.org/java" as java
@@ -177,35 +180,135 @@ routine changeSystemImplementationName(pcm::System system) {
 
 reaction AddedAssemblyContextToComposedStructure {
 	after element pcm::AssemblyContext created and inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
-	call addAssemblyContextToComposedStructure(affectedEObject, newValue)
+	call {
+		createOrFindAssemblyContextField(newValue, affectedEObject)
+		createOrFindAssemblyContextConstructor(newValue, affectedEObject)
+		createOrFindAssemblyContextImport(newValue, affectedEObject)
+	}
 }
 
-// TODO HK This is ugly...
-routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStructure, pcm::AssemblyContext assemblyContext) {
+routine createOrFindAssemblyContextField(pcm::AssemblyContext assemblyContext, pcm::ComposedStructure composedStructure) {
+	 match {
+		 val compositeComponentJavaClass = retrieve java::Class corresponding to composedStructure
+		 val encapsulatedComponentJavaClass = retrieve java::Class corresponding to assemblyContext.encapsulatedComponent__AssemblyContext
+		 require absence of java::Field corresponding to assemblyContext
+	 }
+	 action {
+		call {
+			val foundField = compositeComponentJavaClass.members.filter(Field).findFirst[name == assemblyContext.entityName]
+			if (foundField === null) {
+				createAssemblyContextField(assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass)
+			} else {
+				addAssemblyContextFieldCorrespondence(assemblyContext, foundField)
+			}
+		}
+	 }
+}
+
+routine createAssemblyContextField(pcm::AssemblyContext assemblyContext, java::Class compositeComponentJavaClass, java::Class encapsulatedComponentJavaClass) {
+	action {
+		val assemblyContextField = create java::Field and initialize {
+			createPrivateField(assemblyContextField, createNamespaceClassifierReference(encapsulatedComponentJavaClass), assemblyContext.entityName)
+			compositeComponentJavaClass.members += assemblyContextField
+		}
+		add correspondence between assemblyContextField and assemblyContext
+	}
+}
+
+routine addAssemblyContextFieldCorrespondence(pcm::AssemblyContext assemblyContext, java::Field javaField) {
+	action {
+		add correspondence between javaField and assemblyContext
+	}
+}
+
+routine createOrFindAssemblyContextConstructor(pcm::AssemblyContext assemblyContext, pcm::ComposedStructure composedStructure) {
 	match {
 		val compositeComponentJavaClass = retrieve java::Class corresponding to composedStructure
 		val encapsulatedComponentJavaClass = retrieve java::Class corresponding to assemblyContext.encapsulatedComponent__AssemblyContext
+		require absence of java::Constructor corresponding to assemblyContext
 	}
 	action {
-		val assemblyContextField = create java::Field and initialize {
-			val TypeReference typeRef = createNamespaceClassifierReference(encapsulatedComponentJavaClass);
-			createPrivateField(assemblyContextField, typeRef, assemblyContext.entityName);
+		call {
+			val foundConstructor = compositeComponentJavaClass.members.filter(Constructor).findFirst[name == compositeComponentJavaClass.name]
+			if (foundConstructor === null) {
+				createAssemblyContextConstructor(assemblyContext, compositeComponentJavaClass)
+			} else {
+				val foundCall = foundConstructor.statements.filter(ExpressionStatement).map[expression].filter(AssignmentExpression).map[value].filter(NewConstructorCall).head
+				if (foundCall === null) {
+					createAssemblyContextStatement(assemblyContext, foundConstructor, compositeComponentJavaClass)
+				} else{
+					addAssemblyContextConstructorCorrespondence(assemblyContext, foundConstructor, foundCall)
+				}
+			}
 		}
-		val newConstructorCall = create java::NewConstructorCall
-		val contextClassImport = create java::ClassifierImport
+	}
+}
+
+routine createAssemblyContextConstructor(pcm::AssemblyContext assemblyContext, java::Class compositeComponentJavaClass) {
+	match {
+		val assemblyContextField = retrieve java::Field corresponding to assemblyContext
+	}
+	action {
 		val constructor = create java::Constructor
-		update compositeComponentJavaClass {
-			compositeComponentJavaClass.members += assemblyContextField;
-			addConstructorToClass(constructor, compositeComponentJavaClass);
-			addImportToCompilationUnitOfClassifier(contextClassImport, compositeComponentJavaClass, encapsulatedComponentJavaClass);
+		call {
+			createAssemblyContextStatement(assemblyContext, constructor, compositeComponentJavaClass)
+			addConstructorToClass(constructor, compositeComponentJavaClass)
 		}
+	}
+}
+
+routine createAssemblyContextStatement(pcm::AssemblyContext assemblyContext, java::Constructor constructor, java::Class compositeComponentJavaClass) {
+	match {
+		val assemblyContextField = retrieve java::Field corresponding to assemblyContext
+	}
+	action {
+		val newConstructorCall = create java::NewConstructorCall
 		update constructor {
-			createNewForFieldInConstructor(newConstructorCall, constructor, assemblyContextField);
+			createNewForFieldInConstructor(newConstructorCall, constructor, assemblyContextField)
 		}
-		add correspondence between assemblyContextField and assemblyContext
 		add correspondence between newConstructorCall and assemblyContext
-		add correspondence between contextClassImport and assemblyContext
 		add correspondence between constructor and assemblyContext
+	}
+}
+
+routine addAssemblyContextConstructorCorrespondence(pcm::AssemblyContext assemblyContext, java::Constructor constructor, java::NewConstructorCall constructorCall) {
+	action {
+		add correspondence between constructorCall and assemblyContext
+		add correspondence between constructor and assemblyContext
+	}
+}
+
+routine createOrFindAssemblyContextImport(pcm::AssemblyContext assemblyContext, pcm::ComposedStructure composedStructure) {
+	match {
+		val compositeComponentJavaClass = retrieve java::Class corresponding to composedStructure
+		val encapsulatedComponentJavaClass = retrieve java::Class corresponding to assemblyContext.encapsulatedComponent__AssemblyContext
+		require absence of java::ClassifierImport corresponding to assemblyContext
+	}
+	action {
+		call {
+			val foundImport = compositeComponentJavaClass.containingCompilationUnit.imports.filter(ClassifierImport).findFirst[it.classifier == encapsulatedComponentJavaClass]
+			if(foundImport === null) {
+				createAssemblyContextImport(assemblyContext, compositeComponentJavaClass, encapsulatedComponentJavaClass)
+			} else {
+				addAssemblyContextImportCorrespondence(assemblyContext, foundImport)
+			}
+		}
+	}
+}
+
+routine createAssemblyContextImport(pcm::AssemblyContext assemblyContext, java::Class compositeComponentJavaClass, java::Class encapsulatedComponentJavaClass) {
+	action {
+		val contextClassImport = create java::ClassifierImport and initialize {
+			addImportToCompilationUnitOfClassifier(contextClassImport, compositeComponentJavaClass, encapsulatedComponentJavaClass)
+		}
+		add correspondence between contextClassImport and assemblyContext
+	}
+}
+
+
+routine addAssemblyContextImportCorrespondence(pcm::AssemblyContext assemblyContext, java::ClassifierImport contextClassImport) {
+	action {
+		add correspondence between contextClassImport and assemblyContext
 	}
 }
 

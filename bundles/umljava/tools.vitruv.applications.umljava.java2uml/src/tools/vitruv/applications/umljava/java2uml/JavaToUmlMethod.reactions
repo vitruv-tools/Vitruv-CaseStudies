@@ -5,6 +5,7 @@ import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.modifiers.Private
 import org.emftext.language.java.modifiers.Protected
 import org.emftext.language.java.modifiers.Public
+import org.eclipse.uml2.uml.OperationOwner
 
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
@@ -25,58 +26,63 @@ import routines javaToUmlTypePropagation using qualified names
 reaction JavaClassMethodCreated {
     after element java::ClassMethod created and inserted in java::ConcreteClassifier[members]
     with (affectedEObject instanceof Class)
-    	|| (affectedEObject instanceof Enumeration)
-    call createUmlClassMethod(newValue, affectedEObject)
+        || (affectedEObject instanceof Enumeration)
+    call createOrFindUmlClassMethod(newValue, affectedEObject)
 }
 
-routine createUmlClassMethod(java::ClassMethod jMeth, java::ConcreteClassifier jClassifier) {
-    match {
+routine createOrFindUmlClassMethod(java::ClassMethod jMethod, java::ConcreteClassifier jClassifier) {
+     match {
         val uClassifier = retrieve uml::Classifier corresponding to jClassifier
-		require absence of uml::Operation corresponding to jMeth
+            with uClassifier instanceof OperationOwner
+        require absence of uml::Operation corresponding to jMethod
     }
     action {
-        val uOperation = create uml::Operation and initialize {
-            uOperation.name = jMeth.name;
-        }
-        add correspondence between uOperation and jMeth
         call {
-            if (uClassifier instanceof org.eclipse.uml2.uml.Class) {
-                addUmlOperationToClass(uClassifier, uOperation)
-            } else if (uClassifier instanceof org.eclipse.uml2.uml.Enumeration) {
-                addUmlOperationToEnum(uClassifier, uOperation)
+            val foundMethod = (uClassifier as OperationOwner).ownedOperations.findFirst[name == jMethod.name]
+            if (foundMethod === null) {
+                createUmlClassMethod(jMethod, uClassifier)
             } else {
-                logger.warn("Can not add ClassMethod to " + uClassifier)
+                addUmlMethodCorrespondence(foundMethod, jMethod)
             }
         }
     }
 }
 
-routine addUmlOperationToClass(uml::Class uClass, uml::Operation uOperation) {
+routine createUmlClassMethod(java::ClassMethod jMethod, uml::Classifier uClassifier) {
     action {
-        update uClass {
-            uClass.ownedOperations += uOperation
+        val uOperation = create uml::Operation and initialize {
+            uOperation.name = jMethod.name;
         }
-    }
-}
-//separate routines because Enum and Class don't have a common super class for "having ownedOperations"
-routine addUmlOperationToEnum(uml::Enumeration uEnum, uml::Operation uOperation) {
-    action {
-        update uEnum {
-            uEnum.ownedOperations += uOperation
+        add correspondence between uOperation and jMethod
+        update uClassifier {
+            (uClassifier as OperationOwner).ownedOperations += uOperation
         }
     }
 }
 
 reaction JavaInterfaceMethodCreated {
     after element java::InterfaceMethod created and inserted in java::Interface[members]
-    call createUmlInterfaceMethod(newValue, affectedEObject)
+    call createOrFindUmlInterfaceMethod(newValue, affectedEObject)
 }
 
-routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jInterface) {
-    match {
+routine createOrFindUmlInterfaceMethod(java::InterfaceMethod jMethod, java::Interface jInterface) {
+     match {
         val uInterface = retrieve uml::Interface corresponding to jInterface
-		require absence of uml::Operation corresponding to jMeth
+        require absence of uml::Operation corresponding to jMethod
     }
+    action {
+        call {
+            val foundMethod = uInterface.ownedOperations.findFirst[name == jMethod.name]
+            if (foundMethod === null) {
+                createUmlInterfaceMethod(jMethod, uInterface)
+            } else {
+                addUmlMethodCorrespondence(foundMethod, jMethod)
+            }
+        }
+    }
+}
+
+routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, uml::Interface uInterface) {
     action {
         val uOperation = create uml::Operation and initialize {
             uOperation.name = jMeth.name;
@@ -89,16 +95,36 @@ routine createUmlInterfaceMethod(java::InterfaceMethod jMeth, java::Interface jI
     }
 }
 
-reaction JavaConstructorCreated {
-    after element java::Constructor created and inserted in java::ConcreteClassifier[members]
-    call createUmlConstructor(newValue, affectedEObject)
+// Shared between interface methods, class methods and constructors:
+routine addUmlMethodCorrespondence(uml::Operation uOperation, java::Member jMethodOrConstructor) {
+    action {
+        add correspondence between uOperation and jMethodOrConstructor
+    }
 }
 
-routine createUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
-    match {
+reaction JavaConstructorCreated {
+    after element java::Constructor created and inserted in java::ConcreteClassifier[members]
+    call createOrFindUmlConstructor(newValue, affectedEObject)
+}
+
+routine createOrFindUmlConstructor(java::Constructor jConstructor, java::ConcreteClassifier jClassifier) {
+     match {
         val uClassifier = retrieve uml::Class corresponding to jClassifier
-		require absence of uml::Operation corresponding to jConstructor
+        require absence of uml::Operation corresponding to jConstructor
     }
+    action {
+        call {
+            val foundConstructor = uClassifier.ownedOperations.findFirst[name == jConstructor.name]
+            if (foundConstructor === null) {
+                createUmlConstructor(jConstructor, uClassifier)
+            } else {
+                addUmlMethodCorrespondence(foundConstructor, jConstructor)
+            }
+        }
+    }
+}
+
+routine createUmlConstructor(java::Constructor jConstructor, uml::Class uClassifier) {
     action {
         val uConstructor = create uml::Operation and initialize {
             uConstructor.name = jConstructor.name
@@ -201,7 +227,7 @@ reaction JavaParameterCreated {
 routine createUmlParameter(java::Parametrizable jMeth, java::OrdinaryParameter jParam) {
     match {
         val uOperation = retrieve uml::Operation corresponding to jMeth
-		require absence of uml::Parameter corresponding to jParam
+        require absence of uml::Parameter corresponding to jParam
     }
     action {
         val uParam = create uml::Parameter and initialize {
@@ -252,15 +278,15 @@ routine changeUmlReturnType(java::Method jMeth, java::TypeReference jType) {
         val uOperation = retrieve uml::Operation corresponding to jMeth
     }
     action {
-		execute {
-			var uParam = uOperation.getReturnResult
-			if (uParam === null){
-				// create a new return parameter
-				uParam = uOperation.createOwnedParameter("returnParameter", null)
-				uParam.direction = ParameterDirectionKind.RETURN_LITERAL
-			}
-        	javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam)
-		}
+        execute {
+            var uParam = uOperation.getReturnResult
+            if (uParam === null){
+                // create a new return parameter
+                uParam = uOperation.createOwnedParameter("returnParameter", null)
+                uParam.direction = ParameterDirectionKind.RETURN_LITERAL
+            }
+            javaToUmlTypePropagation.propagateMethodReturnTypeChange(jMeth, uParam)
+        }
     }
 }
 
@@ -288,7 +314,7 @@ routine changeUmlNamedElementVisibility(java::AnnotableAndModifiable jElem, java
     }
     action {
         update uElem {
-        	uElem.visibility = getUMLVisibilityKindFromJavaModifier(mod);
+            uElem.visibility = getUMLVisibilityKindFromJavaModifier(mod);
         }
     }
 }
@@ -321,11 +347,11 @@ routine renameUmlNamedElementCorrespondingToCompilationUnit(java::CompilationUni
     }
     action {
         update uElement {
-        	var propagatedName = jElement.name
-        	if(!jElement.namespaces.empty) { // trim off the namespace in case the name is loaded fully classified
+            var propagatedName = jElement.name
+            if(!jElement.namespaces.empty) { // trim off the namespace in case the name is loaded fully classified
                 var namespacePrefix = jElement.namespaces.join("\\.") + "\\." // escaping avoids eating any char with "." regex
                 propagatedName = propagatedName.replaceFirst(namespacePrefix, "")
-        	}
+            }
             if(propagatedName.endsWith(".java")) { // trim off file extension if it exists 
                 propagatedName = propagatedName.replaceFirst("\\.java", "") // escaping avoids eating any char with "." regex
             }

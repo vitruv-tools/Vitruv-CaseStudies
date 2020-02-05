@@ -112,7 +112,7 @@ reaction FieldCreated {
 		val type = getNormalizedClassifierFromTypeReference(newValue.typeReference)
 		fieldCreatedCorrespondingToOperationInterface(type, newValue)
 		fieldCreatedCorrespondingToRepositoryComponent(type, newValue)
-		createAssemblyContext(newValue.containingConcreteClassifier, newValue)
+		createOrFindAssemblyContext(newValue.containingConcreteClassifier, newValue)
 	}
 }
 
@@ -132,6 +132,24 @@ routine createInnerDeclaration(java::ConcreteClassifier classifier, java::Field 
 	}
 }
 
+routine createOrFindAssemblyContext(java::ConcreteClassifier classifier, java::Field javaField) {
+    match {
+        val composedProvidingRequiringEntity = retrieve pcm::ComposedProvidingRequiringEntity corresponding to classifier
+        val repositoryComponent = retrieve pcm::RepositoryComponent corresponding to getClassifierFromTypeReference(javaField.typeReference)
+        require absence of pcm::AssemblyContext corresponding to javaField
+    }
+    action {
+        call {
+            val pcmAssemblyContextCandidate = composedProvidingRequiringEntity.assemblyContexts__ComposedStructure.findFirst[entityName === javaField.name]
+            if (pcmAssemblyContextCandidate === null) {
+                createAssemblyContext(classifier, javaField)
+            } else {
+                addAssemblyContextCorrespondence(pcmAssemblyContextCandidate, javaField)
+            }
+        }
+    }
+}
+
 routine createAssemblyContext(java::ConcreteClassifier classifier, java::Field javaField) {
 	match {
 		val composedProvidingRequiringEntity = retrieve pcm::ComposedProvidingRequiringEntity corresponding to classifier
@@ -145,6 +163,12 @@ routine createAssemblyContext(java::ConcreteClassifier classifier, java::Field j
 		}
 		add correspondence between assemblyContext and javaField
 	}
+}
+
+routine addAssemblyContextCorrespondence(pcm::AssemblyContext assemblyContext, java::Field javaField) {
+    action {
+        add correspondence between assemblyContext and javaField
+    }
 }
 
 routine fieldCreatedCorrespondingToOperationInterface(java::Classifier classifier, java::Field javaField) {
