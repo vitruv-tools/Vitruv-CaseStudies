@@ -1,4 +1,5 @@
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimNotMany
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -11,12 +12,54 @@ import routines javaToUmlTypePropagation using qualified names
 
 reaction JavaAttributeCreatedInClass {
     after element java::Field created and inserted in java::Class[members]
-    call createUmlAttributeInClass(affectedEObject, newValue)
+    call createOrFindUmlAttributeInClass(affectedEObject, newValue)
 }
 
 reaction JavaAttributeCreatedInEnum {
     after element java::Field created and inserted in java::Enumeration[members]
-    call createUmlAttributeInEnum(affectedEObject, newValue)
+    call createOrFindUmlAttributeInEnum(affectedEObject, newValue)
+}
+
+routine addAttributeCorrespondence(uml::Property umlAttribute, java::Field javaField) {
+     action {
+         add correspondence between umlAttribute and javaField
+     }
+}
+
+//UML-Enumeration and UML-Class don't have a common superclass for "having ownedAttributes".
+//Therefore we implemented two separate routines
+routine createOrFindUmlAttributeInEnum(java::Enumeration javaEnum, java::Field javaField) {
+    match {
+        val umlEnum = retrieve uml::Enumeration corresponding to javaEnum
+        require absence of uml::Property corresponding to javaField
+    }
+    action {
+        call {
+            val foundAttribute = umlEnum.ownedAttributes.filter[name == javaField.name].claimNotMany
+            if (foundAttribute === null) {
+                createUmlAttributeInEnum(javaEnum, javaField)
+            } else {
+                addAttributeCorrespondence(foundAttribute, javaField)
+            }
+        }
+    }
+}
+
+routine createOrFindUmlAttributeInClass(java::Class javaClass, java::Field javaField) {
+    match {
+        val umlClass = retrieve uml::Class corresponding to javaClass
+        require absence of uml::Property corresponding to javaField
+    }
+    action {
+        call {
+            val foundAttribute = umlClass.ownedAttributes.filter[name == javaField.name].claimNotMany
+            if (foundAttribute === null) {
+                createUmlAttributeInClass(javaClass, javaField)
+            } else {
+                addAttributeCorrespondence(foundAttribute, javaField)
+            }
+        }
+    }
 }
 
 //UML-Enumeration and UML-Class don't have a common superclass for "having ownedAttributes".

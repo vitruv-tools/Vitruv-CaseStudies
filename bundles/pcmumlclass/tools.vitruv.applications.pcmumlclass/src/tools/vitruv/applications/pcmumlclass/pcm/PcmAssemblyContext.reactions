@@ -34,19 +34,17 @@ routine insertCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssem
 routine detectOrCreateCorrespondingAssemblyContextProperty(pcm::AssemblyContext pcmAssembly, pcm::ComposedProvidingRequiringEntity pcmComposite) {
 	match {
 		val umlCompositeImplementation = retrieve uml::Class corresponding to pcmComposite tagged with TagLiterals.IPRE__IMPLEMENTATION
-		val umlProperty = retrieve optional uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
+		require absence of uml::Property corresponding to pcmAssembly tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 		val umlComponentImplementation = retrieve optional uml::Class 
 			corresponding to pcmAssembly.encapsulatedComponent__AssemblyContext tagged with TagLiterals.IPRE__IMPLEMENTATION
 	}
 	action{
 		call {
-			if (!umlProperty.isPresent) {
-				val Property umlPropertyCandidate = umlCompositeImplementation.ownedAttributes.findFirst[it.type == umlComponentImplementation]
-				if (umlPropertyCandidate !== null) {
-					addCorrespondenceForExistingAssemblyContextProperty(pcmAssembly, umlPropertyCandidate)
-				} else {
-					createCorrespondingAssemblyContextProperty(pcmAssembly, pcmComposite)
-				}
+			val Property umlPropertyCandidate = umlCompositeImplementation.ownedAttributes.findFirst[name == pcmAssembly.entityName]
+			if (umlPropertyCandidate === null) {
+				createCorrespondingAssemblyContextProperty(pcmAssembly, pcmComposite)
+			} else {
+				addCorrespondenceForExistingAssemblyContextProperty(pcmAssembly, umlPropertyCandidate)
 			}
 		}
 	}

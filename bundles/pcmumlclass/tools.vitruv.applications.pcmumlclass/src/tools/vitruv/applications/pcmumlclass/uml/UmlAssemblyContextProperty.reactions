@@ -34,8 +34,7 @@ routine insertCorrespondingAssemblyContext(uml::Property umlProperty, uml::Class
 	}
 	action {
 		call {
-			if (pcmCompositeComponent.isPresent 
-				&& (pcmInnerComponent.isPresent || umlProperty.type === null) // allow 'null' for uninitialized references
+			if (pcmCompositeComponent.isPresent && (pcmInnerComponent.isPresent || umlProperty.type === null) // allow 'null' for uninitialized references
 			) {
 				detectOrCreateCorrespondingAssemblyContext(umlProperty, umlComponent)
 				moveCorrespondingAssemblyContext(umlProperty, umlComponent)
@@ -51,18 +50,15 @@ routine detectOrCreateCorrespondingAssemblyContext(uml::Property umlProperty, um
 	match {
 		val pcmCompositeComponent = retrieve pcm::ComposedProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val pcmInnerComponent = retrieve pcm::RepositoryComponent corresponding to umlProperty.type tagged with TagLiterals.IPRE__IMPLEMENTATION
-		val pcmAssemblyContext = retrieve optional pcm::AssemblyContext corresponding to umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
+		require absence of pcm::AssemblyContext corresponding to umlProperty tagged with TagLiterals.ASSEMBLY_CONTEXT__PROPERTY
 	}
 	action {
 		call {
-			if (!pcmAssemblyContext.isPresent) {
-				val pcmAssemblyContextCandidate = pcmCompositeComponent.assemblyContexts__ComposedStructure
-						.findFirst[it.encapsulatedComponent__AssemblyContext === pcmInnerComponent]
-				if (pcmAssemblyContextCandidate !== null) {
-					addCorrespondenceForExistingAssemblyContext(umlProperty, pcmAssemblyContextCandidate)
-				} else {
-					createCorrespondingAssemblyContext(umlProperty, umlComponent)
-				}
+			val pcmAssemblyContextCandidate = pcmCompositeComponent.assemblyContexts__ComposedStructure.findFirst[entityName == umlProperty.name]
+			if (pcmAssemblyContextCandidate === null) {
+				createCorrespondingAssemblyContext(umlProperty, umlComponent)
+			} else {
+				addCorrespondenceForExistingAssemblyContext(umlProperty, pcmAssemblyContextCandidate)
 			}
 		}
 	}
