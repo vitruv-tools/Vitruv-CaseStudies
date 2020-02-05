@@ -57,7 +57,7 @@ reaction pcm2javaCommon::AddedAssemblyContextToComposedStructure {
 	call addAssemblyContextToComposedStructure(affectedEObject, newValue)
 }
 
-routine pcm2javaCommon::addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStructure, pcm::AssemblyContext assemblyContext) {
+routine addAssemblyContextToComposedStructure(pcm::ComposedStructure composedStructure, pcm::AssemblyContext assemblyContext) {
 	match {
 		val compositeComponentJavaClass = retrieve java::Class corresponding to composedStructure
 		val encapsulatedComponentJavaClass = retrieve java::Class corresponding to assemblyContext.encapsulatedComponent__AssemblyContext
