@@ -59,7 +59,7 @@ Bidirectional transformation between UML and PCM, between UML and Java, and betw
   | [fix27](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix27) | [PR 74](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/74) | Duplicate repository component creation due to the element already existing but missing the required correspondences. |
   | [fix28](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix28) | [PR 75](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/75) | Incorrect first letter capitalization during name propagation for repository components and classifiers. |
   | [fix29](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix29) | [PR 76](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/76) | Duplicate CompositeDataType creation due to the element already existing but missing the required correspondences. |
-  | TO DO | [PR 77](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/77) | Duplicate creation of the assembly context concept elements. |
+  | [fix30](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix30) | [PR 77](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/77) | Duplicate creation of assembly contexts and correlating fields, constructors, import declarations, and access methods. |
 
 ### Fix to Test Case Failure/Error Correlation
 
