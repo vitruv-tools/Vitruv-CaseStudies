@@ -63,10 +63,11 @@ Bidirectional transformation between UML and PCM, between UML and Java, and betw
 
 ### Fix to Test Case Failure/Error Correlation
 
-The following tables shows the concept test cases affected by the problems that were addressed by the fixes. Fail means the test did not produce the expected results, while error means the test crashed during its execution. A total of 39 test cases were executed.
+The following tables shows the concept test cases affected by the problems that were addressed by the fixes. Fail means the test did not produce the expected results, while error means the test crashed during its execution. A total of 39 test cases were executed for the first two phases. A total of 16 test cases were executed for the second two phases, as not every concept could be fully fixed due to the time constraints of this case study. Note that the complexity of the change propagation increases exponentially with each additional transformation. As a result the amount of issues with each concept grew exponentially as well.
 
 **PCM ↔︎ UML → Java:**
 
+ Note that 14 out of 39 test cases are displayed here, the others did not have any issues.
 | Affected Concept Test Case                     | fix1 | fix3 | fix4 | fix5 | fix6/7 | fix8 | fix9 |
 |------------------------------------------------|------|------|------|------|--------|------|------|
 | Composite Datatype (Creation, UML)             |      |      |      |      |        |      |      |
@@ -86,6 +87,7 @@ The following tables shows the concept test cases affected by the problems that 
 
 **PCM ↔︎ UML ↔︎ Java:**
 
+Note that 14 out of 39 test cases are displayed here, the others did not have any issues.
 | Affected Concept Test Case                     | fix1 | fix3 | fix4 | fix5 | fix6/7 | fix8  | fix9  |
 |------------------------------------------------|------|------|------|------|--------|-------|-------|
 | Composite Datatype (Creation, UML)             |      |      |      |      | Fail   | Error |       |
@@ -102,3 +104,27 @@ The following tables shows the concept test cases affected by the problems that 
 | Required Role (Constructor Parameter, UML)     |      |      | Fail |      |        |       |       |
 | Signature (Collection return type, UML)        |      |      |      | Fail |        |       |       |
 | System (UML)                                   |      |      |      |      | Error  | Error |       |
+
+**PCM ↔︎ UML ↔︎ Java ← PCM:**
+
+ Note that all 16 fixed test cases are displayed here.
+|                                                | fix10 | fix11 | fix12 | fix13 | fix14 | fix15 | fix16 | fix17 | fix18 | fix19 | fix20 |
+|------------------------------------------------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+| Assembly Context (Creation, PCM)               | Error |       | Error | Error |       |       |       |       |       |       |       |
+| Assembly Context (Creation, UML)               | Error |       | Error | Error |       |       |       |       |       |       |       |
+| Composite Datatype (Creation, PCM)             | Error |       | Error | Error |       |       |       |       | Error |       |       |
+| Composite Datatype (Creation, UML)             | Error |       | Error | Error |       |       |       |       | Error |       |       |
+| Composite Datatype (with Parent, PCM)          | Error |       | Error | Error |       |       |       |       | Error |       |       |
+| Composite Datatype (with Parent, UML)          | Error |       | Error | Error |       |       |       |       | Error |       |       |
+| Interface (PCM)                                | Error |       | Error | Error | Error |       |       |       |       |       |       |
+| Interface (UML)                                | Error |       | Error | Error | Error | Error |       |       |       |       |       |
+| Repository Component (UML)                     | Error |       | Error | Error |       |       |       | Fail  | Error |       |       |
+| Repository Component (PCM)                     | Error |       | Error | Error |       |       |       |       |       |       |       |
+| Repository (Deletion, PCM)                     | Error |       | Error | Error |       |       |       |       |       |       |       |
+| Repository (Rename, PCM)                       | Error |       | Error |       |       |       | Wrong |       |       |       |       |
+| Repository (Creation, PCM)                     | Error |       | Error |       |       |       |       |       |       |       |       |
+| Repository (Creation, UML)                     |       | ???   |       |       |       |       |       |       |       |       | Error |
+| System (PCM)                                   |       |       | Fail  | Error |       |       |       |       |       |       |       |
+| System (UML)                                   |       |       |       |       |       |       |       |       | Error | Error | Error |
+
+_Note: The test case marked with ??? did not error when removing fix11, as other fixes still prevented the error. This test case only errored when removing the repository find-or-create-pattern as well, which was introduced by a later fix._
