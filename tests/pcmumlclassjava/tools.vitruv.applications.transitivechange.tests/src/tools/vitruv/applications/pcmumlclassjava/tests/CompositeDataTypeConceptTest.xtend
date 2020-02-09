@@ -130,6 +130,8 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
 		var umlCompositeTypeParentClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE_PARENT, false)
 		umlCompositeTypeClass.createGeneralization(umlCompositeTypeParentClass)
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
+		userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
 		saveAndSynchronizeChanges(umlDatatypesPkg)
 
 		reloadResourceAndReturnRoot(umlDatatypesPkg)
