@@ -65,10 +65,16 @@ Bidirectional transformation between UML and PCM, between UML and Java, and betw
 
 The following tables shows the concept test cases affected by the problems that were addressed by the fixes. Fail means the test did not produce the expected results, while error means the test crashed during its execution. A total of 39 test cases were executed for the first two phases. A total of 16 test cases were executed for the second two phases, as not every concept could be fully fixed due to the time constraints of this case study. Note that the complexity of the change propagation increases exponentially with each additional transformation. As a result the amount of issues with each concept grew exponentially as well.
 
+The following terms are used:
+* Error - the test case was executed but did not meet its success conditions
+* Fail  - the test case crashed during its execution
+* Loop  - the test case never terminated due to a endless loop in the change propagation
+* Wrong - while the test case was executed and did meet its success conditions, the persisted files are not as expected
+
 **PCM ↔︎ UML → Java:**
 
  Note that 14 out of 39 test cases are displayed here, the others did not have any issues.
-| Affected Concept Test Case                     | fix1 | fix3 | fix4 | fix5 | fix6/7 | fix8 | fix9 |
+| Fix Number                                     | fix1 | fix3 | fix4 | fix5 | fix6/7 | fix8 | fix9 |
 |------------------------------------------------|------|------|------|------|--------|------|------|
 | Composite Datatype (Creation, UML)             |      |      |      |      |        |      |      |
 | Composite Datatype (Creation with Parent, UML) |      |      |      |      |        |      |      |
@@ -88,7 +94,7 @@ The following tables shows the concept test cases affected by the problems that 
 **PCM ↔︎ UML ↔︎ Java:**
 
 Note that 14 out of 39 test cases are displayed here, the others did not have any issues.
-| Affected Concept Test Case                     | fix1 | fix3 | fix4 | fix5 | fix6/7 | fix8  | fix9  |
+| Fix Number                                     | fix1 | fix3 | fix4 | fix5 | fix6/7 | fix8  | fix9  |
 |------------------------------------------------|------|------|------|------|--------|-------|-------|
 | Composite Datatype (Creation, UML)             |      |      |      |      | Fail   | Error |       |
 | Composite Datatype (Creation with Parent, UML) |      |      |      |      | Error  | Fail  |       |
@@ -120,11 +126,33 @@ Note that 14 out of 39 test cases are displayed here, the others did not have an
 | Interface (UML)                                | Error |       | Error | Error | Error | Error |       |       |       |       |       |
 | Repository Component (UML)                     | Error |       | Error | Error |       |       |       | Fail  | Error |       |       |
 | Repository Component (PCM)                     | Error |       | Error | Error |       |       |       |       |       |       |       |
-| Repository (Deletion, PCM)                     | Error |       | Error | Error |       |       |       |       |       |       |       |
-| Repository (Rename, PCM)                       | Error |       | Error |       |       |       | Wrong |       |       |       |       |
-| Repository (Creation, PCM)                     | Error |       | Error |       |       |       |       |       |       |       |       |
+| Repository (Deletion, PCM)                     | Fail  |       | Error | Error |       |       |       |       |       |       |       |
+| Repository (Rename, PCM)                       | Fail  |       | Error |       |       |       | Wrong |       |       |       |       |
+| Repository (Creation, PCM)                     | Fail  |       | Error |       |       |       |       |       |       |       |       |
 | Repository (Creation, UML)                     |       | ???   |       |       |       |       |       |       |       |       | Error |
 | System (PCM)                                   |       |       | Fail  | Error |       |       |       |       |       |       |       |
 | System (UML)                                   |       |       |       |       |       |       |       |       | Error | Error | Error |
 
 _Note: The test case marked with ??? did not error when removing fix11, as other fixes still prevented the error. This test case only errored when removing the repository find-or-create-pattern as well, which was introduced by a later fix._
+
+**PCM ↔︎ UML ↔︎ Java ↔︎ PCM:**
+
+ Note that all 16 fixed test cases are displayed here.
+|                                                | fix21 | fix22 | fix23 | fix24 | fix25 | fix26 | fix27 | fix28 | fix29 | fix30 |
+|------------------------------------------------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+| Assembly Context (Creation, PCM)               | Error |       |       |       |       | Loop  | Error |       |       | Error |       
+| Assembly Context (Creation, UML)               | Error |       |       |       |       | Loop  | Error |       |       | Error |       
+| Composite Datatype (Creation, PCM)             | Error |       |       |       |       | Error |       |       |       |       |      
+| Composite Datatype (Creation, UML)             | Error |       |       |       |       | Error |       |       |       |       |       
+| Composite Datatype (with Parent, PCM)          | Error |       |       |       |       | Error |       |       |       |       |       
+| Composite Datatype (with Parent, UML)          | Error | Error | Error |       |       | Error |       |       | Error |       |       
+| Interface (PCM)                                | Error |       |       |       |       |       |       |       |       |       |       
+| Interface (UML)                                | Error |       |       | Error |       | Loop  |       |       |       |       |       
+| Repository Component (UML)                     | Error | Error | Error |       |       | Loop  | Error |       |       |       |       
+| Repository Component (PCM)                     | Error | Fail  |       |       |       | Loop  | Error | Error |       |       |       
+| Repository (Deletion, PCM)                     | Error | Fail  |       |       |       |       |       |       |       |       |       
+| Repository (Rename, PCM)                       | Error | Fail  |       |       |       |       |       |       |       |       |       
+| Repository (Creation, PCM)                     | Error | Fail  | Error |       |       |       |       |       |       |       |       
+| Repository (Creation, UML)                     |       |       |       |       |       |       |       |       |       |       |       
+| System (PCM)                                   |       |       |       |       |       | Error |       |       |       |       |       
+| System (UML)                                   |       |       | Error |       | Error | Error |       |       |       |       |       
