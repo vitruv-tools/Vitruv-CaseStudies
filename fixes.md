@@ -5,7 +5,7 @@ They can be viewed with: `git tag -l "fix*"`
 
 And details can be viewed with: `git show fix1`
 
-### PCM ↔︎ UML → Java (8 fixes)
+### PCM ↔︎ UML → Java
 Bidirectional transformation between UML and PCM, but only unidirectional transformation from UML to Java.
 
  | fix commit tag | correlating pull request | addressed problem |
@@ -17,13 +17,13 @@ Bidirectional transformation between UML and PCM, but only unidirectional transf
  | [fix5](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix5) | [PR 47](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/47) | Missing adaption of Java types (collection <--> non-collection type) when changing the multiplicities of UML return types. |
  | [fix6](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix6) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | When inserting Java compilation units, correlating UML classes were not moved to the correlating UML package of the compilation unit. |
  | [fix7](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix7) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | *Multiple commits for one issue, see fix6.* |
- | [fix8](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix8) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | UML classes were deleted although Java compilation units were only removed from their container. |
 
 ### PCM ↔︎ UML ↔︎ Java
 Bidirectional transformation between UML and PCM, as well as between UML and Java.
 
   | fix commit tag | correlating pull request | addressed problem |
   | -- | -- | -- |
+  | [fix8](https://github.com/tsaglam/Vitruv-Applications-ComponentBasedSystems-CaseStudy/releases/tag/fix8) | [PR 43](https://github.com/vitruv-tools/Vitruv-Applications-ComponentBasedSystems/pull/43) | UML classes were deleted although Java compilation units were only removed from their container. |
   | fix9* | [PR 44](https://github.com/vitruv-tools/Vitruv-Domains-ComponentBasedSystems/pull/44) | Unnamed Java packages lead to problems with invalid paths. This could lead to duplicate package names. |
 
 **this fix tag is not located in this repository, as it concerns the domains repository. The correlating pull request is also part of that repository.*
