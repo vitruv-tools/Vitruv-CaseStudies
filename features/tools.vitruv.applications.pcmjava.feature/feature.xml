@@ -33,6 +33,7 @@
       <import feature="tools.vitruv.framework.feature" version="0.3.0"/>
       <import feature="tools.vitruv.domains.java.feature" version="0.3.0"/>
       <import feature="tools.vitruv.domains.pcm.feature" version="0.3.0"/>
+      <import feature="tools.vitruv.applications.util.temporary.feature" version="0.1.0"/>
    </requires>
 
    <plugin

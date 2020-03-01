@@ -14,6 +14,7 @@
 	<name>Feature Modules</name>
 
 	<modules>
+		<module>tools.vitruv.applications.util.temporary.feature</module>
 		<module>tools.vitruv.applications.pcmjava.feature</module>
 		<module>tools.vitruv.applications.pcmjava.ejbtransformations.feature</module>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.feature</module>
