@@ -31,21 +31,19 @@ routine insertCorrespondingProvidedRealization(pcm::OperationProvidedRole pcmPro
 routine detectOrCreateCorrespondingProvidedRealization(pcm::OperationProvidedRole pcmProvided, pcm::InterfaceProvidingRequiringEntity pcmIPRE) {
 	match {
 		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
-		val umlRealization = retrieve optional uml::InterfaceRealization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 		val umlInterface = retrieve optional uml::Interface corresponding to pcmProvided.providedInterface__OperationProvidedRole tagged with TagLiterals.INTERFACE_TO_INTERFACE 
+	    require absence of uml::InterfaceRealization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
 	action {
 		call {
-			if (!umlRealization.isPresent) {
-				var InterfaceRealization umlRealizationCandidate = null
-				if(umlInterface.isPresent) 
-					umlRealizationCandidate = umlComponentImpl.interfaceRealizations
-						.findFirst[it.name == pcmProvided.entityName && it.contract === umlInterface.get]
-				if (umlRealizationCandidate !== null) {
-					addCorrespondenceForExistingRealization(pcmProvided, umlRealizationCandidate)
-				}
-				createCorrespondingProvidedRealization(pcmProvided, pcmIPRE)
+			var InterfaceRealization umlRealizationCandidate = null
+			if(umlInterface.isPresent) 
+				umlRealizationCandidate = umlComponentImpl.interfaceRealizations
+					.findFirst[it.name == pcmProvided.entityName && it.contract === umlInterface.get]
+			if (umlRealizationCandidate !== null) {
+				addCorrespondenceForExistingRealization(pcmProvided, umlRealizationCandidate)
 			}
+			createCorrespondingProvidedRealization(pcmProvided, pcmIPRE)
 		}
 	}
 }

@@ -12,6 +12,7 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
 import static tools.vitruv.applications.umljava.util.CommonUtil.showMessage
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import static extension tools.vitruv.framework.util.bridges.JavaHelper.claimOneOrNone
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -272,7 +273,10 @@ routine addUmlClassImplement(java::Class jClass, java::TypeReference jReference,
     }
     action {
         execute {
-            if (uInterface !== null) {
+            val matchingInterfaceRealization = uClass.interfaceRealizations.filter[name == uInterface.name + uInterface.name].filter[contract == uInterface].claimOneOrNone
+            if(matchingInterfaceRealization.present) {
+                 addImplementsCorrespondence(jReference, matchingInterfaceRealization.get)
+            } else if (uInterface !== null) {
                 val uRealization = uClass.createInterfaceRealization(uInterface.name + uInterface.name, uInterface)
                 addImplementsCorrespondence(jReference, uRealization)
             } else {

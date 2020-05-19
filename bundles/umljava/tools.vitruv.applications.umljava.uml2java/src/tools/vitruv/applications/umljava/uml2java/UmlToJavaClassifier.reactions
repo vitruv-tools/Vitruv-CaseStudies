@@ -16,6 +16,7 @@ import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import static extension tools.vitruv.framework.util.bridges.JavaHelper.claimOneOrNone
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
 import "http://www.emftext.org/java" as java
@@ -247,13 +248,19 @@ routine createJavaClassImplementsReference(uml::InterfaceRealization uRealizatio
 		require absence of java::TypeReference corresponding to uRealization
 	}
 	action {
-		execute { // Should actually be split into execute and call
-            var typeReference = createTypeReference(uRealization.contract, Optional.^of(jInterface), null, userInteractor)
-            addJavaImport(jClass.containingCompilationUnit, typeReference)
-            jClass.implements += typeReference
-            addImplementsCorrespondence(uRealization, typeReference)
-        }
-    }
+		execute {
+			val matchingReference = jClass.implements.filter[target == jInterface].claimOneOrNone
+			if (matchingReference.isPresent) {
+				addImplementsCorrespondence(uRealization, matchingReference.get)
+			} else {
+				var typeReference = createTypeReference(uRealization.contract, Optional.^of(jInterface), null, userInteractor)
+				addJavaImport(jClass.containingCompilationUnit, typeReference)
+				jClass.implements += typeReference
+				addImplementsCorrespondence(uRealization, typeReference)
+			}
+			
+		}
+	}
 }
 
 routine addImplementsCorrespondence(uml::InterfaceRealization uRealization, java::TypeReference jReference) {

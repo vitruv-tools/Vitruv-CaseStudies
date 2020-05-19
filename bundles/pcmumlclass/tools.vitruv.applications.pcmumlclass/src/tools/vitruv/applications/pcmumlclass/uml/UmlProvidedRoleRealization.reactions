@@ -50,18 +50,16 @@ routine detectOrCreateCorrespondingProvidedRole(uml::InterfaceRealization umlRea
 	match {
 		val pcmComponent = retrieve pcm::InterfaceProvidingRequiringEntity corresponding to umlComponent tagged with TagLiterals.IPRE__IMPLEMENTATION
 		val pcmInterface = retrieve pcm::OperationInterface corresponding to umlRealization.contract tagged with TagLiterals.INTERFACE_TO_INTERFACE
-		val pcmProvided = retrieve optional pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
+		require absence of pcm::OperationProvidedRole corresponding to umlRealization tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
 	action {
 		call {
-			if (!pcmProvided.isPresent) {
-				val pcmProvidedCandidate = pcmComponent.providedRoles_InterfaceProvidingEntity
-					.filter(OperationProvidedRole).findFirst[it.providedInterface__OperationProvidedRole === pcmInterface]
-				if (pcmProvidedCandidate !== null) {
-					addCorrespondenceForExistingProvidedRole(umlRealization, pcmProvidedCandidate)
-				} else {
-					createCorrespondingProvidedRole(umlRealization, umlComponent)
-				}
+			val pcmProvidedCandidate = pcmComponent.providedRoles_InterfaceProvidingEntity
+				.filter(OperationProvidedRole).findFirst[it.providedInterface__OperationProvidedRole === pcmInterface]
+			if (pcmProvidedCandidate !== null) {
+				addCorrespondenceForExistingProvidedRole(umlRealization, pcmProvidedCandidate)
+			} else {
+				createCorrespondingProvidedRole(umlRealization, umlComponent)
 			}
 		}
 	}
