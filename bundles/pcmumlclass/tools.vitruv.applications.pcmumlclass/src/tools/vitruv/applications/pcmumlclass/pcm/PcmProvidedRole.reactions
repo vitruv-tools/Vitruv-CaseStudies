@@ -1,4 +1,3 @@
-import org.eclipse.uml2.uml.InterfaceRealization
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml 
@@ -31,19 +30,17 @@ routine insertCorrespondingProvidedRealization(pcm::OperationProvidedRole pcmPro
 routine detectOrCreateCorrespondingProvidedRealization(pcm::OperationProvidedRole pcmProvided, pcm::InterfaceProvidingRequiringEntity pcmIPRE) {
 	match {
 		val umlComponentImpl = retrieve uml::Class corresponding to pcmIPRE tagged with TagLiterals.IPRE__IMPLEMENTATION
-		val umlInterface = retrieve optional uml::Interface corresponding to pcmProvided.providedInterface__OperationProvidedRole tagged with TagLiterals.INTERFACE_TO_INTERFACE 
+		val umlInterface = retrieve uml::Interface corresponding to pcmProvided.providedInterface__OperationProvidedRole tagged with TagLiterals.INTERFACE_TO_INTERFACE 
 	    require absence of uml::InterfaceRealization corresponding to pcmProvided tagged with TagLiterals.PROVIDED_ROLE__INTERFACE_REALIZATION
 	}
 	action {
 		call {
-			var InterfaceRealization umlRealizationCandidate = null
-			if(umlInterface.isPresent) 
-				umlRealizationCandidate = umlComponentImpl.interfaceRealizations
-					.findFirst[it.name == pcmProvided.entityName && it.contract === umlInterface.get]
+			var umlRealizationCandidate = umlComponentImpl.interfaceRealizations.findFirst[it.name == pcmProvided.entityName && it.contract === umlInterface]
 			if (umlRealizationCandidate !== null) {
 				addCorrespondenceForExistingRealization(pcmProvided, umlRealizationCandidate)
+			} else {
+				createCorrespondingProvidedRealization(pcmProvided, pcmIPRE)
 			}
-			createCorrespondingProvidedRealization(pcmProvided, pcmIPRE)
 		}
 	}
 }

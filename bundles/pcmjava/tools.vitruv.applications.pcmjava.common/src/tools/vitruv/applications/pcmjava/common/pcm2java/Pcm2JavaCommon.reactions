@@ -20,9 +20,6 @@ import org.emftext.language.java.references.IdentifierReference
 import org.emftext.language.java.references.SelfReference
 import org.emftext.language.java.statements.ExpressionStatement
 import org.emftext.language.java.types.PrimitiveType
-import org.emftext.language.java.types.TypeReference
-import org.emftext.language.java.containers.ContainersPackage
-import org.emftext.language.java.classifiers.Interface
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType

@@ -273,11 +273,11 @@ routine addUmlClassImplement(java::Class jClass, java::TypeReference jReference,
     }
     action {
         execute {
-            val matchingInterfaceRealization = uClass.interfaceRealizations.filter[name == uInterface.name + uInterface.name].filter[contract == uInterface].claimOneOrNone
-            if(matchingInterfaceRealization.present) {
+            val matchingInterfaceRealization = uClass.interfaceRealizations.filter[contract == uInterface].claimOneOrNone
+            if(matchingInterfaceRealization.isPresent) {
                  addImplementsCorrespondence(jReference, matchingInterfaceRealization.get)
             } else if (uInterface !== null) {
-                val uRealization = uClass.createInterfaceRealization(uInterface.name + uInterface.name, uInterface)
+                val uRealization = uClass.createInterfaceRealization(uInterface.name, uInterface)
                 addImplementsCorrespondence(jReference, uRealization)
             } else {
                 logger.warn("Could not add " + jInterface.name + " as implemented interface for " + uClass
