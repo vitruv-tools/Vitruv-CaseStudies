@@ -12,6 +12,8 @@ interface VitruvApplicationTestAdapter {
 
 	def Resource getResourceAt(String modelPathInProject)
 
+	def Resource getTestResource(String resourcePath)
+
 	def void createAndSynchronizeModel(String modelPathInProject, EObject rootElement)
 
 	def void saveAndSynchronizeChanges(Resource resource)

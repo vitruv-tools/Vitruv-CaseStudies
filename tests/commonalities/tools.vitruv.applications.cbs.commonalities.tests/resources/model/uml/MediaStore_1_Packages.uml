@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" name="model">
+  <packagedElement xmi:type="uml:Package" name="defaultRepository">
+    <packagedElement xmi:type="uml:Package" name="contracts"/>
+    <packagedElement xmi:type="uml:Package" name="datatypes"/>
+    <packagedElement xmi:type="uml:Package" name="userDBAdapter"/>
+    <packagedElement xmi:type="uml:Package" name="audioWatermarking"/>
+    <packagedElement xmi:type="uml:Package" name="reencoding"/>
+    <packagedElement xmi:type="uml:Package" name="mediaManagement"/>
+    <packagedElement xmi:type="uml:Package" name="facade"/>
+    <packagedElement xmi:type="uml:Package" name="mediaAccess"/>
+    <packagedElement xmi:type="uml:Package" name="packaging"/>
+    <packagedElement xmi:type="uml:Package" name="dB"/>
+    <packagedElement xmi:type="uml:Package" name="fileStorage"/>
+    <packagedElement xmi:type="uml:Package" name="tagWatermarking"/>
+    <packagedElement xmi:type="uml:Package" name="cache"/>
+    <packagedElement xmi:type="uml:Package" name="userManagement"/>
+    <packagedElement xmi:type="uml:Package" name="downloadLoadBalancer"/>
+    <packagedElement xmi:type="uml:Package" name="parallelWatermarking"/>
+  </packagedElement>
+</uml:Model>
