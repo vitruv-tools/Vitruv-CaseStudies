@@ -1,0 +1,30 @@
+concept ComponentBasedDesign
+
+commonality Repository {
+
+	with PCM:(Repository in Resource)
+	whereat {
+		Resource.path = "model/",
+		Resource.fileExtension = "repository"
+	}
+
+	with ObjectOrientedDesign:(
+		Package called "RepositoryPackage",
+		Package called "ContractsPackage",
+		Package called "DatatypesPackage"
+	)
+	whereat {
+		ContractsPackage in RepositoryPackage,
+		ContractsPackage.name = "contracts",
+
+		DatatypesPackage in RepositoryPackage,
+		DatatypesPackage.name = "datatypes"
+	}
+
+	has name {
+		= PCM:Repository.entityName
+		-> PCM:Resource.name
+
+		= ObjectOrientedDesign:RepositoryPackage.name
+	}
+}

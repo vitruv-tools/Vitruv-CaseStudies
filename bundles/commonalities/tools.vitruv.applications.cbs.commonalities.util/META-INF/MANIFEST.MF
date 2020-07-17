@@ -34,4 +34,5 @@ Require-Bundle: com.google.guava,
  org.emftext.language.java,
  org.palladiosimulator.pcm,
  org.palladiosimulator.pcm.resources
-Export-Package: tools.vitruv.applications.cbs.commonalities.util
+Export-Package: tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute,
+ tools.vitruv.applications.cbs.commonalities.util.java.operators.reference
