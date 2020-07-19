@@ -1,6 +1,7 @@
 package tools.vitruv.applications.cbs.commonalities.tests.java
 
 import org.eclipse.emf.ecore.EObject
+import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
 import tools.vitruv.applications.cbs.commonalities.tests.DomainModelTester
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
@@ -19,6 +20,9 @@ class JavaModelTester extends DomainModelTester {
 			Package: {
 				rootObject.createAndSynchronizeJavaPackage
 			}
+			CompilationUnit: {
+				rootObject.createAndSynchronizeJavaCompilationUnit
+			}
 			default: {
 				throw new IllegalStateException("Unhandled Java root object: " + rootObject)
 			}
@@ -29,6 +33,9 @@ class JavaModelTester extends DomainModelTester {
 		switch (rootObject) {
 			Package: {
 				rootObject.assertJavaPackageExists
+			}
+			CompilationUnit: {
+				rootObject.assertJavaCompilationUnitExists
 			}
 			default: {
 				throw new IllegalStateException("Unhandled Java root object: " + rootObject)

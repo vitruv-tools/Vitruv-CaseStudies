@@ -26,9 +26,13 @@ class CBSExecutionTestCompiler extends ExecutionTestCompiler {
 	static val COMMONALITY_FILES = #[
 		// ObjectOrientedDesign:
 		ooCommonalityFile('Package'),
+		ooCommonalityFile('Interface'),
+		ooCommonalityFile('Class'),
 
 		// ComponentBasedDesign:
-		cbsCommonalityFile('Repository')
+		cbsCommonalityFile('Repository'),
+		cbsCommonalityFile('Component'),
+		cbsCommonalityFile('ComponentInterface')
 	]
 
 	static val DOMAIN_DEPENDENCIES = #[
