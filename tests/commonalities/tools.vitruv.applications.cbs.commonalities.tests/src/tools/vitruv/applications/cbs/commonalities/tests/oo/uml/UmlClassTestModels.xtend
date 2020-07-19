@@ -61,9 +61,9 @@ class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.
 
 	override emptyClassCreation() {
 		return newModel [
-			val umlModel = newUmlModel.insertPackageWithClass(newUmlPackage1, newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
 				withDefaultVisibility
-			])
+			]))
 			return #[
 				umlModel
 			]
@@ -74,9 +74,9 @@ class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.
 
 	override privateClassCreation() {
 		return newModel [
-			val umlModel = newUmlModel.insertPackageWithClass(newUmlPackage1, newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
 				visibility = VisibilityKind.PRIVATE_LITERAL
-			])
+			]))
 			return #[
 				umlModel
 			]
@@ -85,9 +85,9 @@ class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.
 
 	override publicClassCreation() {
 		return newModel [
-			val umlModel = newUmlModel.insertPackageWithClass(newUmlPackage1, newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
 				visibility = VisibilityKind.PUBLIC_LITERAL
-			])
+			]))
 			return #[
 				umlModel
 			]
@@ -96,9 +96,9 @@ class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.
 
 	override protectedClassCreation() {
 		return newModel [
-			val umlModel = newUmlModel.insertPackageWithClass(newUmlPackage1, newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
 				visibility = VisibilityKind.PROTECTED_LITERAL
-			])
+			]))
 			return #[
 				umlModel
 			]
@@ -107,9 +107,9 @@ class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.
 
 	override packagePrivateClassCreation() {
 		return newModel [
-			val umlModel = newUmlModel.insertPackageWithClass(newUmlPackage1, newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
 				visibility = VisibilityKind.PACKAGE_LITERAL
-			])
+			]))
 			return #[
 				umlModel
 			]
@@ -118,10 +118,10 @@ class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.
 
 	override finalClassCreation() {
 		return newModel [
-			val umlModel = newUmlModel.insertPackageWithClass(newUmlPackage1, newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
 				withDefaultVisibility
 				isFinalSpecialization = true
-			])
+			]))
 			return #[
 				umlModel
 			]
@@ -130,10 +130,10 @@ class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.
 
 	override abstractClassCreation() {
 		return newModel [
-			val umlModel = newUmlModel.insertPackageWithClass(newUmlPackage1, newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
 				withDefaultVisibility
 				isAbstract = true
-			])
+			]))
 			return #[
 				umlModel
 			]
@@ -142,11 +142,11 @@ class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.
 
 	override classWithMultipleModifiersCreation() {
 		return newModel [
-			val umlModel = newUmlModel.insertPackageWithClass(newUmlPackage1, newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
 				visibility = VisibilityKind.PUBLIC_LITERAL
 				isAbstract = true
 				isFinalSpecialization = true
-			])
+			]))
 			return #[
 				umlModel
 			]
