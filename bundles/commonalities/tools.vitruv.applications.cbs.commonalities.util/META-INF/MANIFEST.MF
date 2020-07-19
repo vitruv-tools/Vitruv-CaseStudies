@@ -39,4 +39,8 @@ Export-Package: tools.vitruv.applications.cbs.commonalities.util.common,
  tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute,
  tools.vitruv.applications.cbs.commonalities.util.java.operators.reference,
  tools.vitruv.applications.cbs.commonalities.util.oo,
+ tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute,
+ tools.vitruv.applications.cbs.commonalities.util.pcm,
+ tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute,
+ tools.vitruv.applications.cbs.commonalities.util.uml,
  tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute

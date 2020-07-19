@@ -40,4 +40,10 @@ commonality Repository {
 
 		= ObjectOrientedDesign:ContractsPackage.interfaces
 	}
+
+	has compositeDataTypes referencing ComponentBasedDesign:CompositeDataType {
+		= PCM:Repository.dataTypes__Repository
+
+		= ObjectOrientedDesign:DatatypesPackage.classes
+	}
 }

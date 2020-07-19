@@ -64,6 +64,12 @@ commonality Class {
 	// Note: No 'static' attribute, since UML has no equivalent to represent this.
 
 	// TODO methods
-	// TODO properties
+	has properties referencing ObjectOrientedDesign:Property {
+		= UML:Class.ownedAttribute
+
+		// Note: Any elements that are not of type Java:Field are implicitly ignored.
+		= Java:Class.members
+	}
+
 	// TODO super types
 }
