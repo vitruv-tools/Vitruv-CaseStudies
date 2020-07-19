@@ -1,4 +1,6 @@
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaAbstractModifierOperator
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaCompilationUnitNameOperator
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaFinalModifierOperator
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaVisibilityOperator
 
 import tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute.UmlVisibilityOperator
@@ -47,7 +49,20 @@ commonality Class {
 		= javaVisibility(Java:Class.annotationsAndModifiers, Java:Class)
 	}
 
-	// TODO final, abstract, static modifiers
+	has final {
+		= UML:Class.isFinalSpecialization
+
+		= javaFinalModifier(Java:Class.annotationsAndModifiers, Java:Class)
+	}
+
+	has abstract {
+		= UML:Class.isAbstract
+
+		= javaAbstractModifier(Java:Class.annotationsAndModifiers, Java:Class)
+	}
+
+	// Note: No 'static' attribute, since UML has no equivalent to represent this.
+
 	// TODO methods
 	// TODO properties
 	// TODO super types
