@@ -63,7 +63,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 	override emptyClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
 				withDefaultVisibility
 			])
 			return #[
@@ -78,7 +78,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 	override privateClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPrivate
 			])
 			return #[
@@ -91,7 +91,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 	override publicClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 			])
 			return #[
@@ -104,7 +104,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 	override protectedClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createProtected
 			])
 			return #[
@@ -118,7 +118,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 		return newModel [
 			val javaPackage = newJavaPackage1
 			// The created class has no modifiers and is therefore package-private.
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaClass1)
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1)
 			return #[
 				javaPackage,
 				javaCompilationUnit
@@ -129,7 +129,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 	override finalClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
 				withDefaultVisibility
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createFinal
 			])
@@ -143,7 +143,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 	override abstractClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
 				withDefaultVisibility
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createAbstract
 			])
@@ -157,7 +157,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 	override classWithMultipleModifiersCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createFinal
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createAbstract
@@ -176,8 +176,8 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 			val javaPackage = newJavaPackage1
 			val javaClass1 = newJavaClass1.withDefaultVisibility
 			val javaClass2 = newJavaClass2.withDefaultVisibility
-			val javaCompilationUnit1 = javaPackage.createCompilationUnitWithClassifier(javaClass1)
-			val javaCompilationUnit2 = javaPackage.createCompilationUnitWithClassifier(javaClass2)
+			val javaCompilationUnit1 = javaPackage.newCompilationUnit(javaClass1)
+			val javaCompilationUnit2 = javaPackage.newCompilationUnit(javaClass2)
 			return #[
 				javaPackage,
 				javaCompilationUnit1,
@@ -192,8 +192,8 @@ class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTes
 			val javaPackage2 = newJavaPackage2
 			val javaClass1 = newJavaClass1.withDefaultVisibility
 			val javaClass2 = newJavaClass2.withDefaultVisibility
-			val javaCompilationUnit1 = javaPackage1.createCompilationUnitWithClassifier(javaClass1)
-			val javaCompilationUnit2 = javaPackage2.createCompilationUnitWithClassifier(javaClass2)
+			val javaCompilationUnit1 = javaPackage1.newCompilationUnit(javaClass1)
+			val javaCompilationUnit2 = javaPackage2.newCompilationUnit(javaClass2)
 			return #[
 				javaPackage1,
 				javaPackage2,

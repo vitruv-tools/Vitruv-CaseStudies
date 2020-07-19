@@ -43,7 +43,7 @@ class JavaInterfaceTestModels extends JavaTestModelsBase implements AbstractInte
 	override emptyInterfaceCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.createCompilationUnitWithClassifier(newJavaInterface1)
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaInterface1)
 			return #[
 				javaPackage,
 				javaCompilationUnit
@@ -56,8 +56,8 @@ class JavaInterfaceTestModels extends JavaTestModelsBase implements AbstractInte
 	override multipleInterfacesInSamePackageCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit1 = javaPackage.createCompilationUnitWithClassifier(newJavaInterface1)
-			val javaCompilationUnit2 = javaPackage.createCompilationUnitWithClassifier(newJavaInterface2)
+			val javaCompilationUnit1 = javaPackage.newCompilationUnit(newJavaInterface1)
+			val javaCompilationUnit2 = javaPackage.newCompilationUnit(newJavaInterface2)
 			return #[
 				javaPackage,
 				javaCompilationUnit1,
@@ -70,8 +70,8 @@ class JavaInterfaceTestModels extends JavaTestModelsBase implements AbstractInte
 		return newModel [
 			val javaPackage1 = newJavaPackage1
 			val javaPackage2 = newJavaPackage2
-			val javaCompilationUnit1 = javaPackage1.createCompilationUnitWithClassifier(newJavaInterface1)
-			val javaCompilationUnit2 = javaPackage2.createCompilationUnitWithClassifier(newJavaInterface2)
+			val javaCompilationUnit1 = javaPackage1.newCompilationUnit(newJavaInterface1)
+			val javaCompilationUnit2 = javaPackage2.newCompilationUnit(newJavaInterface2)
 			return #[
 				javaPackage1,
 				javaPackage2,

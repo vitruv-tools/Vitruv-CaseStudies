@@ -15,7 +15,7 @@ class JavaModelHelper {
 		return javaPackage.namespaces + Arrays.asList(javaPackage.name) // TODO duplication with JavaPersistenceHelper
 	}
 
-	static def createJavaPackage(Package parentPackage, String packageName) {
+	static def newJavaPackage(Package parentPackage, String packageName) {
 		return ContainersFactory.eINSTANCE.createPackage => [
 			if (parentPackage !== null) {
 				namespaces += parentPackage.fullPackageNamespaces
@@ -24,7 +24,7 @@ class JavaModelHelper {
 		]
 	}
 
-	static def createCompilationUnit(Package parentPackage, String fileName) {
+	static def newCompilationUnit(Package parentPackage, String fileName) {
 		return ContainersFactory.eINSTANCE.createCompilationUnit => [
 			if (parentPackage !== null) {
 				namespaces += parentPackage.fullPackageNamespaces
@@ -33,8 +33,8 @@ class JavaModelHelper {
 		]
 	}
 
-	static def <C extends ConcreteClassifier> createCompilationUnitWithClassifier(Package parentPackage, C classifier) {
-		return parentPackage.createCompilationUnit(classifier.name) => [
+	static def <C extends ConcreteClassifier> newCompilationUnit(Package parentPackage, C classifier) {
+		return parentPackage.newCompilationUnit(classifier.name) => [
 			classifiers += classifier
 		]
 	}

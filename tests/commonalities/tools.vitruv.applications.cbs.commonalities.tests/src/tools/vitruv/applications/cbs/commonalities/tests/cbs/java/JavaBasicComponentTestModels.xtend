@@ -19,14 +19,14 @@ class JavaBasicComponentTestModels extends JavaTestModelsBase implements Abstrac
 			val javaRepositoryModel = new JavaRepositoryModel()
 			val repositoryPackage = javaRepositoryModel.repositoryPackage
 
-			val componentPackage = repositoryPackage.createJavaPackage(COMPONENT_NAME.toFirstLower)
+			val componentPackage = repositoryPackage.newJavaPackage(COMPONENT_NAME.toFirstLower)
 
 			val componentClassName = COMPONENT_NAME + 'Impl'
 			val componentClass = ClassifiersFactory.eINSTANCE.createClass => [
 				name = componentClassName
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 			]
-			val compilationUnit = componentPackage.createCompilationUnitWithClassifier(componentClass)
+			val compilationUnit = componentPackage.newCompilationUnit(componentClass)
 
 			return (javaRepositoryModel.rootObjects + #[
 				componentPackage,

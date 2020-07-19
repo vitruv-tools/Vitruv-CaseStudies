@@ -21,7 +21,7 @@ class JavaComponentInterfaceTestModels extends JavaTestModelsBase implements Abs
 			val javaInterface = ClassifiersFactory.eINSTANCE.createInterface => [
 				name = INTERFACE_NAME
 			]
-			val compilationUnit = contractsPackage.createCompilationUnitWithClassifier(javaInterface)
+			val compilationUnit = contractsPackage.newCompilationUnit(javaInterface)
 
 			return (javaRepositoryModel.rootObjects + #[
 				compilationUnit

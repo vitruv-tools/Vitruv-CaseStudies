@@ -19,9 +19,9 @@ class JavaRepositoryModel {
 
 	new() {
 		// Construct Java model for empty PCM repository:
-		repositoryPackage = createJavaPackage(null, PCM.REPOSITORY_NAME)
-		datatypesPackage = repositoryPackage.createJavaPackage(PCM.DATATYPES_PACKAGE_NAME)
-		contractsPackage = repositoryPackage.createJavaPackage(PCM.CONTRACTS_PACKAGE_NAME)
+		repositoryPackage = newJavaPackage(null, PCM.REPOSITORY_NAME)
+		datatypesPackage = repositoryPackage.newJavaPackage(PCM.DATATYPES_PACKAGE_NAME)
+		contractsPackage = repositoryPackage.newJavaPackage(PCM.CONTRACTS_PACKAGE_NAME)
 	}
 
 	public def List<? extends EObject> getRootObjects() {
