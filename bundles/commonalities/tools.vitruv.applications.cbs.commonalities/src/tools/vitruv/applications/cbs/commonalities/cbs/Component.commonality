@@ -1,0 +1,28 @@
+import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.FirstUpperOperator
+import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.PrefixOperator
+
+concept ComponentBasedDesign
+
+// Externally contained by ComponentBasedDesign:Repository.components
+referenced commonality Component {
+
+	// Externally contained by PCM:Repository.components__Repository
+	with PCM:BasicComponent
+
+	// Contained by ObjectOrientedDesign:RepositoryPackage.subPackages
+	with ObjectOrientedDesign:(
+		Package called "ComponentPackage",
+		Class called "ComponentClass"
+	)
+	whereat {
+		ComponentClass in ComponentPackage.classes,
+		ComponentClass.visibility = "PUBLIC"
+	}
+
+	has name {
+		= PCM:BasicComponent.entityName
+
+		= firstUpper(ObjectOrientedDesign:ComponentPackage.name)
+		= prefix(ObjectOrientedDesign:ComponentClass.name, "Impl")
+	}
+}

@@ -27,4 +27,17 @@ commonality Repository {
 
 		= ObjectOrientedDesign:RepositoryPackage.name
 	}
+
+	has components referencing ComponentBasedDesign:Component {
+		= PCM:Repository.components__Repository
+
+		// TODO ignore contracts and datatypes packages
+		= ObjectOrientedDesign:RepositoryPackage.subPackages
+	}
+
+	has componentInterfaces referencing ComponentBasedDesign:ComponentInterface {
+		= PCM:Repository.interfaces__Repository
+
+		= ObjectOrientedDesign:ContractsPackage.interfaces
+	}
 }
