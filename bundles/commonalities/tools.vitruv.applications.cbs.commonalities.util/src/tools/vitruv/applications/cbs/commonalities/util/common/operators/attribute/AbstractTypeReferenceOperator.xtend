@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute
 
-import java.util.Optional
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
@@ -128,6 +127,30 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	// Domain <-> Intermediate mapping:
 
 	/**
+	 * Some domains have a special representation for the absence of a type
+	 * reference (eg. 'void' in Java).
+	 * <p>
+	 * This method returns <code>true</code> if the given domain type reference
+	 * represents such an absence of a referenced type.
+	 * <p>
+	 * By default this simply checks if the given domain type reference is
+	 * <code>null</code>.
+	 */
+	protected def boolean isDomainVoidReference(R domainTypeReference) {
+		return (domainTypeReference === null)
+	}
+
+	/**
+	 * Returns a domain specific representation for the absence of a type
+	 * reference (eg. 'void' in Java).
+	 * <p>
+	 * By default this simply returns <code>null</code>.
+	 */
+	protected def R getDomainVoidReference() {
+		return null;
+	}
+
+	/**
 	 * Gets the referenced domain type.
 	 */
 	protected abstract def T getReferencedDomainType(R domainTypeReference)
@@ -145,19 +168,16 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	protected abstract def String asString(T domainType)
 
 	/**
-	 * Checks if the given domain type is a primitive and then returns an
-	 * {@link Optional} which contains the corresponding
-	 * {@link CommonPrimitiveType common primitive type}. Since some domains
-	 * have a special representation for 'no type', this Optional can also
-	 * return an empty Optional. Otherwise this returns <code>null</code>.
+	 * Checks if the given domain type is a primitive and then returns the
+	 * corresponding {@link CommonPrimitiveType common primitive type}.
+	 * <p>
+	 * Otherwise this returns <code>null</code>.
 	 */
-	protected abstract def Optional<CommonPrimitiveType> toCommonPrimitiveType(T domainType)
+	protected abstract def CommonPrimitiveType toCommonPrimitiveType(T domainType)
 
 	/**
 	 * Creates a reference to the domain type for the specified common
 	 * primitive type.
-	 * <p>
-	 * Note: The given {@link CommonPrimitiveType} may also be <code>null</code>.
 	 */
 	protected abstract def R toPrimitiveDomainTypeReference(CommonPrimitiveType commonPrimitiveType)
 
@@ -191,6 +211,10 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	// Operator:
 
 	private def String toIntermediateTypeReference(R domainTypeReference) {
+		if (domainTypeReference.isDomainVoidReference) {
+			return null; // Represented as null inside the intermediate model
+		}
+
 		// Get the referenced domain type and handle null:
 		val referencedDomainType = domainTypeReference?.referencedDomainType
 		if (referencedDomainType === null) return null
@@ -198,11 +222,7 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 		// Check if the domain type represents a common primitive type:
 		val commonPrimitiveType = referencedDomainType.toCommonPrimitiveType
 		if (commonPrimitiveType !== null) {
-			if (commonPrimitiveType.empty) {
-				return null // Stored as null inside the intermediate model
-			} else {
-				return commonPrimitiveType.get.name
-			}
+			return commonPrimitiveType.name
 		}
 
 		// Handle non-primitive types:
@@ -218,8 +238,10 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	// intermediateTypeReference can be null
 	protected def R toDomainTypeReference(String intermediateTypeReference) {
 		val referencedIntermediateType = intermediateTypeReference.referencedIntermediateType
-		if (referencedIntermediateType === null || referencedIntermediateType instanceof CommonPrimitiveType) {
-			return (referencedIntermediateType as CommonPrimitiveType).toPrimitiveDomainTypeReference
+		if (referencedIntermediateType === null) {
+			return domainVoidReference
+		} else if (referencedIntermediateType instanceof CommonPrimitiveType) {
+			return referencedIntermediateType.toPrimitiveDomainTypeReference
 		} else if (referencedIntermediateType instanceof Intermediate) {
 			val domainType = referencedIntermediateType.correspondingDomainType
 			return domainType.domainTypeReference

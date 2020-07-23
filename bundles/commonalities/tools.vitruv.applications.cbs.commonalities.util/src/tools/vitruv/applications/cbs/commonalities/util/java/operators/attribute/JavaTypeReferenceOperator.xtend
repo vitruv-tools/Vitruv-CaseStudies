@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute
 
-import java.util.Optional
 import org.emftext.language.java.JavaClasspath
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ConcreteClassifier
@@ -44,6 +43,25 @@ class JavaTypeReferenceOperator extends AbstractTypeReferenceOperator<TypeRefere
 		super(executionState, 'Java', targetConceptDomainName, Type)
 	}
 
+	override protected isDomainVoidReference(TypeReference domainTypeReference) {
+		if (domainTypeReference === null) return true
+		if (domainTypeReference instanceof Void) return true
+
+		// Check for wrapper Void type:
+		val domainType = domainTypeReference.referencedDomainType
+		if (domainType instanceof Class) {
+			if (domainType.unWrapPrimitiveType instanceof Void) {
+				return true
+			}
+		}
+
+		return false
+	}
+
+	override protected TypeReference getDomainVoidReference() {
+		return TypesFactory.eINSTANCE.createVoid
+	}
+
 	override protected getReferencedDomainType(TypeReference domainTypeReference) {
 		return domainTypeReference.target
 	}
@@ -72,6 +90,7 @@ class JavaTypeReferenceOperator extends AbstractTypeReferenceOperator<TypeRefere
 
 	private def toCommonPrimitiveType(PrimitiveType javaPrimitiveType) {
 		assertTrue(javaPrimitiveType !== null)
+		assertTrue(!(javaPrimitiveType instanceof Void)) // Void is handled separately
 		switch (javaPrimitiveType) {
 			Boolean:
 				return CommonPrimitiveType.BOOLEAN
@@ -79,8 +98,6 @@ class JavaTypeReferenceOperator extends AbstractTypeReferenceOperator<TypeRefere
 				return CommonPrimitiveType.INTEGER
 			Double:
 				return CommonPrimitiveType.DOUBLE
-			Void:
-				return null
 			default: {
 				throw new IllegalArgumentException("Unsupported Java primitive type: " + javaPrimitiveType.asString)
 			}
@@ -89,27 +106,26 @@ class JavaTypeReferenceOperator extends AbstractTypeReferenceOperator<TypeRefere
 
 	override protected toCommonPrimitiveType(Type domainType) {
 		assertTrue(domainType !== null)
+		assertTrue(!(domainType instanceof Void)) // Void is handled separately
 		if (domainType instanceof PrimitiveType) {
-			return Optional.ofNullable(domainType.toCommonPrimitiveType)
+			return domainType.toCommonPrimitiveType
 		} else if (domainType instanceof Class) {
 			// Check for wrapped primitive types:
 			val javaPrimitiveType = domainType.unWrapPrimitiveType
 			if (javaPrimitiveType !== null) {
-				return Optional.ofNullable(javaPrimitiveType.toCommonPrimitiveType)
+				return javaPrimitiveType.toCommonPrimitiveType
 			}
 
 			// Check for String type:
 			if (domainType.qualifiedName == String.name) {
-				return Optional.of(CommonPrimitiveType.STRING)
+				return CommonPrimitiveType.STRING
 			}
 		}
 		return null
 	}
 
 	override protected toPrimitiveDomainTypeReference(CommonPrimitiveType commonPrimitiveType) {
-		if (commonPrimitiveType === null) {
-			return TypesFactory.eINSTANCE.createVoid
-		}
+		assertTrue(commonPrimitiveType !== null)
 		switch (commonPrimitiveType) {
 			case BOOLEAN:
 				return TypesFactory.eINSTANCE.createBoolean

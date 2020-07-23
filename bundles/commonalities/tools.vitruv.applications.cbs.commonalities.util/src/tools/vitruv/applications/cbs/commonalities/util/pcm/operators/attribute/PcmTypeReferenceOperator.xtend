@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute
 
-import java.util.Optional
 import org.palladiosimulator.pcm.core.entity.NamedElement
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
@@ -72,7 +71,7 @@ class PcmTypeReferenceOperator extends AbstractTypeReferenceOperator<DataType, D
 	override protected toCommonPrimitiveType(DataType domainType) {
 		assertTrue(domainType !== null)
 		if (domainType instanceof PrimitiveDataType) {
-			return Optional.of(domainType.toCommonPrimitiveType)
+			return domainType.toCommonPrimitiveType
 		}
 		return null
 	}

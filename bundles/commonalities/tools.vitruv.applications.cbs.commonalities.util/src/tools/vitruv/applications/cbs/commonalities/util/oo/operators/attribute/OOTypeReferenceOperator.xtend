@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute
 
-import java.util.Optional
 import tools.vitruv.applications.cbs.commonalities.util.common.CommonPrimitiveType
 import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.AbstractTypeReferenceOperator
 import tools.vitruv.extensions.dslruntime.commonalities.intermediatemodelbase.Intermediate
@@ -31,6 +30,7 @@ class OOTypeReferenceOperator extends AbstractTypeReferenceOperator<String, Obje
 	}
 
 	override protected getReferencedDomainType(String domainTypeReference) {
+		assertTrue(domainTypeReference !== null)
 		if (domainTypeReference.isIntermediateReference) {
 			// Intermediate reference:
 			val intermediateModelResource = getIntermediateResource(participationDomainName)
@@ -38,23 +38,23 @@ class OOTypeReferenceOperator extends AbstractTypeReferenceOperator<String, Obje
 			return referencedIntermediateType
 		} else {
 			// Primitive:
-			return domainTypeReference
+			return CommonPrimitiveType.byName(domainTypeReference) // returns null for empty String
 		}
 	}
 
 	override protected getDomainTypeReference(Object domainType) {
+		assertTrue(domainType !== null)
 		if (domainType instanceof Intermediate) {
 			return domainType.toIntermediateReference
+		} else if (domainType instanceof CommonPrimitiveType) {
+			return domainType.name
 		} else {
-			assertTrue(domainType instanceof String)
-			return domainType as String
+			throw new IllegalStateException("Unexpected intermediate type: " + domainType)
 		}
 	}
 
 	override protected asString(Object domainType) {
-		if (domainType instanceof String) {
-			return domainType
-		} else if (domainType instanceof Intermediate) {
+		if (domainType instanceof Intermediate) {
 			// Check if we find a 'name' feature:
 			val nameFeature = domainType.eClass.EStructuralFeatures.findFirst[name == 'name']
 			if (nameFeature !== null && nameFeature.EType.instanceClass == String) {
@@ -63,14 +63,17 @@ class OOTypeReferenceOperator extends AbstractTypeReferenceOperator<String, Obje
 					return name
 				}
 			}
+		} else if (domainType instanceof CommonPrimitiveType) {
+			return domainType.name
+		} else {
+			return domainType.toString
 		}
-		return domainType.toString
 	}
 
 	override protected toCommonPrimitiveType(Object domainType) {
 		assertTrue(domainType !== null)
-		if (domainType instanceof String) {
-			return Optional.ofNullable(CommonPrimitiveType.byName(domainType))
+		if (domainType instanceof CommonPrimitiveType) {
+			return domainType
 		}
 		return null
 	}

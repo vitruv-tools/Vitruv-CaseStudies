@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute
 
-import java.util.Optional
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
 import tools.vitruv.applications.cbs.commonalities.util.common.CommonPrimitiveType
@@ -65,7 +64,7 @@ class UmlTypeReferenceOperator extends AbstractTypeReferenceOperator<Type, Type>
 	override protected toCommonPrimitiveType(Type domainType) {
 		assertTrue(domainType !== null)
 		if (domainType instanceof PrimitiveType) {
-			return Optional.of(domainType.toCommonPrimitiveType)
+			return domainType.toCommonPrimitiveType
 		}
 		return null
 	}
