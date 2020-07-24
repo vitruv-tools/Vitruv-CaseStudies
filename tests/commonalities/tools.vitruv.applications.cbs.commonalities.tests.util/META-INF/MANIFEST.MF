@@ -29,6 +29,7 @@ Require-Bundle: org.junit,
  org.emftext.language.java.resource.java,
  org.eclipse.uml2.uml
 Export-Package: tools.vitruv.applications.cbs.commonalities.tests.util,
+ tools.vitruv.applications.cbs.commonalities.tests.util.common,
  tools.vitruv.applications.cbs.commonalities.tests.util.java,
  tools.vitruv.applications.cbs.commonalities.tests.util.pcm,
  tools.vitruv.applications.cbs.commonalities.tests.util.uml

@@ -1,4 +1,4 @@
-package tools.vitruv.applications.cbs.commonalities.tests.util
+package tools.vitruv.applications.cbs.commonalities.tests.util.common
 
 import edu.kit.ipd.sdq.activextendannotations.Utility
 import java.util.Collections

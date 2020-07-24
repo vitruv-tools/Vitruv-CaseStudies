@@ -6,7 +6,7 @@ import org.emftext.language.java.containers.CompilationUnit
 import org.emftext.language.java.containers.Package
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 
-import static extension tools.vitruv.applications.cbs.commonalities.tests.util.FilePathUtil.*
+import static extension tools.vitruv.applications.cbs.commonalities.tests.util.common.FilePathUtil.*
 
 // TODO Move this into JavaPersistenceHelper? However, we also need to move
 // FilePathUtil to some common place first.

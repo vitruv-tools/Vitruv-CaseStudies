@@ -4,7 +4,7 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.domains.pcm.PcmNamespace
 
-import static extension tools.vitruv.applications.cbs.commonalities.tests.util.FilePathUtil.*
+import static extension tools.vitruv.applications.cbs.commonalities.tests.util.common.FilePathUtil.*
 
 @Utility
 class PcmFilePathHelper {

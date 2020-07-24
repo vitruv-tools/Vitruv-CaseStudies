@@ -3,7 +3,7 @@ package tools.vitruv.applications.cbs.commonalities.tests.util.uml
 import org.eclipse.uml2.uml.Model
 import tools.vitruv.domains.uml.UmlDomain
 
-import static extension tools.vitruv.applications.cbs.commonalities.tests.util.FilePathUtil.*
+import static extension tools.vitruv.applications.cbs.commonalities.tests.util.common.FilePathUtil.*
 
 class UmlFilePathHelper {
 
