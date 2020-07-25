@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute
 
-import org.emftext.language.java.JavaClasspath
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.emftext.language.java.commons.NamedElement
@@ -135,12 +134,7 @@ class JavaTypeReferenceOperator extends AbstractTypeReferenceOperator<TypeRefere
 				return TypesFactory.eINSTANCE.createDouble
 			case STRING: {
 				// TODO If possible, use a regular ClassifierReference + import instead?
-				// Note: We intentionally don't resolve this proxy into a temporary or local ResourceSet,
-				// because the UuidGeneratorAndResolver would then complain about not being able to find the object.
-				// One alternative could be to resolve it into the test's ResourceSet. But using the proxy works fine as well.
-				val javaType = JavaClasspath.get.getClassifier(String.name) as ConcreteClassifier
-				return JavaModificationUtil.createNamespaceClassifierReference(javaType)
-				// return JavaModificationUtil.createNamespaceClassifierReferenceForName("java.lang", "String")
+				return JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
 			}
 			default: {
 				throw new IllegalArgumentException("Unsupported common primitive type: " + commonPrimitiveType.name)

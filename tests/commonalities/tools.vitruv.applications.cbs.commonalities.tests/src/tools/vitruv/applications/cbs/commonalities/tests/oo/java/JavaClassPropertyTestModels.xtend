@@ -198,7 +198,7 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 				members += newJavaField => [
 					withDefaultVisibility
 					name = STRING_PROPERTY_NAME
-					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name, false)
+					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
 				]
 			])
 			return #[

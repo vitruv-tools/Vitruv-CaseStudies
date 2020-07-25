@@ -113,7 +113,7 @@ class JavaCompositeDataTypeTestModels extends JavaTestModelsBase implements Comp
 			val datatypeClass = newJavaCompositeDataTypeClass => [
 				members += newJavaElementField => [
 					name = STRING_ELEMENT_NAME
-					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name, true)
+					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
 				]
 			]
 			val compilationUnit = datatypesPackage.newCompilationUnit(datatypeClass)
@@ -144,7 +144,7 @@ class JavaCompositeDataTypeTestModels extends JavaTestModelsBase implements Comp
 				]
 				members += newJavaElementField => [
 					name = STRING_ELEMENT_NAME
-					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name, true)
+					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
 				]
 			]
 			val compilationUnit = datatypesPackage.newCompilationUnit(datatypeClass)
