@@ -37,7 +37,7 @@ class PcmTestHelper {
 		return pcmRepository
 	}
 
-	def assertPcmRepositoryeExists(Repository pcmRepository) {
+	def assertPcmRepositoryExists(Repository pcmRepository) {
 		assertThat(pcmRepository.pcmRepositoryResource, contains(pcmRepository, ignoring('id'), ignoringUnsetFeatures))
 	}
 }

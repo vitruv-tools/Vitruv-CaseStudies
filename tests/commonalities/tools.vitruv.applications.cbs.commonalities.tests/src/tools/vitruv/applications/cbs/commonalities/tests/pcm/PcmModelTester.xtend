@@ -28,7 +28,7 @@ class PcmModelTester extends DomainModelTester {
 	override assertModelExists(EObject rootObject) {
 		switch (rootObject) {
 			Repository: {
-				rootObject.assertPcmRepositoryeExists
+				rootObject.assertPcmRepositoryExists
 			}
 			default: {
 				throw new IllegalStateException("Unhandled PCM root object: " + rootObject)
