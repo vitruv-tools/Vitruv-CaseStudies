@@ -2,13 +2,13 @@ package tools.vitruv.applications.cbs.commonalities.tests.cbs.java
 
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.modifiers.ModifiersFactory
-import tools.vitruv.applications.cbs.commonalities.tests.cbs.AbstractBasicComponentTest
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.BasicComponentTest
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*
 
-class JavaBasicComponentTestModels extends JavaTestModelsBase implements AbstractBasicComponentTest.DomainModels {
+class JavaBasicComponentTestModels extends JavaTestModelsBase implements BasicComponentTest.DomainModels {
 
 	new(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
 		super(vitruvApplicationTestAdapter)

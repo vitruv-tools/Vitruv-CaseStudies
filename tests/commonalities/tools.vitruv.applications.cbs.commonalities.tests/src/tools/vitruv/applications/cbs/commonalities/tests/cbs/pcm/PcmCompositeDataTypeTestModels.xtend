@@ -1,14 +1,14 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm
 
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.cbs.commonalities.tests.cbs.AbstractCompositeDataTypeTest
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.CompositeDataTypeTest
 import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.applications.cbs.commonalities.util.pcm.PcmPrimitiveDataType
 
 import static tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelHelper.*
 
-class PcmCompositeDataTypeTestModels extends PcmTestModelsBase implements AbstractCompositeDataTypeTest.DomainModels {
+class PcmCompositeDataTypeTestModels extends PcmTestModelsBase implements CompositeDataTypeTest.DomainModels {
 
 	private static def newPcmCompositeDataType() {
 		return RepositoryFactory.eINSTANCE.createCompositeDataType => [

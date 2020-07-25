@@ -1,13 +1,13 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm
 
 import org.palladiosimulator.pcm.repository.Repository
-import tools.vitruv.applications.cbs.commonalities.tests.cbs.AbstractMediaStoreTest
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.MediaStoreTest
 import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 import static org.junit.Assert.*
 
-class PcmMediaStoreTestModels extends PcmTestModelsBase implements AbstractMediaStoreTest.DomainModels {
+class PcmMediaStoreTestModels extends PcmTestModelsBase implements MediaStoreTest.DomainModels {
 
 	// private static val PCM_MEDIA_STORE_REPOSITORY_PATH = 'resources/model/pcm/MediaStore.repository'
 	static val PCM_MEDIA_STORE_REPOSITORY_PATH = 'resources/model/pcm/MediaStore_NoSEFF.repository'

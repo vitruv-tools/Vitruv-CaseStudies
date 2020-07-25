@@ -1,7 +1,7 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo.uml
 
 import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.applications.cbs.commonalities.tests.oo.AbstractInterfaceTest
+import tools.vitruv.applications.cbs.commonalities.tests.oo.InterfaceTest
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
@@ -9,7 +9,7 @@ import static tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModel
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlModelHelper.*
 
-class UmlInterfaceTestModels extends UmlTestModelsBase implements AbstractInterfaceTest.DomainModels {
+class UmlInterfaceTestModels extends UmlTestModelsBase implements InterfaceTest.DomainModels {
 
 	private static def newUmlPackage1() {
 		return UMLFactory.eINSTANCE.createPackage => [

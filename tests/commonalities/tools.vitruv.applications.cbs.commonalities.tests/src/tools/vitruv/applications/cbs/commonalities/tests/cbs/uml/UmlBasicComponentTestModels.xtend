@@ -1,11 +1,11 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.uml
 
 import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.applications.cbs.commonalities.tests.cbs.AbstractBasicComponentTest
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.BasicComponentTest
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
-class UmlBasicComponentTestModels extends UmlTestModelsBase implements AbstractBasicComponentTest.DomainModels {
+class UmlBasicComponentTestModels extends UmlTestModelsBase implements BasicComponentTest.DomainModels {
 
 	new(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
 		super(vitruvApplicationTestAdapter)

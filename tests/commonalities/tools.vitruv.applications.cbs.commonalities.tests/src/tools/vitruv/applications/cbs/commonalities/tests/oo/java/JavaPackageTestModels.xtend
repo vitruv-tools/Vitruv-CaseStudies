@@ -2,10 +2,10 @@ package tools.vitruv.applications.cbs.commonalities.tests.oo.java
 
 import org.emftext.language.java.containers.ContainersFactory
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
-import tools.vitruv.applications.cbs.commonalities.tests.oo.AbstractPackageTest
+import tools.vitruv.applications.cbs.commonalities.tests.oo.PackageTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
-class JavaPackageTestModels extends JavaTestModelsBase implements AbstractPackageTest.DomainModels {
+class JavaPackageTestModels extends JavaTestModelsBase implements PackageTest.DomainModels {
 
 	private static def newRoot1JavaPackage() {
 		return ContainersFactory.eINSTANCE.createPackage => [

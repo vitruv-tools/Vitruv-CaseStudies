@@ -1,10 +1,51 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo
 
+import java.util.List
+import org.eclipse.uml2.uml.VisibilityKind
+import org.emftext.language.java.modifiers.ModifiersFactory
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.DomainModel
+import tools.vitruv.applications.cbs.commonalities.tests.DomainModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.oo.java.JavaClassTestModels
+import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlClassTestModels
+import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 
-abstract class AbstractClassTest extends CBSCommonalitiesExecutionTest {
+@RunWith(Parameterized)
+@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
+class ClassTest extends CBSCommonalitiesExecutionTest {
+
+	@Parameterized.Parameters(name='{0} to {1}')
+	static def List<Object[]> testParameters() {
+		return #[
+			#[
+				new UmlTestModelsProvider [new UmlClassTestModels(it)],
+				new JavaTestModelsProvider [
+					new JavaClassTestModels(it) {
+						// UML creates classes with no visibility by default, which maps to public visibility in Java.
+						override protected defaultClassVisibility() {
+							return ModifiersFactory.eINSTANCE.createPublic
+						}
+					}
+				]
+			],
+			#[
+				new JavaTestModelsProvider [new JavaClassTestModels(it)],
+				new UmlTestModelsProvider [
+					// Java creates classes with package-private visibility by default.
+					new UmlClassTestModels(it) {
+						override protected defaultClassVisibility () {
+							return VisibilityKind.PACKAGE_LITERAL
+						}
+					}
+				]
+			]
+		]
+	}
 
 	/**
 	 * If not specified otherwise by the individual test cases, all created
@@ -53,8 +94,14 @@ abstract class AbstractClassTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel multipleClassesInDifferentPackagesCreation()
 	}
 
-	protected abstract def DomainModels getSourceModels()
-	protected abstract def DomainModels getTargetModels()
+	val DomainModels sourceModels
+	val DomainModels targetModels
+
+	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
+		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
+	}
 
 	// Empty class
 

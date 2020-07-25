@@ -6,12 +6,12 @@ import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.modifiers.Modifier
 import org.emftext.language.java.modifiers.ModifiersFactory
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
-import tools.vitruv.applications.cbs.commonalities.tests.oo.AbstractClassTest
+import tools.vitruv.applications.cbs.commonalities.tests.oo.ClassTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*
 
-class JavaClassTestModels extends JavaTestModelsBase implements AbstractClassTest.DomainModels {
+class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.DomainModels {
 
 	private static def newJavaPackage1() {
 		return ContainersFactory.eINSTANCE.createPackage => [

@@ -1,11 +1,34 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs
 
+import java.util.List
 import org.junit.Ignore
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.DomainModel
+import tools.vitruv.applications.cbs.commonalities.tests.DomainModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.java.JavaCompositeDataTypeTestModels
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm.PcmCompositeDataTypeTestModels
+import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 
-abstract class AbstractCompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+
+@RunWith(Parameterized)
+@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
+class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
+
+	@Parameterized.Parameters(name='{0} to {1}')
+	static def List<Object[]> testParameters() {
+		val domainModelsProviders = #[
+			new PcmTestModelsProvider [new PcmCompositeDataTypeTestModels(it)],
+			// new UmlTestModelsProvider [new UmlCompositeDataTypeTestModels(it)], // TODO implement
+			new JavaTestModelsProvider [new JavaCompositeDataTypeTestModels(it)]
+		]
+		return domainModelsProviders.toListOfPairs(true)
+	}
 
 	interface DomainModels {
 
@@ -57,8 +80,14 @@ abstract class AbstractCompositeDataTypeTest extends CBSCommonalitiesExecutionTe
 		def DomainModel compositeDataTypeWithCompositeElementsCreation()
 	}
 
-	protected abstract def DomainModels getSourceModels()
-	protected abstract def DomainModels getTargetModels()
+	val DomainModels sourceModels
+	val DomainModels targetModels
+
+	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
+		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
+	}
 
 	// Empty CompositeDataType
 

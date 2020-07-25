@@ -1,12 +1,12 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.uml
 
-import tools.vitruv.applications.cbs.commonalities.tests.cbs.AbstractMediaStoreTest
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.MediaStoreTest
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 import static org.junit.Assert.*
 
-package abstract class AbstractUmlMediaStoreTestModels extends UmlTestModelsBase implements AbstractMediaStoreTest.DomainModels {
+package abstract class AbstractUmlMediaStoreTestModels extends UmlTestModelsBase implements MediaStoreTest.DomainModels {
 
 	new(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
 		super(vitruvApplicationTestAdapter)

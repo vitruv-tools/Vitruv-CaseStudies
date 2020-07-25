@@ -1,10 +1,10 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.uml
 
-import tools.vitruv.applications.cbs.commonalities.tests.cbs.AbstractCompositeDataTypeTest
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.CompositeDataTypeTest
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
-class UmlCompositeDataTypeTestModels extends UmlTestModelsBase implements AbstractCompositeDataTypeTest.DomainModels {
+class UmlCompositeDataTypeTestModels extends UmlTestModelsBase implements CompositeDataTypeTest.DomainModels {
 
 	new(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
 		super(vitruvApplicationTestAdapter)

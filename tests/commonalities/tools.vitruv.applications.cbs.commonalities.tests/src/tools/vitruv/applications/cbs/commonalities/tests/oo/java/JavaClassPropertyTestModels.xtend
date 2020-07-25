@@ -8,13 +8,13 @@ import org.emftext.language.java.modifiers.Modifier
 import org.emftext.language.java.modifiers.ModifiersFactory
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
-import tools.vitruv.applications.cbs.commonalities.tests.oo.AbstractClassPropertyTest
+import tools.vitruv.applications.cbs.commonalities.tests.oo.ClassPropertyTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.domains.java.util.JavaModificationUtil
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*
 
-class JavaClassPropertyTestModels extends JavaTestModelsBase implements AbstractClassPropertyTest.DomainModels {
+class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPropertyTest.DomainModels {
 
 	private static def newJavaPackage() {
 		return ContainersFactory.eINSTANCE.createPackage => [
@@ -49,13 +49,13 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements Abstract
 	 * Returning <code>null</code> results in no visibility modifier being
 	 * added and therefore package-private visibility.
 	 */
-	protected def Modifier defaultPropertyVisibility() {
+	protected def Modifier defaultFieldVisibility() {
 		return null // package-private
 	}
 
 	private def withDefaultVisibility(Field javaField) {
 		return javaField => [
-			val defaultVisibility = defaultPropertyVisibility
+			val defaultVisibility = defaultFieldVisibility
 			if (defaultVisibility !== null) {
 				annotationsAndModifiers += defaultVisibility
 			}

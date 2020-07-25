@@ -1,13 +1,13 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo.uml
 
 import org.eclipse.uml2.uml.UMLFactory
-import tools.vitruv.applications.cbs.commonalities.tests.oo.AbstractPackageTest
+import tools.vitruv.applications.cbs.commonalities.tests.oo.PackageTest
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 import static tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelHelper.*
 
-class UmlPackageTestModels extends UmlTestModelsBase implements AbstractPackageTest.DomainModels {
+class UmlPackageTestModels extends UmlTestModelsBase implements PackageTest.DomainModels {
 
 	private static def newRoot1UmlPackage() {
 		return UMLFactory.eINSTANCE.createPackage => [

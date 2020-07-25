@@ -3,12 +3,12 @@ package tools.vitruv.applications.cbs.commonalities.tests.oo.java
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.containers.ContainersFactory
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
-import tools.vitruv.applications.cbs.commonalities.tests.oo.AbstractInterfaceTest
+import tools.vitruv.applications.cbs.commonalities.tests.oo.InterfaceTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*
 
-class JavaInterfaceTestModels extends JavaTestModelsBase implements AbstractInterfaceTest.DomainModels {
+class JavaInterfaceTestModels extends JavaTestModelsBase implements InterfaceTest.DomainModels {
 
 	private static def newJavaPackage1() {
 		return ContainersFactory.eINSTANCE.createPackage => [

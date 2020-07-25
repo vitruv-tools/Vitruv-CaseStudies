@@ -1,13 +1,13 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm
 
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.applications.cbs.commonalities.tests.cbs.AbstractComponentInterfaceTest
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.ComponentInterfaceTest
 import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 import static tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelHelper.*
 
-class PcmComponentInterfaceTestModels extends PcmTestModelsBase implements AbstractComponentInterfaceTest.DomainModels {
+class PcmComponentInterfaceTestModels extends PcmTestModelsBase implements ComponentInterfaceTest.DomainModels {
 
 	new(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
 		super(vitruvApplicationTestAdapter)

@@ -3,7 +3,7 @@ package tools.vitruv.applications.cbs.commonalities.tests.oo.uml
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import tools.vitruv.applications.cbs.commonalities.tests.oo.AbstractClassTest
+import tools.vitruv.applications.cbs.commonalities.tests.oo.ClassTest
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
@@ -11,7 +11,7 @@ import static tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModel
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlModelHelper.*
 
-class UmlClassTestModels extends UmlTestModelsBase implements AbstractClassTest.DomainModels {
+class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainModels {
 
 	private static def newUmlPackage1() {
 		return UMLFactory.eINSTANCE.createPackage => [

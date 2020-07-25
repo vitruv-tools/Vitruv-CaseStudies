@@ -1,10 +1,10 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.java
 
-import tools.vitruv.applications.cbs.commonalities.tests.cbs.AbstractRepositoryTest
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.RepositoryTest
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
-class JavaRepositoryTestModels extends JavaTestModelsBase implements AbstractRepositoryTest.DomainModels {
+class JavaRepositoryTestModels extends JavaTestModelsBase implements RepositoryTest.DomainModels {
 
 	new(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
 		super(vitruvApplicationTestAdapter)
