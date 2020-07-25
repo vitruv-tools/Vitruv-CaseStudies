@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum;
 import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -32,8 +31,9 @@ public enum PcmPrimitiveDataType {
 	BOOL(PrimitiveTypeEnum.BOOL),
 	DOUBLE(PrimitiveTypeEnum.DOUBLE),
 	CHAR(PrimitiveTypeEnum.CHAR),
-	BYTE(PrimitiveTypeEnum.BYTE),
-	LONG(PrimitiveTypeEnum.LONG);
+	BYTE(PrimitiveTypeEnum.BYTE);
+	// TODO Missing in PCM's PrimitiveTypes.repository and therefore not supported by us currently.
+	// LONG(PrimitiveTypeEnum.LONG);
 
 	private static final Logger logger = LogManager.getLogger(PcmPrimitiveDataType.class);
 	static {
@@ -84,17 +84,6 @@ public enum PcmPrimitiveDataType {
 		Repository repository = (Repository) resource.getContents().get(0);
 		List<PrimitiveDataType> pcmPrimitiveDataTypes = Lists.newArrayList(
 				Iterables.filter(repository.getDataTypes__Repository(), PrimitiveDataType.class));
-		// TODO PCM's PrimitiveTypes.repository does not contain instances for all supported PCM primitive datatypes
-		// (misses long). We therefore manually add instances for any missing primitive types.
-		for (PrimitiveTypeEnum typeEnum : PrimitiveTypeEnum.values()) {
-			if (!pcmPrimitiveDataTypes.stream().anyMatch(dataType -> (dataType.getType() == typeEnum))) {
-				logger.debug("Adding missing default PCM primitive data type: " + typeEnum);
-				PrimitiveDataType newDataType = RepositoryFactory.eINSTANCE.createPrimitiveDataType();
-				newDataType.setType(typeEnum);
-				repository.getDataTypes__Repository().add(newDataType);
-				pcmPrimitiveDataTypes.add(newDataType);
-			}
-		}
 
 		// Bind PCM primitive types to enum values:
 		for (PrimitiveDataType pcmType : pcmPrimitiveDataTypes) {
