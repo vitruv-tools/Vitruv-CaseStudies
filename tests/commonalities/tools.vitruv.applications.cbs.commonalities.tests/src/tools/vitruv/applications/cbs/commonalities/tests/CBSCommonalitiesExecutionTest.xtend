@@ -20,9 +20,6 @@ abstract class CBSCommonalitiesExecutionTest extends CommonalitiesExecutionTest 
 	val VitruvApplicationTestAdapter vitruvApplicationTestAdapter = createVitruvApplicationTestAdapter()
 
 	private def VitruvApplicationTestAdapter createVitruvApplicationTestAdapter() {
-		val resourceAtFunc = [ String modelPathInProject |
-			resourceAt(modelPathInProject)
-		]
 		val testResourceFunc = [ String resourcePath |
 			getTestResource(resourcePath)
 		]
@@ -38,7 +35,8 @@ abstract class CBSCommonalitiesExecutionTest extends CommonalitiesExecutionTest 
 		return new VitruvApplicationTestAdapter() {
 
 			override getResourceAt(String modelPathInProject) {
-				resourceAtFunc.apply(modelPathInProject)
+				// The resources get loaded into the result resource set:
+				resultResourceSet.resourceAt(modelPathInProject)
 			}
 
 			override getTestResource(String resourcePath) {
@@ -62,16 +60,22 @@ abstract class CBSCommonalitiesExecutionTest extends CommonalitiesExecutionTest 
 	@Accessors(PROTECTED_GETTER)
 	private var ResourceSet testResourcesResourceSet
 
+	// Stores the loaded target models.
+	@Accessors(PROTECTED_GETTER)
+	private var ResourceSet resultResourceSet
+
 	override protected createChangePropagationSpecifications() {
 		compiler.changePropagationDefinitions
 	}
 
 	override protected setup() {
 		testResourcesResourceSet = new ResourceSetImpl()
+		resultResourceSet = new ResourceSetImpl()
 	}
 
 	override protected cleanup() {
 		testResourcesResourceSet = null
+		resultResourceSet = null
 	}
 
 	protected final def getTestResource(String resourcePath) {

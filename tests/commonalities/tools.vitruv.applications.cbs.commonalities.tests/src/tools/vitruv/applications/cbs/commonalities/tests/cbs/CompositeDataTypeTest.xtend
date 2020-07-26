@@ -1,7 +1,6 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs
 
 import java.util.List
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -137,7 +136,6 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 		targetModels.multipleCompositeDataTypesWithPrimitiveElementsCreation.check()
 	}
 
-	@Ignore // TODO The comparison of classifier references in the expected and loaded Java models does not work yet.
 	@Test
 	def void compositeDataTypeWithCompositeElementsCreation() {
 		sourceModels.compositeDataTypeWithCompositeElementsCreation.createAndSynchronize()
