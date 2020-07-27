@@ -181,6 +181,13 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	 */
 	protected abstract def R toPrimitiveDomainTypeReference(CommonPrimitiveType commonPrimitiveType)
 
+	/**
+	 * Retrieves the (unique) intermediate object for the given domain type
+	 * object from the correspondence model.
+	 * <p>
+	 * Returns <code>null</code> if there is no corresponding intermediate
+	 * object.
+	 */
 	protected def Intermediate getCorrespondingIntermediateType(T domainType) {
 		assertTrue(domainType !== null)
 		assertTrue(domainType instanceof EObject)
@@ -189,12 +196,16 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 			Intermediate).toList
 		checkState(intermediateTypes.size <= 1, '''Found more than one corresponding intermediate for «
 			participationDomainName» type '«domainType.asString»'!''')
-		val intermediateType = intermediateTypes.head
-		checkState(intermediateType !== null, '''Found no corresponding intermediate for «participationDomainName
-			» type '«domainType.asString»'!''')
+		val intermediateType = intermediateTypes.head // can be null
 		return intermediateType
 	}
 
+	/**
+	 * Retrieves the (unique) domain object for the given intermediate type
+	 * object from the correspondence model.
+	 * <p>
+	 * Returns <code>null</code> if there is no corresponding domain object.
+	 */
 	protected def T getCorrespondingDomainType(Intermediate intermediateType) {
 		assertTrue(intermediateType !== null)
 		// We get the corresponding domain type via the correspondence model:
@@ -202,9 +213,7 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 			domainTypeClass).toList
 		checkState(domainTypes.size <= 1, '''Found more than one corresponding «participationDomainName» type for«
 			» intermediate type '«intermediateType»': «domainTypes»''')
-		val domainType = domainTypes.head
-		checkState(domainType !== null, '''Found no corresponding «participationDomainName» type for intermediate type«
-			» '«intermediateType»'!''')
+		val domainType = domainTypes.head // can be null
 		return domainType
 	}
 
@@ -228,7 +237,12 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 		// Handle non-primitive types:
 		if (referencedDomainType instanceof EObject) {
 			val intermediateType = getCorrespondingIntermediateType(referencedDomainType)
-			return intermediateType.toIntermediateReference
+			if (intermediateType === null) {
+				// There is no corresponding intermediate type object yet:
+				return null
+			} else {
+				return intermediateType.toIntermediateReference
+			}
 		} else {
 			throw new IllegalStateException('''Unsupported kind of «participationDomainName» type: «
 				referencedDomainType.class.name»''')
@@ -244,7 +258,14 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 			return referencedIntermediateType.toPrimitiveDomainTypeReference
 		} else if (referencedIntermediateType instanceof Intermediate) {
 			val domainType = referencedIntermediateType.correspondingDomainType
-			return domainType.domainTypeReference
+			if (domainType === null) {
+				// There is no corresponding domain type object yet:
+				// This can for example happen if in a sequence of processed model changes the creation of the
+				// referenced intermediate has not been propagated yet.
+				return domainVoidReference
+			} else {
+				return domainType.domainTypeReference
+			}
 		} else {
 			throw new IllegalStateException('''Unsupported kind of intermediate type: «
 				referencedIntermediateType.class.name»''')
