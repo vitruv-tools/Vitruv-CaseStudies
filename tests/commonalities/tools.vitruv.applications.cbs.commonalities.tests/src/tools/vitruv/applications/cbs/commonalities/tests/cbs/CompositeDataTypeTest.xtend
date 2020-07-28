@@ -9,8 +9,10 @@ import tools.vitruv.applications.cbs.commonalities.tests.DomainModel
 import tools.vitruv.applications.cbs.commonalities.tests.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.java.JavaCompositeDataTypeTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm.PcmCompositeDataTypeTestModels
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlCompositeDataTypeTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
@@ -23,7 +25,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 	static def List<Object[]> testParameters() {
 		val domainModelsProviders = #[
 			new PcmTestModelsProvider [new PcmCompositeDataTypeTestModels(it)],
-			// new UmlTestModelsProvider [new UmlCompositeDataTypeTestModels(it)], // TODO implement
+			new UmlTestModelsProvider [new UmlCompositeDataTypeTestModels(it)],
 			new JavaTestModelsProvider [new JavaCompositeDataTypeTestModels(it)]
 		]
 		return domainModelsProviders.toListOfPairs(true)
