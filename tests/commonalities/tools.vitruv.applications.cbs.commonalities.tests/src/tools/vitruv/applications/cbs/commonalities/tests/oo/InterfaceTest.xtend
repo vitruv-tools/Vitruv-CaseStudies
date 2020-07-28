@@ -28,6 +28,9 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 		return domainModelsProviders.toListOfPairs(true)
 	}
 
+	/**
+	 * All created interfaces are of public visibility currently.
+	 */
 	interface DomainModels {
 
 		static val PACKAGE_1_NAME = 'root'
@@ -80,4 +83,5 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 	}
 
 	// TODO renaming
+	// TODO support for non-public interfaces? (eg. package-private, or private inner interfaces)
 }

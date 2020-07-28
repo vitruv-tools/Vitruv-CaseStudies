@@ -1,4 +1,7 @@
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaCompilationUnitNameOperator
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.condition.JavaVisibilityConditionOperator
+
+import tools.vitruv.applications.cbs.commonalities.util.uml.operators.condition.UmlVisibilityConditionOperator
 
 concept ObjectOrientedDesign
 
@@ -10,6 +13,7 @@ commonality Interface {
 	whereat {
 		Interface in Model,
 		Model in Resource,
+		Interface hasUmlVisibility "PUBLIC",
 		// TODO Use a condition operator to ask the user for the model name and path
 		// TODO Duplication with specification in ObjectOrientedDesign:Package
 		Model.name = "model",
@@ -25,6 +29,7 @@ commonality Interface {
 	whereat {
 		Interface in CompilationUnit.classifiers,
 		CompilationUnit in Resource,
+		Interface hasJavaVisibility "PUBLIC",
 		Resource.path = "src/",
 		Resource.fileExtension = "java"
 	}
@@ -39,6 +44,9 @@ commonality Interface {
 	}
 
 	// TODO methods
+	// TODO Support non-public visibilities?
+	// Top level interfaces can also be package-private, inner interfaces can also be protected and private.
+
 	// TODO super types
 	// TODO (minor) static final fields
 }
