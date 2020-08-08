@@ -19,7 +19,7 @@ commonality Interface {
 		-> Resource.path = "model/",
 		-> Resource.name = "model",
 		Resource.fileExtension = "uml",
-		-> Interface hasUmlVisibility "PUBLIC"
+		-> Interface.visibility isUmlVisibility "PUBLIC"
 	}
 
 	// Optionally externally contained by Java:Package.javaPackageCompilationUnits
@@ -31,7 +31,7 @@ commonality Interface {
 		CompilationUnit in Resource,
 		-> Resource.path = "src/",
 		Resource.fileExtension = "java",
-		-> Interface hasJavaVisibility "PUBLIC"
+		-> Interface.annotationsAndModifiers hasJavaVisibility "PUBLIC"
 	}
 
 	has name {

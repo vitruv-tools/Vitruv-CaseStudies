@@ -3,9 +3,9 @@ package tools.vitruv.applications.cbs.commonalities.util.java.operators.conditio
 import java.util.List
 import org.apache.log4j.Logger
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
+import org.emftext.language.java.modifiers.ModifiersPackage
 import tools.vitruv.applications.cbs.commonalities.util.oo.Visibility
 import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentOperator
-import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.IParticipationClassConditionOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.ParticipationConditionOperator
 
 import static com.google.common.base.Preconditions.*
@@ -13,14 +13,16 @@ import static com.google.common.base.Preconditions.*
 import static extension tools.vitruv.applications.cbs.commonalities.util.java.JavaVisibilityHelper.*
 
 @ParticipationConditionOperator(name = 'hasJavaVisibility')
-class JavaVisibilityConditionOperator extends AbstractSingleArgumentOperator implements IParticipationClassConditionOperator {
+class JavaVisibilityConditionOperator extends AbstractSingleArgumentOperator {
 
 	static val Logger logger = Logger.getLogger(JavaVisibilityConditionOperator)
 
 	new(Object leftOperand, List<?> rightOperands) {
 		super(leftOperand, rightOperands)
-		checkArgument(leftOperand instanceof AnnotableAndModifiable,
-			"Expecting an AnnotableAndModifiable as left operand!")
+		checkArgument(leftOperandObject instanceof AnnotableAndModifiable,
+			"Expecting an AnnotableAndModifiable as left operand object!")
+		checkArgument(leftOperandFeature == ModifiersPackage.Literals.ANNOTABLE_AND_MODIFIABLE__ANNOTATIONS_AND_MODIFIERS,
+			"Expecting 'annotationsAndModifiers' as left operand feature!")
 		checkArgument(rightOperand instanceof String, "Expecting String as right operand!")
 		checkArgument(rightVisibility !== null, "Invalid visibility: " + rightOperand)
 	}
