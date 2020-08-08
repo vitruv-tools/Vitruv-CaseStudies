@@ -1,6 +1,7 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.java
 
 import org.emftext.language.java.classifiers.ClassifiersFactory
+import org.emftext.language.java.modifiers.ModifiersFactory
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.ComponentInterfaceTest
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
@@ -20,6 +21,7 @@ class JavaComponentInterfaceTestModels extends JavaTestModelsBase implements Com
 
 			val javaInterface = ClassifiersFactory.eINSTANCE.createInterface => [
 				name = INTERFACE_NAME
+				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 			]
 			val compilationUnit = contractsPackage.newCompilationUnit(javaInterface)
 

@@ -2,6 +2,7 @@ package tools.vitruv.applications.cbs.commonalities.tests.oo.java
 
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.containers.ContainersFactory
+import org.emftext.language.java.modifiers.ModifiersFactory
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.oo.InterfaceTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
@@ -25,11 +26,12 @@ class JavaInterfaceTestModels extends JavaTestModelsBase implements InterfaceTes
 	private static def newJavaInterface1() {
 		return ClassifiersFactory.eINSTANCE.createInterface => [
 			name = INTERFACE_1_NAME
+			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 		]
 	}
 
 	private static def newJavaInterface2() {
-		return ClassifiersFactory.eINSTANCE.createInterface => [
+		return newJavaInterface1 => [
 			name = INTERFACE_2_NAME
 		]
 	}

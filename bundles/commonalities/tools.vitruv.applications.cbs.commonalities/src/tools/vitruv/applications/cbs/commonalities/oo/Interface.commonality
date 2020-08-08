@@ -13,13 +13,13 @@ commonality Interface {
 	whereat {
 		Interface in Model,
 		Model in Resource,
-		Interface hasUmlVisibility "PUBLIC",
 		// TODO Use a condition operator to ask the user for the model name and path
 		// TODO Duplication with specification in ObjectOrientedDesign:Package
 		-> Model.name = "model",
 		-> Resource.path = "model/",
 		-> Resource.name = "model",
-		Resource.fileExtension = "uml"
+		Resource.fileExtension = "uml",
+		-> Interface hasUmlVisibility "PUBLIC"
 	}
 
 	// Optionally externally contained by Java:Package.javaPackageCompilationUnits
@@ -29,9 +29,9 @@ commonality Interface {
 	whereat {
 		Interface in CompilationUnit.classifiers,
 		CompilationUnit in Resource,
-		Interface hasJavaVisibility "PUBLIC",
 		-> Resource.path = "src/",
-		Resource.fileExtension = "java"
+		Resource.fileExtension = "java",
+		-> Interface hasJavaVisibility "PUBLIC"
 	}
 
 	has name {

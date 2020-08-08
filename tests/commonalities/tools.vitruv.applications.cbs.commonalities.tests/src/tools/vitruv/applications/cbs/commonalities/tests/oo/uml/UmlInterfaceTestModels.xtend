@@ -1,6 +1,7 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo.uml
 
 import org.eclipse.uml2.uml.UMLFactory
+import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.cbs.commonalities.tests.oo.InterfaceTest
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
@@ -26,11 +27,12 @@ class UmlInterfaceTestModels extends UmlTestModelsBase implements InterfaceTest.
 	private static def newUmlInterface1() {
 		return UMLFactory.eINSTANCE.createInterface => [
 			name = INTERFACE_1_NAME
+			visibility = VisibilityKind.PUBLIC_LITERAL
 		]
 	}
 
 	private static def newUmlInterface2() {
-		return UMLFactory.eINSTANCE.createInterface => [
+		return newUmlInterface1 => [
 			name = INTERFACE_2_NAME
 		]
 	}
