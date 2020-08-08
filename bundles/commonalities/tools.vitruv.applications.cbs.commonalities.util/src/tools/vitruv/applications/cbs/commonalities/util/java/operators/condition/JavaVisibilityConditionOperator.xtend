@@ -1,6 +1,7 @@
 package tools.vitruv.applications.cbs.commonalities.util.java.operators.condition
 
 import java.util.List
+import org.apache.log4j.Logger
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import tools.vitruv.applications.cbs.commonalities.util.oo.Visibility
 import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentOperator
@@ -13,6 +14,8 @@ import static extension tools.vitruv.applications.cbs.commonalities.util.java.Ja
 
 @ParticipationConditionOperator(name = 'hasJavaVisibility')
 class JavaVisibilityConditionOperator extends AbstractSingleArgumentOperator implements IParticipationClassConditionOperator {
+
+	static val Logger logger = Logger.getLogger(JavaVisibilityConditionOperator)
 
 	new(Object leftOperand, List<?> rightOperands) {
 		super(leftOperand, rightOperands)
@@ -39,6 +42,12 @@ class JavaVisibilityConditionOperator extends AbstractSingleArgumentOperator imp
 
 	override check() {
 		val modifiers = leftAnnotableAndModifiable.annotationsAndModifiers
-		return (modifiers.visibility === rightVisibility)
+		val leftVisibility = modifiers.visibility
+		val result = (leftVisibility === rightVisibility)
+		if (!result) {
+			logger.debug('''Condition check failed. leftObject='«leftOperandObject»', leftFeature='«leftOperandFeature
+				»', leftVisibility='«leftVisibility»', rightVisibility='«rightVisibility»'.''')
+		}
+		return result
 	}
 }
