@@ -15,8 +15,8 @@ referenced commonality Property {
 	with UML:Property
 	whereat {
 		// TODO We only support single-valued properties currently.
-		Property.lower = 1,
-		Property.upper = 1
+		-> Property.lower = 1,
+		-> Property.upper = 1
 	}
 
 	// Externally contained by Java:Class.members

@@ -4,7 +4,7 @@ commonality Repository {
 
 	with PCM:(Repository in Resource)
 	whereat {
-		Resource.path = "model/",
+		-> Resource.path = "model/",
 		Resource.fileExtension = "repository"
 	}
 

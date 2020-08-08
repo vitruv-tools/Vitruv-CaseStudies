@@ -13,16 +13,16 @@ commonality Package {
 		Package in Model,
 		Model in Resource,
 		// TODO Use a condition operator to ask the user for the model name and path
-		Model.name = "model",
-		Resource.path = "model/",
-		Resource.name = "model",
+		-> Model.name = "model",
+		-> Resource.path = "model/",
+		-> Resource.name = "model",
 		Resource.fileExtension = "uml"
 	}
 
 	// Optionally externally contained by Java:Package.javaSubPackages
 	with Java:(Package in Resource)
 	whereat {
-		Resource.path = "src/",
+		-> Resource.path = "src/",
 		Resource.name = "package-info",
 		Resource.fileExtension = "java"
 	}

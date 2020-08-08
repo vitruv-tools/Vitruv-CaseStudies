@@ -16,9 +16,9 @@ commonality Interface {
 		Interface hasUmlVisibility "PUBLIC",
 		// TODO Use a condition operator to ask the user for the model name and path
 		// TODO Duplication with specification in ObjectOrientedDesign:Package
-		Model.name = "model",
-		Resource.path = "model/",
-		Resource.name = "model",
+		-> Model.name = "model",
+		-> Resource.path = "model/",
+		-> Resource.name = "model",
 		Resource.fileExtension = "uml"
 	}
 
@@ -30,7 +30,7 @@ commonality Interface {
 		Interface in CompilationUnit.classifiers,
 		CompilationUnit in Resource,
 		Interface hasJavaVisibility "PUBLIC",
-		Resource.path = "src/",
+		-> Resource.path = "src/",
 		Resource.fileExtension = "java"
 	}
 
