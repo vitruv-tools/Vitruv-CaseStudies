@@ -11,7 +11,7 @@ import static com.google.common.base.Preconditions.*
 /**
  * Checks and/or sets the parameter direction kind for a given UML Parameter.
  */
-@ParticipationConditionOperator(name='isUmlParameterDirection')
+@ParticipationConditionOperator(name = 'isUmlParameterDirection')
 class UmlParameterDirectionConditionOperator extends AbstractSingleArgumentConditionOperator {
 
 	static val Logger logger = Logger.getLogger(UmlParameterDirectionConditionOperator)
