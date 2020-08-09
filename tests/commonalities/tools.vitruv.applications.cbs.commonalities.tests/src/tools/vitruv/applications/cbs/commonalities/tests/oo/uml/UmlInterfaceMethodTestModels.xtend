@@ -31,6 +31,7 @@ class UmlInterfaceMethodTestModels extends UmlTestModelsBase implements Interfac
 		return UMLFactory.eINSTANCE.createOperation => [
 			name = METHOD_NAME
 			visibility = VisibilityKind.PUBLIC_LITERAL
+			isAbstract = true
 		]
 	}
 
@@ -63,6 +64,22 @@ class UmlInterfaceMethodTestModels extends UmlTestModelsBase implements Interfac
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlInterface => [
 				ownedOperations += newUmlOperation
+			]))
+			return #[
+				umlModel
+			]
+		]
+	}
+
+	// Static
+
+	override staticInterfaceMethodCreation() {
+		return newModel [
+			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlInterface => [
+				ownedOperations += newUmlOperation => [
+					isAbstract = false
+					isStatic = true
+				]
 			]))
 			return #[
 				umlModel

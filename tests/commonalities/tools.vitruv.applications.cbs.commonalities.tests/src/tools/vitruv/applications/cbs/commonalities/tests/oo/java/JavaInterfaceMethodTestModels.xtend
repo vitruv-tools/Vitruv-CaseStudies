@@ -3,6 +3,7 @@ package tools.vitruv.applications.cbs.commonalities.tests.oo.java
 import org.emftext.language.java.classifiers.ClassifiersFactory
 import org.emftext.language.java.containers.ContainersFactory
 import org.emftext.language.java.members.MembersFactory
+import org.emftext.language.java.modifiers.Abstract
 import org.emftext.language.java.modifiers.ModifiersFactory
 import org.emftext.language.java.parameters.ParametersFactory
 import org.emftext.language.java.types.TypesFactory
@@ -59,6 +60,24 @@ class JavaInterfaceMethodTestModels extends JavaTestModelsBase implements Interf
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaInterface => [
 				members += newJavaInterfaceMethod
+			])
+			return #[
+				javaPackage,
+				javaCompilationUnit
+			]
+		]
+	}
+
+	// Static
+
+	override staticInterfaceMethodCreation() {
+		return newModel [
+			val javaPackage = newJavaPackage
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaInterface => [
+				members += newJavaInterfaceMethod => [
+					annotationsAndModifiers.removeIf[it instanceof Abstract]
+					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createStatic
+				]
 			])
 			return #[
 				javaPackage,

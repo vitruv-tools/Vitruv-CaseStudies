@@ -59,6 +59,10 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 		 */
 		def DomainModel basicInterfaceMethodCreation()
 
+		// Static
+
+		def DomainModel staticInterfaceMethodCreation()
+
 		// Return parameter
 
 		/**
@@ -131,6 +135,14 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 	def void basicInterfaceMethodCreation() {
 		sourceModels.basicInterfaceMethodCreation.createAndSynchronize()
 		targetModels.basicInterfaceMethodCreation.check()
+	}
+
+	// Static
+
+	@Test
+	def void staticInterfaceMethodCreation() {
+		sourceModels.staticInterfaceMethodCreation.createAndSynchronize()
+		targetModels.staticInterfaceMethodCreation.check()
 	}
 
 	// Return parameter
