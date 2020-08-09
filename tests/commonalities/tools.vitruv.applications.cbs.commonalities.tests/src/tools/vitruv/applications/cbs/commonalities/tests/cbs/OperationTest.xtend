@@ -35,8 +35,51 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 
 		static val INTERFACE_NAME = 'SomeInterface'
 		static val OPERATION_NAME = 'SomeOperation'
+		static val OPERATION_2_NAME = 'SomeOtherOperation'
+		static val INTEGER_PARAMETER_NAME = 'integerInput'
+		static val BOOLEAN_PARAMETER_NAME = 'booleanInput'
+		static val DOUBLE_PARAMETER_NAME = 'doubleInput'
+		static val STRING_PARAMETER_NAME = 'stringInput'
+
+		// Empty
 
 		def DomainModel emptyOperationCreation()
+
+		// Return type
+
+		/**
+		 * Operation with integer return type and no inputs.
+		 */
+		def DomainModel operationWithIntegerReturnCreation()
+
+		def DomainModel operationWithStringReturnCreation()
+
+		// Input parameters
+
+		def DomainModel operationWithIntegerInputCreation()
+
+		/**
+		 * Operation with a boolean, integer and double input parameter.
+		 */
+		def DomainModel operationWithMultiplePrimitiveInputsCreation()
+
+		def DomainModel operationWithStringInputCreation()
+
+		// Mixed input and return types
+
+		/**
+		 * Operation with an integer and String input parameter and an integer
+		 * return type.
+		 */
+		def DomainModel operationWithMixedInputsAndReturnCreation()
+
+		// Multiple operations
+
+		/**
+		 * Both operations have an integer return type. The first operation has
+		 * a boolean input parameter, the second has a String input parameter.
+		 */
+		def DomainModel multipleOperationsCreation()
 	}
 
 	val DomainModels sourceModels
@@ -48,10 +91,62 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
 	}
 
+	// Empty
+
 	@Test
-	def void emptyComponentInterfaceCreation() {
+	def void emptyOperationCreation() {
 		sourceModels.emptyOperationCreation.createAndSynchronize()
 		targetModels.emptyOperationCreation.check()
+	}
+
+	// Return type
+
+	@Test
+	def void operationWithIntegerReturnCreation() {
+		sourceModels.operationWithIntegerReturnCreation.createAndSynchronize()
+		targetModels.operationWithIntegerReturnCreation.check()
+	}
+
+	@Test
+	def void operationWithStringReturnCreation() {
+		sourceModels.operationWithStringReturnCreation.createAndSynchronize()
+		targetModels.operationWithStringReturnCreation.check()
+	}
+
+	// Input parameters
+
+	@Test
+	def void operationWithIntegerInputCreation() {
+		sourceModels.operationWithIntegerInputCreation.createAndSynchronize()
+		targetModels.operationWithIntegerInputCreation.check()
+	}
+
+	@Test
+	def void operationWithMultiplePrimitiveInputsCreation() {
+		sourceModels.operationWithMultiplePrimitiveInputsCreation.createAndSynchronize()
+		targetModels.operationWithMultiplePrimitiveInputsCreation.check()
+	}
+
+	@Test
+	def void operationWithStringInputCreation() {
+		sourceModels.operationWithStringInputCreation.createAndSynchronize()
+		targetModels.operationWithStringInputCreation.check()
+	}
+
+	// Mixed input and return types
+
+	@Test
+	def void operationWithMixedInputsAndReturnCreation() {
+		sourceModels.operationWithMixedInputsAndReturnCreation.createAndSynchronize()
+		targetModels.operationWithMixedInputsAndReturnCreation.check()
+	}
+
+	// Multiple operations
+
+	@Test
+	def void multipleOperationsCreation() {
+		sourceModels.multipleOperationsCreation.createAndSynchronize()
+		targetModels.multipleOperationsCreation.check()
 	}
 
 	// TODO renaming
