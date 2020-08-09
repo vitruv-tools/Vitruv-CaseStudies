@@ -5,7 +5,7 @@ import org.apache.log4j.Logger
 import org.emftext.language.java.modifiers.AnnotableAndModifiable
 import org.emftext.language.java.modifiers.ModifiersPackage
 import tools.vitruv.applications.cbs.commonalities.util.oo.Visibility
-import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentOperator
+import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentConditionOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.ParticipationConditionOperator
 
 import static com.google.common.base.Preconditions.*
@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.*
 import static extension tools.vitruv.applications.cbs.commonalities.util.java.JavaVisibilityHelper.*
 
 @ParticipationConditionOperator(name = 'hasJavaVisibility')
-class JavaVisibilityConditionOperator extends AbstractSingleArgumentOperator {
+class JavaVisibilityConditionOperator extends AbstractSingleArgumentConditionOperator {
 
 	static val Logger logger = Logger.getLogger(JavaVisibilityConditionOperator)
 

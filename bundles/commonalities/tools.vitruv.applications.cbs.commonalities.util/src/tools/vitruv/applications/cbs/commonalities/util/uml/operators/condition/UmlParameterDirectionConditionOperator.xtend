@@ -3,7 +3,7 @@ package tools.vitruv.applications.cbs.commonalities.util.uml.operators.condition
 import java.util.List
 import org.apache.log4j.Logger
 import org.eclipse.uml2.uml.ParameterDirectionKind
-import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentOperator
+import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentConditionOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.ParticipationConditionOperator
 
 import static com.google.common.base.Preconditions.*
@@ -12,7 +12,7 @@ import static com.google.common.base.Preconditions.*
  * Checks and/or sets the parameter direction kind for a given UML Parameter.
  */
 @ParticipationConditionOperator(name='isUmlParameterDirection')
-class UmlParameterDirectionConditionOperator extends AbstractSingleArgumentOperator {
+class UmlParameterDirectionConditionOperator extends AbstractSingleArgumentConditionOperator {
 
 	static val Logger logger = Logger.getLogger(UmlParameterDirectionConditionOperator)
 

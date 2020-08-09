@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.uml2.uml.UMLPackage
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.cbs.commonalities.util.oo.Visibility
-import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentOperator
+import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.AbstractSingleArgumentConditionOperator
 import tools.vitruv.extensions.dslruntime.commonalities.operators.participation.condition.ParticipationConditionOperator
 
 import static com.google.common.base.Preconditions.*
@@ -19,7 +19,7 @@ import static extension tools.vitruv.applications.cbs.commonalities.util.uml.Uml
  * visibility attribute.
  */
 @ParticipationConditionOperator(name = 'isUmlVisibility')
-class UmlVisibilityConditionOperator extends AbstractSingleArgumentOperator {
+class UmlVisibilityConditionOperator extends AbstractSingleArgumentConditionOperator {
 
 	static val Logger logger = Logger.getLogger(UmlVisibilityConditionOperator)
 
