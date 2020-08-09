@@ -6,6 +6,8 @@ import tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute.
 concept ObjectOrientedDesign
 
 // Externally contained by ObjectOrientedDesign:InterfaceMethod.parameters
+// and ObjectOrientedDesign:ClassMethod.parameters
+// and ObjectOrientedDesign:Constructor.parameters
 referenced commonality MethodParameter {
 
 	// Externally contained by UML:Operation.ownedParameter
@@ -19,6 +21,8 @@ referenced commonality MethodParameter {
 	}
 
 	// Externally contained by Java:InterfaceMethod.parameters
+	// and Java:ClassMethod.parameters
+	// and Java:Constructor.parameters
 	with Java:OrdinaryParameter
 	whereat {
 	}
