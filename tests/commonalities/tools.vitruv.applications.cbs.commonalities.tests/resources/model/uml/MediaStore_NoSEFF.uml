@@ -3,22 +3,12 @@
   <packagedElement xmi:type="uml:Package" name="defaultRepository">
     <packagedElement xmi:type="uml:Package" name="contracts">
       <packagedElement xmi:type="uml:Interface" name="IUserDB">
-        <ownedOperation name="addUser">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
-        <ownedOperation name="getUserData">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
+        <ownedOperation name="addUser"/>
+        <ownedOperation name="getUserData"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" name="IDownload">
         <ownedOperation name="download">
-          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/AudioCollectionRequest" direction="return">
+          <ownedParameter type="//defaultRepository/datatypes/AudioCollectionRequest" direction="return">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
@@ -30,25 +20,16 @@
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" name="IMediaAccess">
         <ownedOperation name="upload">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
           <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
         </ownedOperation>
-        <ownedOperation name="getFileList">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
+        <ownedOperation name="getFileList"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" name="IPackaging">
         <ownedOperation name="zip">
-          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return">
+          <ownedParameter type="//defaultRepository/datatypes/FileContent" direction="return">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
@@ -60,17 +41,13 @@
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" name="IMediaManagement">
         <ownedOperation name="upload">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
           <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
         </ownedOperation>
         <ownedOperation name="download">
-          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return">
+          <ownedParameter type="//defaultRepository/datatypes/FileContent" direction="return">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
@@ -79,44 +56,20 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
         </ownedOperation>
-        <ownedOperation name="getFileList">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
+        <ownedOperation name="getFileList"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" name="IFacade">
         <ownedOperation name="upload">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
           <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
         </ownedOperation>
-        <ownedOperation name="getFileList">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
-        <ownedOperation name="register">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
-        <ownedOperation name="login">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
+        <ownedOperation name="getFileList"/>
+        <ownedOperation name="register"/>
+        <ownedOperation name="login"/>
         <ownedOperation name="download">
-          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return">
+          <ownedParameter type="//defaultRepository/datatypes/FileContent" direction="return">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
@@ -127,22 +80,12 @@
         </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" name="IDB">
-        <ownedOperation name="query">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
-        <ownedOperation name="getFileList">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
+        <ownedOperation name="query"/>
+        <ownedOperation name="getFileList"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" name="IFileStorage">
         <ownedOperation name="getFiles">
-          <ownedParameter name="returnParam" type="//defaultRepository/datatypes/FileContent" direction="return">
+          <ownedParameter type="//defaultRepository/datatypes/FileContent" direction="return">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
           </ownedParameter>
@@ -152,10 +95,6 @@
           </ownedParameter>
         </ownedOperation>
         <ownedOperation name="storeFile">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
           <ownedParameter name="file" type="//defaultRepository/datatypes/FileContent">
             <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
@@ -163,18 +102,8 @@
         </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" name="IUserManagement">
-        <ownedOperation name="register">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
-        <ownedOperation name="login">
-          <ownedParameter name="returnParam" direction="return">
-            <lowerValue xmi:type="uml:LiteralInteger" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" value="1"/>
-          </ownedParameter>
-        </ownedOperation>
+        <ownedOperation name="register"/>
+        <ownedOperation name="login"/>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" name="datatypes">

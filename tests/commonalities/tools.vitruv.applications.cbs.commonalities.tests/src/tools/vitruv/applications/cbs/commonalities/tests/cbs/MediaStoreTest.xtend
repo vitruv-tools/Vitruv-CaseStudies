@@ -11,6 +11,7 @@ import tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm.PcmMediaStoreTe
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_1_Packages
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_2_ClassAndInterfaceStubs
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_3_CompositeDataTypes
+import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_4_OperationSignatures
 import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 
@@ -30,15 +31,14 @@ class MediaStoreTest extends CBSCommonalitiesExecutionTest {
 		val umlModels3 = new DomainModelsProvider('UML (3_CompositeDataTypes)') [
 			new UmlMediaStoreTestModels_3_CompositeDataTypes(it)
 		]
-		// TODO
-//		val umlModels4 = new DomainModelsProvider('UML (4_OperationSignatures)') [
-//			new UmlMediaStoreTestModels_4_OperationSignatures(it)
-//		]
+		val umlModels4 = new DomainModelsProvider('UML (4_OperationSignatures)') [
+			new UmlMediaStoreTestModels_4_OperationSignatures(it)
+		]
 		return #[
 			#[pcmModels, umlModels1],
 			#[pcmModels, umlModels2],
-			#[pcmModels, umlModels3]
-			// #[pcmModels, umlModels1],
+			#[pcmModels, umlModels3],
+			#[pcmModels, umlModels4]
 		]
 	}
 
