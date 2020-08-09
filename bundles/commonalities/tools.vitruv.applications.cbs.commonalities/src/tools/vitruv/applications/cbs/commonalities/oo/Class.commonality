@@ -70,6 +70,14 @@ commonality Class {
 		= Java:Class.members
 	}
 
+	has constructors referencing ObjectOrientedDesign:Constructor {
+		// Note: The participation conditions ensure that we only match constructor operations.
+		= UML:Class.ownedOperation
+
+		// Note: Any elements that are not of type Java:Constructor are implicitly ignored.
+		= Java:Class.members
+	}
+
 	has methods referencing ObjectOrientedDesign:ClassMethod {
 		= UML:Class.ownedOperation
 
