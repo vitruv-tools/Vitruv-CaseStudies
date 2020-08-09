@@ -269,7 +269,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 	// Multiple methods
 
 	@Test
-	def void multipleInterfaceMethodsCreation() {
+	def void multipleClassMethodsCreation() {
 		sourceModels.multipleClassMethodsCreation.createAndSynchronize()
 		targetModels.multipleClassMethodsCreation.check()
 	}
