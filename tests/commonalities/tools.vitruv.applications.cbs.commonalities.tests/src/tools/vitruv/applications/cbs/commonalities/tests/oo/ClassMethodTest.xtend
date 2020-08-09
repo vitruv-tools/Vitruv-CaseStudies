@@ -67,6 +67,14 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 		def DomainModel privateClassMethodCreation()
 
+		// Modifiers
+
+		def DomainModel finalClassMethodCreation()
+
+		def DomainModel abstractClassMethodCreation()
+
+		def DomainModel staticClassMethodCreation()
+
 		// Return parameter
 
 		/**
@@ -164,6 +172,26 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 	def void privateClassMethodCreation() {
 		sourceModels.privateClassMethodCreation.createAndSynchronize()
 		targetModels.privateClassMethodCreation.check()
+	}
+
+	// Modifiers
+
+	@Test
+	def void finalClassMethodCreation() {
+		sourceModels.finalClassMethodCreation.createAndSynchronize()
+		targetModels.finalClassMethodCreation.check()
+	}
+
+	@Test
+	def void abstractClassMethodCreation() {
+		sourceModels.abstractClassMethodCreation.createAndSynchronize()
+		targetModels.abstractClassMethodCreation.check()
+	}
+
+	@Test
+	def void staticClassMethodCreation() {
+		sourceModels.staticClassMethodCreation.createAndSynchronize()
+		targetModels.staticClassMethodCreation.check()
 	}
 
 	// Return parameter

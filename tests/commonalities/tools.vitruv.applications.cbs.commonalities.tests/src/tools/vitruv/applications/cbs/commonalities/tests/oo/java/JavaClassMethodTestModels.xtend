@@ -132,6 +132,53 @@ class JavaClassMethodTestModels extends JavaTestModelsBase implements ClassMetho
 		]
 	}
 
+	// Modifiers
+
+	override finalClassMethodCreation() {
+		return newModel [
+			val javaPackage = newJavaPackage
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
+				members += newJavaClassMethod => [
+					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createFinal
+				]
+			])
+			return #[
+				javaPackage,
+				javaCompilationUnit
+			]
+		]
+	}
+
+	override abstractClassMethodCreation() {
+		return newModel [
+			val javaPackage = newJavaPackage
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
+				members += newJavaClassMethod => [
+					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createAbstract
+				]
+			])
+			return #[
+				javaPackage,
+				javaCompilationUnit
+			]
+		]
+	}
+
+	override staticClassMethodCreation() {
+		return newModel [
+			val javaPackage = newJavaPackage
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
+				members += newJavaClassMethod => [
+					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createStatic
+				]
+			])
+			return #[
+				javaPackage,
+				javaCompilationUnit
+			]
+		]
+	}
+
 	// Return parameter
 
 	override classMethodWithIntegerReturnCreation() {

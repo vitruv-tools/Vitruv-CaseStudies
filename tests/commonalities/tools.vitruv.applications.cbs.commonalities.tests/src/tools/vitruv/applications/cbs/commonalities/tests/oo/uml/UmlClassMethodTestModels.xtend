@@ -124,6 +124,47 @@ class UmlClassMethodTestModels extends UmlTestModelsBase implements ClassMethodT
 		]
 	}
 
+	// Modifiers
+
+	override finalClassMethodCreation() {
+		return newModel [
+			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
+				ownedOperations += newUmlOperation => [
+					isLeaf = true
+				]
+			]))
+			return #[
+				umlModel
+			]
+		]
+	}
+
+	override abstractClassMethodCreation() {
+		return newModel [
+			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
+				ownedOperations += newUmlOperation => [
+					isAbstract = true
+				]
+			]))
+			return #[
+				umlModel
+			]
+		]
+	}
+
+	override staticClassMethodCreation() {
+		return newModel [
+			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
+				ownedOperations += newUmlOperation => [
+					isStatic = true
+				]
+			]))
+			return #[
+				umlModel
+			]
+		]
+	}
+
 	// Return parameter
 
 	override classMethodWithIntegerReturnCreation() {
