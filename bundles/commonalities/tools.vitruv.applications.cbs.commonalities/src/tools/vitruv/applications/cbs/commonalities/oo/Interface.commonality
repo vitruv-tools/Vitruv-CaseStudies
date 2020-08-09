@@ -43,7 +43,13 @@ commonality Interface {
 		-> Java:Resource.name
 	}
 
-	// TODO methods
+	has methods referencing ObjectOrientedDesign:InterfaceMethod {
+		= UML:Interface.ownedOperation
+
+		// Note: Any elements that are not of type Java:InterfaceMethod are implicitly ignored.
+		= Java:Interface.members
+	}
+
 	// TODO Support non-public visibilities?
 	// Top level interfaces can also be package-private, inner interfaces can also be protected and private.
 

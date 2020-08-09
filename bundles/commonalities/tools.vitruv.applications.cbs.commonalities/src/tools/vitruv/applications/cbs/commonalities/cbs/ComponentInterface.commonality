@@ -14,4 +14,10 @@ referenced commonality ComponentInterface {
 
 		= ObjectOrientedDesign:Interface.name
 	}
+
+	has operations referencing ComponentBasedDesign:Operation {
+		= PCM:OperationInterface.signatures__OperationInterface
+
+		= ObjectOrientedDesign:Interface.methods
+	}
 }
