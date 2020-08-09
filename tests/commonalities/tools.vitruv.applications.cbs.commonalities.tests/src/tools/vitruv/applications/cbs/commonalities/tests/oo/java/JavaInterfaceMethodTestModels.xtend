@@ -86,7 +86,7 @@ class JavaInterfaceMethodTestModels extends JavaTestModelsBase implements Interf
 		]
 	}
 
-	// Return parameter
+	// Return type
 
 	override interfaceMethodWithIntegerReturnCreation() {
 		return newModel [
@@ -285,7 +285,7 @@ class JavaInterfaceMethodTestModels extends JavaTestModelsBase implements Interf
 		]
 	}
 
-	// Mixed inputs and return types
+	// Mixed input and return types
 
 	override interfaceMethodWithMixedInputsAndReturnCreation() {
 		return newModel [

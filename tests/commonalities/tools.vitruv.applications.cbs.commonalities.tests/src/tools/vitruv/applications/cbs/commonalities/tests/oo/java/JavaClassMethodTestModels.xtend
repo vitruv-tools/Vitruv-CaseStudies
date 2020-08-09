@@ -179,7 +179,7 @@ class JavaClassMethodTestModels extends JavaTestModelsBase implements ClassMetho
 		]
 	}
 
-	// Return parameter
+	// Return type
 
 	override classMethodWithIntegerReturnCreation() {
 		return newModel [
@@ -378,7 +378,7 @@ class JavaClassMethodTestModels extends JavaTestModelsBase implements ClassMetho
 		]
 	}
 
-	// Mixed inputs and return types
+	// Mixed input and return types
 
 	override classMethodWithMixedInputsAndReturnCreation() {
 		return newModel [

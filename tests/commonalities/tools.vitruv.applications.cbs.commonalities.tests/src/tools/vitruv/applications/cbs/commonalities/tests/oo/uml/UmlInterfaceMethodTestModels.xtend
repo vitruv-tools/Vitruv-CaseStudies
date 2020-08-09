@@ -87,7 +87,7 @@ class UmlInterfaceMethodTestModels extends UmlTestModelsBase implements Interfac
 		]
 	}
 
-	// Return parameter
+	// Return type
 
 	override interfaceMethodWithIntegerReturnCreation() {
 		return newModel [
@@ -268,7 +268,7 @@ class UmlInterfaceMethodTestModels extends UmlTestModelsBase implements Interfac
 		]
 	}
 
-	// Mixed inputs and return types
+	// Mixed input and return types
 
 	override interfaceMethodWithMixedInputsAndReturnCreation() {
 		return newModel [

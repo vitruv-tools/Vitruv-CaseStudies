@@ -165,7 +165,7 @@ class UmlClassMethodTestModels extends UmlTestModelsBase implements ClassMethodT
 		]
 	}
 
-	// Return parameter
+	// Return type
 
 	override classMethodWithIntegerReturnCreation() {
 		return newModel [
@@ -346,7 +346,7 @@ class UmlClassMethodTestModels extends UmlTestModelsBase implements ClassMethodT
 		]
 	}
 
-	// Mixed inputs and return types
+	// Mixed input and return types
 
 	override classMethodWithMixedInputsAndReturnCreation() {
 		return newModel [

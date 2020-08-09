@@ -63,10 +63,10 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
 		def DomainModel staticInterfaceMethodCreation()
 
-		// Return parameter
+		// Return type
 
 		/**
-		 * Interface method with integer return parameter and no inputs.
+		 * Interface method with integer return type and no inputs.
 		 */
 		def DomainModel interfaceMethodWithIntegerReturnCreation()
 
@@ -103,11 +103,11 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 		 */
 		def DomainModel interfaceMethodWithMixedInputsCreation()
 
-		// Mixed inputs and return types
+		// Mixed input and return types
 
 		/**
 		 * Interface method with an integer, String and class input parameter
-		 * and an integer return parameter.
+		 * and an integer return type.
 		 */
 		def DomainModel interfaceMethodWithMixedInputsAndReturnCreation()
 
@@ -145,7 +145,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 		targetModels.staticInterfaceMethodCreation.check()
 	}
 
-	// Return parameter
+	// Return type
 
 	@Test
 	def void interfaceMethodWithIntegerReturnCreation() {
@@ -209,7 +209,7 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 		targetModels.interfaceMethodWithMixedInputsCreation.check()
 	}
 
-	// Mixed inputs and return types
+	// Mixed input and return types
 
 	@Test
 	def void interfaceMethodWithMixedInputsAndReturnCreation() {

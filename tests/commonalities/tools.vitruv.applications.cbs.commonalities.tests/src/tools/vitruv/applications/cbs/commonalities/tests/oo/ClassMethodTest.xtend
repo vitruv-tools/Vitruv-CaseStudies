@@ -75,10 +75,10 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
 		def DomainModel staticClassMethodCreation()
 
-		// Return parameter
+		// Return type
 
 		/**
-		 * Class method with integer return parameter and no inputs.
+		 * Class method with integer return type and no inputs.
 		 */
 		def DomainModel classMethodWithIntegerReturnCreation()
 
@@ -114,11 +114,11 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 		 */
 		def DomainModel classMethodWithMixedInputsCreation()
 
-		// Mixed inputs and return types
+		// Mixed input and return types
 
 		/**
 		 * Class method with an integer, String and class input parameter and
-		 * an integer return parameter.
+		 * an integer return type.
 		 */
 		def DomainModel classMethodWithMixedInputsAndReturnCreation()
 
@@ -194,7 +194,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 		targetModels.staticClassMethodCreation.check()
 	}
 
-	// Return parameter
+	// Return type
 
 	@Test
 	def void classMethodWithIntegerReturnCreation() {
@@ -258,7 +258,7 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 		targetModels.classMethodWithMixedInputsCreation.check()
 	}
 
-	// Mixed inputs and return types
+	// Mixed input and return types
 
 	@Test
 	def void classMethodWithMixedInputsAndReturnCreation() {
