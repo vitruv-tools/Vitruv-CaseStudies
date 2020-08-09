@@ -140,6 +140,32 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 		targetModels.basicClassMethodCreation.check()
 	}
 
+	// Visibility
+
+	@Test
+	def void publicClassMethodCreation() {
+		sourceModels.publicClassMethodCreation.createAndSynchronize()
+		targetModels.publicClassMethodCreation.check()
+	}
+
+	@Test
+	def void protectedClassMethodCreation() {
+		sourceModels.protectedClassMethodCreation.createAndSynchronize()
+		targetModels.protectedClassMethodCreation.check()
+	}
+
+	@Test
+	def void packagePrivateClassMethodCreation() {
+		sourceModels.packagePrivateClassMethodCreation.createAndSynchronize()
+		targetModels.packagePrivateClassMethodCreation.check()
+	}
+
+	@Test
+	def void privateClassMethodCreation() {
+		sourceModels.privateClassMethodCreation.createAndSynchronize()
+		targetModels.privateClassMethodCreation.check()
+	}
+
 	// Return parameter
 
 	@Test

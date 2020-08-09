@@ -102,7 +102,7 @@ class UmlClassMethodTestModels extends UmlTestModelsBase implements ClassMethodT
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
 				ownedOperations += newUmlOperation => [
-					visibility = VisibilityKind.PRIVATE_LITERAL
+					visibility = VisibilityKind.PACKAGE_LITERAL
 				]
 			]))
 			return #[
