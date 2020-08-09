@@ -31,6 +31,7 @@ class CBSExecutionTestCompiler extends ExecutionTestCompiler {
 		ooCommonalityFile('Property'),
 		ooCommonalityFile('InterfaceMethod'),
 		ooCommonalityFile('ClassMethod'),
+		ooCommonalityFile('Constructor'),
 		ooCommonalityFile('MethodParameter'),
 
 		// ComponentBasedDesign:

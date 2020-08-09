@@ -11,7 +11,8 @@ import org.junit.runners.Suite.SuiteClasses
 	ClassTest,
 	ClassPropertyTest,
 	InterfaceMethodTest,
-	ClassMethodTest
+	ClassMethodTest,
+	ConstructorTest
 )
 class OOTestSuite {
 }
