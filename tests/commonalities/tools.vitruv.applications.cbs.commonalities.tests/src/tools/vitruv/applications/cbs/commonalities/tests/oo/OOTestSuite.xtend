@@ -9,7 +9,9 @@ import org.junit.runners.Suite.SuiteClasses
 	PackageTest,
 	InterfaceTest,
 	ClassTest,
-	ClassPropertyTest
+	ClassPropertyTest,
+	InterfaceMethodTest,
+	ClassMethodTest
 )
 class OOTestSuite {
 }
