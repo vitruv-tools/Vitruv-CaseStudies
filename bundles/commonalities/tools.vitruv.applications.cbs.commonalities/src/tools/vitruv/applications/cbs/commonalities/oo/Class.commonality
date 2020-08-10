@@ -1,7 +1,7 @@
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaAbstractModifierOperator
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaCompilationUnitNameOperator
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaFinalModifierOperator
-import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaTypeReferenceOperator
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaTypeReferenceOrNullOperator
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaTypeReferencesOperator
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaVisibilityOperator
 
@@ -71,7 +71,7 @@ commonality Class {
 	has superClass {
 		= umlSingleGeneralization(UML:Class.generalization, "ObjectOrientedDesign")
 
-		= javaTypeReference(Java:Class.^extends, "ObjectOrientedDesign")
+		= javaTypeReferenceOrNull(Java:Class.^extends, "ObjectOrientedDesign")
 	}
 
 	has implementedInterfaces {
