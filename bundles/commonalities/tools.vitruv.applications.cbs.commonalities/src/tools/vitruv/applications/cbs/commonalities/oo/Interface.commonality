@@ -1,6 +1,8 @@
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaCompilationUnitNameOperator
+import tools.vitruv.applications.cbs.commonalities.util.java.operators.attribute.JavaTypeReferencesOperator
 import tools.vitruv.applications.cbs.commonalities.util.java.operators.condition.JavaVisibilityConditionOperator
 
+import tools.vitruv.applications.cbs.commonalities.util.uml.operators.attribute.UmlGeneralizationsOperator
 import tools.vitruv.applications.cbs.commonalities.util.uml.operators.condition.UmlVisibilityConditionOperator
 
 concept ObjectOrientedDesign
@@ -43,6 +45,12 @@ commonality Interface {
 		-> Java:Resource.name
 	}
 
+	has superInterfaces {
+		= umlGeneralizations(UML:Interface.generalization, "ObjectOrientedDesign")
+
+		= javaTypeReferences(Java:Interface.^extends, "ObjectOrientedDesign")
+	}
+
 	has methods referencing ObjectOrientedDesign:InterfaceMethod {
 		= UML:Interface.ownedOperation
 
@@ -53,6 +61,5 @@ commonality Interface {
 	// TODO Support non-public visibilities?
 	// Top level interfaces can also be package-private, inner interfaces can also be protected and private.
 
-	// TODO super types
 	// TODO (minor) static final fields
 }
