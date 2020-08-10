@@ -29,15 +29,16 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 		]
 	}
 
-	private static def newJavaField() {
+	private static def newBasicJavaField() {
 		return MembersFactory.eINSTANCE.createField => [
 			name = PROPERTY_NAME
+			typeReference = TypesFactory.eINSTANCE.createInt // Default type
 		]
 	}
 
-	private static def newBasicPrimitiveJavaField() {
-		return newJavaField => [
-			typeReference = TypesFactory.eINSTANCE.createInt
+	private static def newJavaField() {
+		return newBasicJavaField => [
+			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPrivate // Default visibility
 		]
 	}
 
@@ -68,7 +69,7 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 		return newModel [
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
-				members += newBasicPrimitiveJavaField => [
+				members += newBasicJavaField => [
 					withDefaultVisibility
 				]
 			])
@@ -79,13 +80,13 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 		]
 	}
 
-	// Modifiers
+	// Visibility
 
 	override privateClassPropertyCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
-				members += newBasicPrimitiveJavaField => [
+				members += newBasicJavaField => [
 					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPrivate
 				]
 			])
@@ -100,7 +101,7 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 		return newModel [
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
-				members += newBasicPrimitiveJavaField => [
+				members += newBasicJavaField => [
 					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 				]
 			])
@@ -115,7 +116,7 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 		return newModel [
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
-				members += newBasicPrimitiveJavaField => [
+				members += newBasicJavaField => [
 					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createProtected
 				]
 			])
@@ -131,7 +132,7 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
 				// The created field has no modifiers and is therefore package-private.
-				members += newBasicPrimitiveJavaField
+				members += newBasicJavaField
 			])
 			return #[
 				javaPackage,
@@ -140,12 +141,13 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 		]
 	}
 
+	// Modifiers
+
 	override finalClassPropertyCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
-				members += newBasicPrimitiveJavaField => [
-					withDefaultVisibility
+				members += newJavaField => [
 					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createFinal
 				]
 			])
@@ -160,8 +162,7 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 		return newModel [
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
-				members += newBasicPrimitiveJavaField => [
-					withDefaultVisibility
+				members += newJavaField => [
 					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createStatic
 				]
 			])
@@ -176,8 +177,7 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 		return newModel [
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
-				members += newBasicPrimitiveJavaField => [
-					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPrivate
+				members += newJavaField => [
 					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createStatic
 					annotationsAndModifiers += ModifiersFactory.eINSTANCE.createFinal
 				]
@@ -196,7 +196,6 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
 				members += newJavaField => [
-					withDefaultVisibility
 					name = STRING_PROPERTY_NAME
 					typeReference = JavaModificationUtil.createNamespaceClassifierReferenceForName(String.name)
 				]
@@ -215,17 +214,14 @@ class JavaClassPropertyTestModels extends JavaTestModelsBase implements ClassPro
 			val javaPackage = newJavaPackage
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass => [
 				members += newJavaField => [
-					withDefaultVisibility
 					name = BOOLEAN_PROPERTY_NAME
 					typeReference = TypesFactory.eINSTANCE.createBoolean
 				]
 				members += newJavaField => [
-					withDefaultVisibility
 					name = INT_PROPERTY_NAME
 					typeReference = TypesFactory.eINSTANCE.createInt
 				]
 				members += newJavaField => [
-					withDefaultVisibility
 					name = DOUBLE_PROPERTY_NAME
 					typeReference = TypesFactory.eINSTANCE.createDouble
 				]

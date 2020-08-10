@@ -50,10 +50,11 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 	/**
 	 * If not specified otherwise by the individual test cases, all created
 	 * classes are of public visibility and all created properties are of
-	 * primitive <code>int</code> type and use the domain's default property
-	 * visibility. Since some domains have different default property
-	 * visibilities, this has to be considered in the pairwise tests between
-	 * those domains.
+	 * private visibility and primitive <code>int</code> type.
+	 * <p>
+	 * Some test cases may use the domain's default property visibility. Since
+	 * some domains have different default visibilities, this has to be
+	 * considered in the pairwise tests between those domains.
 	 */
 	interface DomainModels {
 
@@ -68,16 +69,20 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 		// Basic
 
 		/**
-		 * A property with only the minimally required attributes.
+		 * A property with only the minimally required attributes and the
+		 * domain's default visibility.
 		 */
 		def DomainModel basicPrimitiveClassPropertyCreation()
 
-		// Modifiers
+		// Visibility
 
 		def DomainModel privateClassPropertyCreation()
 		def DomainModel publicClassPropertyCreation()
 		def DomainModel protectedClassPropertyCreation()
 		def DomainModel packagePrivateClassPropertyCreation()
+
+		// Modifiers
+
 		def DomainModel finalClassPropertyCreation()
 		def DomainModel staticClassPropertyCreation()
 
@@ -126,7 +131,7 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 		targetModels.basicPrimitiveClassPropertyCreation.check()
 	}
 
-	// Modifiers
+	// Visibility
 
 	@Test
 	def void privateClassPropertyCreation() {
@@ -151,6 +156,8 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 		sourceModels.packagePrivateClassPropertyCreation.createAndSynchronize()
 		targetModels.packagePrivateClassPropertyCreation.check()
 	}
+
+	// Modifiers
 
 	@Test
 	def void finalClassPropertyCreation() {

@@ -25,14 +25,20 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 		]
 	}
 
-	private static def newUmlClass1() {
+	private static def newBasicUmlClass1() {
 		return UMLFactory.eINSTANCE.createClass => [
 			name = CLASS_1_NAME
 		]
 	}
 
+	private static def newUmlClass1() {
+		return newBasicUmlClass1 => [
+			visibility = VisibilityKind.PUBLIC_LITERAL
+		]
+	}
+
 	private static def newUmlClass2() {
-		return UMLFactory.eINSTANCE.createClass => [
+		return newUmlClass1 => [
 			name = CLASS_2_NAME
 		]
 	}
@@ -61,7 +67,7 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 
 	override emptyClassCreation() {
 		return newModel [
-			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
+			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newBasicUmlClass1 => [
 				withDefaultVisibility
 			]))
 			return #[
@@ -70,7 +76,7 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 		]
 	}
 
-	// Modifiers
+	// Visibility
 
 	override privateClassCreation() {
 		return newModel [
@@ -116,10 +122,11 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 		]
 	}
 
+	// Modifiers
+
 	override finalClassCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
-				withDefaultVisibility
 				isFinalSpecialization = true
 			]))
 			return #[
@@ -131,7 +138,6 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 	override abstractClassCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
-				withDefaultVisibility
 				isAbstract = true
 			]))
 			return #[
@@ -143,7 +149,6 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 	override classWithMultipleModifiersCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage1.withElements(newUmlClass1 => [
-				visibility = VisibilityKind.PUBLIC_LITERAL
 				isAbstract = true
 				isFinalSpecialization = true
 			]))
@@ -159,8 +164,8 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 		return newModel [
 			val umlModel = newUmlModel => [
 				packagedElements += newUmlPackage1 => [
-					packagedElements += newUmlClass1.withDefaultVisibility
-					packagedElements += newUmlClass2.withDefaultVisibility
+					packagedElements += newUmlClass1
+					packagedElements += newUmlClass2
 				]
 			]
 			return #[
@@ -173,10 +178,10 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 		return newModel [
 			val umlModel = newUmlModel => [
 				packagedElements += newUmlPackage1 => [
-					packagedElements += newUmlClass1.withDefaultVisibility
+					packagedElements += newUmlClass1
 				]
 				packagedElements += newUmlPackage2 => [
-					packagedElements += newUmlClass2.withDefaultVisibility
+					packagedElements += newUmlClass2
 				]
 			]
 			return #[

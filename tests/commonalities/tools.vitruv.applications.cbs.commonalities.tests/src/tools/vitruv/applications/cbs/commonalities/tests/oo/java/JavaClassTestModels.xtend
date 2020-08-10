@@ -25,14 +25,20 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 		]
 	}
 
-	private static def newJavaClass1() {
+	private static def newBasicJavaClass1() {
 		return ClassifiersFactory.eINSTANCE.createClass => [
 			name = CLASS_1_NAME
 		]
 	}
 
+	private static def newJavaClass1() {
+		return newBasicJavaClass1 => [
+			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic // Default visibility
+		]
+	}
+
 	private static def newJavaClass2() {
-		return ClassifiersFactory.eINSTANCE.createClass => [
+		return newJavaClass1 => [
 			name = CLASS_2_NAME
 		]
 	}
@@ -63,7 +69,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 	override emptyClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newBasicJavaClass1 => [
 				withDefaultVisibility
 			])
 			return #[
@@ -73,12 +79,12 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 		]
 	}
 
-	// Modifiers
+	// Visibility
 
 	override privateClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newBasicJavaClass1 => [
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPrivate
 			])
 			return #[
@@ -91,7 +97,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 	override publicClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newBasicJavaClass1 => [
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 			])
 			return #[
@@ -104,7 +110,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 	override protectedClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newBasicJavaClass1 => [
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createProtected
 			])
 			return #[
@@ -118,7 +124,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 		return newModel [
 			val javaPackage = newJavaPackage1
 			// The created class has no modifiers and is therefore package-private.
-			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1)
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newBasicJavaClass1)
 			return #[
 				javaPackage,
 				javaCompilationUnit
@@ -126,11 +132,12 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 		]
 	}
 
+	// Modifiers
+
 	override finalClassCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
-				withDefaultVisibility
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createFinal
 			])
 			return #[
@@ -144,7 +151,6 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 		return newModel [
 			val javaPackage = newJavaPackage1
 			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
-				withDefaultVisibility
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createAbstract
 			])
 			return #[
@@ -157,7 +163,7 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 	override classWithMultipleModifiersCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaCompilationUnit = javaPackage.newCompilationUnit(newJavaClass1 => [
+			val javaCompilationUnit = javaPackage.newCompilationUnit(newBasicJavaClass1 => [
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createFinal
 				annotationsAndModifiers += ModifiersFactory.eINSTANCE.createAbstract
@@ -174,8 +180,8 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 	override multipleClassesInSamePackageCreation() {
 		return newModel [
 			val javaPackage = newJavaPackage1
-			val javaClass1 = newJavaClass1.withDefaultVisibility
-			val javaClass2 = newJavaClass2.withDefaultVisibility
+			val javaClass1 = newJavaClass1
+			val javaClass2 = newJavaClass2
 			val javaCompilationUnit1 = javaPackage.newCompilationUnit(javaClass1)
 			val javaCompilationUnit2 = javaPackage.newCompilationUnit(javaClass2)
 			return #[
@@ -190,8 +196,8 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 		return newModel [
 			val javaPackage1 = newJavaPackage1
 			val javaPackage2 = newJavaPackage2
-			val javaClass1 = newJavaClass1.withDefaultVisibility
-			val javaClass2 = newJavaClass2.withDefaultVisibility
+			val javaClass1 = newJavaClass1
+			val javaClass2 = newJavaClass2
 			val javaCompilationUnit1 = javaPackage1.newCompilationUnit(javaClass1)
 			val javaCompilationUnit2 = javaPackage2.newCompilationUnit(javaClass2)
 			return #[

@@ -27,15 +27,16 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 		]
 	}
 
-	private static def newUmlProperty() {
+	private static def newBasicUmlProperty() {
 		return UMLFactory.eINSTANCE.createProperty => [
 			name = PROPERTY_NAME
+			type = UmlPrimitiveType.INTEGER.umlType // Default type
 		]
 	}
 
-	private static def newBasicPrimitiveUmlProperty() {
-		return newUmlProperty() => [
-			type = UmlPrimitiveType.INTEGER.umlType
+	private static def newUmlProperty() {
+		return newBasicUmlProperty => [
+			visibility = VisibilityKind.PRIVATE_LITERAL // Default visibility
 		]
 	}
 
@@ -64,7 +65,7 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 	override basicPrimitiveClassPropertyCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
+				ownedAttributes += newBasicUmlProperty => [
 					withDefaultVisibility
 				]
 			]))
@@ -74,12 +75,12 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 		]
 	}
 
-	// Modifiers
+	// Visibility
 
 	override privateClassPropertyCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
+				ownedAttributes += newBasicUmlProperty => [
 					visibility = VisibilityKind.PRIVATE_LITERAL
 				]
 			]))
@@ -92,7 +93,7 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 	override publicClassPropertyCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
+				ownedAttributes += newBasicUmlProperty => [
 					visibility = VisibilityKind.PUBLIC_LITERAL
 				]
 			]))
@@ -105,7 +106,7 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 	override protectedClassPropertyCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
+				ownedAttributes += newBasicUmlProperty => [
 					visibility = VisibilityKind.PROTECTED_LITERAL
 				]
 			]))
@@ -118,7 +119,7 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 	override packagePrivateClassPropertyCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
+				ownedAttributes += newUmlProperty => [
 					visibility = VisibilityKind.PACKAGE_LITERAL
 				]
 			]))
@@ -128,11 +129,12 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 		]
 	}
 
+	// Modifiers
+
 	override finalClassPropertyCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
-					withDefaultVisibility
+				ownedAttributes += newUmlProperty => [
 					isReadOnly = true
 				]
 			]))
@@ -145,8 +147,7 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 	override staticClassPropertyCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
-					withDefaultVisibility
+				ownedAttributes += newUmlProperty => [
 					isStatic = true
 				]
 			]))
@@ -159,8 +160,7 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 	override classPropertyWithMultipleModifiersCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
-					visibility = VisibilityKind.PRIVATE_LITERAL
+				ownedAttributes += newUmlProperty => [
 					isStatic = true
 					isReadOnly = true
 				]
@@ -176,8 +176,7 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 	override stringClassPropertyCreation() {
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
-				ownedAttributes += newBasicPrimitiveUmlProperty => [
-					withDefaultVisibility
+				ownedAttributes += newUmlProperty => [
 					name = STRING_PROPERTY_NAME
 					type = UmlPrimitiveType.STRING.umlType
 				]
@@ -194,17 +193,14 @@ class UmlClassPropertyTestModels extends UmlTestModelsBase implements ClassPrope
 		return newModel [
 			val umlModel = newUmlModel.withElements(newUmlPackage.withElements(newUmlClass => [
 				ownedAttributes += newUmlProperty() => [
-					withDefaultVisibility
 					name = BOOLEAN_PROPERTY_NAME
 					type = UmlPrimitiveType.BOOLEAN.umlType
 				]
 				ownedAttributes += newUmlProperty() => [
-					withDefaultVisibility
 					name = INT_PROPERTY_NAME
 					type = UmlPrimitiveType.INTEGER.umlType
 				]
 				ownedAttributes += newUmlProperty() => [
-					withDefaultVisibility
 					name = DOUBLE_PROPERTY_NAME
 					type = UmlPrimitiveType.REAL.umlType
 				]

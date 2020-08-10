@@ -49,9 +49,11 @@ class ClassTest extends CBSCommonalitiesExecutionTest {
 
 	/**
 	 * If not specified otherwise by the individual test cases, all created
-	 * classes use the domain's default class visibility. Since some domains
-	 * have different default class visibilities, this has to be taken into
-	 * account when testing these pairs of domains.
+	 * classes are of public visibility.
+	 * <p>
+	 * Some test cases may create classes with the domain's default visibility.
+	 * Since some domains have different default class visibilities, this has
+	 * to be taken into account when testing these pairs of domains.
 	 */
 	interface DomainModels {
 
@@ -63,16 +65,20 @@ class ClassTest extends CBSCommonalitiesExecutionTest {
 		// Empty class
 
 		/**
-		 * A class with only the minimally required attributes.
+		 * A class with only the minimally required attributes and the domain's
+		 * default visibility.
 		 */
 		def DomainModel emptyClassCreation()
 
-		// Modifiers
+		// Visibility
 
 		def DomainModel privateClassCreation()
 		def DomainModel publicClassCreation()
 		def DomainModel protectedClassCreation()
 		def DomainModel packagePrivateClassCreation()
+
+		// Modifiers
+
 		def DomainModel finalClassCreation()
 		def DomainModel abstractClassCreation()
 
@@ -111,7 +117,7 @@ class ClassTest extends CBSCommonalitiesExecutionTest {
 		targetModels.emptyClassCreation.check()
 	}
 
-	// Modifiers
+	// Visibility
 
 	@Test
 	def void privateClassCreation() {
@@ -136,6 +142,8 @@ class ClassTest extends CBSCommonalitiesExecutionTest {
 		sourceModels.packagePrivateClassCreation.createAndSynchronize()
 		targetModels.packagePrivateClassCreation.check()
 	}
+
+	// Modifiers
 
 	@Test
 	def void finalClassCreation() {
