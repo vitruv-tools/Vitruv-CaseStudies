@@ -8,6 +8,7 @@ import org.emftext.language.java.modifiers.ModifiersFactory
 import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.oo.ClassTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
+import tools.vitruv.domains.java.util.JavaModificationUtil
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*
 
@@ -40,6 +41,19 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 	private static def newJavaClass2() {
 		return newJavaClass1 => [
 			name = CLASS_2_NAME
+		]
+	}
+
+	private static def newJavaInterface1() {
+		return ClassifiersFactory.eINSTANCE.createInterface => [
+			name = INTERFACE_1_NAME
+			annotationsAndModifiers += ModifiersFactory.eINSTANCE.createPublic
+		]
+	}
+
+	private static def newJavaInterface2() {
+		return newJavaInterface1 => [
+			name = INTERFACE_2_NAME
 		]
 	}
 
@@ -205,6 +219,65 @@ class JavaClassTestModels extends JavaTestModelsBase implements ClassTest.Domain
 				javaPackage2,
 				javaCompilationUnit1,
 				javaCompilationUnit2
+			]
+		]
+	}
+
+	// Super class
+
+	override classWithSuperClassCreation() {
+		return newModel [
+			val javaPackage = newJavaPackage1
+			val javaClass2 = newJavaClass2
+			val javaClass1 = newJavaClass1 => [
+				extends = JavaModificationUtil.createNamespaceClassifierReference(javaClass2)
+			]
+			val javaCompilationUnit1 = javaPackage.newCompilationUnit(javaClass2)
+			val javaCompilationUnit2 = javaPackage.newCompilationUnit(javaClass1)
+			return #[
+				javaPackage,
+				javaCompilationUnit1,
+				javaCompilationUnit2
+			]
+		]
+	}
+
+	// Implemented interfaces
+
+	override classImplementingInterfaceCreation() {
+		return newModel [
+			val javaPackage = newJavaPackage1
+			val javaInterface1 = newJavaInterface1
+			val javaClass1 = newJavaClass1 => [
+				implements += JavaModificationUtil.createNamespaceClassifierReference(javaInterface1)
+			]
+			val javaCompilationUnit1 = javaPackage.newCompilationUnit(javaInterface1)
+			val javaCompilationUnit2 = javaPackage.newCompilationUnit(javaClass1)
+			return #[
+				javaPackage,
+				javaCompilationUnit1,
+				javaCompilationUnit2
+			]
+		]
+	}
+
+	override classImplementingMultipleInterfacesCreation() {
+		return newModel [
+			val javaPackage = newJavaPackage1
+			val javaInterface1 = newJavaInterface1
+			val javaInterface2 = newJavaInterface2
+			val javaClass1 = newJavaClass1 => [
+				implements += JavaModificationUtil.createNamespaceClassifierReference(javaInterface1)
+				implements += JavaModificationUtil.createNamespaceClassifierReference(javaInterface2)
+			]
+			val javaCompilationUnit1 = javaPackage.newCompilationUnit(javaInterface1)
+			val javaCompilationUnit2 = javaPackage.newCompilationUnit(javaInterface2)
+			val javaCompilationUnit3 = javaPackage.newCompilationUnit(javaClass1)
+			return #[
+				javaPackage,
+				javaCompilationUnit1,
+				javaCompilationUnit2,
+				javaCompilationUnit3
 			]
 		]
 	}

@@ -43,6 +43,19 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 		]
 	}
 
+	private static def newUmlInterface1() {
+		return UMLFactory.eINSTANCE.createInterface => [
+			name = INTERFACE_1_NAME
+			visibility = VisibilityKind.PUBLIC_LITERAL
+		]
+	}
+
+	private static def newUmlInterface2() {
+		return newUmlInterface1 => [
+			name = INTERFACE_2_NAME
+		]
+	}
+
 	new(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
 		super(vitruvApplicationTestAdapter)
 	}
@@ -182,6 +195,72 @@ class UmlClassTestModels extends UmlTestModelsBase implements ClassTest.DomainMo
 				]
 				packagedElements += newUmlPackage2 => [
 					packagedElements += newUmlClass2
+				]
+			]
+			return #[
+				umlModel
+			]
+		]
+	}
+
+	// Super class
+
+	override classWithSuperClassCreation() {
+		return newModel [
+			val umlModel = newUmlModel => [
+				packagedElements += newUmlPackage1 => [
+					val umlClass2 = newUmlClass2
+					packagedElements += umlClass2
+					packagedElements += newUmlClass1 => [
+						generalizations += UMLFactory.eINSTANCE.createGeneralization => [
+							general = umlClass2
+						]
+					]
+				]
+			]
+			return #[
+				umlModel
+			]
+		]
+	}
+
+	// Implemented interfaces
+
+	override classImplementingInterfaceCreation() {
+		return newModel [
+			val umlModel = newUmlModel => [
+				packagedElements += newUmlPackage1 => [
+					val umlInterface1 = newUmlInterface1
+					packagedElements += umlInterface1
+					packagedElements += newUmlClass1 => [
+						interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization => [
+							contract = umlInterface1
+						]
+					]
+				]
+			]
+			return #[
+				umlModel
+			]
+		]
+	}
+
+	override classImplementingMultipleInterfacesCreation() {
+		return newModel [
+			val umlModel = newUmlModel => [
+				packagedElements += newUmlPackage1 => [
+					val umlInterface1 = newUmlInterface1
+					val umlInterface2 = newUmlInterface2
+					packagedElements += umlInterface1
+					packagedElements += umlInterface2
+					packagedElements += newUmlClass1 => [
+						interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization => [
+							contract = umlInterface1
+						]
+						interfaceRealizations += UMLFactory.eINSTANCE.createInterfaceRealization => [
+							contract = umlInterface2
+						]
+					]
 				]
 			]
 			return #[

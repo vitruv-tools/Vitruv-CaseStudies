@@ -37,6 +37,12 @@ class UmlInterfaceTestModels extends UmlTestModelsBase implements InterfaceTest.
 		]
 	}
 
+	private static def newUmlInterface3() {
+		return newUmlInterface1 => [
+			name = INTERFACE_3_NAME
+		]
+	}
+
 	new(VitruvApplicationTestAdapter vitruvApplicationTestAdapter) {
 		super(vitruvApplicationTestAdapter)
 	}
@@ -76,6 +82,51 @@ class UmlInterfaceTestModels extends UmlTestModelsBase implements InterfaceTest.
 				]
 				packagedElements += newUmlPackage2 => [
 					packagedElements += newUmlInterface2
+				]
+			]
+			return #[
+				umlModel
+			]
+		]
+	}
+
+	// Super interfaces
+
+	override interfaceWithSuperInterfaceCreation() {
+		return newModel [
+			val umlModel = newUmlModel => [
+				packagedElements += newUmlPackage1 => [
+					val umlInterface2 = newUmlInterface2
+					packagedElements += umlInterface2
+					packagedElements += newUmlInterface1 => [
+						generalizations += UMLFactory.eINSTANCE.createGeneralization => [
+							general = umlInterface2
+						]
+					]
+				]
+			]
+			return #[
+				umlModel
+			]
+		]
+	}
+
+	override interfaceWithMultipleSuperInterfacesCreation() {
+		return newModel [
+			val umlModel = newUmlModel => [
+				packagedElements += newUmlPackage1 => [
+					val umlInterface2 = newUmlInterface2
+					val umlInterface3 = newUmlInterface3
+					packagedElements += umlInterface2
+					packagedElements += umlInterface3
+					packagedElements += newUmlInterface1 => [
+						generalizations += UMLFactory.eINSTANCE.createGeneralization => [
+							general = umlInterface2
+						]
+						generalizations += UMLFactory.eINSTANCE.createGeneralization => [
+							general = umlInterface3
+						]
+					]
 				]
 			]
 			return #[

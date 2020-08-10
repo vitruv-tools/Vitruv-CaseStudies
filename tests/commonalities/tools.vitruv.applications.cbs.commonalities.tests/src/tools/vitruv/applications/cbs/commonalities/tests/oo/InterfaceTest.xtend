@@ -37,6 +37,7 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 		static val PACKAGE_2_NAME = 'root2'
 		static val INTERFACE_1_NAME = 'Foo'
 		static val INTERFACE_2_NAME = 'Bar'
+		static val INTERFACE_3_NAME = 'Baz'
 
 		// Empty interface
 
@@ -49,6 +50,18 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 
 		def DomainModel multipleInterfacesInSamePackageCreation()
 		def DomainModel multipleInterfacesInDifferentPackagesCreation()
+
+		// Super interfaces
+
+		/**
+		 * Interface 1 extending interface 2 from the same package.
+		 */
+		def DomainModel interfaceWithSuperInterfaceCreation()
+
+		/**
+		 * Interface 1 extending interface 2 and 3 from the same package.
+		 */
+		def DomainModel interfaceWithMultipleSuperInterfacesCreation()
 	}
 
 	val DomainModels sourceModels
@@ -80,6 +93,20 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 	def void multipleInterfacesInDifferentPackagesCreation() {
 		sourceModels.multipleInterfacesInDifferentPackagesCreation.createAndSynchronize()
 		targetModels.multipleInterfacesInDifferentPackagesCreation.check()
+	}
+
+	// Super interfaces
+
+	@Test
+	def void interfaceWithSuperInterfaceCreation() {
+		sourceModels.interfaceWithSuperInterfaceCreation.createAndSynchronize()
+		targetModels.interfaceWithSuperInterfaceCreation.check()
+	}
+
+	@Test
+	def void interfaceWithMultipleSuperInterfacesCreation() {
+		sourceModels.interfaceWithMultipleSuperInterfacesCreation.createAndSynchronize()
+		targetModels.interfaceWithMultipleSuperInterfacesCreation.check()
 	}
 
 	// TODO renaming

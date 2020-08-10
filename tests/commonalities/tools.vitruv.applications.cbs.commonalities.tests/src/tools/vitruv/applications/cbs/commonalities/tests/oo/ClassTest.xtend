@@ -61,6 +61,8 @@ class ClassTest extends CBSCommonalitiesExecutionTest {
 		static val PACKAGE_2_NAME = 'root2'
 		static val CLASS_1_NAME = 'Foo'
 		static val CLASS_2_NAME = 'Bar'
+		static val INTERFACE_1_NAME = 'IFoo'
+		static val INTERFACE_2_NAME = 'IBar'
 
 		// Empty class
 
@@ -98,6 +100,25 @@ class ClassTest extends CBSCommonalitiesExecutionTest {
 
 		def DomainModel multipleClassesInSamePackageCreation()
 		def DomainModel multipleClassesInDifferentPackagesCreation()
+
+		// Super class
+
+		/**
+		 * Class 1 extending class 2 from the same package.
+		 */
+		def DomainModel classWithSuperClassCreation()
+
+		// Implemented interfaces
+
+		/**
+		 * Class 1 implementing interface 1 from the same package.
+		 */
+		def DomainModel classImplementingInterfaceCreation()
+
+		/**
+		 * Class 1 implementing interface 1 and 2 from the same package.
+		 */
+		def DomainModel classImplementingMultipleInterfacesCreation()
 	}
 
 	val DomainModels sourceModels
@@ -175,5 +196,27 @@ class ClassTest extends CBSCommonalitiesExecutionTest {
 	def void multipleClassesInDifferentPackagesCreation() {
 		sourceModels.multipleClassesInDifferentPackagesCreation.createAndSynchronize()
 		targetModels.multipleClassesInDifferentPackagesCreation.check()
+	}
+
+	// Super class
+
+	@Test
+	def void classWithSuperClassCreation() {
+		sourceModels.classWithSuperClassCreation.createAndSynchronize()
+		targetModels.classWithSuperClassCreation.check()
+	}
+
+	// Implemented interfaces
+
+	@Test
+	def void classImplementingInterfaceCreation() {
+		sourceModels.classImplementingInterfaceCreation.createAndSynchronize()
+		targetModels.classImplementingInterfaceCreation.check()
+	}
+
+	@Test
+	def void classImplementingMultipleInterfacesCreation() {
+		sourceModels.classImplementingMultipleInterfacesCreation.createAndSynchronize()
+		targetModels.classImplementingMultipleInterfacesCreation.check()
 	}
 }
