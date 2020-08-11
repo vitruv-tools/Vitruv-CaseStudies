@@ -1,7 +1,9 @@
 package tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute
 
+import org.eclipse.emf.ecore.EObject
 import org.palladiosimulator.pcm.core.entity.NamedElement
 import org.palladiosimulator.pcm.repository.DataType
+import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import tools.vitruv.applications.cbs.commonalities.util.common.CommonPrimitiveType
 import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.AbstractTypeReferenceOperator
@@ -13,15 +15,19 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
 import static tools.vitruv.framework.util.XtendAssertHelper.*
 
 /**
- * Maps between references to PCM {@link DataType}s and an intermediate
- * representation of these type references.
+ * Maps between references to PCM types ({@link DataType}s, but also types such
+ * as {@link OperationInterface}) and an intermediate representation of these
+ * type references.
+ * <p>
+ * Since there is no common PCM type for the types of objects this operator
+ * supports, it operates on plain {@link EObject}s.
  */
 @AttributeMappingOperator(
 	name='pcmTypeReference',
 	commonalityAttributeType=@AttributeType(multiValued=false, type=String),
-	participationAttributeType=@AttributeType(multiValued=false, type=DataType)
+	participationAttributeType=@AttributeType(multiValued=false, type=EObject)
 )
-class PcmTypeReferenceOperator extends AbstractTypeReferenceOperator<DataType, DataType> {
+class PcmTypeReferenceOperator extends AbstractTypeReferenceOperator<EObject, EObject> {
 
 	/**
 	 * @param executionState the reactions execution state
@@ -31,17 +37,17 @@ class PcmTypeReferenceOperator extends AbstractTypeReferenceOperator<DataType, D
 		super(executionState, 'PCM', targetConceptDomainName, DataType)
 	}
 
-	override protected getReferencedDomainType(DataType domainTypeReference) {
+	override protected getReferencedDomainType(EObject domainTypeReference) {
 		// PCM does not use a separate type to represent type references:
 		return domainTypeReference
 	}
 
-	override protected getDomainTypeReference(DataType domainType) {
+	override protected getDomainTypeReference(EObject domainType) {
 		// PCM does not use a separate type to represent type references:
 		return domainType
 	}
 
-	override protected asString(DataType domainType) {
+	override protected asString(EObject domainType) {
 		if (domainType instanceof PrimitiveDataType) {
 			return domainType.type.name()
 		} else if (domainType instanceof NamedElement) {
@@ -68,7 +74,7 @@ class PcmTypeReferenceOperator extends AbstractTypeReferenceOperator<DataType, D
 		}
 	}
 
-	override protected toCommonPrimitiveType(DataType domainType) {
+	override protected toCommonPrimitiveType(EObject domainType) {
 		assertTrue(domainType !== null)
 		if (domainType instanceof PrimitiveDataType) {
 			return domainType.toCommonPrimitiveType

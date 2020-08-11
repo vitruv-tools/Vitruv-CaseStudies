@@ -1,6 +1,10 @@
 import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.FirstUpperOperator
 import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.PrefixOperator
 
+import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.OOTypeReferencesOperator
+
+import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.PcmProvidedRolesOperator
+
 concept ComponentBasedDesign
 
 // Externally contained by ComponentBasedDesign:Repository.components
@@ -25,4 +29,13 @@ referenced commonality Component {
 		= firstUpper(ObjectOrientedDesign:ComponentPackage.name)
 		= prefix(ObjectOrientedDesign:ComponentClass.name, "Impl")
 	}
+
+	has providedRoles {
+		// TODO We do not react to changes of the interfaces provided by these ProvidedRoles currently.
+		= pcmProvidedRoles(PCM:BasicComponent.providedRoles_InterfaceProvidingEntity, "ComponentBasedDesign")
+
+		= ooTypeReferences(ObjectOrientedDesign:ComponentClass.implementedInterfaces, "ComponentBasedDesign")
+	}
+
+	// TODO requiredRoles
 }

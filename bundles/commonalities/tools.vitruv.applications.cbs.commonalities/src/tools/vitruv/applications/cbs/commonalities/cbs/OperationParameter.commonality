@@ -1,5 +1,5 @@
 import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.OOTypeReferenceOperator
-import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.PcmTypeReferenceOperator
+import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.PcmDataTypeReferenceOperator
 
 concept ComponentBasedDesign
 
@@ -19,7 +19,7 @@ referenced commonality OperationParameter {
 	}
 
 	has type {
-		= pcmTypeReference(PCM:Parameter.dataType__Parameter, "ComponentBasedDesign")
+		= pcmDataTypeReference(PCM:Parameter.dataType__Parameter, "ComponentBasedDesign")
 
 		= ooTypeReference(ObjectOrientedDesign:MethodParameter.type, "ComponentBasedDesign")
 	}
