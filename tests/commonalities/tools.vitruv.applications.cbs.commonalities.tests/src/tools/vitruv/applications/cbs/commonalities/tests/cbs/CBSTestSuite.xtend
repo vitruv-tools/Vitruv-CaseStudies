@@ -10,6 +10,7 @@ import org.junit.runners.Suite.SuiteClasses
 	ComponentInterfaceTest,
 	BasicComponentTest,
 	CompositeDataTypeTest,
+	ProvidedRoleTest,
 	MediaStoreTest
 )
 class CBSTestSuite {
