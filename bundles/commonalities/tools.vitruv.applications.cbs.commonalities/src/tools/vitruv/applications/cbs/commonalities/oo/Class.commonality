@@ -69,12 +69,14 @@ commonality Class {
 	// Note: No 'static' attribute, since UML has no equivalent to represent this.
 
 	has superClass {
+		// TODO We do no react to changes of the 'general' reference currently.
 		= umlSingleGeneralization(UML:Class.generalization, "ObjectOrientedDesign")
 
 		= javaTypeReferenceOrNull(Java:Class.^extends, "ObjectOrientedDesign")
 	}
 
 	has implementedInterfaces {
+		// TODO We do no react to changes of the 'contract' reference currently.
 		= umlInterfaceRealizations(UML:Class.interfaceRealization, "ObjectOrientedDesign")
 
 		= javaTypeReferences(Java:Class.implements, "ObjectOrientedDesign")

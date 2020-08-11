@@ -46,6 +46,7 @@ commonality Interface {
 	}
 
 	has superInterfaces {
+		// TODO We do no react to changes of the 'general' reference currently.
 		= umlGeneralizations(UML:Interface.generalization, "ObjectOrientedDesign")
 
 		= javaTypeReferences(Java:Interface.^extends, "ObjectOrientedDesign")
