@@ -13,7 +13,7 @@ import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlInterfaceTest
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static extension tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.*
 
 @RunWith(Parameterized)
 @Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
@@ -25,7 +25,7 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 			new UmlTestModelsProvider [new UmlInterfaceTestModels(it)],
 			new JavaTestModelsProvider [new JavaInterfaceTestModels(it)]
 		]
-		return domainModelsProviders.toListOfPairs(true)
+		return domainModelsProviders.orderedPairs
 	}
 
 	/**

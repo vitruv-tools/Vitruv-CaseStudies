@@ -15,7 +15,7 @@ import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsProvid
 import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 
-import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+import static extension tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.*
 
 @RunWith(Parameterized)
 @Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
@@ -28,7 +28,7 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 			new UmlTestModelsProvider [new UmlCompositeDataTypeTestModels(it)],
 			new JavaTestModelsProvider [new JavaCompositeDataTypeTestModels(it)]
 		]
-		return domainModelsProviders.toListOfPairs(true)
+		return domainModelsProviders.orderedPairs
 	}
 
 	interface DomainModels {

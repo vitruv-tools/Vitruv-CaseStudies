@@ -32,7 +32,7 @@ class ProvidedRoleTest extends CBSCommonalitiesExecutionTest {
 //			new UmlTestModelsProvider [new UmlProvidedRoleTestModels(it)],
 //			new JavaTestModelsProvider [new JavaProvidedRoleTestModels(it)]
 //		]
-//		return domainModelsProviders.toListOfPairs(true)
+//		return domainModelsProviders.orderedPairs
 		return #[
 			#[pcmModels, umlModels],
 			#[umlModels, pcmModels],
