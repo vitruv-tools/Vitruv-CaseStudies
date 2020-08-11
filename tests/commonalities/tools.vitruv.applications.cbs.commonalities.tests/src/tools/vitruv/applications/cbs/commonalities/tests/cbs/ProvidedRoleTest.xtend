@@ -63,7 +63,6 @@ class ProvidedRoleTest extends CBSCommonalitiesExecutionTest {
 
 	@Test
 	def void componentWithProvidedRoleCreation() {
-		debugReactions
 		sourceModels.componentWithProvidedRoleCreation.createAndSynchronize()
 		targetModels.componentWithProvidedRoleCreation.check()
 	}
