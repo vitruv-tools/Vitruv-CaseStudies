@@ -147,7 +147,7 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	 * By default this simply returns <code>null</code>.
 	 */
 	protected def R getDomainVoidReference() {
-		return null;
+		return null
 	}
 
 	/**
@@ -221,7 +221,7 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 
 	private def String toIntermediateTypeReference(R domainTypeReference) {
 		if (domainTypeReference.isDomainVoidReference) {
-			return null; // Represented as null inside the intermediate model
+			return null // Represented as null inside the intermediate model
 		}
 
 		// Get the referenced domain type and handle null:
