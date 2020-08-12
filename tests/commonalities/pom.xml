@@ -27,6 +27,7 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<failIfNoTests>true</failIfNoTests>
+					<testClass>tools.vitruv.applications.cbs.commonalities.tests.CompleteTestSuite</testClass>
 				</configuration>
 			</plugin>
 			<plugin>
