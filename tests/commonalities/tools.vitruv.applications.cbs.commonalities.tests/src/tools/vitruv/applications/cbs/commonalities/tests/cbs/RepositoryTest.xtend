@@ -5,15 +5,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModel
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.java.JavaRepositoryTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm.PcmRepositoryTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlRepositoryTestModels
-import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
+import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.*
 

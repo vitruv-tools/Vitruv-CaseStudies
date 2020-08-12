@@ -4,8 +4,8 @@ import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.cbs.commonalities.tests.oo.ClassPropertyTest
-import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
+import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.util.uml.UmlPrimitiveType
 
 import static tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelHelper.*

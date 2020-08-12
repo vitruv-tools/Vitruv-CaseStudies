@@ -1,4 +1,4 @@
-package tools.vitruv.applications.cbs.commonalities.tests
+package tools.vitruv.applications.cbs.commonalities.tests.util
 
 import org.eclipse.emf.ecore.EObject
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter

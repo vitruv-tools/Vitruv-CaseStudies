@@ -1,4 +1,4 @@
-package tools.vitruv.applications.cbs.commonalities.tests
+package tools.vitruv.applications.cbs.commonalities.tests.util
 
 /**
  * Provides methods to create and check the domain model for a specific test

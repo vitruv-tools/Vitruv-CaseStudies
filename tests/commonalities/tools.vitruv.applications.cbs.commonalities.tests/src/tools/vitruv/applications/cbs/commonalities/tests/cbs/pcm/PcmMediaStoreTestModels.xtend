@@ -2,8 +2,8 @@ package tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm
 
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.MediaStoreTest
-import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
+import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsBase
 
 import static org.junit.Assert.*
 

@@ -1,6 +1,6 @@
-package tools.vitruv.applications.cbs.commonalities.tests.pcm
+package tools.vitruv.applications.cbs.commonalities.tests.util.pcm
 
-import tools.vitruv.applications.cbs.commonalities.tests.DomainTestModelsBase
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 class PcmTestModelsBase extends DomainTestModelsBase {

@@ -1,6 +1,6 @@
-package tools.vitruv.applications.cbs.commonalities.tests.uml
+package tools.vitruv.applications.cbs.commonalities.tests.util.uml
 
-import tools.vitruv.applications.cbs.commonalities.tests.DomainTestModelsBase
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestHelper
 

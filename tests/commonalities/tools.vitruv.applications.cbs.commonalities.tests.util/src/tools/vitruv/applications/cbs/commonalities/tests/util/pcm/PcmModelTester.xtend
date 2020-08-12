@@ -1,8 +1,8 @@
-package tools.vitruv.applications.cbs.commonalities.tests.pcm
+package tools.vitruv.applications.cbs.commonalities.tests.util.pcm
 
 import org.eclipse.emf.ecore.EObject
 import org.palladiosimulator.pcm.repository.Repository
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModelTester
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelTester
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestHelper
 

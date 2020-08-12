@@ -1,9 +1,9 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo.java
 
 import org.emftext.language.java.containers.ContainersFactory
-import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.oo.PackageTest
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
+import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsBase
 
 class JavaPackageTestModels extends JavaTestModelsBase implements PackageTest.DomainModels {
 

@@ -3,8 +3,8 @@ package tools.vitruv.applications.cbs.commonalities.tests.cbs.uml
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.CompositeDataTypeTest
-import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
+import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.util.uml.UmlPrimitiveType
 
 class UmlCompositeDataTypeTestModels extends UmlTestModelsBase implements CompositeDataTypeTest.DomainModels {

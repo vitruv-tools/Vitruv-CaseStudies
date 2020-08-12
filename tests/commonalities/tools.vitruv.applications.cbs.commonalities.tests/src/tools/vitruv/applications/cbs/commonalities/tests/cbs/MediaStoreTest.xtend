@@ -5,14 +5,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModel
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm.PcmMediaStoreTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_1_Packages
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_2_ClassAndInterfaceStubs
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_3_CompositeDataTypes
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlMediaStoreTestModels_4_OperationSignatures
-import tools.vitruv.applications.cbs.commonalities.tests.pcm.PcmTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 
 @RunWith(Parameterized)

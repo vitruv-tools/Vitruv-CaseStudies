@@ -1,8 +1,8 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs.uml
 
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.RepositoryTest
-import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
+import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsBase
 
 class UmlRepositoryTestModels extends UmlTestModelsBase implements RepositoryTest.DomainModels {
 

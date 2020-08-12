@@ -1,7 +1,7 @@
-package tools.vitruv.applications.cbs.commonalities.tests.pcm
+package tools.vitruv.applications.cbs.commonalities.tests.util.pcm
 
 import java.util.function.Function
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 
 class PcmTestModelsProvider<D> extends DomainModelsProvider<D> {

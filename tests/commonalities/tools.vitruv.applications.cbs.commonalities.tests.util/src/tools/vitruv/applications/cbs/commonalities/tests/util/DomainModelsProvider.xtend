@@ -1,4 +1,4 @@
-package tools.vitruv.applications.cbs.commonalities.tests
+package tools.vitruv.applications.cbs.commonalities.tests.util
 
 import java.util.function.Function
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter

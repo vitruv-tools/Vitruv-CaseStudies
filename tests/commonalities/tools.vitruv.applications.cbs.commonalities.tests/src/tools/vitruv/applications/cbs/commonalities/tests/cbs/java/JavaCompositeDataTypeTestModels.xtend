@@ -5,8 +5,8 @@ import org.emftext.language.java.members.MembersFactory
 import org.emftext.language.java.modifiers.ModifiersFactory
 import org.emftext.language.java.types.TypesFactory
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.CompositeDataTypeTest
-import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsBase
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
+import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsBase
 import tools.vitruv.domains.java.util.JavaModificationUtil
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaModelHelper.*

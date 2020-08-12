@@ -1,8 +1,8 @@
-package tools.vitruv.applications.cbs.commonalities.tests.uml
+package tools.vitruv.applications.cbs.commonalities.tests.util.uml
 
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Model
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModelTester
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelTester
 import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationTestAdapter
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestHelper
 

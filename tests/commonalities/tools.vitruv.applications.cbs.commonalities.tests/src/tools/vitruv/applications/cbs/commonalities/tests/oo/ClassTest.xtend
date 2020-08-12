@@ -7,13 +7,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModel
-import tools.vitruv.applications.cbs.commonalities.tests.DomainModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.java.JavaTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.oo.java.JavaClassTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlClassTestModels
-import tools.vitruv.applications.cbs.commonalities.tests.uml.UmlTestModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
+import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
+import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
 
 @RunWith(Parameterized)
 @Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
