@@ -26,8 +26,8 @@ referenced commonality Component {
 	has name {
 		= PCM:BasicComponent.entityName
 
-		= firstUpper(ObjectOrientedDesign:ComponentPackage.name)
 		= prefix(ObjectOrientedDesign:ComponentClass.name, "Impl")
+		-> firstUpper(ObjectOrientedDesign:ComponentPackage.name)
 	}
 
 	has providedRoles {
