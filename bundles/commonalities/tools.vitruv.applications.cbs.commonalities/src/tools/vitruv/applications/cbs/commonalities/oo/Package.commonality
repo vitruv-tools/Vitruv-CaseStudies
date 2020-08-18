@@ -60,7 +60,7 @@ commonality Package {
 	has interfaces referencing ObjectOrientedDesign:Interface {
 		// Note: Any elements that are not of type UML:Interface are implicitly ignored.
 		= UML:Package.packagedElement
-		// Note: Any compilation units that don't correspond to an ObjectOrientedDesign:Class are implicitly ignored.
+		// Note: Any compilation units that don't correspond to an ObjectOrientedDesign:Interface are implicitly ignored.
 		= Java:Package.javaPackageCompilationUnits(ref CompilationUnit.namespaces, Package.namespaces, Package.name)
 	}
 }

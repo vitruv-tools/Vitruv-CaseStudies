@@ -10,6 +10,7 @@ referenced commonality CompositeDataTypeElement {
 	with PCM:InnerDeclaration
 
 	// Externally contained by ObjectOrientedDesign:Class.properties
+	// TODO: Getter and setter methods, externally contained by ObjectOrientedDesign:Class.methods
 	with ObjectOrientedDesign:Property
 	whereat {
 		Property.visibility = "PRIVATE"
