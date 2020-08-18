@@ -1,4 +1,4 @@
-concept ComponentBasedDesign
+concept ComponentBasedSystems
 
 commonality Repository {
 
@@ -28,20 +28,20 @@ commonality Repository {
 		= ObjectOrientedDesign:RepositoryPackage.name
 	}
 
-	has components referencing ComponentBasedDesign:Component {
+	has components referencing ComponentBasedSystems:Component {
 		= PCM:Repository.components__Repository
 
 		// TODO ignore contracts and datatypes packages
 		= ObjectOrientedDesign:RepositoryPackage.subPackages
 	}
 
-	has componentInterfaces referencing ComponentBasedDesign:ComponentInterface {
+	has componentInterfaces referencing ComponentBasedSystems:ComponentInterface {
 		= PCM:Repository.interfaces__Repository
 
 		= ObjectOrientedDesign:ContractsPackage.interfaces
 	}
 
-	has compositeDataTypes referencing ComponentBasedDesign:CompositeDataType {
+	has compositeDataTypes referencing ComponentBasedSystems:CompositeDataType {
 		= PCM:Repository.dataTypes__Repository
 
 		= ObjectOrientedDesign:DatatypesPackage.classes

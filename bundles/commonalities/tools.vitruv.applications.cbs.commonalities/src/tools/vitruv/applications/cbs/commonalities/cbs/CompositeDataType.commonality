@@ -1,6 +1,6 @@
-concept ComponentBasedDesign
+concept ComponentBasedSystems
 
-// Externally contained by ComponentBasedDesign:Repository.compositeDataTypes
+// Externally contained by ComponentBasedSystems:Repository.compositeDataTypes
 referenced commonality CompositeDataType {
 
 	// Externally contained by PCM:Repository.datatypes__Repository
@@ -18,7 +18,7 @@ referenced commonality CompositeDataType {
 		= ObjectOrientedDesign:Class.name
 	}
 
-	has elements referencing ComponentBasedDesign:CompositeDataTypeElement {
+	has elements referencing ComponentBasedSystems:CompositeDataTypeElement {
 		= PCM:CompositeDataType.innerDeclaration_CompositeDataType
 
 		= ObjectOrientedDesign:Class.properties

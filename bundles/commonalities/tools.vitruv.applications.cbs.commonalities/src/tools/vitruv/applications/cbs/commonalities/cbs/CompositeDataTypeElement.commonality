@@ -1,9 +1,9 @@
 import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.OOTypeReferenceOperator
 import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.PcmDataTypeReferenceOperator
 
-concept ComponentBasedDesign
+concept ComponentBasedSystems
 
-// Externally contained by ComponentBasedDesign:CompositeDataType.elements
+// Externally contained by ComponentBasedSystems:CompositeDataType.elements
 referenced commonality CompositeDataTypeElement {
 
 	// Externally contained by PCM:CompositeDataType.innerDeclaration_CompositeDataType
@@ -22,8 +22,8 @@ referenced commonality CompositeDataTypeElement {
 	}
 
 	has type {
-		= pcmDataTypeReference(PCM:InnerDeclaration.datatype_InnerDeclaration, "ComponentBasedDesign")
+		= pcmDataTypeReference(PCM:InnerDeclaration.datatype_InnerDeclaration, "ComponentBasedSystems")
 
-		= ooTypeReference(ObjectOrientedDesign:Property.type, "ComponentBasedDesign")
+		= ooTypeReference(ObjectOrientedDesign:Property.type, "ComponentBasedSystems")
 	}
 }

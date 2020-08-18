@@ -5,9 +5,9 @@ import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.O
 
 import tools.vitruv.applications.cbs.commonalities.util.pcm.operators.attribute.PcmProvidedRolesOperator
 
-concept ComponentBasedDesign
+concept ComponentBasedSystems
 
-// Externally contained by ComponentBasedDesign:Repository.components
+// Externally contained by ComponentBasedSystems:Repository.components
 referenced commonality Component {
 
 	// Externally contained by PCM:Repository.components__Repository
@@ -32,9 +32,9 @@ referenced commonality Component {
 
 	has providedRoles {
 		// TODO We do not react to changes of the interfaces provided by these ProvidedRoles currently.
-		= pcmProvidedRoles(PCM:BasicComponent.providedRoles_InterfaceProvidingEntity, "ComponentBasedDesign")
+		= pcmProvidedRoles(PCM:BasicComponent.providedRoles_InterfaceProvidingEntity, "ComponentBasedSystems")
 
-		= ooTypeReferences(ObjectOrientedDesign:ComponentClass.implementedInterfaces, "ComponentBasedDesign")
+		= ooTypeReferences(ObjectOrientedDesign:ComponentClass.implementedInterfaces, "ComponentBasedSystems")
 	}
 
 	// TODO requiredRoles
