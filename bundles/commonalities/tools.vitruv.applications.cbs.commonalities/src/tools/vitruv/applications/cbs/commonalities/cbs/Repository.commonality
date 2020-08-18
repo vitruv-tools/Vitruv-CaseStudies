@@ -31,7 +31,8 @@ commonality Repository {
 	has components referencing ComponentBasedSystems:Component {
 		= PCM:Repository.components__Repository
 
-		// TODO ignore contracts and datatypes packages
+		// Note: We assume that the contracts and datatypes packages do not contain classes which match the Component
+		// participation. Otherwise these packages would need to be ignored here.
 		= ObjectOrientedDesign:RepositoryPackage.subPackages
 	}
 

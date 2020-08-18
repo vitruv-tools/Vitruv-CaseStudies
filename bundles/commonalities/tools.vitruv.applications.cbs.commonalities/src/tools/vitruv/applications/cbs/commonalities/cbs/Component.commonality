@@ -1,5 +1,6 @@
 import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.FirstUpperOperator
 import tools.vitruv.applications.cbs.commonalities.util.common.operators.attribute.PrefixOperator
+import tools.vitruv.applications.cbs.commonalities.util.common.operators.condition.SuffixConditionOperator
 
 import tools.vitruv.applications.cbs.commonalities.util.oo.operators.attribute.OOTypeReferencesOperator
 
@@ -20,7 +21,10 @@ referenced commonality Component {
 	)
 	whereat {
 		ComponentClass in ComponentPackage.classes,
-		ComponentClass.visibility = "PUBLIC"
+		ComponentClass.visibility = "PUBLIC",
+		// Note: This condition cannot be enforced because it depends on the component's name. Instead an attribute
+		// mapping takes care of setting the class name accordingly during participation instantiation.
+		<- ComponentClass.name hasSuffix "Impl"
 	}
 
 	has name {
