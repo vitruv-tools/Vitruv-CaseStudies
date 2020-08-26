@@ -1,0 +1,26 @@
+concept ComponentBasedSystems
+
+// Externally contained by ComponentBasedSystems:Repository.compositeDataTypes
+referenced commonality CompositeDataType {
+
+	// Externally contained by PCM:Repository.datatypes__Repository
+	with PCM:CompositeDataType
+
+	// Externally contained by ObjectOrientedDesign:DatatypesPackage.classes
+	with ObjectOrientedDesign:Class
+	whereat {
+		Class.visibility = "PUBLIC"
+	}
+
+	has name {
+		= PCM:CompositeDataType.entityName
+
+		= ObjectOrientedDesign:Class.name
+	}
+
+	has elements referencing ComponentBasedSystems:CompositeDataTypeElement {
+		= PCM:CompositeDataType.innerDeclaration_CompositeDataType
+
+		= ObjectOrientedDesign:Class.properties
+	}
+}

@@ -1,0 +1,23 @@
+concept ComponentBasedSystems
+
+// Externally contained by ComponentBasedSystems:Repository.componentInterfaces
+referenced commonality ComponentInterface {
+
+	// Externally contained by PCM:Repository.interfaces__Repository
+	with PCM:OperationInterface
+
+	// Externally contained by ObjectOrientedDesign:Package.interfaces
+	with ObjectOrientedDesign:Interface
+
+	has name {
+		= PCM:OperationInterface.entityName
+
+		= ObjectOrientedDesign:Interface.name
+	}
+
+	has operations referencing ComponentBasedSystems:Operation {
+		= PCM:OperationInterface.signatures__OperationInterface
+
+		= ObjectOrientedDesign:Interface.methods
+	}
+}

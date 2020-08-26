@@ -20,6 +20,7 @@
 		<module>pcmumlcomponents</module>
 		<module>umlclassumlcomponents</module>
 		<module>umljava</module>
+		<module>commonalities</module>
 	</modules>
 	
 </project>

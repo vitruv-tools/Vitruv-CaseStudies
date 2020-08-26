@@ -22,6 +22,7 @@
 		<module>tools.vitruv.applications.pcmumlclass.feature</module>
 		<module>tools.vitruv.applications.umlclassumlcomponents.feature</module>
 		<module>tools.vitruv.applications.umljava.feature</module>
+		<module>tools.vitruv.applications.cbs.commonalities.feature</module>
 	</modules>
 	
 </project>

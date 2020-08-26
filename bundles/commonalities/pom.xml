@@ -5,22 +5,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>tools.vitruv</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>bundles</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	<artifactId>bundles</artifactId>
+	<artifactId>cbs-commonalities</artifactId>
 	<packaging>pom</packaging>
-	<name>Bundle Modules</name>
+	<name>CBS Commonalities Application</name>
 
 	<modules>
-		<module>pcmjava</module>
-		<module>pcmumlclass</module>
-		<module>pcmumlcomponents</module>
-		<module>umlclassumlcomponents</module>
-		<module>umljava</module>
-		<module>commonalities</module>
-		<module>util</module>
+		<module>tools.vitruv.applications.cbs.commonalities</module>
+		<module>tools.vitruv.applications.cbs.commonalities.util</module>
 	</modules>
 
 </project>

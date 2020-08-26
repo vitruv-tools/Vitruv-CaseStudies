@@ -1,0 +1,21 @@
+# MediaStore incremental test cases:
+----------
+
+1) Packages for the repository and its contained components.
+
+2) + Empty classes and interfaces for all components and component interfaces.
+
+3) + Classes and properties for CompositeDataTypes and their inner declarations.
+
+4) + Operations with parameters for interface operation signatures.
+
+5) + Properties, constructors and operations (both with parameters), and interface implementations for provided and required roles.
+TODO
+
+6) + Classes inheriting from Collection types and multi-valued properties for CollectionDataTypes.
+TODO
+* The MediaStore PCM repository doesn't actually contain CollectionDataTypes..
+
+7) + Classes with properties and constructors for CompositeComponents and their AssemblyContexts.
+TODO
+* The MediaStore PCM repository doesn't actually contain CompositeComponents..
