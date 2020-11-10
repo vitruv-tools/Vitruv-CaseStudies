@@ -26,7 +26,7 @@ class JavaVisibilityHelper {
 	/**
 	 * Gets the {@link Visibility} from the given Java modifiers.
 	 */
-	public static def getVisibility(List<AnnotationInstanceOrModifier> modifiers) {
+	static def getVisibility(List<AnnotationInstanceOrModifier> modifiers) {
 		checkNotNull(modifiers, "modifiers is null")
 		val visibilityModifiers = modifiers.visibilityModifiers
 		if (visibilityModifiers.size > 1) {
@@ -46,7 +46,7 @@ class JavaVisibilityHelper {
 	 * A <code>null</code> visibility is mapped to Public. Package-private
 	 * visibility results in the removal of any previous visibility modifier.
 	 */
-	public static def setVisibility(List<AnnotationInstanceOrModifier> previousModifiers, Visibility visibility) {
+	static def setVisibility(List<AnnotationInstanceOrModifier> previousModifiers, Visibility visibility) {
 		checkNotNull(previousModifiers, "previousModifiers is null")
 		val newJavaVisibilityModifier = visibility.toJavaModifier // can be null
 		val List<AnnotationInstanceOrModifier> newModifiers = new ArrayList(previousModifiers)

@@ -28,7 +28,7 @@ class PcmProvidedRolesOperator extends AbstractAttributeMappingOperator<List<Str
 	static val Logger logger = Logger.getLogger(PcmProvidedRolesOperator)
 
 	// Maps between PCM and intermediate type references:
-	private val PcmTypeReferenceOperator pcmTypeReferenceOperator
+	val PcmTypeReferenceOperator pcmTypeReferenceOperator
 
 	/**
 	 * @param executionState the reactions execution state

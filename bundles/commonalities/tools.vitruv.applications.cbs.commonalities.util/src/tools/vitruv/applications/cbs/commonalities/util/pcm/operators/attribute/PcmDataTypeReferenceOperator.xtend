@@ -22,7 +22,7 @@ import tools.vitruv.extensions.dslsruntime.reactions.ReactionExecutionState
 class PcmDataTypeReferenceOperator extends AbstractAttributeMappingOperator<String, DataType> {
 
 	// Maps between PCM and intermediate type references:
-	private val PcmTypeReferenceOperator pcmTypeReferenceOperator
+	val PcmTypeReferenceOperator pcmTypeReferenceOperator
 
 	/**
 	 * @param executionState the reactions execution state

@@ -37,8 +37,8 @@ class UmlReturnTypeOperator extends AbstractAttributeMappingOperator<String, Lis
 	static val Logger logger = Logger.getLogger(UmlReturnTypeOperator)
 
 	// Used to map between UML and intermediate type references:
-	private val UmlTypeReferenceOperator umlTypeReferenceOperator
-	private val Operation operation
+	val UmlTypeReferenceOperator umlTypeReferenceOperator
+	val Operation operation
 
 	/**
 	 * @param executionState the reactions execution state
