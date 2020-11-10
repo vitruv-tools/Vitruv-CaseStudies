@@ -56,7 +56,7 @@ abstract class AbstractTypeReferenceOperator<R, T> extends AbstractAttributeMapp
 	 * This is used when querying the correspondence model for objects
 	 * corresponding to a given non-primitive type.
 	 */
-	private val Class<? extends T> domainTypeClass
+	val Class<? extends T> domainTypeClass
 
 	/**
 	 * @param executionState the reactions execution state

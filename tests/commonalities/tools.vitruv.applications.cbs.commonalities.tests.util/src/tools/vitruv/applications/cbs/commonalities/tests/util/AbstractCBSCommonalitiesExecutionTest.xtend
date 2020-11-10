@@ -54,11 +54,11 @@ abstract class AbstractCBSCommonalitiesExecutionTest extends CommonalitiesExecut
 	}
 
 	@Accessors(PROTECTED_GETTER)
-	private var ResourceSet testResourcesResourceSet
+	var ResourceSet testResourcesResourceSet
 
 	// Stores the loaded target models.
 	@Accessors(PROTECTED_GETTER)
-	private var ResourceSet resultResourceSet
+	var ResourceSet resultResourceSet
 
 	override protected setup() {
 		testResourcesResourceSet = new ResourceSetImpl()

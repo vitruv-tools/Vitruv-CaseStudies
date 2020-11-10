@@ -37,7 +37,7 @@ class XtextRunnerWithParameters extends BlockJUnit4ClassRunnerWithParameters {
 		}
 	}
 
-	private InternalXtextRunner xtextRunner
+	InternalXtextRunner xtextRunner
 
 	new(TestWithParameters test) throws InitializationError {
 		super(test)

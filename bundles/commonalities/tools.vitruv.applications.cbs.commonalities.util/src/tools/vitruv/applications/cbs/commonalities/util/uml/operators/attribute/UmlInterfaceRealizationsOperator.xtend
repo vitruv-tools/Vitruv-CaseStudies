@@ -27,7 +27,7 @@ class UmlInterfaceRealizationsOperator extends AbstractAttributeMappingOperator<
 	static val Logger logger = Logger.getLogger(UmlInterfaceRealizationsOperator)
 
 	// Maps between UML and intermediate type references:
-	private val UmlTypeReferenceOperator umlTypeReferenceOperator
+	val UmlTypeReferenceOperator umlTypeReferenceOperator
 
 	/**
 	 * @param executionState the reactions execution state

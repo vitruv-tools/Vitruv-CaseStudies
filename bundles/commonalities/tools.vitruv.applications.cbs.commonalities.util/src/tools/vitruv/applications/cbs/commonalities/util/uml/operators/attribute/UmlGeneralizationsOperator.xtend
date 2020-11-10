@@ -26,7 +26,7 @@ class UmlGeneralizationsOperator extends AbstractAttributeMappingOperator<List<S
 	static val Logger logger = Logger.getLogger(UmlGeneralizationsOperator)
 
 	// Maps between UML and intermediate type references:
-	private val UmlTypeReferenceOperator umlTypeReferenceOperator
+	val UmlTypeReferenceOperator umlTypeReferenceOperator
 
 	/**
 	 * @param executionState the reactions execution state

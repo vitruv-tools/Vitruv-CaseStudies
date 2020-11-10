@@ -24,7 +24,7 @@ class JavaRepositoryModel {
 		contractsPackage = repositoryPackage.newJavaPackage(PCM.CONTRACTS_PACKAGE_NAME)
 	}
 
-	public def List<? extends EObject> getRootObjects() {
+	def List<? extends EObject> getRootObjects() {
 		return #[
 			repositoryPackage,
 			datatypesPackage,
