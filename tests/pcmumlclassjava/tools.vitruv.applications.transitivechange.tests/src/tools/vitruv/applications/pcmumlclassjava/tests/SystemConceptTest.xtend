@@ -9,14 +9,16 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.junit.Test
 import org.palladiosimulator.pcm.system.System
 import org.palladiosimulator.pcm.system.SystemFactory
+import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.TagLiterals
+import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
 
 import static org.junit.Assert.*
 
 /**
+ * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::System
  * with its corresponding uml::Package and uml::Class (implementation).
  * <br><br>
