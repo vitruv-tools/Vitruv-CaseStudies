@@ -1,32 +1,21 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Transitive Transformation Tests PCM Java UML Class
+Bundle-Name: Transitive Transformation Tests between PCM, Java, and UML Class
 Bundle-SymbolicName: tools.vitruv.applications.transitivechange.tests
 Bundle-Version: 0.1.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.transitivechange.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: com.google.guava,
- org.eclipse.xtext.xbase.lib,
- org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro,
- org.apache.log4j;bundle-version="1.2.15",
+Require-Bundle: org.eclipse.xtend.lib,
+ org.apache.log4j,
  org.junit;bundle-version="4.12.0",
- org.eclipse.jdt.core;bundle-version="3.12.2",
- org.eclipse.core.runtime;bundle-version="3.12.0",
- org.eclipse.jdt.core.manipulation;bundle-version="1.7.0",
- org.eclipse.ltk.core.refactoring;bundle-version="3.7.0",
- org.eclipse.jdt.ui;bundle-version="3.12.2",
- org.eclipse.core.resources;bundle-version="3.11.1",
- org.eclipse.text;bundle-version="3.6.0",
  org.eclipse.emf.compare,
  tools.vitruv.testutils;bundle-version="0.2.0",
- tools.vitruv.framework.change.processing,
  tools.vitruv.applications.umljava.java2uml,
  tools.vitruv.applications.umljava.uml2java,
- tools.vitruv.domains.java.util,
- tools.vitruv.applications.pcmumlclass;bundle-version="0.1.0",
- tools.vitruv.applications.umljava;bundle-version="0.1.0",
- tools.vitruv.applications.umljava.util;bundle-version="0.1.0",
+ tools.vitruv.applications.pcmumlclass,
+ tools.vitruv.applications.umljava.util,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
-Export-Package: tools.vitruv.applications.pcmumlclassjava.tests;x-internal:=true
+Export-Package: tools.vitruv.applications.pcmumlclassjava,
+ tools.vitruv.applications.pcmumlclassjava.tests
+Bundle-Vendor: vitruv-tools
