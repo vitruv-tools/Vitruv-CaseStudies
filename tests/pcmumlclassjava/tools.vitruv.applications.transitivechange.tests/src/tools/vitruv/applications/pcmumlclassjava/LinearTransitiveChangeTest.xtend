@@ -8,7 +8,7 @@ import org.junit.BeforeClass
  * used applications contain stil some issues regarding the fully transitive use case.
  * TODO TS: these issues should be fixed in the PCM/UML/Java applications and all sub classes should extend TransitiveChangeTest directly
  */
-class LinearTransitiveChangeTest extends TransitiveChangeTest {
+abstract class LinearTransitiveChangeTest extends TransitiveChangeTest {
 
     @BeforeClass
     def static void enforceLinearNetwork() {

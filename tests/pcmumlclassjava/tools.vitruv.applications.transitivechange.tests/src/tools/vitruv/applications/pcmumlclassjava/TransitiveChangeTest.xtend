@@ -50,9 +50,9 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
  */
-class TransitiveChangeTest extends PcmUmlClassApplicationTest {
+abstract class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
-    protected static final int ARRAY_LIST_SELECTION = 0;
+    protected static final int ARRAY_LIST_SELECTION = 0
     protected static boolean linearNetwork // set true (before class) to avoid the transformation between PCM and Java
     private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
 
@@ -67,14 +67,14 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
         if (!linearNetwork) {
             specifications.addAll(new Pcm2JavaChangePropagationSpecification, new Java2PcmChangePropagationSpecification)
         }
-        return specifications;
+        return specifications
     }
 
     override protected getVitruvDomains() {
         new PcmDomainProvider().domain.enableTransitiveChangePropagation
         new UmlDomainProvider().domain.enableTransitiveChangePropagation
         new JavaDomainProvider().domain.enableTransitiveChangePropagation
-        return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain];
+        return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain]
     }
 
     def protected checkJavaType(Classifier umlClassifier) {
@@ -233,7 +233,7 @@ class TransitiveChangeTest extends PcmUmlClassApplicationTest {
      * Checks whether a classifier is a java.util.Collection. This means any super type or itself must be a collection.
      */
     def private dispatch boolean isCollection(Classifier classifier) {
-        return false; // classifier is type parameter => cannot be collection
+        return false // classifier is type parameter => cannot be collection
     }
 
     def private dispatch boolean isCollection(ConcreteClassifier classifier) {
