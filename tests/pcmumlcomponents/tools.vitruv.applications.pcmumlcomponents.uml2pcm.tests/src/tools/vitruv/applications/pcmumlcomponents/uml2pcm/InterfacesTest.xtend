@@ -26,7 +26,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void createInterfaceTest() {
+	def void createInterfaceTest() {
 		val interfaceName = INTERFACE_NAME
 		val umlInterface = createUmlInterface(interfaceName)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten;
@@ -37,7 +37,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void createIntefaceOperationTest() {
+	def void createIntefaceOperationTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		userInteractor.addNextSingleSelection(10)
 		val p1Type = UMLFactory.eINSTANCE.createPrimitiveType()
@@ -82,7 +82,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void changeInterfaceOperationTest() {
+	def void changeInterfaceOperationTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
 		var correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
@@ -121,7 +121,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void addOperationParameterTest() {
+	def void addOperationParameterTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
 		val umlParameter = createParameter(umlOperation, PARAMETER_NAME, UML_TYPE_INT)
@@ -150,7 +150,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void changeOperationParameterTest() {
+	def void changeOperationParameterTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
 		val umlParameter = createParameter(umlOperation, PARAMETER_NAME, UML_TYPE_INT)
@@ -179,7 +179,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void deleteOperationParameterTest() {
+	def void deleteOperationParameterTest() {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		val umlOperation = createInterfaceOperation(umlInterface, OPERATION_NAME, UML_TYPE_BOOL)
 		val parameter1 = createParameter(umlOperation, PARAMETER_NAME, UML_TYPE_INT)

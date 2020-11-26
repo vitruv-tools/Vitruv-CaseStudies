@@ -32,7 +32,7 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 final class PcmUmlClassApplicationTestHelper {
-	public new (CorrespondenceModel testCorrespondenceModel, Function<URI, EObject> eObjectRetriever, Function<URI, Resource> resourceRetriever) {
+	new (CorrespondenceModel testCorrespondenceModel, Function<URI, EObject> eObjectRetriever, Function<URI, Resource> resourceRetriever) {
 		this.correspondenceModel = testCorrespondenceModel
 		this.eObjectRetriever = eObjectRetriever
 		
@@ -52,8 +52,8 @@ final class PcmUmlClassApplicationTestHelper {
 		UML_UNLIMITED_NATURAL =  umlPrimitiveTypes.findFirst[it.name == "UnlimitedNatural"]
 	}
 	
-	private val CorrespondenceModel correspondenceModel
-	private val Function<URI, EObject> eObjectRetriever
+	val CorrespondenceModel correspondenceModel
+	val Function<URI, EObject> eObjectRetriever
 	
 	/**
 	 * Fetches the given {@link EObject} from the {@link ResourceSet} of the running test.
@@ -66,24 +66,24 @@ final class PcmUmlClassApplicationTestHelper {
 	 * 		the {@link EObject} instance living in some ResourceSet
 	 * @return the object instance in the ResourceSet of this test
 	 */
-	def public <T extends EObject> getModifiableInstance(T original) {
+	def <T extends EObject> getModifiableInstance(T original) {
 		val originalURI = EcoreUtil.getURI(original)
 		return eObjectRetriever.apply(originalURI) as T
 	}
 	
-	def public <T extends EObject> Set<T> getCorrSet(EObject source, Class<T> typeFilter) {
+	def <T extends EObject> Set<T> getCorrSet(EObject source, Class<T> typeFilter) {
 		return correspondenceModel.getCorrespondingEObjectsByType(source, typeFilter) as Set<T>
 	}
 	
-	def public <T extends EObject> T getCorr(EObject source, Class<T> typeFilter, String tag) {
+	def <T extends EObject> T getCorr(EObject source, Class<T> typeFilter, String tag) {
 		return ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(correspondenceModel, source, tag, typeFilter).head
 	}
 	
-	def public <T extends EObject> Set<T> getModifiableCorrSet(EObject source, Class<T> typeFilter) {
+	def <T extends EObject> Set<T> getModifiableCorrSet(EObject source, Class<T> typeFilter) {
 		return getCorrSet(source, typeFilter).map[getModifiableInstance(it)].filter[it !== null].toSet
 	}
 	
-	def public <T extends EObject> T getModifiableCorr(EObject source, Class<T> typeFilter, String tag) {
+	def <T extends EObject> T getModifiableCorr(EObject source, Class<T> typeFilter, String tag) {
 		val correspondence = getCorr(source, typeFilter,tag)
 		if(correspondence === null) return null
 		return getModifiableInstance(getCorr(source, typeFilter,tag))
@@ -121,19 +121,19 @@ final class PcmUmlClassApplicationTestHelper {
 	public val PrimitiveType UML_UNLIMITED_NATURAL
 	
 	// Repository
-	public def createRepository() {
+	def createRepository() {
 		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 		pcmRepository.entityName = REPOSITORY_NAME
 		return pcmRepository
 	}
 	
-	public def getUmlRepositoryPackage(Repository pcmRepository) {
+	def getUmlRepositoryPackage(Repository pcmRepository) {
 		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
 	}
-	public def getUmlContractsPackage(Repository pcmRepository) {
+	def getUmlContractsPackage(Repository pcmRepository) {
 		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
 	}
-	public def getUmlDataTypesPackage(Repository pcmRepository) {
+	def getUmlDataTypesPackage(Repository pcmRepository) {
 		return getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
 	}
 	
@@ -144,33 +144,33 @@ final class PcmUmlClassApplicationTestHelper {
 		pcmRepository.components__Repository += pcmComponent
 		return pcmComponent
 	}
-	public def createComponent(Repository pcmRepository) {
+	def createComponent(Repository pcmRepository) {
 		return createComponent(pcmRepository, COMPONENT_NAME)
 	}
-	public def createComponent_2(Repository pcmRepository) {
+	def createComponent_2(Repository pcmRepository) {
 		return createComponent(pcmRepository, COMPONENT_NAME_2)
 	}
 	
 	private def getPcmComponent(Repository pcmRepository, String componentName) {
 		return pcmRepository.components__Repository.filter(CompositeComponent).findFirst[it.entityName == componentName]
 	}
-	public def getPcmComponent(Repository pcmRepository) {
+	def getPcmComponent(Repository pcmRepository) {
 		return getPcmComponent(pcmRepository, COMPONENT_NAME)
 	}
-	public def getPcmComponent_2(Repository pcmRepository) {
+	def getPcmComponent_2(Repository pcmRepository) {
 		return getPcmComponent(pcmRepository, COMPONENT_NAME_2)
 	}
 	
-	public def getUmlComponentImpl(Repository pcmRepository) {
+	def getUmlComponentImpl(Repository pcmRepository) {
 		return getModifiableCorr(getPcmComponent(pcmRepository), org.eclipse.uml2.uml.Class, TagLiterals.IPRE__IMPLEMENTATION)
 	}
-	public def getUmlComponentImpl_2(Repository pcmRepository) {
+	def getUmlComponentImpl_2(Repository pcmRepository) {
 		return getModifiableCorr(getPcmComponent_2(pcmRepository), org.eclipse.uml2.uml.Class, TagLiterals.IPRE__IMPLEMENTATION)
 	}
-	public def getUmlComponentConstructor(Repository pcmRepository) {
+	def getUmlComponentConstructor(Repository pcmRepository) {
 		return getModifiableCorr(getPcmComponent(pcmRepository), Operation, TagLiterals.IPRE__CONSTRUCTOR)
 	}
-	public def getUmlComponentConstructor_2(Repository pcmRepository) {
+	def getUmlComponentConstructor_2(Repository pcmRepository) {
 		return getModifiableCorr(getPcmComponent_2(pcmRepository), Operation, TagLiterals.IPRE__CONSTRUCTOR)
 	}
 	
@@ -181,32 +181,32 @@ final class PcmUmlClassApplicationTestHelper {
 		pcmRepository.dataTypes__Repository += pcmCompositeDataType
 		return pcmCompositeDataType
 	}
-	public def createCompositeDataType(Repository pcmRepository) {
+	def createCompositeDataType(Repository pcmRepository) {
 		return createCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
 	}
-	public def createCompositeDataType_2(Repository pcmRepository) {
+	def createCompositeDataType_2(Repository pcmRepository) {
 		return createCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
 	}
 	
 	private def getPcmCompositeDataType(Repository pcmRepository, String componentName) {
 		return pcmRepository.dataTypes__Repository.filter(CompositeDataType).findFirst[it.entityName == componentName]
 	}
-	public def getPcmCompositeDataType(Repository pcmRepository) {
+	def getPcmCompositeDataType(Repository pcmRepository) {
 		return getPcmCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME)
 	}
-	public def getPcmCompositeDataType_2(Repository pcmRepository) {
+	def getPcmCompositeDataType_2(Repository pcmRepository) {
 		return getPcmCompositeDataType(pcmRepository, PcmUmlClassApplicationTestHelper.COMPOSITE_DATATYPE_NAME_2)
 	}
 	
-	public def getUmlCompositeDataTypeClass(Repository pcmRepository) {
+	def getUmlCompositeDataTypeClass(Repository pcmRepository) {
 		return getModifiableCorr(getPcmCompositeDataType(pcmRepository), org.eclipse.uml2.uml.Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 	}
-	public def getUmlCompositeDataTypeClass_2(Repository pcmRepository) {
+	def getUmlCompositeDataTypeClass_2(Repository pcmRepository) {
 		return getModifiableCorr(getPcmCompositeDataType_2(pcmRepository), org.eclipse.uml2.uml.Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 	}
 	
 	// CollectionDataType
-	public def createCollectionDataType(Repository pcmRepository, DataType innerType) {
+	def createCollectionDataType(Repository pcmRepository, DataType innerType) {
 		val pcmCollectionType = RepositoryFactory.eINSTANCE.createCollectionDataType
 		pcmCollectionType.entityName = PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME
 		pcmCollectionType.innerType_CollectionDataType = innerType
@@ -214,41 +214,41 @@ final class PcmUmlClassApplicationTestHelper {
 		return pcmCollectionType
 	}
 	
-	public def getPcmCollectionDataType(Repository pcmRepository) {
+	def getPcmCollectionDataType(Repository pcmRepository) {
 		return pcmRepository.dataTypes__Repository.filter(CollectionDataType)
 			.findFirst[it.entityName == PcmUmlClassApplicationTestHelper.COLLECTION_DATATYPE_NAME] 
 	}
 	
 	// OperationInterface
-	public def createOperationInterface(Repository pcmRepository) {
+	def createOperationInterface(Repository pcmRepository) {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
 		pcmInterface.entityName = INTERFACE_NAME
 		pcmRepository.interfaces__Repository += pcmInterface
 		return pcmInterface
 	}
 	
-	public def getPcmOperationInterface(Repository pcmRepository) {
+	def getPcmOperationInterface(Repository pcmRepository) {
 		return pcmRepository.interfaces__Repository.filter(OperationInterface).findFirst[it.entityName == INTERFACE_NAME]
 	}
-	public def getUmlInterface(Repository pcmRepository) {
+	def getUmlInterface(Repository pcmRepository) {
 		return getModifiableCorr(getPcmOperationInterface(pcmRepository), Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 	}
 
 	// OperationSignature
-	public def createOperationSignature(OperationInterface pcmInterface) {
+	def createOperationSignature(OperationInterface pcmInterface) {
 		val pcmSignature = RepositoryFactory.eINSTANCE.createOperationSignature
 		pcmSignature.entityName = SIGNATURE_NAME
 		pcmInterface.signatures__OperationInterface += pcmSignature
 		return pcmSignature
 	}
 	
-	public def getPcmOperationSignature(OperationInterface pcmInterface) {
+	def getPcmOperationSignature(OperationInterface pcmInterface) {
 		return pcmInterface.signatures__OperationInterface.filter(OperationSignature).findFirst[it.entityName == SIGNATURE_NAME]
 	}
-	public def getUmlOperation(OperationInterface pcmInterface) {
+	def getUmlOperation(OperationInterface pcmInterface) {
 		return getModifiableCorr(getPcmOperationSignature(pcmInterface), Operation, TagLiterals.SIGNATURE__OPERATION)
 	}
-	public def getUmlReturnParameter(OperationInterface pcmInterface) {
+	def getUmlReturnParameter(OperationInterface pcmInterface) {
 		return getModifiableCorr(getPcmOperationSignature(pcmInterface), Parameter, TagLiterals.SIGNATURE__RETURN_PARAMETER)
 	}
 

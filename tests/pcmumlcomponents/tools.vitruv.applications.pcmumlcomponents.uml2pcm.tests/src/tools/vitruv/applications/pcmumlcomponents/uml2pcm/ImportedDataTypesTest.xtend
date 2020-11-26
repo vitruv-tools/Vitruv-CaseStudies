@@ -21,7 +21,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 	 * Cannot modify resource set without a write transaction
 	 */
 	//@Test
-	public def void importedTypesExistTest() {
+	def void importedTypesExistTest() {
 		val umlTypes = importPrimitiveTypes()
 		assertNotNull(umlTypes.getOwnedMember(UMLTYPE_BOOL))
 		val umlType = umlTypes.getOwnedMember(UMLTYPE_BOOL) as DataType
@@ -34,7 +34,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void unmappedPrimitiveTypeTest() {
+	def void unmappedPrimitiveTypeTest() {
 		importPrimitiveTypes()
 		val umlTypeName = "MyPrimitive"
 		val umlType = UMLFactory.eINSTANCE.createPrimitiveType()
@@ -48,7 +48,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void mapToCompositeTypeTest() {
+	def void mapToCompositeTypeTest() {
 		importPrimitiveTypes()
 		val umlTypeName = "MyPrimitive"
 		val umlType = UMLFactory.eINSTANCE.createPrimitiveType()
@@ -62,7 +62,7 @@ class ImportedDataTypesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void useImportedTypeTest() {
+	def void useImportedTypeTest() {
 		val umlTypes = importPrimitiveTypes()
 		val umlType = umlTypes.getOwnedMember(UMLTYPE_BOOL) as PrimitiveType
 		val umlInterface = UMLFactory.eINSTANCE.createInterface()

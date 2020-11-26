@@ -90,7 +90,7 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void createNonPrimitiveCollectionTypeTest() {
+	def void createNonPrimitiveCollectionTypeTest() {
 		val innerTypeName = "A"
 		val innerType = RepositoryFactory.eINSTANCE.createCompositeDataType()
 		innerType.entityName = innerTypeName

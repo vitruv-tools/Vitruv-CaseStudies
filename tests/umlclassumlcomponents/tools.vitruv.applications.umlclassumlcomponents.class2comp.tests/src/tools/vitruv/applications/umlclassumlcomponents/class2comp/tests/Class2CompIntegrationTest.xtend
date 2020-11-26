@@ -25,7 +25,7 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 		//Don't initialize a model here, as we are loading and creating one
 	}
 	
-	public def Model integrationTest(String fileName) {		
+	def Model integrationTest(String fileName) {		
 		val Resource inputResource = getTestModelResource(fileName)
 		sendCollectedUserInteractionSelections(this.userInteractor)
 		createAndSynchronizeModel(OUTPUT_NAME, inputResource.allContents.head)

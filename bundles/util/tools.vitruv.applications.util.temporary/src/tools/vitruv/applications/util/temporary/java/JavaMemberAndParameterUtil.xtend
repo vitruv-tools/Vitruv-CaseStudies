@@ -47,7 +47,7 @@ import static tools.vitruv.domains.java.util.JavaModificationUtil.*
  */
 @Utility
 class JavaMemberAndParameterUtil {
-    private static val logger = Logger.getLogger(JavaMemberAndParameterUtil.simpleName)
+    static val logger = Logger.getLogger(JavaMemberAndParameterUtil.simpleName)
 
     /**
      * @return public Operation with name no return, params or modifier

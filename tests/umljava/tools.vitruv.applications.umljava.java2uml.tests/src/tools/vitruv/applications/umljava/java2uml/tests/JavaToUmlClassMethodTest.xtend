@@ -23,23 +23,23 @@ import org.emftext.language.java.parameters.OrdinaryParameter
  * @author Fei
  */
 class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
-    private static val CLASS_NAME = "ClassName";
-    private static val TYPE_NAME = "TypeName";
-    private static val TYPE_NAME2 = "TypeName2";
-    private static val OPERATION_NAME = "classMethod";
-    private static val OPERATION_NAME2 = "classMethod2";
-    private static val STANDARD_OPERATION_NAME = "standardMethod";
-    private static val OPERATION_RENAME = "classMethodRenamed";
-    private static val PARAMETER_NAME = "parameterName";
-    private static val PARAMETER_NAME2 = "parameterName2";
-    private static val PARAMETER_RENAME = "parameterRenamed";
+    static val CLASS_NAME = "ClassName";
+    static val TYPE_NAME = "TypeName";
+    static val TYPE_NAME2 = "TypeName2";
+    static val OPERATION_NAME = "classMethod";
+    static val OPERATION_NAME2 = "classMethod2";
+    static val STANDARD_OPERATION_NAME = "standardMethod";
+    static val OPERATION_RENAME = "classMethodRenamed";
+    static val PARAMETER_NAME = "parameterName";
+    static val PARAMETER_NAME2 = "parameterName2";
+    static val PARAMETER_RENAME = "parameterRenamed";
     
-    private static var Class jClass;
-    private static var Class typeClass;
-    private static var Class typeClass2;
-    private static var ClassMethod jMeth;
-    private static var ClassMethod jParamMeth;
-    private static var OrdinaryParameter jParam;
+    static var Class jClass;
+    static var Class typeClass;
+    static var Class typeClass2;
+    static var ClassMethod jMeth;
+    static var ClassMethod jParamMeth;
+    static var OrdinaryParameter jParam;
     
     /**
      * Initializes and synchronizes three classes. One class has two methods.

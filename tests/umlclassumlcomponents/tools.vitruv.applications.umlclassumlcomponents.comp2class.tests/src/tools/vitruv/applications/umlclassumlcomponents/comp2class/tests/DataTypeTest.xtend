@@ -19,7 +19,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	********/
 	
 	@Test
-	public def void testCreateClassForDataType() {
+	def void testCreateClassForDataType() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
 		
@@ -27,7 +27,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	}
 	
 	@Test
-	public def void testAddPropertyToDataType(){
+	def void testAddPropertyToDataType(){
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
 		
@@ -45,7 +45,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	
 	@Ignore
 	@Test
-    public def void testRenameDataTypeProperty() {
+    def void testRenameDataTypeProperty() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
 		
@@ -66,7 +66,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
     }
 	
 	@Test
-	public def void testAddOperationToDataType(){
+	def void testAddOperationToDataType(){
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
 		
@@ -84,7 +84,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 	
 	@Ignore	
 	@Test
-    public def void testRenameDataTypeOperation() {
+    def void testRenameDataTypeOperation() {
 		val compDataType = createDataType(DATATYPE_NAME, 1)
 		saveAndSynchronizeChanges(compDataType)
 		

@@ -18,15 +18,15 @@ import org.emftext.language.java.types.TypesFactory
  * @author Fei
  */
 class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
-    private static val INTERFACE_NAME = "InterfaceName";
-    private static val TYPE_NAME = "TypeName";
-    private static val IOPERATION_NAME = "interfaceMethod";
-    private static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod";
-    private static val IOPERATION_RENAME = "interfaceMethodRenamed";
+    static val INTERFACE_NAME = "InterfaceName";
+    static val TYPE_NAME = "TypeName";
+    static val IOPERATION_NAME = "interfaceMethod";
+    static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod";
+    static val IOPERATION_RENAME = "interfaceMethodRenamed";
     
-    private static var org.eclipse.uml2.uml.Interface uInterface;
-    private static var org.eclipse.uml2.uml.Class typeClass;
-    private static var org.eclipse.uml2.uml.Operation uOperation;
+    static var org.eclipse.uml2.uml.Interface uInterface;
+    static var org.eclipse.uml2.uml.Class typeClass;
+    static var org.eclipse.uml2.uml.Operation uOperation;
     
     @Before
     def void before() {

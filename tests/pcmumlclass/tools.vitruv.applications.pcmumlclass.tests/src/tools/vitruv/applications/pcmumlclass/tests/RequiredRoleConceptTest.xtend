@@ -21,9 +21,9 @@ import static org.junit.Assert.*
  */
 class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 
-	private val REQUIRED_ROLE_NAME = "testRequiredRole"	 
+	val REQUIRED_ROLE_NAME = "testRequiredRole"	 
 	
-	def public static void checkRequiredRoleConcept(
+	def static void checkRequiredRoleConcept(
 			CorrespondenceModel cm,
 			OperationRequiredRole pcmRequired,
 			Property umlRequiredInstance,

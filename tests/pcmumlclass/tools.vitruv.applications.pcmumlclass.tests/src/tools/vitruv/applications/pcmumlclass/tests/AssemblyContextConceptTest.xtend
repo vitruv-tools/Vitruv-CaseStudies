@@ -18,9 +18,9 @@ import static org.junit.Assert.*
  */
 class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 
-	private static val PROPERTY_NAME = "testAssemblyContextField"
+	static val PROPERTY_NAME = "testAssemblyContextField"
 
-	def public static void checkAssemblyContextConcept(
+	def static void checkAssemblyContextConcept(
 			CorrespondenceModel cm,
 			AssemblyContext pcmAssemblyContext,
 			Property umlAssemblyContextProperty

@@ -11,7 +11,7 @@ import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedT
 class VisibilityTest extends AbstractClass2CompTest {
 
 	@Test
-	public def void testVisibilityChange() {
+	def void testVisibilityChange() {
 		val umlClass = createClass(CLASS_NAME, 0)
 		umlClass.visibility = VisibilityKind.PRIVATE_LITERAL
 		saveAndSynchronizeWithInteractions(umlClass)		

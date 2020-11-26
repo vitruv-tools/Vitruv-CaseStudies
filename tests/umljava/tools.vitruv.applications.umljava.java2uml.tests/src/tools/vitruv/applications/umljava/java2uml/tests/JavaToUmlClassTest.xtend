@@ -21,14 +21,14 @@ import static extension tools.vitruv.applications.util.temporary.java.JavaModifi
  * @author Fei
  */
 class JavaToUmlClassTest extends Java2UmlTransformationTest {
-	private static val CLASS_NAME = "ClassName";
-	private static val STANDARD_CLASS_NAME = "StandardClassName";
-	private static val CLASS_RENAMED = "ClassRenamed"
-	private static val SUPER_CLASS_NAME = "SuperClassName"
-	private static val INTERFACE_NAME = "InterfaceName";
-	private static val INTERFACE_NAME2 = "InterfaceName2";
+	static val CLASS_NAME = "ClassName";
+	static val STANDARD_CLASS_NAME = "StandardClassName";
+	static val CLASS_RENAMED = "ClassRenamed"
+	static val SUPER_CLASS_NAME = "SuperClassName"
+	static val INTERFACE_NAME = "InterfaceName";
+	static val INTERFACE_NAME2 = "InterfaceName2";
 
-	private static var org.emftext.language.java.classifiers.Class jClass;
+	static var org.emftext.language.java.classifiers.Class jClass;
 
 	@Before
 	def void before() {

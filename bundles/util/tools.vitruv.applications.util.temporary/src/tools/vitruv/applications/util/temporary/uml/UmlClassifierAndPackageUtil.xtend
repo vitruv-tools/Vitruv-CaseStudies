@@ -32,7 +32,7 @@ import org.eclipse.uml2.uml.VisibilityKind
  */
 @Utility
 class UmlClassifierAndPackageUtil {
-    private static val logger = Logger.getLogger(UmlClassifierAndPackageUtil.simpleName)
+    static val logger = Logger.getLogger(UmlClassifierAndPackageUtil.simpleName)
 
     /**
      * Searches and retrieves the UML package in the UML model that has an equal name as the given package name.

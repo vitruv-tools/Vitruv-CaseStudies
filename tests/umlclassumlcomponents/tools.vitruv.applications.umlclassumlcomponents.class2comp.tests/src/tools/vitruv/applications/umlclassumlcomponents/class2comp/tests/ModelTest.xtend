@@ -15,7 +15,7 @@ class ModelTest extends AbstractClass2CompTest {
 	//Model creation currently unused due to usage of one singular Model
 	
 	@Test
-		public def void testModelCreation() {
+		def void testModelCreation() {
 			assertModelExists(FOLDER_NAME + MODEL_NAME + "." + MODEL_FILE_EXTENSION)
 			val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
 			assertEquals(1, correspondingElements.size)

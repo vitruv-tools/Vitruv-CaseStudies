@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.resource.Resource
  * @author Fei
  */
 abstract class AbstractUmlJavaTest extends VitruviusApplicationTest {
-    private static val logger = Logger.getLogger(typeof(VitruviusApplicationTest).simpleName)
+    static val logger = Logger.getLogger(typeof(VitruviusApplicationTest).simpleName)
     
     override protected getVitruvDomains() {
         return #[new UmlDomainProvider().domain, new JavaDomainProvider().domain];

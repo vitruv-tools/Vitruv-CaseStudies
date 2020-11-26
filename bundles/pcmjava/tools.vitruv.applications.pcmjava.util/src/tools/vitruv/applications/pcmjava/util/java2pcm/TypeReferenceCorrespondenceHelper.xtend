@@ -48,9 +48,9 @@ class TypeReferenceCorrespondenceHelper {
 	private new() {
 	}
 
-	private static final Logger logger = Logger.getLogger(TypeReferenceCorrespondenceHelper.simpleName)
+	static final Logger logger = Logger.getLogger(TypeReferenceCorrespondenceHelper.simpleName)
 
-	private static var ClaimableMap<Class<? extends PrimitiveType>, DataType> primitveTypeMappingMap;
+	static var ClaimableMap<Class<? extends PrimitiveType>, DataType> primitveTypeMappingMap;
 
 	private def static initPrimitiveTypeMap() {
 		primitveTypeMappingMap = new ClaimableHashMap
@@ -98,7 +98,7 @@ class TypeReferenceCorrespondenceHelper {
 		return primitveTypeMappingMap.claimValueForKey(primitiveType.class)
 	}
 
-	public def static DataType getCorrespondingPCMDataTypeForTypeReference(TypeReference typeReference,
+	def static DataType getCorrespondingPCMDataTypeForTypeReference(TypeReference typeReference,
 		CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo,
 		long arrayDimension) {
 			var DataType pcmDataType = getDataTypeFromTypeReference(typeReference, correspondenceModel, userInteractor,

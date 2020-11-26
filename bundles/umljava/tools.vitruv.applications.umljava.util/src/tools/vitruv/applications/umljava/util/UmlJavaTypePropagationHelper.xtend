@@ -35,14 +35,14 @@ import edu.kit.ipd.sdq.activextendannotations.Utility
  */
 @Utility
 class UmlJavaTypePropagationHelper {
-    private static val logger = Logger.getLogger(UmlJavaTypePropagationHelper.simpleName)
+    static val logger = Logger.getLogger(UmlJavaTypePropagationHelper.simpleName)
 
     public static val UML_PRIMITIVE_BOOLEAN_TAG = "Boolean"
     public static val UML_PRIMITIVE_REAL_TAG = "Real"
     public static val UML_PRIMITIVE_INTEGER_TAG = "Integer"
     public static val UML_PRIMITIVE_STRING_TAG = "String"
 
-    private static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
+    static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
 
     /**
      * Prompts a message to the user that allows him to choose a collection datatype.

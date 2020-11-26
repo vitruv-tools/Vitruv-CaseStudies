@@ -13,7 +13,7 @@ class ClassTest extends AbstractClass2CompTest{
 	********/	
 	
 	@Test
-	public def void testCreateComponentForClass() {
+	def void testCreateComponentForClass() {
 		val umlClass = createClass(CLASS_NAME, 0)
 		saveAndSynchronizeWithInteractions(umlClass)
 		
@@ -21,7 +21,7 @@ class ClassTest extends AbstractClass2CompTest{
 	}
 	
 	@Test
-	public def void testCreate2ComponentsFor2ClassesInSamePackage() {
+	def void testCreate2ComponentsFor2ClassesInSamePackage() {
 		val classPackage = createPackage(CLASS_NAME)
 		val umlClass1 = createClass(CLASS_NAME, classPackage, 0)
 		val umlClass2 = createClassWithoutInteraction(CLASS_NAME2, classPackage)
@@ -36,7 +36,7 @@ class ClassTest extends AbstractClass2CompTest{
 	}
 	
 	@Test
-	public def void testCreate2ComponentsFor2ClassesInDifferentPackages() {
+	def void testCreate2ComponentsFor2ClassesInDifferentPackages() {
 		val classPackage1 = createPackage(CLASS_NAME)
 		val umlClass1 = createClass(CLASS_NAME, classPackage1, 0)
 		val classPackage2 = createPackage(CLASS_NAME2)
@@ -51,7 +51,7 @@ class ClassTest extends AbstractClass2CompTest{
 	}
 	
 	@Test
-	public def void testCreateNoComponentForClass() {
+	def void testCreateNoComponentForClass() {
 		val umlClass = createClass(CLASS_NAME, 1)
 		saveAndSynchronizeWithInteractions(umlClass)
 		
@@ -61,7 +61,7 @@ class ClassTest extends AbstractClass2CompTest{
 	}
 
 	@Test
-    public def void testRenameClass() {
+    def void testRenameClass() {
     	val umlClass = createClass("Old", 0)
 		saveAndSynchronizeWithInteractions(umlClass)
 		
@@ -74,7 +74,7 @@ class ClassTest extends AbstractClass2CompTest{
     }
     
 	@Test
-    public def void testDeleteClass() {
+    def void testDeleteClass() {
     	val classPackage = createPackage(CLASS_NAME)
     	val umlClass = createClass(CLASS_NAME, classPackage, 0)	
 		saveAndSynchronizeWithInteractions(umlClass)
@@ -91,7 +91,7 @@ class ClassTest extends AbstractClass2CompTest{
     }    
     
     @Test
-	public def void testCreateComponentForClassInPackage() {
+	def void testCreateComponentForClassInPackage() {
 		val classPackage = createPackage(CLASS_NAME)
 		val umlClass = createClass(CLASS_NAME, classPackage, 0)
 		saveAndSynchronizeWithInteractions(umlClass)

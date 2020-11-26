@@ -17,12 +17,12 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
  * @author Fei
  */
 class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
-    private static val INTERFACE_NAME = "InterfaceName"
-    private static val INTERFACE_RENAME = "InterfaceRename"
-    private static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
-    private static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
-    private static val STANDARD_INTERFACE_NAME = "StandardInterfaceName"
-    private static var Interface uInterface
+    static val INTERFACE_NAME = "InterfaceName"
+    static val INTERFACE_RENAME = "InterfaceRename"
+    static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
+    static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
+    static val STANDARD_INTERFACE_NAME = "StandardInterfaceName"
+    static var Interface uInterface
     
     
     @Before

@@ -25,18 +25,18 @@ import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParame
  * @author Fei
  */
 class UmlToJavaParameterTest extends Uml2JavaTransformationTest {
-    private static val CLASS_NAME = "ClassName";
-    private static val TYPE_NAME = "TypeName";
-    private static val OPERATION_NAME = "classMethod";
-    private static val PARAMETER_NAME = "parameterName";
-    private static val STANDARD_PARAMETER_NAME = "standardParameterName"
-    private static val PARAMETER_RENAME = "parameterRenamed";
+    static val CLASS_NAME = "ClassName";
+    static val TYPE_NAME = "TypeName";
+    static val OPERATION_NAME = "classMethod";
+    static val PARAMETER_NAME = "parameterName";
+    static val STANDARD_PARAMETER_NAME = "standardParameterName"
+    static val PARAMETER_RENAME = "parameterRenamed";
     
-    private static var Class uClass
-    private static var Class typeClass
-    private static var Parameter uParam
-    private static var PrimitiveType pType
-    private static var Operation uOperation
+    static var Class uClass
+    static var Class typeClass
+    static var Parameter uParam
+    static var PrimitiveType pType
+    static var Operation uOperation
     
     
     @Before

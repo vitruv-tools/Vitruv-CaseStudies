@@ -341,7 +341,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * @return
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
-	public def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath) {
+	def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath) {
 		val originalUri = originalWithinProjektPath.modelVuri.EMFUri
 		val generatedUri = generatedWithinProjektPath.modelVuri.EMFUri
 		return compare(originalUri, generatedUri)
@@ -358,7 +358,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * @return
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
-	public def Comparison compare(URI originalUri, URI generatedUri) {
+	def Comparison compare(URI originalUri, URI generatedUri) {
 		val resourceSet = new ResourceSetImpl()
 		val original = resourceSet.getResource(originalUri, true).contents.head
 		val generated = resourceSet.getResource(generatedUri, true).contents.head
@@ -369,7 +369,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * This directly applies the default EMFCompare comparator to the passed elements. 
 	 * It does not ensure that the compared elements are in sync with the disk state.  
 	 */
-	public def Comparison compare(Notifier original, Notifier generated) {
+	def Comparison compare(Notifier original, Notifier generated) {
 		val comparator = EMFCompare.builder().build();
 		val scope = new DefaultComparisonScope(original, generated, original)
 		return comparator.compare(scope);
@@ -386,7 +386,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * @param skipFeatures
 	 * 		the names of the features that should be ignored
 	 */
-	public def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
+	def mergeElements(EObject original, EObject generated, String ... skipFeatures) {
 		for (feature : original.eClass.EAllStructuralFeatures) {
 			if(
 				!feature.derived 

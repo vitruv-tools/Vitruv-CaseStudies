@@ -23,9 +23,9 @@ import org.junit.Ignore
  */
 class AttributeConceptTest extends PcmUmlClassApplicationTest {
 
-	private static val TEST_ATTRIBUTE = "testAttribute"
+	static val TEST_ATTRIBUTE = "testAttribute"
 	
-	def public static void checkAttributeConcept(CorrespondenceModel cm, 
+	def static void checkAttributeConcept(CorrespondenceModel cm, 
 			InnerDeclaration pcmAttribute, 
 			Property umlAttribute
 	) {

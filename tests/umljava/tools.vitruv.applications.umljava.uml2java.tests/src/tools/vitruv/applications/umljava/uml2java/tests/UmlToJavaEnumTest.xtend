@@ -23,18 +23,18 @@ import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParame
  * @author Fei
  */
 class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
-	private static val ENUM_NAME = "EnumName"
-	private static val ENUM_RENAME = "EnumRenamed"
-	private static val STANDARD_ENUM_NAME = "StandardEnumName"
-	private static val ENUM_LITERAL_NAMES_1 = #["RED", "BLUE", "GREEN", "YELLOW", "PURPLE"]
-	private static val ENUM_LITERAL_NAMES_2 = #["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
-	private static val LITERAL_NAME = "LITERALNAME"
-	private static val OPERATION_NAME = "operationName"
-	private static val TYPE_CLASS = "TypeClass"
-	private static val ATTRIBUTE_NAME = "attributeName"
-	private static var Enumeration uEnum
-	private static val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
-	private static val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
+	static val ENUM_NAME = "EnumName"
+	static val ENUM_RENAME = "EnumRenamed"
+	static val STANDARD_ENUM_NAME = "StandardEnumName"
+	static val ENUM_LITERAL_NAMES_1 = #["RED", "BLUE", "GREEN", "YELLOW", "PURPLE"]
+	static val ENUM_LITERAL_NAMES_2 = #["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
+	static val LITERAL_NAME = "LITERALNAME"
+	static val OPERATION_NAME = "operationName"
+	static val TYPE_CLASS = "TypeClass"
+	static val ATTRIBUTE_NAME = "attributeName"
+	static var Enumeration uEnum
+	static val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
+	static val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
 	
 	@Before
 	def void before() {

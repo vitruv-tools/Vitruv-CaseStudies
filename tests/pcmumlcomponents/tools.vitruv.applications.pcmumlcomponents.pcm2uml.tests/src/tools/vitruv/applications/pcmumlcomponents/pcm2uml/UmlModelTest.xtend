@@ -8,7 +8,7 @@ import static org.junit.Assert.*
 class UmlModelTest extends AbstractPcmUmlTest {
 
 	@Test
-	public def void testModelCreation() {
+	def void testModelCreation() {
 		assertModelExists("model/" + MODEL_NAME + ".uml");
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
 		assertEquals(1, correspondingElements.size);
@@ -18,7 +18,7 @@ class UmlModelTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testModelRename() {
+	def void testModelRename() {
 		val newName = 'foo';
 		rootElement.entityName = newName;
 		saveAndSynchronizeChanges(rootElement);

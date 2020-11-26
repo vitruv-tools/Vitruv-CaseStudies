@@ -18,16 +18,16 @@ import org.eclipse.emf.ecore.util.EcoreUtil
  * @author Fei
  */
 class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
-    private static val INTERFACE_NAME = "InterfaceName";
-    private static val TYPE_NAME = "TypeName";
-    private static val IOPERATION_NAME = "interfaceMethod";
-    private static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod";
-    private static val IOPERATION_RENAME = "interfaceMethodRenamed";
-    private static val PARAMETER_NAME = "parameterName";
+    static val INTERFACE_NAME = "InterfaceName";
+    static val TYPE_NAME = "TypeName";
+    static val IOPERATION_NAME = "interfaceMethod";
+    static val STANDARD_IOPERATION_NAME = "standardInterfaceMethod";
+    static val IOPERATION_RENAME = "interfaceMethodRenamed";
+    static val PARAMETER_NAME = "parameterName";
     
-    private static var org.emftext.language.java.classifiers.Interface jInterface;
-    private static var org.emftext.language.java.classifiers.Class typeClass;
-    private static var org.emftext.language.java.members.InterfaceMethod jMeth;
+    static var org.emftext.language.java.classifiers.Interface jInterface;
+    static var org.emftext.language.java.classifiers.Class typeClass;
+    static var org.emftext.language.java.members.InterfaceMethod jMeth;
     
     @Before
     def void before() {

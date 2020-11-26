@@ -18,7 +18,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 	********/	
 	
 	@Test
-	public def void testInterfaceRealized() {
+	def void testInterfaceRealized() {
 		//Create Class in Package for a Component
 		val umlComp = createComponent(COMP_NAME)
 		//Create Interface and Realization
@@ -42,7 +42,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 	}
 	
 	@Test
-	public def void testDeleteInterfaceRealization() {
+	def void testDeleteInterfaceRealization() {
 		//Create Class in Package for a Component
 		val umlComp = createComponent(COMP_NAME)
 		//Create Interface and Realization
@@ -63,7 +63,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 	}
 	
 	@Test	
-	public def void testInterfaceUsed() { 
+	def void testInterfaceUsed() { 
 		//***First add InterfaceRealization***
 		
 		//Create Class in Package for a Component
@@ -115,7 +115,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 	}
 		
 	@Test
-	public def void testDeleteUsage() {
+	def void testDeleteUsage() {
 		//***First add InterfaceRealization***
 		
 		//Create Class in Package for a Component
@@ -149,7 +149,7 @@ class InterfaceTest extends AbstractComp2ClassTest {
 	}
 	
 	@Test	
-	public def void testInterfaceUsedTwice() { 
+	def void testInterfaceUsedTwice() { 
 		//***First add InterfaceRealization***
 		
 		//Create Class in Package for a Component

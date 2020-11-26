@@ -39,7 +39,7 @@ import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
  */
 class TestUtil {
 	
-	private static val logger = Logger.getLogger(TestUtil)
+	static val logger = Logger.getLogger(TestUtil)
 	
 	private new() {
 		

@@ -18,15 +18,15 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
  * @author Fei
  */
 class UmlToJavaClassTest extends Uml2JavaTransformationTest {
-	private static val CLASS_NAME = "ClassName";
-	private static val DATATYPE_NAME = "DataTypeName";
-	private static val STANDARD_CLASS_NAME = "StandardClassName"
-	private static val CLASS_RENAME = "ClassRenamed"
-	private static val SUPER_CLASS_NAME = "SuperClassName"
-	private static val INTERFACE_NAME = "InterfaceName";
-	private static val INTERFACE_NAME2 = "InterfaceName2";
+	static val CLASS_NAME = "ClassName";
+	static val DATATYPE_NAME = "DataTypeName";
+	static val STANDARD_CLASS_NAME = "StandardClassName"
+	static val CLASS_RENAME = "ClassRenamed"
+	static val SUPER_CLASS_NAME = "SuperClassName"
+	static val INTERFACE_NAME = "InterfaceName";
+	static val INTERFACE_NAME2 = "InterfaceName2";
 	
-	private var Class uClass;
+	var Class uClass;
 	
 	
 	

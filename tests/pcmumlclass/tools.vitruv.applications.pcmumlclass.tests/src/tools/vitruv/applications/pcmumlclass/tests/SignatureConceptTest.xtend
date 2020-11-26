@@ -24,9 +24,9 @@ import static org.junit.Assert.*
  */
 class SignatureConceptTest extends PcmUmlClassApplicationTest {
 
-	private static val TEST_SIGNATURE_NAME = "testSignature"
+	static val TEST_SIGNATURE_NAME = "testSignature"
 	
-	def public static void checkSignatureConcept(
+	def static void checkSignatureConcept(
 			CorrespondenceModel cm, 
 			OperationSignature pcmSignature, 
 			Operation umlOperation

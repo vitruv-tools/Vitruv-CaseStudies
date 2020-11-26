@@ -15,9 +15,9 @@ import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import static org.junit.Assert.*
 
 class InterfaceTest extends PcmUmlClassTest {
-	private static val TEST_INTERFACE_NAME = "TestInterface"
+	static val TEST_INTERFACE_NAME = "TestInterface"
 
-	def public static checkInterfaceConcept(
+	def static checkInterfaceConcept(
 		CorrespondenceModel cm,
 		OperationInterface pcmInterface,
 		Interface umlInterface

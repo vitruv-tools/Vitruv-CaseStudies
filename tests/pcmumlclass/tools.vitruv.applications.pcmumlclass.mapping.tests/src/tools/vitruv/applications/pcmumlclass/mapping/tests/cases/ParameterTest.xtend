@@ -21,13 +21,13 @@ import org.junit.Ignore
 
 class ParameterTest extends PcmUmlClassTest{
 	
-	private static val TEST_PARAMETER_NAME = "testParameter"
+	static val TEST_PARAMETER_NAME = "testParameter"
 	 
 	def private static boolean checkParameterModifiers(ParameterModifier pcmModifier, ParameterDirectionKind umlDirection) {
 		return umlDirection == PcmUmlClassHelper.getMatchingParameterDirection(pcmModifier)
 	}
 	
-	def public static checkParameterConcept(CorrespondenceModel cm, 
+	def static checkParameterConcept(CorrespondenceModel cm, 
 			Parameter pcmParam, 
 			org.eclipse.uml2.uml.Parameter umlParam
 	) {

@@ -9,11 +9,11 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getNorm
 
 class EjbJava2PcmHelper {
 
-    public static def boolean overridesInterfaceMethod(ClassMethod classMethod, Class jaMoPPClass){
+    static def boolean overridesInterfaceMethod(ClassMethod classMethod, Class jaMoPPClass){
         return null !== getOverridenInterfaceMethod(classMethod, jaMoPPClass)
     }
 
-    public static def getOverridenInterfaceMethod(ClassMethod classMethod, Class jaMoPPClass){
+    static def getOverridenInterfaceMethod(ClassMethod classMethod, Class jaMoPPClass){
         val implementedEjbInterfaces = jaMoPPClass.implements.map[getNormalizedClassifierFromTypeReference(it)]
             .filter(typeof(Interface)).filter[EjbAnnotationHelper.isEjbBuisnessInterface(it)]
         for(ejbInterface : implementedEjbInterfaces){

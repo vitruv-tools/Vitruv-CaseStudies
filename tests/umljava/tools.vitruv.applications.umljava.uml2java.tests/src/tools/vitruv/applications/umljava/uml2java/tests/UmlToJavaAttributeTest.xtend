@@ -26,16 +26,16 @@ import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssocia
  * @author Fei
  */
 class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
-    private static val ATTRIBUTE_NAME = "attributName";
-    private static val ATTRIBUTE_RENAME = "attributeRenamed";
-    private static val STANDARD_ATTRIBUTE_NAME = "standardAttributName";
-    private static val CLASS_NAME = "ClassName";
-    private static val TYPE_CLASS = "TypeClass";
+    static val ATTRIBUTE_NAME = "attributName";
+    static val ATTRIBUTE_RENAME = "attributeRenamed";
+    static val STANDARD_ATTRIBUTE_NAME = "standardAttributName";
+    static val CLASS_NAME = "ClassName";
+    static val TYPE_CLASS = "TypeClass";
     
-    private static var Property uAttr;
-    private static var Class uClass;
-    private static var Class typeClass;
-    private static var PrimitiveType pType
+    static var Property uAttr;
+    static var Class uClass;
+    static var Class typeClass;
+    static var PrimitiveType pType
     
     @Before
     def void before() {

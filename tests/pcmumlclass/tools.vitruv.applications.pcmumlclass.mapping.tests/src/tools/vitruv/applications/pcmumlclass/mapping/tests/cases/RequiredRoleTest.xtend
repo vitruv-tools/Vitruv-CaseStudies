@@ -19,11 +19,11 @@ import org.junit.Ignore
 import org.apache.log4j.Logger
 
 class RequiredRoleTest extends PcmUmlClassTest {
-	private static val logger = Logger.getLogger(RequiredRoleTest)
+	static val logger = Logger.getLogger(RequiredRoleTest)
 
-	private val REQUIRED_ROLE_NAME = "testRequiredRole"
+	val REQUIRED_ROLE_NAME = "testRequiredRole"
 
-	def public static void checkRequiredRoleConcept(
+	def static void checkRequiredRoleConcept(
 		CorrespondenceModel cm,
 		OperationRequiredRole pcmRequired,
 		Property umlRequiredInstance,
