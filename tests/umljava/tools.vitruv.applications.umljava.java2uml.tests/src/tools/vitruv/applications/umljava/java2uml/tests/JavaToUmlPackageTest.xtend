@@ -27,7 +27,7 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     static var org.emftext.language.java.containers.Package jPackageLevel1
     static var Class jClass
     
-    def override setup() {
+    override setup() {
     	super.setup();
         jPackageLevel1 = createJavaPackageAsModel(PACKAGE_LEVEL_1, null)
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)

@@ -47,7 +47,7 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 		return outputRepository
 	}
 	
-	override protected def initializeTestModel() {
+	override protected initializeTestModel() {
 		
 	}
 	

@@ -16,7 +16,7 @@ import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
  * @author Fei
  */
 abstract class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
-    protected static val final Logger logger = Logger.getLogger(typeof(Uml2JavaTransformationTest).simpleName);
+    protected static val Logger logger = Logger.getLogger(typeof(Uml2JavaTransformationTest).simpleName);
     
 	static val MODEL_FILE_EXTENSION = "uml";
 	static val MODEL_NAME = "model"; //name of the uml rootmodel
