@@ -19,7 +19,7 @@ class InterfaceTest extends AbstractClass2CompTest {
 	********/
 	
 	@Test
-	public def void testInterfaceRequiredAndProvided() {
+	def void testInterfaceRequiredAndProvided() {
 		//Create 2 Components:
 		val classPackage1 = createPackage(CLASS_NAME)
 		val umlClass1 = createClass(CLASS_NAME, classPackage1, 0)
@@ -63,7 +63,7 @@ class InterfaceTest extends AbstractClass2CompTest {
 	}	
 	
 	@Test
-	public def void testInterfaceHasNoReachOutwards() {
+	def void testInterfaceHasNoReachOutwards() {
 		//Create 2 Components:
 		val classPackage1 = createPackage(CLASS_NAME)
 		val umlClass1 = createClass(CLASS_NAME, classPackage1, 0)
@@ -102,7 +102,7 @@ class InterfaceTest extends AbstractClass2CompTest {
 	}
     
 	@Test
-	public def void testInterfaceRemoved() {
+	def void testInterfaceRemoved() {
 		//***First create a realized and used Interface***
 		
 		//Create 2 Components:
@@ -143,7 +143,7 @@ class InterfaceTest extends AbstractClass2CompTest {
 	}
 	
 	@Test
-	public def void testInterfaceRealizaionRemoved() {
+	def void testInterfaceRealizaionRemoved() {
 		//***First create a realized and used Interface***
 		
 		//Create 2 Components:

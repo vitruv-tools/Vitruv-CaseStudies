@@ -16,10 +16,10 @@ import static org.junit.Assert.*
 import org.junit.Ignore
 
 class DatatypesTest extends PcmUmlClassTest{
-		private static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
-	private static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
+		static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
+	static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
 	
-	def public static checkCompositeDataTypeConcept(CorrespondenceModel cm, 
+	def static checkCompositeDataTypeConcept(CorrespondenceModel cm, 
 			CompositeDataType pcmCompositeType, 
 			Class umlClass
 	) {

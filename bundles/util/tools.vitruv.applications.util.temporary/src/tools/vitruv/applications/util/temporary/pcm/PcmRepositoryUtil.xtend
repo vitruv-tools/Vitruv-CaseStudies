@@ -8,7 +8,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 @Utility
 class PcmRepositoryUtil {
-    private static final Logger logger = Logger.getLogger(PcmRepositoryUtil.simpleName)
+    static final Logger logger = Logger.getLogger(PcmRepositoryUtil.simpleName)
 
     def static Repository getFirstRepository(CorrespondenceModel correspondenceModel) {
         val Set<Repository> repos = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Repository)

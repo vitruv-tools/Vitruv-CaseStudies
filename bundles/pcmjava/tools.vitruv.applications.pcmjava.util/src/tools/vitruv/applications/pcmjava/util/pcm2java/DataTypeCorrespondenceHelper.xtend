@@ -36,9 +36,9 @@ class DataTypeCorrespondenceHelper { // FIXME TS this seems to be a utility clas
 	private new() {
 	}
 
-	private static final Logger logger = Logger.getLogger(DataTypeCorrespondenceHelper.simpleName)
+	static final Logger logger = Logger.getLogger(DataTypeCorrespondenceHelper.simpleName)
 
-	private static var ClaimableMap<PrimitiveTypeEnum, Type> primitveTypeMappingMap;
+	static var ClaimableMap<PrimitiveTypeEnum, Type> primitveTypeMappingMap;
 
 	private def static initPrimitiveTypeMap() {
 		primitveTypeMappingMap = new ClaimableHashMap<PrimitiveTypeEnum, Type>()
@@ -53,14 +53,14 @@ class DataTypeCorrespondenceHelper { // FIXME TS this seems to be a utility clas
 		primitveTypeMappingMap.put(PrimitiveTypeEnum.STRING, stringClassifier)
 	}
 
-	public synchronized def static Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType pdt) {
+	synchronized def static Type claimJaMoPPTypeForPrimitiveDataType(PrimitiveDataType pdt) {
 		if (null === primitveTypeMappingMap) {
 			initPrimitiveTypeMap()
 		}
 		return EcoreUtil.copy(primitveTypeMappingMap.claimValueForKey(pdt.type))
 	}
 
-	public static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,
+	static def TypeReference claimUniqueCorrespondingJaMoPPDataTypeReference(DataType dataType,
 		CorrespondenceModel ci) {
 		if (null === dataType) {
 			return TypesFactory.eINSTANCE.createVoid

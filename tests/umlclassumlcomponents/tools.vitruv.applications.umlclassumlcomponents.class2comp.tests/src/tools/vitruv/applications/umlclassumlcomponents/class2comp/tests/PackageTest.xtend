@@ -14,7 +14,7 @@ class PackageTest extends AbstractClass2CompTest{
 	***********/
 	
 	@Test
-	public def void testCreatePackageWithoutLink() {
+	def void testCreatePackageWithoutLink() {
 		//Create Component without Package:
 		val umlClass = createClass(CLASS_NAME, 0)
 		saveAndSynchronizeWithInteractions(umlClass)
@@ -28,7 +28,7 @@ class PackageTest extends AbstractClass2CompTest{
 	}
 		
 	@Test
-	public def void testPackageIllegalRename1() {
+	def void testPackageIllegalRename1() {
 		//Create Package and try to rename to DataType-Package name:
 		val classPackage = createPackage(PACKAGE_NAME)				
 		saveAndSynchronizeWithInteractions(rootElement)
@@ -39,7 +39,7 @@ class PackageTest extends AbstractClass2CompTest{
 	}
 	
 	@Test
-	public def void testPackageIllegalRename2() {
+	def void testPackageIllegalRename2() {
 		//Create Package and try to overwrite the pre-existing DataType-Package name:
 		val dataTypePackage = createPackage(CLASS_DATATYPES_PACKAGE)
 		val classPackage = createPackage(PACKAGE_NAME)				
@@ -53,7 +53,7 @@ class PackageTest extends AbstractClass2CompTest{
 	
 	@Ignore		
 	@Test
-	public def void testPackageIllegalRename3() {
+	def void testPackageIllegalRename3() {
 		//Create Package with legal DataType-Package name, then try to rename it:
 		val dataTypePackage = createPackage(CLASS_DATATYPES_PACKAGE)
 				
@@ -85,7 +85,7 @@ class PackageTest extends AbstractClass2CompTest{
 	//}
 	
 	@Test
-	public def void testCreatePackageWithLinkButNoComponent() {
+	def void testCreatePackageWithLinkButNoComponent() {
 		//Create Package and try to link it no non-existing Component
 		val classPackage = createPackage(PACKAGE_NAME, 0, 0)
 		saveAndSynchronizeWithInteractions(classPackage)

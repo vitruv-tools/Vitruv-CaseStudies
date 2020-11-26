@@ -5,7 +5,7 @@ import org.junit.Test
 class ExisitingModelsTest extends ModelConstructionTest {
 	
 	@Test
-	public def void mediastoreTest() {
+	def void mediastoreTest() {
 		val resource = loadModel("model/mediastore.uml")
 		userInteractor.addNextSingleSelection(1)
         userInteractor.addNextSingleSelection(1)
@@ -20,7 +20,7 @@ class ExisitingModelsTest extends ModelConstructionTest {
 	}
 	
 	@Test
-	public def void mediastoreRoundtripTest() {
+	def void mediastoreRoundtripTest() {
 		val resource = loadModel("model/mediastore_generated.uml")
 		userInteractor.addNextSingleSelection(1)
 		userInteractor.addNextSingleSelection(1)
@@ -36,7 +36,7 @@ class ExisitingModelsTest extends ModelConstructionTest {
 	}
 	
 	@Test
-	public def void smallExampleRoundtripTest() {
+	def void smallExampleRoundtripTest() {
 		val resource = loadModel("model/small_example.uml")
 		userInteractor.addNextSingleSelection(1)
 		userInteractor.addNextSingleSelection(1)

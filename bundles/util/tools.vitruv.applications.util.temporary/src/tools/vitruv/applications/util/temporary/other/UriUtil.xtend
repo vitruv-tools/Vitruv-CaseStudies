@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EObject
 @Utility
 class UriUtil {
 
-    private static val logger = Logger.getLogger(UriUtil.simpleName)
+    static val logger = Logger.getLogger(UriUtil.simpleName)
 
     def static normalizeURI(EObject eObject) {
         if (null === eObject.eResource || null === eObject.eResource.resourceSet) {

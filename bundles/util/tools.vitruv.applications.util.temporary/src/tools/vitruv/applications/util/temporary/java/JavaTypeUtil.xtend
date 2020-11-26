@@ -36,9 +36,9 @@ import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 @Utility
 class JavaTypeUtil {
 
-    private static val logger = Logger.getLogger(JavaTypeUtil.simpleName)
+    static val logger = Logger.getLogger(JavaTypeUtil.simpleName)
 
-    private static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
+    static val List<Class<?>> supportedCollectionTypes = #[ArrayList, LinkedList, HashSet]
 
     /**
      * Retrieves the type referenced by a type reference. This can either be a classifier or a primitive type.
@@ -188,7 +188,7 @@ class JavaTypeUtil {
         return null
     }
 
-    public static def boolean hasSameTargetReference(TypeReference reference1, TypeReference reference2) {
+    static def boolean hasSameTargetReference(TypeReference reference1, TypeReference reference2) {
         if (reference1 == reference2 || reference1.equals(reference2)) {
             return true
         }

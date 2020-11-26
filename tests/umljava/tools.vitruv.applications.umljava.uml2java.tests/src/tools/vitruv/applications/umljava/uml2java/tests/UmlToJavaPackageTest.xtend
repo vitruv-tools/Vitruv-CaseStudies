@@ -17,13 +17,13 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
  * @author Fei
  */
 class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
-    private static val PACKAGE_LEVEL_1 = "level1"
-    private static val PACKAGE_LEVEL_2 = "level2"
-    private static val PACKAGE_NAME = "packagename"
-    private static val PACKAGE_RENAMED = "packagerenamed"
-    private static val CLASS_NAME = "ClassName"
+    static val PACKAGE_LEVEL_1 = "level1"
+    static val PACKAGE_LEVEL_2 = "level2"
+    static val PACKAGE_NAME = "packagename"
+    static val PACKAGE_RENAMED = "packagerenamed"
+    static val CLASS_NAME = "ClassName"
     
-    private static var Package uPackageLevel1
+    static var Package uPackageLevel1
 
     @Before
     def void before() {

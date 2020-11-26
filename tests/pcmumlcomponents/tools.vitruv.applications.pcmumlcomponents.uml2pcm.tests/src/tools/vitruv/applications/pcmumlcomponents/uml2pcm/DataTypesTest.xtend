@@ -14,7 +14,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	protected val DATATYPE_NAME = "fooType"
 	
 	@Test
-	public def void primitiveTypeCreate() {
+	def void primitiveTypeCreate() {
 		val primitiveType = UMLFactory.eINSTANCE.createPrimitiveType()
 		primitiveType.name = UML_TYPE_BOOL
 		rootElement.packagedElements += primitiveType
@@ -27,7 +27,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	}
 		
 	@Test
-	public def void compositeTypeCreate() {
+	def void compositeTypeCreate() {
 		val typeName = DATATYPE_NAME
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = typeName
@@ -43,7 +43,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void compositeTypeAddProperty() {
+	def void compositeTypeAddProperty() {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = DATATYPE_NAME
 		rootElement.packagedElements += dataType
@@ -92,7 +92,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void compositeTypeChangeProperty() {
+	def void compositeTypeChangeProperty() {
 		val umlType = createCompositeDataType(DATATYPE_NAME)
 		val umlProperty = createProperty(umlType, PARAMETER_NAME, UML_TYPE_INT)
 		
@@ -113,7 +113,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void compositeTypeDeleteProperty() {
+	def void compositeTypeDeleteProperty() {
 		val umlType = createCompositeDataType(DATATYPE_NAME)
 		val property1 = createProperty(umlType, PARAMETER_NAME, UML_TYPE_INT)
 		val remainingPropertyName = PARAMETER_NAME_2

@@ -43,7 +43,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testInterfaceCreation() {
+	def void testInterfaceCreation() {
 		val interfaceName = INTERFACE_NAME
 		val pcmInterface = createOperationInterface(interfaceName)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmInterface]).flatten
@@ -54,7 +54,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testInterfaceAddOperation() {
+	def void testInterfaceAddOperation() {
 		val pcmInterface = createOperationInterface(INTERFACE_NAME)
 		val returnType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		returnType.type = PrimitiveTypeEnum.BOOL
@@ -72,7 +72,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testInterfaceChangeOperation() {
+	def void testInterfaceChangeOperation() {
 		val pcmInterface = createOperationInterface(INTERFACE_NAME)
 		val pcmOperation = createOperationInterfaceOperation(pcmInterface, OPERATION_NAME, PrimitiveTypeEnum.BOOL)
 		val newReturnType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
@@ -97,7 +97,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testInterfaceRemoveOperation() {
+	def void testInterfaceRemoveOperation() {
 		val pcmInterface = createOperationInterface(INTERFACE_NAME)
 		val pcmOperation1 = createOperationInterfaceOperation(pcmInterface, OPERATION_NAME, PrimitiveTypeEnum.INT)
 		val pcmOperation2 = createOperationInterfaceOperation(pcmInterface, OPERATION_NAME_2, PrimitiveTypeEnum.DOUBLE)
@@ -111,7 +111,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testInterfaceRemove() {
+	def void testInterfaceRemove() {
 		val pcmInterface = createOperationInterface(INTERFACE_NAME)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmInterface]).flatten
 		assertEquals(1, correspondingElements.length)
@@ -132,7 +132,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testParameterAdd() {
+	def void testParameterAdd() {
 		val pcmInterface = createOperationInterface(INTERFACE_NAME)
 		val pcmOperation = createOperationInterfaceOperation(pcmInterface, OPERATION_NAME, PrimitiveTypeEnum.BOOL)
 		val parameterName = PARAMETER_NAME
@@ -151,7 +151,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testParameterChange() {
+	def void testParameterChange() {
 		val pcmInterface = createOperationInterface(INTERFACE_NAME)
 		val pcmOperation = createOperationInterfaceOperation(pcmInterface, OPERATION_NAME, PrimitiveTypeEnum.BOOL)
 		val pcmParameter = createOperationParameter(pcmOperation, PARAMETER_NAME, pcmOperation.returnType__OperationSignature)
@@ -186,7 +186,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testParameterDelete() {
+	def void testParameterDelete() {
 		val pcmInterface = createOperationInterface(INTERFACE_NAME)
 		val pcmOperation = createOperationInterfaceOperation(pcmInterface, OPERATION_NAME, PrimitiveTypeEnum.BOOL)
 		val pcmParameter1 = createOperationParameter(pcmOperation, PARAMETER_NAME, pcmOperation.returnType__OperationSignature)

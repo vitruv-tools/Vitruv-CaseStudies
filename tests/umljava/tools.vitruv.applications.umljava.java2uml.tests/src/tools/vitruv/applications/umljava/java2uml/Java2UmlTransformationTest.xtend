@@ -24,9 +24,9 @@ import java.util.ArrayList
  * @author Fei
  */
 abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
-    private static val logger = Logger.getLogger(Java2UmlTransformationTest.simpleName)
-    private static val UMLMODELPATH = "rootModelDirectory" //Directory of the Uml Model Path used in the java2uml tests
-    private static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
+    static val logger = Logger.getLogger(Java2UmlTransformationTest.simpleName)
+    static val UMLMODELPATH = "rootModelDirectory" //Directory of the Uml Model Path used in the java2uml tests
+    static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
 	
 	override protected cleanup() {
 

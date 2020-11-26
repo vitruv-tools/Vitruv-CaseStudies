@@ -21,11 +21,11 @@ import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
  */
 class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
     
-    private static val CLASSNAME_1 = "ClassName1"
-    private static val CLASSNAME_2 = "ClassName2"
+    static val CLASSNAME_1 = "ClassName1"
+    static val CLASSNAME_2 = "ClassName2"
     
-    private static var org.eclipse.uml2.uml.Class uClass1
-    private static var org.eclipse.uml2.uml.Class uClass2
+    static var org.eclipse.uml2.uml.Class uClass1
+    static var org.eclipse.uml2.uml.Class uClass2
     
     @Before
     def void before() {

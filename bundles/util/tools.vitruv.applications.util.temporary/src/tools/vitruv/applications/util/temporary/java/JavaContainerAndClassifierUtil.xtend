@@ -207,7 +207,7 @@ class JavaContainerAndClassifierUtil {
      * @return the found classifier, or null if there is no matching classifer.
      * @throws IllegalStateException if there are multiple classifers in the package with a matching name.
      */
-    public static def <T extends ConcreteClassifier> T findClassifier(String name, Package javaPackage, java.lang.Class<T> classifierType) {
+    static def <T extends ConcreteClassifier> T findClassifier(String name, Package javaPackage, java.lang.Class<T> classifierType) {
         val matchingClassifiers = javaPackage.compilationUnits.map[it.classifiers].flatten.filter(classifierType).filter[it.name.toFirstUpper == name.toFirstUpper]
         if (matchingClassifiers.size > 1) throw new IllegalStateException("Multiple matching classifers were found: " + matchingClassifiers)
         return matchingClassifiers.head

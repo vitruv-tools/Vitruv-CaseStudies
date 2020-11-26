@@ -7,14 +7,14 @@ import static org.junit.Assert.*
 class ModelTest extends AbstractUmlPcmTest {
 
 	@Test
-	public def void testRepositoryCreation() {
+	def void testRepositoryCreation() {
 		assertModelExists("repository/" + MODEL_NAME + ".repository");
 		val pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(MODEL_NAME, pcmRepository.entityName);
 	}
 
 	@Test
-	public def void testRepositoryRename() {
+	def void testRepositoryRename() {
 		val newName = 'foo';
 		rootElement.name = newName;
 		saveAndSynchronizeChanges(rootElement);

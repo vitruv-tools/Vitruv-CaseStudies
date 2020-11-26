@@ -23,18 +23,18 @@ import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPacka
  * @author Fei
  */
 class JavaToUmlEnumTest extends Java2UmlTransformationTest {
-    private static val ENUM_NAME = "EnumName"
-    private static val ENUM_RENAME = "EnumRenamed"
-    private static val STANDARD_ENUM_NAME = "StandardEnumName"
-    private static val ENUM_LITERAL_NAMES_1 = #["RED", "BLUE", "GREEN", "YELLOW", "PURPLE"]
-    private static val ENUM_LITERAL_NAMES_2 = #["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
-    private static val CONSTANT_NAME = "CONSTANTNAME"
-    private static val OPERATION_NAME = "operationName"
-    private static val ATTRIBUTE_NAME = "attributeName"
-    private static val TYPECLASS = "TypeClass"
-    private static var Enumeration jEnum
-    private static val enumConstants1 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_1)
-    private static val enumConstants2 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2)
+    static val ENUM_NAME = "EnumName"
+    static val ENUM_RENAME = "EnumRenamed"
+    static val STANDARD_ENUM_NAME = "StandardEnumName"
+    static val ENUM_LITERAL_NAMES_1 = #["RED", "BLUE", "GREEN", "YELLOW", "PURPLE"]
+    static val ENUM_LITERAL_NAMES_2 = #["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
+    static val CONSTANT_NAME = "CONSTANTNAME"
+    static val OPERATION_NAME = "operationName"
+    static val ATTRIBUTE_NAME = "attributeName"
+    static val TYPECLASS = "TypeClass"
+    static var Enumeration jEnum
+    static val enumConstants1 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_1)
+    static val enumConstants2 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2)
     
     @Before
     def void before() {

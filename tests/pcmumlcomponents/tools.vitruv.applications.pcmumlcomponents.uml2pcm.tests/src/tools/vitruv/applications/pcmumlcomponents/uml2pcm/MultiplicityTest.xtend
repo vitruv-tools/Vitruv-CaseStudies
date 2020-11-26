@@ -26,7 +26,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 	}
 
 	@Test
-	public def void attributeMultiplicityTest() {
+	def void attributeMultiplicityTest() {
 		val innerDataType = createInnerDataType()
 		val umlDataType = UMLFactory.eINSTANCE.createDataType()
 		umlDataType.name = "fooType"
@@ -52,7 +52,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 	}
 
 	@Test
-	public def void parameterMultiplicityTest() {
+	def void parameterMultiplicityTest() {
 		val parameterType = createInnerDataType()
 		val umlInterface = UMLFactory.eINSTANCE.createInterface()
 		umlInterface.name = INTERFACE_NAME
@@ -74,7 +74,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void returnTypeMultiplicityTest() {
+	def void returnTypeMultiplicityTest() {
 		val returnType = createInnerDataType()
 		val umlInterface = UMLFactory.eINSTANCE.createInterface()
 		umlInterface.name = INTERFACE_NAME
@@ -96,7 +96,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 	 * type back to the non-list representation. 
 	 */
 	@Test
-	public def void unsetMultiplicityTest() {
+	def void unsetMultiplicityTest() {
 		val innerDataType = createInnerDataType()
 		val umlDataType = UMLFactory.eINSTANCE.createDataType()
 		umlDataType.name = "fooType"
@@ -117,7 +117,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 	}
 	
 	@Test
-	public def void deleteMultiplicityType() {
+	def void deleteMultiplicityType() {
 		val innerDataType = createInnerDataType()
 		saveAndSynchronizeChanges(rootElement)
 		var pcmRepository = rootElement.claimCorrespondingRepository

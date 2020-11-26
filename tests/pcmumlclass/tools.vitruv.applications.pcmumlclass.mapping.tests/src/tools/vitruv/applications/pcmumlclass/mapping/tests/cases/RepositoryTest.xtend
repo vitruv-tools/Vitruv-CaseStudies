@@ -16,7 +16,7 @@ import static org.junit.Assert.*
 import org.apache.log4j.Logger
 
 class RepositoryTest extends PcmUmlClassTest {
-	private static val logger = Logger.getLogger(RepositoryTest)
+	static val logger = Logger.getLogger(RepositoryTest)
 	
 	def protected static checkRepositoryConcept(
 		CorrespondenceModel cm,

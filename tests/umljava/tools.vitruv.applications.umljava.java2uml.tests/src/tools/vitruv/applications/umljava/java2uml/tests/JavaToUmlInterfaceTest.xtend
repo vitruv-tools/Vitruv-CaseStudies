@@ -19,13 +19,13 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
  * @author Fei
  */
 class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
-    private static val INTERFACE_NAME = "InterfaceName"
-    private static val INTERFACE_RENAME = "InterfaceRename"
-    private static val STANDARD_INTERFACE_NAME = "StandardInterfaceName"
-    private static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
-    private static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
+    static val INTERFACE_NAME = "InterfaceName"
+    static val INTERFACE_RENAME = "InterfaceRename"
+    static val STANDARD_INTERFACE_NAME = "StandardInterfaceName"
+    static val SUPERINTERFACENAME_1 = "SuperInterfaceOne"
+    static val SUPERINTERFACENAME_2 = "SuperInterfaceTwo"
     
-    private static var Interface jInterface
+    static var Interface jInterface
     
     @Before
     def void before() {

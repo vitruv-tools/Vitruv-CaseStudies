@@ -15,7 +15,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 	********/
 	
 	@Test
-	public def void testCreateClassForComponent() {
+	def void testCreateClassForComponent() {
 		val umlComp = createComponent(COMP_NAME)
 		saveAndSynchronizeChanges(umlComp)
 		
@@ -23,7 +23,7 @@ class ComponentTest extends AbstractComp2ClassTest{
 	}
 	
 	@Test
-    public def void testRenameComponent() {
+    def void testRenameComponent() {
     	val umlComp = createComponent("Old")
 		saveAndSynchronizeChanges(rootElement)
 		
@@ -36,7 +36,7 @@ class ComponentTest extends AbstractComp2ClassTest{
     }
     
 	@Test
-    public def void testDeleteComponentWithPackage() {
+    def void testDeleteComponentWithPackage() {
     	val umlComp = createComponent(COMP_NAME)	 
 		saveAndSynchronizeChanges(umlComp)
 		
@@ -57,7 +57,7 @@ class ComponentTest extends AbstractComp2ClassTest{
     }
 	
 	@Test
-    public def void testDeleteComponentWithoutPackage() {
+    def void testDeleteComponentWithoutPackage() {
     	val umlComp = createComponent(COMP_NAME)    	
 		saveAndSynchronizeChanges(umlComp)
 		
@@ -89,7 +89,7 @@ class ComponentTest extends AbstractComp2ClassTest{
     }
     
 	@Test
-    public def void testDeleteComponentWithPackageAndContents() {
+    def void testDeleteComponentWithPackageAndContents() {
     	val umlComp = createComponent(COMP_NAME)    	
 		saveAndSynchronizeChanges(umlComp)
 		
@@ -121,7 +121,7 @@ class ComponentTest extends AbstractComp2ClassTest{
     }
     
 	@Test
-	public def void testCreate2ClassFor2Component() {
+	def void testCreate2ClassFor2Component() {
 		val umlComp1 = createComponent(COMP_NAME)
 		val umlComp2 = createComponent(COMP_NAME2)
 		saveAndSynchronizeChanges(rootElement)

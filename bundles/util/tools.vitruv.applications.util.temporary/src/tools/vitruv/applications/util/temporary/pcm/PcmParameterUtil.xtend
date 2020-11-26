@@ -7,7 +7,7 @@ import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 
 @Utility
 class PcmParameterUtil {
-    public static def void setParameterName(Parameter parameter, String newName) {
+    static def void setParameterName(Parameter parameter, String newName) {
         // Set entity name as well if it exists
         if (parameter.eClass.EAllAttributes.exists[name == "entityName"]) {
             parameter.eSet(parameter.eClass.EAllAttributes.filter[name == "entityName"].claimOne, newName);

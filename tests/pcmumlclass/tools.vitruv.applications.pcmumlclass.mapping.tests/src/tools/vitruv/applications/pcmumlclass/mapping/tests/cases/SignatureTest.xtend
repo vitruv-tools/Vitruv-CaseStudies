@@ -21,11 +21,11 @@ import org.junit.Ignore
 import org.apache.log4j.Logger
 
 class SignatureTest extends PcmUmlClassTest {
-	private static val logger = Logger.getLogger(SignatureTest)
+	static val logger = Logger.getLogger(SignatureTest)
 
-	private static val TEST_SIGNATURE_NAME = "testSignature"
+	static val TEST_SIGNATURE_NAME = "testSignature"
 	 
-	def public static void checkSignatureConcept(
+	def static void checkSignatureConcept(
 		CorrespondenceModel cm,
 		OperationSignature pcmSignature,
 		Operation umlOperation

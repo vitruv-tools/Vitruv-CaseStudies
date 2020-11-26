@@ -12,9 +12,9 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import static org.junit.Assert.*
 class ProvidedRoleTest extends PcmUmlClassTest{
 	
-	 private static val PROVIDED_ROLE_NAME = "testProvidedRole"
+	 static val PROVIDED_ROLE_NAME = "testProvidedRole"
 	
-	def public static void checkProvidedRoleConcept(
+	def static void checkProvidedRoleConcept(
 			CorrespondenceModel cm,
 			OperationProvidedRole pcmProvided,
 			InterfaceRealization umlRealization

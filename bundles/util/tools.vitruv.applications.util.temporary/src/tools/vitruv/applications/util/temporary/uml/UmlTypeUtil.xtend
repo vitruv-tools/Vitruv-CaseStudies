@@ -20,7 +20,7 @@ class UmlTypeUtil { // TODO TS merge with UmlClassifierAndPackagableUtil?
     public static val UML_PRIMITIVE_INTEGER_TAG = "Integer"
     public static val UML_PRIMITIVE_STRING_TAG = "String"
 
-    public static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(ResourceSet rs) {
+    static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(ResourceSet rs) {
         var List<PrimitiveType> umlPrimitiveTypes = #[]
         val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
         val resource = rs.getResource(uri, true)
@@ -28,7 +28,7 @@ class UmlTypeUtil { // TODO TS merge with UmlClassifierAndPackagableUtil?
         return umlPrimitiveTypes
     }
 
-    public static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(Function<URI, Resource> resourceRetriever) {
+    static def List<PrimitiveType> getSupportedPredefinedUmlPrimitiveTypes(Function<URI, Resource> resourceRetriever) {
         var List<PrimitiveType> umlPrimitiveTypes = #[]
         val uri = URI.createURI("pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml")
         val resource = resourceRetriever.apply(uri)
@@ -38,7 +38,7 @@ class UmlTypeUtil { // TODO TS merge with UmlClassifierAndPackagableUtil?
         return umlPrimitiveTypes
     }
 
-    public static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm, ResourceSet rs) {
+    static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm, ResourceSet rs) {
         var List<PrimitiveType> umlPrimitiveTypes = getSupportedPredefinedUmlPrimitiveTypes(rs)
         for (primitive : umlPrimitiveTypes) {
             val alreadyRegistered = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, primitive.name,

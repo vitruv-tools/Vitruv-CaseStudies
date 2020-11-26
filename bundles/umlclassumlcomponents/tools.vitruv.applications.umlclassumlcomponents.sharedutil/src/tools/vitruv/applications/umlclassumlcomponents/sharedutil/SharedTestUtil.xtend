@@ -6,7 +6,6 @@ import org.eclipse.uml2.uml.NamedElement
 import static org.junit.Assert.*
 
 class SharedTestUtil {
-	
 	/***************
 	*Constants:*
 	****************/		
@@ -34,10 +33,9 @@ class SharedTestUtil {
 	*Assert Helper:*
 	****************/		
 	
-	public static def void assertTypeAndName(EObject umlObject, Class<? extends NamedElement> umlType, String name) {	
+	static def void assertTypeAndName(EObject umlObject, Class<? extends NamedElement> umlType, String name) {	
 		assertTrue(umlObject.class.isInstance(umlType) || umlObject.class.genericInterfaces.contains(umlType))
 		//Second condition encloses 'impl'-Classes		
 		assertEquals(name, (umlObject as NamedElement).name)
 	}
-
 }

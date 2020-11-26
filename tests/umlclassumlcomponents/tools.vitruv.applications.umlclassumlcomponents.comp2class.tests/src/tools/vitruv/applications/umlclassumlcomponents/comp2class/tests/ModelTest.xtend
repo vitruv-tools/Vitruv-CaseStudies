@@ -16,7 +16,7 @@ class ModelTest extends AbstractComp2ClassTest {
 	
 	@Test
 	//This test covers usage of one as well as two Models
-	public def void testModelCreation() {
+	def void testModelCreation() {
 		//Check Model:
 		assertModelExists(FOLDER_NAME + MODEL_NAME + "." + MODEL_FILE_EXTENSION)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten

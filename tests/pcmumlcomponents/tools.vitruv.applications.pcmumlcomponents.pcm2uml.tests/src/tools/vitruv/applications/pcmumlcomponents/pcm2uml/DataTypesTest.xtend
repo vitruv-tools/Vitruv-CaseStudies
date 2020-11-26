@@ -28,7 +28,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testPrimitiveDataTypeCreate() {
+	def void testPrimitiveDataTypeCreate() {
 		val pcmDataType = createPrimitiveDataType()
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
 		assertEquals(1, correspondingElements.length)
@@ -39,7 +39,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testPrimitiveDataTypeDelete() {
+	def void testPrimitiveDataTypeDelete() {
 		val dataTypesBefore = rootElement.dataTypes__Repository.length
 		val pcmDataType = createPrimitiveDataType()
 		rootElement.dataTypes__Repository.remove(pcmDataType)
@@ -65,7 +65,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testCompositeDataTypeCreate() {
+	def void testCompositeDataTypeCreate() {
 		val pcmDataType = createCompositeDataType(DATATYPE_NAME)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
 		assertEquals(1, correspondingElements.length)
@@ -75,7 +75,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testCompositeDataTypeDeclarationAdd() {
+	def void testCompositeDataTypeDeclarationAdd() {
 		val attributeName = ATTRIBUTE_NAME
 		val pcmDataType = initCompositeDataTypeDeclaration(DATATYPE_NAME, attributeName)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
@@ -86,7 +86,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testCompositeDataTypeDeclarationEdit() {
+	def void testCompositeDataTypeDeclarationEdit() {
 		val attributeName = ATTRIBUTE_NAME
 		val pcmDataType = initCompositeDataTypeDeclaration(DATATYPE_NAME, ATTRIBUTE_NAME + "2")
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
@@ -100,7 +100,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testCompositeDataTypeDeclarationDelete() {
+	def void testCompositeDataTypeDeclarationDelete() {
 		val attributeName = ATTRIBUTE_NAME
 		val innerType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		innerType.type = PrimitiveTypeEnum .INT
@@ -121,7 +121,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testCompositeDataTypeDelete() {
+	def void testCompositeDataTypeDelete() {
 		val dataTypesBefore = rootElement.dataTypes__Repository.length
 		val pcmDataType = createCompositeDataType(DATATYPE_NAME)
 		rootElement.dataTypes__Repository.remove(pcmDataType)
@@ -141,7 +141,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void importedDataTypesTest() {
+	def void importedDataTypesTest() {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
 		pcmInterface.entityName = INTERFACE_NAME
 		val pcmOperation = RepositoryFactory.eINSTANCE.createOperationSignature()
@@ -163,7 +163,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void unmappedDataTypeTest() {
+	def void unmappedDataTypeTest() {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
 		pcmInterface.entityName = INTERFACE_NAME
 		val pcmOperation = RepositoryFactory.eINSTANCE.createOperationSignature()

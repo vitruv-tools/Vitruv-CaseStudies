@@ -34,12 +34,12 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 
 //	private static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms.repository"
 	// all SEFFs removed because the TUID-generator failed for ResourceDemandParameters 
-	private static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_noSEFF.repository" 
+	static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_noSEFF.repository" 
 //	private static val UML_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms_repository_noSEFF_unedited.uml"
-	private static val UML_MEDIA_STORE_REDUCED_PATH = "resources/model/ms_repository_reduced.uml"
+	static val UML_MEDIA_STORE_REDUCED_PATH = "resources/model/ms_repository_reduced.uml"
 	 
-	private static val UML_GENERATED_MEDIA_STORE_MODEL_PATH = "model-gen/ms_repository.uml"
-	private static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH = "model-gen/ms_repository.repository"
+	static val UML_GENERATED_MEDIA_STORE_MODEL_PATH = "model-gen/ms_repository.uml"
+	static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH = "model-gen/ms_repository.repository"
 	
 	private def createRepository(){
 		val pcmRepo = RepositoryFactory.eINSTANCE.createRepository

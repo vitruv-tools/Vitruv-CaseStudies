@@ -13,9 +13,9 @@ import org.eclipse.uml2.uml.Interface
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 
 class ComponentsTest extends AbstractPcmUmlTest {
-	private static val COMPONENT_NAME = "TestComponent";
-	private static val INTERFACE_NAME = "TestInterface1"
-	private static val INTERFACE_NAME2 = "TestInterface2"
+	static val COMPONENT_NAME = "TestComponent";
+	static val INTERFACE_NAME = "TestInterface1"
+	static val INTERFACE_NAME2 = "TestInterface2"
 	protected static val PROVIDED_ROLE_NAME = "TestProvided" 
 	protected static val REQUIRED_ROLE_NAME = "TestRequired" 
 	
@@ -46,7 +46,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testCreateComponent() {
+	def void testCreateComponent() {
 		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
 		pcmComponent.entityName = COMPONENT_NAME;
 		rootElement.components__Repository += pcmComponent;
@@ -59,7 +59,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testCreateRequiredRole() {
+	def void testCreateRequiredRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface = createInterface(INTERFACE_NAME)
 		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
@@ -86,7 +86,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testChangeRequiredRole() {
+	def void testChangeRequiredRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface1 = createInterface(INTERFACE_NAME)
 		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
@@ -106,7 +106,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testRemoveRequiredRole() {
+	def void testRemoveRequiredRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface = createInterface(INTERFACE_NAME)
 		val requiredRole = RepositoryFactory.eINSTANCE.createOperationRequiredRole()
@@ -123,7 +123,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testCreateProvidedRole() {
+	def void testCreateProvidedRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface = createInterface(INTERFACE_NAME)
 		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()
@@ -150,7 +150,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testChangeRovidedRole() {
+	def void testChangeRovidedRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface1 = createInterface(INTERFACE_NAME)
 		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()
@@ -170,7 +170,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 	
 	@Test
-	public def void testRemoveRovidedRole() {
+	def void testRemoveRovidedRole() {
 		val pcmComponent = createBasicComponent(COMPONENT_NAME)
 		val pcmInterface = createInterface(INTERFACE_NAME)
 		val providedRole = RepositoryFactory.eINSTANCE.createOperationProvidedRole()

@@ -57,14 +57,14 @@ import static tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.*
  * 
  * @author Alexander Monev
  */
-public class PcmJamoppUtilsGuice {
+class PcmJamoppUtilsGuice {
 
-	private static val Logger logger = Logger.getLogger(PcmJamoppUtilsGuice.simpleName)
+	static val Logger logger = Logger.getLogger(PcmJamoppUtilsGuice.simpleName)
 
 	public static final int SELECT_KEEP_OLD_BINDING = 0;
 	public static final int SELECT_REPLACE_WITH_NEW_BINDING = 1;
 
-	def public static createConfigureMethodForAssemblyContext(AssemblyContext assemblyContext,
+	def static createConfigureMethodForAssemblyContext(AssemblyContext assemblyContext,
 		RepositoryComponent component, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
 		var Class jaMoPPCompositeClass = null
 		try {
@@ -83,7 +83,7 @@ public class PcmJamoppUtilsGuice {
 		return classMethod
 	}
 
-	public def static EObject[] createBindCall(AssemblyContext assemblyContext, RepositoryComponent component,
+	def static EObject[] createBindCall(AssemblyContext assemblyContext, RepositoryComponent component,
 		ClassMethod configureMethod, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
 
 		if (configureMethod.parameters.nullOrEmpty) {
@@ -397,7 +397,7 @@ public class PcmJamoppUtilsGuice {
 
 	}
 
-	def public static checkIfUserWantsToReplaceInterfaceBinding(String interfaceName, String className,
+	def static checkIfUserWantsToReplaceInterfaceBinding(String interfaceName, String className,
 		UserInteractor ui) {
 		val msg = "Interface " + interfaceName + " is already mapped to basic component " + className +
 			" . Adding another binding for the same interface will lead to a runtime exception by Guice."
@@ -709,15 +709,15 @@ public class PcmJamoppUtilsGuice {
 			return null
 		}
 
-		public def static saveResourceForClass(ConcreteClassifier jaMoPPClass) {
+		def static saveResourceForClass(ConcreteClassifier jaMoPPClass) {
 			jaMoPPClass.eResource.save(null)
 		}
 
-		public def static saveResourceForSystem(ComposedStructure system) {
+		def static saveResourceForSystem(ComposedStructure system) {
 			EcoreResourceBridge.saveResource(system.eResource)
 		}
 
-		public def static EObject[] createBindCallForConnector(AssemblyContext assemblyContext,
+		def static EObject[] createBindCallForConnector(AssemblyContext assemblyContext,
 			AssemblyConnector assemblyConnector, CorrespondenceModel correspondenceModel,
 			UserInteractor userInteractor) {
 				val configureMethod = correspondenceModel.

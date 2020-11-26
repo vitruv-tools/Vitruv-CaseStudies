@@ -18,14 +18,14 @@ import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
  */
 class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     
-    private static val PACKAGE_LEVEL_1 = "level1"
-    private static val PACKAGE_NAME = "packagename"
-    private static val PACKAGE_RENAMED = "packagerenamed"
-    private static val CLASS_NAME = "ClassName"
-    private static val CLASS_NAME2 = "ClassName2"
+    static val PACKAGE_LEVEL_1 = "level1"
+    static val PACKAGE_NAME = "packagename"
+    static val PACKAGE_RENAMED = "packagerenamed"
+    static val CLASS_NAME = "ClassName"
+    static val CLASS_NAME2 = "ClassName2"
     
-    private static var org.emftext.language.java.containers.Package jPackageLevel1
-    private static var Class jClass
+    static var org.emftext.language.java.containers.Package jPackageLevel1
+    static var Class jClass
     
     def override setup() {
     	super.setup();

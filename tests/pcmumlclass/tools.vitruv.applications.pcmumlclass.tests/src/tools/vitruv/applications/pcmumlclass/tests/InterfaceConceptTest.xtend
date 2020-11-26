@@ -20,9 +20,9 @@ import static org.junit.Assert.*
  */
 class InterfaceConceptTest extends PcmUmlClassApplicationTest {
 
-	private static val TEST_INTERFACE_NAME = "TestInterface"
+	static val TEST_INTERFACE_NAME = "TestInterface"
 	
-	def public static checkInterfaceConcept(CorrespondenceModel cm, 
+	def static checkInterfaceConcept(CorrespondenceModel cm, 
 			OperationInterface pcmInterface, 
 			Interface umlInterface
 	) {

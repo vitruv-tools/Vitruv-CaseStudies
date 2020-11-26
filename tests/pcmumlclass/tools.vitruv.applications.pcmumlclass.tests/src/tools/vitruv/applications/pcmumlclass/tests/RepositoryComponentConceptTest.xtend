@@ -27,9 +27,9 @@ import static org.junit.Assert.*
  */
 class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 
-	private val COMPONENT_NAME = "testComponent"
+	val COMPONENT_NAME = "testComponent"
 	 
-	def public static void checkRepositoryComponentConcept(
+	def static void checkRepositoryComponentConcept(
 			CorrespondenceModel cm, 
 			RepositoryComponent pcmComponent, 
 			Package umlComponentPkg,

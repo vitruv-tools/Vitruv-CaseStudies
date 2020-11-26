@@ -4,7 +4,7 @@ import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.TuidUpdateP
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmPackagePreprocessor
 
 class EjbJava2PcmChangePropagationSpecification extends mir.reactions.ejbjava2pcm.Ejbjava2pcmChangePropagationSpecification {
-	public override setup() {
+	override setup() {
 		addChangePreprocessor(new TuidUpdatePreprocessor());
 		addChangePreprocessor(new Java2PcmPackagePreprocessor());  
 		super.setup();

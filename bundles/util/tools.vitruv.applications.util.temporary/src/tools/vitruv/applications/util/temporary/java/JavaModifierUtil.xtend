@@ -19,7 +19,7 @@ import org.emftext.language.java.modifiers.Public
 @Utility
 class JavaModifierUtil {
 
-    private static val logger = Logger.getLogger(JavaModifierUtil.simpleName)
+    static val logger = Logger.getLogger(JavaModifierUtil.simpleName)
 
     /**
      * Sets for the modifiable the java visibility modifier corresponding to the given JavaVisibility enum constant.

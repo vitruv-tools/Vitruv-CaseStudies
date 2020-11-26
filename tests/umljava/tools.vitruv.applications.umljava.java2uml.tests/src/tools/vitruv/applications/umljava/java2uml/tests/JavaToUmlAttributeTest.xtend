@@ -26,15 +26,15 @@ import static extension tools.vitruv.applications.util.temporary.java.JavaModifi
  * @author Fei
  */
 class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
-    private static val ATTRIBUTE_NAME = "attributName"
-    private static val ATTRIBUTE_RENAME = "attributeRenamed"
-    private static val STANDARD_ATTRIBUTE_NAME = "standardAttributName"
-    private static val CLASS_NAME = "ClassName"
-    private static val TYPE_CLASS = "TypeClass"
+    static val ATTRIBUTE_NAME = "attributName"
+    static val ATTRIBUTE_RENAME = "attributeRenamed"
+    static val STANDARD_ATTRIBUTE_NAME = "standardAttributName"
+    static val CLASS_NAME = "ClassName"
+    static val TYPE_CLASS = "TypeClass"
     
-    private static var Field jAttr
-    private static var Class jClass
-    private static var Class typeClass 
+    static var Field jAttr
+    static var Class jClass
+    static var Class typeClass 
     
     /**
      * Initializes two java classes. One class contains an attribute.

@@ -27,12 +27,12 @@ import static org.junit.Assert.*
  */
 class SystemConceptTest extends PcmUmlClassApplicationTest {
 
-	private static val PCM_MODEL_FILE = "model/System.system"
-	private static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
+	static val PCM_MODEL_FILE = "model/System.system"
+	static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
 			DefaultLiterals.UML_EXTENSION
 			
-	private val MODEL_NAME = "testRootModel"
-	private val SYSTEM_NAME = "TestSystem"
+	val MODEL_NAME = "testRootModel"
+	val SYSTEM_NAME = "TestSystem"
 	
 	def protected static checkSystemConcept(
 			CorrespondenceModel cm,
