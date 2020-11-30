@@ -54,7 +54,7 @@ abstract class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
     protected static final int ARRAY_LIST_SELECTION = 0
     protected static boolean linearNetwork // set true (before class) to avoid the transformation between PCM and Java
-    private static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
+    static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
 
     override protected createChangePropagationSpecifications() {
         val specifications = new ArrayList<ChangePropagationSpecification>()

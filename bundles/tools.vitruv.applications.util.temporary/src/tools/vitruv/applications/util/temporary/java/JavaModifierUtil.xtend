@@ -30,7 +30,7 @@ class JavaModifierUtil {
      * @param visibility the java visibility to set
      * 
      */
-    def static void setJavaVisibilityModifier(AnnotableAndModifiable modifiable, JavaVisibility visibility) {
+    def static setJavaVisibilityModifier(AnnotableAndModifiable modifiable, JavaVisibility visibility) {
         if (visibility == JavaVisibility.PACKAGE) {
             removeJavaVisibilityModifiers(modifiable)
         } else {
@@ -120,7 +120,7 @@ class JavaModifierUtil {
      * @param the name to set
      * @throws IllegalArgumentException if name is null
      */
-    def static void setName(NamedElement namedElement, String name) {
+    def static setName(NamedElement namedElement, String name) {
         if (name === null) {
             throw new IllegalArgumentException("Cannot set name of " + namedElement + " to null")
         }
@@ -134,7 +134,7 @@ class JavaModifierUtil {
      * @param modifiable the AnnotableAndModifiable
      * @param toAdd true to add the modifier, otherwise remove
      */
-    def static void setFinal(AnnotableAndModifiable modifiable, boolean toAdd) {
+    def static setFinal(AnnotableAndModifiable modifiable, boolean toAdd) {
         setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createFinal, toAdd)
     }
 
@@ -145,7 +145,7 @@ class JavaModifierUtil {
      * @param modifiable the AnnotableAndModifiable
      * @param toAdd true to add the modifier, otherwise remove
      */
-    def static void setAbstract(AnnotableAndModifiable modifiable, boolean toAdd) {
+    def static setAbstract(AnnotableAndModifiable modifiable, boolean toAdd) {
         setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createAbstract, toAdd)
     }
 
@@ -156,7 +156,7 @@ class JavaModifierUtil {
      * @param modifiable the AnnotableAndModifiable
      * @param toAdd true to add the modifier, otherwise remove
      */
-    def static void setStatic(AnnotableAndModifiable modifiable, boolean toAdd) {
+    def static setStatic(AnnotableAndModifiable modifiable, boolean toAdd) {
         setJavaModifier(modifiable, ModifiersFactory.eINSTANCE.createStatic, toAdd)
     }
 
@@ -214,7 +214,7 @@ class JavaModifierUtil {
      * @param jModifiable the AnnotableAndModifiable for which a java visibility modifier should be set
      * @param uVisibility the VisibilityKind
      */
-    def static void setJavaVisibility(AnnotableAndModifiable jModifiable, VisibilityKind uVisibility) {
+    def static setJavaVisibility(AnnotableAndModifiable jModifiable, VisibilityKind uVisibility) {
         setJavaVisibilityModifier(jModifiable, getJavaVisibilityConstantFromUmlVisibilityKind(uVisibility))
     }
 }

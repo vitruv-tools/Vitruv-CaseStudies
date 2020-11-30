@@ -48,13 +48,12 @@ class JavaContainerAndClassifierUtil {
      * @return the new class with the given attributes
      */
     def static createJavaClass(String name, JavaVisibility visibility, boolean abstr, boolean fin) {
-        val jClass = ClassifiersFactory.eINSTANCE.createClass;
+        val jClass = ClassifiersFactory.eINSTANCE.createClass
         setName(jClass, name)
         setJavaVisibilityModifier(jClass, visibility)
         setAbstract(jClass, abstr)
         setFinal(jClass, fin)
-
-        return jClass;
+        return jClass
     }
 
     /**
@@ -78,13 +77,13 @@ class JavaContainerAndClassifierUtil {
      * @return the new interface
      */
     def static createJavaInterface(String name, List<Interface> superInterfaces) {
-        val jInterface = ClassifiersFactory.eINSTANCE.createInterface;
+        val jInterface = ClassifiersFactory.eINSTANCE.createInterface
         setName(jInterface, name)
-        jInterface.makePublic;
+        jInterface.makePublic
         if (!superInterfaces.nullOrEmpty) {
-            jInterface.extends.addAll(createNamespaceReferenceFromList(superInterfaces));
+            jInterface.extends.addAll(createNamespaceReferenceFromList(superInterfaces))
         }
-        return jInterface;
+        return jInterface
     }
 
     /**
@@ -96,11 +95,11 @@ class JavaContainerAndClassifierUtil {
      * @return the new enum
      */
     def static createJavaEnum(String name, JavaVisibility visibility, List<EnumConstant> constantsList) {
-        val jEnum = ClassifiersFactory.eINSTANCE.createEnumeration;
+        val jEnum = ClassifiersFactory.eINSTANCE.createEnumeration
         setName(jEnum, name)
         setJavaVisibilityModifier(jEnum, visibility)
         addEnumConstantIfNotNull(jEnum, constantsList)
-        return jEnum;
+        return jEnum
     }
 
     /**
@@ -142,7 +141,7 @@ class JavaContainerAndClassifierUtil {
         while (iter.hasNext) {
             val type = (iter.next as NamespaceClassifierReference).classifierReferences.head.target
             if (classif.name.equals(type.name)) {
-                iter.remove;
+                iter.remove
             }
         }
     }
@@ -184,7 +183,7 @@ class JavaContainerAndClassifierUtil {
         val iter = jPackage.compilationUnits.iterator
         while (iter.hasNext) {
             if (iter.next.name.equals(jClassifier.name)) {
-                iter.remove;
+                iter.remove
             }
         }
     }
@@ -193,7 +192,7 @@ class JavaContainerAndClassifierUtil {
         val file = new File(directory + "/package-info.java")
         file.createNewFile
         val writer = new PrintWriter(file)
-        writer.println("package " + packageName + ";")
+        writer.println("package " + packageName + "")
         writer.close
         return file
     }

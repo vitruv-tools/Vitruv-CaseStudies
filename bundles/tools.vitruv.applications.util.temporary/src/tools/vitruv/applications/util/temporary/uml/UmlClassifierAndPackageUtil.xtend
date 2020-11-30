@@ -102,14 +102,14 @@ class UmlClassifierAndPackageUtil {
      * Creates a simple Uml CLass (public, not static, not abstract, no fields, no operations)
      */
     def static createSimpleUmlClass(Package uPackage, String name) {
-        return createUmlClassAndAddToPackage(uPackage, name, VisibilityKind.PUBLIC_LITERAL, false, false);
+        return createUmlClassAndAddToPackage(uPackage, name, VisibilityKind.PUBLIC_LITERAL, false, false)
     }
 
     /**
      * Creates a simple uml interface (public, no super interfaces, no operations no attributes)
      */
     def static createSimpleUmlInterface(Package uPackage, String name) {
-        return createUmlInterfaceAndAddToPackage(uPackage, name, null);
+        return createUmlInterfaceAndAddToPackage(uPackage, name, null)
     }
 
     /**
@@ -227,12 +227,12 @@ class UmlClassifierAndPackageUtil {
      * @return the new uml class
      */
     def static Class createUmlClass(String name, VisibilityKind visibility, boolean abstr, boolean fin) {
-        val uClass = UMLFactory.eINSTANCE.createClass;
+        val uClass = UMLFactory.eINSTANCE.createClass
         setName(uClass, name)
-        uClass.visibility = visibility;
-        uClass.isAbstract = abstr;
-        uClass.isFinalSpecialization = fin;
-        return uClass;
+        uClass.visibility = visibility
+        uClass.isAbstract = abstr
+        uClass.isFinalSpecialization = fin
+        return uClass
     }
 
     /**
@@ -246,13 +246,13 @@ class UmlClassifierAndPackageUtil {
      * @return the new uml interface
      */
     def static Interface createUmlInterface(String name, List<Interface> superInterfaces) {
-        val uInterface = UMLFactory.eINSTANCE.createInterface;
+        val uInterface = UMLFactory.eINSTANCE.createInterface
         setName(uInterface, name)
-        uInterface.visibility = VisibilityKind.PUBLIC_LITERAL;
+        uInterface.visibility = VisibilityKind.PUBLIC_LITERAL
         if (!superInterfaces.nullOrEmpty) {
-            uInterface.generals.addAll(superInterfaces);
+            uInterface.generals.addAll(superInterfaces)
         }
-        return uInterface;
+        return uInterface
     }
 
     /**
@@ -262,7 +262,7 @@ class UmlClassifierAndPackageUtil {
      * @return a new primitive type with the given name
      */
     def static PrimitiveType createUmlPrimitiveTypeAndAddToModel(Package uPackage, String pTypeName) {
-        val pType = createUmlPrimitiveType(pTypeName);
+        val pType = createUmlPrimitiveType(pTypeName)
         uPackage.packagedElements += pType
         return pType
     }
@@ -273,9 +273,9 @@ class UmlClassifierAndPackageUtil {
      * @return a new primitive type with the given name
      */
     def static createUmlPrimitiveType(String name) {
-        val pType = UMLFactory.eINSTANCE.createPrimitiveType;
+        val pType = UMLFactory.eINSTANCE.createPrimitiveType
         setName(pType, name)
-        return pType;
+        return pType
     }
 
     /**
@@ -296,7 +296,7 @@ class UmlClassifierAndPackageUtil {
      * @param subClassifier the classifier who inherits the super clsssifier
      * @param super classifier the new super classifier of the sub classifier
      */
-    def static void addUmlSuperClassifier(Classifier subClassifier, Classifier superClassifier) {
+    def static addUmlSuperClassifier(Classifier subClassifier, Classifier superClassifier) {
         if (subClassifier === null || superClassifier === null) {
             throw new IllegalArgumentException("Can not create generalization relation for null")
         }
@@ -309,7 +309,7 @@ class UmlClassifierAndPackageUtil {
      * @param realizationName the name of the interface implementation relation
      * @param interfaceToImplement the interface that the implementor implements
      */
-    def static void addUmlInterfaceRealization(BehavioredClassifier implementor, String realizationName, Interface interfaceToImplement) {
+    def static addUmlInterfaceRealization(BehavioredClassifier implementor, String realizationName, Interface interfaceToImplement) {
         if (implementor === null || interfaceToImplement === null) {
             throw new IllegalArgumentException("Can not create implementation relation for null")
         }
@@ -320,7 +320,7 @@ class UmlClassifierAndPackageUtil {
      * Removes a super classifier from a given sub classifier
      * @param classifierToRemove the classifier that should be removed as super classifier of sub classifier
      */
-    def static void removeUmlGeneralClassifier(Classifier subClassifier, Classifier classifierToRemove) {
+    def static removeUmlGeneralClassifier(Classifier subClassifier, Classifier classifierToRemove) {
         if (subClassifier === null || classifierToRemove === null) {
             throw new IllegalArgumentException("Can not remove generalization relation for null")
         }
@@ -335,7 +335,7 @@ class UmlClassifierAndPackageUtil {
     /**
      * Removes a implemented interface from an implementor
      */
-    def static void removeUmlImplementedInterface(Class implementor, Interface interfaceToRemove) {
+    def static removeUmlImplementedInterface(Class implementor, Interface interfaceToRemove) {
         if (implementor === null || interfaceToRemove === null) {
             throw new IllegalArgumentException("Can not remove class generalization relation for null")
         }
@@ -389,16 +389,16 @@ class UmlClassifierAndPackageUtil {
         val iter = uPackage.packagedElements.iterator
         while (iter.hasNext) {
             if (iter.next.name.equals(packageable.name)) {
-                iter.remove;
+                iter.remove
             }
         }
     }
 
-    def package static void setName(NamedElement namedElement, String name) {
+    def package static setName(NamedElement namedElement, String name) {
         if (name === null) {
-            throw new IllegalArgumentException("Invalid name: " + name + " for " + namedElement);
+            throw new IllegalArgumentException("Invalid name: " + name + " for " + namedElement)
         }
-        namedElement.name = name;
+        namedElement.name = name
     }
 
     def private static List<String> buildNamespaceStringList(Namespace uNamespace, List<String> namespace) {

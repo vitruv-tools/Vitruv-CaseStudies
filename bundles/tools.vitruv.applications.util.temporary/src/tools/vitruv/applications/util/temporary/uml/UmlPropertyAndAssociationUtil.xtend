@@ -29,14 +29,14 @@ class UmlPropertyAndAssociationUtil {
      * @return the new attribute
      */
     def static createUmlAttribute(String name, Type type, VisibilityKind visibility, boolean fin, boolean stat) {
-        val uAttribute = UMLFactory.eINSTANCE.createProperty;
+        val uAttribute = UMLFactory.eINSTANCE.createProperty
         setName(uAttribute, name)
-        uAttribute.visibility = visibility;
-        uAttribute.isReadOnly = fin;
-        uAttribute.isStatic = stat;
-        uAttribute.type = type;
+        uAttribute.visibility = visibility
+        uAttribute.isReadOnly = fin
+        uAttribute.isStatic = stat
+        uAttribute.type = type
 
-        return uAttribute;
+        return uAttribute
     }
 
     /**

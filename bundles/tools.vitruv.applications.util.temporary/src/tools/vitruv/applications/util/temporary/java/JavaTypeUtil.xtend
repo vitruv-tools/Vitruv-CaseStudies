@@ -148,7 +148,7 @@ class JavaTypeUtil {
         return namespaceClassifierReference
     }
 
-    def static void setTypeReference(TypedElement typedElement, TypeReference typeRef) {
+    def static setTypeReference(TypedElement typedElement, TypeReference typeRef) {
         if (typeRef !== null) {
             typedElement.typeReference = typeRef
         } else {
@@ -188,7 +188,7 @@ class JavaTypeUtil {
         return null
     }
 
-    static def boolean hasSameTargetReference(TypeReference reference1, TypeReference reference2) {
+    def static boolean hasSameTargetReference(TypeReference reference1, TypeReference reference2) {
         if (reference1 == reference2 || reference1.equals(reference2)) {
             return true
         }
@@ -264,8 +264,6 @@ class JavaTypeUtil {
                     addJavaImport(compUnit, typeArgument.typeReference)
                 }
             }
-        } else {
-            // shouldn't occur
         }
     }
 

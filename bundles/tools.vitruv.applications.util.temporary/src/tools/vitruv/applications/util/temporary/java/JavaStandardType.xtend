@@ -23,14 +23,14 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
  */
 @Utility
 class JavaStandardType {
-    public static val BOOLEAN = "boolean";
-    public static val BYTE = "byte";
-    public static val CHAR = "char";
-    public static val DOUBLE = "double";
-    public static val FLOAT = "float";
-    public static val INT = "int";
-    public static val LONG = "long";
-    public static val SHORT = "short";
+    public static val BOOLEAN = "boolean"
+    public static val BYTE = "byte"
+    public static val CHAR = "char"
+    public static val DOUBLE = "double"
+    public static val FLOAT = "float"
+    public static val INT = "int"
+    public static val LONG = "long"
+    public static val SHORT = "short"
     public static val STRING = "String"
     public static val VOID = "void"
 
