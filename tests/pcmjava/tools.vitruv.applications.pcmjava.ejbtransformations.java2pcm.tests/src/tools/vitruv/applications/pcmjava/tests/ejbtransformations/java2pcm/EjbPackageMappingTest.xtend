@@ -5,6 +5,9 @@ import org.palladiosimulator.pcm.repository.Repository
 
 import static org.junit.Assert.assertEquals
 
+import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
+import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
+
 class EjbPackageMappingTest extends EjbJava2PcmTransformationTest {
 	
 	@Test
