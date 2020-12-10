@@ -21,7 +21,7 @@ before_install:
     - . /tmp/BuildUtilities/travis-ci/setupenvironment.sh
 install: true
 
-script: mvn clean verify
+script: ./mvnw -B clean verify
 
 after_success:
 - . /tmp/BuildUtilities/travis-ci/deploy.sh applications/cbs releng/tools.vitruv.applications.cbs.updatesite repository vitruv-tools updatesite
