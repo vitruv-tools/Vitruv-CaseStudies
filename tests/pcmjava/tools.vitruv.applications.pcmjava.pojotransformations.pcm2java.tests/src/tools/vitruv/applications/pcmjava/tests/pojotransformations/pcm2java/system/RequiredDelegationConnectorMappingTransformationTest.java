@@ -1,9 +1,9 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.core.composition.CompositionFactory;
@@ -19,7 +19,7 @@ import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
 public class RequiredDelegationConnectorMappingTransformationTest extends Pcm2JavaTransformationTest {
 
-	@Ignore
+	@Disabled
     @Test
     public void testAddRequireDelegationConnector() throws Throwable {
         final Repository repo = super.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);

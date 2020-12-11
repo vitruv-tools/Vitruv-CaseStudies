@@ -2,7 +2,7 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.rep
 
 import org.emftext.language.java.classifiers.Interface;
 import org.emftext.language.java.containers.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.Repository;

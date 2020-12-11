@@ -1,13 +1,12 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.types.Int;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.emftext.language.java.types.TypeReference;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
@@ -17,6 +16,8 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHelper;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DataTypeCorrespondenceHelperTest extends Pcm2JavaTransformationTest {
 
@@ -31,9 +32,8 @@ public class DataTypeCorrespondenceHelperTest extends Pcm2JavaTransformationTest
 				super.getCorrespondenceModel());
 		final NamespaceClassifierReference ncr = (NamespaceClassifierReference) type;
 		final Classifier classifier = (Classifier) ncr.getTarget();
-		assertEquals("Name of composite data type does not equals name of classifier", cdt.getEntityName(), // +
-																											// "Impl",
-				classifier.getName());
+		assertEquals(cdt.getEntityName(), classifier.getName(),
+				"Name of composite data type does not equals name of classifier");
 	}
 
 	@Test
@@ -51,20 +51,20 @@ public class DataTypeCorrespondenceHelperTest extends Pcm2JavaTransformationTest
 	}
 
 	@Test
-    public void testCorrespondenceForCollectionDataType() throws Throwable {
-    	final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+	public void testCorrespondenceForCollectionDataType() throws Throwable {
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
-    	// Create and sync CollectionDataType
-    	this.getUserInteractor().addNextSingleSelection(0);
-    	final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
-                Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null);
-    	
-    	final TypeReference type = DataTypeCorrespondenceHelper.claimUniqueCorrespondingJaMoPPDataTypeReference(collectionDataType,
-    			super.getCorrespondenceModel());
-    	final NamespaceClassifierReference ncr = (NamespaceClassifierReference) type;
-    	final Classifier classifier = (Classifier) ncr.getTarget();
-    	assertEquals("Name of composite data type does not equals name of classifier", collectionDataType.getEntityName(), // + "Impl",
-    			classifier.getName());
+		// Create and sync CollectionDataType
+		this.getUserInteractor().addNextSingleSelection(0);
+		final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
+				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null);
+
+		final TypeReference type = DataTypeCorrespondenceHelper
+				.claimUniqueCorrespondingJaMoPPDataTypeReference(collectionDataType, super.getCorrespondenceModel());
+		final NamespaceClassifierReference ncr = (NamespaceClassifierReference) type;
+		final Classifier classifier = (Classifier) ncr.getTarget();
+		assertEquals(collectionDataType.getEntityName(), classifier.getName(),
+				"Name of composite data type does not equals name of classifier");
 	}
 
 }

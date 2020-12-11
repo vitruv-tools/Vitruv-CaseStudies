@@ -4,7 +4,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 

@@ -1,13 +1,11 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Set;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.parameters.OrdinaryParameter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.OperationSignature;
@@ -20,6 +18,8 @@ import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.applications.util.temporary.pcm.PcmParameterUtil;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PcmParameterMappingTransformationTest extends Pcm2JavaTransformationTest {
 

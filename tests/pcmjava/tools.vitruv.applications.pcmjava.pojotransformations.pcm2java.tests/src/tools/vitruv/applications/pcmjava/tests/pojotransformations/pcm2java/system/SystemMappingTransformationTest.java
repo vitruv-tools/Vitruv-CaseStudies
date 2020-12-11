@@ -3,7 +3,7 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.sys
 import org.eclipse.emf.ecore.EClass;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.system.System;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;

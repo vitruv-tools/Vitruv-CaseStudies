@@ -2,7 +2,7 @@ package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.rep
 
 import org.emftext.language.java.members.InterfaceMethod;
 import org.emftext.language.java.types.TypeReference;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.OperationInterface;
 import org.palladiosimulator.pcm.repository.OperationSignature;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
