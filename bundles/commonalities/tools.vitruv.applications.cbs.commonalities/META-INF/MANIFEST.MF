@@ -4,7 +4,7 @@ Bundle-Vendor: vitruv.tools
 Bundle-Name: Vitruv CBS Commonalities Application
 Bundle-SymbolicName: tools.vitruv.applications.cbs.commonalities;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,

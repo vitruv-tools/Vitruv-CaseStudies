@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM <-> UML Class Transformations
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass;singleton:=true
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Eclipse-ExtensibleAPI: true

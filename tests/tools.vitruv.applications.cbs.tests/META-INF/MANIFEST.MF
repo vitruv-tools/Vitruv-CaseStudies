@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius Tests for Component-based Systems
 Bundle-SymbolicName: tools.vitruv.applications.cbs.tests
 Automatic-Module-Name: tools.vitruv.applications.cbs.tests
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  tools.vitruv.applications.pcmjava.tests,

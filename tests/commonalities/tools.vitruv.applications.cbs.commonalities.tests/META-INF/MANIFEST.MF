@@ -4,7 +4,7 @@ Bundle-Vendor: vitruv.tools
 Bundle-Name: Vitruvius CBS Commonalities Tests
 Bundle-SymbolicName: tools.vitruv.applications.cbs.commonalities.tests
 Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities.tests
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  org.apache.log4j,

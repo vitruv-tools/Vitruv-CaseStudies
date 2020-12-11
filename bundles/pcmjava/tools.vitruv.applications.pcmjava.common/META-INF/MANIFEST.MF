@@ -4,7 +4,7 @@ Bundle-Name: Vitruvius Application PCM-Java Common Reactions
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.common
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.common
 Bundle-Vendor: vitruv.tools
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: tools.vitruv.applications.pcmjava.common.pcm2java,
  mir.reactions.pcm2javaCommon,

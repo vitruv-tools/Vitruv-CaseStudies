@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM-Java POJO Transformations Tests PCM -> Java
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,
  com.google.guava,

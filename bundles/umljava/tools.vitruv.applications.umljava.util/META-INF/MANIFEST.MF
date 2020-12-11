@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius UML-Java Transformations Utils
 Bundle-SymbolicName: tools.vitruv.applications.umljava.util
 Automatic-Module-Name: tools.vitruv.applications.umljava.util
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,

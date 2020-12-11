@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM-Java EJB Transformations
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.ejbtransformations
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm,
  tools.vitruv.framework.applications

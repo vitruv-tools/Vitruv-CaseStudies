@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM-Java POJO Transformations Java -> PCM
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0.qualifier
 Require-Bundle: org.eclipse.emf.ecore,
  com.google.guava,
  org.eclipse.core.resources,
