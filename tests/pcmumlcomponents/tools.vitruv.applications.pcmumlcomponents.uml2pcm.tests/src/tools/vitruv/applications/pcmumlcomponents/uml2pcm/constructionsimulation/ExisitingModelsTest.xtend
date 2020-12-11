@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmumlcomponents.uml2pcm.constructionsimulation
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class ExisitingModelsTest extends ModelConstructionTest {
 	

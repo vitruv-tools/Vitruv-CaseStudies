@@ -1,7 +1,7 @@
 package tools.vitruv.applications.pcmumlcomponents.uml2pcm.constructionsimulation
 
 import org.eclipse.emf.ecore.resource.Resource
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class DatatypeConstructionTest extends ModelConstructionTest {
 		

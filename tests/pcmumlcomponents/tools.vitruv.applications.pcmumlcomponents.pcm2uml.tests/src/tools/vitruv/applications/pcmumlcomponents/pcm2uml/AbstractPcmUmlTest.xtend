@@ -10,11 +10,11 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
-import tools.vitruv.domains.pcm.PcmDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.testutils.VitruviusApplicationTest
+import org.junit.jupiter.api.BeforeEach
+import java.nio.file.Path
+import tools.vitruv.testutils.LegacyVitruvApplicationTest
 
-abstract class AbstractPcmUmlTest extends VitruviusApplicationTest {
+abstract class AbstractPcmUmlTest extends LegacyVitruvApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "repository";
 	protected static val MODEL_NAME = "model";
 	//private static val PRIMITIVETYPES_URI = "platform:/plugin/org.palladiosimulator.pcm.resources/defaultModels/PrimitiveTypes.repository"
@@ -29,26 +29,22 @@ abstract class AbstractPcmUmlTest extends VitruviusApplicationTest {
 	
 	protected static var Repository primitiveTypesRepository = null
 	
-	private def String getProjectModelPath(String modelName) {
-		"model/" + modelName + "." + MODEL_FILE_EXTENSION;
+	private def Path getProjectModelPath(String modelName) {
+		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}
 	
 	protected def Repository getRootElement() {
-		return MODEL_NAME.projectModelPath.firstRootElement as Repository;
+		return Repository.from(MODEL_NAME.projectModelPath)
 	}
 	
-	override protected createChangePropagationSpecifications() {
+	override protected getChangePropagationSpecifications() {
 		return #[new PcmToUmlComponentsChangePropagationSpecification()]; 
-	}
-	
-	override protected getVitruvDomains() {
-		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain];
 	}
 	
 	protected def initializeTestModel() {
 		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository();
 		pcmRepository.entityName = MODEL_NAME;
-		createAndSynchronizeModel(MODEL_NAME.projectModelPath, pcmRepository);
+		createAndSynchronizeModel(MODEL_NAME.projectModelPath.toString, pcmRepository);
 	}
 	
 	protected def Model getUmlModel() {
@@ -56,10 +52,8 @@ abstract class AbstractPcmUmlTest extends VitruviusApplicationTest {
 		return (correspondingElements.get(0) as Model)
 	}
 	
-	override protected cleanup() {
-	}
-	
-	override protected setup() {
+	@BeforeEach
+	def protected setup() {
 		initializeTestModel()
 	}
 	

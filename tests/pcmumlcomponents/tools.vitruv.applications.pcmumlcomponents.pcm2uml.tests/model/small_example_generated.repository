@@ -19,13 +19,13 @@
   <interfaces__Repository xsi:type="repository:OperationInterface" id="_NQ_3sE4YEeeZM6P4vjWfWQ" entityName="ISell">
     <signatures__OperationInterface id="_NdYG0E4YEeeZM6P4vjWfWQ" entityName="sell"/>
     <signatures__OperationInterface id="_NdgpsE4YEeeZM6P4vjWfWQ" entityName="moreSell">
-      <parameters__OperationSignature entityName="item" parameterName="item">
+      <parameters__OperationSignature parameterName="item">
         <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
       </parameters__OperationSignature>
-      <parameters__OperationSignature entityName="price" parameterName="price">
+      <parameters__OperationSignature parameterName="price">
         <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.0"/>
       </parameters__OperationSignature>
-      <parameters__OperationSignature entityName="sellerList" dataType__Parameter="_NgUtIE4YEeeZM6P4vjWfWQ" parameterName="sellerList"/>
+      <parameters__OperationSignature dataType__Parameter="_NgUtIE4YEeeZM6P4vjWfWQ" parameterName="sellerList"/>
     </signatures__OperationInterface>
   </interfaces__Repository>
   <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_NRwssE4YEeeZM6P4vjWfWQ" entityName="BName">

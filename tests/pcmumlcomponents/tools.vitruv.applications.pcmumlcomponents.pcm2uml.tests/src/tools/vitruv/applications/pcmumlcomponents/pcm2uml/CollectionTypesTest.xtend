@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmumlcomponents.pcm2uml
 
-import org.junit.Test
-import static org.junit.Assert.*
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.CollectionDataType
@@ -10,7 +8,14 @@ import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Parameter
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
-import org.junit.Ignore
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class CollectionTypesTest extends AbstractPcmUmlTest {
 	
@@ -140,7 +145,7 @@ class CollectionTypesTest extends AbstractPcmUmlTest {
 	 * Change the inner type of a collection type - all occurrences should be adapted
 	 */
 	// TODO Reeable, currently disabled because of indeterministic failure
-	@Ignore
+	@Disabled
 	@Test
 	def void changeInnerCollectionTypeTest() {
 		val innerType = RepositoryFactory.eINSTANCE.createCompositeDataType()

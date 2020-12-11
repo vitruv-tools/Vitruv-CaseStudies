@@ -4,16 +4,20 @@ import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.UMLFactory
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationSignature
 
-import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Operation
 import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class InterfacesTest extends AbstractUmlPcmTest {
 	

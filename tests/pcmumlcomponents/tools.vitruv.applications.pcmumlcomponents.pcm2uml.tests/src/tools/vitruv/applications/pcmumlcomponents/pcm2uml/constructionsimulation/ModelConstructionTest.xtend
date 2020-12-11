@@ -5,8 +5,6 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.AbstractPcmUmlTest
 import tools.vitruv.domains.pcm.util.RepositoryModelLoader
-import org.palladiosimulator.pcm.repository.RepositoryFactory
-import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Model
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.CollectionDataType
@@ -19,6 +17,10 @@ import org.palladiosimulator.pcm.repository.OperationSignature
 import org.eclipse.uml2.uml.Operation
 import org.palladiosimulator.pcm.repository.Parameter
 import org.eclipse.emf.common.util.URI
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 		
@@ -35,16 +37,8 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 	}
 	
 	protected def Repository constructRepository(Repository inputRepository) {
-		val outputRepository = RepositoryFactory.eINSTANCE.createRepository()
-		outputRepository.entityName = inputRepository.entityName
-		outputRepository.repositoryDescription = inputRepository.repositoryDescription
-		createAndSynchronizeModel(TARGET_MODEL_NAME, outputRepository)
-		outputRepository.dataTypes__Repository.addAll(inputRepository.dataTypes__Repository)
-		outputRepository.failureTypes__Repository.addAll(inputRepository.failureTypes__Repository)
-		outputRepository.interfaces__Repository.addAll(inputRepository.interfaces__Repository)
-		outputRepository.components__Repository.addAll(inputRepository.components__Repository)
-		saveAndSynchronizeChanges(outputRepository)
-		return outputRepository
+		createAndSynchronizeModel(TARGET_MODEL_NAME, inputRepository)
+		return inputRepository
 	}
 	
 	override protected initializeTestModel() {
