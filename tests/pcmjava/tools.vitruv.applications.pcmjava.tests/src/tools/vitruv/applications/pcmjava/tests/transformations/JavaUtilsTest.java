@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.emftext.language.java.containers.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tools.vitruv.domains.java.util.JavaModificationUtil;
 
