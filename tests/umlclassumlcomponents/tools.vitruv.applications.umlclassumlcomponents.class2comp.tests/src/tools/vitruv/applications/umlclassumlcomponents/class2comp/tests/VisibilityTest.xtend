@@ -3,10 +3,11 @@ package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.Test
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class VisibilityTest extends AbstractClass2CompTest {
 

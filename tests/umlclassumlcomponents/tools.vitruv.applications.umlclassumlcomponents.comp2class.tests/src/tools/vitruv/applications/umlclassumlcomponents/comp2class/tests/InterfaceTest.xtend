@@ -5,11 +5,14 @@ import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Usage
-import org.junit.Test
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class InterfaceTest extends AbstractComp2ClassTest {
 		    	

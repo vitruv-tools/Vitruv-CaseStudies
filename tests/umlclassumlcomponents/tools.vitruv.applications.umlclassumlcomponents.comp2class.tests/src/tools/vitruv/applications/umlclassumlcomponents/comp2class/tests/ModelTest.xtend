@@ -2,11 +2,15 @@ package tools.vitruv.applications.umlclassumlcomponents.comp2class.tests
 
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
-import org.junit.Test
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.hamcrest.MatcherAssert.assertThat;
+import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
+import java.nio.file.Path
 
 class ModelTest extends AbstractComp2ClassTest {
 	
@@ -18,7 +22,8 @@ class ModelTest extends AbstractComp2ClassTest {
 	//This test covers usage of one as well as two Models
 	def void testModelCreation() {
 		//Check Model:
-		assertModelExists(FOLDER_NAME + MODEL_NAME + "." + MODEL_FILE_EXTENSION)
+		val modelUri = getPlatformModelUri(Path.of(FOLDER_NAME).resolve(MODEL_NAME + "." + MODEL_FILE_EXTENSION))
+		assertThat(modelUri, isResource);
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
 		val classModel = correspondingElements.filter(Model).get(0)
 		assertTypeAndName(classModel, Model, MODEL_NAME)

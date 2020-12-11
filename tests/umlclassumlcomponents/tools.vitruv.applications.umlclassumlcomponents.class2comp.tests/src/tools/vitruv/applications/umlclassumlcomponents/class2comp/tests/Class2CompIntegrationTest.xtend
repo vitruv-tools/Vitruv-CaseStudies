@@ -13,11 +13,12 @@ import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Property
-import org.junit.Test
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedIntegrationTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class Class2CompIntegrationTest extends AbstractClass2CompTest {
 	

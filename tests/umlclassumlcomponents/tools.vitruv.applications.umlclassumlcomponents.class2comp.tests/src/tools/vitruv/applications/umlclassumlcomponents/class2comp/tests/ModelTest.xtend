@@ -1,11 +1,15 @@
 package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 
 import org.eclipse.uml2.uml.Model
-import org.junit.Test
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.hamcrest.MatcherAssert.assertThat;
+import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
+import java.nio.file.Path
 
 class ModelTest extends AbstractClass2CompTest {
 	
@@ -15,12 +19,13 @@ class ModelTest extends AbstractClass2CompTest {
 	//Model creation currently unused due to usage of one singular Model
 	
 	@Test
-		def void testModelCreation() {
-			assertModelExists(FOLDER_NAME + MODEL_NAME + "." + MODEL_FILE_EXTENSION)
-			val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
-			assertEquals(1, correspondingElements.size)
-			val umlModel = correspondingElements.get(0)
-			assertTypeAndName(umlModel, Model, MODEL_NAME)
+	def void testModelCreation() {
+		val modelUri = getPlatformModelUri(Path.of(FOLDER_NAME).resolve(MODEL_NAME + "." + MODEL_FILE_EXTENSION))
+		assertThat(modelUri, isResource);
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
+		assertEquals(1, correspondingElements.size)
+		val umlModel = correspondingElements.get(0)
+		assertTypeAndName(umlModel, Model, MODEL_NAME)
 	}
 	
 }

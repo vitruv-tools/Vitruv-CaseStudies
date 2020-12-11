@@ -1,10 +1,13 @@
 package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 
 import org.eclipse.uml2.uml.Component
-import org.junit.Test
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class ClassTest extends AbstractClass2CompTest{
 	

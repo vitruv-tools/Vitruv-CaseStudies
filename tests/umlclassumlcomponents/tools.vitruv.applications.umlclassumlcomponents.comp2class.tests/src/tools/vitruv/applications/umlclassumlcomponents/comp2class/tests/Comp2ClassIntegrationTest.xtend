@@ -11,13 +11,14 @@ import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.Interface
-import org.junit.Test
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedIntegrationTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
 import org.eclipse.uml2.uml.Component
-import org.junit.Ignore
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	
@@ -172,7 +173,7 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 		assertTrue(umlClass2.interfaceRealizations.contains(iFRealization2))	
 	}
 	
-	@Ignore
+	@Disabled
 	@Test
 	def void integrationTestAllCombined() {
 		//Decide to create a Class for the first DataType:
