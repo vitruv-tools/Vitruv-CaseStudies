@@ -24,12 +24,12 @@ import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.MembersFactory;
 import org.emftext.language.java.resource.java.mopp.JavaResourceFactory;
 import org.emftext.language.java.types.TypesFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class JaMoPPTest {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         // register JaMoPP package and factory globally
         EPackage.Registry.INSTANCE.put(JavaPackage.eNS_URI, JavaPackage.eINSTANCE);
@@ -102,10 +102,10 @@ public class JaMoPPTest {
     }
 
     @Test
-    public void testGetLayoutInformations() throws Throwable {
+    public void testGetLayoutInformation() throws Throwable {
         String uriStr = JaMoPPTest.class.getCanonicalName();
         uriStr = uriStr.replace(".", "/");
-        uriStr = "src-test/" + uriStr + ".java";
+        uriStr = "src/" + uriStr + ".java";
         final URI uri = URI.createURI(uriStr);
         final ResourceSet resourceSet = new ResourceSetImpl();
         final Resource resource = resourceSet.createResource(uri);
