@@ -22,7 +22,7 @@
 		<module>umlclassumlcomponents</module>
 		<module>tools.vitruv.applications.umljava</module>
 		<module>commonalities</module>
-		<module>util</module>
+		<module>tools.vitruv.applications.util.temporary</module>
 	</modules>
 
 </project>
