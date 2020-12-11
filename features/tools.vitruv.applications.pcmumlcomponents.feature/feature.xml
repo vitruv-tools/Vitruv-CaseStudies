@@ -28,11 +28,11 @@
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.uml2.uml"/>
-      <import feature="tools.vitruv.framework.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.domains.pcm.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.domains.uml.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.applications.util.temporary.feature" version="0.1.0"/>
+      <import feature="tools.vitruv.framework.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.domains.uml.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.applications.util.temporary.feature"/>
    </requires>
 
    <plugin
