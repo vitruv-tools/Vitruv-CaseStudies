@@ -15,7 +15,7 @@
 
 	<modules>
 		<!--<module>pcmjava</module>-->
-		<!--<module>pcmumlclass</module>-->
+		<module>pcmumlclass</module>
 		<!--<module>pcmumlclassjava</module>-->
 		<!--<module>pcmumlcomponents</module>-->
 		<!--<module>umlclassumlcomponents</module>-->

@@ -2,14 +2,16 @@ package tools.vitruv.applications.pcmumlclass.tests
 
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Property
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationRequiredRole 
@@ -85,8 +87,8 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
 		val pcmComponent = helper.getPcmComponent(pcmRepository)
-		assertEquals("There should be exactly one RequiredRole since only one was created by the test case.", 
-			1, pcmComponent.requiredRoles_InterfaceRequiringEntity.size)
+		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.size,
+			"There should be exactly one RequiredRole since only one was created by the test case.")
 		pcmRequired = pcmComponent.requiredRoles_InterfaceRequiringEntity.head as OperationRequiredRole
 		assertNotNull(pcmRequired)
 		checkRequiredRoleConcept(pcmRequired)
@@ -105,8 +107,8 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
 		umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
-		assertEquals("There should be exactly one Parameter for one RequiredRole created by the test case.", 
-			1, umlConstructor.ownedParameters.size)
+		assertEquals(1, umlConstructor.ownedParameters.size,
+			"There should be exactly one Parameter for one RequiredRole created by the test case.")
 		umlConstructorParameter = umlConstructor.ownedParameters.findFirst[it.name == REQUIRED_ROLE_NAME]
 		assertNotNull(umlConstructorParameter)
 		checkRequiredRoleConcept(umlConstructorParameter)
@@ -126,8 +128,8 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 		
 		umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
-		assertEquals("There should be exactly one Property for one RequiredRole created by the test case.", 
-			1, umlComponentImpl.ownedAttributes.size)
+		assertEquals(1, umlComponentImpl.ownedAttributes.size,
+			"There should be exactly one Property for one RequiredRole created by the test case.")
 		umlRequiredInstanceField = helper.getUmlComponentImpl(pcmRepository).ownedAttributes.findFirst[it.name == REQUIRED_ROLE_NAME]
 		assertNotNull(umlRequiredInstanceField)
 		checkRequiredRoleConcept(umlRequiredInstanceField)

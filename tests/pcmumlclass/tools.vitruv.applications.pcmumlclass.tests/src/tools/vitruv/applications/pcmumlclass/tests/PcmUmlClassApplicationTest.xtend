@@ -16,7 +16,6 @@ import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.testutils.VitruviusApplicationTest
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.common.util.URI
@@ -33,11 +32,20 @@ import org.eclipse.uml2.uml.Interface
 import java.util.HashMap
 import java.util.List
 
-import static org.junit.Assert.*
 import java.util.ArrayList
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
+import java.nio.file.Path
+import tools.vitruv.testutils.LegacyVitruvApplicationTest
 
-abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
-	override protected createChangePropagationSpecifications() {
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.hamcrest.MatcherAssert.assertThat;
+import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
+import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
+
+abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
+	override protected getChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification, 
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
@@ -48,10 +56,6 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		new PcmDomainProvider().domain.enableTransitiveChangePropagation
 		new UmlDomainProvider().domain.enableTransitiveChangePropagation
 	}
-	override protected getVitruvDomains() {
-		patchDomains();
-		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain];
-	}
 	
 	protected var PcmUmlClassApplicationTestHelper helper
 	protected var ResourceSet testResourceSet;
@@ -60,14 +64,27 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		return testResourceSet.getResource(uri, true)
 	}
 	
-	override protected setup() {
-		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri | uri.getModelElement], [uri | uri.modelResource])
+	@BeforeEach
+	def protected void setup() {
+		patchDomains
+		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri | uri.resourceAt])
 		testResourceSet = new ResourceSetImpl();
 	}
 	
-	override protected cleanup() {
+	@AfterEach
+	def protected void cleanup() {
 		testResourceSet = null
 		helper = null
+	}
+	
+	def protected void assertModelExists(String modelPathWithinProject) {
+		val modelUri = getPlatformModelUri(Path.of(modelPathWithinProject))
+		assertThat(modelUri, isResource)
+	}
+
+	def protected void assertModelNotExists(String modelPathWithinProject) {
+		val modelUri = getPlatformModelUri(Path.of(modelPathWithinProject))
+		assertThat(modelUri, isNoResource)
 	}
 	
 	/**
@@ -90,7 +107,7 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 		stopRecordingChanges(modelElement) 
 		val resourceURI = modelElement.eResource.URI
 		modelElement.eResource.unload
-		val rootElement = getModelResource(resourceURI).contents.head
+		val rootElement = resourceAt(resourceURI).contents.head
 		if(rootElement !== null) {
 			startRecordingChanges(rootElement)
 		}
@@ -342,8 +359,8 @@ abstract class PcmUmlClassApplicationTest extends VitruviusApplicationTest {
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
 	def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath) {
-		val originalUri = originalWithinProjektPath.modelVuri.EMFUri
-		val generatedUri = generatedWithinProjektPath.modelVuri.EMFUri
+		val originalUri = getPlatformModelUri(Path.of(originalWithinProjektPath))
+		val generatedUri = getPlatformModelUri(Path.of(generatedWithinProjektPath))
 		return compare(originalUri, generatedUri)
 	}
 	

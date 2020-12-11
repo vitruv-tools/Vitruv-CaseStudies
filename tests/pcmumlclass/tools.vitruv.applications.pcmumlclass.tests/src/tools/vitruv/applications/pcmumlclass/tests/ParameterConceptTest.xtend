@@ -4,7 +4,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Type
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.ParameterModifier
@@ -13,8 +12,11 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.PcmUmlClassHelper
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Parameter 
@@ -92,7 +94,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(umlParameter)
 		checkParameterConcept(umlParameter)
 		var reloadedUmlType = helper.getModifiableInstance(umlType)
-		assertNotNull("The DataType should not be null after reload", reloadedUmlType)
+		assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
 		assertTrue(EcoreUtil.equals(umlParameter.type, reloadedUmlType))
 		assertTrue(umlParameter.lower == lower)
 		assertTrue(umlParameter.upper == upper)
@@ -101,7 +103,7 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateParameterConcept_UML_primitiveType() {
 		var pcmRepository = createRepositoryWithSignature
-		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_INT)
+		assertNotNull(helper.UML_INT, "Initialization of PrimitiveTypes seems to have failed")
 		testCreateParameterConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
 	}
 	
@@ -137,14 +139,14 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(pcmParameter)
 		checkParameterConcept(pcmParameter)
 		val reloadedPcmType = helper.getModifiableInstance(pcmType)
-		assertNotNull("The DataType should not be null after reload", reloadedPcmType)
+		assertNotNull(reloadedPcmType, "The DataType should not be null after reload")
 		assertTrue(EcoreUtil.equals(pcmParameter.dataType__Parameter, reloadedPcmType))
 	}
 	
 	@Test
 	def void testCreateParameterConcept_PCM_primitiveType() {
 		var pcmRepository = createRepositoryWithSignature
-		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_INT)
+		assertNotNull(helper.PCM_INT, "Initialization of PrimitiveTypes seems to have failed")
 		_testCreateParameterConcept_PCM_withType(pcmRepository, helper.PCM_INT)
 	}
 	
