@@ -18,7 +18,7 @@
 		<module>tools.vitruv.applications.pcmumlclass.tests</module>
 		<module>tools.vitruv.applications.pcmumlclass.mapping.tests</module>
 		<!--<module>pcmumlclassjava</module>-->
-		<module>pcmumlcomponents</module>
+		<module>tools.vitruv.applications.pcmumlcomponents.tests</module>
 		<module>tools.vitruv.applications.umlclassumlcomponents.tests</module>
 		<module>tools.vitruv.applications.umljava.tests</module>
 		<!--<module>commonalities</module>-->

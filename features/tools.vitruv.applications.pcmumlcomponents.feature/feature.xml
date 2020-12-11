@@ -36,20 +36,6 @@
    </requires>
 
    <plugin
-         id="tools.vitruv.applications.pcmumlcomponents.pcm2uml"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="tools.vitruv.applications.pcmumlcomponents.uml2pcm"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="tools.vitruv.applications.pcmumlcomponents"
          download-size="0"
          install-size="0"
