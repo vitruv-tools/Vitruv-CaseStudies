@@ -7,32 +7,24 @@ import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
 import tools.vitruv.applications.umlclassumlcomponents.class2comp.UmlClass2UmlCompChangePropagation
-import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.testutils.VitruviusApplicationTest
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.UserInteractionTestUtil.*
+import org.junit.jupiter.api.BeforeEach
+import tools.vitruv.testutils.LegacyVitruvApplicationTest
+import java.nio.file.Path
 
-abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
+import static org.junit.jupiter.api.Assertions.assertEquals
+
+abstract class AbstractClass2CompTest extends LegacyVitruvApplicationTest {
 
 	protected def Model getRootElement() {
-		return MODEL_NAME.projectModelPath.firstRootElement as Model
+		return Model.from(MODEL_NAME.projectModelPath)
 	}
 	
-	//Hack for handling of one singular UML model instead of two
-	override protected getVitruvDomains() {
-		return #[new UmlDomainProvider().domain]
-	}
-		
-	override protected createChangePropagationSpecifications() {
+	override protected getChangePropagationSpecifications() {
 		return #[new UmlClass2UmlCompChangePropagation()]
-	}
-	
-	//Hack for handling of one singular UML model instead of two
-	override protected getCorrespondenceModel() {
-		return this.getVirtualModel().getCorrespondenceModel() 
 	}
 	
 	//SaveAndSynchronize & commit all pending userInteractions
@@ -41,21 +33,19 @@ abstract class AbstractClass2CompTest extends VitruviusApplicationTest {
 		saveAndSynchronizeChanges(object)
 	}
 	
-	override protected cleanup() {
-	}
-	
-	override protected setup() {
+	@BeforeEach
+	def protected setup() {
 		initializeTestModel()
 	}
 		
 	protected def initializeTestModel() {
 		val umlModel = UMLFactory.eINSTANCE.createModel()
 		umlModel.name = MODEL_NAME
-		createAndSynchronizeModel(MODEL_NAME.projectModelPath, umlModel)
+		createAndSynchronizeModel(MODEL_NAME.projectModelPath.toString, umlModel)
 	}
 		
-	private def String getProjectModelPath(String modelName) {
-		FOLDER_NAME + modelName + "." + MODEL_FILE_EXTENSION
+	private def Path getProjectModelPath(String modelName) {
+		Path.of(FOLDER_NAME).resolve(modelName + "." + MODEL_FILE_EXTENSION)
 	}	
 	
 

@@ -5,11 +5,13 @@ import org.eclipse.uml2.uml.DataType
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.UMLFactory
-import org.junit.Test
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class DataTypeTest extends AbstractClass2CompTest {
 		

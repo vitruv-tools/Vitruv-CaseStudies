@@ -19,7 +19,7 @@
 		<module>tools.vitruv.applications.pcmumlclass.mapping.tests</module>
 		<!--<module>pcmumlclassjava</module>-->
 		<!--<module>pcmumlcomponents</module>-->
-		<!--<module>umlclassumlcomponents</module>-->
+		<module>umlclassumlcomponents</module>
 		<module>tools.vitruv.applications.umljava.tests</module>
 		<!--<module>commonalities</module>-->
 	</modules>

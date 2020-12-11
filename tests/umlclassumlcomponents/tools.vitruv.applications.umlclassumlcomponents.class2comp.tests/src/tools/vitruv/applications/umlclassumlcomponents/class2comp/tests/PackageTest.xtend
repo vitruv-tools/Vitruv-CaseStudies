@@ -1,11 +1,13 @@
 package tools.vitruv.applications.umlclassumlcomponents.class2comp.tests
 
-import org.junit.Test
-
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedTestUtil.*
 import static tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
-import org.junit.Ignore
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class PackageTest extends AbstractClass2CompTest{
 	
@@ -51,8 +53,7 @@ class PackageTest extends AbstractClass2CompTest{
 		assertTrue(dataTypePackage.name == CLASS_DATATYPES_PACKAGE_NAME)
 	}
 	
-	@Ignore		
-	@Test
+	@Disabled
 	def void testPackageIllegalRename3() {
 		//Create Package with legal DataType-Package name, then try to rename it:
 		val dataTypePackage = createPackage(CLASS_DATATYPES_PACKAGE)
