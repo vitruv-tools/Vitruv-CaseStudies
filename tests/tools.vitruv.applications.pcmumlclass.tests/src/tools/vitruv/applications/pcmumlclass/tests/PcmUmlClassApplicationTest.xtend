@@ -241,7 +241,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			}
 		}
 		
-		saveAndSynchronizeChanges(generatedModel)
+		//saveAndSynchronizeChanges(generatedModel)
 		return reloadResourceAndReturnRoot(generatedModel) as Model
 	}
 	

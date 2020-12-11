@@ -18,10 +18,12 @@ import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.userinteraction.UserInteractionFactory
 
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
+import org.junit.jupiter.api.BeforeEach
+import java.nio.file.Path
 
 abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest {
 	
-	override protected createChangePropagationSpecifications() {
+	override protected getChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification, 
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification,
@@ -30,15 +32,11 @@ abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest
 		];  
 	}
 	
-	private def patchDomains() {
+	@BeforeEach
+	def void patchDomains() {
 		new PcmDomainProvider().domain.enableTransitiveChangePropagation
 		new UmlDomainProvider().domain.enableTransitiveChangePropagation
 		new JavaDomainProvider().domain.enableTransitiveChangePropagation
-	}
-	
-	override protected getVitruvDomains() {
-		patchDomains();
-		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain]
 	}
 	
 	protected def setInteractiveUserInteractor(){
@@ -53,7 +51,7 @@ abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest
 	
 	def protected getJavaPackage(String ... namespaces){
 		val packageFileName = JavaPersistenceHelper.buildJavaFilePath(JavaPersistenceHelper.packageInfoClassName + ".java", namespaces)
-		val resource = getModelResource(packageFileName)
+		val resource = resourceAt(Path.of(packageFileName))
 		if (
 			resource !== null 
 			&& resource.contents.head !== null 
@@ -88,7 +86,7 @@ abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest
 		// fails because the CU needs to load java.lang.Object 
 		// and UUID resolver fails on trying to register the 'Object extends Object'-ClassifierReference 
 		val cuFileName = JavaPersistenceHelper.buildJavaFilePath(name + ".java", namespaces)
-		val resource = getModelResource(cuFileName)
+		val resource = resourceAt(Path.of(cuFileName))
 		if (
 			resource !== null 
 			&& resource.contents.head !== null 
