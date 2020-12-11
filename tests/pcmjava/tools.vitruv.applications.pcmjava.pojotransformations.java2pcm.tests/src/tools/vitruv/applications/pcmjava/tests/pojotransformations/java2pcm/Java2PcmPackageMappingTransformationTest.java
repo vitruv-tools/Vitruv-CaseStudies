@@ -13,7 +13,7 @@ import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 public class Java2PcmPackageMappingTransformationTest extends Java2PcmTransformationTest {
 
 	@Override
-	protected List<ChangePropagationSpecification> createChangePropagationSpecifications() {
+	protected List<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		return Collections.singletonList(new Java2PcmChangePropagationSpecification());
 	}
 

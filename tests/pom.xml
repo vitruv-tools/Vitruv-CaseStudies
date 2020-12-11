@@ -14,7 +14,7 @@
 	<name>Test Modules</name>
 
 	<modules>
-		<!--<module>pcmjava</module>-->
+		<module>pcmjava</module>
 		<module>tools.vitruv.applications.pcmumlclass.tests</module>
 		<module>tools.vitruv.applications.pcmumlclass.mapping.tests</module>
 		<!--<module>pcmumlclassjava</module>-->

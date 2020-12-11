@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
