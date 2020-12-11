@@ -18,7 +18,7 @@
 		<module>pcmumlclass</module>
 		<module>pcmumlcomponents</module>
 		<module>umlclassumlcomponents</module>
-		<module>umljava</module>
+		<module>tools.vitruv.applications.umljava</module>
 		<module>commonalities</module>
 		<module>util</module>
 	</modules>
