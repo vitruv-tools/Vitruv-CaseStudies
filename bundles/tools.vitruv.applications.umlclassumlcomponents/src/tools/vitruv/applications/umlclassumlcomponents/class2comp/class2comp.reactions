@@ -9,7 +9,7 @@ import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.PrimitiveType
 import tools.vitruv.framework.userinteraction.UserInteractionOptions.WindowModality
 
-import static extension tools.vitruv.applications.umlclassumlcomponents.sharedutil.SharedUtil.*
+import static extension tools.vitruv.applications.umlclassumlcomponents.util.SharedUtil.*
 import org.eclipse.uml2.uml.Usage
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as umlclass
