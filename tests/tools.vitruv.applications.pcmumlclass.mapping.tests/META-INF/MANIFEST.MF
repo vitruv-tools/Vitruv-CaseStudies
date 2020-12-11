@@ -1,37 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruvius PCM-UML Class Mappings Tests
+Bundle-Name: Vitruv PCM-UML Class Mappings Application Tests
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlclass.mapping.tests
 Bundle-Version: 0.2.0.qualifier
 Fragment-Host: tools.vitruv.applications.pcmumlclass.mapping
-Require-Bundle: org.eclipse.xtext.testing,
- org.eclipse.xtext.xbase.testing,
+Require-Bundle: tools.vitruv.applications.util.temporary,
  tools.vitruv.testutils,
- tools.vitruv.framework.applications,
- org.eclipse.emf.transaction,
- tools.vitruv.domains.pcm,
- tools.vitruv.domains.uml,
- tools.vitruv.dsls.reactions,
- tools.vitruv.extensions.dslsruntime.reactions,
- tools.vitruv.dsls.mappings,
- tools.vitruv.domains.pcm.util,
- tools.vitruv.testutils.domains,
- org.eclipse.emf.compare,
- tools.vitruv.framework.util,
- tools.vitruv.framework.change,
- tools.vitruv.framework.change.processing,
- tools.vitruv.extensions.dslsruntime.reactions,
- com.google.guava,
- org.eclipse.emf.ecore,
- org.eclipse.core.resources,
- org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro,
- org.apache.log4j;bundle-version="1.2.15",
- tools.vitruv.framework.correspondence,
- tools.vitruv.framework.userinteraction,
- tools.vitruv.extensions.dslsruntime.mappings,
- org.eclipse.core.expressions;bundle-version="3.6.300",
- tools.vitruv.applications.util.temporary,
  org.junit.jupiter.api,
  org.hamcrest.core
 Bundle-RequiredExecutionEnvironment: JavaSE-11
