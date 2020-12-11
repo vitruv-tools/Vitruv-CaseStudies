@@ -25,7 +25,6 @@
 
    <requires>
       <import plugin="com.google.guava"/>
-      <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.xtext.xbase.lib"/>
       <import plugin="org.eclipse.xtend.lib" version="2.19.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.xtend.lib.macro"/>
@@ -38,11 +37,11 @@
       <import plugin="org.emftext.language.java.resource.java"/>
       <import plugin="org.emftext.commons.antlr3_4_0" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.emftext.language.java.resource.bcel"/>
-      <import feature="tools.vitruv.framework.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.domains.java.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.domains.pcm.feature" version="0.3.0"/>
-      <import feature="edu.kit.ipd.sdq.commons.util.emf.feature" version="1.5.0"/>
+      <import feature="tools.vitruv.framework.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.domains.java.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="1.0.0"/>
+      <import feature="edu.kit.ipd.sdq.commons.util.emf.feature" version="1.6.0"/>
    </requires>
 
    <plugin

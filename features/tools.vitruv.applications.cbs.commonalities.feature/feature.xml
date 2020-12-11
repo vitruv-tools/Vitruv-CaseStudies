@@ -21,20 +21,20 @@
 
    <requires>
       <import plugin="com.google.guava"/>
-      <import plugin="org.eclipse.xtext.xbase.lib"/>
-      <import plugin="org.eclipse.xtend.lib"/>
-      <import plugin="org.eclipse.xtend.lib.macro"/>
+      <import feature="tools.vitruv.framework.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.domains.java.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.domains.uml.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.domains.pcm.feature" version="1.0.0"/>
       <import plugin="org.apache.log4j"/>
-      <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.eclipse.swt" version="3.102.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.runtime"/>
-      <import feature="tools.vitruv.framework.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.domains.java.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.domains.uml.feature" version="0.3.0"/>
-      <import feature="tools.vitruv.domains.pcm.feature" version="0.3.0"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.swt" version="3.102.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.uml2.uml"/>
+      <import plugin="org.eclipse.xtend.lib"/>
+      <import plugin="org.eclipse.xtend.lib.macro"/>
+      <import plugin="org.eclipse.xtext.xbase.lib"/>
       <import plugin="org.emftext.language.java"/>
    </requires>
 
