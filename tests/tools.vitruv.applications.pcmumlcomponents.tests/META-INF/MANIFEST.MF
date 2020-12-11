@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Vitruv PCM-UML Components Application Tests
+Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents.tests
+Automatic-Module-Name: tools.vitruv.applications.pcmumlcomponents.tests
+Bundle-Version: 0.2.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Fragment-Host: tools.vitruv.applications.pcmumlcomponents
+Require-Bundle: org.junit.jupiter.api,
+ tools.vitruv.testutils,
+ org.hamcrest.core
+Bundle-Vendor: vitruv.tools
