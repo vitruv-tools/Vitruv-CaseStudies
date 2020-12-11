@@ -1,8 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.java2pcm;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.Set;
@@ -16,8 +14,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.InsertEdit;
 import org.emftext.language.java.members.Field;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.CompositeDataType;
 import org.palladiosimulator.pcm.repository.InnerDeclaration;
 import org.palladiosimulator.pcm.repository.OperationRequiredRole;
@@ -26,6 +24,9 @@ import tools.vitruv.applications.pcmjava.tests.util.CompilationUnitManipulatorHe
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
@@ -72,25 +73,25 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
         this.assertInnerDeclaration(newInnerDeclaration, newFieldTypeName, fieldName);
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void testRemoveFieldInClassThatCorrespondsToBasicComponent() {
         fail("Not yet implemented");
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void testAddFieldToClassThatCorrespondsToBasicComponent() {
         fail("Not yet implemented");
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void testAddFieldInClassWithoutCorrespondence() {
         fail("Not yet implemented");
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void testAddFieldWithTypeOfInterface() throws Throwable {
         this.createRepoBasicComponentAndInterface();
@@ -150,7 +151,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
                                     + correspondingEObject);
                         }
                     }
-                    assertTrue("OperationRequiredRole does not correspond to a field", fieldFound);
+                    assertTrue(fieldFound, "OperationRequiredRole does not correspond to a field");
                 } catch (final Throwable e) {
                     if (e instanceof Exception) {
                         throw (Exception) e;
@@ -205,7 +206,7 @@ public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransf
             final String fieldName) throws Throwable {
         super.assertPCMNamedElement(innerDeclaration, fieldName);
         final String pcmDataTypeName = super.getNameFromPCMDataType(innerDeclaration.getDatatype_InnerDeclaration());
-        assertEquals("The name of the PCM datatype does not equal the JaMoPP type name", pcmDataTypeName, fieldType);
+        assertEquals(pcmDataTypeName, fieldType, "The name of the PCM datatype does not equal the JaMoPP type name");
     }
 
 }
