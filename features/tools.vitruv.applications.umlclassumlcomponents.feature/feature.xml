@@ -38,21 +38,7 @@
    </requires>
 
    <plugin
-         id="tools.vitruv.applications.umlclassumlcomponents.class2comp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="tools.vitruv.applications.umlclassumlcomponents.comp2class"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="tools.vitruv.applications.umlclassumlcomponents.sharedutil"
+         id="tools.vitruv.applications.umlclassumlcomponents"
          download-size="0"
          install-size="0"
          version="0.0.0"

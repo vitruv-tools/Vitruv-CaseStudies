@@ -19,7 +19,7 @@
 		<module>tools.vitruv.applications.pcmumlclass.mapping</module>
 		<module>tools.vitruv.applications.pcmumlclass.mapping.sources</module>
 		<module>pcmumlcomponents</module>
-		<module>umlclassumlcomponents</module>
+		<module>tools.vitruv.applications.umlclassumlcomponents</module>
 		<module>tools.vitruv.applications.umljava</module>
 		<module>commonalities</module>
 		<module>tools.vitruv.applications.util.temporary</module>
