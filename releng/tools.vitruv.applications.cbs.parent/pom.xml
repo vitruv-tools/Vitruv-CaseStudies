@@ -9,19 +9,19 @@
 		<version>0.7.0</version>
 	</parent>
 	<artifactId>applications-cbs-parent</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>pom</packaging>
 
 	<repositories>
 		<repository>
 			<id>Vitruv Framework</id>
 			<layout>p2</layout>
-			<url>https://vitruv-tools.github.io/updatesite/nightly/framework/</url>
+			<url>https://vitruv-tools.github.io/updatesite/release/framework/</url>
 		</repository>
 		<repository>
 			<id>Vitruv Domains</id>
 			<layout>p2</layout>
-			<url>https://vitruv-tools.github.io/updatesite/nightly/domains/cbs/</url>
+			<url>https://vitruv-tools.github.io/updatesite/release/domains/cbs/</url>
 		</repository>
 		<repository>
 			<id>Palladiosimulator</id>
@@ -115,7 +115,7 @@
 							<dependency>
 								<groupId>tools.vitruv</groupId>
 								<artifactId>tools.vitruv.applications.cbs.frameworkwrapper</artifactId>
-								<version>0.1.0-SNAPSHOT</version>
+								<version>0.1.0</version>
 							</dependency>
 							<dependency>
 								<groupId>org.eclipse.xtend</groupId>

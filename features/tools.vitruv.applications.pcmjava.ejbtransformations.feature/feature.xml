@@ -2,7 +2,7 @@
 <feature
       id="tools.vitruv.applications.pcmjava.ejbtransformations.feature"
       label="%featureName"
-      version="0.1.0.qualifier"
+      version="0.1.0"
       provider-name="%providerName"
       license-feature="tools.vitruv.license.feature"
       license-feature-version="1.0.0">
@@ -21,7 +21,7 @@
 
    <includes
          id="tools.vitruv.applications.pcmjava.feature"
-         version="0.1.0.qualifier"/>
+         version="0.1.0"/>
 
    <requires>
       <import plugin="org.apache.log4j"/>

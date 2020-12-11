@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM-UML Components Transformations UML -> PCM
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents.uml2pcm
 Automatic-Module-Name: tools.vitruv.applications.pcmumlcomponents.uml2pcm
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Eclipse-ExtensibleAPI: true
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,

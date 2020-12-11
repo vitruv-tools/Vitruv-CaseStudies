@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PCM 2 Java Dependency Injection
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.depinjecttransformations.pcm2java
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Export-Package: mir.reactions.pcm2depInjectJava;x-internal:=true,
  mir.reactions.pcm2depInjectJava.pcm2javaCommon;x-internal:=true,
  mir.routines.pcm2depInjectJava;x-internal:=true,

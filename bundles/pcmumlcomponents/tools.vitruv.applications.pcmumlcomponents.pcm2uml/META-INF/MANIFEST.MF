@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius PCM-UML Components Transformations PCM -> UML
 Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents.pcm2uml
 Automatic-Module-Name: tools.vitruv.applications.pcmumlcomponents.pcm2uml
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Eclipse-ExtensibleAPI: true
 Export-Package: mir.reactions.pcmToUml;x-internal:=true,
  mir.routines.pcmToUml;x-internal:=true,

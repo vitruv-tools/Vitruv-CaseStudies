@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Vitruvius UMLClass-UMLComp Transformations Class -> Components
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents.class2comp
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents.class2comp
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Export-Package: mir.reactions.class2comp;x-internal:=true,
  mir.routines.class2comp;x-internal:=true,
  tools.vitruv.applications.umlclassumlcomponents.class2comp
