@@ -1,20 +1,21 @@
 package tools.vitruv.applications.pcmumlcomponents.pcm2uml.constructionsimulation
 
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.Repository
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
 
 class ExistingModelsTest extends ModelConstructionTest {
 	
 	@Test
 	def void smallExampleTest() {
 		val resource = loadModel("model/small_example.repository")
-		//loadPrimitiveTypes(resource.resourceSet)
 		val repository = resource.allContents.head as Repository
 		constructRepository(repository)
 		
 	}
 	
 	@Test
+	@Disabled("For ParametricResourceDemand currently not TUID can be calculated")
 	def void mediastoreTest() {
 		val resource = loadModel("model/mediastore.repository")
 		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.allContents.head)
@@ -22,7 +23,7 @@ class ExistingModelsTest extends ModelConstructionTest {
 	
 	@Test
 	def void mediastoreRoundtripTest() {
-		val resource = loadModel("model/mediastore_current.repository")
+		val resource = loadModel("model/mediastore_generated.repository")
 		createAndSynchronizeModel(TARGET_MODEL_NAME, resource.allContents.head)
 	}
 	

@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
-import org.junit.Test
-import static org.junit.Assert.*
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.Component
 import org.eclipse.uml2.uml.Interface
@@ -10,6 +8,11 @@ import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class ComponentsTest extends AbstractUmlPcmTest {
 	

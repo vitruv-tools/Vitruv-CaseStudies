@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmumlcomponents.pcm2uml
 
 import org.eclipse.uml2.uml.DataType
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.CollectionDataType
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.PrimitiveDataType
@@ -9,10 +8,15 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlcomponents.pcm2uml.PcmToUmlUtil
 
-import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Operation
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class DataTypesTest extends AbstractPcmUmlTest {
 	
@@ -113,11 +117,11 @@ class DataTypesTest extends AbstractPcmUmlTest {
 		saveAndSynchronizeChanges(rootElement)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmDataType]).flatten
 		val umlType = (correspondingElements.get(0) as DataType)
-		assertEquals("Type should be initialized with two properties", 2, umlType.ownedAttributes.length)
+		assertEquals(2, umlType.ownedAttributes.length, "Type should be initialized with two properties")
 		val removedDeclaration = pcmDataType.innerDeclaration_CompositeDataType.remove(0)
-		assertEquals("removed type should be the expected one", removedDeclaration.entityName, attributeName)
+		assertEquals(removedDeclaration.entityName, attributeName, "removed type should be the expected one")
 		saveAndSynchronizeChanges(pcmDataType)
-		assertEquals("synchronized type should only have one owned attribute left", 1, umlType.ownedAttributes.length)
+		assertEquals(1, umlType.ownedAttributes.length, "synchronized type should only have one owned attribute left")
 	}
 	
 	@Test

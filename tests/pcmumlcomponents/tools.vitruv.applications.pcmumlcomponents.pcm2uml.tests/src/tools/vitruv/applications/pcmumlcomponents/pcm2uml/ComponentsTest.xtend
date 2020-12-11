@@ -1,9 +1,7 @@
 package tools.vitruv.applications.pcmumlcomponents.pcm2uml
 
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 
-import static org.junit.Assert.*
 import org.eclipse.uml2.uml.Component
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.BasicComponent
@@ -11,6 +9,10 @@ import org.eclipse.uml2.uml.InterfaceRealization
 import org.eclipse.uml2.uml.Usage
 import org.eclipse.uml2.uml.Interface
 import org.palladiosimulator.pcm.repository.RepositoryComponent
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class ComponentsTest extends AbstractPcmUmlTest {
 	static val COMPONENT_NAME = "TestComponent";

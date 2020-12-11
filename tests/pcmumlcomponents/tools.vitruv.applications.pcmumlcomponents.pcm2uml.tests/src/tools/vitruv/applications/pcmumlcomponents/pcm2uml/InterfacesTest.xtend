@@ -1,7 +1,5 @@
 package tools.vitruv.applications.pcmumlcomponents.pcm2uml
 
-import org.junit.Test
-import static org.junit.Assert.*
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.eclipse.uml2.uml.Interface
@@ -15,6 +13,11 @@ import org.palladiosimulator.pcm.repository.PrimitiveDataType
 import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.ParameterModifier
 import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class InterfacesTest extends AbstractPcmUmlTest {
 		

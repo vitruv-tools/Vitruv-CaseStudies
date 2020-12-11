@@ -11,17 +11,19 @@ import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.resource.UMLResource
 import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
-import tools.vitruv.domains.pcm.PcmDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.testutils.VitruviusApplicationTest
 import org.eclipse.emf.common.util.BasicEList
 import org.palladiosimulator.pcm.repository.Repository
 import org.eclipse.emf.ecore.EClass
 
-import static org.junit.Assert.assertEquals
 import org.eclipse.uml2.uml.UMLPackage
+import org.junit.jupiter.api.BeforeEach
+import tools.vitruv.testutils.LegacyVitruvApplicationTest
+import java.nio.file.Path
 
-abstract class AbstractUmlPcmTest extends VitruviusApplicationTest {
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertEquals
+
+abstract class AbstractUmlPcmTest extends LegacyVitruvApplicationTest {
 	protected static val MODEL_FILE_EXTENSION = "uml";
 	protected static val MODEL_NAME = "model";
 	protected static val COMPONENT_NAME = "TestComponent"
@@ -35,32 +37,26 @@ abstract class AbstractUmlPcmTest extends VitruviusApplicationTest {
 	protected static val UML_TYPE_REAL = "Real"
 	protected static val UML_TYPE_STRING = "String"	
 	
-	private def String getProjectModelPath(String modelName) {
-		"model/" + modelName + "." + MODEL_FILE_EXTENSION;
+	private def Path getProjectModelPath(String modelName) {
+		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION);
 	}
 	
 	protected def Model getRootElement() {
-		return MODEL_NAME.getProjectModelPath.firstRootElement as Model;
+		return Model.from(MODEL_NAME.getProjectModelPath);
 	}
 	
-	override protected createChangePropagationSpecifications() {
+	override protected getChangePropagationSpecifications() {
 		return #[new UmlToPcmComponentsChangePropagationSpecification()]; 
-	}
-	
-	override protected getVitruvDomains() {
-		return #[new UmlDomainProvider().domain, new PcmDomainProvider().domain];
 	}
 	
 	protected def initializeTestModel() {
 		val umlModel = UMLFactory.eINSTANCE.createModel();
 		umlModel.name = MODEL_NAME;
-		createAndSynchronizeModel(MODEL_NAME.getProjectModelPath, umlModel);
+		createAndSynchronizeModel(MODEL_NAME.getProjectModelPath.toString, umlModel);
 	}
 	
-	override protected cleanup() {
-	}
-	
-	override protected setup() {
+	@BeforeEach
+	def protected setup() {
 		this.initializeTestModel()
 	}
 	

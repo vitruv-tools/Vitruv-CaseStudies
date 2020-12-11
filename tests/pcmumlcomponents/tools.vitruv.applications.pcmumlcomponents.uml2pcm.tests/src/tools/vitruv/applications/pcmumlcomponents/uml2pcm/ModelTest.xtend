@@ -1,14 +1,18 @@
 package tools.vitruv.applications.pcmumlcomponents.uml2pcm
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.hamcrest.MatcherAssert.assertThat;
+import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
+import java.nio.file.Path
 
 class ModelTest extends AbstractUmlPcmTest {
 
 	@Test
 	def void testRepositoryCreation() {
-		assertModelExists("repository/" + MODEL_NAME + ".repository");
+		val modelUri = getPlatformModelUri(Path.of("repository").resolve(MODEL_NAME + ".repository"))
+		assertThat(modelUri, isResource);
 		val pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(MODEL_NAME, pcmRepository.entityName);
 	}

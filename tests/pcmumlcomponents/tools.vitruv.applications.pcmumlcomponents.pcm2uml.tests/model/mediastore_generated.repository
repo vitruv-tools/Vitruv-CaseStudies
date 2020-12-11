@@ -38,43 +38,43 @@
   </components__Repository>
   <interfaces__Repository xsi:type="repository:OperationInterface" id="_cCV28E7aEee28eLF7ElX0w" entityName="IHTTP">
     <signatures__OperationInterface id="_cQC7wE7aEee28eLF7ElX0w" entityName="HTTPDownload" returnType__OperationSignature="_cZ1J4E7aEee28eLF7ElX0w">
-      <parameters__OperationSignature entityName="request" dataType__Parameter="_cBDdgE7aEee28eLF7ElX0w" parameterName="request"/>
+      <parameters__OperationSignature dataType__Parameter="_cBDdgE7aEee28eLF7ElX0w" parameterName="request"/>
     </signatures__OperationInterface>
     <signatures__OperationInterface id="_cQEJ4E7aEee28eLF7ElX0w" entityName="HTTPUpload">
-      <parameters__OperationSignature entityName="file" dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
+      <parameters__OperationSignature dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
     </signatures__OperationInterface>
   </interfaces__Repository>
   <interfaces__Repository xsi:type="repository:OperationInterface" id="_cCYTME7aEee28eLF7ElX0w" entityName="IMediaStore">
     <signatures__OperationInterface id="_caQnsE7aEee28eLF7ElX0w" entityName="download" returnType__OperationSignature="_cZ1J4E7aEee28eLF7ElX0w">
-      <parameters__OperationSignature entityName="ids" parameterName="ids">
+      <parameters__OperationSignature parameterName="ids">
         <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
       </parameters__OperationSignature>
-      <parameters__OperationSignature entityName="customerType" parameterName="customerType">
+      <parameters__OperationSignature parameterName="customerType">
         <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
       </parameters__OperationSignature>
     </signatures__OperationInterface>
     <signatures__OperationInterface id="_caR10E7aEee28eLF7ElX0w" entityName="upload">
-      <parameters__OperationSignature entityName="file" dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
+      <parameters__OperationSignature dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
     </signatures__OperationInterface>
   </interfaces__Repository>
   <interfaces__Repository xsi:type="repository:OperationInterface" id="_cCb9kE7aEee28eLF7ElX0w" entityName="IAudioDB">
     <signatures__OperationInterface id="_cac08E7aEee28eLF7ElX0w" entityName="queryDB" returnType__OperationSignature="_cZ1J4E7aEee28eLF7ElX0w">
-      <parameters__OperationSignature entityName="ids" parameterName="ids">
+      <parameters__OperationSignature parameterName="ids">
         <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.1"/>
       </parameters__OperationSignature>
     </signatures__OperationInterface>
     <signatures__OperationInterface id="_caeDEE7aEee28eLF7ElX0w" entityName="addFile">
-      <parameters__OperationSignature entityName="file" dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
+      <parameters__OperationSignature dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
     </signatures__OperationInterface>
   </interfaces__Repository>
   <interfaces__Repository xsi:type="repository:OperationInterface" id="_cCfA4E7aEee28eLF7ElX0w" entityName="ISound">
     <signatures__OperationInterface id="_cal-4E7aEee28eLF7ElX0w" entityName="watermark" returnType__OperationSignature="_cBBBQE7aEee28eLF7ElX0w">
-      <parameters__OperationSignature entityName="file" dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
+      <parameters__OperationSignature dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
     </signatures__OperationInterface>
   </interfaces__Repository>
   <interfaces__Repository xsi:type="repository:OperationInterface" id="_cCg2EE7aEee28eLF7ElX0w" entityName="IEncode">
     <signatures__OperationInterface id="_caqQUE7aEee28eLF7ElX0w" entityName="encode" returnType__OperationSignature="_cBBBQE7aEee28eLF7ElX0w">
-      <parameters__OperationSignature entityName="file" dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
+      <parameters__OperationSignature dataType__Parameter="_cBBBQE7aEee28eLF7ElX0w" parameterName="file"/>
     </signatures__OperationInterface>
   </interfaces__Repository>
   <dataTypes__Repository xsi:type="repository:CompositeDataType" id="_cBBBQE7aEee28eLF7ElX0w" entityName="File"/>
