@@ -1,11 +1,7 @@
 package tools.vitruv.applications.pcmjava.tests.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,7 +15,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -68,6 +63,8 @@ import org.emftext.language.java.members.Member;
 import org.emftext.language.java.members.Method;
 import org.emftext.language.java.modifiers.AnnotableAndModifiable;
 import org.emftext.language.java.types.TypeReference;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.CollectionDataType;
@@ -84,11 +81,10 @@ import org.palladiosimulator.pcm.repository.RepositoryComponent;
 import org.palladiosimulator.pcm.seff.ResourceDemandingSEFF;
 import org.palladiosimulator.pcm.system.System;
 
+import edu.kit.ipd.sdq.commons.util.org.eclipse.core.resources.IProjectUtil;
 import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
-import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
-import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.java.JavaNamespace;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilder;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator;
@@ -97,26 +93,30 @@ import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
 import tools.vitruv.framework.change.description.ConcreteChange;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
-import tools.vitruv.framework.domains.VitruvDomain;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
 import tools.vitruv.framework.ui.monitorededitor.ProjectBuildUtils;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationAbortCause;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationListener;
-import tools.vitruv.testutils.VitruviusUnmonitoredApplicationTest;
-import tools.vitruv.testutils.util.TestUtil;
+import tools.vitruv.testutils.LegacyVitruvApplicationTest;
+import tools.vitruv.testutils.TestProject;
 
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
+import static org.junit.jupiter.api.Assertions.fail;
 import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * Test class that contains utillity methods that can be used by JaMoPP2PCM
+ * Test class that contains utility methods that can be used by JaMoPP2PCM
  * transformation tests
  *
  */
 @SuppressWarnings("restriction")
-public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApplicationTest
+public abstract class Java2PcmTransformationTest extends LegacyVitruvApplicationTest
 		implements ChangePropagationListener, SynchronizationAwaitCallback {
 
 	private static final Logger logger = Logger.getLogger(Java2PcmTransformationTest.class.getSimpleName());
@@ -127,33 +127,25 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected Package secondPackage;
 	private int expectedNumberOfSyncs = 0;
 
-	public Java2PcmTransformationTest() {
-		setTestProjectCreator(projectName -> TestUtil.createPlatformProject(projectName, true).getLocation().toFile());
-	}
-
-	@Override
-	protected Iterable<VitruvDomain> getVitruvDomains() {
-	    List<VitruvDomain> result = new ArrayList<VitruvDomain>();
-        result.add(new PcmDomainProvider().getDomain());
-        result.add(new JavaDomainProvider().getDomain());
-        return result;
-	}
+	private IProject testEclipseProject;
 
 	protected IProject getCurrentTestProject() {
-		return ResourcesPlugin.getWorkspace().getRoot().getProject(getCurrentTestProjectFolder().getName());
+		return testEclipseProject;
 	}
 
-	@Override
-	public void beforeTest() {
-		super.beforeTest();
-		this.getVirtualModel().addChangePropagationListener(this);
+	@BeforeEach
+	public void beforeTest(@TestProject Path testProjectFolder) {
+		testEclipseProject = IProjectUtil.createProjectAt(testProjectFolder.getFileName().toString(),
+				testProjectFolder);
+		IProjectUtil.configureAsJavaProject(testEclipseProject);
+		getVirtualModel().addChangePropagationListener(this);
 		// This is necessary because otherwise Maven tests will fail as
 		// resources from previous
 		// tests are still in the classpath and accidentally resolved
 		JavaClasspath.reset();
 		// add PCM Java Builder to Project under test
 		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
-		pcmJavaBuilder.addToProject(this.getCurrentTestProject(), getVirtualModel().getFolder(),
+		pcmJavaBuilder.addToProject(getCurrentTestProject(), getVirtualModel().getFolder(),
 				Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		// build the project
 		ProjectBuildUtils.issueIncrementalBuild(getCurrentTestProject(), VitruviusJavaBuilder.BUILDER_ID);
@@ -162,19 +154,14 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		java.lang.System.setErr(null);
 	}
 
-	private String getPlatformModelPath(final String modelPathWithinProject) {
-		return this.getCurrentTestProject().getName() + "/" + modelPathWithinProject;
+	// We need to use platform URIs, because the JDT AST will not recognize changes
+	// when using file URIs.
+	@Override
+	protected boolean usePlatformURIs() {
+		return true;
 	}
 
-	// We override the modelVuri getter, because we have to use platform URIs
-	// for the Java to PCM tests
-	// because otherwise the JDT AST will not recognize the changes
-	@Override
-	protected VURI getModelVuri(String modelPathWithinProject) {
-		return VURI.getInstance(getPlatformModelPath(modelPathWithinProject));
-	}
-
-	@Override
+	@AfterEach
 	public void afterTest() {
 		// Remove PCM Java Builder
 		final VitruviusJavaBuilderApplicator pcmJavaRemoveBuilder = new VitruviusJavaBuilderApplicator();
@@ -270,7 +257,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		final List<String> namespaceList = Arrays.asList(namespace);
 		jaMoPPPackage.setName(namespaceList.get(namespaceList.size() - 1));
 		jaMoPPPackage.getNamespaces().addAll(namespaceList.subList(0, namespaceList.size() - 1));
-		final Resource resource = this.createModelResource(getPathInProjectForSrcFile(packageFile));
+		final Resource resource = resourceAt(Path.of(getPathInProjectForSrcFile(packageFile))); // resourceAt(Path.of(getPathInProjectForSrcFile(packageFile)));
 		EcoreResourceBridge.saveEObjectAsOnlyContent(jaMoPPPackage, resource);
 		waitForSynchronization(1);
 		return jaMoPPPackage;
@@ -371,7 +358,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	private IPackageFragmentRoot getIJavaProject() throws CoreException {
 		final IProject project = this.getCurrentTestProject();
 		final IJavaProject javaProject = JavaCore.create(project);
-		final IFolder sourceFolder = project.getFolder(TestUtil.SOURCE_FOLDER);
+		final IFolder sourceFolder = project.getFolder("src");
 		if (!sourceFolder.exists()) {
 			final boolean force = true;
 			final boolean local = true;
@@ -382,7 +369,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	}
 
 	private String getPathInProjectForSrcFile(final String srcFilePath) {
-		return TestUtil.SOURCE_FOLDER + "/" + srcFilePath;
+		return "src/" + srcFilePath;
 	}
 
 	protected <T> T addClassInSecondPackage(final Class<T> classOfCorrespondingObject) throws Throwable {
@@ -456,8 +443,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	/**
 	 * Change user interactor in changeSynchronizer of
-	 * PCMJaMoPPTransformationExecuter by invoking the setUserInteractor method
-	 * of the class ChangeSynchronizer
+	 * PCMJaMoPPTransformationExecuter by invoking the setUserInteractor method of
+	 * the class ChangeSynchronizer
 	 *
 	 * @throws Throwable
 	 */
@@ -473,7 +460,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	// }
 
 	protected CompositeComponent addSecondPackageCorrespondsToCompositeComponent() throws Throwable {
-		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
+		this.getUserInteractor()
+				.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
 		return this.createSecondPackage(CompositeComponent.class, Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.COMPOSITE_COMPONENT_NAME);
 	}
@@ -484,7 +472,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	}
 
 	protected void addSecondPackageCorrespondsWithoutCorrespondences() throws Throwable {
-		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
+		this.getUserInteractor()
+				.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.getSelection());
 		this.createSecondPackageWithoutCorrespondence(Pcm2JavaTestUtils.REPOSITORY_NAME,
 				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME);
 	}
@@ -492,8 +481,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected void assertRepositoryAndPCMName(final Repository repo, final RepositoryComponent repoComponent,
 			final String expectedName) throws Throwable {
 
-		assertEquals("Repository of compoennt is not the repository: " + repo, repo.getId(),
-				repoComponent.getRepository__RepositoryComponent().getId());
+		assertEquals(repo.getId(), repoComponent.getRepository__RepositoryComponent().getId(),
+				"Repository of compoennt is not the repository: " + repo);
 
 		this.assertPCMNamedElement(repoComponent, expectedName);
 	}
@@ -501,9 +490,9 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected void assertResourceAndFileForEObjects(final EObject... eObjects) throws Throwable {
 		for (final EObject eObject : eObjects) {
 			final Resource eResource = eObject.eResource();
-			assertNotNull("Resource of eObject " + eObject + " is null", eResource);
+			assertNotNull(eResource, "Resource of eObject " + eObject + " is null");
 			final IFile iFile = URIUtil.getIFileForEMFUri(eResource.getURI());
-			assertTrue("No IFile for eObject " + eObject + " in resource " + eResource + " found.", iFile.exists());
+			assertTrue(iFile.exists(), "No IFile for eObject " + eObject + " in resource " + eResource + " found.");
 		}
 	}
 
@@ -531,8 +520,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected void assertRepositoryAndPCMNameForDatatype(final Repository repo, final DataType dt,
 			final String expectedName) throws Throwable {
 
-		assertEquals("Repository of compoennt is not the repository: " + repo, repo.getId(),
-				dt.getRepository__DataType().getId());
+		assertEquals(repo.getId(), dt.getRepository__DataType().getId(),
+				"Repository of compoennt is not the repository: " + repo);
 		if (dt instanceof CompositeDataType) {
 			this.assertPCMNamedElement((CompositeDataType) dt, expectedName);
 		} else if (dt instanceof CollectionDataType) {
@@ -544,13 +533,13 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected void assertPCMNamedElement(final NamedElement pcmNamedElement, final String expectedName)
 			throws Throwable {
-		assertEquals("The name of pcm named element is not " + expectedName, expectedName,
-				pcmNamedElement.getEntityName());
+		assertEquals(expectedName, pcmNamedElement.getEntityName(),
+				"The name of pcm named element is not " + expectedName);
 		this.assertResourceAndFileForEObjects(pcmNamedElement);
 	}
 
 	protected void assertPcmParameter(final Parameter pcmParameter, final String expectedName) throws Throwable {
-		assertEquals("The name of pcm parameter is not " + expectedName, expectedName, pcmParameter.getParameterName());
+		assertEquals(expectedName, pcmParameter.getParameterName(), "The name of pcm parameter is not " + expectedName);
 		this.assertResourceAndFileForEObjects(pcmParameter);
 	}
 
@@ -625,19 +614,22 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected OperationInterface addInterfaceInSecondPackageWithCorrespondence(final String packageName)
 			throws Throwable {
-		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
+		this.getUserInteractor()
+				.addNextSingleSelection(Java2PcmUserSelection.SELECT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
 		return this.createInterfaceInPackage(packageName);
 	}
 
 	protected EObject addInterfaceInPackageWithoutCorrespondence(final String packageName) throws Throwable {
-		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
+		this.getUserInteractor().addNextSingleSelection(
+				Java2PcmUserSelection.SELECT_DONT_CREATE_INTERFACE_NOT_IN_CONTRACTS.getSelection());
 		Package jaMoPPPackage = this.getPackageWithNameFromCorrespondenceModel(packageName);
 		return this.createInterfaceInPackage(jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName(),
 				"I" + packageName, false);
 	}
 
 	protected Package getPackageWithNameFromCorrespondenceModel(final String name) throws CoreException {
-		final Set<Package> packages = this.getCorrespondenceModel().getAllEObjectsOfTypeInCorrespondences(Package.class);
+		final Set<Package> packages = this.getCorrespondenceModel()
+				.getAllEObjectsOfTypeInCorrespondences(Package.class);
 		for (final Package currentPackage : packages) {
 			if (currentPackage.getName().equals(name)) {
 				return currentPackage;
@@ -701,7 +693,7 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 	protected void assertDataTypeName(final TypeReference typeReference, final DataType pcmDataType) {
 		final String jaMoPPTypeName = getNameFromJaMoPPType(typeReference);
 		final String pcmTypeName = this.getNameFromPCMDataType(pcmDataType);
-		assertEquals("The name of the PCM datatype does not equal the JaMoPP type name", jaMoPPTypeName, pcmTypeName);
+		assertEquals(jaMoPPTypeName, pcmTypeName, "The name of the PCM datatype does not equal the JaMoPP type name");
 	}
 
 	protected String getNameFromPCMDataType(final DataType pcmDataType) {
@@ -862,10 +854,9 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		// ADDITION: Using Maven, changes run properly without the sleep, so it
 		// is removed by now.
 		// In Eclipse, it does not work without the sleep.
-		/*try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-		}*/
+		/*
+		 * try { Thread.sleep(5000); } catch (InterruptedException e) { }
+		 */
 		final ICompilationUnit classCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(className, this.getCurrentTestProject());
 		this.importCompilationUnitWithName(implementingInterfaceName, classCompilationUnit);
@@ -953,7 +944,8 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 		createChange.setIndex(index);
 		createChange.setNewValue(newAnnotation);
 		final VURI vuri = VURI.getInstance(annotableAndModifiable.eResource());
-		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteChangeWithVuri(createChange, vuri);
+		final ConcreteChange change = VitruviusChangeFactory.getInstance().createConcreteChangeWithVuri(createChange,
+				vuri);
 		getVirtualModel().propagateChange(change);
 	}
 
@@ -1001,11 +993,11 @@ public abstract class Java2PcmTransformationTest extends VitruviusUnmonitoredApp
 
 	protected void assertOperationInterface(final Repository repo, final OperationInterface opIf,
 			final String expectedName) {
-		assertTrue("The created operation interface is null", null != opIf);
-		assertEquals("OperationInterface name does not equals the expected interface Name.", opIf.getEntityName(),
-				expectedName);
-		assertEquals("The created operation interface is not in the repository", repo.getId(),
-				opIf.getRepository__Interface().getId());
+		assertTrue(null != opIf, "The created operation interface is null");
+		assertEquals(opIf.getEntityName(), expectedName,
+				"OperationInterface name does not equals the expected interface Name.");
+		assertEquals(repo.getId(), opIf.getRepository__Interface().getId(),
+				"The created operation interface is not in the repository");
 	}
 
 }
