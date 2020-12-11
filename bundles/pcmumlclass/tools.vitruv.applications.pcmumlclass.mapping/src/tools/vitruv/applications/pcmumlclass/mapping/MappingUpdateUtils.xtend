@@ -58,14 +58,22 @@ class MappingUpdateUtils {
 			override transformToInterchangeableValue() {
 				if (suffixInInterchangeableValue) {
 					[
-						if ((it as String).endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
+						val string = it as String;
+						if (string.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
 							it
 						} else {
-							(it as String) + DefaultLiterals.IMPLEMENTATION_SUFFIX
+							string + DefaultLiterals.IMPLEMENTATION_SUFFIX
 						}
 					]
 				} else {
-					[(it as String).substring(0, (it as String).length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length)]
+					[
+						val string = it as String;
+						if (string !== null && string.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
+							string.substring(0, (it as String).length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length)
+						} else{
+							string
+						}
+					]
 				}
 			}
 
@@ -78,7 +86,14 @@ class MappingUpdateUtils {
 					}
 				} else {
 					if (suffixInInterchangeableValue) {
-						[(it as String).substring(0, (it as String).length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length)]
+						[
+							val string = it as String;
+							if (string !== null && string.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
+								string.substring(0, (it as String).length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length)
+							} else{
+								string
+							}
+						]
 					} else {
 						[it]
 					}
