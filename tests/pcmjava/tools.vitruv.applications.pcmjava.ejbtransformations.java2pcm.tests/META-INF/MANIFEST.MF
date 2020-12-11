@@ -5,7 +5,7 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations.java2p
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests
 Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.junit,
+Require-Bundle: org.junit.jupiter.api,
  com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
