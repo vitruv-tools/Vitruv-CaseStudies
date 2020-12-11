@@ -6,10 +6,11 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationT
 
 import static com.google.common.base.Preconditions.*
 import static org.hamcrest.MatcherAssert.assertThat
-import static org.junit.Assert.*
 import static tools.vitruv.testutils.matchers.ModelMatchers.*
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmFilePathHelper.*
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertNotNull
 
 class PcmTestHelper {
 
@@ -30,14 +31,13 @@ class PcmTestHelper {
 	}
 
 	def getPcmRepository(Resource pcmRepositoryResource) {
-		assertTrue("Expecting resource to contain exactly 1 root object: " + pcmRepositoryResource.URI,
-			pcmRepositoryResource.contents.size == 1)
+		assertTrue(pcmRepositoryResource.contents.size == 1, "Expecting resource to contain exactly 1 root object: " + pcmRepositoryResource.URI)
 		val pcmRepository = pcmRepositoryResource.contents.head as Repository
-		assertNotNull("Could not find PCM repository in resource: " + pcmRepositoryResource.URI, pcmRepository)
+		assertNotNull(pcmRepository, "Could not find PCM repository in resource: " + pcmRepositoryResource.URI)
 		return pcmRepository
 	}
 
 	def assertPcmRepositoryExists(Repository pcmRepository) {
-		assertThat(pcmRepository.pcmRepositoryResource, contains(pcmRepository, ignoring('id'), ignoringUnsetFeatures))
+		assertThat(pcmRepository.pcmRepositoryResource, contains(pcmRepository, ignoringFeatures('id'), ignoringUnsetFeatures))
 	}
 }

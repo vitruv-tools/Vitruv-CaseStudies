@@ -2,10 +2,10 @@ package tools.vitruv.applications.cbs.commonalities.tests.util
 
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
-import tools.vitruv.testutils.VitruviusApplicationTest
+import tools.vitruv.testutils.VitruvApplicationTest
 
 /**
- * Interface to internals of {@link VitruviusApplicationTest} for testing
+ * Interface to internals of {@link VitruvApplicationTest} for testing
  * related helpers.
  */
 interface VitruvApplicationTestAdapter {

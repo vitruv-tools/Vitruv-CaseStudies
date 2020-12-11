@@ -8,7 +8,11 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.xtend.lib.annotations.Accessors
 import tools.vitruv.dsls.commonalities.testutils.CommonalitiesExecutionTest
 
-import static org.junit.Assert.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
+import java.nio.file.Path
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 abstract class AbstractCBSCommonalitiesExecutionTest extends CommonalitiesExecutionTest {
 
@@ -32,7 +36,7 @@ abstract class AbstractCBSCommonalitiesExecutionTest extends CommonalitiesExecut
 
 			override getResourceAt(String modelPathInProject) {
 				// The resources get loaded into the result resource set:
-				resultResourceSet.resourceAt(modelPathInProject)
+				resultResourceSet.getResource(getPlatformModelUri(Path.of(modelPathInProject)), true);
 			}
 
 			override getTestResource(String resourcePath) {
@@ -59,13 +63,15 @@ abstract class AbstractCBSCommonalitiesExecutionTest extends CommonalitiesExecut
 	// Stores the loaded target models.
 	@Accessors(PROTECTED_GETTER)
 	var ResourceSet resultResourceSet
-
-	override protected setup() {
+	
+	@BeforeEach
+	def protected void setup() {
 		testResourcesResourceSet = new ResourceSetImpl()
 		resultResourceSet = new ResourceSetImpl()
 	}
 
-	override protected cleanup() {
+	@AfterEach
+	def protected void cleanup() {
 		testResourcesResourceSet = null
 		resultResourceSet = null
 	}
@@ -73,7 +79,7 @@ abstract class AbstractCBSCommonalitiesExecutionTest extends CommonalitiesExecut
 	protected final def getTestResource(String resourcePath) {
 		val resourceUri = URI.createURI(resourcePath)
 		val resource = testResourcesResourceSet.getResource(resourceUri, true)
-		assertNotNull("Resource not found: " + resourcePath, resource)
+		assertNotNull(resource, "Resource not found: " + resourcePath)
 		return resource
 	}
 }
