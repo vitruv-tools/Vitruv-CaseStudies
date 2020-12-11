@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.common.util.URI
 import tools.vitruv.applications.umljava.tests.uml2java.UmlToJavaTransformationTest
+import org.junit.jupiter.api.Disabled
 
 class UmlConstructionSimulationTest extends UmlToJavaTransformationTest {
 	
@@ -32,6 +33,7 @@ class UmlConstructionSimulationTest extends UmlToJavaTransformationTest {
      * 
      */
     @Test
+    @Disabled("Potentially exceeds Java heap space")
     def void testRootModelName() {
     	testUmlModel("resources/rootModelName.uml")
     	//Check manually in the JUnit-workspace.
