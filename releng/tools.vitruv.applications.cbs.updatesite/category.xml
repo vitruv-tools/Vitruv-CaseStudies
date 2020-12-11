@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/tools.vitruv.applications.util.temporary.feature_0.3.0.qualifier.jar" id="tools.vitruv.applications.util.temporary.feature" version="0.2.0.qualifier">
+   <feature url="features/tools.vitruv.applications.util.temporary.feature_0.2.0.qualifier.jar" id="tools.vitruv.applications.util.temporary.feature" version="0.2.0.qualifier">
       <category name="Vitruv Applications for Component-based Systems"/>
    </feature>
    <feature id="tools.vitruv.applications.util.temporary.feature.source" version="0.2.0.qualifier">
