@@ -32,9 +32,9 @@ import static extension tools.vitruv.framework.correspondence.CorrespondenceMode
 import tools.vitruv.applications.util.temporary.pcm.PcmDataTypeUtil
 
 final class PcmUmlClassApplicationTestHelper {
-	new (CorrespondenceModel testCorrespondenceModel, Function<URI, EObject> eObjectRetriever, Function<URI, Resource> resourceRetriever) {
+	new (CorrespondenceModel testCorrespondenceModel, Function<URI, Resource> resourceRetriever) {
 		this.correspondenceModel = testCorrespondenceModel
-		this.eObjectRetriever = eObjectRetriever
+		this.resourceRetriever = resourceRetriever
 		
 		val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(resourceRetriever)	
 		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
@@ -53,7 +53,7 @@ final class PcmUmlClassApplicationTestHelper {
 	}
 	
 	val CorrespondenceModel correspondenceModel
-	val Function<URI, EObject> eObjectRetriever
+	val Function<URI, Resource> resourceRetriever
 	
 	/**
 	 * Fetches the given {@link EObject} from the {@link ResourceSet} of the running test.
@@ -67,8 +67,8 @@ final class PcmUmlClassApplicationTestHelper {
 	 * @return the object instance in the ResourceSet of this test
 	 */
 	def <T extends EObject> getModifiableInstance(T original) {
-		val originalURI = EcoreUtil.getURI(original)
-		return eObjectRetriever.apply(originalURI) as T
+		val originalURI = EcoreUtil.getURI(original) 
+		return resourceRetriever.apply(originalURI.trimFragment).getEObject(originalURI.fragment) as T
 	}
 	
 	def <T extends EObject> Set<T> getCorrSet(EObject source, Class<T> typeFilter) {

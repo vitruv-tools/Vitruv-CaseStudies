@@ -1,14 +1,14 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import org.eclipse.uml2.uml.Property
-import org.junit.Test
 import org.palladiosimulator.pcm.core.composition.AssemblyContext
 import org.palladiosimulator.pcm.core.composition.CompositionFactory
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-
-import static org.junit.Assert.*
+import org.junit.jupiter.api.Test
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::AssemblyContext 

@@ -1,14 +1,15 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import org.eclipse.uml2.uml.InterfaceRealization
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationProvidedRole 

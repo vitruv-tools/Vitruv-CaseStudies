@@ -4,16 +4,16 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Type
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-
-import static org.junit.Assert.*
-import org.junit.Ignore
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::InnerDeclaration with 
@@ -79,7 +79,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		assertNotNull(pcmAttribute)
 		checkAttributeConcept(pcmAttribute)
 		val reloadedPcmType = helper.getModifiableInstance(pcmType)
-		assertNotNull("The DataType should not be null after reload", reloadedPcmType)
+		assertNotNull(reloadedPcmType, "The DataType should not be null after reload")
 		assertTrue(EcoreUtil.equals(pcmAttribute.datatype_InnerDeclaration, reloadedPcmType))
 	}
 
@@ -87,7 +87,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateAttributeConcept_PCM_primitiveType() {
 		var pcmRepository = createRepository()
-		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_INT)
+		assertNotNull(helper.PCM_INT, "Initialization of PrimitiveTypes seems to have failed")
 		testCreateAttributeConcept_PCM(pcmRepository, helper.PCM_INT)
 	}
 	
@@ -127,7 +127,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		checkAttributeConcept(umlAttribute)
 		
 		val reloadedUmlType = helper.getModifiableInstance(umlType)
-		assertNotNull("The DataType should not be null after reload", reloadedUmlType)
+		assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
 		assertTrue(EcoreUtil.equals(umlAttribute.type, reloadedUmlType))
 		assertTrue(umlAttribute.lower == lower)
 		assertTrue(umlAttribute.upper == upper)
@@ -136,7 +136,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 	@Test
 	def void testCreateAttributeConcept_UML_primitiveType() {
 		var pcmRepository = createRepository()
-		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_INT)
+		assertNotNull(helper.UML_INT, "Initialization of PrimitiveTypes seems to have failed")
 		testCreateAttributeConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
 	}
 	
@@ -146,7 +146,7 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		testCreateAttributeConcept_UML(pcmRepository, helper.getUmlCompositeDataTypeClass(pcmRepository), 1, 1)
 	}
 	
-	@Ignore
+	@Disabled
 	@Test
 	def void testCreateAttributeConcept_UML_collectionType() {
 		// expected to fail see the explanation in 'testCreateAttributeConcept_UML(..)'

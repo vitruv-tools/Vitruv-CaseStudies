@@ -15,7 +15,7 @@
 
 	<modules>
 		<module>tools.vitruv.applications.pcmumlclass.tests</module>
-		<module>tools.vitruv.applications.pcmumlclass.mapping.tests</module>
+		<!--<module>tools.vitruv.applications.pcmumlclass.mapping.tests</module>-->
 	</modules>
 	
 </project>

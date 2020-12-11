@@ -3,13 +3,16 @@ package tools.vitruv.applications.pcmumlclass.tests
 import org.eclipse.emf.common.util.URI
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.UMLFactory
-import org.junit.Ignore
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 
-import static org.junit.Assert.*
+import java.nio.file.Path
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * Model creation tests, to test the set of transformations as a whole. 
@@ -34,7 +37,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	static val PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2 = "model-gen/ms_repository_backward.repository"
 
 	@Test
-	@Ignore //skip until needed because of performance
+	@Disabled //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML() {
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
 		val pcmMsRepositoryResource = uri.testResource
@@ -49,7 +52,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-	@Ignore //skip until needed because of performance
+	@Disabled //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_UML2PCM() {
 		val uri = URI.createURI(UML_MEDIA_STORE_REPOSITORY_PATH)
 		val umlMsRepositoryResource = uri.testResource
@@ -60,7 +63,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-	@Ignore //skip until needed because of performance
+	@Disabled //skip until needed because of performance
 	def void testMediaStoreRepositoryCreation_PCM2UML2PCM() {
 		// forwards
 		val uri = URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH)
@@ -75,7 +78,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
 		// backwards 
-		val umlMsRepositoryResource = UML_GENERATED_MEDIA_STORE_MODEL_PATH.modelVuri.EMFUri.testResource
+		val umlMsRepositoryResource = getPlatformModelUri(Path.of(UML_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource
 		assertNotNull(umlMsRepositoryResource)
 		val umlMsModel = umlMsRepositoryResource.contents.head as Model
 		assertNotNull(umlMsModel)
@@ -86,10 +89,10 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		
 		val comparison = compare(
 			URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH), 
-			PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2.modelVuri.EMFUri
+			getPlatformModelUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2))
 		)
-		assertEquals("Encountered differences after round-trip batch creation. That was kind of expected."
-			+ "\nLast manual check looked good with 245 differences", 0, comparison.differences.size
+		assertEquals(0, comparison.differences.size, "Encountered differences after round-trip batch creation. That was kind of expected."
+			+ "\nLast manual check looked good with 245 differences" 
 		)
 		// expected (and found deltas):
 		//	- each PCM element has a different id since it is unique and those are newly generated elements
@@ -97,7 +100,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 	}
 	
 	@Test
-	@Ignore
+	@Disabled
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_PCM2UML2PCM() {
 		var pcmRepo_forward = RepositoryFactory.eINSTANCE.createRepository
 		pcmRepo_forward.entityName = "TestRepository"
@@ -113,7 +116,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
-		val umlRepo_backward = UML_GENERATED_MEDIA_STORE_MODEL_PATH.modelVuri.EMFUri.testResource.contents.head as Model
+		val umlRepo_backward = getPlatformModelUri(Path.of(UML_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.head as Model
 		simulateRepositoryInsertion_UML(umlRepo_backward, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
@@ -121,11 +124,11 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		
 		//expect 3 differences because of id changes
 		val comparison = compare(PCM_GENERATED_MEDIA_STORE_MODEL_PATH, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 3, comparison.differences.size)
+		assertEquals(3, comparison.differences.size, "Encountered differences after round-trip batch creation (that was kind of expected).")
 	}
 	
 	@Test
-	@Ignore
+	@Disabled
 	def void testMinimalRepositoryWithCompositeTypeRoundtrip_UML2PCM2UML() {
 		var umlRepo_forward = UMLFactory.eINSTANCE.createModel
 		umlRepo_forward.name = "umlrootmodel"
@@ -139,14 +142,14 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassApplicationTest {
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
-		val pcmRepo_forward = PCM_GENERATED_MEDIA_STORE_MODEL_PATH.modelVuri.EMFUri.testResource.contents.head as Repository
+		val pcmRepo_forward = getPlatformModelUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.head as Repository
 		simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		
 		//expect 0 differences because there are no changed IDs on the uml side
 		val comparison = compare(UML_GENERATED_MEDIA_STORE_MODEL_PATH, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
-		assertEquals("Encountered differences after round-trip batch creation (that was kind of expected).", 0, comparison.differences.size)
+		assertEquals(0, comparison.differences.size, "Encountered differences after round-trip batch creation (that was kind of expected).")
 	}
 	
 }
