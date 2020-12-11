@@ -1,6 +1,5 @@
 package tools.vitruv.applications.pcmumlclass.mapping
 
-import org.apache.commons.lang3.StringUtils
 import tools.vitruv.extensions.dslsruntime.mappings.updates.MappingUpdateTransformation
 
 class MappingUpdateUtils {
@@ -59,14 +58,14 @@ class MappingUpdateUtils {
 			override transformToInterchangeableValue() {
 				if (suffixInInterchangeableValue) {
 					[
-						if (StringUtils.endsWith((it as String), DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
+						if ((it as String).endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
 							it
 						} else {
 							(it as String) + DefaultLiterals.IMPLEMENTATION_SUFFIX
 						}
 					]
 				} else {
-					[StringUtils.removeEnd((it as String), DefaultLiterals.IMPLEMENTATION_SUFFIX)]
+					[(it as String).substring(0, (it as String).length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length)]
 				}
 			}
 
@@ -79,7 +78,7 @@ class MappingUpdateUtils {
 					}
 				} else {
 					if (suffixInInterchangeableValue) {
-						[StringUtils.removeEnd((it as String), DefaultLiterals.IMPLEMENTATION_SUFFIX)]
+						[(it as String).substring(0, (it as String).length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length)]
 					} else {
 						[it]
 					}
