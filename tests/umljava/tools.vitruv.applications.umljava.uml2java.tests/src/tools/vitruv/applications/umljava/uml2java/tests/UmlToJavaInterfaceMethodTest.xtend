@@ -5,12 +5,13 @@ import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParame
 import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import static org.junit.Assert.*;
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
-import org.junit.Test
-import org.junit.Before
 import org.emftext.language.java.types.TypesFactory
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This class provides basic tests for creating, deleting and changing traits of interface methods.
@@ -28,7 +29,7 @@ class UmlToJavaInterfaceMethodTest extends Uml2JavaTransformationTest {
     static var org.eclipse.uml2.uml.Class typeClass;
     static var org.eclipse.uml2.uml.Operation uOperation;
     
-    @Before
+    @BeforeEach
     def void before() {
         uInterface = createSimpleUmlInterface(rootElement, INTERFACE_NAME);
         uOperation = createUmlInterfaceOperation(IOPERATION_NAME, null, null);

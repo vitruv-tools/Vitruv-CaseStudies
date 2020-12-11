@@ -1,15 +1,17 @@
 package tools.vitruv.applications.umljava.java2uml.tests
 
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import org.junit.Before
-import static org.junit.Assert.*;
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.junit.jupiter.api.BeforeEach
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This class contains test cases for the creation, renaming and deleting of interface methods.
@@ -29,7 +31,7 @@ class JavaToUmlInterfaceMethodTest extends Java2UmlTransformationTest {
     static var org.emftext.language.java.classifiers.Class typeClass;
     static var org.emftext.language.java.members.InterfaceMethod jMeth;
     
-    @Before
+    @BeforeEach
     def void before() {
         jInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_NAME)

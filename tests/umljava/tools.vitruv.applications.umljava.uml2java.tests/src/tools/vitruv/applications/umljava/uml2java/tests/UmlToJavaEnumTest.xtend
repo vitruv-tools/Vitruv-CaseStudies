@@ -3,18 +3,19 @@ package tools.vitruv.applications.umljava.uml2java.tests
 import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
-import org.junit.Before
-import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * A Test class for creating, renaming and deleting enums.
@@ -36,7 +37,7 @@ class UmlToJavaEnumTest extends Uml2JavaTransformationTest {
 	static val enumLiterals1 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_1)
 	static val enumLiterals2 = createUmlEnumLiteralsFromList(ENUM_LITERAL_NAMES_2)
 	
-	@Before
+	@BeforeEach
 	def void before() {
 		uEnum = createUmlEnumAndAddToPackage(rootElement, ENUM_NAME, VisibilityKind.PUBLIC_LITERAL, enumLiterals1)
 		saveAndSynchronizeChanges(uEnum)

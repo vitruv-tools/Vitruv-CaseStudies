@@ -1,12 +1,12 @@
 package tools.vitruv.applications.umljava.java2uml.constructionsimulationtest
 
-import org.eclipse.emf.common.util.URI
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.File
 import org.apache.commons.io.FilenameUtils
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import java.util.List
+import org.eclipse.emf.common.util.URI
 
 /**
  * Test class for the reconstruction of existing java models
@@ -45,7 +45,7 @@ class JavaConstructionSimulationTest extends Java2UmlTransformationTest {
         createAndSyncPackageInfo(directoryContents, directoryPath, namespace)
             
         for (file : directoryContents.filter["java".equals(FilenameUtils.getExtension(name))].filter[!name.equals("package-info.java")]) {
-            val res = getModelResource(URI.createFileURI(file.path)).allContents.head
+            val res = resourceAt(URI.createFileURI(file.path)).allContents.head
             createAndSynchronizeModel(file.path, res)
         }
         for (file : directoryContents.filter[it.isDirectory]) {
@@ -108,7 +108,7 @@ class JavaConstructionSimulationTest extends Java2UmlTransformationTest {
     def private void loadFirstFileWithTheName(File[] fileList, String name) {
         val file = fileList.findFirst[it.name.equals(name)]
         if (file !== null && file.exists) {
-            val res = getModelResource(URI.createFileURI(file.path)).allContents.head
+            val res = resourceAt(URI.createFileURI(file.path)).allContents.head
             createAndSynchronizeModel(file.path, res)
         }
     }
@@ -121,7 +121,7 @@ class JavaConstructionSimulationTest extends Java2UmlTransformationTest {
         } else {
             packageInfoFile = packageInfos.head
         }
-        val packageInfoRes = getModelResource(URI.createFileURI(packageInfoFile.path)).allContents.head
+        val packageInfoRes = resourceAt(URI.createFileURI(packageInfoFile.path)).allContents.head
         createAndSynchronizeModel(packageInfoFile.path, packageInfoRes)
     }
 }

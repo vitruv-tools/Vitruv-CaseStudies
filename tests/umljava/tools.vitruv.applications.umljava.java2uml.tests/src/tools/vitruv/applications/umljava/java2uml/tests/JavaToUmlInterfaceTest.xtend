@@ -3,14 +3,16 @@ package tools.vitruv.applications.umljava.java2uml.tests
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.classifiers.Interface
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import org.junit.jupiter.api.BeforeEach
+
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * A Test class for interface tests. Checks their creation, renaming, deleting and the 
@@ -27,7 +29,7 @@ class JavaToUmlInterfaceTest extends Java2UmlTransformationTest {
     
     static var Interface jInterface
     
-    @Before
+    @BeforeEach
     def void before() {
         jInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
     }

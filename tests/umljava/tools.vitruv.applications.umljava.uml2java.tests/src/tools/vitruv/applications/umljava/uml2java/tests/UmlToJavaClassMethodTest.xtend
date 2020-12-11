@@ -6,18 +6,20 @@ import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
-import org.junit.Before
-import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlOperationAndParameterUtil.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * A Test class to test class methods and its traits.
@@ -43,7 +45,7 @@ class UmlToJavaClassMethodTest extends Uml2JavaTransformationTest {
      * Initializes two uml classes and a primitive type. One uml class contains 
      * an operation with a parameter.
      */
-    @Before
+    @BeforeEach
     def void before() {
         uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
         typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);

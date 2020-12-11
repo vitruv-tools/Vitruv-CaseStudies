@@ -4,17 +4,20 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.classifiers.Enumeration
 import org.emftext.language.java.types.TypesFactory
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import org.junit.jupiter.api.BeforeEach
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This class contains Tests for creating, deleting and renaming enums.
@@ -36,7 +39,7 @@ class JavaToUmlEnumTest extends Java2UmlTransformationTest {
     static val enumConstants1 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_1)
     static val enumConstants2 = createJavaEnumConstantsFromList(ENUM_LITERAL_NAMES_2)
     
-    @Before
+    @BeforeEach
     def void before() {
         jEnum = createJavaEnumWithCompilationUnit(ENUM_NAME, JavaVisibility.PUBLIC, enumConstants1)
     }

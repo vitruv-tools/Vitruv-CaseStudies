@@ -5,19 +5,21 @@ import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.types.TypesFactory
-import org.junit.Before
-import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.util.temporary.uml.UmlTypeUtil
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This Test class checks the creating, deleting and modifying of attributes in den uml to java
@@ -37,7 +39,7 @@ class UmlToJavaAttributeTest extends Uml2JavaTransformationTest {
     static var Class typeClass;
     static var PrimitiveType pType
     
-    @Before
+    @BeforeEach
     def void before() {
         uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
         typeClass = createSimpleUmlClass(rootElement, TYPE_CLASS);

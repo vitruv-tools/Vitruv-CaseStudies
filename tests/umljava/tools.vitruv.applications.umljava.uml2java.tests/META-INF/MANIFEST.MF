@@ -8,7 +8,8 @@ Fragment-Host: tools.vitruv.applications.umljava.uml2java
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.testutils,
  tools.vitruv.framework.change.processing,
- org.junit
+ org.hamcrest.core,
+ org.junit.jupiter.api
 Export-Package: tools.vitruv.applications.umljava.uml2java,
  tools.vitruv.applications.umljava.uml2java.constructionsimulationtest;x-internal:=true,
  tools.vitruv.applications.umljava.uml2java.tests;x-internal:=true

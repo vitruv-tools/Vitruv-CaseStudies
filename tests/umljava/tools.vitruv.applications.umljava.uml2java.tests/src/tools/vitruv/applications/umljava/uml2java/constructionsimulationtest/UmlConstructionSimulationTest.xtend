@@ -1,6 +1,6 @@
 package tools.vitruv.applications.umljava.uml2java.constructionsimulationtest
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.common.util.URI
