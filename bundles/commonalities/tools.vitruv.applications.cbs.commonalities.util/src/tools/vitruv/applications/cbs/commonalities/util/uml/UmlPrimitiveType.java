@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.URI;
@@ -32,9 +31,6 @@ public enum UmlPrimitiveType {
 	UNLIMITED("UnlimitedNatural");
 
 	private static final Logger logger = LogManager.getLogger(UmlPrimitiveType.class);
-	static {
-		logger.setLevel(Level.TRACE);
-	}
 
 	private static final Map<String, UmlPrimitiveType> byUmlTypeName = new HashMap<>();
 
