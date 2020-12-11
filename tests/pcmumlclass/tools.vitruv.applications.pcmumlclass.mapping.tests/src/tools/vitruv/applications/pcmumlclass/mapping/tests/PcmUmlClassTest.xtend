@@ -28,17 +28,24 @@ import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.Repository
 import tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
-import tools.vitruv.domains.pcm.PcmDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.extensions.dslsruntime.reactions.helper.ReactionsCorrespondenceHelper
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import tools.vitruv.testutils.VitruviusApplicationTest
 
-import static org.junit.Assert.*
+import tools.vitruv.testutils.LegacyVitruvApplicationTest
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import java.nio.file.Path
 
-abstract class PcmUmlClassTest extends VitruviusApplicationTest {
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
 
-	override protected createChangePropagationSpecifications() {
+import static org.hamcrest.MatcherAssert.assertThat;
+import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
+import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
+
+abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
+
+	override protected getChangePropagationSpecifications() {
 		return #[
 			new CombinedPcmToUmlChangePropagationSpecification,
 			new CombinedUmlToPcmChangePropagationSpecification
@@ -52,25 +59,33 @@ abstract class PcmUmlClassTest extends VitruviusApplicationTest {
 		return testResourceSet.getResource(uri, true)
 	}
 
-	override protected getVitruvDomains() {
-		return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain];
-	}
-
-	override protected cleanup() {
+	@AfterEach
+	def protected void cleanup() {
 		testResourceSet = null
 		helper = null
 	}
 
-	override protected setup() {
+	@BeforeEach
+	def protected void setup() {
 		testResourceSet = new ResourceSetImpl();
-		helper = new PcmUmlClassTestHelper(correspondenceModel, [uri|uri.getModelElement], [uri|uri.modelResource])
+		helper = new PcmUmlClassTestHelper(correspondenceModel, [uri|uri.resourceAt])
+	}
+	
+	def protected void assertModelExists(String modelPathWithinProject) {
+		val modelUri = getPlatformModelUri(Path.of(modelPathWithinProject))
+		assertThat(modelUri, isResource)
+	}
+
+	def protected void assertModelNotExists(String modelPathWithinProject) {
+		val modelUri = getPlatformModelUri(Path.of(modelPathWithinProject))
+		assertThat(modelUri, isNoResource)
 	}
 
 	protected def EObject reloadResourceAndReturnRoot(EObject modelElement) {
 		stopRecordingChanges(modelElement)
 		val resourceURI = modelElement.eResource.URI
 		modelElement.eResource.unload
-		val rootElement = getModelResource(resourceURI).contents.head
+		val rootElement = resourceAt(resourceURI).contents.head
 		if (rootElement !== null) {
 			startRecordingChanges(rootElement)
 		}
@@ -322,8 +337,8 @@ abstract class PcmUmlClassTest extends VitruviusApplicationTest {
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
 	def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath) {
-		val originalUri = originalWithinProjektPath.modelVuri.EMFUri
-		val generatedUri = generatedWithinProjektPath.modelVuri.EMFUri
+		val originalUri = getPlatformModelUri(Path.of(originalWithinProjektPath))
+		val generatedUri = getPlatformModelUri(Path.of(generatedWithinProjektPath))
 		return compare(originalUri, generatedUri)
 	}
 	

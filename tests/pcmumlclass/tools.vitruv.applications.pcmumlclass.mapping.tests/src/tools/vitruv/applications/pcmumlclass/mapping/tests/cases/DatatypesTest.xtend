@@ -2,7 +2,6 @@ package tools.vitruv.applications.pcmumlclass.mapping.tests.cases
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -12,8 +11,12 @@ import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
-import static org.junit.Assert.*
-import org.junit.Ignore
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
 
 class DatatypesTest extends PcmUmlClassTest{
 		static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
@@ -99,7 +102,7 @@ class DatatypesTest extends PcmUmlClassTest{
 		checkCompositeDataTypeConcept(pcmCompositeType)
 	}
 	
-	@Ignore("Not working properly yet")
+	@Disabled("Not working properly yet")
 	@Test
 	def void testCreateCompositeDataType_withParent_UML() {
 		var pcmRepository = createRepositoryConcept()
@@ -123,7 +126,7 @@ class DatatypesTest extends PcmUmlClassTest{
 		checkCompositeDataTypeConcept(umlCompositeTypeParentClass)
 	}
 	
-	@Ignore("Not working properly yet")
+	@Disabled("Not working properly yet")
 	@Test
 	def void testCreateCompositeDataType_withParent_PCM() {
 		var pcmRepository = createRepositoryConcept()

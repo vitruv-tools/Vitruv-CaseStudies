@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmumlclass.mapping.tests.cases
 
 import org.eclipse.uml2.uml.InterfaceRealization
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.OperationProvidedRole
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -9,7 +8,11 @@ import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassApplicationTestHelper
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
-import static org.junit.Assert.*
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+
 class ProvidedRoleTest extends PcmUmlClassTest{
 	
 	 static val PROVIDED_ROLE_NAME = "testProvidedRole"

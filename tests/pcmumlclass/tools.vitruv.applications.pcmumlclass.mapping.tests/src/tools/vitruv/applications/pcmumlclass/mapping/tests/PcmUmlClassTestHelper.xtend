@@ -53,12 +53,11 @@ class PcmUmlClassTestHelper {
 	public val PrimitiveType UML_UNLIMITED_NATURAL
 
 	val CorrespondenceModel correspondenceModel
-	val Function<URI, EObject> eObjectRetriever
+	val Function<URI, Resource> resourceRetriever
 
-	new(CorrespondenceModel testCorrespondenceModel, Function<URI, EObject> eObjectRetriever,
-		Function<URI, Resource> resourceRetriever) {
+	new(CorrespondenceModel testCorrespondenceModel, Function<URI, Resource> resourceRetriever) {
 		this.correspondenceModel = testCorrespondenceModel
-		this.eObjectRetriever = eObjectRetriever
+		this.resourceRetriever = resourceRetriever
 
 		val pcmPrimitiveTypes = PcmDataTypeUtil.getPcmPrimitiveTypes(resourceRetriever)
 		PCM_BOOL = pcmPrimitiveTypes.findFirst[it.type === PrimitiveTypeEnum.BOOL]
@@ -88,8 +87,8 @@ class PcmUmlClassTestHelper {
 	 * @return the object instance in the ResourceSet of this test
 	 */
 	def <T extends EObject> getModifiableInstance(T original) {
-		val originalURI = EcoreUtil.getURI(original)
-		return eObjectRetriever.apply(originalURI) as T
+		val originalURI = EcoreUtil.getURI(original) 
+		return resourceRetriever.apply(originalURI.trimFragment).getEObject(originalURI.fragment) as T
 	}
 
 //	def public <T extends EObject> Set<T> getCorrSet(EObject source, Class<T> typeFilter) {
