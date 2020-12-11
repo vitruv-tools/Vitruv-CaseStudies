@@ -5,7 +5,6 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Type
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.Repository
@@ -16,9 +15,15 @@ import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassApplicatio
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
-import org.junit.Ignore
 import org.apache.log4j.Logger
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
 
 class SignatureTest extends PcmUmlClassTest {
 	static val logger = Logger.getLogger(SignatureTest)
@@ -115,27 +120,27 @@ class SignatureTest extends PcmUmlClassTest {
 
 		checkSignatureConcept(umlOperation)
 		var reloadedUmlType = helper.getModifiableInstance(umlType)
-		assertNotNull("The DataType should not be null after reload", reloadedUmlType)
+		assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
 		assertTrue(EcoreUtil.equals(umlOperation.type, reloadedUmlType))
 		assertEquals(lower, umlOperation.lower)
 		assertEquals(upper, umlOperation.upper)
 		assertEquals(
-			"The Operation should have only a return parameter, since no other parameters were supposed to be added by this test.",
 			1,
-			umlOperation.ownedParameters.size
+			umlOperation.ownedParameters.size,
+			"The Operation should have only a return parameter, since no other parameters were supposed to be added by this test."
 		)
 	}
 
-	@Ignore("Not working properly yet")
+	@Disabled("Not working properly yet")
 	@Test
 	def void testCreateSignatureConcept_UML_primitiveReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
 		pcmRepository = _testCreateSignatureConcept_UML(pcmRepository, helper.UML_STRING)
-		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_STRING)
+		assertNotNull(helper.UML_STRING, "Initialization of PrimitiveTypes seems to have failed")
 		_testReturnTypePropagation_UML(pcmRepository, helper.UML_STRING, 1, 1)
 	}
 
-	@Ignore("Not working properly yet")
+	@Disabled("Not working properly yet")
 	@Test
 	def void testCreateSignatureConcept_UML_compositeReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
@@ -144,7 +149,7 @@ class SignatureTest extends PcmUmlClassTest {
 		_testReturnTypePropagation_UML(pcmRepository, type, 1, 1)
 	}
 
-	@Ignore("Not working properly yet")
+	@Disabled("Not working properly yet")
 	@Test
 	def void testCreateSignatureConcept_UML_collectionReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
@@ -176,7 +181,7 @@ class SignatureTest extends PcmUmlClassTest {
 		checkSignatureConcept(pcmSignature)
 		assertTrue(pcmSignature.entityName == TEST_SIGNATURE_NAME)
 		val reloadedPcmType = helper.getModifiableInstance(pcmType)
-		assertNotNull("The DataType should not be null after reload", reloadedPcmType)
+		assertNotNull(reloadedPcmType, "The DataType should not be null after reload")
 		assertTrue(EcoreUtil.equals(pcmSignature.returnType__OperationSignature, reloadedPcmType))
 
 //		assertEquals(
@@ -186,11 +191,11 @@ class SignatureTest extends PcmUmlClassTest {
 //		)
 	}
 
-	@Ignore("Not working properly yet")
+	@Disabled("Not working properly yet")
 	@Test
 	def void testCreateSignatureConcept_PCM_primitiveReturnType() {
 		var pcmRepository = createRepositoryWithInterface()
-		assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_STRING)
+		assertNotNull(helper.PCM_STRING, "Initialization of PrimitiveTypes seems to have failed")
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.PCM_STRING)
 	}
 	
@@ -200,7 +205,7 @@ class SignatureTest extends PcmUmlClassTest {
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.getPcmCompositeDataType(pcmRepository))
 	}
 
-	@Ignore("Not working properly yet")
+	@Disabled("Not working properly yet")
 	@Test
 	def void testCreateSignatureConcept_PCM_collectionReturnType() {
 		var pcmRepository = createRepositoryWithInterface()

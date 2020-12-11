@@ -4,7 +4,6 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryComponent
@@ -15,7 +14,10 @@ import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassApplicatio
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class RepositoryComponentTest extends PcmUmlClassTest{
 	

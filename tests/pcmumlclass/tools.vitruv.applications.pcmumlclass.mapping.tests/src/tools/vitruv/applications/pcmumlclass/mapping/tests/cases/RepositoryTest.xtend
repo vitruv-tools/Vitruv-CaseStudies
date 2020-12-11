@@ -4,7 +4,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
@@ -12,8 +11,12 @@ import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassApplicatio
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
 import org.apache.log4j.Logger
+
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class RepositoryTest extends PcmUmlClassTest {
 	static val logger = Logger.getLogger(RepositoryTest)

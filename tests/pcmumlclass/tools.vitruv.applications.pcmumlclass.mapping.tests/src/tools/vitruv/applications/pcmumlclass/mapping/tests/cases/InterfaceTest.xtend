@@ -2,7 +2,6 @@ package tools.vitruv.applications.pcmumlclass.mapping.tests.cases
 
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Interface
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -12,7 +11,10 @@ import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Test
 
 class InterfaceTest extends PcmUmlClassTest {
 	static val TEST_INTERFACE_NAME = "TestInterface"
