@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruvius PCM-Java EJB Transformations
+Bundle-Name: Vitruv PCM-Java EJB Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.ejbtransformations
 Bundle-Version: 0.2.0.qualifier
