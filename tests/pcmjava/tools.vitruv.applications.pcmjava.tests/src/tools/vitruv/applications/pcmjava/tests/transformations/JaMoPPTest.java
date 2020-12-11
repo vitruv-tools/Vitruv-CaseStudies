@@ -62,6 +62,7 @@ public class JaMoPPTest {
         resource = resourceSet.createResource(uri);
         resource.getContents().add(jaMoPPCompilationUnit);
         resource.save(null);
+        resource.delete(null);
     }
 
     @Test
@@ -76,6 +77,7 @@ public class JaMoPPTest {
         final Resource resource = resourceSet.createResource(uri);
         resource.getContents().add(jaMoPPPackage);
         resource.save(null);
+        resource.delete(null);
     }
 
     @Test
@@ -99,6 +101,7 @@ public class JaMoPPTest {
         jaIf.getMembers().add(ifMethod);
         resource.save(null);
         assertTrue("Resource of interface method is null", null != ifMethod.eResource());
+        resource.delete(null);
     }
 
     @Test
