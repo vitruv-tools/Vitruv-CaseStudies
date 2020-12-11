@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruvius PCM-Java POJO Transformations Tests Java -> PCM
+Bundle-Name: Vitruv PCM-Java POJO Application Tests Java -> PCM
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests
 Bundle-Version: 0.2.0.qualifier
