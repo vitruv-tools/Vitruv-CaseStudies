@@ -3,8 +3,6 @@ package tools.vitruv.applications.pcmumlclassjava.tests
 import org.apache.log4j.Logger
 import org.eclipse.emf.common.util.URI
 import org.eclipse.uml2.uml.Model
-import org.junit.Ignore
-import org.junit.Test
 import org.palladiosimulator.pcm.repository.ParameterModifier
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -12,10 +10,12 @@ import tools.vitruv.applications.pcmumlclass.DefaultLiterals
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaStandardType.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+import static org.junit.jupiter.api.Assertions.assertNotNull
 
 /**
  * Model creation tests, to test the set of transformations as a whole. 
@@ -173,7 +173,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	
 	// REMARK: Currently failing due to incomplete Java UUIDs
 	@Test
-	@Ignore
+	@Disabled
 	def void testMediaStoreCreation_JavaInserted_reducedAndManuallyReplicated() {		
 		val REPOSITORY_PKG_NAME = "defaultRepository"
 		val CONTRACTS_PKG_NAME = "contracts"
@@ -244,7 +244,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	
 	// REMARK: Only for manual test execution
 	@Test
-	@Ignore
+	@Disabled
 	def void testMediaStoreCreation_PcmInserted() {
 		setInteractiveUserInteractor
 		
@@ -258,7 +258,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	
 	// REMARK: Only for manual test execution
 	@Test
-	@Ignore
+	@Disabled
 	def void testMinimalRepository_PcmUmlJava() {
 		setInteractiveUserInteractor
 		
