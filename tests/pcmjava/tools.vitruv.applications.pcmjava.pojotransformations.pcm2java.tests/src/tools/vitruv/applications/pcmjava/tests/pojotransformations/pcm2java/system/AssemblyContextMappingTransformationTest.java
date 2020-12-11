@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.system;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.repository.BasicComponent;

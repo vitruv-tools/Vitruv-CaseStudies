@@ -1,14 +1,13 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Set;
 
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 
@@ -16,6 +15,8 @@ import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationTest {
 
@@ -86,8 +87,8 @@ public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationT
                 foundDatatypesPackage = true;
             }
         }
-        assertTrue("No correspondeing repository package found", foundRepositoryPackage);
-        assertTrue("No correspondeing datatype package found", foundDatatypesPackage);
-        assertTrue("No correspondeing contracts package found", foundContractsPackage);
+        assertTrue(foundRepositoryPackage, "No correspondeing repository package found");
+        assertTrue(foundDatatypesPackage, "No correspondeing datatype package found");
+        assertTrue(foundContractsPackage, "No correspondeing contracts package found");
     }
 }

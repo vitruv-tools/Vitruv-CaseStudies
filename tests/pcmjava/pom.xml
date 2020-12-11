@@ -15,31 +15,11 @@
 
 	<modules>
 		<module>tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests</module>
-		<!--<module>tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests</module>-->
+		<module>tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests</module>
 		<module>tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests</module>
 		<!--The following plugin is only for running a complete test suite within Eclipse, but not necessary here -->
 		<!--<module>tools.vitruv.applications.pcmjava.tests</module>-->
 		<module>tools.vitruv.applications.pcmjava.tests.util</module>
 	</modules>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<useUIHarness>true</useUIHarness>
-					<failIfNoTests>false</failIfNoTests>
-					<!-- Test suites explicitly defined as they are sumsuming each other and would lead to redundant test execution -->
-					<includes>
-						<include>**/Pcm2JavaTestSuite.class</include>
-						<include>**/Java2PcmTestSuite.class</include>
-						<include>**/EjbJava2PcmTransformationsTestSuite.class</include>
-					</includes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	
 </project>

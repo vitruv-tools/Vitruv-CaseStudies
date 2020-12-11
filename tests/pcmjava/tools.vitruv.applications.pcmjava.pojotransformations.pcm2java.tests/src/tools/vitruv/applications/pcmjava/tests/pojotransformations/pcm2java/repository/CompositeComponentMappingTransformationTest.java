@@ -4,8 +4,7 @@ import java.io.IOException;
 
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.containers.Package;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.palladiosimulator.pcm.core.composition.AssemblyContext;
 import org.palladiosimulator.pcm.repository.BasicComponent;
@@ -18,6 +17,8 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory;
 
 import tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.Pcm2JavaTransformationTest;
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CompositeComponentMappingTransformationTest extends Pcm2JavaTransformationTest {
 
@@ -71,7 +72,7 @@ public class CompositeComponentMappingTransformationTest extends Pcm2JavaTransfo
         final CompositeComponent compositeComponent = this.createAndSyncRepoAndCompositeComponent();
         final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(
                 compositeComponent.getRepository__RepositoryComponent(), Pcm2JavaTestUtils.INTERFACE_NAME);
-        Assert.assertNotNull(opInterface);
+        assertNotNull(opInterface);
     }
 
     private CompositeComponent createAndSyncRepoAndCompositeComponent() throws IOException {

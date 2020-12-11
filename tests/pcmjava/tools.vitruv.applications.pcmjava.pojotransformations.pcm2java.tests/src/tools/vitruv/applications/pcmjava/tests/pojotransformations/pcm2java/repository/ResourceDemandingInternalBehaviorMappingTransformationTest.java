@@ -1,12 +1,10 @@
 package tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 
 import org.emftext.language.java.members.ClassMethod;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.palladiosimulator.pcm.repository.BasicComponent;
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.seff.ResourceDemandingInternalBehaviour;
@@ -17,11 +15,13 @@ import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ResourceDemandingInternalBehaviorMappingTransformationTest extends Pcm2JavaTransformationTest {
 
 	private static final String RESOURCE_DEMANDING_INTERNAL_BEHAVIOUR_CLASS_METHOD = "resourceDemandingInternalBehaviourClassMethod";
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testCreateResourceDemandingInternalBehavior() throws Throwable {
 		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
@@ -41,8 +41,8 @@ public class ResourceDemandingInternalBehaviorMappingTransformationTest extends 
 			final String expectedMethodName) throws Throwable {
 		final ClassMethod classMethod = claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
 				this.getCorrespondenceModel(), resourceDemandingInternalBehaviour, ClassMethod.class));
-		assertEquals("The class method should have the same name as the user selected", classMethod.getName(),
-				expectedMethodName);
+		assertEquals(classMethod.getName(), expectedMethodName,
+				"The class method should have the same name as the user selected");
 	}
 
 	private ResourceDemandingInternalBehaviour createAndSyncResourceDemandingInternalBehavior(
