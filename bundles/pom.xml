@@ -15,7 +15,9 @@
 
 	<modules>
 		<module>pcmjava</module>
-		<module>pcmumlclass</module>
+		<module>tools.vitruv.applications.pcmumlclass</module>
+		<module>tools.vitruv.applications.pcmumlclass.mapping</module>
+		<module>tools.vitruv.applications.pcmumlclass.mapping.sources</module>
 		<module>pcmumlcomponents</module>
 		<module>umlclassumlcomponents</module>
 		<module>tools.vitruv.applications.umljava</module>
