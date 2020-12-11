@@ -6,10 +6,11 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationT
 
 import static com.google.common.base.Preconditions.*
 import static org.hamcrest.MatcherAssert.assertThat
-import static org.junit.Assert.*
 import static tools.vitruv.testutils.matchers.ModelMatchers.*
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlFilePathHelper.*
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertNotNull
 
 class UmlTestHelper {
 
@@ -30,10 +31,9 @@ class UmlTestHelper {
 	}
 
 	def getUmlRootModel(Resource umlModelResource) {
-		assertTrue("Expecting resource to contain exactly 1 root object: " + umlModelResource.URI,
-			umlModelResource.contents.size == 1)
+		assertTrue(umlModelResource.contents.size == 1, "Expecting resource to contain exactly 1 root object: " + umlModelResource.URI)
 		val umlModel = umlModelResource.contents.head as Model
-		assertNotNull("Could not find UML root model in resource: " + umlModelResource.URI, umlModel)
+		assertNotNull(umlModel, "Could not find UML root model in resource: " + umlModelResource.URI)
 		return umlModel
 	}
 
