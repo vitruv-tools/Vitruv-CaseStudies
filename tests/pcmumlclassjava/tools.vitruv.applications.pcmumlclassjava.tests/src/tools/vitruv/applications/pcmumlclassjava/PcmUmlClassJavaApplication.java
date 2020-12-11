@@ -5,8 +5,8 @@ import java.util.Set;
 
 import tools.vitruv.applications.pcmumlclass.CombinedPcmToUmlClassReactionsChangePropagationSpecification;
 import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChangePropagationSpecification;
-import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification;
-import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification;
+import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification;
+import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification;
 import tools.vitruv.domains.java.JavaDomainProvider;
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
