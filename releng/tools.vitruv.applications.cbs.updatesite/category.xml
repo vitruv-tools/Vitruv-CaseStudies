@@ -38,7 +38,7 @@
          Applications for Vitruv and Component-based Systems
       </description>
    </category-def>
-   <repository-reference location="http://https://kit-sdq.github.io/updatesite/nightly/asem/" enabled="true" />
-   <repository-reference location="http://https://vitruv-tools.github.io/updatesite/nightly/framework/" enabled="true" />
-   <repository-reference location="http://https://vitruv-tools.github.io/updatesite/nightly/domains/" enabled="true" />
+   <repository-reference location="http://kit-sdq.github.io/updatesite/nightly/asem/" enabled="true" />
+   <repository-reference location="http://vitruv-tools.github.io/updatesite/nightly/framework/" enabled="true" />
+   <repository-reference location="http://vitruv-tools.github.io/updatesite/nightly/domains/cbs/" enabled="true" />
 </site>
