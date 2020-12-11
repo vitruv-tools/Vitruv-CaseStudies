@@ -16,6 +16,7 @@ import org.emftext.language.java.members.Member
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 import org.eclipse.uml2.uml.UMLPackage
 import java.util.ArrayList
+import org.junit.jupiter.api.BeforeEach
 
 /**
  * Abstract Class for Java To UML Tests. Contains functions to create Java-CompilationUnits 
@@ -28,16 +29,13 @@ abstract class Java2UmlTransformationTest extends AbstractUmlJavaTest {
     static val UMLMODELPATH = "rootModelDirectory" //Directory of the Uml Model Path used in the java2uml tests
     static val UMLMODELNAME = "rootModelName" //Name of the Uml Model used in the java2uml tests
 	
-	override protected cleanup() {
-
-    }
-    
-    override protected setup() {
+	@BeforeEach    
+    def protected setup() {
         userInteractor.addNextTextInput(UMLMODELNAME)
         userInteractor.addNextTextInput(UMLMODELPATH)
     }
 	
-	override protected createChangePropagationSpecifications() {
+	override protected getChangePropagationSpecifications() {
 		return #[new JavaToUmlChangePropagationSpecification()]; 
 	}
 	

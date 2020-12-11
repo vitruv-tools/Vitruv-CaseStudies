@@ -3,17 +3,22 @@ package tools.vitruv.applications.umljava.java2uml.tests
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import org.junit.jupiter.api.BeforeEach
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * A Test class to test classes and their traits.
@@ -30,7 +35,7 @@ class JavaToUmlClassTest extends Java2UmlTransformationTest {
 
 	static var org.emftext.language.java.classifiers.Class jClass;
 
-	@Before
+	@BeforeEach
 	def void before() {
 		jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME);
 	}

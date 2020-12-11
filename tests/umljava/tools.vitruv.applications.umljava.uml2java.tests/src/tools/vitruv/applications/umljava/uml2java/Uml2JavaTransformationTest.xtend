@@ -8,6 +8,11 @@ import org.eclipse.uml2.uml.UMLFactory
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
 import org.eclipse.uml2.uml.Operation
 import tools.vitruv.applications.umljava.testutil.AbstractUmlJavaTest
+import org.junit.jupiter.api.BeforeEach
+import java.nio.file.Path
+import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
+import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
+import static org.hamcrest.MatcherAssert.assertThat
 
 /**
  * Abstract super class for uml to java test cases.
@@ -21,33 +26,31 @@ abstract class Uml2JavaTransformationTest extends AbstractUmlJavaTest {
 	static val MODEL_FILE_EXTENSION = "uml";
 	static val MODEL_NAME = "model"; //name of the uml rootmodel
 
-	private def String getProjectModelPath(String modelName) {
-		"model/" + modelName + "." + MODEL_FILE_EXTENSION;
+	private def Path getProjectModelPath(String modelName) {
+		Path.of("model").resolve(modelName + "." + MODEL_FILE_EXTENSION);
 	}
 	
 	protected def Model getRootElement() {
-		return getFirstRootElement(MODEL_NAME.projectModelPath) as Model;
+		return Model.from(MODEL_NAME.projectModelPath);
 	}
 	
-	override protected createChangePropagationSpecifications() {
+	override protected getChangePropagationSpecifications() {
 		return #[new UmlToJavaChangePropagationSpecification()]; 
 	}
 
-	override protected cleanup() {
-        
-    }
-    
-    override protected setup() {
+	@BeforeEach
+    def protected setup() {
         val umlModel = UMLFactory.eINSTANCE.createModel();
         umlModel.name = MODEL_NAME;
-        createAndSynchronizeModel(MODEL_NAME.projectModelPath, umlModel);
+        createAndSynchronizeModel(MODEL_NAME.projectModelPath.toString, umlModel);
     }
 
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {
-	    assertModelExists(buildJavaFilePath(fileName + ".java", namespaces));
+	    assertThat(getPlatformModelUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isResource)
 	}
+	
     def protected assertJavaFileNotExists(String fileName, String[] namespaces) {
-        assertModelNotExists(buildJavaFilePath(fileName + ".java", namespaces));
+       assertThat(getPlatformModelUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isNoResource)
     }
     
     /**

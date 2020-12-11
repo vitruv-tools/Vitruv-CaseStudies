@@ -1,13 +1,11 @@
 package tools.vitruv.applications.umljava.testutil
 
 import org.eclipse.emf.ecore.EObject
-import tools.vitruv.domains.java.JavaDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
-import tools.vitruv.testutils.VitruviusApplicationTest
 import org.apache.log4j.Logger
 import java.util.function.Function
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
+import tools.vitruv.testutils.LegacyVitruvApplicationTest
 
 /**
  * Abstract class for umljava tests in both directions.
@@ -15,16 +13,10 @@ import org.eclipse.emf.ecore.resource.Resource
  * 
  * @author Fei
  */
-abstract class AbstractUmlJavaTest extends VitruviusApplicationTest {
-    static val logger = Logger.getLogger(typeof(VitruviusApplicationTest).simpleName)
+abstract class AbstractUmlJavaTest extends LegacyVitruvApplicationTest {
+    static val logger = Logger.getLogger(typeof(LegacyVitruvApplicationTest).simpleName)
     
-    override protected getVitruvDomains() {
-        return #[new UmlDomainProvider().domain, new JavaDomainProvider().domain];
-    }
-
-	protected val Function<URI, Resource> resourceRetriever = [uri | uri.modelResource]
-    protected val Function<URI, EObject> elementRetriever = [uri | uri.modelElement] 
-
+	protected val Function<URI, Resource> resourceRetriever = [uri | uri.resourceAt]
     /**
      * Retrieves all corresponding objects of obj.
      * 

@@ -2,14 +2,18 @@ package tools.vitruv.applications.umljava.java2uml.tests
 
 import org.eclipse.uml2.uml.Package
 import org.emftext.language.java.classifiers.Class
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClassifierUtil.*
 import static tools.vitruv.domains.java.util.JavaPersistenceHelper.*
+import org.junit.jupiter.api.BeforeEach
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This class contains basis tests for java packages.
@@ -27,8 +31,8 @@ class JavaToUmlPackageTest extends Java2UmlTransformationTest {
     static var org.emftext.language.java.containers.Package jPackageLevel1
     static var Class jClass
     
-    override setup() {
-    	super.setup();
+    @BeforeEach
+    def void testSetup() {
         jPackageLevel1 = createJavaPackageAsModel(PACKAGE_LEVEL_1, null)
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)
         jPackageLevel1.compilationUnits += getContainingCompilationUnit(jClass)

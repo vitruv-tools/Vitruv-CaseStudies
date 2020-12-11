@@ -3,13 +3,15 @@ package tools.vitruv.applications.umljava.uml2java.tests
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.uml2.uml.Interface
-import org.junit.Before
-import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This class contains tests that deal with changes with interfaces.
@@ -25,7 +27,7 @@ class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
     static var Interface uInterface
     
     
-    @Before
+    @BeforeEach
     def void before() {
         uInterface = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
         saveAndSynchronizeChanges(rootElement)
@@ -77,7 +79,7 @@ class UmlToJavaInterfaceTest extends Uml2JavaTransformationTest {
         uInterface.generalizations.remove(0);
         saveAndSynchronizeChanges(rootElement);
         val jI = getCorrespondingInterface(uInterface)
-        assertTrue(jI.extends.size.toString, jI.extends.size == 1);
+        assertTrue(jI.extends.size == 1, jI.extends.size.toString);
         assertEquals(SUPERINTERFACENAME_2, getClassifierFromTypeReference(jI.extends.get(0)).name)
         assertJavaFileExists(SUPERINTERFACENAME_1, #[]);
     }

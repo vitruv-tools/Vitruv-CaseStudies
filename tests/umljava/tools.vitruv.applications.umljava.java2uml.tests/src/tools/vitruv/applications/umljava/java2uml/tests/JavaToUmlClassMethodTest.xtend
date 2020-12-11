@@ -2,11 +2,9 @@ package tools.vitruv.applications.umljava.java2uml.tests
 
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.ClassMethod
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 
-import static org.junit.Assert.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
@@ -17,6 +15,10 @@ import org.eclipse.uml2.uml.VisibilityKind
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.emftext.language.java.types.TypesFactory
 import org.emftext.language.java.parameters.OrdinaryParameter
+import org.junit.jupiter.api.BeforeEach
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * A test class to test the class method reactions.
@@ -45,7 +47,7 @@ class JavaToUmlClassMethodTest extends Java2UmlTransformationTest {
      * Initializes and synchronizes three classes. One class has two methods.
      * One of the methods owns a parameter.
      */
-    @Before
+    @BeforeEach
     def void before() {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME);
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_NAME);

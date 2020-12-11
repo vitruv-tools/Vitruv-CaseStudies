@@ -2,16 +2,19 @@ package tools.vitruv.applications.umljava.uml2java.tests
 
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.Before
-import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.getClassifierFromTypeReference
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This class provides tests for basic class tests in the uml to java direction
@@ -30,7 +33,7 @@ class UmlToJavaClassTest extends Uml2JavaTransformationTest {
 	
 	
 	
-	@Before
+	@BeforeEach
 	def void before() {
 	    uClass = createUmlClassAndAddToPackage(rootElement, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
         saveAndSynchronizeChanges(rootElement)
@@ -131,7 +134,7 @@ class UmlToJavaClassTest extends Uml2JavaTransformationTest {
         saveAndSynchronizeChanges(uClass);
         
         val jClass = getCorrespondingClass(uClass)
-        assertTrue(jClass.implements.size.toString, jClass.implements.size == 1);
+        assertTrue(jClass.implements.size == 1, jClass.implements.size.toString);
         assertEquals(INTERFACE_NAME2, getClassifierFromTypeReference(jClass.implements.get(0)).name)
         assertJavaFileExists(INTERFACE_NAME, #[]);
         assertClassEquals(uClass, jClass)

@@ -1,18 +1,19 @@
 package tools.vitruv.applications.umljava.uml2java.tests
 
-import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
-import org.junit.Before
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlPropertyAndAssociationUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static extension tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This test class contains basic test for associations.
@@ -27,7 +28,7 @@ class UmlToJavaAssociationTest extends Uml2JavaTransformationTest {
     static var org.eclipse.uml2.uml.Class uClass1
     static var org.eclipse.uml2.uml.Class uClass2
     
-    @Before
+    @BeforeEach
     def void before() {
         uClass1 = createSimpleUmlClass(rootElement, CLASSNAME_1)
         uClass2 = createSimpleUmlClass(rootElement, CLASSNAME_2)

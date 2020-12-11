@@ -2,14 +2,17 @@ package tools.vitruv.applications.umljava.uml2java.tests
 
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
 import tools.vitruv.applications.umljava.uml2java.Uml2JavaTransformationTest
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlClassifierAndPackageUtil.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+
+import static org.junit.jupiter.api.Assertions.assertNull
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * This test class contains basic test cases for package creation, renaming and deletion.
@@ -25,7 +28,7 @@ class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
     
     static var Package uPackageLevel1
 
-    @Before
+    @BeforeEach
     def void before() {
         uPackageLevel1 = createUmlPackageAndAddToSuperPackage(PACKAGE_LEVEL_1, rootElement)
         createUmlClassAndAddToPackage(uPackageLevel1, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
@@ -54,7 +57,7 @@ class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
         
     }
     
-    @Test @Ignore
+    @Test @Disabled
     def testDeletePackage() { //Delete or Refactoring java packages seems to lead to problems
         var jPackage = getCorrespondingPackage(uPackageLevel1)
         assertNotNull(jPackage)
@@ -66,7 +69,7 @@ class UmlToJavaPackageTest extends Uml2JavaTransformationTest {
         assertNull(jPackage)
     }
     
-    @Test @Ignore
+    @Test @Disabled
     def testRenamePackage() { //Delete or Refactoring java packages seems to lead to problems
         uPackageLevel1.name = PACKAGE_RENAMED
         saveAndSynchronizeChanges(uPackageLevel1)

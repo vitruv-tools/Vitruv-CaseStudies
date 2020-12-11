@@ -4,12 +4,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.classifiers.Class
 import org.emftext.language.java.members.Field
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import tools.vitruv.applications.umljava.java2uml.Java2UmlTransformationTest
 import tools.vitruv.applications.util.temporary.java.JavaStandardType
 import tools.vitruv.applications.util.temporary.java.JavaVisibility
 
-import static org.junit.Assert.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.umljava.testutil.UmlTestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaMemberAndParameterUtil.*
@@ -18,7 +17,11 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 import static tools.vitruv.applications.util.temporary.uml.UmlTypeUtil.*
 
 import static extension tools.vitruv.applications.util.temporary.java.JavaModifierUtil.*
+import org.junit.jupiter.api.BeforeEach
 
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * Test class for testing the attribute reactions.
@@ -39,8 +42,8 @@ class JavaToUmlAttributeTest extends Java2UmlTransformationTest {
     /**
      * Initializes two java classes. One class contains an attribute.
      */
-    override void setup() {
-    	super.setup();
+    @BeforeEach
+    def void testSetup() {
         jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)
         typeClass = createSimpleJavaClassWithCompilationUnit(TYPE_CLASS)
         jAttr = createJavaAttribute(ATTRIBUTE_NAME, createJavaPrimitiveType(JavaStandardType.INT), JavaVisibility.PRIVATE, false, false)
