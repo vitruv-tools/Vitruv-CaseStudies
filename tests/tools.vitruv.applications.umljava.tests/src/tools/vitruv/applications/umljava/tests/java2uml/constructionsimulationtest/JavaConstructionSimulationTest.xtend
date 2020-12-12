@@ -7,6 +7,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaContainerAndClas
 import java.util.List
 import org.eclipse.emf.common.util.URI
 import tools.vitruv.applications.umljava.tests.java2uml.JavaToUmlTransformationTest
+import org.junit.jupiter.api.Disabled
 
 /**
  * Test class for the reconstruction of existing java models
@@ -19,6 +20,7 @@ class JavaConstructionSimulationTest extends JavaToUmlTransformationTest {
      * https://github.com/orhanobut/logger (12.5.2017)
      */
     @Test
+    @Disabled("Does not run properly in Maven and requires manual checking anyway")
     def void testOrhanobutLoggerProject() {
         loadLoggerProjectIndividually("testresources/com", "com")
         //Check junit workspace
