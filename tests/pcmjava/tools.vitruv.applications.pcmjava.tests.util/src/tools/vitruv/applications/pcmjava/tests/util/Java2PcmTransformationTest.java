@@ -169,7 +169,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	@BeforeEach
-	public void beforeTest(@TestProject Path testProjectFolder) throws CoreException {
+	public synchronized void beforeTest(@TestProject Path testProjectFolder) throws CoreException {
 		getVirtualModel().addChangePropagationListener(this);
 		configureJavaProject(testProjectFolder);
 		addJavaBuilder();
