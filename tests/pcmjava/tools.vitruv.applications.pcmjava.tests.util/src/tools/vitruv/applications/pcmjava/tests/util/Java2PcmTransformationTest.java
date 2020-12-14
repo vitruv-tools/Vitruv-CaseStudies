@@ -460,24 +460,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return javaRoot;
 	}
 
-	/**
-	 * Change user interactor in changeSynchronizer of
-	 * PCMJaMoPPTransformationExecuter by invoking the setUserInteractor method of
-	 * the class ChangeSynchronizer
-	 *
-	 * @throws Throwable
-	 */
-	// private void setUserInteractor(final UserInteractor newUserInteractor)
-	// throws Throwable {
-	//// final PCMJavaBuilder pcmJavaBuilder =
-	// this.getPCMJavaBuilderFromProject();
-	//// final Change2CommandTransformingProviding transformingProviding =
-	// JavaBridge
-	//// .getFieldFromClass(VitruviusEmfBuilder.class, "transformingProviding",
-	// pcmJavaBuilder);
-	// this.setUserInteractor(newUserInteractor);
-	// }
-
 	protected CompositeComponent addSecondPackageCorrespondsToCompositeComponent() throws Throwable {
 		this.getUserInteractor()
 				.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_COMPONENT.getSelection());
@@ -861,21 +843,6 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected OperationProvidedRole addImplementsCorrespondingToOperationProvidedRoleToClass(final String className,
 			final String implementingInterfaceName) throws CoreException {
-		// TODO Somehow, we have to wait some time here.
-		// If we do not wait, some effect of the previous interface creation has
-		// not finished and thus
-		// adding the implements statement to the class will result in an
-		// unsuccessful proxy resolution
-		// for the implemented interface, which means that no correspondence
-		// gets created.
-		// Even forcing a reload of the interface and class models in the VSUM
-		// does not have any positive effect.
-		// ADDITION: Using Maven, changes run properly without the sleep, so it
-		// is removed by now.
-		// In Eclipse, it does not work without the sleep.
-		/*
-		 * try { Thread.sleep(5000); } catch (InterruptedException e) { }
-		 */
 		final ICompilationUnit classCompilationUnit = CompilationUnitManipulatorHelper
 				.findICompilationUnitWithClassName(className, this.getCurrentTestProject());
 		this.importCompilationUnitWithName(implementingInterfaceName, classCompilationUnit);
