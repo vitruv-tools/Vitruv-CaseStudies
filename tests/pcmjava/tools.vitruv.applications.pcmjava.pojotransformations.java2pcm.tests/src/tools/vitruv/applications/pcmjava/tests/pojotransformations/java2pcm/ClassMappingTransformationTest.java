@@ -70,7 +70,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
             final EObject eObject = super.addClassInPackage(this.secondPackage, EObject.class);
             fail("The class should not have any correspondences, but it has a correspondence to eObject: " + eObject);
         } catch (final RuntimeException re) {
-            // ecpected exception
+            // expected exception
         }
     }
 
@@ -108,7 +108,7 @@ public class ClassMappingTransformationTest extends Java2PcmPackageMappingTransf
     }
 
     @Test
-    public void testAddCompsiteDatatypeClassInDatatypePackage() throws Throwable {
+    public void testAddCompositeDatatypeClassInDatatypePackage() throws Throwable {
         final Repository repo = this.addRepoContractsAndDatatypesPackage();
 
         final CompositeDataType cdt = this.addClassThatCorrespondsToCompositeDatatype();
