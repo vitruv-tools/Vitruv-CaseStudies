@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -28,7 +29,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class JaMoPPTest {
-
+	private static Logger LOGGER = Logger.getLogger(JaMoPPTest.class);
+	
     @BeforeEach
     public void setUp() throws Exception {
         // register JaMoPP package and factory globally
@@ -129,10 +131,10 @@ public class JaMoPPTest {
     }
 
     private void printLayoutInformation(final NamedElement namedElement) {
-        System.out.println("commenatable.getLayoutInformations(): " + namedElement.getLayoutInformations());
+        LOGGER.trace("commenatable.getLayoutInformations(): " + namedElement.getLayoutInformations());
         for (final LayoutInformation layoutInformation : namedElement.getLayoutInformations()) {
             final int startOffset = layoutInformation.getStartOffset();
-            System.out.println("Start offset for " + namedElement.getName() + ": " + startOffset);
+            LOGGER.trace("Start offset for " + namedElement.getName() + ": " + startOffset);
         }
     }
 }
