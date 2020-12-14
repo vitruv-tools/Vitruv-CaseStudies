@@ -232,8 +232,10 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
 		this.mainPackage = this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
-		this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts" });
-		this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes" });
+		// Contracts and datatypes packages are created by change propagation, so wait for them to be synchronized instead of creating them
+		waitForSynchronization(2);
+		//this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts" });
+		//this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes" });
 		final CorrespondenceModel ci = this.getCorrespondenceModel();
 		if (null == ci) {
 			throw new RuntimeException("Could not get correspondence instance.");
