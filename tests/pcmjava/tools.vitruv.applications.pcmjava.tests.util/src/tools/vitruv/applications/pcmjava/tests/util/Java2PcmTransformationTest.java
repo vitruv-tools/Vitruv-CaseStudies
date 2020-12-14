@@ -191,7 +191,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	public synchronized void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
 		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
-		logger.debug("Starting to wait for finished synchronization. Expected syncs: "
+		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName() + ". Expected syncs: "
 				+ numberOfExpectedSynchronizationCalls + ", remaining syncs: " + expectedNumberOfSyncs);
 		try {
 			int wakeups = 0;
@@ -202,14 +202,14 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 				// timeout
 				// and so the synchronization was not finished as expected
 				if (wakeups > numberOfExpectedSynchronizationCalls) {
+					logger.error("Waiting for synchronization timed out in project " + testEclipseProject.getName());
 					fail("Waiting for synchronization timed out");
 				}
 			}
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
-		} finally {
-			logger.debug("Finished waiting for synchronization");
 		}
+		logger.debug("Finished waiting for synchronization in project " + testEclipseProject.getName());
 	}
 
 	@Override
@@ -219,14 +219,14 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	@Override
 	public synchronized void finishedChangePropagation() {
 		expectedNumberOfSyncs--;
-		logger.debug("Reducing number of expected syncs to: " + expectedNumberOfSyncs);
+		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: " + expectedNumberOfSyncs);
 		this.notifyAll();
 	}
 
 	@Override
 	public synchronized void abortedChangePropagation(ChangePropagationAbortCause cause) {
 		expectedNumberOfSyncs--;
-		logger.debug("Reducing number of expected syncs to: " + expectedNumberOfSyncs);
+		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: " + expectedNumberOfSyncs);
 		this.notifyAll();
 	}
 
@@ -274,7 +274,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		final List<String> namespaceList = Arrays.asList(namespace);
 		jaMoPPPackage.setName(namespaceList.get(namespaceList.size() - 1));
 		jaMoPPPackage.getNamespaces().addAll(namespaceList.subList(0, namespaceList.size() - 1));
-		final Resource resource = resourceAt(Path.of(getPathInProjectForSrcFile(packageFile))); // resourceAt(Path.of(getPathInProjectForSrcFile(packageFile)));
+		final Resource resource = resourceAt(Path.of(getPathInProjectForSrcFile(packageFile)));
 		EcoreResourceBridge.saveEObjectAsOnlyContent(jaMoPPPackage, resource);
 		waitForSynchronization(1);
 		return jaMoPPPackage;
