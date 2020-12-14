@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruvius Application PCM-Java Common Reactions
+Bundle-Name: Vitruv Application PCM-Java Common Reactions
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.common
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.common
 Bundle-Vendor: vitruv.tools
