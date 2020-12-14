@@ -5,6 +5,12 @@ import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.OperationInterface
 import tools.vitruv.applications.pcmjava.tests.util.Java2PcmTransformationTest
 import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming.EjbJava2PcmChangePropagationSpecification
+import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils
+import org.palladiosimulator.pcm.repository.Repository
+import java.io.IOException
+import org.eclipse.core.runtime.CoreException
+import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
+import static edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.claimOne
 
 /**
  * class that contains special methods for EJB testing
@@ -45,8 +51,16 @@ abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest 
 	}
 
 	def protected createPackageAndEjbInterface() {
-		super.addRepoContractsAndDatatypesPackage()
+		addRepoContractsAndDatatypesPackage()
 		this.createEjbInterface(TEST_INTERFACE_NAME)
 	}
 
+	override Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
+		this.mainPackage = this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME]);
+		this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts"]);
+		this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes"]);
+		val Repository repo = claimOne(
+			CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, this.mainPackage, Repository));
+		return repo;
+	}
 }
