@@ -125,7 +125,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	protected Package mainPackage;
 	protected Package secondPackage;
-	private int expectedNumberOfSyncs = 0;
+	private int expectedNumberOfSyncs;
 
 	private IProject testEclipseProject;
 
@@ -133,39 +133,56 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		return testEclipseProject;
 	}
 
-	@BeforeEach
-	public void beforeTest(@TestProject Path testProjectFolder) {
-		testEclipseProject = IProjectUtil.createProjectAt(testProjectFolder.getFileName().toString(),
-				testProjectFolder);
-		IProjectUtil.configureAsJavaProject(testEclipseProject);
-		getVirtualModel().addChangePropagationListener(this);
-		// This is necessary because otherwise Maven tests will fail as
-		// resources from previous
-		// tests are still in the classpath and accidentally resolved
-		JavaClasspath.reset();
-		// add PCM Java Builder to Project under test
-		final VitruviusJavaBuilderApplicator pcmJavaBuilder = new VitruviusJavaBuilderApplicator();
-		pcmJavaBuilder.addToProject(getCurrentTestProject(), getVirtualModel().getFolder(),
-				Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
-		// build the project
-		ProjectBuildUtils.issueIncrementalBuild(getCurrentTestProject(), VitruviusJavaBuilder.BUILDER_ID);
-		this.expectedNumberOfSyncs = 0;
-		// Pipe JaMoPP error output to null
-		java.lang.System.setErr(null);
-	}
-
-	// We need to use platform URIs, because the JDT AST will not recognize changes
-	// when using file URIs.
+	/*
+	 * We need to use platform URIs, because the JDT AST will not recognize changes
+	 * when using file URIs.
+	 */
 	@Override
 	protected boolean usePlatformURIs() {
 		return true;
 	}
+	
+	private void configureJavaProject(Path testProjectFolder) {
+		String projectName = testProjectFolder.getFileName().toString();
+		testEclipseProject = IProjectUtil.createProjectAt(projectName, testProjectFolder);
+		IProjectUtil.configureAsJavaProject(testEclipseProject);
+	}
+
+	private void addJavaBuilder() throws CoreException {
+		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
+		javaBuilderApplicator.addToProject(getCurrentTestProject(), getVirtualModel().getFolder(),
+				Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
+		// Adding the builder already started a build, but to wait for it to
+		// finish, we issue an incremental build synchronously, so that we do
+		// not proceed before it has finished
+		ProjectBuildUtils.issueIncrementalBuild(getCurrentTestProject(), VitruviusJavaBuilder.BUILDER_ID);
+		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
+	}
+
+	private void initializeJamopp() {
+		// This is necessary because otherwise Maven tests will fail as
+		// resources from previous tests are still in the classpath and
+		// accidentally resolved
+		JavaClasspath.reset();
+		// Pipe JaMoPP error output to null
+		java.lang.System.setErr(null);
+	}
+
+	@BeforeEach
+	public void beforeTest(@TestProject Path testProjectFolder) throws CoreException {
+		getVirtualModel().addChangePropagationListener(this);
+		configureJavaProject(testProjectFolder);
+		addJavaBuilder();
+		initializeJamopp();
+		this.expectedNumberOfSyncs = 0;
+		logger.info("Finished test setup for project " + testEclipseProject.getName());
+	}
 
 	@AfterEach
 	public void afterTest() {
-		// Remove PCM Java Builder
-		final VitruviusJavaBuilderApplicator pcmJavaRemoveBuilder = new VitruviusJavaBuilderApplicator();
-		pcmJavaRemoveBuilder.removeBuilderFromProject(this.getCurrentTestProject());
+		// Remove Java Builder
+		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
+		javaBuilderApplicator.removeBuilderFromProject(this.getCurrentTestProject());
 	}
 
 	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits) throws JavaModelException {
