@@ -17,7 +17,7 @@ Require-Bundle: org.junit.jupiter.api,
  tools.vitruv.framework.util,
  tools.vitruv.testutils,
  tools.vitruv.framework.change.processing,
- tools.vitruv.framework.metamodel,
+ tools.vitruv.framework.domains,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm
