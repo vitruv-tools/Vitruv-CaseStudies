@@ -67,7 +67,7 @@ class MediaStoreRepositoryTest extends PcmUmlClassTest{
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
 		// backwards 
-		val umlMsRepositoryResource = getPlatformModelUri(Path.of(UML_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource
+		val umlMsRepositoryResource = getUri(Path.of(UML_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource
 		assertNotNull(umlMsRepositoryResource)
 		val umlMsModel = umlMsRepositoryResource.contents.head as Model
 		assertNotNull(umlMsModel)
@@ -78,7 +78,7 @@ class MediaStoreRepositoryTest extends PcmUmlClassTest{
 		
 		val comparison = compare(
 			URI.createURI(PCM_MEDIA_STORE_REPOSITORY_PATH), 
-			getPlatformModelUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2))
+			getUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2))
 		)
 		assertEquals(0, comparison.differences.size, "Encountered differences after round-trip batch creation. That was kind of expected."
 			+ "\nLast manual check looked good with 245 differences"
@@ -105,7 +105,7 @@ class MediaStoreRepositoryTest extends PcmUmlClassTest{
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
-		val umlRepo_backward = getPlatformModelUri(Path.of(UML_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.head as Model
+		val umlRepo_backward = getUri(Path.of(UML_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.head as Model
 		simulateRepositoryInsertion_UML(umlRepo_backward, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
@@ -131,7 +131,7 @@ class MediaStoreRepositoryTest extends PcmUmlClassTest{
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH)
 		
-		val pcmRepo_forward = getPlatformModelUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.head as Repository
+		val pcmRepo_forward = getUri(Path.of(PCM_GENERATED_MEDIA_STORE_MODEL_PATH)).testResource.contents.head as Repository
 		simulateRepositoryInsertion_PCM(pcmRepo_forward, PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2, UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(PCM_GENERATED_MEDIA_STORE_MODEL_PATH_2)
 		assertModelExists(UML_GENERATED_MEDIA_STORE_MODEL_PATH_2)

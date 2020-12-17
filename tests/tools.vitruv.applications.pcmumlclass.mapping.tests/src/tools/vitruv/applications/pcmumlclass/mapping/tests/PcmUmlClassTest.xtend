@@ -72,12 +72,12 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 	}
 	
 	def protected void assertModelExists(String modelPathWithinProject) {
-		val modelUri = getPlatformModelUri(Path.of(modelPathWithinProject))
+		val modelUri = getUri(Path.of(modelPathWithinProject))
 		assertThat(modelUri, isResource)
 	}
 
 	def protected void assertModelNotExists(String modelPathWithinProject) {
-		val modelUri = getPlatformModelUri(Path.of(modelPathWithinProject))
+		val modelUri = getUri(Path.of(modelPathWithinProject))
 		assertThat(modelUri, isNoResource)
 	}
 
@@ -337,8 +337,8 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 	 * 		the Comparison produced by the default EMFCompare configuration (EMFCompare.builder.build)
 	 */
 	def Comparison compare(String originalWithinProjektPath, String generatedWithinProjektPath) {
-		val originalUri = getPlatformModelUri(Path.of(originalWithinProjektPath))
-		val generatedUri = getPlatformModelUri(Path.of(generatedWithinProjektPath))
+		val originalUri = getUri(Path.of(originalWithinProjektPath))
+		val generatedUri = getUri(Path.of(generatedWithinProjektPath))
 		return compare(originalUri, generatedUri)
 	}
 	

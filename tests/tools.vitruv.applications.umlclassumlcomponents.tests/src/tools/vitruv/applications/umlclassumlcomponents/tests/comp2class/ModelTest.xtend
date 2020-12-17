@@ -22,7 +22,7 @@ class ModelTest extends AbstractComp2ClassTest {
 	//This test covers usage of one as well as two Models
 	def void testModelCreation() {
 		//Check Model:
-		val modelUri = getPlatformModelUri(Path.of(FOLDER_NAME).resolve(MODEL_NAME + "." + MODEL_FILE_EXTENSION))
+		val modelUri = getUri(Path.of(FOLDER_NAME).resolve(MODEL_NAME + "." + MODEL_FILE_EXTENSION))
 		assertThat(modelUri, isResource);
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
 		val classModel = correspondingElements.filter(Model).get(0)

@@ -14,7 +14,7 @@ class UmlModelTest extends AbstractPcmUmlTest {
 
 	@Test
 	def void testModelCreation() {
-		val modelUri = getPlatformModelUri(Path.of("model").resolve(MODEL_NAME + ".uml"))
+		val modelUri = getUri(Path.of("model").resolve(MODEL_NAME + ".uml"))
 		assertThat(modelUri, isResource);
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
 		assertEquals(1, correspondingElements.size);

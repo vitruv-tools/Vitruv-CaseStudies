@@ -20,7 +20,7 @@ class ModelTest extends AbstractClass2CompTest {
 	
 	@Test
 	def void testModelCreation() {
-		val modelUri = getPlatformModelUri(Path.of(FOLDER_NAME).resolve(MODEL_NAME + "." + MODEL_FILE_EXTENSION))
+		val modelUri = getUri(Path.of(FOLDER_NAME).resolve(MODEL_NAME + "." + MODEL_FILE_EXTENSION))
 		assertThat(modelUri, isResource);
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
 		assertEquals(1, correspondingElements.size)
