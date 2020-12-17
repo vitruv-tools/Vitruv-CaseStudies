@@ -158,6 +158,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		ProjectBuildUtils.issueIncrementalBuild(getCurrentTestProject(), VitruviusJavaBuilder.BUILDER_ID);
 		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
 	}
+	
+	private void removeJavaBuilder() {
+		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
+		javaBuilderApplicator.removeBuilderFromProject(this.getCurrentTestProject());
+	}
 
 	private void initializeJamopp() {
 		// This is necessary because otherwise Maven tests will fail as
@@ -183,9 +188,13 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	@AfterEach
 	public void afterTest() {
-		// Remove Java Builder
-		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
-		javaBuilderApplicator.removeBuilderFromProject(this.getCurrentTestProject());
+		getVirtualModel().removeChangePropagationListener(this);
+		removeJavaBuilder();
+		if (expectedNumberOfSyncs < 0) {
+			logger.fatal("There have been more change notifications than expected in project "
+					+ testEclipseProject.getName());
+			fail("There have been more change notifications than expected");
+		}
 	}
 
 	public void editCompilationUnit(final ICompilationUnit cu, final TextEdit... edits) throws JavaModelException {
