@@ -158,14 +158,14 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		ResourcesPlugin.getWorkspace().getDescription().setAutoBuilding(false);
 	}
 
-	private void addJavaBuilder() throws CoreException {
+	private void addJavaBuilder() {
 		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
 		javaBuilderApplicator.addToProject(getCurrentTestProject(), getVirtualModel().getFolder(),
 				Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
 		refreshAndBuild();
 		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
 	}
-	
+
 	private void removeJavaBuilder() {
 		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
 		javaBuilderApplicator.removeBuilderFromProject(this.getCurrentTestProject());
@@ -184,7 +184,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	}
 
 	@BeforeEach
-	public synchronized void beforeTest(@TestProject Path testProjectFolder) throws CoreException {
+	public synchronized void beforeTest(@TestProject Path testProjectFolder) {
 		getVirtualModel().addChangePropagationListener(this);
 		configureJavaProject(testProjectFolder);
 		addJavaBuilder();
@@ -210,16 +210,16 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 
 	public synchronized void waitForSynchronization(int numberOfExpectedSynchronizationCalls) {
 		expectedNumberOfSyncs += numberOfExpectedSynchronizationCalls;
-		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName() + ". Expected syncs: "
-				+ numberOfExpectedSynchronizationCalls + ", remaining syncs: " + expectedNumberOfSyncs);
+		logger.debug("Starting to wait for finished synchronization in test " + testEclipseProject.getName()
+				+ ". Expected syncs: " + numberOfExpectedSynchronizationCalls + ", remaining syncs: "
+				+ expectedNumberOfSyncs);
 		try {
 			int wakeups = 0;
 			while (expectedNumberOfSyncs > 0) {
 				wait(MAXIMUM_SYNC_WAITING_TIME);
 				wakeups++;
-				// If we had more wakeups than expected sync calls, we had a
-				// timeout
-				// and so the synchronization was not finished as expected
+				// If we had more wakeups than expected synchronization calls, we had a timeout
+				// and so the synchronization has not finished as expected
 				if (wakeups > numberOfExpectedSynchronizationCalls) {
 					logger.error("Waiting for synchronization timed out in project " + testEclipseProject.getName());
 					fail("Waiting for synchronization timed out");
@@ -239,23 +239,28 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	@Override
 	public synchronized void finishedChangePropagation() {
 		expectedNumberOfSyncs--;
-		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: " + expectedNumberOfSyncs);
+		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
+				+ expectedNumberOfSyncs);
 		this.notifyAll();
 	}
 
 	@Override
 	public synchronized void abortedChangePropagation(ChangePropagationAbortCause cause) {
 		expectedNumberOfSyncs--;
-		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: " + expectedNumberOfSyncs);
+		logger.debug("Reducing number of expected syncs in project " + testEclipseProject.getName() + " to: "
+				+ expectedNumberOfSyncs);
 		this.notifyAll();
 	}
 
 	protected Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
 		this.mainPackage = this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
-		// Contracts and datatypes packages are created by change propagation, so wait for them to be synchronized instead of creating them
+		// Contracts and datatypes packages are created by change propagation, so wait
+		// for them to be synchronized instead of creating them
 		waitForSynchronization(2);
-		//this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts" });
-		//this.createPackageWithPackageInfo(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes" });
+		// this.createPackageWithPackageInfo(new String[] {
+		// Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts" });
+		// this.createPackageWithPackageInfo(new String[] {
+		// Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes" });
 		final CorrespondenceModel ci = this.getCorrespondenceModel();
 		if (null == ci) {
 			throw new RuntimeException("Could not get correspondence instance.");
