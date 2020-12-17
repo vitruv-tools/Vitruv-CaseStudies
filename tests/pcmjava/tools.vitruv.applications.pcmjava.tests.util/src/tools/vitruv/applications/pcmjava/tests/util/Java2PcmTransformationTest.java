@@ -1,6 +1,7 @@
 package tools.vitruv.applications.pcmjava.tests.util;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +88,6 @@ import edu.kit.ipd.sdq.commons.util.org.eclipse.emf.common.util.URIUtil;
 import tools.vitruv.domains.pcm.PcmNamespace;
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection;
 import tools.vitruv.domains.java.JavaNamespace;
-import tools.vitruv.domains.java.builder.VitruviusJavaBuilder;
 import tools.vitruv.domains.java.builder.VitruviusJavaBuilderApplicator;
 import tools.vitruv.domains.java.echange.feature.reference.JavaInsertEReference;
 import tools.vitruv.domains.java.echange.feature.reference.ReferenceFactory;
@@ -95,7 +95,6 @@ import tools.vitruv.framework.change.description.ConcreteChange;
 import tools.vitruv.framework.change.description.VitruviusChangeFactory;
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil;
 import tools.vitruv.framework.correspondence.CorrespondenceModel;
-import tools.vitruv.framework.ui.monitorededitor.ProjectBuildUtils;
 import tools.vitruv.framework.util.bridges.EcoreResourceBridge;
 import tools.vitruv.framework.util.datatypes.VURI;
 import tools.vitruv.framework.vsum.modelsynchronization.ChangePropagationAbortCause;
