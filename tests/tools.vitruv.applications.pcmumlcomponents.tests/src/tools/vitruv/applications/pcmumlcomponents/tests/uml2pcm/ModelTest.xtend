@@ -11,7 +11,7 @@ class ModelTest extends AbstractUmlPcmTest {
 
 	@Test
 	def void testRepositoryCreation() {
-		val modelUri = getPlatformModelUri(Path.of("repository").resolve(MODEL_NAME + ".repository"))
+		val modelUri = getUri(Path.of("repository").resolve(MODEL_NAME + ".repository"))
 		assertThat(modelUri, isResource);
 		val pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(MODEL_NAME, pcmRepository.entityName);

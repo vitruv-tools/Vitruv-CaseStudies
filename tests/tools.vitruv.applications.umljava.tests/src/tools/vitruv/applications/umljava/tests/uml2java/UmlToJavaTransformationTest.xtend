@@ -47,11 +47,11 @@ abstract class UmlToJavaTransformationTest extends AbstractUmlJavaTest {
     }
 
 	def protected assertJavaFileExists(String fileName, String[] namespaces) {
-	    assertThat(getPlatformModelUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isResource)
+	    assertThat(getUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isResource)
 	}
 	
     def protected assertJavaFileNotExists(String fileName, String[] namespaces) {
-       assertThat(getPlatformModelUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isNoResource)
+       assertThat(getUri(Path.of(buildJavaFilePath(fileName + ".java", namespaces))), isNoResource)
     }
     
     /**
