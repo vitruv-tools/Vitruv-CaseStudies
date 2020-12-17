@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -109,6 +110,7 @@ import static tools.vitruv.domains.java.util.JavaQueryUtil.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static tools.vitruv.framework.ui.monitorededitor.ProjectBuildUtils.refreshAndBuildIncrementally;;
 
 /**
  * Test class that contains utility methods that can be used by JaMoPP2PCM
@@ -141,21 +143,27 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 	protected boolean usePlatformURIs() {
 		return true;
 	}
-	
+
+	private void refreshAndBuild() {
+		try {
+			refreshAndBuildIncrementally(testEclipseProject);
+		} catch (IllegalStateException e) {
+			fail("Failure during project reload and build");
+		}
+	}
+
 	private void configureJavaProject(Path testProjectFolder) {
 		String projectName = testProjectFolder.getFileName().toString();
 		testEclipseProject = IProjectUtil.createProjectAt(projectName, testProjectFolder);
 		IProjectUtil.configureAsJavaProject(testEclipseProject);
+		ResourcesPlugin.getWorkspace().getDescription().setAutoBuilding(false);
 	}
 
 	private void addJavaBuilder() throws CoreException {
 		final VitruviusJavaBuilderApplicator javaBuilderApplicator = new VitruviusJavaBuilderApplicator();
 		javaBuilderApplicator.addToProject(getCurrentTestProject(), getVirtualModel().getFolder(),
 				Collections.singletonList(PcmNamespace.REPOSITORY_FILE_EXTENSION));
-		// Adding the builder already started a build, but to wait for it to
-		// finish, we issue an incremental build synchronously, so that we do
-		// not proceed before it has finished
-		ProjectBuildUtils.issueIncrementalBuild(getCurrentTestProject(), VitruviusJavaBuilder.BUILDER_ID);
+		refreshAndBuild();
 		logger.info("Finished adding and initializing builder to project " + testEclipseProject.getName());
 	}
 	
@@ -221,6 +229,7 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		} catch (InterruptedException e) {
 			fail("An interrupt occurred unexpectedly");
 		}
+		refreshAndBuild();
 		logger.debug("Finished waiting for synchronization in project " + testEclipseProject.getName());
 	}
 
