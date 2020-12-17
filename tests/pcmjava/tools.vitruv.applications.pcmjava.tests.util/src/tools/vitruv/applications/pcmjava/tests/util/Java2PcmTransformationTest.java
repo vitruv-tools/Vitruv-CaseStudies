@@ -164,8 +164,11 @@ public abstract class Java2PcmTransformationTest extends LegacyVitruvApplication
 		// resources from previous tests are still in the classpath and
 		// accidentally resolved
 		JavaClasspath.reset();
-		// Pipe JaMoPP error output to null
-		java.lang.System.setErr(null);
+		// Pipe JaMoPP error output to empty stream
+		java.lang.System.setErr(new PrintStream(new java.io.OutputStream() {
+			public void write(int b) {
+			}
+		}));
 	}
 
 	@BeforeEach
