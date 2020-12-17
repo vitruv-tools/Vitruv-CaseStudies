@@ -39,6 +39,9 @@ public class PackageMappingTransformationTest extends Java2PcmPackageMappingTran
 	@Test
 	public void testAddFirstPackageWithoutFile() throws Throwable {
 		super.createPackage(new String[] { Pcm2JavaTestUtils.REPOSITORY_NAME });
+		// Consistency preservation creates the contracts and datatypes packages, which
+		// also trigger consistency preservation and notify the test
+		waitForSynchronization(2);
 		final CorrespondenceModel ci = this.getCorrespondenceModel();
 		assertTrue(null != ci, "CorrespondenceModel == null");
 		assertTrue(0 < ci.getAllEObjectsOfTypeInCorrespondences(Repository.class).size(),
