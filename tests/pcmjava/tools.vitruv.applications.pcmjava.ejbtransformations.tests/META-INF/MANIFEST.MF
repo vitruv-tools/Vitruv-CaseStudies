@@ -5,10 +5,14 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmjava.ejbtransformations.tests;
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.ejbtransformations.tests
 Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Fragment-Host: tools.vitruv.applications.pcmjava.ejbtransformations
 Require-Bundle: org.junit.jupiter.api,
  tools.vitruv.testutils,
  tools.vitruv.applications.pcmjava.tests.util,
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ tools.vitruv.applications.pcmjava.ejbtransformations,
+ com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro
 Export-Package: tools.vitruv.applications.pcmjava.tests.ejbtransformations.java2pcm
 Bundle-Vendor: vitruv.tools
