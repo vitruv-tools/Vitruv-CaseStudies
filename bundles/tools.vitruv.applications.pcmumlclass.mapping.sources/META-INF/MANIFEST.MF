@@ -28,7 +28,6 @@ Require-Bundle: tools.vitruv.dsls.mappings,
  org.eclipse.uml2.uml,
  tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.domains.pcm;visibility:=reexport,
- tools.vitruv.domains.pcm.util,
  tools.vitruv.dsls.reactions,
  tools.vitruv.dsls.mirbase,
  tools.vitruv.dsls.mappings

@@ -14,8 +14,6 @@ Require-Bundle: com.google.guava,
  org.eclipse.swt;bundle-version="3.102.0",
  org.eclipse.core.resources;bundle-version="3.8.100",
  org.eclipse.core.runtime;bundle-version="3.9.0",
- org.emftext.language.java,
- org.palladiosimulator.pcm,
  tools.vitruv.framework.util,
  tools.vitruv.framework.userinteraction,
  tools.vitruv.framework.tuid,
@@ -26,13 +24,8 @@ Require-Bundle: com.google.guava,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.domains.java;visibility:=reexport,
  tools.vitruv.domains.java.echange,
- tools.vitruv.domains.java.util;visibility:=reexport,
- tools.vitruv.domains.java.util.jamoppparser,
- org.palladiosimulator.pcm.resources,
- tools.vitruv.domains.pcm.util,
  tools.vitruv.applications.util.temporary;visibility:=reexport,
  edu.kit.ipd.sdq.activextendannotations
-Comment: Do not remove org.palladiosimulator.pcm.resources dependency. It is needed because the PCM primitive types repo is provided by this plugin, which is loaded using the URI string and, thus, does not induce a statically checked dependency
 Export-Package: tools.vitruv.applications.pcmjava.util.java2pcm,
  tools.vitruv.applications.pcmjava.util.pcm2java
 Bundle-Vendor: vitruv.tools
