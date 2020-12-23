@@ -10,7 +10,7 @@ import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.pcm.PcmDomainProvider
 import tools.vitruv.framework.util.command.ResourceAccess
 
-class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
+package class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 
 	new() {
 		super(new JavaDomainProvider().domain, new PcmDomainProvider().domain)
