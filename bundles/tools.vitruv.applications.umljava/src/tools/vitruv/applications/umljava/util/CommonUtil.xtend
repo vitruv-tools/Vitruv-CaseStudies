@@ -12,7 +12,7 @@ class CommonUtil {
     private new() {}
     
     /**
-     * Displays the given message with the userInteractor.
+     * Displays the given message with the userInteraction.
      * 
      * @param userInteractor the userInteractor to display the message.
      * @param message the message to display

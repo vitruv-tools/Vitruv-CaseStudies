@@ -67,7 +67,7 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		var pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
 		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 		
-		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 

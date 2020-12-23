@@ -76,7 +76,7 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 		var pcmSystem = SystemFactory.eINSTANCE.createSystem
 		pcmSystem.entityName = SYSTEM_NAME
 		
-		userInteractor.addNextTextInput(UML_MODEL_FILE)
+		userInteraction.addNextTextInput(UML_MODEL_FILE)
 		createAndSynchronizeModel(PCM_MODEL_FILE, pcmSystem)
 		pcmSystem = reloadResourceAndReturnRoot(pcmSystem) as System
 		
@@ -89,12 +89,12 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 		var umlModel = UMLFactory.eINSTANCE.createModel
 		umlModel.name = MODEL_NAME
 		
-		userInteractor.addNextTextInput(PCM_MODEL_FILE)
+		userInteraction.addNextTextInput(PCM_MODEL_FILE)
 		createAndSynchronizeModel(UML_MODEL_FILE, umlModel)
 		
 		var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
 		
-		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
 		saveAndSynchronizeChanges(umlSystemPkg)
 		umlModel = reloadResourceAndReturnRoot(umlModel) as Model
 

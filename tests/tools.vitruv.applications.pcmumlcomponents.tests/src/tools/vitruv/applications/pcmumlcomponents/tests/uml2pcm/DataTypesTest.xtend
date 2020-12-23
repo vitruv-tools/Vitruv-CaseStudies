@@ -37,7 +37,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		dataType.name = typeName
 		val nrOwnedTypesBefore = rootElement.ownedTypes.length
 		rootElement.packagedElements += dataType
-		userInteractor.addNextSingleSelection(1)
+		userInteraction.addNextSingleSelection(1)
 		saveAndSynchronizeChanges(rootElement)
 		assertEquals(nrOwnedTypesBefore + 1, rootElement.ownedTypes.length)
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[dataType]).flatten
@@ -51,7 +51,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = DATATYPE_NAME
 		rootElement.packagedElements += dataType
-		userInteractor.addNextSingleSelection(1)
+		userInteraction.addNextSingleSelection(1)
 		val propertyName = PARAMETER_NAME
 		val propertyType = UMLFactory.eINSTANCE.createPrimitiveType()
 		propertyType.name = UML_TYPE_INT
@@ -73,7 +73,7 @@ class DataTypesTest extends AbstractUmlPcmTest {
 		val dataType = UMLFactory.eINSTANCE.createDataType()
 		dataType.name = DATATYPE_NAME
 		rootElement.packagedElements += dataType
-		userInteractor.addNextSingleSelection(1)
+		userInteraction.addNextSingleSelection(1)
 		saveAndSynchronizeChanges(rootElement)
 		return dataType
 	}

@@ -221,7 +221,7 @@ class TypeReferenceCorrespondenceHelper {
 
 			/*val String message = "Automatically created the corresponding composite data type " + cdt.entityName +
 			 * 	" for classifier " + classifier.name + correspondingWarning
-			 userInteractor.showMessage(UserInteractionType.MODELESS, message)*/
+			 userInteraction.showMessage(UserInteractionType.MODELESS, message)*/
 			return cdt
 		}
 

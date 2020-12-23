@@ -28,7 +28,7 @@ class Comp2ClassIntegrationTest extends AbstractComp2ClassTest {
 	
 	def Model integrationTest(String fileName) {		
 		val Resource inputResource = getTestModelResource(fileName)
-		sendCollectedUserInteractionSelections(this.userInteractor)
+		sendCollectedUserInteractionSelections(this.userInteraction)
 		createAndSynchronizeModel(OUTPUT_NAME, inputResource.allContents.head)
 		
 		val umlModel = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model).get(0)
