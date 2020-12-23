@@ -7,7 +7,6 @@ Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: com.google.guava,
  org.apache.log4j,
- org.eclipse.emf.emfstore.common,
  org.eclipse.jdt.core,
  org.eclipse.emf.transaction,
  org.eclipse.xtext.xbase.lib,
