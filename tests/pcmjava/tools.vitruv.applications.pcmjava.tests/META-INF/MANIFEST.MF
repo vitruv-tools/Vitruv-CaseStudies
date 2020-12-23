@@ -10,19 +10,13 @@ Require-Bundle: org.junit.jupiter.api,
  org.junit.platform.suite.api,
  org.junit,
  org.apache.log4j;bundle-version="1.2.15",
- org.palladiosimulator.pcm;bundle-version="4.3.0",
- org.emftext.language.java.resource.java,
- tools.vitruv.framework.util,
- tools.vitruv.framework.tuid,
  tools.vitruv.testutils,
- tools.vitruv.framework.change,
- tools.vitruv.framework.change.processing,
- tools.vitruv.domains.java.echange,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests,
- tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests
+ tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.tests,
+ org.emftext.language.java.resource.java
 Export-Package: tools.vitruv.applications.pcmjava.tests,
  tools.vitruv.applications.pcmjava.tests.transformations
 Bundle-Vendor: vitruv.tools

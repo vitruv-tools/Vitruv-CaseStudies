@@ -16,8 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
  tools.vitruv.framework.util,
  tools.vitruv.framework.vsum,
- tools.vitruv.framework.tuid,
- tools.vitruv.domains.pcm.util
+ tools.vitruv.framework.tuid
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: tools.vitruv.applications.pcmjava.ui;x-internal:=true,

@@ -21,9 +21,6 @@ Require-Bundle: com.google.guava,
  tools.vitruv.framework.correspondence,
  tools.vitruv.framework.userinteraction,
  tools.vitruv.extensions.dslsruntime.reactions;visibility:=reexport,
- tools.vitruv.extensions.dslsruntime.mappings,
- tools.vitruv.domains.pcm.util,
- org.palladiosimulator.pcm,
- org.palladiosimulator.pcm.resources;bundle-version="4.0.0"
+ tools.vitruv.extensions.dslsruntime.mappings
 Export-Package: tools.vitruv.applications.pcmumlcomponents
 Bundle-Vendor: vitruv.tools

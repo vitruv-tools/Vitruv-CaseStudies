@@ -14,8 +14,6 @@ Require-Bundle: com.google.guava,
  tools.vitruv.domains.pcm,
  org.apache.log4j,
  org.eclipse.core.resources,
- tools.vitruv.domains.java.util.jamoppparser,
- tools.vitruv.domains.java.util,
  edu.kit.ipd.sdq.activextendannotations,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.framework.userinteraction
