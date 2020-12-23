@@ -4,7 +4,7 @@ import org.emftext.language.java.classifiers.ConcreteClassifier
 import org.palladiosimulator.pcm.repository.BasicComponent
 import org.palladiosimulator.pcm.repository.OperationInterface
 import tools.vitruv.applications.pcmjava.tests.util.Java2PcmTransformationTest
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming.EjbJava2PcmChangePropagationSpecification
+import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmChangePropagationSpecification
 import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils
 import org.palladiosimulator.pcm.repository.Repository
 import java.io.IOException

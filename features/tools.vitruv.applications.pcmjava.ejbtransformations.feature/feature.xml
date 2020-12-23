@@ -36,28 +36,14 @@
       <import plugin="org.emftext.language.java.resource.java"/>
       <import plugin="org.emftext.commons.antlr3_4_0" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.emftext.language.java.resource.bcel"/>
-      <import feature="tools.vitruv.framework.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.extensions.dslsruntime.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.domains.java.feature" version="1.0.0"/>
-      <import feature="tools.vitruv.domains.pcm.feature" version="1.0.0"/>
+      <import feature="tools.vitruv.framework.feature"/>
+      <import feature="tools.vitruv.extensions.dslsruntime.feature"/>
+      <import feature="tools.vitruv.domains.java.feature"/>
+      <import feature="tools.vitruv.domains.pcm.feature"/>
    </requires>
 
    <plugin
          id="tools.vitruv.applications.pcmjava.ejbtransformations"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -2,7 +2,6 @@ import tools.vitruv.applications.pcmjava.util.java2pcm.TypeReferenceCorresponden
 import org.emftext.language.java.commons.NamedElement
 import org.emftext.language.java.members.Field
 import org.emftext.language.java.members.InterfaceMethod
-import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.EjbJava2PcmHelper
 import org.palladiosimulator.pcm.repository.Repository
 import java.util.Collections
 import org.palladiosimulator.pcm.repository.OperationInterface
@@ -310,7 +309,7 @@ routine createdFieldInDatatypeClass(java::Class clazz, java::Field field) {
 reaction CreateClassMethodInEjbClass {
 	after element java::ClassMethod inserted in java::Class[members]
 		with affectedEObject.isEjbClass &&
-	   		EjbJava2PcmHelper.overridesInterfaceMethod(newValue, affectedEObject)
+	   		overridesInterfaceMethod(newValue, affectedEObject)
 	call createdClassMethodInEjbClass(affectedEObject, newValue)
 }
 

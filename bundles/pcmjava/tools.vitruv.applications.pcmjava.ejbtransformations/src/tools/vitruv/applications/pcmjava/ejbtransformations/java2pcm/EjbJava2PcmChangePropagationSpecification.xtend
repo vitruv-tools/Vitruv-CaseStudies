@@ -1,4 +1,4 @@
-package tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.change2commandtransforming
+package tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm
 
 import tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm.TuidUpdatePreprocessor
 import tools.vitruv.applications.pcmjava.util.java2pcm.Java2PcmPackagePreprocessor
