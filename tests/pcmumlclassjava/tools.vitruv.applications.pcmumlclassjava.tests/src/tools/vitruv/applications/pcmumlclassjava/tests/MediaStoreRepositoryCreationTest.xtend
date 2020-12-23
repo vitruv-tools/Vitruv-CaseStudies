@@ -123,8 +123,8 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 	
 	@Test
 	def void testMinimalRepository_PcmUmlJava_collectionTypeReplace() {
-		userInteractor.addNextTextInput("") // uses default uml model path and name
-		userInteractor.addNextSingleSelection(0) // uses default java collection type
+		userInteraction.addNextTextInput("") // uses default uml model path and name
+		userInteraction.addNextSingleSelection(0) // uses default java collection type
 		
 		val pcmRepo = RepositoryFactory.eINSTANCE.createRepository
 		pcmRepo.entityName = "TestRepository"
@@ -192,10 +192,10 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		val COMPONENT_IMPL_NAME = "MediaAccessImpl"
 		val ATTRIBUTE_NAME = "requiredIFileStorage"
 		
-		userInteractor.addNextTextInput("repository") // uml model name
-		userInteractor.addNextTextInput("model") // uml model path
-		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // the package should correspond to a repository
-		userInteractor.addNextTextInput("model/repository.repository") // pcm repository file
+		userInteraction.addNextTextInput("repository") // uml model name
+		userInteraction.addNextTextInput("model") // uml model path
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // the package should correspond to a repository
+		userInteraction.addNextTextInput("model/repository.repository") // pcm repository file
 		var jPkg_Repo = createJavaPackageAsModel(REPOSITORY_PKG_NAME, null)
 		saveAndSynchronizeChanges(jPkg_Repo)
 		
@@ -229,7 +229,7 @@ class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 		// At the moment it is possible to create a pcm::BasicComponent by inserting a package into the repository-package.
 		// But it is not possible to edit the generated ComponentImpl-java::Class, because the containing CompilationUnit
 		// can not be loaded/UUID-registered in the view-ResourceSet. 
-		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT) // the package should correspond to a BasicComponent
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__BASIC_COMPONENT) // the package should correspond to a BasicComponent
 		var jPkg_mediaAccess = createJavaPackageAsModel(COMPONENT_PKG_NAME, jPkg_Repo)
 		saveAndSynchronizeChanges(jPkg_mediaAccess)
 		var jClass_MediaAccessImpl = getJavaClassFromCompilationUnit(COMPONENT_IMPL_NAME, REPOSITORY_PKG_NAME, COMPONENT_PKG_NAME) // TODO here it fails

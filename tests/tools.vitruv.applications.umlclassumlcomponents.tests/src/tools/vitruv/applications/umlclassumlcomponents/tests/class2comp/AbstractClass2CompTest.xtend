@@ -29,7 +29,7 @@ abstract class AbstractClass2CompTest extends LegacyVitruvApplicationTest {
 	
 	//SaveAndSynchronize & commit all pending userInteractions
 	protected def saveAndSynchronizeWithInteractions(EObject object) {
-		sendCollectedUserInteractionSelections(this.userInteractor)
+		sendCollectedUserInteractionSelections(this.userInteraction)
 		saveAndSynchronizeChanges(object)
 	}
 	

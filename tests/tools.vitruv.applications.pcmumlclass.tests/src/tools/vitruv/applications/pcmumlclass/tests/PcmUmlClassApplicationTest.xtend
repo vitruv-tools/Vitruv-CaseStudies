@@ -177,7 +177,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 */
 	protected def simulateRepositoryInsertion_PCM(Repository inOriginalRepository, String pcmOutputPath, String umlOutputPath) {
 		val originalRepository = inOriginalRepository
-		userInteractor.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
+		userInteraction.addNextTextInput(umlOutputPath) // answers where to save the corresponding .uml model
 		createAndSynchronizeModel(pcmOutputPath, originalRepository)
 		var generatedRepository = reloadResourceAndReturnRoot(originalRepository) as Repository
 		return generatedRepository 
@@ -258,7 +258,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		originalComponentPackage.packagedElements -= originalComponentImpl
 		assertTrue(originalComponentPackage.packagedElements.empty)
 		
-		userInteractor.addNextSingleSelection(userDisambigutationComponentType)
+		userInteraction.addNextSingleSelection(userDisambigutationComponentType)
 		generatedRepositoryPackage.nestedPackages += originalComponentPackage //throws UUID error when tested on its own
 		saveAndSynchronizeChanges(generatedModel) //should generate generatedComponentImpl
 		generatedModel = reloadResourceAndReturnRoot(generatedModel) as Model 
@@ -328,8 +328,8 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			.filter[it !== originalContractsPackage && it !== originalDatatypesPackage].toList
 		umlRepositoryPackage.nestedPackages.clear
 		
-		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // rootelement is supposed to be a repository
-		userInteractor.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY) // rootelement is supposed to be a repository
+		userInteraction.addNextTextInput(pcmOutputPath) // answers where to save the corresponding .pcm model
 		createAndSynchronizeModel(umlOutputPath, originalRepositoryModel)
 		var generatedModel = reloadResourceAndReturnRoot(originalRepositoryModel) as Model
 		

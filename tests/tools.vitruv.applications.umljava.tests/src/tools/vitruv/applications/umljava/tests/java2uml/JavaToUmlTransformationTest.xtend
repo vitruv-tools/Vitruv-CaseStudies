@@ -32,8 +32,8 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	
 	@BeforeEach    
     def protected setup() {
-        userInteractor.addNextTextInput(UMLMODELNAME)
-        userInteractor.addNextTextInput(UMLMODELPATH)
+        userInteraction.addNextTextInput(UMLMODELNAME)
+        userInteraction.addNextTextInput(UMLMODELPATH)
     }
 	
 	override protected getChangePropagationSpecifications() {

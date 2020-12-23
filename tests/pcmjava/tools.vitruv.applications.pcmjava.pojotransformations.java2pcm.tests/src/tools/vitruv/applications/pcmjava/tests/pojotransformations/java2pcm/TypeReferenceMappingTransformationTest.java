@@ -18,7 +18,7 @@ public class TypeReferenceMappingTransformationTest extends Java2PcmPackageMappi
 		this.addRepoContractsAndDatatypesPackage();
 		// create class
 		this.addSecondPackageCorrespondsWithoutCorrespondences();
-		this.getUserInteractor().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
+		this.getUserInteraction().addNextSingleSelection(Java2PcmUserSelection.SELECT_BASIC_COMPONENT.getSelection());
 		final BasicComponent basicComponent = this.addClassInSecondPackage(BasicComponent.class);
 		// create interface
 		final OperationInterface opInterface = this.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence(

@@ -69,7 +69,7 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		helper.createComponent(pcmRepository)
 		helper.createOperationInterface(pcmRepository)
 		
-		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 
 		return reloadResourceAndReturnRoot(pcmRepository) as Repository 

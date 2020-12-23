@@ -75,7 +75,7 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 	def private Repository createRepository() {
 		var pcmRepository = helper.createRepository()
 		
-		userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
@@ -104,7 +104,7 @@ class RepositoryComponentConceptTest extends PcmUmlClassApplicationTest {
 		var umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
 		startRecordingChanges(umlRepositoryPkg)
 		
-		userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
 		var umlComponentPkg = umlRepositoryPkg.createNestedPackage(COMPONENT_NAME)
 		
 		saveAndSynchronizeChanges(umlComponentPkg)
