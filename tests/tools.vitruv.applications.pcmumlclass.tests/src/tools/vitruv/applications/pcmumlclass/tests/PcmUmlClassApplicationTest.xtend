@@ -77,6 +77,16 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		helper = null
 	}
 	
+	def protected void assertModelExists(String modelPathWithinProject) {
+		val modelUri = getUri(Path.of(modelPathWithinProject))
+		assertThat(modelUri, isResource)
+	}
+
+	def protected void assertModelNotExists(String modelPathWithinProject) {
+		val modelUri = getUri(Path.of(modelPathWithinProject))
+		assertThat(modelUri, isNoResource)
+	}
+	
 	/**
 	 * Reloads the Resource of the passed element and returns the root element.
 	 * <br><br>
