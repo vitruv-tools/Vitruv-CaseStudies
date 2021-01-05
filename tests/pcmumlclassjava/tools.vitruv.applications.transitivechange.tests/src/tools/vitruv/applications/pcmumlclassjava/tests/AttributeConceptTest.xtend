@@ -3,7 +3,7 @@ package tools.vitruv.applications.pcmumlclassjava.tests
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Type
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.InnerDeclaration
 import org.palladiosimulator.pcm.repository.Repository
@@ -13,7 +13,7 @@ import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHel
 import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -58,8 +58,8 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
         helper.createCompositeDataType(pcmRepository)
         val pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
         helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+        userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
         createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
@@ -75,7 +75,7 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
         pcmAttribute.entityName = TEST_ATTRIBUTE
         pcmAttribute.datatype_InnerDeclaration = pcmType
         pcmCompositeType.innerDeclaration_CompositeDataType += pcmAttribute
-        userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
+        userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
         saveAndSynchronizeChanges(pcmAttribute)
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
         pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
@@ -84,14 +84,14 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
         assertNotNull(pcmAttribute)
         checkAttributeConcept(pcmAttribute)
         val reloadedPcmType = helper.getModifiableInstance(pcmType)
-        assertNotNull("The DataType should not be null after reload", reloadedPcmType)
+        assertNotNull(reloadedPcmType, "The DataType should not be null after reload")
         assertTrue(EcoreUtil.equals(pcmAttribute.datatype_InnerDeclaration, reloadedPcmType))
     }
 
     @Test
     def void testCreateAttributeConcept_PCM_primitiveType() {
         var pcmRepository = createRepository()
-        assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_INT)
+        assertNotNull( helper.PCM_INT, "Initialization of PrimitiveTypes seems to have failed")
         testCreateAttributeConcept_PCM(pcmRepository, helper.PCM_INT)
     }
 
@@ -130,7 +130,7 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
         checkAttributeConcept(umlAttribute)
 
         val reloadedUmlType = helper.getModifiableInstance(umlType)
-        assertNotNull("The DataType should not be null after reload", reloadedUmlType)
+        assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
         assertTrue(EcoreUtil.equals(umlAttribute.type, reloadedUmlType))
         assertTrue(umlAttribute.lower == lower)
         assertTrue(umlAttribute.upper == upper)
@@ -139,7 +139,7 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
     @Test
     def void testCreateAttributeConcept_UML_primitiveType() {
         var pcmRepository = createRepository()
-        assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_INT)
+        assertNotNull(helper.UML_INT, "Initialization of PrimitiveTypes seems to have failed")
         testCreateAttributeConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
     }
 

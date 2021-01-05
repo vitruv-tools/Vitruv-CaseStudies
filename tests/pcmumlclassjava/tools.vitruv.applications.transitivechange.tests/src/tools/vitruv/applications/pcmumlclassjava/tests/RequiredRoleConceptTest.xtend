@@ -4,7 +4,7 @@ import org.eclipse.uml2.uml.Classifier
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Property
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.OperationRequiredRole
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
@@ -13,7 +13,7 @@ import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHel
 import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -87,7 +87,7 @@ class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
         helper.createComponent(pcmRepository)
         helper.createOperationInterface(pcmRepository)
 
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
         createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 
         return reloadResourceAndReturnRoot(pcmRepository) as Repository
@@ -105,8 +105,7 @@ class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 
         val pcmComponent = helper.getPcmComponent(pcmRepository)
-        assertEquals("There should be exactly one RequiredRole since only one was created by the test case.", 1,
-            pcmComponent.requiredRoles_InterfaceRequiringEntity.size)
+        assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.size, "There should be exactly one RequiredRole since only one was created by the test case.")
         pcmRequired = pcmComponent.requiredRoles_InterfaceRequiringEntity.head as OperationRequiredRole
         assertNotNull(pcmRequired)
         checkRequiredRoleConcept(pcmRequired)
@@ -125,7 +124,7 @@ class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 
         umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
-        assertEquals("There should be exactly one Parameter for one RequiredRole created by the test case.", 1, umlConstructor.ownedParameters.size)
+        assertEquals(1, umlConstructor.ownedParameters.size, "There should be exactly one Parameter for one RequiredRole created by the test case.")
         umlConstructorParameter = umlConstructor.ownedParameters.findFirst[it.name == REQUIRED_ROLE_NAME]
         assertNotNull(umlConstructorParameter)
         checkRequiredRoleConcept(umlConstructorParameter)
@@ -145,7 +144,7 @@ class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 
         umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
-        assertEquals("There should be exactly one Property for one RequiredRole created by the test case.", 1, umlComponentImpl.ownedAttributes.size)
+        assertEquals(1, umlComponentImpl.ownedAttributes.size, "There should be exactly one Property for one RequiredRole created by the test case.")
         umlRequiredInstanceField = helper.getUmlComponentImpl(pcmRepository).ownedAttributes.findFirst[it.name == REQUIRED_ROLE_NAME]
         assertNotNull(umlRequiredInstanceField)
         checkRequiredRoleConcept(umlRequiredInstanceField)

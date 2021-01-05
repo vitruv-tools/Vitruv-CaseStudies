@@ -4,7 +4,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Type
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.Parameter
 import org.palladiosimulator.pcm.repository.ParameterModifier
@@ -16,7 +16,7 @@ import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHel
 import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -63,7 +63,7 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
         // Created before test cases, should be still there:
         var pcmRepository = pcmParameter.operationSignature__Parameter.interface__OperationSignature.repository__Interface
         val umlPackage = helper.getUmlRepositoryPackage(pcmRepository)
-        assertNotNull("Could not retrieve UML package of " + pcmRepository, umlPackage)
+        assertNotNull(umlPackage, "Could not retrieve UML package of " + pcmRepository)
         umlPackage.checkJavaPackage
         umlPackage.nestedPackages.forEach[checkJavaPackage]
         helper.getUmlInterface(pcmRepository).checkJavaType
@@ -79,8 +79,8 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
         val pcmInterface = helper.createOperationInterface(pcmRepository)
         helper.createOperationSignature(pcmInterface)
 
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION)
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+        userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
         createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
@@ -99,7 +99,7 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
         umlParameter.type = umlType
         umlParameter.lower = lower
         umlParameter.upper = upper
-        userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION)
+        userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
         saveAndSynchronizeChanges(umlParameter)
 
         reloadResourceAndReturnRoot(umlParameter)
@@ -111,7 +111,7 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
         assertNotNull(umlParameter)
         checkParameterConcept(umlParameter)
         var reloadedUmlType = helper.getModifiableInstance(umlType)
-        assertNotNull("The DataType should not be null after reload", reloadedUmlType)
+        assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
         assertTrue(EcoreUtil.equals(umlParameter.type, reloadedUmlType))
         assertTrue(umlParameter.lower == lower)
         assertTrue(umlParameter.upper == upper)
@@ -120,7 +120,7 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
     @Test
     def void testCreateParameterConcept_UML_primitiveType() {
         var pcmRepository = createRepositoryWithSignature
-        assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_INT)
+        assertNotNull(helper.UML_INT, "Initialization of PrimitiveTypes seems to have failed")
         testCreateParameterConcept_UML(pcmRepository, helper.UML_INT, 1, 1)
     }
 
@@ -145,7 +145,7 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
         pcmParameter.parameterName = ParameterConceptTest.TEST_PARAMETER_NAME
         pcmParameter.dataType__Parameter = pcmType
         pcmSignature.parameters__OperationSignature += pcmParameter
-        userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
+        userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
         saveAndSynchronizeChanges(pcmParameter)
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
         pcmInterface = helper.getPcmOperationInterface(pcmRepository)
@@ -155,14 +155,14 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
         assertNotNull(pcmParameter)
         checkParameterConcept(pcmParameter)
         val reloadedPcmType = helper.getModifiableInstance(pcmType)
-        assertNotNull("The DataType should not be null after reload", reloadedPcmType)
+        assertNotNull(reloadedPcmType, "The DataType should not be null after reload")
         assertTrue(EcoreUtil.equals(pcmParameter.dataType__Parameter, reloadedPcmType))
     }
 
     @Test
     def void testCreateParameterConcept_PCM_primitiveType() {
         var pcmRepository = createRepositoryWithSignature
-        assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_INT)
+        assertNotNull(helper.PCM_INT, "Initialization of PrimitiveTypes seems to have failed")
         _testCreateParameterConcept_PCM_withType(pcmRepository, helper.PCM_INT)
     }
 

@@ -4,7 +4,7 @@ import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.CompositeComponent
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryComponent
@@ -15,7 +15,7 @@ import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHel
 import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -84,7 +84,7 @@ class RepositoryComponentConceptTest extends TransitiveChangeTest {
     def private Repository createRepository() {
         var pcmRepository = helper.createRepository()
 
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
         createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
@@ -113,10 +113,10 @@ class RepositoryComponentConceptTest extends TransitiveChangeTest {
         var umlRepositoryPkg = helper.getUmlRepositoryPackage(pcmRepository)
         startRecordingChanges(umlRepositoryPkg)
 
-        userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
+        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORYCOMPONENT_TYPE__COMPOSITE_COMPONENT)
         var umlComponentPkg = umlRepositoryPkg.createNestedPackage(COMPONENT_NAME)
 
-        userInteractor.addNextSingleSelection(0)
+        userInteraction.addNextSingleSelection(0)
         saveAndSynchronizeChanges(umlComponentPkg)
         reloadResourceAndReturnRoot(umlComponentPkg)
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository

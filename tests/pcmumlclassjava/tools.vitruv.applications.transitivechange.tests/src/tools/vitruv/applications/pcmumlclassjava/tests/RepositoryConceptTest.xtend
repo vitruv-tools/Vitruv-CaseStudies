@@ -4,7 +4,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
@@ -14,7 +14,7 @@ import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHel
 import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -86,9 +86,9 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 
         var umlRepositoryPkg = umlModel.createNestedPackage("testCbsRepository")
 
-        userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
+        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
         saveAndSynchronizeChanges(umlModel)
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 
@@ -103,7 +103,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
     def void testCreateRepositoryConcept_PCM() {
         var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
         createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
@@ -117,8 +117,8 @@ class RepositoryConceptTest extends TransitiveChangeTest {
     def void testRenameRepositoryConcept_PCM() {
         var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
         createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 
         pcmRepository.entityName = "Pcm2UmlNameChange"
@@ -127,7 +127,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 
         val newName = "pcm2UmlNameChange_2" // should be synchronized to upper case
         pcmRepository.entityName = newName
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
         saveAndSynchronizeChanges(pcmRepository)
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 
@@ -144,7 +144,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
     def void testDeleteRepositoryConcept_PCM() {
         var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
         pcmRepository.entityName = "testCbsRepository" // has to be capitalized via round-trip
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
         createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
@@ -156,7 +156,7 @@ class RepositoryConceptTest extends TransitiveChangeTest {
         var umlRepositoryPackage = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
         var umlModel = umlRepositoryPackage.nestingPackage
 
-        userInteractor.addNextConfirmationInput(true)
+        userInteraction.addNextConfirmationInput(true)
         deleteAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 
         assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
@@ -168,6 +168,6 @@ class RepositoryConceptTest extends TransitiveChangeTest {
 
         // There should be no Java packages:
         val allJavaPackages = typeof(org.emftext.language.java.containers.Package).getCorrespondingObjectsOfClass
-        assertEquals("Too many Java packages: " + allJavaPackages, umlModel?.packagedElements.size, allJavaPackages.size)
+        assertEquals(umlModel?.packagedElements.size, allJavaPackages.size, "Too many Java packages: " + allJavaPackages)
     }
 }

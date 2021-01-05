@@ -1,6 +1,6 @@
 package tools.vitruv.applications.pcmumlclassjava
 
-import org.junit.BeforeClass
+import org.junit.jupiter.api.BeforeAll
 
 /**
  * This class allows to create transitive change tests that to do use the fully network,
@@ -10,7 +10,7 @@ import org.junit.BeforeClass
  */
 abstract class LinearTransitiveChangeTest extends TransitiveChangeTest {
 
-    @BeforeClass
+    @BeforeAll
     def static void enforceLinearNetwork() {
         linearNetwork = true
     }

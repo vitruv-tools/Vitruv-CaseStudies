@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
 import org.eclipse.uml2.uml.VisibilityKind
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.system.System
 import org.palladiosimulator.pcm.system.SystemFactory
 import tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.Java2PcmUserSelection
@@ -15,7 +15,7 @@ import tools.vitruv.applications.pcmumlclass.TagLiterals
 import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -81,12 +81,12 @@ class SystemConceptTest extends TransitiveChangeTest {
         pcmSystem.entityName = SYSTEM_NAME
 
         // Always required
-        userInteractor.addNextTextInput(UML_MODEL_FILE)
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection) // Also serves as NOTHING in the rarer case
+        userInteraction.addNextTextInput(UML_MODEL_FILE)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection) // Also serves as NOTHING in the rarer case
         // Depending on the transformation execution order sometimes (but rarely) required:
-        userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING)
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
 
         createAndSynchronizeModel(PCM_MODEL_FILE, pcmSystem)
         pcmSystem = reloadResourceAndReturnRoot(pcmSystem) as System
@@ -100,18 +100,18 @@ class SystemConceptTest extends TransitiveChangeTest {
         var umlModel = UMLFactory.eINSTANCE.createModel
         umlModel.name = MODEL_NAME
 
-        userInteractor.addNextTextInput(PCM_MODEL_FILE)
+        userInteraction.addNextTextInput(PCM_MODEL_FILE)
         createAndSynchronizeModel(UML_MODEL_FILE, umlModel)
 
         var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
 
-        userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
-        userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING) // In the rare case also serves as SYSTEM  
-        userInteractor.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING) // In the rare case also serves as SYSTEM  
+        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING) // In the rare case also serves as SYSTEM  
+        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING) // In the rare case also serves as SYSTEM  
         // In the rare case not needed (depending on the transformation execution order)
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
-        userInteractor.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
 
         saveAndSynchronizeChanges(umlSystemPkg)
         umlModel = reloadResourceAndReturnRoot(umlModel) as Model

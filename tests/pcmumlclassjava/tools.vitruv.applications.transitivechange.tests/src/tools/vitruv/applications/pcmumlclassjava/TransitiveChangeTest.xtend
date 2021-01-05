@@ -35,17 +35,18 @@ import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChang
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.umljava.java2uml.JavaToUmlChangePropagationSpecification
 import tools.vitruv.applications.umljava.uml2java.UmlToJavaChangePropagationSpecification
-import tools.vitruv.applications.util.temporary.java.JavaVisibility
+import tools.vitruv.applications.umljava.util.java.JavaVisibility
 import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
-import tools.vitruv.domains.pcm.PcmDomainProvider
-import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
 import static tools.vitruv.applications.umljava.testutil.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
+import tools.vitruv.domains.uml.UmlDomainProvider
+import tools.vitruv.domains.pcm.PcmDomainProvider
+import org.junit.jupiter.api.BeforeEach
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
@@ -56,7 +57,7 @@ abstract class TransitiveChangeTest extends PcmUmlClassApplicationTest {
     protected static boolean linearNetwork // set true (before class) to avoid the transformation between PCM and Java
     static val logger = Logger.getLogger(typeof(TransitiveChangeTest).simpleName)
 
-    override protected createChangePropagationSpecifications() {
+    override protected getChangePropagationSpecifications() {
         val specifications = new ArrayList<ChangePropagationSpecification>()
         specifications.addAll(
             new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
@@ -70,11 +71,11 @@ abstract class TransitiveChangeTest extends PcmUmlClassApplicationTest {
         return specifications
     }
 
-    override protected getVitruvDomains() {
+    @BeforeEach
+    def void patchDomains() { // ensures all domains execute transitively
         new PcmDomainProvider().domain.enableTransitiveChangePropagation
         new UmlDomainProvider().domain.enableTransitiveChangePropagation
         new JavaDomainProvider().domain.enableTransitiveChangePropagation
-        return #[new PcmDomainProvider().domain, new UmlDomainProvider().domain, new JavaDomainProvider().domain]
     }
 
     def protected checkJavaType(Classifier umlClassifier) {

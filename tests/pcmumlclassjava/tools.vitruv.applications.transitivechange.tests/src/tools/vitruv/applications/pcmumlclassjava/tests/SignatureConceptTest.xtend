@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.ParameterDirectionKind
 import org.eclipse.uml2.uml.Type
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.palladiosimulator.pcm.repository.DataType
 import org.palladiosimulator.pcm.repository.OperationSignature
 import org.palladiosimulator.pcm.repository.Repository
@@ -17,7 +17,7 @@ import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTestHel
 import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -81,8 +81,8 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
         var pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
         helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 
-        userInteractor.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION)
+        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+        userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
         createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
 
         return reloadResourceAndReturnRoot(pcmRepository) as Repository
@@ -117,7 +117,7 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
         umlReturnParameter.lower = lower
         umlReturnParameter.upper = upper
 
-        userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION)
+        userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
         saveAndSynchronizeChanges(umlInterface)
         reloadResourceAndReturnRoot(umlInterface)
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
@@ -127,21 +127,21 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
 
         checkSignatureConcept(umlOperation)
         var reloadedUmlType = helper.getModifiableInstance(umlType)
-        assertNotNull("The DataType should not be null after reload", reloadedUmlType)
+        assertNotNull(reloadedUmlType, "The DataType should not be null after reload")
         assertTrue(EcoreUtil.equals(umlOperation.type, reloadedUmlType))
         assertEquals(lower, umlOperation.lower)
         assertEquals(upper, umlOperation.upper)
         assertEquals(
-            "The Operation should have only a return parameter, since no other parameters were supposed to be added by this test.",
             1,
-            umlOperation.ownedParameters.size
+            umlOperation.ownedParameters.size,
+            "The Operation should have only a return parameter, since no other parameters were supposed to be added by this test."
         )
     }
 
     @Test
     def void testCreateSignatureConcept_UML_primitiveReturnType() {
         var pcmRepository = _testCreateSignatureConcept_UML
-        assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.UML_STRING)
+        assertNotNull(helper.UML_STRING, "Initialization of PrimitiveTypes seems to have failed")
         _testReturnTypePropagation_UML(pcmRepository, helper.UML_STRING, 1, 1)
     }
 
@@ -165,7 +165,7 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
         pcmSignature.entityName = TEST_SIGNATURE_NAME
         pcmSignature.returnType__OperationSignature = pcmType
         pcmInterface.signatures__OperationInterface += pcmSignature
-        userInteractor.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
+        userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
         saveAndSynchronizeChanges(pcmSignature)
 
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
@@ -176,20 +176,20 @@ class SignatureConceptTest extends LinearTransitiveChangeTest {
         checkSignatureConcept(pcmSignature)
         assertTrue(pcmSignature.entityName == TEST_SIGNATURE_NAME)
         val reloadedPcmType = helper.getModifiableInstance(pcmType)
-        assertNotNull("The DataType should not be null after reload", reloadedPcmType)
+        assertNotNull(reloadedPcmType, "The DataType should not be null after reload")
         assertTrue(EcoreUtil.equals(pcmSignature.returnType__OperationSignature, reloadedPcmType))
 
         assertEquals(
-            "The Signature should have no parameter, since none were supposed to be added by this test.",
             0,
-            pcmSignature.parameters__OperationSignature.size
+            pcmSignature.parameters__OperationSignature.size,
+            "The Signature should have no parameter, since none were supposed to be added by this test."
         )
     }
 
     @Test
     def void testCreateSignatureConcept_PCM_primitiveReturnType() {
         var pcmRepository = createRepositoryWithInterface()
-        assertNotNull("Initialization of PrimitiveTypes seems to have failed", helper.PCM_STRING)
+        assertNotNull(helper.PCM_STRING, "Initialization of PrimitiveTypes seems to have failed")
         _testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.PCM_STRING)
     }
 
