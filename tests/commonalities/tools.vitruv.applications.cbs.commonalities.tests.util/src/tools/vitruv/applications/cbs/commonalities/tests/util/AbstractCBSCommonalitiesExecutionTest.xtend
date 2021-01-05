@@ -2,7 +2,6 @@ package tools.vitruv.applications.cbs.commonalities.tests.util
 
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.AfterEach
 import java.nio.file.Path
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import tools.vitruv.dsls.commonalities.testutils.ExecutionTestCompiler
 import org.junit.jupiter.api.^extension.ExtendWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
@@ -64,72 +62,45 @@ abstract class AbstractCBSCommonalitiesExecutionTest extends LegacyVitruvApplica
 	}
 
 	@Accessors(PROTECTED_GETTER)
-	val VitruvApplicationTestAdapter vitruvApplicationTestAdapter = createVitruvApplicationTestAdapter()
+	val VitruvApplicationTestAdapter vitruvApplicationTestAdapter = new VitruvApplicationTestAdapter() {
+		/**
+		 * Returns a resource from the runtime test project
+		 */
+		override getResourceAt(String modelPathInProject) {
+			validationResourceSet.getResource(getUri(Path.of(modelPathInProject)), true);
+		}
 
-	private def VitruvApplicationTestAdapter createVitruvApplicationTestAdapter() {
-		val testResourceFunc = [ String resourcePath |
-			getTestResource(resourcePath)
-		]
-		val createAndSynchronizeModelFunc = [ String modelPathInProject, EObject rootElement |
-			createAndSynchronizeModel(modelPathInProject, rootElement)
+		/**
+		 * Returns a test resource from the test specification project (this project) rather than the runtime project
+		 */
+		override getTestResource(String resourcePathInExecutingProject) {
+			validationResourceSet.getResource(URI.createURI(resourcePathInExecutingProject), true)
+		}
+
+		override createAndSynchronizeModel(String modelPathInProject, EObject rootElement) {
+			val resource = resourceAt(Path.of(modelPathInProject)).startRecordingChanges => [
+				contents += rootElement
+			]
+			propagate
 			// This is a necessary hack, because the transformations recreate elements, such that the resulting models are the same but new UUIDs are assigned.
 			// Starting recording again reloads the UUIDs
-			startRecordingChanges(rootElement)
-		]
-		val saveAndSynchronizeChangesFunc = [ Resource resource |
-			saveAndSynchronizeChanges(resource)
-		]
-		val deleteAndSynchronizeModelFunc = [ String modelPathInProject |
-			deleteAndSynchronizeModel(modelPathInProject)
-		]
-		return new VitruvApplicationTestAdapter() {
-
-			override getResourceAt(String modelPathInProject) {
-				// The resources get loaded into the result resource set:
-				resultResourceSet.getResource(getUri(Path.of(modelPathInProject)), true);
-			}
-
-			override getTestResource(String resourcePath) {
-				testResourceFunc.apply(resourcePath)
-			}
-
-			override createAndSynchronizeModel(String modelPathInProject, EObject rootElement) {
-				createAndSynchronizeModelFunc.apply(modelPathInProject, rootElement)
-			}
-
-			override saveAndSynchronizeChanges(Resource resource) {
-				saveAndSynchronizeChangesFunc.apply(resource)
-			}
-
-			override deleteAndSynchronizeModel(String modelPathInProject) {
-				deleteAndSynchronizeModelFunc.apply(modelPathInProject)
-			}
+			startRecordingChanges(resource)
 		}
 	}
 
 	@Accessors(PROTECTED_GETTER)
-	var ResourceSet testResourcesResourceSet
-
-	// Stores the loaded target models.
-	@Accessors(PROTECTED_GETTER)
-	var ResourceSet resultResourceSet
+	var ResourceSet validationResourceSet
 
 	@BeforeEach
 	def protected void setupResourceSets() {
-		testResourcesResourceSet = new ResourceSetImpl()
-		resultResourceSet = new ResourceSetImpl()
+		validationResourceSet = new ResourceSetImpl()
 	}
 
 	@AfterEach
 	def protected void cleanupResourceSets() {
-		testResourcesResourceSet = null
-		resultResourceSet = null
+		validationResourceSet.resources.forEach[unload]
+		validationResourceSet.resources.clear
+		validationResourceSet = null
 	}
 
-	protected final def getTestResource(String resourcePath) {
-		val resourceUri = URI.createURI(resourcePath)
-		val resource = testResourcesResourceSet.getResource(resourceUri, true)
-		assertNotNull(resource, "Resource not found: " + resourcePath)
-		return resource
-	}
 }
