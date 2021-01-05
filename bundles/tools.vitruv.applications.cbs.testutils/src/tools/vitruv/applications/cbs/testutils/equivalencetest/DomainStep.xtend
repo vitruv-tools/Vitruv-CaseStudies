@@ -33,7 +33,7 @@ package class MainStep implements DomainStep {
 
 	override Map<VitruvDomain, DomainStep> determineReferenceSteps(
 		Map<VitruvDomain, ? extends Collection<? extends DomainStep>> availableSteps) {
-		availableSteps.filter[domain, _|domain != targetDomain].mapValues[get(0)]
+		availableSteps.mapValues[get(0)]
 	}
 }
 
