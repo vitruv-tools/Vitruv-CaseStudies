@@ -15,7 +15,4 @@ interface VitruvApplicationTestAdapter {
 
 	def void createAndSynchronizeModel(String modelPathInProject, EObject rootElement)
 
-	def void saveAndSynchronizeChanges(Resource resource)
-
-	def void deleteAndSynchronizeModel(String modelPathInProject)
 }
