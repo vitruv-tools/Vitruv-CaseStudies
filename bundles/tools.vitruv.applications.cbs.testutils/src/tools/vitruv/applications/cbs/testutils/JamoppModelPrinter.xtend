@@ -94,7 +94,7 @@ class JamoppModelPrinter implements ModelPrinter {
 				]
 			case NAMESPACE_AWARE_ELEMENT__NAMESPACES:
 				target.printList(valueList, SINGLE_LINE) [ subTarget, element |
-					subTarget.printValue(element)
+					subPrinter.printFeatureValue(subTarget, idProvider, feature, element)
 				]
 			default:
 				NOT_RESPONSIBLE
