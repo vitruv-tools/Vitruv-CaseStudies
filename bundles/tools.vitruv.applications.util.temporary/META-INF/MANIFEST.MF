@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Vitruvius Temporary Utils
+Bundle-Name: Vitruv Temporary Utils
 Comment: This project is only temporary, as the utils will be moved to their respective domains!
 Bundle-SymbolicName: tools.vitruv.applications.util.temporary
 Automatic-Module-Name: tools.vitruv.applications.util.temporary
@@ -8,11 +8,10 @@ Bundle-Version: 0.2.0.qualifier
 Require-Bundle: org.eclipse.xtend.lib,
  tools.vitruv.domains.uml,
  tools.vitruv.domains.java,
- edu.kit.ipd.sdq.activextendannotations,
- org.apache.log4j,
- tools.vitruv.domains.java.util,
  tools.vitruv.domains.pcm,
- tools.vitruv.extensions.dslsruntime.mappings,
+ org.apache.log4j,
+ edu.kit.ipd.sdq.activextendannotations,
+ tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.framework.userinteraction
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: tools.vitruv.applications.util.temporary.java,
