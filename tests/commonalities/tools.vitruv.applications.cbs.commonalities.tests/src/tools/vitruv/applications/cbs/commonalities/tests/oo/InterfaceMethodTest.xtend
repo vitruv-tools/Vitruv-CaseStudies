@@ -1,23 +1,18 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo
 
 import java.util.List
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.oo.java.JavaInterfaceMethodTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlInterfaceMethodTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		return #[
 			#[
@@ -120,109 +115,128 @@ class InterfaceMethodTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel multipleInterfaceMethodsCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
-		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
-	}
-
 	// Basic
 
-	@Test
-	def void basicInterfaceMethodCreation() {
-		sourceModels.basicInterfaceMethodCreation.createAndSynchronize()
-		targetModels.basicInterfaceMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void basicInterfaceMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.basicInterfaceMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.basicInterfaceMethodCreation.check()
 	}
 
 	// Static
 
-	@Test
-	def void staticInterfaceMethodCreation() {
-		sourceModels.staticInterfaceMethodCreation.createAndSynchronize()
-		targetModels.staticInterfaceMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void staticInterfaceMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.staticInterfaceMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.staticInterfaceMethodCreation.check()
 	}
 
 	// Return type
 
-	@Test
-	def void interfaceMethodWithIntegerReturnCreation() {
-		sourceModels.interfaceMethodWithIntegerReturnCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithIntegerReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithIntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithIntegerReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithIntegerReturnCreation.check()
 	}
 
-	@Test
-	def void interfaceMethodWithStringReturnCreation() {
-		sourceModels.interfaceMethodWithStringReturnCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithStringReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithStringReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithStringReturnCreation.check()
 	}
 
-	@Test
-	def void interfaceMethodWithClassReturnCreation() {
-		sourceModels.interfaceMethodWithClassReturnCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithClassReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithClassReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithClassReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithClassReturnCreation.check()
 	}
 
-	@Test
-	def void interfaceMethodWithSelfReturnCreation() {
-		sourceModels.interfaceMethodWithSelfReturnCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithSelfReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithSelfReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithSelfReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithSelfReturnCreation.check()
 	}
 
 	// Input parameters
 
-	@Test
-	def void interfaceMethodWithIntegerInputCreation() {
-		sourceModels.interfaceMethodWithIntegerInputCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithIntegerInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithIntegerInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithIntegerInputCreation.check()
 	}
 
-	@Test
-	def void interfaceMethodWithMultiplePrimitiveInputsCreation() {
-		sourceModels.interfaceMethodWithMultiplePrimitiveInputsCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithMultiplePrimitiveInputsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithMultiplePrimitiveInputsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithMultiplePrimitiveInputsCreation.check()
 	}
 
-	@Test
-	def void interfaceMethodWithStringInputCreation() {
-		sourceModels.interfaceMethodWithStringInputCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithStringInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithStringInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithStringInputCreation.check()
 	}
 
-	@Test
-	def void interfaceMethodWithClassInputCreation() {
-		sourceModels.interfaceMethodWithClassInputCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithClassInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithClassInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithClassInputCreation.check()
 	}
 
-	@Test
-	def void interfaceMethodWithSelfInputCreation() {
-		sourceModels.interfaceMethodWithSelfInputCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithSelfInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithSelfInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithSelfInputCreation.check()
 	}
 
-	@Test
-	def void interfaceMethodWithMixedInputsCreation() {
-		sourceModels.interfaceMethodWithMixedInputsCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithMixedInputsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithMixedInputsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithMixedInputsCreation.check()
 	}
 
 	// Mixed input and return types
 
-	@Test
-	def void interfaceMethodWithMixedInputsAndReturnCreation() {
-		sourceModels.interfaceMethodWithMixedInputsAndReturnCreation.createAndSynchronize()
-		targetModels.interfaceMethodWithMixedInputsAndReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceMethodWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceMethodWithMixedInputsAndReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceMethodWithMixedInputsAndReturnCreation.check()
 	}
 
 	// Multiple methods
 
-	@Test
-	def void multipleInterfaceMethodsCreation() {
-		sourceModels.multipleInterfaceMethodsCreation.createAndSynchronize()
-		targetModels.multipleInterfaceMethodsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multipleInterfaceMethodsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multipleInterfaceMethodsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multipleInterfaceMethodsCreation.check()
 	}
 
 	// TODO rename

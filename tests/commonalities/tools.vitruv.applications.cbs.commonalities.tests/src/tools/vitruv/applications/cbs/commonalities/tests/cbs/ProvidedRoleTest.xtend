@@ -1,25 +1,20 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs
 
 import java.util.List
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.java.JavaProvidedRoleTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm.PcmProvidedRoleTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlProvidedRoleTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
-import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class ProvidedRoleTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		val pcmModels = new PcmTestModelsProvider [new PcmProvidedRoleTestModels(it)]
 		val umlModels = new UmlTestModelsProvider [new UmlProvidedRoleTestModels(it)]
@@ -52,24 +47,19 @@ class ProvidedRoleTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel componentWithMultipleProvidedRolesCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void componentWithProvidedRoleCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
+		sourceModelsProvider.getModels.componentWithProvidedRoleCreation.createAndSynchronize()
+		targetModelsProvider.getModels.componentWithProvidedRoleCreation.check()
 	}
 
-	@Test
-	def void componentWithProvidedRoleCreation() {
-		sourceModels.componentWithProvidedRoleCreation.createAndSynchronize()
-		targetModels.componentWithProvidedRoleCreation.check()
-	}
-
-	@Test
-	def void componentWithMultipleProvidedRolesCreation() {
-		sourceModels.componentWithMultipleProvidedRolesCreation.createAndSynchronize()
-		targetModels.componentWithMultipleProvidedRolesCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void componentWithMultipleProvidedRolesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.componentWithMultipleProvidedRolesCreation.createAndSynchronize()
+		targetModelsProvider.getModels.componentWithMultipleProvidedRolesCreation.check()
 	}
 }

@@ -1,27 +1,22 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs
 
 import java.util.List
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.java.JavaOperationTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm.PcmOperationTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlOperationTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
-import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.*
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class OperationTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		val domainModelsProviders = #[
 			new PcmTestModelsProvider [new PcmOperationTestModels(it)],
@@ -82,71 +77,78 @@ class OperationTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel multipleOperationsCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
-		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
-	}
-
 	// Empty
 
-	@Test
-	def void emptyOperationCreation() {
-		sourceModels.emptyOperationCreation.createAndSynchronize()
-		targetModels.emptyOperationCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void emptyOperationCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.emptyOperationCreation.createAndSynchronize()
+		targetModelsProvider.getModels.emptyOperationCreation.check()
 	}
 
 	// Return type
 
-	@Test
-	def void operationWithIntegerReturnCreation() {
-		sourceModels.operationWithIntegerReturnCreation.createAndSynchronize()
-		targetModels.operationWithIntegerReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void operationWithIntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.operationWithIntegerReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.operationWithIntegerReturnCreation.check()
 	}
 
-	@Test
-	def void operationWithStringReturnCreation() {
-		sourceModels.operationWithStringReturnCreation.createAndSynchronize()
-		targetModels.operationWithStringReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void operationWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.operationWithStringReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.operationWithStringReturnCreation.check()
 	}
 
 	// Input parameters
 
-	@Test
-	def void operationWithIntegerInputCreation() {
-		sourceModels.operationWithIntegerInputCreation.createAndSynchronize()
-		targetModels.operationWithIntegerInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void operationWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.operationWithIntegerInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.operationWithIntegerInputCreation.check()
 	}
 
-	@Test
-	def void operationWithMultiplePrimitiveInputsCreation() {
-		sourceModels.operationWithMultiplePrimitiveInputsCreation.createAndSynchronize()
-		targetModels.operationWithMultiplePrimitiveInputsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void operationWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.operationWithMultiplePrimitiveInputsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.operationWithMultiplePrimitiveInputsCreation.check()
 	}
 
-	@Test
-	def void operationWithStringInputCreation() {
-		sourceModels.operationWithStringInputCreation.createAndSynchronize()
-		targetModels.operationWithStringInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void operationWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.operationWithStringInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.operationWithStringInputCreation.check()
 	}
 
 	// Mixed input and return types
 
-	@Test
-	def void operationWithMixedInputsAndReturnCreation() {
-		sourceModels.operationWithMixedInputsAndReturnCreation.createAndSynchronize()
-		targetModels.operationWithMixedInputsAndReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void operationWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.operationWithMixedInputsAndReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.operationWithMixedInputsAndReturnCreation.check()
 	}
 
 	// Multiple operations
 
-	@Test
-	def void multipleOperationsCreation() {
-		sourceModels.multipleOperationsCreation.createAndSynchronize()
-		targetModels.multipleOperationsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multipleOperationsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multipleOperationsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multipleOperationsCreation.check()
 	}
 
 	// TODO renaming

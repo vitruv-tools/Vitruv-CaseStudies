@@ -1,27 +1,22 @@
 package tools.vitruv.applications.cbs.commonalities.tests.cbs
 
 import java.util.List
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.java.JavaCompositeDataTypeTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.pcm.PcmCompositeDataTypeTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.cbs.uml.UmlCompositeDataTypeTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
-import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.*
+import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.ParameterizedTest
+import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		val domainModelsProviders = #[
 			new PcmTestModelsProvider [new PcmCompositeDataTypeTestModels(it)],
@@ -81,67 +76,74 @@ class CompositeDataTypeTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel compositeDataTypeWithCompositeElementsCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
-		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
-	}
-
 	// Empty CompositeDataType
 
-	@Test
-	def void emptyCompositeDataTypeCreation() {
-		sourceModels.emptyCompositeDataTypeCreation.createAndSynchronize()
-		targetModels.emptyCompositeDataTypeCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void emptyCompositeDataTypeCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.emptyCompositeDataTypeCreation.createAndSynchronize()
+		targetModelsProvider.getModels.emptyCompositeDataTypeCreation.check()
 	}
 
 	// Primitive inner elements
 
-	@Test
-	def void compositeDataTypeWithBooleanElementCreation() {
-		sourceModels.compositeDataTypeWithBooleanElementCreation.createAndSynchronize()
-		targetModels.compositeDataTypeWithBooleanElementCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void compositeDataTypeWithBooleanElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.compositeDataTypeWithBooleanElementCreation.createAndSynchronize()
+		targetModelsProvider.getModels.compositeDataTypeWithBooleanElementCreation.check()
 	}
 
-	@Test
-	def void compositeDataTypeWithIntegerElementCreation() {
-		sourceModels.compositeDataTypeWithIntegerElementCreation.createAndSynchronize()
-		targetModels.compositeDataTypeWithIntegerElementCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void compositeDataTypeWithIntegerElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.compositeDataTypeWithIntegerElementCreation.createAndSynchronize()
+		targetModelsProvider.getModels.compositeDataTypeWithIntegerElementCreation.check()
 	}
 
-	@Test
-	def void compositeDataTypeWithDoubleElementCreation() {
-		sourceModels.compositeDataTypeWithDoubleElementCreation.createAndSynchronize()
-		targetModels.compositeDataTypeWithDoubleElementCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void compositeDataTypeWithDoubleElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.compositeDataTypeWithDoubleElementCreation.createAndSynchronize()
+		targetModelsProvider.getModels.compositeDataTypeWithDoubleElementCreation.check()
 	}
 
-	@Test
-	def void compositeDataTypeWithStringElementCreation() {
-		sourceModels.compositeDataTypeWithStringElementCreation.createAndSynchronize()
-		targetModels.compositeDataTypeWithStringElementCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void compositeDataTypeWithStringElementCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.compositeDataTypeWithStringElementCreation.createAndSynchronize()
+		targetModelsProvider.getModels.compositeDataTypeWithStringElementCreation.check()
 	}
 
-	@Test
-	def void compositeDataTypeWithWithMultiplePrimitiveElementsCreation() {
-		sourceModels.compositeDataTypeWithWithMultiplePrimitiveElementsCreation.createAndSynchronize()
-		targetModels.compositeDataTypeWithWithMultiplePrimitiveElementsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void compositeDataTypeWithWithMultiplePrimitiveElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.compositeDataTypeWithWithMultiplePrimitiveElementsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.compositeDataTypeWithWithMultiplePrimitiveElementsCreation.check()
 	}
 
 	// Multiple CompositeDataTypes
 
-	@Test
-	def void multipleCompositeDataTypesWithPrimitiveElementsCreation() {
-		sourceModels.multipleCompositeDataTypesWithPrimitiveElementsCreation.createAndSynchronize()
-		targetModels.multipleCompositeDataTypesWithPrimitiveElementsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multipleCompositeDataTypesWithPrimitiveElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multipleCompositeDataTypesWithPrimitiveElementsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multipleCompositeDataTypesWithPrimitiveElementsCreation.check()
 	}
 
-	@Test
-	def void compositeDataTypeWithCompositeElementsCreation() {
-		sourceModels.compositeDataTypeWithCompositeElementsCreation.createAndSynchronize()
-		targetModels.compositeDataTypeWithCompositeElementsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void compositeDataTypeWithCompositeElementsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.compositeDataTypeWithCompositeElementsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.compositeDataTypeWithCompositeElementsCreation.check()
 	}
 
 	// TODO renaming

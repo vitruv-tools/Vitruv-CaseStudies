@@ -1,25 +1,20 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo
 
 import java.util.List
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.oo.java.JavaInterfaceTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlInterfaceTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.*
+import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.ParameterizedTest
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class InterfaceTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		val domainModelsProviders = #[
 			new UmlTestModelsProvider [new UmlInterfaceTestModels(it)],
@@ -64,49 +59,50 @@ class InterfaceTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel interfaceWithMultipleSuperInterfacesCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
-		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
-	}
-
 	// Empty interface
 
-	@Test
-	def void emptyInterfaceCreation() {
-		sourceModels.emptyInterfaceCreation.createAndSynchronize()
-		targetModels.emptyInterfaceCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void emptyInterfaceCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.emptyInterfaceCreation.createAndSynchronize()
+		targetModelsProvider.getModels.emptyInterfaceCreation.check()
 	}
 
 	// Multiple interfaces
 
-	@Test
-	def void multipleInterfacesInSamePackageCreation() {
-		sourceModels.multipleInterfacesInSamePackageCreation.createAndSynchronize()
-		targetModels.multipleInterfacesInSamePackageCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multipleInterfacesInSamePackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multipleInterfacesInSamePackageCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multipleInterfacesInSamePackageCreation.check()
 	}
 
-	@Test
-	def void multipleInterfacesInDifferentPackagesCreation() {
-		sourceModels.multipleInterfacesInDifferentPackagesCreation.createAndSynchronize()
-		targetModels.multipleInterfacesInDifferentPackagesCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multipleInterfacesInDifferentPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multipleInterfacesInDifferentPackagesCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multipleInterfacesInDifferentPackagesCreation.check()
 	}
 
 	// Super interfaces
 
-	@Test
-	def void interfaceWithSuperInterfaceCreation() {
-		sourceModels.interfaceWithSuperInterfaceCreation.createAndSynchronize()
-		targetModels.interfaceWithSuperInterfaceCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceWithSuperInterfaceCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceWithSuperInterfaceCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceWithSuperInterfaceCreation.check()
 	}
 
-	@Test
-	def void interfaceWithMultipleSuperInterfacesCreation() {
-		sourceModels.interfaceWithMultipleSuperInterfacesCreation.createAndSynchronize()
-		targetModels.interfaceWithMultipleSuperInterfacesCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void interfaceWithMultipleSuperInterfacesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.interfaceWithMultipleSuperInterfacesCreation.createAndSynchronize()
+		targetModelsProvider.getModels.interfaceWithMultipleSuperInterfacesCreation.check()
 	}
 
 	// TODO renaming
