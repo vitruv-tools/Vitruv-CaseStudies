@@ -11,3 +11,4 @@ Require-Bundle: org.junit.jupiter.api,
  org.hamcrest.core,
  org.apache.commons.io
 Bundle-Vendor: vitruv.tools
+Export-Package: tools.vitruv.applications.umljava.tests.util

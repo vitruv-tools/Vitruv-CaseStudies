@@ -36,7 +36,7 @@ import tools.vitruv.applications.pcmumlclass.CombinedUmlClassToPcmReactionsChang
 import tools.vitruv.applications.pcmumlclass.tests.PcmUmlClassApplicationTest
 import tools.vitruv.applications.umljava.JavaToUmlChangePropagationSpecification
 import tools.vitruv.applications.umljava.UmlToJavaChangePropagationSpecification
-import tools.vitruv.applications.umljava.util.java.JavaVisibility
+import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.domains.java.JavaDomainProvider
 import tools.vitruv.domains.java.util.JavaPersistenceHelper
 import tools.vitruv.domains.pcm.PcmDomainProvider
@@ -44,8 +44,8 @@ import tools.vitruv.domains.uml.UmlDomainProvider
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification
 
 import static org.junit.jupiter.api.Assertions.*
-import static tools.vitruv.applications.umljava.testutil.JavaTestUtil.*
-import static tools.vitruv.applications.umljava.testutil.TestUtil.*
+import static tools.vitruv.applications.umljava.tests.util.JavaTestUtil.*
+import static tools.vitruv.applications.umljava.tests.util.TestUtil.*
 import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 /** 
