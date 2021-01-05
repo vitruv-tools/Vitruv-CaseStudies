@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -11,6 +11,10 @@
 	<artifactId>applications-cbs-parent</artifactId>
 	<version>0.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
+	<properties>
+		<tycho.version>2.2.0-SNAPSHOT</tycho.version>
+	</properties>
 
 	<repositories>
 		<repository>
@@ -29,6 +33,13 @@
 			<url>https://updatesite.palladio-simulator.com/palladio-core-pcm/releases/4.3.0/</url>
 		</repository>
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>tycho-snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<profiles>
 		<profile>
