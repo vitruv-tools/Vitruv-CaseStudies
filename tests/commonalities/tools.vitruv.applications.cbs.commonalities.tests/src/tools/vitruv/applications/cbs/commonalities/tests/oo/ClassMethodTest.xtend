@@ -1,23 +1,19 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo
 
 import java.util.List
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.oo.java.JavaClassMethodTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlClassMethodTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.Disabled
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		return #[
 			#[
@@ -131,147 +127,179 @@ class ClassMethodTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel multipleClassMethodsCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
-		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
-	}
-
 	// Basic
 
-	@Test
-	def void basicClassMethodCreation() {
-		sourceModels.basicClassMethodCreation.createAndSynchronize()
-		targetModels.basicClassMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void basicClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.basicClassMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.basicClassMethodCreation.check()
 	}
 
 	// Visibility
 
-	@Test
-	def void publicClassMethodCreation() {
-		sourceModels.publicClassMethodCreation.createAndSynchronize()
-		targetModels.publicClassMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void publicClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.publicClassMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.publicClassMethodCreation.check()
 	}
 
-	@Test
-	def void protectedClassMethodCreation() {
-		sourceModels.protectedClassMethodCreation.createAndSynchronize()
-		targetModels.protectedClassMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void protectedClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.protectedClassMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.protectedClassMethodCreation.check()
 	}
 
-	@Test
-	def void packagePrivateClassMethodCreation() {
-		sourceModels.packagePrivateClassMethodCreation.createAndSynchronize()
-		targetModels.packagePrivateClassMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void packagePrivateClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.packagePrivateClassMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.packagePrivateClassMethodCreation.check()
 	}
 
-	@Test
-	def void privateClassMethodCreation() {
-		sourceModels.privateClassMethodCreation.createAndSynchronize()
-		targetModels.privateClassMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void privateClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.privateClassMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.privateClassMethodCreation.check()
 	}
 
 	// Modifiers
 
-	@Test
-	def void finalClassMethodCreation() {
-		sourceModels.finalClassMethodCreation.createAndSynchronize()
-		targetModels.finalClassMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void finalClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.finalClassMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.finalClassMethodCreation.check()
 	}
 
-	@Test
-	def void abstractClassMethodCreation() {
-		sourceModels.abstractClassMethodCreation.createAndSynchronize()
-		targetModels.abstractClassMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void abstractClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.abstractClassMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.abstractClassMethodCreation.check()
 	}
 
-	@Test
-	def void staticClassMethodCreation() {
-		sourceModels.staticClassMethodCreation.createAndSynchronize()
-		targetModels.staticClassMethodCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void staticClassMethodCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.staticClassMethodCreation.createAndSynchronize()
+		targetModelsProvider.getModels.staticClassMethodCreation.check()
 	}
 
 	// Return type
 
-	@Test
-	def void classMethodWithIntegerReturnCreation() {
-		sourceModels.classMethodWithIntegerReturnCreation.createAndSynchronize()
-		targetModels.classMethodWithIntegerReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void IntegerReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithIntegerReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithIntegerReturnCreation.check()
 	}
 
-	@Test
-	def void classMethodWithStringReturnCreation() {
-		sourceModels.classMethodWithStringReturnCreation.createAndSynchronize()
-		targetModels.classMethodWithStringReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	@Disabled
+	def void classMethodWithStringReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithStringReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithStringReturnCreation.check()
 	}
 
-	@Test
-	def void classMethodWithClassReturnCreation() {
-		sourceModels.classMethodWithClassReturnCreation.createAndSynchronize()
-		targetModels.classMethodWithClassReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithClassReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithClassReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithClassReturnCreation.check()
 	}
 
-	@Test
-	def void classMethodWithSelfReturnCreation() {
-		sourceModels.classMethodWithSelfReturnCreation.createAndSynchronize()
-		targetModels.classMethodWithSelfReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithSelfReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithSelfReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithSelfReturnCreation.check()
 	}
 
 	// Input parameters
 
-	@Test
-	def void classMethodWithIntegerInputCreation() {
-		sourceModels.classMethodWithIntegerInputCreation.createAndSynchronize()
-		targetModels.classMethodWithIntegerInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithIntegerInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithIntegerInputCreation.check()
 	}
 
-	@Test
-	def void classMethodWithMultiplePrimitiveInputsCreation() {
-		sourceModels.classMethodWithMultiplePrimitiveInputsCreation.createAndSynchronize()
-		targetModels.classMethodWithMultiplePrimitiveInputsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithMultiplePrimitiveInputsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithMultiplePrimitiveInputsCreation.check()
 	}
 
-	@Test
-	def void classMethodWithStringInputCreation() {
-		sourceModels.classMethodWithStringInputCreation.createAndSynchronize()
-		targetModels.classMethodWithStringInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithStringInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithStringInputCreation.check()
 	}
 
-	@Test
-	def void classMethodWithClassInputCreation() {
-		sourceModels.classMethodWithClassInputCreation.createAndSynchronize()
-		targetModels.classMethodWithClassInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithClassInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithClassInputCreation.check()
 	}
 
-	@Test
-	def void classMethodWithSelfInputCreation() {
-		sourceModels.classMethodWithSelfInputCreation.createAndSynchronize()
-		targetModels.classMethodWithSelfInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithSelfInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithSelfInputCreation.check()
 	}
 
-	@Test
-	def void classMethodWithMixedInputsCreation() {
-		sourceModels.classMethodWithMixedInputsCreation.createAndSynchronize()
-		targetModels.classMethodWithMixedInputsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithMixedInputsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithMixedInputsCreation.check()
 	}
 
 	// Mixed input and return types
 
-	@Test
-	def void classMethodWithMixedInputsAndReturnCreation() {
-		sourceModels.classMethodWithMixedInputsAndReturnCreation.createAndSynchronize()
-		targetModels.classMethodWithMixedInputsAndReturnCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classMethodWithMixedInputsAndReturnCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classMethodWithMixedInputsAndReturnCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classMethodWithMixedInputsAndReturnCreation.check()
 	}
 
 	// Multiple methods
 
-	@Test
-	def void multipleClassMethodsCreation() {
-		sourceModels.multipleClassMethodsCreation.createAndSynchronize()
-		targetModels.multipleClassMethodsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multipleClassMethodsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multipleClassMethodsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multipleClassMethodsCreation.check()
 	}
 
 	// TODO rename

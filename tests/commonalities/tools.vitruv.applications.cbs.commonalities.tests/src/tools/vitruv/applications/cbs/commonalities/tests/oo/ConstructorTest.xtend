@@ -1,24 +1,19 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo
 
 import java.util.List
-import org.junit.Ignore
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.oo.java.JavaConstructorTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlConstructorTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class ConstructorTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		return #[
 			#[
@@ -98,85 +93,98 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel multipleConstructorsCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
-		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
-	}
-
 	// Basic
 
-	@Test
-	def void basicConstructorCreation() {
-		sourceModels.basicConstructorCreation.createAndSynchronize()
-		targetModels.basicConstructorCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void basicConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.basicConstructorCreation.createAndSynchronize()
+		targetModelsProvider.getModels.basicConstructorCreation.check()
 	}
 
 	// Visibility
 
-	@Test
-	def void publicConstructorCreation() {
-		sourceModels.publicConstructorCreation.createAndSynchronize()
-		targetModels.publicConstructorCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void publicConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.publicConstructorCreation.createAndSynchronize()
+		targetModelsProvider.getModels.publicConstructorCreation.check()
 	}
 
-	@Test
-	def void protectedConstructorCreation() {
-		sourceModels.protectedConstructorCreation.createAndSynchronize()
-		targetModels.protectedConstructorCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void protectedConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.protectedConstructorCreation.createAndSynchronize()
+		targetModelsProvider.getModels.protectedConstructorCreation.check()
 	}
 
-	@Test
-	def void packagePrivateConstructorCreation() {
-		sourceModels.packagePrivateConstructorCreation.createAndSynchronize()
-		targetModels.packagePrivateConstructorCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void packagePrivateConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.packagePrivateConstructorCreation.createAndSynchronize()
+		targetModelsProvider.getModels.packagePrivateConstructorCreation.check()
 	}
 
-	@Test
-	def void privateConstructorCreation() {
-		sourceModels.privateConstructorCreation.createAndSynchronize()
-		targetModels.privateConstructorCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void privateConstructorCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.privateConstructorCreation.createAndSynchronize()
+		targetModelsProvider.getModels.privateConstructorCreation.check()
 	}
 
 	// Input parameters
 
-	@Test
-	def void constructorWithIntegerInputCreation() {
-		sourceModels.constructorWithIntegerInputCreation.createAndSynchronize()
-		targetModels.constructorWithIntegerInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void constructorWithIntegerInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.constructorWithIntegerInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.constructorWithIntegerInputCreation.check()
 	}
 
-	@Test
-	def void constructorWithMultiplePrimitiveInputsCreation() {
-		sourceModels.constructorWithMultiplePrimitiveInputsCreation.createAndSynchronize()
-		targetModels.constructorWithMultiplePrimitiveInputsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void constructorWithMultiplePrimitiveInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.constructorWithMultiplePrimitiveInputsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.constructorWithMultiplePrimitiveInputsCreation.check()
 	}
 
-	@Test
-	def void constructorWithStringInputCreation() {
-		sourceModels.constructorWithStringInputCreation.createAndSynchronize()
-		targetModels.constructorWithStringInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void constructorWithStringInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.constructorWithStringInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.constructorWithStringInputCreation.check()
 	}
 
-	@Test
-	def void constructorWithClassInputCreation() {
-		sourceModels.constructorWithClassInputCreation.createAndSynchronize()
-		targetModels.constructorWithClassInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void constructorWithClassInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.constructorWithClassInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.constructorWithClassInputCreation.check()
 	}
 
-	@Test
-	def void constructorWithSelfInputCreation() {
-		sourceModels.constructorWithSelfInputCreation.createAndSynchronize()
-		targetModels.constructorWithSelfInputCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void constructorWithSelfInputCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.constructorWithSelfInputCreation.createAndSynchronize()
+		targetModelsProvider.getModels.constructorWithSelfInputCreation.check()
 	}
 
-	@Test
-	def void constructorWithMixedInputsCreation() {
-		sourceModels.constructorWithMixedInputsCreation.createAndSynchronize()
-		targetModels.constructorWithMixedInputsCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void constructorWithMixedInputsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.constructorWithMixedInputsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.constructorWithMixedInputsCreation.check()
 	}
 
 	// Multiple constructors
@@ -184,10 +192,12 @@ class ConstructorTest extends CBSCommonalitiesExecutionTest {
 	// TODO Does not work yet in the UML->Java direction. Problem: The created Java constructors are first empty. When
 	// adding parameters, we retrieve the target constructor via the correspondence model. However, Java's TUIDs for
 	// constructors without parameters are the same. Result: All parameters get added to the same single constructor.
-	@Ignore
-	@Test
-	def void multipleConstructorsCreation() {
-		sourceModels.multipleConstructorsCreation.createAndSynchronize()
-		targetModels.multipleConstructorsCreation.check()
+	@Disabled
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multipleConstructorsCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multipleConstructorsCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multipleConstructorsCreation.check()
 	}
 }

@@ -1,25 +1,20 @@
 package tools.vitruv.applications.cbs.commonalities.tests.oo
 
 import java.util.List
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.oo.java.JavaPackageTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlPackageTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.ParameterizedTestUtil.*
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class PackageTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		val domainModelsProviders = #[
 			new UmlTestModelsProvider [new UmlPackageTestModels(it)],
@@ -40,31 +35,28 @@ class PackageTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel subPackagesCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void singleRootPackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
 		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
+		sourceModelsProvider.getModels.singleRootPackageCreation.createAndSynchronize()
+		targetModelsProvider.getModels.singleRootPackageCreation.check()
 	}
 
-	@Test
-	def void singleRootPackageCreation() {
-		sourceModels.singleRootPackageCreation.createAndSynchronize()
-		targetModels.singleRootPackageCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multiRootPackageCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multiRootPackageCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multiRootPackageCreation.check()
 	}
 
-	@Test
-	def void multiRootPackageCreation() {
-		sourceModels.multiRootPackageCreation.createAndSynchronize()
-		targetModels.multiRootPackageCreation.check()
-	}
-
-	@Test
-	def void subPackagesCreation() {
-		sourceModels.subPackagesCreation.createAndSynchronize()
-		targetModels.subPackagesCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void subPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.subPackagesCreation.createAndSynchronize()
+		targetModelsProvider.getModels.subPackagesCreation.check()
 		// TODO check that no PCM repository is created for this?
 	}
 

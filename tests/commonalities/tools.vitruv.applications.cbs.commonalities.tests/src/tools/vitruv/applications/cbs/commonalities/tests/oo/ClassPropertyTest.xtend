@@ -3,23 +3,18 @@ package tools.vitruv.applications.cbs.commonalities.tests.oo
 import java.util.List
 import org.eclipse.uml2.uml.VisibilityKind
 import org.emftext.language.java.modifiers.ModifiersFactory
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import tools.vitruv.applications.cbs.commonalities.tests.CBSCommonalitiesExecutionTest
 import tools.vitruv.applications.cbs.commonalities.tests.oo.java.JavaClassPropertyTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.oo.uml.UmlClassPropertyTestModels
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModel
 import tools.vitruv.applications.cbs.commonalities.tests.util.DomainModelsProvider
 import tools.vitruv.applications.cbs.commonalities.tests.util.java.JavaTestModelsProvider
-import tools.vitruv.applications.cbs.commonalities.tests.util.runner.XtextParametersRunnerFactory
 import tools.vitruv.applications.cbs.commonalities.tests.util.uml.UmlTestModelsProvider
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@RunWith(Parameterized)
-@Parameterized.UseParametersRunnerFactory(XtextParametersRunnerFactory)
 class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 
-	@Parameterized.Parameters(name='{0} to {1}')
 	static def List<Object[]> testParameters() {
 		return #[
 			#[
@@ -114,83 +109,94 @@ class ClassPropertyTest extends CBSCommonalitiesExecutionTest {
 		def DomainModel multiplePrimitiveClassPropertiesCreation()
 	}
 
-	val DomainModels sourceModels
-	val DomainModels targetModels
-
-	new(DomainModelsProvider<DomainModels> sourceModelsProvider,
-		DomainModelsProvider<DomainModels> targetModelsProvider) {
-		this.sourceModels = sourceModelsProvider.getModels(vitruvApplicationTestAdapter)
-		this.targetModels = targetModelsProvider.getModels(vitruvApplicationTestAdapter)
-	}
-
 	// Basic
 
-	@Test
-	def void basicPrimitiveClassPropertyCreation() {
-		sourceModels.basicPrimitiveClassPropertyCreation.createAndSynchronize()
-		targetModels.basicPrimitiveClassPropertyCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void basicPrimitiveClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.basicPrimitiveClassPropertyCreation.createAndSynchronize()
+		targetModelsProvider.getModels.basicPrimitiveClassPropertyCreation.check()
 	}
 
 	// Visibility
 
-	@Test
-	def void privateClassPropertyCreation() {
-		sourceModels.privateClassPropertyCreation.createAndSynchronize()
-		targetModels.privateClassPropertyCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void privateClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.privateClassPropertyCreation.createAndSynchronize()
+		targetModelsProvider.getModels.privateClassPropertyCreation.check()
 	}
 
-	@Test
-	def void publicClassPropertyCreation() {
-		sourceModels.publicClassPropertyCreation.createAndSynchronize()
-		targetModels.publicClassPropertyCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void publicClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.publicClassPropertyCreation.createAndSynchronize()
+		targetModelsProvider.getModels.publicClassPropertyCreation.check()
 	}
 
-	@Test
-	def void protectedClassPropertyCreation() {
-		sourceModels.protectedClassPropertyCreation.createAndSynchronize()
-		targetModels.protectedClassPropertyCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void protectedClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.protectedClassPropertyCreation.createAndSynchronize()
+		targetModelsProvider.getModels.protectedClassPropertyCreation.check()
 	}
 
-	@Test
-	def void packagePrivateClassPropertyCreation() {
-		sourceModels.packagePrivateClassPropertyCreation.createAndSynchronize()
-		targetModels.packagePrivateClassPropertyCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void packagePrivateClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.packagePrivateClassPropertyCreation.createAndSynchronize()
+		targetModelsProvider.getModels.packagePrivateClassPropertyCreation.check()
 	}
 
 	// Modifiers
 
-	@Test
-	def void finalClassPropertyCreation() {
-		sourceModels.finalClassPropertyCreation.createAndSynchronize()
-		targetModels.finalClassPropertyCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void finalClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.finalClassPropertyCreation.createAndSynchronize()
+		targetModelsProvider.getModels.finalClassPropertyCreation.check()
 	}
 
-	@Test
-	def void staticClassPropertyCreation() {
-		sourceModels.finalClassPropertyCreation.createAndSynchronize()
-		targetModels.finalClassPropertyCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void staticClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.finalClassPropertyCreation.createAndSynchronize()
+		targetModelsProvider.getModels.finalClassPropertyCreation.check()
 	}
 
-	@Test
-	def void classPropertyWithMultipleModifiersCreation() {
-		sourceModels.classPropertyWithMultipleModifiersCreation.createAndSynchronize()
-		targetModels.classPropertyWithMultipleModifiersCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void classPropertyWithMultipleModifiersCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.classPropertyWithMultipleModifiersCreation.createAndSynchronize()
+		targetModelsProvider.getModels.classPropertyWithMultipleModifiersCreation.check()
 	}
 
 	// Type references
 
-	@Test
-	def void stringClassPropertyCreation() {
-		sourceModels.stringClassPropertyCreation.createAndSynchronize()
-		targetModels.stringClassPropertyCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void stringClassPropertyCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.stringClassPropertyCreation.createAndSynchronize()
+		targetModelsProvider.getModels.stringClassPropertyCreation.check()
 	}
 
 	// Multiple properties
 
-	@Test
-	def void multipleClassesInDifferentPackagesCreation() {
-		sourceModels.multiplePrimitiveClassPropertiesCreation.createAndSynchronize()
-		targetModels.multiplePrimitiveClassPropertiesCreation.check()
+	@ParameterizedTest(name='{0} to {1}')
+	@MethodSource("testParameters")
+	def void multipleClassesInDifferentPackagesCreation(DomainModelsProvider<DomainModels> sourceModelsProvider,
+		DomainModelsProvider<DomainModels> targetModelsProvider) {
+		sourceModelsProvider.getModels.multiplePrimitiveClassPropertiesCreation.createAndSynchronize()
+		targetModelsProvider.getModels.multiplePrimitiveClassPropertiesCreation.check()
 	}
 
 	// TODO other data types: Classes, interfaces

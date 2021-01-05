@@ -6,7 +6,7 @@ import tools.vitruv.applications.cbs.commonalities.tests.util.VitruvApplicationT
 
 import static com.google.common.base.Preconditions.*
 import static org.hamcrest.MatcherAssert.assertThat
-import static tools.vitruv.testutils.matchers.ModelMatchers.*
+import static tools.vitruv.applications.cbs.commonalities.tests.util.ModelMatchers.*
 
 import static extension tools.vitruv.applications.cbs.commonalities.tests.util.pcm.PcmFilePathHelper.*
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -38,6 +38,6 @@ class PcmTestHelper {
 	}
 
 	def assertPcmRepositoryExists(Repository pcmRepository) {
-		assertThat(pcmRepository.pcmRepositoryResource, contains(pcmRepository, ignoringFeatures('id'), ignoringUnsetFeatures))
+		assertThat(pcmRepository.pcmRepositoryResource, contains(pcmRepository, ignoring('id'), ignoringUnsetFeatures))
 	}
 }
