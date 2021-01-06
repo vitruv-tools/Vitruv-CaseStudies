@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Component-Based Applications Commonalities Equivalence Tests
+Bundle-SymbolicName: tools.vitruv.applications.cbs.commonalities.equivalencetests
+Bundle-Version: 0.2.0.qualifier
+Automatic-Module-Name: tools.vitruv.applications.cbs.commonalities.equivalencetests
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Vendor: vitruv.tools
+Require-Bundle: org.eclipse.xtend.lib,
+ tools.vitruv.applications.cbs.equivalencetesttemplates,
+ tools.vitruv.applications.cbs.commonalities,
+ org.junit.jupiter.api
+Export-Package: tools.vitruv.applications.cbs.commonalities.equivalencetests

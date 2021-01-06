@@ -1,0 +1,33 @@
+package tools.vitruv.applications.cbs.commonalities.equivalencetests
+
+import java.lang.annotation.Target
+import java.lang.annotation.Retention
+import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTest
+import tools.vitruv.applications.cbs.commonalities.CbsCommonalitiesChangePropagationSpecifications
+import tools.vitruv.applications.cbs.testutils.JamoppComparisonSettings
+import tools.vitruv.applications.cbs.testutils.PcmComparisonSettings
+import tools.vitruv.testutils.printing.ModelPrinterChange
+import tools.vitruv.applications.cbs.testutils.PcmModelPrinter
+import tools.vitruv.applications.cbs.testutils.JamoppModelPrinter
+import tools.vitruv.testutils.printing.UseModelPrinter
+import org.junit.jupiter.api.^extension.ExtendWith
+
+@Target(TYPE)
+@Retention(RUNTIME)
+@EquivalenceTest(value=#[
+	CbsCommonalitiesChangePropagationSpecifications.Uml2ObjectOrientedDesign,
+	CbsCommonalitiesChangePropagationSpecifications.ObjectOrientedDesign2Uml,
+	CbsCommonalitiesChangePropagationSpecifications.Java2ObjectOrientedDesign,
+	CbsCommonalitiesChangePropagationSpecifications.ObjectOrientedDesign2Java,
+	CbsCommonalitiesChangePropagationSpecifications.Pcm2ComponentBasedSystems,
+	CbsCommonalitiesChangePropagationSpecifications.ComponentBasedSystems2Pcm,
+	CbsCommonalitiesChangePropagationSpecifications.ObjectOrientedDesign2ComponentBasedSystems,
+	CbsCommonalitiesChangePropagationSpecifications.ComponentBasedSystems2ObjectOrientedDesign
+], comparisonSettings=#[
+	JamoppComparisonSettings,
+	PcmComparisonSettings
+])
+@ExtendWith(ModelPrinterChange)
+@UseModelPrinter(JamoppModelPrinter, PcmModelPrinter)
+annotation CommonalitiesEquivalenceTest {
+}

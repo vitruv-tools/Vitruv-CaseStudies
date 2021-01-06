@@ -16,6 +16,7 @@
 	<modules>
 		<module>tools.vitruv.applications.cbs.commonalities.tests</module>
 		<module>tools.vitruv.applications.cbs.commonalities.tests.util</module>
+		<module>tools.vitruv.applications.cbs.commonalities.equivalencetests</module>
 	</modules>
 
 	<build>
