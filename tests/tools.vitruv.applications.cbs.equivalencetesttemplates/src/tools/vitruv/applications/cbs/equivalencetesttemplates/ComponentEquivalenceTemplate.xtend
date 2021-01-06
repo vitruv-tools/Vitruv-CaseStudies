@@ -10,18 +10,21 @@ import org.palladiosimulator.pcm.repository.CompositeComponent
 import tools.vitruv.applications.cbs.testutils.equivalencetest.ParameterizedEquivalenceTestBuilder
 import org.emftext.language.java.containers.Package
 import org.emftext.language.java.containers.CompilationUnit
+import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
 
-@DisplayName("component mapping")
-class ComponentEquivalenceTemplate {
+@InheritableDisplayName("componenents")
+abstract class ComponentEquivalenceTemplate {
+	abstract protected def RepositoryEquivalenceTemplate getRepository()
+
 	@TestFactory
-	@DisplayName("creating a component")
-	def createComponent(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
+	@DisplayName("creation")
+	def create(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
 		parameterizedBy(#[
 			parameters(BasicComponent, 0),
 			parameters(CompositeComponent, 1)
 		], [$0.simpleName]) [ extension builder, componentType, componentTypeChoice |
 
-			dependsOn[new RepositoryEquivalenceTemplate().createRepository(it)]
+			dependsOn[repository.create(it)]
 
 			stepFor(pcm.domain) [ extension view |
 				Repository.from('model/Test'.repository).propagate [
@@ -85,9 +88,9 @@ class ComponentEquivalenceTemplate {
 	}
 
 	@TestFactory
-	@DisplayName("renaming a component")
-	def renameComponent(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
-		dependsOn([createComponent(it)]) [ extension builder |
+	@DisplayName("renaming")
+	def rename(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
+		dependsOn([create(it)]) [ extension builder |
 
 			stepFor(pcm.domain) [ extension view |
 				Repository.from('model/Test'.repository).components__Repository.get(0).propagate [

@@ -21,4 +21,5 @@ Require-Bundle: tools.vitruv.testutils,
  org.junit.platform.commons,
  org.opentest4j
 Export-Package: tools.vitruv.applications.cbs.testutils,
- tools.vitruv.applications.cbs.testutils.equivalencetest
+ tools.vitruv.applications.cbs.testutils.equivalencetest,
+ tools.vitruv.applications.cbs.testutils.junit

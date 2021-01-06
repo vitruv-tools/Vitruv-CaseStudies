@@ -7,13 +7,14 @@ import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
 import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
 import org.palladiosimulator.pcm.repository.Repository
 import org.emftext.language.java.containers.Package
+import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
 
-@DisplayName("repository mapping")
-class RepositoryEquivalenceTemplate {
+@InheritableDisplayName("repositories")
+abstract class RepositoryEquivalenceTemplate {
 
 	@TestFactory
-	@DisplayName("creating a repository")
-	def createRepository(extension EquivalenceTestBuilder builder) {
+	@DisplayName("creation")
+	def create(extension EquivalenceTestBuilder builder) {
 		stepFor(pcm.domain) [ extension view |
 			resourceAt('model/Test'.repository).propagate [
 				contents += pcm.repository.Repository => [
@@ -64,16 +65,27 @@ class RepositoryEquivalenceTemplate {
 	}
 
 	@TestFactory
-	@DisplayName("renaming a repository")
-	def renameRepository(extension EquivalenceTestBuilder builder) {
-		dependsOn [createRepository(it)]
+	@DisplayName("renaming")
+	def rename(extension EquivalenceTestBuilder builder) {
+		dependsOn [create(it)]
 
 		stepFor(pcm.domain) [ extension view |
-			Repository.from('model/Test'.repository).entityName = 'Renamed'
+			Repository.from('model/Test'.repository).propagate [
+				entityName = 'Renamed'
+			]
 		]
 
 		inputVariantFor(pcm.domain, 'lowercase name') [ extension view |
-			Repository.from('model/Test'.repository).entityName = 'renamed'
+			Repository.from('model/Test'.repository).propagate [
+				entityName = 'renamed'
+			]
+		]
+
+		inputVariantFor(pcm.domain, 'also rename file') [ extension view |
+			resourceAt('model/Test'.repository).propagate [
+				moveTo('model/Renamed'.repository)
+				Repository.from(it).entityName = 'Renamed'
+			]
 		]
 
 		stepFor(java.domain) [ extension view |
@@ -104,9 +116,9 @@ class RepositoryEquivalenceTemplate {
 	}
 
 	@TestFactory
-	@DisplayName("deleting a repository")
-	def deleteRepository(extension EquivalenceTestBuilder builder) {
-		dependsOn [createRepository(it)]
+	@DisplayName("deletion")
+	def delete(extension EquivalenceTestBuilder builder) {
+		dependsOn [create(it)]
 
 		stepFor(pcm.domain) [ extension view |
 			resourceAt('model/Test'.repository).propagate[delete(emptyMap())]

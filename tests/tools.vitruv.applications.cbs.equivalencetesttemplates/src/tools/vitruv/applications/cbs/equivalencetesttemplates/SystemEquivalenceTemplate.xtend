@@ -8,13 +8,16 @@ import tools.vitruv.applications.cbs.testutils.equivalencetest.EquivalenceTestBu
 import org.palladiosimulator.pcm.system.System
 import org.emftext.language.java.containers.Package
 import org.emftext.language.java.containers.CompilationUnit
+import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
 
-@DisplayName("system mapping")
-class SystemEquivalenceTemplate {
+@InheritableDisplayName("systems")
+abstract class SystemEquivalenceTemplate {
+	abstract protected def RepositoryEquivalenceTemplate getRepository()
+
 	@TestFactory
-	@DisplayName("creating a system")
-	def createSystem(extension EquivalenceTestBuilder builder) {
-		dependsOn[new RepositoryEquivalenceTemplate().createRepository(it)]
+	@DisplayName("creation")
+	def create(extension EquivalenceTestBuilder builder) {
+		dependsOn[repository.create(it)]
 
 		stepFor(pcm.domain) [ extension view |
 			resourceAt('model/Test'.system).propagate [
@@ -77,9 +80,9 @@ class SystemEquivalenceTemplate {
 	}
 
 	@TestFactory
-	@DisplayName("renaming a system")
-	def renameSystem(extension EquivalenceTestBuilder builder) {
-		dependsOn([createSystem(it)])
+	@DisplayName("renaming")
+	def rename(extension EquivalenceTestBuilder builder) {
+		dependsOn([create(it)])
 
 		stepFor(pcm.domain) [ extension view |
 			System.from('model/Test'.system).propagate[entityName = 'Renamed']
@@ -94,7 +97,7 @@ class SystemEquivalenceTemplate {
 				moveTo('src/renamed/package-info'.java)
 				Package.from(it).name = 'renamed'
 			]
-			
+
 			resourceAt('src/test/TestImpl'.java).propagate [
 				moveTo('src/renamed/RenamedImpl'.java)
 				CompilationUnit.from(it) => [
