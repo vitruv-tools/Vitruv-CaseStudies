@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.equivalencetesttemplates
 
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.TestFactory
 import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
 import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
@@ -12,19 +11,18 @@ import org.emftext.language.java.containers.Package
 import org.emftext.language.java.containers.CompilationUnit
 import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
 
-@InheritableDisplayName("componenents")
+@InheritableDisplayName("components")
 abstract class ComponentEquivalenceTemplate {
 	abstract protected def RepositoryEquivalenceTemplate getRepository()
 
 	@TestFactory
-	@DisplayName("creation")
-	def create(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
+	def creation(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
 		parameterizedBy(#[
 			parameters(BasicComponent, 0),
 			parameters(CompositeComponent, 1)
 		], [$0.simpleName]) [ extension builder, componentType, componentTypeChoice |
 
-			dependsOn[repository.create(it)]
+			dependsOn[repository.creation(it)]
 
 			stepFor(pcm.domain) [ extension view |
 				Repository.from('model/Test'.repository).propagate [
@@ -88,9 +86,8 @@ abstract class ComponentEquivalenceTemplate {
 	}
 
 	@TestFactory
-	@DisplayName("renaming")
-	def rename(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
-		dependsOn([create(it)]) [ extension builder |
+	def renaming(extension ParameterizedEquivalenceTestBuilder parameterBuilder) {
+		dependsOn([creation(it)]) [ extension builder |
 
 			stepFor(pcm.domain) [ extension view |
 				Repository.from('model/Test'.repository).components__Repository.get(0).propagate [

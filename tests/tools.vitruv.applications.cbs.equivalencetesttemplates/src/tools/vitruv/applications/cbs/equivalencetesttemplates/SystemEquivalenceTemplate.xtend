@@ -1,6 +1,5 @@
 package tools.vitruv.applications.cbs.equivalencetesttemplates
 
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.TestFactory
 import static extension tools.vitruv.applications.cbs.testutils.PcmCreators.*
 import static extension tools.vitruv.applications.cbs.testutils.JavaCreators.*
@@ -15,9 +14,8 @@ abstract class SystemEquivalenceTemplate {
 	abstract protected def RepositoryEquivalenceTemplate getRepository()
 
 	@TestFactory
-	@DisplayName("creation")
-	def create(extension EquivalenceTestBuilder builder) {
-		dependsOn[repository.create(it)]
+	def creation(extension EquivalenceTestBuilder builder) {
+		dependsOn[repository.creation(it)]
 
 		stepFor(pcm.domain) [ extension view |
 			resourceAt('model/Test'.system).propagate [
@@ -80,9 +78,8 @@ abstract class SystemEquivalenceTemplate {
 	}
 
 	@TestFactory
-	@DisplayName("renaming")
-	def rename(extension EquivalenceTestBuilder builder) {
-		dependsOn([create(it)])
+	def renaming(extension EquivalenceTestBuilder builder) {
+		dependsOn([creation(it)])
 
 		stepFor(pcm.domain) [ extension view |
 			System.from('model/Test'.system).propagate[entityName = 'Renamed']

@@ -13,8 +13,7 @@ import tools.vitruv.applications.cbs.testutils.junit.InheritableDisplayName
 abstract class RepositoryEquivalenceTemplate {
 
 	@TestFactory
-	@DisplayName("creation")
-	def create(extension EquivalenceTestBuilder builder) {
+	def creation(extension EquivalenceTestBuilder builder) {
 		stepFor(pcm.domain) [ extension view |
 			resourceAt('model/Test'.repository).propagate [
 				contents += pcm.repository.Repository => [
@@ -66,8 +65,8 @@ abstract class RepositoryEquivalenceTemplate {
 
 	@TestFactory
 	@DisplayName("renaming")
-	def rename(extension EquivalenceTestBuilder builder) {
-		dependsOn [create(it)]
+	def renaming(extension EquivalenceTestBuilder builder) {
+		dependsOn [creation(it)]
 
 		stepFor(pcm.domain) [ extension view |
 			Repository.from('model/Test'.repository).propagate [
@@ -116,9 +115,8 @@ abstract class RepositoryEquivalenceTemplate {
 	}
 
 	@TestFactory
-	@DisplayName("deletion")
-	def delete(extension EquivalenceTestBuilder builder) {
-		dependsOn [create(it)]
+	def deletion(extension EquivalenceTestBuilder builder) {
+		dependsOn [creation(it)]
 
 		stepFor(pcm.domain) [ extension view |
 			resourceAt('model/Test'.repository).propagate[delete(emptyMap())]

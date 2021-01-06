@@ -98,8 +98,8 @@ package class EquivalenceTestExecutable implements Executable, AutoCloseable {
 		var interactionProvider = UserInteractionFactory.instance.createPredefinedInteractionResultProvider(null)
 		var userInteractor = UserInteractionFactory.instance.createUserInteractor(interactionProvider)
 		val vsum = new VirtualModelImpl(vsumDirectory.toFile(), userInteractor, new VirtualModelConfiguration => [
-			addMetamodel(testStep.targetDomain)
-			referenceDomains.reject[it == testStep.targetDomain].forEach[domain|addMetamodel(domain)]
+			changePropagationSpecifications.flatMap[List.of(sourceDomain, targetDomain)].toSet //
+			.forEach[domain|addMetamodel(domain)]
 			changePropagationSpecifications.forEach[spec|addChangePropagationSpecification(spec)]
 		])
 		new DirectoryTestView(
