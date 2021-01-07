@@ -23,7 +23,7 @@ class UmlOperationAndParameterUtil {
      * Creats a simple uml operation.
      *
      * @param name the name of the new operation
-     * @return new public Operation with name no return, params or modifier
+     * @return new public Operation with name; no return, params or modifier
      */
     def static Operation createSimpleUmlOperation(String name) {
         return createUmlOperation(name, null, VisibilityKind.PUBLIC_LITERAL, false, false, null)
