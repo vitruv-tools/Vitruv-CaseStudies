@@ -33,7 +33,7 @@ class UmlOperationAndParameterUtil {
      * Creates an uml operation that acts as InterfaceMethod. (public, not static, abstract)
      */
     def static Operation createUmlInterfaceOperation(String name, Type returnType, List<Parameter> params) {
-        return createUmlOperation(name, returnType, VisibilityKind.PUBLIC_LITERAL, true, false, params);
+        return createUmlOperation(name, returnType, VisibilityKind.PUBLIC_LITERAL, true, false, params)
     }
 
     /**
@@ -49,18 +49,18 @@ class UmlOperationAndParameterUtil {
      * @return the new operation
      */
     def static Operation createUmlOperation(String name, Type returnType, VisibilityKind visibility, boolean abstr, boolean stat, List<Parameter> params) {
-        val uOperation = UMLFactory.eINSTANCE.createOperation;
+        val uOperation = UMLFactory.eINSTANCE.createOperation
         setName(uOperation, name)
         if (returnType !== null) {
-            uOperation.type = returnType;
+            uOperation.type = returnType
         }
-        uOperation.visibility = visibility;
-        uOperation.isAbstract = abstr;
-        uOperation.isStatic = stat;
+        uOperation.visibility = visibility
+        uOperation.isAbstract = abstr
+        uOperation.isStatic = stat
         if (!params.nullOrEmpty) {
-            uOperation.ownedParameters.addAll(params);
+            uOperation.ownedParameters.addAll(params)
         }
-        return uOperation;
+        return uOperation
     }
 
     /**
@@ -68,14 +68,14 @@ class UmlOperationAndParameterUtil {
      * Otherwise it beacomes a normal parameter (direction: in)
      */
     def static Parameter createUmlParameter(String name, Type type) {
-        val param = UMLFactory.eINSTANCE.createParameter;
-        param.type = type;
+        val param = UMLFactory.eINSTANCE.createParameter
+        param.type = type
         if (name === null) {
-            param.direction = ParameterDirectionKind.RETURN_LITERAL;
+            param.direction = ParameterDirectionKind.RETURN_LITERAL
         } else {
-            param.name = name;
-            param.direction = ParameterDirectionKind.IN_LITERAL;
+            param.name = name
+            param.direction = ParameterDirectionKind.IN_LITERAL
         }
-        return param;
+        return param
     }
 }

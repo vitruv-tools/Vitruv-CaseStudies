@@ -7,11 +7,7 @@ Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: com.google.guava,
  org.apache.log4j,
- org.eclipse.emf.ecore,
- org.eclipse.core.resources,
- org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro,
  edu.kit.ipd.sdq.activextendannotations,
  tools.vitruv.domains.uml,
  tools.vitruv.domains.java,
@@ -24,5 +20,6 @@ Require-Bundle: com.google.guava,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.extensions.dslsruntime.mappings,
  tools.vitruv.applications.util.temporary;visibility:=reexport
-Export-Package: tools.vitruv.applications.umljava
+Export-Package: tools.vitruv.applications.umljava,
+ tools.vitruv.applications.umljava.util
 Bundle-Vendor: vitruv.tools

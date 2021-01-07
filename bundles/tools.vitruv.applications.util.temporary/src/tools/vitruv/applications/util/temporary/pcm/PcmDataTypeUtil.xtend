@@ -15,7 +15,7 @@ import org.palladiosimulator.pcm.repository.PrimitiveTypeEnum
 @Utility
 class PcmDataTypeUtil {
 
-    static val PCM_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository");
+    static val PCM_PRIMITIVE_TYPES_URI = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository")
 
     def static getPcmPrimitiveTypes(EObject alreadyPersistedObject) {
         return getPcmPrimitiveTypes(alreadyPersistedObject.eResource.resourceSet)

@@ -216,7 +216,7 @@ class JavaMemberAndParameterUtil {
         return setterMethod
     }
 
-    static def createSetter(Field field, ClassMethod method) {
+    def static createSetter(Field field, ClassMethod method) {
         method.name = "set" + field.name.toFirstUpper
         method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
         method.typeReference = TypesFactory.eINSTANCE.createVoid
@@ -249,7 +249,7 @@ class JavaMemberAndParameterUtil {
         return method
     }
 
-    static def createGetter(Field field, ClassMethod method) {
+    def static createGetter(Field field, ClassMethod method) {
         method.name = "get" + field.name.toFirstUpper
         method.annotationsAndModifiers.add(ModifiersFactory.eINSTANCE.createPublic)
         method.typeReference = EcoreUtil.copy(field.typeReference)
@@ -265,7 +265,7 @@ class JavaMemberAndParameterUtil {
         return method
     }
 
-    def static void addParametersIfNotNull(Parametrizable parametrizable, List<Parameter> params) {
+    def static   addParametersIfNotNull(Parametrizable parametrizable, List<Parameter> params) {
         if (!params.nullOrEmpty) {
             parametrizable.parameters.addAll(params)
         }
@@ -332,7 +332,7 @@ class JavaMemberAndParameterUtil {
         return getJavaClassMethodsWithName(jClass, buildGetterName(jAttributeName))
     }
 
-    def static void removeJavaGettersOfAttribute(Field jAttribute) {
+    def static removeJavaGettersOfAttribute(Field jAttribute) {
         val getters = getJavaGettersOfAttribute(jAttribute)
         if (!getters.nullOrEmpty) {
             for (getter : getters) {
@@ -341,7 +341,7 @@ class JavaMemberAndParameterUtil {
         }
     }
 
-    def static void removeJavaSettersOfAttribute(Field jAttribute) {
+    def static removeJavaSettersOfAttribute(Field jAttribute) {
         val setters = getJavaSettersOfAttribute(jAttribute)
         if (!setters.nullOrEmpty) {
             for (setter : setters) {
@@ -357,7 +357,7 @@ class JavaMemberAndParameterUtil {
      * @param jAttributeWithOldName the Attribute with the new name
      * @param the name of jAttribute before it was renamed
      */
-    def static void renameSettersOfAttribute(Field jAttributeWithnewName, String oldName) {
+    def static renameSettersOfAttribute(Field jAttributeWithnewName, String oldName) {
         val setters = getJavaSettersOfAttribute(jAttributeWithnewName.containingConcreteClassifier, oldName)
         for (setter : setters) {
             renameSetter(setter, jAttributeWithnewName, oldName)
@@ -369,7 +369,7 @@ class JavaMemberAndParameterUtil {
      * Renames the given setter so that it matches the name of the given attribute
      * @param oldNaem new Setter name without set-Prefix
      */
-    def static void renameSetter(ClassMethod setter, Field jAttribute, String oldName) {
+    def static renameSetter(ClassMethod setter, Field jAttribute, String oldName) {
         setter.name = buildSetterName(jAttribute.name)
         for (expStatement : setter.statements.filter(ExpressionStatement)) {
             val selfReference = getAttributeSelfReferenceInExpressionStatement(expStatement, oldName)
@@ -378,7 +378,7 @@ class JavaMemberAndParameterUtil {
 
     }
 
-    def static void updateAttributeTypeInSetters(Field jAttribute) {
+    def static updateAttributeTypeInSetters(Field jAttribute) {
         val setters = getJavaSettersOfAttribute(jAttribute)
         for (setter : setters) {
             updateAttributeTypeInSetter(setter, jAttribute)
@@ -389,7 +389,7 @@ class JavaMemberAndParameterUtil {
      * Assumption: Setter has one parameter and one assignment for the attribute
      * 
      */
-    def static void updateAttributeTypeInSetter(ClassMethod setter, Field jAttribute) {
+    def static updateAttributeTypeInSetter(ClassMethod setter, Field jAttribute) {
         val param = setter.parameters.head
         if (param !== null) {
             param.typeReference = EcoreUtil.copy(jAttribute.typeReference)
@@ -405,7 +405,7 @@ class JavaMemberAndParameterUtil {
      * 
      * @param jAttribute the attribute with the new name
      */
-    def static void renameGettersOfAttribute(Field jAttribute, String oldName) {
+    def static renameGettersOfAttribute(Field jAttribute, String oldName) {
         val getters = getJavaGettersOfAttribute(jAttribute.containingConcreteClassifier, oldName)
         for (getter : getters) {
             renameGetterOfAttribute(getter, jAttribute)
@@ -416,7 +416,7 @@ class JavaMemberAndParameterUtil {
      * Renames the given getter so that it matches the name of the given attribute
      * Assumption: standard getter that only returns the attribute
      */
-    def static void renameGetterOfAttribute(ClassMethod getter, Field jAttribute) {
+    def static renameGetterOfAttribute(ClassMethod getter, Field jAttribute) {
         getter.name = buildGetterName(jAttribute.name)
         val returnStatement = getter.statements.filter(Return).head
         if (returnStatement !== null) {
@@ -429,7 +429,7 @@ class JavaMemberAndParameterUtil {
      * and matches the return type of the getters to the type of the attribute.
      * 
      */
-    def static void updateAttributeTypeInGetters(Field jAttribute) {
+    def static updateAttributeTypeInGetters(Field jAttribute) {
         for (getter : getJavaGettersOfAttribute(jAttribute)) {
             updateAttributeTypeInGetter(getter, jAttribute)
         }
@@ -438,7 +438,7 @@ class JavaMemberAndParameterUtil {
     /**
      * Updates the return type of the given getter to match the return type of the given attribute.
      */
-    def static void updateAttributeTypeInGetter(ClassMethod getter, Field jAttribute) {
+    def static updateAttributeTypeInGetter(ClassMethod getter, Field jAttribute) {
         getter.typeReference = EcoreUtil.copy(jAttribute.typeReference)
     }
 
@@ -477,12 +477,12 @@ class JavaMemberAndParameterUtil {
         return true
     }
 
-    def static void initializeClassMethod(ClassMethod classMethod, Method implementedMethod, boolean ensurePublic) {
+    def static initializeClassMethod(ClassMethod classMethod, Method implementedMethod, boolean ensurePublic) {
         initializeClassMethod(classMethod, implementedMethod.name, implementedMethod.typeReference, implementedMethod.modifiers, implementedMethod.parameters,
             ensurePublic)
     }
 
-    def static void initializeClassMethod(ClassMethod classMethod, String name, TypeReference typeReference, Modifier[] modifiers,
+    def static initializeClassMethod(ClassMethod classMethod, String name, TypeReference typeReference, Modifier[] modifiers,
         Parameter[] parameters, boolean ensurePublic) {
         classMethod.name = name
         if (null !== typeReference) {
@@ -510,7 +510,7 @@ class JavaMemberAndParameterUtil {
                 return currentMethod as ClassMethod
             }
         }
-        null
+        return null
     }
 
     /**

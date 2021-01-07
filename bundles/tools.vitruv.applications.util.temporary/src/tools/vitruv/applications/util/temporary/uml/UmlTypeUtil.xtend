@@ -38,7 +38,7 @@ class UmlTypeUtil { // TODO TS merge with UmlClassifierAndPackagableUtil?
         return umlPrimitiveTypes
     }
 
-    static def void registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm, ResourceSet rs) {
+    def static registerPredefinedUmlPrimitiveTypes(CorrespondenceModel cm, ResourceSet rs) {
         var List<PrimitiveType> umlPrimitiveTypes = getSupportedPredefinedUmlPrimitiveTypes(rs)
         for (primitive : umlPrimitiveTypes) {
             val alreadyRegistered = ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, UMLPackage.Literals.PRIMITIVE_TYPE, primitive.name,
