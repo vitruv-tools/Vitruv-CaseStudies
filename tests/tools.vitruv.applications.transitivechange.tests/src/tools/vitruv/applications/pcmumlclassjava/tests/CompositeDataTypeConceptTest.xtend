@@ -27,10 +27,10 @@ import static org.junit.jupiter.api.Assertions.*
  */
 class CompositeDataTypeConceptTest extends TransitiveChangeTest {
 
-    private static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
-    private static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
+    static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
+    static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
 
-    def public static checkCompositeDataTypeConcept(
+    def static checkCompositeDataTypeConcept(
         CorrespondenceModel cm,
         CompositeDataType pcmCompositeType,
         Class umlClass
@@ -166,8 +166,7 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
 
         pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
 
-        pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType).
-            findFirst[it.entityName == TEST_COMPOSITE_DATATYPE] as CompositeDataType
+        pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType).findFirst[it.entityName == TEST_COMPOSITE_DATATYPE] as CompositeDataType
         assertNotNull(pcmCompositeType)
         checkCompositeDataTypeConcept(pcmCompositeType)
     }

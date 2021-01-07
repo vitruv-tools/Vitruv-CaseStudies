@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.*
  */
 class InterfaceConceptTest extends TransitiveChangeTest {
 
-    private static val TEST_INTERFACE_NAME = "TestInterface"
+    static val TEST_INTERFACE_NAME = "TestInterface"
 
-    def public static checkInterfaceConcept(
+    def static checkInterfaceConcept(
         CorrespondenceModel cm,
         OperationInterface pcmInterface,
         Interface umlInterface

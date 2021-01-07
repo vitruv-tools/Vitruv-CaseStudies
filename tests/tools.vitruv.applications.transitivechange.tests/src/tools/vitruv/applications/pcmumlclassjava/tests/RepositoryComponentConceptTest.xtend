@@ -30,9 +30,9 @@ import static org.junit.jupiter.api.Assertions.*
  */
 class RepositoryComponentConceptTest extends TransitiveChangeTest {
 
-    private val COMPONENT_NAME = "testComponent"
+    val COMPONENT_NAME = "testComponent"
 
-    def public static void checkRepositoryComponentConcept(
+    def static void checkRepositoryComponentConcept(
         CorrespondenceModel cm,
         RepositoryComponent pcmComponent,
         Package umlComponentPkg,

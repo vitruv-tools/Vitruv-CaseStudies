@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*
  */
 class AssemblyContextConceptTest extends TransitiveChangeTest {
 
-    private static val PROPERTY_NAME = "testAssemblyContextField"
+    static val PROPERTY_NAME = "testAssemblyContextField"
 
-    def public static void checkAssemblyContextConcept(
+    def static void checkAssemblyContextConcept(
         CorrespondenceModel cm,
         AssemblyContext pcmAssemblyContext,
         Property umlAssemblyContextProperty
@@ -32,8 +32,7 @@ class AssemblyContextConceptTest extends TransitiveChangeTest {
         assertNotNull(umlAssemblyContextProperty)
         assertTrue(corresponds(cm, pcmAssemblyContext, umlAssemblyContextProperty, TagLiterals.ASSEMBLY_CONTEXT__PROPERTY))
         assertTrue(corresponds(cm, pcmAssemblyContext.parentStructure__AssemblyContext, umlAssemblyContextProperty.owner, TagLiterals.IPRE__IMPLEMENTATION))
-        assertTrue(
-            corresponds(cm, pcmAssemblyContext.encapsulatedComponent__AssemblyContext, umlAssemblyContextProperty.type, TagLiterals.IPRE__IMPLEMENTATION))
+        assertTrue(corresponds(cm, pcmAssemblyContext.encapsulatedComponent__AssemblyContext, umlAssemblyContextProperty.type, TagLiterals.IPRE__IMPLEMENTATION))
         assertTrue(pcmAssemblyContext.entityName == umlAssemblyContextProperty.name)
     }
 

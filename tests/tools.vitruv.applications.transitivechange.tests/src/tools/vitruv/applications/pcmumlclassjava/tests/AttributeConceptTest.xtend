@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.*
  */
 class AttributeConceptTest extends LinearTransitiveChangeTest {
 
-    private static val TEST_ATTRIBUTE = "testAttribute"
+    static val TEST_ATTRIBUTE = "testAttribute"
 
-    def public static void checkAttributeConcept(
+    def static void checkAttributeConcept(
         CorrespondenceModel cm,
         InnerDeclaration pcmAttribute,
         Property umlAttribute
@@ -91,7 +91,7 @@ class AttributeConceptTest extends LinearTransitiveChangeTest {
     @Test
     def void testCreateAttributeConcept_PCM_primitiveType() {
         var pcmRepository = createRepository()
-        assertNotNull( helper.PCM_INT, "Initialization of PrimitiveTypes seems to have failed")
+        assertNotNull(helper.PCM_INT, "Initialization of PrimitiveTypes seems to have failed")
         testCreateAttributeConcept_PCM(pcmRepository, helper.PCM_INT)
     }
 

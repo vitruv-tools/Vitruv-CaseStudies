@@ -15,8 +15,7 @@ Require-Bundle: org.eclipse.xtend.lib,
  tools.vitruv.applications.pcmumlclass,
  tools.vitruv.applications.pcmumlclass.tests,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java,
- tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
- tools.vitruv.applications.util.temporary
+ tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
 Export-Package: tools.vitruv.applications.pcmumlclassjava,
  tools.vitruv.applications.pcmumlclassjava.tests
 Bundle-Vendor: vitruv-tools

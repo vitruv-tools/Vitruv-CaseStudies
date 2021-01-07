@@ -26,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.*
  */
 class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
 
-    private val REQUIRED_ROLE_NAME = "testRequiredRole"
+    val REQUIRED_ROLE_NAME = "testRequiredRole"
 
-    def public static void checkRequiredRoleConcept(
+    def static void checkRequiredRoleConcept(
         CorrespondenceModel cm,
         OperationRequiredRole pcmRequired,
         Property umlRequiredInstance,

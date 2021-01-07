@@ -27,13 +27,13 @@ import static org.junit.jupiter.api.Assertions.*
  */
 class ParameterConceptTest extends LinearTransitiveChangeTest {
 
-    private static val TEST_PARAMETER_NAME = "testParameter"
+    static val TEST_PARAMETER_NAME = "testParameter"
 
     def private static boolean checkParameterModifiers(ParameterModifier pcmModifier, ParameterDirectionKind umlDirection) {
         return umlDirection == PcmUmlClassHelper.getMatchingParameterDirection(pcmModifier)
     }
 
-    def public static checkParameterConcept(
+    def static checkParameterConcept(
         CorrespondenceModel cm,
         Parameter pcmParameter,
         org.eclipse.uml2.uml.Parameter umlParameter

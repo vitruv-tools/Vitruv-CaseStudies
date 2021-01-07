@@ -50,6 +50,7 @@ import static tools.vitruv.applications.util.temporary.java.JavaTypeUtil.*
 
 /** 
  * Transitive change test class for networks of UML, Java and PCM models.
+ * Provides additional checks for comparing the Java model to the correlating UML model.
  */
 abstract class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
@@ -146,8 +147,7 @@ abstract class TransitiveChangeTest extends PcmUmlClassApplicationTest {
 
     def private dispatch checkJavaMethod(ClassMethod javaMethod, Operation umlOperation) {
         val javaClass = javaMethod.eContainer as Class
-        assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract,
-            javaMethod.parameters, javaClass)
+        assertJavaClassMethodTraits(javaMethod, umlOperation.name, JavaVisibility.PUBLIC, null, umlOperation.static, umlOperation.abstract, javaMethod.parameters, javaClass)
         assertFinalMethodEquals(umlOperation, javaMethod)
     }
 
@@ -242,7 +242,8 @@ abstract class TransitiveChangeTest extends PcmUmlClassApplicationTest {
     }
 
     /**
-     * Fixed version of TestUtil.assertParameterListEquals(), mostly copied.
+     * Fixed version of TestUtil.assertParameterListEquals(), mostly copied. This versions accepts Java collection types for certain UML multiplicities.
+     * @see TransitiveChangeTest.checkTypes(Type, TypeReference, int)
      */
     def private void assertParameterListEquals(List<Parameter> umlParameters, List<org.emftext.language.java.parameters.Parameter> javaParameters) {
         val uParamListWithoutReturn = umlParameters.filter[direction != ParameterDirectionKind.RETURN_LITERAL]

@@ -28,9 +28,9 @@ import static org.junit.jupiter.api.Assertions.*
  */
 class SignatureConceptTest extends LinearTransitiveChangeTest {
 
-    private static val TEST_SIGNATURE_NAME = "testSignature"
+    static val TEST_SIGNATURE_NAME = "testSignature"
 
-    def public static void checkSignatureConcept(
+    def static void checkSignatureConcept(
         CorrespondenceModel cm,
         OperationSignature pcmSignature,
         Operation umlOperation
