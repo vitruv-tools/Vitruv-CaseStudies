@@ -4,7 +4,6 @@ Bundle-Name: Vitruv UML-Java Application
 Bundle-SymbolicName: tools.vitruv.applications.umljava;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.umljava
 Bundle-Version: 0.2.0.qualifier
-Eclipse-ExtensibleAPI: true
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.apache.log4j,
  org.eclipse.xtend.lib,
@@ -15,5 +14,6 @@ Require-Bundle: org.apache.log4j,
  tools.vitruv.framework.change,
  tools.vitruv.extensions.dslsruntime.mappings,
  tools.vitruv.applications.util.temporary;visibility:=reexport
-Export-Package: tools.vitruv.applications.umljava
+Export-Package: tools.vitruv.applications.umljava,
+ tools.vitruv.applications.umljava.util
 Bundle-Vendor: vitruv.tools
