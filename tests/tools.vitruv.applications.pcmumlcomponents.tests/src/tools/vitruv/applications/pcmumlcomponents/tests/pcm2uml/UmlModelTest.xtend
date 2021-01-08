@@ -27,7 +27,7 @@ class UmlModelTest extends AbstractPcmUmlTest {
 	def void testModelRename() {
 		val newName = 'foo';
 		rootElement.entityName = newName;
-		saveAndSynchronizeChanges(rootElement);
+		propagate
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten
 		assertEquals(newName, (correspondingElements.get(0) as Model).name);
 	}

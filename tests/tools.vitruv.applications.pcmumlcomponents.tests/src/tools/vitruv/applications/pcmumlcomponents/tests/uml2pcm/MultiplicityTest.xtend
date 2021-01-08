@@ -37,7 +37,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		umlDataType.name = "fooType"
 		rootElement.packagedElements += umlDataType
 		umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 0, UnlimitedNaturalLiteralExp.UNLIMITED)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 
 		val pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(3, pcmRepository.dataTypes__Repository.length)
@@ -66,7 +66,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 			#[parameterType as Type].toEList())
 		val umlParameter = umlOperation.ownedParameters.head
 		umlParameter.upper = 2
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 
 		val pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(2, pcmRepository.dataTypes__Repository.length)
@@ -87,7 +87,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, new BasicEList<String>(), new BasicEList<Type>(), returnType)
 		val umlParameter = umlOperation.ownedParameters.head
 		umlParameter.lower = 0
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 
 		val pcmRepository = rootElement.claimCorrespondingRepository
 		val collectionType = pcmRepository.dataTypes__Repository.findFirst[t|t instanceof CompositeDataType]
@@ -107,10 +107,10 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		umlDataType.name = "fooType"
 		rootElement.packagedElements += umlDataType
 		val umlAttribute = umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1, UnlimitedNaturalLiteralExp.UNLIMITED)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 
 		umlAttribute.upperValue = null
-		saveAndSynchronizeChanges(umlAttribute)
+		propagate
 		assertEquals(1, umlAttribute.upperBound)
 		assertEquals(1, umlAttribute.lowerBound)
 		assertEquals(umlAttribute.upper, umlAttribute.upperBound)
@@ -124,7 +124,7 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 	@Test
 	def void deleteMultiplicityType() {
 		val innerDataType = createInnerDataType()
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		var pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(1, pcmRepository.dataTypes__Repository.length)
 		
@@ -132,17 +132,17 @@ class MultiplicityTest extends AbstractUmlPcmTest {
 		umlDataType.name = "fooType"
 		rootElement.packagedElements += umlDataType
 		umlDataType.createOwnedAttribute(PARAMETER_NAME, innerDataType, 1, UnlimitedNaturalLiteralExp.UNLIMITED)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(3, pcmRepository.dataTypes__Repository.length)
 		
 		rootElement.packagedElements -= umlDataType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(2, pcmRepository.dataTypes__Repository.length)
 		
 		rootElement.packagedElements -= innerDataType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		pcmRepository = rootElement.claimCorrespondingRepository
 		assertEquals(0, pcmRepository.dataTypes__Repository.length)
 	}

@@ -25,7 +25,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		rootElement.packagedElements += umlComponent
 		val componentMode = if (isComposable) 0 else 1
 		userInteraction.addNextSingleSelection(componentMode)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return umlComponent
 	}
 	
@@ -37,7 +37,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		val umlInterface = UMLFactory.eINSTANCE.createInterface()
 		umlInterface.name = name
 		rootElement.packagedElements += umlInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return umlInterface
 	}
 	
@@ -74,7 +74,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface
 		umlComponent.interfaceRealizations += interfaceRealization
-		saveAndSynchronizeChanges(umlComponent)
+		propagate
 		
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(1, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
@@ -92,12 +92,12 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface1
 		umlComponent.interfaceRealizations += interfaceRealization
-		saveAndSynchronizeChanges(umlComponent)
+		propagate
 		
 		val umlInterface2 = createUmlInterface(INTERFACE_NAME + "2")
 		interfaceRealization.suppliers.clear()
 		interfaceRealization.suppliers += umlInterface2
-		saveAndSynchronizeChanges(interfaceRealization)
+		propagate
 		
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(1, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
@@ -115,10 +115,10 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		interfaceRealization.name = INTERFACE_REALIZATION_NAME
 		interfaceRealization.suppliers += umlInterface
 		umlComponent.interfaceRealizations += interfaceRealization
-		saveAndSynchronizeChanges(umlComponent)
+		propagate
 		
 		umlComponent.interfaceRealizations -= interfaceRealization
-		saveAndSynchronizeChanges(umlComponent)
+		propagate
 		
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(0, pcmComponent.providedRoles_InterfaceProvidingEntity.length)
@@ -132,7 +132,7 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface
 		umlComponent.packagedElements += usage
-		saveAndSynchronizeChanges(umlComponent)
+		propagate
 		
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)
@@ -150,13 +150,13 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface1
 		umlComponent.packagedElements += usage
-		saveAndSynchronizeChanges(umlComponent)
+		propagate
 		
 		val umlInterface2 = createUmlInterface(INTERFACE_NAME + "2")
 		// usage.suppliers.clear()
 		// usage.suppliers += #[umlInterface2]
 		usage.suppliers.set(0, umlInterface2)
-		saveAndSynchronizeChanges(usage)
+		propagate
 		
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)
@@ -174,10 +174,10 @@ class ComponentsTest extends AbstractUmlPcmTest {
 		usage.name = USAGE_NAME
 		usage.suppliers += umlInterface
 		umlComponent.packagedElements += usage
-		saveAndSynchronizeChanges(umlComponent)
+		propagate
 		
 		umlComponent.packagedElements -= usage
-		saveAndSynchronizeChanges(umlComponent)
+		propagate
 		
 		val pcmComponent = getCorrespondingBasicComponent(umlComponent)
 		assertEquals(0, pcmComponent.requiredRoles_InterfaceRequiringEntity.length)

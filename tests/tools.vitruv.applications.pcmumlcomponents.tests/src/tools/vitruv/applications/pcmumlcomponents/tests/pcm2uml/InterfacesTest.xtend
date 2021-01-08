@@ -25,7 +25,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
 		pcmInterface.entityName = name
 		rootElement.interfaces__Repository += pcmInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return pcmInterface
 	}
 	
@@ -34,7 +34,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		operationSignature.entityName = operationName
 		operationSignature.returnType__OperationSignature = returnType
 		pcmInterface.signatures__OperationInterface += operationSignature
-		saveAndSynchronizeChanges(pcmInterface)
+		propagate
 		return operationSignature
 	}
 	
@@ -62,7 +62,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		val returnType = RepositoryFactory.eINSTANCE.createPrimitiveDataType()
 		returnType.type = PrimitiveTypeEnum.BOOL
 		rootElement.dataTypes__Repository += returnType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		val operationName = OPERATION_NAME
 		val pcmOperation = createOperationInterfaceOperation(pcmInterface, operationName, returnType)
 		val correspondingInterface = correspondenceModel.getCorrespondingEObjects(#[pcmInterface]).flatten
@@ -82,18 +82,18 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		newReturnType.type = PrimitiveTypeEnum.CHAR
 		rootElement.dataTypes__Repository += newReturnType
 		pcmOperation.returnType__OperationSignature = newReturnType
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		var correspondingOperation = correspondenceModel.getCorrespondingEObjects(#[pcmOperation]).flatten
 		var umlOperation = (correspondingOperation.get(0) as Operation)
 		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(newReturnType.type), umlOperation.type.name)
 		
 		val newOperationName = OPERATION_NAME_2
 		pcmOperation.entityName = newOperationName
-		saveAndSynchronizeChanges(pcmOperation)
+		propagate
 		assertEquals(newOperationName, umlOperation.name)
 		
 		pcmOperation.returnType__OperationSignature = null
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		correspondingOperation = correspondenceModel.getCorrespondingEObjects(#[pcmOperation]).flatten
 		umlOperation = (correspondingOperation.get(0) as Operation)
 		assertEquals(null, umlOperation.type)
@@ -108,7 +108,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		val umlInterface = (correspondingInterface.get(0) as Interface)
 		assertEquals(2, umlInterface.ownedOperations.length)
 		pcmInterface.signatures__OperationInterface -= pcmOperation1
-		saveAndSynchronizeChanges(pcmInterface)
+		propagate
 		assertEquals(1, umlInterface.ownedOperations.length)
 		assertEquals(pcmOperation2.entityName, umlInterface.ownedOperations.get(0).name)
 	}
@@ -121,7 +121,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		val umlModel = (correspondenceModel.getCorrespondingEObjects(#[rootElement]).flatten.get(0) as Model)
 		val elementCount = umlModel.packagedElements.length
 		rootElement.interfaces__Repository -= pcmInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		assertEquals(elementCount-1, umlModel.packagedElements.length)
 	}
 	
@@ -130,7 +130,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		pcmParameter.name = name
 		pcmParameter.dataType__Parameter = type
 		pcmSignature.parameters__OperationSignature += pcmParameter
-		saveAndSynchronizeChanges(pcmSignature)
+		propagate
 		return pcmParameter
 	}
 	
@@ -166,7 +166,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		newType.type = PrimitiveTypeEnum.DOUBLE
 		rootElement.dataTypes__Repository += newType
 		pcmParameter.dataType__Parameter = newType
-		saveAndSynchronizeChanges(pcmParameter)
+		propagate
 		
 		correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
 		umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
@@ -176,11 +176,11 @@ class InterfacesTest extends AbstractPcmUmlTest {
 
 		val newName = PARAMETER_NAME_2
 		pcmParameter.name = newName
-		saveAndSynchronizeChanges(pcmParameter)
+		propagate
 		assertEquals(newName, umlParameter.name)
 		
 		pcmParameter.modifier__Parameter = ParameterModifier.OUT
-		saveAndSynchronizeChanges(pcmParameter)
+		propagate
 		
 		correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
 		umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
@@ -203,7 +203,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		val parameterCount = umlOperation.ownedParameters.length
 		
 		pcmOperation.parameters__OperationSignature -= pcmParameter1
-		saveAndSynchronizeChanges(pcmOperation)
+		propagate
 		
 		assertEquals(parameterCount - 1, umlOperation.ownedParameters.length)
 		

@@ -25,7 +25,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val umlInterface = UMLFactory.eINSTANCE.createInterface();
 		umlInterface.name = name
 		rootElement.packagedElements += umlInterface
-		saveAndSynchronizeChanges(rootElement);
+		propagate
 		return umlInterface
 	}
 	
@@ -58,7 +58,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val parameterTypes = new BasicEList<Type>()
 		parameterTypes += p1Type
 		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, parameterNames, parameterTypes, returnType)
-		saveAndSynchronizeChanges(rootElement);
+		propagate
 
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten;
 		assertEquals(1, correspondingElements.length);
@@ -81,7 +81,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		umlOperation.name = operationName
 		umlOperation.type = returnType
 		umlInterface.ownedOperations += umlOperation
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return umlOperation
 	}
 	
@@ -92,13 +92,13 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		var correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
 		var pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
 		umlOperation.name = OPERATION_NAME + "2"
-		saveAndSynchronizeChanges(umlOperation)
+		propagate
 		assertEquals(umlOperation.name, pcmSignature.entityName)
 		val newType = UMLFactory.eINSTANCE.createPrimitiveType()
 		newType.name = UML_TYPE_INT
 		rootElement.packagedElements += newType
 		umlOperation.type = newType
-		saveAndSynchronizeChanges(umlOperation)
+		propagate
 		
 		correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
 		pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
@@ -106,7 +106,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 			(pcmSignature.returnType__OperationSignature as PrimitiveDataType).type)
 			
 		umlOperation.type = null
-		saveAndSynchronizeChanges(umlOperation)
+		propagate
 		correspondingSignatures = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
 		pcmSignature = (correspondingSignatures.get(0) as OperationSignature)
 		assertNull(pcmSignature.returnType__OperationSignature)
@@ -120,7 +120,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		umlParameter.name = name
 		umlParameter.type = parameterType
 		umlOperation.ownedParameters += umlParameter
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return umlParameter
 	}
 	
@@ -166,18 +166,18 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		
 		val newName = PARAMETER_NAME_2
 		umlParameter.name = newName
-		saveAndSynchronizeChanges(umlParameter)
+		propagate
 		pcmParameter = getCorrespondingParameter(umlParameter)
 		assertEquals(newName, pcmParameter.parameterName)
 		
 		val newType = umlOperation.type
 		umlParameter.type = newType
-		saveAndSynchronizeChanges(umlParameter)
+		propagate
 		pcmParameter = getCorrespondingParameter(umlParameter)
 		assertEquals(UmlToPcmUtil.getPcmPrimitiveType(newType.name), (pcmParameter.dataType__Parameter as PrimitiveDataType).type)
 		
 		umlParameter.direction = ParameterDirectionKind.INOUT_LITERAL
-		saveAndSynchronizeChanges(umlParameter)
+		propagate
 		pcmParameter = getCorrespondingParameter(umlParameter)
 		assertEquals(UmlToPcmUtil.getPcmParameterModifier(umlParameter.direction), pcmParameter.modifier__Parameter)
 	}
@@ -195,14 +195,14 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		assertEquals(2, pcmSignature.parameters__OperationSignature.length)
 		
 		umlOperation.ownedParameters -= parameter1
-		saveAndSynchronizeChanges(umlOperation)
+		propagate
 		
 		pcmSignature = getCorrespondingSignature(umlOperation)
 		assertEquals(1, pcmSignature.parameters__OperationSignature.length)
 		assertEquals(remainingParameterName, pcmSignature.parameters__OperationSignature.get(0).parameterName)
 		
 		umlOperation.ownedParameters.remove(0)
-		saveAndSynchronizeChanges(umlOperation)
+		propagate
 		
 		pcmSignature = getCorrespondingSignature(umlOperation)
 		assertEquals(1, pcmSignature.parameters__OperationSignature.length)

@@ -25,7 +25,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface()
 		pcmInterface.entityName = name
 		rootElement.interfaces__Repository += pcmInterface
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		return pcmInterface
 	}
 	
@@ -33,7 +33,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
 		pcmComponent.entityName = COMPONENT_NAME;
 		rootElement.components__Repository += pcmComponent;
-		saveAndSynchronizeChanges(pcmComponent);
+		propagate
 		return pcmComponent
 	}
 	
@@ -52,7 +52,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
 		pcmComponent.entityName = COMPONENT_NAME;
 		rootElement.components__Repository += pcmComponent;
-		saveAndSynchronizeChanges(pcmComponent);
+		propagate
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent]).flatten
 		assertEquals(1, correspondingElements.size);
 		val umlComponent = correspondingElements.get(0);
@@ -69,7 +69,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		requiredRole.entityName = REQUIRED_ROLE_NAME
 		requiredRole.requiringEntity_RequiredRole = pcmComponent
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[requiredRole]).flatten
 		assertEquals(1, correspondingElements.length)
@@ -95,11 +95,11 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface1
 		requiredRole.entityName = REQUIRED_ROLE_NAME
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		val pcmInterface2 = createInterface(INTERFACE_NAME + "2")
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface2
-		saveAndSynchronizeChanges(requiredRole)
+		propagate
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[requiredRole]).flatten
 		val umlUsage = (correspondingElements.get(0) as Usage)
@@ -115,10 +115,10 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		requiredRole.requiredInterface__OperationRequiredRole = pcmInterface
 		requiredRole.entityName = REQUIRED_ROLE_NAME
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += requiredRole
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		pcmComponent.requiredRoles_InterfaceRequiringEntity -= requiredRole
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		val umlComponent = getCorrespondingUmlComponent(pcmComponent)
 		assertEquals(0, umlComponent.packagedElements.length)
@@ -133,7 +133,7 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent
 		pcmComponent.providedRoles_InterfaceProvidingEntity += providedRole
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[providedRole]).flatten
 		assertEquals(1, correspondingElements.length)
@@ -160,11 +160,11 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent
 		pcmComponent.providedRoles_InterfaceProvidingEntity += providedRole
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		val pcmInterface2 = createInterface(INTERFACE_NAME2)
 		providedRole.providedInterface__OperationProvidedRole = pcmInterface2
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		val umlComponent = getCorrespondingUmlComponent(pcmComponent)
 		val umlInterface = getCorrespondingUmlInterface(pcmInterface2)
@@ -180,10 +180,10 @@ class ComponentsTest extends AbstractPcmUmlTest {
 		providedRole.entityName = PROVIDED_ROLE_NAME
 		providedRole.providingEntity_ProvidedRole = pcmComponent
 		pcmComponent.providedRoles_InterfaceProvidingEntity += providedRole
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		pcmComponent.providedRoles_InterfaceProvidingEntity -= providedRole
-		saveAndSynchronizeChanges(pcmComponent)
+		propagate
 		
 		val umlComponent = getCorrespondingUmlComponent(pcmComponent)
 		assertEquals(0, umlComponent.packagedElements.length)
