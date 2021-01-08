@@ -1,12 +1,8 @@
-import java.util.List
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.Class
 import org.palladiosimulator.pcm.repository.RepositoryComponent
 import org.palladiosimulator.pcm.repository.Repository
-import org.eclipse.xtext.xbase.lib.ObjectExtensions
-import org.eclipse.xtext.xbase.lib.BooleanExtensions
 import org.eclipse.uml2.uml.Operation
-import java.util.Optional
 
 import "http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" as repository
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
@@ -93,7 +89,7 @@ routine repositoryComponent_BidirectionalCheck(ecore::EObject affectedEObject, p
 	action {
 		call {
 			if ( affectedEObject instanceof RepositoryComponent ) { var RepositoryComponent component_ = affectedEObject { var repository__candidate = component_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { { if ( routineName === "updateComponentCorrespondingUmlNames" ) updateComponentCorrespondingUmlNames ( component_ , repository_ ) } return } } } } }
-			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null && component__candidate instanceof RepositoryComponent ) { var RepositoryComponent component_ = component__candidate as RepositoryComponent { { if ( routineName === "updateComponentCorrespondingUmlNames" ) updateComponentCorrespondingUmlNames ( component_ , repository_ ) } return } } } }
+			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null ) { var RepositoryComponent component_ = component__candidate { { if ( routineName === "updateComponentCorrespondingUmlNames" ) updateComponentCorrespondingUmlNames ( component_ , repository_ ) } return } } } }
 		}
 	}
 }
@@ -102,7 +98,7 @@ routine repositoryComponent_ElementCreatedCheck(ecore::EObject affectedEObject) 
 	action {
 		call {
 			if ( affectedEObject instanceof RepositoryComponent ) { var RepositoryComponent component_ = affectedEObject { var repository__candidate = component_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { repositoryComponent_CreateMapping ( component_ , repository_ ) return } } } } }
-			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null && component__candidate instanceof RepositoryComponent ) { var RepositoryComponent component_ = component__candidate as RepositoryComponent { repositoryComponent_CreateMapping ( component_ , repository_ ) return } } } }
+			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null ) { var RepositoryComponent component_ = component__candidate { repositoryComponent_CreateMapping ( component_ , repository_ ) return } } } }
 		}
 	}
 }
@@ -141,7 +137,7 @@ routine repositoryComponent_ElementUpdatedCheck(ecore::EObject affectedEObject) 
 	action {
 		call {
 			if ( affectedEObject instanceof RepositoryComponent ) { var RepositoryComponent component_ = affectedEObject { var repository__candidate = component_ . eContainer { if ( repository__candidate !== null && repository__candidate instanceof Repository ) { var Repository repository_ = repository__candidate as Repository { repositoryComponent_CreateMapping ( component_ , repository_ ) return } } } } }
-			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null && component__candidate instanceof RepositoryComponent ) { var RepositoryComponent component_ = component__candidate as RepositoryComponent { repositoryComponent_CreateMapping ( component_ , repository_ ) return } } } }
+			if ( affectedEObject instanceof Repository ) { var Repository repository_ = affectedEObject for ( component__candidate : repository_ . components__Repository ) { if ( component__candidate !== null ) { var RepositoryComponent component_ = component__candidate { repositoryComponent_CreateMapping ( component_ , repository_ ) return } } } }
 			repositoryComponent_ElementDeletedCheck(affectedEObject)
 		}
 	}

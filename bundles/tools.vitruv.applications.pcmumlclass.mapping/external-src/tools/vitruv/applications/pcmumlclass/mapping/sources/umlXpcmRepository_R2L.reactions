@@ -1,9 +1,5 @@
-import java.util.List
 import org.eclipse.uml2.uml.Package
 import org.palladiosimulator.pcm.repository.Repository
-import org.eclipse.xtext.xbase.lib.ObjectExtensions
-import java.util.Optional
-import org.eclipse.xtext.xbase.lib.BooleanExtensions
 
 import "http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" as repository
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml

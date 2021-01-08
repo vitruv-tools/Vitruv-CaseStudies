@@ -1,11 +1,7 @@
-import java.util.List
 import org.eclipse.uml2.uml.Package
 import org.palladiosimulator.pcm.repository.CompositeDataType
 import org.palladiosimulator.pcm.repository.Repository
-import org.eclipse.xtext.xbase.lib.ObjectExtensions
-import org.eclipse.xtext.xbase.lib.BooleanExtensions
 import org.eclipse.uml2.uml.Class
-import java.util.Optional
 import org.eclipse.uml2.uml.Generalization
 
 import "http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" as repository
@@ -175,8 +171,8 @@ routine compositeDatatypeParent_DeleteMapping(uml::Class class_, uml::Generaliza
 routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject for ( parentType__candidate : type_ . parentType_CompositeDataType ) { if ( parentType__candidate !== null && parentType__candidate instanceof CompositeDataType ) { var CompositeDataType parentType_ = parentType__candidate as CompositeDataType { { } return } } } }
-			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType parentType_ = affectedEObject for ( type__candidate : parentType_ . eCrossReferences ) { if ( type__candidate !== null && type__candidate instanceof CompositeDataType ) { var CompositeDataType type_ = type__candidate as CompositeDataType if ( type_ . parentType_CompositeDataType . contains ( parentType_ ) ) { { } return } } } }
+			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject for ( parentType__candidate : type_ . parentType_CompositeDataType ) { if ( parentType__candidate !== null ) { { { } return } } } }
+			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType parentType_ = affectedEObject for ( type__candidate : parentType_ . eCrossReferences ) { if ( type__candidate !== null ) { var CompositeDataType type_ = type__candidate as CompositeDataType if ( type_ . parentType_CompositeDataType . contains ( parentType_ ) ) { { } return } } } }
 		}
 	}
 }
@@ -184,7 +180,7 @@ routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObjec
 routine compositeDatatypeParent_ElementCreatedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
-			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject for ( parentType__candidate : type_ . parentType_CompositeDataType ) { if ( parentType__candidate !== null && parentType__candidate instanceof CompositeDataType ) { var CompositeDataType parentType_ = parentType__candidate as CompositeDataType { compositeDatatypeParent_CreateMapping ( type_ , parentType_ ) return } } } }
+			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject for ( parentType__candidate : type_ . parentType_CompositeDataType ) { if ( parentType__candidate !== null ) { var CompositeDataType parentType_ = parentType__candidate { compositeDatatypeParent_CreateMapping ( type_ , parentType_ ) return } } } }
 			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType parentType_ = affectedEObject for ( type__candidate : parentType_ . eCrossReferences ) { if ( type__candidate !== null && type__candidate instanceof CompositeDataType ) { var CompositeDataType type_ = type__candidate as CompositeDataType if ( type_ . parentType_CompositeDataType . contains ( parentType_ ) ) { compositeDatatypeParent_CreateMapping ( type_ , parentType_ ) return } } } }
 		}
 	}
@@ -213,7 +209,7 @@ routine compositeDatatypeParent_ElementDeletedCheck(ecore::EObject affectedEObje
 routine compositeDatatypeParent_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
-			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject for ( parentType__candidate : type_ . parentType_CompositeDataType ) { if ( parentType__candidate !== null && parentType__candidate instanceof CompositeDataType ) { var CompositeDataType parentType_ = parentType__candidate as CompositeDataType { compositeDatatypeParent_CreateMapping ( type_ , parentType_ ) return } } } }
+			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType type_ = affectedEObject for ( parentType__candidate : type_ . parentType_CompositeDataType ) { if ( parentType__candidate !== null ) { var CompositeDataType parentType_ = parentType__candidate { compositeDatatypeParent_CreateMapping ( type_ , parentType_ ) return } } } }
 			if ( affectedEObject instanceof CompositeDataType ) { var CompositeDataType parentType_ = affectedEObject for ( type__candidate : parentType_ . eCrossReferences ) { if ( type__candidate !== null && type__candidate instanceof CompositeDataType ) { var CompositeDataType type_ = type__candidate as CompositeDataType if ( type_ . parentType_CompositeDataType . contains ( parentType_ ) ) { compositeDatatypeParent_CreateMapping ( type_ , parentType_ ) return } } } }
 			compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
 		}

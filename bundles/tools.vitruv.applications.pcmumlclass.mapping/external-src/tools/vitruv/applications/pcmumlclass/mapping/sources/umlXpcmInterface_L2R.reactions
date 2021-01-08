@@ -1,11 +1,7 @@
-import java.util.List
 import org.palladiosimulator.pcm.repository.Repository
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Package
-import org.eclipse.xtext.xbase.lib.ObjectExtensions
-import org.eclipse.xtext.xbase.lib.BooleanExtensions
 import org.palladiosimulator.pcm.repository.OperationInterface
-import java.util.Optional
 import org.eclipse.uml2.uml.Generalization
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
@@ -185,8 +181,8 @@ routine operationInterfaceParent_DeleteMapping(repository::OperationInterface op
 routine operationInterfaceParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { { } return } } } }
-			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var interface__candidate = generalization_ . eContainer { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { { } return } } } } }
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null ) { { { } return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var interface__candidate = generalization_ . eContainer { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { { { } return } } } } }
 		}
 	}
 }
@@ -194,7 +190,7 @@ routine operationInterfaceParent_BidirectionalCheck(ecore::EObject affectedEObje
 routine operationInterfaceParent_ElementCreatedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
-			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } }
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null ) { var Generalization generalization_ = generalization__candidate { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } }
 			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var interface__candidate = generalization_ . eContainer { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } } }
 		}
 	}
@@ -223,7 +219,7 @@ routine operationInterfaceParent_ElementDeletedCheck(ecore::EObject affectedEObj
 routine operationInterfaceParent_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
-			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } }
+			if ( affectedEObject instanceof Interface ) { var Interface interface_ = affectedEObject for ( generalization__candidate : interface_ . generalizations ) { if ( generalization__candidate !== null ) { var Generalization generalization_ = generalization__candidate { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } }
 			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var interface__candidate = generalization_ . eContainer { if ( interface__candidate !== null && interface__candidate instanceof Interface ) { var Interface interface_ = interface__candidate as Interface { operationInterfaceParent_CreateMapping ( interface_ , generalization_ ) return } } } } }
 			operationInterfaceParent_ElementDeletedCheck(affectedEObject)
 		}
