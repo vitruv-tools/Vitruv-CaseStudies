@@ -60,7 +60,7 @@ class MappingUpdateUtils {
 			override transformToInterchangeableValue() {
 				if (suffixInInterchangeableValue) {
 					[
-						val string = it as String;
+						val string = it as String
 						if (string.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
 							it
 						} else {
@@ -69,7 +69,7 @@ class MappingUpdateUtils {
 					]
 				} else {
 					[
-						val string = it as String;
+						val string = it as String
 						if (string !== null && string.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
 							string.substring(0, (it as String).length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length)
 						} else {
@@ -89,7 +89,7 @@ class MappingUpdateUtils {
 				} else {
 					if (suffixInInterchangeableValue) {
 						[
-							val string = it as String;
+							val string = it as String
 							if (string !== null && string.endsWith(DefaultLiterals.IMPLEMENTATION_SUFFIX)) {
 								string.substring(0,
 									(it as String).length - DefaultLiterals.IMPLEMENTATION_SUFFIX.length)

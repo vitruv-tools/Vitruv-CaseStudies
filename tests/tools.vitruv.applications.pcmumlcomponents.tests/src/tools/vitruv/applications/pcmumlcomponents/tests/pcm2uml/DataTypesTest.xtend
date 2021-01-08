@@ -9,7 +9,7 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory
 
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Operation
-import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*;
+import static extension edu.kit.ipd.sdq.commons.util.org.palladiosimulator.pcm.repository.ParameterUtil.*
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNull
@@ -51,7 +51,7 @@ class DataTypesTest extends AbstractPcmUmlTest {
 	}
 
 	protected def CompositeDataType createCompositeDataType(String name) {
-		val pcmDataType = RepositoryFactory.eINSTANCE.createCompositeDataType();
+		val pcmDataType = RepositoryFactory.eINSTANCE.createCompositeDataType()
 		pcmDataType.entityName = name
 		rootElement.dataTypes__Repository += pcmDataType
 		propagate

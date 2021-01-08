@@ -22,7 +22,7 @@ import tools.vitruv.applications.pcmumlcomponents.uml2pcm.UmlToPcmUtil
 class InterfacesTest extends AbstractUmlPcmTest {
 
 	protected def Interface createUmlInterface(String name) {
-		val umlInterface = UMLFactory.eINSTANCE.createInterface();
+		val umlInterface = UMLFactory.eINSTANCE.createInterface()
 		umlInterface.name = name
 		rootElement.packagedElements += umlInterface
 		propagate
@@ -33,8 +33,8 @@ class InterfacesTest extends AbstractUmlPcmTest {
 	def void createInterfaceTest() {
 		val interfaceName = INTERFACE_NAME
 		val umlInterface = createUmlInterface(interfaceName)
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten;
-		assertEquals(1, correspondingElements.length);
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlInterface]).flatten
+		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof OperationInterface)
 		val pcmInterface = (correspondingElements.get(0) as OperationInterface)
 		assertEquals(interfaceName, pcmInterface.entityName)
@@ -45,7 +45,7 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val umlInterface = createUmlInterface(INTERFACE_NAME)
 		userInteraction.addNextSingleSelection(10)
 		val p1Type = UMLFactory.eINSTANCE.createPrimitiveType()
-		p1Type.name = "dataType1";
+		p1Type.name = "dataType1"
 		rootElement.packagedElements += p1Type
 
 		userInteraction.addNextSingleSelection(2)
@@ -60,8 +60,8 @@ class InterfacesTest extends AbstractUmlPcmTest {
 		val umlOperation = umlInterface.createOwnedOperation(OPERATION_NAME, parameterNames, parameterTypes, returnType)
 		propagate
 
-		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten;
-		assertEquals(1, correspondingElements.length);
+		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[umlOperation]).flatten
+		assertEquals(1, correspondingElements.length)
 		assertTrue(correspondingElements.get(0) instanceof OperationSignature)
 		val pcmOperation = (correspondingElements.get(0) as OperationSignature)
 		assertEquals(umlOperation.name, pcmOperation.entityName)

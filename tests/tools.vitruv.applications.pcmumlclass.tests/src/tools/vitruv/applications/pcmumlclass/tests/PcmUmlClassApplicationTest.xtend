@@ -40,7 +40,7 @@ import tools.vitruv.testutils.LegacyVitruvApplicationTest
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 
@@ -49,7 +49,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		return #[
 			new CombinedPcmToUmlClassReactionsChangePropagationSpecification,
 			new CombinedUmlClassToPcmReactionsChangePropagationSpecification
-		];
+		]
 	}
 
 	private def patchDomains() {
@@ -58,7 +58,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	}
 
 	protected var PcmUmlClassApplicationTestHelper helper
-	protected var ResourceSet testResourceSet;
+	protected var ResourceSet testResourceSet
 
 	protected def getTestResource(URI uri) {
 		return testResourceSet.getResource(uri, true)
@@ -68,7 +68,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	def protected void setup() {
 		patchDomains
 		helper = new PcmUmlClassApplicationTestHelper(correspondenceModel, [uri|uri.resourceAt])
-		testResourceSet = new ResourceSetImpl();
+		testResourceSet = new ResourceSetImpl()
 	}
 
 	@AfterEach
@@ -124,7 +124,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 			ReactionsCorrespondenceHelper.getCorrespondingObjectsOfType(cm, a, tag, b.class).head)
 	}
 
-	// DataType consistency constraints; defined here because it is used in multiple tests
+	// DataType consistency constraints defined here because it is used in multiple tests
 	private static def boolean isCorrectSimpleTypeCorrespondence(
 		CorrespondenceModel correspondenceModel,
 		DataType pcmDatatype,
@@ -427,9 +427,9 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 	 * It does not ensure that the compared elements are in sync with the disk state.  
 	 */
 	def Comparison compare(Notifier original, Notifier generated) {
-		val comparator = EMFCompare.builder().build();
+		val comparator = EMFCompare.builder().build()
 		val scope = new DefaultComparisonScope(original, generated, original)
-		return comparator.compare(scope);
+		return comparator.compare(scope)
 	}
 
 	/**

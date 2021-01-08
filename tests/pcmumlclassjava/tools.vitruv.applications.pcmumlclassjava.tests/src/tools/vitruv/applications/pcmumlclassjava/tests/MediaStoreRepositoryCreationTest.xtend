@@ -31,7 +31,7 @@ import java.nio.file.Path
  */
 class MediaStoreRepositoryCreationTest extends PcmUmlClassJavaApplicationTest {
 
-    protected static val Logger logger = Logger.getLogger(typeof(MediaStoreRepositoryCreationTest).simpleName);
+    protected static val Logger logger = Logger.getLogger(typeof(MediaStoreRepositoryCreationTest).simpleName)
 
 //	private static val PCM_MEDIA_STORE_REPOSITORY_PATH = "resources/model/ms.repository"
 	// all SEFFs removed because the TUID-generator failed for ResourceDemandParameters 

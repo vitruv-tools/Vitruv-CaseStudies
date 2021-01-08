@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 class ComponentsTest extends AbstractPcmUmlTest {
-	static val COMPONENT_NAME = "TestComponent";
+	static val COMPONENT_NAME = "TestComponent"
 	static val INTERFACE_NAME = "TestInterface1"
 	static val INTERFACE_NAME2 = "TestInterface2"
 	protected static val PROVIDED_ROLE_NAME = "TestProvided"
@@ -30,9 +30,9 @@ class ComponentsTest extends AbstractPcmUmlTest {
 	}
 
 	protected def BasicComponent createBasicComponent(String name) {
-		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
-		pcmComponent.entityName = COMPONENT_NAME;
-		rootElement.components__Repository += pcmComponent;
+		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent()
+		pcmComponent.entityName = COMPONENT_NAME
+		rootElement.components__Repository += pcmComponent
 		propagate
 		return pcmComponent
 	}
@@ -49,15 +49,15 @@ class ComponentsTest extends AbstractPcmUmlTest {
 
 	@Test
 	def void testCreateComponent() {
-		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent();
-		pcmComponent.entityName = COMPONENT_NAME;
-		rootElement.components__Repository += pcmComponent;
+		val pcmComponent = RepositoryFactory.eINSTANCE.createBasicComponent()
+		pcmComponent.entityName = COMPONENT_NAME
+		rootElement.components__Repository += pcmComponent
 		propagate
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmComponent]).flatten
-		assertEquals(1, correspondingElements.size);
-		val umlComponent = correspondingElements.get(0);
-		assertTrue(umlComponent instanceof Component);
-		assertEquals(COMPONENT_NAME, (umlComponent as Component).name);
+		assertEquals(1, correspondingElements.size)
+		val umlComponent = correspondingElements.get(0)
+		assertTrue(umlComponent instanceof Component)
+		assertEquals(COMPONENT_NAME, (umlComponent as Component).name)
 	}
 
 	@Test

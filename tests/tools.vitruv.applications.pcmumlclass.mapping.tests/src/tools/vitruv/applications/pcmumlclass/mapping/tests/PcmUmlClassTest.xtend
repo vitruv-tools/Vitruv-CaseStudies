@@ -39,7 +39,7 @@ import java.nio.file.Path
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat
 import static tools.vitruv.testutils.matchers.ModelMatchers.isResource
 import static tools.vitruv.testutils.matchers.ModelMatchers.isNoResource
 
@@ -49,10 +49,10 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		return #[
 			new CombinedPcmToUmlChangePropagationSpecification,
 			new CombinedUmlToPcmChangePropagationSpecification
-		];
+		]
 	}
 
-	protected var ResourceSet testResourceSet;
+	protected var ResourceSet testResourceSet
 	protected var PcmUmlClassTestHelper helper
 
 	protected def getTestResource(URI uri) {
@@ -67,7 +67,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 
 	@BeforeEach
 	def protected void setup() {
-		testResourceSet = new ResourceSetImpl();
+		testResourceSet = new ResourceSetImpl()
 		helper = new PcmUmlClassTestHelper(correspondenceModel, [uri|uri.resourceAt])
 	}
 
@@ -388,9 +388,9 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 	 * It does not ensure that the compared elements are in sync with the disk state.  
 	 */
 	def Comparison compare(Notifier original, Notifier generated) {
-		val comparator = EMFCompare.builder().build();
+		val comparator = EMFCompare.builder().build()
 		val scope = new DefaultComparisonScope(original, generated, original)
-		return comparator.compare(scope);
+		return comparator.compare(scope)
 	}
 
 	/**
