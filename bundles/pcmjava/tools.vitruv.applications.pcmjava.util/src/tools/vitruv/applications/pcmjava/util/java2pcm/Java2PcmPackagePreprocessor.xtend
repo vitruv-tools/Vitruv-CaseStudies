@@ -47,7 +47,7 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
 
     private def void attachPackageToResource(EObject eObject, VURI vuri) {
         if (eObject instanceof Package) {
-            val Package newPackage = eObject as Package;
+            val Package newPackage = eObject
             // attach the package to a resource in order to enable the calculation of
             // a Tuid in the transformations
             val ResourceSet resourceSet = new ResourceSetImpl();
@@ -67,7 +67,7 @@ class Java2PcmPackagePreprocessor extends AbstractChangePropagationSpecification
 		if (doesHandleChange(change, correspondenceModel)) {
     		val eChange = change.getEChanges.get(0);
         	if (eChange instanceof InsertRootEObject<?>) {
-	            attachPackageToResource(eChange.newValue as EObject, change.getURI());
+	            attachPackageToResource(eChange.newValue, change.getURI());
         	} else if (eChange instanceof JavaReplaceSingleValuedEAttribute<?,?>) {
 	            prepareRenamePackageInfos(eChange, change.getURI());
         	} // TODO: package deletion

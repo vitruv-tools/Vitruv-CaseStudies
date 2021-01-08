@@ -258,7 +258,7 @@ class JavaTypeUtil {
             addJavaImport(compUnit, jType)
             // add imports for typeArguments if any exist
             if (jTypeRef instanceof NamespaceClassifierReference) {
-                val typeArguments = (jTypeRef as NamespaceClassifierReference).classifierReferences.get(0).typeArguments
+                val typeArguments = jTypeRef.classifierReferences.get(0).typeArguments
                 for (typeArgument : typeArguments.filter(QualifiedTypeArgument).filter[it.typeReference !== null]) {
                     typeArgument.typeReference
                     addJavaImport(compUnit, typeArgument.typeReference)

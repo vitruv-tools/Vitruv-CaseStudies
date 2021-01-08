@@ -107,7 +107,7 @@ class UmlToPcmTypesUtil {
 
 	protected static def ReactionsCorrespondence createTaggedCorrespondence(CorrespondenceModel correspondenceModel, EObject elementA, EObject elementB,
 		String tag) {
-		val correspondence = correspondenceModel.reactionsView.createAndAddCorrespondence(#[elementA], #[elementB]) as ReactionsCorrespondence
+		val correspondence = correspondenceModel.reactionsView.createAndAddCorrespondence(#[elementA], #[elementB])
 		correspondence.tag = tag
 		return correspondence
 	}

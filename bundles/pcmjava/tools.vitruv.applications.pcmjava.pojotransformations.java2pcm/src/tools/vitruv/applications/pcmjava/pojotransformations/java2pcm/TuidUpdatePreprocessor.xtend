@@ -7,7 +7,6 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.change.echange.EChange
 import tools.vitruv.domains.java.echange.feature.JavaFeatureEChange
 import tools.vitruv.framework.tuid.TuidManager
-import org.eclipse.emf.ecore.EObject
 import tools.vitruv.framework.util.command.ResourceAccess
 
 // This is a copy from tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm 
@@ -23,8 +22,8 @@ class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 
 	override propagateChange(EChange change, CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
 		if (change instanceof JavaFeatureEChange<?, ?>) {
-			val oldAffectedEObject = change.oldAffectedEObject as EObject // Cast necessary due to Xcore/Xtend problem
-			val newAffectedEObject = change.affectedEObject as EObject // Cast necessary due to Xcore/Xtend problem
+			val oldAffectedEObject = change.oldAffectedEObject
+			val newAffectedEObject = change.affectedEObject
 			if (null !== oldAffectedEObject && null !== newAffectedEObject) {
 				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject);
 			}

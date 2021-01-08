@@ -152,7 +152,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlProperty, TagLiterals.COLLECTION_DATATYPE__PROPERTY)
 		val collectionTypeCorrespondenceIsCorrect = 
 			if(pcmDatatype instanceof CollectionDataType) 
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlProperty.type, umlProperty.lower, umlProperty.upper)
+				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype, umlProperty.type, umlProperty.lower, umlProperty.upper)
 			else null
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}
@@ -165,7 +165,7 @@ abstract class PcmUmlClassApplicationTest extends LegacyVitruvApplicationTest {
 		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlParam, TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 		val collectionTypeCorrespondenceIsCorrect = 
 			if(pcmDatatype instanceof CollectionDataType) 
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType, umlParam.type, umlParam.lower, umlParam.upper)
+				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype, umlParam.type, umlParam.lower, umlParam.upper)
 			else null
 		return simpleTypeCorrespondence || (collectionTypeCorrespondenceExists && collectionTypeCorrespondenceIsCorrect)
 	}

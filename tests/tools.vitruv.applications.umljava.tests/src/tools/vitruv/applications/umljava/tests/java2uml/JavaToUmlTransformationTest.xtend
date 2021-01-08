@@ -9,7 +9,6 @@ import tools.vitruv.applications.util.temporary.java.JavaVisibility
 import tools.vitruv.applications.umljava.tests.util.AbstractUmlJavaTest
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Property
-import org.apache.log4j.Logger
 import java.util.List
 import org.emftext.language.java.members.EnumConstant
 import org.emftext.language.java.members.Member
@@ -27,7 +26,6 @@ import java.nio.file.Path
  * @author Fei
  */
 abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
-	static val logger = Logger.getLogger(JavaToUmlTransformationTest.simpleName)
 	static val UMLMODELPATH = "rootModelDirectory" // Directory of the Uml Model Path used in the java2uml tests
 	static val UMLMODELNAME = "rootModelName" // Name of the Uml Model used in the java2uml tests
 
@@ -217,10 +215,6 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	def protected getRegisteredUmlModel() {
 		val model = CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel,
 			UMLPackage.Literals.MODEL, Model).head
-		if (!(model instanceof Model)) {
-			logger.warn("No Uml Rootmodel found.")
-			return null
-		}
 		return model
 	}
 

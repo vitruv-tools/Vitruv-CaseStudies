@@ -171,7 +171,7 @@ class InterfacesTest extends AbstractPcmUmlTest {
 		correspondingElements = correspondenceModel.getCorrespondingEObjects(#[pcmParameter]).flatten
 		umlParameter = (correspondingElements.get(0) as org.eclipse.uml2.uml.Parameter)
 				
-		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName((newType as PrimitiveDataType).type),
+		assertEquals(PcmToUmlUtil.getUmlPrimitiveTypeName(newType.type),
 			umlParameter.type.name)
 
 		val newName = PARAMETER_NAME_2

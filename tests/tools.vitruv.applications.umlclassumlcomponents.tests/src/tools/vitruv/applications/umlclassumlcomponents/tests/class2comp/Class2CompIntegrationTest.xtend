@@ -37,7 +37,7 @@ class Class2CompIntegrationTest extends AbstractClass2CompTest {
 		val umlModel = correspondenceModel.getAllEObjectsOfTypeInCorrespondences(Model).get(0)
 		umlModel.eResource.save(Collections.EMPTY_MAP)
 		
-		return umlModel as Model
+		return umlModel
 	}
 	
 	/*******

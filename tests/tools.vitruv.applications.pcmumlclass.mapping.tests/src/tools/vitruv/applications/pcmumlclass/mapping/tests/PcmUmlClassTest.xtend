@@ -139,7 +139,7 @@ abstract class PcmUmlClassTest extends LegacyVitruvApplicationTest {
 		val collectionTypeCorrespondenceExists = corresponds(correspondenceModel, pcmDatatype, umlParam,
 			TagLiterals.COLLECTION_DATATYPE__PARAMETER)
 		val collectionTypeCorrespondenceIsCorrect = if (pcmDatatype instanceof CollectionDataType)
-				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype as CollectionDataType,
+				isCorrectCollectionTypeCorrespondence(correspondenceModel, pcmDatatype,
 					umlParam.type, umlParam.lower, umlParam.upper)
 			else
 				null
