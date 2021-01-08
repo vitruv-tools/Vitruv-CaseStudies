@@ -9,30 +9,29 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 
-class VisibilityTest extends AbstractComp2ClassTest{
-			    	
-   	/*******
-	*Tests:*
-	********/
-	
+class VisibilityTest extends AbstractComp2ClassTest {
+
+	/*******
+	 * Tests:*
+	 ********/
 	private def void assertVisibility(NamedElement element) {
 		val correspondingElements = correspondenceModel.getCorrespondingEObjects(#[element]).flatten
 		for (EObject corrElement : correspondingElements) {
 			assertTrue((corrElement as NamedElement).visibility == element.visibility)
-		} 
-		
+		}
+
 	}
-	
+
 	@Test
 	def void testVisibilityChange() {
 		val umlComp = createComponent(COMP_NAME)
 		umlComp.visibility = VisibilityKind.PRIVATE_LITERAL
-		propagate		
+		propagate
 		assertVisibility(umlComp)
-		
+
 		umlComp.visibility = VisibilityKind.PUBLIC_LITERAL
-		propagate		
+		propagate
 		assertVisibility(umlComp)
-	}			
-	
+	}
+
 }
