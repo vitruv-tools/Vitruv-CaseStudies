@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeAll
  */
 abstract class LinearTransitiveChangeTest extends TransitiveChangeTest {
 
-    @BeforeAll
-    def static void enforceLinearNetwork() {
-        linearNetwork = true
-    }
+	@BeforeAll
+	def static void enforceLinearNetwork() {
+		linearNetwork = true
+	}
 }

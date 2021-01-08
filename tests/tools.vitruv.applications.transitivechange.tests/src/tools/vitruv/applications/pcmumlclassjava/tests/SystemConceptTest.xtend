@@ -30,102 +30,105 @@ import java.nio.file.Path
  */
 class SystemConceptTest extends TransitiveChangeTest {
 
-    static val PCM_MODEL_FILE = "model/System.system"
-    static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME + DefaultLiterals.UML_EXTENSION
+	static val PCM_MODEL_FILE = "model/System.system"
+	static val UML_MODEL_FILE = DefaultLiterals.MODEL_DIRECTORY + "/" + DefaultLiterals.UML_MODEL_FILE_NAME +
+		DefaultLiterals.UML_EXTENSION
 
-    val MODEL_NAME = "testRootModel"
-    val SYSTEM_NAME = "TestSystem"
+	val MODEL_NAME = "testRootModel"
+	val SYSTEM_NAME = "TestSystem"
 
-    def protected static checkSystemConcept(
-        CorrespondenceModel cm,
-        System pcmSystem,
-        Package umlSystemPkg,
-        Class umlSystemImpl,
-        Operation umlSystemConstructor
-    ) {
-        assertNotNull(pcmSystem)
-        assertNotNull(umlSystemPkg)
-        assertNotNull(umlSystemImpl)
-        assertNotNull(umlSystemConstructor)
-        assertTrue(corresponds(cm, pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE))
-        assertTrue(corresponds(cm, pcmSystem, umlSystemImpl, TagLiterals.IPRE__IMPLEMENTATION))
-        assertTrue(pcmSystem.entityName.toFirstLower == umlSystemPkg.name)
-        assertTrue(pcmSystem.entityName == umlSystemPkg.name.toFirstUpper)
-        assertTrue(pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlSystemImpl.name)
-        assertTrue(umlSystemImpl.isFinalSpecialization)
-        assertTrue(umlSystemImpl.visibility === VisibilityKind.PUBLIC_LITERAL)
-        assertTrue(umlSystemImpl.package === umlSystemPkg)
-    }
+	def protected static checkSystemConcept(
+		CorrespondenceModel cm,
+		System pcmSystem,
+		Package umlSystemPkg,
+		Class umlSystemImpl,
+		Operation umlSystemConstructor
+	) {
+		assertNotNull(pcmSystem)
+		assertNotNull(umlSystemPkg)
+		assertNotNull(umlSystemImpl)
+		assertNotNull(umlSystemConstructor)
+		assertTrue(corresponds(cm, pcmSystem, umlSystemPkg, TagLiterals.SYSTEM__SYSTEM_PACKAGE))
+		assertTrue(corresponds(cm, pcmSystem, umlSystemImpl, TagLiterals.IPRE__IMPLEMENTATION))
+		assertTrue(pcmSystem.entityName.toFirstLower == umlSystemPkg.name)
+		assertTrue(pcmSystem.entityName == umlSystemPkg.name.toFirstUpper)
+		assertTrue(pcmSystem.entityName + DefaultLiterals.IMPLEMENTATION_SUFFIX == umlSystemImpl.name)
+		assertTrue(umlSystemImpl.isFinalSpecialization)
+		assertTrue(umlSystemImpl.visibility === VisibilityKind.PUBLIC_LITERAL)
+		assertTrue(umlSystemImpl.package === umlSystemPkg)
+	}
 
-    def protected checkSystemConcept(Package umlSystemPkg) {
-        assertNotNull(umlSystemPkg)
-        val pcmSystem = helper.getModifiableCorr(umlSystemPkg, System, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
-        assertNotNull(pcmSystem)
-        checkSystemConcept(pcmSystem)
-    }
+	def protected checkSystemConcept(Package umlSystemPkg) {
+		assertNotNull(umlSystemPkg)
+		val pcmSystem = helper.getModifiableCorr(umlSystemPkg, System, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
+		assertNotNull(pcmSystem)
+		checkSystemConcept(pcmSystem)
+	}
 
-    def protected checkSystemConcept(System pcmSystem) {
-        assertNotNull(pcmSystem)
-        val umlSystemPkg = helper.getModifiableCorr(pcmSystem, Package, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
-        val umlSystemImpl = helper.getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)
-        val umlSystemConstructor = helper.getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
-        checkSystemConcept(correspondenceModel, pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
-        checkJavaPackage(umlSystemPkg)
-        checkJavaType(umlSystemImpl)
-        checkJavaConstructor(umlSystemConstructor)
-    }
+	def protected checkSystemConcept(System pcmSystem) {
+		assertNotNull(pcmSystem)
+		val umlSystemPkg = helper.getModifiableCorr(pcmSystem, Package, TagLiterals.SYSTEM__SYSTEM_PACKAGE)
+		val umlSystemImpl = helper.getModifiableCorr(pcmSystem, Class, TagLiterals.IPRE__IMPLEMENTATION)
+		val umlSystemConstructor = helper.getModifiableCorr(pcmSystem, Operation, TagLiterals.IPRE__CONSTRUCTOR)
+		checkSystemConcept(correspondenceModel, pcmSystem, umlSystemPkg, umlSystemImpl, umlSystemConstructor)
+		checkJavaPackage(umlSystemPkg)
+		checkJavaType(umlSystemImpl)
+		checkJavaConstructor(umlSystemConstructor)
+	}
 
-    @Test
-    def void testCreateSystemConcept_PCM() {
-        val pcmSystem = SystemFactory.eINSTANCE.createSystem => [
-        	entityName = SYSTEM_NAME
-        ]
+	@Test
+	def void testCreateSystemConcept_PCM() {
+		val pcmSystem = SystemFactory.eINSTANCE.createSystem => [
+			entityName = SYSTEM_NAME
+		]
 
-        // Always required
-        userInteraction.addNextTextInput(UML_MODEL_FILE)
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection) // Also serves as NOTHING in the rarer case
-        // Depending on the transformation execution order sometimes (but rarely) required:
-        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING)
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+		// Always required
+		userInteraction.addNextTextInput(UML_MODEL_FILE)
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection) // Also serves as NOTHING in the rarer case
+		// Depending on the transformation execution order sometimes (but rarely) required:
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING)
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
 
-        resourceAt(Path.of(PCM_MODEL_FILE)).startRecordingChanges => [
-        	contents += pcmSystem
-        ]
-        propagate
-        val reloadedPcmSystem = pcmSystem.clearResourcesAndReloadRoot
+		resourceAt(Path.of(PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmSystem
+		]
+		propagate
+		val reloadedPcmSystem = pcmSystem.clearResourcesAndReloadRoot
 
-        checkSystemConcept(reloadedPcmSystem)
-        assertTrue(reloadedPcmSystem.entityName == SYSTEM_NAME)
-    }
+		checkSystemConcept(reloadedPcmSystem)
+		assertTrue(reloadedPcmSystem.entityName == SYSTEM_NAME)
+	}
 
-    @Test
-    def void testCreateSystemConcept_UML() {
-        val umlModel = UMLFactory.eINSTANCE.createModel => [
-        	name = MODEL_NAME
-        ]
+	@Test
+	def void testCreateSystemConcept_UML() {
+		val umlModel = UMLFactory.eINSTANCE.createModel => [
+			name = MODEL_NAME
+		]
 
-        userInteraction.addNextTextInput(PCM_MODEL_FILE)
-        resourceAt(Path.of(UML_MODEL_FILE)).startRecordingChanges => [
-        	contents += umlModel
-        ]
-        propagate
+		userInteraction.addNextTextInput(PCM_MODEL_FILE)
+		resourceAt(Path.of(UML_MODEL_FILE)).startRecordingChanges => [
+			contents += umlModel
+		]
+		propagate
 
-        var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
+		var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
 
-        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
-        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING) // In the rare case also serves as SYSTEM  
-        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING) // In the rare case also serves as SYSTEM  
-        // In the rare case not needed (depending on the transformation execution order)
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING) // In the rare case also serves as SYSTEM  
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__NOTHING) // In the rare case also serves as SYSTEM  
+		// In the rare case not needed (depending on the transformation execution order)
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_SYSTEM.selection)
 
-        propagate
-        
-        umlSystemPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.findFirst[it.name == SYSTEM_NAME.toFirstLower]
-        assertNotNull(umlSystemPkg)
-        checkSystemConcept(umlSystemPkg)
-    }
+		propagate
+
+		umlSystemPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.findFirst [
+			it.name == SYSTEM_NAME.toFirstLower
+		]
+		assertNotNull(umlSystemPkg)
+		checkSystemConcept(umlSystemPkg)
+	}
 
 }
