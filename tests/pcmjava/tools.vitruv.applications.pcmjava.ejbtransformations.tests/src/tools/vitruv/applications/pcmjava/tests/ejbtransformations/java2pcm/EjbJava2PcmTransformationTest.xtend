@@ -39,7 +39,7 @@ abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest 
 
 	def protected createEjbInterface(String interfaceName) {
 		val ConcreteClassifier classifier = super.createJaMoPPInterfaceInPackage(mainPackage.name,
-			interfaceName) as ConcreteClassifier
+			interfaceName)
 		val OperationInterface correspondingOpInterface = this.addAnnotationToClassifier(classifier,
 			REMOTE_ANNOTATION_NAME, OperationInterface, interfaceName)
 		correspondingOpInterface

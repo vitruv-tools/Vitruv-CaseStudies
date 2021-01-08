@@ -69,7 +69,7 @@ class DataTypeCorrespondenceHelper { // FIXME TS this seems to be a utility clas
 		if (type instanceof TypeReference) {
 			return type
 		} else if (type instanceof ConcreteClassifier) {
-			return createNamespaceClassifierReference(type as ConcreteClassifier)
+			return createNamespaceClassifierReference(type)
 		}
 		logger.warn(
 			"found type " + type +

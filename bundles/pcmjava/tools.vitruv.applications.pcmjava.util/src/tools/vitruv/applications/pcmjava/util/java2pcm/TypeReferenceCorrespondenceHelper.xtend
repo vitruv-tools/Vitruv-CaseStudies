@@ -132,12 +132,12 @@ class TypeReferenceCorrespondenceHelper {
 		def static DataType getDataTypeFromTypeReference(TypeReference typeReference,
 			CorrespondenceModel correspondenceModel, UserInteractor userInteractor, Repository repo) {
 			if (typeReference instanceof PrimitiveType) {
-				return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference as PrimitiveType)
+				return claimPCMDataTypeForJaMoPPPrimitiveType(typeReference)
 			} else if (typeReference instanceof ClassifierReference) {
-				return getPCMDataTypeForClassifierReference(typeReference as ClassifierReference, correspondenceModel,
+				return getPCMDataTypeForClassifierReference(typeReference, correspondenceModel,
 					userInteractor, repo)
 			} else if (typeReference instanceof NamespaceClassifierReference) {
-				return getPCMDataTypeForNamespaceClassifierReference(typeReference as NamespaceClassifierReference,
+				return getPCMDataTypeForNamespaceClassifierReference(typeReference,
 					correspondenceModel, userInteractor, repo)
 			}
 			return null

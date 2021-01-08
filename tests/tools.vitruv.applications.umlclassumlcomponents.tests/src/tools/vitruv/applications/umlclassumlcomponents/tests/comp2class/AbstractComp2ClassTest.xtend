@@ -92,7 +92,7 @@ abstract class AbstractComp2ClassTest extends LegacyVitruvApplicationTest {
 		
 		assertTypeAndName(umlClass, Class, name)		
 		//Check Package
-		val classPackage = (umlClass as Class).package
+		val classPackage = umlClass.package
 		assertEquals(packageName, classPackage.name)
 		val packageOwnedTypes = classPackage.ownedTypes
 		assertTrue(packageOwnedTypes.size >= 1)

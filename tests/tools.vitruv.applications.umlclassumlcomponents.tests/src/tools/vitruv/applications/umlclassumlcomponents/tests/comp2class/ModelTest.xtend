@@ -29,7 +29,7 @@ class ModelTest extends AbstractComp2ClassTest {
 		assertTypeAndName(classModel, Model, MODEL_NAME)
 		
 		//Check DataType Package
-		val packagedElements = (classModel as Model).packagedElements
+		val packagedElements = classModel.packagedElements
 		assertEquals(1, packagedElements.size)
 		val dataTypePackage = packagedElements.get(0)
 		assertTypeAndName(dataTypePackage, Package, CLASS_DATATYPES_PACKAGE_NAME)

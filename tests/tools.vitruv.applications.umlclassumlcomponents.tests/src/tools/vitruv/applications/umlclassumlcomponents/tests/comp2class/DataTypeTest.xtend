@@ -64,7 +64,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 		
 		//Check if rename happened in Class Property:
 		val classProperty = umlClass.ownedAttributes.get(0)
-		assertEquals("New", (classProperty as Property).name)
+		assertEquals("New", classProperty.name)
     }
 	
 	@Test
@@ -103,7 +103,7 @@ class DataTypeTest extends AbstractComp2ClassTest{
 		
 		//Check if rename happened in Class Operation:
 		val classOperation = umlClass.ownedOperations.get(0)
-		assertEquals("New", (classOperation as Operation).name)
+		assertEquals("New", classOperation.name)
     }
     
     		

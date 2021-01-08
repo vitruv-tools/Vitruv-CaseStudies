@@ -148,7 +148,7 @@ class PcmJamoppUtilsGuice {
 			}
 		}
 
-		val affectedClass = configureMethod.containingConcreteClassifier as ConcreteClassifier
+		val affectedClass = configureMethod.containingConcreteClassifier
 		PcmJamoppUtilsGuice.saveResourceForClass(affectedClass)
 
 		if (acToRemove !== null) {
@@ -174,7 +174,7 @@ class PcmJamoppUtilsGuice {
 
 	def static addInjectToConstructor(Constructor constructor, ConcreteClassifier jaMoPPClass) {
 		// Add @Inject tag
-		val annotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance() as AnnotationInstance
+		val annotation = AnnotationsFactory.eINSTANCE.createAnnotationInstance()
 		val classifierReference = createNamespaceClassifierReferenceForName("javax.inject", "Inject")
 		val Classifier classifier = classifierReference.classifierReferences.get(0).target
 		annotation.setAnnotation(classifier)
@@ -785,7 +785,7 @@ class PcmJamoppUtilsGuice {
 					}
 				}
 
-				val affectedClass = configureMethod.containingConcreteClassifier as ConcreteClassifier
+				val affectedClass = configureMethod.containingConcreteClassifier
 				PcmJamoppUtilsGuice.saveResourceForClass(affectedClass)
 
 				if (connectorToRemove !== null) {

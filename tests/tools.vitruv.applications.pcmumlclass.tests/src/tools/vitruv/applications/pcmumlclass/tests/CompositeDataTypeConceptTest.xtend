@@ -150,7 +150,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType)
-			.findFirst[it.entityName == TEST_COMPOSITE_DATATYPE] as CompositeDataType
+			.findFirst[it.entityName == TEST_COMPOSITE_DATATYPE]
 		assertNotNull(pcmCompositeType)
 		checkCompositeDataTypeConcept(pcmCompositeType)
 	}

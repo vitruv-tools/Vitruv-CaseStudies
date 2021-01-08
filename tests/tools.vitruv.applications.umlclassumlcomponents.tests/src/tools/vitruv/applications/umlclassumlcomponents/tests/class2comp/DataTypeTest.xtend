@@ -65,7 +65,7 @@ class DataTypeTest extends AbstractClass2CompTest {
 		
 		//Check if rename happened in Component Property:
 		val compProperty = compDataType.ownedAttributes.get(0)
-		assertEquals("New", (compProperty as Property).name)
+		assertEquals("New", compProperty.name)
     }
 	
 	@Test
@@ -103,7 +103,7 @@ class DataTypeTest extends AbstractClass2CompTest {
 		
 		//Check if rename happened in Component Operation:
 		val compOperation = compDataType.ownedOperations.get(0)
-		assertEquals("New", (compOperation as Operation).name)
+		assertEquals("New", compOperation.name)
     }   
     
      			

@@ -49,7 +49,7 @@ class PcmToUmlUtil {
 		if (correspondingObjects.length > 0) {
 			val correspondingObject = correspondingObjects.get(0)
 			if (correspondingObject instanceof DataType) {
-				return correspondingObject as DataType
+				return correspondingObject
 			}
 		}
 		var DataType correspondingType = null
@@ -83,7 +83,7 @@ class PcmToUmlUtil {
 	protected static def ReactionsCorrespondence createTaggedCorrespondence(CorrespondenceModel correspondenceModel,
 		EObject elementA, EObject elementB, String tag) {
 		val correspondence = correspondenceModel.reactionsView.
-			createAndAddCorrespondence(#[elementA], #[elementB]) as ReactionsCorrespondence
+			createAndAddCorrespondence(#[elementA], #[elementB])
 		correspondence.tag = tag
 		return correspondence
 	}

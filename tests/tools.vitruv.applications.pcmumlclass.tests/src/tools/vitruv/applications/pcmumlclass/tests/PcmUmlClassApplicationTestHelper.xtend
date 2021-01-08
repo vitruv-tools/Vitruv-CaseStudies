@@ -72,7 +72,7 @@ final class PcmUmlClassApplicationTestHelper {
 	}
 	
 	def <T extends EObject> Set<T> getCorrSet(EObject source, Class<T> typeFilter) {
-		return correspondenceModel.getCorrespondingEObjectsByType(source, typeFilter) as Set<T>
+		return correspondenceModel.getCorrespondingEObjectsByType(source, typeFilter)
 	}
 	
 	def <T extends EObject> T getCorr(EObject source, Class<T> typeFilter, String tag) {

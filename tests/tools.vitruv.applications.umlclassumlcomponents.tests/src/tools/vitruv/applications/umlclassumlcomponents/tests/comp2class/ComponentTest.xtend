@@ -1,6 +1,5 @@
 package tools.vitruv.applications.umlclassumlcomponents.tests.comp2class
 
-import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.UMLFactory
 
 import static tools.vitruv.applications.umlclassumlcomponents.tests.util.SharedTestUtil.*
@@ -43,8 +42,8 @@ class ComponentTest extends AbstractComp2ClassTest{
 		propagate
 		
 		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
-		val classPackage = (umlClass as Class).package
-		val classModel = (umlClass as Class).model
+		val classPackage = umlClass.package
+		val classModel = umlClass.model
 		
 		//Remove Component		
 		assertTrue(rootElement.packagedElements.contains(umlComp))
@@ -64,8 +63,8 @@ class ComponentTest extends AbstractComp2ClassTest{
 		propagate
 		
 		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
-		val classPackage = (umlClass as Class).package
-		val classModel = (umlClass as Class).model
+		val classPackage = umlClass.package
+		val classModel = umlClass.model
 		
 		//Package gets more members:
     	val umlClass2 = UMLFactory.eINSTANCE.createClass()
@@ -96,8 +95,8 @@ class ComponentTest extends AbstractComp2ClassTest{
 		propagate
 		
 		val umlClass = assertClassAndPackage(umlComp, COMP_NAME)
-		val classPackage = (umlClass as Class).package
-		val classModel = (umlClass as Class).model
+		val classPackage = umlClass.package
+		val classModel = umlClass.model
 		
 		//Package gets more members:
     	val umlClass2 = UMLFactory.eINSTANCE.createClass()
