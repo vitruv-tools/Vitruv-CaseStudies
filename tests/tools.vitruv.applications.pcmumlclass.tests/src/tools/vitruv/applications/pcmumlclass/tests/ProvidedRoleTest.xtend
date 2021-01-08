@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationProvidedRole 
@@ -52,11 +53,14 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 		helper.createOperationInterface(pcmRepository)
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
+		return pcmRepository.clearResourcesAndReloadRoot 
 	}
 
 	@Test
@@ -68,8 +72,8 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 		pcmProvided.providedInterface__OperationProvidedRole = helper.getPcmOperationInterface(pcmRepository)
 		helper.getPcmComponent(pcmRepository).providedRoles_InterfaceProvidingEntity += pcmProvided
 		
-		saveAndSynchronizeChanges(pcmProvided)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		pcmProvided = helper.getPcmComponent(pcmRepository).providedRoles_InterfaceProvidingEntity.head as OperationProvidedRole
 		checkProvidedRoleConcept(pcmProvided)
@@ -84,9 +88,9 @@ class ProvidedRoleTest extends PcmUmlClassApplicationTest {
 		var umlRealization = helper.getUmlComponentImpl(pcmRepository)
 			.createInterfaceRealization(PROVIDED_ROLE_NAME, helper.getUmlInterface(pcmRepository))
 		
-		saveAndSynchronizeChanges(umlRealization)
-		reloadResourceAndReturnRoot(umlRealization)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		umlRealization.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		val umlInterface = helper.getUmlInterface(pcmRepository) //necessary that it is final for Lambda
 		umlRealization = helper.getUmlComponentImpl(pcmRepository).interfaceRealizations.findFirst[it.contract == umlInterface]

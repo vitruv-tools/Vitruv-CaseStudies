@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationRequiredRole 
@@ -65,14 +66,18 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 	}
 
 	def private Repository createRepository_Component_Interface() {
-		var pcmRepository = helper.createRepository
+		val pcmRepository = helper.createRepository
 		helper.createComponent(pcmRepository)
 		helper.createOperationInterface(pcmRepository)
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
+		return pcmRepository.clearResourcesAndReloadRoot 
 	}
 
 	@Test
@@ -83,8 +88,8 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		pcmRequired.requiredInterface__OperationRequiredRole = helper.getPcmOperationInterface(pcmRepository)
 		helper.getPcmComponent(pcmRepository).requiredRoles_InterfaceRequiringEntity += pcmRequired
 		
-		saveAndSynchronizeChanges(pcmRequired)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		val pcmComponent = helper.getPcmComponent(pcmRepository)
 		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.size,
@@ -102,9 +107,9 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		
 		var umlConstructorParameter = umlConstructor.createOwnedParameter(REQUIRED_ROLE_NAME, helper.getUmlInterface(pcmRepository))
 		
-		saveAndSynchronizeChanges(umlConstructorParameter)
-		reloadResourceAndReturnRoot(umlConstructorParameter)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		umlConstructorParameter.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
 		assertEquals(1, umlConstructor.ownedParameters.size,
@@ -123,9 +128,9 @@ class RequiredRoleConceptTest extends PcmUmlClassApplicationTest {
 		
 		var umlRequiredInstanceField = umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
 		
-		saveAndSynchronizeChanges(umlRequiredInstanceField)
-		reloadResourceAndReturnRoot(umlRequiredInstanceField)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		umlRequiredInstanceField.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
 		assertEquals(1, umlComponentImpl.ownedAttributes.size,

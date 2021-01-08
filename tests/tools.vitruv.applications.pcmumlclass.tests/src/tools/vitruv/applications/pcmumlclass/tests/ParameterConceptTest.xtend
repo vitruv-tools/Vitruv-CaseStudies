@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNull
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Parameter 
@@ -64,11 +65,14 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		helper.createOperationSignature(pcmInterface)
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
+		return pcmRepository.clearResourcesAndReloadRoot 
 	}	
 
 	
@@ -83,10 +87,10 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		umlParameter.type = umlType
 		umlParameter.lower = lower
 		umlParameter.upper = upper
-		saveAndSynchronizeChanges(umlParameter)
+		propagate
 		
-		reloadResourceAndReturnRoot(umlParameter)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlParameter.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 		umlOperation = helper.getUmlOperation(pcmInterface)
 		
@@ -130,8 +134,8 @@ class ParameterConceptTest extends PcmUmlClassApplicationTest {
 		pcmParameter.dataType__Parameter = pcmType
 		pcmSignature.parameters__OperationSignature += pcmParameter
 		
-		saveAndSynchronizeChanges(pcmParameter)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 		pcmSignature = helper.getPcmOperationSignature(pcmInterface)
 		
