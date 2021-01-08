@@ -100,21 +100,21 @@ abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest
 	
 	def protected createCompilationUnitInPackage(Package containingPackage, String cuName){
 		val List<String> namespace = if(containingPackage === null) #[] else (containingPackage.namespaces + #[containingPackage.name]).toList
-		val cu = ContainersFactory.eINSTANCE.createCompilationUnit
-        cu.name = cuName  + ".java"
+		val compilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit => [
+			name = '''«name».java'''
+			namespaces += namespace
+		]
 //        cu.name = (namespace + #[cuName]).join(".")  + ".java"
-        cu.namespaces += namespace
-        containingPackage.compilationUnits += cu
-        createAndSynchronizeJavaCU(cu)
-        return cu
-	}
-	
-	def protected createAndSynchronizeJavaCU(CompilationUnit cu){
-		createAndSynchronizeModel(JavaPersistenceHelper.buildJavaFilePath(cu), cu)
+        containingPackage.compilationUnits += compilationUnit
+        resourceAt(Path.of(JavaPersistenceHelper.buildJavaFilePath(compilationUnit))).startRecordingChanges => [
+			contents += compilationUnit
+		]
+		propagate
+        return compilationUnit
 	}
 	
 	/**
-	 * Implicitly creates the necessary CompilationUnit and calls createAndSynchronizeModel(). 
+	 * Implicitly creates the necessary CompilationUnit and propagates the changes. 
 	 */
 	def protected createJavaClassInPackage(
 		Package containingPackage,
@@ -123,12 +123,12 @@ abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest
 		val cu = createCompilationUnitInPackage(containingPackage, cName)
 		val class = createJavaClass(cName, visibility, abstr, fin)
 		cu.classifiers += class
-		saveAndSynchronizeChanges(cu)
+		propagate
 		return class
 	}
 	
 	/**
-	 * Implicitly creates the necessary CompilationUnit and calls createAndSynchronizeModel(). 
+	 * Implicitly creates the necessary CompilationUnit and propagates the changes. 
 	 */
 	def protected createJavaInterfaceInPackage(
 		Package containingPackage,
@@ -137,7 +137,7 @@ abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest
 		val cu = createCompilationUnitInPackage(containingPackage, cName)
 		val interface = createJavaInterface(cName, superInterfaces)
 		cu.classifiers += interface
-		saveAndSynchronizeChanges(cu)
+		propagate
 		return interface
 	}
 	
@@ -151,7 +151,10 @@ abstract class PcmUmlClassJavaApplicationTest extends PcmUmlClassApplicationTest
      */
     def protected createJavaPackageAsModel(String name, Package superPackage) {
         val jPackage = createJavaPackage(name, superPackage)
-        createAndSynchronizeModel(JavaPersistenceHelper.buildJavaFilePath(jPackage), jPackage)
+        resourceAt(Path.of(JavaPersistenceHelper.buildJavaFilePath(jPackage))).startRecordingChanges => [
+			contents += jPackage
+		]
+		propagate
         return jPackage
     }
 
