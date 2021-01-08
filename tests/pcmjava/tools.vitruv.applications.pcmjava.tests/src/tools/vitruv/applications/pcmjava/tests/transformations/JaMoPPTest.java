@@ -30,111 +30,111 @@ import org.junit.jupiter.api.Test;
 
 public class JaMoPPTest {
 	private static Logger LOGGER = Logger.getLogger(JaMoPPTest.class);
-	
-    @BeforeEach
-    public void setUp() throws Exception {
-        // register JaMoPP package and factory globally
-        EPackage.Registry.INSTANCE.put(JavaPackage.eNS_URI, JavaPackage.eINSTANCE);
-        final Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-        final Map<String, Object> m = reg.getExtensionToFactoryMap();
-        m.put("java", new JavaResourceFactory());
-        m.put("", new JavaResourceFactory());
-    }
 
-    @Test
-    public void testJaMoPPRename() throws IOException {
-        final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
-        final Interface jaMoPPInterface = ClassifiersFactory.eINSTANCE.createInterface();
-        jaMoPPInterface.setName("TestJava");
-        final CompilationUnit jaMoPPCompilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit();
-        jaMoPPCompilationUnit.setName("TestJava.java");
-        jaMoPPCompilationUnit.getClassifiers().add(jaMoPPInterface);
-        jaMoPPPackage.getCompilationUnits().add(jaMoPPCompilationUnit);
-        jaMoPPPackage.setName("testJaMoPPPackage");
-        final ResourceSet resourceSet = new ResourceSetImpl();
-        String uriStr = "src/testpackage/" + jaMoPPCompilationUnit.getName();
-        URI uri = URI.createFileURI(uriStr);
-        Resource resource = resourceSet.createResource(uri);
-        resource.getContents().add(jaMoPPCompilationUnit);
-        resource.save(null);
-        jaMoPPCompilationUnit.setName("TestRenameJava.java");
-        resource.delete(null);
-        uriStr = "src/testpackage/" + jaMoPPCompilationUnit.getName();
-        uri = URI.createFileURI(uriStr);
-        resource = resourceSet.createResource(uri);
-        resource.getContents().add(jaMoPPCompilationUnit);
-        resource.save(null);
-        resource.delete(null);
-    }
+	@BeforeEach
+	public void setUp() throws Exception {
+		// register JaMoPP package and factory globally
+		EPackage.Registry.INSTANCE.put(JavaPackage.eNS_URI, JavaPackage.eINSTANCE);
+		final Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+		final Map<String, Object> m = reg.getExtensionToFactoryMap();
+		m.put("java", new JavaResourceFactory());
+		m.put("", new JavaResourceFactory());
+	}
 
-    @Test
-    public void testJaMoPPPackage() throws Exception {
-        final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
-        jaMoPPPackage.setName("testpackageName");
-        final ResourceSet resourceSet = new ResourceSetImpl();
-        final String srcPath = "src-tmp/";
-        String packageName = jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName();
-        packageName = packageName.replace(".", "/");
-        final URI uri = URI.createFileURI(srcPath + packageName + "/package-info.java");
-        final Resource resource = resourceSet.createResource(uri);
-        resource.getContents().add(jaMoPPPackage);
-        resource.save(null);
-        resource.delete(null);
-    }
+	@Test
+	public void testJaMoPPRename() throws IOException {
+		final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
+		final Interface jaMoPPInterface = ClassifiersFactory.eINSTANCE.createInterface();
+		jaMoPPInterface.setName("TestJava");
+		final CompilationUnit jaMoPPCompilationUnit = ContainersFactory.eINSTANCE.createCompilationUnit();
+		jaMoPPCompilationUnit.setName("TestJava.java");
+		jaMoPPCompilationUnit.getClassifiers().add(jaMoPPInterface);
+		jaMoPPPackage.getCompilationUnits().add(jaMoPPCompilationUnit);
+		jaMoPPPackage.setName("testJaMoPPPackage");
+		final ResourceSet resourceSet = new ResourceSetImpl();
+		String uriStr = "src/testpackage/" + jaMoPPCompilationUnit.getName();
+		URI uri = URI.createFileURI(uriStr);
+		Resource resource = resourceSet.createResource(uri);
+		resource.getContents().add(jaMoPPCompilationUnit);
+		resource.save(null);
+		jaMoPPCompilationUnit.setName("TestRenameJava.java");
+		resource.delete(null);
+		uriStr = "src/testpackage/" + jaMoPPCompilationUnit.getName();
+		uri = URI.createFileURI(uriStr);
+		resource = resourceSet.createResource(uri);
+		resource.getContents().add(jaMoPPCompilationUnit);
+		resource.save(null);
+		resource.delete(null);
+	}
 
-    @Test
-    public void testAddInterfaceMethod() throws IOException {
-        final CompilationUnit cu = ContainersFactory.eINSTANCE.createCompilationUnit();
-        cu.setName("TestAddInterfaceMethod.java");
-        final Interface jaIf = ClassifiersFactory.eINSTANCE.createInterface();
-        jaIf.setName("TestAddInterfaceMethod");
-        cu.getClassifiers().add(jaIf);
-        final ResourceSet rs = new ResourceSetImpl();
-        final String srcPath = "src-tmp/";
-        final String cuName = srcPath + cu.getName();
-        final URI uri = URI.createFileURI(cuName);
-        final Resource resource = rs.createResource(uri);
-        // resource.save(null);
-        final InterfaceMethod ifMethod = MembersFactory.eINSTANCE.createInterfaceMethod();
-        ifMethod.setName("testMethod");
-        ifMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
-        resource.getContents().add(cu);
-        resource.save(null);
-        jaIf.getMembers().add(ifMethod);
-        resource.save(null);
-        assertTrue("Resource of interface method is null", null != ifMethod.eResource());
-        resource.delete(null);
-    }
+	@Test
+	public void testJaMoPPPackage() throws Exception {
+		final Package jaMoPPPackage = ContainersFactory.eINSTANCE.createPackage();
+		jaMoPPPackage.setName("testpackageName");
+		final ResourceSet resourceSet = new ResourceSetImpl();
+		final String srcPath = "src-tmp/";
+		String packageName = jaMoPPPackage.getNamespacesAsString() + jaMoPPPackage.getName();
+		packageName = packageName.replace(".", "/");
+		final URI uri = URI.createFileURI(srcPath + packageName + "/package-info.java");
+		final Resource resource = resourceSet.createResource(uri);
+		resource.getContents().add(jaMoPPPackage);
+		resource.save(null);
+		resource.delete(null);
+	}
 
-    @Test
-    public void testGetLayoutInformation() throws Throwable {
-        String uriStr = JaMoPPTest.class.getCanonicalName();
-        uriStr = uriStr.replace(".", "/");
-        uriStr = "src/" + uriStr + ".java";
-        final URI uri = URI.createURI(uriStr);
-        final ResourceSet resourceSet = new ResourceSetImpl();
-        final Resource resource = resourceSet.createResource(uri);
-        resource.load(null);
-        this.assertLayoutInfosInResource(resource);
-    }
+	@Test
+	public void testAddInterfaceMethod() throws IOException {
+		final CompilationUnit cu = ContainersFactory.eINSTANCE.createCompilationUnit();
+		cu.setName("TestAddInterfaceMethod.java");
+		final Interface jaIf = ClassifiersFactory.eINSTANCE.createInterface();
+		jaIf.setName("TestAddInterfaceMethod");
+		cu.getClassifiers().add(jaIf);
+		final ResourceSet rs = new ResourceSetImpl();
+		final String srcPath = "src-tmp/";
+		final String cuName = srcPath + cu.getName();
+		final URI uri = URI.createFileURI(cuName);
+		final Resource resource = rs.createResource(uri);
+		// resource.save(null);
+		final InterfaceMethod ifMethod = MembersFactory.eINSTANCE.createInterfaceMethod();
+		ifMethod.setName("testMethod");
+		ifMethod.setTypeReference(TypesFactory.eINSTANCE.createVoid());
+		resource.getContents().add(cu);
+		resource.save(null);
+		jaIf.getMembers().add(ifMethod);
+		resource.save(null);
+		assertTrue("Resource of interface method is null", null != ifMethod.eResource());
+		resource.delete(null);
+	}
 
-    protected void assertLayoutInfosInResource(final Resource resource) {
-        final CompilationUnit compilationUnit = (CompilationUnit) resource.getContents().get(0);
-        this.printLayoutInformation(compilationUnit);
-        for (final ConcreteClassifier classifier : compilationUnit.getClassifiers()) {
-            this.printLayoutInformation(classifier);
-            for (final Member member : classifier.getMembers()) {
-                this.printLayoutInformation(member);
-            }
-        }
-        assertTrue("Could not get layout information", null != compilationUnit.getLayoutInformations());
-    }
+	@Test
+	public void testGetLayoutInformation() throws Throwable {
+		String uriStr = JaMoPPTest.class.getCanonicalName();
+		uriStr = uriStr.replace(".", "/");
+		uriStr = "src/" + uriStr + ".java";
+		final URI uri = URI.createURI(uriStr);
+		final ResourceSet resourceSet = new ResourceSetImpl();
+		final Resource resource = resourceSet.createResource(uri);
+		resource.load(null);
+		this.assertLayoutInfosInResource(resource);
+	}
 
-    private void printLayoutInformation(final NamedElement namedElement) {
-        LOGGER.trace("commenatable.getLayoutInformations(): " + namedElement.getLayoutInformations());
-        for (final LayoutInformation layoutInformation : namedElement.getLayoutInformations()) {
-            final int startOffset = layoutInformation.getStartOffset();
-            LOGGER.trace("Start offset for " + namedElement.getName() + ": " + startOffset);
-        }
-    }
+	protected void assertLayoutInfosInResource(final Resource resource) {
+		final CompilationUnit compilationUnit = (CompilationUnit) resource.getContents().get(0);
+		this.printLayoutInformation(compilationUnit);
+		for (final ConcreteClassifier classifier : compilationUnit.getClassifiers()) {
+			this.printLayoutInformation(classifier);
+			for (final Member member : classifier.getMembers()) {
+				this.printLayoutInformation(member);
+			}
+		}
+		assertTrue("Could not get layout information", null != compilationUnit.getLayoutInformations());
+	}
+
+	private void printLayoutInformation(final NamedElement namedElement) {
+		LOGGER.trace("commenatable.getLayoutInformations(): " + namedElement.getLayoutInformations());
+		for (final LayoutInformation layoutInformation : namedElement.getLayoutInformations()) {
+			final int startOffset = layoutInformation.getStartOffset();
+			LOGGER.trace("Start offset for " + namedElement.getName() + ": " + startOffset);
+		}
+	}
 }

@@ -13,27 +13,27 @@ import org.junit.jupiter.api.Test;
 import tools.vitruv.domains.java.util.JavaModificationUtil;
 
 /**
- * Test for the JaMoPPPCMUtil class - not a utility class. Tests the textual creation of a
- * CompilationUnit using JaMoPP.
+ * Test for the JaMoPPPCMUtil class - not a utility class. Tests the textual
+ * creation of a CompilationUnit using JaMoPP.
  *
  * @author Langhamm
  *
  */
 public class JavaUtilsTest {
 
-    @Test
-    public void testCreateCompilationUnit() throws IOException {
-        final String className = "TestCollectionDataType";
-        @SuppressWarnings("rawtypes")
-        final Class<? extends Collection> selectedClass = ArrayList.class;
-        final String content = "package " + "datatypes;" + "\n\n" + "import " + selectedClass.getPackage().getName()
-                + "." + selectedClass.getSimpleName() + ";\n\n" + "public class " + className + " extends "
-                + selectedClass.getSimpleName() + "<" + "String" + ">" + " {\n" + "\n\n" + "}";
-        final CompilationUnit cu = JavaModificationUtil.createCompilationUnit(className, content);
+	@Test
+	public void testCreateCompilationUnit() throws IOException {
+		final String className = "TestCollectionDataType";
+		@SuppressWarnings("rawtypes")
+		final Class<? extends Collection> selectedClass = ArrayList.class;
+		final String content = "package " + "datatypes;" + "\n\n" + "import " + selectedClass.getPackage().getName()
+				+ "." + selectedClass.getSimpleName() + ";\n\n" + "public class " + className + " extends "
+				+ selectedClass.getSimpleName() + "<" + "String" + ">" + " {\n" + "\n\n" + "}";
+		final CompilationUnit cu = JavaModificationUtil.createCompilationUnit(className, content);
 
-        assertEquals("CompilationUnit name is wrong", cu.getName(), className + ".java");
-        assertTrue("No classifier in compliation unit", cu.getClassifiers().size() == 1);
-        assertEquals("ClassifierName name is wrong", cu.getClassifiers().get(0).getName(), className);
-    }
+		assertEquals("CompilationUnit name is wrong", cu.getName(), className + ".java");
+		assertTrue("No classifier in compliation unit", cu.getClassifiers().size() == 1);
+		assertEquals("ClassifierName name is wrong", cu.getClassifiers().get(0).getName(), className);
+	}
 
 }

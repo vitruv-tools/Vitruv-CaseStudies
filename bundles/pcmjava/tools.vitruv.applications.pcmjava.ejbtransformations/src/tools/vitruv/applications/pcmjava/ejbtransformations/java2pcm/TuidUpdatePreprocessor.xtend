@@ -16,7 +16,7 @@ package class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecifica
 	}
 
 	override doesHandleChange(EChange change, CorrespondenceModel correspondenceModel) {
-		return change instanceof JavaFeatureEChange<?, ?>;
+		return change instanceof JavaFeatureEChange<?, ?>
 	}
 
 	override propagateChange(EChange change, CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
@@ -24,7 +24,7 @@ package class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecifica
 			val oldAffectedEObject = change.oldAffectedEObject
 			val newAffectedEObject = change.affectedEObject
 			if (null !== oldAffectedEObject && null !== newAffectedEObject) {
-				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject);
+				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject)
 			}
 		}
 	}

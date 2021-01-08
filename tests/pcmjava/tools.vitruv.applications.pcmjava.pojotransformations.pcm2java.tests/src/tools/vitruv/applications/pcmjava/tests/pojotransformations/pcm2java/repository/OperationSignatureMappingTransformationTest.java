@@ -16,63 +16,63 @@ import tools.vitruv.applications.pcmjava.util.pcm2java.DataTypeCorrespondenceHel
 
 public class OperationSignatureMappingTransformationTest extends Pcm2JavaTransformationTest {
 
-    @Test
-    public void testAddOperationSignature() throws Throwable {
-        final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
+	@Test
+	public void testAddOperationSignature() throws Throwable {
+		final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
 
-        this.assertOperationSignatureCorrespondence(opSig);
-    }
+		this.assertOperationSignatureCorrespondence(opSig);
+	}
 
-    @Test
-    public void testRenameOperationSignature() throws Throwable {
-        final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
+	@Test
+	public void testRenameOperationSignature() throws Throwable {
+		final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
 
-        opSig.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
-        propagate();
+		opSig.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
+		propagate();
 
-        this.assertOperationSignatureCorrespondence(opSig);
-    }
+		this.assertOperationSignatureCorrespondence(opSig);
+	}
 
-    @Test
-    public void testChangeOperationSignatureReturnType() throws Throwable {
-        final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
+	@Test
+	public void testChangeOperationSignatureReturnType() throws Throwable {
+		final OperationSignature opSig = this.createAndSyncRepoInterfaceAndOperationSignature();
 
-        final Repository repo = opSig.getInterface__OperationSignature().getRepository__Interface();
-        final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
-        opSig.setReturnType__OperationSignature(pdt);
-        propagate();
+		final Repository repo = opSig.getInterface__OperationSignature().getRepository__Interface();
+		final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
+		opSig.setReturnType__OperationSignature(pdt);
+		propagate();
 
-        this.assertOperationSignatureCorrespondence(opSig);
-    }
+		this.assertOperationSignatureCorrespondence(opSig);
+	}
 
-    @Test
-    public void testCreateOperationSignatureWithReturnType() throws Throwable {
-        // create
-        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
-        final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
-                Pcm2JavaTestUtils.INTERFACE_NAME);
+	@Test
+	public void testCreateOperationSignatureWithReturnType() throws Throwable {
+		// create
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+		final OperationInterface opInterface = this.addInterfaceToReposiotryAndSync(repo,
+				Pcm2JavaTestUtils.INTERFACE_NAME);
 
-        // prepare OperationSignature with return type at creation
-        final OperationSignature opSig = RepositoryFactory.eINSTANCE.createOperationSignature();
-        opSig.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
-        final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
-        opSig.setReturnType__OperationSignature(pdt);
-        opSig.setInterface__OperationSignature(opInterface);
-        // trigger synchronization execution
-        propagate();
+		// prepare OperationSignature with return type at creation
+		final OperationSignature opSig = RepositoryFactory.eINSTANCE.createOperationSignature();
+		opSig.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME);
+		final PrimitiveDataType pdt = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
+		opSig.setReturnType__OperationSignature(pdt);
+		opSig.setInterface__OperationSignature(opInterface);
+		// trigger synchronization execution
+		propagate();
 
-        // assert the signature
-        this.assertOperationSignatureCorrespondence(opSig);
-    }
+		// assert the signature
+		this.assertOperationSignatureCorrespondence(opSig);
+	}
 
-    private InterfaceMethod assertOperationSignatureCorrespondence(final OperationSignature opSig) throws Throwable {
-        final InterfaceMethod intMethod = (InterfaceMethod) this.assertSingleCorrespondence(opSig,
-                InterfaceMethod.class, opSig.getEntityName());
-        final TypeReference tr = DataTypeCorrespondenceHelper.claimUniqueCorrespondingJaMoPPDataTypeReference(
-                opSig.getReturnType__OperationSignature(), this.getCorrespondenceModel());
-        this.assertEqualsTypeReference(intMethod.getTypeReference(), tr);
+	private InterfaceMethod assertOperationSignatureCorrespondence(final OperationSignature opSig) throws Throwable {
+		final InterfaceMethod intMethod = (InterfaceMethod) this.assertSingleCorrespondence(opSig,
+				InterfaceMethod.class, opSig.getEntityName());
+		final TypeReference tr = DataTypeCorrespondenceHelper.claimUniqueCorrespondingJaMoPPDataTypeReference(
+				opSig.getReturnType__OperationSignature(), this.getCorrespondenceModel());
+		this.assertEqualsTypeReference(intMethod.getTypeReference(), tr);
 
-        return intMethod;
-    }
+		return intMethod;
+	}
 
 }

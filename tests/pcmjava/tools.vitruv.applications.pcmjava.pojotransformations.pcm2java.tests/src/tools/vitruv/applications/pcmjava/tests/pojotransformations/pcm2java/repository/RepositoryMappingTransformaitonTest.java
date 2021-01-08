@@ -20,75 +20,78 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RepositoryMappingTransformaitonTest extends Pcm2JavaTransformationTest {
 
-    @Test
-    public void testAddRepository() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+	@Test
+	public void testAddRepository() throws Throwable {
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
-        this.assertRepositoryCorrespondences(repo);
-    }
+		this.assertRepositoryCorrespondences(repo);
+	}
 
-    @Test
-    public void testRepositoryNameChange() throws Throwable {
-        // setup
-        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+	@Test
+	public void testRepositoryNameChange() throws Throwable {
+		// setup
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
-        // Test
-        repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
-        EcoreResourceBridge.saveResource(repo.eResource());
-        propagate();
+		// Test
+		repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
+		EcoreResourceBridge.saveResource(repo.eResource());
+		propagate();
 
-        // check
-        this.assertRepositoryCorrespondences(repo);
-    }
+		// check
+		this.assertRepositoryCorrespondences(repo);
+	}
 
-    @Test
-    public void testRepositoryNameChangeWithComponents() throws Throwable {
-        // setup
-        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
-        final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
-        
-        // Test
-        repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
-        EcoreResourceBridge.saveResource(repo.eResource());
-        propagate();
+	@Test
+	public void testRepositoryNameChangeWithComponents() throws Throwable {
+		// setup
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+		final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
 
-        // check
-        this.assertRepositoryCorrespondences(repo);
-        this.assertBasicComponentCorrespondences(repo, basicComponent);
-    }
-    
-    @SuppressWarnings("unchecked")
-    private void assertBasicComponentCorrespondences(final Repository repository, final BasicComponent basicComponent) throws Throwable {
-        this.assertCorrespondnecesAndCompareNames(basicComponent, 3,
-                new java.lang.Class[] { CompilationUnit.class, Package.class, Class.class },
-                new String[] { repository.getEntityName() + "." + basicComponent.getEntityName() + "." + basicComponent.getEntityName() + "Impl", basicComponent.getEntityName(),
-                        basicComponent.getEntityName() + "Impl" });
+		// Test
+		repo.setEntityName(Pcm2JavaTestUtils.REPOSITORY_NAME + Pcm2JavaTestUtils.RENAME);
+		EcoreResourceBridge.saveResource(repo.eResource());
+		propagate();
 
-    }
-    
-    private void assertRepositoryCorrespondences(final Repository repo) throws Throwable {
-        if (null == this.getCorrespondenceModel()) {
-            fail("correspondence instance is still null - no transformation was executed.");
-            return;
-        }
-        final Set<Package> jaMoPPPackages = CorrespondenceModelUtil
-                .getCorrespondingEObjectsByType(this.getCorrespondenceModel(), repo, Package.class);
-        boolean foundRepositoryPackage = false;
-        boolean foundDatatypesPackage = false;
-        boolean foundContractsPackage = false;
-        for (final Package pack : jaMoPPPackages) {
-            if (pack.getName().equals(repo.getEntityName())) {
-                foundRepositoryPackage = true;
-            }
-            if (pack.getName().equals("contracts")) {
-                foundContractsPackage = true;
-            }
-            if (pack.getName().equals("datatypes")) {
-                foundDatatypesPackage = true;
-            }
-        }
-        assertTrue(foundRepositoryPackage, "No correspondeing repository package found");
-        assertTrue(foundDatatypesPackage, "No correspondeing datatype package found");
-        assertTrue(foundContractsPackage, "No correspondeing contracts package found");
-    }
+		// check
+		this.assertRepositoryCorrespondences(repo);
+		this.assertBasicComponentCorrespondences(repo, basicComponent);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void assertBasicComponentCorrespondences(final Repository repository, final BasicComponent basicComponent)
+			throws Throwable {
+		this.assertCorrespondnecesAndCompareNames(basicComponent, 3,
+				new java.lang.Class[] { CompilationUnit.class, Package.class, Class.class },
+				new String[] {
+						repository.getEntityName() + "." + basicComponent.getEntityName() + "."
+								+ basicComponent.getEntityName() + "Impl",
+						basicComponent.getEntityName(), basicComponent.getEntityName() + "Impl" });
+
+	}
+
+	private void assertRepositoryCorrespondences(final Repository repo) throws Throwable {
+		if (null == this.getCorrespondenceModel()) {
+			fail("correspondence instance is still null - no transformation was executed.");
+			return;
+		}
+		final Set<Package> jaMoPPPackages = CorrespondenceModelUtil
+				.getCorrespondingEObjectsByType(this.getCorrespondenceModel(), repo, Package.class);
+		boolean foundRepositoryPackage = false;
+		boolean foundDatatypesPackage = false;
+		boolean foundContractsPackage = false;
+		for (final Package pack : jaMoPPPackages) {
+			if (pack.getName().equals(repo.getEntityName())) {
+				foundRepositoryPackage = true;
+			}
+			if (pack.getName().equals("contracts")) {
+				foundContractsPackage = true;
+			}
+			if (pack.getName().equals("datatypes")) {
+				foundDatatypesPackage = true;
+			}
+		}
+		assertTrue(foundRepositoryPackage, "No correspondeing repository package found");
+		assertTrue(foundDatatypesPackage, "No correspondeing datatype package found");
+		assertTrue(foundContractsPackage, "No correspondeing contracts package found");
+	}
 }

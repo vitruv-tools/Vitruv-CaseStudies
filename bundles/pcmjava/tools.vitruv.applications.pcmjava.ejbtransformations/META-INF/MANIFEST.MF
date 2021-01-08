@@ -11,7 +11,8 @@ Require-Bundle: tools.vitruv.framework.applications,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.common,
  tools.vitruv.domains.pcm,
- tools.vitruv.domains.java
+ tools.vitruv.domains.java,
+ edu.kit.ipd.sdq.activextendannotations
 Export-Package: tools.vitruv.applications.pcmjava.ejbtransformations,
  tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm,
  tools.vitruv.applications.pcmjava.ejbtransformations.pcm2java

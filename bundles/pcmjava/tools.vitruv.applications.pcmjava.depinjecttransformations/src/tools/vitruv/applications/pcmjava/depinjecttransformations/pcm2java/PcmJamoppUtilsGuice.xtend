@@ -52,20 +52,22 @@ import static tools.vitruv.domains.java.util.JavaModificationUtil.*
 import static extension edu.kit.ipd.sdq.commons.util.java.lang.IterableUtil.*
 import static extension tools.vitruv.framework.correspondence.CorrespondenceModelUtil.*
 import static tools.vitruv.applications.util.temporary.pcm.PcmRepositoryUtil.*
+import edu.kit.ipd.sdq.activextendannotations.Utility
 
 /**
  * 
  * @author Alexander Monev
  */
+ @Utility
 class PcmJamoppUtilsGuice {
 
 	static val Logger logger = Logger.getLogger(PcmJamoppUtilsGuice.simpleName)
 
-	public static final int SELECT_KEEP_OLD_BINDING = 0;
-	public static final int SELECT_REPLACE_WITH_NEW_BINDING = 1;
+	public static final int SELECT_KEEP_OLD_BINDING = 0
+	public static final int SELECT_REPLACE_WITH_NEW_BINDING = 1
 
-	def static createConfigureMethodForAssemblyContext(AssemblyContext assemblyContext,
-		RepositoryComponent component, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
+	def static createConfigureMethodForAssemblyContext(AssemblyContext assemblyContext, RepositoryComponent component,
+		CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
 		var Class jaMoPPCompositeClass = null
 		try {
 			jaMoPPCompositeClass = correspondenceModel.getCorrespondingEObjectsByType(
@@ -74,7 +76,8 @@ class PcmJamoppUtilsGuice {
 		} catch (RuntimeException e) {
 			val String msg = "Can not create field for component " + component.entityName +
 				" because the component does not have a corresponding class yet."
-			userInteractor.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).startInteraction()
+			userInteractor.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).
+				startInteraction()
 			throw e
 		}
 
@@ -164,7 +167,7 @@ class PcmJamoppUtilsGuice {
 
 	}
 
-	def static ensureConstructorWithInjectAnnotation(Class jaMoPPClass) { 
+	def static ensureConstructorWithInjectAnnotation(Class jaMoPPClass) {
 		val constructor = JavaMemberAndParameterUtil.getOrCreateConstructorToClass(jaMoPPClass)
 		if (!checkConstructorForInjectionTag(constructor)) {
 			addInjectToConstructor(constructor, jaMoPPClass)
@@ -278,7 +281,7 @@ class PcmJamoppUtilsGuice {
 		for (ExpressionStatement expr : newStatements.filter(ExpressionStatement)) {
 			val interfaceAndClassName = returnInterfaceAndClassNameForBindExpression(expr)
 			val interfaceName = interfaceAndClassName.key
-			//val className = interfaceAndClassName.value
+			// val className = interfaceAndClassName.value
 			if (interfaceName !== null) {
 				// logger.info("newstatement bind " + interfaceName + " to " + className)
 				newMappings.add(interfaceAndClassName)
@@ -392,17 +395,16 @@ class PcmJamoppUtilsGuice {
 		if (saveClassResource) {
 			saveResourceForClass(affectedClass)
 			TuidManager.instance.updateTuid(oldMethod, newMethod)
-			//ci.update(oldMethod, newMethod)
+		// ci.update(oldMethod, newMethod)
 		}
 
 	}
 
-	def static checkIfUserWantsToReplaceInterfaceBinding(String interfaceName, String className,
-		UserInteractor ui) {
+	def static checkIfUserWantsToReplaceInterfaceBinding(String interfaceName, String className, UserInteractor ui) {
 		val msg = "Interface " + interfaceName + " is already mapped to basic component " + className +
 			" . Adding another binding for the same interface will lead to a runtime exception by Guice."
-		val choice = ui.singleSelectionDialogBuilder.message(msg)
-		    .choices(#["Keep old binding", "Replace with new binding"]).windowModality(WindowModality.MODAL)
+		val choice = ui.singleSelectionDialogBuilder.message(msg).choices(
+			#["Keep old binding", "Replace with new binding"]).windowModality(WindowModality.MODAL)
 		switch choice {
 			case SELECT_KEEP_OLD_BINDING: {
 				return false
@@ -535,7 +537,8 @@ class PcmJamoppUtilsGuice {
 		CorrespondenceModel ci) {
 		val opInterface = assemblyConnector.providedRole_AssemblyConnector.providedInterface__OperationProvidedRole
 		val implClass = ci.getCorrespondingEObjectsByType(
-			assemblyConnector.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext, Class).claimOne
+			assemblyConnector.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext, Class).
+			claimOne
 		val interfaceClass = ci.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
 		for (ExpressionStatement expr : configureMethod.statements.filter(ExpressionStatement)) {
 			if (interfaceAndClassNameEqualBindExpressionArguments(expr, interfaceClass.name, implClass.name)) {
@@ -599,7 +602,8 @@ class PcmJamoppUtilsGuice {
 			val String msg = "Can not create assembly connector providing interface " + opInterface.entityName +
 				" because no operation requiring role for interface " + opInterface.entityName +
 				" was found in the system. Only assembly context for " + component.entityName + " was created."
-			userInteractor.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).startInteraction()
+			userInteractor.notificationDialogBuilder.message(msg).windowModality(WindowModality.MODELESS).
+				startInteraction()
 			return null
 		}
 	}
@@ -608,194 +612,188 @@ class PcmJamoppUtilsGuice {
 		OperationInterface opInterface, RepositoryComponent component, ComposedStructure system,
 		UserInteractor userInteractor) {
 
-			var ac = findAssemblyContextForBasicComponent(component, system)
-			if (ac === null) {
-				ac = CompositionFactory.eINSTANCE.createAssemblyContext
-				ac.setEntityName("assemblyContext_" + component.entityName)
-				ac.setEncapsulatedComponent__AssemblyContext(component)
-				ac.setParentStructure__AssemblyContext(system)
-			}
-
-			assemblyConnector.setProvidingAssemblyContext_AssemblyConnector(ac)
-			val providedRole = findProvidedRoleForComponentAndInterface(component, opInterface)
-			assemblyConnector.setProvidedRole_AssemblyConnector(providedRole)
+		var ac = findAssemblyContextForBasicComponent(component, system)
+		if (ac === null) {
+			ac = CompositionFactory.eINSTANCE.createAssemblyContext
+			ac.setEntityName("assemblyContext_" + component.entityName)
+			ac.setEncapsulatedComponent__AssemblyContext(component)
+			ac.setParentStructure__AssemblyContext(system)
 		}
 
-		private def static findRequiredRoleInSystem(OperationInterface opInterface, ComposedStructure system) {
+		assemblyConnector.setProvidingAssemblyContext_AssemblyConnector(ac)
+		val providedRole = findProvidedRoleForComponentAndInterface(component, opInterface)
+		assemblyConnector.setProvidedRole_AssemblyConnector(providedRole)
+	}
 
-			for (AssemblyContext ac : system.assemblyContexts__ComposedStructure) {
-				val comp = ac.encapsulatedComponent__AssemblyContext
-				for (OperationRequiredRole requiredRole : comp.requiredRoles_InterfaceRequiringEntity.filter(
-					OperationRequiredRole)) {
-					val reqInterface = requiredRole.requiredInterface__OperationRequiredRole
-					if (reqInterface.equals(opInterface)) {
-						return ac -> requiredRole
-					}
-				}
-			}
-			// TODO: does it make any sense to look for a required delegation connector?
-			for (RequiredDelegationConnector connector : system.connectors__ComposedStructure.filter(
-				RequiredDelegationConnector)) {
-				val OperationRequiredRole requiredRole = connector.innerRequiredRole_RequiredDelegationConnector
+	private def static findRequiredRoleInSystem(OperationInterface opInterface, ComposedStructure system) {
+
+		for (AssemblyContext ac : system.assemblyContexts__ComposedStructure) {
+			val comp = ac.encapsulatedComponent__AssemblyContext
+			for (OperationRequiredRole requiredRole : comp.requiredRoles_InterfaceRequiringEntity.filter(
+				OperationRequiredRole)) {
 				val reqInterface = requiredRole.requiredInterface__OperationRequiredRole
-				if (reqInterface !== null && reqInterface.equals(opInterface)) {
-					return connector.assemblyContext_RequiredDelegationConnector -> requiredRole
-				}
-			}
-
-			return null
-		}
-
-		// TODO: check if a similar method exists in POJO utils
-		private def static findProvidedRoleForComponentAndInterface(RepositoryComponent component,
-			OperationInterface opInterface) {
-			for (OperationProvidedRole providedRole : component.providedRoles_InterfaceProvidingEntity.filter(
-				OperationProvidedRole)) {
-				val providedInterface = providedRole.providedInterface__OperationProvidedRole
-				if (providedInterface.equals(opInterface)) {
-					return providedRole
-				}
-			}
-
-			return null
-		}
-
-		// TODO: check if a similar method exists in POJO utils
-		def static findAssemblyConnectorForOperationInterface(OperationInterface opInterface,
-			ComposedStructure system) {
-			for (AssemblyConnector ac : system.getConnectors__ComposedStructure.filter(AssemblyConnector)) {
-				if (ac.providedRole_AssemblyConnector.providedInterface__OperationProvidedRole.equals(opInterface)) {
-					return ac
+				if (reqInterface.equals(opInterface)) {
+					return ac -> requiredRole
 				}
 			}
 		}
-
-		// TODO: check if a similar method exists in POJO utils
-		private def static findAssemblyContextForBasicComponent(RepositoryComponent component,
-			ComposedStructure system) {
-			for (AssemblyContext ac : system.assemblyContexts__ComposedStructure) {
-				if (ac.encapsulatedComponent__AssemblyContext.equals(component)) {
-					return ac
-				}
+		// TODO: does it make any sense to look for a required delegation connector?
+		for (RequiredDelegationConnector connector : system.connectors__ComposedStructure.filter(
+			RequiredDelegationConnector)) {
+			val OperationRequiredRole requiredRole = connector.innerRequiredRole_RequiredDelegationConnector
+			val reqInterface = requiredRole.requiredInterface__OperationRequiredRole
+			if (reqInterface !== null && reqInterface.equals(opInterface)) {
+				return connector.assemblyContext_RequiredDelegationConnector -> requiredRole
 			}
 		}
 
-		// TODO: check if a similar method exists in POJO utils
-		private def static findBasicComponentByName(String entityName, CorrespondenceModel ci) {
-			val repo = getFirstRepository(ci)
-			for (BasicComponent comp : repo.components__Repository.filter(BasicComponent)) {
-				try {
-					val implClass = ci.getCorrespondingEObjectsByType(comp, Class).claimOne
-					if (implClass.name == entityName) {
-						return comp
-					}
-				} catch (IllegalArgumentException ex) {
-					// because of java.lang.IllegalArgumentException: Invalid type given EmptyModelImpl
-					logger.trace(ex)
-				}
+		return null
+	}
+
+	// TODO: check if a similar method exists in POJO utils
+	private def static findProvidedRoleForComponentAndInterface(RepositoryComponent component,
+		OperationInterface opInterface) {
+		for (OperationProvidedRole providedRole : component.providedRoles_InterfaceProvidingEntity.filter(
+			OperationProvidedRole)) {
+			val providedInterface = providedRole.providedInterface__OperationProvidedRole
+			if (providedInterface.equals(opInterface)) {
+				return providedRole
 			}
-
-			return null
 		}
 
-		// TODO: check if a similar method exists in POJO utils
-		private def static findOperationInterfaceByName(String entityName, CorrespondenceModel ci) {
-			val repo = getFirstRepository(ci)
-			for (OperationInterface opInterface : repo.interfaces__Repository.filter(OperationInterface)) {
-				if (opInterface.entityName == entityName) {
-					return opInterface
-				}
+		return null
+	}
+
+	// TODO: check if a similar method exists in POJO utils
+	def static findAssemblyConnectorForOperationInterface(OperationInterface opInterface, ComposedStructure system) {
+		for (AssemblyConnector ac : system.getConnectors__ComposedStructure.filter(AssemblyConnector)) {
+			if (ac.providedRole_AssemblyConnector.providedInterface__OperationProvidedRole.equals(opInterface)) {
+				return ac
 			}
-			return null
+		}
+	}
+
+	// TODO: check if a similar method exists in POJO utils
+	private def static findAssemblyContextForBasicComponent(RepositoryComponent component, ComposedStructure system) {
+		for (AssemblyContext ac : system.assemblyContexts__ComposedStructure) {
+			if (ac.encapsulatedComponent__AssemblyContext.equals(component)) {
+				return ac
+			}
+		}
+	}
+
+	// TODO: check if a similar method exists in POJO utils
+	private def static findBasicComponentByName(String entityName, CorrespondenceModel ci) {
+		val repo = getFirstRepository(ci)
+		for (BasicComponent comp : repo.components__Repository.filter(BasicComponent)) {
+			try {
+				val implClass = ci.getCorrespondingEObjectsByType(comp, Class).claimOne
+				if (implClass.name == entityName) {
+					return comp
+				}
+			} catch (IllegalArgumentException ex) {
+				// because of java.lang.IllegalArgumentException: Invalid type given EmptyModelImpl
+				logger.trace(ex)
+			}
 		}
 
-		def static saveResourceForClass(ConcreteClassifier jaMoPPClass) {
-			jaMoPPClass.eResource.save(null)
+		return null
+	}
+
+	// TODO: check if a similar method exists in POJO utils
+	private def static findOperationInterfaceByName(String entityName, CorrespondenceModel ci) {
+		val repo = getFirstRepository(ci)
+		for (OperationInterface opInterface : repo.interfaces__Repository.filter(OperationInterface)) {
+			if (opInterface.entityName == entityName) {
+				return opInterface
+			}
 		}
+		return null
+	}
 
-		def static saveResourceForSystem(ComposedStructure system) {
-			EcoreResourceBridge.saveResource(system.eResource)
-		}
+	def static saveResourceForClass(ConcreteClassifier jaMoPPClass) {
+		jaMoPPClass.eResource.save(null)
+	}
 
-		def static EObject[] createBindCallForConnector(AssemblyContext assemblyContext,
-			AssemblyConnector assemblyConnector, CorrespondenceModel correspondenceModel,
-			UserInteractor userInteractor) {
-				val configureMethod = correspondenceModel.
-					getCorrespondingEObjectsByType(assemblyContext, ClassMethod).claimOne
-				configureMethod.statements.removeAll(configureMethod.statements)
+	def static saveResourceForSystem(ComposedStructure system) {
+		EcoreResourceBridge.saveResource(system.eResource)
+	}
 
-				val system = assemblyContext.parentStructure__AssemblyContext
-				val assemblyConnectors = system.connectors__ComposedStructure.filter(AssemblyConnector)
+	def static EObject[] createBindCallForConnector(AssemblyContext assemblyContext,
+		AssemblyConnector assemblyConnector, CorrespondenceModel correspondenceModel, UserInteractor userInteractor) {
+		val configureMethod = correspondenceModel.getCorrespondingEObjectsByType(assemblyContext, ClassMethod).claimOne
+		configureMethod.statements.removeAll(configureMethod.statements)
 
-				val newOpInterface = assemblyConnector.providedRole_AssemblyConnector.
-					providedInterface__OperationProvidedRole
-				var ExpressionStatement newStatement = null
-				var removeNewBinding = false
-				var AssemblyConnector connectorToRemove = null
+		val system = assemblyContext.parentStructure__AssemblyContext
+		val assemblyConnectors = system.connectors__ComposedStructure.filter(AssemblyConnector)
 
-				for (AssemblyConnector ac : assemblyConnectors) {
-					if (!configureMethod.parameters.nullOrEmpty) {
-						val implClass = correspondenceModel.getCorrespondingEObjectsByType(
-							ac.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext, Class).claimOne
+		val newOpInterface = assemblyConnector.providedRole_AssemblyConnector.providedInterface__OperationProvidedRole
+		var ExpressionStatement newStatement = null
+		var removeNewBinding = false
+		var AssemblyConnector connectorToRemove = null
 
-						val opInterface = ac.providedRole_AssemblyConnector.providedInterface__OperationProvidedRole
-						val interfaceClass = correspondenceModel.
-							getCorrespondingEObjectsByType(opInterface, Interface).claimOne
+		for (AssemblyConnector ac : assemblyConnectors) {
+			if (!configureMethod.parameters.nullOrEmpty) {
+				val implClass = correspondenceModel.getCorrespondingEObjectsByType(
+					ac.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext, Class).
+					claimOne
 
-						var removeOldBinding = false
-						// A binding for opInterface already exists -> check if the new binding binds it to a different implementation
-						// If that is the case, the user must decide whether to only keep the old binding, or replace it with the new one	
-						if (opInterface.equals(newOpInterface) && !ac.equals(assemblyConnector) &&
-							!ac.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext.
-								equals(assemblyConnector.providingAssemblyContext_AssemblyConnector.
-									encapsulatedComponent__AssemblyContext)) {
-							if (PcmJamoppUtilsGuice.
-								checkIfUserWantsToReplaceInterfaceBinding(interfaceClass.name, implClass.name,
-									userInteractor)) {
-								// Old binding won't be readded to the list of statements
-								removeOldBinding = true
-								// Remove old assembly connector
-								connectorToRemove = ac
-							} else {
-								if (newStatement !== null) { // New binding has already been readded to the list of statements
-								// -> remove it
-									configureMethod.statements.remove(newStatement)
-								} else { // New binding will be handled later in the loop -> remember not to add it
-									removeNewBinding = true
-								}
-								// Remove newly created assembly connector
-								connectorToRemove = assemblyConnector
-							}
+				val opInterface = ac.providedRole_AssemblyConnector.providedInterface__OperationProvidedRole
+				val interfaceClass = correspondenceModel.getCorrespondingEObjectsByType(opInterface, Interface).claimOne
+
+				var removeOldBinding = false
+				// A binding for opInterface already exists -> check if the new binding binds it to a different implementation
+				// If that is the case, the user must decide whether to only keep the old binding, or replace it with the new one	
+				if (opInterface.equals(newOpInterface) && !ac.equals(assemblyConnector) &&
+					!ac.providingAssemblyContext_AssemblyConnector.encapsulatedComponent__AssemblyContext.equals(
+						assemblyConnector.providingAssemblyContext_AssemblyConnector.
+							encapsulatedComponent__AssemblyContext)) {
+					if (PcmJamoppUtilsGuice.
+						checkIfUserWantsToReplaceInterfaceBinding(interfaceClass.name, implClass.name,
+							userInteractor)) {
+						// Old binding won't be readded to the list of statements
+						removeOldBinding = true
+						// Remove old assembly connector
+						connectorToRemove = ac
+					} else {
+						if (newStatement !== null) { // New binding has already been readded to the list of statements
+						// -> remove it
+							configureMethod.statements.remove(newStatement)
+						} else { // New binding will be handled later in the loop -> remember not to add it
+							removeNewBinding = true
 						}
-
-						if (!removeOldBinding && !(removeNewBinding && ac.equals(assemblyConnector))) {
-							val expressionStatement = PcmJamoppUtilsGuice.addBindCallToConfigureMethod(configureMethod,
-								interfaceClass.name, implClass.name)
-
-							if (expressionStatement !== null && ac.equals(assemblyConnector)) {
-								newStatement = expressionStatement
-							} else if (expressionStatement === null &&
-								ac.requiringAssemblyContext_AssemblyConnector ==
-									assemblyConnector.requiringAssemblyContext_AssemblyConnector &&
-								ac.requiredRole_AssemblyConnector == assemblyConnector.requiredRole_AssemblyConnector) {
-								// don't add equal assembly connectors
-								connectorToRemove = assemblyConnector
-							}
-						}
+						// Remove newly created assembly connector
+						connectorToRemove = assemblyConnector
 					}
 				}
 
-				val affectedClass = configureMethod.containingConcreteClassifier
-				PcmJamoppUtilsGuice.saveResourceForClass(affectedClass)
+				if (!removeOldBinding && !(removeNewBinding && ac.equals(assemblyConnector))) {
+					val expressionStatement = PcmJamoppUtilsGuice.addBindCallToConfigureMethod(configureMethod,
+						interfaceClass.name, implClass.name)
 
-				if (connectorToRemove !== null) {
-					EcoreUtil.remove(connectorToRemove)
-					PcmJamoppUtilsGuice.saveResourceForSystem(system)
+					if (expressionStatement !== null && ac.equals(assemblyConnector)) {
+						newStatement = expressionStatement
+					} else if (expressionStatement === null &&
+						ac.requiringAssemblyContext_AssemblyConnector ==
+							assemblyConnector.requiringAssemblyContext_AssemblyConnector &&
+						ac.requiredRole_AssemblyConnector == assemblyConnector.requiredRole_AssemblyConnector) {
+						// don't add equal assembly connectors
+						connectorToRemove = assemblyConnector
+					}
 				}
-
-				return null
-
 			}
-
 		}
-		
+
+		val affectedClass = configureMethod.containingConcreteClassifier
+		PcmJamoppUtilsGuice.saveResourceForClass(affectedClass)
+
+		if (connectorToRemove !== null) {
+			EcoreUtil.remove(connectorToRemove)
+			PcmJamoppUtilsGuice.saveResourceForSystem(system)
+		}
+
+		return null
+
+	}
+
+}

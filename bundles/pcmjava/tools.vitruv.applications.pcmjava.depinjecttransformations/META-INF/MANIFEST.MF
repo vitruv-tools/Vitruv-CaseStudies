@@ -14,6 +14,7 @@ Require-Bundle: tools.vitruv.testutils,
  tools.vitruv.applications.pcmjava.common,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.domains.java,
- tools.vitruv.domains.pcm
+ tools.vitruv.domains.pcm,
+ edu.kit.ipd.sdq.activextendannotations
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools
