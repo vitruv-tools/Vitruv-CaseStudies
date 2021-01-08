@@ -10,12 +10,12 @@ Require-Bundle: org.junit.jupiter.api,
  org.junit.platform.suite.api,
  org.junit,
  org.apache.log4j,
+ org.emftext.language.java.resource.java,
  tools.vitruv.testutils,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.pojotransformations.java2pcm.tests,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests,
- org.emftext.language.java.resource.java,
  tools.vitruv.applications.pcmjava.ejbtransformations.tests
 Export-Package: tools.vitruv.applications.pcmjava.tests,
  tools.vitruv.applications.pcmjava.tests.transformations

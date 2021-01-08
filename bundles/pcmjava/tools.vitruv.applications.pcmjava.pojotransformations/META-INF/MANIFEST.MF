@@ -4,25 +4,7 @@ Bundle-Name: Vitruv PCM-Java POJO Application
 Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations
 Bundle-Version: 0.2.0.qualifier
-Require-Bundle: org.eclipse.emf.ecore,
- org.apache.log4j,
- com.google.guava,
- org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro,
- org.eclipse.core.resources,
- org.eclipse.emf.ecore.xmi;bundle-version="2.9.1",
- org.emftext.language.java,
- org.emftext.language.java.resource,
- org.emftext.language.java.resource.java,
- org.emftext.commons.antlr3_4_0;bundle-version="3.4.0",
- org.emftext.language.java.resource.bcel,
- org.palladiosimulator.pcm,
- tools.vitruv.framework.util,
- tools.vitruv.framework.userinteraction,
- tools.vitruv.framework.change,
- tools.vitruv.domains.java.echange,
- tools.vitruv.applications.pcmjava.util,
- tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
+Require-Bundle: tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java,
  tools.vitruv.framework.applications
 Bundle-RequiredExecutionEnvironment: JavaSE-11

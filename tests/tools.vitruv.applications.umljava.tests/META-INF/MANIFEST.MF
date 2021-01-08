@@ -6,14 +6,10 @@ Automatic-Module-Name: tools.vitruv.applications.umljava.tests
 Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit.jupiter.api,
- org.apache.log4j,
- org.eclipse.xtend.lib,
  tools.vitruv.applications.umljava,
- tools.vitruv.domains.uml,
- tools.vitruv.domains.java,
  tools.vitruv.framework.applications,
- tools.vitruv.extensions.dslsruntime.mappings,
  tools.vitruv.testutils,
+ tools.vitruv.extensions.dslsruntime.reactions,
  org.hamcrest.core,
  org.apache.commons.io
 Bundle-Vendor: vitruv.tools

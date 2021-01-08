@@ -5,25 +5,13 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmjava.pojotransformations.pcm2j
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.pojotransformations.pcm2java.tests
 Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: com.google.guava,
- org.apache.log4j,
- org.eclipse.jdt.core,
- org.eclipse.emf.transaction,
- org.eclipse.xtext.xbase.lib,
- org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro,
- org.palladiosimulator.pcm,
- tools.vitruv.framework.vsum,
- tools.vitruv.framework.util,
+Require-Bundle: org.eclipse.emf.transaction,
  tools.vitruv.testutils,
- tools.vitruv.framework.change,
- tools.vitruv.framework.change.processing,
  tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.domains.java.echange,
  tools.vitruv.applications.pcmjava.util,
  tools.vitruv.applications.pcmjava.tests.util,
  tools.vitruv.applications.pcmjava.pojotransformations.pcm2java,
- tools.vitruv.applications.util.temporary,
  org.junit.jupiter.api
 Export-Package: tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java,
  tools.vitruv.applications.pcmjava.tests.pojotransformations.pcm2java.repository,

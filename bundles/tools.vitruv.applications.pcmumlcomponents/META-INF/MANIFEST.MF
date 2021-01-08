@@ -5,22 +5,9 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmumlcomponents;singleton:=true
 Automatic-Module-Name: tools.vitruv.applications.pcmumlcomponents
 Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: com.google.guava,
- org.eclipse.xtext.xbase.lib,
- org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro,
- tools.vitruv.domains.uml;visibility:=reexport,
+Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.domains.pcm;visibility:=reexport,
- org.apache.log4j,
- org.eclipse.emf.ecore,
- org.eclipse.core.resources,
  tools.vitruv.framework.applications,
- tools.vitruv.framework.util,
- tools.vitruv.framework.change,
- tools.vitruv.framework.change.processing,
- tools.vitruv.framework.correspondence,
- tools.vitruv.framework.userinteraction,
- tools.vitruv.extensions.dslsruntime.reactions;visibility:=reexport,
- tools.vitruv.extensions.dslsruntime.mappings
+ tools.vitruv.extensions.dslsruntime.reactions
 Export-Package: tools.vitruv.applications.pcmumlcomponents
 Bundle-Vendor: vitruv.tools
