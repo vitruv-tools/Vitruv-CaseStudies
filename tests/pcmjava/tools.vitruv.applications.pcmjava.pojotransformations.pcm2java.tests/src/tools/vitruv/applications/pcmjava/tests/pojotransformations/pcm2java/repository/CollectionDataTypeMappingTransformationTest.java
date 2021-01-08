@@ -12,49 +12,49 @@ import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
 public class CollectionDataTypeMappingTransformationTest extends Pcm2JavaTransformationTest {
 
-    @Test
-    public void testAddCollectionDataTypeWithoutInnerType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+	@Test
+	public void testAddCollectionDataTypeWithoutInnerType() throws Throwable {
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
 
-        this.getUserInteraction().addNextSingleSelection(0);
-        final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
-                Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null);
+		this.getUserInteraction().addNextSingleSelection(0);
+		final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
+				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, null);
 
-        this.assertDataTypeCorrespondence(collectionDataType);
-    }
+		this.assertDataTypeCorrespondence(collectionDataType);
+	}
 
-    @Test
-    public void testAddCollectionDataTypeWithPrimitiveTypeStringAsInnerType() throws Throwable {
-        final PrimitiveTypeEnum pte = PrimitiveTypeEnum.STRING;
-        this.testAddCollectionDataTypeWithPrimitiveInnerType(pte);
-    }
+	@Test
+	public void testAddCollectionDataTypeWithPrimitiveTypeStringAsInnerType() throws Throwable {
+		final PrimitiveTypeEnum pte = PrimitiveTypeEnum.STRING;
+		this.testAddCollectionDataTypeWithPrimitiveInnerType(pte);
+	}
 
-    @Test
-    public void testAddCollectionDataTypeWithPrimitiveTypeIntAsInnerType() throws Throwable {
-        this.testAddCollectionDataTypeWithPrimitiveInnerType(PrimitiveTypeEnum.INT);
-    }
+	@Test
+	public void testAddCollectionDataTypeWithPrimitiveTypeIntAsInnerType() throws Throwable {
+		this.testAddCollectionDataTypeWithPrimitiveInnerType(PrimitiveTypeEnum.INT);
+	}
 
-    @Test
-    public void testAddCollectionDataTypeWithComplexInnerType() throws Throwable {
-        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
-        final CompositeDataType compositeDataType = this.createAndSyncCompositeDataType(repo);
+	@Test
+	public void testAddCollectionDataTypeWithComplexInnerType() throws Throwable {
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+		final CompositeDataType compositeDataType = this.createAndSyncCompositeDataType(repo);
 
-        this.getUserInteraction().addNextSingleSelection(0);
-        final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
-                Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, compositeDataType);
+		this.getUserInteraction().addNextSingleSelection(0);
+		final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
+				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, compositeDataType);
 
-        this.assertDataTypeCorrespondence(collectionDataType);
-    }
+		this.assertDataTypeCorrespondence(collectionDataType);
+	}
 
-    protected void testAddCollectionDataTypeWithPrimitiveInnerType(final PrimitiveTypeEnum pte) throws Throwable {
-        final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
-        final PrimitiveDataType primitiveType = createPrimitiveDataType(pte, repo);
-        
-        this.getUserInteraction().addNextSingleSelection(0);
-        final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
-                Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, primitiveType);
+	protected void testAddCollectionDataTypeWithPrimitiveInnerType(final PrimitiveTypeEnum pte) throws Throwable {
+		final Repository repo = this.createAndSyncRepository(Pcm2JavaTestUtils.REPOSITORY_NAME);
+		final PrimitiveDataType primitiveType = createPrimitiveDataType(pte, repo);
 
-        this.assertDataTypeCorrespondence(collectionDataType);
-    }
-    
+		this.getUserInteraction().addNextSingleSelection(0);
+		final CollectionDataType collectionDataType = this.addCollectionDatatypeAndSync(repo,
+				Pcm2JavaTestUtils.COLLECTION_DATA_TYPE_NAME, primitiveType);
+
+		this.assertDataTypeCorrespondence(collectionDataType);
+	}
+
 }

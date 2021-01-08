@@ -11,33 +11,33 @@ import tools.vitruv.applications.pcmjava.tests.util.Pcm2JavaTestUtils;
 
 public class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransformationTest {
 
-    @Test
-    public void testAddInnerDeclaration() throws Throwable {
-        final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
+	@Test
+	public void testAddInnerDeclaration() throws Throwable {
+		final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
 
-        this.assertInnerDeclaration(innerDec);
-    }
+		this.assertInnerDeclaration(innerDec);
+	}
 
-    @Test
-    public void testRenameInnerDeclaration() throws Throwable {
-        final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
+	@Test
+	public void testRenameInnerDeclaration() throws Throwable {
+		final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
 
-        innerDec.setEntityName(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME);
-        propagate();
+		innerDec.setEntityName(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME);
+		propagate();
 
-        this.assertInnerDeclaration(innerDec);
-    }
+		this.assertInnerDeclaration(innerDec);
+	}
 
-    @Test
-    public void testChangeInnerDeclarationType() throws Throwable {
-        final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
+	@Test
+	public void testChangeInnerDeclarationType() throws Throwable {
+		final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
 
-        final Repository repo = innerDec.getCompositeDataType_InnerDeclaration().getRepository__DataType();
-        final PrimitiveDataType newPDT = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
-        innerDec.setDatatype_InnerDeclaration(newPDT);
-        propagate();
+		final Repository repo = innerDec.getCompositeDataType_InnerDeclaration().getRepository__DataType();
+		final PrimitiveDataType newPDT = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
+		innerDec.setDatatype_InnerDeclaration(newPDT);
+		propagate();
 
-        this.assertInnerDeclaration(innerDec);
-    }
+		this.assertInnerDeclaration(innerDec);
+	}
 
 }

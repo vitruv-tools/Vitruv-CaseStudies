@@ -368,7 +368,7 @@ public class Pcm2JavaTransformationTest extends LegacyVitruvApplicationTest {
 
 	protected Path createSystemPathInProject(final String systemName) {
 		return Path.of("model").resolve(systemName + "." + PcmNamespace.SYSTEM_FILE_EXTENSION);
-		//return "model/" + systemName + "." + PcmNamespace.SYSTEM_FILE_EXTENSION;
+		// return "model/" + systemName + "." + PcmNamespace.SYSTEM_FILE_EXTENSION;
 	}
 
 	protected System createAndSyncSystem(final String systemName) throws Throwable {

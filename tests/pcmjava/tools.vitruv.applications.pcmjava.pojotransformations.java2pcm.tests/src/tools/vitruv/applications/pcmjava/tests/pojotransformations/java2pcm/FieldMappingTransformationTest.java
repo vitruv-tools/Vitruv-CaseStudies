@@ -30,183 +30,186 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FieldMappingTransformationTest extends Java2PcmPackageMappingTransformationTest {
 
-    @Test
-    public void testAddFieldToClassThatCorrespondsToCompositeDatatype() throws Throwable {
-        super.addRepoContractsAndDatatypesPackage();
-        final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
-        final String fieldType = "String";
-        final String fieldName = "stringField";
+	@Test
+	public void testAddFieldToClassThatCorrespondsToCompositeDatatype() throws Throwable {
+		super.addRepoContractsAndDatatypesPackage();
+		final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
+		final String fieldType = "String";
+		final String fieldName = "stringField";
 
-        final InnerDeclaration innerDeclaration = this.addFieldToClassWithName(cdt.getEntityName(), fieldType,
-                fieldName, InnerDeclaration.class);
+		final InnerDeclaration innerDeclaration = this.addFieldToClassWithName(cdt.getEntityName(), fieldType,
+				fieldName, InnerDeclaration.class);
 
-        this.assertInnerDeclaration(innerDeclaration, fieldType, fieldName);
-    }
+		this.assertInnerDeclaration(innerDeclaration, fieldType, fieldName);
+	}
 
-    @Test
-    public void testRenameFieldInClassThatCorrespondsToCompositeDatatype() throws Throwable {
-        final String fieldTypeName = "String";
-        final String fieldName = "stringField";
-        super.addRepoContractsAndDatatypesPackage();
-        final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
-        this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
+	@Test
+	public void testRenameFieldInClassThatCorrespondsToCompositeDatatype() throws Throwable {
+		final String fieldTypeName = "String";
+		final String fieldName = "stringField";
+		super.addRepoContractsAndDatatypesPackage();
+		final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
+		this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
 
-        final String newFieldName = fieldName + Pcm2JavaTestUtils.RENAME;
-        final InnerDeclaration newInnerDeclaration = this.renameFieldInClass(cdt.getEntityName(), fieldName,
-                newFieldName);
+		final String newFieldName = fieldName + Pcm2JavaTestUtils.RENAME;
+		final InnerDeclaration newInnerDeclaration = this.renameFieldInClass(cdt.getEntityName(), fieldName,
+				newFieldName);
 
-        this.assertInnerDeclaration(newInnerDeclaration, fieldTypeName, newFieldName);
-    }
+		this.assertInnerDeclaration(newInnerDeclaration, fieldTypeName, newFieldName);
+	}
 
-    @Test
-    public void testChangeTypeOfFieldInClassThatCorrespondsToCompositeDatatype() throws Throwable {
-        final String fieldTypeName = "String";
-        final String fieldName = "stringField";
-        super.addRepoContractsAndDatatypesPackage();
-        final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
-        this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
+	@Test
+	public void testChangeTypeOfFieldInClassThatCorrespondsToCompositeDatatype() throws Throwable {
+		final String fieldTypeName = "String";
+		final String fieldName = "stringField";
+		super.addRepoContractsAndDatatypesPackage();
+		final CompositeDataType cdt = super.addClassThatCorrespondsToCompositeDatatype();
+		this.addFieldToClassWithName(cdt.getEntityName(), fieldTypeName, fieldName, InnerDeclaration.class);
 
-        final String newFieldTypeName = "int";
-        final InnerDeclaration newInnerDeclaration = this.changeFieldTypeInClass(cdt.getEntityName(), fieldName,
-                newFieldTypeName);
+		final String newFieldTypeName = "int";
+		final InnerDeclaration newInnerDeclaration = this.changeFieldTypeInClass(cdt.getEntityName(), fieldName,
+				newFieldTypeName);
 
-        this.assertInnerDeclaration(newInnerDeclaration, newFieldTypeName, fieldName);
-    }
+		this.assertInnerDeclaration(newInnerDeclaration, newFieldTypeName, fieldName);
+	}
 
-    @Disabled
-    @Test
-    public void testRemoveFieldInClassThatCorrespondsToBasicComponent() {
-        fail("Not yet implemented");
-    }
+	@Disabled
+	@Test
+	public void testRemoveFieldInClassThatCorrespondsToBasicComponent() {
+		fail("Not yet implemented");
+	}
 
-    @Disabled
-    @Test
-    public void testAddFieldToClassThatCorrespondsToBasicComponent() {
-        fail("Not yet implemented");
-    }
+	@Disabled
+	@Test
+	public void testAddFieldToClassThatCorrespondsToBasicComponent() {
+		fail("Not yet implemented");
+	}
 
-    @Disabled
-    @Test
-    public void testAddFieldInClassWithoutCorrespondence() {
-        fail("Not yet implemented");
-    }
+	@Disabled
+	@Test
+	public void testAddFieldInClassWithoutCorrespondence() {
+		fail("Not yet implemented");
+	}
 
-    @Disabled
-    @Test
-    public void testAddFieldWithTypeOfInterface() throws Throwable {
-        this.createRepoBasicComponentAndInterface();
+	@Disabled
+	@Test
+	public void testAddFieldWithTypeOfInterface() throws Throwable {
+		this.createRepoBasicComponentAndInterface();
 
-        // create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" to
-        // Interface
-        final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
-                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME,
-                "i" + Pcm2JavaTestUtils.INTERFACE_NAME, OperationRequiredRole.class);
+		// create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME +
+		// "Requiring" to
+		// Interface
+		final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME,
+				"i" + Pcm2JavaTestUtils.INTERFACE_NAME, OperationRequiredRole.class);
 
-        this.assertOperationRequiredRole(orrToInterface);
-    }
+		this.assertOperationRequiredRole(orrToInterface);
+	}
 
-    @Test
-    public void testAddFieldWithTypeOfBasicComponentToClass() throws Throwable {
-        this.createRepoBasicComponentAndInterface();
+	@Test
+	public void testAddFieldWithTypeOfBasicComponentToClass() throws Throwable {
+		this.createRepoBasicComponentAndInterface();
 
-        // create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" to
-        // Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing"
-        final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
-                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl",
-                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl",
-                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME.toLowerCase() + "Providing", OperationRequiredRole.class);
+		// create required role from Pcm2JavaTestUtils.BASIC_COMPONENT_NAME +
+		// "Requiring" to
+		// Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing"
+		final OperationRequiredRole orrToInterface = this.addFieldToClassWithName(
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring" + "Impl",
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl",
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME.toLowerCase() + "Providing", OperationRequiredRole.class);
 
-        this.assertOperationRequiredRole(orrToInterface);
-    }
+		this.assertOperationRequiredRole(orrToInterface);
+	}
 
-    private void createRepoBasicComponentAndInterface() throws CoreException, IOException, InterruptedException {
-        // create main package
-        super.addRepoContractsAndDatatypesPackage();
-        // create package and classes
-        this.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing");
-        this.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring");
-        // create interface
-        super.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts", Pcm2JavaTestUtils.INTERFACE_NAME);
-        // create provided role from providing compontent to interface
-        super.addImplementsCorrespondingToOperationProvidedRoleToClass(
-                Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME);
-    }
+	private void createRepoBasicComponentAndInterface() throws CoreException, IOException, InterruptedException {
+		// create main package
+		super.addRepoContractsAndDatatypesPackage();
+		// create package and classes
+		this.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing");
+		this.addPackageAndImplementingClass(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Requiring");
+		// create interface
+		super.createInterfaceInPackageBasedOnJaMoPPPackageWithCorrespondence("contracts",
+				Pcm2JavaTestUtils.INTERFACE_NAME);
+		// create provided role from providing compontent to interface
+		super.addImplementsCorrespondingToOperationProvidedRoleToClass(
+				Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + "Providing" + "Impl", Pcm2JavaTestUtils.INTERFACE_NAME);
+	}
 
-    private void assertOperationRequiredRole(final OperationRequiredRole operationRequiredRole) throws Throwable {
-    	this.getVirtualModel().executeCommand(new Callable<Void>() {
+	private void assertOperationRequiredRole(final OperationRequiredRole operationRequiredRole) throws Throwable {
+		this.getVirtualModel().executeCommand(new Callable<Void>() {
 
-            @Override
-            public Void call() throws Exception {
-                Set<EObject> correspondingEObjects;
-                try {
-                    correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjects(
-                            FieldMappingTransformationTest.this.getCorrespondenceModel(), operationRequiredRole);
+			@Override
+			public Void call() throws Exception {
+				Set<EObject> correspondingEObjects;
+				try {
+					correspondingEObjects = CorrespondenceModelUtil.getCorrespondingEObjects(
+							FieldMappingTransformationTest.this.getCorrespondenceModel(), operationRequiredRole);
 
-                    boolean fieldFound = false;
-                    for (final EObject correspondingEObject : correspondingEObjects) {
-                        if (correspondingEObject instanceof Field) {
-                            fieldFound = true;
-                        } else {
-                            fail("OperationRequiredRole should correspond to field only, but corresonds also to: "
-                                    + correspondingEObject);
-                        }
-                    }
-                    assertTrue(fieldFound, "OperationRequiredRole does not correspond to a field");
-                } catch (final Throwable e) {
-                    if (e instanceof Exception) {
-                        throw (Exception) e;
-                    }
-                    throw new RuntimeException(e);
-                }
-                return null;
-            }
-        });
+					boolean fieldFound = false;
+					for (final EObject correspondingEObject : correspondingEObjects) {
+						if (correspondingEObject instanceof Field) {
+							fieldFound = true;
+						} else {
+							fail("OperationRequiredRole should correspond to field only, but corresonds also to: "
+									+ correspondingEObject);
+						}
+					}
+					assertTrue(fieldFound, "OperationRequiredRole does not correspond to a field");
+				} catch (final Throwable e) {
+					if (e instanceof Exception) {
+						throw (Exception) e;
+					}
+					throw new RuntimeException(e);
+				}
+				return null;
+			}
+		});
 
-    }
+	}
 
-    private InnerDeclaration renameFieldInClass(final String className, final String fieldName,
-            final String newFieldName) throws Throwable {
-        final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-                this.getCurrentTestProject());
-        final IType type = icu.getType(className);
-        final IField fieldToRename = type.getField(fieldName);
-        final String fieldToRenameStr = fieldToRename.getSource();
-        final String fieldToRenameType = fieldToRenameStr.split(" ")[1];
-        final String fieldToRenameName = fieldToRenameStr.split(" ")[2];
-        final int offset = fieldToRename.getSourceRange().getOffset() + fieldToRenameStr.indexOf(fieldToRenameType)
-                + fieldToRenameType.length() + 1;
-        final int lengthToDelete = fieldToRenameName.length();
-        final DeleteEdit deleteEdit = new DeleteEdit(offset, lengthToDelete);
-        final InsertEdit insertEdit = new InsertEdit(offset, newFieldName + ";");
-        editCompilationUnit(icu, deleteEdit, insertEdit);
-        final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, newFieldName);
-        return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
-                this.getCorrespondenceModel(), newJaMoPPField, InnerDeclaration.class));
-    }
+	private InnerDeclaration renameFieldInClass(final String className, final String fieldName,
+			final String newFieldName) throws Throwable {
+		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
+				this.getCurrentTestProject());
+		final IType type = icu.getType(className);
+		final IField fieldToRename = type.getField(fieldName);
+		final String fieldToRenameStr = fieldToRename.getSource();
+		final String fieldToRenameType = fieldToRenameStr.split(" ")[1];
+		final String fieldToRenameName = fieldToRenameStr.split(" ")[2];
+		final int offset = fieldToRename.getSourceRange().getOffset() + fieldToRenameStr.indexOf(fieldToRenameType)
+				+ fieldToRenameType.length() + 1;
+		final int lengthToDelete = fieldToRenameName.length();
+		final DeleteEdit deleteEdit = new DeleteEdit(offset, lengthToDelete);
+		final InsertEdit insertEdit = new InsertEdit(offset, newFieldName + ";");
+		editCompilationUnit(icu, deleteEdit, insertEdit);
+		final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, newFieldName);
+		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+				newJaMoPPField, InnerDeclaration.class));
+	}
 
-    private InnerDeclaration changeFieldTypeInClass(final String className, final String fieldName,
-            final String newFieldTypeName) throws Throwable {
-        final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
-                this.getCurrentTestProject());
-        final IType type = icu.getType(className);
-        final IField fieldToRename = type.getField(fieldName);
-        final String fieldSrc = fieldToRename.getSource();
-        final String fieldType = fieldSrc.split(" ")[1];
-        final int offset = fieldToRename.getSourceRange().getOffset() + fieldSrc.indexOf(fieldType);
-        final int lengthToDelete = fieldType.length();
-        final DeleteEdit deleteEdit = new DeleteEdit(offset, lengthToDelete);
-        final InsertEdit insertEdit = new InsertEdit(offset, newFieldTypeName);
-        editCompilationUnit(icu, deleteEdit, insertEdit);
-        final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, fieldName);
-        return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(
-                this.getCorrespondenceModel(), newJaMoPPField, InnerDeclaration.class));
-    }
+	private InnerDeclaration changeFieldTypeInClass(final String className, final String fieldName,
+			final String newFieldTypeName) throws Throwable {
+		final ICompilationUnit icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(className,
+				this.getCurrentTestProject());
+		final IType type = icu.getType(className);
+		final IField fieldToRename = type.getField(fieldName);
+		final String fieldSrc = fieldToRename.getSource();
+		final String fieldType = fieldSrc.split(" ")[1];
+		final int offset = fieldToRename.getSourceRange().getOffset() + fieldSrc.indexOf(fieldType);
+		final int lengthToDelete = fieldType.length();
+		final DeleteEdit deleteEdit = new DeleteEdit(offset, lengthToDelete);
+		final InsertEdit insertEdit = new InsertEdit(offset, newFieldTypeName);
+		editCompilationUnit(icu, deleteEdit, insertEdit);
+		final Field newJaMoPPField = this.getJaMoPPFieldFromClass(icu, fieldName);
+		return claimOne(CorrespondenceModelUtil.getCorrespondingEObjectsByType(this.getCorrespondenceModel(),
+				newJaMoPPField, InnerDeclaration.class));
+	}
 
-    private void assertInnerDeclaration(final InnerDeclaration innerDeclaration, final String fieldType,
-            final String fieldName) throws Throwable {
-        super.assertPCMNamedElement(innerDeclaration, fieldName);
-        final String pcmDataTypeName = super.getNameFromPCMDataType(innerDeclaration.getDatatype_InnerDeclaration());
-        assertEquals(pcmDataTypeName, fieldType, "The name of the PCM datatype does not equal the JaMoPP type name");
-    }
+	private void assertInnerDeclaration(final InnerDeclaration innerDeclaration, final String fieldType,
+			final String fieldName) throws Throwable {
+		super.assertPCMNamedElement(innerDeclaration, fieldName);
+		final String pcmDataTypeName = super.getNameFromPCMDataType(innerDeclaration.getDatatype_InnerDeclaration());
+		assertEquals(pcmDataTypeName, fieldType, "The name of the PCM datatype does not equal the JaMoPP type name");
+	}
 
 }

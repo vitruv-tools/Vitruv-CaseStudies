@@ -26,7 +26,7 @@ abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest 
 	protected static val String TEST_FIELD_NAME = "testEJBfield"
 
 	override protected getChangePropagationSpecifications() {
-		return #[new EjbJava2PcmChangePropagationSpecification()];
+		return #[new EjbJava2PcmChangePropagationSpecification()]
 	}
 
 	def protected createEjbClass(String className) {
@@ -38,8 +38,7 @@ abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest 
 	}
 
 	def protected createEjbInterface(String interfaceName) {
-		val ConcreteClassifier classifier = super.createJaMoPPInterfaceInPackage(mainPackage.name,
-			interfaceName)
+		val ConcreteClassifier classifier = super.createJaMoPPInterfaceInPackage(mainPackage.name, interfaceName)
 		val OperationInterface correspondingOpInterface = this.addAnnotationToClassifier(classifier,
 			REMOTE_ANNOTATION_NAME, OperationInterface, interfaceName)
 		correspondingOpInterface
@@ -56,11 +55,11 @@ abstract class EjbJava2PcmTransformationTest extends Java2PcmTransformationTest 
 	}
 
 	override Repository addRepoContractsAndDatatypesPackage() throws IOException, CoreException {
-		this.mainPackage = this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME]);
-		this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts"]);
-		this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes"]);
+		this.mainPackage = this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME])
+		this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME, "contracts"])
+		this.createPackageWithPackageInfo(#[Pcm2JavaTestUtils.REPOSITORY_NAME, "datatypes"])
 		val Repository repo = claimOne(
-			CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, this.mainPackage, Repository));
-		return repo;
+			CorrespondenceModelUtil.getCorrespondingEObjectsByType(correspondenceModel, this.mainPackage, Repository))
+		return repo
 	}
 }

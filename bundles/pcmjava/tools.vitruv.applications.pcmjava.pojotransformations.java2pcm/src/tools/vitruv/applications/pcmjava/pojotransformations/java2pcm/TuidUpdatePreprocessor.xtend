@@ -11,13 +11,13 @@ import tools.vitruv.framework.util.command.ResourceAccess
 
 // This is a copy from tools.vitruv.applications.pcmjava.ejbtransformations.java2pcm 
 class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
-	
+
 	new() {
 		super(new JavaDomainProvider().domain, new PcmDomainProvider().domain)
 	}
 
 	override doesHandleChange(EChange change, CorrespondenceModel correspondenceModel) {
-		return change instanceof JavaFeatureEChange<?, ?>;
+		return change instanceof JavaFeatureEChange<?, ?>
 	}
 
 	override propagateChange(EChange change, CorrespondenceModel correspondenceModel, ResourceAccess resourceAccess) {
@@ -25,7 +25,7 @@ class TuidUpdatePreprocessor extends AbstractEChangePropagationSpecification {
 			val oldAffectedEObject = change.oldAffectedEObject
 			val newAffectedEObject = change.affectedEObject
 			if (null !== oldAffectedEObject && null !== newAffectedEObject) {
-				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject);
+				TuidManager.instance.updateTuid(oldAffectedEObject, newAffectedEObject)
 			}
 		}
 	}

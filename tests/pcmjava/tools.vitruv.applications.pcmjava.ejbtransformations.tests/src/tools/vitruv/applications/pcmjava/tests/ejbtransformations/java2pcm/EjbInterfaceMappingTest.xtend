@@ -72,11 +72,11 @@ class EjbInterfaceMappingTest extends EjbJava2PcmTransformationTest {
 		assertPCMParam(pcmParam, name, PrimitiveTypeEnum.BYTE)
 
 		val icu = CompilationUnitManipulatorHelper.findICompilationUnitWithClassName(TEST_INTERFACE_NAME,
-			this.currentTestProject);
+			this.currentTestProject)
 		val IMethod iMethod = icu.getType(TEST_INTERFACE_NAME).methods.get(0)
 		val secondParamname = "additionalData"
 		val typeStringName = "String[]"
-		val String secondParameterStr = ", " + typeStringName + " " + secondParamname;
+		val String secondParameterStr = ", " + typeStringName + " " + secondParamname
 		val secondPcmParam = super.insertParameterIntoSignature(correspondingOpSignature.entityName, secondParamname,
 			icu, iMethod, secondParameterStr)
 		assertPCMParam(secondPcmParam, secondParamname, PrimitiveTypeEnum.STRING)
