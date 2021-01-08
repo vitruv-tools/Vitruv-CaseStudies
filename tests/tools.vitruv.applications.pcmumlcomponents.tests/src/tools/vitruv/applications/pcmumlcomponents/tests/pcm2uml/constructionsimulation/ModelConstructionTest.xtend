@@ -22,16 +22,15 @@ import java.nio.file.Path
 
 abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 	protected val TARGET_MODEL_PATH = Path.of("model/model.repository")
-	
+
 	override protected initializeTestModel() {
-		
 	}
-	
+
 	protected def <T> returnType(EObject eobj, Class<T> type) {
 		assertTrue(type.isAssignableFrom(eobj.class))
 		return type.cast(eobj)
 	}
-	
+
 	protected def void validateCorrespondence(Logger logger, Parameter pcmParameter) {
 		logger.debug("Checking for correspondence for pcm::Parameter " + pcmParameter.parameterName)
 		val correspondingElements = pcmParameter.correspondingElements
@@ -39,7 +38,7 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 		val umlParameter = correspondingElements.head.returnType(org.eclipse.uml2.uml.Parameter)
 		assertEquals(pcmParameter.parameterName, umlParameter.name)
 	}
-	
+
 	protected def void validateCorrespondence(Logger logger, OperationSignature pcmSignature) {
 		logger.debug("Checking for correspondence for pcm::OperationSignature " + pcmSignature.entityName)
 		val correspondingElements = pcmSignature.correspondingElements
@@ -49,7 +48,7 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 		for (parameter : pcmSignature.parameters__OperationSignature)
 			validateCorrespondence(logger, parameter)
 	}
-	
+
 	protected def void validateCorrespondence(Logger logger, Interface pcmInterface) {
 		logger.debug("Checking for correspondence for pcm::Interface " + pcmInterface.entityName)
 		if (pcmInterface instanceof OperationInterface) {
@@ -64,7 +63,7 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 			return
 		}
 	}
-	
+
 	protected def void validateCorrespondence(Logger logger, InnerDeclaration innerDeclaration) {
 		logger.debug("Checking for correspondence for pcm::InnerDeclaration " + innerDeclaration.entityName)
 		val correspondingElements = innerDeclaration.correspondingElements
@@ -72,7 +71,7 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 		val umlProperty = correspondingElements.head.returnType(org.eclipse.uml2.uml.Property)
 		assertEquals(innerDeclaration.entityName, umlProperty.name)
 	}
-	
+
 	protected def void validateCorrespondence(Logger logger, DataType dataType) {
 		logger.debug("Checking for correspondence for pcm::DataType")
 		val correspondingElements = dataType.correspondingElements
@@ -89,7 +88,7 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 			}
 		}
 	}
-	
+
 	protected def void validateCorrespondence(Logger logger, Repository repository) {
 		logger.debug("Checking for correspondence for pcm::Repository " + repository.entityName)
 		val correspondingElements = repository.correspondingElements
@@ -100,5 +99,5 @@ abstract class ModelConstructionTest extends AbstractPcmUmlTest {
 		for (interface : repository.interfaces__Repository)
 			validateCorrespondence(logger, interface)
 	}
-	
+
 }

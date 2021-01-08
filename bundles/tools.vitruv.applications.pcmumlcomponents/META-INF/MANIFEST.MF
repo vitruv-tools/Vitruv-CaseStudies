@@ -8,6 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.domains.uml;visibility:=reexport,
  tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.framework.applications,
- tools.vitruv.extensions.dslsruntime.reactions
+ tools.vitruv.extensions.dslsruntime.reactions,
+ edu.kit.ipd.sdq.activextendannotations
 Export-Package: tools.vitruv.applications.pcmumlcomponents
 Bundle-Vendor: vitruv.tools
