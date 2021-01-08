@@ -11,7 +11,7 @@ import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
-import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassApplicationTestHelper
+import static tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals.*
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
@@ -30,7 +30,7 @@ class SignatureTest extends PcmUmlClassTest {
 	static val logger = Logger.getLogger(SignatureTest)
 
 	static val TEST_SIGNATURE_NAME = "testSignature"
-	 
+
 	def static void checkSignatureConcept(
 		CorrespondenceModel cm,
 		OperationSignature pcmSignature,
@@ -76,8 +76,8 @@ class SignatureTest extends PcmUmlClassTest {
 		var pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
 		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(UML_MODEL_FILE)
+		resourceAt(Path.of(PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
@@ -85,13 +85,13 @@ class SignatureTest extends PcmUmlClassTest {
 		return pcmRepository.clearResourcesAndReloadRoot
 	}
 
-	private def _testCreateSignatureConcept_UML(Repository pcmRepository, Type type) {		
+	private def _testCreateSignatureConcept_UML(Repository pcmRepository, Type type) {
 		var umlInterface = helper.getUmlInterface(pcmRepository)
 		startRecordingChanges(umlInterface)
 		var umlOperation = umlInterface.createOwnedOperation(TEST_SIGNATURE_NAME, null, null)
 		umlOperation.createOwnedParameter(DefaultLiterals.RETURN_PARAM_NAME, type)
 		propagate
-		
+
 		umlInterface.clearResourcesAndReloadRoot
 		val reloadedPcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlInterface = helper.getUmlInterface(reloadedPcmRepository)
@@ -159,8 +159,7 @@ class SignatureTest extends PcmUmlClassTest {
 		var pcmRepository = createRepositoryWithInterface()
 		val type = helper.getUmlCompositeDataTypeClass_2(pcmRepository)
 		pcmRepository = _testCreateSignatureConcept_UML(pcmRepository, type)
-		_testReturnTypePropagation_UML(pcmRepository,type , 0,
-			LiteralUnlimitedNatural.UNLIMITED)
+		_testReturnTypePropagation_UML(pcmRepository, type, 0, LiteralUnlimitedNatural.UNLIMITED)
 	}
 
 	private def _testCreateSignatureConcept_PCM_withReturnType(Repository inPcmRepository, DataType pcmType) {
@@ -176,7 +175,7 @@ class SignatureTest extends PcmUmlClassTest {
 		pcmSignature.parameters__OperationSignature += pcmParameter
 		pcmInterface.signatures__OperationInterface += pcmSignature
 		propagate
-		
+
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 
@@ -202,7 +201,7 @@ class SignatureTest extends PcmUmlClassTest {
 		assertNotNull(helper.PCM_STRING, "Initialization of PrimitiveTypes seems to have failed")
 		_testCreateSignatureConcept_PCM_withReturnType(pcmRepository, helper.PCM_STRING)
 	}
-	
+
 	@Test
 	def void testCreateSignatureConcept_PCM_compositeReturnType() {
 		var pcmRepository = createRepositoryWithInterface()

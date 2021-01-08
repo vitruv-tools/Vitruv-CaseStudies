@@ -28,31 +28,38 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 
 	static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
 	static val TEST_COMPOSITE_DATATYPE_PARENT = "TestCompositeTypeParent"
-	
-	def static checkCompositeDataTypeConcept(CorrespondenceModel cm, 
-			CompositeDataType pcmCompositeType, 
-			Class umlClass
+
+	def static checkCompositeDataTypeConcept(
+		CorrespondenceModel cm,
+		CompositeDataType pcmCompositeType,
+		Class umlClass
 	) {
 		assertTrue(corresponds(cm, pcmCompositeType, umlClass))
 		assertTrue(pcmCompositeType.entityName == umlClass.name)
-		//Repository should correspond to the datatypes package
-		assertTrue(corresponds(cm, pcmCompositeType.repository__DataType, umlClass.package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE))
+		// Repository should correspond to the datatypes package
+		assertTrue(
+			corresponds(cm, pcmCompositeType.repository__DataType, umlClass.package,
+				TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE))
 		// check that parent compositedatatypes and parent classes correspond
-		val umlParentCorrespondences = pcmCompositeType.parentType_CompositeDataType
-				.map[pcmParent | CorrespondenceModelUtil.getCorrespondingEObjectsByType(cm, pcmParent, Class).head].toList
+		val umlParentCorrespondences = pcmCompositeType.parentType_CompositeDataType.map [ pcmParent |
+			CorrespondenceModelUtil.getCorrespondingEObjectsByType(cm, pcmParent, Class).head
+		].toList
 		assertFalse(umlParentCorrespondences.contains(null))
 		assertFalse(
-			umlParentCorrespondences
-				.map[umlParent | umlClass.generalizations.exists[gen | EcoreUtil.equals(gen.general, umlParent)]]
-				.exists[it == false]
+			umlParentCorrespondences.map [ umlParent |
+				umlClass.generalizations.exists[gen|EcoreUtil.equals(gen.general, umlParent)]
+			].exists[it == false]
 		)
 	}
+
 	def protected checkCompositeDataTypeConcept(CompositeDataType pcmCompositeType) {
 		val umlClass = helper.getModifiableCorr(pcmCompositeType, Class, TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
+
 	def protected checkCompositeDataTypeConcept(Class umlClass) {
-		val pcmCompositeType = helper.getModifiableCorr(umlClass, CompositeDataType, TagLiterals.COMPOSITE_DATATYPE__CLASS)
+		val pcmCompositeType = helper.getModifiableCorr(umlClass, CompositeDataType,
+			TagLiterals.COMPOSITE_DATATYPE__CLASS)
 		checkCompositeDataTypeConcept(correspondenceModel, pcmCompositeType, umlClass)
 	}
 
@@ -61,7 +68,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 	 */
 	def private Repository createRepositoryConcept() {
 		val pcmRepository = helper.createRepository
-		
+
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
@@ -70,7 +77,7 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return pcmRepository.clearResourcesAndReloadRoot 
+		return pcmRepository.clearResourcesAndReloadRoot
 	}
 
 	@Test
@@ -78,19 +85,22 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		var pcmRepository = createRepositoryConcept()
 		var umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		startRecordingChanges(umlDatatypesPkg)
-		
-		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
+
+		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(
+			CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
 		propagate
-		
+
 		umlDatatypesPkg.clearResourcesAndReloadRoot
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
-		
-		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE] as Class
+
+		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst [
+			it.name == CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE
+		] as Class
 		assertNotNull(umlCompositeTypeClass)
 		checkCompositeDataTypeConcept(umlCompositeTypeClass)
 	}
-	
+
 	@Test
 	def void testCreateCompositeDataTypeConcept_PCM() {
 		var pcmRepository = createRepositoryConcept()
@@ -100,39 +110,41 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
 		pcmRepository.dataTypes__Repository += pcmCompositeType
 		propagate
-		
+
 		umlDatatypesPkg.clearResourcesAndReloadRoot
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
-		
+
 		pcmCompositeType = pcmRepository.dataTypes__Repository.head as CompositeDataType
 		assertNotNull(pcmCompositeType)
 		checkCompositeDataTypeConcept(pcmCompositeType)
 	}
-	
+
 	@Test
 	def void testCreateCompositeDataType_withParent_UML() {
 		var pcmRepository = createRepositoryConcept()
 		var umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		startRecordingChanges(umlDatatypesPkg)
-		
+
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
 		var umlCompositeTypeParentClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE_PARENT, false)
 		umlCompositeTypeClass.createGeneralization(umlCompositeTypeParentClass)
 		propagate
-		
+
 		umlDatatypesPkg.clearResourcesAndReloadRoot
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
-		
-		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class	
+
+		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class
 		assertNotNull(umlCompositeTypeClass)
 		checkCompositeDataTypeConcept(umlCompositeTypeClass)
-		umlCompositeTypeParentClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE_PARENT] as Class
+		umlCompositeTypeParentClass = umlDatatypesPkg.packagedElements.findFirst [
+			it.name == TEST_COMPOSITE_DATATYPE_PARENT
+		] as Class
 		assertNotNull(umlCompositeTypeParentClass)
 		checkCompositeDataTypeConcept(umlCompositeTypeParentClass)
 	}
-	
+
 	@Test
 	def void testCreateCompositeDataType_withParent_PCM() {
 		var pcmRepository = createRepositoryConcept()
@@ -140,17 +152,18 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
 		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
 		pcmRepository.dataTypes__Repository += pcmCompositeType
-		
+
 		var pcmCompositeTypeParent = RepositoryFactory.eINSTANCE.createCompositeDataType
 		pcmCompositeTypeParent.entityName = TEST_COMPOSITE_DATATYPE_PARENT
 		pcmRepository.dataTypes__Repository += pcmCompositeTypeParent
 		pcmCompositeType.parentType_CompositeDataType += pcmCompositeTypeParent
 		propagate
-		
+
 		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-		
-		pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType)
-			.findFirst[it.entityName == TEST_COMPOSITE_DATATYPE]
+
+		pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType).findFirst [
+			it.entityName == TEST_COMPOSITE_DATATYPE
+		]
 		assertNotNull(pcmCompositeType)
 		checkCompositeDataTypeConcept(pcmCompositeType)
 	}

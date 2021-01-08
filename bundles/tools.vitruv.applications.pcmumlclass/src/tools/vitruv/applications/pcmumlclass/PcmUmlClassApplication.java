@@ -5,7 +5,7 @@ import java.util.Set;
 
 import tools.vitruv.domains.pcm.PcmDomainProvider;
 import tools.vitruv.domains.uml.UmlDomainProvider;
-import tools.vitruv.framework.applications.AbstractVitruvApplication; 
+import tools.vitruv.framework.applications.AbstractVitruvApplication;
 import tools.vitruv.framework.change.processing.ChangePropagationSpecification;
 
 public class PcmUmlClassApplication extends AbstractVitruvApplication {
@@ -13,7 +13,7 @@ public class PcmUmlClassApplication extends AbstractVitruvApplication {
 	public PcmUmlClassApplication() {
 		patchDomains();
 	}
-	
+
 	@Override
 	public Set<ChangePropagationSpecification> getChangePropagationSpecifications() {
 		Set<ChangePropagationSpecification> specs = new HashSet<ChangePropagationSpecification>();
@@ -26,7 +26,7 @@ public class PcmUmlClassApplication extends AbstractVitruvApplication {
 	public String getName() {
 		return "PCM <-> UML Class";
 	}
-	
+
 	private void patchDomains() {
 		new UmlDomainProvider().getDomain().enableTransitiveChangePropagation();
 		new PcmDomainProvider().getDomain().enableTransitiveChangePropagation();

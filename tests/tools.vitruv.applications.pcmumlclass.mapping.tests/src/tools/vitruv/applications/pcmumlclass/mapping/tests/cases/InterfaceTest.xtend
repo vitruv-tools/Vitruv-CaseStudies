@@ -6,7 +6,7 @@ import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.Repository
 import org.palladiosimulator.pcm.repository.RepositoryFactory
 import tools.vitruv.applications.pcmumlclass.mapping.TagLiterals
-import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassApplicationTestHelper
+import static tools.vitruv.applications.pcmumlclass.mapping.DefaultLiterals.*
 import tools.vitruv.applications.pcmumlclass.mapping.tests.PcmUmlClassTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
@@ -59,14 +59,14 @@ class InterfaceTest extends PcmUmlClassTest {
 	def private Repository createRepositoryConcept() {
 		val pcmRepository = helper.createRepository
 
-		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+		userInteraction.addNextTextInput(UML_MODEL_FILE)
+		resourceAt(Path.of(PCM_MODEL_FILE)).startRecordingChanges => [
 			contents += pcmRepository
 		]
 		propagate
 
-		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		assertModelExists(PCM_MODEL_FILE)
+		assertModelExists(UML_MODEL_FILE)
 
 		return pcmRepository.clearResourcesAndReloadRoot
 	}
