@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertEquals
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::OperationSignature with its
@@ -61,16 +62,19 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 	}
 
 	def private Repository createRepositoryWithInterface() {
-		var pcmRepository = helper.createRepository()
+		val pcmRepository = helper.createRepository()
 		helper.createOperationInterface(pcmRepository)
 		helper.createCompositeDataType(pcmRepository)
 		var pcmCompositeType_2 = helper.createCompositeDataType_2(pcmRepository)
 		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 		
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
+		return pcmRepository.clearResourcesAndReloadRoot 
 	}
 	
 	private def _testCreateSignatureConcept_UML() {
@@ -80,10 +84,10 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		
 		var umlOperation = umlInterface.createOwnedOperation(TEST_SIGNATURE_NAME, null, null)
 		
-		saveAndSynchronizeChanges(umlInterface)
-		reloadResourceAndReturnRoot(umlInterface)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlInterface = helper.getUmlInterface(pcmRepository)
+		umlInterface.startRecordingChanges
 		
 		umlOperation = umlInterface.ownedOperations.head
 		assertNotNull(umlOperation)
@@ -102,9 +106,9 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		umlReturnParameter.lower = lower
 		umlReturnParameter.upper = upper
 		
-		saveAndSynchronizeChanges(umlInterface)
-		reloadResourceAndReturnRoot(umlInterface)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		umlInterface.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		umlInterface = helper.getUmlInterface(pcmRepository)
 		umlOperation = umlInterface.ownedOperations.head
@@ -147,9 +151,9 @@ class SignatureConceptTest extends PcmUmlClassApplicationTest {
 		pcmSignature.entityName = TEST_SIGNATURE_NAME
 		pcmSignature.returnType__OperationSignature = pcmType
 		pcmInterface.signatures__OperationInterface += pcmSignature
-		saveAndSynchronizeChanges(pcmSignature)
+		propagate
 		
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		pcmInterface = helper.getPcmOperationInterface(pcmRepository)
 		
 		pcmSignature = pcmInterface.signatures__OperationInterface.head

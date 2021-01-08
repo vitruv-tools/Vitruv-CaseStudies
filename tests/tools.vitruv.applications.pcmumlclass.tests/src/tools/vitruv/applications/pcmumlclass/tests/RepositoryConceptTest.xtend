@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
 import org.palladiosimulator.pcm.repository.Repository
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::Repository
@@ -63,20 +63,23 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateRepositoryConcept_UML() {
-		var umlModel = UMLFactory.eINSTANCE.createModel()
-		umlModel.name = "umlModel"
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE, umlModel)
+		val umlModel = UMLFactory.eINSTANCE.createModel() => [
+			name = "umlModel"
+		]
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)).startRecordingChanges => [
+			contents += umlModel
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		
 		var umlRepositoryPkg = umlModel.createNestedPackage("testCbsRepository")
 		
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-		saveAndSynchronizeChanges(umlModel)
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		
-		umlModel = reloadResourceAndReturnRoot(umlModel) as Model
-		umlRepositoryPkg = umlModel.nestedPackages.head
+		umlRepositoryPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.head
 		assertTrue(umlRepositoryPkg.name == "testCbsRepository")
 		
 		checkUmlRepositoryPackage(umlRepositoryPkg)
@@ -84,33 +87,38 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	
 	@Test
 	def void testCreateRepositoryConcept_PCM() {
-		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
+		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
-		
-		checkPcmRepository(pcmRepository)
+		checkPcmRepository(pcmRepository.clearResourcesAndReloadRoot)
 	}
 	
 	@Test
 	def void testRenameRepositoryConcept_PCM() {
 		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
+		val initialRepository = pcmRepository
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += initialRepository
+		]
+		propagate
 		
 		pcmRepository.entityName = "Pcm2UmlNameChange"
-		saveAndSynchronizeChanges(pcmRepository)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		val newName = "pcm2UmlNameChange_2" // should be synchronized to upper case
 		pcmRepository.entityName = newName
-		saveAndSynchronizeChanges(pcmRepository)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		assertTrue(pcmRepository.entityName == newName.toFirstUpper)
 		checkPcmRepository(pcmRepository)
@@ -118,15 +126,20 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 	
 	@Test 
 	def void testDeleteRepositoryConcept_PCM() {
-		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
-		pcmRepository.entityName = "testCbsRepository" //has to be capitalized via round-trip
-		
+		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository() => [
+			entityName = "testCbsRepository" //has to be capitalized via round-trip
+		]
+		val initialRepository = pcmRepository
+				
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += initialRepository
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository	
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot	
 		assertTrue(pcmRepository.entityName == "TestCbsRepository")
 		checkPcmRepository(pcmRepository)
 		
@@ -134,13 +147,15 @@ class RepositoryConceptTest extends PcmUmlClassApplicationTest {
 		var umlModel = umlRepositoryPackage.nestingPackage
 		
 		userInteraction.addNextConfirmationInput(true)
-		deleteAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).propagate[
+			delete(null)
+		]
 		
 		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 		// before the following reload, the mUmlModel instance will be out of synch with the vsum 
 		assertFalse(umlModel?.packagedElements.empty)
-		umlModel = reloadResourceAndReturnRoot(umlModel) as Model
+		umlModel = umlModel.clearResourcesAndReloadRoot
 		assertTrue(umlModel?.packagedElements.empty)
 	}
 }

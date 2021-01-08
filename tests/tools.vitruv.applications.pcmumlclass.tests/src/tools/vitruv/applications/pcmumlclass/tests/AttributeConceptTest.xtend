@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::InnerDeclaration with 
@@ -55,11 +56,14 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		helper.createCollectionDataType(pcmRepository, pcmCompositeType_2)
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
+		return pcmRepository.clearResourcesAndReloadRoot
 	}
 	
 	private def void testCreateAttributeConcept_PCM(Repository inPcmRepository, DataType pcmType) {
@@ -71,8 +75,8 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		pcmAttribute.datatype_InnerDeclaration = pcmType
 		pcmCompositeType.innerDeclaration_CompositeDataType += pcmAttribute
 		
-		saveAndSynchronizeChanges(pcmAttribute)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		pcmCompositeType = helper.getPcmCompositeDataType(pcmRepository)
 		
 		pcmAttribute = pcmCompositeType.innerDeclaration_CompositeDataType.findFirst[it.entityName == TEST_ATTRIBUTE]
@@ -118,9 +122,9 @@ class AttributeConceptTest extends PcmUmlClassApplicationTest {
 		umlAttribute.type = umlType 
 		umlAttribute.upper = upper
 		
-		saveAndSynchronizeChanges(umlAttribute)
-		reloadResourceAndReturnRoot(umlAttribute)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		umlAttribute.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		umlAttribute = helper.getUmlCompositeDataTypeClass(pcmRepository).ownedAttributes.findFirst[it.name == TEST_ATTRIBUTE]
 		assertNotNull(umlAttribute)

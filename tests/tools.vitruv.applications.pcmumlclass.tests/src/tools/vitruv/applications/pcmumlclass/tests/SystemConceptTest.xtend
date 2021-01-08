@@ -1,7 +1,6 @@
 package tools.vitruv.applications.pcmumlclass.tests
 
 import org.eclipse.uml2.uml.Class
-import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Package
 import org.eclipse.uml2.uml.UMLFactory
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::System
@@ -73,32 +73,39 @@ class SystemConceptTest extends PcmUmlClassApplicationTest {
 
 	@Test
 	def void testCreateSystemConcept_PCM() {
-		var pcmSystem = SystemFactory.eINSTANCE.createSystem
-		pcmSystem.entityName = SYSTEM_NAME
+		val pcmSystem = SystemFactory.eINSTANCE.createSystem => [
+			entityName = SYSTEM_NAME
+		]
 		
 		userInteraction.addNextTextInput(UML_MODEL_FILE)
-		createAndSynchronizeModel(PCM_MODEL_FILE, pcmSystem)
-		pcmSystem = reloadResourceAndReturnRoot(pcmSystem) as System
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmSystem
+		]
+		propagate
 		
-		checkSystemConcept(pcmSystem)
-		assertTrue(pcmSystem.entityName == SYSTEM_NAME)
+		val reloadedPcmSystem = pcmSystem.clearResourcesAndReloadRoot
+		checkSystemConcept(reloadedPcmSystem)
+		assertTrue(reloadedPcmSystem.entityName == SYSTEM_NAME)
 	}
 	
 	@Test
 	def void testCreateSystemConcept_UML() {
-		var umlModel = UMLFactory.eINSTANCE.createModel
-		umlModel.name = MODEL_NAME
+		val umlModel = UMLFactory.eINSTANCE.createModel => [
+			name = MODEL_NAME
+		]
 		
 		userInteraction.addNextTextInput(PCM_MODEL_FILE)
-		createAndSynchronizeModel(UML_MODEL_FILE, umlModel)
+		resourceAt(Path.of(UML_MODEL_FILE)).startRecordingChanges => [
+			contents += umlModel
+		]
+		propagate
 		
 		var umlSystemPkg = umlModel.createNestedPackage(SYSTEM_NAME)
 		
 		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__SYSTEM)
-		saveAndSynchronizeChanges(umlSystemPkg)
-		umlModel = reloadResourceAndReturnRoot(umlModel) as Model
+		propagate
 
-		umlSystemPkg = umlModel.nestedPackages.findFirst[it.name == SYSTEM_NAME.toFirstLower]
+		umlSystemPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.findFirst[it.name == SYSTEM_NAME.toFirstLower]
 		assertNotNull(umlSystemPkg)
 		checkSystemConcept(umlSystemPkg)
 	}

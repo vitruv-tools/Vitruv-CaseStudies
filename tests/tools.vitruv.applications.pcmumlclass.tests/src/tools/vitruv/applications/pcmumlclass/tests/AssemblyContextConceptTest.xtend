@@ -9,6 +9,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::AssemblyContext 
@@ -53,11 +54,14 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		helper.createComponent_2(pcmRepository)
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
+		return pcmRepository.clearResourcesAndReloadRoot 
 	}
 
 
@@ -72,8 +76,8 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		pcmAssemblyContext.encapsulatedComponent__AssemblyContext = helper.getPcmComponent_2(pcmRepository) 
 		pcmComponent.assemblyContexts__ComposedStructure += pcmAssemblyContext
 		
-		saveAndSynchronizeChanges(pcmAssemblyContext)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		pcmAssemblyContext = helper.getPcmComponent(pcmRepository).assemblyContexts__ComposedStructure.head
 		assertNotNull(pcmAssemblyContext)
@@ -88,9 +92,9 @@ class AssemblyContextConceptTest extends PcmUmlClassApplicationTest {
 		
 		var umlAssemblyContextProperty = umlComponent.createOwnedAttribute(PROPERTY_NAME, helper.getUmlComponentImpl_2(pcmRepository))
 		
-		saveAndSynchronizeChanges(umlAssemblyContextProperty)
-		reloadResourceAndReturnRoot(umlAssemblyContextProperty)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		propagate
+		umlAssemblyContextProperty.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		umlAssemblyContextProperty = helper.getUmlComponentImpl(pcmRepository).ownedAttributes.findFirst[it.name == PROPERTY_NAME]
 		assertNotNull(umlAssemblyContextProperty)

@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 
 import static org.junit.jupiter.api.Assertions.assertFalse
+import java.nio.file.Path
 
 /**
  * This test class tests the reactions and routines that are supposed to synchronize a pcm::CompositeDataType in a pcm::Repository
@@ -62,11 +63,14 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		val pcmRepository = helper.createRepository
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
+		return pcmRepository.clearResourcesAndReloadRoot 
 	}
 
 	@Test
@@ -76,10 +80,10 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		startRecordingChanges(umlDatatypesPkg)
 		
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
-		saveAndSynchronizeChanges(umlDatatypesPkg)
+		propagate
 		
-		reloadResourceAndReturnRoot(umlDatatypesPkg)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
 		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE] as Class
@@ -95,10 +99,10 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
 		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
 		pcmRepository.dataTypes__Repository += pcmCompositeType
-		saveAndSynchronizeChanges(pcmCompositeType)
+		propagate
 		
-		reloadResourceAndReturnRoot(umlDatatypesPkg)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
 		pcmCompositeType = pcmRepository.dataTypes__Repository.head as CompositeDataType
@@ -115,10 +119,10 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
 		var umlCompositeTypeParentClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE_PARENT, false)
 		umlCompositeTypeClass.createGeneralization(umlCompositeTypeParentClass)
-		saveAndSynchronizeChanges(umlDatatypesPkg)
+		propagate
 		
-		reloadResourceAndReturnRoot(umlDatatypesPkg)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
 		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class	
@@ -141,9 +145,9 @@ class CompositeDataTypeConceptTest extends PcmUmlClassApplicationTest {
 		pcmCompositeTypeParent.entityName = TEST_COMPOSITE_DATATYPE_PARENT
 		pcmRepository.dataTypes__Repository += pcmCompositeTypeParent
 		pcmCompositeType.parentType_CompositeDataType += pcmCompositeTypeParent
-		saveAndSynchronizeChanges(pcmCompositeType)
+		propagate
 		
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType)
 			.findFirst[it.entityName == TEST_COMPOSITE_DATATYPE] as CompositeDataType
