@@ -5,26 +5,21 @@ Bundle-SymbolicName: tools.vitruv.applications.pcmjava.tests.util
 Automatic-Module-Name: tools.vitruv.applications.pcmjava.tests.util
 Bundle-Version: 0.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.junit.jupiter.api,
+Require-Bundle: org.apache.log4j,
+ org.junit.jupiter.api,
  org.apache.commons.lang,
- org.apache.log4j,
  org.eclipse.jdt.core.manipulation,
  org.eclipse.ltk.core.refactoring,
- org.eclipse.jdt.ui,
- org.eclipse.core.resources,
- org.eclipse.core.runtime,
  org.eclipse.jdt.core,
  org.eclipse.text,
- org.eclipse.xtext.xbase.lib,
- tools.vitruv.framework.util,
- tools.vitruv.framework.change,
- tools.vitruv.framework.change.processing,
- tools.vitruv.framework.vsum,
  tools.vitruv.testutils,
- tools.vitruv.framework.ui.monitorededitor,
  tools.vitruv.domains.java.echange,
  tools.vitruv.domains.java.monitorededitor,
  tools.vitruv.applications.pcmjava.util,
- tools.vitruv.applications.pcmjava.pojotransformations.java2pcm
+ tools.vitruv.applications.pcmjava.pojotransformations.java2pcm,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ tools.vitruv.domains.java;visibility:=reexport,
+ tools.vitruv.domains.pcm;visibility:=reexport
 Export-Package: tools.vitruv.applications.pcmjava.tests.util
 Bundle-Vendor: vitruv.tools

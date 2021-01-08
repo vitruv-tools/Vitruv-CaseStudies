@@ -4,20 +4,7 @@ Bundle-Name: Vitruv UML Class-UML Components Application
 Bundle-SymbolicName: tools.vitruv.applications.umlclassumlcomponents
 Automatic-Module-Name: tools.vitruv.applications.umlclassumlcomponents
 Bundle-Version: 0.2.0.qualifier
-Require-Bundle: org.eclipse.uml2.uml,
- org.apache.log4j,
- com.google.guava,
- org.eclipse.emf.ecore,
- org.eclipse.core.resources,
- org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro,
- tools.vitruv.framework.util,
- tools.vitruv.framework.change,
- tools.vitruv.framework.change.processing,
- tools.vitruv.framework.correspondence,
- tools.vitruv.framework.userinteraction,
- tools.vitruv.extensions.dslsruntime.reactions;visibility:=reexport,
- tools.vitruv.extensions.dslsruntime.mappings,
+Require-Bundle: tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.domains.uml;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: vitruv.tools

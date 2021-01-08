@@ -6,13 +6,11 @@ Bundle-Version: 0.2.0.qualifier
 Automatic-Module-Name: tools.vitruv.applications.pcmumlclass.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: tools.vitruv.testutils,
- org.eclipse.emf.compare,
  org.junit.jupiter.api,
+ org.eclipse.emf.compare,
  org.hamcrest.core,
  tools.vitruv.applications.pcmumlclass,
- org.eclipse.xtend.lib,
- tools.vitruv.framework.applications,
- tools.vitruv.extensions.dslsruntime.mappings,
+ tools.vitruv.extensions.dslsruntime.reactions,
  tools.vitruv.applications.util.temporary
 Export-Package: tools.vitruv.applications.pcmumlclass.tests
 Bundle-Vendor: vitruv.tools
