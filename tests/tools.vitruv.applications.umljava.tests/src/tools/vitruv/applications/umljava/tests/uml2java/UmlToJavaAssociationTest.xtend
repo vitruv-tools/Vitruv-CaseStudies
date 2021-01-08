@@ -31,14 +31,14 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
     def void before() {
         uClass1 = createSimpleUmlClass(rootElement, CLASSNAME_1)
         uClass2 = createSimpleUmlClass(rootElement, CLASSNAME_2)
-        saveAndSynchronizeChanges(rootElement)
+        propagate
     }
     
     @Test
     def void testCreateAssociation1() {
         this.userInteraction.addNextSingleSelection(0)
         createDirectedAssociation(uClass1, uClass2, 0, 1)
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         
         val uAttribute = uClass1.ownedAttributes.head
         val jClass1 = getCorrespondingClass(uClass1)
@@ -53,7 +53,7 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 	def void testCreateAssociation2() {
 		this.userInteraction.addNextSingleSelection(0)
 		createDirectedAssociation(uClass1, uClass2, 1, 1)
-		saveAndSynchronizeChanges(rootElement)
+		propagate
 		
 		val uAttribute = uClass1.ownedAttributes.head
 		val jClass1 = getCorrespondingClass(uClass1)
@@ -69,7 +69,7 @@ class UmlToJavaAssociationTest extends UmlToJavaTransformationTest {
 	def void testCreateAssociation3() {
 	    this.userInteraction.addNextSingleSelection(0) //0 is ArrayList
         createDirectedAssociation(uClass1, uClass2, 0, LiteralUnlimitedNatural.UNLIMITED)
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         
         val uAttribute = uClass1.ownedAttributes.head
         

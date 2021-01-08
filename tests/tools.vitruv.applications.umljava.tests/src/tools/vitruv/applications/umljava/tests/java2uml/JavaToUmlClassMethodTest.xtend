@@ -56,7 +56,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
         jParamMeth = createJavaClassMethod(OPERATION_NAME2, TypesFactory.eINSTANCE.createBoolean, JavaVisibility.PUBLIC, false, false, #[jParam])
         jClass.members += jMeth;
         jClass.members += jParamMeth
-        saveAndSynchronizeChanges(jClass);
+        propagate
     }
     
     /**
@@ -66,7 +66,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     def void testCreateMethod() {
         val meth = createSimpleJavaOperation(STANDARD_OPERATION_NAME)
         jClass.members += meth
-        saveAndSynchronizeChanges(jClass)
+        propagate
         val uOperation = getCorrespondingMethod(meth)
         val uClass = getCorrespondingClass(jClass)
         assertUmlOperationTraits(uOperation, STANDARD_OPERATION_NAME, VisibilityKind.PUBLIC_LITERAL, null, 
@@ -80,7 +80,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def void testChangeReturnType() {
         jMeth.typeReference = createNamespaceReferenceFromClassifier(typeClass)
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         val uOperation = getCorrespondingMethod(jMeth)
         val uTypeClass = getCorrespondingClass(typeClass)
@@ -94,7 +94,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def void testRenameMethod() {
         jMeth.name = OPERATION_RENAME
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         val uOperation = getCorrespondingMethod(jMeth)
         val uClass = getCorrespondingClass(jClass)
@@ -111,7 +111,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
         assertNotNull(getCorrespondingMethod(jMeth))
         
         EcoreUtil.delete(jMeth)
-        saveAndSynchronizeChanges(jClass)
+        propagate
         
         val uClass = getCorrespondingClass(jClass)
         assertUmlClassDontHaveOperation(uClass, OPERATION_RENAME)
@@ -124,14 +124,14 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def testStaticMethod() {
         jMeth.static = true
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         var uOperation = getCorrespondingMethod(jMeth)
         assertUmlFeatureHasStaticValue(uOperation, true)
         assertClassMethodEquals(uOperation, jMeth)
         
         jMeth.static = false
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         uOperation = getCorrespondingMethod(jMeth)
         assertUmlFeatureHasStaticValue(uOperation, false)
@@ -146,14 +146,14 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def testAbstractMethod() {
         jMeth.abstract = true
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         var uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasAbstractValue(uOperation, true)
         assertClassMethodEquals(uOperation, jMeth)
         
         jMeth.abstract = false
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasAbstractValue(uOperation, false)
@@ -167,14 +167,14 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def testFinalMethod() {
         jMeth.final = true
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         var uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasFinalValue(uOperation, true)
         assertClassMethodEquals(uOperation, jMeth)
         
         jMeth.final = false
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationHasFinalValue(uOperation, false)
@@ -188,14 +188,14 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def testMethodVisibility() {
         jMeth.makeProtected
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         var uOperation = getCorrespondingMethod(jMeth)
         assertUmlNamedElementHasVisibility(uOperation, VisibilityKind.PROTECTED_LITERAL)
         assertClassMethodEquals(uOperation, jMeth)
         
         jMeth.makePrivate
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         uOperation = getCorrespondingMethod(jMeth)
         assertUmlNamedElementHasVisibility(uOperation, VisibilityKind.PRIVATE_LITERAL)
@@ -209,7 +209,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     def testCreateParameter() {
         val param = createJavaParameter(PARAMETER_NAME2, createNamespaceReferenceFromClassifier(typeClass))
         jMeth.parameters += param
-        saveAndSynchronizeChanges(jMeth)
+        propagate
 
         val uOperation = getCorrespondingMethod(jMeth)
         val uParam = getCorrespondingParameter(param)
@@ -223,7 +223,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def testRenameParameter() {
         jParam.name = PARAMETER_RENAME
-        saveAndSynchronizeChanges(jMeth)
+        propagate
 
         val uOperation = getCorrespondingMethod(jParamMeth)
         val uParam = getCorrespondingParameter(jParam)
@@ -238,7 +238,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     def testDeleteParameter() {
         assertNotNull(jParam)
         EcoreUtil.delete(jParam)
-        saveAndSynchronizeChanges(jMeth)
+        propagate
         
         val uOperation = getCorrespondingMethod(jMeth)
         assertUmlOperationDontHaveParameter(uOperation, PARAMETER_NAME)
@@ -250,7 +250,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def testChangeParameterType() {
         jParam.typeReference = createNamespaceReferenceFromClassifier(typeClass)
-        saveAndSynchronizeChanges(jParam)
+        propagate
 
         val uParam = getCorrespondingParameter(jParam)
         val uTypeClass = getCorrespondingClass(typeClass)
@@ -264,7 +264,7 @@ class JavaToUmlClassMethodTest extends JavaToUmlTransformationTest {
     @Test
     def testCreateConstructor() {
         val jConstr = createJavaConstructorAndAddToClass(jClass, JavaVisibility.PUBLIC)
-        saveAndSynchronizeChanges(jConstr)
+        propagate
         
         val uConstr = getCorrespondingMethod(jConstr)
         assertNotNull(uConstr)

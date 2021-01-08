@@ -50,14 +50,14 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
         uClass.ownedOperations += uOperation;
         rootElement.packagedElements += uClass;
         rootElement.packagedElements += typeClass;
-        saveAndSynchronizeChanges(rootElement);
+        propagate
     }
     
     @Test
     def testCreateParameter() {
         val uParam = createUmlParameter(STANDARD_PARAMETER_NAME, typeClass)
         uOperation.ownedParameters += uParam;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
 
         val jParam = getCorrespondingParameter(uParam)
         val jTypeClass = getCorrespondingClass(typeClass)
@@ -68,7 +68,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
     @Test
     def testRenameParameter() {
         uParam.name = PARAMETER_RENAME
-        saveAndSynchronizeChanges(uParam)
+        propagate
         
         val jParam = getCorrespondingParameter(uParam)
         val jMethod = getCorrespondingClassMethod(uOperation)
@@ -80,7 +80,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
     @Test
     def testDeleteParameter() {
         uParam.destroy
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         
         val jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
@@ -89,7 +89,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
     @Test
     def testChangeParameterType() {
         uParam.type = typeClass
-        saveAndSynchronizeChanges(uParam)
+        propagate
         
         val jParam = getCorrespondingParameter(uParam)
         val jTypeClass = getCorrespondingClass(typeClass)
@@ -100,7 +100,7 @@ class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
     @Test
     def testChangeParameterDirectionToReturn() {
         uParam.direction = ParameterDirectionKind.RETURN_LITERAL
-        saveAndSynchronizeChanges(uParam)
+        propagate
         assertNull(getCorrespondingParameter(uParam))
         var jMethod = getCorrespondingClassMethod(uOperation)
         assertJavaElementHasTypeRef(jMethod, TypesFactory.eINSTANCE.createInt)

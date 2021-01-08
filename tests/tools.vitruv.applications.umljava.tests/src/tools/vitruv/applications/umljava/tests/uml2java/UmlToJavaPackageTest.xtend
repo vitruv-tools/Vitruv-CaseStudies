@@ -31,14 +31,14 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
     def void before() {
         uPackageLevel1 = createUmlPackageAndAddToSuperPackage(PACKAGE_LEVEL_1, rootElement)
         createUmlClassAndAddToPackage(uPackageLevel1, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         
     }
     
     @Test
     def testCreatePackage() {
         val uPackage = createUmlPackageAndAddToSuperPackage(PACKAGE_NAME, rootElement)
-        saveAndSynchronizeChanges(uPackage)
+        propagate
         
         val jPackage = getCorrespondingPackage(uPackage)
         assertEquals(PACKAGE_NAME, jPackage.name)
@@ -48,7 +48,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
     @Test
     def testCreateNestedPackage() {
         val uPackageLevel2 = createUmlPackageAndAddToSuperPackage(PACKAGE_LEVEL_2, uPackageLevel1)
-        saveAndSynchronizeChanges(uPackageLevel2)
+        propagate
         
         val jPackageLevel2 = getCorrespondingPackage(uPackageLevel2)
         assertEquals(PACKAGE_LEVEL_2, jPackageLevel2.name)
@@ -62,7 +62,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
         assertNotNull(jPackage)
         
         uPackageLevel1.destroy
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         
         jPackage = getCorrespondingPackage(uPackageLevel1)
         assertNull(jPackage)
@@ -71,7 +71,7 @@ class UmlToJavaPackageTest extends UmlToJavaTransformationTest {
     @Test @Disabled
     def testRenamePackage() { //Delete or Refactoring java packages seems to lead to problems
         uPackageLevel1.name = PACKAGE_RENAMED
-        saveAndSynchronizeChanges(uPackageLevel1)
+        propagate
         
         val jPackage = getCorrespondingPackage(uPackageLevel1)
         assertEquals(PACKAGE_RENAMED, jPackage.name)

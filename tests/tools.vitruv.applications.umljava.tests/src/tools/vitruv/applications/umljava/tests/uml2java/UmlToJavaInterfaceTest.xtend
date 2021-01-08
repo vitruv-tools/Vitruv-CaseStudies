@@ -29,14 +29,14 @@ class UmlToJavaInterfaceTest extends UmlToJavaTransformationTest {
     @BeforeEach
     def void before() {
         uInterface = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         
     }
     
     @Test
     def testCreateInterface() {
         val interface = createSimpleUmlInterface(rootElement, STANDARD_INTERFACE_NAME);
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         
         assertJavaFileExists(STANDARD_INTERFACE_NAME, #[]);
         val jInterface = getCorrespondingInterface(interface)
@@ -46,7 +46,7 @@ class UmlToJavaInterfaceTest extends UmlToJavaTransformationTest {
     @Test
     def testRenameInterface() {
         uInterface.name = INTERFACE_RENAME;
-        saveAndSynchronizeChanges(uInterface);
+        propagate
         
         assertJavaFileExists(INTERFACE_RENAME, #[]);
         val jInterface = getCorrespondingInterface(uInterface)
@@ -57,7 +57,7 @@ class UmlToJavaInterfaceTest extends UmlToJavaTransformationTest {
     @Test
     def testDeleteInterface() {
         uInterface.destroy;
-        saveAndSynchronizeChanges(rootElement);
+        propagate
         
         assertJavaFileNotExists(INTERFACE_NAME, #[]);
     }
@@ -65,7 +65,7 @@ class UmlToJavaInterfaceTest extends UmlToJavaTransformationTest {
     @Test
     def testAddSuperInterface() {
         val interface = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         val jI = getCorrespondingInterface(interface)
         assertEquals(SUPERINTERFACENAME_1, getClassifierFromTypeReference(jI.extends.get(0)).name)
         assertEquals(SUPERINTERFACENAME_2, getClassifierFromTypeReference(jI.extends.get(1)).name)
@@ -74,9 +74,9 @@ class UmlToJavaInterfaceTest extends UmlToJavaTransformationTest {
     @Test
     def testRemoveSuperInterface() {
         val uInterface = createInterfaceWithTwoSuperInterfaces(STANDARD_INTERFACE_NAME, SUPERINTERFACENAME_1, SUPERINTERFACENAME_2);
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         uInterface.generalizations.remove(0);
-        saveAndSynchronizeChanges(rootElement);
+        propagate
         val jI = getCorrespondingInterface(uInterface)
         assertTrue(jI.extends.size == 1, jI.extends.size.toString);
         assertEquals(SUPERINTERFACENAME_2, getClassifierFromTypeReference(jI.extends.get(0)).name)

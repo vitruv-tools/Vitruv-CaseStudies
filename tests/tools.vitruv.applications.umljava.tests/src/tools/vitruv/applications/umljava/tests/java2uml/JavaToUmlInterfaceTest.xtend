@@ -46,7 +46,7 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
     @Test
     def void testRenameInterface() {
         jInterface.name = INTERFACE_RENAME
-        saveAndSynchronizeChanges(jInterface)
+        propagate
         
         val uInterface = getCorrespondingInterface(jInterface)
         assertEquals(INTERFACE_RENAME, uInterface.name)
@@ -54,9 +54,9 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
     }
     @Test
     def void testDeleteInterface() {
-        val comp = jInterface.containingCompilationUnit
+        jInterface.containingCompilationUnit
         EcoreUtil.delete(jInterface)
-        saveAndSynchronizeChanges(comp)
+        propagate
         assertTrue(getUmlPackagedElementsbyName(org.eclipse.uml2.uml.Interface, INTERFACE_NAME).nullOrEmpty)
     }
     
@@ -64,7 +64,7 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
     def testAddSuperInterface() {
         val superInterface = createSimpleJavaInterfaceWithCompilationUnit(SUPERINTERFACENAME_1)
         jInterface.extends += createNamespaceReferenceFromClassifier(superInterface)
-        saveAndSynchronizeChanges(jInterface)
+        propagate
         
         val uInterface = getCorrespondingInterface(jInterface)
         val uSuperInterface = getCorrespondingInterface(superInterface)
@@ -78,10 +78,10 @@ class JavaToUmlInterfaceTest extends JavaToUmlTransformationTest {
         val superInterface2 = createSimpleJavaInterfaceWithCompilationUnit(SUPERINTERFACENAME_2)
         jInterface.extends += createNamespaceReferenceFromClassifier(superInterface)
         jInterface.extends += createNamespaceReferenceFromClassifier(superInterface2)
-        saveAndSynchronizeChanges(jInterface)
+        propagate
         
         jInterface.extends.remove(0)
-        saveAndSynchronizeChanges(jInterface)
+        propagate
         
         val uInterface = getCorrespondingInterface(jInterface)
         val uSuperInterface = getCorrespondingInterface(superInterface)

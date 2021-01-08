@@ -36,14 +36,14 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
         typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
         rootElement.packagedElements += uInterface;
         rootElement.packagedElements += typeClass;
-        saveAndSynchronizeChanges(rootElement);
+        propagate
     }
     
     @Test
     def void testCreateInterfaceMethod() {
         val interfaceMethod = createUmlInterfaceOperation(STANDARD_IOPERATION_NAME, null, null)
         uInterface.ownedOperations += interfaceMethod
-        saveAndSynchronizeChanges(uInterface);
+        propagate
         
         val jMethod = getCorrespondingInterfaceMethod(interfaceMethod)
         val jInterface = getCorrespondingInterface(uInterface)
@@ -55,7 +55,7 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
     @Test
     def testRenameInterfaceMethod() {
         uOperation.name = IOPERATION_RENAME;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         val jMethod = getCorrespondingInterfaceMethod(uOperation)
         val jInterface = getCorrespondingInterface(uInterface)
@@ -68,7 +68,7 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
     def testDeleteInterfaceMethod() {
         assertNotNull(uOperation)
         uOperation.destroy;
-        saveAndSynchronizeChanges(rootElement);
+        propagate
         
         val jInterface = getCorrespondingInterface(uInterface)
         assertJavaMemberContainerDontHaveMember(jInterface, IOPERATION_NAME)
@@ -77,7 +77,7 @@ class UmlToJavaInterfaceMethodTest extends UmlToJavaTransformationTest {
     @Test
     def testChangeInterfaceMethodReturnType() {
         uOperation.type = typeClass;
-        saveAndSynchronizeChanges(uOperation);
+        propagate
         
         val jMethod = getCorrespondingInterfaceMethod(uOperation)
         val jTypeClass = getCorrespondingClass(typeClass)

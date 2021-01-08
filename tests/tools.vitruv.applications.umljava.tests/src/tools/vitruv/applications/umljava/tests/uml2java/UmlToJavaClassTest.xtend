@@ -35,13 +35,13 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 	@BeforeEach
 	def void before() {
 	    uClass = createUmlClassAndAddToPackage(rootElement, CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
-        saveAndSynchronizeChanges(rootElement)
+        propagate
 	}
 
 	@Test
 	def testCreateClass() {
 	    val c = createUmlClassAndAddToPackage(rootElement, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false)
-	    saveAndSynchronizeChanges(rootElement) 
+	    propagate 
 	    
 	    val jClass = getCorrespondingClass(c)
 	    assertEquals(STANDARD_CLASS_NAME, jClass.name)
@@ -51,7 +51,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 	@Test
 	def testDeletedClass() {
         uClass.destroy;
-        saveAndSynchronizeChanges(rootElement);
+        propagate
         
         assertJavaFileNotExists(CLASS_NAME, #[]);
 	}
@@ -59,7 +59,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
 	@Test
     def testChangeClassVisibility() {
         uClass.visibility = VisibilityKind.PRIVATE_LITERAL;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertJavaModifiableHasVisibility(jClass, JavaVisibility.PRIVATE)
@@ -70,7 +70,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
     @Test
     def testChangeClassVisibility2() {
         uClass.visibility = VisibilityKind.PACKAGE_LITERAL;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertJavaModifiableHasVisibility(jClass, JavaVisibility.PACKAGE)
@@ -80,7 +80,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
     @Test
     def testChangeAbstractClass() {
         uClass.isAbstract = true;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertJavaModifiableAbstract(jClass, true)
@@ -90,7 +90,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
     @Test
     def testRenameClass() {
         uClass.name =  CLASS_RENAME;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertEquals(CLASS_RENAME, jClass.name)
@@ -103,7 +103,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
     @Test
     def testChangeFinalClass() {
         uClass.isFinalSpecialization = true;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertJavaModifiableFinal(jClass, true)
@@ -114,7 +114,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
     def testSuperClassChanged() {
         val superClass = createSimpleUmlClass(rootElement, SUPER_CLASS_NAME);
         uClass.generals += superClass;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         val jClass = getCorrespondingClass(uClass)
         val jSuperClass = getCorrespondingClass(superClass)
         assertHasSuperClass(jClass, jSuperClass);
@@ -127,10 +127,10 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
         val uI2 = createSimpleUmlInterface(rootElement, INTERFACE_NAME2);
         uClass.createInterfaceRealization("InterfacRealization", uI);
         uClass.createInterfaceRealization("InterfacRealization2", uI2);
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         uClass.interfaceRealizations.remove(0);
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertTrue(jClass.implements.size == 1, jClass.implements.size.toString);
@@ -143,7 +143,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
     def testAddClassImplement() {
         val uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME)
         uClass.createInterfaceRealization("InterfacRealization", uI)
-        saveAndSynchronizeChanges(uClass)
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertEquals(INTERFACE_NAME, getClassifierFromTypeReference(jClass.implements.head).name);
@@ -155,7 +155,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
     	val uClass2 = createSimpleUmlClass(rootElement, STANDARD_CLASS_NAME)
         val uI = createSimpleUmlInterface(rootElement, INTERFACE_NAME);
         val realization = uClass.createInterfaceRealization("InterfacRealization", uI);
-        saveAndSynchronizeChanges(rootElement);
+        propagate
         
         var jClass = getCorrespondingClass(uClass)
         var jClass2 = getCorrespondingClass(uClass2)
@@ -163,7 +163,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
         assertTrue(jClass2.implements.nullOrEmpty)
         
         realization.implementingClassifier = uClass2
-        saveAndSynchronizeChanges(rootElement);
+        propagate
         
         jClass = getCorrespondingClass(uClass)
         jClass2 = getCorrespondingClass(uClass2)
@@ -179,7 +179,7 @@ class UmlToJavaClassTest extends UmlToJavaTransformationTest {
     @Test
     def testCreateDataType() {
         val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
-        saveAndSynchronizeChanges(dataType)
+        propagate
         
         val jClass = getCorrespondingClass(dataType)
         assertEquals(DATATYPE_NAME, jClass.name)

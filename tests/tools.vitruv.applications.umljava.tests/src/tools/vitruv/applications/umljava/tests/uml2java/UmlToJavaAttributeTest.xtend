@@ -45,14 +45,14 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
         uAttr = createUmlAttribute(ATTRIBUTE_NAME, typeClass, VisibilityKind.PUBLIC_LITERAL, false, false);
         uClass.ownedAttributes += uAttr;
         pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
-        saveAndSynchronizeChanges(rootElement);
+        propagate
     }
 
     @Test
     def testCreatePrimitiveAttribute() {
         val attr = createUmlAttribute(STANDARD_ATTRIBUTE_NAME, pType, VisibilityKind.PUBLIC_LITERAL, false, false);
         uClass.ownedAttributes += attr;
-        saveAndSynchronizeChanges(uClass);       
+        propagate       
         
         val jClass = getCorrespondingClass(uClass)
         val jAttr = getCorrespondingAttribute(attr);
@@ -63,7 +63,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
     @Test
     def testCreateAttribute() {
         val attr = uClass.createOwnedAttribute(STANDARD_ATTRIBUTE_NAME, typeClass);
-        saveAndSynchronizeChanges(uClass);
+        propagate
            
         val jClass = getCorrespondingClass(uClass)
         val jtypeClass = getCorrespondingClass(typeClass)
@@ -77,7 +77,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
     @Test
     def testRenameAttribute() {
         uAttr.name = ATTRIBUTE_RENAME;
-        saveAndSynchronizeChanges(uClass)
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         val jAttr = getCorrespondingAttribute(uAttr)
@@ -91,7 +91,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
     @Test
     def testDeleteAttribute() {
         uAttr.destroy;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         assertJavaMemberContainerDontHaveMember(jClass, ATTRIBUTE_NAME)
@@ -100,7 +100,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
     @Test
     def testStaticAttribute() {
         uAttr.isStatic = true;
-        saveAndSynchronizeChanges(uClass);
+        propagate
          
         val jAttr = getCorrespondingAttribute(uAttr)
         assertJavaModifiableStatic(jAttr, true)
@@ -110,7 +110,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
     @Test
     def testFinalAttribute() {
         uAttr.isReadOnly = true;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         val jAttr = getCorrespondingAttribute(uAttr)
         assertJavaModifiableFinal(jAttr, true)
@@ -120,14 +120,14 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
     @Test
     def testAttributeVisibility() {
         uAttr.visibility = VisibilityKind.PRIVATE_LITERAL;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         var jAttr = getCorrespondingAttribute(uAttr)
         assertJavaModifiableHasVisibility(jAttr, JavaVisibility.PRIVATE)
         assertAttributeEquals(uAttr, jAttr)
         
         uAttr.visibility = VisibilityKind.PACKAGE_LITERAL;
-        saveAndSynchronizeChanges(uClass);
+        propagate
         
         jAttr = getCorrespondingAttribute(uAttr)
         assertJavaModifiableHasVisibility(jAttr, JavaVisibility.PACKAGE)
@@ -137,7 +137,7 @@ class UmlToJavaAttributeTest extends UmlToJavaTransformationTest {
     @Test
     def testChangeAttributeType() {
         uAttr.type = pType
-        saveAndSynchronizeChanges(rootElement)
+        propagate
         
         val jClass = getCorrespondingClass(uClass)
         val jAttr = getCorrespondingAttribute(uAttr);
