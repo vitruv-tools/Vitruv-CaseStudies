@@ -1,11 +1,7 @@
-import java.util.List
 import org.palladiosimulator.pcm.repository.Repository
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Package
-import org.eclipse.xtext.xbase.lib.ObjectExtensions
-import org.eclipse.xtext.xbase.lib.BooleanExtensions
 import org.palladiosimulator.pcm.repository.CompositeDataType
-import java.util.Optional
 import org.eclipse.uml2.uml.Generalization
 
 import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
@@ -185,8 +181,8 @@ routine compositeDatatypeParent_DeleteMapping(repository::CompositeDataType type
 routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { { } return } } } }
-			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { { } return } } } } }
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null ) { { { } return } } } }
+			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { { { } return } } } } }
 		}
 	}
 }
@@ -194,7 +190,7 @@ routine compositeDatatypeParent_BidirectionalCheck(ecore::EObject affectedEObjec
 routine compositeDatatypeParent_ElementCreatedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
-			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } }
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null ) { var Generalization generalization_ = generalization__candidate { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } }
 			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } } }
 		}
 	}
@@ -223,7 +219,7 @@ routine compositeDatatypeParent_ElementDeletedCheck(ecore::EObject affectedEObje
 routine compositeDatatypeParent_ElementUpdatedCheck(ecore::EObject affectedEObject) {
 	action {
 		call {
-			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null && generalization__candidate instanceof Generalization ) { var Generalization generalization_ = generalization__candidate as Generalization { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } }
+			if ( affectedEObject instanceof Class ) { var Class class_ = affectedEObject for ( generalization__candidate : class_ . generalizations ) { if ( generalization__candidate !== null ) { var Generalization generalization_ = generalization__candidate { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } }
 			if ( affectedEObject instanceof Generalization ) { var Generalization generalization_ = affectedEObject { var class__candidate = generalization_ . eContainer { if ( class__candidate !== null && class__candidate instanceof Class ) { var Class class_ = class__candidate as Class { compositeDatatypeParent_CreateMapping ( class_ , generalization_ ) return } } } } }
 			compositeDatatypeParent_ElementDeletedCheck(affectedEObject)
 		}

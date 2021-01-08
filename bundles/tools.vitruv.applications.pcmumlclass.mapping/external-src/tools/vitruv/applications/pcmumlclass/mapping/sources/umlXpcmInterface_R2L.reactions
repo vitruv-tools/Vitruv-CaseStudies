@@ -1,11 +1,7 @@
-import java.util.List
 import org.eclipse.uml2.uml.Package
 import org.palladiosimulator.pcm.repository.OperationInterface
 import org.palladiosimulator.pcm.repository.Repository
-import org.eclipse.xtext.xbase.lib.ObjectExtensions
-import org.eclipse.xtext.xbase.lib.BooleanExtensions
 import org.eclipse.uml2.uml.Interface
-import java.util.Optional
 import org.eclipse.uml2.uml.Generalization
 
 import "http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" as repository
@@ -175,7 +171,7 @@ routine operationInterfaceParent_DeleteMapping(uml::Interface interface_, uml::G
 routine operationInterfaceParent_BidirectionalCheck(ecore::EObject affectedEObject, plain String as routineName) {
 	action {
 		call {
-			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( parentInterface__candidate : operationInterface_ . parentInterfaces__Interface ) { if ( parentInterface__candidate !== null && parentInterface__candidate instanceof OperationInterface ) { var OperationInterface parentInterface_ = parentInterface__candidate as OperationInterface { { } return } } } }
+			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface operationInterface_ = affectedEObject for ( parentInterface__candidate : operationInterface_ . parentInterfaces__Interface ) { if ( parentInterface__candidate !== null && parentInterface__candidate instanceof OperationInterface ) { { { } return } } } }
 			if ( affectedEObject instanceof OperationInterface ) { var OperationInterface parentInterface_ = affectedEObject for ( operationInterface__candidate : parentInterface_ . eCrossReferences ) { if ( operationInterface__candidate !== null && operationInterface__candidate instanceof OperationInterface ) { var OperationInterface operationInterface_ = operationInterface__candidate as OperationInterface if ( operationInterface_ . parentInterfaces__Interface . contains ( parentInterface_ ) ) { { } return } } } }
 		}
 	}
