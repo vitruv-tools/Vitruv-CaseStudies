@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
+import java.nio.file.Path
 
 class DatatypesTest extends PcmUmlClassTest{
 		static val TEST_COMPOSITE_DATATYPE = "TestCompositeType"
@@ -58,11 +59,14 @@ class DatatypesTest extends PcmUmlClassTest{
 		val pcmRepository = helper.createRepository
 		
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository 
+		return pcmRepository.clearResourcesAndReloadRoot 
 	}
 
 	@Test
@@ -72,10 +76,10 @@ class DatatypesTest extends PcmUmlClassTest{
 		startRecordingChanges(umlDatatypesPkg)
 		
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
-		saveAndSynchronizeChanges(umlDatatypesPkg)
+		propagate
 		
-		reloadResourceAndReturnRoot(umlDatatypesPkg)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
 		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class
@@ -91,10 +95,10 @@ class DatatypesTest extends PcmUmlClassTest{
 		var pcmCompositeType = RepositoryFactory.eINSTANCE.createCompositeDataType
 		pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
 		pcmRepository.dataTypes__Repository += pcmCompositeType
-		saveAndSynchronizeChanges(pcmCompositeType)
+		propagate
 		
-		reloadResourceAndReturnRoot(umlDatatypesPkg)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
 		pcmCompositeType = pcmRepository.dataTypes__Repository.head as CompositeDataType
@@ -112,10 +116,10 @@ class DatatypesTest extends PcmUmlClassTest{
 		var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE, false)
 		var umlCompositeTypeParentClass = umlDatatypesPkg.createOwnedClass(TEST_COMPOSITE_DATATYPE_PARENT, false)
 		umlCompositeTypeClass.createGeneralization(umlCompositeTypeParentClass)
-		saveAndSynchronizeChanges(umlDatatypesPkg)
+		propagate
 		
-		reloadResourceAndReturnRoot(umlDatatypesPkg)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlDatatypesPkg.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 		
 		umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class	
@@ -139,9 +143,9 @@ class DatatypesTest extends PcmUmlClassTest{
 		pcmCompositeTypeParent.entityName = TEST_COMPOSITE_DATATYPE_PARENT
 		pcmRepository.dataTypes__Repository += pcmCompositeTypeParent
 		pcmCompositeType.parentType_CompositeDataType += pcmCompositeTypeParent
-		saveAndSynchronizeChanges(pcmCompositeType)
+		propagate
 		
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType)
 			.findFirst[it.entityName == TEST_COMPOSITE_DATATYPE] as CompositeDataType

@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
+import java.nio.file.Path
 
 class RequiredRoleTest extends PcmUmlClassTest {
 	static val logger = Logger.getLogger(RequiredRoleTest)
@@ -69,19 +70,22 @@ class RequiredRoleTest extends PcmUmlClassTest {
 	}
 
 	def private Repository createRepository_Component_Interface() {
-		var pcmRepository = helper.createRepository
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
-		val pcmComponent =helper.createComponent(pcmRepository)
+		val pcmRepository = helper.createRepository
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
+		val pcmComponent = helper.createComponent(pcmRepository)
 		var pcmInterface = helper.createOperationInterface(pcmRepository)
-		saveAndSynchronizeChanges(pcmComponent)
-		saveAndSynchronizeChanges(pcmInterface)		
+		propagate
+		propagate		
 		val umlComponentImpl = helper.getModifiableCorr(pcmComponent, Class, TagLiterals.IPRE__IMPLEMENTATION)
 		val umlInterface = helper.getModifiableCorr(pcmInterface, Interface, TagLiterals.INTERFACE_TO_INTERFACE)
 		val umlOperation= helper.getModifiableCorr(pcmComponent, Operation, TagLiterals.IPRE__CONSTRUCTOR)
 		assertNotNull(umlComponentImpl)
 		assertNotNull(umlInterface)
 		assertNotNull(umlOperation)
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository
+		return pcmRepository.clearResourcesAndReloadRoot
 	}
 
 	@Disabled("Not working properly yet")
@@ -94,11 +98,11 @@ class RequiredRoleTest extends PcmUmlClassTest {
 		var pcmComponent = helper.getPcmComponent(pcmRepository)
 		pcmComponent.requiredRoles_InterfaceRequiringEntity += pcmRequired
 
-		saveAndSynchronizeChanges(pcmRequired)
+		propagate
 		val umlRequiredInstance = helper.getCorr(pcmRequired, Property, TagLiterals.REQUIRED_ROLE__PROPERTY)
 		assertNotNull(umlRequiredInstance)
 		
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		
 		pcmComponent = helper.getPcmComponent(pcmRepository)
 		assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.size,
@@ -123,7 +127,7 @@ class RequiredRoleTest extends PcmUmlClassTest {
 		//property in implementation[ownedAttribute]  	,	interface in property[type]		
 		var umlRequiredInstanceField = umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
 		//umlRequiredInstanceField.type = umlInterface
-		saveAndSynchronizeChanges(umlComponentImpl)
+		propagate
 		
 		//startRecordingChanges(umlConstructor)		
 		//	parameter in operation[ownedParameter]  , interface in parameter[type]
@@ -131,10 +135,10 @@ class RequiredRoleTest extends PcmUmlClassTest {
 			umlInterface)
 		//umlConstructorParameter.type =  umlInterface
 		logger.debug('should create mapping now')	
-		saveAndSynchronizeChanges(umlConstructorParameter)
+		propagate
 		
-		reloadResourceAndReturnRoot(umlConstructorParameter)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlConstructorParameter.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
 		umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
 		assertEquals(1, umlConstructor.ownedParameters.size,

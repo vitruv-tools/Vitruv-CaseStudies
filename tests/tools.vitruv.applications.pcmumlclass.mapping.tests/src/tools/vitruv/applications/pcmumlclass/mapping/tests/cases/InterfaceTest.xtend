@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 
 class InterfaceTest extends PcmUmlClassTest {
 	static val TEST_INTERFACE_NAME = "TestInterface"
@@ -56,15 +57,18 @@ class InterfaceTest extends PcmUmlClassTest {
 	}
 
 	def private Repository createRepositoryConcept() {
-		var pcmRepository = helper.createRepository
+		val pcmRepository = helper.createRepository
 
 		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-		createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
 
 		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-		return reloadResourceAndReturnRoot(pcmRepository) as Repository
+		return pcmRepository.clearResourcesAndReloadRoot
 	}
 
 	@Test
@@ -74,10 +78,10 @@ class InterfaceTest extends PcmUmlClassTest {
 		startRecordingChanges(umlContractsPkg)
 
 		var mUmlInterface = umlContractsPkg.createOwnedInterface(TEST_INTERFACE_NAME)
-		saveAndSynchronizeChanges(umlContractsPkg)
+		propagate
 
-		reloadResourceAndReturnRoot(umlContractsPkg)
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		umlContractsPkg.clearResourcesAndReloadRoot
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		umlContractsPkg = helper.getUmlContractsPackage(pcmRepository)
 
 		mUmlInterface = umlContractsPkg.packagedElements.head as Interface
@@ -92,9 +96,9 @@ class InterfaceTest extends PcmUmlClassTest {
 		var mPcmInterface = RepositoryFactory.eINSTANCE.createOperationInterface
 		mPcmInterface.entityName = TEST_INTERFACE_NAME
 		pcmRepository.interfaces__Repository += mPcmInterface
-		saveAndSynchronizeChanges(mPcmInterface)
+		propagate
 
-		pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 		mPcmInterface = pcmRepository.interfaces__Repository.head as OperationInterface
 		assertNotNull(mPcmInterface)
 		checkInterfaceConcept(mPcmInterface)
