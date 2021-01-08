@@ -14,6 +14,7 @@ import tools.vitruv.framework.correspondence.CorrespondenceModel
 import tools.vitruv.framework.correspondence.CorrespondenceModelUtil
 
 import static org.junit.jupiter.api.Assertions.*
+import java.nio.file.Path
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -77,11 +78,14 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
         val pcmRepository = helper.createRepository
 
         userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+        	contents += pcmRepository
+        ]
+        propagate
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-        return reloadResourceAndReturnRoot(pcmRepository) as Repository
+        return pcmRepository.clearResourcesAndReloadRoot
     }
 
     @Test
@@ -92,10 +96,10 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
 
         var umlCompositeTypeClass = umlDatatypesPkg.createOwnedClass(CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE, false)
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
-        saveAndSynchronizeChanges(umlDatatypesPkg)
+        propagate
 
-        reloadResourceAndReturnRoot(umlDatatypesPkg)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        umlDatatypesPkg.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 
         umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == CompositeDataTypeConceptTest.TEST_COMPOSITE_DATATYPE] as Class
@@ -112,10 +116,10 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
         pcmCompositeType.entityName = TEST_COMPOSITE_DATATYPE
         pcmRepository.dataTypes__Repository += pcmCompositeType
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
-        saveAndSynchronizeChanges(pcmCompositeType)
+        propagate
 
-        reloadResourceAndReturnRoot(umlDatatypesPkg)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        umlDatatypesPkg.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 
         pcmCompositeType = pcmRepository.dataTypes__Repository.head as CompositeDataType
@@ -134,10 +138,10 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
         umlCompositeTypeClass.createGeneralization(umlCompositeTypeParentClass)
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
-        saveAndSynchronizeChanges(umlDatatypesPkg)
+		propagate
 
-        reloadResourceAndReturnRoot(umlDatatypesPkg)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        umlDatatypesPkg.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         umlDatatypesPkg = helper.getUmlDataTypesPackage(pcmRepository)
 
         umlCompositeTypeClass = umlDatatypesPkg.packagedElements.findFirst[it.name == TEST_COMPOSITE_DATATYPE] as Class
@@ -162,9 +166,9 @@ class CompositeDataTypeConceptTest extends TransitiveChangeTest {
         pcmCompositeType.parentType_CompositeDataType += pcmCompositeTypeParent
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
         userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_COMPOSITE_DATA_TYPE.selection)
-        saveAndSynchronizeChanges(pcmCompositeType)
+        propagate
 
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
         pcmCompositeType = pcmRepository.dataTypes__Repository.filter(CompositeDataType).findFirst[it.entityName == TEST_COMPOSITE_DATATYPE] as CompositeDataType
         assertNotNull(pcmCompositeType)

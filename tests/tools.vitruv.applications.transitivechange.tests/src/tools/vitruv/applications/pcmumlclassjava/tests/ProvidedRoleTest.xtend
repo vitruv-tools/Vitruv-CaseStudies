@@ -11,6 +11,7 @@ import tools.vitruv.applications.pcmumlclassjava.TransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
+import java.nio.file.Path
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -67,11 +68,14 @@ class ProvidedRoleTest extends TransitiveChangeTest {
         helper.createOperationInterface(pcmRepository)
 
         userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+        	contents += pcmRepository
+        ]
+        propagate
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-        return reloadResourceAndReturnRoot(pcmRepository) as Repository
+        return pcmRepository.clearResourcesAndReloadRoot
     }
 
     @Test
@@ -83,8 +87,8 @@ class ProvidedRoleTest extends TransitiveChangeTest {
         pcmProvided.providedInterface__OperationProvidedRole = helper.getPcmOperationInterface(pcmRepository)
         helper.getPcmComponent(pcmRepository).providedRoles_InterfaceProvidingEntity += pcmProvided
 
-        saveAndSynchronizeChanges(pcmProvided)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
         pcmProvided = helper.getPcmComponent(pcmRepository).providedRoles_InterfaceProvidingEntity.head as OperationProvidedRole
         checkProvidedRoleConcept(pcmProvided)
@@ -97,9 +101,9 @@ class ProvidedRoleTest extends TransitiveChangeTest {
 
         var umlRealization = helper.getUmlComponentImpl(pcmRepository).createInterfaceRealization(PROVIDED_ROLE_NAME, helper.getUmlInterface(pcmRepository))
 
-        saveAndSynchronizeChanges(umlRealization)
-        reloadResourceAndReturnRoot(umlRealization)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        umlRealization.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
         val umlInterface = helper.getUmlInterface(pcmRepository) // necessary that it is final for Lambda
         umlRealization = helper.getUmlComponentImpl(pcmRepository).interfaceRealizations.findFirst[it.contract == umlInterface]

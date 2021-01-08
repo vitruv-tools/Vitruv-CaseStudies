@@ -17,6 +17,7 @@ import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
+import java.nio.file.Path
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -81,11 +82,14 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
 
         userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
         userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
-        createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+        	contents += pcmRepository
+        ]
+        propagate
         assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
         assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-        return reloadResourceAndReturnRoot(pcmRepository) as Repository
+        return pcmRepository.clearResourcesAndReloadRoot
     }
 
     private def void testCreateParameterConcept_UML(Repository inPcmRepository, Type umlType, int lower, int upper) {
@@ -100,10 +104,10 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
         umlParameter.lower = lower
         umlParameter.upper = upper
         userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION)
-        saveAndSynchronizeChanges(umlParameter)
+        propagate
 
-        reloadResourceAndReturnRoot(umlParameter)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        umlParameter.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         pcmInterface = helper.getPcmOperationInterface(pcmRepository)
         umlOperation = helper.getUmlOperation(pcmInterface)
 
@@ -146,8 +150,8 @@ class ParameterConceptTest extends LinearTransitiveChangeTest {
         pcmParameter.dataType__Parameter = pcmType
         pcmSignature.parameters__OperationSignature += pcmParameter
         userInteraction.addNextSingleSelection(ARRAY_LIST_SELECTION) // Mock user input
-        saveAndSynchronizeChanges(pcmParameter)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
         pcmInterface = helper.getPcmOperationInterface(pcmRepository)
         pcmSignature = helper.getPcmOperationSignature(pcmInterface)
 

@@ -14,6 +14,7 @@ import tools.vitruv.applications.pcmumlclassjava.LinearTransitiveChangeTest
 import tools.vitruv.framework.correspondence.CorrespondenceModel
 
 import static org.junit.jupiter.api.Assertions.*
+import java.nio.file.Path
 
 /**
  * This class is based on the correlating PCM/UML test class. It is extended to include Java in the network.
@@ -83,14 +84,17 @@ class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
     }
 
     def private Repository createRepository_Component_Interface() {
-        var pcmRepository = helper.createRepository
+        val pcmRepository = helper.createRepository
         helper.createComponent(pcmRepository)
         helper.createOperationInterface(pcmRepository)
 
         userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        createAndSynchronizeModel(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE, pcmRepository)
+        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+        	contents += pcmRepository
+        ]
+        propagate
 
-        return reloadResourceAndReturnRoot(pcmRepository) as Repository
+        return pcmRepository.clearResourcesAndReloadRoot
     }
 
     @Test
@@ -101,8 +105,8 @@ class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
         pcmRequired.requiredInterface__OperationRequiredRole = helper.getPcmOperationInterface(pcmRepository)
         helper.getPcmComponent(pcmRepository).requiredRoles_InterfaceRequiringEntity += pcmRequired
 
-        saveAndSynchronizeChanges(pcmRequired)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
         val pcmComponent = helper.getPcmComponent(pcmRepository)
         assertEquals(1, pcmComponent.requiredRoles_InterfaceRequiringEntity.size, "There should be exactly one RequiredRole since only one was created by the test case.")
@@ -119,9 +123,9 @@ class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
 
         var umlConstructorParameter = umlConstructor.createOwnedParameter(REQUIRED_ROLE_NAME, helper.getUmlInterface(pcmRepository))
 
-        saveAndSynchronizeChanges(umlConstructorParameter)
-        reloadResourceAndReturnRoot(umlConstructorParameter)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        umlConstructorParameter.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
         umlConstructor = helper.getUmlComponentConstructor(pcmRepository)
         assertEquals(1, umlConstructor.ownedParameters.size, "There should be exactly one Parameter for one RequiredRole created by the test case.")
@@ -139,9 +143,9 @@ class RequiredRoleConceptTest extends LinearTransitiveChangeTest {
 
         var umlRequiredInstanceField = umlComponentImpl.createOwnedAttribute(REQUIRED_ROLE_NAME, umlInterface)
 
-        saveAndSynchronizeChanges(umlRequiredInstanceField)
-        reloadResourceAndReturnRoot(umlRequiredInstanceField)
-        pcmRepository = reloadResourceAndReturnRoot(pcmRepository) as Repository
+        propagate
+        umlRequiredInstanceField.clearResourcesAndReloadRoot
+        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
         umlComponentImpl = helper.getUmlComponentImpl(pcmRepository)
         assertEquals(1, umlComponentImpl.ownedAttributes.size, "There should be exactly one Property for one RequiredRole created by the test case.")
