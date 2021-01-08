@@ -62,7 +62,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
                 Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME);
         opr.setRequiredInterface__OperationRequiredRole(newInterface);
         opr.setRequiringEntity_RequiredRole(newBasicComponent);
-        super.saveAndSynchronizeChanges(repo);
+        propagate();
 
        	assertOperationRequiredRole(opr);
     }
@@ -72,7 +72,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
         final OperationRequiredRole opr = this.createAndSyncRepoBasicCompInterfaceAndOperationReqiredRole();
 
         opr.setEntityName("operationReqRoleNameChange");
-        super.saveAndSynchronizeChanges(opr);
+        propagate();
 
         this.assertOperationRequiredRole(opr);
     }
@@ -85,7 +85,7 @@ public class OperationRequiredRoleMappingTransformationTest extends Pcm2JavaTran
         final OperationInterface newInterface = this.addInterfaceToReposiotryAndSync(repo,
                 Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
         opr.setRequiredInterface__OperationRequiredRole(newInterface);
-        super.saveAndSynchronizeChanges(opr);
+        propagate();
 
         this.assertOperationRequiredRole(opr);
     }

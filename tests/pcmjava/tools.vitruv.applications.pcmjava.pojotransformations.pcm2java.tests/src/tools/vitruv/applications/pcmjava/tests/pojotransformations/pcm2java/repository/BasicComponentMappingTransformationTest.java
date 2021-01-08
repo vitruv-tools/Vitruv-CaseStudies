@@ -28,7 +28,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
 
         basicComponent.setEntityName(Pcm2JavaTestUtils.BASIC_COMPONENT_NAME + Pcm2JavaTestUtils.RENAME);
-        this.saveAndSynchronizeChanges(repo);
+        propagate();
 
         this.assertBasicComponentCorrespondences(basicComponent);
     }
@@ -39,7 +39,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
         final BasicComponent basicComponent = this.addBasicComponentAndSync(repo);
 
         EcoreUtil.delete(basicComponent);
-        super.saveAndSynchronizeChanges(repo);
+        propagate();
 
         this.assertEmptyCorrespondence(basicComponent);
         this.assertCompilationUnitForBasicComponentDeleted(basicComponent);
@@ -52,7 +52,7 @@ public class BasicComponentMappingTransformationTest extends Pcm2JavaTransformat
         final BasicComponent basicComponent2 = this.addBasicComponentAndSync(repo, "SecondBasicComponent");
 
         EcoreUtil.delete(basicComponent);
-        super.saveAndSynchronizeChanges(repo);
+        propagate();
 
         this.assertEmptyCorrespondence(basicComponent);
         this.assertBasicComponentCorrespondences(basicComponent2);

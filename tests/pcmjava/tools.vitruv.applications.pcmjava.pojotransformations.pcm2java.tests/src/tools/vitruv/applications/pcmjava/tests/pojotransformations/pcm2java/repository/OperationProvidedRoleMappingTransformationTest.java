@@ -36,7 +36,7 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
 				Pcm2JavaTestUtils.INTERFACE_NAME + Pcm2JavaTestUtils.RENAME);
 
 		operationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
-		super.saveAndSynchronizeChanges(repo);
+		propagate();
 
 		this.assertOperationProvidedRole(operationProvidedRole);
 	}
@@ -50,7 +50,7 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
 		final BasicComponent newBasicComponent = this.addBasicComponentAndSync(repo, "NewProvidingComponent");
 
 		operationProvidedRole.setProvidingEntity_ProvidedRole(newBasicComponent);
-		super.saveAndSynchronizeChanges(repo);
+		propagate();
 
 		this.assertOperationProvidedRole(operationProvidedRole);
 	}
@@ -71,7 +71,7 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
 		newOperationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
 		newOperationProvidedRole.setProvidingEntity_ProvidedRole(basicComponent);
 		basicComponent.getProvidedRoles_InterfaceProvidingEntity().add(newOperationProvidedRole);
-		super.saveAndSynchronizeChanges(repo);
+		propagate();
 
 		this.assertOperationProvidedRole(operationProvidedRole);
 		this.assertOperationProvidedRole(newOperationProvidedRole);
@@ -92,10 +92,10 @@ public class OperationProvidedRoleMappingTransformationTest extends Pcm2JavaTran
 		newOperationProvidedRole.setProvidedInterface__OperationProvidedRole(newInterface);
 		newOperationProvidedRole.setProvidingEntity_ProvidedRole(basicComponent);
 		basicComponent.getProvidedRoles_InterfaceProvidingEntity().add(newOperationProvidedRole);
-		super.saveAndSynchronizeChanges(repo);
+		propagate();
 
 		basicComponent.getProvidedRoles_InterfaceProvidingEntity().remove(newOperationProvidedRole);
-		super.saveAndSynchronizeChanges(repo);
+		propagate();
 
 		this.assertOperationProvidedRole(operationProvidedRole);
 		final CompilationUnit jaMoPPCu = claimOne(CorrespondenceModelUtil

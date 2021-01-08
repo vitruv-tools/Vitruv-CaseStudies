@@ -45,7 +45,7 @@ public class SEFFMappingTransformationTest extends Pcm2JavaTransformationTest {
 		final ResourceDemandingSEFF rdSEFF = this.createAndSyncSeff(bc1, opSignature);
 
 		opSignature.setEntityName(Pcm2JavaTestUtils.OPERATION_SIGNATURE_1_NAME + Pcm2JavaTestUtils.RENAME);
-		super.saveAndSynchronizeChanges(opInterface);
+		propagate();
 
 		this.assertSEFFCorrespondenceToMethod(rdSEFF, opSignature.getEntityName());
 	}

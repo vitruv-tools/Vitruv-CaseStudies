@@ -23,7 +23,7 @@ public class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransform
         final InnerDeclaration innerDec = this.createAndSyncRepositoryCompositeDataTypeAndInnerDeclaration();
 
         innerDec.setEntityName(Pcm2JavaTestUtils.INNER_DEC_NAME + Pcm2JavaTestUtils.RENAME);
-        super.saveAndSynchronizeChanges(innerDec);
+        propagate();
 
         this.assertInnerDeclaration(innerDec);
     }
@@ -35,7 +35,7 @@ public class InnerDeclarationMappingTransformationTest extends Pcm2JavaTransform
         final Repository repo = innerDec.getCompositeDataType_InnerDeclaration().getRepository__DataType();
         final PrimitiveDataType newPDT = createPrimitiveDataType(PrimitiveTypeEnum.STRING, repo);
         innerDec.setDatatype_InnerDeclaration(newPDT);
-        super.saveAndSynchronizeChanges(innerDec);
+        propagate();
 
         this.assertInnerDeclaration(innerDec);
     }
