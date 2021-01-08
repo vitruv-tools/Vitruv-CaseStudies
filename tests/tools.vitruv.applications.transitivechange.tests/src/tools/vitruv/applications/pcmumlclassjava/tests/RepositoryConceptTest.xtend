@@ -25,164 +25,172 @@ import java.nio.file.Path
  */
 class RepositoryConceptTest extends TransitiveChangeTest {
 
-    def protected static checkRepositoryConcept(
-        CorrespondenceModel cm,
-        Repository pcmRepo,
-        Package umlRepositoryPkg,
-        Package umlContractsPkg,
-        Package umlDatatypesPkg
-    ) {
-        // correspondence constraints
-        assertTrue(corresponds(cm, pcmRepo, umlRepositoryPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
-        assertTrue(corresponds(cm, pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE))
-        assertTrue(corresponds(cm, pcmRepo, umlDatatypesPkg, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE))
-        // containment constraints
-        assertTrue(EcoreUtil.equals(umlContractsPkg.nestingPackage, umlRepositoryPkg))
-        assertTrue(EcoreUtil.equals(umlDatatypesPkg.nestingPackage, umlRepositoryPkg))
-        // attribute constraints
-        assertTrue(umlRepositoryPkg.name == pcmRepo.entityName.toFirstLower)
-        assertTrue(umlRepositoryPkg.name.toFirstUpper == pcmRepo.entityName)
-        assertTrue(umlContractsPkg.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME)
-        assertTrue(umlDatatypesPkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME)
-    }
+	def protected static checkRepositoryConcept(
+		CorrespondenceModel cm,
+		Repository pcmRepo,
+		Package umlRepositoryPkg,
+		Package umlContractsPkg,
+		Package umlDatatypesPkg
+	) {
+		// correspondence constraints
+		assertTrue(corresponds(cm, pcmRepo, umlRepositoryPkg, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE))
+		assertTrue(corresponds(cm, pcmRepo, umlContractsPkg, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE))
+		assertTrue(corresponds(cm, pcmRepo, umlDatatypesPkg, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE))
+		// containment constraints
+		assertTrue(EcoreUtil.equals(umlContractsPkg.nestingPackage, umlRepositoryPkg))
+		assertTrue(EcoreUtil.equals(umlDatatypesPkg.nestingPackage, umlRepositoryPkg))
+		// attribute constraints
+		assertTrue(umlRepositoryPkg.name == pcmRepo.entityName.toFirstLower)
+		assertTrue(umlRepositoryPkg.name.toFirstUpper == pcmRepo.entityName)
+		assertTrue(umlContractsPkg.name == DefaultLiterals.CONTRACTS_PACKAGE_NAME)
+		assertTrue(umlDatatypesPkg.name == DefaultLiterals.DATATYPES_PACKAGE_NAME)
+	}
 
-    def protected checkUmlRepositoryPackage(Package umlRepositoryPkg) {
-        assertTrue(umlRepositoryPkg !== null)
-        val pcmRepository = helper.getModifiableCorr(umlRepositoryPkg, Repository, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
-        assertTrue(pcmRepository !== null)
-        checkPcmRepository(pcmRepository)
-        checkJavaRepositoryPackage(umlRepositoryPkg)
-    }
+	def protected checkUmlRepositoryPackage(Package umlRepositoryPkg) {
+		assertTrue(umlRepositoryPkg !== null)
+		val pcmRepository = helper.getModifiableCorr(umlRepositoryPkg, Repository,
+			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+		assertTrue(pcmRepository !== null)
+		checkPcmRepository(pcmRepository)
+		checkJavaRepositoryPackage(umlRepositoryPkg)
+	}
 
-    def protected checkPcmRepository(Repository pcmRepository) {
-        assertTrue(pcmRepository !== null)
-        val umlRepositoryPkg = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
-        val umlContractsPkg = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
-        val umlDatatypesPkg = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
-        assertTrue(umlRepositoryPkg !== null)
-        assertTrue(umlContractsPkg !== null)
-        assertTrue(umlDatatypesPkg !== null)
-        checkRepositoryConcept(correspondenceModel, pcmRepository, umlRepositoryPkg, umlContractsPkg, umlDatatypesPkg)
-        checkJavaRepositoryPackage(umlRepositoryPkg)
-    }
+	def protected checkPcmRepository(Repository pcmRepository) {
+		assertTrue(pcmRepository !== null)
+		val umlRepositoryPkg = helper.getModifiableCorr(pcmRepository, Package,
+			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+		val umlContractsPkg = helper.getModifiableCorr(pcmRepository, Package,
+			TagLiterals.REPOSITORY_TO_CONTRACTS_PACKAGE)
+		val umlDatatypesPkg = helper.getModifiableCorr(pcmRepository, Package,
+			TagLiterals.REPOSITORY_TO_DATATYPES_PACKAGE)
+		assertTrue(umlRepositoryPkg !== null)
+		assertTrue(umlContractsPkg !== null)
+		assertTrue(umlDatatypesPkg !== null)
+		checkRepositoryConcept(correspondenceModel, pcmRepository, umlRepositoryPkg, umlContractsPkg, umlDatatypesPkg)
+		checkJavaRepositoryPackage(umlRepositoryPkg)
+	}
 
-    /**
-     * Checks whether the Java package structure fits to the UML package structure (assumes UML is correct)
-     */
-    def protected checkJavaRepositoryPackage(Package umlRepositoryPackage) {
-        umlRepositoryPackage.checkJavaPackage
-        umlRepositoryPackage.nestedPackages.forEach[checkJavaPackage]
+	/**
+	 * Checks whether the Java package structure fits to the UML package structure (assumes UML is correct)
+	 */
+	def protected checkJavaRepositoryPackage(Package umlRepositoryPackage) {
+		umlRepositoryPackage.checkJavaPackage
+		umlRepositoryPackage.nestedPackages.forEach[checkJavaPackage]
 
-        val javaRepositoryPackage = getFirstCorrespondingObject(umlRepositoryPackage, org.emftext.language.java.containers.Package)
-        javaRepositoryPackage.checkUmlPackage
-    }
+		val javaRepositoryPackage = getFirstCorrespondingObject(umlRepositoryPackage,
+			org.emftext.language.java.containers.Package)
+		javaRepositoryPackage.checkUmlPackage
+	}
 
-    @Test
-    def void testCreateRepositoryConcept_UML() {
-        val umlModel = UMLFactory.eINSTANCE.createModel() => [
-        	name = "umlModel"
-        ]
-        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)).startRecordingChanges => [
-        	contents += umlModel
-        ]
-        propagate
-        assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+	@Test
+	def void testCreateRepositoryConcept_UML() {
+		val umlModel = UMLFactory.eINSTANCE.createModel() => [
+			name = "umlModel"
+		]
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)).startRecordingChanges => [
+			contents += umlModel
+		]
+		propagate
+		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-        var umlRepositoryPkg = umlModel.createNestedPackage("testCbsRepository")
+		var umlRepositoryPkg = umlModel.createNestedPackage("testCbsRepository")
 
-        userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
-        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
-        propagate
-        assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextSingleSelection(DefaultLiterals.USER_DISAMBIGUATE_REPOSITORY_SYSTEM__REPOSITORY)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
+		propagate
+		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
 
-        umlRepositoryPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.head
-        assertTrue(umlRepositoryPkg.name == "testCbsRepository")
+		umlRepositoryPkg = umlModel.clearResourcesAndReloadRoot.nestedPackages.head
+		assertTrue(umlRepositoryPkg.name == "testCbsRepository")
 
-        checkUmlRepositoryPackage(umlRepositoryPkg)
-    }
+		checkUmlRepositoryPackage(umlRepositoryPkg)
+	}
 
-    @Test
-    def void testCreateRepositoryConcept_PCM() {
-        val pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
+	@Test
+	def void testCreateRepositoryConcept_PCM() {
+		val pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
 
-        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-        	contents += pcmRepository
-        ]
-        propagate
-        assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-        assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += pcmRepository
+		]
+		propagate
+		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-        checkPcmRepository(pcmRepository.clearResourcesAndReloadRoot)
-    }
+		checkPcmRepository(pcmRepository.clearResourcesAndReloadRoot)
+	}
 
-    @Test
-    def void testRenameRepositoryConcept_PCM() {
-        var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
-        val initialRepository = pcmRepository
+	@Test
+	def void testRenameRepositoryConcept_PCM() {
+		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository()
+		val initialRepository = pcmRepository
 
-        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
-        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-        	contents += initialRepository
-        ]
-        propagate
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += initialRepository
+		]
+		propagate
 
-        pcmRepository.entityName = "Pcm2UmlNameChange"
-        propagate
-        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
+		pcmRepository.entityName = "Pcm2UmlNameChange"
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
-        val newName = "pcm2UmlNameChange_2" // should be synchronized to upper case
-        pcmRepository.entityName = newName
-        userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
-        propagate
-        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
+		val newName = "pcm2UmlNameChange_2" // should be synchronized to upper case
+		pcmRepository.entityName = newName
+		userInteraction.addNextSingleSelection(Java2PcmUserSelection.SELECT_NOTHING_DECIDE_LATER.selection)
+		propagate
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
 
-        assertTrue(pcmRepository.entityName == newName.toFirstUpper)
-        checkPcmRepository(pcmRepository)
+		assertTrue(pcmRepository.entityName == newName.toFirstUpper)
+		checkPcmRepository(pcmRepository)
 
-        // There should be no Java packages:
-        var umlRepositoryPackage = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
-        var umlModel = umlRepositoryPackage.nestingPackage
-        umlModel.checkNumberOfJavaPackages
-    }
+		// There should be no Java packages:
+		var umlRepositoryPackage = helper.getModifiableCorr(pcmRepository, Package,
+			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+		var umlModel = umlRepositoryPackage.nestingPackage
+		umlModel.checkNumberOfJavaPackages
+	}
 
-    @Test
-    def void testDeleteRepositoryConcept_PCM() {
-        var pcmRepository = RepositoryFactory.eINSTANCE.createRepository() => [
-        	entityName = "testCbsRepository" // has to be capitalized via round-trip
-        ]
-        val initialRepository = pcmRepository
-        userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
-        	contents += initialRepository
-        ]
-        propagate
-        assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-        assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+	@Test
+	def void testDeleteRepositoryConcept_PCM() {
+		var pcmRepository = RepositoryFactory.eINSTANCE.createRepository() => [
+			entityName = "testCbsRepository" // has to be capitalized via round-trip
+		]
+		val initialRepository = pcmRepository
+		userInteraction.addNextTextInput(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).startRecordingChanges => [
+			contents += initialRepository
+		]
+		propagate
+		assertModelExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
 
-        pcmRepository = pcmRepository.clearResourcesAndReloadRoot
-        assertTrue(pcmRepository.entityName == "TestCbsRepository")
-        checkPcmRepository(pcmRepository)
+		pcmRepository = pcmRepository.clearResourcesAndReloadRoot
+		assertTrue(pcmRepository.entityName == "TestCbsRepository")
+		checkPcmRepository(pcmRepository)
 
-        var umlRepositoryPackage = helper.getModifiableCorr(pcmRepository, Package, TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
-        var umlModel = umlRepositoryPackage.nestingPackage
+		var umlRepositoryPackage = helper.getModifiableCorr(pcmRepository, Package,
+			TagLiterals.REPOSITORY_TO_REPOSITORY_PACKAGE)
+		var umlModel = umlRepositoryPackage.nestingPackage
 
-        userInteraction.addNextConfirmationInput(true)
-        resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).propagate[
-        	delete(null)
-        ]
+		userInteraction.addNextConfirmationInput(true)
+		resourceAt(Path.of(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)).propagate [
+			delete(null)
+		]
 
-        assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
-        assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
-        // before the following reload, the mUmlModel instance will be out of synch with the vsum 
-        assertFalse(umlModel?.packagedElements.empty)
-        umlModel = umlModel.clearResourcesAndReloadRoot
-        assertTrue(umlModel?.packagedElements.empty)
+		assertModelNotExists(PcmUmlClassApplicationTestHelper.PCM_MODEL_FILE)
+		assertModelExists(PcmUmlClassApplicationTestHelper.UML_MODEL_FILE)
+		// before the following reload, the mUmlModel instance will be out of synch with the vsum 
+		assertFalse(umlModel?.packagedElements.empty)
+		umlModel = umlModel.clearResourcesAndReloadRoot
+		assertTrue(umlModel?.packagedElements.empty)
 
-        // There should be no Java packages:
-        val allJavaPackages = typeof(org.emftext.language.java.containers.Package).getCorrespondingObjectsOfClass
-        assertEquals(umlModel?.packagedElements.size, allJavaPackages.size, "Too many Java packages: " + allJavaPackages)
-    }
+		// There should be no Java packages:
+		val allJavaPackages = typeof(org.emftext.language.java.containers.Package).getCorrespondingObjectsOfClass
+		assertEquals(umlModel?.packagedElements.size, allJavaPackages.size,
+			"Too many Java packages: " + allJavaPackages)
+	}
 }
