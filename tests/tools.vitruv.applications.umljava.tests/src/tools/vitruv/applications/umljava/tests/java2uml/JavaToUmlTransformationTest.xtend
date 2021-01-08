@@ -36,7 +36,7 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	}
 
 	override protected getChangePropagationSpecifications() {
-		return #[new JavaToUmlChangePropagationSpecification()];
+		return #[new JavaToUmlChangePropagationSpecification()]
 	}
 
 	/**
@@ -53,11 +53,11 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	 */
 	def protected createJavaClassWithCompilationUnit(String cName, JavaVisibility visibility, boolean abstr,
 		boolean fin) {
-		val cu = createCompilationUnitAsModel(cName);
+		val cu = createCompilationUnitAsModel(cName)
 		val cls = createJavaClass(cName, visibility, abstr, fin)
-		cu.classifiers += cls;
+		cu.classifiers += cls
 		propagate
-		return cls;
+		return cls
 	}
 
 	/**
@@ -69,7 +69,7 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	 * @return the new Java-Class
 	 */
 	def protected createSimpleJavaClassWithCompilationUnit(String name) {
-		return createJavaClassWithCompilationUnit(name, JavaVisibility.PUBLIC, false, false);
+		return createJavaClassWithCompilationUnit(name, JavaVisibility.PUBLIC, false, false)
 	}
 
 	/**
@@ -81,7 +81,7 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	 * @return the new java interface
 	 */
 	def protected createSimpleJavaInterfaceWithCompilationUnit(String name) {
-		return createJavaInterfaceWithCompilationUnit(name, null);
+		return createJavaInterfaceWithCompilationUnit(name, null)
 	}
 
 	/**
@@ -94,11 +94,11 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 	 * @return the new java interface
 	 */
 	def protected createJavaInterfaceWithCompilationUnit(String name, List<Interface> superInterfaces) {
-		val cu = createCompilationUnitAsModel(name);
+		val cu = createCompilationUnitAsModel(name)
 		val jI = createJavaInterface(name, superInterfaces)
-		cu.classifiers += jI;
+		cu.classifiers += jI
 		propagate
-		return jI;
+		return jI
 	}
 
 	/**
@@ -158,7 +158,7 @@ abstract class JavaToUmlTransformationTest extends AbstractUmlJavaTest {
 		String elementName) {
 		val model = registeredUmlModel
 		if(model === null) return new ArrayList<org.eclipse.uml2.uml.PackageableElement>()
-		return model.packagedElements.filter(type).filter[it.name == elementName].toList;
+		return model.packagedElements.filter(type).filter[it.name == elementName].toList
 	}
 
 	/**

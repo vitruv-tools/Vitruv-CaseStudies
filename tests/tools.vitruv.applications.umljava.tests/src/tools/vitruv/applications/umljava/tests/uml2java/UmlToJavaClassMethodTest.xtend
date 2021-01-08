@@ -26,202 +26,202 @@ import static org.junit.jupiter.api.Assertions.assertEquals
  * @author Fei
  */
 class UmlToJavaClassMethodTest extends UmlToJavaTransformationTest {
-    static val CLASS_NAME = "ClassName";
-    static val TYPE_NAME = "TypeName";
-    static val OPERATION_NAME = "classMethod";
-    static val STANDARD_OPERATION_NAME = "standardMethod";
-    static val OPERATION_RENAME = "classMethodRenamed";
-    static val PARAMETER_NAME = "parameterName";
-    static val DATATYPE_NAME = "DataTypeName";
-    
-    static var Class uClass
-    static var Class typeClass
-    static var Parameter uParam
-    static var PrimitiveType pType
-    static var Operation uOperation
-    
-    /**
-     * Initializes two uml classes and a primitive type. One uml class contains 
-     * an operation with a parameter.
-     */
-    @BeforeEach
-    def void before() {
-        uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
-        typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
-        pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
-        uParam = createUmlParameter(PARAMETER_NAME, pType)
-        uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
-        uClass.ownedOperations += uOperation;
-        rootElement.packagedElements += uClass;
-        rootElement.packagedElements += typeClass;
-        propagate
-    }
-    
-    /**
-     * Tests if creating a uml operation also causes the creating of an corresponding
-     * java method.
-     */
-    @Test
-    def void testCreateClassMethod() {
-        val operation = uClass.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
-        propagate
-        
-        val jMethod = getCorrespondingClassMethod(operation)
-        val jClass = getCorrespondingClass(uClass)
-        assertNotNull(jMethod)
-        assertJavaClassMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
-        	TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
-        assertClassMethodEquals(operation, jMethod)
-    }
-    
-    /**
-     * Tests the change of the uml method return type. Checks if
-     * the corresponding java method adapated the corresponding type.
-     */
-    @Test
-    def void testChangeReturnType() {
-        uOperation.type = typeClass;
-        propagate
-        
-        val jMethod = getCorrespondingClassMethod(uOperation)
-        val jTypeClass = getCorrespondingClass(typeClass)
-        assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertClassMethodEquals(uOperation, jMethod)
-    }
-    
-    /**
-     * Tests if renaming a method is correctly reflected on the java side.
-     */
-    @Test
-    def testRenameMethod() {
-        uOperation.name = OPERATION_RENAME;
-        propagate
-        
-        val jMethod = getCorrespondingClassMethod(uOperation)
-        val jClass = getCorrespondingClass(uClass)
-        assertEquals(OPERATION_RENAME, jMethod.name)
-        assertClassMethodEquals(uOperation, jMethod)
-        assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
-    }
-    
-    /**
-     * Tests if deleting a method is correctly reflected on the java side.
-     */
-    @Test
-    def testDeleteMethod() {
-        uOperation.destroy;
-        propagate
-        
-        val jClass = getCorrespondingClass(uClass)
-        assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
-    }
-    
-    /**
-     * Tests if setting a method static correctly reflected on the java side.
-     */
-    @Test
-    def testStaticMethod() {
-        uOperation.isStatic = true;
-        propagate
-        
-        val jMethod = getCorrespondingClassMethod(uOperation)
-        assertJavaModifiableStatic(jMethod, true)
-        assertClassMethodEquals(uOperation, jMethod)
-    }
-    
-    /**
-     * Tests if setting a method final correctly reflected on the java side.
-     */
-    @Test
-    def testFinalMethod() {
-        uOperation.isLeaf = true;
-        propagate
-        
-        val jMethod = getCorrespondingClassMethod(uOperation)
-        assertJavaModifiableFinal(jMethod, true)
-        assertClassMethodEquals(uOperation, jMethod)
-    }
-    
-    /**
-     * Tests if setting a method abstract is correctly reflected on the java side.
-     */
-    @Test
-    def testAbstractMethod() {
-        uOperation.isAbstract = true;
-        propagate
-        
-        val jMethod = getCorrespondingClassMethod(uOperation)
-        assertJavaModifiableAbstract(jMethod, true)
-        assertClassMethodEquals(uOperation, jMethod)
-    }
-    
-    /**
-     * Tests if visibility changes are propagated to the java method.
-     */
-    @Test
-    def testMethodVisibility() {
-        uOperation.visibility = VisibilityKind.PRIVATE_LITERAL;
-        propagate
-        
-        var jMethod = getCorrespondingClassMethod(uOperation)
-        assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PRIVATE)
-        assertClassMethodEquals(uOperation, jMethod)
-        
-        uOperation.visibility = VisibilityKind.PROTECTED_LITERAL;
-        propagate
-        
-        jMethod = getCorrespondingClassMethod(uOperation)
-        assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
-        assertClassMethodEquals(uOperation, jMethod)
-    }
-    
-    /**
-     * Tests the creation of a method that act as constructor and checks if a 
-     * constructor is created on the java side.
-     */
-    @Test
-    def testCreateConstructor() {
-        val uConstr = createSimpleUmlOperation(uClass.name)
-        uClass.ownedOperations += uConstr
-        propagate
-        val jConstr = getCorrespondingConstructor(uConstr)
-        assertNotNull(jConstr)
-    }
-    
-    /**
-     * Checks if method creating in datatypes is reflected in the corresponding java class.
-     */
-    @Test
-    def void testCreateMethodInDataType() {
-        val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
-        val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
-        propagate
-        
-        val jMethod = getCorrespondingClassMethod(operation)
-        val jClass = getCorrespondingClass(dataType)
-        assertNotNull(jMethod)
-        assertJavaClassMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
-            TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
-        assertClassMethodEquals(operation, jMethod)
-    }
-    
-    /**
-     * Tests the deletion of methods in data types and if the deletion is
-     * propagated to the java model.
-     */
-    @Test
-    def void testDeleteMethodInDataType() {
-        val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
-        val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null);
-        propagate
-        
-        var jMethod = getCorrespondingClassMethod(operation)
-        assertNotNull(jMethod)
-        
-        operation.destroy
-        propagate
-        
-        val jClass = getCorrespondingClass(dataType)
-        assertJavaMemberContainerDontHaveMember(jClass, STANDARD_OPERATION_NAME)
-    }
+	static val CLASS_NAME = "ClassName"
+	static val TYPE_NAME = "TypeName"
+	static val OPERATION_NAME = "classMethod"
+	static val STANDARD_OPERATION_NAME = "standardMethod"
+	static val OPERATION_RENAME = "classMethodRenamed"
+	static val PARAMETER_NAME = "parameterName"
+	static val DATATYPE_NAME = "DataTypeName"
+
+	static var Class uClass
+	static var Class typeClass
+	static var Parameter uParam
+	static var PrimitiveType pType
+	static var Operation uOperation
+
+	/**
+	 * Initializes two uml classes and a primitive type. One uml class contains 
+	 * an operation with a parameter.
+	 */
+	@BeforeEach
+	def void before() {
+		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
+		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
+		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+		uParam = createUmlParameter(PARAMETER_NAME, pType)
+		uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
+		uClass.ownedOperations += uOperation
+		rootElement.packagedElements += uClass
+		rootElement.packagedElements += typeClass
+		propagate
+	}
+
+	/**
+	 * Tests if creating a uml operation also causes the creating of an corresponding
+	 * java method.
+	 */
+	@Test
+	def void testCreateClassMethod() {
+		val operation = uClass.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
+		propagate
+
+		val jMethod = getCorrespondingClassMethod(operation)
+		val jClass = getCorrespondingClass(uClass)
+		assertNotNull(jMethod)
+		assertJavaClassMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
+			TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
+		assertClassMethodEquals(operation, jMethod)
+	}
+
+	/**
+	 * Tests the change of the uml method return type. Checks if
+	 * the corresponding java method adapated the corresponding type.
+	 */
+	@Test
+	def void testChangeReturnType() {
+		uOperation.type = typeClass
+		propagate
+
+		val jMethod = getCorrespondingClassMethod(uOperation)
+		val jTypeClass = getCorrespondingClass(typeClass)
+		assertJavaElementHasTypeRef(jMethod, createNamespaceReferenceFromClassifier(jTypeClass))
+		assertClassMethodEquals(uOperation, jMethod)
+	}
+
+	/**
+	 * Tests if renaming a method is correctly reflected on the java side.
+	 */
+	@Test
+	def testRenameMethod() {
+		uOperation.name = OPERATION_RENAME
+		propagate
+
+		val jMethod = getCorrespondingClassMethod(uOperation)
+		val jClass = getCorrespondingClass(uClass)
+		assertEquals(OPERATION_RENAME, jMethod.name)
+		assertClassMethodEquals(uOperation, jMethod)
+		assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
+	}
+
+	/**
+	 * Tests if deleting a method is correctly reflected on the java side.
+	 */
+	@Test
+	def testDeleteMethod() {
+		uOperation.destroy
+		propagate
+
+		val jClass = getCorrespondingClass(uClass)
+		assertJavaMemberContainerDontHaveMember(jClass, OPERATION_NAME)
+	}
+
+	/**
+	 * Tests if setting a method static correctly reflected on the java side.
+	 */
+	@Test
+	def testStaticMethod() {
+		uOperation.isStatic = true
+		propagate
+
+		val jMethod = getCorrespondingClassMethod(uOperation)
+		assertJavaModifiableStatic(jMethod, true)
+		assertClassMethodEquals(uOperation, jMethod)
+	}
+
+	/**
+	 * Tests if setting a method final correctly reflected on the java side.
+	 */
+	@Test
+	def testFinalMethod() {
+		uOperation.isLeaf = true
+		propagate
+
+		val jMethod = getCorrespondingClassMethod(uOperation)
+		assertJavaModifiableFinal(jMethod, true)
+		assertClassMethodEquals(uOperation, jMethod)
+	}
+
+	/**
+	 * Tests if setting a method abstract is correctly reflected on the java side.
+	 */
+	@Test
+	def testAbstractMethod() {
+		uOperation.isAbstract = true
+		propagate
+
+		val jMethod = getCorrespondingClassMethod(uOperation)
+		assertJavaModifiableAbstract(jMethod, true)
+		assertClassMethodEquals(uOperation, jMethod)
+	}
+
+	/**
+	 * Tests if visibility changes are propagated to the java method.
+	 */
+	@Test
+	def testMethodVisibility() {
+		uOperation.visibility = VisibilityKind.PRIVATE_LITERAL
+		propagate
+
+		var jMethod = getCorrespondingClassMethod(uOperation)
+		assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PRIVATE)
+		assertClassMethodEquals(uOperation, jMethod)
+
+		uOperation.visibility = VisibilityKind.PROTECTED_LITERAL
+		propagate
+
+		jMethod = getCorrespondingClassMethod(uOperation)
+		assertJavaModifiableHasVisibility(jMethod, JavaVisibility.PROTECTED)
+		assertClassMethodEquals(uOperation, jMethod)
+	}
+
+	/**
+	 * Tests the creation of a method that act as constructor and checks if a 
+	 * constructor is created on the java side.
+	 */
+	@Test
+	def testCreateConstructor() {
+		val uConstr = createSimpleUmlOperation(uClass.name)
+		uClass.ownedOperations += uConstr
+		propagate
+		val jConstr = getCorrespondingConstructor(uConstr)
+		assertNotNull(jConstr)
+	}
+
+	/**
+	 * Checks if method creating in datatypes is reflected in the corresponding java class.
+	 */
+	@Test
+	def void testCreateMethodInDataType() {
+		val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
+		val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
+		propagate
+
+		val jMethod = getCorrespondingClassMethod(operation)
+		val jClass = getCorrespondingClass(dataType)
+		assertNotNull(jMethod)
+		assertJavaClassMethodTraits(jMethod, STANDARD_OPERATION_NAME, JavaVisibility.PUBLIC,
+			TypesFactory.eINSTANCE.createVoid, false, false, null, jClass)
+		assertClassMethodEquals(operation, jMethod)
+	}
+
+	/**
+	 * Tests the deletion of methods in data types and if the deletion is
+	 * propagated to the java model.
+	 */
+	@Test
+	def void testDeleteMethodInDataType() {
+		val dataType = createUmlDataType(rootElement, DATATYPE_NAME)
+		val operation = dataType.createOwnedOperation(STANDARD_OPERATION_NAME, null, null, null)
+		propagate
+
+		var jMethod = getCorrespondingClassMethod(operation)
+		assertNotNull(jMethod)
+
+		operation.destroy
+		propagate
+
+		val jClass = getCorrespondingClass(dataType)
+		assertJavaMemberContainerDontHaveMember(jClass, STANDARD_OPERATION_NAME)
+	}
 }

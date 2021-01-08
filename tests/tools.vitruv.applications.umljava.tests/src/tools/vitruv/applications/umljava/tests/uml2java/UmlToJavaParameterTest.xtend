@@ -26,84 +26,83 @@ import static org.junit.jupiter.api.Assertions.assertEquals
  * @author Fei
  */
 class UmlToJavaParameterTest extends UmlToJavaTransformationTest {
-    static val CLASS_NAME = "ClassName";
-    static val TYPE_NAME = "TypeName";
-    static val OPERATION_NAME = "classMethod";
-    static val PARAMETER_NAME = "parameterName";
-    static val STANDARD_PARAMETER_NAME = "standardParameterName"
-    static val PARAMETER_RENAME = "parameterRenamed";
-    
-    static var Class uClass
-    static var Class typeClass
-    static var Parameter uParam
-    static var PrimitiveType pType
-    static var Operation uOperation
-    
-    
-    @BeforeEach
-    def void before() {
-        uClass = createSimpleUmlClass(rootElement, CLASS_NAME);
-        typeClass = createSimpleUmlClass(rootElement, TYPE_NAME);
-        pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name=="Integer"]
-        uParam = createUmlParameter(PARAMETER_NAME, pType)
-        uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
-        uClass.ownedOperations += uOperation;
-        rootElement.packagedElements += uClass;
-        rootElement.packagedElements += typeClass;
-        propagate
-    }
-    
-    @Test
-    def testCreateParameter() {
-        val uParam = createUmlParameter(STANDARD_PARAMETER_NAME, typeClass)
-        uOperation.ownedParameters += uParam;
-        propagate
+	static val CLASS_NAME = "ClassName"
+	static val TYPE_NAME = "TypeName"
+	static val OPERATION_NAME = "classMethod"
+	static val PARAMETER_NAME = "parameterName"
+	static val STANDARD_PARAMETER_NAME = "standardParameterName"
+	static val PARAMETER_RENAME = "parameterRenamed"
 
-        val jParam = getCorrespondingParameter(uParam)
-        val jTypeClass = getCorrespondingClass(typeClass)
-        assertJavaParameterTraits(jParam, STANDARD_PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertParameterEquals(uParam, jParam)
-    }
-    
-    @Test
-    def testRenameParameter() {
-        uParam.name = PARAMETER_RENAME
-        propagate
-        
-        val jParam = getCorrespondingParameter(uParam)
-        val jMethod = getCorrespondingClassMethod(uOperation)
-        assertEquals(PARAMETER_RENAME, jParam.name)
-        assertJavaMethodHasUniqueParameter(jMethod, PARAMETER_RENAME, TypesFactory.eINSTANCE.createInt)
-        assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
-    }
-    
-    @Test
-    def testDeleteParameter() {
-        uParam.destroy
-        propagate
-        
-        val jMethod = getCorrespondingClassMethod(uOperation)
-        assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
-    }
-    
-    @Test
-    def testChangeParameterType() {
-        uParam.type = typeClass
-        propagate
-        
-        val jParam = getCorrespondingParameter(uParam)
-        val jTypeClass = getCorrespondingClass(typeClass)
-        assertJavaParameterTraits(jParam, PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
-        assertParameterEquals(uParam, jParam)
-    }
-    
-    @Test
-    def testChangeParameterDirectionToReturn() {
-        uParam.direction = ParameterDirectionKind.RETURN_LITERAL
-        propagate
-        assertNull(getCorrespondingParameter(uParam))
-        var jMethod = getCorrespondingClassMethod(uOperation)
-        assertJavaElementHasTypeRef(jMethod, TypesFactory.eINSTANCE.createInt)
-        
-    }
+	static var Class uClass
+	static var Class typeClass
+	static var Parameter uParam
+	static var PrimitiveType pType
+	static var Operation uOperation
+
+	@BeforeEach
+	def void before() {
+		uClass = createSimpleUmlClass(rootElement, CLASS_NAME)
+		typeClass = createSimpleUmlClass(rootElement, TYPE_NAME)
+		pType = UmlTypeUtil.getSupportedPredefinedUmlPrimitiveTypes(resourceRetriever).findFirst[it.name == "Integer"]
+		uParam = createUmlParameter(PARAMETER_NAME, pType)
+		uOperation = createUmlOperation(OPERATION_NAME, null, VisibilityKind.PUBLIC_LITERAL, false, false, #[uParam])
+		uClass.ownedOperations += uOperation
+		rootElement.packagedElements += uClass
+		rootElement.packagedElements += typeClass
+		propagate
+	}
+
+	@Test
+	def testCreateParameter() {
+		val uParam = createUmlParameter(STANDARD_PARAMETER_NAME, typeClass)
+		uOperation.ownedParameters += uParam
+		propagate
+
+		val jParam = getCorrespondingParameter(uParam)
+		val jTypeClass = getCorrespondingClass(typeClass)
+		assertJavaParameterTraits(jParam, STANDARD_PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
+		assertParameterEquals(uParam, jParam)
+	}
+
+	@Test
+	def testRenameParameter() {
+		uParam.name = PARAMETER_RENAME
+		propagate
+
+		val jParam = getCorrespondingParameter(uParam)
+		val jMethod = getCorrespondingClassMethod(uOperation)
+		assertEquals(PARAMETER_RENAME, jParam.name)
+		assertJavaMethodHasUniqueParameter(jMethod, PARAMETER_RENAME, TypesFactory.eINSTANCE.createInt)
+		assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
+	}
+
+	@Test
+	def testDeleteParameter() {
+		uParam.destroy
+		propagate
+
+		val jMethod = getCorrespondingClassMethod(uOperation)
+		assertJavaMethodDontHaveParameter(jMethod, PARAMETER_NAME)
+	}
+
+	@Test
+	def testChangeParameterType() {
+		uParam.type = typeClass
+		propagate
+
+		val jParam = getCorrespondingParameter(uParam)
+		val jTypeClass = getCorrespondingClass(typeClass)
+		assertJavaParameterTraits(jParam, PARAMETER_NAME, createNamespaceReferenceFromClassifier(jTypeClass))
+		assertParameterEquals(uParam, jParam)
+	}
+
+	@Test
+	def testChangeParameterDirectionToReturn() {
+		uParam.direction = ParameterDirectionKind.RETURN_LITERAL
+		propagate
+		assertNull(getCorrespondingParameter(uParam))
+		var jMethod = getCorrespondingClassMethod(uOperation)
+		assertJavaElementHasTypeRef(jMethod, TypesFactory.eINSTANCE.createInt)
+
+	}
 }

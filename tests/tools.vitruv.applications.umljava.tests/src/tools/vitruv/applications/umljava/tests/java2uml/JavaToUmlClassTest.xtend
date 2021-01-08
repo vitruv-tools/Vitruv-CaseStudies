@@ -26,18 +26,18 @@ import java.nio.file.Path
  * @author Fei
  */
 class JavaToUmlClassTest extends JavaToUmlTransformationTest {
-	static val CLASS_NAME = "ClassName";
-	static val STANDARD_CLASS_NAME = "StandardClassName";
+	static val CLASS_NAME = "ClassName"
+	static val STANDARD_CLASS_NAME = "StandardClassName"
 	static val CLASS_RENAMED = "ClassRenamed"
 	static val SUPER_CLASS_NAME = "SuperClassName"
-	static val INTERFACE_NAME = "InterfaceName";
-	static val INTERFACE_NAME2 = "InterfaceName2";
+	static val INTERFACE_NAME = "InterfaceName"
+	static val INTERFACE_NAME2 = "InterfaceName2"
 
-	static var org.emftext.language.java.classifiers.Class jClass;
+	static var org.emftext.language.java.classifiers.Class jClass
 
 	@BeforeEach
 	def void before() {
-		jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME);
+		jClass = createSimpleJavaClassWithCompilationUnit(CLASS_NAME)
 	}
 
 	/**
@@ -45,9 +45,9 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def void testCreateClass() {
-		val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME);
+		val cls = createSimpleJavaClassWithCompilationUnit(STANDARD_CLASS_NAME)
 
-		val uClass = getCorrespondingClass(cls);
+		val uClass = getCorrespondingClass(cls)
 		assertUmlClassTraits(uClass, STANDARD_CLASS_NAME, VisibilityKind.PUBLIC_LITERAL, false, false,
 			registeredUmlModel)
 		assertClassEquals(uClass, cls)
@@ -58,10 +58,10 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def testRenameClass() {
-		jClass.name = CLASS_RENAMED;
+		jClass.name = CLASS_RENAMED
 		propagate
 
-		val uClass = getCorrespondingClass(jClass);
+		val uClass = getCorrespondingClass(jClass)
 		assertEquals(CLASS_RENAMED, uClass.name)
 		assertClassEquals(uClass, jClass)
 	}
@@ -93,7 +93,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 		resourceAt(Path.of(compUnitFilePath)).propagate [
 			delete(null)
 		]
-		
+
 		assertTrue(getUmlPackagedElementsbyName(Class, CLASS_NAME).nullOrEmpty)
 	}
 
@@ -102,17 +102,17 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def testChangeClassVisibility() {
-		jClass.makeProtected;
+		jClass.makeProtected
 		propagate
 
-		var uClass = getCorrespondingClass(jClass);
+		var uClass = getCorrespondingClass(jClass)
 		assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PROTECTED_LITERAL)
 		assertClassEquals(uClass, jClass)
 
-		jClass.makePrivate;
+		jClass.makePrivate
 		propagate
 
-		uClass = getCorrespondingClass(jClass);
+		uClass = getCorrespondingClass(jClass)
 		assertUmlNamedElementHasVisibility(uClass, VisibilityKind.PRIVATE_LITERAL)
 		assertClassEquals(uClass, jClass)
 	}
@@ -163,8 +163,8 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def testSuperClassChanged() {
-		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME);
-		jClass.extends = createNamespaceReferenceFromClassifier(superClass);
+		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME)
+		jClass.extends = createNamespaceReferenceFromClassifier(superClass)
 		propagate
 
 		val uClass = getCorrespondingClass(jClass)
@@ -180,7 +180,7 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	@Test
 	def testRemoveSuperClass() {
 		val superClass = createSimpleJavaClassWithCompilationUnit(SUPER_CLASS_NAME)
-		jClass.extends = createNamespaceReferenceFromClassifier(superClass);
+		jClass.extends = createNamespaceReferenceFromClassifier(superClass)
 		propagate
 
 		var uClass = getCorrespondingClass(jClass)
@@ -207,8 +207,8 @@ class JavaToUmlClassTest extends JavaToUmlTransformationTest {
 	 */
 	@Test
 	def testAddClassImplement() {
-		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME);
-		jClass.implements += createNamespaceReferenceFromClassifier(implInterface);
+		val implInterface = createSimpleJavaInterfaceWithCompilationUnit(INTERFACE_NAME)
+		jClass.implements += createNamespaceReferenceFromClassifier(implInterface)
 		propagate
 
 		val uClass = getCorrespondingClass(jClass)

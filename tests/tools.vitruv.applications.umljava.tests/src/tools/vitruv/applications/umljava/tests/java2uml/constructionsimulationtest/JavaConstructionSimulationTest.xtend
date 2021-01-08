@@ -122,12 +122,12 @@ class JavaConstructionSimulationTest extends JavaToUmlTransformationTest {
 	def private void createAndSyncPackageInfo(List<File> directoryContents, String directoryPath, String namespace) {
 		val packageInfos = directoryContents.filter[name.equals("package-info.java")]
 		val packageInfoFile = if (packageInfos.nullOrEmpty) {
-			createPackageInfo(directoryPath, namespace)
-		} else {
-			packageInfos.head
-		}
+				createPackageInfo(directoryPath, namespace)
+			} else {
+				packageInfos.head
+			}
 		resourceAt(Path.of(packageInfoFile.path)).startRecordingChanges => [
-			contents += EObject.from(createFileURI(packageInfoFile.path))	
+			contents += EObject.from(createFileURI(packageInfoFile.path))
 		]
 		propagate
 	}
